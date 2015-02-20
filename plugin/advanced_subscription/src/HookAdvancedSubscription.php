@@ -13,9 +13,11 @@ class HookAdvancedSubscription extends HookObserver implements
     HookWSRegistrationObserverInterface,
     HookNotificationContentObserverInterface
 {
+    public $plugin;
 
     protected function __construct()
     {
+        $this->plugin = AdvancedSubscriptionPlugin::create();
         parent::__construct(
             'plugin/advanced_subscription/src/HookAdvancedSubscription.class.php',
             'advanced_subscription'
@@ -423,47 +425,46 @@ class HookAdvancedSubscription extends HookObserver implements
             $sessionId = (int) $params['session_id'];
             // Check if student is already subscribed
 
-            $advsubPlugin = AdvancedSubscriptionPlugin::create();
-            $isOpen = $advsubPlugin->isSessionOpen($sessionId);
-            $status = $advsubPlugin->getQueueStatus($userId, $sessionId);
-            $vacancy = $advsubPlugin->getVacancy($sessionId);
-            $data = $advsubPlugin->getSessionDetails($sessionId);
+            $isOpen = $this->plugin->isSessionOpen($sessionId);
+            $status = $this->plugin->getQueueStatus($userId, $sessionId);
+            $vacancy = $this->plugin->getVacancy($sessionId);
+            $data = $this->plugin->getSessionDetails($sessionId);
             if (!empty($data) && is_array($data)) {
                 $data['status'] = $status;
                 // 5 Cases:
                 if ($isOpen) {
                     // Go to Course session
-                    $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
+                    $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
                 } else {
                     try {
-                        $isAble = $advsubPlugin->isAllowedToDoRequest($userId, $params);
-                        $data['message'] = $advsubPlugin->getStatusMessage($status, $isAble);
+                        $isAble = $this->plugin->isAllowedToDoRequest($userId, $params);
+                        $data['message'] = $this->plugin->getStatusMessage($status, $isAble);
                     } catch (\Exception $e) {
                         $data['message'] = $e->getMessage();
                     }
-                    $params['a'] = 'subscribe';
-                    $params['s'] = intval($sessionId);
-                    $params['current_user_id'] = 0; // No needed
-                    $params['u'] = intval($userId);
-                    $params['q'] = 0; // No needed
-                    $params['e'] = ADV_SUB_QUEUE_STATUS_START;
+                    $params['action'] = 'subscribe';
+                    $params['sessionId'] = intval($sessionId);
+                    $params['currentUserId'] = 0; // No needed
+                    $params['studentUserId'] = intval($userId);
+                    $params['queueId'] = 0; // No needed
+                    $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
                     if ($vacancy > 0) {
                         // Check conditions
-                        if ($status === ADV_SUB_QUEUE_STATUS_NO_QUEUE) {
+                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                             // No in Queue, require queue subscription url action
-                            $data['action_url'] = $advsubPlugin->getQueueUrl($params);
-                        } elseif ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
+                            $data['action_url'] = $this->plugin->getQueueUrl($params);
+                        } elseif ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                             // send url action
-                            $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
+                            $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
                         } else {
                             // In queue, output status message, no more info.
                         }
                     } else {
-                        if ($status === ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
-                            $data['action_url'] = $advsubPlugin->getSessionUrl($sessionId);
+                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                            $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
                         } else {
                             // in Queue or not, cannot be subscribed to session
-                            $data['action_url'] = $advsubPlugin->getQueueUrl($params);
+                            $data['action_url'] = $this->plugin->getQueueUrl($params);
                         }
                     }
                 }
@@ -527,18 +528,26 @@ class HookAdvancedSubscription extends HookObserver implements
 
             return return_error(WS_ERROR_NOT_FOUND_RESULT);
         }
-        //@TODO: Not implemented yet, see BT#9092
-        // Check if advanced inscription plugin is enabled
-        $isAdvancedInscriptionEnabled = false;
-        if ($isAdvancedInscriptionEnabled) {
-            // Get validated and waiting queue users count for each session
-            foreach ($sessionList as &$session) {
-                // Add validated and queue users count
-                $session['validated_user_num'] = 0;
-                $session['waiting_user_num'] = 0;
-            }
-        } else {
-            // Set -1 to validated and waiting queue users count
+
+        // Get validated and waiting queue users count for each session
+        foreach ($sessionList as &$session) {
+            // Add validated and queue users count
+            $session['validated_user_num'] = $this->plugin->countQueueByParams(
+                array(
+                    'sessions' => array($session['id']),
+                    'status' => array(ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED)
+
+                )
+            );
+            $session['waiting_user_num'] = $this->plugin->countQueueByParams(
+                array(
+                    'sessions' => array($session['id']),
+                    'status' => array(
+                        ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START,
+                        ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED,
+                    ),
+                )
+            );
         }
 
         return $sessionList;
@@ -552,15 +561,15 @@ class HookAdvancedSubscription extends HookObserver implements
     {
         $data = $hook->getEventData();
         if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
-            $data['advsub_pre_content'] = $data['content'];
+            $data['advanced_subscription_pre_content'] = $data['content'];
 
             return $data;
         } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
             if (
                 isset($data['content']) &&
                 !empty($data['content']) &&
-                isset($data['advsub_pre_content']) &&
-                !empty($data['advsub_pre_content'])
+                isset($data['advanced_subscription_pre_content']) &&
+                !empty($data['advanced_subscription_pre_content'])
             ) {
                 $data['content'] = str_replace(
                     array(
@@ -569,7 +578,7 @@ class HookAdvancedSubscription extends HookObserver implements
                         '<br/>',
                     ),
                     '',
-                    $data['advsub_pre_content']
+                    $data['advanced_subscription_pre_content']
                 );
             }
 
@@ -588,15 +597,15 @@ class HookAdvancedSubscription extends HookObserver implements
     {
         $data = $hook->getEventData();
         if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
-            $data['advsub_pre_title'] = $data['title'];
+            $data['advanced_subscription_pre_title'] = $data['title'];
 
             return $data;
         } elseif ($data['type'] === HOOK_EVENT_TYPE_POST) {
             if (
-                isset($data['advsub_pre_title']) &&
-                !empty($data['advsub_pre_title'])
+                isset($data['advanced_subscription_pre_title']) &&
+                !empty($data['advanced_subscription_pre_title'])
             ) {
-                $data['title'] = $data['advsub_pre_title'];
+                $data['title'] = $data['advanced_subscription_pre_title'];
             }
 
             return $data;

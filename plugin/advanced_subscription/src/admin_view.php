@@ -13,22 +13,22 @@ api_protect_admin_script();
 // start plugin
 $plugin = AdvancedSubscriptionPlugin::create();
 // Session ID
-$s = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
+$sessionId = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : null;
 
 // Init template
 $tpl = new Template($plugin->get_lang('plugin_title'));
 // Get all sessions
 $sessionList = $plugin->listAllSessions();
 
-if (!empty($s)) {
+if (!empty($sessionId)) {
     // Get student list in queue
-    $studentList = $plugin->listAllStudentsInQueueBySession($s);
+    $studentList = $plugin->listAllStudentsInQueueBySession($sessionId);
     // Set selected to current session
-    $sessionList[$s]['selected'] = 'selected="selected"';
-    $studentList['session']['id'] = $s;
+    $sessionList[$sessionId]['selected'] = 'selected="selected"';
+    $studentList['session']['id'] = $sessionId;
     // Assign variables
     $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
-    $sessionArray = api_get_session_info($s);
+    $sessionArray = api_get_session_info($sessionId);
     $extraSession = new ExtraFieldValue('session');
     $extraField = new ExtraField('session');
     // Get session fields
@@ -40,7 +40,7 @@ if (!empty($s)) {
         $fields[$field['id']] = $field['field_variable'];
     }
 
-    $mergedArray = array_merge(array($s), array_keys($fields));
+    $mergedArray = array_merge(array($sessionId), array_keys($fields));
     $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
     foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Check if session field value is set in session field list
@@ -53,17 +53,17 @@ if (!empty($s)) {
     }
     $adminsArray = UserManager::get_all_administrators();
 
-    $data['a'] = 'confirm';
-    $data['s'] = $s;
-    $data['current_user_id'] = api_get_user_id();
+    $data['action'] = 'confirm';
+    $data['sessionId'] = $sessionId;
+    $data['currentUserId'] = api_get_user_id();
     $isWesternNameOrder = api_is_western_name_order();
 
     foreach ($studentList['students'] as &$student) {
-        $data['u'] = intval($student['user_id']);
-        $data['q'] = intval($student['queue_id']);
-        $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED;
+        $data['studentUserId'] = intval($student['user_id']);
+        $data['queueId'] = intval($student['queue_id']);
+        $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;
         $student['acceptUrl'] = $plugin->getQueueUrl($data);
-        $data['e'] = ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED;
+        $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED;
         $student['rejectUrl'] = $plugin->getQueueUrl($data);
         $student['complete_name'] = $isWesternNameOrder ?
             $student['firstname'] . ', ' . $student['lastname'] :
@@ -78,8 +78,8 @@ if (!empty($s)) {
 
 // Assign variables
 $tpl->assign('sessionItems', $sessionList);
-$tpl->assign('approveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED);
-$tpl->assign('disapproveAdmin', ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED);
+$tpl->assign('approveAdmin', ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED);
+$tpl->assign('disapproveAdmin', ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED);
 // Get rendered template
 $content = $tpl->fetch('/advanced_subscription/views/admin_view.tpl');
 // Assign into content

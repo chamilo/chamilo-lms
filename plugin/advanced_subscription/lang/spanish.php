@@ -7,8 +7,6 @@ $strings['ws_url'] = 'URL del Webservice';
 $strings['ws_url_help'] = 'La URL de la cual se solicitará información para el proceso de la inscripción avanzada';
 $strings['check_induction'] = 'Activar requerimiento de curso inducción';
 $strings['check_induction_help'] = 'Escoja si se requiere que se complete los cursos de inducción';
-$strings['tool_enable'] = 'Inscripción avanzada activada';
-$strings['tool_enable_help'] = "Escoja si desea activar la inscripción avanzada.";
 $strings['yearly_cost_limit'] = 'Límite de UITs';
 $strings['yearly_cost_limit_help'] = "El límite de UITs de cursos que se pueden llevar en un año calendario del año actual.";
 $strings['yearly_hours_limit'] = 'Límite de horas lectivas';
@@ -22,7 +20,6 @@ $strings['course_session_credit_year_start_date_help'] = "Fecha de inicio del a�
 $strings['min_profile_percentage'] = 'Porcentage de perfil completado mínimo requerido';
 $strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.00)';
 
-
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse";
 $strings['AdvancedSubscriptionProfileIncomplete'] = "Su perfil no es lo suficientemente completo para poder inscribirse al curso. Por favor complete su perfil";
@@ -32,10 +29,16 @@ $strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha al
 $strings['AdvancedSubscriptionCourseXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s cursos que ha seguido este año";
 $strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple con las condiciones iniciales para poder inscribirse al curso";
 $strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no están completos o no son los correctos.";
-
 $strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
 
-//Needed in order to show the plugin title
+$strings['AdvancedSubscriptionNoQueue'] = "You are not subscribed for this course.";
+$strings['AdvancedSubscriptionNoQueueIsAble'] = "You are not subscribed, but you are qualified for this course.";
+$strings['AdvancedSubscriptionQueueStart'] = "Your subscription request is pending for approval by your boss, please wait attentive.";
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = "We are sorry, your subscription was rejected by your boss.";
+$strings['AdvancedSubscriptionQueueBossApproved'] = "Your subscription request has been accepted by your boss, now is pending for vacancies.";
+$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "We are sorry, your subscription was rejected by the administrator.";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulation, your subscription request has been accepted by administrator";
+$strings['AdvancedSubscriptionQueueDefaultX'] = "There was an error, queue status %d is not defined by system.";
 
 // Mail translations
 $strings['MailStudentRequest'] = 'Solicitud de registro de estudiante';
@@ -48,7 +51,7 @@ $strings['MailStudentRequestNoBoss'] = 'Solicitud de registro de estudiante sin 
 
 // TPL translations
 // Admin view
-$strings['SelectASession'] = 'Elija una sesión';
+$strings['SelectASession'] = 'Elija una sesión de formación';
 $strings['SessionName'] = 'Nombre de la sesión';
 $strings['Target'] = 'Publico objetivo';
 $strings['Vacancies'] = 'Vacantes';

@@ -10,22 +10,22 @@ $plugin = AdvancedSubscriptionPlugin::create();
 // Get validation hash
 $hash = Security::remove_XSS($_REQUEST['v']);
 // Get data from request (GET or POST)
-$data['a'] = 'confirm';
-$data['current_user_id'] = 1;
-$data['q'] = 0;
+$data['action'] = 'confirm';
+$data['currentUserId'] = 1;
+$data['queueId'] = 0;
 $data['is_connected'] = true;
 $data['profile_completed'] = 90.0;
 // Init result array
 
-$data['s'] = 1;
-$data['u'] = 4;
+$data['sessionId'] = 1;
+$data['studentUserId'] = 4;
 
 
 // Prepare data
 // Get session data
 // Assign variables
 $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
-$sessionArray = api_get_session_info($data['s']);
+$sessionArray = api_get_session_info($data['sessionId']);
 $extraSession = new ExtraFieldValue('session');
 $extraField = new ExtraField('session');
 // Get session fields
@@ -38,7 +38,7 @@ foreach ($fieldList as $field) {
     $fields[$field['id']] = $field['field_variable'];
 }
 
-$mergedArray = array_merge(array($data['s']), array_keys($fields));
+$mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
 $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
 foreach ($sessionFieldValueList as $sessionFieldValue) {
     // Check if session field value is set in session field list
@@ -50,11 +50,11 @@ foreach ($sessionFieldValueList as $sessionFieldValue) {
     }
 }
 // Get student data
-$studentArray = api_get_user_info($data['u']);
+$studentArray = api_get_user_info($data['studentUserId']);
 $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
 $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
 // Get superior data if exist
-$superiorId = UserManager::getStudentBoss($data['u']);
+$superiorId = UserManager::getStudentBoss($data['studentUserId']);
 if (!empty($superiorId)) {
     $superiorArray = api_get_user_info($superiorId);
 } else {
@@ -71,7 +71,7 @@ foreach ($adminsArray as &$admin) {
 }
 unset($admin);
 // Set data
-$data['a'] = 'confirm';
+$data['action'] = 'confirm';
 $data['student'] = $studentArray;
 $data['superior'] = $superiorArray;
 $data['admins'] = $adminsArray;
@@ -79,10 +79,10 @@ $data['admin'] = current($adminsArray);
 $data['session'] = $sessionArray;
 $data['signature'] = api_get_setting('Institution');
 $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-    'advanced_subscription/src/admin_view.php?s=' . $data['s'];
-$data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
+    'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+$data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED;
 $data['student']['acceptUrl'] = $plugin->getQueueUrl($data);
-$data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
+$data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED;
 $data['student']['rejectUrl'] = $plugin->getQueueUrl($data);
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('data', $data);

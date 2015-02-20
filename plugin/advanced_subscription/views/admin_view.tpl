@@ -1,4 +1,4 @@
-<form id="form_advsub_admin" class="form-search" method="post" action="/plugin/advanced_subscription/src/admin_view.php" name="form_advsub_admin">
+<form id="form_advanced_subscription_admin" class="form-search" method="post" action="/plugin/advanced_subscription/src/admin_view.php" name="form_advanced_subscription_admin">
     <div class="row">
         <div class="span6">
             <p class="text-title-select">{{ 'SelectASession' | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
@@ -36,7 +36,7 @@
                 <table id="student_table" class="table table-striped">
                     <tbody>
                     <tr>
-                        <th style="width: 118px;"><img src="img/icon-avatar.png"/> </th>
+                        <th style="width: 118px;"><img src="{{ _p.web_plugin }}advanced_subscription/views/img/icon-avatar.png"/> </th>
                         <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
@@ -51,13 +51,13 @@
                         <td>{{ student.validation }}</td>
                         <td>
                             <a
-                                class="btn btn-success btn-advsub btn-accept"
+                                class="btn btn-success btn-advanced-subscription btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
                                 {{ 'Accept' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                             <a
-                                class="btn btn-danger btn-advsub btn-reject"
+                                class="btn btn-danger btn-advanced-subscription btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
                                 {{ 'Reject' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
@@ -78,12 +78,12 @@
 
 <input name="f" value="social" type="hidden">
 </form>
-<div class="modal fade" id="modalMail" tabindex="-1" role="dialog" aria-labelledby="privacidadLabel" aria-hidden="true">
+<div class="modal fade" id="modalMail" tabindex="-1" role="dialog" aria-labelledby="modalMailLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title" id="privacidadLabel">{{ "AdvancedSubscriptionAdminViewTitle" | get_plugin_lang('AdvancedSubscriptionPlugin')}}</h4>
+                <h4 class="modal-title" id="modalMailLabel">{{ "AdvancedSubscriptionAdminViewTitle" | get_plugin_lang('AdvancedSubscriptionPlugin')}}</h4>
             </div>
             <div class="modal-body">
                 <iframe id="iframeAdvsub" frameBorder="0">
@@ -95,13 +95,13 @@
         </div>
     </div>
 </div>
-<link href="{{ _p.web_plugin }}advancedsubscription/views/css/style.css" rel="stylesheet" type="text/css">
+<link href="{{ _p.web_plugin }}advanced_subscription/views/css/style.css" rel="stylesheet" type="text/css">
 <script>
     $(document).ready(function(){
         $("#session-select").change(function () {
-            $("#form_advsub_admin").submit();
+            $("#form_advanced_subscription_admin").submit();
         });
-        $("a.btn-advsub").click(function(event){
+        $("a.btn-advanced-subscription").click(function(event){
             event.preventDefault();
             var confirmed = false;
             var studentName = $(this).closest("tr").find(".name").html();
@@ -117,16 +117,15 @@
             } else {
                 var msg = "{{ 'AreYouSureYouWantToRejectSubscriptionOfX' | get_plugin_lang('AdvancedSubscriptionPlugin') }}";
                 var confirmed = confirm(msg.replace(msgRe, studentName));
-                );
             }
             if (confirmed) {
                 var thisBlock = $(this).closest("tr");
-                var advsubUrl = $(this).attr("href")
-                $("#iframeAdvsub").attr("src", advsubUrl)
+                var advancedSubscriptionUrl = $(this).attr("href")
+                $("#iframeAdvsub").attr("src", advancedSubscriptionUrl)
                 $("#modalMail").modal("show");
                 $.ajax({
                     dataType: "json",
-                    url: advsubUrl
+                    url: advancedSubscriptionUrl
                 }).done(function(result){
                     if (result.error == true) {
                         thisBlock.slideUp();

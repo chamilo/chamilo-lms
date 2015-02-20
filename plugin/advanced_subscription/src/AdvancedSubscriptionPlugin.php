@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * @TODO: Improve description
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting a subscribe to a session
  * @package chamilo.plugin.advanced_subscription
@@ -17,7 +16,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     function __construct()
     {
         $parameters = array(
-            'tool_enable' => 'boolean',
             'yearly_cost_limit' => 'text',
             'yearly_hours_limit' => 'text',
             'yearly_cost_unit_converter' => 'text',
@@ -26,7 +24,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'ws_url' => 'text',
             'min_profile_percentage' => 'text',
             'check_induction' => 'boolean',
-            'confirmation_message' => 'wysiwyg',
             'secret_key' => 'text',
         );
 
@@ -71,9 +68,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     private function installDatabase()
     {
-        $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $advancedSubscriptionQueueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
 
-        $sql = "CREATE TABLE IF NOT EXISTS $pAdvSubQueueTable (" .
+        $sql = "CREATE TABLE IF NOT EXISTS $advancedSubscriptionQueueTable (" .
             "id int UNSIGNED NOT NULL AUTO_INCREMENT, " .
             "session_id int UNSIGNED NOT NULL, " .
             "user_id int UNSIGNED NOT NULL, " .
@@ -81,8 +78,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             "last_message_id int UNSIGNED NOT NULL, " .
             "created_at datetime NOT NULL, " .
             "updated_at datetime NULL, " .
-            "PRIMARY KEY PK_advsub_queue (id), " .
-            "UNIQUE KEY UK_advsub_queue (user_id, session_id)); ";
+            "PRIMARY KEY PK_advanced_subscription_queue (id), " .
+            "UNIQUE KEY UK_advanced_subscription_queue (user_id, session_id)); ";
         Database::query($sql);
     }
 
@@ -93,14 +90,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     private function uninstallDatabase()
     {
         /* Drop plugin tables */
-        $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $advancedSubscriptionQueueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
 
-        $sql = "DROP TABLE IF EXISTS $pAdvSubQueueTable; ";
+        $sql = "DROP TABLE IF EXISTS $advancedSubscriptionQueueTable; ";
         Database::query($sql);
 
         /* Delete settings */
-        $tSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        Database::query("DELETE FROM $tSettings WHERE subkey = 'advanced_subscription'");
+        $settingsTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        Database::query("DELETE FROM $settingsTable WHERE subkey = 'advanced_subscription'");
     }
 
     /**
@@ -115,39 +112,39 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function isAllowedToDoRequest($userId, $params = array())
     {
         if (isset($params['is_connected']) && isset($params['profile_completed'])) {
-            $isAble = false;
-            $advSubPlugin = self::create();
-            $wsUrl = $advSubPlugin->get('ws_url');
+            $isAllowed = false;
+            $plugin = self::create();
+            $wsUrl = $plugin->get('ws_url');
             // @TODO: Get connection status from user by WS
             $isConnected = $params['is_connected'];
             if ($isConnected) {
-                $profileCompletedMin = (float) $advSubPlugin->get('min_profile_percentage');
+                $profileCompletedMin = (float) $plugin->get('min_profile_percentage');
                 // @TODO: Get completed profile percentage by WS
                 $profileCompleted = (float) $params['profile_completed'];
                 if ($profileCompleted > $profileCompletedMin) {
-                    $checkInduction = $advSubPlugin->get('check_induction');
+                    $checkInduction = $plugin->get('check_induction');
                     // @TODO: check if user have completed at least one induction session
                     $completedInduction = true;
                     if (!$checkInduction || $completedInduction) {
-                        $uitMax = $advSubPlugin->get('yearly_cost_unit_converter');
-                        $uitMax *= $advSubPlugin->get('yearly_cost_limit');
+                        $uitMax = $plugin->get('yearly_cost_unit_converter');
+                        $uitMax *= $plugin->get('yearly_cost_limit');
                         // @TODO: Get UIT completed by user this year by WS
                         $uitUser = 0;
                         $extra = new ExtraFieldValue('session');
                         $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'cost');
                         $uitUser += $var['field_value'];
                         if ($uitMax >= $uitUser) {
-                            $expendedTimeMax = $advSubPlugin->get('yearly_hours_limit');
+                            $expendedTimeMax = $plugin->get('yearly_hours_limit');
                             // @TODO: Get Expended time from user data
                             $expendedTime = 0;
                             $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'duration');
                             $expendedTime += $var['field_value'];
                             if ($expendedTimeMax >= $expendedTime) {
-                                $expendedNumMax = $advSubPlugin->get('courses_count_limit');
+                                $expendedNumMax = $plugin->get('courses_count_limit');
                                 // @TODO: Get Expended num from user
                                 $expendedNum = 0;
                                 if ($expendedNumMax >= $expendedNum) {
-                                    $isAble = true;
+                                    $isAllowed = true;
                                 } else {
                                     throw new \Exception($this->get_lang('AdvancedSubscriptionCourseXLimitReached'));
                                 }
@@ -167,7 +164,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 throw new \Exception($this->get_lang('AdvancedSubscriptionNotConnected'));
             }
 
-            return $isAble;
+            return $isAllowed;
         } else {
             throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteParams'));
         }
@@ -186,7 +183,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $userId = intval($userId);
         $sessionId = intval($sessionId);
         $now = api_get_utc_datetime();
-        $pAdvSubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $advancedSubscriptionQueueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $attributes = array(
             'session_id' => $sessionId,
             'user_id' => $userId,
@@ -195,7 +192,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'updated_at' => null,
         );
 
-        $id = Database::insert($pAdvSubQueueTable, $attributes);
+        $id = Database::insert($advancedSubscriptionQueueTable, $attributes);
 
         return $id;
     }
@@ -213,7 +210,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $mailId = intval($mailId);
         $userId = intval($userId);
         $sessionId = intval($sessionId);
-        $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $attributes = array(
             'last_message_id' => $mailId,
         );
@@ -325,19 +322,19 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $where = array(
                 'id = ?' => intval($params['queue']['id']),
             );
-        } elseif(isset($params['u']) && isset($params['s'])) {
+        } elseif(isset($params['studentUserId']) && isset($params['sessionId'])) {
             $where = array(
                 'user_id = ? AND session_id = ? AND status <> ? AND status <> ?' => array(
-                    intval($params['u']),
-                    intval($params['s']),
+                    intval($params['studentUserId']),
+                    intval($params['sessionId']),
                     $newStatus,
-                    ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED,
+                    ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED,
                 ),
             );
         }
         if (isset($where)) {
             $res = (bool) Database::update(
-                Database::get_main_table(TABLE_ADV_SUB_QUEUE),
+                Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE),
                 array(
                     'status' => $newStatus,
                     'updated_at' => api_get_utc_datetime(),
@@ -378,169 +375,169 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
         $mailIds = array();
         switch ($actionType) {
-            case ADV_SUB_ACTION_STUDENT_REQUEST:
+            case ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST:
                 // Mail to student
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advanced_subscription/views/student_notice_student.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $tpl->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
-                    $data['s'],
+                    $data['sessionId'],
                     true
                 );
                 break;
-            case ADV_SUB_ACTION_SUPERIOR_APPROVE:
+            case ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailBossAccept'),
                     $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_student.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to superior
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailBossAccept'),
                     $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_superior.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to admin
                 foreach ($data['admins'] as $adminId => $admin) {
                     $tpl->assign('admin', $admin);
                     $mailIds[] = $this->sendMailMessage(
-                        $data['u'],
+                        $data['studentUserId'],
                         $adminId,
                         $this->get_lang('MailBossAccept'),
                         $tpl->fetch('/advanced_subscription/views/superior_accepted_notice_admin.tpl'),
-                        $data['s'],
+                        $data['sessionId'],
                         true
                     );
                 }
                 break;
-            case ADV_SUB_ACTION_SUPERIOR_DISAPPROVE:
+            case ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_DISAPPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailBossReject'),
                     $tpl->fetch('/advanced_subscription/views/superior_rejected_notice_student.tpl'),
-                    $data['s'],
+                    $data['sessionId'],
                     true
                 );
                 // Mail to superior
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailBossReject'),
                     $tpl->fetch('/advanced_subscription/views/superior_rejected_notice_superior.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 break;
-            case ADV_SUB_ACTION_SUPERIOR_SELECT:
+            case ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_SELECT:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
                     $tpl->fetch('/advanced_subscription/views/student_notice_student.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to superior
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
                     $tpl->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
-                    $data['s'],
+                    $data['sessionId'],
                     true
                 );
                 break;
-            case ADV_SUB_ACTION_ADMIN_APPROVE:
+            case ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_student.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_superior.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to admin
-                $adminId = $data['current_user_id'];
+                $adminId = $data['currentUserId'];
                 $tpl->assign('admin', $data['admins'][$adminId]);
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $adminId,
                     $this->get_lang('MailAdminAccept'),
                     $tpl->fetch('/advanced_subscription/views/admin_accepted_notice_admin.tpl'),
-                    $data['s'],
+                    $data['sessionId'],
                     true
                 );
                 break;
-            case ADV_SUB_ACTION_ADMIN_DISAPPROVE:
+            case ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE:
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_student.tpl'),
-                    $data['s'],
+                    $data['sessionId'],
                     true
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['superior']['user_id'],
                     $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_superior.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to admin
-                $adminId = $data['current_user_id'];
+                $adminId = $data['currentUserId'];
                 $tpl->assign('admin', $data['admins'][$adminId]);
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $adminId,
                     $this->get_lang('MailAdminReject'),
                     $tpl->fetch('/advanced_subscription/views/admin_rejected_notice_admin.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 break;
-            case ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS:
+            case ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST_NO_BOSS:
                 // Mail to student
                 $mailIds['render'] = $this->sendMailMessage(
-                    $data['u'],
+                    $data['studentUserId'],
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestNoBoss'),
                     $tpl->fetch('/advanced_subscription/views/student_no_superior_notice_student.tpl'),
-                    $data['s']
+                    $data['sessionId']
                 );
                 // Mail to admin
                 foreach ($data['admins'] as $adminId => $admin) {
                     $tpl->assign('admin', $admin);
                     $mailIds[] = $this->sendMailMessage(
-                        $data['u'],
+                        $data['studentUserId'],
                         $adminId,
                         $this->get_lang('MailStudentRequestNoBoss'),
                         $tpl->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
-                        $data['s'],
+                        $data['sessionId'],
                         true
                     );
                 }
@@ -565,16 +562,22 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $count = 0;
         if (!empty($params) && is_array($params)) {
-            $advsubQueueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+            $advancedSubscriptionQueueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
             $where['1 = ? '] = 1;
             if (isset($params['sessions']) && is_array($params['sessions'])) {
+                foreach ($params['sessions'] as &$sessionId) {
+                    $sessionId = intval($sessionId);
+                }
                 $where['AND session_id IN ( ? ) '] = implode($params['sessions']);
             }
             if (isset($params['status']) && is_array($params['status'])) {
+                foreach ($params['status'] as &$status) {
+                    $status = intval($status);
+                }
                 $where['AND status IN ( ? ) '] = implode($params['status']);
             }
             $where['where'] = $where;
-            $count = Database::select('COUNT(*)', $advsubQueueTable, $where);
+            $count = Database::select('COUNT(*)', $advancedSubscriptionQueueTable, $where);
             $count = $count[0]['COUNT(*)'];
         }
         return $count;
@@ -614,8 +617,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getQueueStatus($userId, $sessionId)
     {
+        $userId = intval($userId);
+        $sessionId = intval($sessionId);
         if (!empty($userId) && !empty($sessionId)) {
-            $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+            $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
             $row = Database::select(
                 'status',
                 $queueTable,
@@ -631,7 +636,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 return $row[0]['status'];
             } else {
 
-                return ADV_SUB_QUEUE_STATUS_NO_QUEUE;
+                return ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE;
             }
         }
 
@@ -650,8 +655,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
             $vacancy = intval($var['field_value']);
             if (!empty($vacancy)) {
-                $vacancy -= $this->countQueueByParams(array('sessions' => $sessionId, 'status' => ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED));
-
+                $vacancy -= $this->countQueueByParams(
+                    array(
+                        'sessions' => array($sessionId),
+                        'status' => array(ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED),
+                    )
+                );
                 if ($vacancy >= 0) {
 
                     return $vacancy;
@@ -713,26 +722,26 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $message = '';
         switch ($status)
         {
-            case ADV_SUB_QUEUE_STATUS_NO_QUEUE:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {
                     $message = $this->get_lang('AdvancedSubscriptionNoQueueIsAble');
                 } else {
                     $message = $this->get_lang('AdvancedSubscriptionNoQueue');
                 }
                 break;
-            case ADV_SUB_QUEUE_STATUS_START:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START:
                 $message = $this->get_lang('AdvancedSubscriptionQueueStart');
                 break;
-            case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
                 $message = $this->get_lang('AdvancedSubscriptionQueueBossDisapproved');
                 break;
-            case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
                 $message = $this->get_lang('AdvancedSubscriptionQueueBossApproved');
                 break;
-            case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
                 $message = $this->get_lang('AdvancedSubscriptionQueueAdminDisapproved');
                 break;
-            case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
+            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
                 $message = $this->get_lang('AdvancedSubscriptionQueueAdminApproved');
                 break;
             default:
@@ -761,13 +770,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getQueueUrl($params)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/ajax/advsub.ajax.php?' .
-            'a=' . Security::remove_XSS($params['a']) . '&' .
-            's=' . intval($params['s']) . '&' .
-            'current_user_id=' . intval($params['current_user_id']) . '&' .
-            'e=' . intval($params['e']) . '&' .
-            'u=' . intval($params['u']) . '&' .
-            'q=' . intval($params['q']) . '&' .
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/ajax/advanced_subscription.ajax.php?' .
+            'a=' . Security::remove_XSS($params['action']) . '&' .
+            's=' . intval($params['sessionId']) . '&' .
+            'current_user_id=' . intval($params['currentUserId']) . '&' .
+            'e=' . intval($params['newStatus']) . '&' .
+            'u=' . intval($params['studentUserId']) . '&' .
+            'q=' . intval($params['queueId']) . '&' .
             'is_connected=' . intval($params['is_connected']) . '&' .
             'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
@@ -808,7 +817,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $sessionArray[$var] = $val;
             }
         }
-        $queueTable = Database::get_main_table(TABLE_ADV_SUB_QUEUE);
+        $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
         $where = array(
@@ -816,8 +825,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             array(
                 'q.session_id = ? AND q.status <> ? AND q.status <> ?' => array(
                     $sessionId,
-                    ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED,
-                    ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED,
+                    ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED,
+                    ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED,
                 )
             )
         );
@@ -826,16 +835,16 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         foreach ($students as &$student) {
             $status = intval($student['status']);
             switch($status) {
-                case ADV_SUB_QUEUE_STATUS_NO_QUEUE:
-                case ADV_SUB_QUEUE_STATUS_START:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START:
                     $student['validation'] = '';
                     break;
-                case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
-                case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
                     $student['validation'] = get_lang('No');
                     break;
-                case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
-                case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
+                case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
                     $student['validation'] = get_lang('Yes');
                     break;
                 default:
@@ -881,12 +890,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $key = sha1($this->get('secret_key'));
         // Prepare array to have specific type variables
-        $dataPrepared['a'] = strval($data['a']);
-        $dataPrepared['s'] = intval($data['s']);
-        $dataPrepared['current_user_id'] = intval($data['current_user_id']);
-        $dataPrepared['u'] = intval($data['u']);
-        $dataPrepared['q'] = intval($data['q']);
-        $dataPrepared['e'] = intval($data['e']);
+        $dataPrepared['action'] = strval($data['action']);
+        $dataPrepared['sessionId'] = intval($data['sessionId']);
+        $dataPrepared['currentUserId'] = intval($data['currentUserId']);
+        $dataPrepared['studentUserId'] = intval($data['studentUserId']);
+        $dataPrepared['queueId'] = intval($data['queueId']);
+        $dataPrepared['newStatus'] = intval($data['newStatus']);
         $dataPrepared = serialize($dataPrepared);
         return sha1($dataPrepared . $key);
     }

@@ -15,23 +15,23 @@ $plugin = AdvancedSubscriptionPlugin::create();
 // Get validation hash
 $hash = Security::remove_XSS($_REQUEST['v']);
 // Get data from request (GET or POST)
-$data['a'] = Security::remove_XSS($_REQUEST['a']);
-$data['s'] = intval($_REQUEST['s']);
-$data['current_user_id'] = intval($_REQUEST['current_user_id']);
-$data['u'] = intval($_REQUEST['u']);
-$data['q'] = intval($_REQUEST['q']);
-$data['e'] = intval($_REQUEST['e']);
+$data['action'] = Security::remove_XSS($_REQUEST['a']);
+$data['sessionId'] = intval($_REQUEST['s']);
+$data['currentUserId'] = intval($_REQUEST['current_user_id']);
+$data['studentUserId'] = intval($_REQUEST['u']);
+$data['queueId'] = intval($_REQUEST['q']);
+$data['newStatus'] = intval($_REQUEST['e']);
 $data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
 $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_REQUEST['profile_completed']) : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
 // Check if data is valid or is for start subscription
-$verified = $plugin->checkHash($data, $hash) || $data['a'] == 'subscribe';
+$verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';
 if ($verified) {
-    switch($data['a']) {
+    switch($data['action']) {
         case 'check': // Check minimum requirements
             try {
-                $res = AdvancedSubscriptionPlugin::create()->isAllowedToDoRequest($data['u'], $data);
+                $res = AdvancedSubscriptionPlugin::create()->isAllowedToDoRequest($data['studentUserId'], $data);
                 if ($res) {
                     $result['error'] = false;
                     $result['errorMessage'] = 'No error';
@@ -46,14 +46,14 @@ if ($verified) {
             break;
         case 'subscribe': // Subscription
             // Start subscription to queue
-            $res = AdvancedSubscriptionPlugin::create()->startSubscription($data['u'], $data['s'], $data);
+            $res = AdvancedSubscriptionPlugin::create()->startSubscription($data['studentUserId'], $data['sessionId'], $data);
             // Check if queue subscription was successful
             if ($res === true) {
                 // Prepare data
                 // Get session data
                 // Assign variables
                 $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
-                $sessionArray = api_get_session_info($data['s']);
+                $sessionArray = api_get_session_info($data['sessionId']);
                 $extraSession = new ExtraFieldValue('session');
                 $extraField = new ExtraField('session');
                 // Get session fields
@@ -65,7 +65,7 @@ if ($verified) {
                     $fields[$field['id']] = $field['field_variable'];
                 }
 
-                $mergedArray = array_merge(array($data['s']), array_keys($fields));
+                $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
                 $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
                     // Check if session field value is set in session field list
@@ -77,11 +77,11 @@ if ($verified) {
                     }
                 }
                 // Get student data
-                $studentArray = api_get_user_info($data['u']);
+                $studentArray = api_get_user_info($data['studentUserId']);
                 $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
                 $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
                 // Get superior data if exist
-                $superiorId = UserManager::getStudentBoss($data['u']);
+                $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                 if (!empty($superiorId)) {
                     $superiorArray = api_get_user_info($superiorId);
                 } else {
@@ -98,7 +98,7 @@ if ($verified) {
                 }
                 unset($admin);
                 // Set data
-                $data['a'] = 'confirm';
+                $data['action'] = 'confirm';
                 $data['student'] = $studentArray;
                 $data['superior'] = $superiorArray;
                 $data['admins'] = $adminsArray;
@@ -109,13 +109,13 @@ if ($verified) {
                 if (empty($superiorId)) {
                     // Student boss does not exist
                     // Update status to accepted by boss
-                    $res = $plugin->updateQueueStatus($data, ADV_SUB_QUEUE_STATUS_BOSS_APPROVED);
+                    $res = $plugin->updateQueueStatus($data, ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED);
                     if (!empty($res)) {
                         // Prepare admin url
                         $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
-                            'advanced_subscription/src/admin_view.php?s=' . $data['s'];
+                            'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
                         // Send mails
-                        $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST_NO_BOSS);
+                        $result['mailIds'] = $plugin->sendMail($data, ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST_NO_BOSS);
                         // Check if mails were sent
                         if (!empty($result['mailIds'])) {
                             $result['error'] = false;
@@ -134,13 +134,13 @@ if ($verified) {
                 } else {
                     // Student boss does exist
                     // Get url to be accepted by boss
-                    $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_APPROVED;
+                    $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED;
                     $data['student']['acceptUrl'] = $plugin->getQueueUrl($data);
                     // Get url to be rejected by boss
-                    $data['e'] = ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED;
+                    $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED;
                     $data['student']['rejectUrl'] = $plugin->getQueueUrl($data);
                     // Send mails
-                    $result['mailIds'] = $plugin->sendMail($data, ADV_SUB_ACTION_STUDENT_REQUEST);
+                    $result['mailIds'] = $plugin->sendMail($data, ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST);
                     // Check if mails were sent
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;
@@ -168,14 +168,14 @@ if ($verified) {
             break;
         case 'confirm':
             // Check if new status is set
-            if (isset($data['e'])) {
+            if (isset($data['newStatus'])) {
                 // Update queue status
-                $res = $plugin->updateQueueStatus($data, $data['e']);
+                $res = $plugin->updateQueueStatus($data, $data['newStatus']);
                 if ($res === true) {
                     // Prepare data
                     // Prepare session data
                     $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
-                    $sessionArray = api_get_session_info($data['s']);
+                    $sessionArray = api_get_session_info($data['sessionId']);
                     $extraSession = new ExtraFieldValue('session');
                     $extraField = new ExtraField('session');
                     // Get session fields
@@ -187,7 +187,7 @@ if ($verified) {
                         $fields[$field['id']] = $field['field_variable'];
                     }
 
-                    $mergedArray = array_merge(array($data['s']), array_keys($fields));
+                    $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
                     $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
                     foreach ($sessionFieldValueList as $sessionFieldValue) {
                         // Check if session field value is set in session field list
@@ -199,11 +199,11 @@ if ($verified) {
                         }
                     }
                     // Prepare student data
-                    $studentArray = api_get_user_info($data['u']);
+                    $studentArray = api_get_user_info($data['studentUserId']);
                     $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
                     $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
                     // Prepare superior data
-                    $superiorId = UserManager::getStudentBoss($data['u']);
+                    $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                     if (!empty($superiorId)) {
                         $superiorArray = api_get_user_info($superiorId);
                     } else {
@@ -225,22 +225,22 @@ if ($verified) {
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
-                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/admin_view.php?s=' . $data['s'];
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
                     // Check if exist and action in data
                     if (empty($data['action'])) {
                         // set action in data by new status
-                        switch ($data['e']) {
-                            case ADV_SUB_QUEUE_STATUS_BOSS_APPROVED:
-                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_APPROVE;
+                        switch ($data['newStatus']) {
+                            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
+                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE;
                                 break;
-                            case ADV_SUB_QUEUE_STATUS_BOSS_DISAPPROVED:
-                                $data['action'] = ADV_SUB_ACTION_SUPERIOR_DISAPPROVE;
+                            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
+                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_DISAPPROVE;
                                 break;
-                            case ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED:
-                                $data['action'] = ADV_SUB_ACTION_ADMIN_APPROVE;
+                            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
+                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE;
                                 break;
-                            case ADV_SUB_QUEUE_STATUS_ADMIN_DISAPPROVED:
-                                $data['action'] = ADV_SUB_ACTION_ADMIN_DISAPPROVE;
+                            case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
+                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE;
                                 break;
                             default:
                                 break;
@@ -248,8 +248,8 @@ if ($verified) {
                     }
 
                     // Student Session inscription
-                    if ($data['e'] == ADV_SUB_QUEUE_STATUS_ADMIN_APPROVED) {
-                        SessionManager::suscribe_users_to_session($data['s'], array($data['u']), null, false);
+                    if ($data['newStatus'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                        SessionManager::suscribe_users_to_session($data['sessionId'], array($data['studentUserId']), null, false);
                     }
 
                     // Send mails
@@ -273,7 +273,7 @@ if ($verified) {
             }
             break;
         default:
-            $result['errorMessage'] = 'Action do not exist!';
+            $result['errorMessage'] = 'This action does not exist!';
     }
 }
 

@@ -4,23 +4,32 @@
 $strings['plugin_title'] = 'Advanced Subscription';
 $strings['plugin_comment'] = 'Plugin for managing the registration queue and communication to sessions from an external website';
 $strings['ws_url'] = 'Webservice url';
-$strings['ws_url'] = 'Webservice url';
-$strings['yearly_cost_unit_converter'] = 'Taxation unit (TU)';
-$strings['min_profile_percentage'] = 'Minimum required of completed percentage profile';
-$strings['yearly_cost_limit'] = 'Yearly limit TU for courses (measured in Taxation units)';
-$strings['yearly_hours_limit'] = 'Yearly limit hours for courses';
-$strings['courses_count_limit'] = 'Yearly limit times for courses';
+$strings['ws_url_help'] = 'La URL de la cual se solicitará información para el proceso de la inscripción avanzada';
 $strings['check_induction'] = 'Activate induction course requirement';
+$strings['check_induction_help'] = 'Check to require induction course';
+$strings['yearly_cost_limit'] = 'Yearly limit TUV for courses (measured in Taxation units)';
+$strings['yearly_cost_limit_help'] = "How much TUV the student courses should cost at most.";
+$strings['yearly_hours_limit'] = 'Yearly limit teaching hours for courses';
+$strings['yearly_hours_limit_help'] = "How many teching hours the student may learn by year.";
+$strings['yearly_cost_unit_converter'] = 'Taxation unit value (TUV)';
+$strings['yearly_cost_unit_converter_help'] = "The taxation unit value for current year in local currency";
+$strings['courses_count_limit'] = 'Yearly limit times for courses';
+$strings['courses_count_limit_help'] = "How many times a student can course, this does <strong>not</strong> include induction courses";
 $strings['course_session_credit_year_start_date'] = 'Year start date';
+$strings['course_session_credit_year_start_date_help'] = "a date (dd/mm)";
+$strings['min_profile_percentage'] = "Minimum required of completed percentage profile";
+$strings['min_profile_percentage_help'] = "Percentage number( > 0.00 y < 100.00)";
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "You are not connected to platform. Please login first";
 $strings['AdvancedSubscriptionProfileIncomplete'] = "Your percentage completed profile require to exceed minimum percentage. Please complete percentage";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "You have not yet completed induction course. Please complete it first";
-$strings['AdvancedSubscriptionCostXLimitReached'] = "We are sorry, you have already reached yearly limit mount for courses";
-$strings['AdvancedSubscriptionTimeXLimitReached'] = "We are sorry, you have already reached yearly limit hours for courses";
-$strings['AdvancedSubscriptionCourseXLimitReached'] = "We are sorry, you have already reached yearly limit times for courses";
+$strings['AdvancedSubscriptionCostXLimitReached'] = "We are sorry, you have already reached yearly limit %s TUV cost for courses ";
+$strings['AdvancedSubscriptionTimeXLimitReached'] = "We are sorry, you have already reached yearly limit %s hours for courses";
+$strings['AdvancedSubscriptionCourseXLimitReached'] = "We are sorry, you have already reached yearly limit %s times for courses";
 $strings['AdvancedSubscriptionNotMoreAble'] = "We are sorry, you no longer fulfills the initial conditions to subscribe this course";
+$strings['AdvancedSubscriptionIncompleteParams'] = "The parameters are wrong or incomplete.";
+$strings['AdvancedSubscriptionIsNotEnabled'] = "Advanced subscription is not enabled";
 
 $strings['AdvancedSubscriptionNoQueue'] = "You are not subscribed for this course.";
 $strings['AdvancedSubscriptionNoQueueIsAble'] = "You are not subscribed, but you are qualified for this course.";
@@ -42,7 +51,7 @@ $strings['MailStudentRequestNoBoss'] = 'Student registration request without bos
 
 // TPL langs
 // Admin view
-$strings['SelectASession'] = 'Select a session';
+$strings['SelectASession'] = 'Select a training session';
 $strings['SessionName'] = 'Session name';
 $strings['Target'] = 'Target audience';
 $strings['Vacancies'] = 'Vacancies';
@@ -59,6 +68,11 @@ $strings['AcceptInfinitive'] = 'Accept';
 $strings['RejectInfinitive'] = 'Reject';
 $strings['AreYouSureYouWantToAcceptSubscriptionOfX'] = 'Are you sure you want to accept the subscription of %s?';
 $strings['AreYouSureYouWantToRejectSubscriptionOfX'] = 'Are you sure you want to reject the subscription of %s?';
+
+$strings['MailTitle'] = 'Received request for course %s';
+$strings['MailDear'] = 'Dear:';
+$strings['MailThankYou'] = 'Thank you.';
+$strings['MailThankYouCollaboration'] = 'Thank you for your help.';
 
 // Admin Accept
 $strings['MailTitleAdminAcceptToAdmin'] = 'Information: Has been received inscription validation';

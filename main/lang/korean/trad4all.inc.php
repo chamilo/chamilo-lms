@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TypeMessage = "메세지를 입력하여 주십시요!";
+$ConfirmReset = "정말로 모든 메세지를 삭제하시겠습니까?";
+$ClearList = "리스트 모두 삭제";
+$CallSent = "대화를 신청하였습니다. 상대방의 수락을 기다리는 중입니다.";
+$ChatDenied = "상대방으로부터 대화 신청이 거부되었습니다.";
 $UsersOnline = "온라인 상의 유저";
 $Remove = "삭제";
 $Enter = "과정 목록으로 돌아가기";

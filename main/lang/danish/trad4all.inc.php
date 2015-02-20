@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Tilføj et nyt diskussionsforum";
 $ReplyShort = "SV:";
 $NoTimeLimits = "Ingen tidsbegrænsning";
+$TypeMessage = "Indtast venligst din meddelelse!";
+$ConfirmReset = "Ønsker du virkelig at slette alle meddelelser?";
+$ClearList = "Ryd listen";
+$CallSent = "Anmodning om chat er blevet afsendt. Venter på svar fra bruger";
+$ChatDenied = "Dit anmodning blev afvist";
+$Send = "Send";
+$Connected = "Deltager i chatten";
 $Title = "Titel";
 $By = "Af";
 $UsersOnline = "Brugere online";

@@ -20,6 +20,15 @@ if (defined('SYSTEM_INSTALLATION')) {
     // Delete directories and files that are not necessary anymore
     // pChart (1) lib, etc
 
+    // Delete the "chat" file in all language directories, as variables have been moved to the trad4all file
+    $langPath = api_get_path(SYS_CODE_PATH).'lang/';
+    $list = scandir($langPath);
+    foreach ($list as $entry) {
+        if (is_dir($langPath.$entry)) {
+            unlink($langPath.$entry.'/chat.inc.php');
+        }
+    }
+
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

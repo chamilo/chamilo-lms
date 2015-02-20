@@ -5,6 +5,11 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Tambah sebuah forum baru";
 $ReplyShort = "Re:";
 $NoTimeLimits = "Tanpa batas waktu";
+$TypeMessage = "Silahkan ketik pesan anda!";
+$ConfirmReset = "Apakah anda benar-benar akan menghapus semua pesan?";
+$ClearList = "Hapus daftar";
+$CallSent = "Panggilan Chat  telah dikirim. Menunggu jawaban patner anda.";
+$ChatDenied = "Panggilan anda ditolak patner anda.";
 $Title = "Judul";
 $UsersOnline = "User Online";
 $Remove = "Hapus";

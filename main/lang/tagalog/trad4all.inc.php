@@ -3,6 +3,10 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Tanggalin lahat ang nilikhang mga pagdalo";
+$TypeMessage = "Mangyaring i-type ang iyong mensahe!";
+$ConfirmReset = "Nais mo ba talagang tanggalin lahat ng mga mensahe?";
+$ClearList = "Linisin ang chat";
+$Connected = "Mga kasama sa chat";
 $Title = "pamagat";
 $By = "Ni";
 $UsersOnline = "Mga Gumagamit online";

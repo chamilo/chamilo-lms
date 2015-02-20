@@ -3,6 +3,11 @@
 for more information: see languages.txt in the lang folder.
 */
 $NoTimeLimits = "Žádné časové omezení";
+$TypeMessage = "Prosím napište Vaši správu!";
+$ConfirmReset = "Opravdu chcete smazat všechny správy?";
+$ClearList = "Vyčistit seznam";
+$CallSent = "Váše pozvání na Chat hovor bylo posláno, nyní čekám na potvrzení od vašeho partnera.";
+$ChatDenied = "Volaný zamítnul Váš hovor.";
 $Title = "Nadpis";
 $UsersOnline = "Uživatel online";
 $Remove = "Odstranit";

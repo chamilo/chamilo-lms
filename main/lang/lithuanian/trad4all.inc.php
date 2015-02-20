@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Sukurti naują forumą";
 $ReplyShort = "Re:";
 $NoTimeLimits = "Laiko apribojimų nėra";
+$TypeMessage = "Prašome rašyti žinutes!";
+$ConfirmReset = "Ar tkrai norite ištrinti visas žinutes?";
+$ClearList = "Išvalyti sąrašą";
+$CallSent = "Kvietimas išsiųstas. Laukiama patvirtinimo.";
+$ChatDenied = "Jūsų kvietimas atmestas.";
+$Send = "Siųsti";
+$Connected = "Prisijungęs";
 $Title = "Antraštė";
 $By = "By";
 $UsersOnline = "Prisijungę vartotojai";

@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Dodaj novi forum";
 $ReplyShort = "Odg:";
 $NoTimeLimits = "Bez vremenskog ograničenja";
+$TypeMessage = "Molim Vas, otkucajte vašu poruku!";
+$ConfirmReset = "Da li zaista želite da obrišete sve poruke?";
+$ClearList = "Obriši listu";
+$CallSent = "Poziv za Chat  je poslat. Čeka se odobrenje vašeg sagovornika.";
+$ChatDenied = "Vaš sagovornik je odbio vaš poziv.";
+$Send = "Pošalji";
+$Connected = "Chat partneri";
 $Title = "Naslov";
 $UsersOnline = "Online korisnici";
 $Remove = "Ukloni";

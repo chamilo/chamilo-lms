@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Yapay hoq k'itirimanata";
 $ReplyShort = "Kuti:";
 $NoTimeLimits = "Sin límite de tiempo";
+$TypeMessage = "Ama hina kaychu, qelqa willanaykita";
+$ConfirmReset = "Cheqaychu kashanki llipin willanakunata pichanaykipaq?";
+$ClearList = "Pichay sinrita";
+$CallSent = "Rimapakunapaq mañakuyqa apachiku. Mayqan runaman mañakuyqa suyachikushanraq.";
+$ChatDenied = "Waqyasqaykiqa mana chaskikunchu runa mañakusqayki";
+$Send = "Apachiy";
+$Connected = "Kaqkuna";
 $Title = "Sutinchaynin";
 $By = "Pi churarun";
 $UsersOnline = "Haykan kashanku";

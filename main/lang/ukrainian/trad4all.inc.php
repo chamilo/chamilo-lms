@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Додати новий форум";
 $ReplyShort = "Віпд.:";
 $NoTimeLimits = "Без ліміту часу";
+$TypeMessage = "Будь ласка, введіть повідомлення!";
+$ConfirmReset = "Ви дійсно бажаєте видалити всі повідомлення?";
+$ClearList = "Почистити список";
+$CallSent = "Запит відправлено. Очікуємо підтвердження партнера.";
+$ChatDenied = "Ваш запит було відкинуто партнером.";
+$Send = "Відправити";
+$Connected = "З'єднаний";
 $Title = "Заголовок";
 $UsersOnline = "Користувачі онлайн";
 $Remove = "Видалити";

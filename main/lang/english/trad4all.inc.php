@@ -33,9 +33,7 @@ $CotangentCot = "Cotangent:\t\t\tcot(x)";
 $HyperbolicCotangentCoth = "Hyperbolic cotangent:\t\tcoth(x)";
 $ArccotangentArccot = "Arccotangent:\t\t\tarccot(x)";
 $HyperbolicArccotangentArccoth = "Hyperbolic arccotangent:\t\tarccoth(x)";
-$HelpCookieUsageValidation = "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />
-If needed, the Help section of your browser indicates how to configure cookies.<br /><br />
-For more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website.";
+$HelpCookieUsageValidation = "In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website.";
 $YouAcceptCookies = "By continuing to use this site, you declare you accept its use of cookies.";
 $TemplateCertificateComment = "An example certificate format";
 $TemplateCertificateTitle = "Certificate";
@@ -158,7 +156,7 @@ $SortByUpdatedDate = "Sort by edition date";
 $SortByCreatedDate = "Sort by creation date";
 $ViewTable = "Table view";
 $ViewList = "List view";
-$DRH = "HR director";
+$DRH = "Human Resources Manager";
 $Global = "Global";
 $QuestionTitle = "Question title";
 $QuestionId = "Question ID";
@@ -328,6 +326,13 @@ $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
 $NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
+$TypeMessage = "Please type your message!";
+$ConfirmReset = "Do you really want to delete all messages?";
+$ClearList = "Clear the chat";
+$CallSent = "Chat call has been sent. Waiting for the approval of your partner.";
+$ChatDenied = "Your call has been denied by your partner.";
+$Send = "Send message";
+$Connected = "Chat partners";
 $Title = "Title";
 $By = "By";
 $UsersOnline = "Users online";
@@ -380,7 +385,7 @@ $OfficialCode = "Code";
 $FirstName = "First name";
 $LastName = "Last name";
 $Status = "Status";
-$Email = "E-mail";
+$Email = "e-mail";
 $SlideshowConversion = "Slideshow conversion";
 $UploadFile = "File upload";
 $AvailableFrom = "Available from";
@@ -428,7 +433,7 @@ $Propositions = "Proposals for an improvement of";
 $Maj = "Update";
 $Modify = "Edit";
 $Invisible = "invisible";
-$Save = "Send message";
+$Save = "Save";
 $Move = "Move";
 $Help = "Help";
 $Ok = "Validate";
@@ -693,7 +698,7 @@ $Other = "Other";
 $AddRight = "Add";
 $CampusHomepage = "Homepage";
 $YouHaveNewMessage = "You have a new message!";
-$myActiveSessions = "My active sessions";
+$myActiveSessions = "My active Sessions";
 $myInactiveSessions = "My inactive sessions";
 $FileUpload = "File upload";
 $MyActiveSessions = "My active Sessions";
@@ -839,7 +844,7 @@ $UserNativeLanguage = "Native language";
 $UserResidenceCountry = "Country of residence";
 $AddAnAttachment = "Add attachment";
 $FileComment = "File comment";
-$FileName = "File name";
+$FileName = "Filename";
 $SessionsAdmin = "Sessions administrator";
 $MakeChangeable = "Make changeable";
 $MakeUnchangeable = "Make unchangeable";
@@ -1360,14 +1365,7 @@ $YouMustAcceptLicence = "You must accept the licence";
 $SelectOne = "Select one";
 $ContactInformationHasBeenSent = "Contact information has been sent";
 $UserInactivedSinceX = "User inactive since %s";
-$ContactInformationDescription = "Dear user,<br />
-<br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />
-<br />
-By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />
-<br />
-By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />
-<br />
-Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />";
+$ContactInformationDescription = "Dear user,<br />\n<br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />\n<br />\nBy knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />\n<br />\nBy filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />\n<br />\nPlease note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />";
 $CompanyActivity = "Your company's activity";
 $DateUnLock = "Unlock date";
 $DateLock = "Lock date";
@@ -1574,8 +1572,7 @@ $SaveForNow = "Save and continue later";
 $NoQuicktime = "Your browser does not have the QuickTime plugin installed. You can still use the platform, but to run a larger number of media file types, we suggest you might want to install it.";
 $NoJavaSun = "Your browser doesn't seem to have the Sun Java plugin installed. You can still use the platform, but you will lose a few of its capabilities.";
 $NoJava = "Your browser does not support Java";
-$JavaSun24 = "Your browser has a Java version not supported by this tool.
-To use it you have to install a Java Sun version higher than 24";
+$JavaSun24 = "Your browser has a Java version not supported by this tool.\nTo use it you have to install a Java Sun version higher than 24";
 $NoMessageAnywere = "If you do not want to see this message again during this session, click here";
 $Attempts = "Attempts";
 $SeeResults = "See results";

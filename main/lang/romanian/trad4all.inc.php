@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Adaugati un forum nou";
 $ReplyShort = "Re:";
 $NoTimeLimits = "Fara limite de timp";
+$TypeMessage = "Te rog scrie mesajul !";
+$ConfirmReset = "Esti sigur(a) ca doresti sa stergi toate mesajele?";
+$ClearList = "Curata lista";
+$CallSent = "Apelul de chat a fost trimis. Asteapta aprobarea partenerului.";
+$ChatDenied = "Apelul tau a fost respins de catre partener.";
+$Send = "Trimite";
+$Connected = "Parteneri de chat";
 $Title = "Titlu";
 $By = "De";
 $UsersOnline = "Utilizatori online";

@@ -5,6 +5,11 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Aldoni novan forumon";
 $ReplyShort = "Respondo:";
 $NoTimeLimits = "Sen templimo";
+$TypeMessage = "Bonvolu tajpi tekston!";
+$ConfirmReset = "Ĉu certe, ke vi volas forigi ĉiujn mesaĝojn?";
+$ClearList = "Viŝi";
+$CallSent = "Babilpeto sendita. Atendu la konsenton de via partnero.";
+$ChatDenied = "Via peto estas ignorata de via partnero.";
 $Title = "Titolo";
 $UsersOnline = "Konektitaj uzuloj";
 $Remove = "Forigi";

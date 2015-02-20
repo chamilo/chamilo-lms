@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Amestar un foru";
 $ReplyShort = "Re:";
 $NoTimeLimits = "Ensin llende de tiempu";
+$TypeMessage = "Por favor, escriba'l so mensaxe";
+$ConfirmReset = "¿ Ta seguru de querer esborrar tolos mensaxes ?";
+$ClearList = "Esborrar el llistáu";
+$CallSent = "Unvióse un pidimientu de chat. N'espera d'aprobación de la persona contautada.";
+$ChatDenied = "El so llamáu rechazóse. La persona contautada nun quier chatear con usté.";
+$Send = "Unviar";
+$Connected = "Coneutaos";
 $Title = "Títulu";
 $By = "Espublizáu por";
 $UsersOnline = "Usuarios coneutaos";

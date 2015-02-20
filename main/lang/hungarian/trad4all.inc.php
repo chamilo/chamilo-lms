@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Új fórum hozzáadása";
 $ReplyShort = "Vá:";
 $NoTimeLimits = "Nincs időkorlát";
+$TypeMessage = "Kérjük, írja be az üzenetét !";
+$ConfirmReset = "Valóban ki akarja törölni az összes üzenetet ?";
+$ClearList = "Lista kiürítése";
+$CallSent = "Chat-felhívás elküldve";
+$ChatDenied = "Visszautasítva.";
+$Send = "Küld";
+$Connected = "Létrejött a kapcsolat";
 $Title = "Cím";
 $By = "Szerző";
 $UsersOnline = "Jelenlévő felhasználó";

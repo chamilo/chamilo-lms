@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$OpenBadgesBannerText = "Um novo padrão de reconhecimento e verificação de aprendizagem combinado com as habilidades do Chamilo. Use as abas para configurar.";
+$OpenBadgesIntroduction = "Introduzindo OpenBadges (sistema de emblemas)";
+$DesignANewBadgeComment = "Crie o design de um novo emblema, faça o download da ferramenta de design e faça o upload na plataforma.";
 $TheBadgesWillBeSentToThatBackpack = "Os emblemas serão enviados para esta mochila";
 $BackpackDetails = "Detalhes de mochila";
 $CriteriaToEarnTheBadge = "Critério para ganhar emblema";
@@ -327,6 +330,13 @@ $SelectACategory = "Selecione uma categoria";
 $AdvancedEdit = "Edição avançada";
 $NoTimeLimits = "Sem limite de tempo";
 $SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";
+$TypeMessage = "Por favor, digite a sua mensagem!";
+$ConfirmReset = "Tem a certeza que deseja excluir todas as mensagens?";
+$ClearList = "Limpar a lista";
+$CallSent = "O convite para o Chat foi enviado. Aguarde aprovação do usuário solicitado.";
+$ChatDenied = "Seu convite para o chat não foi aceito pelo usuário.";
+$Send = "Enviar";
+$Connected = "Conectados";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Usuários online";

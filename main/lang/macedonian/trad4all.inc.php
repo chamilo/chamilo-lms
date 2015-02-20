@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Додај нов форум";
 $ReplyShort = "Одг:";
 $NoTimeLimits = "Нема временски ограничувања";
+$TypeMessage = "Ве молиме внесете ја вашата порака";
+$ConfirmReset = "Навистина ли сакате да ги избришете СИТЕ пораки?";
+$ClearList = "Избриши го списокот";
+$CallSent = "Повикот за муабет беше испратен. Почетајте го одобрувањето од соговорникот.";
+$ChatDenied = "Соговорникот го одби Вашиот повик.";
+$Send = "Испрати";
+$Connected = "Поврзано";
 $Title = "Наслов";
 $By = "Од";
 $UsersOnline = "Највени корисници";

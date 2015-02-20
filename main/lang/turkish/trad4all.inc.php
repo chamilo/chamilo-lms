@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "Forum ekle";
 $ReplyShort = "Cevap:";
 $NoTimeLimits = "Zaman sınırlaması yok";
+$TypeMessage = "Lütfen mesajınızı yazınız!";
+$ConfirmReset = "Bütün mesajlari silmek istiyormusunuz?";
+$ClearList = "Listeyi temizle";
+$CallSent = "Sohbet isteğiniz gönderildi, cevap bekleniyor.";
+$ChatDenied = "Çağrınız kabul edilmedi.";
+$Send = "Mesaj gönder";
+$Connected = "Sohbete Katılanlar";
 $Title = "Başlık";
 $UsersOnline = "Online kullanıcılar";
 $Remove = "Kaldır";

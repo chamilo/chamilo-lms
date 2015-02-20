@@ -4,6 +4,10 @@ for more information: see languages.txt in the lang folder.
 */
 $Username = "ユーザー名";
 $DeleteAllAttendances = "作成した出席をすべて削除";
+$TypeMessage = "メッセージを入力してください!";
+$ConfirmReset = "メッセージをすべて削除しますか?";
+$ClearList = "チャットを消去";
+$Connected = "チャットの相手";
 $Title = "タイトル";
 $UsersOnline = "オンライン ユーザー";
 $Remove = "败瓢";

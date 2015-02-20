@@ -5,6 +5,13 @@ for more information: see languages.txt in the lang folder.
 $AddForum = "新增討論區";
 $ReplyShort = "回覆：";
 $NoTimeLimits = "沒有時限";
+$TypeMessage = "請輸入你的消息!";
+$ConfirmReset = "真的想要刪除所有消息嗎？";
+$ClearList = "清除清單";
+$CallSent = "聊天請求已經發送，等待對方同意。";
+$ChatDenied = "你的聊天請求已經被對方拒絕。";
+$Send = "已傳送";
+$Connected = "已連線";
 $Title = "標題";
 $UsersOnline = "線上使用者";
 $Remove = "移除";

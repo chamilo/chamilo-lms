@@ -224,7 +224,7 @@ class Controller extends \Controller
         if ($form->validate()) {
             $success = $repo->save($description);
 
-            $message = $success ? get_lang('DescriptionUpdated') : get_lang('Error');
+            $message = $success ? get_lang('CourseDescriptionUpdated') : get_lang('Error');
 
             $home = $this->url(self::ACTION_DEFAULT);
             Redirect::go($home);

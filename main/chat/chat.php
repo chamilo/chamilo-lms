@@ -6,7 +6,6 @@
  * @package chamilo.chat
  */
 
-$language_file = array('chat');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_CHAT;
 $this_section = SECTION_COURSES;

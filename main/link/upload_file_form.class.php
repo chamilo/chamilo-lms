@@ -14,7 +14,7 @@ use Chamilo;
 
 /**
  * Form to upload a file.
- * 
+ *
  * @license /licence.txt
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
@@ -28,7 +28,7 @@ class UploadFileForm extends \FormValidator
 
     /**
      *
-     * 
+     *
      */
     function init()
     {
@@ -38,11 +38,11 @@ class UploadFileForm extends \FormValidator
         $label = get_lang('File');
         $this->add_file('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
-        //$this->add_checkbox('replace', '', get_lang('ReplaceExistingEntries'));
+        //$this->addCheckBox('replace', '', get_lang('ReplaceExistingEntries'));
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
-        
-         $label = get_lang('CSVMustLookLike');     
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+
+         $label = get_lang('CSVMustLookLike');
          $label = "<h4>$label</h4>";
          $help = '<pre>
                     <strong>"url"</strong>;"title";"description";"target";"category_title";"category_description"
@@ -50,13 +50,13 @@ class UploadFileForm extends \FormValidator
                     "http://google.com";"Google";"";"_self";"Google";""
                     "http://mail.google.com";"Google";"";"_self";"Google";""
                     </pre>';
-         
+
          $this->add_html($label . $help);
     }
 
     /**
      *
-     * @return array 
+     * @return array
      */
     public function get_file()
     {

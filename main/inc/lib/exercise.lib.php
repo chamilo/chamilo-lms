@@ -154,17 +154,15 @@ class ExerciseLib
             } elseif ($answerType == FREE_ANSWER) {
                 $fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer'] : null;
 
-                $oFCKeditor = new CKeditor();
-                $oFCKeditor->ToolbarSet = 'Test_Free_Answer';
-                $oFCKeditor->Width = '100%';
-                $oFCKeditor->Height = '200';
-                $oFCKeditor->Value = $fck_content;
-                $s .= $oFCKeditor->editor(
-                    "choice[" . $questionId . "]",
-                    $oFCKeditor->Value
+                $form = new FormValidator('free_choice_'.$questionId);
+                $config = array(
+                    'ToolbarSet' => 'TestFreeAnswer'
                 );
+                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $s .=  $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
-                //Add nanog
+                // Add nanog
                 if (api_get_setting('enable_nanogong') == 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId, $exe_id;
@@ -186,16 +184,13 @@ class ExerciseLib
                     echo $nano->show_button();
                 }
 
-                $oFCKeditor = new CKeditor();
-                $oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-                $oFCKeditor->Width = '100%';
-                $oFCKeditor->Height = '150';
-                $oFCKeditor->ToolbarStartExpanded = false;
-                $oFCKeditor->Value = '';
-                $s .= $oFCKeditor->editor(
-                    "choice[" . $questionId . "]",
-                    $oFCKeditor->Value
+                $form = new FormValidator('free_choice_'.$questionId);
+                $config = array(
+                    'ToolbarSet' => 'TestFreeAnswer'
                 );
+                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
+                $s .=  $form->return_form();
             }
 
             // Now navigate through the possible answers, using the max number of

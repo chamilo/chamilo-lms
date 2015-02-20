@@ -256,7 +256,7 @@ echo '<div class=actions>';
 echo '</div>';
 
 // Tool introduction
-Display::display_introduction_section(TOOL_BLOG);
+Display::display_introduction_section(TOOL_BLOGS);
 
 //Display::display_header($nameTools,'Blogs');
 ?>

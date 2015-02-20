@@ -216,9 +216,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access    public
      * @return    bool      true if file has been uploaded, false otherwise
      */
-    function isUploadedFile()
+    public function isUploadedFile()
     {
-        return $this->_ruleIsUploadedFile($this->_value);
+        return HTML_QuickForm_file::_ruleIsUploadedFile($this->_value);
     } // end func isUploadedFile
 
     // }}}
@@ -231,7 +231,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      * @access    private
      * @return    bool      true if file has been uploaded, false otherwise
      */
-    function _ruleIsUploadedFile($elementValue)
+    public static function _ruleIsUploadedFile($elementValue)
     {
         if ((isset($elementValue['error']) && $elementValue['error'] == 0) ||
             (!empty($elementValue['tmp_name']) && $elementValue['tmp_name'] != 'none')) {

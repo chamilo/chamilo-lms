@@ -23,45 +23,6 @@
  * @link        http://pear.php.net/package/HTML_QuickForm
  */
 
-/**
- * PEAR and PEAR_Error classes, for error handling
- */
-require_once 'PEAR.php';
-
-/**
- * Element types known to HTML_QuickForm
- * @see HTML_QuickForm::registerElementType(), HTML_QuickForm::getRegisteredTypes(),
- *      HTML_QuickForm::isTypeRegistered()
- * @global array $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']
- */
-$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] = array(
-    'group'             => array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
-    'hidden'            => array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
-    'reset'             => array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
-    'checkbox'          => array('HTML/QuickForm/checkbox.php','HTML_QuickForm_checkbox'),
-    'file'              => array('HTML/QuickForm/file.php','HTML_QuickForm_file'),
-    'image'             => array('HTML/QuickForm/image.php','HTML_QuickForm_image'),
-    'password'          => array('HTML/QuickForm/password.php','HTML_QuickForm_password'),
-    'radio'             => array('HTML/QuickForm/radio.php','HTML_QuickForm_radio'),
-    'button'            => array('HTML/QuickForm/button.php','HTML_QuickForm_button'),
-    'submit'            => array('HTML/QuickForm/submit.php','HTML_QuickForm_submit'),
-    'select'            => array('HTML/QuickForm/select.php','HTML_QuickForm_select'),
-    'hiddenselect'      => array('HTML/QuickForm/hiddenselect.php','HTML_QuickForm_hiddenselect'),
-    'text'              => array('HTML/QuickForm/text.php','HTML_QuickForm_text'),
-    'textarea'          => array('HTML/QuickForm/textarea.php','HTML_QuickForm_textarea'),
-    'link'              => array('HTML/QuickForm/link.php','HTML_QuickForm_link'),
-    'advcheckbox'       => array('HTML/QuickForm/advcheckbox.php','HTML_QuickForm_advcheckbox'),
-    'date'              => array('HTML/QuickForm/date.php','HTML_QuickForm_date'),
-    'static'            => array('HTML/QuickForm/static.php','HTML_QuickForm_static'),
-    'header'            => array('HTML/QuickForm/header.php', 'HTML_QuickForm_header'),
-    'html'              => array('HTML/QuickForm/html.php', 'HTML_QuickForm_html'),
-    'hierselect'        => array('HTML/QuickForm/hierselect.php', 'HTML_QuickForm_hierselect'),
-    'autocomplete'      => array('HTML/QuickForm/autocomplete.php', 'HTML_QuickForm_autocomplete'),
-    'xbutton'           => array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton'),
-    'advanced_settings' => array('HTML/QuickForm/advanced_settings.php','HTML_QuickForm_advanced_settings'),
-    'label'             => array('HTML/QuickForm/label.php','HTML_QuickForm_label'),
-    'email'             => array('HTML/QuickForm/email.php','HTML_QuickForm_email')
-);
 
 /**
  * Validation rules known to HTML_QuickForm
@@ -394,9 +355,8 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    void
      */
-    function registerRule($ruleName, $type, $data1, $data2 = null)
+    public static function registerRule($ruleName, $type, $data1, $data2 = null)
     {
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $registry->registerRule($ruleName, $type, $data1, $data2);
     } // end func registerRule
@@ -601,19 +561,18 @@ class HTML_QuickForm extends HTML_Common
      * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
-    function &_loadElement($event, $type, $args)
+    public function &_loadElement($event, $type, $args)
     {
-        $type = strtolower($type);
-        if (!HTML_QuickForm::isTypeRegistered($type)) {
-            $error = PEAR::raiseError(null, QUICKFORM_UNREGISTERED_ELEMENT, null, E_USER_WARNING, "Element '$type' does not exist in HTML_QuickForm::_loadElement()", 'HTML_QuickForm_Error', true);
-            return $error;
+        $lowerType = strtolower($type);
+        $className = 'HTML_QuickForm_'.$lowerType;
+        // Try classic class name HTML_QuickForm_
+        if (!class_exists($className)) {
+            // Try new class name CamelCase
+            $className = underScoreToCamelCase($type);
+            if (!class_exists($className)) {
+                throw new \Exception("Class '$className' does not exist. ");
+            }
         }
-        $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
-        $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
-
-        include_once $includeFile;
-        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
-        //$elementObject =& new $className();
         $elementObject = new $className();
 
         for ($i = 0; $i < 5; $i++) {
@@ -626,7 +585,7 @@ class HTML_QuickForm extends HTML_Common
             return $err;
         }
         return $elementObject;
-    } // end func _loadElement
+    }
 
     // }}}
     // {{{ addElement()
@@ -1737,7 +1696,7 @@ class HTML_QuickForm extends HTML_Common
     *
     * @access public
     * @since 3.0
-    * @return object a default renderer object
+    * @return HTML_QuickForm_Renderer_Default
     */
     function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {

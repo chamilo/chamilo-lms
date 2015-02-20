@@ -345,7 +345,11 @@ if (api_is_allowed_to_edit(null, true) ||
                             echo '</td>';
                         }
                     } else {
-                        echo '<td class="checkboxes_col_'.$calendar['id'].'">';
+                        $calendarClass = null;
+                        if (isset($calendar)) {
+                            $calendarClass = "checkboxes_col_".$calendar['id'];
+                        }
+                        echo '<td class="'.$calendarClass.'">';
                         echo '<div style="height:20px">';
                         echo '<center>&nbsp;</center>
                         </div>

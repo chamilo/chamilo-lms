@@ -8,7 +8,7 @@
  */
 
 // Language files that need to be included
-$language_file = array('slideshow', 'document');
+$language_file = array('document');
 require_once '../inc/global.inc.php';
 api_protect_course_script();
 

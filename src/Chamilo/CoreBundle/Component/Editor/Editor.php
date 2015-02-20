@@ -182,7 +182,7 @@ class Editor
     {
         if (is_array($config)) {
             foreach ($config as $key => $value) {
-                switch($key) {
+                switch ($key) {
                     case 'ToolbarSet':
                         $this->toolbarSet = $value;
                         break;

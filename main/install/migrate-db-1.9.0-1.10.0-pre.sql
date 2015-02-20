@@ -49,9 +49,11 @@ ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
 
+DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
+DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.9' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.10' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

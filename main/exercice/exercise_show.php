@@ -155,8 +155,7 @@ function getFCK(vals,marksid) {
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
         if (maxEditors == 0) {
-            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            oHidden.value = oEditor.GetXHTML(true);
+            oHidden.value = CKEDITOR.instances[oHidden.name].getData();
         } else {
             oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
         }
@@ -289,7 +288,8 @@ $exercise_content = null;
 $category_list = array();
 
 $useAdvancedEditor = true;
-if (count($questionList) > $maxEditors) {
+
+if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
 
@@ -543,6 +543,7 @@ foreach ($questionList as $questionId) {
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
 			$comnt = Event::get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
+
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
@@ -695,7 +696,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 }
 
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
-    //Adding total
+    // Adding total
     $category_list['total'] = array(
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
@@ -714,20 +715,19 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_boss()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo '<form name="myform" id="myform" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+		echo ' <form name="myform" id="myform" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin !='learnpath' && $origin!='student_progress') {
-
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
-		<button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
+        <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
             <?php echo get_lang('CorrectTest'); ?>
         </button>
 		</form>

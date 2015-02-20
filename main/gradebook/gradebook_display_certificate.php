@@ -149,7 +149,7 @@ if ($filter) {
         api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
-    $form->add_button('submit', get_lang('Submit'));
+    $form->addButton('submit', get_lang('Submit'));
     $filterForm = '<br />'.$form->return_form();
 
     if ($form->validate()) {

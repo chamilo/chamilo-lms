@@ -486,7 +486,7 @@ class Skill extends Model
             }
         }
 
-        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type, s.icon
+        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type, s.icon, s.short_code
                 FROM {$this->table} s INNER JOIN {$this->table_skill_rel_skill} ss ON (s.id = ss.skill_id) $id_condition
                 ORDER BY ss.id, ss.parent_id";
 
@@ -734,7 +734,7 @@ class Skill extends Model
     public function get_user_skills($user_id, $get_skill_data = false)
     {
         $user_id = intval($user_id);
-        $sql = 'SELECT DISTINCT s.id, s.name FROM '.$this->table_skill_rel_user.' u INNER JOIN '.$this->table.' s
+        $sql = 'SELECT DISTINCT s.id, s.name, s.icon FROM '.$this->table_skill_rel_user.' u INNER JOIN '.$this->table.' s
                 ON u.skill_id = s.id
                 WHERE user_id = '.$user_id;
 
@@ -744,7 +744,21 @@ class Skill extends Model
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 if ($get_skill_data) {
-                    $clean_skill[$skill['id']] = $skill;
+                    $iconThumb = null;
+
+                    if (!empty($skill['icon'])) {
+                        $iconThumb = sprintf(
+                            "badges/%s-small.png",
+                            sha1($skill['name'])
+                        );
+                    }
+
+                    $clean_skill[$skill['id']] = array_merge(
+                        $skill,
+                        array(
+                            'iconThumb' => $iconThumb
+                        )
+                    );
                 } else {
                     $clean_skill[$skill['id']] = $skill['id'];
                 }
@@ -797,8 +811,15 @@ class Skill extends Model
                     $skill['parent_id'] = 'root';
                 }
 
-                // because except main keys (id, name, children) others keys are not saved while in the space tree
+                // because except main keys (id, name, children) others keys
+                // are not saved while in the space tree
                 $skill['data'] = array('parent_id' => $skill['parent_id']);
+
+                // If a short code was defined, send the short code to replace
+                // skill name (to shorten the text in the wheel)
+                if (!empty($skill['short_code'])) {
+                    $skill['data']['name'] = $skill['short_code'];
+                }
 
                 //In order to paint all members of a family with the same color
                 if (empty($skill_id)) {

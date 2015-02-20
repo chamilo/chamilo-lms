@@ -8,7 +8,7 @@
  */
 
 // name of the language file that needs to be included
-$language_file = array('course_description', 'userInfo', 'admin');
+$language_file = array('userInfo', 'admin');
 
 // including files
 require_once '../inc/global.inc.php';
@@ -94,72 +94,7 @@ $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function() {
-	//Second col
-     /*
-    $("#thematic_plan_add").live("submit", function() {
-
-		var serialize_form_content = $(this).serialize();
-
-		//Getting FCK content
-		var oEditor = FCKeditorAPI.GetInstance("description[1]");
-		content_1=  oEditor.GetXHTML(true) ;
-		var oEditor = FCKeditorAPI.GetInstance("description[2]");
-		content_2=  oEditor.GetXHTML(true) ;
-		var oEditor = FCKeditorAPI.GetInstance("description[3]");
-		content_3=  oEditor.GetXHTML(true) ;
-		var oEditor = FCKeditorAPI.GetInstance("description[4]");
-		content_4=  oEditor.GetXHTML(true) ;
-		var oEditor = FCKeditorAPI.GetInstance("description[5]");
-		content_5=  oEditor.GetXHTML(true) ;
-		var oEditor = FCKeditorAPI.GetInstance("description[6]");
-		content_6=  oEditor.GetXHTML(true) ;
-
-		$.ajax({
-			type: "POST",
-			url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_plan",
-			data: "desc[1]="+content_1+"&"+"desc[2]="+content_2+"&"+"desc[3]="+content_3+"&"+"desc[4]="+content_4+"&"+"desc[5]="+content_5+"&"+"desc[6]="+content_6+"&"+serialize_form_content,
-			success: function(data) {
-				var thematic_id = $("input[name=\"thematic_id\"]").val();
-				$("#thematic_plan_"+thematic_id).html(data);
-				$("#thematic_plan_add").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");
-                //location.reload(true);
-			}
-		});
-		//prevent the browser to follow the link
-        return false;
-	});*/
-
-   // Third col
-   /*
-	$("#thematic_advance").live("submit", function() {
-	   	var url = this.href;
-        var my_id = this.id;
-		var serialize_form_content = $(this).serialize();
-
-		//Getting FCK content
-		var oEditor = FCKeditorAPI.GetInstance("content");
-		content =  oEditor.GetXHTML(true) ;
-		$.ajax({
-				type: "POST",
-				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_advance",
-				data: "real_content=" + content + "&" +serialize_form_content,
-				success: function(data) {
-					var thematic_advance_id = $("input[name=\"thematic_advance_id\"]").val();
-					$("#thematic_advance_"+thematic_advance_id).html(data);
-					$("#thematic_advance").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");
-
-					//Only refresh if the parent is to add
-					if (my_id == "add_button") {
-						//location.reload(true);
-					}
-				}
-		});
-		//prevent the browser to follow the link
-        return false;
-	});*/
-
     $(".thematic_advance_actions, .thematic_tools ").hide();
-
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);
 		$("#thematic_id_content_"+id ).show();
@@ -179,17 +114,6 @@ $(document).ready(function() {
 		var id = parseInt(this.id.split("_")[4]);
 		$("#thematic_advance_tools_"+id ).hide();
 	});
-    /*
-    $("#custom_date").live("click", function() {
-        $("#div_custom_datetime").css("display", "none");
-        $("#div_datetime_by_attendance").hide();
-    });
-
-    $("#from_attendance").live("click", function() {
-        $("#div_custom_datetime").css("display", "block");
-        $("#div_custom_datetime").show();
-        $("#div_datetime_by_attendance").show();
-    });*/
 });
 </script>';
 

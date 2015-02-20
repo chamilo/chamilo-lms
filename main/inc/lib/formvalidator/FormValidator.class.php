@@ -147,14 +147,14 @@ class FormValidator extends HTML_QuickForm
         $renderer = & $this->defaultRenderer();
 
         //Form template
-        $form_template = '<form{attributes}>
+        $formTemplate = '<form{attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>
 </fieldset>
 {hidden}
 </form>';
-        $renderer->setFormTemplate($form_template);
+        $renderer->setFormTemplate($formTemplate);
 
         //Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
@@ -272,27 +272,48 @@ EOT;
      * @param string $name
      * @param string $value
      */
-    function add_hidden($name, $value)
+    public function addHidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     */
     public function add_textarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }
 
-    public function add_button($name, $label, $attributes = array())
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     */
+    public function addButton($name, $label, $attributes = array())
     {
         $this->addElement('button', $name, $label, $attributes);
     }
 
-    public function add_checkbox($name, $label, $trailer = '', $attributes = array())
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $trailer
+     * @param array  $attributes
+     */
+    public function addCheckBox($name, $label, $trailer = '', $attributes = array())
     {
         $this->addElement('checkbox', $name, $label, $trailer, $attributes);
     }
 
-    public function add_radio($name, $label, $options = '')
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $options
+     */
+    public function addRadio($name, $label, $options = array())
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -301,26 +322,47 @@ EOT;
         $this->addGroup($group, $name, $label);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $options
+     * @param array  $attributes
+     */
     public function add_select($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }
 
+    /**
+     * @param string $label
+     * @param string $text
+     */
     public function add_label($label, $text)
     {
         $this->addElement('label', $label, $text);
     }
 
+    /**
+     * @param string $text
+     */
     public function add_header($text)
     {
         $this->addElement('header', $text);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     */
     public function add_file($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }
 
+    /**
+     * @param string $snippet
+     */
     public function add_html($snippet)
     {
         $this->addElement('html', $snippet);
@@ -338,7 +380,7 @@ EOT;
      * @param array $config (optional)	Configuration settings for the online editor.
      *
      */
-    public function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
+    public function add_html_editor($name, $label, $required = true, $fullPage = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
@@ -346,8 +388,12 @@ EOT;
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
 
-        /** @var HTML_QuickForm_html_editor $element */
+        /** @var HtmlEditor $element */
         $element = $this->getElement($name);
+
+        if ($fullPage) {
+            $config['FullPage'] = true;
+        }
 
         if ($element->editor) {
             $element->editor->processConfig($config);

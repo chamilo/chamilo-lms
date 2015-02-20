@@ -6,7 +6,7 @@ use Chamilo;
 
 /**
  * Form to upload a CSV file.
- * 
+ *
  * @license /licence.txt
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
@@ -16,7 +16,7 @@ class UploadFileForm extends \FormValidator
     /**
      *
      * @param string $action
-     * @return \Glossary\UploadFileForm 
+     * @return \Glossary\UploadFileForm
      */
     public static function create($action)
     {
@@ -30,7 +30,7 @@ class UploadFileForm extends \FormValidator
 
     /**
      *
-     * 
+     *
      */
     function init()
     {
@@ -42,7 +42,7 @@ class UploadFileForm extends \FormValidator
         $this->add_file('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
 
         $label = get_lang('CSVMustLookLike');
         $label = "$label";

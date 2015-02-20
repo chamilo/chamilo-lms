@@ -28,6 +28,8 @@ api_protect_course_script(true, false, true);
 // including additional libraries
 require_once 'hotpotatoes.lib.php';
 
+$_course = api_get_course_info();
+
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = isset($origin) ? $origin : null;
@@ -125,8 +127,10 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
-    ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
-    $id = intval($_GET['exeid']); //filtered by post-condition
+    ($is_allowedToEdit || $is_tutor)
+) {
+    //filtered by post-condition
+    $id = intval($_GET['exeid']);
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
         api_not_allowed();
@@ -162,8 +166,7 @@ if (isset($_REQUEST['comments']) &&
         }
     }
 
-    $loop_in_track = ($comments_exist === true) ? (count($_POST) / 2) : count($_POST);
-
+    $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
     $array_content_id_exe = array();
 
     if ($comments_exist === true) {
@@ -181,14 +184,10 @@ if (isset($_REQUEST['comments']) &&
             $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
-        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
 
-        $result = Database::query($sql);
-        Database::result($result, 0, "question");
-
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
-                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
-        Database::query($query);
+        $sql = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        Database::query($sql);
 
         //Saving results in the track recording table
         $sql = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
@@ -226,7 +225,12 @@ if (isset($_REQUEST['comments']) &&
         $message .= $from_name;
         $message = str_replace("#test#", Security::remove_XSS($test), $message);
         $message = str_replace("#url#", $url, $message);
-        MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
+        MessageManager::send_message_simple(
+            $student_id,
+            $subject,
+            $message,
+            api_get_user_id()
+        );
     }
 
     //Updating LP score here

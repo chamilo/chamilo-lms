@@ -426,16 +426,13 @@ class Event
         $learnpath_item_id = null
     ) {
         global $debug;
-
-        //$score = Database::escape_string($score);
-        // $answer = Database::escape_string($answer);
         $question_id = Database::escape_string($question_id);
         $exe_id = Database::escape_string($exe_id);
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
 
         // check user_id or get from context
-        if (empty($user_id) or intval($user_id) != $user_id) {
+        if (empty($user_id)) {
             $user_id = api_get_user_id();
             // anonymous
             if (empty($user_id)) {
@@ -447,7 +444,7 @@ class Event
             $course_id = api_get_course_int_id();
         }
         // check session_id or get from context
-        if (empty($session_id) or intval($session_id) != $session_id) {
+        if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
         // check learnpath_id or get from context
@@ -478,13 +475,6 @@ class Event
             $answer = 0;
         }
 
-        if (!empty($user_id)) {
-            $user_id = "'".$user_id."'";
-        } else {
-            // anonymous
-            $user_id = api_get_anonymous_id();
-        }
-
         $file = '';
         if (isset($nano)) {
             $file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
@@ -510,12 +500,13 @@ class Event
             // Check if attempt exists.
 
             $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
-                    WHERE c_id = $course_id AND
-                          session_id = $session_id AND
-                          exe_id = $exe_id AND
-                          user_id = $user_id AND
-                          question_id = $question_id AND
-                          position = $position";
+                    WHERE
+                        c_id = $course_id AND
+                        session_id = $session_id AND
+                        exe_id = $exe_id AND
+                        user_id = $user_id AND
+                        question_id = $question_id AND
+                        position = $position";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 if ($debug) {

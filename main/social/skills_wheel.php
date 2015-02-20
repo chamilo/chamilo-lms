@@ -37,6 +37,8 @@ $skill = new Skill();
 $ranking = $skill->get_user_skill_ranking($load_user);
 $countSkill = count($skill->get_all());
 
+$mySkills = $skill->get_user_skills($user_id, true);
+
 $skill_condition = '';
 if (isset($_GET['skill_id'])) {
     $skill_condition = '&skill_id='.intval($_GET['skill_id']);
@@ -53,6 +55,7 @@ $tpl->assign('url', $url);
 $tpl->assign('userInfo', $userInfo);
 $tpl->assign('ranking', $ranking);
 $tpl->assign('countSkill', $countSkill);
+$tpl->assign('mySkills', $mySkills);
 
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');
 $tpl->assign('content', $content);

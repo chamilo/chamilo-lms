@@ -71,13 +71,13 @@ class CourseDescriptionForm extends \FormValidator
         $defaults['content'] = $description->content;
 
         $this->add_header($description->get_title());
-        $this->add_hidden('description_type', $description->get_description_type());
-        $this->add_hidden('c_id', $description->c_id);
-        $this->add_hidden('id', $description->id);
+        $this->addHidden('description_type', $description->get_description_type());
+        $this->addHidden('c_id', $description->c_id);
+        $this->addHidden('id', $description->id);
         $this->add_textfield('title', get_lang('Title'), true, array('size' => 'width: 350px;'));
         $this->applyFilter('title', 'html_filter');
         $this->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
-        $this->add_button('save', get_lang('Save'), 'class="save"');
+        $this->addButton('save', get_lang('Save'), 'class="save"');
 
         $this->setDefaults($defaults);
     }

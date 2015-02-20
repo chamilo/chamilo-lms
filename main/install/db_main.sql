@@ -670,7 +670,6 @@ VALUES
 ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
-('wcag_anysurfer_public_pages', NULL, 'radio','Editor','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
 ('stylesheets', NULL, 'textfield','stylesheets','chamilo','',NULL, NULL, NULL, 1),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
@@ -884,7 +883,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.9','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.10','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -984,8 +983,6 @@ VALUES
 ('allow_email_editor', 'false', 'No'),
 ('show_email_addresses','true','Yes'),
 ('show_email_addresses','false','No'),
-('wcag_anysurfer_public_pages', 'true', 'Yes'),
-('wcag_anysurfer_public_pages', 'false', 'No'),
 ('upload_extensions_list_type', 'blacklist', 'Blacklist'),
 ('upload_extensions_list_type', 'whitelist', 'Whitelist'),
 ('upload_extensions_skip', 'true', 'Remove'),

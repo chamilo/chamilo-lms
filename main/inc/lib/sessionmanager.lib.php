@@ -2613,13 +2613,16 @@ class SessionManager
 
         if (Database::num_rows($rs_check_user) > 0) {
             if ($nocoach) {
-                // check if user_id exits int session_rel_user
+                // check if user_id exists in session_rel_user (if the user is
+                // subscribed to the session in any manner)
                 $sql = "SELECT id_user FROM $tbl_session_rel_user
                         WHERE id_session = '$session_id' AND id_user = '$user_id'";
                 $res = Database::query($sql);
 
                 if (Database::num_rows($res) > 0) {
-                    // The user don't be a coach now
+                    // The user is already subscribed to the session. Change the
+                    // record so the user is NOT a coach for this course anymore
+                    // and then exit
                     $sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 0
                             WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id' ";
                     Database::query($sql);
@@ -2628,7 +2631,9 @@ class SessionManager
                     else
                         return false;
                 } else {
-                    // The user don't be a coach now
+                    // The user is not subscribed to the session, so make sure
+                    // he isn't subscribed to a course in this session either
+                    // and then exit
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                             WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id' ";
                     Database::query($sql);
@@ -2638,8 +2643,8 @@ class SessionManager
                         return false;
                 }
             } else {
-                // Assign user like a coach to course
-                // First check if the user is registered in the course
+                // Assign user as a coach to course
+                // First check if the user is registered to the course
                 $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
                         WHERE id_session = '$session_id' AND course_code = '$course_code' AND id_user = '$user_id'";
                 $rs_check = Database::query($sql);
@@ -2665,9 +2670,8 @@ class SessionManager
                     }
                 }
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -5692,5 +5696,88 @@ class SessionManager
         }
 
         return $description;
+    }
+
+    /**
+     * Get a session list filtered by name, description or any of the given extra fields
+     * @param string $term The term to search
+     * @param array $extraFieldsToInclude Extra fields to include in the session data
+     * @return array The list
+     */
+    public static function searchSession($term, $extraFieldsToInclude = array())
+    {
+        $sTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+
+        $term = Database::escape_string($term);
+
+        $resultData = Database::select('id, name, date_start, date_end, duration, description', $sTable, array(
+            'where' => array(
+                "name LIKE %?% " => $term,
+                "OR description LIKE %?% " => $term,
+                "OR id IN (
+                    SELECT session_id
+                    FROM $sfvTable
+                    WHERE field_value LIKE %?%
+                ) " => $term
+            )
+        ));
+
+        if (empty($extraFieldsToInclude)) {
+            return $resultData;
+        }
+
+        $variables = array();
+        $variablePlaceHolders = array();
+
+        foreach ($extraFieldsToInclude as $sessionExtraField) {
+            $variablePlaceHolders[] = "?";
+            $variables[] = Database::escape_string($sessionExtraField);
+        }
+
+        $sessionExtraField = new ExtraField('session');
+        $fieldList = $sessionExtraField->get_all(array(
+            "field_variable IN ( " . implode(", ", $variablePlaceHolders) . " ) " => $variables
+        ));
+
+        $fields = array();
+
+        // Index session fields
+        foreach ($fieldList as $field) {
+            $fields[$field['id']] = $field['field_variable'];
+        }
+
+        // Get session field values
+        $extra = new ExtraFieldValue('session');
+        $sessionFieldValueList = $extra->get_all(
+            array(
+                "field_id IN ( " . implode(", ", $variablePlaceHolders) . " )" => array_keys($fields)
+            )
+        );
+
+        // Add session fields values to session list
+        foreach ($resultData as $id => &$session) {
+            foreach ($sessionFieldValueList as $sessionFieldValue) {
+                // Match session field values to session
+                if ($sessionFieldValue['session_id'] != $id) {
+                    continue;
+                }
+
+                // Check if session field value is set in session field list
+                if (!isset($fields[$sessionFieldValue['field_id']])) {
+                    continue;
+                }
+
+                $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
+                $extrafieldValue = $sessionFieldValue['field_value'];
+
+                $session['extra'][] = array(
+                    'variable' => $extrafieldVariable,
+                    'value' => $extrafieldValue
+                );
+            }
+        }
+
+        return $resultData;
     }
 }

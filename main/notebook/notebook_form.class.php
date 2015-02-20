@@ -78,7 +78,7 @@ class NotebookForm extends \FormValidator
         }
         $this->add_html_editor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
 
         $this->setDefaults($defaults);
     }

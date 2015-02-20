@@ -13,7 +13,7 @@ use Chamilo;
 
 /**
  * Edit/Create link form.
- * 
+ *
  * @license /licence.txt
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
@@ -73,7 +73,7 @@ class LinkForm extends \FormValidator
 
         $this->add_textarea('description', get_lang('Description'), array('class' => 'span3'));
 
-        $this->add_checkbox('on_homepage', '', get_lang('OnHomepage'));
+        $this->addCheckBox('on_homepage', '', get_lang('OnHomepage'));
 
         $id = $link->id;
         if ($id) {
@@ -100,7 +100,7 @@ class LinkForm extends \FormValidator
         //$help = '<span class="help-block">' . get_lang('AddTargetOfLinkOnHomepage') . '</span>';
         //$this->add_label('', $help);
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
 
         $this->setDefaults($defaults);
     }

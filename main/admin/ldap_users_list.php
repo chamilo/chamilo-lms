@@ -17,11 +17,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$action = $_GET["action"];
-$login_as_user_id = $_GET["user_id"];
+$action = @$_GET["action"] ?: null;
+$login_as_user_id = @$_GET["user_id"] ?: null;
 
 // Login as ...
-if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
+if ($action == "login_as" && !empty ($login_as_user_id))
 {
 	login_user($login_as_user_id);
 }
@@ -200,10 +200,10 @@ $form->display();
 
 
 
-$parameters['keyword_username'] = $_GET['keyword_username'];
-$parameters['keyword_firstname'] = $_GET['keyword_firstname'];
-$parameters['keyword_lastname'] = $_GET['keyword_lastname'];
-$parameters['keyword_email'] = $_GET['keyword_email'];
+$parameters['keyword_username'] = @$_GET['keyword_username'] ?: null;
+$parameters['keyword_firstname'] = @$_GET['keyword_firstname'] ?: null;
+$parameters['keyword_lastname'] = @$_GET['keyword_lastname'] ?: null;
+$parameters['keyword_email'] = @$_GET['keyword_email'] ?: null;
 if (isset($_GET['id_session']))
 	$parameters['id_session'] = $_GET['id_session'];
 // Create a sortable table with user-data

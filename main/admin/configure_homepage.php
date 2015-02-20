@@ -46,7 +46,7 @@ function home_tabs($file_logged_in)
 	}
 }
 
-$language_file = array('index', 'admin', 'accessibility');
+$language_file = array('index', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -200,9 +200,6 @@ if (api_is_multiple_url_enabled()) {
 
 // Check WCAG settings and prepare edition using WCAG
 $errorMsg = '';
-if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-	$errorMsg = WCAG_Rendering::request_validation();
-}
 
 // Filter link param
 $link = '';
@@ -224,12 +221,7 @@ if (!empty($action)) {
 		switch ($action) {
 			case 'edit_top':
 				// Filter
-				$home_top = '';
-				if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-					$home_top = WCAG_Rendering::prepareXHTML();
-				} else {
-					$home_top = trim(stripslashes($_POST['home_top']));
-				}
+				$home_top = trim(stripslashes($_POST['home_top']));
 
 				// Write
 				if (is_writable($homep)) {
@@ -334,12 +326,8 @@ if (!empty($action)) {
 				break;
 			case 'edit_news':
 				//Filter
-				//$s_languages_news=$_POST["news_languages"]; // TODO: Why this line has been disabled?
-				if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-					$home_news = WCAG_rendering::prepareXHTML();
-				} else {
-					$home_news = trim(stripslashes($_POST['home_news']));
-				}
+				$home_news = trim(stripslashes($_POST['home_news']));
+
 				//Write
 				if ($s_languages_news != 'all') {
 					if (file_exists($homep.$newsf.'_'.$s_languages_news.$ext)) {
@@ -387,14 +375,7 @@ if (!empty($action)) {
 				$link_name      = trim(stripslashes($_POST['link_name']));
 				$link_url       = trim(stripslashes($_POST['link_url']));
 				$add_in_tab     = intval($_POST['add_in_tab']);
-
-				// WCAG
-				if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-					$link_html = WCAG_Rendering::prepareXHTML();
-				} else {
-					$link_html = trim(stripslashes($_POST['link_html']));
-				}
-
+				$link_html = trim(stripslashes($_POST['link_html']));
 				$filename = trim(stripslashes($_POST['filename']));
 				$target_blank = $_POST['target_blank'] ? true : false;
 
@@ -882,22 +863,13 @@ switch ($action) {
 		if (!empty($target_blank)) { $target_blank_checkbox->setChecked(true); }
 
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {
-			if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-				$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:$link_html));
-			} else {
-				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-				$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-			}
+			$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
+			$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		} else {
 			if (in_array($action, array('edit_tabs','insert_tabs'))) {
-				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-					$form->addElement('html', get_lang('Content').' ('.get_lang('Optional').')');
-					$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:(!empty($link_html) ? $link_html : '')));
-				} else {
-					$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
-					$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-				}
+				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
+				$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 			}
 			$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
 			$form->addElement('html','<table id="table_langs" style="margin-left:159px;"><tr>');
@@ -968,17 +940,8 @@ switch ($action) {
 			$form->addElement('html', $html);
 		}
 
-		if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-			//TODO: review these lines
-			// Print WCAG-specific HTML editor
-			$html = '<tr><td>';
-			$html .= WCAG_Rendering::create_xhtml($open);
-			$html .= '</td></tr>';
-			$form->addElement('html', $html);
-		} else {
-			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-		}
+		$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
+		$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'),array('id' => 'all_langs'));
 		$form->addElement('html','<table id="table_langs" style="margin-left:5px;"><tr>');
 

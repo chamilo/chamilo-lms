@@ -4367,11 +4367,13 @@ class Wiki
         echo '</ul>';
         echo '</li>';
 
-        //menu show page
+        // Menu show page
         echo '<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.self::is_active_navigation_tab('showpage').'>'.
             Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
 
-        if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit() ||
+            GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())
+        ) {
             // menu edit page
 
             echo '<a href="index.php?cidReq=' . $_course['id'] . '&action=edit&amp;title=' . api_htmlentities(urlencode($page)) . '&session_id=' . $session_id . '&group_id=' . $groupId . '"' . self::is_active_navigation_tab('edit') . '>' .
@@ -4381,7 +4383,7 @@ class Wiki
                     '',
                     ICON_SIZE_MEDIUM
                 ) . '</a>';
-            //menu discuss page
+            // menu discuss page
             echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.self::is_active_navigation_tab('discuss').'>'.
                 Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
         }
@@ -4458,7 +4460,7 @@ class Wiki
         $groupId = $this->group_id;
         $userId = api_get_user_id();
 
-        if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false,true)==false) {
+        if (api_get_session_id() != 0 && api_is_allowed_to_session_edit(false,true) == false) {
             api_not_allowed();
         }
 

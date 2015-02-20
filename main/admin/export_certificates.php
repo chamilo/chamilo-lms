@@ -23,7 +23,7 @@ foreach ($courses as $course) {
 }
 $form->addElement('select', 'course', get_lang('Course'), $options);
 $form->addElement('file', 'file', get_lang('File'));
-$form->add_button('submit', get_lang('Submit'));
+$form->addButton('submit', get_lang('Submit'));
 $form->display();
 
 if ($form->validate()) {

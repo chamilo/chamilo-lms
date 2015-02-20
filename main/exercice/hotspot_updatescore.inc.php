@@ -8,7 +8,7 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $courseCode   = $_GET['coursecode'];
 $questionId   = $_GET['questionId'];
@@ -47,7 +47,7 @@ foreach ($coords as $coord) {
 }
 $coordinates = substr($coordinates,0,-1);
 
-$TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
+$TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
 // update db
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];

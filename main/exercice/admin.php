@@ -124,7 +124,7 @@ Event::delete_all_incomplete_attempts(
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 $objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : null;
 if (isset($_REQUEST['convertAnswer'])) {
-    $objQuestion = $objQuestion->swapAnswerTypes();
+    $objQuestion = $objQuestion->swapSimpleAnswerTypes();
     $_SESSION['objQuestion'] = $objQuestion;
 }
 $objAnswer   = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : null;

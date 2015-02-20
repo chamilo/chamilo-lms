@@ -637,14 +637,14 @@ abstract class Question
     }
 
     /**
-    Sets the title
+     * Sets the title
      */
     public function setTitle($title) {
         $this->question = $title;
     }
 
     /**
-    Sets the title
+     * Sets extra info
      */
     public function setExtra($extra) {
         $this->extra = $extra;
@@ -1632,7 +1632,7 @@ abstract class Question
      * Swap between unique and multiple type answers
      * @return object
      */
-    function swapAnswerTypes()
+    function swapSimpleAnswerTypes()
     {
         $oppositeAnswers = array(
             UNIQUE_ANSWER => MULTIPLE_ANSWER,

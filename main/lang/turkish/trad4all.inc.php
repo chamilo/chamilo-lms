@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Forum ekle";
 $ReplyShort = "Cevap:";
+$WCAGGoMenu = "Menüye git";
+$WCAGGoContent = "İçeriğe git";
 $NoTimeLimits = "Zaman sınırlaması yok";
 $TypeMessage = "Lütfen mesajınızı yazınız!";
 $ConfirmReset = "Bütün mesajlari silmek istiyormusunuz?";
@@ -337,6 +339,12 @@ $Other = "Diğer";
 $AddRight = "Ekle";
 $year = "yıl";
 $ReadOnly = "Salt okunur";
+$CourseProgram = "Ders Açıklamaları";
+$ThisCourseDescriptionIsEmpty = "Bu ders için bir açýklama yapýlmamýþtýr";
+$QuestionPlan = "Ders yetkilisine soru";
+$NewBloc = "Diğer";
+$CourseDescriptionUpdated = "Ders tanımı güncellendi";
+$CourseDescriptionDeleted = "Ders tanımı silindi";
 $NextWeek = "Sonraki hafta";
 $GeneralDescription = "Genel Açıklama";
 $GeneralDescriptionQuestions = "Dersin programdaki yeri neresi? Gerekli şeyler varmı? Ders diğer derslerle nasıl bir bağlantı içinde?";

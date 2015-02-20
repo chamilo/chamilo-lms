@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Sukurti naują forumą";
 $ReplyShort = "Re:";
+$WCAGGoMenu = "Meniu";
+$WCAGGoContent = "Turinys";
 $NoTimeLimits = "Laiko apribojimų nėra";
 $TypeMessage = "Prašome rašyti žinutes!";
 $ConfirmReset = "Ar tkrai norite ištrinti visas žinutes?";
@@ -414,6 +416,12 @@ $SeeDetail = "See detail";
 $GroupSingle = "Group";
 $PleaseLoginAgainFromHomepage = "Please try to login again from the homepage";
 $PleaseLoginAgainFromFormBelow = "Please try to login again using the form below";
+$CourseProgram = "Kurso aprašymas";
+$ThisCourseDescriptionIsEmpty = "Šis kursas dar neaprašytas.";
+$QuestionPlan = "Pagalbiniai klausimai kūrėjui";
+$NewBloc = "Kita";
+$CourseDescriptionUpdated = "Kurso aprašymas atnaujintas";
+$CourseDescriptionDeleted = "Kurso aprašymas ištrintas";
 $NextWeek = "Kita savaitė";
 $GeneralDescription = "Apibūdinimas";
 $GeneralDescriptionQuestions = "Koks kurso vaidmuo studijų modulyje? Ar yra kokių išankstinių reikalavimų? Kaip šis kursas siejasi su kitais kursais?";

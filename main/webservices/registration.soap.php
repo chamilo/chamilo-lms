@@ -2922,7 +2922,7 @@ function WSCourseDescription($params) {
                             get_lang('CourseMaterial'),
                             get_lang('HumanAndTechnicalResources'),
                             get_lang('Assessment'),
-                            get_lang('AddCat'));
+                            get_lang('AddCategory'));
 
     // TODO: Hard-coded Spanish texts.
     //$default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');

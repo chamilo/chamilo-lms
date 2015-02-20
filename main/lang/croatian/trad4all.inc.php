@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Dodaj novi forum";
 $ReplyShort = "Odg:";
+$WCAGGoMenu = "Pođi na izbornik";
+$WCAGGoContent = "Pođi na sadržaj";
 $NoTimeLimits = "Bez vremenskog ograničenja";
 $TypeMessage = "Molim unesite poruku!";
 $ConfirmReset = "Želite li doista izbrisati sve poruke?";
@@ -573,6 +575,12 @@ $BackToPreviousPage = "Povratak na prethodnu stranicu";
 $ListView = "Prikaži kao listu";
 $NoOfficialCode = "Nema službene šifre";
 $Owner = "Vlasnik";
+$CourseProgram = "Opis kolegija";
+$ThisCourseDescriptionIsEmpty = "Ovaj kolegij nije opisan";
+$QuestionPlan = "Pitanje nosiocu";
+$NewBloc = "Ostalo";
+$CourseDescriptionUpdated = "Opis kolegija je ažuriran";
+$CourseDescriptionDeleted = "Opis kolegija je izbrisan";
 $NextWeek = "Sljedeći tjedan";
 $GeneralDescription = "Opći opis";
 $GeneralDescriptionQuestions = "Koje mjesto kolegij ima u programu? Postoje li kakvi preduvjeti? Kako je kolegij povezan s drugim kolegijima?";

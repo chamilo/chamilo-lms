@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "新增討論區";
 $ReplyShort = "回覆：";
+$WCAGGoMenu = "前往選單";
+$WCAGGoContent = "前往內容";
 $NoTimeLimits = "沒有時限";
 $TypeMessage = "請輸入你的消息!";
 $ConfirmReset = "真的想要刪除所有消息嗎？";
@@ -370,6 +372,12 @@ $UplFileTooBig = "檔案太大不能上傳";
 $UplGenericError = "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。";
 $MyGradebook = "我的成績本子";
 $Gradebook = "成績本子";
+$CourseProgram = "課程介紹";
+$ThisCourseDescriptionIsEmpty = "本課程目前沒有簡介";
+$QuestionPlan = "向老師提問";
+$NewBloc = "其他內容";
+$CourseDescriptionUpdated = "已更新課程簡介";
+$CourseDescriptionDeleted = "已刪除課程簡介";
 $NextWeek = "下周";
 $GeneralDescription = "概略介紹";
 $GeneralDescriptionQuestions = "這課程處於這計劃的甚麼位置？有沒有甚麼先決要素？這課程如何連接其他課程？";

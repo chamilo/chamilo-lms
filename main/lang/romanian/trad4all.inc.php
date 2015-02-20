@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Adaugati un forum nou";
 $ReplyShort = "Re:";
+$WCAGGoMenu = "Spre meniu";
+$WCAGGoContent = "Spre continut";
 $NoTimeLimits = "Fara limite de timp";
 $TypeMessage = "Te rog scrie mesajul !";
 $ConfirmReset = "Esti sigur(a) ca doresti sa stergi toate mesajele?";
@@ -608,6 +610,12 @@ $SaveIntroText = "Salvati introducerea textului";
 $CourseName = "Numele cursului";
 $SendAMessage = "Trimite un mesaj";
 $Menu = "Meniu";
+$CourseProgram = "Descrierea cursului";
+$ThisCourseDescriptionIsEmpty = "Acest curs nu este descris in prezent.";
+$QuestionPlan = "Intrebare catre conducator";
+$NewBloc = "Altceva";
+$CourseDescriptionUpdated = "Descrierea cursului a fost actualizata";
+$CourseDescriptionDeleted = "Descrierea cursului a fost eliminata";
 $NextWeek = "Saptamana viitoare";
 $GeneralDescription = "Descriere generala";
 $GeneralDescriptionQuestions = "Care este locul cursului in prgram? Exista cerinte de indeplinit? Cum este cursul in relatie cu alte cursuri?";

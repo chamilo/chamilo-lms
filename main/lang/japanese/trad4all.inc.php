@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $Username = "ユーザー名";
 $DeleteAllAttendances = "作成した出席をすべて削除";
+$WCAGGoMenu = "メニューへ";
+$WCAGGoContent = "コンテンツへ";
 $TypeMessage = "メッセージを入力してください!";
 $ConfirmReset = "メッセージをすべて削除しますか?";
 $ClearList = "チャットを消去";
@@ -310,6 +312,8 @@ $System = "システム";
 $Parent = "親";
 $FirstPage = "最初のページへ";
 $LastPage = "最後のページへ";
+$QuestionPlan = "ヘルプ";
+$NewBloc = "その他";
 $DragAndDropAnElementHere = "要素をここにドラッグ/ドロップ";
 $CalendarList = "出席カレンダー一覧";
 $AttendanceCalendarDescription = "出席カレンダーでは、出席一覧を登録することができます (学生の出席が必要な実際のセッションごとに 1 つ)。新しい出席一覧をここに追加します。";

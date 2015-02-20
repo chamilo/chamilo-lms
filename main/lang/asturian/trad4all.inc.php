@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Amestar un foru";
 $ReplyShort = "Re:";
+$WCAGGoMenu = "Dir al menú";
+$WCAGGoContent = "Dir al conteníu";
 $NoTimeLimits = "Ensin llende de tiempu";
 $TypeMessage = "Por favor, escriba'l so mensaxe";
 $ConfirmReset = "¿ Ta seguru de querer esborrar tolos mensaxes ?";
@@ -726,6 +728,12 @@ $Until = "Fasta";
 $FirstPage = "Primer páxina";
 $LastPage = "Páxina cabera";
 $Coachs = "Tutores";
+$CourseProgram = "Descripción del cursu";
+$ThisCourseDescriptionIsEmpty = "Descripción non disponible";
+$QuestionPlan = "Entrugues pal mayestru";
+$NewBloc = "Apartáu personalizáu";
+$CourseDescriptionUpdated = "La descripción del cursu actualizóse";
+$CourseDescriptionDeleted = "La descripción del cursu esborróse";
 $NextWeek = "Siguiente selmana";
 $GeneralDescription = "Descripción xeneral";
 $GeneralDescriptionQuestions = "¿ Qué papel y función tien esti cursu nel programa ? ¿ Necesítense actividaes previes ? ¿Qué rellación tien con otros cursos ?";

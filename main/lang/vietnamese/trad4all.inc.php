@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WCAGGoMenu = "Chuyển đến thực đơn";
+$WCAGGoContent = "Chuyển đến nội dung";
 $Remove = "Xoá";
 $Enter = "Trở lại danh mục khoá học";
 $Description = "Mô tả tóm tắt";
@@ -76,6 +78,10 @@ $MyCourses = "Danh mục khoá học";
 $ModifyProfile = "Sửa thông tin cá nhân";
 $MyStats = "Xem thống kê";
 $Logout = "Logout";
+$CourseProgram = "Mô tả tóm tắt";
+$ThisCourseDescriptionIsEmpty = "Giáo trình này không có phần diễn giải";
+$QuestionPlan = "Câu hỏi với giáo viên";
+$NewBloc = "Khác";
 $NextWeek = "Tuần kế tiếp";
 $Height = "Chiều cao";
 $ResizingComment = "thay đổi kích thước bức ảnh thep pixels";

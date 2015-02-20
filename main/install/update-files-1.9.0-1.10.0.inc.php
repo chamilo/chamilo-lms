@@ -25,7 +25,12 @@ if (defined('SYSTEM_INSTALLATION')) {
     $list = scandir($langPath);
     foreach ($list as $entry) {
         if (is_dir($langPath.$entry)) {
+            unlink($langPath.$entry.'/accessibility.inc.php');
             unlink($langPath.$entry.'/chat.inc.php');
+            unlink($langPath.$entry.'/course_description.inc.php');
+            unlink($langPath.$entry.'/external_module.inc.php');
+            unlink($langPath.$entry.'/myagenda.inc.php');
+            unlink($langPath.$entry.'/scormbuilder.inc.php');
             unlink($langPath.$entry.'/slideshow.inc.php');
         }
     }

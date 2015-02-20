@@ -7,8 +7,6 @@
 
 require_once '../config.php';
 
-$language_file = array('course_description');
-
 // Get the name of the database course.
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 

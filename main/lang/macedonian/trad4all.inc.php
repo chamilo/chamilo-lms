@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Додај нов форум";
 $ReplyShort = "Одг:";
+$WCAGGoMenu = " Мени Goto";
+$WCAGGoContent = "Содржина на Goto";
 $NoTimeLimits = "Нема временски ограничувања";
 $TypeMessage = "Ве молиме внесете ја вашата порака";
 $ConfirmReset = "Навистина ли сакате да ги избришете СИТЕ пораки?";
@@ -446,6 +448,12 @@ $DearUser = "Драг кориснику";
 $YourRegistrationData = "Вашите регистрациони податоци";
 $ResetLink = "Кликнете овде за да ја препокриете Вашата лозинка";
 $VisibilityChanged = "Видливоста е променета.";
+$CourseProgram = "Опис на курсот";
+$ThisCourseDescriptionIsEmpty = "&#1044;&#1086; &#1089;&#1077;&#1075;&#1072; &#1085;&#1077; &#1077; &#1074;&#1085;&#1077;&#1089;&#1077;&#1085; &#1086;&#1087;&#1080;&#1089; &#1085;&#1072; &#1086;&#1074;&#1086;&#1112; &#1082;&#1091;&#1088;&#1089;.";
+$QuestionPlan = "Прашање за водачот";
+$NewBloc = "Друго";
+$CourseDescriptionUpdated = "Описот на курсот ќе биде ажуриран";
+$CourseDescriptionDeleted = "Описот на курсот ќе биде избришан";
 $NextWeek = "Следната седмица";
 $GeneralDescription = "Општ Опис";
 $GeneralDescriptionQuestions = "Кое е местото на курсот во програмата? Потебни ли се предзнаења? Како е курсот поврзан со другите курсеви?";

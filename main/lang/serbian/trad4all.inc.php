@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Dodaj novi forum";
 $ReplyShort = "Odg:";
+$WCAGGoMenu = "Idi na adresu";
+$WCAGGoContent = "Idi na sadržaj";
 $NoTimeLimits = "Bez vremenskog ograničenja";
 $TypeMessage = "Molim Vas, otkucajte vašu poruku!";
 $ConfirmReset = "Da li zaista želite da obrišete sve poruke?";
@@ -330,6 +332,12 @@ $Notebook = "Beležnica";
 $FieldRequired = "Obavezno polje";
 $DateSend = "Datum slanja";
 $Image = "Slika";
+$CourseProgram = "Opis kursa";
+$ThisCourseDescriptionIsEmpty = "Ovaj kurs trenutno nije opisan.";
+$QuestionPlan = "Pitanje za vođu";
+$NewBloc = "Drugo";
+$CourseDescriptionUpdated = "Opis kursa je ažuriran";
+$CourseDescriptionDeleted = "Opis kursa je obrisan";
 $NextWeek = "Sledeća nedelja";
 $GeneralDescription = "Opšti opis";
 $GeneralDescriptionQuestions = "Kakvo je mesto kursa u programu? Postoje li nekakvi uslovi? Kako je kurs povezan sa drugim kursevima?";

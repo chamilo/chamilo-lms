@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WCAGGoMenu = "Ke menu";
+$WCAGGoContent = "Ke kandungan";
 $Remove = "Padam";
 $Enter = "Kembali ke senarai subjek";
 $Description = "Penerangan";
@@ -78,6 +80,10 @@ $MyCourses = "Senarai Subjek";
 $ModifyProfile = "Kemaskini Butir Peribadi";
 $MyStats = "Papar Statistik";
 $Logout = "Keluar";
+$CourseProgram = "Penerangan Subjek";
+$ThisCourseDescriptionIsEmpty = "Subjek ini belum diberi penerangan";
+$QuestionPlan = "Maklumat untuk Pensyarah";
+$NewBloc = "Lain-lain";
 $NextWeek = "Minggu Seterusnya";
 $Height = "Height";
 $ResizingComment = "resize the image to the following dimensions (in pixels)";

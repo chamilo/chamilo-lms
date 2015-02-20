@@ -14,7 +14,7 @@
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
+$language_file = array('create_course', 'registration','admin','exercice', 'course_info');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;

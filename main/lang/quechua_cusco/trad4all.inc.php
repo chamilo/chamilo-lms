@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Yapay hoq k'itirimanata";
 $ReplyShort = "Kuti:";
+$WCAGGoMenu = "Ajllanaman riy";
+$WCAGGoContent = "Ima kaqkunaman riy";
 $NoTimeLimits = "Sin límite de tiempo";
 $TypeMessage = "Ama hina kaychu, qelqa willanaykita";
 $ConfirmReset = "Cheqaychu kashanki llipin willanakunata pichanaykipaq?";
@@ -669,6 +671,12 @@ $SendAMessage = "Enviar mensaje";
 $Menu = "Menú";
 $BackToUserList = "Regresar a lista de usurios";
 $GraphicNotAvailable = "Gráfico no disponible";
+$CourseProgram = "Yachachinaq nisqaynin";
+$ThisCourseDescriptionIsEmpty = "Nisqay mana kanchu";
+$QuestionPlan = "Acha puririnapaq";
+$NewBloc = "Runamanta apartado nisqan";
+$CourseDescriptionUpdated = "Yachachinaq nisqayninqa kunanyachisqaña";
+$CourseDescriptionDeleted = "Yachachinaq nisqayninqa pichasqaña";
 $NextWeek = "Hamuq qanchis p'unchayuq";
 $GeneralDescription = "Llipin nisqasqay";
 $GeneralDescriptionQuestions = "Iman yachachinaq ruwaynin kay programapi ? Munakunchu ñaupaq ruwanakunata ? Ima masichay kan kay yachachinawan hoqkunawan ?";

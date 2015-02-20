@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WCAGGoMenu = "Jdi do menu";
+$WCAGGoContent = "Jdi na obsah";
 $NoTimeLimits = "Žádné časové omezení";
 $TypeMessage = "Prosím napište Vaši správu!";
 $ConfirmReset = "Opravdu chcete smazat všechny správy?";
@@ -320,6 +322,12 @@ $UserOnlineListSession = "Seznam studentů aktualně přihlášených - Výuka";
 $From = "Od";
 $To = "Komu";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
+$CourseProgram = "Popis kurzu";
+$ThisCourseDescriptionIsEmpty = "Tento kurz momentálně není popsaný.";
+$QuestionPlan = "Otázka pro vedoucího";
+$NewBloc = "Další";
+$CourseDescriptionUpdated = "Popis kurzu byl aktualizován";
+$CourseDescriptionDeleted = "Popis kurzi byl smazán";
 $Height = "Výška";
 $ResizingComment = "změnit velikost obrázku na nasledující rozměry (v pixlech)";
 $Width = "Šířka";

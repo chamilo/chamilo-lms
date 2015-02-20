@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Tambah sebuah forum baru";
 $ReplyShort = "Re:";
+$WCAGGoMenu = "Ke menu";
+$WCAGGoContent = "Ke isi";
 $NoTimeLimits = "Tanpa batas waktu";
 $TypeMessage = "Silahkan ketik pesan anda!";
 $ConfirmReset = "Apakah anda benar-benar akan menghapus semua pesan?";
@@ -310,6 +312,10 @@ $CourseAdminRoleDescription = "Admin Mata Kuliah";
 $h = "h";
 $CreateNewGlobalRole = "Buat role/peran global baru";
 $CreateNewLocalRole = "Buat role/peran lokal baru";
+$CourseProgram = "Deskripsi Mata Kuliah";
+$ThisCourseDescriptionIsEmpty = "Mata Kuliah ini saat ini belum dideskripsikan";
+$QuestionPlan = "Pertanyaan ke pengajar";
+$NewBloc = "Lainnya";
 $NextWeek = "Minggu Berikutnya";
 $GeneralDescription = "Deskripsi Umum";
 $GeneralDescriptionQuestions = "Dimana tempat mata kuliah dalam program? Adakah pra-syarat? Bagaimana keterkaitan mata kulliah ini dengan mata kuliah lain?";

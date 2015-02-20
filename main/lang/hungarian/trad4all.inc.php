@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Új fórum hozzáadása";
 $ReplyShort = "Vá:";
+$WCAGGoMenu = "Ugrás a menühöz";
+$WCAGGoContent = "Ugrás a tartalomhoz";
 $NoTimeLimits = "Nincs időkorlát";
 $TypeMessage = "Kérjük, írja be az üzenetét !";
 $ConfirmReset = "Valóban ki akarja törölni az összes üzenetet ?";
@@ -630,6 +632,12 @@ $Menu = "Menü";
 $BackToUserList = "Vissza a felhasználói listához";
 $GraphicNotAvailable = "Kép nem található";
 $Parent = "Szülő";
+$CourseProgram = "Kurzusleírás";
+$ThisCourseDescriptionIsEmpty = "Ehhez a kurzushoz jelenleg nem tartozik leírás.";
+$QuestionPlan = "Kérdés a kurzus létrehozójának";
+$NewBloc = "Egyéb";
+$CourseDescriptionUpdated = "A kurzus leírása frissítve.";
+$CourseDescriptionDeleted = "A kurzus leírása törölve.";
 $NextWeek = "Következő hét";
 $GeneralDescription = "Általános meghatározás";
 $GeneralDescriptionQuestions = "Hol van a kurzus helye a képzési programban? Hogyan kapcsolódik a kurzus más kurzusokhoz?";

@@ -4,6 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Aldoni novan forumon";
 $ReplyShort = "Respondo:";
+$WCAGGoMenu = "Iri al la menuo";
+$WCAGGoContent = "Iri al la enhavo";
 $NoTimeLimits = "Sen templimo";
 $TypeMessage = "Bonvolu tajpi tekston!";
 $ConfirmReset = "Ĉu certe, ke vi volas forigi ĉiujn mesaĝojn?";
@@ -327,6 +329,10 @@ $From = "de";
 $To = "al";
 $Category = "Kategorio";
 $UserAge = "Aĝo";
+$CourseProgram = "Kurso: lokiĝo kaj flanka informo";
+$ThisCourseDescriptionIsEmpty = "Ĉi-kurso ne ankoraŭ havas priskribon";
+$QuestionPlan = "Demando pri la planado <BR> por la instruisto";
+$NewBloc = "Aliaj (libere aldoneblaj)";
 $NextWeek = "Venonta semajno";
 $GeneralDescription = "Ĝenerala Priskribo";
 $GeneralDescriptionQuestions = "Kiel rolas la kurso ene de la programo? Ĉu ekzistas antaŭkondiĉoj? Kiel la kurso ligiĝas kun aliaj kursoj?";

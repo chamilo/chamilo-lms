@@ -66,7 +66,6 @@ switch ($action) {
         }
         break;
 	case 'show_course_information' :
-		$language_file = array('course_description');
 		require_once '../global.inc.php';
 
 		// Get the name of the database course.

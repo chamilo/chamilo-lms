@@ -5,6 +5,8 @@ for more information: see languages.txt in the lang folder.
 $DeleteAllAttendances = "Poista kaikki valitut läsnäolot";
 $AddForum = "Lisää uusi keskustelualue";
 $ReplyShort = "VS:";
+$WCAGGoMenu = "Mene valikkoon";
+$WCAGGoContent = "Mene sisältöön";
 $SearchXapianModuleNotInstalled = "Xapian hakumodulia ei ole asennettu";
 $TypeMessage = "Kirjoita viestisi!";
 $ConfirmReset = "Tahdotko varmasti poistaa kaikki viestit?";
@@ -688,6 +690,12 @@ $Until = "Saakka";
 $FirstPage = "Ensimmäinen sivu";
 $LastPage = "Viimeinen sivu";
 $Coachs = "Tutorit";
+$CourseProgram = "Kurssin kuvaus";
+$ThisCourseDescriptionIsEmpty = "Kurssin kuvausta ei ole vielä tehty.";
+$QuestionPlan = "Kysymyksiä opettajalle";
+$NewBloc = "Muu";
+$CourseDescriptionUpdated = "Kurssin kuvaus on päivitetty";
+$CourseDescriptionDeleted = "Kurssin kuvaus on poistettu";
 $ThereAreNoRegisteredDatetimeYet = "Päivää/aikaa ei ole vielä rekisteröity";
 $CalendarList = "Kalenteri lista tapaamisista";
 $GeneralDescription = "Yleinen kuvaus";
@@ -881,4 +889,5 @@ $ShowToAdminsOnly = "Näytä vain ylläpitäjille";
 $ShowToAdminsAndTeachers = "Näytä ylläpitäjille ja opettajille";
 $ShowToAllUsers = "Näytä kaikille käyttäjille";
 $LoginX = "Kirjaudu käyttäjänä: %s";
+$AddCourseDescription = "Lisää kurssin kuvaus";
 ?>

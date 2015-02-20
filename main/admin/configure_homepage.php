@@ -46,7 +46,7 @@ function home_tabs($file_logged_in)
 	}
 }
 
-$language_file = array('index', 'admin', 'accessibility');
+$language_file = array('index', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

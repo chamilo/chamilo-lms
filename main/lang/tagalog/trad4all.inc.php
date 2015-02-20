@@ -3,6 +3,8 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Tanggalin lahat ang nilikhang mga pagdalo";
+$WCAGGoMenu = "Pumunta sa menu";
+$WCAGGoContent = "Pumunta sa nilalaman";
 $TypeMessage = "Mangyaring i-type ang iyong mensahe!";
 $ConfirmReset = "Nais mo ba talagang tanggalin lahat ng mga mensahe?";
 $ClearList = "Linisin ang chat";
@@ -287,6 +289,8 @@ $System = "System";
 $Parent = "Pinagmulan";
 $FirstPage = "Unang pahina";
 $LastPage = "Huling pahina";
+$QuestionPlan = "Tulong";
+$NewBloc = "Iba pa";
 $DragAndDropAnElementHere = "Mag-Drag-and-drop ng elemento dito";
 $CalendarList = "Kalendaryo ng lista ng mga pagdadalo";
 $AttendanceCalendarDescription = "Ang kalendaryo ng pagdalo ay pinapayagan kang magrehistro ng mga lista ng pagdalo (isa bawat totoong sesyon ng mga mag-aaral na kailangang daluhan). Magdagdag ng bagong lista ng pagdalo dito.";

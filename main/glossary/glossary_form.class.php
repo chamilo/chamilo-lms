@@ -68,10 +68,10 @@ class GlossaryForm extends \FormValidator
         $defaults['name'] = $glossary->name;
         $defaults['description'] = $glossary->description;
 
-        $this->add_hidden('c_id', $glossary->c_id);
-        $this->add_hidden('id', $glossary->id);
-        $this->add_hidden('session_id', $glossary->session_id);
-        $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
+        $this->addHidden('c_id', $glossary->c_id);
+        $this->addHidden('id', $glossary->id);
+        $this->addHidden('session_id', $glossary->session_id);
+        $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
 
         $form_name = $glossary->id ? get_lang('TermEdit') : get_lang('TermAddNew');
         $this->add_header($form_name);

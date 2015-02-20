@@ -5,9 +5,7 @@
  *	This file takes care of all blog navigation and displaying.
  *	@package chamilo.blogs
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = 'blog';
 
@@ -23,7 +21,7 @@ $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 api_protect_course_script(true);
 
 //	 ONLY USERS REGISTERED IN THE COURSE
-if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
+if ((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit()) {
 	api_not_allowed(true);//print headers/footers
 }
 
@@ -43,15 +41,15 @@ if (api_is_allowed_to_edit()) {
 			$current_section=get_lang('EditBlog');
 			$my_url='action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
 		}
-		$interbreadcrumb[]= array (
-		'url' => 'blog_admin.php?'.$my_url,
-		'name' => $current_section
-		);
+		/*$interbreadcrumb[] = array(
+			'url' => 'blog_admin.php?' . $my_url,
+			'name' => $current_section
+		);*/
 		Display::display_header('');
-	} else {
 	}
 	echo '<div class="actions">';
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",Display::return_icon('new_blog.png',get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",
+		Display::return_icon('new_blog.png',get_lang('AddBlog'),'',ICON_SIZE_MEDIUM)."</a>";
 	echo '</div>';
 
 	/*
@@ -62,7 +60,7 @@ if (api_is_allowed_to_edit()) {
 	$get_blog_id       = Security::remove_XSS($_POST['blog_id']);
 
 	if (!empty($_POST['new_blog_submit']) AND !empty($_POST['blog_name'])) {
-		if (strlen(trim($_POST['blog_name']))>0)  {
+		if (isset($_POST['blog_name']))  {
 			Blog::create_blog($get_blog_name,$get_blog_subtitle);
 			Display::display_confirmation_message(get_lang('BlogStored'));
 		}

@@ -44,7 +44,7 @@ class UploadFileForm extends \FormValidator
         $form_name = get_lang('ImportGlossary');
         $this->add_header($form_name);
 
-        $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
+        $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('ImportCSVFileLocation');
         $this->add_file('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');

@@ -409,7 +409,7 @@ EOT;
      */
     function add_datepicker($name, $label)
     {
-        $this->addElement('datepicker', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePicker', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }
@@ -423,7 +423,7 @@ EOT;
      */
     public function add_datepickerdate($name, $label)
     {
-        $this->addElement('datepickerdate', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePickerDate', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }

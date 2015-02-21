@@ -66,6 +66,7 @@ class SessionManager
      * @param string $duration
      * @param string $description Optional. The session description
      * @param int $showDescription Optional. Whether show the session description
+     * @param array $extrafields 
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -84,7 +85,8 @@ class SessionManager
         $fix_name = false,
         $duration = null,
         $description = null,
-        $showDescription = 0
+        $showDescription = 0,
+        $extraFields = array()
     ) {
         global $_configuration;
 

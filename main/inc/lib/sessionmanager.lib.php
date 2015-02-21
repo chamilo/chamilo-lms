@@ -2112,7 +2112,7 @@ class SessionManager
 
         if ($nb_affected > 0) {
             // Update number of courses in the session
-            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses + $nb_affected WHERE id='$session_id' ";
+            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses - $nb_affected WHERE id='$session_id' ";
             Database::query($sql);
             return true;
         } else {

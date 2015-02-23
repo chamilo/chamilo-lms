@@ -88,23 +88,23 @@ class MySpace
      * Gets the connections to a course as an array of login and logout time
      *
      * @param   int     User ud
-     * @param   string  Course code
+     * @param   int   $courseId
      * @param   int     Session id (optional, default = 0)
      * @return  array   Conections
      */
-    static function get_connections_to_course($user_id, $course_code, $session_id = 0)
+    static function get_connections_to_course($user_id, $courseId, $session_id = 0)
     {
         // Database table definitions
-        $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         // protect data
         $user_id     = intval($user_id);
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $session_id  = intval($session_id);
 
         $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
                 WHERE   user_id = '.$user_id.' AND
-                        course_code="'.$course_code.'" AND
+                        c_id="'.$courseId.'" AND
                         session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -118,7 +118,14 @@ class MySpace
         return $connections;
     }
 
-    static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
+    /**
+     * @param $user_id
+     * @param $course_list
+     * @param int $session_id
+     * @return array|bool
+     */
+    static function get_connections_from_course_list($user_id, $course_list, $session_id = 0)
+    {
         // Database table definitions
         $tbl_track_course = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
@@ -130,16 +137,19 @@ class MySpace
         $session_id  = intval($session_id);
         $new_course_list = array();
         foreach ($course_list as $course_item) {
-            $new_course_list[] =  '"'.Database::escape_string($course_item['code']).'"';
+            $courseInfo = api_get_course_info($course_item['code']);
+            $courseId = $courseInfo['real_id'];
+            $new_course_list[] =  '"'.$courseId.'"';
         }
         $course_list = implode(', ', $new_course_list);
 
         if (empty($course_list)) {
             return false;
         }
-        $sql = 'SELECT login_course_date, logout_course_date, course_code FROM ' . $tbl_track_course . '
+        $sql = 'SELECT login_course_date, logout_course_date, course_code
+                FROM ' . $tbl_track_course . '
                 WHERE   user_id = '.$user_id.' AND
-                        course_code IN ('.$course_list.') AND
+                        c_id IN ('.$course_list.') AND
                         session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -148,38 +158,11 @@ class MySpace
         while ($row = Database::fetch_array($rs)) {
             $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
             $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
-            $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date,'course_code' => $row['course_code']);
-        }
-        return $connections;
-    }
-
-    /**
-     * TODO: Not used, to b deleted?
-     * Enter description here...
-     * @param int $user_id
-     * @param string $course_code
-     * @param date $year
-     * @param date $month
-     * @param date $day
-     * @return unknown
-     */
-    static function get_connections_to_course_by_time($user_id, $course_code, $year = '', $month = '', $day = '') {
-        // Database table definitions
-        $tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
-        $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-                        WHERE user_id = ' . intval($user_id) . '
-                        AND course_code="' . Database::escape_string($course_code) . '"
-                        ORDER BY login_course_date DESC';
-
-        $rs = Database::query($sql);
-        $connections = array();
-        while ($row = Database::fetch_array($rs)) {
-            $login_date = $row['login_course_date'];
-            $logout_date = $row['logout_course_date'];
-            $timestamp_login_date = strtotime($login_date);
-            $timestamp_logout_date = strtotime($logout_date);
-            $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+            $connections[] = array(
+                'login' => $timestamp_login_date,
+                'logout' => $timestamp_logout_date,
+                'c_id' => $row['c_id']
+            );
         }
         return $connections;
     }
@@ -216,18 +199,23 @@ class MySpace
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
         // getting all the courses of the user
-        $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+        $sql = "SELECT * FROM $tbl_course_user
+                WHERE user_id = '".intval($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
         $result = Database::query($sql);
         while ($row = Database::fetch_row($result)) {
+            $courseCode = $row[0];
+            $courseInfo = api_get_course_info($courseCode);
+            $courseId = $courseInfo['real_id'];
+
             $return .= '<tr>';
             // course code
-            $return .= '    <td width="157px" >'.cut($row[0], 20, true).'</td>';
+            $return .= '    <td width="157px" >'.cut($courseCode, 20, true).'</td>';
             // time spent in the course
-            $return .= '    <td><div>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_id, $row[0])).'</div></td>';
+            $return .= '    <td><div>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_id, $courseId)).'</div></td>';
             // student progress in course
-            $return .= '    <td><div>'.round(Tracking :: get_avg_student_progress($user_id, $row[0]), 2).'</div></td>';
+            $return .= '    <td><div>'.round(Tracking :: get_avg_student_progress($user_id, $courseCode), 2).'</div></td>';
             // student score
-            $avg_score = Tracking :: get_avg_student_score($user_id, $row[0]);
+            $avg_score = Tracking :: get_avg_student_score($user_id, $courseCode);
             if (is_numeric($avg_score)) {
                 $avg_score = round($avg_score,2);
             } else {
@@ -236,21 +224,17 @@ class MySpace
 
             $return .= '    <td><div>'.$avg_score.'</div></td>';
             // student tes score
-            //$return .= '  <td><div style="width:40px">'.round(Tracking :: get_avg_student_exercise_score ($user_id, $row[0]),2).'%</div></td>';
+            //$return .= '  <td><div style="width:40px">'.round(Tracking :: get_avg_student_exercise_score ($user_id, $courseCode),2).'%</div></td>';
             // student messages
-            $return .= '    <td><div>'.Tracking :: count_student_messages($user_id, $row[0]).'</div></td>';
+            $return .= '    <td><div>'.Tracking :: count_student_messages($user_id, $courseCode).'</div></td>';
             // student assignments
-            $return .= '    <td><div>'.Tracking :: count_student_assignments($user_id, $row[0]).'</div></td>';
+            $return .= '    <td><div>'.Tracking :: count_student_assignments($user_id, $courseCode).'</div></td>';
             // student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-            $exercises_results = MySpace::exercises_results($user_id, $row[0]);
+            $exercises_results = MySpace::exercises_results($user_id, $courseCode);
             $return .= '    <td width="105px"><div>'.(is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )').'</div></td>';
             //$return .= '  <td><div>'.$exercises_results['score_possible'].'</div></td>';
             $return .= '    <td><div>'.$exercises_results['questions_answered'].'</div></td>';
-            //$return .= '  <td><div>'.$exercises_results['percentage'].'% </div></td>';
-            // first connection
-            //$return .= '  <td width="60px">'.Tracking :: get_first_connection_date_on_the_course ($user_id, $row[0]).'</td>';
-            // last connection
-            $return .= '    <td><div>'.Tracking :: get_last_connection_date_on_the_course ($user_id, $row[0]).'</div></td>';
+            $return .= '    <td><div>'.Tracking :: get_last_connection_date_on_the_course ($user_id, $courseId).'</div></td>';
             $return .= '<tr>';
         }
         $return .= '</table>';
@@ -1239,16 +1223,21 @@ class MySpace
     public static function course_tracking_filter($course_code, $url_params, $row)
     {
         $course_code = $row[0];
+        $courseInfo = api_get_course_info($course_code);
+
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
         // database table definition
         $tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         // getting all the courses of the user
-        $sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+        $sql = "SELECT *
+                FROM $tbl_user AS u
+                INNER JOIN $tbl_course_rel_user AS cu
+                ON cu.user_id = u.user_id
+                WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
         $result = Database::query($sql);
         $time_spent = 0;
         $progress = 0;
@@ -1263,7 +1252,7 @@ class MySpace
         $total_questions_answered = 0;
         while ($row = Database::fetch_object($result)) {
             // get time spent in the course and session
-            $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $course_code);
+            $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $courseInfo['real_id']);
             $progress_tmp = Tracking::get_avg_student_progress($row->user_id, $course_code, array(), null, true);
             $progress += $progress_tmp[0];
             $nb_progress_lp += $progress_tmp[1];
@@ -1274,8 +1263,7 @@ class MySpace
             }
             $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
             $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
-
-            $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $course_code, null, false);
+            $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $courseInfo['real_id'], null, false);
             if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
             } else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1344,7 +1332,6 @@ class MySpace
     {
         // database table definition
         $tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         // the values of the sortable table
@@ -1387,13 +1374,19 @@ class MySpace
         // the other lines (the data)
         foreach ($course_data as $key => $course) {
             $course_code = $course[0];
-            $course_title = $course[1];
+            $courseInfo = api_get_course_info($course_code);
+            $course_title = $courseInfo['title'];
+            $courseId = $courseInfo['real_id'];
 
             $csv_row = array();
             $csv_row[] = $course_title;
 
             // getting all the courses of the session
-            $sql = "SELECT * FROM $tbl_user AS u INNER JOIN $tbl_course_rel_user AS cu ON cu.user_id = u.user_id WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+            $sql = "SELECT *
+                    FROM $tbl_user AS u
+                    INNER JOIN $tbl_course_rel_user AS cu
+                    ON cu.user_id = u.user_id
+                    WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
             $result = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1408,7 +1401,7 @@ class MySpace
             $total_questions_answered = 0;
             while ($row = Database::fetch_object($result)) {
                 // get time spent in the course and session
-                $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $course_code);
+                $time_spent += Tracking::get_time_spent_on_the_course($row->user_id, $courseId);
                 $progress_tmp = Tracking::get_avg_student_progress($row->user_id, $course_code, array(), null, true);
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
@@ -1420,7 +1413,7 @@ class MySpace
                 $nb_messages += Tracking::count_student_messages($row->user_id, $course_code);
                 $nb_assignments += Tracking::count_student_assignments($row->user_id, $course_code);
 
-                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $course_code, null, false);
+                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row->user_id, $courseId, null, false);
                 if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
                 } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1602,14 +1595,24 @@ class MySpace
         $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         // getting all the courses of the user
-        $sql = "SELECT * FROM $tbl_course AS c INNER JOIN $tbl_session_rel_course AS sc ON sc.course_code = c.code WHERE sc.id_session = '".$session_id."';";
+        $sql = "SELECT * FROM $tbl_course AS c
+                INNER JOIN $tbl_session_rel_course AS sc
+                ON sc.course_code = c.code
+                WHERE sc.id_session = '".$session_id."';";
         $result = Database::query($sql);
         while ($row = Database::fetch_object($result)) {
+            $courseCode = $row->code;
+            $courseInfo = api_get_course_info($row->code);
+            $courseId = $courseInfo['real_id'];
             $return .= '<tr>';
             // course code
             $return .= '    <td width="157px" >'.$row->title.'</td>';
             // get the users in the course
-            $sql = "SELECT user_id FROM $tbl_user AS u INNER JOIN $tbl_session_rel_course_rel_user AS scu ON u.user_id = scu.id_user WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$row->code."';";
+            $sql = "SELECT user_id
+                    FROM $tbl_user AS u
+                    INNER JOIN $tbl_session_rel_course_rel_user AS scu
+                    ON u.user_id = scu.id_user
+                    WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$courseCode."';";
             $result_users = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1624,7 +1627,7 @@ class MySpace
             $total_questions_answered = 0;
             while($row_user = Database::fetch_object($result_users)) {
                 // get time spent in the course and session
-                $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $row->code, $session_id);
+                $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
                 $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, array(), $session_id, true);
                 $progress += $progress_tmp[0];
                 $nb_progress_lp += $progress_tmp[1];
@@ -1635,8 +1638,7 @@ class MySpace
                 }
                 $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
                 $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
-
-                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $row->code, $session_id, false);
+                $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $courseId, $session_id, false);
                 if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                     $last_login_date = $last_login_date_tmp;
                 } else if($last_login_date_tmp != false && $last_login_date != false) { // TODO: Repeated previous condition! To be cleaned.
@@ -1753,14 +1755,22 @@ class MySpace
             $session_title = $session[1];
 
             // getting all the courses of the session
-            $sql = "SELECT * FROM $tbl_course AS c INNER JOIN $tbl_session_rel_course AS sc ON sc.course_code = c.code WHERE sc.id_session = '".$session_id."';";
+            $sql = "SELECT * FROM $tbl_course AS c
+                    INNER JOIN $tbl_session_rel_course AS sc
+                    ON sc.course_code = c.code
+                    WHERE sc.id_session = '".$session_id."';";
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
+                $courseInfo = api_get_course_info($row->code);
+                $courseId = $courseInfo['real_id'];
                 $csv_row = array();
                 $csv_row[] = $session_title;
                 $csv_row[] = $row->title;
                 // get the users in the course
-                $sql = "SELECT user_id FROM $tbl_user AS u INNER JOIN $tbl_session_rel_course_rel_user AS scu ON u.user_id = scu.id_user WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$row->code."';";
+                $sql = "SELECT user_id FROM $tbl_user AS u
+                        INNER JOIN $tbl_session_rel_course_rel_user AS scu
+                        ON u.user_id = scu.id_user
+                        WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$row->code."';";
                 $result_users = Database::query($sql);
                 $time_spent = 0;
                 $progress = 0;
@@ -1775,7 +1785,7 @@ class MySpace
                 $total_questions_answered = 0;
                 while($row_user = Database::fetch_object($result_users)) {
                     // get time spent in the course and session
-                    $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $row->code, $session_id);
+                    $time_spent += Tracking::get_time_spent_on_the_course($row_user->user_id, $courseId, $session_id);
                     $progress_tmp = Tracking::get_avg_student_progress($row_user->user_id, $row->code, array(), $session_id, true);
                     $progress += $progress_tmp[0];
                     $nb_progress_lp += $progress_tmp[1];
@@ -1787,7 +1797,7 @@ class MySpace
                     $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
                     $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
 
-                    $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $row->code, $session_id, false);
+                    $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $courseId, $session_id, false);
                     if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                         $last_login_date = $last_login_date_tmp;
                     } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
@@ -1975,9 +1985,13 @@ class MySpace
         // the other lines (the data)
         foreach ($user_data as $key => $user) {
             // getting all the courses of the user
-            $sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".intval($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+            $sql = "SELECT * FROM $tbl_course_user
+                    WHERE user_id = '".intval($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
             $result = Database::query($sql);
             while ($row = Database::fetch_row($result)) {
+                $courseInfo = api_get_course_info($row['course_code']);
+                $courseId = $courseInfo['real_id'];
+
                 $csv_row = array();
                 // user official code
                 $csv_row[] = $user[0];
@@ -1998,7 +2012,7 @@ class MySpace
                     }
                 }
                 // time spent in the course
-                $csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $row[0]));
+                $csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $courseId));
                 // student progress in course
                 $csv_row[] = round(Tracking :: get_avg_student_progress ($user[4], $row[0]), 2);
                 // student score
@@ -2016,9 +2030,9 @@ class MySpace
                 $csv_row[] = $exercises_results['questions_answered'];
                 $csv_row[] = $exercises_results['percentage'];
                 // first connection
-                $csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $row[0]);
+                $csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $courseId);
                 // last connection
-                $csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $row[0]));
+                $csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $courseId));
 
                 $csv_content[] = $csv_row;
             }
@@ -2062,20 +2076,23 @@ class MySpace
 
         $res = Database::query($sql);
         while ($row_course = Database::fetch_row($res)) {
-
             $course_code = $row_course[0];
-            $course_info = api_get_course_info($course_code);
+            $courseInfo = api_get_course_info($course_code);
             $avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course
             if (empty($session_id)) {
-                $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+                $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
+                        WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
             } else {
-                $sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+                $sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu
+                        WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
             }
             $rs = Database::query($sql);
             $users = array();
-            while ($row = Database::fetch_array($rs)) { $users[] = $row['user_id']; }
+            while ($row = Database::fetch_array($rs)) {
+                $users[] = $row['user_id'];
+            }
 
             if (count($users) > 0) {
                 $nb_students_in_course = count($users);
@@ -2084,7 +2101,7 @@ class MySpace
                 $avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
                 $avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
                 $avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
-                $avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
+                $avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $courseInfo['real_id'], $session_id);
 
                 $avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
                 if (is_numeric($avg_score_in_course)) {
@@ -2641,13 +2658,19 @@ class MySpace
     }
 }
 
-
-function get_stats($user_id, $course_code, $start_date = null, $end_date = null) {
+/**
+ * @param $user_id
+ * @param int $courseId
+ * @param null $start_date
+ * @param null $end_date
+ * @return array
+ */
+function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
+{
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main           = Database :: get_main_table(TABLE_MAIN_COURSE);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-    $course_info = api_get_course_info($course_code);
+    $course_info = api_get_course_info_by_id($courseId);
     if (!empty($course_info)) {
         $strg_sd    = "";
         $strg_ed    = "";
@@ -2656,13 +2679,15 @@ function get_stats($user_id, $course_code, $start_date = null, $end_date = null)
             $strg_sd = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
             $strg_ed = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
         }
-        $sql = 'SELECT SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
-            SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
-            count(user_id) as times
-            FROM ' . $tbl_track_course . '
-            WHERE user_id = ' . intval($user_id) . '
-            AND course_code = "' . Database::escape_string($course_code) . '" '.$strg_sd.' '.$strg_ed.' '.'
-            ORDER BY login_course_date ASC';
+        $sql = 'SELECT
+                SEC_TO_TIME(avg(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
+                SEC_TO_TIME(sum(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
+                count(user_id) as times
+                FROM ' . $tbl_track_course . '
+                WHERE
+                    user_id = ' . intval($user_id) . ' AND
+                    c_id = "' . intval($courseId) . '" '.$strg_sd.' '.$strg_ed.' '.'
+                ORDER BY login_course_date ASC';
 
         $rs = Database::query($sql);
         $result = array();
@@ -2689,18 +2714,19 @@ function add_day_to($end_date) {
  * Gets the connections to a course as an array of login and logout time
  *
  * @param   int       $user_id
- * @param   string    $course_code
+ * @param   int    $courseId
  * @author  Jorge Frisancho Jibaja
  * @author  Julio Montoya <gugli100@gmail.com> fixing the function
  * @version OCT-22- 2010
  * @return  array
  */
-function get_connections_to_course_by_date($user_id, $course_code, $start_date, $end_date)
+function get_connections_to_course_by_date($user_id, $courseId, $start_date, $end_date)
 {
     // Database table definitions
-    $tbl_track_course   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $course_info = api_get_course_info($course_code);
+    $tbl_track_course   = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+    $course_info = api_get_course_info_by_id($courseId);
     $user_id = intval($user_id);
+    $courseId = intval($courseId);
     $connections = array();
 
     if (!empty($course_info)) {
@@ -2709,7 +2735,7 @@ function get_connections_to_course_by_date($user_id, $course_code, $start_date, 
                 FROM $tbl_track_course
                 WHERE
                   user_id = $user_id AND
-                  course_code = '$course_code' AND
+                  c_id = '$courseId' AND
                   login_course_date BETWEEN '$start_date' AND '$end_date' AND
                   logout_course_date BETWEEN '$start_date' AND '$end_date'
                 ORDER BY login_course_date ASC";

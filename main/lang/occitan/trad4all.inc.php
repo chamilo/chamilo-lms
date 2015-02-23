@@ -215,4 +215,10 @@ $Send2All = "Avètz pas causit d'usanciers ni mai de grops. L'element serà visi
 $Wiki = "Wiki";
 $Category = "Categoria";
 $ListView = "mostrar coma lista";
+$CourseProgram = "Descripcion dau cors";
+$ThisCourseDescriptionIsEmpty = "Aqueste cors actualament es pas descrich";
+$QuestionPlan = "Demandar au professor";
+$NewBloc = "Autre";
+$CourseDescriptionUpdated = "La descripcion dau cors es estada actualizada";
+$CourseDescriptionDeleted = "La descripcion au cors es estada eliminada";
 ?>

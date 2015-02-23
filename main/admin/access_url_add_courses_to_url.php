@@ -28,10 +28,10 @@ $courses = array ();
 $url_list = array();
 $users = array();
 
-$tbl_access_url_rel_course 	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$tbl_access_url 			= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$tbl_course					= Database :: get_main_table(TABLE_MAIN_COURSE);
+$tbl_access_url_rel_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_access_url = Database:: get_main_table(TABLE_MAIN_ACCESS_URL);
+$tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 
 /*	Header   */
 $tool_name = get_lang('AddCoursesToURL');

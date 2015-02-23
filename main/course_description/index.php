@@ -7,9 +7,6 @@
 * @package chamilo.course_description
 */
 
-// name of the language file that needs to be included
-$language_file = array ('course_description', 'accessibility');
-
 // including files
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_DESCRIPTION;

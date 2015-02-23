@@ -572,21 +572,21 @@ class Testcategory
         if (count($category_list) > 1) {
             foreach ($category_list as $category_id => $category_item) {
                 $table->setCellContents($row, 0, $category_name_list[$category_id]);
-                $table->setCellContents($row, 1, show_score($category_item['score'], $category_item['total'], false));
-                $table->setCellContents($row, 2, show_score($category_item['score'], $category_item['total'], true, false, true));
+                $table->setCellContents($row, 1, ExerciseLib::show_score($category_item['score'], $category_item['total'], false));
+                $table->setCellContents($row, 2, ExerciseLib::show_score($category_item['score'], $category_item['total'], true, false, true));
                 $row++;
             }
 
             if (!empty($none_category)) {
                 $table->setCellContents($row, 0, get_lang('None'));
-                $table->setCellContents($row, 1, show_score($none_category['score'], $none_category['total'], false));
-                $table->setCellContents($row, 2, show_score($none_category['score'], $none_category['total'], true, false, true));
+                $table->setCellContents($row, 1, ExerciseLib::show_score($none_category['score'], $none_category['total'], false));
+                $table->setCellContents($row, 2, ExerciseLib::show_score($none_category['score'], $none_category['total'], true, false, true));
                 $row++;
             }
             if (!empty($total)) {
                 $table->setCellContents($row, 0, get_lang('Total'));
-                $table->setCellContents($row, 1, show_score($total['score'], $total['total'], false));
-                $table->setCellContents($row, 2, show_score($total['score'], $total['total'], true, false, true));
+                $table->setCellContents($row, 1, ExerciseLib::show_score($total['score'], $total['total'], false));
+                $table->setCellContents($row, 2, ExerciseLib::show_score($total['score'], $total['total'], true, false, true));
             }
             return $table->toHtml();
         }

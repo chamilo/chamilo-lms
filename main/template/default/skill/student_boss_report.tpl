@@ -33,7 +33,7 @@
                     <td>{{ row.completeName }}</td>
                     <td>{{ row.skillName }}</td>
                     <td>{{ row.achievedAt }}</td>
-                    <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}" width="64"> {{ row.courseName }}</td>
+                    <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}"> {{ row.courseName }}</td>
                 </tr>
             {% endfor %}
         </tbody>

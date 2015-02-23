@@ -10,7 +10,6 @@
 
 define('FRAME', 'chat');
 
-$language_file = array('chat');
 require_once '../inc/global.inc.php';
 
 $course = $_GET['cidReq'];

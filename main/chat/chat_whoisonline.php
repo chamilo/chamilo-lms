@@ -8,7 +8,6 @@
  */
 
 define('FRAME', 'online');
-$language_file = array('chat');
 
 require_once '../inc/global.inc.php';
 

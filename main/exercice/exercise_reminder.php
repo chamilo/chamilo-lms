@@ -36,7 +36,7 @@ if (!$objExercise) {
 }
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;
@@ -133,7 +133,7 @@ echo '<script>
     }
 </script>';
 
-$attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+$attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 

@@ -10,7 +10,6 @@ if (file_exists('multiple_url_fix.php')) {
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'log.class.php';
 
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);

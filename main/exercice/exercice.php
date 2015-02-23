@@ -162,7 +162,7 @@ if ($origin != 'learnpath') {
     Display :: display_reduced_header();
 }
 
-event_access_tool(TOOL_QUIZ);
+Event::event_access_tool(TOOL_QUIZ);
 
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
@@ -183,7 +183,7 @@ if ($is_allowedToEdit) {
             if ($check) {
                 // list des exercices dans un test
                 // we got variable $courseId $courseInfo session api_get_session_id()
-                $exerciseList = get_all_exercises_for_course_id(
+                $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
                     $courseInfo,
                     api_get_session_id(),
                     $courseId,
@@ -476,7 +476,6 @@ $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array
 
 $exercise_list = array();
 $exercise_obj = new Exercise();
-//$list_ordered = $exercise_obj->get_exercise_list_ordered();
 $list_ordered = null;
 
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
@@ -623,7 +622,13 @@ if (!empty($exercise_list)) {
                     $title = $cut_title;
                 }
 
-                $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                $count_exercise_not_validated = intval(
+                    Event::count_exercise_result_not_validated(
+                        $my_exercise_id,
+                        $courseId,
+                        $session_id
+                    )
+                );
 
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
                 $move = null;
@@ -744,7 +749,7 @@ if (!empty($exercise_list)) {
                 }
 
                 //Attempts
-                //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
+                //$attempts = ExerciseLib::get_count_exam_results($row['id']).' '.get_lang('Attempts');
                 //$item .=  Display::tag('td',$attempts);
                 $item .= Display::tag('td', $number_of_questions);
             } else {
@@ -803,7 +808,7 @@ if (!empty($exercise_list)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -843,7 +848,7 @@ if (!empty($exercise_list)) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';
-                            $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                            $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }
@@ -986,7 +991,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
         } else {
             // Student only
             if ($active == 1) {
-                $attempt = getLatestHotPotatoResult(
+                $attempt = ExerciseLib::getLatestHotPotatoResult(
                     $path,
                     $userId,
                     api_get_course_int_id(),
@@ -999,7 +1004,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 if (!empty($attempt)) {
                     $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $attemptText = get_lang('LatestAttempt').' : ';
-                    $attemptText .= show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
+                    $attemptText .= ExerciseLib::show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
                     $attemptText .= $actions;
                 } else {
                     // No attempts.

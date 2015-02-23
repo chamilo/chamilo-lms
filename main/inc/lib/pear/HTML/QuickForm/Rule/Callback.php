@@ -22,11 +22,6 @@
  */
 
 /**
- * Abstract base class for QuickForm validation rules
- */
-require_once 'HTML/QuickForm/Rule.php';
-
-/**
  * Validates values using callback functions or methods
  *
  * @category    HTML

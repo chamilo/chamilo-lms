@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+$language_file = 'document';
+
 require_once '../../global.inc.php';
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;

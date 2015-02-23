@@ -1,9 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
 
 /**
  * Class Database
@@ -773,7 +769,6 @@ class Database
                 strpos($query, 'static_') === false &&
                 strpos($query, 'public_admin') === false &&
                 strpos($query, 'chamilo_electric_blue') === false &&
-                strpos($query, 'wcag_anysurfer_public_pages') === false &&
                 strpos($query, 'specific_field') === false &&
                 strpos($query, 'down_doc_path') === false &&
                 strpos($query, 'INNER JOIN') === false &&

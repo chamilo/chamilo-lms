@@ -9,17 +9,6 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-/**
- * required files for getting data
- */
-
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
 use CpChart\Classes\pCache as pCache;

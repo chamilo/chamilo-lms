@@ -120,7 +120,7 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';

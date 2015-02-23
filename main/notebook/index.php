@@ -37,7 +37,7 @@ $(document).ready(function () {
 $tool = TOOL_NOTEBOOK;
 
 // Tracking
-event_access_tool(TOOL_NOTEBOOK);
+Event::event_access_tool(TOOL_NOTEBOOK);
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'addnote') {

@@ -62,6 +62,7 @@ use \ChamiloSession as Session;
 /**
  * Code
  */
+require_once api_get_path(SYS_CODE_PATH).'auth/external_login/ldap.inc.php';
 require 'ldap_var.inc.php';
 /**
  *    Check login and password with LDAP
@@ -325,7 +326,9 @@ function ldap_set_version(&$resource) {
  */
 function ldap_handle_bind(&$ldap_handler,&$ldap_bind) {
     //error_log('Entering ldap_handle_bind(&$ldap_handler,&$ldap_bind)',0);
-    global $ldap_rdn,$ldap_pass;
+    global $ldap_rdn,$ldap_pass, $extldap_config;
+    $ldap_rdn = $extldap_config['admin_dn'];
+    $ldap_pass = $extldap_config['admin_password'];
     if (!empty($ldap_rdn) and !empty($ldap_pass)) {
         //error_log('Trying authenticated login :'.$ldap_rdn.'/'.$ldap_pass,0);
         $ldap_bind = ldap_bind($ldap_handler,$ldap_rdn,$ldap_pass);
@@ -352,21 +355,23 @@ function ldap_handle_bind(&$ldap_handler,&$ldap_bind) {
  */
 function ldap_get_users() {
 
-    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
+    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $extldap_user_correspondance;
 
-    $keyword_firstname = trim(Database::escape_string($_GET['keyword_firstname']));
-    $keyword_lastname = trim(Database::escape_string($_GET['keyword_lastname']));
-    $keyword_username = trim(Database::escape_string($_GET['keyword_username']));
-    $keyword_type = Database::escape_string($_GET['keyword_type']);
+    $keyword_firstname = isset($_GET['keyword_firstname']) ? trim(Database::escape_string($_GET['keyword_firstname'])): '';
+    $keyword_lastname = isset($_GET['keyword_lastname']) ? trim(Database::escape_string($_GET['keyword_lastname'])) : '';
+    $keyword_username = isset($_GET['keyword_username']) ? trim(Database::escape_string($_GET['keyword_username'])) : '';
+    $keyword_type = isset($_GET['keyword_type']) ? Database::escape_string($_GET['keyword_type']) : '';
 
     $ldap_query=array();
 
     if ($keyword_username != "") {
-        $ldap_query[]="(uid=".$keyword_username."*)";
-    } else if ($keyword_lastname!=""){
-        $ldap_query[]="(sn=".$keyword_lastname."*)";
+        $ldap_query[] = str_replace('%username%', $keyword_username, $ldap_search_dn);
+    } else {
+        if ($keyword_lastname!=""){
+            $ldap_query[]="(".$extldap_user_correspondance['lastname']."=".$keyword_lastname."*)";
+        }
         if ($keyword_firstname!="") {
-            $ldap_query[]="(givenName=".$keyword_firstname."*)";
+            $ldap_query[]="(".$extldap_user_correspondance['firstname']."=".$keyword_firstname."*)";
         }
     }
     if ($keyword_type !="" && $keyword_type !="all") {
@@ -380,7 +385,7 @@ function ldap_get_users() {
         }
         $str_query.=" )";
     } else {
-        $str_query=$ldap_query[0];
+        $str_query= count($ldap_query) > 0 ? $ldap_query[0] : null;
     }
 
     $ds = ldap_connect($ldap_host, $ldap_port);
@@ -421,6 +426,9 @@ function ldap_get_number_of_users() {
  * @author    Mustapha Alouani
  */
 function ldap_get_user_data($from, $number_of_items, $column, $direction) {
+    
+    global $extldap_user_correspondance;
+    
     $users = array();
     $is_western_name_order = api_is_western_name_order();
     if (isset($_GET['submit'])) {
@@ -434,17 +442,17 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
                 //$dn_array=ldap_explode_dn($info[$key]["dn"],1);
                 //$user[] = $dn_array[0]; // uid is first key
                 //$user[] = $dn_array[0]; // uid is first key
-                $user[] = $info[$key]['uid'][0];
-                $user[] = $info[$key]['uid'][0];
+                $user[] = $info[$key][$extldap_user_correspondance['username']][0];
+                $user[] = $info[$key][$extldap_user_correspondance['username']][0];
                 if ($is_western_name_order) {
-                    $user[] = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
-                    $user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key][$extldap_user_correspondance['firstname']][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key][$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
                 } else {
-                    $user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
-                    $user[] = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key][$extldap_user_correspondance['firstname']][0], api_get_system_encoding(), 'UTF-8');
+                    $user[] = api_convert_encoding($info[$key][$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
                 }
                 $user[] = $info[$key]['mail'][0];
-                $outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
+                $user[] = $info[$key][$extldap_user_correspondance['username']][0];
                 $users[] = $user;
             }
         } else {
@@ -462,9 +470,12 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
  * @author    Mustapha Alouani
  */
 function modify_filter($user_id,$url_params, $row) {
-    $url_params_id="id[]=".$row[0];
+    $query_string="id[]=".$row[0];
+    if (!empty($_GET['id_session'])){
+        $query_string .= '&amp;id_session='.Security::remove_XSS($_GET['id_session']);
+    }
     //$url_params_id="id=".$row[0];
-    $result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
+    $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
     return $result;
 }
 
@@ -474,26 +485,9 @@ function modify_filter($user_id,$url_params, $row) {
  * @author    Mustapha Alouani
  */
 function ldap_add_user($login) {
-    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
-    $ds = ldap_connect($ldap_host, $ldap_port);
-    ldap_set_version($ds);
-    $user_id = 0;
-    if ($ds) {
-        $str_query="(uid=".$login.")";
-        $r = false;
-        $res = ldap_handle_bind($ds, $r);
-        $sr = ldap_search($ds, $ldap_basedn, $str_query);
-        //echo "Number of results is : ".ldap_count_entries($ds,$sr)."<p>";
-        $info = ldap_get_entries($ds, $sr);
-
-        for ($key = 0; $key < $info['count']; $key ++) {
-            $user_id = ldap_add_user_by_array($info[$key]);
-        }
-
-    } else {
-        Display :: display_error_message(get_lang('LDAPConnectionError'));
+    if ($ldap_user = extldap_authenticate($login, 'nopass', true)) {
+        return extldap_add_user_by_array($ldap_user);
     }
-    return $user_id;
 }
 
 function ldap_add_user_by_array($data, $update_if_exists = true) {

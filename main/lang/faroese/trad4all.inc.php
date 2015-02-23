@@ -80,6 +80,7 @@ $Result = "Úrslit";
 $Phone = "Telefon";
 $SaveSettings = "Goym stillingar";
 $SocialNetwork = "Sosialt";
+$QuestionPlan = "Hjálp";
 $EditMyProfile = "Broyt vangamynd";
 $Password = "Loyniorð";
 $EditProfile = "Broyt vangamynd";

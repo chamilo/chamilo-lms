@@ -7,7 +7,6 @@
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'add_course.lib.inc.php';
 
 /**
  * Function to convert from ppt to png

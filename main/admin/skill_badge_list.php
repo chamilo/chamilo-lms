@@ -5,6 +5,8 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.admin.openbadges
  */
+use \ChamiloSession as Session;
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -14,6 +16,12 @@ if (!api_is_platform_admin() || api_get_setting('allow_skills_tool') !== 'true')
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
+$errorMessage = null;
+
+if (Session::has('errorMessage')) {
+    $errorMessage = Session::read('errorMessage');
+}
 
 $objSkill = new Skill();
 $skills = $objSkill->get_all();
@@ -30,9 +38,12 @@ $interbreadcrumb = array(
 );
 
 $tpl = new Template(get_lang('Skills'));
+$tpl->assign('errorMessage', $errorMessage);
 $tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
 $tpl->assign('skills', $skills);
 
 $contentTemplate = $tpl->get_template('skill/badge_list.tpl');
 
 $tpl->display($contentTemplate);
+
+Session::erase('errorMessage');

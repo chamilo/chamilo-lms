@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WCAGGoMenu = "Gå til meny";
+$WCAGGoContent = "Gå til innhold";
 $NoTimeLimits = "Ingen tidsbegrensning";
 $Title = "Tittel";
 $UsersOnline = "Brukere online";
@@ -299,6 +301,12 @@ $Progress = "Fremdrift";
 $MyProgress = "Min fremdrift";
 $MyGradebook = "Min karakterbok";
 $Gradebook = "Karakterbok";
+$CourseProgram = "Kurs beskrivelse";
+$ThisCourseDescriptionIsEmpty = "Dette kureste er ennå ikke beskrevet";
+$QuestionPlan = "Spørsmål til lærer";
+$NewBloc = "Annen";
+$CourseDescriptionUpdated = "Kursbeskrivelsen ble oppdatert";
+$CourseDescriptionDeleted = "Kursbeskrivelsen ble slettet";
 $NextWeek = "Neste uke";
 $GeneralDescription = "Generell beskrivelse";
 $Objectives = "Målsettning";

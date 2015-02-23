@@ -2,14 +2,14 @@
 
 
 class TestMySpaceLib extends UnitTestCase {
-	
+
 	public function TestMySpaceLib() {
 		$this->UnitTestCase('Test My Space');
-	}	
-	
-	
+	}
+
+
 	public function __construct() {
-		// The constructor acts like a global setUp for the class			
+		// The constructor acts like a global setUp for the class
 		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
 	}
 /*
@@ -21,18 +21,10 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-*/	
+*/
 	public function testGetConnectionsToCourse() {
 		//ob_start();
 		$res = MySpace::get_connections_to_course($user_id = 1, $course_code = 'COURSETEST');
- 		$this->assertTrue(is_array($res));
-		//ob_end_clean();
-	 	//var_dump($res);
-	}
-
-	public function testGetConnectionsToCourseByTime() {
-		//ob_start();
-		$res = MySpace::get_connections_to_course_by_time($user_id = 1, $course_code = 'COURSETEST', $year = '', $month = '', $day = '');
  		$this->assertTrue(is_array($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -53,7 +45,7 @@ class TestMySpaceLib extends UnitTestCase {
 		ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testDisplayUserOverviewExportOptions() {
 		//ob_start();
 		$res = MySpace::display_user_overview_export_options();
@@ -61,7 +53,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testExercisesResults() {
 		//ob_start();
 		$res = MySpace::exercises_results($user_id = 1, $course_code = 'COURSETEST');
@@ -77,7 +69,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testGetCourseData() {
 		//ob_start();
 		$res = MySpace::get_course_data($from = 1, $number_of_items = 2, $column = 2, $direction = 1);
@@ -109,7 +101,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testMakeUsername() {
 		//ob_start();
 		$res = MySpace::make_username($firstname = 'Vargas', $lastname = 'Carlos', $username = 'cvargas', $language = null, $encoding = null);
@@ -117,7 +109,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testCheckUserInArray() {
 		//ob_start();
 		$res = MySpace::check_user_in_array($usernames = array(), $user_array = array());
@@ -125,7 +117,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testUserAvailableInSession() {
 		//ob_start();
 		$res = MySpace::user_available_in_session($username = 1, $course_list = array(), $id_session = 1);
@@ -141,7 +133,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testGetUserCreator() {
 		//ob_start();
 		$res = MySpace::get_user_creator($users = array(), $course_list = array(), $id_session = 1);
@@ -149,7 +141,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-		
+
 	public function testValidate_data() {
 		//ob_start();
 		$res = MySpace::validate_data($users = array(), $id_session = null);
@@ -165,7 +157,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}*//*
-	
+
 	public function testSaveData() {
 		//ob_start();
 		$res = MySpace::save_data($users = array(), $course_list = array(), $id_session = 1);
@@ -173,7 +165,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testParseCsvData() {
 		//ob_start();
 		$res = MySpace::parse_csv_data($file = '');
@@ -189,7 +181,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testElementEnd() {
 		//ob_start();
 		$res = MySpace::element_end($parser = 'Contact', $data = '');
@@ -197,7 +189,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testCharacterData() {
 		//ob_start();
 		$res = MySpace::character_data($parser = 'Contact', $data = '');
@@ -205,7 +197,7 @@ class TestMySpaceLib extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	
+
 	public function testParseXmlData() {
 		//ob_start();
 		$res = MySpace::parse_xml_data($file = '');
@@ -215,7 +207,7 @@ class TestMySpaceLib extends UnitTestCase {
 	}
 
 	public function __destruct() {
-		// The destructor acts like a global tearDown for the class			
-		//require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		// The destructor acts like a global tearDown for the class
+		//require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';
 	}
 }

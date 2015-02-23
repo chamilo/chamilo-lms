@@ -4,11 +4,11 @@ use \ChamiloSession as Session;
 
 /* For licensing terms, see /license.txt */
 /**
- * This file contains the necessary elements to implement a Single Sign On 
- * mechanism with an arbitrary external web application (given some light 
+ * This file contains the necessary elements to implement a Single Sign On
+ * mechanism with an arbitrary external web application (given some light
  * development there) and is based on the Drupal-Chamilo module implementation.
  * To develop a new authentication mechanism, please extend this class and
- * overwrite its method, then modify the corresponding calling code in 
+ * overwrite its method, then modify the corresponding calling code in
  * main/inc/local.inc.php
  * @package chamilo.auth.sso
  */
@@ -40,16 +40,16 @@ class sso {
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
     }
-    
+
     /**
-     * Unlogs the user from the remote server 
+     * Unlogs the user from the remote server
      */
     public function logout()
     {
         header('Location: '.$this->deauth_url);
         exit;
     }
-    
+
     /**
      * Sends the user to the master URL for a check of active connection
      */
@@ -68,7 +68,7 @@ class sso {
         header('Location: '.$this->master_url.$params);
         exit;
     }
-    
+
     /**
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
@@ -79,10 +79,10 @@ class sso {
         $loginFailed = false;
         //change the way we recover the cookie depending on how it is formed
         $sso = $this->decode_cookie($_GET['sso_cookie']);
-        
+
         //error_log('check_user');
         //error_log('sso decode cookie: '.print_r($sso,1));
-        
+
         //lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status
@@ -97,7 +97,7 @@ class sso {
                 //This user's authentification is managed by Chamilo itself
                 // check the user's password
                 // password hash comes already parsed in sha1, md5 or none
-                
+
                 /*
                 error_log($sso['secret']);
                 error_log($uData['password']);
@@ -125,7 +125,7 @@ class sso {
                         // check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
                             or $uData['expiration_date']=='0000-00-00 00:00:00') {
-                            
+
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
                                 //Check the access_url configuration setting if
@@ -139,9 +139,9 @@ class sso {
                                 $current_access_url_id = 1;
                                 $my_url_list = array(1);
                             }
-                            
+
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);
-                            
+
                             if ($my_user_is_admin === false) {
                                 if (is_array($my_url_list) && count($my_url_list) > 0) {
                                     if (in_array($current_access_url_id, $my_url_list)) {
@@ -149,7 +149,7 @@ class sso {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        event_login();
+                                        Event::event_login();
                                         // Redirect to homepage
                                         $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
                                         header('Location: '. $sso_target);
@@ -180,7 +180,7 @@ class sso {
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);
                                     Session::write('_user', $_user);
-                                    event_login();
+                                    Event::event_login();
                                 } else {
                                     //Secondary URL admin wants to login
                                     // so we check as a normal user
@@ -188,7 +188,7 @@ class sso {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        event_login();
+                                        Event::event_login();
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
@@ -243,7 +243,7 @@ class sso {
         }
         return $loginFailed;
     }
-    
+
     /**
      * Decode the cookie (this function may vary depending on the
      * Single Sign On implementation
@@ -259,7 +259,7 @@ class sso {
      * Generate the URL for profile editing for a any user or the current user
      * @param int $userId Optional. The user id
      * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
-     * @return string The SSO URL 
+     * @return string The SSO URL
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {

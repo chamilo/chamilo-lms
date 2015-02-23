@@ -16,6 +16,11 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active">
+                {% if not errorMessage is empty %}
+                    <div class="alert alert-error">
+                        {{ errorMessage }}
+                    </div>
+                {% endif %}
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>

@@ -32,7 +32,7 @@
  * @version     Release: 3.2.10
  * @since       1.0
  */
-class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
+class HTML_QuickForm_style_submit_button extends HTML_QuickForm_style_button
 {
     // {{{ constructor
 
@@ -46,17 +46,17 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylesubmitbutton($elementName = null, $value = null, $attributes = null, $img = null) {
+    function HTML_QuickForm_style_submit_button($elementName = null, $value = null, $attributes = null, $img = null) {
         if (empty($attributes)) {
             $attributes = array();
         }
-        
+
         if (!isset($attributes['class'])) {
             if (is_array($attributes)) {
                 $attributes['class'] = 'btn';
-            }            
+            }
         }
-        HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value, $img);
+        HTML_QuickForm_style_button::HTML_QuickForm_style_button($elementName, null, $attributes, $value, $img);
         $this->setValue($value);
         $this->setType('submit');
     } //end constructor

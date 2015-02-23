@@ -190,7 +190,7 @@ function create_zip(){
 }
 
 function rename_zip($FileZip) {
-    event_download(($FileZip['PATH'] == '/')?'full_export_'.date('Ymd').'.zip (folder)': basename($FileZip['PATH']).'.zip (folder)');
+    Event::event_download(($FileZip['PATH'] == '/')?'full_export_'.date('Ymd').'.zip (folder)': basename($FileZip['PATH']).'.zip (folder)');
     $name = ($FileZip['PATH']=='/')? 'full_export_'.date('Ymd').'.zip':basename($FileZip['PATH']).'.zip';
     if(file_exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)){ unlink($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name); }
     if(file_exists($FileZip['TEMP_FILE_ZIP'])) {

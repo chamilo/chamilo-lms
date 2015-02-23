@@ -47,7 +47,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
     }
 
-    $form->addElement('datepicker', 'custom_start_date', get_lang('StartDate'), array('form_name'=>'thematic_advance'));
+    $form->addElement('DatePicker', 'custom_start_date', get_lang('StartDate'), array('form_name'=>'thematic_advance'));
     $form->addElement('html', '</div>');
 
     if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {

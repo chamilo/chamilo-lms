@@ -298,7 +298,7 @@ if ($form->validate()) {
 
     $course_code = $course['code'];
     $visual_code = $course['visual_code'];
-    $visual_code = generate_course_code($visual_code);
+    $visual_code = CourseManager::generate_course_code($visual_code);
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;

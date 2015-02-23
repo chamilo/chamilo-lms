@@ -3154,7 +3154,7 @@ function get_whats_new()
         $sql = "SELECT * FROM ".$tracking_last_tool_access."
                 WHERE
                     access_user_id='".Database::escape_string($_user['user_id'])."' AND
-                    access_cours_code='".Database::escape_string($_course['sysCode'])."' AND
+                    c_id ='".$course_id."' AND
                     access_tool='".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);

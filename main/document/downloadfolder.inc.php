@@ -279,7 +279,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 // Launch event
-event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
+Event::event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
 
 // Start download of created file
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';

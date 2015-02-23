@@ -46,6 +46,7 @@ $tpl->assign('wheel_url', $url);
 
 $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
+$tpl->assign('isAdministration', true);
 
 $content = $tpl->fetch('default/skill/skill_wheel.tpl');
 $tpl->assign('content', $content);

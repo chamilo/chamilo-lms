@@ -65,17 +65,14 @@ $timeReport = new TeacherTimeReport();
 
 if (!empty($selectedCourse)) {
     $withFilter = true;
-
     $course = api_get_course_info($selectedCourse);
-
     $reportTitle = sprintf(get_lang('TimeReportForCourseX'), $course['title']);
-
     $teachers = CourseManager::get_teacher_list_from_course_code($selectedCourse);
 
     foreach ($teachers as $teacher) {
         $totalTime = UserManager::getExpendedTimeInCourses(
             $teacher['user_id'],
-            $selectedCourse,
+            $course['real_id'],
             0,
             $selectedFrom,
             $selectedUntil
@@ -108,7 +105,7 @@ if (!empty($selectedCourse)) {
             foreach ($coaches as $coach) {
                 $totalTime = UserManager::getExpendedTimeInCourses(
                     $coach['user_id'],
-                    $selectedCourse,
+                    $course['real_id'],
                     $session['id'],
                     $selectedFrom,
                     $selectedUntil
@@ -163,7 +160,7 @@ if (!empty($selectedSession)) {
             foreach ($coaches as $coach) {
                 $totalTime = UserManager::getExpendedTimeInCourses(
                     $coach['user_id'],
-                    $course['code'],
+                    $course['id'],
                     $selectedSession,
                     $selectedFrom,
                     $selectedUntil
@@ -210,7 +207,7 @@ if (!empty($selectedTeacher)) {
 
             $totalTime = UserManager::getExpendedTimeInCourses(
                 $selectedTeacher,
-                $course['code'],
+                $course['real_id'],
                 0,
                 $selectedFrom,
                 $selectedUntil
@@ -242,7 +239,7 @@ if (!empty($selectedTeacher)) {
 
         $totalTime = UserManager::getExpendedTimeInCourses(
             $selectedTeacher,
-            $course['course_code'],
+            $course['real_id'],
             $session['id'],
             $selectedFrom,
             $selectedUntil

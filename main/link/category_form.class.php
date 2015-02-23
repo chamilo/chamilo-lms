@@ -12,7 +12,7 @@ namespace Link;
 
 /**
  * Edit/create a LinkCategory.
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -25,7 +25,7 @@ class CategoryForm extends \FormValidator
     {
         parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
     }
-    
+
     /**
      *
      * @return object
@@ -41,32 +41,30 @@ class CategoryForm extends \FormValidator
     }
     /**
      *
-     * @param \Link\LinkCategory $category 
+     * @param \Link\LinkCategory $category
      */
     function init($category = null)
     {
         $this->set_category($category);
-        
+
         $defaults = array();
         $defaults['category_title'] = $category->category_title;
         $defaults['category_description'] =  $category->description;
-        
+
         $this->addElement('hidden', 'c_id', $category->c_id);
         $this->addElement('hidden', 'id', $category->id);
         $this->addElement('hidden', 'session_id', $category->session_id);
 
         $form_name = $category->id ? get_lang('ModifyCategory') : get_lang('AddCategory');
-        $this->add_header($form_name);
-
-
+        $this->addHeader($form_name);
         $this->add_textfield('category_title', get_lang('Title'));
         $this->addRule('category_title', get_lang('Required'), 'required');
-        
+
         $this->addElement('textarea', 'category_description', get_lang('Description'));
         $this->addElement('button', 'save', get_lang('Save'), array('class' => 'btn save'));
         $this->setDefaults($defaults);
     }
-    
+
     function update_model()
     {
         $values = $this->exportValues();

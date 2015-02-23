@@ -139,17 +139,32 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     $lis = '';
     if (!empty($skills)) {
         foreach ($skills as $skill) {
+            $badgeImage = null;
+
+            if (!empty($skill['icon'])) {
+                $badgeImage = Display::img(
+                    api_get_path(WEB_DATA_PATH) . $skill['iconThumb'],
+                    $skill['name']
+                );
+            } else {
+                $badgeImage = Display::return_icon(
+                    'award_red.png',
+                    $skill['name'],
+                    array('title' => $skill['name'])
+                );
+            }
+
             $lis .= Display::tag(
                 'li',
-                Display::span(
+                $badgeImage . Display::span(
                     $skill['name'],
                     array('class' => 'label_tag skill')
                 )
             );
         }
-        $socialRightInformation .= Display::tag('ul', $lis);
+        $socialRightInformation .= Display::tag('ul', $lis, array('class' => 'menulist'));
     }
-    $socialRightInformation .= "<div class=\"btn-group\">";
+    $socialRightInformation .= '<div class="menulist">';
     if (api_is_student() || api_is_student_boss() || api_is_drh()) {
         $socialRightInformation .= Display::url(
             get_lang('SkillsReport'),
@@ -158,7 +173,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
         );
     }
     $socialRightInformation .= Display::url(
-        get_lang('ViewSkillsWheel'),
+        get_lang('SkillsWheel'),
         api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php',
         array('class' => 'btn')
     );
@@ -167,7 +182,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
         api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php',
         array('class' => 'btn')
     );
-    $socialRightInformation .= '</div>';
+    $socialRightInformation .= '</div><br />';
 }
 
 

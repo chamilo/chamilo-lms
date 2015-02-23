@@ -12,6 +12,9 @@ class Promotion extends Model
     public $table;
     public $columns = array('id','name','description','career_id','status','created_at','updated_at');
 
+    /**
+     * Constructor
+     */
 	public function __construct()
     {
         $this->table =  Database::get_main_table(TABLE_PROMOTION);
@@ -57,9 +60,10 @@ class Promotion extends Model
                             $val = (int)$career_id;
                         }
                         $new[$key] = $val;
+                        break;
                     default:
                         $new[$key] = $val;
-                    break;
+                        break;
                 }
             }
 
@@ -117,7 +121,8 @@ class Promotion extends Model
      * Displays the title + grid
      * @return  string  html code
      */
-	function display() {
+	public function display()
+    {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
@@ -142,24 +147,15 @@ class Promotion extends Model
         }
     }
 
-
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
      * @param   string  url
      * @param   string  header name
-     * @return  obj     form validator obj
+     * @return  FormValidator
      */
-
-    function return_form($url, $action = 'add')
+    public function return_form($url, $action = 'add')
     {
-		/*$oFCKeditor = new FCKeditor('description') ;
-		$oFCKeditor->ToolbarSet = 'careers';
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Height		= '200';
-		$oFCKeditor->Value		= '';
-		$oFCKeditor->CreateHtml();*/
-
 		$form = new FormValidator('promotion', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
@@ -171,7 +167,17 @@ class Promotion extends Model
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', $id);
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70','id' => 'name'));
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        $form->add_html_editor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'careers',
+                'Width' => '100%',
+                'Height' => '250'
+            )
+        );
         $career = new Career();
         $careers = $career->get_all();
         $career_list = array();
@@ -207,20 +213,41 @@ class Promotion extends Model
         return $form;
     }
 
+    /**
+     * @param $params
+     * @param bool $show_query
+     * @return bool
+     */
     public function save($params, $show_query = false)
     {
     	$id = parent::save($params, $show_query);
     	if (!empty($id)) {
-    		event_system(LOG_PROMOTION_CREATE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(
+                LOG_PROMOTION_CREATE,
+                LOG_PROMOTION_ID,
+                $id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
     	}
     	return $id;
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function delete($id)
     {
     	if (parent::delete($id)) {
            SessionManager::clear_session_ref_promotion($id);
-    	   event_system(LOG_PROMOTION_DELETE, LOG_PROMOTION_ID, $id, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(
+                LOG_PROMOTION_DELETE,
+                LOG_PROMOTION_ID,
+                $id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         } else {
             return false;
         }

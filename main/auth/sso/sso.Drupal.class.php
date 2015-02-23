@@ -4,7 +4,7 @@ use \ChamiloSession as Session;
 
 /* For licensing terms, see /license.txt */
 /**
- * This file contains the necessary elements to implement a Single Sign On 
+ * This file contains the necessary elements to implement a Single Sign On
  * mechanism with an external Drupal application (on which the Chamilo module
  * 7.x-1.0-alpha3 or above must be implemented)
  *
@@ -16,7 +16,7 @@ use \ChamiloSession as Session;
  *
  * @package chamilo.auth.sso
  */
- 
+
 /**
  * The SSO class allows for management of remote Single Sign On resources
  */
@@ -44,9 +44,9 @@ class ssoDrupal {
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
     }
-    
+
     /**
-     * Unlogs the user from the remote server 
+     * Unlogs the user from the remote server
      */
     public function logout() {
         header('Location: '.$this->deauth_url);
@@ -69,7 +69,7 @@ class ssoDrupal {
         header('Location: '.$this->master_url.$params);
         exit;
     }
-    
+
     /**
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
@@ -100,29 +100,29 @@ class ssoDrupal {
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
 
-                if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key()) 
+                if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())
                     && ($sso['username'] == $uData['username'])) {
 
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {                            
-                            
+                        if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
                                 //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
                                 //Getting the current access_url_id of the platform
                                 $current_access_url_id = api_get_current_access_url_id();
-                                // my user is subscribed in these 
+                                // my user is subscribed in these
                                 //sites: $my_url_list
                                 $my_url_list = api_get_access_url_from_user($uData['user_id']);
                             } else {
                                 $current_access_url_id = 1;
                                 $my_url_list = array(1);
                             }
-                            
+
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);
-                            
+
                             if ($my_user_is_admin === false) {
                                 if (is_array($my_url_list) && count($my_url_list) > 0 ) {
                                     if (in_array($current_access_url_id, $my_url_list)) {
@@ -130,7 +130,7 @@ class ssoDrupal {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        event_login();
+                                        Event::event_login();
                                         // Redirect to homepage
                                         $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
                                         header('Location: '. $sso_target);
@@ -143,7 +143,7 @@ class ssoDrupal {
                                         exit;
                                     }
                                 } else {
-                                    // there is no URL in the multiple 
+                                    // there is no URL in the multiple
                                     // urls list for this user
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -153,23 +153,23 @@ class ssoDrupal {
                             } else {
                                 //Only admins of the "main" (first) Chamilo
                                 // portal can login wherever they want
-                                if (in_array(1, $my_url_list)) { 
-                                    //Check if this admin is admin on the  
+                                if (in_array(1, $my_url_list)) {
+                                    //Check if this admin is admin on the
                                     // principal portal
                                     $_user['user_id'] = $uData['user_id'];
                                     $_user = api_get_user_info($_user['user_id']);
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);
                                     Session::write('_user', $_user);
-                                    event_login();
+                                    Event::event_login();
                                 } else {
-                                    //Secondary URL admin wants to login 
+                                    //Secondary URL admin wants to login
                                     // so we check as a normal user
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user',$_user);
-                                        event_login();
+                                        Event::event_login();
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
@@ -177,7 +177,7 @@ class ssoDrupal {
                                         exit;
                                     }
                                 }
-                            }                       
+                            }
                         } else {
                             // user account expired
                             $loginFailed = true;
@@ -215,7 +215,7 @@ class ssoDrupal {
         }
         return $loginFailed;
     }
-    
+
     /**
      * Decode the cookie (this function may vary depending on the
      * Single Sign On implementation
@@ -230,7 +230,7 @@ class ssoDrupal {
      * Generate the URL for profile editing for a any user or the current user
      * @param int $userId Optional. The user id
      * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
-     * @return string If the URL is obtained return the drupal_user_id. Otherwise return false 
+     * @return string If the URL is obtained return the drupal_user_id. Otherwise return false
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
     {
@@ -243,18 +243,19 @@ class ssoDrupal {
         $userExtraFieldValue = new ExtraFieldValue('user');
         $drupalUserIdData = $userExtraFieldValue->get_values_by_handler_and_field_variable($userId, 'drupal_user_id');
 
+        // If this is an administrator, allow him to make some changes in
+        // the Chamilo profile
+        if ($asAdmin && api_is_platform_admin(true)) {
+            return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
+        }
+        // If the user doesn't match a Drupal user, give the normal profile
+        // link
         if ($drupalUserIdData === false) {
-            if ($asAdmin && api_is_platform_admin(true)) {
-                return api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$userId";
-            }
-
             return api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
         }
-
+        // In all other cases, generate a link to the Drupal profile edition
         $drupalUserId = $drupalUserIdData['field_value'];
-
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
-
         return $url;
     }
 

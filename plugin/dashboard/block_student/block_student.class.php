@@ -7,23 +7,12 @@
  */
 
 /**
- * required files for getting data
- */
-require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
-
-/**
  * This class is used like controller for student block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockStudent"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
 class BlockStudent extends Block
 {
-
     private $user_id;
 	private $students;
 	private $path;
@@ -129,8 +118,10 @@ class BlockStudent extends Block
 	 			if (!empty($courses_by_user)) {
 		 			foreach ($courses_by_user as $course) {
 		 				$course_code = $course['code'];
+						$courseInfo = api_get_course_info($course_code);
+						$courseId = $courseInfo['real_id'];
 		 				$course_title = $course['title'];
-		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course_code));
+		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $courseId));
 		 				$students_table .= '<tr '.$style.'>
 											<td align="right">'.$course_title.'</td>
 											<td align="right">'.$time.'</td>

@@ -14,7 +14,7 @@
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
+$language_file = array('create_course', 'registration','admin','exercice', 'course_info');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -32,9 +32,6 @@ $course_validation_feature = false;
 if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
     $course_validation_feature = true;
 }
-
-// Require additional libraries.
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
     function setFocus(){
@@ -192,7 +189,7 @@ if ($form->validate()) {
     }
 
     if ($wanted_code == '') {
-        $wanted_code = generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        $wanted_code = CourseManager::generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
     }
 
     // Check whether the requested course code has already been occupied.

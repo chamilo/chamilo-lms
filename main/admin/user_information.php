@@ -188,7 +188,7 @@ if (count($sessions) > 0) {
             $timeSpent = api_time_to_hms(
                 Tracking :: get_time_spent_on_the_course(
                     $user['user_id'],
-                    $courseInfo['code'],
+                    $courseInfo['real_id'],
                     $id_session
                 )
             );
@@ -286,19 +286,21 @@ if (Database::num_rows($res) > 0) {
     $data = array();
     $courseToolInformationTotal = null;
     while ($course = Database::fetch_object($res)) {
+        $courseInfo = api_get_course_info($course->code);
         $courseToolInformation = null;
 
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
             '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.
+                Display::return_icon('delete.png', get_lang('Delete')).'</a>';
         }
 
         $timeSpent = api_time_to_hms(
             Tracking :: get_time_spent_on_the_course(
                 $user['user_id'],
-                $course->code,
+                $courseInfo['real_id'],
                 0
             )
         );
@@ -308,7 +310,7 @@ if (Database::num_rows($res) > 0) {
             $course->id,
             0
         );
-        $courseInfo = api_get_course_info($course->code);
+
         $row = array(
             Display::url($course->code, $courseInfo['course_public_url']),
             $course->title,

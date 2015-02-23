@@ -40,8 +40,8 @@ ob_implicit_flush(true);
 session_start();
 
 require_once api_get_path(SYS_PATH).'vendor/autoload.php';
+require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
-require_once api_get_path(LIBRARY_PATH).'log.class.php';
 require_once 'install.lib.php';
 require_once 'install.class.php';
 require_once 'i_database.class.php';
@@ -756,7 +756,6 @@ if (@$_POST['step2']) {
 
 	if ($installType == 'update') {
 
-		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 		remove_memory_and_time_limits();
 		database_server_connect();
 		// Initialization of the database connection encoding intentionaly is not done.

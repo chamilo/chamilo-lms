@@ -108,9 +108,9 @@ $isOpenSession->save(array(
 
 $duration = new ExtraField('session');
 $duration->save(array(
-    'field_type' => ExtraField::FIELD_TYPE_INTEGER,
-    'field_variable' => 'duration',
-    'field_display_text' => get_lang('Duration'),
+    'field_type' => ExtraField::FIELD_TYPE_TEXT,
+    'field_variable' => 'human_text_duration',
+    'field_display_text' => get_lang('DurationInWords'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));

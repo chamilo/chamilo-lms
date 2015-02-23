@@ -125,8 +125,8 @@ class GradeBookResult
 					ORDER BY exe_cours_id ASC, exe_date ASC";
         }
 
-        $results=getManyResultsXCol($sql,8);
-        $hpresults=getManyResultsXCol($hpsql,7);
+        $results=StatsUtils::getManyResultsXCol($sql,8);
+        $hpresults=StatsUtils::getManyResultsXCol($hpsql,7);
 
         $NoTestRes = 0;
         $NoHPTestRes = 0;

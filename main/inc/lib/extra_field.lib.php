@@ -735,9 +735,14 @@ class ExtraField extends Model
 
                         $addOptions = array();
 
+                        $optionsExists = false;
                         global $app;
-                        $optionsExists = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->
-                        findOneBy(array('fieldId' => $field_details['id']));
+                        // Check if exist $app['orm.em'] object
+                        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
+                            $optionsExists = $app['orm.em']
+                                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                                ->findOneBy(array('fieldId' => $field_details['id']));
+                        }
 
                         if ($optionsExists) {
                             if (isset($userInfo['status']) && !empty($userInfo['status'])) {
@@ -912,7 +917,7 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_DATETIME:
                         $form->addElement(
-                            'datepicker',
+                            'DatePicker',
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
                             array('form_name' => $form_name)

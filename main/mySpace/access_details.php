@@ -30,7 +30,9 @@ $user_id = intval($_REQUEST['student']);
 $session_id = intval($_GET['id_session']);
 $type = Security::remove_XSS($_REQUEST['type']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
-$connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
+$courseInfo = api_get_course_info($course_code);
+$courseId = $courseInfo['real_id'];
+$connections = MySpace::get_connections_to_course($user_id, $courseId, $session_id);
 $quote_simple = "'";
 
 $form = new FormValidator('myform', 'get', api_get_self(), null, array('id' => 'myform'));
@@ -112,7 +114,7 @@ $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AccessDetails'));
 Display :: display_header('');
 $userInfo = api_get_user_info($user_id);
 $result_to_print = '';
-$sql_result = MySpace::get_connections_to_course($user_id, $course_code);
+$sql_result = MySpace::get_connections_to_course($user_id, $courseId);
 $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
@@ -130,7 +132,7 @@ $form->display();
     <div id="cev_cont_stats">
     <?php
     if ($result_to_print != "")  {
-        $rst                = get_stats($user_id, $course_code);
+        $rst                = get_stats($user_id, $courseId);
         $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
         $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
         $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';

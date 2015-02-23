@@ -131,7 +131,7 @@ $whatsnew_post_info = Session::read('whatsnew_post_info');
 
 /* TRACKING */
 
-event_access_tool(TOOL_FORUM);
+Event::event_access_tool(TOOL_FORUM);
 
 /*
     RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS

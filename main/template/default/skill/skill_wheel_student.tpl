@@ -66,17 +66,6 @@ function load_skill_info(skill_id) {
     });
 }
 
-function load_my_skills() {
-    $.ajax({
-        url: url+'&a=get_user_skills&user_id='+{{ _u.user_id}},
-        //async: false,
-        success: function(data) {
-            $('#my_skills').html(data);
-        }
-    });
-}
-
-
 $(document).ready(function() {
     /* Skill search */
 
@@ -205,8 +194,6 @@ $(document).ready(function() {
 
     load_nodes(0, main_depth);
 
-    load_my_skills();
-
     function open_popup(skill_id, parent_id) {
         //Cleaning selected
         $("#gradebook_id").find('option').remove();
@@ -291,11 +278,17 @@ $(document).ready(function() {
                         <p>
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
                         </p>
-                        {% for i in 1..ranking if ranking > 0 %}
-                            <img src="{{ _p.web }}main/img/icons/22/award_red.png"/>
-                        {% endfor %}
-                        {% for i in 1..(countSkill - ranking) %}
-                            <img src="{{ _p.web }}main/img/icons/22/award_red_na.png"/>
+                        {% if mySkills is not empty %}
+                            {%for skill in mySkills %}
+                                {% if skill.iconThumb is empty %}
+                                    <img src="{{ 'award_red.png' | icon(22) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                {% else %}
+                                    <img src="{{ _p.web_data }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% for i in 1..(9 - ranking) %}
+                            <img src="{{ 'award_red_na.png' | icon(22) }}">
                         {% endfor %}
                     </div>
                 </div>
@@ -309,21 +302,30 @@ $(document).ready(function() {
                 <!-- End Legend -->
                 <!-- ACCORDION -->
                 <div class="accordion" id="accordion2">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <!-- MY SKILLS -->
-                                <div id="my_skills" class="skill-items">
+                    {% if mySkills is not empty %}
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                    <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
+                                </a>
+                            </div>
+                            <div id="collapseOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <!-- MY SKILLS -->
+                                    <div id="my_skills" class="skill-items">
+                                        <ul class="skill-winner">
+                                            {%for skill in mySkills %}
+                                                <li>
+                                                    <a class="" rel="{{ skill.id}}" href="#">{{ skill.name }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <!-- MY SKILLS -->
                                 </div>
-                                <!-- MY SKILLS -->
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
@@ -387,4 +389,54 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
+</div>
+
+<div id="dialog-form" style="">
+    <p class="validateTips"></p>
+    <form id="add_item" class="form-horizontal" name="form">
+        <fieldset>
+            <div class="control-group">
+                <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>
+                <div class="controls">
+                    <!--<input type="text" name="name" id="name" class="span4" readonly />-->
+                    <p id="name" class="span4">
+                    </p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">{{ 'ShortCode' | get_lang }}</label>
+                <div class="controls">
+                    <!--<input type="text" name="short_code" id="short_code" class="span2" readonly />-->
+                    <p id="short_code" class="span4">
+                    </p>
+                </div>
+            </div>
+            <div id="skill_row" class="control-group">
+                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>
+                <div class="controls">
+                    <ul id="skill_edit_holder" class="holder holder_simple">
+                    </ul>
+                </div>
+            </div>
+            <div id="gradebook_row" class="control-group">
+                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>
+                <div class="controls">
+                    <ul id="gradebook_holder" class="holder holder_simple">
+                    </ul>
+                    <span class="help-block">
+                    {{ 'WithCertificate'|get_lang }}
+                    </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>
+                <div class="controls">
+                    <!--<textarea name="description" id="description" class="span4" rows="7" readonly>
+                    </textarea>-->
+                    <p id="description" class="span4">
+                    </p>
+                </div>
+            </div>
+        </fieldset>
+    </form>
 </div>

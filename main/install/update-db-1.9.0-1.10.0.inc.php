@@ -40,7 +40,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
 
     $_configuration['db_glue'] = get_config_param('dbGlu');
-    
+
     if ($singleDbForm) {
         $_configuration['table_prefix'] 	= get_config_param('courseTablePrefix');
         $_configuration['main_database'] 	= get_config_param('mainDbName');
@@ -94,16 +94,33 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
 
         if (INSTALL_TYPE_UPDATE == 'update') {
-
-            /*
-            $sql = "SELECT selected_value FROM $dbNameForm.settings_current WHERE variable='use_session_mode' ";
+            // Updating track tables with c_id
+            $res = iDatabase::query("SELECT id, code FROM $dbNameForm.course");
             $result = iDatabase::query($sql);
-            $result = Database::fetch_array($result);
-            $session_mode  = $result['selected_value'];            
-            if ($session_mode == 'true')
-            { ... }
-            */
+            $courses = Database::store_result($result);
+            foreach ($courses as $course) {
+                $courseId = $course['id'];
+                $courseCode = $course['code'];
 
+                $fields = array(
+                    'track_e_access' => 'access_cours_code',
+                    'track_e_default' => 'default_cours_code',
+                    'track_e_lastaccess' => 'access_cours_code',
+                    'track_e_downloads' =>  'down_cours_id',
+                    'track_e_hotpotatoes' => 'exe_cours_id',
+                    'track_e_links' => 'links_cours_id',
+                    'track_e_course_access' => 'course_code',
+                    'track_e_online' => 'course',
+                    'track_e_attempt' => 'course_code',
+                    'track_e_exercices' => 'exe_cours_id'
+                );
+
+                foreach ($fields as $table => $key) {
+                    $sql = "UPDATE $dbNameForm.$table SET c_id = '$courseId'
+                            WHERE $key = '$courseCode'";
+                    iDatabase::query($sql);
+                }
+            }
         }
     }
 
@@ -111,7 +128,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     if ($singleDbForm) {
         $prefix =  get_config_param('table_prefix');
     }
-    
+
     Log::notice("Database prefix: '$prefix'");
 
     // Get the courses databases queries list (c_q_list)
@@ -137,7 +154,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 die('Error while querying the courses list in update_db-1.9.0-1.10.0.inc.php');
             }
             $errors = array();
-              
+
             if (iDatabase::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
@@ -145,13 +162,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $list[] = $row;
                     $i++;
                 }
-                
+
                 foreach ($list as $rowCourse) {
                     if (!$singleDbForm) { // otherwise just use the main one
                         iDatabase::select_db($rowCourse['db_name']);
                     }
                     Log::notice('Course db ' . $rowCourse['db_name']);
-                    
+
                     // Now use the $c_q_list
                     foreach ($courseQueriesList as $query) {
                         if ($singleDbForm) {

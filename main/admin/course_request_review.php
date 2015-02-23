@@ -19,12 +19,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-
-// Including a configuration file.
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
 // The delete action should be deactivated in this page.
 // Better reject the target request, after that you can delete it.
 // see DELETE_ACTION_ENABLED constant in main_api.lib.php

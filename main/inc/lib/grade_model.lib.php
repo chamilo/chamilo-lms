@@ -10,6 +10,9 @@ class GradeModel extends Model
     public $table;
     public $columns = array('id', 'name', 'description');
 
+    /**
+     * Constructor
+     */
 	public function __construct()
     {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL);
@@ -55,14 +58,6 @@ class GradeModel extends Model
      */
     public function return_form($url, $action)
     {
-        /*
-        $oFCKeditor = new FCKeditor('description') ;
-        $oFCKeditor->ToolbarSet = 'grade_model';
-        $oFCKeditor->Width		= '100%';
-        $oFCKeditor->Height		= '200';
-        $oFCKeditor->Value		= '';
-        $oFCKeditor->CreateHtml();
-        */
         $form = new FormValidator('grades', 'post', $url);
 
         // Setting the form elements
@@ -77,7 +72,17 @@ class GradeModel extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        $form->add_html_editor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'careers',
+                'Width' => '100%',
+                'Height' => '250'
+            )
+        );
 
         $form->addElement('label', get_lang('Components'));
 

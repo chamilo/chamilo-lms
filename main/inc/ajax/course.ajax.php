@@ -180,7 +180,7 @@ switch ($action) {
         if (api_is_platform_admin()) {
             $course = api_get_course_info_by_id($_GET['course_id']);
             $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
-            $exercises = get_all_exercises($course, $session_id, false, $_GET['q'], true, 3);
+            $exercises = ExerciseLib::get_all_exercises($course, $session_id, false, $_GET['q'], true, 3);
 
             foreach ($exercises as $exercise) {
                 $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']) );

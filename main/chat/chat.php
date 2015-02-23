@@ -6,7 +6,6 @@
  * @package chamilo.chat
  */
 
-$language_file = array('chat');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_CHAT;
 $this_section = SECTION_COURSES;
@@ -26,7 +25,7 @@ if ($origin != 'whoisonline') {
 
 /*  TRACKING */
 
-event_access_tool(TOOL_CHAT);
+Event::event_access_tool(TOOL_CHAT);
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
 /*

@@ -324,7 +324,7 @@ function login_user($user_id) {
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+	$track_e_login_table  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
 

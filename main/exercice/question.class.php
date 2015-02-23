@@ -683,22 +683,22 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @param integer $exerciseId - exercise ID if saving in an exercise
 	 */
-	function save($exerciseId=0) {
+	public function save($exerciseId=0)
+	{
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-		$id				= $this->id;
-		$question		= $this->question;
-		$description	= $this->description;
-		$weighting		= $this->weighting;
-		$position		= $this->position;
-		$type			= $this->type;
-		$picture		= $this->picture;
-		$level			= $this->level;
-        $extra			= $this->extra;
-        $c_id 			= $this->course['real_id'];
-        $category       = $this->category;
-
+		$id = $this->id;
+		$question = $this->question;
+		$description = $this->description;
+		$weighting = $this->weighting;
+		$position = $this->position;
+		$type = $this->type;
+		$picture = $this->picture;
+		$level = $this->level;
+		$extra = $this->extra;
+		$c_id = $this->course['real_id'];
+		$category = $this->category;
 
 		// question already exists
 		if(!empty($id)) {
@@ -1143,28 +1143,17 @@ abstract class Question
 	 * A subclass can redifine this function to add fields...
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
-	function createForm (&$form, $fck_config=0) {
+	function createForm (&$form, $fck_config=0)
+	{
 		echo '<style>
-					.media { display:none;}
+					.media { display:none; }
 				</style>';
+
 		echo '<script>
-			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
-			function FCKeditor_OnComplete( editorInstance ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-			      HideFCKEditorByInstanceName (editorInstance.Name);
-			   }
-			}
-
-			function HideFCKEditorByInstanceName ( editorInstanceName ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-			      }
-			}
-
-			function show_media(){
-				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\') {
+		function show_media() {
+			var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
+			if (my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 			} else {
@@ -1217,7 +1206,7 @@ abstract class Question
 			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		');
 
-		$form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
+		$form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" style="display:none">');
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
 		$form->addElement ('html','</div>');
 

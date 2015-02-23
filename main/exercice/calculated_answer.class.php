@@ -73,14 +73,6 @@ class CalculatedAnswer extends Question
                 document.getElementById("randomValue"+index).innerHTML = "'.get_lang("ExampleValue").': " + result;
            }
 
-            /*function FCKeditor_OnComplete(editorInstance) {
-                if (window.attachEvent) {
-                    editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
-                } else {
-                    editorInstance.EditorDocument.addEventListener("keyup", updateBlanks, true);
-                }
-            }*/
-
             CKEDITOR.on("instanceCreated", function(e) {
                 if (e.editor.name === "answer") {
                     e.editor.on("change", updateBlanks);

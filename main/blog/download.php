@@ -51,7 +51,7 @@ $tbl_blogs_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 $course_id = api_get_course_int_id();
 
 // launch event
-event_download($doc_url);
+Event::event_download($doc_url);
 
 $sql = 'SELECT filename FROM '.$tbl_blogs_attachment.'
         WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.Database::escape_string($doc_url).'"';

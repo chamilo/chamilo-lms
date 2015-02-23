@@ -22,7 +22,7 @@ function handle_regions()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -116,7 +116,7 @@ function handle_plugins()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -255,7 +255,7 @@ function handle_stylesheets()
             // Add event to the system log.
             $user_id = api_get_user_id();
             $category = $_GET['category'];
-            event_system(
+            Event::addEvent(
                 LOG_CONFIGURATION_SETTINGS_CHANGE,
                 LOG_CONFIGURATION_SETTINGS_CATEGORY,
                 $category,
@@ -755,7 +755,7 @@ function handle_templates() {
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
     } else {
         if ($action == 'delete' && is_numeric($_GET['id'])) {
             delete_template($_GET['id']);
@@ -763,7 +763,7 @@ function handle_templates() {
             // Add event to the system log
             $user_id = api_get_user_id();
             $category = $_GET['category'];
-            event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+            Event::addEvent(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         }
         display_templates();
     }

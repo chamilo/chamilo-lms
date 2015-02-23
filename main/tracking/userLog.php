@@ -23,13 +23,12 @@ $this_section = "session_my_space";
 // variables
 $user_id = api_get_user_id();
 $course_id = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 
 /* Libraries */
-
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
@@ -80,7 +79,7 @@ $sql = "SELECT 1
             AND ((date_start<=NOW()
             AND date_end>=NOW())
             OR (date_start='0000-00-00' AND date_end='0000-00-00'))
-        WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
+        WHERE id_session='".api_get_session_id()."' AND course_code='$_cid'";
 //echo $sql;
 $result=Database::query($sql);
 if(!Database::num_rows($result)){
@@ -137,7 +136,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     FROM $TABLECOURSE_GROUPSUSER
                     WHERE group_id = '".intval($_gid)."'";
         }
-        $userGroupNb = getOneResult($sql);
+        $userGroupNb = StatsUtils::getOneResult($sql);
         $step = 25; // number of student per page
         if ($userGroupNb > $step) {
             if(!isset($offset)) {
@@ -174,17 +173,17 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         if ($is_allowedToTrackEverybodyInCourse) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
-                        FROM $TABLECOURSUSER cu , $TABLEUSER u
-                        WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                            AND cu.course_code = '".Database::escape_string($_cid)."'
-                        LIMIT $offset,$step";
+                    FROM $TABLECOURSUSER cu , $TABLEUSER u
+                    WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                        AND cu.course_code = '".Database::escape_string($_cid)."'
+                    LIMIT $offset,$step";
         } else {
             // list of users of this group
             $sql = "SELECT u.user_id, u.firstname,u.lastname
-                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE gu.user_id = u.user_id
-                            AND gu.group_id = '".intval($_gid)."'
-                        LIMIT $offset,$step";
+                    FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                    WHERE gu.user_id = u.user_id
+                        AND gu.group_id = '".intval($_gid)."'
+                    LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);
         echo 	"<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
@@ -253,13 +252,13 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                 $view ='0000000';
             }
             //Logins
-            TrackingUserLog::display_login_tracking_info($view, $uInfo, $_cid);
+            TrackingUserLog::display_login_tracking_info($view, $uInfo, $courseId);
 
             //Exercise results
             TrackingUserLog::display_exercise_tracking_info($view, $uInfo, $_cid);
 
             //Student publications uploaded
-            TrackingUserLog::display_student_publications_tracking_info($view, $uInfo, $_cid);
+            TrackingUserLog::display_student_publications_tracking_info($view, $uInfo, $courseId);
 
             //Links usage
             TrackingUserLog::display_links_tracking_info($view, $uInfo, $_cid);

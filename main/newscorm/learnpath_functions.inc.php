@@ -1250,8 +1250,7 @@ function export_exercise($item_id) {
         $i ++;
 
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
-        // Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table.
-        $test .= showQuestion($questionId, false, 'export', $i);
+        $test .= ExerciseLib::showQuestion($questionId, false, 'export', $i);
 
     } // end foreach()
 

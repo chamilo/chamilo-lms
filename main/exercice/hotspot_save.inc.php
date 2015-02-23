@@ -8,7 +8,7 @@
 * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $questionId = intval($_GET['questionId']);

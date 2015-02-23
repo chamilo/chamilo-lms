@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * ZombieQuery
@@ -9,7 +10,6 @@
  */
 class ZombieManager
 {
-
     static function last_year()
     {
         $today = time();
@@ -21,7 +21,7 @@ class ZombieManager
 
     /**
      * Returns users whose last login is prior from $ceiling
-     * 
+     *
      * @param int|string $ceiling last login date
      * @param bool $active_only if true returns only active users. Otherwise returns all users.
      * @return ResultSet
@@ -34,38 +34,37 @@ class ZombieManager
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql = 'SELECT 
-                    user.user_id, 
-                    user.firstname, 
-                    user.lastname, 
-                    user.username, 
-                    user.auth_source, 
-                    user.email, 
-                    user.status, 
-                    user.registration_date, 
-                    user.active, 
+        $sql = 'SELECT
+                    user.user_id,
+                    user.firstname,
+                    user.lastname,
+                    user.username,
+                    user.auth_source,
+                    user.email,
+                    user.status,
+                    user.registration_date,
+                    user.active,
                     access.login_date';
 
         global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
-
+        if (api_is_multiple_url_enabled()) {
             $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $current_url_id = api_get_current_access_url_id();
 
             $sql .= " FROM $user_table as user, $login_table as access, $access_url_rel_user_table as url
-                      WHERE 
-                        access.login_date = (SELECT MAX(a.login_date) 
-                                             FROM $login_table as a 
+                      WHERE
+                        access.login_date = (SELECT MAX(a.login_date)
+                                             FROM $login_table as a
                                              WHERE a.login_user_id = user.user_id
                                              ) AND
                         access.login_date <= '$ceiling' AND
-                        user.user_id = access.login_user_id AND 
+                        user.user_id = access.login_user_id AND
                         url.user_id = user.user_id AND url.access_url_id=$current_url_id";
         } else {
             $sql .= " FROM $user_table as user, $login_table as access
-                      WHERE 
-                        access.login_date = (SELECT MAX(a.login_date) 
-                                             FROM $login_table as a 
+                      WHERE
+                        access.login_date = (SELECT MAX(a.login_date)
+                                             FROM $login_table as a
                                              WHERE a.login_user_id = user.user_id
                                              ) AND
                         access.login_date <= '$ceiling' AND

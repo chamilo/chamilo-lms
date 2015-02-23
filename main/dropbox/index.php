@@ -18,7 +18,7 @@ $viewReceivedCategory = isset($_GET['view_received_category']) ? Security::remov
 $viewSentCategory = isset($_GET['view_sent_category']) ? Security::remove_XSS($_GET['view_sent_category']) : null;
 
 // Do the tracking
-event_access_tool(TOOL_DROPBOX);
+Event::event_access_tool(TOOL_DROPBOX);
 
 // This var is used to give a unique value to every page request. This is to prevent resubmiting data
 $dropbox_unid = md5(uniqid(rand(), true));

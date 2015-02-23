@@ -63,7 +63,7 @@ if (count($ids) == 1) {
     }
 
     if ($pub->is_file()) {
-        event_download(Uri::here());
+        Event::event_download(Uri::here());
         DocumentManager::file_send_for_download($pub->get_absolute_path(), false, $pub->get_title());
         exit;
     }
@@ -88,7 +88,7 @@ if (count($ids) == 1) {
         $title = $item->get_title();
         $zip->add($path, $title);
     }
-    event_download(Uri::here());
+    Event::event_download(Uri::here());
     DocumentManager::file_send_for_download($zip->get_path(), false, $pub->get_title() . '.zip');
 }
 
@@ -129,5 +129,5 @@ foreach ($items as $item) {
 /**
  * Send file for download
  */
-event_download(Uri::here());
+Event::event_download(Uri::here());
 DocumentManager::file_send_for_download($zip->get_path(), false, get_lang('StudentPublications') . '.zip');

@@ -23,24 +23,24 @@
  * Configuration settings
  */
 // your ldap server
-$ldap_host = api_get_setting('ldap_main_server_address');
+$ldap_host = $extldap_config['host'][0];
 // your ldap server's port number
-$ldap_port = api_get_setting('ldap_main_server_port');
+$ldap_port = @$extldap_config['port'] ?: null;
 //domain
-$ldap_basedn = api_get_setting('ldap_domain');
+$ldap_basedn = $extldap_config['base_dn'];
 
 //search term for students
-$ldap_search_dn = api_get_setting('ldap_search_string');
+$ldap_search_dn = $extldap_config['user_search'];
 
 //additional server params for use of replica in case of problems
-$ldap_host2 = api_get_setting('ldap_replicate_server_address');
-$ldap_port2 = api_get_setting('ldap_replicate_server_port');
+$ldap_host2 = count($extldap_config['host']) > 1 ? $extldap_config['host'][1] : null;
+$ldap_port2 = $extldap_config['port'];
 
 //protocol version - set to 3 for LDAP 3
-$ldap_version = api_get_setting('ldap_version');
+$ldap_version = $extldap_config['protocol_version'];
 
 //non-anonymous LDAP mode
-$ldap_rdn = api_get_setting('ldap_authentication_login');
-$ldap_pass = api_get_setting('ldap_authentication_password');
+$ldap_rdn = $extldap_config['admin_dn'];
+$ldap_pass = $extldap_config['admin_password'];
 
 $ldap_pass_placeholder = "PLACEHOLDER";

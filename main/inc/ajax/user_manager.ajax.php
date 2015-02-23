@@ -112,9 +112,9 @@ switch ($action) {
                         null,
                         $additionalParameters
                     );
-                    event_system(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
+                    Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
-                    event_system(LOG_USER_DISABLE, LOG_USER_ID, $user_id);
+                    Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user_id);
                 }
                 echo $status;
             }

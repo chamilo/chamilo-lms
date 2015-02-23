@@ -512,3 +512,39 @@ QFAMS.init = function (elm)
     }
 };
 
+$(function() {
+
+    $('.advmultiselect_checkbox').click(function() {
+        var id = $(this).attr('id');
+        var selectName = id + '-f';
+        var selectId = selectName.replace('_select_all', '');
+        var selectDestinationId = selectId.replace('-f', '-t');
+
+        $('#'+selectDestinationId).prop("disabled", false);
+
+        var checked = !$('#'+ id).is(':checked');
+        if (!checked) {
+            $('#' +selectId +' option').each(function() {
+                var val = $(this).val();
+                var text = $(this).text();
+                if (val.substr(0 , 4) == 'USER') {
+                    $('#'+selectId).find('[value="'+val+'"]').remove();
+                    $('#' +selectDestinationId).append(new Option(text, val));
+                }
+            });
+        }
+
+        $('#' + selectDestinationId +' option').each(function() {
+            var val = $(this).val();
+            var text = $(this).text();
+
+            if (val.substr(0 , 4) == 'USER') {
+                if (checked) {
+                    // Add
+                    $('#' +selectId ).append(new Option(text, val));
+                    $('#' + selectDestinationId).find('[value="'+val+'"]').remove();
+                }
+            }
+        });
+    });
+});

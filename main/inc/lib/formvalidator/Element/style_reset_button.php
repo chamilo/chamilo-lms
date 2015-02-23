@@ -32,7 +32,7 @@
  * @version     Release: 3.2.10
  * @since       1.0
  */
-class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
+class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_style_button
 {
     // {{{ constructor
 
@@ -48,7 +48,7 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
      */
     function HTML_QuickForm_styleresetbutton($elementName=null, $value=null, $attributes=null)
     {
-        HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value);
+        HTML_QuickForm_style_button::HTML_QuickForm_style_button($elementName, null, $attributes, $value);
         $this->setValue($value);
         $this->setType('reset');
     } //end constructor

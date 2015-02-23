@@ -53,7 +53,7 @@ if (is_dir($full_file_name)) {
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
 // launch event
-event_download($doc_url);
+Event::event_download($doc_url);
 
 $course_id = api_get_course_int_id();
 

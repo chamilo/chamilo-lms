@@ -1241,7 +1241,7 @@ function check_number_feedback($key, $array) {
 /**
  * Get the last access to a given tool of a given user
  * @param $tool string the tool constant
- * @param $course_code the course_id
+ * @param $courseId the course_id
  * @param $user_id the id of the user
  * @return string last tool access date
  *
@@ -1250,11 +1250,11 @@ function check_number_feedback($key, $array) {
  *
  * @todo consider moving this function to a more appropriate place.
  */
-function get_last_tool_access($tool, $course_code = '', $user_id='')
+function get_last_tool_access($tool, $courseId = null, $user_id = null)
 {
     // The default values of the parameters
-    if (empty($course_code)) {
-        $course_code = api_get_course_id();
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
     }
     if (empty($user_id)) {
         $user_id = api_get_user_id();
@@ -1266,7 +1266,7 @@ function get_last_tool_access($tool, $course_code = '', $user_id='')
     $sql = "SELECT access_date FROM $table_last_access
             WHERE
                 access_user_id = ".intval($user_id)." AND
-                access_cours_code='".Database::escape_string($course_code)."' AND
+                c_id='".intval($courseId)."' AND
                 access_tool='".Database::escape_string($tool)."'
                 ORDER BY access_date DESC
                 LIMIT 1";

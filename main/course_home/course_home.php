@@ -183,7 +183,7 @@ api_protect_course_script(true);
 /*  STATISTICS */
 
 if (!isset($coursesAlreadyVisited[$course_code])) {
-    event_access_course();
+    Event::accessCourse();
     $coursesAlreadyVisited[$course_code] = 1;
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }

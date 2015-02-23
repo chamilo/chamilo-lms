@@ -14,7 +14,7 @@ $language_file = array ('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-$tbl_stats_access 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$tbl_stats_access 		= Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 

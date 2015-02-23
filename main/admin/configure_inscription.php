@@ -115,14 +115,8 @@ if (!empty($action)) {
         switch ($action) {
             case 'edit_top':
                 // Filter
-                $home_top = '';
-                if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                    $home_top = WCAG_Rendering::prepareXHTML();
-                } else {
-                    $home_top = trim(stripslashes($_POST['register_top']));
-                }
+                $home_top = trim(stripslashes($_POST['register_top']));
                 // Write
-
                 if (file_exists($homep.$topf.'_'.$lang.$ext)) {
                     if (is_writable($homep.$topf.'_'.$lang.$ext)) {
                         $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
@@ -361,17 +355,8 @@ switch ($action){
         $renderer->setElementTemplate('<tr><td>{element}</td></tr>');
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            //TODO: review these lines
-            // Print WCAG-specific HTML editor
-            $html = '<tr><td>';
-            $html .= WCAG_Rendering::create_xhtml($open);
-            $html .= '</td></tr>';
-            $form->addElement('html', $html);
-        } else {
-            $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-            $form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-        }
+        $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
+        $form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
         $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
         $form->setDefaults($default);
         $form->display();

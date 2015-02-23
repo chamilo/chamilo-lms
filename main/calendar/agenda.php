@@ -63,7 +63,7 @@ function plus_repeated_event() {
 // setting the name of the tool
 $nameTools = get_lang('Agenda');
 
-event_access_tool(TOOL_CALENDAR_EVENT);
+Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());

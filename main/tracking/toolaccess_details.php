@@ -51,7 +51,6 @@ Display::display_header($nameTools,"Tracking");
 </h3>
 
 <?php
-include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -69,27 +68,22 @@ $reqdate=$_REQUEST['reqdate'];
 ?>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
 <?php
-
-
     $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-
-    if(isset($_cid)) //stats for the current course
-    {
+    $courseId = api_get_course_int_id();
+    //stats for the current course
+    if(isset($_cid)) {
         // to see stats of one course user must be courseAdmin of this course
         $is_allowedToTrack = $is_courseAdmin;
-        $courseCodeEqualcidIfNeeded = "AND access_cours_code = '$_cid'";
-    }
-    else // stats for all courses
-    {
+        $courseCodeEqualcidIfNeeded = "AND c_id = '$courseId'";
+    } else {
+        // stats for all courses
         // to see stats of all courses user must be platformAdmin
         $is_allowedToTrack = $is_platformAdmin;
         $courseCodeEqualcidIfNeeded = "";
     }
-    if( $is_allowedToTrack)
-    {
+    if( $is_allowedToTrack) {
         // list of all tools
-        if (!isset($tool))
-        {
+        if (!isset($tool)) {
             $sql = "SELECT access_tool, count( access_tool )
                         FROM $TABLETRACK_ACCESS
                         WHERE access_tool IS NOT NULL
@@ -105,7 +99,7 @@ $reqdate=$_REQUEST['reqdate'];
                 </tr>
             ";
 
-            $results = getManyResults2Col($sql);
+            $results = StatsUtils::getManyResults2Col($sql);
             echo "<table cellpadding='0' cellspacing='0' border='0' align=center>";
             echo "<tr bgcolor='#E6E6E6'>
                     <td width='70%'>
@@ -234,8 +228,8 @@ $reqdate=$_REQUEST['reqdate'];
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,$langDay);
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,$langDay);
                     break;
                 // all days
                 case "week" :
@@ -247,8 +241,8 @@ $reqdate=$_REQUEST['reqdate'];
                                 AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $days_array = daysTab($sql);
-                    makeHitsTable($days_array,$langDay);
+                    $days_array = StatsUtils::daysTab($sql);
+                    StatsUtils::makeHitsTable($days_array,$langDay);
                     break;
                 // all hours
                 case "day"  :
@@ -260,8 +254,8 @@ $reqdate=$_REQUEST['reqdate'];
                                     AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY access_date ASC";
 
-                    $hours_array = hoursTab($sql,$reqdate);
-                    makeHitsTable($hours_array,$langHour);
+                    $hours_array = StatsUtils::hoursTab($sql,$reqdate);
+                    StatsUtils::makeHitsTable($hours_array,$langHour);
                     break;
             }
         }

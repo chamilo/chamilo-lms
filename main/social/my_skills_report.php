@@ -43,12 +43,23 @@ if ($isStudent) {
         $tableRow = array(
             'skillName' => $resultData['name'],
             'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-            'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true),
+            'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true),
             'courseName' => $resultData['title']
         );
 
-        if (file_exists(api_get_path(SYS_COURSE_PATH) . "{$resultData['directory']}/course-pic85x85.png")) {
-            $tableRow['courseImage'] = api_get_path(WEB_COURSE_PATH) . "{$resultData['directory']}/course-pic85x85.png";
+        $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
+
+        if (file_exists($imageSysPath)) {
+            $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
+            $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $resultData['directory']);
+
+            if (!file_exists($thumbSysPath)) {
+                $courseImageThumb = new Image($imageSysPath);
+                $courseImageThumb->resize(32, 32, 0);
+                $courseImageThumb->send_image($thumbSysPath);
+            }
+
+            $tableRow['courseImage'] = $thumbWebPath;
         }
 
         $tableRows[] = $tableRow;
@@ -80,12 +91,23 @@ if ($isStudent) {
                 'completeName' => $followedStudents[$selectedStudent]['completeName'],
                 'skillName' => $resultData['name'],
                 'achievedAt' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
-                'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true),
+                'courseImage' => Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true),
                 'courseName' => $resultData['title']
             );
 
-            if (file_exists(api_get_path(SYS_COURSE_PATH) . "{$resultData['directory']}/course-pic85x85.png")) {
-                $tableRow['courseImage'] = api_get_path(WEB_COURSE_PATH) . "{$resultData['directory']}/course-pic85x85.png";
+            $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
+
+            if (file_exists($imageSysPath)) {
+                $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
+                $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $resultData['directory']);
+
+                if (!file_exists($thumbSysPath)) {
+                    $courseImageThumb = new Image($imageSysPath);
+                    $courseImageThumb->resize(32, 32, 0);
+                    $courseImageThumb->send_image($thumbSysPath);
+                }
+
+                $tableRow['courseImage'] = $thumbWebPath;
             }
 
             $tableRows[] = $tableRow;
@@ -147,11 +169,21 @@ if ($isStudent) {
     foreach ($tableRows as &$row) {
         $row['completeName'] = api_get_person_name($row['firstname'], $row['lastname']);
         $row['achievedAt'] = api_format_date($row['acquired_skill_at'], DATE_FORMAT_NUMBER);
+        $row['courseImage'] = Display::return_icon('course.png', null, null, ICON_SIZE_MEDIUM, null, true);
 
-        if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['c_directory'] . '/course-pic85x85.png')) {
-            $row['courseImage'] = api_get_path(WEB_COURSE_PATH) . $row['c_directory'] . '/course-pic85x85.png';
-        } else {
-            $row['courseImage'] = Display::return_icon('course.png', null, null, ICON_SIZE_BIG, null, true);
+        $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $row['c_directory']);
+
+        if (file_exists($imageSysPath)) {
+            $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $row['c_directory']);
+            $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $row['c_directory']);
+
+            if (!file_exists($thumbSysPath)) {
+                $courseImageThumb = new Image($imageSysPath);
+                $courseImageThumb->resize(32, 32, 0);
+                $courseImageThumb->send_image($thumbSysPath);
+            }
+
+            $row['courseImage'] = $thumbWebPath;
         }
     }
 

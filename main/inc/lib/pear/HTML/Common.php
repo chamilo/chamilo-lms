@@ -143,9 +143,10 @@ class HTML_Common
             foreach ($attributes as $key => $value) {
             	// Modified by Ivan Tcholakov, 16-MAR-2010
                 $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
-                $strAttr .= ' ' . $key . '="' . $value. '"';
+                $strAttr .= ' ' . $key . ' = "' . $value. '"';
             }
         }
+
         return $strAttr;
     } // end func _getAttrString
 

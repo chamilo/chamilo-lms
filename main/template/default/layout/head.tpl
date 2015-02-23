@@ -39,7 +39,11 @@ plugins.forEach(function(plugin) {
 /**
  * Function use to load templates in a div
 **/
-var showTemplates = function () {
+var showTemplates = function (ckeditorName) {
+    var editorName = 'content';
+    if (ckeditorName.length > 0) {
+        editorName = ckeditorName;
+    }
     CKEDITOR.editorConfig(CKEDITOR.config);
     CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
         var templatesConfig = CKEDITOR.getTemplates("default");
@@ -64,10 +68,11 @@ var showTemplates = function () {
                 html: templateHTML,
                 click: function (e) {
                     e.preventDefault();
-
-                    CKEDITOR.instances.content.setData(template.html, function () {
-                        this.checkDirty();
-                    });
+                    if (CKEDITOR.instances[editorName]) {
+                        CKEDITOR.instances[editorName].setData(template.html, function () {
+                            this.checkDirty();
+                        });
+                    }
                 }
             }).appendTo($templateLi);
 

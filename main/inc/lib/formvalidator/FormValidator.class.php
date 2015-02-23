@@ -294,6 +294,7 @@ EOT;
      */
     public function addButton($name, $label, $attributes = array())
     {
+        //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
         $this->addElement('button', $name, $label, $attributes);
     }
 

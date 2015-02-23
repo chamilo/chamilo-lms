@@ -11,9 +11,6 @@
  * @author Julio Montoya  - Improving the list of templates
  * @package chamilo.learnpath
 */
-/**
- * INIT SECTION
- */
 
 $this_section = SECTION_COURSES;
 
@@ -31,25 +28,11 @@ $language_file = 'learnpath';
 /* Header and action code */
 
 $htmlHeadXtra[] = '
-<script>
-
-function FCKeditor_OnComplete( editorInstance ) {
-    document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-}
-
-function InnerDialogLoaded() {
-    if (document.all) {
-        // if is iexplorer
-        var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
-    } else {
-        var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-    }
-    return B.ClickFrame();
-$};'.$_SESSION['oLP']->get_js_dropdown_array().'
+<script>'.$_SESSION['oLP']->get_js_dropdown_array().'
 
 $(document).on("ready", function() {
     CKEDITOR.on("instanceReady", function (e) {
-        showTemplates();
+        showTemplates("content_lp");
     });
 });
 </script>';
@@ -57,12 +40,11 @@ $(document).on("ready", function() {
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
+$isStudentView = isset($_REQUEST['isStudentView']) ? intval($_REQUEST['isStudentView']) : null;
+$learnpath_id = (int) $_REQUEST['lp_id'];
+$submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 /* MAIN CODE */
 
@@ -151,9 +133,7 @@ if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
     echo $_SESSION['oLP']->return_new_tree();
 
     // Show the template list
-    echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>';
-    echo '<br />';
-    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+    echo '<div id="frmModel" class="lp-add-item"></div>';
 } else {
     echo $_SESSION['oLP']->return_new_tree();
 }

@@ -16,8 +16,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
 }
 
 $group_id = intval($_GET['id']);
-$topic_id = intval($_GET['topic_id']);
-$message_id = intval($_GET['msg_id']);
+$topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
+$message_id = isset($_GET['msg_id']) ? intval($_GET['msg_id']) : null;
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
@@ -101,7 +101,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
                 'error'
             );
         }
-        $topic_id = intval($_GET['topic_id']);
+        $topic_id = isset($_GET['topic_id']) ? intval($_GET['topic_id']) : null;
         if ($_POST['action'] == 'add_message_group') {
             $topic_id = $res;
         }
@@ -242,13 +242,13 @@ $social_right_content .= MessageManager::display_message_for_group(
 
 $social_right_content = '<div class="span9">' . $social_right_content . '</div>';
 
-$tpl = new Template($tool_name);
+$tpl = new Template(null);
 $tpl->set_help('Groups');
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
+//$tpl->assign('actions', $actions);
+//$tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

@@ -5224,7 +5224,7 @@ class SessionManager
      * @param int $userId The user id
      * @return boolean Whether is subscribed
      */
-    public static function isUserSusbcribedAsStudent($sessionId, $userId)
+    public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 

@@ -468,7 +468,6 @@ class HookAdvancedSubscription extends HookObserver implements
             error_log('Params ' . print_r($params, 1));
         }
         if (!WSHelperVerifyKey($params)) {
-
             return return_error(WS_ERROR_SECRET_KEY);
         }
         $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
@@ -478,20 +477,21 @@ class HookAdvancedSubscription extends HookObserver implements
             $sessionId = (int) $params['session_id'];
             // Check if student is already subscribed
 
-            $isOpen = $this->plugin->isSessionOpen($sessionId);
-            $status = $this->plugin->getQueueStatus($userId, $sessionId);
-            $vacancy = $this->plugin->getVacancy($sessionId);
-            $data = $this->plugin->getSessionDetails($sessionId);
+            $plugin = AdvancedSubscriptionPlugin::create();
+            $isOpen = $plugin->isSessionOpen($sessionId);
+            $status = $plugin->getQueueStatus($userId, $sessionId);
+            $vacancy = $plugin->getVacancy($sessionId);
+            $data = $plugin->getSessionDetails($sessionId);
             if (!empty($data) && is_array($data)) {
                 $data['status'] = $status;
                 // 5 Cases:
                 if ($isOpen) {
                     // Go to Course session
-                    $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
+                    $data['action_url'] = $plugin->getSessionUrl($sessionId);
                 } else {
                     try {
-                        $isAble = $this->plugin->isAllowedToDoRequest($userId, $params);
-                        $data['message'] = $this->plugin->getStatusMessage($status, $isAble);
+                        $isAble = $plugin->isAllowedToDoRequest($userId, $params);
+                        $data['message'] = $plugin->getStatusMessage($status, $isAble);
                     } catch (\Exception $e) {
                         $data['message'] = $e->getMessage();
                     }
@@ -505,19 +505,19 @@ class HookAdvancedSubscription extends HookObserver implements
                         // Check conditions
                         if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                             // No in Queue, require queue subscription url action
-                            $data['action_url'] = $this->plugin->getQueueUrl($params);
+                            $data['action_url'] = $plugin->getQueueUrl($params);
                         } elseif ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                             // send url action
-                            $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
+                            $data['action_url'] = $plugin->getSessionUrl($sessionId);
                         } else {
                             // In queue, output status message, no more info.
                         }
                     } else {
                         if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                            $data['action_url'] = $this->plugin->getSessionUrl($sessionId);
+                            $data['action_url'] = $plugin->getSessionUrl($sessionId);
                         } else {
                             // in Queue or not, cannot be subscribed to session
-                            $data['action_url'] = $this->plugin->getQueueUrl($params);
+                            $data['action_url'] = $plugin->getQueueUrl($params);
                         }
                     }
                 }
@@ -544,7 +544,7 @@ class HookAdvancedSubscription extends HookObserver implements
      * @param array $params List of parameters (id, category_name, access_url_id, secret_key)
      * @return array|soap_fault Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
      */
-    public function WSListSessionsDetailsByCategory($params)
+    public static function WSListSessionsDetailsByCategory($params)
     {
         global $debug;
 
@@ -584,16 +584,17 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get validated and waiting queue users count for each session
+        $plugin = AdvancedSubscriptionPlugin::create();
         foreach ($sessionList as &$session) {
             // Add validated and queue users count
-            $session['validated_user_num'] = $this->plugin->countQueueByParams(
+            $session['validated_user_num'] = $plugin->countQueueByParams(
                 array(
                     'sessions' => array($session['id']),
                     'status' => array(ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED)
 
                 )
             );
-            $session['waiting_user_num'] = $this->plugin->countQueueByParams(
+            $session['waiting_user_num'] = $plugin->countQueueByParams(
                 array(
                     'sessions' => array($session['id']),
                     'status' => array(

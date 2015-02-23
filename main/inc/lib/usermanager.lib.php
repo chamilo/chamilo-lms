@@ -5120,7 +5120,7 @@ EOF;
     public static function getStudentBoss($userId)
     {
         $userId = intval($userId);
-        if ($userId !== 0) {
+        if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $row = Database::select(
                 'DISTINCT friend_user_id AS boss_id',

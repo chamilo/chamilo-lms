@@ -1,0 +1,63 @@
+.text-title-select{
+    display: inline-block;
+}
+#session-select{
+    display: inline-block;
+}
+.title-name-session{
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: normal;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.badge-dis{
+    background-color: #008080;
+    font-size: 20px;
+}
+.badge-recom{
+    background-color:#88aa00 ;
+    font-size: 20px;
+}
+.separate-badge{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.date, .mode{
+    display: inline-block;
+}
+.img-circle{
+    border-radius: 500px;
+    -moz-border-radius: 500px;
+    -webkit-border-radius: 500px;
+}
+#student_table.table td{
+    vertical-align: middle;
+    text-align: center;
+}
+#student_table.table td.name{
+    color: #084B8A;
+    text-align: left;
+
+}
+#student_table.table th{
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: center;
+}
+#modalMail{
+    width: 770px;
+    margin-top: -180px !important;
+    margin-left:  -385px !important;
+}
+
+#modalMail .modal-body {
+    height: 360px;
+    overflow: visible;
+}
+
+#iframeAdvsub {
+    width: 100%;
+    height: 100%;
+}

@@ -5436,13 +5436,15 @@ class SessionManager
     }
 
     /**
-     * Returns the list of session (name, short description, start date, end date) from category.
-     * The short description is an extra field value
+     * Returns list of a few data from session (name, short description, start date, end date)
+     * And the next extra fields
+     * short_description, mode, human_text_duration, vacancies, brochure, target, schedule
+     * from Session category Id.
      * @param int $categoryId
      * @param string $target
      * @return mixed
      */
-    public static function getSessionBriefListByCategory($categoryId, $target) {
+    public static function getBriefSessionListAndExtraByCategory($categoryId, $target) {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();
@@ -5455,7 +5457,7 @@ class SessionManager
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
             $fieldsArray = array(
-                'short_description', 'mode', 'duration', 'vacancies', 'brochure', 'target', 'schedule'
+                'short_description', 'mode', 'human_text_duration', 'vacancies', 'brochure', 'target', 'schedule'
             );
             // Get the session list from session category and target
             $sessionList = Database::select(
@@ -5660,13 +5662,13 @@ class SessionManager
                 // Not found result, update error message
                 $errorResult['errorMessage'] = 'Not found any session for session category id ' . $sessionCategoryId;
             }
-
-            return $errorResult;
         }
+
+        return $errorResult;
     }
 
     /**
-     * Return session description from
+     * Return session description from session id
      * @param int $sessionId
      * @return string
      */
@@ -5676,7 +5678,7 @@ class SessionManager
         $sessionId = intval($sessionId);
         $description = '';
         // Check if session id is valid
-        if ($sessionId !== 0) {
+        if ($sessionId > 0) {
             // Select query from session id
             $rows = Database::select(
                 'description',
@@ -5698,7 +5700,7 @@ class SessionManager
         return $description;
     }
 
-    /*
+    /**
      * Get a session list filtered by name, description or any of the given extra fields
      * @param string $term The term to search
      * @param array $extraFieldsToInclude Extra fields to include in the session data

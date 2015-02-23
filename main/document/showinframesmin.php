@@ -98,7 +98,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       { load: [
                                               {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
                                       }
                                       );

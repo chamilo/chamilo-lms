@@ -417,7 +417,7 @@ function domesticate($input) {
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
  * make_clickable()}.
  *
- * @since 2.3.2
+ * @since Wordpress 2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -455,7 +455,7 @@ function _make_url_clickable_cb($matches) {
  * (the default behaviour) ampersands are also replaced. The 'clean_url' filter
  * is applied to the returned cleaned URL.
  *
- * @since 2.8.0
+ * @since wordpress 2.8.0
  * @uses wp_kses_bad_protocol() To only permit protocols in the URL set
  *		via $protocols or the common ones set in the function.
  *
@@ -521,7 +521,7 @@ function esc_url( $url, $protocols = null, $_context = 'display' ) {
  * e.g. $subject = '%0%0%0DDD', $search ='%0D', $result ='' rather than the '%0%0DD' that
  * str_replace would return
  *
- * @since 2.8.1
+ * @since wordpress  2.8.1
  * @access private
  *
  * @param string|array $search The value being searched for, otherwise known as the needle. An array may be used to designate multiple needles.
@@ -546,7 +546,7 @@ function _deep_replace( $search, $subject ) {
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
  * make_clickable()}.
  *
- * @since 2.3.2
+ * @since wordpress  2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -574,7 +574,7 @@ function _make_web_ftp_clickable_cb($matches) {
  * This function was backported from 2.5.0 to 2.3.2. Regex callback for {@link
  * make_clickable()}.
  *
- * @since 2.3.2
+ * @since wordpress  2.3.2
  * @access private
  *
  * @param array $matches Single Regex Match.
@@ -591,7 +591,7 @@ function _make_email_clickable_cb($matches) {
  * Converts URI, www and ftp, and email addresses. Finishes by fixing links
  * within links.
  *
- * @since 0.71
+ * @since wordpress  0.71
  *
  * @param string $text Content to convert URIs.
  * @return string Content with converted URIs.
@@ -679,7 +679,7 @@ function make_clickable( $text ) {
  * );
  * </code>
  *
- * @since 3.4.0
+ * @since wordpress  3.4.0
  * @access private
  *
  * @param string $string The string to split.

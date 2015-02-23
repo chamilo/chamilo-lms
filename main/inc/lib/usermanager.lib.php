@@ -5112,4 +5112,34 @@ EOF;
         return 0;
     }
 
+    /**
+     * Get the boss user ID from a followed user id
+     * @param $userId
+     * @return bool
+     */
+    public static function getStudentBoss($userId)
+    {
+        $userId = intval($userId);
+        if ($userId > 0) {
+            $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+            $row = Database::select(
+                'DISTINCT friend_user_id AS boss_id',
+                $userRelTable,
+                array(
+                    'where' => array(
+                        'user_id = ? AND relation_type = ? LIMIT 1' => array(
+                            $userId,
+                            USER_RELATION_TYPE_BOSS,
+                        )
+                    )
+                )
+            );
+            if (!empty($row)) {
+
+                return $row[0]['boss_id'];
+            }
+        }
+
+        return false;
+    }
 }

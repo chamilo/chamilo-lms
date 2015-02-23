@@ -9,13 +9,26 @@ $libpath = api_get_path(LIBRARY_PATH);
 $debug = false;
 
 define('WS_ERROR_SECRET_KEY', 1);
+define('WS_ERROR_NOT_FOUND_RESULT', 2);
+define('WS_ERROR_INVALID_INPUT', 3);
+define('WS_ERROR_SETTING', 4);
+
 
 function return_error($code) {
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
-        break;
+            break;
+        case WS_ERROR_NOT_FOUND_RESULT:
+            $fault = new soap_fault('Server', '', 'No result was found for this query');
+            break;
+        case WS_ERROR_INVALID_INPUT:
+            $fault = new soap_fault('Server', '', 'The input variables are invalid o are not correctly set');
+            break;
+        case WS_ERROR_SETTING:
+            $fault = new soap_fault('Server', '', 'Please check the configuration for this webservice');
+            break;
     }
     return $fault;
 }
@@ -5428,7 +5441,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
             'wsdl:arrayType'=>'tns:session[]')
     ),
     'tns:session'

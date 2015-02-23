@@ -3347,12 +3347,12 @@ function get_datepicker_langage_code() {
 
 /**
  * Returns the variable translated
- * @param $variable the string to translate
- * @param $pluginName the Plugin name
+ * @param string $variable the string to translate
+ * @param string $pluginName the Plugin name
  * @return string the variable translated
  */
 function get_plugin_lang($variable, $pluginName) {
-    eval("\$plugin = {$pluginName}::create();");
+    $plugin = $pluginName::create();
     return $plugin->get_lang($variable);
 }
 /**

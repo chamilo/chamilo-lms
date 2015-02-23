@@ -735,9 +735,14 @@ class ExtraField extends Model
 
                         $addOptions = array();
 
+                        $optionsExists = false;
                         global $app;
-                        $optionsExists = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->
-                        findOneBy(array('fieldId' => $field_details['id']));
+                        // Check if exist $app['orm.em'] object
+                        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
+                            $optionsExists = $app['orm.em']
+                                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                                ->findOneBy(array('fieldId' => $field_details['id']));
+                        }
 
                         if ($optionsExists) {
                             if (isset($userInfo['status']) && !empty($userInfo['status'])) {

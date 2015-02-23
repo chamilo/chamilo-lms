@@ -658,7 +658,7 @@ switch ($action) {
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
         if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
-                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
+                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score',  'user_ip', 'status', 'lp', 'actions'
             );
             $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
             if ($officialCodeInList == true) {

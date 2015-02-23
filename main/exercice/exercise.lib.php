@@ -1317,7 +1317,8 @@ function get_exam_results_data(
                     revised,
                     group_name,
                     group_id,
-                    orig_lp_id";
+                    orig_lp_id,
+                    te.user_ip";
         }
 
         $sql = " $sql_select

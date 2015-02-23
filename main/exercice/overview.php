@@ -182,7 +182,8 @@ if (!empty($attempts) && $visible_return['value'] == true) {
             'date' => api_convert_and_format_date(
                 $attempt_result['start_date'],
                 DATE_TIME_FORMAT_LONG
-            )
+            ),
+            'userIp' => $attempt_result['user_ip']
         );
         $attempt_link .= "&nbsp;&nbsp;&nbsp;" . $teacher_revised;
 
@@ -217,17 +218,17 @@ if (!empty($attempts) && $visible_return['value'] == true) {
 	switch ($objExercise->results_disabled) {
 		case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
-			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
 			break;
 		case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
-			$header_names = array(get_lang('Attempt'), get_lang('StartDate'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'));
 			break;
 		case RESULT_DISABLE_SHOW_SCORE_ONLY:
             if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
-			    $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
+			    $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'));
             }
             else {
-                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
+                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
             }
 			break;
 	}

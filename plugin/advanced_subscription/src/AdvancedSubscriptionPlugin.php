@@ -111,10 +111,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function isAllowedToDoRequest($userId, $params = array())
     {
+        $isAllowed = false;
         if (isset($params['is_connected']) && isset($params['profile_completed'])) {
-            $isAllowed = false;
             $plugin = self::create();
-            $wsUrl = $plugin->get('ws_url');
+            // WS URL is not yet implemented
+            // $wsUrl = $plugin->get('ws_url');
             // @TODO: Get connection status from user by WS
             $isConnected = $params['is_connected'];
             if ($isConnected) {
@@ -128,21 +129,51 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     if (!$checkInduction || $completedInduction) {
                         $uitMax = $plugin->get('yearly_cost_unit_converter');
                         $uitMax *= $plugin->get('yearly_cost_limit');
-                        // @TODO: Get UIT completed by user this year by WS
                         $uitUser = 0;
+                        $now = new DateTime(api_get_utc_datetime());
+                        $newYearDate = $plugin->get('course_session_credit_year_start_date');
+                        $newYearDate = !empty($newYearDate) ?
+                            new \DateTime($newYearDate . $now->format('/Y')) :
+                            $now;
                         $extra = new ExtraFieldValue('session');
-                        $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'cost');
-                        $uitUser += $var['field_value'];
+                        $joinSessionTable = Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su INNER JOIN ' .
+                            Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.id_session';
+                        $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.id_user = ?';
+                        $whereSessionParamsValues = array(
+                            0,
+                            $newYearDate->format('Y-m-d'),
+                            $userId
+                        );
+                        $whereSession = array(
+                            'where' => array(
+                                $whereSessionParams => $whereSessionParamsValues
+                            )
+                        );
+                        $selectSession = 's.id AS id';
+                        $sessions = Database::select(
+                            $selectSession,
+                            $joinSessionTable,
+                            $whereSession
+                        );
+
+                        if (is_array($sessions) && count($sessions) > 0) {
+                            foreach ($sessions as $session) {
+                                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
+                                $uitUser += $var['field_value'];
+                            }
+                        }
                         if ($uitMax >= $uitUser) {
                             $expendedTimeMax = $plugin->get('yearly_hours_limit');
-                            // @TODO: Get Expended time from user data
                             $expendedTime = 0;
-                            $var = $extra->get_values_by_handler_and_field_variable($params['session_id'], 'duration');
-                            $expendedTime += $var['field_value'];
+                            if (is_array($sessions) && count($sessions) > 0) {
+                                foreach ($sessions as $session) {
+                                    $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
+                                    $expendedTime += $var['field_value'];
+                                }
+                            }
                             if ($expendedTimeMax >= $expendedTime) {
                                 $expendedNumMax = $plugin->get('courses_count_limit');
-                                // @TODO: Get Expended num from user
-                                $expendedNum = 0;
+                                $expendedNum = count($sessions);
                                 if ($expendedNumMax >= $expendedNum) {
                                     $isAllowed = true;
                                 } else {
@@ -685,9 +716,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $extraField = new ExtraField('session');
             // Get session fields
             $fieldList = $extraField->get_all(array(
-                'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
             ));
             // Index session fields
+            $fields = array();
             foreach ($fieldList as $field) {
                 $fields[$field['id']] = $field['field_variable'];
             }
@@ -802,6 +834,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
         ));
         // Index session fields
+        $fields = array();
         foreach ($fieldList as $field) {
             $fields[$field['id']] = $field['field_variable'];
         }

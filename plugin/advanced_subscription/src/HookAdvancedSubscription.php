@@ -399,7 +399,16 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get the session brief List by category
-        $sessionList = SessionManager::getBriefSessionListAndExtraByCategory($sessionCategoryId, $params['target']);
+        $fields = array(
+            'short_description',
+            'mode',
+            'human_text_duration',
+            'vacancies',
+            'brochure',
+            'target',
+            'schedule'
+        );
+        $sessionList = SessionManager::getBriefSessionListAndExtraByCategory($sessionCategoryId, $params['target'], $fields);
 
         return $sessionList;
     }

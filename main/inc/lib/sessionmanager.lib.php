@@ -5436,15 +5436,15 @@ class SessionManager
     }
 
     /**
-     * Returns list of a few data from session (name, short description, start date, end date)
-     * And the next extra fields
-     * short_description, mode, human_text_duration, vacancies, brochure, target, schedule
-     * from Session category Id.
-     * @param int $categoryId
-     * @param string $target
+     * Returns list of a few data from session (name, short description, start 
+     * date, end date) and the given extra fields if defined based on a 
+     * session category Id.
+     * @param int $categoryId The internal ID of the session category
+     * @param string $target Value to search for in the session field values
+     * @param array $extraFields A list of fields to be scanned and returned
      * @return mixed
      */
-    public static function getBriefSessionListAndExtraByCategory($categoryId, $target) {
+    public static function getBriefSessionListAndExtraByCategory($categoryId, $target, $extraFields = null) {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();
@@ -5456,9 +5456,10 @@ class SessionManager
             $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
-            $fieldsArray = array(
-                'short_description', 'mode', 'human_text_duration', 'vacancies', 'brochure', 'target', 'schedule'
-            );
+            $fieldsArray = array();
+            foreach ($extraFields as $field) {
+                $fieldsArray[] = Database::escape_string($field);
+            }
             // Get the session list from session category and target
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
@@ -5470,23 +5471,24 @@ class SessionManager
                             sfv.session_id = session.id
                             AND sf.field_variable = 'target'
                             AND sfv.field_value = ?
-                        );" => array($categoryId, $target)
+                        )" => array($categoryId, $target)
                     )
                 )
             );
 
             // Get session fields
             $extraField = new ExtraField('session');
-            $fieldList = $extraField->get_all(array(
-                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
+            $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
+            $fieldsList = $extraField->get_all(array(
+                'field_variable IN ( ' . $questionMarks . ' )' => $fieldsArray
             ));
             // Index session fields
-            foreach ($fieldList as $field) {
+            foreach ($fieldsList as $field) {
                 $fields[$field['id']] = $field['field_variable'];
             }
             // Get session field values
             $extra = new ExtraFieldValue('session');
-            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => array_keys($fields)));
+            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ' . $questionMarks . ' )' => array_keys($fields)));
             // Add session fields values to session list
             foreach ($sessionList as $id => &$session) {
                 foreach ($sessionFieldValueList as $sessionFieldValue) {

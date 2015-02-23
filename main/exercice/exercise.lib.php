@@ -2668,7 +2668,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo $objExercise->show_exercise_result_header(
             $user_info,
             api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG),
-            $exercise_stat_info['duration']
+            $exercise_stat_info['duration'],
+            $exercise_stat_info['user_ip']
         );
     }
 

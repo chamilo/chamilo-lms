@@ -13,7 +13,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     /**
      * Constructor
      */
-    function __construct()
+    public function __construct()
     {
         $parameters = array(
             'yearly_cost_limit' => 'text',
@@ -35,7 +35,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @staticvar null $result
      * @return AdvancedSubscriptionPlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 
@@ -112,7 +112,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function isAllowedToDoRequest($userId, $params = array())
     {
         if (isset($params['is_connected']) && isset($params['profile_completed'])) {
-            $isAllowed = false;
+            $isAllowed = null;
             $plugin = self::create();
             $wsUrl = $plugin->get('ws_url');
             // @TODO: Get connection status from user by WS
@@ -233,7 +233,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function startSubscription($userId, $sessionId, $params)
     {
-        $result = false;
+        $result = null;
         if (!empty($sessionId) && !empty($userId)) {
             $plugin = self::create();
             try {
@@ -322,7 +322,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $where = array(
                 'id = ?' => intval($params['queue']['id']),
             );
-        } elseif(isset($params['studentUserId']) && isset($params['sessionId'])) {
+        } elseif (isset($params['studentUserId']) && isset($params['sessionId'])) {
             $where = array(
                 'user_id = ? AND session_id = ? AND status <> ? AND status <> ?' => array(
                     intval($params['studentUserId']),
@@ -689,12 +689,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
             ));
             // Index session fields
+            $fields = array();
             foreach ($fieldList as $field) {
                 $fields[$field['id']] = $field['field_variable'];
             }
 
             $mergedArray = array_merge(array($sessionId), array_keys($fields));
-            $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+            $sessionFieldValueList = $extraSession->get_all(
+                array(
+                    'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+                )
+            );
             foreach ($sessionFieldValueList as $sessionFieldValue) {
                 // Check if session field value is set in session field list
                 if (isset($fields[$sessionFieldValue['field_id']])) {
@@ -794,7 +799,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         // Filter input variable
         $sessionId = intval($sessionId);
         // Assign variables
-        $fieldsArray = array('target', 'publication_end_date', 'mode', 'recommended_number_of_participants', 'vacancies');
+        $fieldsArray = array(
+            'target',
+            'publication_end_date',
+            'mode',
+            'recommended_number_of_participants',
+            'vacancies'
+        );
         $sessionArray = api_get_session_info($sessionId);
         $extraSession = new ExtraFieldValue('session');
         $extraField = new ExtraField('session');
@@ -803,12 +814,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
         ));
         // Index session fields
+        $fields = array();
         foreach ($fieldList as $field) {
             $fields[$field['id']] = $field['field_variable'];
         }
 
         $mergedArray = array_merge(array($sessionId), array_keys($fields));
-        $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+        $sessionFieldValueList = $extraSession->get_all(
+            array(
+                'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+            )
+        );
         foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Check if session field value is set in session field list
             if (isset($fields[$sessionFieldValue['field_id']])) {

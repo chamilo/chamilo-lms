@@ -5231,6 +5231,8 @@ class SessionManager
         $sessionId = intval($sessionId);
         $userId = intval($userId);
 
+        // COUNT(1) actually returns the number of rows from the table (as if
+        // counting the results from the first column)
         $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
             . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
 

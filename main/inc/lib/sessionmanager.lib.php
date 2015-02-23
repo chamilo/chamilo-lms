@@ -5444,7 +5444,7 @@ class SessionManager
      * @param array $extraFields A list of fields to be scanned and returned
      * @return mixed
      */
-    public static function getBriefSessionListAndExtraByCategory($categoryId, $target, $extraFields = null) {
+    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null) {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();

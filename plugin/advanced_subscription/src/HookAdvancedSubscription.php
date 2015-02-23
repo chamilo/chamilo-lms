@@ -408,7 +408,7 @@ class HookAdvancedSubscription extends HookObserver implements
             'target',
             'schedule'
         );
-        $sessionList = SessionManager::getBriefSessionListAndExtraByCategory($sessionCategoryId, $params['target'], $fields);
+        $sessionList = SessionManager::getShortSessionListAndExtraByCategory($sessionCategoryId, $params['target'], $fields);
 
         return $sessionList;
     }

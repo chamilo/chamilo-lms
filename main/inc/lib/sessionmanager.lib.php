@@ -5440,9 +5440,10 @@ class SessionManager
      * from Session category Id.
      * @param int $categoryId
      * @param string $target
+     * @param array $fieldsArray, array of session extra fields
      * @return mixed
      */
-    public static function getBriefSessionListAndExtraByCategory($categoryId, $target) {
+    public static function getBriefSessionListAndExtraByCategory($categoryId, $target, $fieldsArray) {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();
@@ -5454,9 +5455,6 @@ class SessionManager
             $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
-            $fieldsArray = array(
-                'short_description', 'mode', 'human_text_duration', 'vacancies', 'brochure', 'target', 'schedule'
-            );
             // Get the session list from session category and target
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
@@ -5468,23 +5466,34 @@ class SessionManager
                             sfv.session_id = session.id
                             AND sf.field_variable = 'target'
                             AND sfv.field_value = ?
-                        );" => array($categoryId, $target)
+                        )" => array($categoryId, $target)
                     )
                 )
             );
-
+            $whereFieldVariables = array();
+            $whereFieldIds = array();
+            if (
+                is_array($fieldsArray) &&
+                count($fieldsArray) > 0
+            ) {
+                $whereParams = '?';
+                for ($i = 1; $i < count($fieldsArray); $i++) {
+                    $whereParams .= ', ?';
+                }
+                $whereFieldVariables = 'field_variable IN ( ' . $whereParams .' )';
+                $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
+            }
             // Get session fields
             $extraField = new ExtraField('session');
-            $fieldList = $extraField->get_all(array(
-                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
-            ));
+            $fieldList = $extraField->get_all(array($whereFieldVariables => $fieldsArray));
             // Index session fields
+            $fields = array();
             foreach ($fieldList as $field) {
                 $fields[$field['id']] = $field['field_variable'];
             }
             // Get session field values
             $extra = new ExtraFieldValue('session');
-            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => array_keys($fields)));
+            $sessionFieldValueList = $extra->get_all(array($whereFieldIds => array_keys($fields)));
             // Add session fields values to session list
             foreach ($sessionList as $id => &$session) {
                 foreach ($sessionFieldValueList as $sessionFieldValue) {

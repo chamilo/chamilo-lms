@@ -3,9 +3,7 @@
 /**
  * 	@package chamilo.admin
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -83,10 +81,11 @@ if ($action == 'add' || $action == 'edit') {
         if (!empty($category)) {
             $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
         }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.$categoryId;
+        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.$category;
         $form = new FormValidator('course_category', 'post', $url);
         $form->addElement('header', '', $form_title);
         $form->addElement('hidden', 'formSent', 1);
+
         $form->addElement('text', 'code', get_lang("CategoryCode"));
         $form->addElement('text', 'name', get_lang("CategoryName"));
         $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');

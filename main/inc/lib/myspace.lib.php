@@ -1868,7 +1868,7 @@ class MySpace
     {
         $questions_answered = 0;
         $sql = 'SELECT exe_result , exe_weighting
-            FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
+            FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
             WHERE exe_cours_id = '".Database::escape_string($course_code)."'
             AND exe_user_id = '".intval($user_id)."'";
         if($session_id !== false) {

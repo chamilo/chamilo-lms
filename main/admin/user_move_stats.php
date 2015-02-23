@@ -116,7 +116,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 $course_info = api_get_course_info($origin_course_code);
                 $course_id = $course_info['real_id'];
 
-                $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
                 $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                 $TBL_TRACK_E_COURSE_ACCESS  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
                 $TBL_TRACK_E_LAST_ACCESS    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
@@ -581,7 +581,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
  </script>';
 
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
-    $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $user_id = intval($user_id);
     //$sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, exe_cours_id ORDER by exe_user_id, exe_cours_id ASC";
     $sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, exe_cours_id ASC";

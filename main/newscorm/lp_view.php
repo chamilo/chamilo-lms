@@ -215,7 +215,7 @@ if (!empty($_REQUEST['exeId']) &&
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
 
-    $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id = intval($_GET['lp_item_id']);

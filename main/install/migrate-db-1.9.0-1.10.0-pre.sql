@@ -39,7 +39,8 @@ ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL
 ALTER TABLE track_e_login CHANGE COLUMN user_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_online CHANGE COLUMN user_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
-ALTER TABLE track_e_exercices ADD COLUMN user_ip varchar(39) NOT NULL default '';
+RENAME TABLE track_e_exercices TO track_e_exercises;
+ALTER TABLE track_e_exercises ADD COLUMN user_ip varchar(39) NOT NULL default '';
 ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
 ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
 

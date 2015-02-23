@@ -103,8 +103,8 @@ CREATE TABLE track_e_downloads (
   KEY down_cours_id (down_cours_id)
 );
 
-DROP TABLE IF EXISTS track_e_exercices;
-CREATE TABLE track_e_exercices (
+DROP TABLE IF EXISTS track_e_exercises;
+CREATE TABLE track_e_exercises (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -118,18 +118,18 @@ CREATE TABLE track_e_exercices (
   KEY exe_cours_id (exe_cours_id)
 );
 
-ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
-ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
-ALTER TABLE track_e_exercices ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
-ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
-ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercises ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercises ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercises ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD INDEX ( session_id ) ;
+ALTER TABLE track_e_exercises ADD orig_lp_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD exe_duration int UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercises ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (

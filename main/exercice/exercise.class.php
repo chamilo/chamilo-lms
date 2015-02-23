@@ -1571,7 +1571,7 @@ class Exercise
      */
     public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
-        $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
@@ -1617,7 +1617,7 @@ class Exercise
         }
 
         $session_id = api_get_session_id();
-        // delete TRACK_E_EXERCICES table
+        // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE exe_cours_id = '".api_get_course_id()."'
                 AND exe_exo_id = ".$this->id."
@@ -1710,7 +1710,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
@@ -1758,7 +1758,7 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
@@ -3600,7 +3600,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
@@ -4281,7 +4281,7 @@ class Exercise
 
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -4315,7 +4315,7 @@ class Exercise
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {
@@ -4553,7 +4553,7 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : array($quizId);
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($sessionId != 0) {
             $sql = "SELECT * FROM $track_exercises te "
               . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "

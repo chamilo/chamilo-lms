@@ -36,7 +36,7 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Return the singleton instance of Hook event.
-     * @return HookEventInterface|null
+     * @return static
      */
     public static function create()
     {

@@ -34,7 +34,7 @@ abstract class HookObserver implements HookObserverInterface
     /**
      * Return the singleton instance of Hook observer.
      * If Hook Management plugin is not enabled, will return NULL
-     * @return HookEventInterface|null
+     * @return static|null
      */
     public static function create()
     {

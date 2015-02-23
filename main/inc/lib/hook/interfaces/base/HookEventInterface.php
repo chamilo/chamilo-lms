@@ -33,7 +33,7 @@ interface HookEventInterface
 
     /**
      * Return the singleton instance of Hook event.
-     * @return HookEventInterface|null
+     * @return static|null
      */
     public static function create();
 

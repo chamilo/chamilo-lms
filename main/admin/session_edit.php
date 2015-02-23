@@ -37,17 +37,6 @@ $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id,"name" 
 list($year_start, $month_start, $day_start) = explode('-', $infos['date_start']);
 list($year_end, $month_end, $day_end) = explode('-', $infos['date_end']);
 
-// Default value
-$showDescriptionChecked = 'checked';
-
-if (isset($infos['show_description'])) {
-    if (!empty($infos['show_description'])) {
-        $showDescriptionChecked = 'checked';
-    } else {
-        $showDescriptionChecked = null;
-    }
-}
-
 $end_year_disabled = $end_month_disabled = $end_day_disabled = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -219,17 +208,23 @@ $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
 
-if (array_key_exists('show_description', $infos)) {
-    $form->addElement('textarea', 'description', get_lang('Description'));
+$form->addElement(
+    'textarea',
+    'description',
+    get_lang('Description'),
+    array(
+        'class' => 'span4',
+        'rows' => 3
+    )
+);
 
-    $chkDescriptionAttributes = array();
+$chkDescriptionAttributes = array();
 
-    if (!empty($showDescriptionChecked)) {
-        $chkDescriptionAttributes['checked'] = '';
-    }
-
-    $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
+if (!empty($infos['show_description'])) {
+    $chkDescriptionAttributes['checked'] = '';
 }
+
+$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
 
 $duration = empty($infos['duration']) ? null : $infos['duration'];
 
@@ -268,7 +263,7 @@ $formDefaults = array(
     'date_start' => $infos['date_start'],
     'date_end' => $infos['date_end'],
     'session_visibility' => $infos['visibility'],
-    'description' => array_key_exists('show_description', $infos) ? $infos['description'] : ''
+    'description' => $infos['description']
 );
 
 if ($formSent) {
@@ -277,7 +272,7 @@ if ($formSent) {
     $formDefaults['nb_days_access_after'] = api_htmlentities($nb_days_access_after,ENT_QUOTES,$charset);
     $formDefaults['duration'] = Security::remove_XSS($duration);
 } else {
-    $formDefaults['name'] = api_htmlentities($infos['name'],ENT_QUOTES,$charset);
+    $formDefaults['name'] = Security::remove_XSS($infos['name']);
     $formDefaults['nb_days_access_before'] = api_htmlentities($infos['nb_days_access_before_beginning'],ENT_QUOTES,$charset);
     $formDefaults['nb_days_access_after'] = api_htmlentities($infos['nb_days_access_after_end'],ENT_QUOTES,$charset);
     $formDefaults['duration'] = $duration;
@@ -297,7 +292,7 @@ if ($form->validate()) {
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
     $duration = isset($params['duration']) ? $params['duration'] : null;
-    $description = isset($params['description']) ? $params['description'] : null;
+    $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
 
     $end_limit = $params['end_limit'];

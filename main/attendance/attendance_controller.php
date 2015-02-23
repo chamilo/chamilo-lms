@@ -565,7 +565,7 @@ class AttendanceController
                 ) . '&action=calendar_logins'
             );
             $form->addDateRangePicker('range', get_lang('Range'));
-            $form->add_button('submit', get_lang('submit'));
+            $form->addButton('submit', get_lang('submit'));
 
             if ($form->validate()) {
                 $values = $form->getSubmitValues();

@@ -46,7 +46,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     // Can user create course
     $is_allowedCreateCourse = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
 
-    event_login();
+    Event::event_login();
 } else {
     $loginFailed = true;
     unset($_user['user_id']);

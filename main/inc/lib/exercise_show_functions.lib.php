@@ -41,7 +41,7 @@ class ExerciseShowFunctions
 			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td>
                     <?php
-                    $comm = get_comments($id,$questionId);
+                    $comm = Event::get_comments($id,$questionId);
                     ?>
 				</td>
 			<?php } ?>
@@ -74,7 +74,7 @@ class ExerciseShowFunctions
             if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
                 <td>
                     <?php
-                    $comm = get_comments($id,$questionId);
+                    $comm = Event::get_comments($id,$questionId);
                     ?>
                 </td>
             <?php } ?>
@@ -92,7 +92,7 @@ class ExerciseShowFunctions
 	 */
 	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null)
     {
-        $comments = get_comments($exe_id, $questionId);
+        $comments = Event::get_comments($exe_id, $questionId);
 
         if (!empty($answer)) {
             echo '<tr><td>';
@@ -137,7 +137,7 @@ class ExerciseShowFunctions
 
 			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
 				echo '<td>';
-				$comm = get_comments($id,$questionId);
+				$comm = Event::get_comments($id,$questionId);
 				echo '</td>';
 			}
 			echo '</tr>';
@@ -281,7 +281,7 @@ class ExerciseShowFunctions
 		</td>
 			<?php
 		    if ($ans==1) {
-		        $comm = get_comments($id,$questionId);
+		        $comm = Event::get_comments($id,$questionId);
 			}
 		    ?>
 		 <?php } else { ?>
@@ -371,7 +371,7 @@ class ExerciseShowFunctions
         </td>
             <?php
             if ($ans==1) {
-                $comm = get_comments($id, $questionId);
+                $comm = Event::get_comments($id, $questionId);
             }
             ?>
          <?php } else { ?>
@@ -469,7 +469,7 @@ class ExerciseShowFunctions
         </td>
             <?php
             if ($ans==1) {
-                $comm = get_comments($id,$questionId);
+                $comm = Event::get_comments($id,$questionId);
             }
             ?>
          <?php } else { ?>

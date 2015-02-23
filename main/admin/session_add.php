@@ -258,7 +258,7 @@ if (intval($countUsers) < 50) {
     $form->addElement('select', 'coach_username', get_lang('CoachName'), $coachesOptions, array(
         'id' => 'coach_username',
         'class' => 'chzn-select',
-        'style' => 'width:350px;'
+        'style' => 'width:370px;'
     ));
     $form->addElement('advanced_settings', Display::return_icon('synthese_view.gif') . ' ' . get_lang('ActivityCoach'));
 } else {
@@ -276,7 +276,7 @@ $form->add_html('<div id="ajax_list_coachs"></div>');
 $form->add_select('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
-    'style' => 'width:350px;'
+    'style' => 'width:370px;'
 ));
 
 $form->addElement('advanced_settings','<a class="btn-show" id="advanced_parameters" href="javascript://">'.get_lang('DefineSessionOptions').'</a>');
@@ -326,6 +326,18 @@ $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, 
 $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
+
+$form->addElement(
+    'textarea',
+    'description',
+    get_lang('Description'),
+    array(
+        'class' => 'span4',
+        'rows' => 3
+    )
+);
+
+$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 
 $form->addElement(
     'text',
@@ -385,6 +397,8 @@ if ($form->validate()) {
     $end_limit = isset($params['end_limit']) ? true : false;
     $start_limit = isset($params['start_limit']) ? true : false;
     $duration = isset($params['duration']) ? $params['duration'] : null;
+    $description = $params['description'];
+    $showDescription = isset($params['show_description']) ? 1: 0;
 
     if (empty($end_limit) && empty($start_limit)) {
         $nolimit = 1;
@@ -401,9 +415,22 @@ if ($form->validate()) {
     }
 
     $return = SessionManager::create_session(
-        $name, $startDate, $endDate, $nb_days_acess_before,
-        $nb_days_acess_after, $nolimit, $coach_username, $id_session_category, $id_visibility, $start_limit,
-        $end_limit, false, $duration, $extraFields
+        $name,
+        $startDate,
+        $endDate,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $coach_username,
+        $id_session_category,
+        $id_visibility,
+        $start_limit,
+        $end_limit,
+        false,
+        $duration,
+        $description,
+        $showDescription,
+        $extraFields
     );
 
     if ($return == strval(intval($return))) {

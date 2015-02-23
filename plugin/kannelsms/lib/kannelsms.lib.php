@@ -4,7 +4,7 @@
 /**
  * Class Kannelsms
  * This script handles incoming SMS information, process it and sends an SMS if everything is right
- * 
+ *
  * @package chamilo.plugin.kannelsms.lib
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  *
@@ -42,14 +42,11 @@ class Kannelsms
 
     /**
      * getMobilePhoneNumberById (retrieves a user mobile phone number by user id)
-     * @param   int User id
+     * @param   int $userId User id
      * @return  int User's mobile phone number
      */
     private function getMobilePhoneNumberById($userId)
     {
-        require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
-        require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
-
         $mobilePhoneNumberExtraField = new ExtraField('user');
         $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
 

@@ -80,14 +80,14 @@ class ShibbolethSession
         $_SESSION['noredirection'] = true;
 
         //must be called before 'init_local.inc.php'
-        event_login();
+        Event::event_login();
 
         //used in 'init_local.inc.php' this is BAD but and should be changed
         $loginFailed = false;
         $uidReset = true;
 
         $gidReset = true;
-        $cidReset = false; //FALSE !!      
+        $cidReset = false; //FALSE !!
 
         $mainDbName = Database :: get_main_database();
         $includePath = api_get_path(INCLUDE_PATH);

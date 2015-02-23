@@ -13,7 +13,7 @@ use Chamilo;
 
 /**
  * Form to upload a CSV file.
- * 
+ *
  * @license /licence.txt
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
@@ -23,7 +23,7 @@ class UploadFileForm extends \FormValidator
     /**
      *
      * @param string $action
-     * @return \Glossary\UploadFileForm 
+     * @return \Glossary\UploadFileForm
      */
     public static function create($action)
     {
@@ -37,20 +37,19 @@ class UploadFileForm extends \FormValidator
 
     /**
      *
-     * 
+     *
      */
     function init()
     {
         $form_name = get_lang('ImportGlossary');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
-        $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
+        $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('ImportCSVFileLocation');
         $this->add_file('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
-        $this->add_checkbox('deleteall', '', get_lang('DeleteAllGlossaryTerms'));
-
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addCheckBox('deleteall', '', get_lang('DeleteAllGlossaryTerms'));
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
 
         $label = get_lang('CSVMustLookLike');
         $label = "$label";

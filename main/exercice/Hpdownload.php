@@ -20,7 +20,7 @@ $doc_url=str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldeco
 $filename=basename($doc_url);
 
 // launch event
-//event_download($doc_url);
+//Event::event_download($doc_url);
 if (isset($_course['path'])) {
     $course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 	$full_file_name = $course_path.Security::remove_XSS($doc_url);
@@ -34,7 +34,7 @@ if(!is_file($full_file_name)) {
 }
 
 if (!Security::check_abs_path($full_file_name, $course_path.'/')) {
-    exit;   
+    exit;
 }
 
 $extension=explode('.',$filename);
@@ -68,7 +68,6 @@ header('Last-Modified: '.gmdate('D, d M Y H:i:s',time()+10).' GMT');
 */
 
 if ($content_type == 'text/html') {
-	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 	$directory_name = dirname($full_file_name);
 
 	$dir=str_replace(array('\\',$_configuration['root_sys']."courses/".$_course['path'].'/document'),array('/',''),$directory_name);

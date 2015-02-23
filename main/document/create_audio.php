@@ -93,7 +93,7 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] ||
 
 
 /*	Header */
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
 if (isset ($group)) {

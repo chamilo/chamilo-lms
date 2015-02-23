@@ -1446,7 +1446,7 @@ class DocumentManager
     }
 
     /**
-     * Allow to set a specific document as a new template for FCKEditor
+     * Allow to set a specific document as a new template for CKeditor
      * for a particular user in a particular course
      *
      * @param string $title
@@ -2396,8 +2396,6 @@ class DocumentManager
         $origin_course_path_from_zip = null,
         $origin_course_info_path = null
     ) {
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
         if (empty($content_html)) {
             return false;
         }
@@ -2716,8 +2714,6 @@ class DocumentManager
         $index_document = false,
         $show_output = false
     ) {
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
         $course_dir = $course_info['path'] . '/document';
@@ -5019,7 +5015,7 @@ class DocumentManager
             $ext = strtolower($ext[sizeof($ext) - 1]);
 
             // HTML-files an some other types are shown in a frameset by default.
-            $is_browser_viewable_file = is_browser_viewable($ext);
+            $is_browser_viewable_file = self::is_browser_viewable($ext);
 
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webOdflist)) {
@@ -5788,7 +5784,7 @@ class DocumentManager
      * Checks whether the user is in shared folder
      * @return return bool Return true when user is into shared folder
      */
-    public function is_shared_folder($curdirpath, $current_session_id)
+    public static function is_shared_folder($curdirpath, $current_session_id)
     {
         $clean_curdirpath = Security::remove_XSS($curdirpath);
         if ($clean_curdirpath == '/shared_folder') {
@@ -5854,7 +5850,8 @@ class DocumentManager
      * @param string $file_extension    The filename extension of the document (it must be in lower case).
      * @return bool                     Returns TRUE or FALSE.
      */
-    function is_browser_viewable($file_extension) {
+    public static function is_browser_viewable($file_extension)
+    {
         static $allowed_extensions = array(
             'htm', 'html', 'xhtml',
             'gif', 'jpg', 'jpeg', 'png', 'tif', 'tiff',

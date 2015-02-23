@@ -111,7 +111,12 @@ if (!empty($cats)) {
 
     $total_resource_weight = 0;
     if (!empty($datagen)) {
-        $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
+        $data_array = $datagen->get_data(
+            GradebookDataGenerator :: GDG_SORT_NAME,
+            0,
+            null,
+            true
+        );
 
         if (!empty($data_array)) {
             $newarray = array();
@@ -144,7 +149,7 @@ if ($filter) {
         api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
     );
     $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
-    $form->add_button('submit', get_lang('Submit'));
+    $form->addButton('submit', get_lang('Submit'));
     $filterForm = '<br />'.$form->return_form();
 
     if ($form->validate()) {

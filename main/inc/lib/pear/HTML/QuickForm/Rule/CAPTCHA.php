@@ -17,8 +17,6 @@
  * @link      http://pear.php.net/package/HTML_QuickForm_CAPTCHA
  */
 
-require_once 'HTML/QuickForm/Rule.php';
-
 /**
  * Rule to compare a field with a CAPTCHA image
  *

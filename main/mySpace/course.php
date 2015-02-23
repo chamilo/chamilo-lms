@@ -253,7 +253,7 @@ function get_courses($from, $limit, $column, $direction)
                 // tracking data
                 $avgProgressInCourse = Tracking :: get_avg_student_progress($userIdList, $courseCode, array(), $sessionId);
                 $avgScoreInCourse = Tracking :: get_avg_student_score($userIdList, $courseCode, array(), $sessionId);
-                $avgTimeSpentInCourse = Tracking :: get_time_spent_on_the_course($userIdList, $courseCode, $sessionId);
+                $avgTimeSpentInCourse = Tracking :: get_time_spent_on_the_course($userIdList, $courseInfo['real_id'], $sessionId);
                 $messagesInCourse = Tracking :: count_student_messages($userIdList, $courseCode, $sessionId);
                 $assignmentsInCourse = Tracking :: count_student_assignments($userIdList, $courseCode, $sessionId);
                 $avgTimeSpentInCourse = api_time_to_hms($avgTimeSpentInCourse / $countStudents);

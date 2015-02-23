@@ -67,7 +67,7 @@ class NotebookForm extends \FormValidator
         $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
 
         $form_name = $notebook->id ? get_lang('ModifyNote') : get_lang('NoteAddNew');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
         $this->add_textfield('title', get_lang('NoteTitle'), $required = true, array('class' => 'span3'));
 
@@ -78,7 +78,7 @@ class NotebookForm extends \FormValidator
         }
         $this->add_html_editor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
 
         $this->setDefaults($defaults);
     }

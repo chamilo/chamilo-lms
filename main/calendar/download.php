@@ -67,7 +67,7 @@ if (is_dir($full_file_name)) {
 $tbl_agenda_attachment 	= Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 
 // launch event
-event_download($doc_url);
+Event::event_download($doc_url);
 
 $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
   	  WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.Database::escape_string($doc_url).'"';

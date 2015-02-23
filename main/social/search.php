@@ -185,7 +185,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $results .= '<ul class="thumbnails">';
         foreach ($users as $user) {
 
-            $send_inv      = '<button class="btn btn-mini disabled "><i class="icon-user"></i> '.get_lang('SendInvitation').'</button><br /><br />';
+            $send_inv      = '<button class="btn btn-mini disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button><br /><br />';
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
             $user_info     = api_get_user_info($user['user_id'], true);
             $url           = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
@@ -193,10 +193,10 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
                 $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>
-                             <button class="btn btn-mini"><i class="icon-user"></i> '.get_lang('SendInvitation').'</button></a><br /><br />';
+                             <button class="btn btn-mini"><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button></a><br /><br />';
             }
             $send_msg = '<a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user['user_id'].'\');"/>
-                        <button class="btn btn-mini"><i class="icon-envelope"></i> '.get_lang('SendMessage').'</button></a>';
+                        <button class="btn btn-mini"><i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</button></a>';
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
                 $img             = '<img src="'.$picture['file'].'">';

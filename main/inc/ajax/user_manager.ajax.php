@@ -101,19 +101,20 @@ switch ($action) {
                         'userId' => $user_id
                     );
 
-                    $result = api_mail(
+                    $result = api_mail_html(
                         $recipient_name,
                         $user_info['mail'],
                         $emailsubject,
                         $emailbody,
                         $sender_name,
                         $email_admin,
-                        '',
+                        null,
+                        null,
                         $additionalParameters
                     );
-                    event_system(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
+                    Event::addEvent(LOG_USER_ENABLE, LOG_USER_ID, $user_id);
                 } else {
-                    event_system(LOG_USER_DISABLE, LOG_USER_ID, $user_id);
+                    Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $user_id);
                 }
                 echo $status;
             }

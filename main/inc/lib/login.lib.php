@@ -380,8 +380,6 @@ class Login
 
                     // Database Table Definitions
                     $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                    $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                    $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                     if (!empty($_GET['id_session'])) {
                         $_SESSION['id_session'] = intval($_GET['id_session']);
@@ -396,7 +394,7 @@ class Login
                     if (!isset($_SESSION['login_as'])) {
                         //Course login
                         if (isset($_user['user_id'])) {
-                            event_course_login($_course['sysCode'], $_user['user_id'], api_get_session_id());
+                            Event::event_course_login(api_get_course_int_id(), $_user['user_id'], api_get_session_id());
                         }
                     }
                 } else {
@@ -479,24 +477,23 @@ class Login
                             //We select the last record for the current course in the course tracking table
                             //But only if the login date is < than now + max_life_time
                             $sql = "SELECT course_access_id FROM $course_tracking_table
-                            WHERE   user_id     = " . intval($_user ['user_id']) . " AND
-                                    course_code = '$course_code' AND
-                                    session_id  = " . api_get_session_id() . " AND
-                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                                    WHERE
+                                        user_id     = " . intval($_user ['user_id']) . " AND
+                                        c_id = '".api_get_course_int_id()."' AND
+                                        session_id  = " . api_get_session_id() . " AND
+                                        login_course_date > now() - INTERVAL $session_lifetime SECOND
+                                    ORDER BY login_course_date DESC LIMIT 0,1";
                             $result = Database::query($sql);
 
                             if (Database::num_rows($result) > 0) {
                                 $i_course_access_id = Database::result($result, 0, 0);
                                 //We update the course tracking table
                                 $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
-                                WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
-                                //error_log($sql);
+                                        WHERE course_access_id = " . intval($i_course_access_id) . " AND session_id = " . api_get_session_id();
                                 Database::query($sql);
                             } else {
-                                $sql = "INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-                                    "VALUES('" . $course_code . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
-                                //error_log($sql);
+                                $sql = "INSERT INTO $course_tracking_table (c_id, user_id, login_course_date, logout_course_date, counter, session_id)" .
+                                    "VALUES('" . api_get_course_int_id() . "', '" . $_user['user_id'] . "', '$time', '$time', '1','" . api_get_session_id() . "')";
                                 Database::query($sql);
                             }
                         }

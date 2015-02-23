@@ -515,7 +515,11 @@ class Auth
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+            $count_connections_last_month = Tracking::get_course_connections_count(
+                $row['id'],
+                0,
+                api_get_utc_datetime(time() - (30 * 86400))
+            );
 
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
 

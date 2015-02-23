@@ -116,10 +116,10 @@ if (isset($_REQUEST['load_ajax'])) {
                 $course_info = api_get_course_info($origin_course_code);
                 $course_id = $course_info['real_id'];
 
-                $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-                $TBL_TRACK_ATTEMPT          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-                $TBL_TRACK_E_COURSE_ACCESS  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-                $TBL_TRACK_E_LAST_ACCESS    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+                $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                $TBL_TRACK_ATTEMPT          = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+                $TBL_TRACK_E_COURSE_ACCESS  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                $TBL_TRACK_E_LAST_ACCESS    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
                 $TBL_LP_VIEW                = Database::get_course_table(TABLE_LP_VIEW);
                 $TBL_NOTEBOOK               = Database::get_course_table(TABLE_NOTEBOOK);
@@ -127,9 +127,9 @@ if (isset($_REQUEST['load_ajax'])) {
                 $TBL_STUDENT_PUBLICATION_ASSIGNMENT    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
                 $TBL_ITEM_PROPERTY          = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-                $TBL_DROPBOX_FILE           = Database::get_course_table(TABLE_DROPBOX_FILE);
-                $TBL_DROPBOX_POST           = Database::get_course_table(TABLE_DROPBOX_POST);
-                $TBL_AGENDA                 = Database::get_course_table(TABLE_AGENDA);
+                $TBL_DROPBOX_FILE = Database::get_course_table(TABLE_DROPBOX_FILE);
+                $TBL_DROPBOX_POST = Database::get_course_table(TABLE_DROPBOX_POST);
+                $TBL_AGENDA = Database::get_course_table(TABLE_AGENDA);
 
                 //1. track_e_exercises
                 //ORIGINAL COURSE
@@ -161,7 +161,8 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 if (!$update_database) {
 
-                    $sql = "SELECT * FROM $TABLETRACK_EXERCICES WHERE exe_cours_id = '$origin_course_code' AND  session_id = $new_session_id AND exe_user_id = $user_id ";
+                    $sql = "SELECT * FROM $TABLETRACK_EXERCICES
+                            WHERE exe_cours_id = '$origin_course_code' AND  session_id = $new_session_id AND exe_user_id = $user_id ";
                     $res = Database::query($sql);
                     $list = array();
                     while($row = Database::fetch_array($res,'ASSOC')) {
@@ -188,8 +189,8 @@ if (isset($_REQUEST['load_ajax'])) {
                 //Nothing to do because there are not relationship with a session
 
                 //3. track_e_course_access
-
-                $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS WHERE course_code = '$origin_course_code' AND session_id = $origin_session_id  AND user_id = $user_id ";
+                $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
+                        WHERE c_id  = '$course_id' AND session_id = $origin_session_id  AND user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -204,14 +205,12 @@ if (isset($_REQUEST['load_ajax'])) {
                             $res = Database::query($sql);
                             if ($debug) var_dump($res);
                             $result_message[$TBL_TRACK_E_COURSE_ACCESS]++;
-                        } else {
-                            //$result_message[$TBL_TRACK_E_COURSE_ACCESS][$id] = $data;
                         }
                     }
-
                 //4. track_e_lastaccess
 
-                $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS WHERE access_cours_code = '$origin_course_code' AND access_session_id = $origin_session_id  AND access_user_id = $user_id ";
+                $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
+                        WHERE c_id = '$course_id' AND access_session_id = $origin_session_id  AND access_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -231,7 +230,8 @@ if (isset($_REQUEST['load_ajax'])) {
                 //5. lp_item_view
                 //CHECK ORIGIN
 
-                $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";
+                $sql = "SELECT * FROM $TBL_LP_VIEW
+                        WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";
                 $res = Database::query($sql);
 
                 //Getting the list of LPs in the new session
@@ -581,10 +581,11 @@ $htmlHeadXtra[] = '<script type="text/javascript">
  </script>';
 
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
-    $TABLETRACK_EXERCICES       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id = intval($user_id);
     //$sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, exe_cours_id ORDER by exe_user_id, exe_cours_id ASC";
-    $sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, exe_cours_id ASC";
+    $sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session
+            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, exe_cours_id ASC";
 
     $res = Database::query($sql);
     $course_list = array();

@@ -23,11 +23,6 @@
  */
 
 /**
- * Base class for <input /> form elements
- */
-require_once 'HTML/QuickForm/input.php';
-
-/**
  * HTML class for an <input type="button" /> elements
  *
  * @category    HTML
@@ -39,29 +34,54 @@ require_once 'HTML/QuickForm/input.php';
  */
 class HTML_QuickForm_button extends HTML_QuickForm_input
 {
-    // {{{ constructor
-
     /**
      * Class constructor
      *
-     * @param     string    $elementName    (optional)Input field name attribute
-     * @param     string    $value          (optional)Input field value
-     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
+     * @param     string $elementName (optional)Input field name attribute
+     * @param     string $value (optional)Input field value
+     * @param     mixed $attributes (optional)Either a typical HTML attribute string
      *                                      or an associative array
      * @since     1.0
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_button($elementName=null, $value=null, $attributes=null)
-    {
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, null, $attributes);
+    public function HTML_QuickForm_button(
+        $elementName = null,
+        $value = null,
+        $attributes = null
+    ) {
+        HTML_QuickForm_input::HTML_QuickForm_input(
+            $elementName,
+            null,
+            $attributes
+        );
         $this->_persistantFreeze = false;
         $this->setValue($value);
-        $this->setType('button');
-    } //end constructor
+        $this->setType('submit');
+    }
 
-    // }}}
-    // {{{ freeze()
+    /**
+     * @return string
+     */
+    public function toHtml()
+    {
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            $value = $this->_attributes['value'];
+            unset($this->_attributes['value']);
+            $icon = null;
+            //$class = isset($this->_attributes['class']) ? $this->_attributes['class'] : 'btn btn-large';
+            switch ($this->_attributes['name']) {
+                case 'save':
+                case 'submit':
+                    $icon = '<i class="fa fa-check"></i> ';
+                    break;
+            }
+
+            return $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' />'.$icon.$value.'</button>';
+        }
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -69,12 +89,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function freeze()
+    public function freeze()
     {
         return false;
-    } //end func freeze
-
-    // }}}
-
-} //end class HTML_QuickForm_button
-?>
+    }
+}

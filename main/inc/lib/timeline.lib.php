@@ -1,23 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * This class provides methods for the timeline management.
- * @package chamilo.library
- * @package chamilo.timeline
- */
-/**
- * Init
- */
-define('TIMELINE_STATUS_ACTIVE', '1');
-define('TIMELINE_STATUS_INACTIVE', '2');
 
 /**
+ * Class Timeline
  * Timeline model class definition
+ * @package chamilo.library
  */
 class Timeline extends Model
 {
     public $table;
-    public $columns = array('headline', 'type', 'start_date', 'end_date', 'text', 'media', 'media_credit', 'media_caption', 'title_slide', 'parent_id', 'status','c_id');
+    public $columns = array(
+        'headline',
+        'type',
+        'start_date',
+        'end_date',
+        'text',
+        'media',
+        'media_credit',
+        'media_caption',
+        'title_slide',
+        'parent_id',
+        'status',
+        'c_id'
+    );
     public $is_course_model = true;
 
 	public function __construct()

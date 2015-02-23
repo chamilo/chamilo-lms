@@ -40,11 +40,11 @@ $(document).ready(function(){
                     }
                 }
         });
-        
+
         $("a#assign").click(function () {
             $( "#dialog-form" ).dialog( "open" );
         });
-        
+
         $("input#responseyes").click(function () {
             if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
                 return false;
@@ -73,7 +73,7 @@ $(document).ready(function(){
 });
 
 function validate() {
-    fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
+    fckEditor1val = CKEDITOR.instances["content"].getData();
     document.getElementById("content").value= fckEditor1val;
     if(fckEditor1val == ""){
         alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
@@ -106,7 +106,7 @@ function add_image_form() {
         id: new_elem,
         class: "controls"
     }).appendTo(filepaths);
-    
+
     input_file = $("<input/>", {
         type: "file",
         name: "attach_" + counter_image,
@@ -124,7 +124,7 @@ function add_image_form() {
 
     new_filepath_id = $("#filepath_" + counter_image);
     new_filepath_id.append(input_file, link_remove.append(img_remove));
-    
+
     if (counter_image === 6) {
         var link_attach = $("#link-more-attach");
         if (link_attach) {
@@ -330,7 +330,7 @@ if (!isset($_POST['compose'])) {
     echo "<div class='span8 offset2'>";
     foreach ($messages as $message) {
         $type = "success";
-        
+
         if ($message['admin']) {
             $type = "normal";
             if ($isAdmin) {
@@ -339,10 +339,10 @@ if (!isset($_POST['compose'])) {
         }else {
             $message['message'].='<b>' . get_lang('Sent') . ': ' . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
         }
-        
+
         $receivedMessage = '<b>' . get_lang('Subject') . ': </b> ' . $message['subject'] . '<br/> <b>' . get_lang('Message') . ':</b>' . $message['message'] . '<br/>';
         $attachementLinks = "";
-        
+
         if (isset($message['atachments'])) {
             $attributeClass = array(
                 'class' => 'attachment-link'
@@ -351,7 +351,7 @@ if (!isset($_POST['compose'])) {
                 $attachementLinks .= Display::tag('div', $attach['attachment_link'], $attributeClass);
             }
         }
-        
+
         $entireMessage = $receivedMessage . $attachementLinks;
         echo Display::return_message($entireMessage, $type, false);
     }
@@ -386,11 +386,11 @@ function show_form_send_message()
     global $ticket;
     global $subject;
     global $plugin;
-    
+
     Display::div('', array('span2'));
-    
+
     $form = new FormValidator(
-        'send_ticket', 
+        'send_ticket',
         'POST',
         api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'],
         '',
@@ -400,32 +400,32 @@ function show_form_send_message()
             'class' => 'span9 offset1 form-horizontal'
         )
     );
-    
+
     $form->addElement(
-        'text', 
-        'subject', 
-        get_lang('Subject'), 
+        'text',
+        'subject',
+        get_lang('Subject'),
         array(
-            'for' => 'subject', 
+            'for' => 'subject',
             'value' => $subject,
             'style' => 'width: 540px;'
         )
     );
-    
+
     $form->addElement('hidden', 'ticket_id', $_GET['ticket_id']);
-    
+
     $form->add_html_editor(
-        'content', 
+        'content',
         get_lang('Message'),
-        false, 
-        false, 
+        false,
+        false,
         array(
-            'ToolbarSet' => 'Profile', 
-            'Width' => '550', 
+            'ToolbarSet' => 'Profile',
+            'Width' => '550',
             'Height' => '250'
         )
     );
-    
+
     if ($isAdmin) {
         $form->addElement(
             'checkbox',
@@ -434,29 +434,29 @@ function show_form_send_message()
             $plugin->get_lang('RequestConfirmation')
         );
     }
-    
+
     $form->addElement('html', '<span id="filepaths">');
     $form->addElement('html', '<div id="filepath_1">');
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addElement('html', '</div>');
     $form->addElement('html', '</span>');
-    
+
     $form->addElement('html', '<div class="controls">');
     $form->addElement('html', '<span id="link-more-attach" >');
     $form->addElement('html', '<span class="label label-info" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>');
     $form->addElement('html', '</span>');
     $form->addElement('html', '(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')');
-    
+
     $form->addElement('html', '<br/>');
     $form->addElement(
-        'button', 
-        'compose', 
-        get_lang('SendMessage'), 
+        'button',
+        'compose',
+        get_lang('SendMessage'),
         array(
             'class' => 'save'
         )
     );
-    
+
     $form->display();
 }
 

@@ -331,7 +331,7 @@ class survey_manager
                         visible_results
                     ) VALUES (
 						$course_id,
-						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code'],0))))."',
+						'".Database::escape_string(strtolower(CourseManager::generate_course_code(api_substr($values['survey_code'],0))))."',
 						'".Database::escape_string($values['survey_title'])."',
 						'".Database::escape_string($values['survey_subtitle'])."',
 						'".intval($_user['user_id'])."',

@@ -11,6 +11,10 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
  */
 class Basic extends Toolbar
 {
+    /**
+     * Default plugins that will be use in all toolbars
+     * @var array
+     */
     public $defaultPlugins = array(
         'oembed',
         'video',
@@ -19,6 +23,10 @@ class Basic extends Toolbar
         'justify'
     );
 
+    /**
+     * Plugins this toolbar
+     * @var array
+     */
     public $plugins = array();
 
     /**

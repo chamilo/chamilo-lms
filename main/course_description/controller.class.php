@@ -13,18 +13,18 @@ use Javascript;
 
 /**
  * Controller for course description. Dispatch request and peform required action.
- * 
+ *
  *      - list course description for course
  *      - add a new course description to a course/session
  *      - edit a course session
  *      - delete a course session
- * 
+ *
  * Usage:
- * 
+ *
  *      $controller = CourseDescriptionController::instance();
  *      $controller->run();
- * 
- * @package chamilo.course_description 
+ *
+ * @package chamilo.course_description
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license see /license.txt
@@ -42,8 +42,8 @@ class Controller extends \Controller
 
     /**
      * Return the instance of the controller.
-     * 
-     * @return CourseDescriptionController 
+     *
+     * @return CourseDescriptionController
      */
     public static function instance()
     {
@@ -56,13 +56,13 @@ class Controller extends \Controller
 
     protected function __construct()
     {
-        
+
     }
 
     /**
-     * Action to perform. 
+     * Action to perform.
      * Returns the request parameter.
-     * 
+     *
      * @return string
      */
     public function get_action()
@@ -95,8 +95,8 @@ class Controller extends \Controller
 
     /**
      * Whether the call is authorized or not.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function authorize()
     {
@@ -114,7 +114,7 @@ class Controller extends \Controller
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
@@ -135,12 +135,12 @@ class Controller extends \Controller
         $current_course_tool = TOOL_COURSE_DESCRIPTION;
 
         // Tracking
-        event_access_tool(TOOL_COURSE_DESCRIPTION);
+        Event::event_access_tool(TOOL_COURSE_DESCRIPTION);
     }
 
     /**
      * Javascript used by the controller
-     * 
+     *
      * @return string
      */
     public function javascript()
@@ -156,10 +156,10 @@ class Controller extends \Controller
 
     /**
      * Returns a url for an action that the controller can process
-     * 
+     *
      * @param string $action
      * @param array $params
-     * @return string 
+     * @return string
      */
     public function url($action = '', $params = array())
     {
@@ -185,8 +185,8 @@ class Controller extends \Controller
 
     /**
      * List course descriptions.
-     * 
-     * @param array messages 
+     *
+     * @param array messages
      */
     public function listing()
     {
@@ -203,7 +203,7 @@ class Controller extends \Controller
     }
 
     /**
-     * Performs the edit action. 
+     * Performs the edit action.
      */
     public function edit()
     {
@@ -211,7 +211,7 @@ class Controller extends \Controller
             $this->forbidden();
             return;
         }
-        
+
         $id = Request::get_id();
         $c_id = Request::get_c_id();
 
@@ -223,13 +223,13 @@ class Controller extends \Controller
 
         if ($form->validate()) {
             $success = $repo->save($description);
-            
-            $message = $success ? get_lang('DescriptionUpdated') : get_lang('Error');
+
+            $message = $success ? get_lang('CourseDescriptionUpdated') : get_lang('Error');
 
             $home = $this->url(self::ACTION_DEFAULT);
             Redirect::go($home);
         }
-        
+
         $data = (object) array();
         $data->form = $form;
         $this->render('edit', $data);
@@ -285,7 +285,7 @@ class Controller extends \Controller
 
     /**
      * Performs the delete action.
-     * 
+     *
      * @todo: could be worth to require a security token in the url and check it. Currently confirmation is done through javascript confirmation only.
      */
     public function delete()
@@ -344,7 +344,7 @@ class Controller extends \Controller
             $path = $file->tmp_name;
             $reader = new CsvReader($path);
             $descriptions = $reader->get_items();
-            
+
             $c_id = Request::get_c_id();
             $session_id = Request::get_session_id();
             $course = (object) array();
@@ -364,10 +364,10 @@ class Controller extends \Controller
 
     /**
      * Render a template using data. Adds a few common parameters to the data array.
-     * 
+     *
      * @see /main/template/default/course_description/
      * @param string $template
-     * @param array $data 
+     * @param array $data
      */
     protected function render($template, $data)
     {

@@ -15,7 +15,8 @@
  * Class
  * @package chamilo.blogs
  */
-class Blog {
+class Blog
+{
 	/**
 	 * Get the title of a blog
 	 * @author Toon Keppens
@@ -227,19 +228,18 @@ class Blog {
 	 * @param String $full_text
 	 * @param Integer $blog_id
 	 */
-	public static function create_post ($title, $full_text, $file_comment, $blog_id) {
-		global $_user;
-		global $_course;
+	public static function create_post($title, $full_text, $file_comment, $blog_id)
+	{
+		$_user = api_get_user_info();
+		$_course = api_get_course_info();
+		$course_id = api_get_course_int_id();
 
 		$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 		$upload_ok=true;
 		$has_attachment=false;
-		$current_date=date('Y-m-d H:i:s',time());
+		$current_date = api_get_utc_datetime();
 
-		$course_id = api_get_course_int_id();
-
-
-		if(!empty($_FILES['user_upload']['name'])) {
+		if (!empty($_FILES['user_upload']['name'])) {
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
@@ -270,16 +270,16 @@ class Blog {
 					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 				} else {
 					$new_file_name = uniqid('');
-					$new_path=$updir.'/'.$new_file_name;
+					$new_path = $updir.'/'.$new_file_name;
 					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-					$comment=Database::escape_string($file_comment);
+					$comment = Database::escape_string($file_comment);
 
 					// Storing the attachments if any
 					if ($result) {
-						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size, blog_id,comment_id) '.
-							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
-						$result=Database::query($sql);
-						$message.=' / '.get_lang('AttachmentUpload');
+						$sql = 'INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size, blog_id,comment_id) '.
+							   "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
+						Database::query($sql);
+						//Display::display_confirmation_message(get_lang('AttachmentUpload'));
 					}
 				}
 			}
@@ -346,9 +346,10 @@ class Blog {
 	 * @param Integer $post_id
 	 * @param Integer $parent_id
 	 */
-	public static function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL') {
-		global $_user;
-		global $_course;
+	public static function create_comment($title, $full_text, $file_comment, $blog_id, $post_id, $parent_id, $task_id = 'NULL')
+	{
+		$_user = api_get_user_info();
+		$_course = api_get_course_info();
 		global $blog_table_attachment;
 
 		$upload_ok			= true;
@@ -356,7 +357,7 @@ class Blog {
 		$current_date		= date('Y-m-d H:i:s',time());
 		$course_id 			= api_get_course_int_id();
 
-		if(!empty($_FILES['user_upload']['name'])) {
+		if (!empty($_FILES['user_upload']['name'])) {
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
@@ -371,10 +372,7 @@ class Blog {
 			Database::query($sql);
 
 			// Empty post values, or they are shown on the page again
-			$_POST['comment_title'] = "";
-			$_POST['comment_text'] = "";
-
-			$last_id=Database::insert_id();
+			$last_id = Database::insert_id();
 
 			if ($has_attachment) {
 				$courseDir   = $_course['path'].'/upload/blog';
@@ -382,29 +380,28 @@ class Blog {
 				$updir = $sys_course_path.$courseDir;
 
 				// Try to add an extension to the file if it hasn't one
-				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+				$new_file_name = add_ext_on_mime(
+					stripslashes($_FILES['user_upload']['name']),
+					$_FILES['user_upload']['type']
+				);
 
 				// user's file name
 				$file_name =$_FILES['user_upload']['name'];
 
-				if (!filter_extension($new_file_name))
-				{
+				if (!filter_extension($new_file_name)) {
 					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-				}
-				else
-				{
+				} else {
 					$new_file_name = uniqid('');
 					$new_path=$updir.'/'.$new_file_name;
 					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-					$comment=Database::escape_string($file_comment);
+					$comment = Database::escape_string($file_comment);
 
 					// Storing the attachments if any
-					if ($result)
-					{
+					if ($result) {
 						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size,blog_id,comment_id) '.
 							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
-						$result=Database::query($sql);
-						$message.=' / '.get_lang('AttachmentUpload');
+						Database::query($sql);
+						//$message.=' / '.get_lang('AttachmentUpload');
 					}
 				}
 			}
@@ -417,24 +414,25 @@ class Blog {
 	 * @param Integer $blog_id
 	 * @param Integer $comment_id
 	 */
-	public static function delete_comment ($blog_id, $post_id, $comment_id) {
-		// Init
+	public static function delete_comment ($blog_id, $post_id, $comment_id)
+	{
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		$blog_id = intval($blog_id);
 		$post_id = intval($post_id);
 		$comment_id = intval($comment_id);
-
         $course_id = api_get_course_int_id();
 
-		delete_all_blog_attachment($blog_id,$post_id,$comment_id);
+		delete_all_blog_attachment($blog_id, $post_id, $comment_id);
 
 		// Delete ratings on this comment
-		$sql = "DELETE FROM $tbl_blogs_rating WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND item_id = '".(int)$comment_id."' AND rating_type = 'comment'";
+		$sql = "DELETE FROM $tbl_blogs_rating
+				WHERE c_id = $course_id AND blog_id = '".$blog_id."' AND item_id = '".$comment_id."' AND rating_type = 'comment'";
 		Database::query($sql);
 
 		// select comments that have the selected comment as their parent
-		$sql = "SELECT comment_id FROM $tbl_blogs_comments WHERE c_id = $course_id AND parent_comment_id = '".(int)$comment_id."'";
+		$sql = "SELECT comment_id FROM $tbl_blogs_comments
+				WHERE c_id = $course_id AND parent_comment_id = '".$comment_id."'";
 		$result = Database::query($sql);
 
 		// Delete them recursively
@@ -443,7 +441,8 @@ class Blog {
 		}
 
 		// Finally, delete the selected comment to
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE c_id = $course_id AND comment_id = '".(int)$comment_id."'";
+		$sql = "DELETE FROM $tbl_blogs_comments
+				WHERE c_id = $course_id AND comment_id = '".$comment_id."'";
 		Database::query($sql);
 	}
 
@@ -455,9 +454,10 @@ class Blog {
 	 * @param String $description
 	 * @param String $color
 	 */
-	public static function create_task ($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
+	public static function create_task ($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
+	{
 		// Init
-		$tbl_blogs_tasks       = Database::get_course_table(TABLE_BLOGS_TASKS);
+		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 
 		$course_id = api_get_course_int_id();
@@ -491,7 +491,7 @@ class Blog {
 			Database::query($sql);
 		}
 
-		if($commentsDelete == 'on') {
+		if ($commentsDelete == 'on') {
 			$sql = "
 				INSERT INTO " . $tbl_tasks_permissions . " (c_id, task_id, tool, action ) VALUES (
 					'" . (int)$course_id . "',
@@ -512,13 +512,12 @@ class Blog {
 	 * @param String $description
 	 * @param String $color
 	 */
-	public static function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
-		// Init
+	public static function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)
+	{
 		$tbl_blogs_tasks       = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tasks_permissions = Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 
         $course_id = api_get_course_int_id();
-
 
 		// Create the task
 		$sql = "UPDATE $tbl_blogs_tasks SET
@@ -530,7 +529,8 @@ class Blog {
 
 		$tool = 'BLOG_' . $blog_id;
 
-		$sql = "DELETE FROM " . $tbl_tasks_permissions . " WHERE c_id = $course_id AND task_id = '" . (int)$task_id."'";
+		$sql = "DELETE FROM " . $tbl_tasks_permissions . "
+				WHERE c_id = $course_id AND task_id = '" . (int)$task_id."'";
 		Database::query($sql);
 
 		if ($articleDelete == 'on') {
@@ -575,7 +575,8 @@ class Blog {
 		$course_id = api_get_course_int_id();
 
 		// Delete posts
-		$sql = "DELETE FROM $tbl_blogs_tasks WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."'";
+		$sql = "DELETE FROM $tbl_blogs_tasks
+				WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."'";
 		Database::query($sql);
 	}
 
@@ -584,12 +585,14 @@ class Blog {
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
 	 */
-	public static function delete_assigned_task ($blog_id, $task_id,$user_id) {
+	public static function delete_assigned_task ($blog_id, $task_id, $user_id)
+	{
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
         $course_id = api_get_course_int_id();
 
 		// Delete posts
-		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."' AND user_id = '".(int)$user_id."'";
+		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user
+				WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."' AND user_id = '".(int)$user_id."'";
 		Database::query($sql);
 	}
 
@@ -628,17 +631,12 @@ class Blog {
 					echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: '.stripslashes($mytask['blog_name']) . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
 				}
 				echo '<ul>';
-			}
-			else
-			{
+			} else {
 				echo get_lang('NoTasks');
 			}
-		}
-		else
-		{
+		} else {
 			echo get_lang('NoTasks');
 		}
-
 	}
 
 	/**
@@ -646,14 +644,16 @@ class Blog {
 	 * @author Toon Keppens
 	 * @param Integer $blog_id
 	 */
-	public static function change_blog_visibility ($blog_id) {
+	public static function change_blog_visibility($blog_id)
+	{
 		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		$course_id = api_get_course_int_id();
 
 		// Get blog properties
-		$sql = "SELECT blog_name, visibility FROM $tbl_blogs WHERE c_id = $course_id AND blog_id='".(int)$blog_id."'";
+		$sql = "SELECT blog_name, visibility FROM $tbl_blogs
+				WHERE c_id = $course_id AND blog_id='".(int)$blog_id."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
 		$visibility = $blog['visibility'];
@@ -672,11 +672,11 @@ class Blog {
 		{
 			// Change visibility state, add to course home.
 			$sql = "UPDATE $tbl_blogs SET visibility = '1' WHERE c_id = $course_id AND blog_id ='".(int)$blog_id."' LIMIT 1";
-			$result = Database::query($sql);
+			Database::query($sql);
 
 			$sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, target )
 					VALUES ($course_id, '".Database::escape_string($title)."', 'blog/blog.php?blog_id=".(int)$blog_id."', 'blog.gif', '1', '0', 'pastillegris.gif', '0', '_self')";
-			$result = Database::query($sql);
+			Database::query($sql);
 		}
 	}
 
@@ -720,8 +720,6 @@ class Blog {
 				$blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
 
 				// Create an introduction text (but keep FULL sentences)
-
-				$introduction_text = "";
 				$words = 0;
 				$blog_post_text_cut = cut($blog_post_text, $limit) ;
 				$words = strlen($blog_post_text);
@@ -742,8 +740,7 @@ class Blog {
 				echo '<div class="blogpost_introduction" id="blogpost_introduction_'.$blog_post_id.'">' . $introduction_text.$readMoreLink.'</div>';
 				echo '<div class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</div>';
 
-
-				$file_name_array=get_blog_attachment($blog_id,$blog_post_id,0);
+				$file_name_array = get_blog_attachment($blog_id,$blog_post_id,0);
 
 				if (!empty($file_name_array)) {
 					echo '<br /><br />';
@@ -1107,144 +1104,32 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_form_new_post ($blog_id) {
-		if(api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
-			echo '<script type="text/javascript">
-					function FCKeditor_OnComplete( editorInstance )
-					{
-					  editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-					}
-
-					function check_for_title()
-					{
-						// This functions shows that you can interact directly with the editor area
-						// DOM. In this way you have the freedom to do anything you want with it.
-
-						// Get the editor instance that we want to interact with.
-						var oEditor = FCKeditorAPI.GetInstance(\'post_full_text\') ;
-
-						// Get the Editor Area DOM (Document object).
-						var oDOM = oEditor.EditorDocument ;
-
-						var iLength ;
-						var contentText ;
-						var contentTextArray;
-						var bestandsnaamNieuw = "";
-						var bestandsnaamOud = "";
-
-						// The are two diffent ways to get the text (without HTML markups).
-						// It is browser specific.
-
-						if( document.all )		// If Internet Explorer.
-						{
-							contentText = oDOM.body.innerText ;
-						}
-						else					// If Gecko.
-						{
-							var r = oDOM.createRange() ;
-							r.selectNodeContents( oDOM.body ) ;
-							contentText = r.toString() ;
-						}
-
-						// Compose title if there is none
-						contentTextArray = contentText.split(\' \') ;
-						var x=0;
-						for(x=0; (x<5 && x<contentTextArray.length); x++)
-						{
-							if(x < 4)
-							{
-								bestandsnaamNieuw += contentTextArray[x] + \' \';
-							}
-							else
-							{
-								bestandsnaamNieuw += contentTextArray[x] + \'...\';
-							}
-						}
-
-						if(document.getElementById(\'post_title_edited\').value == "false")
-						{
-							document.getElementById(\'post_title\').value = bestandsnaamNieuw;
-						}
-					}
-
-					function trim(s) {
-					 while(s.substring(0,1) == \' \') {
-					  s = s.substring(1,s.length);
-					 }
-					 while(s.substring(s.length-1,s.length) == \' \') {
-					  s = s.substring(0,s.length-1);
-					 }
-					 return s;
-					}
-
-					function check_if_still_empty()
-					{
-						if(trim(document.getElementById(\'post_title\').value) != "")
-						{
-							document.getElementById(\'post_title_edited\').value = "true";
-						}
-					}
-
-			</script>';
-
-
-			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?action=new_post&blog_id=' . $blog_id . '">';
-
-			echo '<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" />';
-
-			// form title
-			echo '<legend>' . get_lang('NewPost') . '</legend>';
-
-			// article title
-			echo '<div><span class="form_required">*</span>'.get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" onblur="check_if_still_empty()" /></div><br />';
-
-			// article text
-			//@todo use formvalidator
-			//$oFCKeditor = new FCKeditor('post_full_text') ;
-            $oFCKeditor = new CKeditor();
-			$oFCKeditor->Width		= '100%';
-			$oFCKeditor->Height		= '200';
-			if(!api_is_allowed_to_edit()) {
-				$oFCKeditor->ToolbarSet = 'Project_Student';
+	public static function display_form_new_post($blog_id)
+	{
+		if (api_is_allowed('BLOG_' . $blog_id, 'article_add')) {
+			$form = new FormValidator(
+				'add_post',
+				'post',
+				api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=" . $blog_id . "&" . api_get_cidreq(),
+				null,
+				array('enctype' => 'multipart/form-data')
+			);
+			$form->addHidden('post_title_edited', 'false');
+			$form->addHeader(get_lang('NewPost'));
+			$form->add_textfield('title', get_lang('Title'));
+			$config = array();
+			if (!api_is_allowed_to_edit()) {
+				$config['ToolbarSet'] = 'ProjectStudent';
 			} else {
-				$oFCKeditor->ToolbarSet = 'Project';
+				$config['ToolbarSet'] = 'Project';
 			}
-			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
+			$form->add_html_editor('full_text', get_lang('Content'), false, false, $config);
+			$form->add_file('user_upload', get_lang('AddAnAttachment'));
+			$form->add_textarea('post_file_comment', get_lang('FileComment'));
+			$form->addHidden('new_post_submit', 'true');
+			$form->addButton('save', get_lang('Save'));
 
-			echo '<div class="control-group">';
-            //$oFCKeditor->Create();
-            $oFCKeditor->editor('post_full_text');
-			echo '</div>';
-
-			// attachment
-			echo '<div class="control-group">
-						<label class="control-label">
-							' . get_lang('AddAnAttachment') . '
-						</label>
-						<div class="controls">
-							<input type="file" name="user_upload"/>
-						</div>
-					</div>';
-
-			// comment
-			echo '<div class="control-group">
-						<label class="control-label">
-							' . get_lang('FileComment') . '
-						</label>
-						<div class="controls">
-							<textarea name="post_file_comment" cols="34" /></textarea>
-						</div>
-					</div>';
-
-			// submit
-			echo '<div class="control-group">
-						<div class="controls">
-								 <input type="hidden" name="action" value="" />
-								 <input type="hidden" name="new_post_submit" value="true" />
-								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-						</div>
-					</div>';
-			echo '</form>';
+			$form->display();
 		} else {
 			api_not_allowed();
 		}
@@ -1256,15 +1141,16 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_form_edit_post ($blog_id, $post_id) {
-		// Init
+	public static function display_form_edit_post($blog_id, $post_id)
+	{
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 
 		$course_id = api_get_course_int_id();
 
 		// Get posts and author
-		$sql = "SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts post
+		$sql = "SELECT post.*, user.lastname, user.firstname
+				FROM $tbl_blogs_posts post
 				INNER JOIN $tbl_users user ON post.author_id = user.user_id
 				WHERE
 				post.c_id 			= $course_id AND
@@ -1274,48 +1160,30 @@ class Blog {
 		$result = Database::query($sql);
 		$blog_post = Database::fetch_array($result);
 
-		// Prepare data
-		$blog_post_text = stripslashes($blog_post['full_text']);
+		// Form
 
-		echo '<form name="edit_post" method="post" action="blog.php?action=edit_post&post_id=' . Security::remove_XSS($_GET['post_id']) . '&blog_id=' . Security::remove_XSS($blog_id) . '&article_id='.Security::remove_XSS($_GET['article_id']).'&task_id='.Security::remove_XSS($_GET['task_id']).'">';
+		$form = new FormValidator(
+			'edit_post',
+			'post',
+			api_get_path(WEB_CODE_PATH).'blog/blog.php?action=edit_post&post_id=' . intval($_GET['post_id']) . '&blog_id=' . intval($blog_id) . '&article_id='.intval($_GET['article_id']).'&task_id='.intval($_GET['task_id'])
+		);
 
-		// form title
-		echo '<legend>' . get_lang('EditPost') . '</legend>';
+		$form->addHeader(get_lang('EditPost'));
+		$form->add_textfield('title', get_lang('Title'));
 
-		// article title
-		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="post_title" id="post_title" type="text" size="60" value="'.stripslashes($blog_post['title']) . '" /><br /></div>';
-
-		// article text
-		//$oFCKeditor = new FCKeditor('post_full_text') ;
-        $oFCKeditor = new CKeditor();
-
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Height		= '200';
-
-		if(!api_is_allowed_to_edit()) {
-			$oFCKeditor->ToolbarSet = 'Project_Student';
+		if (!api_is_allowed_to_edit()) {
+			$config['ToolbarSet'] = 'ProjectStudent';
 		} else {
-			$oFCKeditor->ToolbarSet = 'Project';
+			$config['ToolbarSet'] = 'Project';
 		}
-		$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
-		echo '<div class="controls">';
-		//echo $oFCKeditor->Create();
-        $oFCKeditor->editor('post_full_text', $oFCKeditor->Value);
-		echo '</div>';
+		$form->add_html_editor('full_text', get_lang('Content'), false, false, $config);
 
-		// submit
-		echo '	<div class="control-group">
-
-					<div class="controls">
-							 <input type="hidden" name="action" value="" />
-							 <input type="hidden" name="edit_post_submit" value="true" />
-							 <input type="hidden" name="post_id" value="' . (int)$_GET['post_id'] . '" />
-							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-					</div>
-				</div>';
-
-
-		echo '</form>';
+		$form->addHidden('action', '');
+		$form->addHidden('edit_post_submit', 'true');
+		$form->addHidden('post_id', intval($_GET['post_id']));
+		$form->addButton('save', get_lang('Save'));
+		$form->setDefaults($blog_post);
+		$form->display();
 	}
 
 	/**
@@ -2334,75 +2202,45 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_new_comment_form ($blog_id, $post_id, $title) {
-		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . intval($blog_id) . '&amp;post_id=' . intval($post_id) . '">';
+	public static function display_new_comment_form($blog_id, $post_id, $title)
+	{
+		$form = new FormValidator(
+			'add_post',
+			'post',
+			api_get_path(WEB_CODE_PATH)."blog/blog.php?action=view_post&blog_id=" . intval($blog_id)  . "&post_id=".intval($post_id)."&".api_get_cidreq(),
+			null,
+			array('enctype' => 'multipart/form-data')
+		);
 
-		// form title
-		echo '<legend>';
-		echo (isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment'));
-		echo '</legend>';
-
-		// comment title
-		echo '<div><span class="form_required">*</span>' . get_lang('Title') . ': <input name="comment_title" id="comment_title" type="text" size="60" value="Re: '.stripslashes($title) . '" /></div><br />';
-
-		// comment text
-		//$oFCKeditor = new FCKeditor('comment_text') ;
-        $oFCKeditor = new CKeditor();
-		$oFCKeditor->Width		= '100%';
-		$oFCKeditor->Height		= '200';
-		if(!api_is_allowed_to_edit())
-		{
-			$oFCKeditor->ToolbarSet = 'Project_Comment_Student';
+		$header = get_lang('AddNewComment');
+		if (isset($_GET['task_id'])) {
+			$header = get_lang('ExecuteThisTask');
 		}
-		else
-		{
-			$oFCKeditor->ToolbarSet = 'Project_Comment';
+		$form->addHeader($header);
+		$form->add_textfield('title', get_lang('Title'));
+
+		$config = array();
+		if (!api_is_allowed_to_edit()) {
+			$config['ToolbarSet'] = 'ProjectComment';
+		} else {
+			$config['ToolbarSet'] = 'ProjectCommentStudent';
 		}
-		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
-		echo '<div class="controls">';
-		//echo $oFCKeditor->Create() ;
-        $oFCKeditor->editor('comment_text');
-		echo '
-				</div>';
+		$form->add_html_editor('comment', get_lang('Comment'), false, false, $config);
+		$form->add_file('user_upload', get_lang('AddAnAttachment'));
 
-		// attachment
-		echo '	<div class="control-group">
-					<label class="control-label">
-						' . get_lang('AddAnAttachment') . '
-					</label>
-					<div class="controls">
-						<input type="file" name="user_upload"/>
-					</div>
-				</div>';
+		$form->add_textarea('post_file_comment', get_lang('FileComment'));
 
-		// attachment comment
-		echo '	<div class="control-group">
-					<label class="control-label">
-						' . get_lang('FileComment') . '
-					</label>
-					<div class="controls">
-						<textarea name="post_file_comment" cols="34" /></textarea>
-					</div>
-				</div>';
+		$form->addHidden('action', null);
+		$form->addHidden('comment_parent_id', 0);
 
-		// attachment comment
-		echo '	<div class="control-group">
-					<div class="controls">
-							 <input type="hidden" name="action" value="" />
-							 <input type="hidden" name="comment_parent_id" id="comment_parent_id" value="0" />';
-									if(isset($_GET['task_id']))
-									{
-										echo ' <input type="hidden" name="new_task_execution_submit" value="true" />';
-										echo ' <input type="hidden" name="task_id" value="' . intval($_GET['task_id']) . '" />';
-									}
-									else
-									{
-										echo ' <input type="hidden" name="new_comment_submit" value="true" />';
-									}
-		echo '					<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
-					</div>
-				</div>';
-		echo '</form>';
+		if (isset($_GET['task_id'])) {
+			$form->addHidden('new_task_execution_submit', 'true');
+			$form->addHidden('task_id', intval($_GET['task_id']));
+		} else {
+			$form->addHidden('new_comment_submit', 'true');
+		}
+		$form->addButton('save', get_lang('Save'));
+		$form->display();
 	}
 
 
@@ -2418,7 +2256,8 @@ class Blog {
 	 *
 	 * @return html code
 	*/
-	public static function display_minimonthcalendar ($month, $year, $blog_id) {
+	public static function display_minimonthcalendar ($month, $year, $blog_id)
+	{
 		// Init
 		global $_user;
 		global $DaysShort;
@@ -2447,17 +2286,21 @@ class Blog {
 
 		//Start the week on monday
 		$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-		$backwardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . Security::remove_XSS($_GET['filter'])."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-		$forewardsURL = api_get_self()."?blog_id=" . (int)$_GET['blog_id']."&amp;filter=" . Security::remove_XSS($_GET['filter'])."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+		$blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
+		$filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
+		$backwardsURL = api_get_self()."?blog_id=" . $blogId."&amp;filter=" . $filter."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+		$forewardsURL = api_get_self()."?blog_id=" . $blogId."&amp;filter=" . $filter."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 		// Get posts for this month
-		$sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname FROM $tbl_blogs_posts post
+		$sql = "SELECT post.*, DAYOFMONTH(date_creation) as post_day, user.lastname, user.firstname
+				FROM $tbl_blogs_posts post
 				INNER JOIN $tbl_users user
 				ON post.author_id = user.user_id
-				WHERE 	post.c_id = $course_id AND
-						post.blog_id = '".(int)$blog_id."' AND
-						MONTH(date_creation) = '".(int)$month."' AND
-						YEAR(date_creation) = '".(int)$year."'
+				WHERE
+					post.c_id = $course_id AND
+					post.blog_id = '".(int)$blog_id."' AND
+					MONTH(date_creation) = '".(int)$month."' AND
+					YEAR(date_creation) = '".(int)$year."'
 				ORDER BY date_creation";
 		$result = Database::query($sql);
 
@@ -2526,12 +2369,11 @@ class Blog {
 				if(($curday == -1) && ($ii == $startdayofweek))
 					$curday = 1;
 
-				if(($curday > 0) && ($curday <= $numberofdays[$month]))
-				{
+				if(($curday > 0) && ($curday <= $numberofdays[$month])) {
 					$bgcolor = $ii < 5 ? $class="class=\"days_week\"" : $class="class=\"days_weekend\"";
 					$dayheader = "$curday";
 
-					if(($curday == $today[mday]) && ($year == $today[year]) && ($month == $today[mon]))
+					if(($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
 					{
 						$dayheader = "$curday";
 						$class = "class=\"days_today\"";
@@ -2575,9 +2417,9 @@ class Blog {
 	 * Blog admin | Display the form to add a new blog.
 	 *
 	 */
-	public static function display_new_blog_form () {
-
-        $form = new FormValidator('add_blog', 'post','blog_admin.php?action=add');
+	public static function display_new_blog_form()
+	{
+        $form = new FormValidator('add_blog', 'post', 'blog_admin.php?action=add');
         $form->addElement('header', get_lang('AddBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
         $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
@@ -2585,9 +2427,10 @@ class Blog {
         $form->addElement('hidden', 'new_blog_submit', 'true');
         $form->addElement('style_submit_button', null, get_lang('SaveProject'));
 
-        $defaults = array();
-        $defaults['blog_name'] = Security::remove_XSS($_POST['blog_name']);
-        $defaults['blog_subtitle'] = Security::remove_XSS($_POST['blog_subtitle']);
+        $defaults = array(
+			'blog_name' => isset($_POST['blog_name']) ? Security::remove_XSS($_POST['blog_name']) : null,
+        	'blog_subtitle' => isset($_POST['blog_subtitle']) ? Security::remove_XSS($_POST['blog_subtitle']) : null
+		);
         $form->setDefaults($defaults);
         $form->display();
 	}
@@ -2596,11 +2439,13 @@ class Blog {
 	 * Blog admin | Display the form to edit a blog.
 	 *
 	 */
-	public static function display_edit_blog_form ($blog_id) {
+	public static function display_edit_blog_form($blog_id)
+	{
 	    $course_id = api_get_course_int_id();
+		$blog_id= intval($blog_id);
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
-		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."'";
+		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE c_id = $course_id AND blog_id = '".$blog_id."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
 
@@ -2610,7 +2455,7 @@ class Blog {
 			$blog['blog_subtitle'] 	= Security::remove_XSS($_POST['blog_subtitle']);
 		}
 
-        $form = new FormValidator('edit_blog', 'post','blog_admin.php?action=edit&blog_id='.Security::remove_XSS($_GET['blog_id']));
+        $form = new FormValidator('edit_blog', 'post','blog_admin.php?action=edit&blog_id='.intval($_GET['blog_id']));
         $form->addElement('header', get_lang('EditBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
         $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
@@ -2641,21 +2486,24 @@ class Blog {
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id, false);
 
-		$sql = "SELECT blog_name,blog_subtitle,visibility,blog_id FROM $tbl_blogs WHERE c_id = $course_id ORDER BY date_creation DESC";
+		$sql = "SELECT blog_name, blog_subtitle, visibility, blog_id, session_id
+				FROM $tbl_blogs WHERE c_id = $course_id
+				ORDER BY date_creation DESC";
 		$result = Database::query($sql);
+		$list_info = array();
 		if (Database::num_rows($result)) {
 			while ($row_project=Database::fetch_row($result)) {
 				$list_info[]=$row_project;
 			}
 		}
 
-
 		$list_content_blog = array();
 		$list_body_blog = array();
+		$_user = api_get_user_info();
 
 		if (is_array($list_info)) {
-			foreach($list_info as $key => $info_log) {
-				//validacion when belongs to a session
+			foreach ($list_info as $key => $info_log) {
+				// Validation when belongs to a session
 				$session_img = api_get_session_image($info_log[4], $_user['status']);
 
 				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
@@ -2668,19 +2516,18 @@ class Blog {
 
 				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
 				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
-			 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
-				$my_image.='<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
-				$my_image.="</a>\n";
-				$my_image.='<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
-				$my_image.='onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
-				$my_image.='<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
-				$my_image.="</a>\n";
-				$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
-				$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
-				$my_image.="</a>\n";
+			 	$my_image = '<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.= '<img src="../img/edit.gif" border="0" title="' . get_lang('EditBlog') . '" />';
+				$my_image.= "</a>\n";
+				$my_image.= '<a href="' .api_get_self(). '?action=delete&amp;blog_id=' . $info_log[3] . '" ';
+				$my_image.= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;" >';
+				$my_image.= '<img src="../img/delete.gif" border="0" title="' . get_lang('DeleteBlog') . '" />';
+				$my_image.= "</a>\n";
+				$my_image.= '<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
+				$my_image.= '<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
+				$my_image.= "</a>\n";
 
 				$list_body_blog[]=$my_image;
-				$my_image='';
 
 				$list_content_blog[]=$list_body_blog;
 				$list_body_blog = array();

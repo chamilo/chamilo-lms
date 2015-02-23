@@ -4,7 +4,16 @@ for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Додати новий форум";
 $ReplyShort = "Віпд.:";
+$WCAGGoMenu = "Перейти до меню";
+$WCAGGoContent = "Перейти до контенту";
 $NoTimeLimits = "Без ліміту часу";
+$TypeMessage = "Будь ласка, введіть повідомлення!";
+$ConfirmReset = "Ви дійсно бажаєте видалити всі повідомлення?";
+$ClearList = "Почистити список";
+$CallSent = "Запит відправлено. Очікуємо підтвердження партнера.";
+$ChatDenied = "Ваш запит було відкинуто партнером.";
+$Send = "Відправити";
+$Connected = "З'єднаний";
 $Title = "Заголовок";
 $UsersOnline = "Користувачі онлайн";
 $Remove = "Видалити";
@@ -242,5 +251,11 @@ $DateFormatLongWithoutDay = "%d. %B. %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Невірний каталог. Будь ласка, створіть каталог в інструментарії Документи для того, аби завантажувати туди зображення";
 $UsersConnectedToMySessions = "Показати всіх користувачів, підключених до моїх сесій";
 $Category = "Категорія";
+$CourseProgram = "Деталі курсу";
+$ThisCourseDescriptionIsEmpty = "&#1062;&#1077;&#1081; &#1082;&#1091;&#1088;&#1089; &#1097;&#1077; &#1085;&#1077; &#1086;&#1087;&#1080;&#1089;&#1072;&#1085;&#1086;.";
+$QuestionPlan = "Питання викладачу щодо планування";
+$NewBloc = "Інше";
+$CourseDescriptionUpdated = "Опис курсу було оновлено";
+$CourseDescriptionDeleted = "Опис курсу було видалено";
 $UploadADocument = "Завантажити документ";
 ?>

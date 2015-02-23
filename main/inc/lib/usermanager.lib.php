@@ -234,7 +234,7 @@ class UserManager
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
-            event_system(LOG_USER_CREATE, LOG_USER_ID, $return);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return);
         } else {
             return api_set_failure('error inserting in Database');
         }
@@ -438,8 +438,8 @@ class UserManager
 
         // Add event to system log
         $user_id_manager = api_get_user_id();
-        event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        Event::addEvent(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        Event::addEvent(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager, null, $user_info);
         return true;
     }
 
@@ -494,7 +494,7 @@ class UserManager
         $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
         $r = Database::query($sql);
         if ($r !== false) {
-            event_system(LOG_USER_DISABLE,LOG_USER_ID,$ids);
+            Event::addEvent(LOG_USER_DISABLE,LOG_USER_ID,$ids);
         }
         return $r;
     }
@@ -524,7 +524,7 @@ class UserManager
         $sql = "UPDATE $table_user SET active = 1 WHERE user_id IN ($ids)";
         $r = Database::query($sql);
         if ($r !== false) {
-            event_system(LOG_USER_ENABLE,LOG_USER_ID,$ids);
+            Event::addEvent(LOG_USER_ENABLE,LOG_USER_ID,$ids);
         }
         return $r;
     }
@@ -676,7 +676,7 @@ class UserManager
             } else {
                 $event_title = LOG_USER_DISABLE;
             }
-            event_system($event_title, LOG_USER_ID, $user_id);
+            Event::addEvent($event_title, LOG_USER_ID, $user_id);
         }
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
@@ -735,7 +735,7 @@ class UserManager
             $ev = LOG_USER_ENABLE;
         }
         if ($r !== false) {
-            event_system($ev,LOG_USER_ID,$user_id);
+            Event::addEvent($ev,LOG_USER_ID,$user_id);
         }
         return $r;
     }
@@ -1924,7 +1924,7 @@ class UserManager
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            event_system(LOG_USER_FIELD_CREATE, LOG_USER_FIELD_VARIABLE, Database::escape_string($fieldvarname));
+            Event::addEvent(LOG_USER_FIELD_CREATE, LOG_USER_FIELD_VARIABLE, Database::escape_string($fieldvarname));
         } else {
             //echo "false - failed" ;
             return false;
@@ -5073,22 +5073,22 @@ EOF;
     /**
      * Calc the expended time (in seconds) by a user in a course
      * @param int $userId The user id
-     * @param string $courseCode The course id
+     * @param int $courseId The course id
      * @param int $sessionId Optional. The session id
      * @param string $from Optional. From date
      * @param string $until Optional. Until date
      * @return int The time
      */
-    public static function getExpendedTimeInCourses($userId, $courseCode, $sessionId = 0, $from = '', $until = '')
+    public static function getExpendedTimeInCourses($userId, $courseId, $sessionId = 0, $from = '', $until = '')
     {
         $userId = intval($userId);
         $sessionId = intval($sessionId);
 
-        $trackCourseAccessTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $trackCourseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         $whereConditions = array(
             'user_id = ? ' => $userId,
-            "AND course_code = '?' " => $courseCode,
+            "AND c_i = '?' " => $courseId,
             'AND session_id = ? ' => $sessionId
         );
 

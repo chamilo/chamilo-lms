@@ -64,8 +64,6 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*  stripslashes POST data  */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	foreach($_POST as $key=>$val) {
@@ -111,11 +109,17 @@ $cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
 $cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
 $modifyIn = isset($modifyIn) ? $modifyIn : null;
 $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
+$_course = api_get_course_info();
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */
 
-delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
+Event::delete_all_incomplete_attempts(
+	api_get_user_id(),
+	$exerciseId,
+	api_get_course_int_id(),
+	api_get_session_id()
+);
 
 // get from session
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
@@ -183,8 +187,6 @@ if (!is_object($objExercise)) {
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
-    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
-    exit;*/
 }
 
 // doesn't select the exercise ID if we come from the question pool
@@ -213,7 +215,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 	}
 
 	// checks if the object exists
-	if(is_object($objQuestion)) {
+	if (is_object($objQuestion)) {
 		// gets the question ID
 		$questionId = $objQuestion->selectId();
 	}
@@ -222,7 +224,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 // if cancelling an exercise
 if ($cancelExercise) {
 	// existing exercise
-	if($exerciseId) {
+	if ($exerciseId) {
 		unset($modifyExercise);
 	} else {
         // new exercise
@@ -235,14 +237,14 @@ if ($cancelExercise) {
 // if cancelling question creation/modification
 if ($cancelQuestion) {
 	// if we are creating a new question from the question pool
-	if(!$exerciseId && !$questionId) {
+	if (!$exerciseId && !$questionId) {
 		// goes back to the question pool
 		header('Location: question_pool.php');
 		exit();
 	} else {
 		// goes back to the question viewing
-		$editQuestion=$modifyQuestion;
-		unset($newQuestion,$modifyQuestion);
+		$editQuestion = $modifyQuestion;
+		unset($newQuestion, $modifyQuestion);
 	}
 }
 
@@ -272,6 +274,7 @@ if ($cancelAnswers) {
 	$editQuestion=$modifyAnswers;
 	unset($modifyAnswers);
 }
+
 $nameTools = null;
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
@@ -289,16 +292,16 @@ if (!empty($gradebook) && $gradebook=='view') {
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "exercice.php?".api_get_cidreq(),"name" => get_lang('Exercices'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
+    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(), "name" => $objExercise->name);
 } else {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
 
 // shows a link to go back to the question pool
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
-	$interbreadcrumb[]=array(
+	$interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."exercice/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
         "name" => get_lang('QuestionPool')
     );
@@ -306,7 +309,7 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
 
 // if the question is duplicated, disable the link of tool name
 if ($modifyIn == 'thisExercise') {
-	if($buttonBack)	{
+	if ($buttonBack)	{
 		$modifyIn='allExercises';
 	} else {
 		$noPHP_SELF=true;
@@ -329,8 +332,6 @@ function multiple_answer_true_false_onchange(variable) {
     }
     document.getElementById(weight_id).value = array_result[result];
 }
-
-
 </script>';
 
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
@@ -520,7 +521,6 @@ if ($newQuestion || $editQuestion) {
     if ($newQuestion == 'yes') {
         $objExercise->edit_exercise_in_lp = true;
     }
-
 	require 'question_admin.inc.php';
 }
 

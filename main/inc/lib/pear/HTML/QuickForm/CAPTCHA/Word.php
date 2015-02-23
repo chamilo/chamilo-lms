@@ -22,12 +22,6 @@
  */
 
 /**
- * Required packages
- */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Word.php';
-
-/**
  * Element for HTML_QuickForm to display a CAPTCHA "word" question
  *
  * The HTML_QuickForm_CAPTCHA package adds an element to the
@@ -78,13 +72,3 @@ class HTML_QuickForm_CAPTCHA_Word extends HTML_QuickForm_CAPTCHA
      */
     var $_CAPTCHA_driver = 'Word';
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Word',
-            'HTML/QuickForm/CAPTCHA/Word.php', 'HTML_QuickForm_CAPTCHA_Word');
-}
-
-?>

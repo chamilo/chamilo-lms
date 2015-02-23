@@ -1,11 +1,8 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.plugin.ticket
- */
-/**
- * INIT SECTION
  */
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
@@ -30,17 +27,17 @@ $htmlHeadXtra[] = '
 <script>
 function load_course_list (div_course, my_user_id, user_email) {
     $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            type: "GET",
-            url: "course_user_list.php",
-            data: "user_id="+my_user_id,
-            success: function(datos) {
-                $("#user_request").html(datos);
-                $("#user_id_request").val(my_user_id);
-                $("#personal_email").val(user_email);
-                $("#btnsubmit").attr("disabled", false);
-                ' . $scrollTol . '
-            }
+        contentType: "application/x-www-form-urlencoded",
+        type: "GET",
+        url: "course_user_list.php",
+        data: "user_id="+my_user_id,
+        success: function(datos) {
+            $("#user_request").html(datos);
+            $("#user_id_request").val(my_user_id);
+            $("#personal_email").val(user_email);
+            $("#btnsubmit").attr("disabled", false);
+            ' . $scrollTol . '
+        }
     });
 }
 function changeType() {
@@ -49,18 +46,18 @@ function changeType() {
     $("#project_id").val(projects[id]);
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
-	if(parseInt(course_required[id]) == 0){
-            $("#divCourse").css("display", "none");
-            if( id != "CUR"){
-                $("#divEmail").css("display", "block");
-                $("#personal_email").attr("required","required");
-            }
-            $("#course_id").disabled = true;
-            $("#course_id").value = 0;
-	}else{
-            $("#divCourse").css("display", "block");
-            $("#course_id").prop("disabled", false);
-            $("#course_id").val(0);
+	if (parseInt(course_required[id]) == 0){
+        $("#divCourse").css("display", "none");
+        if( id != "CUR"){
+            $("#divEmail").css("display", "block");
+            $("#personal_email").attr("required","required");
+        }
+        $("#course_id").disabled = true;
+        $("#course_id").value = 0;
+	} else {
+        $("#divCourse").css("display", "block");
+        $("#course_id").prop("disabled", false);
+        $("#course_id").val(0);
 	}
 }
 function handleClick2(myRadio) {
@@ -70,7 +67,7 @@ function handleClick2(myRadio) {
 }
 function validate() {
     var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-    fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
+    fckEditor1val = CKEDITOR.instances["content"].getData();
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;

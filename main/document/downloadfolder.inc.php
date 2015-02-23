@@ -93,6 +93,11 @@ function fixDocumentNameCallback($p_event, &$p_header)
         $documentData['to_group_id']
     );
 
+    // Changes file.phps to file.php
+    $basename = basename($documentNameFixed);
+    $basenamePHPFixed = str_replace('.phps', '.php', $basename);
+    $documentNameFixed = str_replace($basename, $basenamePHPFixed, $basenamePHPFixed);
+
     $p_header['stored_filename'] = $documentNameFixed;
 
     return 1;
@@ -274,7 +279,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 // Launch event
-event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
+Event::event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)');
 
 // Start download of created file
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';

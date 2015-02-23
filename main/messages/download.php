@@ -85,7 +85,7 @@ $full_file_name = $path_user_info['dir'].'message_attachments/'.$file_url;
 
 if (Security::check_abs_path($full_file_name, $path_user_info['dir'].'message_attachments/')) {
     // launch event
-    event_download($file_url);
+	Event::event_download($file_url);
     DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
 }
 exit;

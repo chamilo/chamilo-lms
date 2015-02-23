@@ -48,7 +48,7 @@ function extldap_connect()
             $ds = ldap_connect($host);
         }
         if (!$ds) {
-            $port = isset($extldap_config['port']) ? $ldap_config['port'] : 389;
+            $port = isset($extldap_config['port']) ? $extldap_config['port'] : 389;
             error_log('EXTLDAP ERROR : cannot connect to '.$extldap_config['host'].':'.$port);
         } else {
             break;

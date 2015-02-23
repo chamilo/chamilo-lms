@@ -24,15 +24,6 @@
  */
 
 /**
- * Class for a group of form elements
- */
-require_once 'HTML/QuickForm/group.php';
-/**
- * Class for <select></select> elements
- */
-require_once 'HTML/QuickForm/select.php';
-
-/**
  * Hierarchical select element
  *
  * Class to dynamically create two or more HTML Select elements

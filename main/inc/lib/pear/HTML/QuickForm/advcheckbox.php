@@ -23,11 +23,6 @@
  */
 
 /**
- * HTML class for a checkbox type field
- */
-require_once 'HTML/QuickForm/checkbox.php';
-
-/**
  * HTML class for an advanced checkbox type field
  *
  * Basically this fixes a problem that HTML has had

@@ -369,12 +369,9 @@ class FlatViewTable extends SortableTable
         // retrieve sorting type
 
         if ($is_western_name_order) {
-            //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
-            $users_sorting = FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME;
-
+            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
         } else {
-            //$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
-            $users_sorting = FlatViewDataGenerator :: FVDG_SORT_LASTNAME;
+            $users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
         }
 
         if ($this->direction == 'DESC') {
@@ -382,17 +379,12 @@ class FlatViewTable extends SortableTable
         } else {
             $users_sorting |= FlatViewDataGenerator :: FVDG_SORT_ASC;
         }
-        // step 1: generate columns: evaluations and links
 
+        // step 1: generate columns: evaluations and links
         $header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
-        if ($is_western_name_order) {
-            $this->set_header(0, $header_names[1]);
-            $this->set_header(1, $header_names[0]);
-        } else {
-            $this->set_header(0, $header_names[0]);
-            $this->set_header(1, $header_names[1]);
-        }
+        $this->set_header(0, $header_names[0]);
+        $this->set_header(1, $header_names[1]);
 
         $column = 2;
         while ($column < count($header_names)) {
@@ -410,22 +402,19 @@ class FlatViewTable extends SortableTable
 
         $table_data = array();
         foreach ($data_array as $user_row) {
-            $table_row = array();
-            $count = 0;
-            $user_id = $user_row[$count++];
-            $lastname = $user_row[$count++];
-            $firstname = $user_row[$count++];
+            $user_id = $user_row[0];
+            unset($user_row[0]);
+            $userInfo = api_get_user_info($user_id);
             if ($is_western_name_order) {
-                $table_row[] = $this->build_name_link($user_id, $firstname);
-                $table_row[] = $this->build_name_link($user_id, $lastname);
+                $user_row[1] = $this->build_name_link($user_id, $userInfo['firstname']);
+                $user_row[2] = $this->build_name_link($user_id, $userInfo['lastname']);
             } else {
-                $table_row[] = $this->build_name_link($user_id, $lastname);
-                $table_row[] = $this->build_name_link($user_id, $firstname);
+                $user_row[1] = $this->build_name_link($user_id, $userInfo['lastname']);
+                $user_row[2] = $this->build_name_link($user_id, $userInfo['firstname']);
             }
-            while ($count < count($user_row)) {
-                $table_row[] = $user_row[$count++];
-            }
-            $table_data[] = $table_row;
+            $user_row = array_values($user_row);
+
+            $table_data[] = $user_row;
         }
         return $table_data;
     }

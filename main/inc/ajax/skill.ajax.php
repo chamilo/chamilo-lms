@@ -74,8 +74,7 @@ switch ($action) {
         break;
     case 'get_course_info_popup':
         $course_info = api_get_course_info($_REQUEST['code']);
-        $course_info['course_code'] = $course_info['code'];
-        $courses = CourseManager::process_hot_course_item(array($course_info));
+        $courses = CourseManager::process_hot_course_item(array($course_info['real_id']));
         Display::display_no_header();
         Display::$global_template->assign('hot_courses', $courses);
         echo Display::$global_template->fetch('default/layout/hot_course_item_popup.tpl');

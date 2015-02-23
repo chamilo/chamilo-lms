@@ -22,11 +22,6 @@
  */
 
 /**
- * An abstract base class for QuickForm renderers
- */
-require_once 'HTML/QuickForm/Renderer.php';
-
-/**
  * A concrete renderer for HTML_QuickForm, using Integrated Templates.
  *
  * This is a "dynamic" renderer, which means that concrete form look

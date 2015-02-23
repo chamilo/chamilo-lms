@@ -180,7 +180,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 if (!empty($files)) {
     $fileName = replace_dangerous_char($work_data['title']);
     // Logging
-    event_download($fileName .'.zip (folder)');
+    Event::event_download($fileName .'.zip (folder)');
 
     //start download of created file
     $name = $fileName .'.zip';

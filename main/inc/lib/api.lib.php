@@ -477,6 +477,44 @@ define ('SKILL_TYPE_REQUIREMENT', 'required');
 define ('SKILL_TYPE_ACQUIRED', 'acquired');
 define ('SKILL_TYPE_BOTH', 'both');
 
+// Message
+define('MESSAGE_STATUS_NEW', '0');
+define('MESSAGE_STATUS_UNREAD', '1');
+//2 ??
+define('MESSAGE_STATUS_DELETED', '3');
+define('MESSAGE_STATUS_OUTBOX', '4');
+define('MESSAGE_STATUS_INVITATION_PENDING', '5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED', '6');
+define('MESSAGE_STATUS_INVITATION_DENIED', '7');
+define('MESSAGE_STATUS_WALL', '8');
+define('MESSAGE_STATUS_WALL_DELETE', '9');
+define('MESSAGE_STATUS_WALL_POST', '10');
+// Images
+define('IMAGE_WALL_SMALL_SIZE', 200);
+define('IMAGE_WALL_MEDIUM_SIZE', 500);
+define('IMAGE_WALL_BIG_SIZE', 2000);
+define('IMAGE_WALL_SMALL', 'small');
+define('IMAGE_WALL_MEDIUM', 'medium');
+define('IMAGE_WALL_BIG', 'big');
+
+// Social PLUGIN PLACES
+define('SOCIAL_LEFT_PLUGIN', 1);
+define('SOCIAL_CENTER_PLUGIN', 2);
+define('SOCIAL_RIGHT_PLUGIN', 3);
+define('CUT_GROUP_NAME', 50);
+
+/**
+ * FormValidator Filter
+ */
+define('NO_HTML', 1);
+define('STUDENT_HTML', 2);
+define('TEACHER_HTML', 3);
+define('STUDENT_HTML_FULLPAGE', 4);
+define('TEACHER_HTML_FULLPAGE', 5);
+
+// Timeline
+define('TIMELINE_STATUS_ACTIVE', '1');
+define('TIMELINE_STATUS_INACTIVE', '2');
 
 /**
  * Inclusion of internationalization libraries
@@ -7766,6 +7804,10 @@ function api_create_protected_dir($name, $parentDirectory)
 {
     $isCreated = false;
 
+    if (!is_writable($parentDirectory)) {
+        return false;
+    }
+
     $fullPath = $parentDirectory . replace_dangerous_char($name);
 
     if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {
@@ -7781,4 +7823,193 @@ function api_create_protected_dir($name, $parentDirectory)
     }
 
     return $isCreated;
+}
+
+
+/**
+ * Sends an HTML email using the phpmailer class (and multipart/alternative to downgrade gracefully)
+ * Sender name and email can be specified, if not specified
+ * name and email of the platform admin are used
+ *
+ * @author Bert Vanderkimpen ICT&O UGent
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
+ * @param string    name of recipient
+ * @param string    email of recipient
+ * @param string    email subject
+ * @param string    email body
+ * @param string    sender name
+ * @param string    sender e-mail
+ * @param array     extra headers in form $headers = array($name => $value) to allow parsing
+ * @param array     data file (path and filename)
+ * @param array     data to attach a file (optional)
+ * @param bool      True for attaching a embedded file inside content html (optional)
+ * @return          returns true if mail was sent
+ * @see             class.phpmailer.php
+ */
+function api_mail_html(
+    $recipient_name,
+    $recipient_email,
+    $subject,
+    $message,
+    $senderName = '',
+    $senderEmail = '',
+    $extra_headers = array(),
+    $data_file = array(),
+    $embedded_image = false,
+    $additionalParameters = array()
+) {
+    global $platform_email;
+
+    $mail = new PHPMailer();
+    $mail->Mailer = $platform_email['SMTP_MAILER'];
+    $mail->Host = $platform_email['SMTP_HOST'];
+    $mail->Port = $platform_email['SMTP_PORT'];
+    $mail->CharSet = $platform_email['SMTP_CHARSET'];
+    // Stay far below SMTP protocol 980 chars limit.
+    $mail->WordWrap = 200;
+
+    if ($platform_email['SMTP_AUTH']) {
+        $mail->SMTPAuth = 1;
+        $mail->Username = $platform_email['SMTP_USER'];
+        $mail->Password = $platform_email['SMTP_PASS'];
+    }
+
+    // 5 = low, 1 = high
+    $mail->Priority = 3;
+    $mail->SMTPKeepAlive = true;
+
+    // Default values
+    $notification = new Notification();
+    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
+    $defaultName = $notification->getDefaultPlatformSenderName();
+
+    // Error to admin.
+    $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($senderName) ? $senderName : $defaultEmail;
+    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultName;
+
+    // Reply to first
+    if (isset($extra_headers['reply_to'])) {
+        $mail->AddReplyTo(
+            $extra_headers['reply_to']['mail'],
+            $extra_headers['reply_to']['name']
+        );
+        $mail->Sender = $extra_headers['reply_to']['mail'];
+        unset($extra_headers['reply_to']);
+    }
+
+    $mail->SetFrom($senderEmail, $senderName);
+
+    $mail->Subject = $subject;
+    $mail->AltBody = strip_tags(
+        str_replace('<br />', "\n", api_html_entity_decode($message))
+    );
+
+    // Send embedded image.
+    if ($embedded_image) {
+        // Get all images html inside content.
+        preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
+        // Prepare new tag images.
+        $new_images_html = array();
+        $i = 1;
+        if (!empty($m[1])) {
+            foreach ($m[1] as $image_path) {
+                $real_path = realpath($image_path);
+                $filename  = basename($image_path);
+                $image_cid = $filename.'_'.$i;
+                $encoding = 'base64';
+                $image_type = mime_content_type($real_path);
+                $mail->AddEmbeddedImage(
+                    $real_path,
+                    $image_cid,
+                    $filename,
+                    $encoding,
+                    $image_type
+                );
+                $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
+                $i++;
+            }
+        }
+
+        // Replace origin image for new embedded image html.
+        $x = 0;
+        if (!empty($m[0])) {
+            foreach ($m[0] as $orig_img) {
+                $message = str_replace($orig_img, $new_images_html[$x], $message);
+                $x++;
+            }
+        }
+    }
+    $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
+    $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+
+    // Attachment ...
+    if (!empty($data_file)) {
+        $mail->AddAttachment($data_file['path'], $data_file['filename']);
+    }
+
+    // Only valid addresses are accepted.
+    if (is_array($recipient_email)) {
+        foreach ($recipient_email as $dest) {
+            if (api_valid_email($dest)) {
+                $mail->AddAddress($dest, $recipient_name);
+            }
+        }
+    } else {
+        if (api_valid_email($recipient_email)) {
+            $mail->AddAddress($recipient_email, $recipient_name);
+        } else {
+            return 0;
+        }
+    }
+
+    if (is_array($extra_headers) && count($extra_headers) > 0) {
+        foreach ($extra_headers as $key => $value) {
+            switch (strtolower($key)) {
+                case 'encoding':
+                case 'content-transfer-encoding':
+                    $mail->Encoding = $value;
+                    break;
+                case 'charset':
+                    $mail->Charset = $value;
+                    break;
+                case 'contenttype':
+                case 'content-type':
+                    $mail->ContentType = $value;
+                    break;
+                default:
+                    $mail->AddCustomHeader($key.':'.$value);
+                    break;
+            }
+        }
+    } else {
+        if (!empty($extra_headers)) {
+            $mail->AddCustomHeader($extra_headers);
+        }
+    }
+
+    // WordWrap the html body (phpMailer only fixes AltBody) FS#2988
+    $mail->Body = $mail->WrapText($mail->Body, $mail->WordWrap);
+    // Send the mail message.
+    if (!$mail->Send()) {
+        error_log('ERROR: mail not sent to '.$recipient_name.' ('.$recipient_email.') because of '.$mail->ErrorInfo.'<br />');
+        return 0;
+    }
+
+    $plugin = new AppPlugin();
+    $installedPluginsList = $plugin->getInstalledPluginListObject();
+    foreach ($installedPluginsList as $installedPlugin) {
+        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
+            $className = str_replace("Plugin", "", get_class($installedPlugin));
+            $smsObject = new $className;
+            $smsObject->send($additionalParameters);
+        }
+    }
+
+    // Clear all the addresses.
+    $mail->ClearAddresses();
+    return 1;
 }

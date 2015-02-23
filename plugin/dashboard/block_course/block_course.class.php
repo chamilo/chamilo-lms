@@ -155,12 +155,12 @@ class BlockCourse extends Block
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $course_data = array();
         $courses = $this->courses;
-
         $thematic = new Thematic();
 
         foreach ($courses as $row_course) {
-
             $course_code = $row_course['code'];
+            $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['real_id'];
             $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course
@@ -174,7 +174,7 @@ class BlockCourse extends Block
             if (count($users) > 0) {
                 $nb_students_in_course = count($users);
                 $avg_time_spent_in_course = api_time_to_hms(
-                    Tracking::get_time_spent_on_the_course($users, $course_code ) / $nb_students_in_course);
+                    Tracking::get_time_spent_on_the_course($users, $courseId) / $nb_students_in_course);
             } else {
                 $avg_time_spent_in_course = null;
             }

@@ -917,7 +917,7 @@ class ExtraField extends Model
                         break;
                     case ExtraField::FIELD_TYPE_DATETIME:
                         $form->addElement(
-                            'datepicker',
+                            'DatePicker',
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
                             array('form_name' => $form_name)
@@ -1230,7 +1230,6 @@ EOF;
                         }
                         break;
                     case ExtraField::FIELD_TYPE_FILE:
-                        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
                         $fieldVariable = "extra_{$field_details['field_variable']}";
 

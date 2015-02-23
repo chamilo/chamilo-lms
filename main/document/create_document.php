@@ -45,101 +45,14 @@ $(document).ready(function() {
     });
 });
 
-function InnerDialogLoaded() {
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
+function setFocus() {
+   $("#document_title").focus();
+}
 
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
+$(window).load(function () {
+	setFocus();
+});
 
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-	var temp=false;
-	var temp2=false;
-	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
-
-	function FCKeditor_OnComplete( editorInstance ) {
-		editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
-		document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-	}
-
-	function check_for_title() {
-		if (temp) {
-			// This functions shows that you can interact directly with the editor area
-			// DOM. In this way you have the freedom to do anything you want with it.
-
-			// Get the editor instance that we want to interact with.
-			var oEditor = FCKeditorAPI.GetInstance(\'content\') ;
-
-			// Get the Editor Area DOM (Document object).
-			var oDOM = oEditor.EditorDocument ;
-
-			var iLength ;
-			var contentText ;
-			var contentTextArray;
-			var bestandsnaamNieuw = "";
-			var bestandsnaamOud = "";
-
-			// The are two different ways to get the text (without HTML markups).
-			// It is browser specific.
-            // If Internet Explorer.
-			if( document.all ) {
-				contentText = oDOM.body.innerText ;
-			} else  {
-			    // If Gecko.
-				var r = oDOM.createRange() ;
-				r.selectNodeContents( oDOM.body ) ;
-				contentText = r.toString() ;
-			}
-
-			var index=contentText.indexOf("/*<![CDATA");
-			contentText=contentText.substr(0,index);
-
-			// Compose title if there is none
-			contentTextArray = contentText.split(\' \') ;
-			var x=0;
-			for(x=0; (x<5 && x<contentTextArray.length); x++) {
-				if(x < 4) {
-					bestandsnaamNieuw += contentTextArray[x] + \' \';
-				} else {
-					bestandsnaamNieuw += contentTextArray[x];
-				}
-			}
-		}
-		temp=true;
-	}
-
-	function trim(s) {
-        while(s.substring(0,1) == \' \') {
-            s = s.substring(1,s.length);
-        }
-        while(s.substring(s.length-1,s.length) == \' \') {
-            s = s.substring(0,s.length-1);
-        }
-        return s;
-	}
-	function setFocus() {
-	   $("#document_title").focus();
-    }
-
-	$(window).load(function () {
-        setFocus();
-    });
 </script>';
 
 //I'm in the certification module?
@@ -183,9 +96,9 @@ if (!empty($sessionId) && empty($document_data)) {
 
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties($groupId);
-        $document_id        = DocumentManager::get_document_id($_course, $group_properties['directory']);
-        $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
+        $group_properties = GroupManager::get_group_properties($groupId);
+        $document_id = DocumentManager::get_document_id($_course, $group_properties['directory']);
+        $document_data = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
         $dir = $document_data['path'];
         $folder_id = $document_data['id'];
     } else {
@@ -240,9 +153,6 @@ for ($i = 0; $i < ($count_dir); $i++) {
 	$relative_url .= '../';
 }
 
-/* We do this in order to avoid the condition in html_editor.php ==> if
-   ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')*
-*/
 if ($relative_url== '') {
 	$relative_url = '/';
 }
@@ -281,7 +191,7 @@ if (!$is_certificate_mode) {
     $req_gid = null;
 	if (api_is_in_group()) {
 		$req_gid = '&amp;gidReq='.api_get_group_id();
-		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".api_get_group_id(), "name" => get_lang('GroupSpace'));
+		$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
 		$noPHP_SELF = true;
 		$to_group_id = api_get_group_id();
 		$path = explode('/', $dir);
@@ -300,14 +210,13 @@ if (!$is_allowed_in_course) {
 
 if (!($is_allowed_to_edit ||
     $_SESSION['group_member_with_upload_rights'] ||
-    is_my_shared_folder($userId, $dir, api_get_session_id()))
+    DocumentManager::is_my_shared_folder($userId, $dir, api_get_session_id()))
 ) {
 	api_not_allowed(true);
 }
 
 /*	Header */
-
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
 if (isset($group_properties)) {
@@ -363,11 +272,6 @@ function document_exists($filename) {
         api_get_session_id(),
         api_get_group_id()
     );
-	/*$filename = addslashes(trim($filename));
-	$filename = Security::remove_XSS($filename);
-	$filename = replace_dangerous_char($filename);
-	$filename = disable_dangerous_file($filename);
-	return !file_exists($filepath.$filename.'.html');*/
 }
 
 // Add group to the form
@@ -393,7 +297,7 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
 
-if (!$is_certificate_mode && !is_my_shared_folder($userId, $dir, $current_session_id)) {
+if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
@@ -404,19 +308,19 @@ if (!$is_certificate_mode && !is_my_shared_folder($userId, $dir, $current_sessio
     if (is_array($folders)) {
         $escaped_folders = array();
         foreach ($folders as $key => & $val) {
-            //Hide some folders
+            // Hide some folders
             if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){
                 continue;
             }
-            //Admin setting for Hide/Show the folders of all users
+            // Admin setting for Hide/Show the folders of all users
             if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){
                 continue;
             }
-            //Admin setting for Hide/Show Default folders to all users
+            // Admin setting for Hide/Show Default folders to all users
             if (api_get_setting('show_default_folders') == 'false' && ($val=='/images' || $val=='/flash' || $val=='/audio' || $val=='/video' || strstr($val, '/images/gallery') || $val=='/video/flv')){
                 continue;
             }
-            //Admin setting for Hide/Show chat history folder
+            // Admin setting for Hide/Show chat history folder
             if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
                 continue;
             }

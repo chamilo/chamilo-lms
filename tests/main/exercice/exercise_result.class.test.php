@@ -1,29 +1,27 @@
 <?php
 
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+class TestExerciseResult extends UnitTestCase
+{
+	public $eExerciseResult;
 
-class TestExerciseResult extends UnitTestCase {
-	
-		public $eExerciseResult;
-	
 	public function TestExerciseResult() {
 		$this->UnitTestCase('');
 	}
-	
+
 	public function setUp() {
-		$this->eExerciseResult = new ExerciseResult();			
+		$this->eExerciseResult = new ExerciseResult();
 	}
-	
-	public function tearDown() {		
+
+	public function tearDown() {
 		$this->eExerciseResult = null;
 	}
-	
+
 	/**
 	 * Gets the results of all students (or just one student if access is limited)
 	 * @param	string		The document path (for HotPotatoes retrieval)
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
 	 */
-	 
+
 	function test_getExercisesReporting() {
 		global $user_id;
 	 	$document_path = api_get_path(SYS_COURSE_PATH).'document/';
@@ -33,7 +31,7 @@ class TestExerciseResult extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Exports the complete report as a CSV file
 	 * @param	string		Document path inside the document tool
@@ -41,7 +39,7 @@ class TestExerciseResult extends UnitTestCase {
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	 
+
 	 function testexportCompleteReportCSV() {
 		global $user_id;
 		$document_path = api_get_path(SYS_COURSE_PATH).'document/';
@@ -53,12 +51,12 @@ class TestExerciseResult extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	 
+
 	 function testexportCompleteReportXLS() {
 		global $user_id;
 		$document_path = api_get_path(SYS_COURSE_PATH).'document/';
@@ -70,16 +68,16 @@ class TestExerciseResult extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	 
-	 
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 }
 ?>

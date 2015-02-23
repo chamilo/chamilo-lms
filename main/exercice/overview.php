@@ -42,7 +42,7 @@ $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" 
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;
@@ -94,7 +94,7 @@ if (isset($_GET['preview'])) {
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
-	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+	$attempt_list = Event::getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
 }
 
 //1. Check if this is a new attempt or a previous
@@ -130,7 +130,7 @@ if ($visible_return['value'] == false) {
     }
 }
 
-$attempts = get_exercise_results_by_user(
+$attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
     $objExercise->id,
     api_get_course_id(),
@@ -146,7 +146,7 @@ $table_content = '';
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
-require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+
 $browser = new Browser();
 $current_browser = $browser->getBrowser();
 $url_suffix = '';
@@ -160,7 +160,7 @@ if (!empty($attempts) && $visible_return['value'] == true) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
 
-        $score = show_score(
+        $score = ExerciseLib::show_score(
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );

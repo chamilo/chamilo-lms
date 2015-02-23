@@ -2,15 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Filter
- */
-define('NO_HTML', 1);
-define('STUDENT_HTML', 2);
-define('TEACHER_HTML', 3);
-define('STUDENT_HTML_FULLPAGE', 4);
-define('TEACHER_HTML_FULLPAGE', 5);
-
-/**
  * Objects of this class can be used to create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
@@ -59,7 +50,7 @@ class FormValidator extends HTML_QuickForm
         $form_target = isset($form_data['target']) ? $form_data['target'] : '';
         $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
         $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-
+        $reset = null;
         $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
 
         $defaults = array();
@@ -156,14 +147,14 @@ class FormValidator extends HTML_QuickForm
         $renderer = & $this->defaultRenderer();
 
         //Form template
-        $form_template = '<form{attributes}>
+        $formTemplate = '<form{attributes}>
 <fieldset>
 	{content}
 	<div class="clear"></div>
 </fieldset>
 {hidden}
 </form>';
-        $renderer->setFormTemplate($form_template);
+        $renderer->setFormTemplate($formTemplate);
 
         //Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
@@ -281,27 +272,49 @@ EOT;
      * @param string $name
      * @param string $value
      */
-    function add_hidden($name, $value)
+    public function addHidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     */
     public function add_textarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }
 
-    public function add_button($name, $label, $attributes = array())
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $attributes
+     */
+    public function addButton($name, $label, $attributes = array())
     {
+        //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
         $this->addElement('button', $name, $label, $attributes);
     }
 
-    public function add_checkbox($name, $label, $trailer = '', $attributes = array())
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $trailer
+     * @param array  $attributes
+     */
+    public function addCheckBox($name, $label, $trailer = '', $attributes = array())
     {
         $this->addElement('checkbox', $name, $label, $trailer, $attributes);
     }
 
-    public function add_radio($name, $label, $options = '')
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $options
+     */
+    public function addRadio($name, $label, $options = array())
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -310,26 +323,47 @@ EOT;
         $this->addGroup($group, $name, $label);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param string $options
+     * @param array  $attributes
+     */
     public function add_select($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }
 
+    /**
+     * @param string $label
+     * @param string $text
+     */
     public function add_label($label, $text)
     {
         $this->addElement('label', $label, $text);
     }
 
-    public function add_header($text)
+    /**
+     * @param string $text
+     */
+    public function addHeader($text)
     {
         $this->addElement('header', $text);
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     */
     public function add_file($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }
 
+    /**
+     * @param string $snippet
+     */
     public function add_html($snippet)
     {
         $this->addElement('html', $snippet);
@@ -347,7 +381,7 @@ EOT;
      * @param array $config (optional)	Configuration settings for the online editor.
      *
      */
-    public function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
+    public function add_html_editor($name, $label, $required = true, $fullPage = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
@@ -355,8 +389,12 @@ EOT;
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
 
-        /** @var HTML_QuickForm_html_editor $element */
+        /** @var HtmlEditor $element */
         $element = $this->getElement($name);
+
+        if ($fullPage) {
+            $config['FullPage'] = true;
+        }
 
         if ($element->editor) {
             $element->editor->processConfig($config);
@@ -372,7 +410,7 @@ EOT;
      */
     function add_datepicker($name, $label)
     {
-        $this->addElement('datepicker', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePicker', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }
@@ -386,7 +424,7 @@ EOT;
      */
     public function add_datepickerdate($name, $label)
     {
-        $this->addElement('datepickerdate', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePickerDate', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }
@@ -452,10 +490,6 @@ EOT;
         if (!function_exists('uploadprogress_get_info')) {
             $this->add_progress_bar($delay);
             return;
-        }
-
-        if (!class_exists('xajax')) {
-            require_once api_get_path(LIBRARY_PATH) . 'xajax/xajax.inc.php';
         }
 
         $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
@@ -604,7 +638,6 @@ EOT;
  */
 function html_filter($html, $mode = NO_HTML)
 {
-    require_once api_get_path(LIBRARY_PATH) . 'formvalidator/Rule/HTML.php';
     $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
     $cleaned_html = kses($html, $allowed_tags);
     return $cleaned_html;

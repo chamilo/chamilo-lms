@@ -21,12 +21,6 @@ api_protect_course_script(true);
 
 $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // moved down to fix bug: http://www.dokeos.com/forum/viewtopic.php?p=18609#18609
 
-/**
- * Libraries
- */
-
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
@@ -43,8 +37,8 @@ $interbreadcrumb[]= array ('url' => 'exercise_history.php'.'?exe_id='.intval($_G
 $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCICES			= Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCICES_QUESTION	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT_RECORDING= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_TRACK_EXERCICES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_ATTEMPT_RECORDING= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 Display::display_header($nameTools,get_lang('Exercise'));
 
 if (isset($_GET['message'])) {

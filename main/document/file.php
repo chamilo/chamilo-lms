@@ -69,7 +69,7 @@ if (count($ids) == 1) {
             Response::not_found();
         }
 
-        event_download(Uri::here());
+        Event::event_download(Uri::here());
         DocumentManager::file_send_for_download($doc);
         exit;
     }
@@ -156,5 +156,5 @@ foreach ($files as $file) {
 /**
  * Send file for download
  */
-event_download(Uri::here());
+Event::event_download(Uri::here());
 DocumentManager::file_send_for_download($temp_zip_path, false, get_lang('Documents') . '.zip');

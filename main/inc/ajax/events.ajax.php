@@ -10,7 +10,7 @@ api_protect_admin_script();
 
 switch ($action) {
     case 'getEventTypes':
-        $events = get_all_event_types();
+        $events = Event::get_all_event_types();
         print json_encode($events);
         break;
     case 'getUsers':
@@ -18,7 +18,7 @@ switch ($action) {
         print json_encode($users);
         break;
     case 'get_event_users':
-        $users = get_event_users($event_name);
+        $users = Event::get_event_users($event_name);
         print json_encode($users);
         break;
 }

@@ -22,10 +22,6 @@
  * @link        http://pear.php.net/package/HTML_QuickForm_Controller
  */
 
-/**
- * The class representing a page of a multipage form.
- */
-require_once 'HTML/QuickForm/Page.php';
 
 /**
  * The class representing a Controller of MVC design pattern.

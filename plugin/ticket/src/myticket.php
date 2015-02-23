@@ -5,9 +5,7 @@
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
  */
-/**
- * Initialization
- */
+
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
 //needed in order to load the plugin lang variables

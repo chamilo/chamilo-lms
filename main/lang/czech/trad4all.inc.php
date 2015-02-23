@@ -2,7 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WCAGGoMenu = "Jdi do menu";
+$WCAGGoContent = "Jdi na obsah";
 $NoTimeLimits = "Žádné časové omezení";
+$TypeMessage = "Prosím napište Vaši správu!";
+$ConfirmReset = "Opravdu chcete smazat všechny správy?";
+$ClearList = "Vyčistit seznam";
+$CallSent = "Váše pozvání na Chat hovor bylo posláno, nyní čekám na potvrzení od vašeho partnera.";
+$ChatDenied = "Volaný zamítnul Váš hovor.";
 $Title = "Nadpis";
 $UsersOnline = "Uživatel online";
 $Remove = "Odstranit";
@@ -315,5 +322,22 @@ $UserOnlineListSession = "Seznam studentů aktualně přihlášených - Výuka";
 $From = "Od";
 $To = "Komu";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
+$CourseProgram = "Popis kurzu";
+$ThisCourseDescriptionIsEmpty = "Tento kurz momentálně není popsaný.";
+$QuestionPlan = "Otázka pro vedoucího";
+$NewBloc = "Další";
+$CourseDescriptionUpdated = "Popis kurzu byl aktualizován";
+$CourseDescriptionDeleted = "Popis kurzi byl smazán";
+$Height = "Výška";
+$ResizingComment = "změnit velikost obrázku na nasledující rozměry (v pixlech)";
+$Width = "Šířka";
+$Resizing = "ZMĚNIT VELIKOST";
+$NoResizingComment = "Zobraz všechny obrázky v jejich původním rozměru. Nenastane změna velikosti. Rolovací lišty se vám zobrazí automaticky, když bude obrázek větší než je rozměr vaší obrazovky.";
+$ShowThumbnails = "Zobraz Miniatury";
+$SetSlideshowOptions = "Nastavit možnosti prezentace";
+$SlideshowOptions = "Možnosti prezentace";
+$NoResizing = "NEMĚNIT VELIKOST (přednastavené)";
+$SlideShow = "Prezentace";
+$ViewSlideshow = "Zobraz prezentaci";
 $UploadADocument = "Uložit dokument na server";
 ?>

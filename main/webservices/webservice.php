@@ -6,33 +6,35 @@
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 
 /**
- * Error returned by one of the methods of the web service. Contains an error code and an error message
+ * Error returned by one of the methods of the web service.
+ * Contains an error code and an error message
  */
-class WSError {
+class WSError
+{
 	/**
 	 * Error handler. This needs to be a class that implements the interface WSErrorHandler
-	 * 
+	 *
 	 * @var WSErrorHandler
 	 */
 	protected static $_handler;
-	
+
 	/**
 	 * Error code
-	 * 
+	 *
 	 * @var int
 	 */
 	public $code;
-	
+
 	/**
 	 * Error message
-	 * 
+	 *
 	 * @var string
 	 */
 	public $message;
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param int Error code
 	 * @param string Error message
 	 */
@@ -40,10 +42,10 @@ class WSError {
 		$this->code = $code;
 		$this->message = $message;
 	}
-	
+
 	/**
 	 * Sets the error handler
-	 * 
+	 *
 	 * @param WSErrorHandler Error handler
 	 */
 	public static function setErrorHandler($handler) {
@@ -51,19 +53,19 @@ class WSError {
 			self::$_handler = $handler;
 		}
 	}
-	
+
 	/**
 	 * Returns the error handler
-	 * 
+	 *
 	 * @return WSErrorHandler Error handler
 	 */
 	public static function getErrorHandler() {
 		return self::$_handler;
 	}
-	
+
 	/**
 	 * Transforms the error into an array
-	 * 
+	 *
 	 * @return array Associative array with code and message
 	 */
 	public function toArray() {
@@ -77,7 +79,7 @@ class WSError {
 interface WSErrorHandler {
 	/**
 	 * Handle method
-	 * 
+	 *
 	 * @param WSError Error
 	 */
 	public function handle($error);
@@ -89,11 +91,11 @@ interface WSErrorHandler {
 class WS {
 	/**
 	 * Chamilo configuration
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $_configuration;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -103,13 +105,13 @@ class WS {
 
 	/**
 	 * Verifies the API key
-	 * 
+	 *
 	 * @param string Secret key
 	 * @return mixed WSError in case of failure, null in case of success
 	 */
 	protected function verifyKey($secret_key) {
 		$ip = trim($_SERVER['REMOTE_ADDR']);
-		// if we are behind a reverse proxy, assume it will send the 
+		// if we are behind a reverse proxy, assume it will send the
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			list($ip1,$ip2) = preg_split('/,/',$_SERVER['HTTP_X_FORWARDED_FOR']);
@@ -123,11 +125,12 @@ class WS {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * Gets the real user id based on the user id field name and value. Note that if the user id field name is "chamilo_user_id", it will use the user id
+	 * Gets the real user id based on the user id field name and value.
+	 * Note that if the user id field name is "chamilo_user_id", it will use the user id
 	 * in the system database
-	 * 
+	 *
 	 * @param string User id field name
 	 * @param string User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
@@ -148,44 +151,48 @@ class WS {
 			}
 		}
 	}
-	
+
 	/**
-	 * Gets the real course id based on the course id field name and value. Note that if the course id field name is "chamilo_course_id", it will use the course id
+	 * Gets the real course id based on the course id field name and value.
+	 * Note that if the course id field name is "chamilo_course_id", it will use the course id
 	 * in the system database
-	 * 
+	 *
 	 * @param string Course id field name
 	 * @param string Course id value
 	 * @return mixed System course id if the course was found, WSError otherwise
 	 */
-	protected function getCourseId($course_id_field_name, $course_id_value) {
-		if($course_id_field_name == "chamilo_course_id") {
-			if(CourseManager::get_course_code_from_course_id(intval($course_id_value)) != null) {
+	protected function getCourseId($course_id_field_name, $course_id_value)
+	{
+		if ($course_id_field_name == "chamilo_course_id") {
+			if (CourseManager::get_course_code_from_course_id(
+					intval($course_id_value)
+				) != null
+			) {
 				return intval($course_id_value);
 			} else {
 				return new WSError(200, "Course not found");
 			}
 		} else {
-			$course_code = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
-      if (!empty($course_code)) {
-        $course_info = CourseManager::get_course_information($course_code);
-        return $course_info['id'];
-      } else {
-        return new WSError(200, "Course not found");
-      }
-      /*
-			if($course_code == 0) {
-				return new WSError(200, "Course not found");
-			} else {
+			$course_code = CourseManager::get_course_code_from_original_id(
+				$course_id_value,
+				$course_id_field_name
+			);
+			if (!empty($course_code)) {
+				$course_info = CourseManager::get_course_information(
+					$course_code
+				);
 				return $course_info['id'];
-			}       
-       */
+			} else {
+				return new WSError(200, "Course not found");
+			}
 		}
 	}
-	
+
 	/**
-	 * Gets the real session id based on the session id field name and value. Note that if the session id field name is "chamilo_session_id", it will use the session id
+	 * Gets the real session id based on the session id field name and value.
+	 * Note that if the session id field name is "chamilo_session_id", it will use the session id
 	 * in the system database
-	 * 
+	 *
 	 * @param string Session id field name
 	 * @param string Session id value
 	 * @return mixed System session id if the session was found, WSError otherwise
@@ -207,35 +214,33 @@ class WS {
 			}
 		}
 	}
-	
+
 	/**
 	 * Handles an error by calling the WSError error handler
-	 * 
+	 *
 	 * @param WSError Error
 	 */
 	protected function handleError($error) {
 		$handler = WSError::getErrorHandler();
 		$handler->handle($error);
 	}
-	
+
 	/**
 	 * Gets a successful result
-	 * 
+	 *
 	 * @return array Array with a code of 0 and a message 'Operation was successful'
 	 */
 	protected function getSuccessfulResult() {
 		return array('code' => 0, 'message' => 'Operation was successful');
 	}
-	
+
 	/**
 	 * Test function. Returns the string success
-	 * 
+	 *
 	 * @return string Success
 	 */
 	public function test() {
 		return "success";
 	}
-	
-	
 }
 

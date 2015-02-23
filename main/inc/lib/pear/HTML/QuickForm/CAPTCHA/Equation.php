@@ -22,12 +22,6 @@
  */
 
 /**
- * Required packages
- */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Equation.php';
-
-/**
  * Element for HTML_QuickForm to display a CAPTCHA equation question
  *
  * The HTML_QuickForm_CAPTCHA package adds an element to the
@@ -80,14 +74,3 @@ class HTML_QuickForm_CAPTCHA_Equation extends HTML_QuickForm_CAPTCHA
      */
     var $_CAPTCHA_driver = 'Equation';
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Equation',
-            'HTML/QuickForm/CAPTCHA/Equation.php',
-            'HTML_QuickForm_CAPTCHA_Equation');
-}
-
-?>

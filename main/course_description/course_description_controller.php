@@ -45,7 +45,7 @@ class CourseDescriptionController
             $data['descriptions'] = array($data['descriptions']);
         }
         foreach ($data['descriptions'] as $description) {
-            if (strpos($description, '<iframe') !== false && $browser['name'] == 'Chrome') {
+            if (strpos($description['content'], '<iframe') !== false && $browser['name'] == 'Chrome') {
                 header("X-XSS-Protection: 0");
             }
         }
@@ -74,11 +74,7 @@ class CourseDescriptionController
                 $check = Security::check_token();
                 if ($check) {
                     $title = $_POST['title'];
-                    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                        $content = WCAG_Rendering::prepareXHTML();
-                    } else {
-                        $content = $_POST['contentDescription'];
-                    }
+                    $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
                     $progress = $_POST['progress'];
@@ -166,11 +162,7 @@ class CourseDescriptionController
         		$check = Security::check_token();
         		if ($check) {
         			$title = $_POST['title'];
-		        	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-						$content = WCAG_Rendering::prepareXHTML();
-					} else {
-						$content = $_POST['contentDescription'];
-					}
+                    $content = $_POST['contentDescription'];
 		        	$description_type = $_POST['description_type'];
 		        	if ($description_type >= ADD_BLOCK) {
 		        		$course_description->set_description_type($description_type);

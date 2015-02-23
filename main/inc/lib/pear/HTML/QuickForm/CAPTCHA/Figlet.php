@@ -22,12 +22,6 @@
  */
 
 /**
- * Required packages
- */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Figlet.php';
-
-/**
  * Element for HTML_QuickForm to display a CAPTCHA figlet
  *
  * The HTML_QuickForm_CAPTCHA package adds an element to the
@@ -113,14 +107,3 @@ class HTML_QuickForm_CAPTCHA_Figlet extends HTML_QuickForm_CAPTCHA
         return $html;
     }
 }
-
-/**
- * Registers the class with QuickForm
- */
-if (class_exists('HTML_QuickForm')) {
-    HTML_QuickForm::registerElementType('CAPTCHA_Figlet',
-            'HTML/QuickForm/CAPTCHA/Figlet.php',
-            'HTML_QuickForm_CAPTCHA_Figlet');
-}
-
-?>

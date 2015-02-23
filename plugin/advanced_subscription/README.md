@@ -1,12 +1,15 @@
 Advanced subscription plugin for Chamilo LMS
 =======================================
-Plugin for managing the registration queue and communication to sessions
+Plugin to manage the registration queue and communication to sessions
 from an external website creating a queue to control session subscription
-and sending emails to approve student subscription request
+and sending emails to approve student subscription requests
+
 # Requirements
-Chamilo LMS 1.10 or greater
+Chamilo LMS 1.10.0 or greater
 
 # Settings
+
+These settings have to be configured in the Configuration screen for the plugin
 
 Parameters    | Description
 ------------- |-------------
@@ -21,7 +24,7 @@ Minimum percentage profile | Minimum percentage required from external website p
 
 # Hooks
 
-This plugin use the next hooks:
+This plugin uses the following hooks (defined since Chamilo LMS 1.10.0):
 
 * HookAdminBlock
 * HookWSRegistration
@@ -31,23 +34,26 @@ This plugin use the next hooks:
 
 # Web services
 
+This plugin also enables new webservices that can be used from registration.soap.php
+
 * HookAdvancedSubscription..WSSessionListInCategory
 * HookAdvancedSubscription..WSSessionGetDetailsByUser
 * HookAdvancedSubscription..WSListSessionsDetailsByCategory
 
 See `/plugin/advanced_subscription/src/HookAdvancedSubscription.php` to check Web services inputs and outputs
 
-# How plugin works?
+# How does this plugin works?
 
-After install plugin, fill the parameters needed (described above)
-Use Web services to communicate course session inscription from external website
-This allow to student to search course session and subscribe if is qualified
-and allowed to subscribe.
+After install, fill the required parameters (described above)
+Use web services to communicate course session inscription from external website
+This allows students to search course sessions and subscribe if they match
+the requirements.
+
 The normal process is:
-* Student search course session
-* Student read session info depending student data
-* Student request a subscription
-* A confirmation email is send to student
-* An email is send to users (superior or admins) who will accept or reject student request
-* When the user aceept o reject, an email will be send to student, superior or admins respectively
+* Student searches course session
+* Student reads session info depending student data
+* Student requests to be subscribed
+* A confirmation email is sent to student
+* An authorization email is sent to student's superior (STUDENT BOSS role) or admins (when there is no superior) who will accept or reject the student request
+* When the superior accepts or rejects, an email will be sent to the student and superior (or admin), respectively
 * To complete the subscription, the request must be validated and accepted by an admin

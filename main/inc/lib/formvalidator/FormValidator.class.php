@@ -345,7 +345,7 @@ EOT;
     /**
      * @param string $text
      */
-    public function add_header($text)
+    public function addHeader($text)
     {
         $this->addElement('header', $text);
     }

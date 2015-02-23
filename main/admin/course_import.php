@@ -210,7 +210,7 @@ if (isset($errors) && count($errors) != 0) {
 }
 
 $form = new FormValidator('import', 'post', api_get_self(), null, array('enctype' => 'multipart/form-data'));
-$form->add_header($tool_name);
+$form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
 $form->addElement('button', 'save', get_lang('Import'));

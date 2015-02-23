@@ -63,8 +63,7 @@ class LinkForm extends \FormValidator
         $this->add_hidden('session_id', $link->session_id);
 
         $form_name = $category->id ? get_lang('LinkMod') : get_lang('LinkAdd');
-        $this->add_header($form_name);
-
+        $this->addHeader($form_name);
 
         $this->add_textfield('url', get_lang('Url'), $required = true, array('class' => 'span6'));
         $this->addRule('url', get_lang('MalformedUrl'), 'regex', '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i');

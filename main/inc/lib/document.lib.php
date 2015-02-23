@@ -1446,7 +1446,7 @@ class DocumentManager
     }
 
     /**
-     * Allow to set a specific document as a new template for FCKEditor
+     * Allow to set a specific document as a new template for CKeditor
      * for a particular user in a particular course
      *
      * @param string $title

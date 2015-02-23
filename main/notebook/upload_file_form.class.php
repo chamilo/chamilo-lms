@@ -35,7 +35,7 @@ class UploadFileForm extends \FormValidator
     function init()
     {
         $form_name = get_lang('Import');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
         $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('File');

@@ -33,7 +33,7 @@ class UploadFileForm extends \FormValidator
     function init()
     {
         $form_name = get_lang('UploadFile');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
         $label = get_lang('File');
         $this->add_file('file', $label);

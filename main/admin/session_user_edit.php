@@ -33,7 +33,7 @@ $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('Sessi
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$sessionId, "name" => get_lang('SessionOverview'));
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
-$form->add_header(get_lang('EditUserSessionDuration'));
+$form->addHeader(get_lang('EditUserSessionDuration'));
 $data = SessionManager::getUserSession($userId, $sessionId);
 $userInfo = api_get_user_info($userId);
 

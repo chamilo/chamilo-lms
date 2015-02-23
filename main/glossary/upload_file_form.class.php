@@ -42,7 +42,7 @@ class UploadFileForm extends \FormValidator
     function init()
     {
         $form_name = get_lang('ImportGlossary');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
         $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('ImportCSVFileLocation');

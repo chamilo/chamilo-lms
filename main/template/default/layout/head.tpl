@@ -41,7 +41,7 @@ plugins.forEach(function(plugin) {
 **/
 var showTemplates = function (ckeditorName) {
     var editorName = 'content';
-    if (ckeditorName.length > 0) {
+    if (ckeditorName && ckeditorName.length > 0) {
         editorName = ckeditorName;
     }
     CKEDITOR.editorConfig(CKEDITOR.config);

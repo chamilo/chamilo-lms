@@ -672,7 +672,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Return the session details data from session extra field value
+     * Return the session details data from a session ID (including the extra
+     * fields used for the advanced subscription mechanism)
      * @param $sessionId
      * @return bool|mixed
      */

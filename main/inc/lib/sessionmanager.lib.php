@@ -5798,4 +5798,18 @@ class SessionManager
 
         return $resultData;
     }
+
+    public static function isValidId($sessionId)
+    {
+        $sessionId = intval($sessionId);
+        if ($sessionId > 0) {
+            $rows = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION), array('where' => array('id = ?' => $sessionId)));
+            if (!empty($rows)) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

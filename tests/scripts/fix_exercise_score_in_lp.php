@@ -11,7 +11,7 @@ require_once '../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$tableExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tableExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT

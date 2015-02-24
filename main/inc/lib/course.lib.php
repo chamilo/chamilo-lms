@@ -2211,7 +2211,7 @@ class CourseManager
 
         $table_stats_hotpots = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $table_stats_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $table_stats_lastaccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $table_stats_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);

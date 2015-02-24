@@ -148,7 +148,7 @@ $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	// Get the expired time of the current exercice in track_e_exercices
+	// Get the expired time of the current exercice in track_e_exercises
 	$total_seconds = $objExercise->expired_time*60;
 }
 
@@ -358,7 +358,7 @@ if ($time_control) {
 	        if ($debug) {error_log('7.9. $clock_expired_time: '.$clock_expired_time); }
 
 			// First we update the attempt to today
-			/* How the expired time is changed into "track_e_exercices" table,
+			/* How the expired time is changed into "track_e_exercises" table,
                then the last attempt for this student should be changed too */
 	        $sql = "UPDATE $exercice_attemp_table SET
 	                tms = '".api_get_utc_datetime()."'

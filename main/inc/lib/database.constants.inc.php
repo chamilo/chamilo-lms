@@ -134,7 +134,7 @@ define('TABLE_STATISTIC_TRACK_E_LINKS',             'track_e_links');
 define('TABLE_STATISTIC_TRACK_E_ONLINE',            'track_e_online');
 define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES',       'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS',     'track_e_course_access');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES',         'track_e_exercices');
+define('TABLE_STATISTIC_TRACK_E_EXERCISES',         'track_e_exercises');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT',           'track_e_attempt');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
 define('TABLE_STATISTIC_TRACK_E_DEFAULT',           'track_e_default');

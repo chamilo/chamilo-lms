@@ -36,18 +36,25 @@ ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
 
 ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0;
 
+RENAME TABLE track_e_exercices TO track_e_exercises
+
 ALTER TABLE session_rel_user ADD COLUMN duration int;
 
 ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
 ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL;
-ALTER TABLE track_e_exercices ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_exercises ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_exercises ADD COLUMN user_ip varchar(39) NOT NULL default '';
 ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_links ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
 ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
 DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
 DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';

@@ -17,7 +17,7 @@
 ALTER TABLE track_e_access DROP COLUMN access_cours_code;
 ALTER TABLE track_e_default DROP COLUMN default_cours_code;
 ALTER TABLE track_e_lastaccess DROP COLUMN access_cours_code;
-ALTER TABLE track_e_exercices DROP COLUMN exe_cours_id;
+ALTER TABLE track_e_exercises DROP COLUMN exe_cours_id;
 ALTER TABLE track_e_downloads DROP COLUMN down_cours_id;
 ALTER TABLE track_e_hotpotatoes DROP COLUMN exe_cours_id;
 ALTER TABLE track_e_links DROP COLUMN links_cours_id;

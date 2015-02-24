@@ -33,7 +33,7 @@ if ($origin == 'learnpath') {
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
@@ -215,7 +215,9 @@ if ($show_results || $show_only_total_score) {
     //Shows exercise header
     echo $objExercise->show_exercise_result_header(
         $user_info,
-        api_convert_and_format_date($exercise_date)
+        api_convert_and_format_date($exercise_date),
+        null,
+        $track_exercise_info['user_ip']
     );
 }
 

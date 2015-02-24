@@ -795,6 +795,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
             $sessionArray['description'] = SessionManager::getDescriptionFromSessionId($sessionId);
 
+            if (isset($sessionArray['brochure'])) {
+                $sessionArray['brochure'] = api_get_path(WEB_CODE_PATH) . $sessionArray['brochure'];
+            }
+            if (isset($sessionArray['banner'])) {
+                $sessionArray['banner'] = api_get_path(WEB_CODE_PATH) . $sessionArray['banner'];
+            }
             return $sessionArray;
         }
 

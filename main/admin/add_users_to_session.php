@@ -96,7 +96,7 @@ function search_users($needle, $type)
 
         $cond_user_id = '';
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_users')  == 'false') {
+        if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users')  == 'true') {
             $order_clause = " AND user.creator_id = ".api_get_user_id().$order_clause;
         }
 

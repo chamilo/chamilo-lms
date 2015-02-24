@@ -132,6 +132,7 @@ $params['session_id'] = $data['sessionId'];
 $params['profile_completed'] = $data['profile_completed'];
 $params['is_connected'] = $data['is_connected'];
 $params['secret_key'] = 'secret_key';
+/** @var $hookPlugin HookAdvancedSubscription */
 $result = $hookPlugin->WSSessionGetDetailsByUser($params);
 echo '<pre>', print_r($result, 1) , '</pre>';
 if (is_array($result) && isset($result['action_url'])) {

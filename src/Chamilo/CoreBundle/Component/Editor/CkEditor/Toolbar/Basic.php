@@ -21,7 +21,10 @@ class Basic extends Toolbar
         'wordcount',
         'templates',
         'justify',
-        'colorbutton'
+        'colorbutton',
+        'flash',
+        'link',
+        'table'
     );
 
     /**

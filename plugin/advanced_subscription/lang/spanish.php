@@ -31,14 +31,14 @@ $strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple c
 $strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no están completos o no son los correctos.";
 $strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
 
-$strings['AdvancedSubscriptionNoQueue'] = "You are not subscribed for this course.";
-$strings['AdvancedSubscriptionNoQueueIsAble'] = "You are not subscribed, but you are qualified for this course.";
-$strings['AdvancedSubscriptionQueueStart'] = "Your subscription request is pending for approval by your boss, please wait attentive.";
-$strings['AdvancedSubscriptionQueueBossDisapproved'] = "We are sorry, your subscription was rejected by your boss.";
-$strings['AdvancedSubscriptionQueueBossApproved'] = "Your subscription request has been accepted by your boss, now is pending for vacancies.";
-$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "We are sorry, your subscription was rejected by the administrator.";
-$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulation, your subscription request has been accepted by administrator";
-$strings['AdvancedSubscriptionQueueDefaultX'] = "There was an error, queue status %d is not defined by system.";
+$strings['AdvancedSubscriptionNoQueue'] = "Usted no está inscrito para este curso.";
+$strings['AdvancedSubscriptionNoQueueIsAble'] = "Usted no está inscrito, pero está calificado para este curso.";
+$strings['AdvancedSubscriptionQueueStart'] = "Su solicitud de inscripción está pendiente de la aprobación de su jefe, por favor espere atentamente.";
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = "Lo sentimos, tu inscripción fue rechazada por tu jefe.";
+$strings['AdvancedSubscriptionQueueBossApproved'] = "Tu solicitud de inscripción ha sido aceptado por tu jefe, ahora está en espera de vacantes.";
+$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Lo sentimos, Tu inscripción ha sido rechazada por el administrador.";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "¡Felicitaciones! Tu inscripción ha sido aceptada por el administrador.";
+$strings['AdvancedSubscriptionQueueDefaultX'] = "Hubo un error el estado en cola %d no está definido en el sistema.";
 
 // Mail translations
 $strings['MailStudentRequest'] = 'Solicitud de registro de estudiante';

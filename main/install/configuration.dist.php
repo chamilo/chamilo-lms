@@ -286,3 +286,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['cookie_warning'] = false;
 // Allows a comment field in the course calendar events. Requires DB change
 //$_configuration['allow_agenda_event_comment'] = false;
+// Filters administration users lists by the session admin who created them.
+// Change to true to restrict the visibility
+//$_configuration['prevent_session_admins_to_manage_all_users'] = false;

@@ -227,20 +227,20 @@ if ($verified) {
                     $data['signature'] = api_get_setting('Institution');
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
                     // Check if exist and action in data
-                    if (empty($data['action'])) {
+                    if (empty($data['mailAction'])) {
                         // set action in data by new status
                         switch ($data['newStatus']) {
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
-                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE;
+                                $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE;
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
-                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_DISAPPROVE;
+                                $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_DISAPPROVE;
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
-                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE;
+                                $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE;
                                 break;
                             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
-                                $data['action'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE;
+                                $data['mailAction'] = ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE;
                                 break;
                             default:
                                 break;
@@ -253,7 +253,7 @@ if ($verified) {
                     }
 
                     // Send mails
-                    $result['mailIds'] = $plugin->sendMail($data, $data['action']);
+                    $result['mailIds'] = $plugin->sendMail($data, $data['mailAction']);
                     // Check if mails were sent
                     if (!empty($result['mailIds'])) {
                         $result['error'] = false;

@@ -48,6 +48,9 @@ $strings['MailStudentRequestSelect'] = 'Student registration requests selection'
 $strings['MailAdminAccept'] = 'Registration request accepted by administrator';
 $strings['MailAdminReject'] = 'Registration request rejected by administrator';
 $strings['MailStudentRequestNoBoss'] = 'Student registration request without boss';
+$strings['MailRemindStudent'] = 'Subscription request reminder';
+$strings['MailRemindSuperior'] = 'Subscription request are pending your approval';
+$strings['MailRemindAdmin'] = 'Course subscription are pending your approval';
 
 // TPL langs
 // Admin view

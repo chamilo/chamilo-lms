@@ -285,7 +285,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * Send message for the student subscription approval to a specific session
-     * @param int $studentId
+     * @param int|array $studentId
      * @param int $receiverId
      * @param string $subject
      * @param string $content
@@ -303,7 +303,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
         if ($save && !empty($mailId)) {
             // Save as sent message
-            $this->saveLastMessage($mailId, $studentId, $sessionId);
+            if (is_array($studentId) && !empty($studentId)) {
+                foreach ($studentId as $student) {
+                    $this->saveLastMessage($mailId, $student['user_id'], $sessionId);
+                }
+            } else {
+                $studentId = intval($studentId);
+                $this->saveLastMessage($mailId, $studentId, $sessionId);
+            }
         }
         return $mailId;
     }
@@ -567,6 +574,50 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['studentUserId'],
                         $adminId,
                         $this->get_lang('MailStudentRequestNoBoss'),
+                        $template->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
+                        $data['sessionId'],
+                        true
+                    );
+                }
+                break;
+            case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_STUDENT:
+                $mailIds['render'] = $this->sendMailMessage(
+                    $data['student']['user_id'],
+                    $data['student']['user_id'],
+                    $this->get_lang('MailRemindStudent'),
+                    $template->fetch('/advanced_subscription/views/reminder_notice_student.tpl'),
+                    $data['sessionId'],
+                    true
+                );
+                break;
+            case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_SUPERIOR:
+                $mailIds['render'] = $this->sendMailMessage(
+                    $data['students'],
+                    $data['superior']['user_id'],
+                    $this->get_lang('MailRemindSuperior'),
+                    $template->fetch('/advanced_subscription/views/reminder_notice_superior.tpl'),
+                    $data['sessionId'],
+                    true
+                );
+                break;
+            case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_SUPERIOR_MAX:
+                $mailIds['render'] = $this->sendMailMessage(
+                    $data['students'],
+                    $data['superior']['user_id'],
+                    $this->get_lang('MailRemindSuperior'),
+                    $template->fetch('/advanced_subscription/views/reminder_notice_superior_max.tpl'),
+                    $data['sessionId'],
+                    true
+                );
+                break;
+            case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_ADMIN:
+                // Mail to admin
+                foreach ($data['admins'] as $adminId => $admin) {
+                    $template->assign('admin', $admin);
+                    $mailIds[] = $this->sendMailMessage(
+                        $data['students'],
+                        $adminId,
+                        $this->get_lang('MailRemindAdmin'),
                         $template->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
                         $data['sessionId'],
                         true

@@ -48,6 +48,9 @@ $strings['MailStudentRequestSelect'] = 'Selección de solicitudes de registro de
 $strings['MailAdminAccept'] = 'Solicitud de registro aceptada por administrador';
 $strings['MailAdminReject'] = 'Solicitud de registro rechazada por administrador';
 $strings['MailStudentRequestNoBoss'] = 'Solicitud de registro de estudiante sin superior';
+$strings['MailRemindStudent'] = 'Recordatorio de la solicitud de inscripción';
+$strings['MailRemindSuperior'] = 'Solicitudes de inscripción estan pendientes de tu aprobación';
+$strings['MailRemindAdmin'] = 'Inscripciones de cursos estan pendientes de tu aprobación';
 
 // TPL translations
 // Admin view

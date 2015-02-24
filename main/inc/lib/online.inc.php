@@ -26,7 +26,7 @@ function LoginCheck($uid) {
     if (!empty($uid)) {
         $user_ip = '';
         if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $user_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
+            $user_ip = Database::escape_string(api_get_real_ip());
         }
 
 		$login_date = api_get_utc_datetime();

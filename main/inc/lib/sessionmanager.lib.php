@@ -489,7 +489,7 @@ class SessionManager
             }
         }
 
-        $query .= ") AS session_table";error_log($query);
+        $query .= ") AS session_table";
 
         $result = Database::query($query);
         $formatted_sessions = array();

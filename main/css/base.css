@@ -3363,6 +3363,7 @@ form .formw .freeze {
 }
 .skill-options .skill-home{
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 .skill-options .btn-block {
   box-sizing: border-box;
@@ -3382,7 +3383,6 @@ form .formw .freeze {
   margin-top: 1em;
 }
 .skill-options .form-search .holder{
-  border: 1px solid #cccccc;
   padding-left: .5em;
   padding-right: .5em;
 }
@@ -3448,6 +3448,7 @@ form .formw .freeze {
   background-color: #FFFFFF;
   padding-top: .5em;
   padding-bottom: .5em;
+  margin-bottom: 1em;
 }
 .skill-options .section-info-skill{
   display: inline-block;
@@ -3469,6 +3470,9 @@ form .formw .freeze {
 }
 .skill-options .button-skill{
   margin-bottom: .5em;
+}
+.search-skill ul.holder li.bit-input input{
+  width: 100%;
 }
 .page-items-profile{
   padding-top: 2em;

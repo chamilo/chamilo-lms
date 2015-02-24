@@ -201,7 +201,7 @@ jQuery(
 	                var input = $(document.createElement("input"));
 	                
 	                li.attr({"class": "bit-input","id": elemid + "_annoninput"});        
-	                input.attr({"type": "text","class": "maininput","size": "1"});        
+	                input.attr({"type": "text","class": "maininput","size": "1"});
 	                holder.append(li.append(input));
 	                
 	                input.focus(

@@ -3,18 +3,16 @@
 {% block body %}
 
     <div class="span12">
-
+        <div class="badges-tabs">
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">Insignias Actuales</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_help.php">Ayuda</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Insignias Actuales' | get_lang }}</a>
             </li>
         </ul>
+        </div>
         <div class="tab-content">
             <div class="tab-pane active">
                 <div class="openbadges-introduction">

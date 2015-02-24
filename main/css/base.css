@@ -5523,7 +5523,12 @@ i.size-32.icon-new-work{
   padding-top: 30px;
   padding-bottom: 30px;
 }
-.openbadges-introduction .block-content .block-title{
+.openbadges-introduction .block-edit{
+  padding-top: 0px;
+  padding-bottom: 30px;
+}
+.openbadges-introduction .block-content .block-title,
+.openbadges-introduction .block-edit .block-title{
   background-color: #e2eceb;
   border: 1px solid #456176;
   padding-left:10px;
@@ -5536,4 +5541,50 @@ i.size-32.icon-new-work{
 .openbadges-introduction .block-content p{
   padding-left: 5%;
   font-size: 14px;
+}
+.badges-tablet .table thead{
+  background-color: #E2ECEB;
+  border-top: 1px solid #677F8F;
+  border-bottom: 1px solid #677F8F;
+  border-left: 1px solid #677F8F;
+  border-right: 1px solid #677F8F;
+  font-size: 16px;
+  color: #456176;
+}
+.badges-tablet .table thead tr th{
+  font-weight: normal;
+}
+.badges-tablet .table td{
+  border-top: 1px solid #677F8F;
+  vertical-align: middle;
+
+}
+.badges-tabs ul.nav-tabs li a{
+  background-color: #E2ECEB;
+  border-top: 1px solid #677F8F;
+  border-right: 1px solid #677F8F;
+  border-left: 1px solid #677F8F;
+  border-bottom: 1px solid #677F8F;
+}
+.badges-tabs ul.nav-tabs .active a{
+  background: #fff;
+  border-bottom: 1px solid #ffffff;
+}
+.badges-tabs .nav-tabs{
+  border-bottom: 1px solid #677F8F;
+}
+.create-badges{
+  text-align: center;
+  margin-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.badges-img, .badges-view{
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #b2b2b2;
+}
+.badges-text{
+  text-align: center;
 }

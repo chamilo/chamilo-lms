@@ -2,26 +2,26 @@
 
 {% block body %}
     <div class="span12">
-
+        <div class="badges-tabs">
         <ul class="nav nav-tabs">
             <li>
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li class="active">
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'IssuerDetails' | get_lang }}</a>
-            </li>
-            <li >
-                <a href="{{ _p.web_main }}admin/skill_badge_help.php">{{ 'Skills' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Insignias Actuales' | get_lang }}</a>
             </li>
         </ul>
+        </div>
         <div class="tab-content">
             <div class="tab-pane active">
+                <div class="openbadges-introduction">
                 {% if not errorMessage is empty %}
                     <div class="alert alert-error">
                         {{ errorMessage }}
                     </div>
                 {% endif %}
-                <table class="table table-bordered table-striped">
+                <div class="badges-tablet">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>{{ 'Name' | get_lang }}</th>
@@ -29,18 +29,13 @@
                             <th>{{ 'Actions' | get_lang }}</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>{{ 'Name' | get_lang }}</th>
-                            <th>{{ 'Description' | get_lang }}</th>
-                            <th>{{ 'Actions' | get_lang }}</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         {% for skill in skills %}
                             <tr>
                                 <td>
-                                    {% if skill.icon %}
+                                    {% if skill.icon is empty %}
+                                        <img src="{{ 'badges-default.png' | icon(128) }}" width="50" alt="{{ skill.name }}">
+                                    {% else %}
                                         <img src="{{ [_p.web_data, skill.icon] | join('') }}" width="50" alt="{{ skill.name }}">
                                     {% endif %}
                                     {{ skill.name }}
@@ -55,6 +50,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>
+                </div>
             </div>
         </div>
     </div>

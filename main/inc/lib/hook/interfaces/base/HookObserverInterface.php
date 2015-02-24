@@ -10,7 +10,7 @@ interface HookObserverInterface
 {
     /**
      * Return the singleton instance of Hook observer.
-     * @return HookEventInterface|null
+     * @return static
      */
     public static function create();
 

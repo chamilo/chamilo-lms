@@ -5485,7 +5485,19 @@ class SessionManager
                     )
                 )
             );
-
+            $whereFieldVariables = array();
+            $whereFieldIds = array();
+            if (
+                is_array($fieldsArray) &&
+                count($fieldsArray) > 0
+            ) {
+                $whereParams = '?';
+                for ($i = 1; $i < count($fieldsArray); $i++) {
+                    $whereParams .= ', ?';
+                }
+                $whereFieldVariables = 'field_variable IN ( ' . $whereParams .' )';
+                $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
+            }
             // Get session fields
             $extraField = new ExtraField('session');
             $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
@@ -5793,5 +5805,19 @@ class SessionManager
         }
 
         return $resultData;
+    }
+
+    public static function isValidId($sessionId)
+    {
+        $sessionId = intval($sessionId);
+        if ($sessionId > 0) {
+            $rows = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION), array('where' => array('id = ?' => $sessionId)));
+            if (!empty($rows)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -37,7 +37,7 @@ $strings['AdvancedSubscriptionQueueStart'] = "Your subscription request is pendi
 $strings['AdvancedSubscriptionQueueBossDisapproved'] = "We are sorry, your subscription was rejected by your boss.";
 $strings['AdvancedSubscriptionQueueBossApproved'] = "Your subscription request has been accepted by your boss, now is pending for vacancies.";
 $strings['AdvancedSubscriptionQueueAdminDisapproved'] = "We are sorry, your subscription was rejected by the administrator.";
-$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulation, your subscription request has been accepted by administrator";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulations!, your subscription request has been accepted by administrator.";
 $strings['AdvancedSubscriptionQueueDefaultX'] = "There was an error, queue status %d is not defined by system.";
 
 // Mail translations
@@ -48,6 +48,9 @@ $strings['MailStudentRequestSelect'] = 'Student registration requests selection'
 $strings['MailAdminAccept'] = 'Registration request accepted by administrator';
 $strings['MailAdminReject'] = 'Registration request rejected by administrator';
 $strings['MailStudentRequestNoBoss'] = 'Student registration request without boss';
+$strings['MailRemindStudent'] = 'Subscription request reminder';
+$strings['MailRemindSuperior'] = 'Subscription request are pending your approval';
+$strings['MailRemindAdmin'] = 'Course subscription are pending your approval';
 
 // TPL langs
 // Admin view

@@ -112,94 +112,103 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function isAllowedToDoRequest($userId, $params = array())
     {
         $isAllowed = null;
-        if (isset($params['is_connected']) && isset($params['profile_completed'])) {
-            $plugin = self::create();
-            // WS URL is not yet implemented
-            // $wsUrl = $plugin->get('ws_url');
-            // @TODO: Get connection status from user by WS
-            $isConnected = $params['is_connected'];
-            if ($isConnected) {
-                $profileCompletedMin = (float) $plugin->get('min_profile_percentage');
-                // @TODO: Get completed profile percentage by WS
+        $plugin = self::create();
+        $wsUrl = $plugin->get('ws_url');
+        // Student always is connected
+        $isConnected = true;
+        if ($isConnected) {
+            $profileCompletedMin = (float) $plugin->get('min_profile_percentage');
+            if (is_string($wsUrl) && !empty($wsUrl)) {
+                $options = array(
+                    'location' => $wsUrl,
+                    'uri' => $wsUrl
+                );
+                $client = new SoapClient(null, $options);
+                $userInfo = UserManager::get_user_info_by_id($userId);
+                try {
+                    $profileCompleted = $client->__soapCall('getProfileCompletionPercentage', $userInfo['extra']['drupal_user_id']);
+                } catch (\Exception $e) {
+                    $profileCompleted = 0;
+                }
+            } elseif (isset($params['profile_completed'])) {
                 $profileCompleted = (float) $params['profile_completed'];
-                if ($profileCompleted > $profileCompletedMin) {
-                    $checkInduction = $plugin->get('check_induction');
-                    // @TODO: check if user have completed at least one induction session
-                    $completedInduction = true;
-                    if (!$checkInduction || $completedInduction) {
-                        $uitMax = $plugin->get('yearly_cost_unit_converter');
-                        $uitMax *= $plugin->get('yearly_cost_limit');
-                        $uitUser = 0;
-                        $now = new DateTime(api_get_utc_datetime());
-                        $newYearDate = $plugin->get('course_session_credit_year_start_date');
-                        $newYearDate = !empty($newYearDate) ?
-                            new \DateTime($newYearDate . $now->format('/Y')) :
-                            $now;
-                        $extra = new ExtraFieldValue('session');
-                        $joinSessionTable = Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su INNER JOIN ' .
-                            Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.id_session';
-                        $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.id_user = ?';
-                        $whereSessionParamsValues = array(
-                            0,
-                            $newYearDate->format('Y-m-d'),
-                            $userId
-                        );
-                        $whereSession = array(
-                            'where' => array(
-                                $whereSessionParams => $whereSessionParamsValues
-                            )
-                        );
-                        $selectSession = 's.id AS id';
-                        $sessions = Database::select(
-                            $selectSession,
-                            $joinSessionTable,
-                            $whereSession
-                        );
+            } else {
+                $profileCompleted = 0;
+            }
+            if ($profileCompleted >= $profileCompletedMin) {
+                $checkInduction = $plugin->get('check_induction');
+                // @TODO: check if user have completed at least one induction session
+                $completedInduction = true;
+                if (!$checkInduction || $completedInduction) {
+                    $uitMax = $plugin->get('yearly_cost_unit_converter');
+                    $uitMax *= $plugin->get('yearly_cost_limit');
+                    $uitUser = 0;
+                    $now = new DateTime(api_get_utc_datetime());
+                    $newYearDate = $plugin->get('course_session_credit_year_start_date');
+                    $newYearDate = !empty($newYearDate) ?
+                        new \DateTime($newYearDate . $now->format('/Y')) :
+                        $now;
+                    $extra = new ExtraFieldValue('session');
+                    $joinSessionTable = Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su INNER JOIN ' .
+                        Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.id_session';
+                    $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.id_user = ?';
+                    $whereSessionParamsValues = array(
+                        0,
+                        $newYearDate->format('Y-m-d'),
+                        $userId
+                    );
+                    $whereSession = array(
+                        'where' => array(
+                            $whereSessionParams => $whereSessionParamsValues
+                        )
+                    );
+                    $selectSession = 's.id AS id';
+                    $sessions = Database::select(
+                        $selectSession,
+                        $joinSessionTable,
+                        $whereSession
+                    );
 
+                    if (is_array($sessions) && count($sessions) > 0) {
+                        foreach ($sessions as $session) {
+                            $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
+                            $uitUser += $var['field_value'];
+                        }
+                    }
+                    if ($uitMax >= $uitUser) {
+                        $expendedTimeMax = $plugin->get('yearly_hours_limit');
+                        $expendedTime = 0;
                         if (is_array($sessions) && count($sessions) > 0) {
                             foreach ($sessions as $session) {
-                                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
-                                $uitUser += $var['field_value'];
+                                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
+                                $expendedTime += $var['field_value'];
                             }
                         }
-                        if ($uitMax >= $uitUser) {
-                            $expendedTimeMax = $plugin->get('yearly_hours_limit');
-                            $expendedTime = 0;
-                            if (is_array($sessions) && count($sessions) > 0) {
-                                foreach ($sessions as $session) {
-                                    $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
-                                    $expendedTime += $var['field_value'];
-                                }
-                            }
-                            if ($expendedTimeMax >= $expendedTime) {
-                                $expendedNumMax = $plugin->get('courses_count_limit');
-                                $expendedNum = count($sessions);
-                                if ($expendedNumMax >= $expendedNum) {
-                                    $isAllowed = true;
-                                } else {
-                                    throw new \Exception($this->get_lang('AdvancedSubscriptionCourseXLimitReached'));
-                                }
+                        if ($expendedTimeMax >= $expendedTime) {
+                            $expendedNumMax = $plugin->get('courses_count_limit');
+                            $expendedNum = count($sessions);
+                            if ($expendedNumMax >= $expendedNum) {
+                                $isAllowed = true;
                             } else {
-                                throw new \Exception($this->get_lang('AdvancedSubscriptionTimeXLimitReached'));
+                                throw new \Exception($this->get_lang('AdvancedSubscriptionCourseXLimitReached'));
                             }
                         } else {
-                            throw new \Exception($this->get_lang('AdvancedSubscriptionCostXLimitReached'));
+                            throw new \Exception($this->get_lang('AdvancedSubscriptionTimeXLimitReached'));
                         }
                     } else {
-                        throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
+                        throw new \Exception($this->get_lang('AdvancedSubscriptionCostXLimitReached'));
                     }
                 } else {
-                    throw new \Exception($this->get_lang('AdvancedSubscriptionProfileIncomplete'));
+                    throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
                 }
             } else {
-                throw new \Exception($this->get_lang('AdvancedSubscriptionNotConnected'));
+                throw new \Exception($this->get_lang('AdvancedSubscriptionProfileIncomplete'));
             }
-
-            return $isAllowed;
         } else {
-            throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteParams'));
+            throw new \Exception($this->get_lang('AdvancedSubscriptionNotConnected'));
         }
 
+        return $isAllowed;
     }
 
     /**
@@ -873,7 +882,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'e=' . intval($params['newStatus']) . '&' .
             'u=' . intval($params['studentUserId']) . '&' .
             'q=' . intval($params['queueId']) . '&' .
-            'is_connected=' . intval($params['is_connected']) . '&' .
+            'is_connected=' . true . '&' .
             'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
         return $url;

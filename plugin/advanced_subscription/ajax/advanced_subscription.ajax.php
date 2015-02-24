@@ -21,7 +21,9 @@ $data['currentUserId'] = intval($_REQUEST['current_user_id']);
 $data['studentUserId'] = intval($_REQUEST['u']);
 $data['queueId'] = intval($_REQUEST['q']);
 $data['newStatus'] = intval($_REQUEST['e']);
-$data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
+// Student always is connected
+// $data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
+$data['is_connected'] = true;
 $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_REQUEST['profile_completed']) : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));

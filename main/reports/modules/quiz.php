@@ -26,7 +26,7 @@ function reports_modules_quiz_quizVal($quiz, $key_id) {
 			'session_id, -1 as attempt, exe_result as score, '.
 			REPORTS_PROGRESS_COMPLETED.' as progress, '.
 			'exe_duration as time, exe_date as ts from '.
-			Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES).
+			Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).
 			' where exe_cours_id = '."'".$quiz['course_code']."'".
 			' and exe_exo_id='.$quiz['child_id']);
 }

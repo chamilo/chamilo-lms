@@ -51,7 +51,7 @@ $TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCES
 $TABLETRACK_LINKS 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_LOGIN 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display

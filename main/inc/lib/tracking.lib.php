@@ -119,7 +119,7 @@ class Tracking
         $TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
         $tbl_quiz_questions = Database :: get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
-        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql = "SELECT max(view_count)
@@ -1606,7 +1606,7 @@ class Tracking
     	if (!empty($course_info)) {
     		// table definition
     		$tbl_course_quiz     = Database::get_course_table(TABLE_QUIZ_TEST);
-    		$tbl_stats_exercise  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    		$tbl_stats_exercise  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
     		// Compose a filter based on optional exercise given
     		$condition_quiz = "";
@@ -1756,7 +1756,7 @@ class Tracking
 
     	$lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
-    	$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    	$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
     	$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
                 WHERE  ex.exe_cours_id = '$course_code'
@@ -1797,7 +1797,7 @@ class Tracking
         if (empty($exercise_list)) {
             return '0%';
         }
-        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exercise_list = array_keys($exercise_list);
         $exercise_list = array_map('intval', $exercise_list);
 
@@ -2123,7 +2123,7 @@ class Tracking
         }
 
         if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';
-        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $course = api_get_course_info($course_code);
@@ -3724,7 +3724,7 @@ class Tracking
                 'start_date'=> 'login_course_date',
                 'end_date'  => 'logout_course_date',
                 ),*/
-            TABLE_STATISTIC_TRACK_E_EXERCICES => array(
+            TABLE_STATISTIC_TRACK_E_EXERCISES => array(
                 'course'    => 'c_id',
                 'session'   => 'session_id',
                 'user'      => 'exe_user_id',
@@ -5189,7 +5189,7 @@ class Tracking
         $tquiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $tquiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $ttrack_exercises  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $ttrack_exercises  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $ttrack_attempt    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sessions = array();
@@ -6534,7 +6534,7 @@ class TrackingUserLog
             return false;
         }
         $table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
+        $sql_ip = "SELECT login_date, user_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
         $ip = '';
         $res_ip = Database::query($sql_ip);
         if ($res_ip !== false && Database::num_rows($res_ip)>0) {

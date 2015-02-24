@@ -58,6 +58,7 @@ CREATE TABLE track_e_access (
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
   KEY access_c_id (c_id),
@@ -108,8 +109,8 @@ CREATE TABLE track_e_downloads (
   KEY down_cours_id (down_cours_id)
 );
 
-DROP TABLE IF EXISTS track_e_exercices;
-CREATE TABLE track_e_exercices (
+DROP TABLE IF EXISTS track_e_exercises;
+CREATE TABLE track_e_exercises (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -118,23 +119,24 @@ CREATE TABLE track_e_exercices (
   exe_exo_id mediumint unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (exe_id),
   KEY exe_user_id (exe_user_id),
   KEY exe_cours_id (exe_cours_id)
 );
 
-ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
-ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
-ALTER TABLE track_e_exercices ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
-ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
-ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercises ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercises ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercises ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD INDEX ( session_id ) ;
+ALTER TABLE track_e_exercises ADD orig_lp_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD exe_duration int UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercises ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
@@ -205,7 +207,7 @@ CREATE TABLE track_e_login (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
+  user_ip varchar(39) NOT NULL default '',
   logout_date datetime NULL default NULL,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
@@ -216,7 +218,7 @@ CREATE TABLE track_e_online (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
+  user_ip varchar(39) NOT NULL default '',
   course varchar(40) default NULL,
   c_id int NOT NULL,
   session_id INT NOT NULL DEFAULT 0,
@@ -258,6 +260,7 @@ CREATE TABLE track_e_course_access (
   logout_course_date datetime default NULL,
   counter int NOT NULL,
   session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (course_access_id)
 );
 

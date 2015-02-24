@@ -36,12 +36,14 @@ ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
 
 ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0;
 
+RENAME TABLE track_e_exercices TO track_e_exercises;
+
 ALTER TABLE session_rel_user ADD COLUMN duration int;
 
 ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL;
-ALTER TABLE track_e_exercices ADD COLUMN c_id int NOT NULL;
+ALTER TABLE track_e_exercises ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_links ADD COLUMN c_id int NOT NULL;
@@ -55,9 +57,14 @@ DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'), ('prevent_session_admins_to_manage_all_users', 'false', 'No');
 
+ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
+ALTER TABLE track_e_exercises ADD COLUMN user_ip varchar(39) NOT NULL default '';
+ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default '';
+ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
+ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.11' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.12' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

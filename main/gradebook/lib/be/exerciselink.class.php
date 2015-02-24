@@ -138,7 +138,7 @@ class ExerciseLink extends AbstractLink
      */
     public function has_results()
     {
-        $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $session_id = api_get_session_id();
         $sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats."
                 WHERE
@@ -159,7 +159,7 @@ class ExerciseLink extends AbstractLink
      */
     public function calc_score($stud_id = null)
     {
-        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblHp = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
 

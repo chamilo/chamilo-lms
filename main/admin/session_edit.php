@@ -92,13 +92,13 @@ foreach ($coaches as $coach) {
     $coachesOption[$coach['user_id']] = "$personName ({$coach['username']})";
 }
 
-$Categories = SessionManager::get_all_session_category();
+$categoriesList = SessionManager::get_all_session_category();
 
 $categoriesOption = array(
     '0' => get_lang('None')
 );
 
-if ($Categories != false) {
+if ($categoriesList != false) {
     foreach ($categoriesList as $categoryItem) {
         $categoriesOption[$categoryItem['id']] = $categoryItem['name'];
     }

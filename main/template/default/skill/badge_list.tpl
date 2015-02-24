@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="span12">
-        
+
         <ul class="nav nav-tabs">
             <li>
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>

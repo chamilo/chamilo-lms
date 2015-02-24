@@ -101,7 +101,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = trim(Database::escape_string($code));
     $name = trim(Database::escape_string($name));
-    $parent_id = intval($parent_id);
+    $parent_id = trim(Database::escape_string($parent_id));
     $canHaveCourses = Database::escape_string($canHaveCourses);
     $code = CourseManager::generate_course_code($code);
 
@@ -109,7 +109,6 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     if (Database::num_rows($result)) {
         return false;
     }
-
     $result = Database::query("SELECT MAX(tree_pos) AS maxTreePos FROM $tbl_category");
     $row = Database::fetch_array($result);
     $tree_pos = $row['maxTreePos'] + 1;
@@ -142,7 +141,8 @@ function updateCategoryChildren($category)
     }
 
     $children_count = compterFils($category, 0) - 1;
-    Database::query("UPDATE $tbl_category SET children_count='$children_count' WHERE code='$category'");
+    $sql = "UPDATE $tbl_category SET children_count='$children_count' WHERE code='$category'";
+    Database::query($sql);
 }
 
 /**

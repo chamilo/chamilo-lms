@@ -66,6 +66,7 @@ class SessionManager
      * @param string $duration
      * @param string $description Optional. The session description
      * @param int $showDescription Optional. Whether show the session description
+     * @param array $extrafields 
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -84,7 +85,8 @@ class SessionManager
         $fix_name = false,
         $duration = null,
         $description = null,
-        $showDescription = 0
+        $showDescription = 0,
+        $extraFields = array()
     ) {
         global $_configuration;
 
@@ -2110,7 +2112,7 @@ class SessionManager
 
         if ($nb_affected > 0) {
             // Update number of courses in the session
-            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses + $nb_affected WHERE id='$session_id' ";
+            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses - $nb_affected WHERE id='$session_id' ";
             Database::query($sql);
             return true;
         } else {
@@ -5222,13 +5224,15 @@ class SessionManager
      * @param int $userId The user id
      * @return boolean Whether is subscribed
      */
-    public static function isUserSusbcribedAsStudent($sessionId, $userId)
+    public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $sessionId = intval($sessionId);
         $userId = intval($userId);
 
+        // COUNT(1) actually returns the number of rows from the table (as if
+        // counting the results from the first column)
         $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
             . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
 
@@ -5434,16 +5438,15 @@ class SessionManager
     }
 
     /**
-     * Returns list of a few data from session (name, short description, start date, end date)
-     * And the next extra fields
-     * short_description, mode, human_text_duration, vacancies, brochure, target, schedule
-     * from Session category Id.
-     * @param int $categoryId
-     * @param string $target
-     * @param array $fieldsArray, array of session extra fields
+     * Returns list of a few data from session (name, short description, start 
+     * date, end date) and the given extra fields if defined based on a 
+     * session category Id.
+     * @param int $categoryId The internal ID of the session category
+     * @param string $target Value to search for in the session field values
+     * @param array $extraFields A list of fields to be scanned and returned
      * @return mixed
      */
-    public static function getBriefSessionListAndExtraByCategory($categoryId, $target, $fieldsArray) {
+    public static function getShortSessionListAndExtraByCategory($categoryId, $target, $extraFields = null) {
         // Init variables
         $categoryId = (int) $categoryId;
         $sessionList = array();
@@ -5455,6 +5458,10 @@ class SessionManager
             $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
             // Join session field and session field values tables
             $joinTable = $sfTable . ' sf INNER JOIN ' . $sfvTable . ' sfv ON sf.id = sfv.field_id';
+            $fieldsArray = array();
+            foreach ($extraFields as $field) {
+                $fieldsArray[] = Database::escape_string($field);
+            }
             // Get the session list from session category and target
             $sessionList = Database::select(
                 'id, name, date_start, date_end',
@@ -5485,15 +5492,17 @@ class SessionManager
             }
             // Get session fields
             $extraField = new ExtraField('session');
-            $fieldList = $extraField->get_all(array($whereFieldVariables => $fieldsArray));
+            $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
+            $fieldsList = $extraField->get_all(array(
+                'field_variable IN ( ' . $questionMarks . ' )' => $fieldsArray
+            ));
             // Index session fields
-            $fields = array();
-            foreach ($fieldList as $field) {
+            foreach ($fieldsList as $field) {
                 $fields[$field['id']] = $field['field_variable'];
             }
             // Get session field values
             $extra = new ExtraFieldValue('session');
-            $sessionFieldValueList = $extra->get_all(array($whereFieldIds => array_keys($fields)));
+            $sessionFieldValueList = $extra->get_all(array('field_id IN ( ' . $questionMarks . ' )' => array_keys($fields)));
             // Add session fields values to session list
             foreach ($sessionList as $id => &$session) {
                 foreach ($sessionFieldValueList as $sessionFieldValue) {

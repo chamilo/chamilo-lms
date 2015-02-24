@@ -294,6 +294,7 @@ EOT;
      */
     public function addButton($name, $label, $attributes = array())
     {
+        //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
         $this->addElement('button', $name, $label, $attributes);
     }
 
@@ -345,7 +346,7 @@ EOT;
     /**
      * @param string $text
      */
-    public function add_header($text)
+    public function addHeader($text)
     {
         $this->addElement('header', $text);
     }
@@ -409,7 +410,7 @@ EOT;
      */
     function add_datepicker($name, $label)
     {
-        $this->addElement('datepicker', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePicker', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }
@@ -423,7 +424,7 @@ EOT;
      */
     public function add_datepickerdate($name, $label)
     {
-        $this->addElement('datepickerdate', $name, $label, array('form_name' => $this->getAttribute('name')));
+        $this->addElement('DatePickerDate', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
         $this->addRule($name, get_lang('InvalidDate'), 'date');
     }

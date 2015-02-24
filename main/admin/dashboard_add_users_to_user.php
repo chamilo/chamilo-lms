@@ -259,7 +259,7 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);
-$searchForm->add_header(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('AdvancedSearch'));
 $renderer =& $searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'user', $user_id);

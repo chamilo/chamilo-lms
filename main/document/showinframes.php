@@ -173,7 +173,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                                 {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
                                                 {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
                                                 {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
                                       }
                                       );

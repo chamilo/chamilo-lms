@@ -173,7 +173,7 @@ if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
 }
 
 $form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'form1'), 5);
+$form->addElement('DatePicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'form1'), 5);
 $form->addElement('html','</div>');
 
 //End date
@@ -185,7 +185,7 @@ if ($expired_on!='0000-00-00 00:00:00' && !empty($expired_on)) {
 }
 
 $form->addElement('html','<div id="end_date_div" style="display:'.$display_date.';">');
-$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('DatePicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'exercise_admin'), 5);
 $form->addElement('html','</div>');
 
 if (api_is_platform_admin()) {

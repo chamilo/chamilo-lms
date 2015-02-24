@@ -100,7 +100,7 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-$searchForm->add_header(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('AdvancedSearch'));
 $renderer =& $searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {

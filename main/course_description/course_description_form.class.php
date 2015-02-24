@@ -70,7 +70,7 @@ class CourseDescriptionForm extends \FormValidator
         $defaults['title'] = $description->title;
         $defaults['content'] = $description->content;
 
-        $this->add_header($description->get_title());
+        $this->addHeader($description->get_title());
         $this->addHidden('description_type', $description->get_description_type());
         $this->addHidden('c_id', $description->c_id);
         $this->addHidden('id', $description->id);

@@ -74,7 +74,7 @@ class GlossaryForm extends \FormValidator
         $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
 
         $form_name = $glossary->id ? get_lang('TermEdit') : get_lang('TermAddNew');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
         $this->add_textfield('name', get_lang('TermName'), $required = true, array('class' => 'span3'));
         $this->add_html_editor('description', get_lang('TermDefinition'), true, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));

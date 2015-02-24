@@ -630,7 +630,7 @@ class Auth
                 if ($session['nbr_courses'] > 0) {
                     $session['coach_name'] = api_get_person_name($session['firstname'], $session['lastname']);
                     $session['coach_name'] .= " ({$session['username']})";
-                    $session['is_subscribed'] = SessionManager::isUserSusbcribedAsStudent($session['id'], $userId);
+                    $session['is_subscribed'] = SessionManager::isUserSubscribedAsStudent($session['id'], $userId);
 
                     $sessionsToBrowse[] = $session;
                 }

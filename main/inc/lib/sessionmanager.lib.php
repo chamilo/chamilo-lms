@@ -3281,6 +3281,7 @@ class SessionManager
     /**
      * @param int $user_id
      * @return array
+     * @deprecated use get_sessions_by_general_coach()
      */
     public static function get_sessions_by_coach($user_id)
     {
@@ -5328,20 +5329,29 @@ class SessionManager
     }
 
     /**
-     * Get the session coached by a user
+     * Get the session coached by a user (general coach and course-session coach)
      * @param int $coachId The coach id
-     * @param boolean $checkSessionRelUserVisibility Optional. Check the session visibility
+     * @param boolean $checkSessionRelUserVisibility Check the session visibility
      * @return array The session list
      */
     public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false)
     {
+        // Get all sessions where $coachId is the general coach
         $sessions = self::get_sessions_by_general_coach($coachId);
-        $sessionsByCoach = self::get_sessions_by_coach($coachId);
+        // Get all sessions where $coachId is the course - session coach
+        $courseSessionList = self::getCoursesListByCourseCoach($coachId);
+        $sessionsByCoach = array();
+        if (!empty($courseSessionList)) {
+            foreach ($courseSessionList as $courseSession) {
+                $sessionsByCoach[$courseSession['id_session']] = api_get_session_info($courseSession['id_session']);
+            }
+        }
 
         if (!empty($sessionsByCoach)) {
             $sessions = array_merge($sessions, $sessionsByCoach);
         }
-        //Remove  repeated sessions
+
+        // Remove repeated sessions
         if (!empty($sessions)) {
             $cleanSessions = array();
             foreach ($sessions as $session) {
@@ -5363,6 +5373,7 @@ class SessionManager
                 $sessions = $newSessions;
             }
         }
+
         return $sessions;
     }
 
@@ -5398,5 +5409,86 @@ class SessionManager
         }
 
         return false;
+    }
+
+    /**
+     * Get the list of course coaches
+     * @return array The list
+     */
+    public static function getAllCourseCoaches()
+    {
+        $coaches = array();
+        $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $idResult = Database::select('DISTINCT id_user', $scuTable, array(
+            'where' => array(
+                'status = ?' => 2
+            )
+        ));
+        if ($idResult != false) {
+            foreach ($idResult as $idData) {
+                $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
+                    'where' => array(
+                        'user_id = ?' => $idData['id_user']
+                    )
+                ), 'first');
+                if ($userResult != false) {
+                    $coaches[] = array(
+                        'id' => $userResult['user_id'],
+                        'lastname' => $userResult['lastname'],
+                        'firstname' => $userResult['firstname'],
+                        'username' => $userResult['username'],
+                        'completeName' => api_get_person_name($userResult['firstname'], $userResult['lastname'])
+                    );
+                }
+            }
+        }
+        return $coaches;
+    }
+    /**
+     * Calculate the total user time in the platform
+     * @param int $userId The user id
+     * @param string $from Optional. From date
+     * @param string $until Optional. Until date
+     * @return string The time (hh:mm:ss)
+     */
+    public static function getTotalUserTimeInPlatform($userId, $from = '', $until = '')
+    {
+        $userId = intval($userId);
+        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $whereConditions = array(
+            'login_user_id = ? ' => $userId
+        );
+        if (!empty($from) && !empty($until)) {
+            $whereConditions["AND (login_date >= '?' "] = $from;
+            $whereConditions["AND logout_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
+        }
+        $trackResult = Database::select(
+            'SEC_TO_TIME(SUM(UNIX_TIMESTAMP(logout_date) - UNIX_TIMESTAMP(login_date))) as total_time',
+            $trackLoginTable,
+            array(
+                'where' => $whereConditions
+            ), 'first'
+        );
+        if ($trackResult != false) {
+            return $trackResult['total_time'] ? $trackResult['total_time'] : '00:00:00';
+        }
+        return '00:00:00';
+    }
+
+    /**
+     * Get the courses list by a course coach
+     * @param int $coachId The coach id
+     * @return array
+     */
+    public static function getCoursesListByCourseCoach($coachId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        return  Database::select('*', $table, array(
+            'where' => array(
+                'id_user = ? AND ' => $coachId,
+                'status = ?' => 2
+            )
+        ));
     }
 }

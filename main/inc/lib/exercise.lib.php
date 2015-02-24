@@ -1592,7 +1592,8 @@ class ExerciseLib
                     revised,
                     group_name,
                     group_id,
-                    orig_lp_id";
+                    orig_lp_id,
+                    te.user_ip";
             }
 
             $sql = " $sql_select
@@ -3301,7 +3302,8 @@ class ExerciseLib
                     $exercise_stat_info['start_date'],
                     DATE_TIME_FORMAT_LONG
                 ),
-                $exercise_stat_info['duration']
+                $exercise_stat_info['duration'],
+                $exercise_stat_info['user_ip']
             );
         }
 

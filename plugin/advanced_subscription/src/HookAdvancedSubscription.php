@@ -475,53 +475,66 @@ class HookAdvancedSubscription extends HookObserver implements
         if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
             $userId = (int) $params['user_id'];
             $sessionId = (int) $params['session_id'];
-            // Check if student is already subscribed
-            $plugin = AdvancedSubscriptionPlugin::create();
-            $isOpen = $plugin->isSessionOpen($sessionId);
-            $status = $plugin->getQueueStatus($userId, $sessionId);
-            $vacancy = $plugin->getVacancy($sessionId);
-            $data = $plugin->getSessionDetails($sessionId);
-            if (!empty($data) && is_array($data)) {
-                $data['status'] = $status;
-                // 5 Cases:
-                if ($isOpen) {
-                    // Go to Course session
-                    $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                } else {
-                    try {
-                        $isAble = self::$plugin->isAllowedToDoRequest($userId, $params);
-                        $data['message'] = self::$plugin->getStatusMessage($status, $isAble);
-                    } catch (\Exception $e) {
-                        $data['message'] = $e->getMessage();
-                    }
-                    $params['action'] = 'subscribe';
-                    $params['sessionId'] = intval($sessionId);
-                    $params['currentUserId'] = 0; // No needed
-                    $params['studentUserId'] = intval($userId);
-                    $params['queueId'] = 0; // No needed
-                    $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
-                    if ($vacancy > 0) {
-                        // Check conditions
-                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
-                            // No in Queue, require queue subscription url action
-                            $data['action_url'] = self::$plugin->getQueueUrl($params);
-                        } elseif ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                            // send url action
-                            $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
-                        } else {
-                            // In queue, output status message, no more info.
-                        }
+            // Check if user exists
+            if (
+                UserManager::is_user_id_valid($userId) &&
+                SessionManager::isValidId($sessionId)
+            ) {
+                // Check if student is already subscribed
+                $plugin = AdvancedSubscriptionPlugin::create();
+                $isOpen = $plugin->isSessionOpen($sessionId);
+                $status = $plugin->getQueueStatus($userId, $sessionId);
+                $vacancy = $plugin->getVacancy($sessionId);
+                $data = $plugin->getSessionDetails($sessionId);
+                if (!empty($data) && is_array($data)) {
+                    $data['status'] = $status;
+                    // Vacancy and queue status cases:
+                    if ($isOpen) {
+                        // Go to Course session
+                        $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                     } else {
-                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                            $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                        try {
+                            $isAllowed = self::$plugin->isAllowedToDoRequest($userId, $params);
+                            $data['message'] = self::$plugin->getStatusMessage($status, $isAllowed);
+                        } catch (\Exception $e) {
+                            $data['message'] = $e->getMessage();
+                        }
+                        $params['action'] = 'subscribe';
+                        $params['sessionId'] = intval($sessionId);
+                        $params['currentUserId'] = 0; // No needed
+                        $params['studentUserId'] = intval($userId);
+                        $params['queueId'] = 0; // No needed
+                        $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
+                        if ($vacancy > 0) {
+                            // Check conditions
+                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                // No in Queue, require queue subscription url action
+                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                // send url action
+                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                            } else {
+                                // In queue, output status message, no more info.
+                            }
                         } else {
-                            // in Queue or not, cannot be subscribed to session
-                            $data['action_url'] = self::$plugin->getQueueUrl($params);
+                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                // in Queue or not, cannot be subscribed to session
+                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                            } else {
+                                // In queue, output status message, no more info.
+                            }
                         }
                     }
+                    $result = $data;
+                } else {
+                    // Return soap fault No result was found
+                    $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
                 }
-                var_dump($data);
-                $result = $data;
+            } else {
+                // Return soap fault No result was found
+                $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
             }
         } else {
             // Return soap fault Not valid input params

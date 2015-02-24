@@ -746,6 +746,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 if ($vacancy >= 0) {
 
                     return $vacancy;
+                } else {
+                    return 0;
                 }
             }
         }

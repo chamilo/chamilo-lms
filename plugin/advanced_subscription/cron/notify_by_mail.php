@@ -25,11 +25,10 @@ $joinTables = Database::get_main_table(TABLE_MAIN_SESSION) . ' s INNER JOIN ' .
 $columns = 's.id AS session_id, uu.friend_user_id AS superior_id, uu.user_id AS student_id, asq.id AS queue_id, asq.status AS status';
 $conditions = array(
     'where' => array(
-        //'s.date_start >= ?
-        'uu.relation_type = ? AND asq.updated_at <= ?' => array(
-        //api_get_utc_datetime(),
+        's.date_start >= ? AND uu.relation_type = ? AND asq.updated_at <= ?' => array(
+            $now,
             USER_RELATION_TYPE_BOSS,
-            $weekAgo
+            $weekAgo,
         )
     ),
     'order' => 's.id',
@@ -94,7 +93,7 @@ foreach ($queueBySuperior as $sessionId => $superiorStudents) {
         'currentUserId' => 0,
         'newStatus' => ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED,
         'studentUserId' => 0,
-        'is_connected' => 0,
+        'is_connected' => true,
         'profile_completed' => 0,
     );
     foreach ($superiorStudents as $superiorId => $students) {
@@ -102,7 +101,7 @@ foreach ($queueBySuperior as $sessionId => $superiorStudents) {
         // Check if superior has at least one student
         if (count($students) > 0) {
             foreach ($students as $studentId => $studentInfo) {
-                if ($studentInfo['status'] != ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START) {
+                if ($studentInfo['status'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START) {
                     $data['students'][$studentId] = api_get_user_info($studentId);
                     $dataUrl['studentUserId'] = $studentId;
                     $dataUrl['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED;
@@ -141,7 +140,7 @@ foreach ($admins as &$admin) {
 unset($admin);
 $queueByAdmin = array();
 foreach ($queueList as $queueItem) {
-    if ($queueItem['status'] != ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED) {
+    if ($queueItem['status'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED) {
         $queueByAdmin[$queueItem['session_id']]['students'][$queueItem['student_id']]['user_id'] = $queueItem['student_id'];
     }
 }

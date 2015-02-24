@@ -253,6 +253,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $queueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
         $attributes = array(
             'last_message_id' => $mailId,
+            'updated_at' => api_get_utc_datetime(),
         );
 
         $num = Database::update(
@@ -627,7 +628,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $data['students'],
                         $adminId,
                         $this->get_lang('MailRemindAdmin'),
-                        $template->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
+                        $template->fetch('/advanced_subscription/views/reminder_notice_admin.tpl'),
                         $data['sessionId'],
                         true
                     );

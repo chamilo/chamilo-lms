@@ -49,7 +49,7 @@
                     <td height="356">&nbsp;</td>
                     <td valign="top"><p>{{ "MailDear" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h2>{{ admin.complete_name }}</h2>
-                        <p>{{ "MailContentStudentRequestNoSuperiorToAdmin"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(complete_name_with_username, session.name, admin_view_url) }}</p>
+                        <p>{{ "MailContentStudentRequestNoSuperiorToAdmin"| get_plugin_lang("AdvancedSubscriptionPlugin") | format(student.complete_name_with_username, session.name, admin_view_url) }}</p>
                         <p>{{ "MailThankYou" | get_plugin_lang("AdvancedSubscriptionPlugin") }}</p>
                         <h3>{{ signature }}</h3></td>
                     <td>&nbsp;</td>

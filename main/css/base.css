@@ -5496,3 +5496,44 @@ i.size-32.icon-new-work{
     font-size: 16px;
     font-weight: normal;
 }
+/* Open Badges */
+.openbadges-introduction{
+  padding-left:50px;
+  padding-right: 50px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  line-height: 30px;
+  margin-bottom: 30px;
+}
+.openbadges-introduction .title{
+  text-align: center;
+  margin-bottom: 20px;
+  color: #456176;
+  font-size: 35px;
+}
+.openbadges-introduction .lead{
+  font-size: 15px;
+}
+.openbadges-introduction .sub-title{
+  color: #456176;
+  text-align: center;
+  font-size: 20px;
+}
+.openbadges-introduction .block-content{
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.openbadges-introduction .block-content .block-title{
+  background-color: #e2eceb;
+  border: 1px solid #456176;
+  padding-left:10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  color: #456176;
+}
+.openbadges-introduction .block-content p{
+  padding-left: 5%;
+  font-size: 14px;
+}

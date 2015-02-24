@@ -13,11 +13,6 @@ if (!api_is_platform_admin() || api_get_setting('allow_skills_tool') !== 'true')
     api_not_allowed(true);
 }
 
-$backpack = 'https://backpack.openbadges.org/';
-
-if (array_key_exists('openbadges_backpack', $_configuration)) {
-    $backpack = $_configuration['openbadges_backpack'];
-}
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -34,7 +29,6 @@ $interbreadcrumb = array(
 
 $tpl = new Template(get_lang('IssuerDetails'));
 
-$tpl->assign('backpack', $backpack);
 
 $contentTemplate = $tpl->get_template('skill/badge_issuer.tpl');
 

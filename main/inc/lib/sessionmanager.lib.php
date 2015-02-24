@@ -5272,20 +5272,29 @@ class SessionManager
     }
 
     /**
-     * Get the session coached by a user
+     * Get the session coached by a user (general coach and course-session coach)
      * @param int $coachId The coach id
-     * @param boolean $checkSessionRelUserVisibility Optional. Check the session visibility
+     * @param boolean $checkSessionRelUserVisibility Check the session visibility
      * @return array The session list
      */
     public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false)
     {
+        // Get all sessions where $coachId is the general coach
         $sessions = self::get_sessions_by_general_coach($coachId);
-        $sessionsByCoach = self::get_sessions_by_coach($coachId);
+        // Get all sessions where $coachId is the course - session coach
+        $courseSessionList = self::getCoursesListByCourseCoach($coachId);
+        $sessionsByCoach = array();
+        if (!empty($courseSessionList)) {
+            foreach ($courseSessionList as $courseSession) {
+                $sessionsByCoach[$courseSession['id_session']] = api_get_session_info($courseSession['id_session']);
+            }
+        }
 
         if (!empty($sessionsByCoach)) {
             $sessions = array_merge($sessions, $sessionsByCoach);
         }
-        //Remove  repeated sessions
+
+        // Remove repeated sessions
         if (!empty($sessions)) {
             $cleanSessions = array();
             foreach ($sessions as $session) {
@@ -5427,9 +5436,8 @@ class SessionManager
      */
     public static function getCoursesListByCourseCoach($coachId)
     {
-        $srcruTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-        return  Database::select('*', $srcruTable, array(
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        return  Database::select('*', $table, array(
             'where' => array(
                 'id_user = ? AND ' => $coachId,
                 'status = ?' => 2

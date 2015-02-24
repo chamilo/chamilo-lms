@@ -20,7 +20,8 @@ class Basic extends Toolbar
         'video',
         'wordcount',
         'templates',
-        'justify'
+        'justify',
+        'colorbutton'
     );
 
     /**

@@ -217,5 +217,5 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->get_template('social/home.tpl');
 $tpl->display($social_layout);

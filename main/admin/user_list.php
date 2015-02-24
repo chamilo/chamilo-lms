@@ -446,7 +446,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
-    if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_users')  == 'false') {
+    global $_configuration;
+    if (api_is_session_admin()
+        && isset($_configuration['prevent_session_admins_to_manage_all_users'])
+        && $_configuration['prevent_session_admins_to_manage_all_users'] == 'true'
+    ) {
         $sql .= " WHERE u.creator_id = " . api_get_user_id();
     }
 

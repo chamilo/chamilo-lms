@@ -3878,7 +3878,7 @@ class Exercise
      * @param array $user_data result of api_get_user_info()
      * @param null $start_date
      * @param null $duration
-     * @param string The user IP
+     * @param string $ip Optional. The user IP
      * @return string
      */
     public function show_exercise_result_header($user_data, $start_date = null, $duration = null, $ip = null)

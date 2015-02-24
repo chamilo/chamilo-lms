@@ -215,7 +215,9 @@ if ($show_results || $show_only_total_score) {
     //Shows exercise header
     echo $objExercise->show_exercise_result_header(
         $user_info,
-        api_convert_and_format_date($exercise_date)
+        api_convert_and_format_date($exercise_date),
+        null,
+        $track_exercise_info['user_ip']
     );
 }
 

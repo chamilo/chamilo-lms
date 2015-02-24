@@ -79,7 +79,7 @@ if (api_is_in_group()) {
 $dir = '/';
 
 $currentDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
-
+$readonly = false;
 if (isset($_GET['id'])) {
     $document_data = DocumentManager::get_document_data_by_id(
         $_GET['id'],
@@ -87,14 +87,13 @@ if (isset($_GET['id'])) {
         true
     );
 
-    $document_id    = $document_data['id'];
-    $file           = $document_data['path'];
-    $parent_id      = DocumentManager::get_document_id($course_info, dirname($file));
-    $dir            = dirname($document_data['path']);
-    $dir_original   =  $dir;
-
-    $doc            = basename($file);
-    $readonly       = $document_data['readonly'];
+	$document_id = $document_data['id'];
+	$file = $document_data['path'];
+	$parent_id = DocumentManager::get_document_id($course_info, dirname($file));
+	$dir = dirname($document_data['path']);
+	$dir_original = $dir;
+	$doc = basename($file);
+	$readonly = $document_data['readonly'];
 }
 
 if (empty($document_data)) {
@@ -193,8 +192,8 @@ if (!is_allowed_to_edit()) {
 
 if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
-	$comment 	     = Database::escape_string(trim($_POST['comment']));
-	$title 		     = Database::escape_string(trim($_POST['title']));
+	$comment = Database::escape_string(trim($_POST['comment']));
+	$title = Database::escape_string(trim($_POST['title']));
     //Just in case see BT#3525
     if (empty($title)) {
 		$title = $documen_data['title'];
@@ -205,7 +204,7 @@ if (isset($_POST['comment'])) {
     if (!empty($document_id)) {
         $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
         Database::query($query);
-        $info_message     = get_lang('fileModified');
+        $info_message = get_lang('fileModified');
     }
 }
 
@@ -249,17 +248,67 @@ if ($is_allowed_to_edit) {
 						if (!is_dir($filepath.'css')) {
 							mkdir($filepath.'css', api_get_permissions_for_new_directories());
 							$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), null, null, null, null, $sessionId);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$doc_id,
+								'FolderCreated',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$doc_id,
+								'invisible',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
 						}
 
 						if (!is_file($filepath.'css/frames.css')) {
 							$platform_theme = api_get_setting('stylesheets');
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
-								$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, $sessionId);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
+								$doc_id = add_document(
+									$_course,
+									$dir . 'css/frames.css',
+									'file',
+									filesize($filepath . 'css/frames.css'),
+									'frames.css'
+								);
+								api_item_property_update(
+									$_course,
+									TOOL_DOCUMENT,
+									$doc_id,
+									'DocumentAdded',
+									api_get_user_id(),
+									null,
+									null,
+									null,
+									null,
+									$sessionId
+								);
+								api_item_property_update(
+									$_course,
+									TOOL_DOCUMENT,
+									$doc_id,
+									'invisible',
+									api_get_user_id(),
+									null,
+									null,
+									null,
+									null,
+									$sessionId
+								);
 							}
 						}
 
@@ -267,12 +316,32 @@ if ($is_allowed_to_edit) {
 						$document_id = DocumentManager::get_document_id($_course, $file);
 
 						if ($document_id) {
-							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $sessionId);
+							update_existing_document(
+								$_course,
+								$document_id,
+								$file_size,
+								$read_only_flag
+							);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$document_id,
+								'DocumentUpdated',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
 							// Update parent folders
-							item_property_update_on_folder($_course, $dir, api_get_user_id());
-							header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq());
-                            exit;
+							item_property_update_on_folder(
+								$_course,
+								$dir,
+								api_get_user_id()
+							);
+							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq());
+							exit;
 						} else {
 							$msgError = get_lang('Impossible');
 						}
@@ -337,6 +406,7 @@ $document_info = api_get_item_property_info(
     $document_id,
     0
 );
+
 // Try to find this document in the session
 if (!empty($sessionId)) {
     $document_info = api_get_item_property_info(
@@ -390,9 +460,9 @@ if ($owner_id == api_get_user_id() ||
     if ($showSystemFolders == 1) {
         $condition = true;
     }
+
 	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
-			$_SESSION['showedit'] = 1;
             $form->add_html_editor('content', '', false, false, $html_editor_config);
 		}
 	}

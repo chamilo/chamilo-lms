@@ -82,7 +82,7 @@ if ($action == 'mark') {
 	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0) {
 		//mark the user mark into the database using something similar to the following function:
 
-		$exercise_table = Database::get_statistic_table('track_e_exercices');
+		$exercise_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 		#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
 		$sql = "SELECT * FROM $exercise_table
 			    WHERE exe_user_id = ".intval($my_usr)." AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = ".intval($my_exe)."

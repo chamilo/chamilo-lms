@@ -1133,7 +1133,7 @@ class ExerciseLib
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCICES = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
         $exe_id = intval($exe_id);
@@ -1445,7 +1445,7 @@ class ExerciseLib
         $TBL_GROUP_REL_USER = Database:: get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database:: get_course_table(TABLE_GROUP);
         $TBL_TRACK_EXERCICES = Database:: get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
@@ -1592,7 +1592,8 @@ class ExerciseLib
                     revised,
                     group_name,
                     group_id,
-                    orig_lp_id";
+                    orig_lp_id,
+                    te.user_ip";
             }
 
             $sql = " $sql_select
@@ -2722,7 +2723,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -2771,7 +2772,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -2841,7 +2842,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_hotspot = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTSPOT
@@ -2915,7 +2916,7 @@ class ExerciseLib
         $current_answer = null
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -3130,7 +3131,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -3301,7 +3302,8 @@ class ExerciseLib
                     $exercise_stat_info['start_date'],
                     DATE_TIME_FORMAT_LONG
                 ),
-                $exercise_stat_info['duration']
+                $exercise_stat_info['duration'],
+                $exercise_stat_info['user_ip']
             );
         }
 

@@ -2511,7 +2511,7 @@ class learnpathItem
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
-                                                        FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . '
+                                                        FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
                                                     WHERE   exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
                                                         AND exe_user_id = ' . $user_id . '
                                                         AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . '
@@ -2542,7 +2542,7 @@ class learnpathItem
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
                                                     FROM ' . Database :: get_statistic_table(
-                                                    TABLE_STATISTIC_TRACK_E_EXERCICES
+                                                    TABLE_STATISTIC_TRACK_E_EXERCISES
                                                 ) . '
                                                     WHERE exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
                                                         AND exe_user_id = ' . $user_id . ' AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . ' ';
@@ -3867,7 +3867,7 @@ class learnpathItem
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
-                            $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+                            $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
                             $safe_exe_id = intval($_REQUEST['exeId']);
                             $sql = "SELECT start_date,exe_date

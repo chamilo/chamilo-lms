@@ -54,13 +54,13 @@
                                 class="btn btn-success btn-advanced-subscription btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
-                                {{ 'Accept' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                                {{ 'AcceptInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                             <a
                                 class="btn btn-danger btn-advanced-subscription btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
-                                {{ 'Reject' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                                {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                         </td>
                     </tr>

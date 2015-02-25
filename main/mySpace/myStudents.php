@@ -164,7 +164,7 @@ if (isset($_GET['details'])) {
 
 // Database Table Definitions
 $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = intval($_GET['user_id']);
@@ -201,7 +201,7 @@ if ($check) {
                     $session_id
                 );
 
-                //@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334
+                //@todo delete the stats.track_e_exercises records. First implement this http://support.chamilo.org/issues/1334
                 $message = Display::return_message(
                     get_lang('LPWasReset'),
                     'success'

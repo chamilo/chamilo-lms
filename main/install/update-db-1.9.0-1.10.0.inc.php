@@ -112,7 +112,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     'track_e_course_access' => 'course_code',
                     'track_e_online' => 'course',
                     'track_e_attempt' => 'course_code',
-                    'track_e_exercices' => 'exe_cours_id'
+                    'track_e_exercises' => 'exe_cours_id'
                 );
 
                 foreach ($fields as $table => $key) {

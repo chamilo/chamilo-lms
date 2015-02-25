@@ -1416,6 +1416,18 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             @chmod($checked_writable, $perm);
         }
 
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
+        }
+
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
+        }
+
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;

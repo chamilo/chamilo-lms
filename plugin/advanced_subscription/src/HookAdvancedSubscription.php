@@ -17,14 +17,14 @@ class HookAdvancedSubscription extends HookObserver implements
     HookWSRegistrationObserverInterface,
     HookNotificationContentObserverInterface
 {
-    public $plugin;
+    public static $plugin;
 
     /**
      * Constructor. Calls parent, mainly.
      */
     protected function __construct()
     {
-        $this->plugin = AdvancedSubscriptionPlugin::create();
+        self::$plugin = AdvancedSubscriptionPlugin::create();
         parent::__construct(
             'plugin/advanced_subscription/src/HookAdvancedSubscription.class.php',
             'advanced_subscription'
@@ -93,7 +93,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     // session.date_end
                     'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'),
                     // session.human_text_duration
-                    'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
+                    'human_text_duration' => array('name' => 'human_text_duration', 'type' => 'xsd:string'),
                     // session.vacancies
                     'vacancies' => array('name' => 'vacancies', 'type' => 'xsd:string'),
                     // session.schedule
@@ -167,8 +167,8 @@ class HookAdvancedSubscription extends HookObserver implements
                     'place' => array('name' => 'place', 'type' => 'xsd:string'),
                     // session.allow_visitors
                     'allow_visitors' => array('name' => 'allow_visitors', 'type' => 'xsd:string'),
-                    // session.duration
-                    'duration' => array('name' => 'duration', 'type' => 'xsd:int'),
+                    // session.teaching_hours
+                    'teaching_hours' => array('name' => 'teaching_hours', 'type' => 'xsd:int'),
                     // session.brochure
                     'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'),
                     // session.banner
@@ -402,6 +402,7 @@ class HookAdvancedSubscription extends HookObserver implements
         } else {
             // Nothing to do
         }
+
         return false;
     }
 
@@ -438,13 +439,12 @@ class HookAdvancedSubscription extends HookObserver implements
 
         // Get the session brief List by category
         $fields = array(
+            'id',
             'short_description',
             'mode',
             'human_text_duration',
             'vacancies',
-            'brochure',
-            'target',
-            'schedule'
+            'schedule',
         );
         $sessionList = SessionManager::getShortSessionListAndExtraByCategory(
             $sessionCategoryId,
@@ -459,7 +459,7 @@ class HookAdvancedSubscription extends HookObserver implements
      * @param $params
      * @return null|soap_fault
      */
-    public function WSSessionGetDetailsByUser($params)
+    public static function WSSessionGetDetailsByUser($params)
     {
         global $debug;
 
@@ -475,53 +475,66 @@ class HookAdvancedSubscription extends HookObserver implements
         if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
             $userId = (int) $params['user_id'];
             $sessionId = (int) $params['session_id'];
-            // Check if student is already subscribed
-
-            $plugin = AdvancedSubscriptionPlugin::create();
-            $isOpen = $plugin->isSessionOpen($sessionId);
-            $status = $plugin->getQueueStatus($userId, $sessionId);
-            $vacancy = $plugin->getVacancy($sessionId);
-            $data = $plugin->getSessionDetails($sessionId);
-            if (!empty($data) && is_array($data)) {
-                $data['status'] = $status;
-                // 5 Cases:
-                if ($isOpen) {
-                    // Go to Course session
-                    $data['action_url'] = $plugin->getSessionUrl($sessionId);
-                } else {
-                    try {
-                        $isAble = $plugin->isAllowedToDoRequest($userId, $params);
-                        $data['message'] = $plugin->getStatusMessage($status, $isAble);
-                    } catch (\Exception $e) {
-                        $data['message'] = $e->getMessage();
-                    }
-                    $params['action'] = 'subscribe';
-                    $params['sessionId'] = intval($sessionId);
-                    $params['currentUserId'] = 0; // No needed
-                    $params['studentUserId'] = intval($userId);
-                    $params['queueId'] = 0; // No needed
-                    $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
-                    if ($vacancy > 0) {
-                        // Check conditions
-                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
-                            // No in Queue, require queue subscription url action
-                            $data['action_url'] = $plugin->getQueueUrl($params);
-                        } elseif ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                            // send url action
-                            $data['action_url'] = $plugin->getSessionUrl($sessionId);
-                        } else {
-                            // In queue, output status message, no more info.
-                        }
+            // Check if user exists
+            if (
+                UserManager::is_user_id_valid($userId) &&
+                SessionManager::isValidId($sessionId)
+            ) {
+                // Check if student is already subscribed
+                $plugin = AdvancedSubscriptionPlugin::create();
+                $isOpen = $plugin->isSessionOpen($sessionId);
+                $status = $plugin->getQueueStatus($userId, $sessionId);
+                $vacancy = $plugin->getVacancy($sessionId);
+                $data = $plugin->getSessionDetails($sessionId);
+                if (!empty($data) && is_array($data)) {
+                    $data['status'] = $status;
+                    // Vacancy and queue status cases:
+                    if ($isOpen) {
+                        // Go to Course session
+                        $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                     } else {
-                        if ($status === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                            $data['action_url'] = $plugin->getSessionUrl($sessionId);
+                        try {
+                            $isAllowed = self::$plugin->isAllowedToDoRequest($userId, $params);
+                            $data['message'] = self::$plugin->getStatusMessage($status, $isAllowed);
+                        } catch (\Exception $e) {
+                            $data['message'] = $e->getMessage();
+                        }
+                        $params['action'] = 'subscribe';
+                        $params['sessionId'] = intval($sessionId);
+                        $params['currentUserId'] = 0; // No needed
+                        $params['studentUserId'] = intval($userId);
+                        $params['queueId'] = 0; // No needed
+                        $params['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START;
+                        if ($vacancy > 0) {
+                            // Check conditions
+                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                // No in Queue, require queue subscription url action
+                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                // send url action
+                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                            } else {
+                                // In queue, output status message, no more info.
+                            }
                         } else {
-                            // in Queue or not, cannot be subscribed to session
-                            $data['action_url'] = $plugin->getQueueUrl($params);
+                            if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                                $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
+                            } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
+                                // in Queue or not, cannot be subscribed to session
+                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                            } else {
+                                // In queue, output status message, no more info.
+                            }
                         }
                     }
+                    $result = $data;
+                } else {
+                    // Return soap fault No result was found
+                    $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
                 }
-                $result = $data;
+            } else {
+                // Return soap fault No result was found
+                $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
             }
         } else {
             // Return soap fault Not valid input params
@@ -587,14 +600,14 @@ class HookAdvancedSubscription extends HookObserver implements
         $plugin = AdvancedSubscriptionPlugin::create();
         foreach ($sessionList as &$session) {
             // Add validated and queue users count
-            $session['validated_user_num'] = $plugin->countQueueByParams(
+            $session['validated_user_num'] = self::$plugin->countQueueByParams(
                 array(
                     'sessions' => array($session['id']),
                     'status' => array(ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED)
 
                 )
             );
-            $session['waiting_user_num'] = $plugin->countQueueByParams(
+            $session['waiting_user_num'] = self::$plugin->countQueueByParams(
                 array(
                     'sessions' => array($session['id']),
                     'status' => array(

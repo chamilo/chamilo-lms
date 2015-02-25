@@ -1,49 +1,49 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Exercise administration
-* 	This script allows to manage (create, modify) an exercise and its questions
-*
-*	 Following scripts are includes for a best code understanding :
-*
-* 	- exercise.class.php : for the creation of an Exercise object
-* 	- question.class.php : for the creation of a Question object
-* 	- answer.class.php : for the creation of an Answer object
-* 	- exercise.lib.php : functions used in the exercise tool
-* 	- exercise_admin.inc.php : management of the exercise
-* 	- question_admin.inc.php : management of a question (statement & answers)
-* 	- statement_admin.inc.php : management of a statement
-* 	- answer_admin.inc.php : management of answers
-* 	- question_list_admin.inc.php : management of the question list
-*
-* 	Main variables used in this script :
-*
-* 	- $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
-* 	- $objExercise : exercise object
-* 	- $objQuestion : question object
-* 	- $objAnswer : answer object
-* 	- $aType : array with answer types
-* 	- $exerciseId : the exercise ID
-* 	- $picturePath : the path of question pictures
-* 	- $newQuestion : ask to create a new question
-* 	- $modifyQuestion : ID of the question to modify
-* 	- $editQuestion : ID of the question to edit
-* 	- $submitQuestion : ask to save question modifications
-* 	- $cancelQuestion : ask to cancel question modifications
-* 	- $deleteQuestion : ID of the question to delete
-* 	- $moveUp : ID of the question to move up
-* 	- $moveDown : ID of the question to move down
-* 	- $modifyExercise : ID of the exercise to modify
-* 	- $submitExercise : ask to save exercise modifications
-* 	- $cancelExercise : ask to cancel exercise modifications
-* 	- $modifyAnswers : ID of the question which we want to modify answers for
-* 	- $cancelAnswers : ask to cancel answer modifications
-* 	- $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
-*
-*	@package chamilo.exercise
-* 	@author Olivier Brouckaert
-* Modified by Hubert Borderiou 21-10-2011 Question by category
-*/
+ *	Exercise administration
+ * 	This script allows to manage (create, modify) an exercise and its questions
+ *
+ *	 Following scripts are includes for a best code understanding :
+ *
+ * 	- exercise.class.php : for the creation of an Exercise object
+ * 	- question.class.php : for the creation of a Question object
+ * 	- answer.class.php : for the creation of an Answer object
+ * 	- exercise.lib.php : functions used in the exercise tool
+ * 	- exercise_admin.inc.php : management of the exercise
+ * 	- question_admin.inc.php : management of a question (statement & answers)
+ * 	- statement_admin.inc.php : management of a statement
+ * 	- answer_admin.inc.php : management of answers
+ * 	- question_list_admin.inc.php : management of the question list
+ *
+ * 	Main variables used in this script :
+ *
+ * 	- $is_allowedToEdit : set to 1 if the user is allowed to manage the exercise
+ * 	- $objExercise : exercise object
+ * 	- $objQuestion : question object
+ * 	- $objAnswer : answer object
+ * 	- $aType : array with answer types
+ * 	- $exerciseId : the exercise ID
+ * 	- $picturePath : the path of question pictures
+ * 	- $newQuestion : ask to create a new question
+ * 	- $modifyQuestion : ID of the question to modify
+ * 	- $editQuestion : ID of the question to edit
+ * 	- $submitQuestion : ask to save question modifications
+ * 	- $cancelQuestion : ask to cancel question modifications
+ * 	- $deleteQuestion : ID of the question to delete
+ * 	- $moveUp : ID of the question to move up
+ * 	- $moveDown : ID of the question to move down
+ * 	- $modifyExercise : ID of the exercise to modify
+ * 	- $submitExercise : ask to save exercise modifications
+ * 	- $cancelExercise : ask to cancel exercise modifications
+ * 	- $modifyAnswers : ID of the question which we want to modify answers for
+ * 	- $cancelAnswers : ask to cancel answer modifications
+ * 	- $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
+ *
+ *	@package chamilo.exercise
+ * 	@author Olivier Brouckaert
+ * Modified by Hubert Borderiou 21-10-2011 Question by category
+ */
 
 use \ChamiloSession as Session;
 
@@ -61,21 +61,21 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $sessionId = api_get_session_id();
 
 if (!$is_allowedToEdit) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 /*  stripslashes POST data  */
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-	foreach($_POST as $key=>$val) {
-		if(is_string($val)) {
-			$_POST[$key]=stripslashes($val);
-		} elseif(is_array($val)) {
-			foreach($val as $key2=>$val2) {
-				$_POST[$key][$key2]=stripslashes($val2);
-			}
-		}
-		$GLOBALS[$key]=$_POST[$key];
-	}
+    foreach($_POST as $key=>$val) {
+        if(is_string($val)) {
+            $_POST[$key]=stripslashes($val);
+        } elseif(is_array($val)) {
+            foreach($val as $key2=>$val2) {
+                $_POST[$key][$key2]=stripslashes($val2);
+            }
+        }
+        $GLOBALS[$key]=$_POST[$key];
+    }
 }
 
 if (empty($exerciseId)) {
@@ -109,21 +109,24 @@ $cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
 $cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
 $modifyIn = isset($modifyIn) ? $modifyIn : null;
 $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
-$_course = api_get_course_info();
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */
 
 Event::delete_all_incomplete_attempts(
-	api_get_user_id(),
-	$exerciseId,
-	api_get_course_int_id(),
-	api_get_session_id()
+    api_get_user_id(),
+    $exerciseId,
+    api_get_course_int_id(),
+    api_get_session_id()
 );
 
 // get from session
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 $objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : null;
+if (isset($_REQUEST['convertAnswer'])) {
+    $objQuestion = $objQuestion->swapSimpleAnswerTypes();
+    $_SESSION['objQuestion'] = $objQuestion;
+}
 $objAnswer   = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : null;
 
 // document path
@@ -173,135 +176,136 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
 
 // Exercise object creation.
 if (!is_object($objExercise)) {
-	// construction of the Exercise object
-	$objExercise = new Exercise();
+    // construction of the Exercise object
+    $objExercise = new Exercise();
 
-	// creation of a new exercise if wrong or not specified exercise ID
-	if ($exerciseId) {
-	    $objExercise->read($exerciseId);
-	}
-	// saves the object into the session
-	Session::write('objExercise', $objExercise);
+    // creation of a new exercise if wrong or not specified exercise ID
+    if ($exerciseId) {
+        $objExercise->read($exerciseId);
+    }
+    // saves the object into the session
+    Session::write('objExercise', $objExercise);
 }
 
 // Exercise can be edited in their course.
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
+    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+    exit;*/
 }
 
 // doesn't select the exercise ID if we come from the question pool
 if (!$fromExercise) {
-	// gets the right exercise ID, and if 0 creates a new exercise
-	if (!$exerciseId = $objExercise->selectId()) {
-		$modifyExercise='yes';
-	}
+    // gets the right exercise ID, and if 0 creates a new exercise
+    if (!$exerciseId = $objExercise->selectId()) {
+        $modifyExercise='yes';
+    }
 }
 
 $nbrQuestions = $objExercise->selectNbrQuestions();
 
 // Question object creation.
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
-	if ($editQuestion || $newQuestion) {
+    if ($editQuestion || $newQuestion) {
 
-		// reads question data
-		if ($editQuestion) {
-			// question not found
-			if (!$objQuestion = Question::read($editQuestion)) {
-				api_not_allowed();
-			}
-			// saves the object into the session
-			Session::write('objQuestion',$objQuestion);
-		}
-	}
+        // reads question data
+        if ($editQuestion) {
+            // question not found
+            if (!$objQuestion = Question::read($editQuestion)) {
+                api_not_allowed();
+            }
+            // saves the object into the session
+            Session::write('objQuestion',$objQuestion);
+        }
+    }
 
-	// checks if the object exists
-	if (is_object($objQuestion)) {
-		// gets the question ID
-		$questionId = $objQuestion->selectId();
-	}
+    // checks if the object exists
+    if(is_object($objQuestion)) {
+        // gets the question ID
+        $questionId = $objQuestion->selectId();
+    }
 }
 
 // if cancelling an exercise
 if ($cancelExercise) {
-	// existing exercise
-	if ($exerciseId) {
-		unset($modifyExercise);
-	} else {
+    // existing exercise
+    if($exerciseId) {
+        unset($modifyExercise);
+    } else {
         // new exercise
-		// goes back to the exercise list
-		header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
-		exit();
-	}
+        // goes back to the exercise list
+        header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+        exit();
+    }
 }
 
 // if cancelling question creation/modification
 if ($cancelQuestion) {
-	// if we are creating a new question from the question pool
-	if (!$exerciseId && !$questionId) {
-		// goes back to the question pool
-		header('Location: question_pool.php');
-		exit();
-	} else {
-		// goes back to the question viewing
-		$editQuestion = $modifyQuestion;
-		unset($newQuestion, $modifyQuestion);
-	}
+    // if we are creating a new question from the question pool
+    if(!$exerciseId && !$questionId) {
+        // goes back to the question pool
+        header('Location: question_pool.php');
+        exit();
+    } else {
+        // goes back to the question viewing
+        $editQuestion=$modifyQuestion;
+        unset($newQuestion,$modifyQuestion);
+    }
 }
 
 if (!empty($clone_question) && !empty($objExercise->id)) {
-	$old_question_obj = Question::read($clone_question);
-	$old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
+    $old_question_obj = Question::read($clone_question);
+    $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
-	$new_id = $old_question_obj->duplicate();
-	$new_question_obj = Question::read($new_id);
-	$new_question_obj->addToList($exerciseId);
+    $new_id = $old_question_obj->duplicate();
+    $new_question_obj = Question::read($new_id);
+    $new_question_obj->addToList($exerciseId);
 
-	// This should be moved to the duplicate function
-	$new_answer_obj = new Answer($clone_question);
-	$new_answer_obj->read();
-	$new_answer_obj->duplicate($new_id);
+    // This should be moved to the duplicate function
+    $new_answer_obj = new Answer($clone_question);
+    $new_answer_obj->read();
+    $new_answer_obj->duplicate($new_id);
 
     //Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
-	header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
-	exit;
+    header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
+    exit;
 }
 
 // if cancelling answer creation/modification
 if ($cancelAnswers) {
-	// goes back to the question viewing
-	$editQuestion=$modifyAnswers;
-	unset($modifyAnswers);
+    // goes back to the question viewing
+    $editQuestion=$modifyAnswers;
+    unset($modifyAnswers);
 }
-
 $nameTools = null;
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
-	$nameTools = get_lang('QuestionManagement');
+    $nameTools = get_lang('QuestionManagement');
 }
 
 if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+    $gradebook=	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array(
+    $interbreadcrumb[]= array(
         'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercice.php?".api_get_cidreq(),"name" => get_lang('Exercices'));
+$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion']) ) {
-    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(), "name" => $objExercise->name);
+    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 } else {
     $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 }
 
 // shows a link to go back to the question pool
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
-	$interbreadcrumb[] = array(
+    $interbreadcrumb[]=array(
         "url" => api_get_path(WEB_CODE_PATH)."exercice/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
         "name" => get_lang('QuestionPool')
     );
@@ -309,11 +313,11 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')){
 
 // if the question is duplicated, disable the link of tool name
 if ($modifyIn == 'thisExercise') {
-	if ($buttonBack)	{
-		$modifyIn='allExercises';
-	} else {
-		$noPHP_SELF=true;
-	}
+    if($buttonBack)	{
+        $modifyIn='allExercises';
+    } else {
+        $noPHP_SELF=true;
+    }
 }
 $htmlHeadXtra[] = '<script>
 
@@ -332,6 +336,8 @@ function multiple_answer_true_false_onchange(variable) {
     }
     document.getElementById(weight_id).value = array_result[result];
 }
+
+
 </script>';
 
 $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/JavaScriptFlashGateway.js\"></script>
@@ -493,35 +499,36 @@ if ($inATest) {
     echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions).'</span>';
     echo '</div>';
 } else if (isset($_GET['newQuestion'])) {
-	// we are in create a new question from question pool not in a test
-	echo '<div class="actions">';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'">'.
+    // we are in create a new question from question pool not in a test
+    echo '<div class="actions">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
-	echo '</div>';
+    echo '</div>';
 } else {
-	// If we are in question_pool but not in an test, go back to question create in pool
-	echo '<div class="actions">';
-	echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">'.
+    // If we are in question_pool but not in an test, go back to question create in pool
+    echo '<div class="actions">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).
         '</a>';
-	echo '</div>';
+    echo '</div>';
 }
 
 if (isset($_GET['message'])) {
-	if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
-		Display::display_confirmation_message(get_lang($_GET['message']));
-	}
+    if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
+        Display::display_confirmation_message(get_lang($_GET['message']));
+    }
 }
 
 if ($newQuestion || $editQuestion) {
-	// statement management
-	$type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
-	echo '<input type="hidden" name="Type" value="'.$type.'" />';
+    // statement management
+    $type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
+    echo '<input type="hidden" name="Type" value="'.$type.'" />';
 
     if ($newQuestion == 'yes') {
         $objExercise->edit_exercise_in_lp = true;
     }
-	require 'question_admin.inc.php';
+
+    require 'question_admin.inc.php';
 }
 
 if (isset($_GET['hotspotadmin'])) {
@@ -531,12 +538,12 @@ if (isset($_GET['hotspotadmin'])) {
     if (!$objQuestion) {
         api_not_allowed();
     }
-	require 'hotspot_admin.inc.php';
+    require 'hotspot_admin.inc.php';
 }
 
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-	// question list management
-	require 'question_list_admin.inc.php';
+    // question list management
+    require 'question_list_admin.inc.php';
 }
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619

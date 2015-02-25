@@ -88,8 +88,8 @@ class HookManagement implements HookManagementInterface
     public function deleteHook($eventName, $observerClassName, $type)
     {
         if ($type === HOOK_EVENT_TYPE_ALL) {
-            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
-            $this->insertHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
+            $this->deleteHook($eventName, $observerClassName, HOOK_EVENT_TYPE_PRE);
+            $this->deleteHook($eventName, $observerClassName, HOOK_EVENT_TYPE_POST);
         } else {
             $this->insertHookIfNotExist($eventName, $observerClassName);
 

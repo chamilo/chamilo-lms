@@ -21,7 +21,7 @@ function fill_whoisonline()
 	//filling the table
 	for ($i=1;$i <=$max;$i++) {
 		$date = api_get_utc_datetime();
-		$sql = "INSERT INTO	$table_e_online (login_id, login_user_id, login_date, login_ip, c_id, session_id, access_url_id)
+		$sql = "INSERT INTO	$table_e_online (login_id, login_user_id, login_date, user_ip, c_id, session_id, access_url_id)
 				VALUES ('$i', '$i', '$date', '127.0.0.1', '', '0','1')";
 		$rs = Database::query($sql);
 	}

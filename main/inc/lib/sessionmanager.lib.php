@@ -434,7 +434,7 @@ class SessionManager
                                 ";
         }
 
-        $select = "SELECT * FROM (SELECT
+        $select = "SELECT DISTINCT * FROM (SELECT
                 IF (
 					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'" . $today . "' " . ") <= s.nb_days_access_before_beginning) OR
@@ -1271,17 +1271,17 @@ class SessionManager
 
         foreach ($return as $key => $info) {
             //Search for ip, we do less querys if we iterate the final array
-            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+            $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);
             //if no ip founded, we search the closest higher ip
-            if (empty($ip['login_ip'])) {
-                $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+            if (empty($ip['user_ip'])) {
+                $sql = sprintf("SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
                 $result = Database::query($sql);
                 $ip = Database::fetch_assoc($result);
             }
             #add ip to final array
-            $return[$key]['ip'] = $ip['login_ip'];
+            $return[$key]['ip'] = $ip['user_ip'];
         }
         return $return;
     }
@@ -5485,7 +5485,19 @@ class SessionManager
                     )
                 )
             );
-
+            $whereFieldVariables = array();
+            $whereFieldIds = array();
+            if (
+                is_array($fieldsArray) &&
+                count($fieldsArray) > 0
+            ) {
+                $whereParams = '?';
+                for ($i = 1; $i < count($fieldsArray); $i++) {
+                    $whereParams .= ', ?';
+                }
+                $whereFieldVariables = 'field_variable IN ( ' . $whereParams .' )';
+                $whereFieldIds = 'field_id IN ( ' . $whereParams .  ' )';
+            }
             // Get session fields
             $extraField = new ExtraField('session');
             $questionMarks = substr(str_repeat('?, ', count($fieldsArray)), 0, -2);
@@ -5793,5 +5805,19 @@ class SessionManager
         }
 
         return $resultData;
+    }
+
+    public static function isValidId($sessionId)
+    {
+        $sessionId = intval($sessionId);
+        if ($sessionId > 0) {
+            $rows = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION), array('where' => array('id = ?' => $sessionId)));
+            if (!empty($rows)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

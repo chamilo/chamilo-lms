@@ -6770,7 +6770,7 @@ function api_user_is_login($user_id = null) {
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
- * @return string the real ip of teh user.
+ * @return string the user's real ip (unsafe - escape it before inserting to db)
  * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
  * @version CEV CHANGE 24APR2012
  */
@@ -6779,7 +6779,7 @@ function api_get_real_ip(){
     global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+        list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if (!empty($debug)) error_log('Real IP: '.$ip);

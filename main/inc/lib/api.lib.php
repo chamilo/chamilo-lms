@@ -3168,8 +3168,9 @@ function api_is_anonymous($user_id = null, $db_check = false) {
             return true;
         }
     }
+
     $_user = api_get_user_info();
-    if (!isset($_user)) {
+    if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
         global $use_anonymous;
@@ -4214,60 +4215,6 @@ function api_get_themes() {
     return array($list_dir, $list_name);
 }
 
-
-
-/* WYSIWYG EDITOR
-   Functions for the WYSIWYG html editor.
-   Please, try to avoid using the following two functions. The preferable way to put
-   an editor's instance on a page is through using a FormValidator's class method. */
-
-/**
- * Displays the WYSIWYG editor for online editing of html
- * @param string $name The name of the form-element
- * @param string $content The default content of the html-editor
- * @param int $height The height of the form element
- * @param int $width The width of the form element
- * @param string $attributes (optional) attributes for the form element
- * @param array $editor_config (optional) Configuration options for the html-editor
- * @deprecated
- */
-function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $_configuration, $_course, $fck_attribute;
-    $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
-    $editor->setValue($content);
-    // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-    if( $height != '') {
-        $fck_attribute['Height'] = $height;
-    }
-    if( $width != '') {
-        $fck_attribute['Width'] = $width;
-    }
-    echo $editor->toHtml();
-}
-
-/**
- * Returns generated html for showing the WYSIWYG editor on the page
- * @param string $name The name of the form-element
- * @param string $content The default content of the html-editor
- * @param int $height The height of the form element
- * @param int $width The width of the form element
- * @param string $attributes (optional) attributes for the form element
- * @param array $editor_config (optional) Configuration options for the html-editor
- * @deprecated
- */
-function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $fck_attribute;
-    $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
-    $editor->setValue($content);
-    // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-    if ($height != '') {
-        $fck_attribute['Height'] = $height;
-    }
-    if ($width != '') {
-        $fck_attribute['Width'] = $width;
-    }
-    return $editor->toHtml();
-}
 
 /**
  * Find the largest sort value in a given user_course_category

@@ -5725,7 +5725,7 @@ class SessionManager
 
         $term = Database::escape_string($term);
 
-        $resultData = Database::select('id, name, date_start, date_end, duration, description', $sTable, array(
+        $resultData = Database::select('*', $sTable, array(
             'where' => array(
                 "name LIKE %?% " => $term,
                 "OR description LIKE %?% " => $term,
@@ -5740,6 +5740,17 @@ class SessionManager
         if (empty($extraFieldsToInclude)) {
             return $resultData;
         }
+
+        foreach ($resultData as $id => &$session) {
+            $session['extra'] = self::getFilteredExtraFields($id, $extraFieldsToInclude);
+        }
+
+        return $resultData;
+    }
+
+    public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = array())
+    {
+        $extraData = array();
 
         $variables = array();
         $variablePlaceHolders = array();
@@ -5769,29 +5780,26 @@ class SessionManager
             )
         );
 
-        // Add session fields values to session list
-        foreach ($resultData as $id => &$session) {
-            foreach ($sessionFieldValueList as $sessionFieldValue) {
-                // Match session field values to session
-                if ($sessionFieldValue['session_id'] != $id) {
-                    continue;
-                }
-
-                // Check if session field value is set in session field list
-                if (!isset($fields[$sessionFieldValue['field_id']])) {
-                    continue;
-                }
-
-                $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
-                $extrafieldValue = $sessionFieldValue['field_value'];
-
-                $session['extra'][] = array(
-                    'variable' => $extrafieldVariable,
-                    'value' => $extrafieldValue
-                );
+        foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Match session field values to session
+            if ($sessionFieldValue['session_id'] != $sessionId) {
+                continue;
             }
+
+            // Check if session field value is set in session field list
+            if (!isset($fields[$sessionFieldValue['field_id']])) {
+                continue;
+            }
+
+            $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
+            $extrafieldValue = $sessionFieldValue['field_value'];
+
+            $extraData[] = array(
+                'variable' => $extrafieldVariable,
+                'value' => $extrafieldValue
+            );
         }
 
-        return $resultData;
+        return $extraData;
     }
 }

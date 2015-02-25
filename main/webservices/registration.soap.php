@@ -5675,7 +5675,8 @@ $server->wsdl->addComplexType(
     '',
     array(
         'id' => array('name' => 'term', 'type' => 'xsd:int'),
-        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string')
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -5695,10 +5696,15 @@ $server->register(
 * Web service to get a session by its id. Optionally can get its extra fields values
 * @param int $id The session id
 * @param string $extraFields Extrafields to include in request result
+* @param string $secretKey Secret key to check
 * @return array The session data
 */
-function WSFetchSession($id, $extraFields)
+function WSFetchSession($id, $extraFields, $secretKey)
 {
+    if (!WSHelperVerifyKey($secretKey)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
     $fieldsToInclude = explode(',', $extraFields);
 
     foreach ($fieldsToInclude as &$field) {

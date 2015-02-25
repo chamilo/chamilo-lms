@@ -3164,11 +3164,11 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     }
     if ($db_check) {
         $info = api_get_user_info($user_id);
-        if ($info['status'] == 6) {
+        if ($info['status'] == ANONYMOUS) {
             return true;
         }
     }
-    global $_user;
+    $_user = api_get_user_info();
     if (!isset($_user)) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW

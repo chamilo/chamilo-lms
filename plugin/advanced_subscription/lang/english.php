@@ -135,3 +135,5 @@ $strings['MailContentReminderSuperiorSecond'] = 'We invite you to accept or reje
 $strings['MailTitleReminderMaxSuperior'] = 'Reminder: Course inscription request for your collaborators';
 $strings['MailContentReminderMaxSuperior'] = 'We remind you, we have received inscription requests below to course <strong>%s</strong> for your collaborators. This course is starting at <strong>%s</strong>. Course details: <strong>%s</strong>.';
 $strings['MailContentReminderMaxSuperiorSecond'] = 'This course have limited vacancies and has received a high inscription request rate, So we recommend all areas to accept at most <strong>%s</strong> candidates. We invite you to accept or reject inscription request, clicking corresponding button for each collaborator.';
+
+$strings['YouMustAcceptTermsAndConditions'] = 'To subscribe to course <strong>%s</strong>, you must accept this terms and conditions.';

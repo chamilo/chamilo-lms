@@ -25,6 +25,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'min_profile_percentage' => 'text',
             'check_induction' => 'boolean',
             'secret_key' => 'text',
+            'terms_and_conditions' => 'wysiwyg'
         );
 
         parent::__construct('1.0', 'Imanol Losada, Daniel Barreto', $parameters);
@@ -321,6 +322,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 $studentId = intval($studentId);
                 $this->saveLastMessage($mailId, $studentId, $sessionId);
             }
+        } elseif (!empty($mailId)) {
+            // Update queue row, updated_at
+            Database::update(
+                Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE),
+                array(
+                    'updated_at' => api_get_utc_datetime(),
+                ),
+                array(
+                    'user_id = ? AND session_id = ?' => array($studentId, $sessionId)
+                )
+            );
         }
         return $mailId;
     }
@@ -430,7 +442,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $template->fetch('/advanced_subscription/views/student_notice_student.tpl'),
-                    $data['sessionId']
+                    $data['sessionId'],
+                    true
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
@@ -438,8 +451,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequest'),
                     $template->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
-                    $data['sessionId'],
-                    true
+                    $data['sessionId']
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_SUPERIOR_APPROVE:
@@ -449,7 +461,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['user_id'],
                     $this->get_lang('MailBossAccept'),
                     $template->fetch('/advanced_subscription/views/superior_accepted_notice_student.tpl'),
-                    $data['sessionId']
+                    $data['sessionId'],
+                    true
                 );
                 // Mail to superior
                 $mailIds['render'] = $this->sendMailMessage(
@@ -467,8 +480,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $adminId,
                         $this->get_lang('MailBossAccept'),
                         $template->fetch('/advanced_subscription/views/superior_accepted_notice_admin.tpl'),
-                        $data['sessionId'],
-                        true
+                        $data['sessionId']
                     );
                 }
                 break;
@@ -498,7 +510,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
                     $template->fetch('/advanced_subscription/views/student_notice_student.tpl'),
-                    $data['sessionId']
+                    $data['sessionId'],
+                    true
                 );
                 // Mail to superior
                 $mailIds['render'] = $this->sendMailMessage(
@@ -506,8 +519,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['user_id'],
                     $this->get_lang('MailStudentRequestSelect'),
                     $template->fetch('/advanced_subscription/views/student_notice_superior.tpl'),
-                    $data['sessionId'],
-                    true
+                    $data['sessionId']
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE:
@@ -517,7 +529,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['user_id'],
                     $this->get_lang('MailAdminAccept'),
                     $template->fetch('/advanced_subscription/views/admin_accepted_notice_student.tpl'),
-                    $data['sessionId']
+                    $data['sessionId'],
+                    true
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
@@ -535,8 +548,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $adminId,
                     $this->get_lang('MailAdminAccept'),
                     $template->fetch('/advanced_subscription/views/admin_accepted_notice_admin.tpl'),
-                    $data['sessionId'],
-                    true
+                    $data['sessionId']
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_ADMIN_DISAPPROVE:
@@ -575,7 +587,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['student']['user_id'],
                     $this->get_lang('MailStudentRequestNoBoss'),
                     $template->fetch('/advanced_subscription/views/student_no_superior_notice_student.tpl'),
-                    $data['sessionId']
+                    $data['sessionId'],
+                    true
                 );
                 // Mail to admin
                 foreach ($data['admins'] as $adminId => $admin) {
@@ -585,8 +598,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $adminId,
                         $this->get_lang('MailStudentRequestNoBoss'),
                         $template->fetch('/advanced_subscription/views/student_no_superior_notice_admin.tpl'),
-                        $data['sessionId'],
-                        true
+                        $data['sessionId']
                     );
                 }
                 break;
@@ -606,8 +618,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['user_id'],
                     $this->get_lang('MailRemindSuperior'),
                     $template->fetch('/advanced_subscription/views/reminder_notice_superior.tpl'),
-                    $data['sessionId'],
-                    true
+                    $data['sessionId']
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_SUPERIOR_MAX:
@@ -616,8 +627,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $data['superior']['user_id'],
                     $this->get_lang('MailRemindSuperior'),
                     $template->fetch('/advanced_subscription/views/reminder_notice_superior_max.tpl'),
-                    $data['sessionId'],
-                    true
+                    $data['sessionId']
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_REMINDER_ADMIN:
@@ -629,8 +639,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         $adminId,
                         $this->get_lang('MailRemindAdmin'),
                         $template->fetch('/advanced_subscription/views/reminder_notice_admin.tpl'),
-                        $data['sessionId'],
-                        true
+                        $data['sessionId']
                     );
                 }
                 break;
@@ -883,7 +892,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'e=' . intval($params['newStatus']) . '&' .
             'u=' . intval($params['studentUserId']) . '&' .
             'q=' . intval($params['queueId']) . '&' .
-            'is_connected=' . true . '&' .
+            'is_connected=' . 1 . '&' .
             'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
         return $url;
@@ -1036,5 +1045,74 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function get_name()
     {
         return 'advanced_subscription';
+    }
+
+    /**
+     * Return the url to show subscription terms
+     * @param array $params
+     * @param int $mode
+     * @return string
+     */
+    public function getTermsUrl($params, $mode = ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP)
+    {
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/terms_and_conditions.php?' .
+            'a=' . Security::remove_XSS($params['action']) . '&' .
+            's=' . intval($params['sessionId']) . '&' .
+            'current_user_id=' . intval($params['currentUserId']) . '&' .
+            'e=' . intval($params['newStatus']) . '&' .
+            'u=' . intval($params['studentUserId']) . '&' .
+            'q=' . intval($params['queueId']) . '&' .
+            'is_connected=' . 1 . '&' .
+            'profile_completed=' . intval($params['profile_completed']) . '&' .
+            'r=' . intval($mode) . '&' .
+            'v=' . $this->generateHash($params);
+        // Launch popup
+        if ($mode == ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP) {
+            $url = 'javascript:void(window.open(\'' . $url .'\',\'AdvancedSubscriptionTerms\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=700px,height=600px\', \'100\' ))';
+        }
+        return $url;
+    }
+
+    /**
+     * Return the url to get mail rendered
+     * @param array $params
+     * @return string
+     */
+    public function getRenderMailUrl($params)
+    {
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/render_mail.php?' .
+            'q=' . $params['queueId'] . '&' .
+            'v=' . $this->generateHash($params);
+        return $url;
+    }
+
+    /**
+     * Return the last message id from queue row
+     * @param int $studentUserId
+     * @param int $sessionId
+     * @return int|bool
+     */
+    public function getLastMessageId($studentUserId, $sessionId)
+    {
+        $studentUserId = intval($studentUserId);
+        $sessionId = intval($sessionId);
+        if (!empty($sessionId) && !empty($studentUserId)) {
+            $row = Database::select(
+                'last_message_id',
+                Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE),
+                array(
+                    'where' => array(
+                        'user_id = ? AND session_id = ?' => array($studentUserId, $sessionId),
+                    )
+                )
+            );
+
+            if (count($row) > 0) {
+
+                return $row[0]['last_message_id'];
+            }
+        }
+
+        return false;
     }
 }

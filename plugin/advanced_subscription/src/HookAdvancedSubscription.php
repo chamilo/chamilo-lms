@@ -509,7 +509,7 @@ class HookAdvancedSubscription extends HookObserver implements
                             // Check conditions
                             if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                                 // No in Queue, require queue subscription url action
-                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                                $data['action_url'] = self::$plugin->getTermsUrl($params);
                             } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                                 // send url action
                                 $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
@@ -521,7 +521,7 @@ class HookAdvancedSubscription extends HookObserver implements
                                 $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                             } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                                 // in Queue or not, cannot be subscribed to session
-                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                                $data['action_url'] = self::$plugin->getTermsUrl($params);
                             } else {
                                 // In queue, output status message, no more info.
                             }

@@ -1502,7 +1502,7 @@ if (!$is_certificate_mode) {
     $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false, array('class' => 'span2'));
+    $form->addText('keyword', '', false, array('class' => 'span2'));
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);

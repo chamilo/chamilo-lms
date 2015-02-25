@@ -92,7 +92,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
     $user_info = api_get_user_info($userfriend_id);
     $height = 180;
     if ($allowed_action == 'add_message_group') {
-        $form->add_textfield('title', get_lang('Title'));
+        $form->addText('title', get_lang('Title'));
         $height = 140;
     }
 

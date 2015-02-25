@@ -31,7 +31,7 @@ $form->addElement('header', '', get_lang('Edit'));
 $form->addElement('hidden', 'sec_token',$token);
 $form->addElement('hidden', 'attendance_id', $attendance_id);
 
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
 $form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 

@@ -65,12 +65,12 @@ class LinkForm extends \FormValidator
         $form_name = $category->id ? get_lang('LinkMod') : get_lang('LinkAdd');
         $this->addHeader($form_name);
 
-        $this->add_textfield('url', get_lang('Url'), $required = true, array('class' => 'span6'));
+        $this->addText('url', get_lang('Url'), $required = true, array('class' => 'span6'));
         $this->addRule('url', get_lang('MalformedUrl'), 'regex', '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i');
 
-        $this->add_textfield('title', get_lang('Title'), $required = false, array('class' => 'span6'));
+        $this->addText('title', get_lang('Title'), $required = false, array('class' => 'span6'));
 
-        $this->add_textarea('description', get_lang('Description'), array('class' => 'span3'));
+        $this->addTextarea('description', get_lang('Description'), array('class' => 'span3'));
 
         $this->addCheckBox('on_homepage', '', get_lang('OnHomepage'));
 

@@ -1116,7 +1116,7 @@ class Blog
 			);
 			$form->addHidden('post_title_edited', 'false');
 			$form->addHeader(get_lang('NewPost'));
-			$form->add_textfield('title', get_lang('Title'));
+			$form->addText('title', get_lang('Title'));
 			$config = array();
 			if (!api_is_allowed_to_edit()) {
 				$config['ToolbarSet'] = 'ProjectStudent';
@@ -1125,7 +1125,7 @@ class Blog
 			}
 			$form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
 			$form->add_file('user_upload', get_lang('AddAnAttachment'));
-			$form->add_textarea('post_file_comment', get_lang('FileComment'));
+			$form->addTextarea('post_file_comment', get_lang('FileComment'));
 			$form->addHidden('new_post_submit', 'true');
 			$form->addButton('save', get_lang('Save'));
 
@@ -1169,7 +1169,7 @@ class Blog
 		);
 
 		$form->addHeader(get_lang('EditPost'));
-		$form->add_textfield('title', get_lang('Title'));
+		$form->addText('title', get_lang('Title'));
 
 		if (!api_is_allowed_to_edit()) {
 			$config['ToolbarSet'] = 'ProjectStudent';
@@ -2217,7 +2217,7 @@ class Blog
 			$header = get_lang('ExecuteThisTask');
 		}
 		$form->addHeader($header);
-		$form->add_textfield('title', get_lang('Title'));
+		$form->addText('title', get_lang('Title'));
 
 		$config = array();
 		if (!api_is_allowed_to_edit()) {
@@ -2228,7 +2228,7 @@ class Blog
 		$form->addHtmlEditor('comment', get_lang('Comment'), false, false, $config);
 		$form->add_file('user_upload', get_lang('AddAnAttachment'));
 
-		$form->add_textarea('post_file_comment', get_lang('FileComment'));
+		$form->addTextarea('post_file_comment', get_lang('FileComment'));
 
 		$form->addHidden('action', null);
 		$form->addHidden('comment_parent_id', 0);

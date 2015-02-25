@@ -92,7 +92,7 @@ $form->addElement('header', get_lang('Course') . '  #' . $course_info['real_id']
 $form->addElement('hidden', 'code', $course_code);
 
 //title
-$form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -101,7 +101,7 @@ $element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), 
 $element->freeze();
 
 // Visual code
-$form->add_textfield('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
+$form->addText('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
@@ -192,11 +192,11 @@ if (!empty($course['category_code'])) {
 $form->addElement('select_ajax', 'category_code', get_lang('CourseFaculty'), null, array('url' => $url, 'defaults' => $categoryList));
 
 
-$form->add_textfield('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
+$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->add_textfield('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
+$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
 $form->applyFilter('department_url', 'html_filter');
 $form->applyFilter('department_url', 'trim');
 

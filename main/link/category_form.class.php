@@ -57,7 +57,7 @@ class CategoryForm extends \FormValidator
 
         $form_name = $category->id ? get_lang('ModifyCategory') : get_lang('AddCategory');
         $this->addHeader($form_name);
-        $this->add_textfield('category_title', get_lang('Title'));
+        $this->addText('category_title', get_lang('Title'));
         $this->addRule('category_title', get_lang('Required'), 'required');
 
         $this->addElement('textarea', 'category_description', get_lang('Description'));

@@ -260,7 +260,7 @@ if ($displayMode == "viewDefEdit") {
     $catToEdit = get_cat_def($_GET['editDef']);
     $edit_heading_form = new FormValidator('edit_heading_form');
     $edit_heading_form->addElement('hidden', 'id');
-    $edit_heading_form->add_textfield('title', get_lang('Title'));
+    $edit_heading_form->addText('title', get_lang('Title'));
     $edit_heading_form->addElement('textarea', 'comment', get_lang('Comment'), array ('cols' => 60, 'rows' => 4));
     $possible_line_nrs[1] = '1 '.get_lang('Line');
     $possible_line_nrs[3] = '3 '.get_lang('Lines');

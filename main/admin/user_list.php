@@ -836,20 +836,20 @@ $form->addElement('header', get_lang('AdvancedSearch'));
 $form->addElement('html', '<table>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td width="200px;">');
-$form->add_textfield('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td>');
 $form->addElement('html', '<td>');
-$form->add_textfield('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td>');
 
 $status_options = array();
@@ -886,7 +886,7 @@ if (!empty($extra_data)) {
 
     $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-    $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
+    $form->addText('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
     $form->addElement('html', '</div>');
 } else {
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');

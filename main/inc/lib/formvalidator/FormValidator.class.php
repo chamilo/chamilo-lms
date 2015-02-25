@@ -236,7 +236,7 @@ EOT;
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param array $attributes (optional)		List of attributes for the form-element
      */
-    function add_textfield($name, $label, $required = true, $attributes = array())
+    public function addText($name, $label, $required = true, $attributes = array())
     {
         $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -282,7 +282,7 @@ EOT;
      * @param string $label
      * @param array  $attributes
      */
-    public function add_textarea($name, $label, $attributes = array())
+    public function addTextarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }

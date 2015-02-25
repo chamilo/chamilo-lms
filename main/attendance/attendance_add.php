@@ -28,7 +28,7 @@ $form = new FormValidator('attendance_add','POST','index.php?action=attendance_a
 $form->addElement('header', '', get_lang('CreateANewAttendance'));
 $form->addElement('hidden', 'sec_token', $token);
 
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
 $form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
 

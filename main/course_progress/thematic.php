@@ -252,7 +252,7 @@ if ($action == 'thematic_list') {
 		$form->addElement('hidden', 'thematic_id',$thematic_id);
 	}
 
-	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+	$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 	$form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 

@@ -33,7 +33,7 @@ $tool_name = get_lang('ModifyClassInfo');
 $class_id = intval($_GET['idclass']);
 $class = ClassManager :: get_class_info($class_id);
 $form = new FormValidator('edit_class', 'post', 'class_edit.php?idclass='.$class_id);
-$form->add_textfield('name',get_lang('ClassName'));
+$form->addText('name',get_lang('ClassName'));
 $form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
 $form->setDefaults(array('name'=>$class['name']));
 if($form->validate())

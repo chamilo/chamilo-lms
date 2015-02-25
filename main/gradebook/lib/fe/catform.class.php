@@ -194,7 +194,7 @@ class CatForm extends FormValidator
     private function build_basic_form()
     {
         $this->addElement('hidden', 'zero', 0);
-        $this->add_textfield(
+        $this->addText(
             'name',
             get_lang('CategoryName'),
             true,
@@ -216,7 +216,7 @@ class CatForm extends FormValidator
         } else {
             $value = 100;
         }
-        $this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'class'=>'span1','maxlength'=>'5'));
+        $this->addText('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'class'=>'span1','maxlength'=>'5'));
         $this->addRule('weight', get_lang('ThisFieldIsRequired'), 'required');
 
         if (api_is_platform_admin() || api_is_drh()) {
@@ -270,7 +270,7 @@ class CatForm extends FormValidator
         if (isset($this->category_object) && $this->category_object->get_parent_id(
             ) == 0
         ) {
-            $this->add_textfield(
+            $this->addText(
                 'certif_min_score',
                 get_lang('CertificateMinScore'),
                 false,

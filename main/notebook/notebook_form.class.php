@@ -69,7 +69,7 @@ class NotebookForm extends \FormValidator
         $form_name = $notebook->id ? get_lang('ModifyNote') : get_lang('NoteAddNew');
         $this->addHeader($form_name);
 
-        $this->add_textfield('title', get_lang('NoteTitle'), $required = true, array('class' => 'span3'));
+        $this->addText('title', get_lang('NoteTitle'), $required = true, array('class' => 'span3'));
 
         if (api_is_allowed_to_edit()) {
             $toolbar = array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300');

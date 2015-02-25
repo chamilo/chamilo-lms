@@ -439,7 +439,7 @@ if ($owner_id == api_get_user_id() ||
 	$form->addElement('hidden', 'showedit');
 	$form->addElement('hidden', 'origin');
 	$form->addElement('hidden', 'origin_opt');
-    $form->add_textfield('title', get_lang('Title'));
+    $form->addText('title', get_lang('Title'));
 
 	$defaults['title'] = $document_data['title'];
 

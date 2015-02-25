@@ -166,7 +166,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
 		if (isset($select_from_user_list)) {
-			$form->add_textfield(
+			$form->addText(
                 'id_text_name',
                 get_lang('SendMessageTo'),
                 true,
@@ -199,7 +199,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->add_textfield('title', get_lang('Subject'), true, array('class' => 'span4'));
+	$form->addText('title', get_lang('Subject'), true, array('class' => 'span4'));
 	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {

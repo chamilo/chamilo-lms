@@ -132,7 +132,7 @@ $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'referer');
 
 // Group name
-$form->add_textfield('name', get_lang('GroupName'));
+$form->addText('name', get_lang('GroupName'));
 
 // Description
 $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));

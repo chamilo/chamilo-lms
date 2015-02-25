@@ -52,7 +52,7 @@ $form = new FormValidator('course_description','POST','index.php?action=add&'.ap
 $form->addElement('header', '', $header);
 $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'width: 350px;'));
 $form->applyFilter('title','html_filter');
 $form->addHtmlEditor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');

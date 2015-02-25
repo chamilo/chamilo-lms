@@ -278,8 +278,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
-    $form->add_textfield('keyword_code', get_lang('CourseCode'), false);
-    $form->add_textfield('keyword_title', get_lang('Title'), false);
+    $form->addText('keyword_code', get_lang('CourseCode'), false);
+    $form->addText('keyword_title', get_lang('Title'), false);
 
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';

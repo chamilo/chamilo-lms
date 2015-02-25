@@ -57,15 +57,6 @@ class MessageManager
     }
 
     /**
-     * Displays the wysiwyg html editor.
-     * @deprecated
-     */
-    public static function display_html_editor_area($name, $resp)
-    {
-        api_disp_html_area($name, get_lang('TypeYourMessage'), '', '', null, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
-    }
-
-    /**
      * Get the new messages for the current user from the database.
      */
     public static function get_new_messages()

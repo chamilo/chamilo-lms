@@ -14,15 +14,9 @@ class Documents extends Basic
         'toolbarswitch',
         'audio',
         'video',
-        'youtube',
-        'leaflet',
         'widget',
         'lineutils',
-        'mathjax',
-        'asciimath',
-        'glossary',
-        'asciisvg',
-        'mapping'
+        'mathjax'
     );
 
     /**
@@ -47,6 +41,7 @@ class Documents extends Basic
             array('name' => 'others'),
             array('name' => 'mode')
         );
+
         $config['extraPlugins'] = $this->getPluginsToString();
         //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
         //$config['mathJaxLib'] = api_get_path(WEB_LIBRARY_JS_PATH).'/math_jax/MathJax.js?config=default';
@@ -55,4 +50,16 @@ class Documents extends Basic
         return $config;
     }
 
+    /**
+     * @return array
+     */
+    public function getConditionalPlugins()
+    {
+        $plugins = array();
+
+        if (api_get_setting('show_glossary_in_documents') != 'none') {
+            $plugins[] = 'glossary';
+        }
+        return $plugins;
+    }
 }

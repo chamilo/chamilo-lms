@@ -20,6 +20,7 @@ class PersonalDriver extends Driver
         if ($this->allow()) {
 
             $userId = api_get_user_id();
+
             if (!empty($userId)) {
 
                 // Adding user personal files
@@ -52,8 +53,9 @@ class PersonalDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             return parent::upload($fp, $dst, $name, $tmpname);
         }
@@ -64,8 +66,9 @@ class PersonalDriver extends Driver
      */
     public function rm($hash)
     {
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             return parent::rm($hash);
         }
@@ -77,6 +80,7 @@ class PersonalDriver extends Driver
     public function allow()
     {
         //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+
         return !api_is_anonymous();
     }
 }

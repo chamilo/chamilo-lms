@@ -19,17 +19,23 @@
 
 // External plugins not part of the default Ckeditor package.
 var plugins = [
-    'oembed',
-    'wordcount',
-    'asciisvg',
-    'video',
-    'toolbarswitch',
-    'audio',
-    'youtube',
-    'leaflet',
     'asciimath',
+    'asciisvg',
+    'audio',
+    //'ckeditor_wiris',
+    'dialogui',
     'glossary',
-    'mapping'
+    'justify',
+    'leaflet',
+    'mapping',
+    'maximize',
+    'oembed',
+    'toolbar',
+    'toolbarswitch',
+    'video',
+    'wikilink',
+    'wordcount',
+    'youtube'
 ];
 
 plugins.forEach(function(plugin) {

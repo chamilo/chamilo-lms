@@ -36,8 +36,9 @@ class HomeDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             return parent::upload($fp, $dst, $name, $tmpname);
         }
@@ -48,8 +49,9 @@ class HomeDriver extends Driver
      */
     public function rm($hash)
     {
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             return parent::rm($hash);
         }

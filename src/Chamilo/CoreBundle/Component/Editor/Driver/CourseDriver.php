@@ -97,8 +97,9 @@ class CourseDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             // upload file by elfinder.
             $result = parent::upload($fp, $dst, $name, $tmpname);
@@ -147,8 +148,9 @@ class CourseDriver extends Driver
     {
         // elfinder does not delete the file
         //parent::rm($hash);
+        $this->setConnectorFromPlugin();
+
         if ($this->allow()) {
-            $this->setConnectorFromPlugin();
 
             $path = $this->decode($hash);
             $stat = $this->stat($path);
@@ -177,11 +179,10 @@ class CourseDriver extends Driver
     public function allow()
     {
         //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
-        $userId = api_get_user_id();
         return
             isset($this->connector->course) &&
             !empty($this->connector->course) &&
-            !api_is_anonymous($userId, true)
+            !api_is_anonymous()
         ;
     }
 }

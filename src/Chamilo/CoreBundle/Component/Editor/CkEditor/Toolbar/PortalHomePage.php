@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
  * @todo complete config
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class PortalHomePage extends Toolbar
+class PortalHomePage extends Basic
 {
 
 }

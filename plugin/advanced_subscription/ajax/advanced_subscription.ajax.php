@@ -25,6 +25,8 @@ $data['newStatus'] = intval($_REQUEST['e']);
 // $data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
 $data['is_connected'] = true;
 $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_REQUEST['profile_completed']) : 0;
+$data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['accept_terms']) : 0;
+$data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
 // Check if data is valid or is for start subscription
@@ -272,6 +274,14 @@ if ($verified) {
                 } else {
                     $result['errorMessage'] = 'User queue can not be updated';
                 }
+            }
+            break;
+        case 'terms_response':
+            // Check if new status is set
+            if (isset($data['accept_terms']) && $data['accept_terms'] == 1) {
+                $legalPlugin = CourseLegalPlugin::create()->saveUserLegal($data['studentId'], $data['courseId'], $data['sessionId']);
+            } else {
+                $result['errorMessage'] = 'Need terms response params';
             }
             break;
         default:

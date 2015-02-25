@@ -25,6 +25,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'min_profile_percentage' => 'text',
             'check_induction' => 'boolean',
             'secret_key' => 'text',
+            'terms_and_conditions' => 'wysiwyg'
         );
 
         parent::__construct('1.0', 'Imanol Losada, Daniel Barreto', $parameters);
@@ -883,7 +884,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'e=' . intval($params['newStatus']) . '&' .
             'u=' . intval($params['studentUserId']) . '&' .
             'q=' . intval($params['queueId']) . '&' .
-            'is_connected=' . true . '&' .
+            'is_connected=' . 1 . '&' .
             'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
         return $url;
@@ -1036,5 +1037,54 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function get_name()
     {
         return 'advanced_subscription';
+    }
+
+    /**
+     * Return the url to show subscription terms
+     * @param array $params
+     * @param int $mode
+     * @return string
+     */
+    public function getTermsUrl($params, $mode = 0)
+    {
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/terms_and_conditions.php?' .
+            'a=' . Security::remove_XSS($params['action']) . '&' .
+            's=' . intval($params['sessionId']) . '&' .
+            'current_user_id=' . intval($params['currentUserId']) . '&' .
+            'e=' . intval($params['newStatus']) . '&' .
+            'u=' . intval($params['studentUserId']) . '&' .
+            'q=' . intval($params['queueId']) . '&' .
+            'is_connected=' . 1 . '&' .
+            'profile_completed=' . intval($params['profile_completed']) . '&' .
+            'r=' . intval($mode) . '&' .
+            'v=' . $this->generateHash($params);
+        // Launch popup
+        if ($mode == 0) {
+            $url = 'javascript:void(window.open(\'' . $url .'\',\'Terms\', \'100\', \'100\' );)';
+        }
+        return $url;
+    }
+
+    /**
+     * Return the url to get subscription terms
+     * @param array $params
+     * @param int $acceptTerms
+     * @return string
+     */
+    public function getTermsResponseUrl($params, $acceptTerms = 0)
+    {
+        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/ajax/advanced_subscription.ajax.php?' .
+            'a=' . Security::remove_XSS($params['action']) . '&' .
+            's=' . intval($params['sessionId']) . '&' .
+            'current_user_id=' . 0 . '&' .
+            'e=' . 0 . '&' .
+            'u=' . intval($params['studentUserId']) . '&' .
+            'q=' . 0 . '&' .
+            'is_connected=' . 1 . '&' .
+            'profile_completed=' . intval($params['profile_completed']) . '&' .
+            'accept_terms=' . intval($acceptTerms) . '&' .
+            'c=' . intval($params['courseId']) . '&' .
+            'v=' . $this->generateHash($params);
+        return $url;
     }
 }

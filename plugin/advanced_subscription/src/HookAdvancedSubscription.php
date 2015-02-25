@@ -509,7 +509,7 @@ class HookAdvancedSubscription extends HookObserver implements
                             // Check conditions
                             if ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                                 // No in Queue, require queue subscription url action
-                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                                $data['action_url'] = self::$plugin->getTermsUrl($params);
                             } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                                 // send url action
                                 $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
@@ -521,7 +521,7 @@ class HookAdvancedSubscription extends HookObserver implements
                                 $data['action_url'] = self::$plugin->getSessionUrl($sessionId);
                             } elseif ($status == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE) {
                                 // in Queue or not, cannot be subscribed to session
-                                $data['action_url'] = self::$plugin->getQueueUrl($params);
+                                $data['action_url'] = self::$plugin->getTermsUrl($params);
                             } else {
                                 // In queue, output status message, no more info.
                             }
@@ -619,6 +619,82 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         return $sessionList;
+    }
+
+    /**
+     * Get a list of sessions (id, coach_id, name, courses_num, users_num, classes_num,
+     * date_start, date_end, access_days_before_num, session_admin_id, visibility,
+     * session_category_id, promotion_id,
+     * validated_user_num, waiting_user_num,
+     * extra, course) the validated_usernum and waiting_user_num are
+     * used when have the plugin for advance incsription enables.
+     * The extra data (field_name, field_value)
+     * The course data (course_id, course_code, course_title,
+     * coach_username, coach_firstname, coach_lastname)
+     * @param array $params List of parameters (id, category_name, access_url_id, secret_key)
+     * @return array|soap_fault Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
+     */
+    public static function WSTermsAndConditions($params)
+    {
+        global $debug;
+
+        if ($debug) {
+            error_log('WSListSessionsDetailsByCategory');
+            error_log('Params ' . print_r($params, 1));
+        }
+        $secretKey = $params['secret_key'];
+
+        // Check if secret key is valid
+        if (!WSHelperVerifyKey($secretKey)) {
+            return return_error(WS_ERROR_SECRET_KEY);
+        }
+
+        // Get Data
+        $data = array();
+        $data['sessionId'] = $params['session_id'];
+        $data['studentUserId'] = $params['user_id'];
+        $data['profile_completed'] = $params['profile_completed'];
+        $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
+        $legalPlugin = CourseLegalPlugin::create();
+        if (
+            UserManager::is_user_id_valid($data['studentUserId']) &&
+            SessionManager::isValidId($data['sessionId'])
+        ) {
+            $courses = SessionManager::get_course_list_by_session_id($data['sessionId']);
+            $course = current($courses);
+            $data['courseId'] = $course['id'];
+            $data['session'] = api_get_session_info($data['sessionId']);
+            $data['student'] = Usermanager::get_user_info_by_id($data['studentUserId']);
+            if ($legalEnabled) {
+                // Get Terms content
+                $termsContent = $legalPlugin->getData($data['courseId'], $data['sessionId']);
+                $termsContent = $termsContent['content'];
+                $termsFiles = $legalPlugin->getCurrentFile($data['courseId'], $data['sessionId']);
+                $twigString = new \Twig_Environment(new \Twig_Loader_String());
+                $termsContent = $twigString->render(
+                    $termsContent,
+                    array(
+                        'session' => $data['session'],
+                        'student' => $data['student'],
+                    )
+                );
+            } else {
+                $termsContent = '';
+                $termsFiles = '';
+            }
+
+            // Set output data
+            $data['action'] = 'terms_response';
+            $data['terms_content'] = $termsContent;
+            $data['terms_files'] = $termsFiles;
+            $data['accept_terms_url'] = self::$plugin->getTermsResponseUrl($data, 1);
+            $data['reject_terms_url'] = self::$plugin->getTermsResponseUrl($data, 0);
+            $data['reject_message'] = self::$plugin->get_lang('YouMustAcceptTermsAndConditions');
+        } else {
+            $data = return_error(WS_ERROR_INVALID_INPUT);
+        }
+
+        return $data;
     }
 
     /**

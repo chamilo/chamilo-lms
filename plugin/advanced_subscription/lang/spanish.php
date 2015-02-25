@@ -135,3 +135,5 @@ $strings['MailContentReminderSuperiorSecond'] = 'Le invitamos a aprobar o desapr
 $strings['MailTitleReminderMaxSuperior'] = 'Recordatorio: Solicitud de consideración de curso para colaborador(es)';
 $strings['MailContentReminderMaxSuperior'] = 'Le recordamos que hemos recibido las siguientes solicitudes de suscripción al curso <strong>%s</strong> de parte de sus colaboradores. El curso se iniciará el <strong>%s</strong>. Detalles del curso: <strong>%s</strong>.';
 $strings['MailContentReminderMaxSuperiorSecond'] = 'Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>%s</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.';
+
+$strings['YouMustAcceptTermsAndConditions'] = 'Para inscribirse al curso <strong>%s</strong>, debe aceptar estos términos y condiciones.';

@@ -1255,7 +1255,7 @@ abstract class Question
 		');
 
         $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
-        $form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
+        $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 
         // hidden values

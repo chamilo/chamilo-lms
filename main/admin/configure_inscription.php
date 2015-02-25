@@ -243,16 +243,16 @@ if ($display_all_form) {
 
     //	EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mycomptetences') == 'true') {
-        $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mydiplomas') == 'true') {
-        $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','myteach') == 'true') {
-        $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true') {
-        $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true') {
         if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
@@ -356,7 +356,7 @@ switch ($action){
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
         $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-        $form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+        $form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
         $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
         $form->setDefaults($default);
         $form->display();

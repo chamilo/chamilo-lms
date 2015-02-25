@@ -3743,11 +3743,11 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             // File and text.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
             $form->add_real_progress_bar('uploadWork', 'file');
-            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
         case 1:
             // Only text.
-            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
             break;
         case 2:
@@ -4368,7 +4368,7 @@ function getFormWork($form, $defaults = array())
     // Create the form that asks for the directory name
     $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
     $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
-    $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+    $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
     $form->addElement(
         'advanced_settings',
         '<a href="javascript: void(0);" onclick="javascript: return plus();">

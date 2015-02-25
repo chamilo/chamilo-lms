@@ -142,7 +142,7 @@ if ($action_todo) {
     }
 
     $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
-    $form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
+    $form->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
     $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
 
     $group = array();

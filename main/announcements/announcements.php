@@ -311,7 +311,7 @@ switch ($action) {
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
-        $form->add_html_editor(
+        $form->addHtmlEditor(
             'content',
             get_lang('Description'),
             false,

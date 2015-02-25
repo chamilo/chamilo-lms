@@ -1019,7 +1019,7 @@ class Exercise
         }
 
         $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" style="display:none" >');
-        $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
+        $form->addHtmlEditor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 
         $form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
@@ -1197,7 +1197,7 @@ class Exercise
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
-            $form -> add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+            $form -> addHtmlEditor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
 
             $defaults = array();
 

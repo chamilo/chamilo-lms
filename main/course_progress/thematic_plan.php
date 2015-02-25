@@ -41,7 +41,7 @@ if ($action == 'thematic_plan_list') {
         foreach ($default_thematic_plan_title as $id => $title) {
             $form->addElement('hidden', 'description_type['.$id.']', $id);
             $form->add_textfield('title['.$id.']', get_lang('Title'), false, array('size'=>'50'));
-            $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
+            $form->addHtmlEditor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
             //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));
             if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
                 $thematic_plan = $new_thematic_plan_data[$id];
@@ -83,7 +83,7 @@ if ($action == 'thematic_plan_list') {
 	}
 
 	$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
-	$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
+	$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
 	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 

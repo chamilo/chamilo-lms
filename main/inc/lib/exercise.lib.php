@@ -158,7 +158,7 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
                 $s .=  $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
@@ -188,7 +188,7 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
                 $s .=  $form->return_form();
             }

@@ -19,15 +19,19 @@ class HtmlEditor extends HTML_QuickForm_textarea
     var $content;
 
     /**
-     * Class constructor
-     * @param string  HTML editor name/id
-     * @param string  HTML editor  label
-     * @param array  Attributes for the textarea
-     * @param array $config	Optional configuration settings for the online editor.
+     * Class Constructor
+     * @param string  $name
+     * @param string  $elementLabel HTML editor  label
+     * @param array  $attributes Attributes for the textarea
+     * @param array $config Optional configuration settings for the online editor.
      * @return bool
      */
-    public function HtmlEditor($name = null, $elementLabel = null, $attributes = null, $config = null)
-    {
+    public function HtmlEditor(
+        $name = null,
+        $elementLabel = null,
+        $attributes = null,
+        $config = array()
+    ) {
         if (empty($name)) {
             return false;
         }

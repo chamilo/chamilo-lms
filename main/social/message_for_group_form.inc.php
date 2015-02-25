@@ -98,7 +98,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
 
     $config = array();
     $config['ToolbarSet'] = 'Messages';
-    $form->add_html_editor(
+    $form->addHtmlEditor(
         'content',
         get_lang('Content'),
         false,

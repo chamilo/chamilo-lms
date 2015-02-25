@@ -598,7 +598,7 @@ class Wiki
             ? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
             : array('ToolbarSet' => 'WikiStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student');
 
-        $form->add_html_editor('content', get_lang('Content'), false, false, $toolBar);
+        $form->addHtmlEditor('content', get_lang('Content'), false, false, $toolBar);
         //$content
         $form->addElement('text', 'comment', get_lang('Comments'));
         $progress = array('', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
@@ -618,7 +618,7 @@ class Wiki
             $form->addElement('advanced_settings', $advanced);
 
             $form->addElement('html', '<div id="options" style="display:none">');
-            $form->add_html_editor('task', get_lang('DescriptionOfTheTask'), false, false, array('ToolbarSet' => 'wiki_task', 'Width' => '100%', 'Height' => '200'));
+            $form->addHtmlEditor('task', get_lang('DescriptionOfTheTask'), false, false, array('ToolbarSet' => 'wiki_task', 'Width' => '100%', 'Height' => '200'));
 
             $form->addElement('label', null, get_lang('AddFeedback'));
             $form->addElement('textarea', 'feedback1', get_lang('Feedback1'));

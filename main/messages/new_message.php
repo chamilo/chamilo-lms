@@ -200,7 +200,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	}
 
 	$form->add_textfield('title', get_lang('Subject'), true, array('class' => 'span4'));
-	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
+	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {
 	    $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);

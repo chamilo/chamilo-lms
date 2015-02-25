@@ -4652,7 +4652,7 @@ class UserManager
                     }
                     break;
                 case self::USER_FIELD_TYPE_TEXTAREA:
-                    $form->add_html_editor(
+                    $form->addHtmlEditor(
                         'extra_'.$field_details[1],
                         $field_details[3],
                         false,

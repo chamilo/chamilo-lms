@@ -463,7 +463,7 @@ if ($owner_id == api_get_user_id() ||
 
 	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
-            $form->add_html_editor('content', '', false, false, $html_editor_config);
+            $form->addHtmlEditor('content', '', false, false, $html_editor_config);
 		}
 	}
 

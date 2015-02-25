@@ -629,7 +629,7 @@ class ExtraField extends Model
                         }
                         break;
                     case ExtraField::FIELD_TYPE_TEXTAREA:
-                        $form->add_html_editor(
+                        $form->addHtmlEditor(
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
                             false,

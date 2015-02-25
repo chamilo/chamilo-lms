@@ -414,7 +414,7 @@ function show_form_send_message()
 
     $form->addElement('hidden', 'ticket_id', $_GET['ticket_id']);
 
-    $form->add_html_editor(
+    $form->addHtmlEditor(
         'content',
         get_lang('Message'),
         false,

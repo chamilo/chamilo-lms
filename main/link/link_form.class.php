@@ -87,7 +87,7 @@ class LinkForm extends \FormValidator
         foreach ($categories as $category) {
             $options[$category->id] = $category->category_title;
         }
-        $this->add_select('category_id', get_lang('Category'), $options);
+        $this->addSelect('category_id', get_lang('Category'), $options);
 
         $targets = array(
             '_self' => get_lang('LinkOpenSelf'),
@@ -95,7 +95,7 @@ class LinkForm extends \FormValidator
             '_parent' => get_lang('LinkOpenParent'),
             '_top' => get_lang('LinkOpenTop')
         );
-        $this->add_select('target', get_lang('LinkTarget'), $targets);
+        $this->addSelect('target', get_lang('LinkTarget'), $targets);
         //$help = '<span class="help-block">' . get_lang('AddTargetOfLinkOnHomepage') . '</span>';
         //$this->add_label('', $help);
 

@@ -332,7 +332,7 @@ EOT;
      * @param string $options
      * @param array  $attributes
      */
-    public function add_select($name, $label, $options = '', $attributes = array())
+    public function addSelect($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }

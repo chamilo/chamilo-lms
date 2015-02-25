@@ -10,7 +10,6 @@
 require_once __DIR__ . '/../config.php';
 // start plugin
 $plugin = AdvancedSubscriptionPlugin::create();
-$courseLegal = CourseLegalPlugin::create();
 // Session ID
 $data['action'] = Security::remove_XSS($_REQUEST['a']);
 $data['sessionId'] = isset($_REQUEST['s']) ? intval($_REQUEST['s']) : 0;
@@ -30,16 +29,31 @@ if (
     !empty($data['studentUserId']) &&
     api_get_plugin_setting('courselegal', 'tool_enable')
 ) {
+    $lastMessageId = $plugin->getLastMessageId($data['studentUserId'], $data['sessionId']);
+    if ($lastMessageId !== false) {
+        // Render mail
+        $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
+        Header::location($url);
+        exit;
+    }
     $courses = SessionManager::get_course_list_by_session_id($data['sessionId']);
     $course = current($courses);
     $data['courseId'] = $course['id'];
-    $termsAndConditions = $courseLegal->getData($data['courseId'], $data['sessionId']);
-    $termsAndConditions = $termsAndConditions['content'];
-    $termFiles = $courseLegal->getCurrentFile($data['courseId'], $data['sessionId']);
+    $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
+    if ($legalEnabled) {
+        $courseLegal = CourseLegalPlugin::create();
+        $termsAndConditions = $courseLegal->getData($data['courseId'], $data['sessionId']);
+        $termsAndConditions = $termsAndConditions['content'];
+        $termFiles = $courseLegal->getCurrentFile($data['courseId'], $data['sessionId']);
+    } else {
+        $termsAndConditions = $plugin->get('terms_and_conditions');
+        $termFiles = '';
+    }
+
     $data['session'] = api_get_session_info($data['sessionId']);
     $data['student'] = Usermanager::get_user_info_by_id($data['studentUserId']);
     $data['acceptTermsUrl'] = $plugin->getQueueUrl($data);
-    $data['rejectTermsUrl'] = $plugin->getTermsUrl($data, 1);
+    $data['rejectTermsUrl'] = $plugin->getTermsUrl($data, ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT);
     // Use Twig with String loader
     $twigString = new \Twig_Environment(new \Twig_Loader_String());
     $termsContent = $twigString->render(
@@ -67,6 +81,4 @@ $tpl->assign('sessionId', $data['sessionId']);
 $tpl->assign('termsContent', $termsContent);
 $tpl->assign('termsFiles', $termFiles);
 $content = $tpl->fetch('/advanced_subscription/views/terms_and_conditions.tpl');
-$tpl->assign('content', $content);
-// Display
-$tpl->display_one_col_template();
+echo $content;

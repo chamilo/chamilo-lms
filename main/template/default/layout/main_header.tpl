@@ -56,65 +56,71 @@
         {% include "default/layout/topbar.tpl" %}
         {% endblock %}
 
-        <div id="main" class="container">
             <header>
-                <div class="row">
-                    <div id="header_left" class="span4">
-                        {# logo #}
-                        {% block logo %}
-                        {{ logo }}
-                        {% endblock %}
+                <div class="container">
+                    <div class="row">
+                        <div id="header_left" class="span4">
+                            {# logo #}
+                            {% block logo %}
+                            {{ logo }}
+                            {% endblock %}
 
-                        {# plugin_header left #}
-                        {% if plugin_header_left is not null %}
+                            {# plugin_header left #}
+                            {% if plugin_header_left is not null %}
                             <div id="plugin_header_left">
                                 {{ plugin_header_left }}
                             </div>
-                        {% endif %}
-                    </div>
-                    <div id="header_center" class="span3">
-                        {# plugin_header center #}
-                        {% if plugin_header_center is not null %}
+                            {% endif %}
+                        </div>
+                        <div id="header_center" class="span3">
+                            {# plugin_header center #}
+                            {% if plugin_header_center is not null %}
                             <div id="plugin_header_center">
                                 {{ plugin_header_center }}
                             </div>
-                        {% endif %}
-                        &nbsp;
-                    </div>
-                    <div id="header_right" class="span5">
-                        {# plugin_header right #}
-                        {% if plugin_header_right is not null %}
-                        <div id="plugin_header_right">
-                            {{ plugin_header_right }}
+                            {% endif %}
+                            &nbsp;
                         </div>
-                        {% endif %}
-                        <div class="section-notifications">
-                            <ul id="notifications" class="nav nav-pills pull-right">
-                            {{ notification_menu }}
-                            </ul>
+                        <div id="header_right" class="span5">
+                            {# plugin_header right #}
+                            {% if plugin_header_right is not null %}
+                            <div id="plugin_header_right">
+                                {{ plugin_header_right }}
+                            </div>
+                            {% endif %}
+                            <div class="section-notifications">
+                                <ul id="notifications" class="nav nav-pills pull-right">
+                                    {{ notification_menu }}
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                    {% if plugin_header_main %}
+                    <div class="row">
+                        <div class="span12">
+                            <div id="plugin_header_main">
+                                {{ plugin_header_main }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
-            {% if plugin_header_main %}
-                <div class="row">
-                    <div class="span12">
-                        <div id="plugin_header_main">
-                            {{ plugin_header_main }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-
-            {# menu #}
-            {% block menu %}
-            {% include "default/layout/menu.tpl" %}
-            {% endblock %}
-
-            {# breadcrumb #}
-            {% block breadcrumb %}
-            {{ breadcrumb }}
-            {% endblock %}
         </header>
+        <div class="menu-bar">
+            <div class="container">
+                {# menu #}
+                {% block menu %}
+                {% include "default/layout/menu.tpl" %}
+                {% endblock %}
+            </div>
+        </div>
+        <div id="main" class="container">
+            <div class="bar-bread">
+                {# breadcrumb #}
+                {% block breadcrumb %}
+                {{ breadcrumb }}
+                {% endblock %}
+            </div>
         <div id="top_main_content" class="row">
 
         {# course navigation links/shortcuts need to be activated by the admin #}

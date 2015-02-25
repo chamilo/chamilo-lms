@@ -1316,6 +1316,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/users/').'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/sessions/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/sessions/').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/courses/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/courses/').'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
             </tr>

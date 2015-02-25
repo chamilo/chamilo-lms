@@ -42,7 +42,7 @@ class UploadFileForm extends \FormValidator
         $this->add_file('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 
-        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'));
 
         $label = get_lang('CSVMustLookLike');
         $label = "$label";

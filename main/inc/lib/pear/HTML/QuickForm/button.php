@@ -70,16 +70,15 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         } else {
             $value = $this->_attributes['value'];
             unset($this->_attributes['value']);
-            $icon = null;
             //$class = isset($this->_attributes['class']) ? $this->_attributes['class'] : 'btn btn-large';
-            switch ($this->_attributes['name']) {
-                case 'save':
-                case 'submit':
-                    $icon = '<i class="fa fa-check"></i> ';
-                    break;
-            }
+            $icon = $this->_attributes['icon'];
+            $icon = '<i class="fa fa-'.$icon.'"></i> ';
 
-            return $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' />'.$icon.$value.'</button>';
+            return
+                $this->_getTabs() . '
+                <button' . $this->_getAttrString($this->_attributes) . ' />'.
+                $icon.$value.
+                '</button>';
         }
     }
 

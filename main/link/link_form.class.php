@@ -99,7 +99,7 @@ class LinkForm extends \FormValidator
         //$help = '<span class="help-block">' . get_lang('AddTargetOfLinkOnHomepage') . '</span>';
         //$this->add_label('', $help);
 
-        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

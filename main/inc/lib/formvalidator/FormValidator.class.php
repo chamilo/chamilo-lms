@@ -59,7 +59,7 @@ class FormValidator extends HTML_QuickForm
             $type = isset($item['type']) ? $item['type'] : 'text';
             $label = isset($item['label']) ? $item['label'] : '';
             if ($type == 'wysiwyg') {
-                $element = $result->add_html_editor($name, $label);
+                $element = $result->addHtmlEditor($name, $label);
             } else {
                 $element = $result->addElement($type, $name, $label);
             }
@@ -290,11 +290,14 @@ EOT;
     /**
      * @param string $name
      * @param string $label
+     * @param string $icon font-awesome
+     * For example plus is transformed to icon fa fa-plus
      * @param array  $attributes
      */
-    public function addButton($name, $label, $attributes = array())
+    public function addButton($name, $label, $icon = 'check', $attributes = array())
     {
         //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
+        $attributes['icon'] = $icon;
         $this->addElement('button', $name, $label, $attributes);
     }
 
@@ -381,7 +384,7 @@ EOT;
      * @param array $config (optional)	Configuration settings for the online editor.
      *
      */
-    public function add_html_editor($name, $label, $required = true, $fullPage = false, $config = null)
+    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = null)
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');

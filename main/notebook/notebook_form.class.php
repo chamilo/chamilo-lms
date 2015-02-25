@@ -76,9 +76,9 @@ class NotebookForm extends \FormValidator
         } else {
             $toolbar = array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student');
         }
-        $this->add_html_editor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
+        $this->addHtmlEditor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
 
-        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

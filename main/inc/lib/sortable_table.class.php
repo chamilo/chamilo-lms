@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'pear/HTML/Table.php';
-require_once 'pear/Pager/Pager.php';
-
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.
@@ -244,7 +241,7 @@ class SortableTable extends HTML_Table
     public function return_table()
     {
         $empty_table = false;
-        $this->processHeaders();
+
         $content = $this->get_table_html();
 
         if ($this->get_total_number_of_items() == 0) {
@@ -568,11 +565,13 @@ class SortableTable extends HTML_Table
      */
     public function get_table_html()
     {
-        $pager    = $this->get_pager();
-        $offset   = $pager->getOffsetByPageId();
-        $from     = $offset[0] - 1;
+        $pager = $this->get_pager();
+        $offset = $pager->getOffsetByPageId();
+        $from = $offset[0] - 1;
 
         $table_data = $this->get_table_data($from);
+
+        $this->processHeaders();
 
         if (is_array($table_data)) {
             $count = 1;
@@ -697,6 +696,7 @@ class SortableTable extends HTML_Table
     public function processHeaders()
     {
         $counter = 0;
+
         foreach ($this->headers as $column => $columnInfo) {
             $label = $columnInfo['label'];
             $sortable = $columnInfo['sortable'];
@@ -715,6 +715,7 @@ class SortableTable extends HTML_Table
             if ($this->column == $column && $this->direction == 'ASC') {
                 $param['direction'] = 'DESC';
             }
+
             $param['page_nr'] = $this->page_nr;
             $param['per_page'] = $this->per_page;
             $param['column'] = $column;
@@ -743,7 +744,6 @@ class SortableTable extends HTML_Table
 
             $counter++;
         }
-
     }
 
     /**

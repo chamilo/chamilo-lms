@@ -60,7 +60,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
                     $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
 
                     //delete
-                    echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
+                    echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,api_get_system_encoding())).'\')) return false;">';
                     echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
                     echo '</a> ';
 

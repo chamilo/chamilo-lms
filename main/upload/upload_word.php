@@ -1,7 +1,7 @@
-<?php 
+<?php
 /* For licensing terms, see /license.txt */
 /**
- * Action controller for the upload process. The display scripts (web forms) 
+ * Action controller for the upload process. The display scripts (web forms)
  * redirect
  * the process here to do what needs to be done with each file.
  * @package chamilo.upload
@@ -18,9 +18,6 @@ $language_file[] = "scormdocument";
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
 include '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
 
 $form_style= '<style>
 .row {
@@ -82,7 +79,7 @@ if (isset($_POST['convert'])) {
     }
 }
 
-event_access_tool(TOOL_UPLOAD);
+Event::event_access_tool(TOOL_UPLOAD);
 // check access permissions (edit permission is needed to add a document or a LP)
 $is_allowed_to_edit = api_is_allowed_to_edit();
 if (!$is_allowed_to_edit) {

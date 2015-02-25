@@ -12,9 +12,6 @@ api_protect_course_script(true);
 
 // Including files
 require_once 'work.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -179,7 +176,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
         }
     }
 }
-$form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+$form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $defaults['title'] 			= $work_item['title'];
 $defaults["description"] 	= $work_item['description'];

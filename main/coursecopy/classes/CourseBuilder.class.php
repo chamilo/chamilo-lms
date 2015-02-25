@@ -26,8 +26,6 @@ require_once 'Thematic.class.php';
 require_once 'Attendance.class.php';
 require_once 'Work.class.php';
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-
 /**
  * Class CourseBuilder
  * Builds a course-object from a Chamilo-course.

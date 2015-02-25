@@ -14,8 +14,6 @@ require_once '../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
 $htmlHeadXtra[] = '
 <script>

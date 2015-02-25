@@ -1,4 +1,4 @@
-{% include 'default/skill/skill_wheel.js.tpl' %}
+{% include template ~ '/skill/skill_wheel.js.tpl' %}
 
 <script>
 

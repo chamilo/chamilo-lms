@@ -21,16 +21,16 @@ use Header;
 
 /**
  * Ajax controller. Dispatch request and perform required action.
- * 
- *      - delete category/link 
+ *
+ *      - delete category/link
  *      - hide/show link
  *      - sort links/categories
- * 
+ *
  * Usage:
- * 
+ *
  *      $controller = AjaxController::instance();
  *      $controller->run();
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -48,7 +48,7 @@ class AjaxController extends \Controller
 
     /**
      * Return the instance of the controller.
-     * 
+     *
      * @return  \Link\AjaxController
      */
     public static function instance()
@@ -62,15 +62,15 @@ class AjaxController extends \Controller
 
     protected function __construct()
     {
-        
+
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
-        event_access_tool(TOOL_LINK);
+        Event::event_access_tool(TOOL_LINK);
     }
 
     public function authorize()
@@ -113,7 +113,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * 
+     *
      */
     public function hide_link()
     {
@@ -131,7 +131,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * 
+     *
      */
     public function show_link()
     {
@@ -149,7 +149,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * 
+     *
      */
     public function delete_link()
     {
@@ -168,7 +168,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * 
+     *
      */
     public function delete_category()
     {
@@ -186,7 +186,7 @@ class AjaxController extends \Controller
         $this->response($success);
     }
     /**
-     * 
+     *
      */
     public function delete_by_course()
     {
@@ -250,7 +250,7 @@ class AjaxController extends \Controller
         $repo = LinkRepository::instance();
         $link = $repo->find_one_by_id($c_id, $id);
         $success = $link ? $link->validate() : false;
-        
+
         $this->response($success);
     }
 
@@ -265,7 +265,7 @@ class AjaxController extends \Controller
     }
 
     /**
-     * Action exists but implementation is missing. 
+     * Action exists but implementation is missing.
      */
     public function missing()
     {
@@ -274,9 +274,9 @@ class AjaxController extends \Controller
 
     /**
      * Display a standard json responce.
-     * 
+     *
      * @param bool $success
-     * @param string $message 
+     * @param string $message
      * @param object $data
      */
     public function response($success = false, $message = '', $data = null)

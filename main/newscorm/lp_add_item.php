@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously
  * learnpath_handler.php
@@ -23,75 +24,7 @@ $learnPath = $_SESSION['oLP'];
 
 $language_file = 'learnpath';
 
-$htmlHeadXtra[] = '
-<script>
-var temp = false;
-var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
-
-function FCKeditor_OnComplete( editorInstance ) {
-    editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title) ;
-    document.getElementById(\'frmModel\').innerHTML = "<iframe id=\'frame_template\' name=\'my_frame_template\' height=890px width=220px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-    loaded = true;
-}
-
-function check_for_title() {
-    if (temp) {
-
-        // This functions shows that you can interact directly with the editor area
-        // DOM. In this way you have the freedom to do anything you want with it.
-
-        // Get the editor instance that we want to interact with.
-        var oEditor = FCKeditorAPI.GetInstance(\'content_lp\') ;
-
-        // Get the Editor Area DOM (Document object).
-        var oDOM = oEditor.EditorDocument ;
-
-        var iLength ;
-        var contentText ;
-        var contentTextArray;
-        var bestandsnaamNieuw = "";
-        var bestandsnaamOud = "";
-
-        // The are two diffent ways to get the text (without HTML markups).
-        // It is browser specific.
-
-        if( document.all )		// If Internet Explorer.
-        {
-            contentText = oDOM.body.innerText ;
-        }
-        else					// If Gecko.
-        {
-            var r = oDOM.createRange() ;
-            r.selectNodeContents( oDOM.body ) ;
-            contentText = r.toString() ;
-        }
-
-        var index=contentText.indexOf("/*<![CDATA");
-        contentText=contentText.substr(0,index);
-
-        // Compose title if there is none
-        contentTextArray = contentText.split(\' \') ;
-        var x=0;
-        for(x=0; (x<5 && x<contentTextArray.length); x++) {
-            if(x < 4) {
-                bestandsnaamNieuw += contentTextArray[x] + \' \';
-            } else {
-                bestandsnaamNieuw += contentTextArray[x];
-            }
-        }
-    }
-    temp=true;
-}
-
-function InnerDialogLoaded() {
-    if (document.all) {
-        // if is iexplorer
-        var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
-    } else {
-        var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-    }
-    return 	B.ClickFrame();
-};'."\n".
+$htmlHeadXtra[] = '<script>'.
 
 $learnPath->get_js_dropdown_array() .
 
@@ -124,6 +57,12 @@ $(function() {
         window.location.href = $(\'a\', this).attr(\'href\');
     });
 });
+
+$(document).on("ready", function() {
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates("content_lp");
+    });
+});
 </script>';
 
 /* Constants and variables */
@@ -139,7 +78,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 if ($action == 'add' && $type == 'learnpathitem') {
      $htmlHeadXtra[] = "<script type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
+if ((!$is_allowed_to_edit)) {
     error_log('New LP - User not authorized in lp_add_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
     exit;
@@ -249,7 +188,7 @@ $message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+    echo '<div id="frmModel" class="lp-add-item"></div>';
 }
 
 echo '</div>';

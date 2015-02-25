@@ -10,7 +10,8 @@
 /**
  * Class defining the <organization> tag in an imsmanifest.xml file
  */
-class scormOrganization {
+class scormOrganization
+{
     public $identifier = '';
     public $structure = '';
     public $title = '';

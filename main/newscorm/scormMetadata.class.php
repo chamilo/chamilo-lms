@@ -9,7 +9,8 @@
 /**
  * scormMetadata class, handling each <metadata> element found in an imsmanifest file
  */
-class scormMetadata {
+class scormMetadata
+{
     public	$lom = '';
     public $schema = '';
     public $schemaversion = '';

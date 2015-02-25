@@ -35,7 +35,7 @@ $(document).ready( function() {
                 {{ "HottestCourses"|display_page_subheader }}
             </div>            
                 
-            {% include 'default/layout/hot_course_item.tpl' %}
+            {% include template ~ '/layout/hot_course_item.tpl' %}
         </div>
     </section>
 {% endif %}

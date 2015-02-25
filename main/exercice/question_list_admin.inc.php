@@ -247,7 +247,7 @@ if (!$inATest) {
                 echo '<br />';
                 //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                 echo '<br />';
-                showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
+                ExerciseLib::showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
                 echo '</p>';
                 echo '</div>';
                 echo '</div>';

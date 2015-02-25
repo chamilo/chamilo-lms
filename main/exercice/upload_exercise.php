@@ -16,13 +16,8 @@ $help_content = 'exercise_upload';
 
 // including the global Dokeos file
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'unique_answer.class.php';
-require_once '../newscorm/learnpath.class.php';
-require_once '../newscorm/learnpathItem.class.php';
 
 // Security check
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

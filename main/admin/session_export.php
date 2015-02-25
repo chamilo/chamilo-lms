@@ -13,7 +13,6 @@ include '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
-include api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $session_id = intval($_GET['session_id']);
 $formSent = 0;
@@ -49,7 +48,7 @@ if ($_POST['formSent']) {
 		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
 
-		
+
 		if ($_configuration['multiple_access_urls']) {
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();

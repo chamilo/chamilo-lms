@@ -42,7 +42,7 @@ if (isset($_SESSION['bc_success'])) {
 }
 
 $courseList = userCourseList();
-$categoryList = listCategories();
+$categoryList = buyCourseListCategories();
 $currencyType = findCurrency();
 
 $tpl->assign('server', $_configuration['root_web']);

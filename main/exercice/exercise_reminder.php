@@ -7,24 +7,8 @@
 * 	@author Julio Montoya Armas switchable fill in blank option added
 */
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 $language_file = 'exercice';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-if ($_GET['origin']=='learnpath') {
-	require_once '../newscorm/learnpath.class.php';
-	require_once '../newscorm/learnpathItem.class.php';
-	require_once '../newscorm/scorm.class.php';
-	require_once '../newscorm/scormItem.class.php';
-	require_once '../newscorm/aicc.class.php';
-	require_once '../newscorm/aiccItem.class.php';
-}
-require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -52,7 +36,7 @@ if (!$objExercise) {
 }
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;
@@ -149,7 +133,7 @@ echo '<script>
     }
 </script>';
 
-$attempt_list = get_all_exercise_event_by_exe_id($exe_id);
+$attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
 

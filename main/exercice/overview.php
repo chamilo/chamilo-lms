@@ -11,9 +11,8 @@
 use \ChamiloSession as Session;
 
 $language_file = 'exercice';
-require_once 'exercise.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
+
 $current_course_tool  = TOOL_QUIZ;
 
 // Clear the exercise session just in case
@@ -43,7 +42,7 @@ $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" 
 $interbreadcrumb[] = array("url" => "#", "name" => $objExercise->name);
 
 $time_control = false;
-$clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+$clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
 	$time_control = true;
@@ -95,7 +94,7 @@ if (isset($_GET['preview'])) {
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, 0);
 $attempt_list = null;
 if (isset($exercise_stat_info['exe_id'])) {
-	$attempt_list = get_all_exercise_event_by_exe_id($exercise_stat_info['exe_id']);
+	$attempt_list = Event::getAllExerciseEventByExeId($exercise_stat_info['exe_id']);
 }
 
 //1. Check if this is a new attempt or a previous
@@ -131,10 +130,10 @@ if ($visible_return['value'] == false) {
     }
 }
 
-$attempts = get_exercise_results_by_user(
+$attempts = Event::getExerciseResultsByUser(
     api_get_user_id(),
     $objExercise->id,
-    api_get_course_id(),
+    api_get_course_int_id(),
     api_get_session_id(),
     $learnpath_id,
     $learnpath_item_id,
@@ -147,7 +146,7 @@ $table_content = '';
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
-require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+
 $browser = new Browser();
 $current_browser = $browser->getBrowser();
 $url_suffix = '';
@@ -161,7 +160,7 @@ if (!empty($attempts) && $visible_return['value'] == true) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
 
-        $score = show_score(
+        $score = ExerciseLib::show_score(
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
@@ -183,7 +182,8 @@ if (!empty($attempts) && $visible_return['value'] == true) {
             'date' => api_convert_and_format_date(
                 $attempt_result['start_date'],
                 DATE_TIME_FORMAT_LONG
-            )
+            ),
+            'userIp' => $attempt_result['user_ip']
         );
         $attempt_link .= "&nbsp;&nbsp;&nbsp;" . $teacher_revised;
 
@@ -218,17 +218,17 @@ if (!empty($attempts) && $visible_return['value'] == true) {
 	switch ($objExercise->results_disabled) {
 		case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
-			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
 			break;
 		case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
-			$header_names = array(get_lang('Attempt'), get_lang('StartDate'));
+			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'));
 			break;
 		case RESULT_DISABLE_SHOW_SCORE_ONLY:
             if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
-			    $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
+			    $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'));
             }
             else {
-                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
+                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score'), get_lang('Details'));
             }
 			break;
 	}

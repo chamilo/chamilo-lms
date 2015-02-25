@@ -1,8 +1,0 @@
-body { margin: 0; padding: 0;  background-color: #eee; }
-table { width: 100%; }
-table td { text-align: center; }
-.crop{cursor:crosshair;}
-.selection { border: dotted 1px #000000; position:absolute; width: 0px; height: 1px; z-index:5; }
-.selectionWhite{ border: dotted 1px #FFFFFF; position:absolute; width: 0px; height: 1px; z-index:5; }
-.handleBox{ z-index:105; }
-.error { font-size:large; font-weight:bold; color:#c00; font-family: Helvetica, sans-serif; } 

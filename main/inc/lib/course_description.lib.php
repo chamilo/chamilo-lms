@@ -7,11 +7,9 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.course_description
  */
+
 /**
- * Code
- */
-/**
- * CourseDescription can be used to instanciate objects or as a library to manage course descriptions
+ * Class CourseDescription Lanage course descriptions
  * @package chamilo.course_description
  */
 class CourseDescription

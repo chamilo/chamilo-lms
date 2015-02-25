@@ -34,7 +34,7 @@ switch ($_GET['action']) {
 		Display :: display_header(get_lang('AddNewResourceType'));
 		api_display_tool_title(get_lang('AddNewResourceType'));
 		$form = new FormValidator('category', 'post', 'm_category.php?action=add');
-		$form->add_textfield('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
+		$form->addText('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
 		$form->addElement('style_submit_button', 'submit', get_lang('CreateResourceType'),'class="add"');
 		if ($form->validate()) {
 			$values = $form->exportValues();
@@ -50,7 +50,7 @@ switch ($_GET['action']) {
 		Display :: display_header(get_lang('EditResourceType'));
 		api_display_tool_title(get_lang('EditResourceType'));
 		$form = new FormValidator('category', 'post', 'm_category.php?action=edit');
-		$form->add_textfield('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
+		$form->addText('name', get_lang('ResourceTypeName'), true, array ('maxlength' => '128'));
 		$form->addElement('hidden', 'id', intval($_GET['id']));
 		$form->addElement('style_submit_button', 'submit', get_lang('ModifyResourceType'),'class="save"');
 		$form->setDefaults(Rsys :: get_category($_GET['id']));

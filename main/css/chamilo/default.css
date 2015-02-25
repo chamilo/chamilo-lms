@@ -7,7 +7,7 @@
 
 /* the following for regular <a> elements */
 body {
-  
+  line-height: 25px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -625,7 +625,7 @@ a.thumbnail:hover{
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    height: 7em;
+    height: auto;
     background: #00a9e0; /* Old browsers */
     color:#ffffff;
     border-top: none;

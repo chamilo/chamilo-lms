@@ -14,11 +14,8 @@ if ( empty ($course_code ) ) {
     $_in_course = false;
 }
 
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
-block_students();
+GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
 
@@ -131,6 +128,7 @@ if ($form->validate()) {
     $cat->set_user_id($values['hid_user_id']);
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
+    $cat->setGenerateCertificates($values['generate_certificates']);
 
     if (empty ($values['visible'])) {
         $visible = 0;

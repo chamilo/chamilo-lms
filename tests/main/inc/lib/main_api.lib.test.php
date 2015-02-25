@@ -494,23 +494,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($cssdir);
 	}
 
-	function testApiDispHtmlArea(){
-		$name = 'name';
-		global $_configuration, $_course, $fck_attribute;
-		ob_start();
-		api_disp_html_area($name, $content ='', $height='', $width='100%', $optAttrib='');
-		$res = ob_get_contents();
-		$this->assertNotEqual($res,'');
-		ob_end_clean();
-	}
-
-	function testApiReturnHtmlArea(){
-		$name = true;
-		global $_configuration, $_course, $fck_attribute;
-		$res=api_return_html_area($name, $content='', $height='', $width='100%', $optAttrib='');
-		$this->assertTrue($res);
-	}
-
 	function testApiSendMail(){
 		$to= 'chamilotest@beeznest.com';
 		$subject='Hello';

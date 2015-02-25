@@ -1,15 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-/*define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH).'mpdf');
-if (!is_dir(_MPDF_TEMP_PATH)) {
-    mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
-}
-require_once api_get_path(SYS_PATH).'vendor/mpdf/mpdf/mpdf.php';
-*/
-define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
-require_once _MPDF_PATH.'mpdf.php';
-
 /**
  * Class PDF
  * @package chamilo.library

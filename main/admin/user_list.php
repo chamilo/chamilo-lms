@@ -324,7 +324,7 @@ function login_user($user_id) {
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+	$track_e_login_table  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
 
@@ -446,6 +446,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
+    if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users')  == 'true') {
+        $sql .= " WHERE u.creator_id = ".api_get_user_id();
+    }
+
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
@@ -559,9 +563,27 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
 	if (api_is_platform_admin(true)) {
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$user_id";
 
-		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
-            $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL($user_id, true);
+        }
+
+        if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
+            $result .= '<a href="' . $editProfileUrl . '">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		} else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
@@ -579,13 +601,35 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	} else {
-		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
-			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
-			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		} else if ($current_user_status_label == $statusname[SESSIONADMIN]) {
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		}
+        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+            $result .= Display::url(
+                Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                "dashboard_add_sessions_to_user.php?user={$user_id}"
+            );
+        } else {
+            if (
+                $current_user_status_label == $statusname[DRH] ||
+                UserManager::is_admin($user_id) ||
+                $current_user_status_label == $statusname[STUDENT_BOSS]
+            ) {
+                $result .= Display::url(
+                    Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'), '', ICON_SIZE_SMALL),
+                    "dashboard_add_users_to_user.php?user={$user_id}"
+                );
+            }
+
+            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+                $result .= Display::url(
+                    Display::return_icon('course_add.gif', get_lang('AssignCourses')),
+                    "dashboard_add_courses_to_user.php?user={$user_id}"
+                );
+
+                $result .= Display::url(
+                    Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                    "dashboard_add_sessions_to_user.php?user={$user_id}"
+                );
+            }
+        }
 	}
 
     if (api_is_platform_admin()) {
@@ -792,20 +836,20 @@ $form->addElement('header', get_lang('AdvancedSearch'));
 $form->addElement('html', '<table>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td width="200px;">');
-$form->add_textfield('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td>');
 $form->addElement('html', '<td>');
-$form->add_textfield('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td>');
 
 $status_options = array();
@@ -842,7 +886,7 @@ if (!empty($extra_data)) {
 
     $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-    $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
+    $form->addText('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
     $form->addElement('html', '</div>');
 } else {
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');

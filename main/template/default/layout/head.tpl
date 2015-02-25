@@ -15,11 +15,87 @@
 {{ css_file_to_string }}
 {{ css_style_print }}
 {{ js_file_to_string }}
+<script>
+
+// External plugins not part of the default Ckeditor package.
+var plugins = [
+    'asciimath',
+    'asciisvg',
+    'audio',
+    //'ckeditor_wiris',
+    'dialogui',
+    'glossary',
+    'justify',
+    'leaflet',
+    'mapping',
+    'maximize',
+    'oembed',
+    'toolbar',
+    'toolbarswitch',
+    'video',
+    'wikilink',
+    'wordcount',
+    'youtube'
+];
+
+plugins.forEach(function(plugin) {
+    CKEDITOR.plugins.addExternal(plugin, '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/plugins/' }}' + plugin + '/');
+});
+
+/**
+ * Function use to load templates in a div
+**/
+var showTemplates = function (ckeditorName) {
+    var editorName = 'content';
+    if (ckeditorName && ckeditorName.length > 0) {
+        editorName = ckeditorName;
+    }
+    CKEDITOR.editorConfig(CKEDITOR.config);
+    CKEDITOR.loadTemplates(CKEDITOR.config.templates_files, function (a){
+        var templatesConfig = CKEDITOR.getTemplates("default");
+
+        var $templatesUL = $("<ul>");
+
+        $.each(templatesConfig.templates, function () {
+            var template = this;
+            var $templateLi = $("<li>");
+
+            var templateHTML = "<img src=\"" + templatesConfig.imagesPath + template.image + "\" ><div>";
+            templateHTML += "<b>" + template.title + "</b>";
+
+            if (template.description) {
+                templateHTML += "<div class=description>" + template.description + "</div>";
+            }
+
+            templateHTML += "</div>";
+
+            $("<a>", {
+                href: "#",
+                html: templateHTML,
+                click: function (e) {
+                    e.preventDefault();
+                    if (CKEDITOR.instances[editorName]) {
+                        CKEDITOR.instances[editorName].setData(template.html, function () {
+                            this.checkDirty();
+                        });
+                    }
+                }
+            }).appendTo($templateLi);
+
+            $templatesUL.append($templateLi);
+        });
+
+        $templatesUL.appendTo("#frmModel");
+    });
+};
+
+</script>
 {{ extra_headers }}
 <script>
-//<![CDATA[
+
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
-{% raw %}
+/*
+@deprecated seems not to be use.
 if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
     window.attachEvent( 'onunload', function() {
         window['__flash__removeCallback'] = function ( instance, name ) {
@@ -32,8 +108,7 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
         } ;
     });
 }
-{% endraw %}
-//]]>
+*/
 
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");

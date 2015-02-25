@@ -11,9 +11,6 @@ $language_file = 'gradebook';
 //$cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'import.lib.php';
 api_block_anonymous_users();
 
 if (isset($_GET['userid'])) {
@@ -26,10 +23,7 @@ if (isset($_GET['userid'])) {
     api_not_allowed();
 }
 
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/userform.class.php';
-block_students();
+GradebookUtils::block_students();
 
 $form = new UserForm(
     UserForm :: TYPE_USER_INFO,
@@ -40,7 +34,7 @@ $form = new UserForm(
 );
 
 if ($form->validate()) {
-    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id.'&'.api_get_cidreq();
+    header('Location: user_stats.php?selectcat=' . Security::remove_XSS($_GET['selectcat']).'&userid=' .$user_id.'&'.api_get_cidreq());
     exit;
 }
 

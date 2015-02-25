@@ -37,8 +37,6 @@ switch ($action) {
             } else {
 
                 // save contact information with web service
-                require_once '../lib/nusoap/nusoap.php';
-
                 // create a client
                 $client = new nusoap_client('http://version.chamilo.org/contact.php?wsdl', true);
 

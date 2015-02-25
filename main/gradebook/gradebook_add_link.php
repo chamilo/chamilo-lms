@@ -9,16 +9,12 @@
 $language_file = array('gradebook', 'exercice');
 
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/linkform.class.php';
-require_once 'lib/fe/linkaddeditform.class.php';
 require_once '../forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 api_block_anonymous_users();
-block_students();
+GradebookUtils::block_students();
 
 $courseCode = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : null;
 $course_info = api_get_course_info($courseCode);

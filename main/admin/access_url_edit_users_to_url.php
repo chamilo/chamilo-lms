@@ -11,9 +11,6 @@ $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'urlmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'access_url_edit_users_to_url_functions.lib.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax->registerFunction(array('search_users', 'Accessurledituserstourl', 'search_users'));

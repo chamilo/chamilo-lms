@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Course request manager
  * @package chamilo.library
@@ -85,7 +86,7 @@ class CourseRequestManager
         $request_date = api_get_utc_datetime();
         $status = COURSE_REQUEST_PENDING;
         $info = 0;
-        $keys = define_course_keys($wanted_code, '');
+        $keys = AddCourse::define_course_keys($wanted_code, '');
         if (!count($keys)) {
             return false;
         }
@@ -148,8 +149,10 @@ class CourseRequestManager
         $recipient_email_admin = get_setting('emailAdministrator');
 
         $userInfo = api_get_user_info($user_id);
+        $plugin = new AppPlugin();
+        $className = $plugin->getSMSPluginName();
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::NEW_COURSE_SUGGESTED_TEACHER,
+            'smsType' => constant($className.'::NEW_COURSE_SUGGESTED_TEACHER'),
             'userId' => $user_id,
             'userUsername' => $userInfo['username']
         );
@@ -186,7 +189,7 @@ class CourseRequestManager
         $recipient_email_teacher = $sender_email_teacher;
 
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED,
+            'smsType' => constant($className.'::COURSE_OPENING_REQUEST_CODE_REGISTERED'),
             'userId' => $user_info['user_id'],
             'courseCode' => $wanted_code
         );
@@ -265,7 +268,7 @@ class CourseRequestManager
             if (self::course_code_exists($wanted_code)) {
                 return false;
             }
-            $keys = define_course_keys($wanted_code, '');
+            $keys = AddCourse::define_course_keys($wanted_code, '');
             if (count($keys)) {
                 $visual_code = $keys['currentCourseCode'];
                 $code = $keys['currentCourseId'];
@@ -466,8 +469,9 @@ class CourseRequestManager
             $recipient_email = $user_info['mail'];
             $extra_headers = 'Bcc: '.$sender_email;
 
+            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
+                'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE_APPROVED'),
                 'userId' => $user_id,
                 'courseCode' => $course_info['code']
             );
@@ -544,8 +548,9 @@ class CourseRequestManager
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
+        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
+            'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE_REJECTED'),
             'userId' => $user_id,
             'courseCode' => $code
         );
@@ -621,8 +626,9 @@ class CourseRequestManager
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
+        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE,
+            'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE'),
             'userId' => $user_id,
             'courseCode' => $code
         );

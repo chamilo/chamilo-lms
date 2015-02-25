@@ -29,7 +29,7 @@ $interbreadcrumb[] = array ('url' => 'class_list.php', 'name' => get_lang('Class
 $tool_name = get_lang("AddClasses");
 
 $form = new FormValidator('add_class');
-$form->add_textfield('name', get_lang('ClassName'));
+$form->addText('name', get_lang('ClassName'));
 $form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
 if ($form->validate()) {
     $values = $form->exportValues();

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 require_once(dirname(__FILE__).'/../forum/forumconfig.inc.php');
@@ -6,22 +7,20 @@ require_once(dirname(__FILE__).'/../forum/forumfunction.inc.php');
 
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'course.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
-
 
 /**
  * Description of cm_soap_inbox
  *
  * @author marcosousa
  */
-class WSCMForum extends WSCM {
+class WSCMForum extends WSCM
+{
 
     public function get_foruns_id($username, $password, $course_code)
     {
         if($this->verifyUserPass($username, $password) == "valid")
-        { 
+        {
             $course_db = CourseManager::get_course_information($course_code);
             $foruns_info = get_forums($id='', $course_db['db_name']);
             $foruns_id = '#';
@@ -36,9 +35,9 @@ class WSCMForum extends WSCM {
         } else
             return get_lang('InvalidId');
     }
-    
+
     public function get_forum_title($username, $password, $course_code, $forum_id)
-    { 
+    {
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $course_db = CourseManager::get_course_information($course_code);
@@ -58,10 +57,10 @@ class WSCMForum extends WSCM {
         } else
             return get_lang('InvalidId');
     }
-    
+
     public function get_forum_threads_id($username, $password, $course_code, $forum_id)
     {
-        if($this->verifyUserPass($username, $password) == "valid") {            
+        if($this->verifyUserPass($username, $password) == "valid") {
             $threads_info = get_threads($forum_id, $course_code);
             $threads_id = '#';
             foreach ($threads_info as $thread)
@@ -156,14 +155,14 @@ class WSCMForum extends WSCM {
 
             // note: change these SQL so that only the relevant fields of the user table are used
             if (api_is_allowed_to_edit(null,true)) {
-                    $sql = "SELECT * FROM $table_posts posts
+                $sql = "SELECT * FROM $table_posts posts
                                     LEFT JOIN  $table_users users
                                             ON posts.poster_id=users.user_id
                                     WHERE posts.thread_id='".Database::escape_string($thread_id)."'
                                     ORDER BY posts.post_id ASC";
             } else {
-                    // students can only se the posts that are approved (posts.visible='1')
-                    $sql = "SELECT * FROM $table_posts posts
+                // students can only se the posts that are approved (posts.visible='1')
+                $sql = "SELECT * FROM $table_posts posts
                                     LEFT JOIN  $table_users users
                                             ON posts.poster_id=users.user_id
                                     WHERE posts.thread_id='".Database::escape_string($thread_id)."'
@@ -172,7 +171,7 @@ class WSCMForum extends WSCM {
             }
             $result=Database::query($sql);
             while ($row=Database::fetch_array($result)) {
-                    $posts_info[]=$row;
+                $posts_info[]=$row;
             }
 
             $posts_id = '#';
@@ -263,7 +262,7 @@ class WSCMForum extends WSCM {
                                             '".Database::escape_string(isset($my_post)?$my_post:null)."',
                                             '".Database::escape_string($visible)."')";
 
-            
+
             $result=Database::query($sql);
             return "Post enviado!";
 //return $sql;

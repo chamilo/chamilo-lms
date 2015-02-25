@@ -59,7 +59,11 @@ function get_tabs() {
             $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
             $navigation['session_my_space']['title'] = get_lang('MySpace');
             $navigation['session_my_space']['key'] = 'my-space';
-	} else {
+    } else if (api_is_student_boss()) {
+        $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH) . 'mySpace/student.php';
+        $navigation['session_my_space']['title'] = get_lang('MySpace');
+        $navigation['session_my_space']['key'] = 'my-space';
+    } else {
             // Link to my progress
             $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
@@ -303,13 +307,13 @@ function return_navigation_array() {
 
         // Reporting
         if (api_get_setting('show_tabs', 'reporting') == 'true') {
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
             }
         } else {
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];

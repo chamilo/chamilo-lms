@@ -7,19 +7,10 @@
  *
  */
 
-/**
- * Code
- */
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 if (empty($origin)) {
     $origin = $_REQUEST['origin'];
@@ -41,7 +32,7 @@ if (empty($id)) {
 $is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = get_exercise_track_exercise_info($id);
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
@@ -74,7 +65,7 @@ if ($show_headers) {
 	Display::display_reduced_header();
 }
 
-display_question_list_by_attempt($objExercise, $id, false);
+ExerciseLib::display_question_list_by_attempt($objExercise, $id, false);
 
 if ($show_headers) {
 	Display::display_footer();

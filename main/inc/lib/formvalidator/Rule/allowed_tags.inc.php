@@ -921,9 +921,7 @@ $allowed_tags_teacher['body']['link'] = array();
 $allowed_tags_teacher['body']['text'] = array();
 $allowed_tags_teacher['body']['vlink'] = array();
 
-
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;
-
 
 // ALLOWED HTML FOR ANONYMOUS USERS
 

@@ -11,8 +11,6 @@ use ChamiloSession as Session;
 
 require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 

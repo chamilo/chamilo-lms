@@ -13,9 +13,6 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
 Display::display_header(null);
 
 $form = new FormValidator('export_certificate');
@@ -26,7 +23,7 @@ foreach ($courses as $course) {
 }
 $form->addElement('select', 'course', get_lang('Course'), $options);
 $form->addElement('file', 'file', get_lang('File'));
-$form->add_button('submit', get_lang('Submit'));
+$form->addButton('submit', get_lang('Submit'));
 $form->display();
 
 if ($form->validate()) {

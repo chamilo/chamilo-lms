@@ -13,7 +13,6 @@ $cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
 $xajax->registerFunction('search_users');
@@ -96,6 +95,10 @@ function search_users($needle, $type)
         }
 
         $cond_user_id = '';
+
+        if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users')  == 'true') {
+            $order_clause = " AND user.creator_id = ".api_get_user_id().$order_clause;
+        }
 
         // Only for single & multiple
         if (in_array($type, array('single','multiple')))

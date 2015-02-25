@@ -52,40 +52,13 @@ if (!empty($courseId)) {
 $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
-$toolbar_set = 'Introduction';
+$toolbar_set = 'IntroductionTool';
 $width = '100%';
 $height = '300';
 
-// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-global $fck_attribute;
+$editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
 
-if (is_array($fck_attribute)) {
-    if (isset($fck_attribute['ToolbarSet'])) {
-        $toolbar_set = $fck_attribute['ToolbarSet'];
-    }
-    if (isset($fck_attribute['Width'])) {
-        $toolbar_set = $fck_attribute['Width'];
-    }
-    if (isset($fck_attribute['Height'])) {
-        $toolbar_set = $fck_attribute['Height'];
-    }
-}
-
-if (is_array($editor_config)) {
-    if (!isset($editor_config['ToolbarSet'])) {
-        $editor_config['ToolbarSet'] = $toolbar_set;
-    }
-    if (!isset($editor_config['Width'])) {
-        $editor_config['Width'] = $width;
-    }
-    if (!isset($editor_config['Height'])) {
-        $editor_config['Height'] = $height;
-    }
-} else {
-    $editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
-}
-
-$form->add_html_editor('intro_content', null, null, false, $editor_config);
+$form->addHtmlEditor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */

@@ -6,22 +6,15 @@
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
  * @package chamilo.exercise
  */
-/**
- * Code
- */
+
 if ( count( get_included_files() ) == 1 ) die( '---' );
 
 if (!function_exists('mime_content_type')) {
-	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 	function mime_content_type($filename) {
 		return DocumentManager::file_get_mime_type((string)$filename);
 	}
 }
 
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/question.class.php');
-require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
 /**
  * Aiken2Question transformation class
  */

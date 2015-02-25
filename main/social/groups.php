@@ -15,9 +15,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-
 $this_section = SECTION_SOCIAL;
 
 // prepare anchor for message group topic
@@ -62,11 +59,11 @@ function add_image_form() {
 		counter_image = counter_image;
 	}
 	var elem1 = document.createElement("div");
-	elem1.setAttribute("id","filepath_"+counter_image);
+	elem1.setAttribute("id", "filepath_"+counter_image);
 	filepaths.appendChild(elem1);
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<div class=\"control-group\"><div class=\"controls\"><input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a></div></div>";
 	if (filepaths.childNodes.length == 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {

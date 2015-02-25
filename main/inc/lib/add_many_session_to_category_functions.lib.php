@@ -4,14 +4,12 @@
  * Definition of the AddManySessionToCategoryFunctions class
  * @package chamilo.library
  */
-/**
- * Init
- */
-require_once dirname(__FILE__).'/xajax/xajax.inc.php';
+
 /**
  * AddManySessionToCategoryFunctions class
  */
-class AddManySessionToCategoryFunctions {
+class AddManySessionToCategoryFunctions
+{
     /**
      * Search for a session based on a given search string
      * @param string A search string

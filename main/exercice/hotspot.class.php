@@ -15,19 +15,22 @@ class HotSpot extends Question
 	static $typePicture = 'hotspot.png';
 	static $explanationLangVar = 'HotSpot';
 
-	function HotSpot() {
+	public function HotSpot()
+	{
 		parent::question();
 		$this -> type = HOT_SPOT;
 	}
 
-	function display() {
+	public function display()
+	{
 	}
 
-	function createForm (&$form, $fck_config=0) {
-		parent::createForm ($form, $fck_config);
+	function createForm (&$form, $fck_config=0)
+	{
+		parent::createForm($form, $fck_config);
 		global $text, $class;
-		if(!isset($_GET['editQuestion'])) {
-			$renderer = $form->defaultRenderer();
+
+		if (!isset($_GET['editQuestion'])) {
 			$form->addElement('file','imageUpload',array('<img src="../img/hotspots.png" />', get_lang('UploadJpgPicture')) );
 
 			// setting the save button here and not in the question class.php
@@ -40,10 +43,10 @@ class HotSpot extends Question
 			// Editing a question
 			$form->addElement('style_submit_button','submitQuestion',get_lang('ModifyExercise'), 'class="'.$class.'"');
 		}
-
 	}
 
-	function processCreation ($form, $objExercise = null) {
+	public function processCreation($form, $objExercise = null)
+	{
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 		if(!empty($file_info['tmp_name'])) {
@@ -65,7 +68,7 @@ class HotSpot extends Question
 	}
 
 	function createAnswersForm ($form) {
-    	// nothing
+		// nothing
 	}
 
 	function processAnswersCreation ($form) {
@@ -78,30 +81,34 @@ class HotSpot extends Question
  */
 class HotSpotDelineation extends HotSpot
 {
-
 	static $typePicture = 'hotspot_delineation.gif';
 	static $explanationLangVar = 'HotspotDelineation';
 
-	function HotSpotDelineation(){
+	function HotSpotDelineation()
+	{
 		parent::question();
 		$this -> type = HOT_SPOT_DELINEATION;
 
 	}
 
-	function createForm (&$form, $fck_config=0) {
+	function createForm (&$form, $fck_config=0)
+	{
 		parent::createForm ($form, $fck_config);
 	}
 
-	function processCreation ($form, $objExercise = null) {
+	function processCreation ($form, $objExercise = null)
+	{
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 	}
 
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+	{
 		parent::createAnswersForm ($form);
 	}
 
-	function processAnswersCreation ($form) {
+	function processAnswersCreation ($form)
+	{
 		parent::processAnswersCreation ($form);
 	}
 }

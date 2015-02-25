@@ -5,10 +5,7 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.dashboard
  */
-/**
- * Code
- */
-// required files
+
 /**
  * DashboardManager can be used to manage dashboard
  * @package chamilo.dashboard

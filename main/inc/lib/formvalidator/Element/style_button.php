@@ -23,11 +23,6 @@
  */
 
 /**
- * Base class for form elements
- */
-require_once 'HTML/QuickForm/element.php';
-
-/**
  * Base class for <button></button> form elements
  *
  * @category    HTML
@@ -35,7 +30,7 @@ require_once 'HTML/QuickForm/element.php';
  * @author      Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @abstract
  */
-class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
+class HTML_QuickForm_style_button extends HTML_QuickForm_element
 {
     // {{{ constructor
     /**
@@ -48,7 +43,8 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_stylebutton($elementName=null, $elementLabel=null, $attributes=null) {
+    function HTML_QuickForm_style_button($elementName=null, $elementLabel=null, $attributes=null)
+    {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
 
     } //end constructor

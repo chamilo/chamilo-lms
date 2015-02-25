@@ -35,7 +35,9 @@ $form->addElement('label', null, Display::url(get_lang('ExampleCSVFile'), api_ge
 $form->addElement('button', 'submit', get_lang('Import'));
 
 if ($form->validate()) {
-    if (isset($_FILES['file']['tmp_name']) && !empty($_FILES['file']['tmp_name'])) {
+    if (isset($_FILES['file']['tmp_name']) &&
+        !empty($_FILES['file']['tmp_name'])
+    ) {
         $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
         $deleteNotInArray = $form->getSubmitValue('delete_not_in_file') == 1 ? true : false;
 

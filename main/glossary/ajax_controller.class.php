@@ -18,16 +18,16 @@ use Header;
 
 /**
  * Ajax controller. Dispatch request and perform required action.
- * 
+ *
  *      - delete one glossary entry
  *      - delete all glossary entried in a course/session
  *      - returns a glossary entry from its id
- * 
+ *
  * Usage:
- * 
+ *
  *      $controller = AjaxController::instance();
  *      $controller->run();
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -40,7 +40,7 @@ class AjaxController extends \AjaxController
 
     /**
      * Return the instance of the controller.
-     * 
+     *
      * @return  \Glossary\AjaxController
      */
     public static function instance()
@@ -53,12 +53,12 @@ class AjaxController extends \AjaxController
     }
 
     /**
-     * Prepare the environment. Set up breadcrumps and raise tracking event. 
+     * Prepare the environment. Set up breadcrumps and raise tracking event.
      */
     protected function prolog()
     {
-        event_access_tool(TOOL_GLOSSARY);
-    }        
+        Event::event_access_tool(TOOL_GLOSSARY);
+    }
 
     public function is_allowed_to_edit()
     {

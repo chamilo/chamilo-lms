@@ -81,7 +81,9 @@ Display :: display_header(get_lang('ToolSurvey'));
 
 // First we check if the needed parameters are present
 if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
+    echo '<div class="survey-block';
     Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'), false);
+    echo '</div>';
     Display :: display_footer();
     exit;
 }
@@ -145,7 +147,9 @@ if ( !isset($_POST['finish_survey']) &&
     ($isAnonymous && isset($_SESSION['surveyuser'])) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
+    echo '<div class="survey-block">';
     Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
+    echo '</div>';
     Display :: display_footer();
     exit;
 }
@@ -311,13 +315,17 @@ if (count($_POST) > 0) {
         }
     } else {
         // In case it's another type than 0 or 1
+
         die(get_lang('ErrorSurveyTypeUnknown'));
     }
 }
 
 // Displaying the survey title and subtitle (appears on every page)
-echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
-echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
+echo '<div class="survey-block">';
+echo '<div id="survey_title">';
+echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'),array('style'=>'display:inline-block; margin-right:5px;'),ICON_SIZE_SMALL);
+echo strip_tags($survey_data['survey_title']).'</div>';
+echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
 
 // Checking time availability
 check_time_availability($survey_data);
@@ -1128,13 +1136,13 @@ if ($survey_data['survey_type'] === '0') {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
             if ($show == 0) {
-                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';    
+                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
             } else {                   
-                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('Next').'</button>';
             }
         }
         if ($show >= $numberofpages && $_GET['show']) {
-            echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
+            echo '<button type="submit" name="finish_survey" class="survey-next">'.get_lang('FinishSurvey').'</button>';
         }
     } else {
         // The normal survey as always but with the form profile
@@ -1212,7 +1220,9 @@ if ($survey_data['survey_type'] === '0') {
         echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
     }
 }
+
 echo '</form>';
+echo '</div>';
 
 // Footer
 Display :: display_footer();

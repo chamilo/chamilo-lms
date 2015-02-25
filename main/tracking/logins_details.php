@@ -52,7 +52,8 @@ $TABLECOURSE_GROUPSUSER = Database::get_course_table(TABLE_GROUP_USER);
 $TABLEUSER = Database::get_main_table(TABLE_MAIN_USER);
 $TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 Display::display_header($nameTools, "Tracking");
-include(api_get_path(LIBRARY_PATH) . "statsUtils.lib.inc.php");
+
+$courseId = api_get_course_int_id();
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -140,91 +141,91 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
         ";
             /*             * ***** END OF MENU ******* */
 
-            switch ($period) {
-                case "month" :
-                    $sql = "SELECT access_date
-                            FROM $TABLETRACK_ACCESS
-                            WHERE access_user_id = '$uInfo'
-                            AND access_cours_code = '" . $_cid . "'
-                            AND MONTH(access_date) = MONTH( FROM_UNIXTIME('$reqdate') )
-                            AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
-							GROUP BY DAYOFMONTH(access_date)
-                            ORDER BY access_date ASC";
-                    $displayedDate = $MonthsLong[date("n", $reqdate) - 1] . date(" Y", $reqdate);
-                    break;
-                case "week" :
-                    $sql = "SELECT access_date
-                            FROM $TABLETRACK_ACCESS
-                            WHERE access_user_id = '$uInfo'
-                            AND access_cours_code = '" . $_cid . "'
-                            AND WEEK(access_date) = WEEK( FROM_UNIXTIME('$reqdate') )
-                            AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
-							GROUP BY DAYOFMONTH(access_date)
-                            ORDER BY access_date ASC";
-                    $weeklowreqdate = ($reqdate - (86400 * date("w", $reqdate)));
-                    $weekhighreqdate = ($reqdate + (86400 * (6 - date("w", $reqdate)) ));
-                    $displayedDate = get_lang('From') . " " . date("d ", $weeklowreqdate) . $MonthsLong[date("n", $weeklowreqdate) - 1] . date(" Y", $weeklowreqdate)
-                            . " " . get_lang('To') . " " . date("d ", $weekhighreqdate) . $MonthsLong[date("n", $weekhighreqdate) - 1] . date(" Y", $weekhighreqdate);
-                    break;
-            }
-            echo "<tr><td>";
-            $results = getManyResults1Col($sql);
-            /*             * * display of the displayed period  ** */
-            echo "<table width='100%' cellpadding='2' cellspacing='1' border='0' align=center>";
-            echo "<td bgcolor='#E6E6E6'>" . $displayedDate . "</td>";
-            if (is_array($results)) {
-                for ($j = 0; $j < sizeof($results); $j++) {
-                    $beautifulDateTime = api_convert_and_format_date($results[$j], null, date_default_timezone_get());
-                    echo "<tr>";
-                    echo "<td style='padding-left : 40px;' valign='top'>" . $beautifulDateTime . "</td>";
-                    echo"</tr>";
-                    // $limit is used to select only results between $results[$j] (current login) and next one
-                    if ($j == ( sizeof($results) - 1 ))
-                        $limit = date("Y-m-d H:i:s", $nextReqDate);
-                    else
-                        $limit = $results[$j + 1];
-                    // select all access to tool between displayed date and next displayed date or now() if
-                    // displayed date is the last login date
-                    $sql = "SELECT access_tool, count(access_tool)
-                            FROM $TABLETRACK_ACCESS
-                            WHERE access_user_id = '$uInfo'
-                                AND access_tool IS NOT NULL
-                                AND access_date > '" . $results[$j] . "'
-                                AND access_date < '" . $limit . "'
-                                AND access_cours_code = '" . $_cid . "'
-                            GROUP BY access_tool
-                            ORDER BY access_tool ASC";
-                    $results2 = getManyResults2Col($sql);
-
-                    if (is_array($results2)) {
-                        echo "<tr><td colspan='2'>\n";
-                        echo "<table width='50%' cellpadding='0' cellspacing='0' border='0'>\n";
-                        for ($k = 0; $k < count($results2); $k++) {
-                            echo "<tr>\n";
-                            echo "<td width='70%' style='padding-left : 60px;'>" . get_lang($results2[$k][0]) . "</td>\n";
-                            echo "<td width='30%' align='right' style='padding-right : 40px'>" . $results2[$k][1] . " " . get_lang('Visits') . "</td>\n";
-                            echo "</tr>";
-                        }
-                        echo "</table>\n";
-                        echo "</td></tr>\n";
-                    }
-                    $previousDate = $value;
-                }
-            } else {
-                echo "<tr>";
-                echo "<td colspan='2' bgcolor='#eeeeee'>" . get_lang('NoResult') . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-            echo "</td></tr>";
-        } else {
-            echo get_lang('ErrorUserNotInGroup');
+        switch ($period) {
+            case "month" :
+                $sql = "SELECT access_date
+                        FROM $TABLETRACK_ACCESS
+                        WHERE access_user_id = '$uInfo'
+                        AND c_id = '" . $courseId . "'
+                        AND MONTH(access_date) = MONTH( FROM_UNIXTIME('$reqdate') )
+                        AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+                        GROUP BY DAYOFMONTH(access_date)
+                        ORDER BY access_date ASC";
+                $displayedDate = $MonthsLong[date("n", $reqdate) - 1] . date(" Y", $reqdate);
+                break;
+            case "week" :
+                $sql = "SELECT access_date
+                        FROM $TABLETRACK_ACCESS
+                        WHERE access_user_id = '$uInfo'
+                        AND c_id = '" . $courseId . "'
+                        AND WEEK(access_date) = WEEK( FROM_UNIXTIME('$reqdate') )
+                        AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
+                        GROUP BY DAYOFMONTH(access_date)
+                        ORDER BY access_date ASC";
+                $weeklowreqdate = ($reqdate - (86400 * date("w", $reqdate)));
+                $weekhighreqdate = ($reqdate + (86400 * (6 - date("w", $reqdate)) ));
+                $displayedDate = get_lang('From') . " " . date("d ", $weeklowreqdate) . $MonthsLong[date("n", $weeklowreqdate) - 1] . date(" Y", $weeklowreqdate)
+                        . " " . get_lang('To') . " " . date("d ", $weekhighreqdate) . $MonthsLong[date("n", $weekhighreqdate) - 1] . date(" Y", $weekhighreqdate);
+                break;
         }
+        echo "<tr><td>";
+        $results = StatsUtils::getManyResults1Col($sql);
+        /*             * * display of the displayed period  ** */
+        echo "<table width='100%' cellpadding='2' cellspacing='1' border='0' align=center>";
+        echo "<td bgcolor='#E6E6E6'>" . $displayedDate . "</td>";
+        if (is_array($results)) {
+            for ($j = 0; $j < sizeof($results); $j++) {
+                $beautifulDateTime = api_convert_and_format_date($results[$j], null, date_default_timezone_get());
+                echo "<tr>";
+                echo "<td style='padding-left : 40px;' valign='top'>" . $beautifulDateTime . "</td>";
+                echo"</tr>";
+                // $limit is used to select only results between $results[$j] (current login) and next one
+                if ($j == ( sizeof($results) - 1 ))
+                    $limit = date("Y-m-d H:i:s", $nextReqDate);
+                else
+                    $limit = $results[$j + 1];
+                // select all access to tool between displayed date and next displayed date or now() if
+                // displayed date is the last login date
+                $sql = "SELECT access_tool, count(access_tool)
+                        FROM $TABLETRACK_ACCESS
+                        WHERE access_user_id = '$uInfo'
+                            AND access_tool IS NOT NULL
+                            AND access_date > '" . $results[$j] . "'
+                            AND access_date < '" . $limit . "'
+                            AND c_id  = '" . $courseId . "'
+                        GROUP BY access_tool
+                        ORDER BY access_tool ASC";
+                $results2 = StatsUtils::getManyResults2Col($sql);
+
+                if (is_array($results2)) {
+                    echo "<tr><td colspan='2'>\n";
+                    echo "<table width='50%' cellpadding='0' cellspacing='0' border='0'>\n";
+                    for ($k = 0; $k < count($results2); $k++) {
+                        echo "<tr>\n";
+                        echo "<td width='70%' style='padding-left : 60px;'>" . get_lang($results2[$k][0]) . "</td>\n";
+                        echo "<td width='30%' align='right' style='padding-right : 40px'>" . $results2[$k][1] . " " . get_lang('Visits') . "</td>\n";
+                        echo "</tr>";
+                    }
+                    echo "</table>\n";
+                    echo "</td></tr>\n";
+                }
+                $previousDate = $value;
+            }
+        } else {
+            echo "<tr>";
+            echo "<td colspan='2' bgcolor='#eeeeee'>" . get_lang('NoResult') . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        echo "</td></tr>";
     } else {
-        // not allowed
-        api_not_allowed();
+        echo get_lang('ErrorUserNotInGroup');
     }
-    ?>
+} else {
+    // not allowed
+    api_not_allowed();
+}
+?>
 </table>
     <?php
     Display::display_footer();

@@ -586,4 +586,18 @@ class AppPlugin
             }
         }
     }
+
+    /**
+     * Get first SMS plugin name
+     * @return string|boolean
+     */
+    public function getSMSPluginName() {
+        $installedPluginsList = $this->getInstalledPluginListObject();
+        foreach ($installedPluginsList as $installedPlugin) {
+            if ($installedPlugin->isMailPlugin) {
+                return get_class($installedPlugin);
+            }
+        }
+        return false;
+    }
 }

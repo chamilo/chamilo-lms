@@ -12,7 +12,6 @@
 session_cache_limiter('nocache');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
@@ -54,7 +53,7 @@ if (is_dir($full_file_name)) {
 $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
 // launch event
-event_download($doc_url);
+Event::event_download($doc_url);
 
 $course_id = api_get_course_int_id();
 

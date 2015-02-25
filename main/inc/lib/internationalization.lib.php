@@ -190,7 +190,6 @@ function get_lang($variable, $reserved = null, $language = null) {
         if (isset($language_files)) {
             $parent_language = null;
             if (api_get_setting('allow_use_sub_language') == 'true') {
-                require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
                 $parent_language = SubLanguageManager::get_parent_language_path($language);
             }
             if (!is_array($language_files)) {
@@ -3348,12 +3347,12 @@ function get_datepicker_langage_code() {
 
 /**
  * Returns the variable translated
- * @param $variable the string to translate
- * @param $pluginName the Plugin name
+ * @param string $variable the string to translate
+ * @param string $pluginName the Plugin name
  * @return string the variable translated
  */
 function get_plugin_lang($variable, $pluginName) {
-    eval("\$plugin = {$pluginName}::create();");
+    $plugin = $pluginName::create();
     return $plugin->get_lang($variable);
 }
 /**

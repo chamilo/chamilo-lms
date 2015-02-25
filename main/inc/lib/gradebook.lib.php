@@ -21,11 +21,14 @@ class Gradebook extends Model
         'user_id'
     );
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
-        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
+        $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $this->table_skill = Database::get_main_table(TABLE_MAIN_SKILL);
+        $this->table_skill_rel_gradebook = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
     }
 
     /**
@@ -97,8 +100,7 @@ class Gradebook extends Model
         $gradebook_id,
         $skill_list,
         $deleteSkillNotInList = true
-    )
-    {
+    ) {
         if (!empty($skill_list)) {
 
             //Cleaning skills
@@ -169,7 +171,17 @@ class Gradebook extends Model
         foreach ($skills as $skill) {
             $clean_skill_list[$skill['id']] = $skill['name'];
         }
-        $form->addElement('select', 'skill', get_lang('Skills'), $clean_skill_list, array('width'=>'450px', 'class'=>'chzn-select','multiple' => 'multiple'));
+        $form->addElement(
+            'select',
+            'skill',
+            get_lang('Skills'),
+            $clean_skill_list,
+            array(
+                'width' => '450px',
+                'class' => 'chzn-select',
+                'multiple' => 'multiple'
+            )
+        );
 
         $selected_skills = self::get_skills_by_gradebook($gradebook_id);
         $clean_selected_skills = array();
@@ -182,6 +194,7 @@ class Gradebook extends Model
         $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
 
         $form->setDefaults(array('skill'=>$clean_selected_skills));
+
         return $form;
     }
 
@@ -192,11 +205,13 @@ class Gradebook extends Model
     function get_skills_by_gradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
-        $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
-                    ON skill.id = skill_rel_gradebook.skill_id
-                 WHERE skill_rel_gradebook.gradebook_id = $gradebook_id";
+        $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill
+                INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
+                ON skill.id = skill_rel_gradebook.skill_id
+                WHERE skill_rel_gradebook.gradebook_id = $gradebook_id";
         $result = Database::query($sql);
-        $result = Database::store_result($result,'ASSOC');
+        $result = Database::store_result($result, 'ASSOC');
+
         return $result;
     }
 

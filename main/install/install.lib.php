@@ -381,6 +381,11 @@ function & get_language_folder_list() {
                 continue;
             }
             if (is_dir($dirname.$entries)) {
+                if (is_file($dirname.$entries.'/install_disabled')) {
+                    // Skip all languages that have this file present, just for
+                    // the install process (languages incomplete)
+                    continue;
+                }
                 $result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
             }
         }
@@ -1029,7 +1034,7 @@ function display_language_selection_box($name = 'language_list', $default_langua
  * can be done in the language of the user
  */
 function display_language_selection() { ?>
-    <h2><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h2>
+    <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
     <div class="RequirementHeading">
         <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
@@ -1038,6 +1043,10 @@ function display_language_selection() { ?>
         <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
+        <br /><br />
+    </div>
+    <div class="RequirementHeading">
+        <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
     </div>
 <?php
 }
@@ -1108,24 +1117,26 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No')).'</td>
+            </tr>
+               <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
+            </tr>
+
+             <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
+                <td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
+            </tr>
+
+            <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No'), true).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
@@ -1313,6 +1324,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_DATA_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_DATA_PATH)).'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_COURSE_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_COURSE_PATH)).' </td>
             </tr>
@@ -1401,6 +1416,18 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             @chmod($checked_writable, $perm);
         }
 
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
+        }
+
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
+        }
+
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
@@ -1408,6 +1435,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         }
 
         $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
+        if (!is_writable($checked_writable)) {
+            $notwritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
+        }
+
+        $checked_writable = api_get_path(SYS_DATA_PATH);
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);

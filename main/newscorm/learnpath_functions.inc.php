@@ -1140,13 +1140,6 @@ function export_exercise($item_id) {
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-
-    require_once '../exercice/testcategory.class.php';
-    require_once '../exercice/exercise.class.php';
-    require_once '../exercice/question.class.php';
-    require_once '../exercice/answer.class.php';
-    require_once '../exercice/exercise.lib.php';
-
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
     /* Clears the exercise session */
@@ -1257,8 +1250,7 @@ function export_exercise($item_id) {
         $i ++;
 
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
-        // Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table.
-        $test .= showQuestion($questionId, false, 'export', $i);
+        $test .= ExerciseLib::showQuestion($questionId, false, 'export', $i);
 
     } // end foreach()
 
@@ -1287,10 +1279,6 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     global $timeNoSecFormat, $dateFormatLong, $language_interface, $langPubl, $langDone, $langThisCourseDescriptionIsEmpty, $lg_course_description, $lg_introduction_text, $_cid, $langHotPotatoesFinished, $lg_author, $lg_date, $lg_groups, $lg_users, $lg_ass, $lg_dropbox, $test, $langQuestion;
 
     $libp = api_get_path(SYS_CODE_PAH);
-    include_once $libp.'exercice/exercise.class.php';
-    include_once $libp.'question.class.php';
-    include_once $libp.'answer.class.php';
-    include_once $libp.'exercise.lib.php';
 
     $langLasting = '';//avoid code parser warning
     include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
@@ -1856,7 +1844,6 @@ function exportSCORM($scormname, $course) {
     DocumentManager :: file_send_for_download($zipfilename, false, basename($scormname.'.zip'));
 
     // Clear.
-    include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
     my_delete($zipfilename);
 }
 

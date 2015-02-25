@@ -7,11 +7,6 @@
  */
 
 /**
- * required files for getting data
- */
-require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
-
-/**
  * This class is used like controller for this session block plugin,
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockSession"), so dashboard controller will be instantiate it
@@ -19,7 +14,6 @@ require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
  */
 class BlockSession extends Block
 {
-
     private $user_id;
 	private $sessions;
 	private $path;

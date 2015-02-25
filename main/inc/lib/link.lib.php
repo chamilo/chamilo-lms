@@ -80,9 +80,13 @@ class Link extends Model
      * @param int   Session ID
      * @return bool
      */
-    public function updateLink($linkId, $linkUrl, $courseId = null, $sessionId = null)
-    {
-        $tblLink = Database :: get_course_table(TABLE_LINK);
+    public function updateLink(
+        $linkId,
+        $linkUrl,
+        $courseId = null,
+        $sessionId = null
+    ) {
+        $tblLink = Database:: get_course_table(TABLE_LINK);
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = intval($linkId);
         if (is_null($courseId)) {
@@ -103,544 +107,122 @@ class Link extends Model
 
         return false;
     }
-}
 
-/**
- * Used to add a link or a category
- * @param string $type, "link" or "category"
- * @todo replace strings by constants
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @return bool True on success, false on failure
- */
-function addlinkcategory($type)
-{
-    global $catlinkstatus;
-    global $msgErr;
+    /**
+     * Used to add a link or a category
+     * @param string $type , "link" or "category"
+     * @todo replace strings by constants
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @return bool True on success, false on failure
+     */
+    public static function addlinkcategory($type)
+    {
+        global $catlinkstatus;
+        global $msgErr;
 
-    $ok = true;
+        $ok = true;
+        $course_id = api_get_course_int_id();
 
-    $course_id = api_get_course_int_id();
+        if ($type == 'link') {
+            $tbl_link = Database:: get_course_table(TABLE_LINK);
 
-    if ($type == 'link') {
-        $tbl_link = Database :: get_course_table(TABLE_LINK);
+            $title = Security:: remove_XSS(stripslashes($_POST['title']));
+            $urllink = Security:: remove_XSS($_POST['urllink']);
+            $description = Security:: remove_XSS($_POST['description']);
+            $selectcategory = Security:: remove_XSS($_POST['selectcategory']);
 
-        $title = Security :: remove_XSS(stripslashes($_POST['title']));
-        $urllink = Security :: remove_XSS($_POST['urllink']);
-        $description = Security :: remove_XSS($_POST['description']);
-        $selectcategory = Security :: remove_XSS($_POST['selectcategory']);
-
-        if ($_POST['onhomepage'] == '') {
-            $onhomepage = 0;
-        } else {
-            $onhomepage = Security :: remove_XSS($_POST['onhomepage']);
-        }
-
-        if (empty($_POST['target_link'])) {
-            $target = '_self'; // Default target.
-        } else {
-            $target = Security :: remove_XSS($_POST['target_link']);
-        }
-
-        $urllink = trim($urllink);
-        $title = trim($title);
-        $description = trim($description);
-
-        // We ensure URL to be absolute.
-        if (strpos($urllink, '://') === false) {
-            $urllink = 'http://' . $urllink;
-        }
-
-        // If the title is empty, we use the URL as title.
-        if ($title == '') {
-            $title = $urllink;
-        }
-
-        // If the URL is invalid, an error occurs.
-        if (!api_valid_url($urllink, true)) { // A check against an absolute URL
-            $msgErr = get_lang('GiveURL');
-            Display :: display_error_message(get_lang('GiveURL'));
-            $ok = false;
-        } else {
-            // Looking for the largest order number for this category.
-            $result = Database :: query(
-                "SELECT MAX(display_order) FROM  " . $tbl_link . "
-                WHERE
-                    c_id = $course_id AND
-                    category_id = '" . intval($_POST['selectcategory']) . "'"
-            );
-            list ($orderMax) = Database :: fetch_row($result);
-            $order = $orderMax + 1;
-
-            $session_id = api_get_session_id();
-
-            $sql = "INSERT INTO " . $tbl_link . "
-                (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
-                VALUES
-                (" . $course_id . ",
-                '" . Database :: escape_string($urllink) . "',
-                '" . Database :: escape_string($title) . "',
-                '" . Database :: escape_string($description) . "',
-                '" . Database :: escape_string($selectcategory) . "',
-                '" . Database :: escape_string($order) . "',
-                '" . Database :: escape_string($onhomepage) . "',
-                '" . Database :: escape_string($target) . "',
-                '" . Database :: escape_string($session_id) . "')";
-
-            $catlinkstatus = get_lang('LinkAdded');
-            Database :: query($sql);
-            $link_id = Database :: insert_id();
-
-            if ($link_id) {
-                api_set_default_visibility($link_id, TOOL_LINK);
+            if ($_POST['onhomepage'] == '') {
+                $onhomepage = 0;
+            } else {
+                $onhomepage = Security:: remove_XSS($_POST['onhomepage']);
             }
 
-            if ((api_get_setting('search_enabled') == 'true') &&
-                $link_id && extension_loaded('xapian')
-            ) {
-                require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
-                require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
-                require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
-
-                $course_int_id = api_get_course_int_id();
-                $courseid = api_get_course_id();
-                $specific_fields = get_specific_field_list();
-                $ic_slide = new IndexableChunk();
-
-                // Add all terms to db.
-                $all_specific_terms = '';
-                foreach ($specific_fields as $specific_field) {
-                    if (isset ($_REQUEST[$specific_field['code']])) {
-                        $sterms = trim($_REQUEST[$specific_field['code']]);
-                        if (!empty ($sterms)) {
-                            $all_specific_terms .= ' ' . $sterms;
-                            $sterms = explode(',', $sterms);
-                            foreach ($sterms as $sterm) {
-                                $ic_slide->addTerm(
-                                    trim($sterm),
-                                    $specific_field['code']
-                                );
-                                add_specific_field_value(
-                                    $specific_field['id'],
-                                    $courseid,
-                                    TOOL_LINK,
-                                    $link_id,
-                                    $sterm
-                                );
-                            }
-                        }
-                    }
-                }
-
-                // Build the chunk to index.
-                $ic_slide->addValue('title', $title);
-                $ic_slide->addCourseId($courseid);
-                $ic_slide->addToolId(TOOL_LINK);
-                $xapian_data = array(
-                    SE_COURSE_ID => $courseid,
-                    SE_TOOL_ID => TOOL_LINK,
-                    SE_DATA => array(
-                        'link_id' => (int)$link_id
-                    ),
-                    SE_USER => (int)api_get_user_id(),
-
-                );
-                $ic_slide->xapian_data = serialize($xapian_data);
-                $description = $all_specific_terms . ' ' . $description;
-                $ic_slide->addValue('content', $description);
-
-                // Add category name if set.
-                if (isset ($_POST['selectcategory']) && $selectcategory > 0) {
-                    $table_link_category = Database :: get_course_table(
-                        TABLE_LINK_CATEGORY
-                    );
-                    $sql_cat = 'SELECT * FROM %s WHERE id=%d AND c_id = %d LIMIT 1';
-                    $sql_cat = sprintf(
-                        $sql_cat,
-                        $table_link_category,
-                        (int)$selectcategory,
-                        $course_int_id
-                    );
-                    $result = Database :: query($sql_cat);
-                    if (Database :: num_rows($result) == 1) {
-                        $row = Database :: fetch_array($result);
-                        $ic_slide->addValue('category', $row['category_title']);
-                    }
-                }
-
-                $di = new ChamiloIndexer();
-                isset ($_POST['language']) ? $lang = Database :: escape_string(
-                    $_POST['language']
-                ) : $lang = 'english';
-                $di->connectDb(null, null, $lang);
-                $di->addChunk($ic_slide);
-
-                // Index and return search engine document id.
-                $did = $di->index();
-                if ($did) {
-                    // Save it to db.
-                    $tbl_se_ref = Database :: get_main_table(
-                        TABLE_MAIN_SEARCH_ENGINE_REF
-                    );
-                    $sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
-                            VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-                    $sql = sprintf(
-                        $sql,
-                        $tbl_se_ref,
-                        $course_int_id,
-                        $courseid,
-                        TOOL_LINK,
-                        $link_id,
-                        $did
-                    );
-                    Database :: query($sql);
-                }
-            }
-            unset ($urllink, $title, $description, $selectcategory);
-            Display :: display_confirmation_message(get_lang('LinkAdded'));
-        }
-    } elseif ($type == 'category') {
-        $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-
-        $category_title = trim($_POST['category_title']);
-        $description = trim($_POST['description']);
-
-        if (empty($category_title)) {
-            $msgErr = get_lang('GiveCategoryName');
-            Display :: display_error_message(get_lang('GiveCategoryName'));
-            $ok = false;
-        } else {
-            // Looking for the largest order number for this category.
-            $result = Database :: query(
-                "SELECT MAX(display_order) FROM  " . $tbl_categories . " WHERE c_id = $course_id "
-            );
-            list ($orderMax) = Database :: fetch_row($result);
-            $order = $orderMax + 1;
-            $order = intval($order);
-            $session_id = api_get_session_id();
-            $sql = "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order, session_id)
-                    VALUES (" . $course_id . ",
-                    '" . Database::escape_string($category_title) . "',
-                    '" . Database::escape_string($description) . "',
-                    '$order',
-                    '$session_id'
-                    )";
-            Database :: query($sql);
-
-            $linkId = Database :: insert_id();
-            if ($linkId) {
-                // add link_category visibility
-                // course ID is taken from context in api_set_default_visibility
-                api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
+            if (empty($_POST['target_link'])) {
+                $target = '_self'; // Default target.
+            } else {
+                $target = Security:: remove_XSS($_POST['target_link']);
             }
 
-            $catlinkstatus = get_lang('CategoryAdded');
-            unset ($category_title, $description);
-            Display :: display_confirmation_message(get_lang('CategoryAdded'));
-        }
-    }
-
-    // "WHAT'S NEW" notification : update last tool Edit.
-    if ($type == 'link') {
-        global $_user;
-        global $_course;
-        global $nameTools;
-        api_item_property_update(
-            $_course,
-            TOOL_LINK,
-            $link_id,
-            'LinkAdded',
-            $_user['user_id']
-        );
-    }
-
-    return $ok;
-}
-
-/**
- * Used to delete a link or a category
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @param int $id
- * @param string    $type   The type of item to delete
- * @return bool
- */
-function deletelinkcategory($id, $type)
-{
-    $courseInfo = api_get_course_info();
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-    $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-
-    $course_id = api_get_course_int_id();
-    $id = intval($id);
-
-    if (empty($id)) {
-
-        return false;
-    }
-
-    $result = false;
-
-    switch ($type) {
-        case 'link':
-            // -> Items are no longer physically deleted,
-            // but the visibility is set to 2 (in item_property).
-            // This will make a restore function possible for the platform administrator.
-
-            $sql = "UPDATE $tbl_link SET on_homepage='0'
-                    WHERE c_id = $course_id AND id='" . $id . "'";
-            Database :: query($sql);
-
-            api_item_property_update(
-                $courseInfo,
-                TOOL_LINK,
-                $id,
-                'delete',
-                api_get_user_id()
-            );
-            delete_link_from_search_engine(api_get_course_id(), $id);
-            Display :: display_confirmation_message(get_lang('LinkDeleted'));
-            $result = true;
-            break;
-        case 'category':
-            // First we delete the category itself and afterwards all the links of this category.
-            $sql = "DELETE FROM " . $tbl_categories . "
-                    WHERE c_id = $course_id AND id='" . $id. "'";
-            Database :: query($sql);
-
-            $sql = "DELETE FROM " . $tbl_link . "
-                    WHERE c_id = $course_id AND category_id='" . $id . "'";
-            Database :: query($sql);
-
-            api_item_property_update(
-                $courseInfo,
-                TOOL_LINK_CATEGORY,
-                $id,
-                'delete',
-                api_get_user_id()
-            );
-
-            Display :: display_confirmation_message(
-                get_lang('CategoryDeleted')
-            );
-            $result = true;
-            break;
-    }
-
-    return $result;
-}
-
-/**
- * Removes a link from search engine database
- * @param string $course_id Course code
- * @param int $link_id Document id to delete
- * @return void
- */
-function delete_link_from_search_engine($course_id, $link_id)
-{
-    // Remove from search engine if enabled.
-    if (api_get_setting('search_enabled') == 'true') {
-        $tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-        $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-        $res = Database :: query($sql);
-        if (Database :: num_rows($res) > 0) {
-            $row = Database :: fetch_array($res);
-            require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
-            $di = new ChamiloIndexer();
-            $di->remove_document((int)$row['search_did']);
-        }
-        $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-        $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-        Database :: query($sql);
-
-        // Remove terms from db.
-        require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-        delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
-    }
-}
-
-/**
- *
- * Get link info
- * @param int link id
- * @return array link info
- *
- **/
-function get_link_info($id)
-{
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM " . $tbl_link . "
-            WHERE c_id = $course_id AND id='" . intval($id) . "' ";
-    $result = Database::query($sql);
-    $data = array();
-    if (Database::num_rows($result)) {
-        $data = Database::fetch_array($result);
-    }
-    return $data;
-}
-
-/**
- * Used to edit a link or a category
- * @todo Rewrite the whole links tool because it is becoming completely cluttered,
- *       code does not follow the coding conventions, does not use html_quickform, ...
- *       Some features were patched in.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @todo replace the globals with the appropriate $_POST or $_GET values
- */
-function editlinkcategory($type)
-{
-    global $catlinkstatus;
-    global $id;
-    global $submit_link;
-    global $submit_category;
-    global $_user;
-    global $_course;
-    global $nameTools;
-    global $urllink;
-    global $title;
-    global $description;
-    global $category;
-    global $selectcategory;
-    global $description;
-    global $category_title;
-    global $onhomepage;
-    global $target_link;
-
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-    $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-
-    $course_id = api_get_course_int_id();
-
-    if ($type == 'link') {
-
-        // This is used to populate the link-form with the info found in the database.
-        if (!empty ($_GET['id'])) {
-            $sql = "SELECT * FROM " . $tbl_link . "
-                    WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
-            $result = Database :: query($sql);
-            if ($myrow = Database :: fetch_array($result)) {
-                $urllink = $myrow['url'];
-                $title = $myrow['title'];
-                $description = $myrow['description'];
-                $category = $myrow['category_id'];
-                if ($myrow['on_homepage'] != 0) {
-                    $onhomepage = 'checked';
-                }
-                $target_link = $myrow['target'];
-            }
-        }
-
-        // This is used to put the modified info of the link-form into the database.
-        if ($_POST['submitLink']) {
-
-            // Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
-            $_POST['urllink'] = trim($_POST['urllink']);
-            $_POST['title'] = trim(Security :: remove_XSS($_POST['title']));
-            $_POST['description'] = trim(
-                Security :: remove_XSS($_POST['description'])
-            );
-            $_POST['selectcategory'] = intval($_POST['selectcategory']);
-            $_POST['id'] = intval($_POST['id']);
+            $urllink = trim($urllink);
+            $title = trim($title);
+            $description = trim($description);
 
             // We ensure URL to be absolute.
-            if (strpos($_POST['urllink'], '://') === false) {
-                $_POST['urllink'] = 'http://' . $_POST['urllink'];
+            if (strpos($urllink, '://') === false) {
+                $urllink = 'http://' . $urllink;
             }
 
             // If the title is empty, we use the URL as title.
-            if ($_POST['title'] == '') {
-                $_POST['title'] = $_POST['urllink'];
+            if ($title == '') {
+                $title = $urllink;
             }
 
             // If the URL is invalid, an error occurs.
-            if (!api_valid_url($urllink, true)) {
-                // A check against an absolute URL.
+            if (!api_valid_url(
+                $urllink,
+                true
+            )
+            ) { // A check against an absolute URL
                 $msgErr = get_lang('GiveURL');
-                Display :: display_error_message(get_lang('GiveURL'));
-                return false;
-            }
-
-            $onhomepage = Security :: remove_XSS($_POST['onhomepage']);
-            $target = Database::escape_string($_POST['target_link']);
-            if (empty ($mytarget)) {
-                $mytarget = '_self';
-            }
-            $mytarget = ", target='" . $target . "'";
-
-            // Finding the old category_id.
-            $sql = "SELECT * FROM " . $tbl_link . "
-                    WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
-            $result = Database :: query($sql);
-            $row = Database :: fetch_array($result);
-            $category_id = $row['category_id'];
-
-            if ($category_id != $_POST['selectcategory']) {
-                $sql = "SELECT MAX(display_order)
-                        FROM " . $tbl_link . "
-                        WHERE c_id = $course_id
-                        AND category_id='" . intval($_POST['selectcategory']) . "'";
-                $result = Database :: query($sql);
-                list ($max_display_order) = Database :: fetch_row($result);
-                $max_display_order++;
+                Display:: display_error_message(get_lang('GiveURL'));
+                $ok = false;
             } else {
-                $max_display_order = $row['display_order'];
-            }
-
-            $sql = "UPDATE " . $tbl_link . " SET " .
-                "url='" . Database :: escape_string($_POST['urllink']) . "', " .
-                "title='" . Database :: escape_string($_POST['title']) . "', " .
-                "description='" . Database :: escape_string($_POST['description']) . "', " .
-                "category_id='" . Database :: escape_string($_POST['selectcategory']) . "', " .
-                "display_order='" . $max_display_order . "', " .
-                "on_homepage= '" . Database :: escape_string($onhomepage) ."' $mytarget " .
-                " WHERE c_id = $course_id AND id='" . intval($_POST['id']) . "'";
-            Database :: query($sql);
-
-            // Update search enchine and its values table if enabled.
-            if (api_get_setting('search_enabled') == 'true') {
-                $link_id = intval($_POST['id']);
-
-                $course_int_id = api_get_course_int_id();
-
-                $course_id = api_get_course_id();
-                $link_url = Database :: escape_string($_POST['urllink']);
-                $link_title = Database :: escape_string($_POST['title']);
-                $link_description = Database :: escape_string(
-                    $_POST['description']
+                // Looking for the largest order number for this category.
+                $result = Database:: query(
+                    "SELECT MAX(display_order) FROM  " . $tbl_link . "
+                    WHERE
+                        c_id = $course_id AND
+                        category_id = '" . intval(
+                        $_POST['selectcategory']
+                    ) . "'"
                 );
+                list ($orderMax) = Database:: fetch_row($result);
+                $order = $orderMax + 1;
 
-                // Actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one.
-                // Get search_did.
-                $tbl_se_ref = Database :: get_main_table(
-                    TABLE_MAIN_SEARCH_ENGINE_REF
-                );
-                $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-                $sql = sprintf(
-                    $sql,
-                    $tbl_se_ref,
-                    $course_id,
-                    TOOL_LINK,
-                    $link_id
-                );
-                $res = Database :: query($sql);
+                $session_id = api_get_session_id();
 
-                if (Database :: num_rows($res) > 0) {
-                    require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
-                    require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
-                    require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+                $sql = "INSERT INTO " . $tbl_link . "
+                    (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
+                    VALUES
+                    (" . $course_id . ",
+                    '" . Database:: escape_string($urllink) . "',
+                    '" . Database:: escape_string($title) . "',
+                    '" . Database:: escape_string($description) . "',
+                    '" . Database:: escape_string($selectcategory) . "',
+                    '" . Database:: escape_string($order) . "',
+                    '" . Database:: escape_string($onhomepage) . "',
+                    '" . Database:: escape_string($target) . "',
+                    '" . Database:: escape_string($session_id) . "')";
 
-                    $se_ref = Database :: fetch_array($res);
+                $catlinkstatus = get_lang('LinkAdded');
+                Database:: query($sql);
+                $link_id = Database:: insert_id();
+
+                if ($link_id) {
+                    api_set_default_visibility($link_id, TOOL_LINK);
+                }
+
+                if ((api_get_setting('search_enabled') == 'true') &&
+                    $link_id && extension_loaded('xapian')
+                ) {
+                    require_once api_get_path(
+                            LIBRARY_PATH
+                        ) . 'search/ChamiloIndexer.class.php';
+                    require_once api_get_path(
+                            LIBRARY_PATH
+                        ) . 'search/IndexableChunk.class.php';
+                    require_once api_get_path(
+                            LIBRARY_PATH
+                        ) . 'specific_fields_manager.lib.php';
+
+                    $course_int_id = api_get_course_int_id();
+                    $courseid = api_get_course_id();
                     $specific_fields = get_specific_field_list();
                     $ic_slide = new IndexableChunk();
 
+                    // Add all terms to db.
                     $all_specific_terms = '';
                     foreach ($specific_fields as $specific_field) {
-                        delete_all_specific_field_value(
-                            $course_id,
-                            $specific_field['id'],
-                            TOOL_LINK,
-                            $link_id
-                        );
                         if (isset ($_REQUEST[$specific_field['code']])) {
                             $sterms = trim($_REQUEST[$specific_field['code']]);
                             if (!empty ($sterms)) {
@@ -653,7 +235,7 @@ function editlinkcategory($type)
                                     );
                                     add_specific_field_value(
                                         $specific_field['id'],
-                                        $course_id,
+                                        $courseid,
                                         TOOL_LINK,
                                         $link_id,
                                         $sterm
@@ -664,11 +246,11 @@ function editlinkcategory($type)
                     }
 
                     // Build the chunk to index.
-                    $ic_slide->addValue("title", $link_title);
-                    $ic_slide->addCourseId($course_id);
+                    $ic_slide->addValue('title', $title);
+                    $ic_slide->addCourseId($courseid);
                     $ic_slide->addToolId(TOOL_LINK);
                     $xapian_data = array(
-                        SE_COURSE_ID => $course_id,
+                        SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LINK,
                         SE_DATA => array(
                             'link_id' => (int)$link_id
@@ -677,24 +259,24 @@ function editlinkcategory($type)
 
                     );
                     $ic_slide->xapian_data = serialize($xapian_data);
-                    $link_description = $all_specific_terms . ' ' . $link_description;
-                    $ic_slide->addValue('content', $link_description);
+                    $description = $all_specific_terms . ' ' . $description;
+                    $ic_slide->addValue('content', $description);
 
                     // Add category name if set.
                     if (isset ($_POST['selectcategory']) && $selectcategory > 0) {
-                        $table_link_category = Database :: get_course_table(
+                        $table_link_category = Database:: get_course_table(
                             TABLE_LINK_CATEGORY
                         );
-                        $sql_cat = 'SELECT * FROM %s WHERE id=%d and c_id = %d LIMIT 1';
+                        $sql_cat = 'SELECT * FROM %s WHERE id=%d AND c_id = %d LIMIT 1';
                         $sql_cat = sprintf(
                             $sql_cat,
                             $table_link_category,
                             (int)$selectcategory,
                             $course_int_id
                         );
-                        $result = Database :: query($sql_cat);
-                        if (Database :: num_rows($result) == 1) {
-                            $row = Database :: fetch_array($result);
+                        $result = Database:: query($sql_cat);
+                        if (Database:: num_rows($result) == 1) {
+                            $row = Database:: fetch_array($result);
                             $ic_slide->addValue(
                                 'category',
                                 $row['category_title']
@@ -703,868 +285,1426 @@ function editlinkcategory($type)
                     }
 
                     $di = new ChamiloIndexer();
-                    isset ($_POST['language']) ? $lang = Database :: escape_string(
+                    isset ($_POST['language']) ? $lang = Database:: escape_string(
                         $_POST['language']
                     ) : $lang = 'english';
                     $di->connectDb(null, null, $lang);
-                    $di->remove_document((int)$se_ref['search_did']);
                     $di->addChunk($ic_slide);
 
                     // Index and return search engine document id.
                     $did = $di->index();
                     if ($did) {
                         // Save it to db.
-                        $sql = 'DELETE FROM %s
-                                WHERE course_code=\'%s\'
-                                AND tool_id=\'%s\'
-                                AND ref_id_high_level=\'%s\'';
-                        $sql = sprintf(
-                            $sql,
-                            $tbl_se_ref,
-                            $course_id,
-                            TOOL_LINK,
-                            $link_id
+                        $tbl_se_ref = Database:: get_main_table(
+                            TABLE_MAIN_SEARCH_ENGINE_REF
                         );
-                        Database :: query($sql);
                         $sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                         $sql = sprintf(
                             $sql,
                             $tbl_se_ref,
                             $course_int_id,
-                            $course_id,
+                            $courseid,
                             TOOL_LINK,
                             $link_id,
                             $did
                         );
-                        Database :: query($sql);
+                        Database:: query($sql);
                     }
                 }
+                unset ($urllink, $title, $description, $selectcategory);
+                Display:: display_confirmation_message(get_lang('LinkAdded'));
             }
-            // "WHAT'S NEW" notification: update table last_toolEdit.
+        } elseif ($type == 'category') {
+            $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+
+            $category_title = trim($_POST['category_title']);
+            $description = trim($_POST['description']);
+
+            if (empty($category_title)) {
+                $msgErr = get_lang('GiveCategoryName');
+                Display:: display_error_message(get_lang('GiveCategoryName'));
+                $ok = false;
+            } else {
+                // Looking for the largest order number for this category.
+                $result = Database:: query(
+                    "SELECT MAX(display_order) FROM  " . $tbl_categories . " WHERE c_id = $course_id "
+                );
+                list ($orderMax) = Database:: fetch_row($result);
+                $order = $orderMax + 1;
+                $order = intval($order);
+                $session_id = api_get_session_id();
+                $sql = "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order, session_id)
+                        VALUES (" . $course_id . ",
+                        '" . Database::escape_string($category_title) . "',
+                        '" . Database::escape_string($description) . "',
+                        '$order',
+                        '$session_id'
+                        )";
+                Database:: query($sql);
+
+                $linkId = Database:: insert_id();
+                if ($linkId) {
+                    // add link_category visibility
+                    // course ID is taken from context in api_set_default_visibility
+                    api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
+                }
+
+                $catlinkstatus = get_lang('CategoryAdded');
+                unset ($category_title, $description);
+                Display:: display_confirmation_message(
+                    get_lang('CategoryAdded')
+                );
+            }
+        }
+
+        // "WHAT'S NEW" notification : update last tool Edit.
+        if ($type == 'link') {
+            global $_user;
+            global $_course;
+            global $nameTools;
             api_item_property_update(
                 $_course,
                 TOOL_LINK,
-                $_POST['id'],
-                'LinkUpdated',
+                $link_id,
+                'LinkAdded',
                 $_user['user_id']
             );
-            Display :: display_confirmation_message(get_lang('LinkModded'));
-        }
-    }
-
-    if ($type == 'category') {
-
-        // This is used to populate the category-form with the info found in the database.
-        if (!$submit_category) {
-            $sql = "SELECT * FROM " . $tbl_categories . "
-                WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
-            $result = Database :: query($sql);
-            if ($myrow = Database :: fetch_array($result)) {
-                $category_title = $myrow['category_title'];
-                $description = $myrow['description'];
-            }
         }
 
-        // This is used to put the modified info of the category-form into the database.
-        if ($submit_category) {
-            $sql = "UPDATE " . $tbl_categories . "
-                    SET category_title='" . Database :: escape_string($_POST['category_title']) . "',
-                    description='" . Database :: escape_string($_POST['description']) . "'
-                    WHERE c_id = $course_id AND id='" . Database :: escape_string($_POST['id']) . "'";
-            Database :: query($sql);
-            Display :: display_confirmation_message(get_lang('CategoryModded'));
+        return $ok;
+    }
+
+    /**
+     * Used to delete a link or a category
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @param int $id
+     * @param string $type The type of item to delete
+     * @return bool
+     */
+    public static function deletelinkcategory($id, $type)
+    {
+        $courseInfo = api_get_course_info();
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+
+        $course_id = api_get_course_int_id();
+        $id = intval($id);
+
+        if (empty($id)) {
+
+            return false;
         }
-    }
 
-    return true; // On errors before this statement, exit from this function by returning false value.
-}
+        $result = false;
 
-/**
- * Creates a correct $view for in the URL
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function makedefaultviewcode($locatie)
-{
-    global $aantalcategories, $view;
-    for ($j = 0; $j <= $aantalcategories - 1; $j++) {
-        $view[$j] = 0;
-    }
-    $view[intval($locatie)] = '1';
-}
+        switch ($type) {
+            case 'link':
+                // -> Items are no longer physically deleted,
+                // but the visibility is set to 2 (in item_property).
+                // This will make a restore function possible for the platform administrator.
 
-/**
- * Changes the visibility of a link
- * @todo add the changing of the visibility of a course
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function change_visibility_link($id, $scope)
-{
-    $_course = api_get_course_info();
-    $_user = api_get_user_info();
-    if ($scope == TOOL_LINK) {
-        api_item_property_update(
-            $_course,
-            TOOL_LINK,
-            $id,
-            $_GET['action'],
-            $_user['user_id']
-        );
-        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-    } elseif ($scope == TOOL_LINK_CATEGORY) {
-        api_item_property_update(
-            $_course,
-            TOOL_LINK_CATEGORY,
-            $id,
-            $_GET['action'],
-            $_user['user_id']
-        );
-        Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-    }
-}
+                $sql = "UPDATE $tbl_link SET on_homepage='0'
+                        WHERE c_id = $course_id AND id='" . $id . "'";
+                Database:: query($sql);
 
-/**
- * Generate SQL to select all the links categories in the current course and
- * session
- * @param   int $courseId
- * @param   int $sessionId
- * @return resource
- */
-function getLinkCategories($courseId, $sessionId)
-{
-    $tblLinkCategory = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    $tblItemProperty = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $courseId = intval($courseId);
-    // Condition for the session.
-    $sessionCondition = api_get_session_condition($sessionId, true, true);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LINK,
+                    $id,
+                    'delete',
+                    api_get_user_id()
+                );
+                self::delete_link_from_search_engine(api_get_course_id(), $id);
+                Display:: display_confirmation_message(get_lang('LinkDeleted'));
+                $result = true;
+                break;
+            case 'category':
+                // First we delete the category itself and afterwards all the links of this category.
+                $sql = "DELETE FROM " . $tbl_categories . "
+                        WHERE c_id = $course_id AND id='" . $id . "'";
+                Database:: query($sql);
 
-    // Getting links
-    $sql = "SELECT *, linkcat.id
-            FROM $tblLinkCategory linkcat
-            WHERE
-                linkcat.c_id = " . $courseId."
-                $sessionCondition
-            ORDER BY linkcat.display_order DESC";
+                $sql = "DELETE FROM " . $tbl_link . "
+                        WHERE c_id = $course_id AND category_id='" . $id . "'";
+                Database:: query($sql);
 
-    $result = Database::query($sql);
-    $categories = Database::store_result($result);
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LINK_CATEGORY,
+                    $id,
+                    'delete',
+                    api_get_user_id()
+                );
 
-    $sql = "SELECT *, linkcat.id
-            FROM $tblLinkCategory linkcat
-            INNER JOIN $tblItemProperty itemproperties
-            ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
-            WHERE
-                itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
-                $sessionCondition AND
-                linkcat.c_id = " . $courseId . "
-            ORDER BY linkcat.display_order DESC";
-
-    $result = Database::query($sql);
-
-    $categoryInItemProperty = array();
-    if (Database::num_rows($result)) {
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $categoryInItemProperty[$row['id']] = $row;
+                Display:: display_confirmation_message(
+                    get_lang('CategoryDeleted')
+                );
+                $result = true;
+                break;
         }
+
+        return $result;
     }
 
-    foreach ($categories as & $category) {
-        if (!isset($categoryInItemProperty[$category['id']])) {
-            api_set_default_visibility($category['id'], TOOL_LINK_CATEGORY);
-        }
-    }
-
-    $sql = "SELECT DISTINCT linkcat.*, visibility
-            FROM $tblLinkCategory linkcat
-            INNER JOIN $tblItemProperty itemproperties
-            ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
-            WHERE
-                itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
-                (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
-                $sessionCondition AND
-                linkcat.c_id = " . $courseId . "
-            GROUP BY c_id, id
-            ORDER BY linkcat.display_order DESC
-            ";
-    $result = Database::query($sql);
-
-    return Database::store_result($result, 'ASSOC');
-}
-
-/**
- * Displays all the links of a given category.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function showlinksofcategory($catid)
-{
-    global $is_allowed, $charset, $urlview, $up, $down, $_user, $token;
-
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-    $TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-    // Condition for the session.
-    $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id, true, true);
-    $catid = intval($catid);
-
-    $course_id = api_get_course_int_id();
-
-    $sqlLinks = "SELECT *, link.id FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties
-                 WHERE
-                    itemproperties.tool='" . TOOL_LINK . "' AND
-                    link.id=itemproperties.ref AND
-                    link.category_id='" . $catid . "' AND
-                    (itemproperties.visibility='0' OR itemproperties.visibility='1')
-                    $condition_session AND
-                    link.c_id = " . $course_id . " AND
-                    itemproperties.c_id = " . $course_id . "
-                    ORDER BY link.display_order DESC";
-    $result = Database :: query($sqlLinks);
-    $numberoflinks = Database :: num_rows($result);
-    if ($numberoflinks > 0) {
-        echo '<table class="data_table" width="100%">';
-        $i = 1;
-        while ($myrow = Database :: fetch_array($result)) {
-            // Validation when belongs to a session.
-            $session_img = api_get_session_image(
-                $myrow['session_id'],
-                $_user['status']
+    /**
+     * Removes a link from search engine database
+     * @param string $course_id Course code
+     * @param int $link_id Document id to delete
+     * @return void
+     */
+    public static function delete_link_from_search_engine($course_id, $link_id)
+    {
+        // Remove from search engine if enabled.
+        if (api_get_setting('search_enabled') == 'true') {
+            $tbl_se_ref = Database:: get_main_table(
+                TABLE_MAIN_SEARCH_ENGINE_REF
             );
-
-            $css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
-
-            $link_validator = '';
-            if (api_is_allowed_to_edit(null, true)) {
-                $link_validator = '' . Display::url(
-                    Display::return_icon(
-                        'preview_view.png',
-                        get_lang('CheckURL'),
-                        array(),
-                        16
-                    ),
-                    '#',
-                    array(
-                        'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes(
-                            $myrow['url']
-                        ) . "');"
-                    )
-                );
-                $link_validator .= Display::span(
-                    '',
-                    array('id' => 'url_id_' . $myrow['id'])
-                );
+            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+            $res = Database:: query($sql);
+            if (Database:: num_rows($res) > 0) {
+                $row = Database:: fetch_array($res);
+                require_once api_get_path(
+                        LIBRARY_PATH
+                    ) . 'search/ChamiloIndexer.class.php';
+                $di = new ChamiloIndexer();
+                $di->remove_document((int)$row['search_did']);
             }
+            $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
+            Database:: query($sql);
 
-            if ($myrow['visibility'] == '1') {
-                echo '<tr class="' . $css_class . '">';
-                echo '<td align="center" valign="middle" width="5%">';
-                echo '<a href="link_goto.php?' . api_get_cidreq() .
-                    '&amp;link_id=' . $myrow['id'] .
-                    '&amp;link_url=' . urlencode($myrow['url']) . '" target="_blank">
-                    <img src="../../main/img/link.gif" border="0" alt="' . get_lang('Link') . '"/></a></td>
-                    <td width="80%" valign="top"><a href="link_goto.php?' . api_get_cidreq() .
-                    '&amp;link_id=' . $myrow['id'] .
-                    '&amp;link_url=' . urlencode($myrow['url']) . '" target="' . $myrow['target'] . '">';
-                echo Security :: remove_XSS($myrow['title']);
-                echo '</a>';
-                echo $link_validator;
-                echo $session_img;
-                echo '<br />' . $myrow['description'];
-            } else {
-                if (api_is_allowed_to_edit(null, true)) {
-                    echo '<tr class="' . $css_class . '">';
-                    echo '<td align="center" valign="middle" width="5%">
-                        <a href="link_goto.php?' . api_get_cidreq() .
-                        '&amp;link_id=' . $myrow['id'] . "
-                        &amp;link_url=" . urlencode($myrow['url']) . '"
-                        target="_blank" class="invisible">';
-                    echo Display :: return_icon(
-                        'link_na.gif',
-                        get_lang('Link')
-                    ), '</a>';
-                    echo '</td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(
-                    ), '&amp;link_id=', $myrow['id'], '&amp;link_url=', urlencode(
-                        $myrow['url']
-                    ), '" target="', $myrow['target'], '"  class="invisible">';
-                    echo Security :: remove_XSS($myrow['url']);
-                    echo "</a>";
-                    echo $link_validator;
-                    echo $session_img, '<br />', $myrow['title'];
-                }
-            }
-
-            if (api_is_allowed_to_edit(null, true)) {
-                echo '<td style="text-align:center;">';
-                if ($session_id == $myrow['session_id']) {
-                    echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
-                        '&amp;sec_token=' . $token .
-                        '&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') .
-                        '&amp;id=' . $myrow['id'] .
-                        '&amp;urlview=' . $urlview . '"title="' . get_lang('Modify') . '">' .
-                        Display :: return_icon(
-                            'edit.png',
-                            get_lang('Modify'),
-                            array(),
-                            ICON_SIZE_SMALL
-                        ) . '</a>';
-
-                    // DISPLAY MOVE UP COMMAND only if it is not the top link.
-                    /* commented at least since 2014-10-11
-                    if ($i != 1) {
-                        echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                    } else {
-                        echo Display :: return_icon('up_na.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
-                    }
-
-                    // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
-                    if ($i < $numberoflinks) {
-                        echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                    } else {
-                        echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
-                    }*/
-
-                    if ($myrow['visibility'] == '1') {
-                        echo '<a href="link.php?' . api_get_cidreq() .
-                            '&amp;sec_token=' . $token .
-                            '&amp;action=invisible&amp;id=' . $myrow['id'] .
-                            '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Hide') . '">' .
-                            Display :: return_icon(
-                                'visible.png',
-                                get_lang('Hide'),
-                                array(),
-                                ICON_SIZE_SMALL
-                            ) . '</a>';
-                    }
-                    if ($myrow['visibility'] == '0') {
-                        echo ' <a href="link.php?' . api_get_cidreq() .
-                            '&amp;sec_token=' . $token .
-                            '&amp;action=visible&amp;id=' . $myrow['id'] .
-                            '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang('Show') . '">' .
-                            Display :: return_icon(
-                                'invisible.png',
-                                get_lang('Show'),
-                                array(),
-                                ICON_SIZE_SMALL
-                            ) . '</a>';
-                    }
-                    echo ' <a href="' . api_get_self() . '?' . api_get_cidreq() .
-                        '&amp;sec_token=' . $token .
-                        '&amp;action=deletelink&amp;id='. $myrow['id'].
-                        '&amp;urlview='. $urlview. "\"
-                        onclick=\"javascript: if(!confirm('" . get_lang('LinkDelconfirm') . "'))
-                        return false;\" title=\"" . get_lang('Delete') . '">' .
-                        Display :: return_icon(
-                            'delete.png',
-                            get_lang('Delete'),
-                            array(),
-                            ICON_SIZE_SMALL
-                        ) . '</a>';
-
-                } else {
-                    echo Display :: return_icon(
-                        'edit_na.png',
-                        get_lang('EditionNotAvailableFromSession'),
-                        array(),
-                        ICON_SIZE_SMALL
-                    ); //get_lang('EditionNotAvailableFromSession');
-                }
-                echo '</td>';
-            }
-            echo '</tr>';
-            $i++;
+            // Remove terms from db.
+            require_once(api_get_path(
+                    LIBRARY_PATH
+                ) . 'specific_fields_manager.lib.php');
+            delete_all_values_for_item($course_id, TOOL_DOCUMENT, $link_id);
         }
-        echo '</table>';
     }
-}
 
-/**
- * Displays the edit, delete and move icons
- * @param int   Category ID
- * @return void
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function showcategoryadmintools($categoryid)
-{
+    /**
+     *
+     * Get link info
+     * @param int link id
+     * @return array link info
+     *
+     **/
+    public static function get_link_info($id)
+    {
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $course_id = api_get_course_int_id();
+        $sql = "SELECT * FROM " . $tbl_link . "
+                WHERE c_id = $course_id AND id='" . intval($id) . "' ";
+        $result = Database::query($sql);
+        $data = array();
+        if (Database::num_rows($result)) {
+            $data = Database::fetch_array($result);
+        }
+        return $data;
+    }
 
-    global $urlview, $aantalcategories, $catcounter, $token;
-    echo '<a href="' . api_get_self() . '?' . api_get_cidreq(
-        ) . '&amp;sec_token=' . $token . '&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang(
-            'Modify'
-        ) . '">' . Display :: return_icon(
-            'edit.png',
-            get_lang('Modify'),
-            array(),
-            ICON_SIZE_SMALL
-        ) . '</a>';
+    /**
+     * Used to edit a link or a category
+     * @todo Rewrite the whole links tool because it is becoming completely cluttered,
+     *       code does not follow the coding conventions, does not use html_quickform, ...
+     *       Some features were patched in.
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @todo replace the globals with the appropriate $_POST or $_GET values
+     */
+    public static function editlinkcategory($type)
+    {
+        global $catlinkstatus;
+        global $id;
+        global $submit_link;
+        global $submit_category;
+        global $_user;
+        global $_course;
+        global $nameTools;
+        global $urllink;
+        global $title;
+        global $description;
+        global $category;
+        global $selectcategory;
+        global $description;
+        global $category_title;
+        global $onhomepage;
+        global $target_link;
 
-    // DISPLAY MOVE UP COMMAND only if it is not the top link.
-    if ($catcounter != 1) {
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+
+        $course_id = api_get_course_int_id();
+
+        if ($type == 'link') {
+
+            // This is used to populate the link-form with the info found in the database.
+            if (!empty ($_GET['id'])) {
+                $sql = "SELECT * FROM " . $tbl_link . "
+                        WHERE c_id = $course_id AND id='" . intval(
+                        $_GET['id']
+                    ) . "'";
+                $result = Database:: query($sql);
+                if ($myrow = Database:: fetch_array($result)) {
+                    $urllink = $myrow['url'];
+                    $title = $myrow['title'];
+                    $description = $myrow['description'];
+                    $category = $myrow['category_id'];
+                    if ($myrow['on_homepage'] != 0) {
+                        $onhomepage = 'checked';
+                    }
+                    $target_link = $myrow['target'];
+                }
+            }
+
+            // This is used to put the modified info of the link-form into the database.
+            if ($_POST['submitLink']) {
+
+                // Ivan, 13-OCT-2010: It is a litle bit messy code below, just in case I added some extra-security checks here.
+                $_POST['urllink'] = trim($_POST['urllink']);
+                $_POST['title'] = trim(Security:: remove_XSS($_POST['title']));
+                $_POST['description'] = trim(
+                    Security:: remove_XSS($_POST['description'])
+                );
+                $_POST['selectcategory'] = intval($_POST['selectcategory']);
+                $_POST['id'] = intval($_POST['id']);
+
+                // We ensure URL to be absolute.
+                if (strpos($_POST['urllink'], '://') === false) {
+                    $_POST['urllink'] = 'http://' . $_POST['urllink'];
+                }
+
+                // If the title is empty, we use the URL as title.
+                if ($_POST['title'] == '') {
+                    $_POST['title'] = $_POST['urllink'];
+                }
+
+                // If the URL is invalid, an error occurs.
+                if (!api_valid_url($urllink, true)) {
+                    // A check against an absolute URL.
+                    $msgErr = get_lang('GiveURL');
+                    Display:: display_error_message(get_lang('GiveURL'));
+                    return false;
+                }
+
+                $onhomepage = Security:: remove_XSS($_POST['onhomepage']);
+                $target = Database::escape_string($_POST['target_link']);
+                if (empty ($mytarget)) {
+                    $mytarget = '_self';
+                }
+                $mytarget = ", target='" . $target . "'";
+
+                // Finding the old category_id.
+                $sql = "SELECT * FROM " . $tbl_link . "
+                        WHERE c_id = $course_id AND id='" . intval(
+                        $_POST['id']
+                    ) . "'";
+                $result = Database:: query($sql);
+                $row = Database:: fetch_array($result);
+                $category_id = $row['category_id'];
+
+                if ($category_id != $_POST['selectcategory']) {
+                    $sql = "SELECT MAX(display_order)
+                            FROM " . $tbl_link . "
+                            WHERE c_id = $course_id
+                            AND category_id='" . intval(
+                            $_POST['selectcategory']
+                        ) . "'";
+                    $result = Database:: query($sql);
+                    list ($max_display_order) = Database:: fetch_row($result);
+                    $max_display_order++;
+                } else {
+                    $max_display_order = $row['display_order'];
+                }
+
+                $sql = "UPDATE " . $tbl_link . " SET " .
+                    "url='" . Database:: escape_string(
+                        $_POST['urllink']
+                    ) . "', " .
+                    "title='" . Database:: escape_string(
+                        $_POST['title']
+                    ) . "', " .
+                    "description='" . Database:: escape_string(
+                        $_POST['description']
+                    ) . "', " .
+                    "category_id='" . Database:: escape_string(
+                        $_POST['selectcategory']
+                    ) . "', " .
+                    "display_order='" . $max_display_order . "', " .
+                    "on_homepage= '" . Database:: escape_string(
+                        $onhomepage
+                    ) . "' $mytarget " .
+                    " WHERE c_id = $course_id AND id='" . intval(
+                        $_POST['id']
+                    ) . "'";
+                Database:: query($sql);
+
+                // Update search enchine and its values table if enabled.
+                if (api_get_setting('search_enabled') == 'true') {
+                    $link_id = intval($_POST['id']);
+
+                    $course_int_id = api_get_course_int_id();
+
+                    $course_id = api_get_course_id();
+                    $link_url = Database:: escape_string($_POST['urllink']);
+                    $link_title = Database:: escape_string($_POST['title']);
+                    $link_description = Database:: escape_string(
+                        $_POST['description']
+                    );
+
+                    // Actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one.
+                    // Get search_did.
+                    $tbl_se_ref = Database:: get_main_table(
+                        TABLE_MAIN_SEARCH_ENGINE_REF
+                    );
+                    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
+                    $sql = sprintf(
+                        $sql,
+                        $tbl_se_ref,
+                        $course_id,
+                        TOOL_LINK,
+                        $link_id
+                    );
+                    $res = Database:: query($sql);
+
+                    if (Database:: num_rows($res) > 0) {
+                        require_once api_get_path(
+                                LIBRARY_PATH
+                            ) . 'search/ChamiloIndexer.class.php';
+                        require_once api_get_path(
+                                LIBRARY_PATH
+                            ) . 'search/IndexableChunk.class.php';
+                        require_once api_get_path(
+                                LIBRARY_PATH
+                            ) . 'specific_fields_manager.lib.php';
+
+                        $se_ref = Database:: fetch_array($res);
+                        $specific_fields = get_specific_field_list();
+                        $ic_slide = new IndexableChunk();
+
+                        $all_specific_terms = '';
+                        foreach ($specific_fields as $specific_field) {
+                            delete_all_specific_field_value(
+                                $course_id,
+                                $specific_field['id'],
+                                TOOL_LINK,
+                                $link_id
+                            );
+                            if (isset ($_REQUEST[$specific_field['code']])) {
+                                $sterms = trim(
+                                    $_REQUEST[$specific_field['code']]
+                                );
+                                if (!empty ($sterms)) {
+                                    $all_specific_terms .= ' ' . $sterms;
+                                    $sterms = explode(',', $sterms);
+                                    foreach ($sterms as $sterm) {
+                                        $ic_slide->addTerm(
+                                            trim($sterm),
+                                            $specific_field['code']
+                                        );
+                                        add_specific_field_value(
+                                            $specific_field['id'],
+                                            $course_id,
+                                            TOOL_LINK,
+                                            $link_id,
+                                            $sterm
+                                        );
+                                    }
+                                }
+                            }
+                        }
+
+                        // Build the chunk to index.
+                        $ic_slide->addValue("title", $link_title);
+                        $ic_slide->addCourseId($course_id);
+                        $ic_slide->addToolId(TOOL_LINK);
+                        $xapian_data = array(
+                            SE_COURSE_ID => $course_id,
+                            SE_TOOL_ID => TOOL_LINK,
+                            SE_DATA => array(
+                                'link_id' => (int)$link_id
+                            ),
+                            SE_USER => (int)api_get_user_id(),
+
+                        );
+                        $ic_slide->xapian_data = serialize($xapian_data);
+                        $link_description = $all_specific_terms . ' ' . $link_description;
+                        $ic_slide->addValue('content', $link_description);
+
+                        // Add category name if set.
+                        if (isset ($_POST['selectcategory']) && $selectcategory > 0) {
+                            $table_link_category = Database:: get_course_table(
+                                TABLE_LINK_CATEGORY
+                            );
+                            $sql_cat = 'SELECT * FROM %s WHERE id=%d and c_id = %d LIMIT 1';
+                            $sql_cat = sprintf(
+                                $sql_cat,
+                                $table_link_category,
+                                (int)$selectcategory,
+                                $course_int_id
+                            );
+                            $result = Database:: query($sql_cat);
+                            if (Database:: num_rows($result) == 1) {
+                                $row = Database:: fetch_array($result);
+                                $ic_slide->addValue(
+                                    'category',
+                                    $row['category_title']
+                                );
+                            }
+                        }
+
+                        $di = new ChamiloIndexer();
+                        isset ($_POST['language']) ? $lang = Database:: escape_string(
+                            $_POST['language']
+                        ) : $lang = 'english';
+                        $di->connectDb(null, null, $lang);
+                        $di->remove_document((int)$se_ref['search_did']);
+                        $di->addChunk($ic_slide);
+
+                        // Index and return search engine document id.
+                        $did = $di->index();
+                        if ($did) {
+                            // Save it to db.
+                            $sql = 'DELETE FROM %s
+                                    WHERE course_code=\'%s\'
+                                    AND tool_id=\'%s\'
+                                    AND ref_id_high_level=\'%s\'';
+                            $sql = sprintf(
+                                $sql,
+                                $tbl_se_ref,
+                                $course_id,
+                                TOOL_LINK,
+                                $link_id
+                            );
+                            Database:: query($sql);
+                            $sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
+                                    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
+                            $sql = sprintf(
+                                $sql,
+                                $tbl_se_ref,
+                                $course_int_id,
+                                $course_id,
+                                TOOL_LINK,
+                                $link_id,
+                                $did
+                            );
+                            Database:: query($sql);
+                        }
+                    }
+                }
+                // "WHAT'S NEW" notification: update table last_toolEdit.
+                api_item_property_update(
+                    $_course,
+                    TOOL_LINK,
+                    $_POST['id'],
+                    'LinkUpdated',
+                    $_user['user_id']
+                );
+                Display:: display_confirmation_message(get_lang('LinkModded'));
+            }
+        }
+
+        if ($type == 'category') {
+
+            // This is used to populate the category-form with the info found in the database.
+            if (!$submit_category) {
+                $sql = "SELECT * FROM " . $tbl_categories . "
+                    WHERE c_id = $course_id AND id='" . intval(
+                        $_GET['id']
+                    ) . "'";
+                $result = Database:: query($sql);
+                if ($myrow = Database:: fetch_array($result)) {
+                    $category_title = $myrow['category_title'];
+                    $description = $myrow['description'];
+                }
+            }
+
+            // This is used to put the modified info of the category-form into the database.
+            if ($submit_category) {
+                $sql = "UPDATE " . $tbl_categories . "
+                        SET category_title='" . Database:: escape_string(
+                        $_POST['category_title']
+                    ) . "',
+                        description='" . Database:: escape_string(
+                        $_POST['description']
+                    ) . "'
+                        WHERE c_id = $course_id AND id='" . Database:: escape_string(
+                        $_POST['id']
+                    ) . "'";
+                Database:: query($sql);
+                Display:: display_confirmation_message(
+                    get_lang('CategoryModded')
+                );
+            }
+        }
+
+        return true; // On errors before this statement, exit from this function by returning false value.
+    }
+
+    /**
+     * Creates a correct $view for in the URL
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     */
+    public static function makedefaultviewcode($locatie)
+    {
+        global $aantalcategories, $view;
+        for ($j = 0; $j <= $aantalcategories - 1; $j++) {
+            $view[$j] = 0;
+        }
+        $view[intval($locatie)] = '1';
+    }
+
+    /**
+     * Changes the visibility of a link
+     * @todo add the changing of the visibility of a course
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     */
+    public static function change_visibility_link($id, $scope)
+    {
+        $_course = api_get_course_info();
+        $_user = api_get_user_info();
+        if ($scope == TOOL_LINK) {
+            api_item_property_update(
+                $_course,
+                TOOL_LINK,
+                $id,
+                $_GET['action'],
+                $_user['user_id']
+            );
+            Display:: display_confirmation_message(
+                get_lang('VisibilityChanged')
+            );
+        } elseif ($scope == TOOL_LINK_CATEGORY) {
+            api_item_property_update(
+                $_course,
+                TOOL_LINK_CATEGORY,
+                $id,
+                $_GET['action'],
+                $_user['user_id']
+            );
+            Display:: display_confirmation_message(
+                get_lang('VisibilityChanged')
+            );
+        }
+    }
+
+    /**
+     * Generate SQL to select all the links categories in the current course and
+     * session
+     * @param   int $courseId
+     * @param   int $sessionId
+     * @return resource
+     */
+    public static function getLinkCategories($courseId, $sessionId)
+    {
+        $tblLinkCategory = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $tblItemProperty = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+        $courseId = intval($courseId);
+        // Condition for the session.
+        $sessionCondition = api_get_session_condition($sessionId, true, true);
+
+        // Getting links
+        $sql = "SELECT *, linkcat.id
+                FROM $tblLinkCategory linkcat
+                WHERE
+                    linkcat.c_id = " . $courseId . "
+                    $sessionCondition
+                ORDER BY linkcat.display_order DESC";
+
+        $result = Database::query($sql);
+        $categories = Database::store_result($result);
+
+        $sql = "SELECT *, linkcat.id
+                FROM $tblLinkCategory linkcat
+                INNER JOIN $tblItemProperty itemproperties
+                ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
+                WHERE
+                    itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                    $sessionCondition AND
+                    linkcat.c_id = " . $courseId . "
+                ORDER BY linkcat.display_order DESC";
+
+        $result = Database::query($sql);
+
+        $categoryInItemProperty = array();
+        if (Database::num_rows($result)) {
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $categoryInItemProperty[$row['id']] = $row;
+            }
+        }
+
+        foreach ($categories as & $category) {
+            if (!isset($categoryInItemProperty[$category['id']])) {
+                api_set_default_visibility($category['id'], TOOL_LINK_CATEGORY);
+            }
+        }
+
+        $sql = "SELECT DISTINCT linkcat.*, visibility
+                FROM $tblLinkCategory linkcat
+                INNER JOIN $tblItemProperty itemproperties
+                ON (linkcat.id = itemproperties.ref AND linkcat.c_id = itemproperties.c_id)
+                WHERE
+                    itemproperties.tool = '" . TOOL_LINK_CATEGORY . "' AND
+                    (itemproperties.visibility = '0' OR itemproperties.visibility = '1')
+                    $sessionCondition AND
+                    linkcat.c_id = " . $courseId . "
+                GROUP BY c_id, id
+                ORDER BY linkcat.display_order DESC
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * Displays all the links of a given category.
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     */
+    public static function showlinksofcategory($catid)
+    {
+        global $is_allowed, $charset, $urlview, $up, $down, $_user, $token;
+
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $TABLE_ITEM_PROPERTY = Database:: get_course_table(TABLE_ITEM_PROPERTY);
+
+        // Condition for the session.
+        $session_id = api_get_session_id();
+        $condition_session = api_get_session_condition($session_id, true, true);
+        $catid = intval($catid);
+
+        $course_id = api_get_course_int_id();
+
+        $sqlLinks = "SELECT *, link.id FROM " . $tbl_link . " link, " . $TABLE_ITEM_PROPERTY . " itemproperties
+                     WHERE
+                        itemproperties.tool='" . TOOL_LINK . "' AND
+                        link.id=itemproperties.ref AND
+                        link.category_id='" . $catid . "' AND
+                        (itemproperties.visibility='0' OR itemproperties.visibility='1')
+                        $condition_session AND
+                        link.c_id = " . $course_id . " AND
+                        itemproperties.c_id = " . $course_id . "
+                        ORDER BY link.display_order DESC";
+        $result = Database:: query($sqlLinks);
+        $numberoflinks = Database:: num_rows($result);
+        if ($numberoflinks > 0) {
+            echo '<table class="data_table" width="100%">';
+            $i = 1;
+            while ($myrow = Database:: fetch_array($result)) {
+                // Validation when belongs to a session.
+                $session_img = api_get_session_image(
+                    $myrow['session_id'],
+                    $_user['status']
+                );
+
+                $css_class = $i % 2 == 0 ? $css_class = 'row_odd' : $css_class = 'row_even';
+
+                $link_validator = '';
+                if (api_is_allowed_to_edit(null, true)) {
+                    $link_validator = '' . Display::url(
+                            Display::return_icon(
+                                'preview_view.png',
+                                get_lang('CheckURL'),
+                                array(),
+                                16
+                            ),
+                            '#',
+                            array(
+                                'onclick' => "check_url('" . $myrow['id'] . "', '" . addslashes(
+                                        $myrow['url']
+                                    ) . "');"
+                            )
+                        );
+                    $link_validator .= Display::span(
+                        '',
+                        array('id' => 'url_id_' . $myrow['id'])
+                    );
+                }
+
+                if ($myrow['visibility'] == '1') {
+                    echo '<tr class="' . $css_class . '">';
+                    echo '<td align="center" valign="middle" width="5%">';
+                    echo '<a href="link_goto.php?' . api_get_cidreq() .
+                        '&amp;link_id=' . $myrow['id'] .
+                        '&amp;link_url=' . urlencode($myrow['url']) . '" target="_blank">
+                        <img src="../../main/img/link.gif" border="0" alt="' . get_lang(
+                            'Link'
+                        ) . '"/></a></td>
+                        <td width="80%" valign="top"><a href="link_goto.php?' . api_get_cidreq(
+                        ) .
+                        '&amp;link_id=' . $myrow['id'] .
+                        '&amp;link_url=' . urlencode(
+                            $myrow['url']
+                        ) . '" target="' . $myrow['target'] . '">';
+                    echo Security:: remove_XSS($myrow['title']);
+                    echo '</a>';
+                    echo $link_validator;
+                    echo $session_img;
+                    echo '<br />' . $myrow['description'];
+                } else {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        echo '<tr class="' . $css_class . '">';
+                        echo '<td align="center" valign="middle" width="5%">
+                            <a href="link_goto.php?' . api_get_cidreq() .
+                            '&amp;link_id=' . $myrow['id'] . "
+                            &amp;link_url=" . urlencode($myrow['url']) . '"
+                            target="_blank" class="invisible">';
+                        echo Display:: return_icon(
+                            'link_na.gif',
+                            get_lang('Link')
+                        ), '</a>';
+                        echo '</td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(
+                        ), '&amp;link_id=', $myrow['id'], '&amp;link_url=', urlencode(
+                            $myrow['url']
+                        ), '" target="', $myrow['target'], '"  class="invisible">';
+                        echo Security:: remove_XSS($myrow['url']);
+                        echo "</a>";
+                        echo $link_validator;
+                        echo $session_img, '<br />', $myrow['title'];
+                    }
+                }
+
+                if (api_is_allowed_to_edit(null, true)) {
+                    echo '<td style="text-align:center;">';
+                    if ($session_id == $myrow['session_id']) {
+                        echo '<a href="' . api_get_self(
+                            ) . '?' . api_get_cidreq() .
+                            '&amp;sec_token=' . $token .
+                            '&amp;action=editlink&amp;category=' . (!empty ($category) ? $category : '') .
+                            '&amp;id=' . $myrow['id'] .
+                            '&amp;urlview=' . $urlview . '"title="' . get_lang(
+                                'Modify'
+                            ) . '">' .
+                            Display:: return_icon(
+                                'edit.png',
+                                get_lang('Modify'),
+                                array(),
+                                ICON_SIZE_SMALL
+                            ) . '</a>';
+
+                        // DISPLAY MOVE UP COMMAND only if it is not the top link.
+                        /* commented at least since 2014-10-11
+                        if ($i != 1) {
+                            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;up=', $myrow[0], '" title="' . get_lang('Up') . '">' . Display :: return_icon('up.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
+                        } else {
+                            echo Display :: return_icon('up_na.png', get_lang('Up'), array (), ICON_SIZE_SMALL) . '</a>';
+                        }
+
+                        // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
+                        if ($i < $numberoflinks) {
+                            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .  '&amp;sec_token='.$token.'&amp;urlview=' . $urlview . '&amp;down=' . $myrow[0] . '" title="' . get_lang('Down') . '">' . Display :: return_icon('down.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
+                        } else {
+                            echo Display :: return_icon('down_na.png', get_lang('Down'), array (), ICON_SIZE_SMALL) . '', "</a>\n";
+                        }*/
+
+                        if ($myrow['visibility'] == '1') {
+                            echo '<a href="link.php?' . api_get_cidreq() .
+                                '&amp;sec_token=' . $token .
+                                '&amp;action=invisible&amp;id=' . $myrow['id'] .
+                                '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang(
+                                    'Hide'
+                                ) . '">' .
+                                Display:: return_icon(
+                                    'visible.png',
+                                    get_lang('Hide'),
+                                    array(),
+                                    ICON_SIZE_SMALL
+                                ) . '</a>';
+                        }
+                        if ($myrow['visibility'] == '0') {
+                            echo ' <a href="link.php?' . api_get_cidreq() .
+                                '&amp;sec_token=' . $token .
+                                '&amp;action=visible&amp;id=' . $myrow['id'] .
+                                '&amp;scope=link&amp;urlview=' . $urlview . '" title="' . get_lang(
+                                    'Show'
+                                ) . '">' .
+                                Display:: return_icon(
+                                    'invisible.png',
+                                    get_lang('Show'),
+                                    array(),
+                                    ICON_SIZE_SMALL
+                                ) . '</a>';
+                        }
+                        echo ' <a href="' . api_get_self(
+                            ) . '?' . api_get_cidreq() .
+                            '&amp;sec_token=' . $token .
+                            '&amp;action=deletelink&amp;id=' . $myrow['id'] .
+                            '&amp;urlview=' . $urlview . "\"
+                            onclick=\"javascript: if(!confirm('" . get_lang(
+                                'LinkDelconfirm'
+                            ) . "'))
+                            return false;\" title=\"" . get_lang(
+                                'Delete'
+                            ) . '">' .
+                            Display:: return_icon(
+                                'delete.png',
+                                get_lang('Delete'),
+                                array(),
+                                ICON_SIZE_SMALL
+                            ) . '</a>';
+
+                    } else {
+                        echo Display:: return_icon(
+                            'edit_na.png',
+                            get_lang('EditionNotAvailableFromSession'),
+                            array(),
+                            ICON_SIZE_SMALL
+                        ); //get_lang('EditionNotAvailableFromSession');
+                    }
+                    echo '</td>';
+                }
+                echo '</tr>';
+                $i++;
+            }
+            echo '</table>';
+        }
+    }
+
+    /**
+     * Displays the edit, delete and move icons
+     * @param int   Category ID
+     * @return void
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     */
+    public static function showcategoryadmintools($categoryid)
+    {
+        global $urlview, $aantalcategories, $catcounter, $token;
         echo '<a href="' . api_get_self() . '?' . api_get_cidreq(
-            ) . '&amp;sec_token=' . $token . '&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang(
-                'Up'
-            ) . '">' . Display :: return_icon(
-                'up.png',
-                get_lang('Up'),
+            ) . '&amp;sec_token=' . $token . '&amp;action=editcategory&amp;id=' . $categoryid . '&amp;urlview=' . $urlview . '" title=' . get_lang(
+                'Modify'
+            ) . '">' . Display:: return_icon(
+                'edit.png',
+                get_lang('Modify'),
                 array(),
                 ICON_SIZE_SMALL
             ) . '</a>';
-    } else {
-        echo Display :: return_icon(
-                'up_na.png',
-                get_lang('Up'),
-                array(),
-                ICON_SIZE_SMALL
-            ) . '</a>';
-    }
 
-    // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
-    if ($catcounter < $aantalcategories) {
+        // DISPLAY MOVE UP COMMAND only if it is not the top link.
+        if ($catcounter != 1) {
+            echo '<a href="' . api_get_self() . '?' . api_get_cidreq(
+                ) . '&amp;sec_token=' . $token . '&amp;catmove=true&amp;up=', $categoryid, '&amp;urlview=' . $urlview . '" title="' . get_lang(
+                    'Up'
+                ) . '">' . Display:: return_icon(
+                    'up.png',
+                    get_lang('Up'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+        } else {
+            echo Display:: return_icon(
+                    'up_na.png',
+                    get_lang('Up'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+        }
+
+        // DISPLAY MOVE DOWN COMMAND only if it is not the bottom link.
+        if ($catcounter < $aantalcategories) {
+            echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
+                '&amp;sec_token=' . $token .
+                '&amp;catmove=true&amp;down=' . $categoryid .
+                '&amp;urlview=' . $urlview . '">
+                ' .
+                Display:: return_icon(
+                    'down.png',
+                    get_lang('Down'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+        } else {
+            echo Display:: return_icon(
+                    'down_na.png',
+                    get_lang('Down'),
+                    array(),
+                    ICON_SIZE_SMALL
+                ) . '</a>';
+        }
         echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
             '&amp;sec_token=' . $token .
-            '&amp;catmove=true&amp;down=' . $categoryid .
-            '&amp;urlview=' . $urlview . '">
-            ' .
-            Display :: return_icon(
-                'down.png',
-                get_lang('Down'),
+            '&amp;action=deletecategory&amp;id=', $categoryid,
+            "&amp;urlview=$urlview\"
+            onclick=\"javascript: if(!confirm('" . get_lang(
+                'CategoryDelconfirm'
+            ) . "')) return false;\">",
+            Display:: return_icon(
+                'delete.png',
+                get_lang('Delete'),
                 array(),
                 ICON_SIZE_SMALL
             ) . '</a>';
-    } else {
-        echo Display :: return_icon('down_na.png', get_lang('Down'), array(), ICON_SIZE_SMALL) . '</a>';
-    }
-    echo '<a href="' . api_get_self() . '?' . api_get_cidreq() .
-        '&amp;sec_token=' . $token .
-        '&amp;action=deletecategory&amp;id=', $categoryid,
-        "&amp;urlview=$urlview\"
-        onclick=\"javascript: if(!confirm('" . get_lang('CategoryDelconfirm') . "')) return false;\">",
-        Display :: return_icon(
-            'delete.png',
-            get_lang('Delete'),
-            array(),
-            ICON_SIZE_SMALL
-        ) . '</a>';
-    $catcounter++;
-}
-
-/**
- * move a link or a linkcategory up or down
- * @param   int Category ID
- * @param   int Course ID
- * @param   int Session ID
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @todo support sessions
- */
-function movecatlink($catlinkid, $courseId = null, $sessionId = null)
-{
-    global $catmove;
-    global $up;
-    global $down;
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-    $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    if (is_null($courseId)) {
-        $courseId = api_get_course_int_id();
-    }
-    $courseId = intval($courseId);
-    if (is_null($sessionId)) {
-        $sessionId = api_get_session_id();
-    }
-    $sessionId = intval($sessionId);
-
-    if (!empty ($down)) {
-        $thiscatlinkId = intval($down);
-        $sortDirection = 'DESC';
-    }
-    if (!empty ($up)) {
-        $thiscatlinkId = intval($up);
-        $sortDirection = 'ASC';
+        $catcounter++;
     }
 
-    // We check if it is a category we are moving or a link.
-    // If it is a category, a querystring catmove = true is present in the url.
-    if ($catmove == 'true') {
-        $movetable = $tbl_categories;
-        $catid = $catlinkid;
-    } else {
-        $movetable = $tbl_link;
-        // Getting the category of the link.
-        if (!empty ($thiscatlinkId)) {
-            $sql = "SELECT category_id FROM " . $movetable . " WHERE c_id = $courseId AND id='$thiscatlinkId'";
-            $result = Database :: query($sql);
-            $catid = Database :: fetch_array($result);
+    /**
+     * move a link or a linkcategory up or down
+     * @param   int Category ID
+     * @param   int Course ID
+     * @param   int Session ID
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @todo support sessions
+     */
+    public static function movecatlink($catlinkid, $courseId = null, $sessionId = null)
+    {
+        global $catmove;
+        global $up;
+        global $down;
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        if (is_null($courseId)) {
+            $courseId = api_get_course_int_id();
         }
-    }
+        $courseId = intval($courseId);
+        if (is_null($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+        $sessionId = intval($sessionId);
 
-    // This code is copied and modified from announcements.php.
-    if (!empty($sortDirection)) {
-
-        if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC'))) {
+        if (!empty ($down)) {
+            $thiscatlinkId = intval($down);
+            $sortDirection = 'DESC';
+        }
+        if (!empty ($up)) {
+            $thiscatlinkId = intval($up);
             $sortDirection = 'ASC';
         }
 
+        // We check if it is a category we are moving or a link.
+        // If it is a category, a querystring catmove = true is present in the url.
         if ($catmove == 'true') {
-            $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
-                            WHERE c_id = $courseId  ORDER BY display_order $sortDirection";
+            $movetable = $tbl_categories;
+            $catid = $catlinkid;
         } else {
-            $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
-                            WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
-                            ORDER BY display_order $sortDirection";
-        }
-        $linkresult = Database :: query($sqlcatlinks);
-        $thislinkOrder = 1;
-        while ($sortrow = Database :: fetch_array($linkresult)) {
-            // STEP 2 : FOUND THE NEXT LINK ID AND ORDER, COMMIT SWAP
-            // This part seems unlogic, but it isn't . We first look for the current link with the querystring ID
-            // and we know the next iteration of the while loop is the next one. These should be swapped.
-            if (isset ($thislinkFound) && $thislinkFound) {
-                $nextlinkId = $sortrow['id'];
-                $nextlinkOrder = $sortrow['display_order'];
-
-                Database :: query(
-                    "UPDATE " . $movetable . "
-                    SET display_order = '$nextlinkOrder'
-                    WHERE c_id = $courseId  AND id =  '$thiscatlinkId'"
-                );
-                Database :: query(
-                    "UPDATE " . $movetable . "
-                    SET display_order = '$thislinkOrder'
-                    WHERE c_id = $courseId  AND id =  '$nextlinkId'"
-                );
-
-                break;
-            }
-            if ($sortrow['id'] == $thiscatlinkId) {
-                $thislinkOrder = $sortrow['display_order'];
-                $thislinkFound = true;
+            $movetable = $tbl_link;
+            // Getting the category of the link.
+            if (!empty ($thiscatlinkId)) {
+                $sql = "SELECT category_id FROM " . $movetable . " WHERE c_id = $courseId AND id='$thiscatlinkId'";
+                $result = Database:: query($sql);
+                $catid = Database:: fetch_array($result);
             }
         }
+
+        // This code is copied and modified from announcements.php.
+        if (!empty($sortDirection)) {
+
+            if (!in_array(
+                trim(strtoupper($sortDirection)),
+                array('ASC', 'DESC')
+            )
+            ) {
+                $sortDirection = 'ASC';
+            }
+
+            if ($catmove == 'true') {
+                $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
+                                WHERE c_id = $courseId  ORDER BY display_order $sortDirection";
+            } else {
+                $sqlcatlinks = "SELECT id, display_order FROM " . $movetable . "
+                                WHERE c_id = $courseId AND category_id='" . $catid[0] . "'
+                                ORDER BY display_order $sortDirection";
+            }
+            $linkresult = Database:: query($sqlcatlinks);
+            $thislinkOrder = 1;
+            while ($sortrow = Database:: fetch_array($linkresult)) {
+                // STEP 2 : FOUND THE NEXT LINK ID AND ORDER, COMMIT SWAP
+                // This part seems unlogic, but it isn't . We first look for the current link with the querystring ID
+                // and we know the next iteration of the while loop is the next one. These should be swapped.
+                if (isset ($thislinkFound) && $thislinkFound) {
+                    $nextlinkId = $sortrow['id'];
+                    $nextlinkOrder = $sortrow['display_order'];
+
+                    Database:: query(
+                        "UPDATE " . $movetable . "
+                        SET display_order = '$nextlinkOrder'
+                        WHERE c_id = $courseId  AND id =  '$thiscatlinkId'"
+                    );
+                    Database:: query(
+                        "UPDATE " . $movetable . "
+                        SET display_order = '$thislinkOrder'
+                        WHERE c_id = $courseId  AND id =  '$nextlinkId'"
+                    );
+
+                    break;
+                }
+                if ($sortrow['id'] == $thiscatlinkId) {
+                    $thislinkOrder = $sortrow['display_order'];
+                    $thislinkFound = true;
+                }
+            }
+        }
+
+        Display:: display_confirmation_message(get_lang('LinkMoved'));
     }
 
-    Display :: display_confirmation_message(get_lang('LinkMoved'));
-}
+    /**
+     * CSV file import functions
+     * @author René Haentjens , Ghent University
+     */
+    public static function get_cat($catname)
+    {
+        // Get category id (existing or make new).
+        $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
+        $course_id = api_get_course_int_id();
 
-/**
- * CSV file import functions
- * @author René Haentjens , Ghent University
- */
-function get_cat($catname)
-{
-    // Get category id (existing or make new).
-    $tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
-    $course_id = api_get_course_int_id();
-
-    $result = Database :: query(
-        "SELECT id FROM " . $tbl_categories . "
-        WHERE c_id = $course_id AND category_title='" . Database::escape_string(
-            $catname
-        ) . "'"
-    );
-    if (Database :: num_rows($result) >= 1 && ($row = Database :: fetch_array($result))) {
-        return $row['id']; // Several categories with same name: take the first.
-    }
-
-    $result = Database :: query(
-        "SELECT MAX(display_order) FROM " . $tbl_categories . " WHERE c_id = $course_id "
-    );
-    list ($max_order) = Database :: fetch_row($result);
-    Database :: query(
-        "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order)
-        VALUES (" . $course_id . ", '" . Database::escape_string($catname) . "','','" . ($max_order + 1) . "')"
-    );
-    return Database :: insert_id();
-}
-
-/**
- * CSV file import functions
- * @author René Haentjens , Ghent University
- */
-function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
-{
-    $tbl_link = Database :: get_course_table(TABLE_LINK);
-
-    $course_id = api_get_course_int_id();
-
-
-    $urleq = "url='" . Database :: escape_string($url) . "'";
-    $cateq = "category_id=" . intval($cat);
-
-    $result = Database :: query(
-        "SELECT id FROM $tbl_link WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq
-    );
-
-    if (Database :: num_rows($result) >= 1 && ($row = Database :: fetch_array($result))) {
-        Database :: query(
-            "UPDATE $tbl_link set title='" . Database :: escape_string(
-                $title
-            ) . "', description='" . Database :: escape_string($description) . "'
-            WHERE c_id = $course_id AND  id='" . Database :: escape_string(
-                $row['id']
+        $result = Database:: query(
+            "SELECT id FROM " . $tbl_categories . "
+            WHERE c_id = $course_id AND category_title='" . Database::escape_string(
+                $catname
             ) . "'"
         );
+        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array(
+                $result
+            ))
+        ) {
+            return $row['id']; // Several categories with same name: take the first.
+        }
 
-        $ipu = 'LinkUpdated';
-        $rv = 1; // 1 = upd
-    } else {
-        // Add new link
-        $result = Database :: query(
-            "SELECT MAX(display_order) FROM  $tbl_link WHERE c_id = $course_id AND category_id='" . intval(
-                $cat
-            ) . "'"
+        $result = Database:: query(
+            "SELECT MAX(display_order) FROM " . $tbl_categories . " WHERE c_id = $course_id "
         );
-        list ($max_order) = Database :: fetch_row($result);
-
-        Database :: query(
-            "INSERT INTO $tbl_link (c_id, url, title, description, category_id, display_order, on_homepage)
-            VALUES (" . api_get_course_int_id() . ",
-            '" . Database :: escape_string($url) . "',
-            '" . Database :: escape_string($title) . "',
-            '" . Database :: escape_string($description) . "',
-            '" . intval($cat) . "','" . (intval($max_order) + 1) . "',
-            '" . intval($on_homepage) .
-            "')"
+        list ($max_order) = Database:: fetch_row($result);
+        Database:: query(
+            "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order)
+            VALUES (" . $course_id . ", '" . Database::escape_string(
+                $catname
+            ) . "','','" . ($max_order + 1) . "')"
         );
-
-        $id = Database :: insert_id();
-        $ipu = 'LinkAdded';
-        $rv = 2; // 2 = new
+        return Database:: insert_id();
     }
-    global $_course, $nameTools, $_user;
-    api_item_property_update($_course, TOOL_LINK, $id, $ipu, $_user['user_id']);
 
-    if ($hidden && $ipu == 'LinkAdded') {
+    /**
+     * CSV file import functions
+     * @author René Haentjens , Ghent University
+     */
+    public static function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
+    {
+        $tbl_link = Database:: get_course_table(TABLE_LINK);
+
+        $course_id = api_get_course_int_id();
+
+
+        $urleq = "url='" . Database:: escape_string($url) . "'";
+        $cateq = "category_id=" . intval($cat);
+
+        $result = Database:: query(
+            "SELECT id FROM $tbl_link WHERE c_id = $course_id AND " . $urleq . ' AND ' . $cateq
+        );
+
+        if (Database:: num_rows($result) >= 1 && ($row = Database:: fetch_array(
+                $result
+            ))
+        ) {
+            Database:: query(
+                "UPDATE $tbl_link set title='" . Database:: escape_string(
+                    $title
+                ) . "', description='" . Database:: escape_string(
+                    $description
+                ) . "'
+                WHERE c_id = $course_id AND  id='" . Database:: escape_string(
+                    $row['id']
+                ) . "'"
+            );
+
+            $ipu = 'LinkUpdated';
+            $rv = 1; // 1 = upd
+        } else {
+            // Add new link
+            $result = Database:: query(
+                "SELECT MAX(display_order) FROM  $tbl_link WHERE c_id = $course_id AND category_id='" . intval(
+                    $cat
+                ) . "'"
+            );
+            list ($max_order) = Database:: fetch_row($result);
+
+            Database:: query(
+                "INSERT INTO $tbl_link (c_id, url, title, description, category_id, display_order, on_homepage)
+                VALUES (" . api_get_course_int_id() . ",
+                '" . Database:: escape_string($url) . "',
+                '" . Database:: escape_string($title) . "',
+                '" . Database:: escape_string($description) . "',
+                '" . intval($cat) . "','" . (intval($max_order) + 1) . "',
+                '" . intval($on_homepage) .
+                "')"
+            );
+
+            $id = Database:: insert_id();
+            $ipu = 'LinkAdded';
+            $rv = 2; // 2 = new
+        }
+        global $_course, $nameTools, $_user;
         api_item_property_update(
             $_course,
             TOOL_LINK,
             $id,
-            'invisible',
+            $ipu,
             $_user['user_id']
         );
-    }
-    return $rv;
-}
 
-/**
- * CSV file import functions
- * @author René Haentjens , Ghent University
- */
-function import_link($linkdata)
-{
-    // url, category_id, title, description, ...
-
-    // Field names used in the uploaded file
-    $known_fields = array(
-        'url',
-        'category',
-        'title',
-        'description',
-        'on_homepage',
-        'hidden'
-    );
-
-    $hide_fields = array(
-        'kw',
-        'kwd',
-        'kwds',
-        'keyword',
-        'keywords'
-    );
-
-    // All other fields are added to description, as "name:value".
-
-    // Only one hide_field is assumed to be present, <> is removed from value.
-
-    if (!($url = trim($linkdata['url'])) || !($title = trim($linkdata['title']))
-    ) {
-        return 0; // 0 = fail
+        if ($hidden && $ipu == 'LinkAdded') {
+            api_item_property_update(
+                $_course,
+                TOOL_LINK,
+                $id,
+                'invisible',
+                $_user['user_id']
+            );
+        }
+        return $rv;
     }
 
-    $cat = ($catname = trim($linkdata['category'])) ? get_cat($catname) : 0;
+    /**
+     * CSV file import functions
+     * @author René Haentjens , Ghent University
+     */
+    public static function import_link($linkdata)
+    {
+        // url, category_id, title, description, ...
 
-    $regs = array(); // Will be passed to ereg()
-    $d = '';
-    foreach ($linkdata as $key => $value) {
-        if (!in_array($key, $known_fields)) {
-            if (in_array($key, $hide_fields) && ereg('^<?([^>]*)>?$', $value, $regs)) { // possibly in <...>
-                if (($kwlist = trim($regs[1])) != '') {
-                    $kw = '<i kw="' . htmlspecialchars($kwlist) . '">';
-                } else {
-                    $kw = '';
+        // Field names used in the uploaded file
+        $known_fields = array(
+            'url',
+            'category',
+            'title',
+            'description',
+            'on_homepage',
+            'hidden'
+        );
+
+        $hide_fields = array(
+            'kw',
+            'kwd',
+            'kwds',
+            'keyword',
+            'keywords'
+        );
+
+        // All other fields are added to description, as "name:value".
+
+        // Only one hide_field is assumed to be present, <> is removed from value.
+
+        if (!($url = trim($linkdata['url'])) || !($title = trim(
+                $linkdata['title']
+            ))
+        ) {
+            return 0; // 0 = fail
+        }
+
+        $cat = ($catname = trim($linkdata['category'])) ? Link::get_cat($catname) : 0;
+
+        $regs = array(); // Will be passed to ereg()
+        $d = '';
+        foreach ($linkdata as $key => $value) {
+            if (!in_array($key, $known_fields)) {
+                if (in_array($key, $hide_fields) && ereg(
+                        '^<?([^>]*)>?$',
+                        $value,
+                        $regs
+                    )
+                ) { // possibly in <...>
+                    if (($kwlist = trim($regs[1])) != '') {
+                        $kw = '<i kw="' . htmlspecialchars($kwlist) . '">';
+                    } else {
+                        $kw = '';
+                    }
+                    // i.e. assume only one of the $hide_fields will be present
+                    // and if found, hide the value as expando property of an <i> tag
+                } elseif (trim($value)) {
+                    $d .= ', ' . $key . ':' . $value;
                 }
-            // i.e. assume only one of the $hide_fields will be present
-            // and if found, hide the value as expando property of an <i> tag
-            }elseif (trim($value)) {
-                $d .= ', ' . $key . ':' . $value;
             }
         }
+        if (!empty($d)) {
+            $d = substr($d, 2) . ' - ';
+        }
+
+        return Link::put_link(
+            $url,
+            $cat,
+            $title,
+            $kw . ereg_replace(
+                '\[((/?(b|big|i|small|sub|sup|u))|br/)\]',
+                '<\\1>',
+                htmlspecialchars($d . $linkdata['description'])
+            ) . ($kw ? '</i>' : ''),
+            $linkdata['on_homepage'] ? '1' : '0',
+            $linkdata['hidden'] ? '1' : '0'
+        );
+        // i.e. allow some BBcode tags, e.g. [b]...[/b]
     }
-    if (!empty($d)) {
-        $d = substr($d, 2) . ' - ';
-    }
 
-    return put_link(
-        $url,
-        $cat,
-        $title,
-        $kw . ereg_replace(
-            '\[((/?(b|big|i|small|sub|sup|u))|br/)\]',
-            '<\\1>',
-            htmlspecialchars($d . $linkdata['description'])
-        ) . ($kw ? '</i>' : ''),
-        $linkdata['on_homepage'] ? '1' : '0',
-        $linkdata['hidden'] ? '1' : '0'
-    );
-    // i.e. allow some BBcode tags, e.g. [b]...[/b]
-}
+    /**
+     * CSV file import functions
+     * @author René Haentjens , Ghent University
+     */
+    public static function import_csvfile()
+    {
+        global $catlinkstatus; // Feedback message to user.
 
-/**
- * CSV file import functions
- * @author René Haentjens , Ghent University
- */
-function import_csvfile()
-{
-    global $catlinkstatus; // Feedback message to user.
+        if (is_uploaded_file($filespec = $_FILES['import_file']['tmp_name'])
+            && filesize($filespec) && ($myFile = @ fopen($filespec, 'r'))
+        ) {
+            // read first line of file (column names) and find ',' or ';'
+            $listsep = strpos(
+                $colnames = trim(fgets($myFile)),
+                ','
+            ) !== false ? ',' : (strpos($colnames, ';') !== false ? ';' : '');
 
-    if (is_uploaded_file($filespec = $_FILES['import_file']['tmp_name'])
-        && filesize($filespec) && ($myFile = @ fopen($filespec, 'r'))
-    ) {
-        // read first line of file (column names) and find ',' or ';'
-        $listsep = strpos(
-            $colnames = trim(fgets($myFile)),
-            ','
-        ) !== false ? ',' : (strpos($colnames, ';') !== false ? ';' : '');
+            if ($listsep) {
+                $columns = array_map(
+                    'strtolower',
+                    explode($listsep, $colnames)
+                );
 
-        if ($listsep) {
-            $columns = array_map('strtolower', explode($listsep, $colnames));
+                if (in_array('url', $columns) && in_array('title', $columns)) {
+                    $stats = array(
+                        0,
+                        0,
+                        0
+                    ); // fails, updates, inserts
 
-            if (in_array('url', $columns) && in_array('title', $columns)) {
-                $stats = array(
-                    0,
-                    0,
-                    0
-                ); // fails, updates, inserts
+                    while (($data = api_fgetcsv($myFile, null, $listsep))) {
+                        //
+                        foreach ($data as $i => & $text) {
+                            $linkdata[$columns[$i]] = $text;
+                        }
 
-                while (($data = api_fgetcsv($myFile, null, $listsep))) {
-                    //
-                    foreach ($data as $i => & $text) {
-                        $linkdata[$columns[$i]] = $text;
+                        $stats[Link::import_link($linkdata)]++;
+                        unset ($linkdata);
                     }
 
-                    $stats[import_link($linkdata)]++;
-                    unset ($linkdata);
-                }
+                    $catlinkstatus = '';
 
-                $catlinkstatus = '';
-
-                if ($stats[0]) {
-                    $catlinkstatus .= $stats[0] . ' ' . get_lang('CsvLinesFailed');
-                }
-                if ($stats[1]) {
-                    $catlinkstatus .= $stats[1] . ' ' . get_lang('CsvLinesOld');
-                }
-                if ($stats[2]) {
-                    $catlinkstatus .= $stats[2] . ' ' . get_lang('CsvLinesNew');
+                    if ($stats[0]) {
+                        $catlinkstatus .= $stats[0] . ' ' . get_lang(
+                                'CsvLinesFailed'
+                            );
+                    }
+                    if ($stats[1]) {
+                        $catlinkstatus .= $stats[1] . ' ' . get_lang(
+                                'CsvLinesOld'
+                            );
+                    }
+                    if ($stats[2]) {
+                        $catlinkstatus .= $stats[2] . ' ' . get_lang(
+                                'CsvLinesNew'
+                            );
+                    }
+                } else {
+                    $catlinkstatus = get_lang(
+                            'CsvFileNoURL'
+                        ) . ($colnames ? get_lang(
+                                'CsvFileLine1'
+                            ) . htmlspecialchars(
+                                substr($colnames, 0, 200)
+                            ) . '...' : '');
                 }
             } else {
-                $catlinkstatus = get_lang('CsvFileNoURL') . ($colnames ? get_lang('CsvFileLine1') . htmlspecialchars(substr($colnames, 0, 200)) . '...' : '');
+                $catlinkstatus = get_lang(
+                        'CsvFileNoSeps'
+                    ) . ($colnames ? get_lang(
+                            'CsvFileLine1'
+                        ) . htmlspecialchars(
+                            substr($colnames, 0, 200)
+                        ) . '...' : '');
             }
+            fclose($myFile);
         } else {
-            $catlinkstatus = get_lang('CsvFileNoSeps') . ($colnames ? get_lang('CsvFileLine1') . htmlspecialchars(substr($colnames, 0, 200)) . '...' : '');
+            $catlinkstatus = get_lang('CsvFileNotFound');
         }
-        fclose($myFile);
-    } else {
-        $catlinkstatus = get_lang('CsvFileNotFound');
     }
-}
 
-/**
- * This function checks if the url is a vimeo link
- * @author Julio Montoya
- * @version 1.0
- */
-function isVimeoLink($url)
-{
-    $isLink = strrpos($url, "vimeo.com");
-    return $isLink;
-}
-
-/**
- * Get vimeo id from URL
- * @param string $url
- * @return bool|mixed
- */
-function getVimeoLinkId($url)
-{
-    $possibleUrls = array(
-        'http://www.vimeo.com/',
-        'http://vimeo.com/',
-        'https://www.vimeo.com/',
-        'https://vimeo.com/'
-    );
-    $url = str_replace($possibleUrls, '', $url);
-
-    if (is_numeric($url)) {
-        return $url;
+    /**
+     * This function checks if the url is a vimeo link
+     * @author Julio Montoya
+     * @version 1.0
+     */
+    public static function isVimeoLink($url)
+    {
+        $isLink = strrpos($url, "vimeo.com");
+        return $isLink;
     }
-    return false;
-}
 
-/**
- * This function checks if the url is a youtube link
- * @author Jorge Frisancho
- * @author Julio Montoya - Fixing code
- * @version 1.0
- */
-function is_youtube_link($url)
-{
-    $is_youtube_link = strrpos($url, "youtube") || strrpos($url, "youtu.be");
-    return $is_youtube_link;
-}
+    /**
+     * Get vimeo id from URL
+     * @param string $url
+     * @return bool|mixed
+     */
+    public static function getVimeoLinkId($url)
+    {
+        $possibleUrls = array(
+            'http://www.vimeo.com/',
+            'http://vimeo.com/',
+            'https://www.vimeo.com/',
+            'https://vimeo.com/'
+        );
+        $url = str_replace($possibleUrls, '', $url);
 
-/**
- * Get youtube id from an URL
- * @param string $url
- * @return string
- */
-function get_youtube_video_id($url)
-{
-    // This is the length of YouTube's video IDs
-    $len = 11;
-
-    // The ID string starts after "v=", which is usually right after
-    // "youtube.com/watch?" in the URL
-    $pos = strpos($url, "v=");
-
-    $id = '';
-
-    //If false try other options
-    if ($pos === false) {
-        $url_parsed = parse_url($url);
-
-        //Youtube shortener
-        //http://youtu.be/ID
-        $pos = strpos($url, "youtu.be");
-
-        if ($pos == false) {
-            $id = '';
-        } else {
-            return substr($url_parsed['path'], 1);
+        if (is_numeric($url)) {
+            return $url;
         }
+        return false;
+    }
 
-        //if empty try the youtube.com/embed/ID
-        if (empty($id)) {
-            $pos = strpos($url, "embed");
-            if ($pos === false) {
-                return '';
+    /**
+     * This function checks if the url is a youtube link
+     * @author Jorge Frisancho
+     * @author Julio Montoya - Fixing code
+     * @version 1.0
+     */
+    public static function is_youtube_link($url)
+    {
+        $is_youtube_link = strrpos($url, "youtube") || strrpos(
+                $url,
+                "youtu.be"
+            );
+        return $is_youtube_link;
+    }
+
+    /**
+     * Get youtube id from an URL
+     * @param string $url
+     * @return string
+     */
+    public static function get_youtube_video_id($url)
+    {
+        // This is the length of YouTube's video IDs
+        $len = 11;
+
+        // The ID string starts after "v=", which is usually right after
+        // "youtube.com/watch?" in the URL
+        $pos = strpos($url, "v=");
+
+        $id = '';
+
+        //If false try other options
+        if ($pos === false) {
+            $url_parsed = parse_url($url);
+
+            //Youtube shortener
+            //http://youtu.be/ID
+            $pos = strpos($url, "youtu.be");
+
+            if ($pos == false) {
+                $id = '';
             } else {
-                return substr($url_parsed['path'], 7);
+                return substr($url_parsed['path'], 1);
             }
+
+            //if empty try the youtube.com/embed/ID
+            if (empty($id)) {
+                $pos = strpos($url, "embed");
+                if ($pos === false) {
+                    return '';
+                } else {
+                    return substr($url_parsed['path'], 7);
+                }
+            }
+        } else {
+            // Offset the start location to match the beginning of the ID string
+            $pos += 2;
+            // Get the ID string and return it
+            $id = substr($url, $pos, $len);
+            return $id;
         }
-    } else {
-        // Offset the start location to match the beginning of the ID string
-        $pos += 2;
-        // Get the ID string and return it
-        $id = substr($url, $pos, $len);
-        return $id;
     }
 }

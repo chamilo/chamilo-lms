@@ -14,14 +14,13 @@
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
+$language_file = array('create_course', 'registration','admin','exercice', 'course_info');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 // Section for the tabs.
 $this_section = SECTION_COURSES;
@@ -32,15 +31,6 @@ $this_section = SECTION_COURSES;
 $course_validation_feature = false;
 if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
     $course_validation_feature = true;
-}
-
-// Require additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-
-if ($course_validation_feature) {
-    require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -108,7 +98,7 @@ $form->addElement(
 );
 
 // Course code
-$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->addText('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
@@ -199,7 +189,7 @@ if ($form->validate()) {
     }
 
     if ($wanted_code == '') {
-        $wanted_code = generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        $wanted_code = CourseManager::generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
     }
 
     // Check whether the requested course code has already been occupied.

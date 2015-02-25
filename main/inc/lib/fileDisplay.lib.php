@@ -6,9 +6,6 @@
 *
 *	@package chamilo.library
 */
-/**
- * Code
- */
 
 /* FILE DISPLAY FUNCTIONS */
 /**

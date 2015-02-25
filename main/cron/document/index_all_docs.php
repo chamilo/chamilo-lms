@@ -7,8 +7,6 @@
  */
 die();
 require '../../inc/global.inc.php';
-require_once '../../inc/lib/course.lib.php';
-require_once '../../inc/lib/document.lib.php';
 if (empty($_GET['doc'])) {
   echo "To add a document name to search, add ?doc=abc to the URL\n";
 } else {
@@ -29,7 +27,7 @@ $td = Database::get_course_table(TABLE_DOCUMENT);
 
 foreach ($courses_list as $course) {
   $course_dir = $course['directory'].'/document';
-  $title = Database::escape_string($_GET['doc']);  
+  $title = Database::escape_string($_GET['doc']);
   $sql = "SELECT id, path, session_id FROM $td WHERE c_id = ".$course['id']." AND path LIKE '%$title%' or title LIKE '%$title%'";
   $res = Database::query($sql);
   if (Database::num_rows($res)>0) {

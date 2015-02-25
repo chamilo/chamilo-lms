@@ -235,7 +235,7 @@ switch ($_GET['action']) {
 				api_display_tool_title(get_lang('EditRight'));
 				$form = new FormValidator('itemright', 'post', "m_item.php?id=".$item['id']."&action=m_rights&subaction=edit");
 
-				$form->add_textfield('classn', get_lang('Class'), true, array ('readonly' => 'readonly'));
+				$form->addText('classn', get_lang('Class'), true, array ('readonly' => 'readonly'));
 
 				$form->addElement('checkbox', 'edit_right', get_lang('EditRight'));
 				$form->addElement('checkbox', 'delete_right', get_lang('DeleteRight'));
@@ -336,7 +336,7 @@ switch ($_GET['action']) {
 		foreach ($cats as $cat)
 			$catOptions[$cat['id']] = $cat['name'];
 		$form->addElement('select', 'category', get_lang('ResourceType'), $catOptions);
-		$form->add_textfield('name', get_lang('ResourceName'), true, array ('maxlength' => '128'));
+		$form->addText('name', get_lang('ResourceName'), true, array ('maxlength' => '128'));
 		$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -372,7 +372,7 @@ switch ($_GET['action']) {
 		api_display_tool_title(get_lang('EditResource'));
 		$form = new FormValidator('item', 'post', 'm_item.php?action=edit');
 		$form->addElement('select', 'category_id', get_lang('ResourceType'), $catOptions);
-		$form->add_textfield('name', get_lang('ResourceName'), array ('maxlength' => '128'));
+		$form->addText('name', get_lang('ResourceName'), array ('maxlength' => '128'));
 		$form->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3', 'cols' => '40'));
 		$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('hidden', 'id', $item['id']);

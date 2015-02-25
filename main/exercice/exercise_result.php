@@ -17,26 +17,10 @@
 
 use \ChamiloSession as Session;
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-
 // Name of the language file that needs to be included
 $language_file = 'exercice';
-
+$debug = false;
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-if ($_GET['origin']=='learnpath') {
-    require_once '../newscorm/learnpath.class.php';
-    require_once '../newscorm/learnpathItem.class.php';
-    require_once '../newscorm/scorm.class.php';
-    require_once '../newscorm/scormItem.class.php';
-    require_once '../newscorm/aicc.class.php';
-    require_once '../newscorm/aiccItem.class.php';
-}
-require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -126,7 +110,7 @@ $i = $total_score = $total_weight = 0;
 
 //We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
-    $attempt_count = get_attempt_count(
+    $attempt_count = Event::get_attempt_count(
         api_get_user_id(),
         $objExercise->id,
         $learnpath_id,
@@ -149,21 +133,21 @@ if ($objExercise->selectAttempts() > 0) {
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
 // Display and save questions
-display_question_list_by_attempt($objExercise, $exe_id, true);
+ExerciseLib::display_question_list_by_attempt($objExercise, $exe_id, true);
 
 //If is not valid
 
 /*
-$session_control_key = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
-if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise->id, $learnpath_id, $learnpath_item_id)) {
+$session_control_key = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+if (isset($session_control_key) && !ExerciseLib::exercise_time_control_is_valid($objExercise->id, $learnpath_id, $learnpath_item_id)) {
 	$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 	$sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks = 0, position = 0 WHERE exe_id = $exe_id ";
 	Database::query($sql_fraud);
 }*/
 
 //Unset session for clock time
-exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
-delete_chat_exercise_session($exe_id);
+ExerciseLib::exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
+ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';

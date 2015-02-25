@@ -99,7 +99,7 @@ if (isset($_POST['language'])) {
 
 	$form->addElement('static', Security::remove_XSS($_POST['language']));
 	$form->addElement('hidden', 'language',Security::remove_XSS($_POST['language']));
-	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250'));
+	$form->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250'));
 
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
 	$form->addElement('radio', 'type', '', get_lang('PageLink') ,'1');

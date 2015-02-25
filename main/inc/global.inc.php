@@ -25,8 +25,8 @@
 define('SHOW_ERROR_CODES', false);
 
 // Determine the directory path where this current file lies.
-// This path will be useful to include the other intialisation files.
-$includePath = dirname(__FILE__);
+// This path will be useful to include the other initialisation files.
+$includePath = __DIR__;
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
@@ -67,7 +67,7 @@ $_configuration['dokeos_stable']    = $_configuration['system_stable'];
 $userPasswordCrypted                = $_configuration['password_encryption'];
 
 // Include the main Chamilo platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
+require_once $includePath.'/lib/api.lib.php';
 
 //Check the PHP version
 api_check_php_version($includePath.'/');
@@ -83,9 +83,6 @@ if (api_get_setting('login_is_email') == 'true') {
 }
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
-// Do not over-use this variable. It is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH);
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -96,15 +93,27 @@ ini_set('include_path', api_create_include_path_setting());
 ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
-require_once dirname(__FILE__).'/autoload.inc.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
-require_once $lib_path.'database.lib.php';
-require_once $lib_path.'text.lib.php';
-require_once $lib_path.'array.lib.php';
-require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'model.lib.php';
-require_once $lib_path.'course.lib.php';
-require_once $lib_path.'online.inc.php';
+// Do not over-use this variable. It is only for this script's local use.
+$libraryPath = api_get_path(LIBRARY_PATH);
+
+// @todo convert this libs in classes
+
+require_once $libraryPath.'database.constants.inc.php';
+require_once $libraryPath.'text.lib.php';
+require_once $libraryPath.'array.lib.php';
+require_once $libraryPath.'online.inc.php';
+require_once $libraryPath.'banner.lib.php';
+require_once $libraryPath.'fileManage.lib.php';
+require_once $libraryPath.'fileUpload.lib.php';
+require_once $libraryPath.'fileDisplay.lib.php';
+require_once $libraryPath.'course_category.lib.php';
+
+define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/');
+if (!is_dir(_MPDF_TEMP_PATH)) {
+    mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
+}
 
 /*  DATABASE CONNECTION  */
 
@@ -115,14 +124,20 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-if (!($conn_return = @Database::connect(
-    array(
-        'server'        => $_configuration['db_host'],
-        'username'      => $_configuration['db_user'],
-        'password'      => $_configuration['db_password'],
-        'persistent'    => $_configuration['db_persistent_connection']
-    )))
-) {
+$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
+// $_configuration['db_client_flags'] can be set in configuration.php to pass
+// flags to the DB connection
+$dbFlags = api_get_configuration_value('db_client_flags');
+
+$params = array(
+    'server' => $_configuration['db_host'],
+    'username' => $_configuration['db_user'],
+    'password' => $_configuration['db_password'],
+    'persistent' => $dbPersistConnection,
+    'client_flags' => $dbFlags,
+);
+
+if (!($conn_return = @Database::connect($params))) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
@@ -186,7 +201,7 @@ if (!Database::select_db($_configuration['main_database'], $database_connection)
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
-while ($row = @Database::fetch_array($result)) {
+while ($row = Database::fetch_array($result)) {
     $charset = $row[0];
 }
 if (empty($charset)) {
@@ -295,9 +310,7 @@ foreach ($result as & $row) {
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
-// Load HTMLPurifier.
-//require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
+require_once $libraryPath.'formvalidator/Rule/allowed_tags.inc.php';
 
 // Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts
@@ -312,9 +325,22 @@ require $includePath.'/local.inc.php';
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
-$mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
-if (file_exists($mail_conf)) {
-	require_once $mail_conf;
+// Including configuration files
+$configurationFiles = array(
+    'mail.conf.php',
+    'profile.conf.php',
+    'course_info.conf.php',
+    'add_course.conf.php',
+    'events.conf.php',
+    'auth.conf.php',
+    'portfolio.conf.php'
+);
+
+foreach ($configurationFiles as $file) {
+    $file = api_get_path(CONFIGURATION_PATH).$file;
+    if (file_exists($file)) {
+        require_once $file;
+    }
 }
 
 if (api_get_setting('server_type') == 'test') {
@@ -322,41 +348,7 @@ if (api_get_setting('server_type') == 'test') {
     ini_set('log_errors', '1');
     error_reporting(-1);
 } else {
-    /*
-    Server type is not test
-    - normal error reporting level
-    - full fake register globals block
-    */
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-
-    // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
-    if (!isset($HTTP_GET_VARS)) { $HTTP_GET_VARS = $_GET; }
-    if (!isset($HTTP_POST_VARS)) { $HTTP_POST_VARS = $_POST; }
-    if (!isset($HTTP_POST_FILES)) { $HTTP_POST_FILES = $_FILES; }
-    if (!isset($HTTP_SESSION_VARS)) { $HTTP_SESSION_VARS = $_SESSION; }
-    if (!isset($HTTP_SERVER_VARS)) { $HTTP_SERVER_VARS = $_SERVER; }
-
-    // Register SESSION variables into $GLOBALS
-    if (sizeof($HTTP_SESSION_VARS)) {
-        if (!is_array($_SESSION)) {
-            $_SESSION = array();
-        }
-        foreach ($HTTP_SESSION_VARS as $key => $val) {
-            $_SESSION[$key] = $HTTP_SESSION_VARS[$key];
-            $GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
-        }
-    }
-
-    // Register SERVER variables into $GLOBALS
-    if (sizeof($HTTP_SERVER_VARS)) {
-        $_SERVER = array();
-        foreach ($HTTP_SERVER_VARS as $key => $val) {
-            $_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-            if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs') {
-                $GLOBALS[$key]=$HTTP_SERVER_VARS[$key];
-            }
-        }
-    }
 }
 
 /*	LOAD LANGUAGE FILES SECTION */
@@ -374,8 +366,7 @@ if (!empty($_POST['language_list'])) {
 }
 
 if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !isset($_SESSION['_user'])) {
-    require_once __DIR__.'/../admin/sub_language.class.php';
-    $l = subLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    $l = SubLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     if (!empty($l)) {
         $user_language = $browser_language = $l;
     }
@@ -387,7 +378,6 @@ $langpath = api_get_path(SYS_LANG_PATH);
 
 /* This will only work if we are in the page to edit a sub_language */
 if (isset($this_script) && $this_script == 'sub_language') {
-    require_once '../admin/sub_language.class.php';
     // getting the arrays of files i.e notification, trad4all, etc
     $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
     //getting parent info
@@ -511,7 +501,6 @@ $language_interface_initial_value = $language_interface;
 $language_files = array();
 $language_files[] = 'trad4all';
 $language_files[] = 'notification';
-$language_files[] = 'accessibility';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {
@@ -524,7 +513,6 @@ if (isset($language_file)) {
 if (is_array($language_files)) {
     // if the sub-language feature is on
     if (api_get_setting('allow_use_sub_language') == 'true') {
-        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
         $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
         foreach ($language_files as $index => $language_file) {
             // include English
@@ -574,14 +562,14 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
-    $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
+        WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
     $q_last_connection = Database::query($sql_last_connection);
     if (Database::num_rows($q_last_connection) > 0) {
@@ -594,7 +582,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
-            event_login();
+            Event::event_login();
             // now that it's created, we can get its ID and carry on
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');

@@ -204,7 +204,7 @@ class learnpath
             $this->last_item_seen = $row['last_item'];
             $this->progress_db = $row['progress'];
             $this->lp_view_session_id = $row['session_id'];
-        } else {
+        } else if (!api_is_invitee()) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
@@ -253,8 +253,6 @@ class learnpath
                     }
                     break;
                 case 2:
-                    require_once 'scorm.class.php';
-                    require_once 'scormItem.class.php';
                     $oItem = new scormItem('db', $row['id'], $course_id);
                     if (is_object($oItem)) {
                         $my_item_id = $oItem->get_id();
@@ -351,17 +349,19 @@ class learnpath
                         }
                     }
                 } else {
-                    if (is_object($this->items[$item_id])) {
-                        $this->items[$item_id]->set_status($this->default_status);
+                    if (!api_is_invitee()) {
+                        if (is_object($this->items[$item_id])) {
+                            $this->items[$item_id]->set_status($this->default_status);
+                        }
+                        // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                        $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
+                                    VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
+                        if ($this->debug > 2) {
+                            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+                        }
+                        $this->items[$item_id]->set_lp_view($this->lp_view_id, $course_id);
+                        Database::query($sql);
                     }
-                    // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                    $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                            VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql, 0);
-                    }
-                    $this->items[$item_id]->set_lp_view($this->lp_view_id, $course_id);
-                    Database::query($sql);
                 }
             }
         }
@@ -637,9 +637,6 @@ class learnpath
                         api_get_session_id()
                     );
                 }
-
-                // Upload the file in the documents tool.
-                include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
                 $file_path = handle_uploaded_document(
                     $_course,
                     $_FILES['mp3'],
@@ -1056,8 +1053,6 @@ class learnpath
             api_get_user_id()
         );
 
-        require_once '../gradebook/lib/be.inc.php';
-
         // Delete link of gradebook tool
         //$tbl_grade_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         /*$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
@@ -1072,10 +1067,9 @@ class learnpath
                    $link[0]->delete();
             }
         }*/
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 4 , $id, api_get_session_id());
         if ($link_info !== false) {
-            remove_resource_from_course_gradebook($link_info['id']);
+            GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
         if (api_get_setting('search_enabled') == 'true') {
@@ -1428,7 +1422,6 @@ class learnpath
         }
 
         if ($row_select['item_type'] == 'link') {
-            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
             $link = new Link();
             $linkId = $row_select['path'];
             $link->updateLink($linkId, $url);
@@ -3374,13 +3367,12 @@ class learnpath
                         }
 
                         if ($lp_item_type == 'link') {
-                            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-                            if (is_youtube_link($file)) {
-                                $src  = get_youtube_video_id($file);
+                            if (Link::is_youtube_link($file)) {
+                                $src  = Link::get_youtube_video_id($file);
                                 $file = 'embed.php?type=youtube&src='.$src;
                             }
-                            if (isVimeoLink($file)) {
-                                $src  = getVimeoLinkId($file);
+                            if (Link::isVimeoLink($file)) {
+                                $src  = Link::getVimeoLinkId($file);
                                 $file = 'embed.php?type=vimeo&src='.$src;
                             }
                         } else {
@@ -3611,7 +3603,7 @@ class learnpath
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $this->lp_view_id = $row['id'];
-        } else {
+        } else if (!api_is_invitee()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
             		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ", 1, $sessionId)";
@@ -4190,6 +4182,9 @@ class learnpath
         // TODO
         // Call autosave method to save the current progress.
         //$this->index = 0;
+        if (api_is_invitee()) {
+            return false;
+        }
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
@@ -4307,7 +4302,7 @@ class learnpath
         $session_condition = api_get_session_condition(api_get_session_id(), true, false);
         $table = Database :: get_course_table(TABLE_LP_VIEW);
 
-        if (isset($this->current)) {
+        if (isset($this->current) && !api_is_invitee()) {
             if ($this->debug > 2) {
                 error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
             }
@@ -4324,19 +4319,21 @@ class learnpath
             Database::query($sql);
         }
 
-        // Save progress.
-        list($progress, $text) = $this->get_progress_bar_text('%');
-        if ($progress >= 0 && $progress <= 100) {
-            $progress = (int) $progress;
-            $sql = "UPDATE $table SET
-                        progress = $progress
-                    WHERE
-                        c_id = ".$course_id." AND
-                        lp_id = " . $this->get_id() . " AND
-                        user_id = " . $this->get_user_id()." ".$session_condition;
-            // Ignore errors as some tables might not have the progress field just yet.
-            Database::query($sql);
-            $this->progress_db = $progress;
+        if (!api_is_invitee()) {
+            // Save progress.
+            list($progress, $text) = $this->get_progress_bar_text('%');
+            if ($progress >= 0 && $progress <= 100) {
+                $progress = (int) $progress;
+                $sql = "UPDATE $table SET
+                            progress = $progress
+                        WHERE
+                            c_id = ".$course_id." AND
+                            lp_id = " . $this->get_id() . " AND
+                            user_id = " . $this->get_user_id()." ".$session_condition;
+                // Ignore errors as some tables might not have the progress field just yet.
+                Database::query($sql);
+                $this->progress_db = $progress;
+            }
         }
     }
 
@@ -6066,7 +6063,6 @@ class learnpath
                 switch ($row['item_type']) {
                     case TOOL_QUIZ:
                         if (!empty($row['path'])) {
-                            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                             $exercise = new Exercise();
                             $exercise->read($row['path']);
                             $return .= $exercise->description.'<br />';
@@ -7240,6 +7236,7 @@ class learnpath
             $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
 
             $relative_prefix = '';
+
             $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
                 'Width' 				=> '100%',
                 'Height' 				=> '500',
@@ -7248,6 +7245,7 @@ class learnpath
                 'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/scorm/',
                 'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().$item_path_fck
             );
+
             $form->addElement('html_editor', 'content_lp', '', null, $editor_config);
             $content_path = (api_get_path(SYS_COURSE_PATH).api_get_course_path().$item_path_fck);
             //$defaults['content_lp'] = file_get_contents($item_path);
@@ -7534,6 +7532,7 @@ class learnpath
                             'CreateDocumentDir' 	=> $relative_prefix,
                             'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
                             'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
+
                         );
 
                         if ($_GET['action'] == 'add_item') {
@@ -8311,7 +8310,6 @@ class learnpath
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
-                require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
                 $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
                 $tmp_obj_exercice = new Exercise();
                 $tmp_obj_exercice->read($tmp_obj_lp_item->path);
@@ -8479,8 +8477,6 @@ class learnpath
      */
     public function get_links()
     {
-        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
-
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
@@ -8499,7 +8495,7 @@ class learnpath
         $return .= '</li>';
         $course_info = api_get_course_info();
 
-        $linkCategories = getLinkCategories($course_id, $session_id);
+        $linkCategories = Link::getLinkCategories($course_id, $session_id);
         $categoryIdList = array();
         if (!empty($linkCategories)) {
             foreach ($linkCategories as $categoryInfo) {
@@ -9083,7 +9079,6 @@ class learnpath
                         }
                         break;
                     case TOOL_QUIZ:
-                        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
                         $exe_id = $item->path; // Should be using ref when everything will be cleaned up in this regard.
                         $exe = new Exercise();
                         $exe->read($exe_id);
@@ -9482,9 +9477,6 @@ EOD;
             $res = unlink($file);
             if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
         }
-        // Send file to client.
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
         $name = replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }

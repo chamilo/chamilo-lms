@@ -15,16 +15,6 @@ $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 
-require_once 'lib/be.inc.php';
-require_once 'lib/scoredisplay.class.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/catform.class.php';
-require_once 'lib/fe/evalform.class.php';
-require_once 'lib/fe/linkform.class.php';
-require_once 'lib/gradebook_data_generator.class.php';
-require_once 'lib/fe/gradebooktable.class.php';
-require_once 'lib/fe/displaygradebook.php';
-
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_edit()) {
@@ -53,7 +43,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
     }
 }
 
-$course_id			  =	get_course_id_by_link_id($my_selectcat);
+$course_id			  =	GradebookUtils::get_course_id_by_link_id($my_selectcat);
 
 $table_link           = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation     = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
@@ -73,12 +63,7 @@ $submitted = isset($_POST['submitted'])?$_POST['submitted']:'';
 if ($submitted==1) {
     Display :: display_confirmation_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
     if (isset($_POST['evaluation'])) {
-        require_once 'lib/be/evaluation.class.php';
         $eval_log = new Evaluation();
-    }
-    if (isset($_POST['link'])) {
-        require_once 'lib/be/abstractlink.class.php';
-        //$eval_link_log = new AbstractLink();
     }
 }
 
@@ -131,7 +116,7 @@ while ($row = Database ::fetch_array($result)) {
         Database::query($sql_t);
     }
 
-    $tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type']).' WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
+    $tempsql = Database::query('SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).' WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
     $resource_name = Database ::fetch_array($tempsql);
 
     if (isset($resource_name['lp_type'])) {
@@ -140,7 +125,7 @@ while ($row = Database ::fetch_array($result)) {
         $resource_name = $resource_name[1];
     }
 
-    $output.= '<tr><td>'.build_type_icon_tag($row['type']).'</td><td> '.$resource_name.' '.Display::label($table_evaluated[$row['type']][3],'info').' </td>';
+    $output.= '<tr><td>'.GradebookUtils::build_type_icon_tag($row['type']).'</td><td> '.$resource_name.' '.Display::label($table_evaluated[$row['type']][3],'info').' </td>';
     $output.= '<td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/></td></tr>';
 }
 
@@ -159,7 +144,7 @@ while ($row = Database ::fetch_array($sql)) {
         $item_weight = trim($_POST['evaluation'][$row['id']]);
     }
     $type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
-    $output.= '<tr><td>'.build_type_icon_tag('evalnotempty').'</td><td>'.$row['name'].' '.Display::label(get_lang('Evaluation').$type_evaluated).'</td>';
+    $output.= '<tr><td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td><td>'.$row['name'].' '.Display::label(get_lang('Evaluation').$type_evaluated).'</td>';
     $output.= '<td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$item_weight.'"/></td></tr>';
 }
 //by iflorespaz

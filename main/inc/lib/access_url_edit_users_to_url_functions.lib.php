@@ -4,10 +4,7 @@
  * Accessurledituserstourl class definition
  * @package chamilo.library
  */
-/**
- * Code
- */
-require_once ('xajax/xajax.inc.php');
+
 /**
  * Accessurledituserstourl class definition
  * Contains several functions dealing with displaying,

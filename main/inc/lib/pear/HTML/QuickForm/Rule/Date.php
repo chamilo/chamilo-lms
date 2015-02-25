@@ -4,14 +4,6 @@
  * QuickForm rule to check a date
  * @package chamilo.include
  */
-/**
- * Code
- */
-require_once ('HTML/QuickForm/Rule.php');
-/**
- * QuickForm rule to check a date
- * @package chamilo.include
- */
 class Html_Quickform_Rule_Date extends HTML_QuickForm_Rule
 {
 	/**

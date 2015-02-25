@@ -9,12 +9,7 @@
 // name of the language file that needs to be included
 $language_file='exercice';
 
-// including global Dokeos file
 require_once '../inc/global.inc.php';
-
-// including additional libraries
-require_once 'question.class.php';
-require_once 'exercise.class.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;

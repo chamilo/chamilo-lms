@@ -1,5 +1,5 @@
-{% include 'default/notebook/header.tpl' %}
-{% include 'default/notebook/javascript.tpl' %}
+{% include template ~ '/notebook/header.tpl' %}
+{% include template ~ '/notebook/javascript.tpl' %}
 
 <div class="btn-toolbar actions-bar" >
     {% if is_allowed_to_edit %}
@@ -37,5 +37,5 @@
     </div>
 </div>
 
-{% include 'default/notebook/list.tpl' %}
+{% include template ~ '/notebook/list.tpl' %}
 

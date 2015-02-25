@@ -9,8 +9,6 @@ $language_file = array('tracking');
 require_once '../global.inc.php';
 $action = $_GET['a'];
 
-//if (!api_is_platform_admin() && !api_is_xml_http_request()) { exit; }
-require_once api_get_path(SYS_CODE_PATH) . 'mySpace/myspace.lib.php';
 
 switch ($action) {
     case 'access_detail':
@@ -19,19 +17,22 @@ switch ($action) {
         $type = Security::remove_XSS($_REQUEST['type']);
         $range = Security::remove_XSS($_REQUEST['range']);
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+
         if ($range == 1) {
             $start_date = Security::remove_XSS($_REQUEST['sd']);
             $end_date = Security::remove_XSS($_REQUEST['ed']);
             $sql_result = get_connections_to_course_by_date(
                 $user_id,
-                $course_code,
+                $courseId,
                 $start_date,
                 $end_date
             );
         } else {
             $sql_result = MySpace::get_connections_to_course(
                 $user_id,
-                $course_code
+                $courseId
             );
         }
         $foo_print = grapher($sql_result, $start_date, $end_date, $type);
@@ -46,10 +47,12 @@ switch ($action) {
         $user_id = isset($_REQUEST['student']) ? $_REQUEST['student'] : "";
         $course_code = isset($_REQUEST['course']) ? $_REQUEST['course'] : "";
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
         $sql_result = get_connections_to_course_by_date(
             $user_id,
-            $course_code,
+            $courseId,
             $start_date,
             $end_date
         );

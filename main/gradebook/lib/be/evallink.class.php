@@ -19,18 +19,26 @@ abstract class EvalLink extends AbstractLink
         parent::__construct();
     }
 
-    // Functions implementing AbstractLink
-
+    /**
+     * @return bool
+     */
     public function has_results()
     {
         $eval = $this->get_evaluation();
+
         return $eval->has_results();
     }
 
-    public function calc_score($stud_id = null)
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function calc_score($userId = null)
     {
         $eval = $this->get_evaluation();
-        return $eval->calc_score($stud_id);
+
+        return $eval->calc_score($userId);
     }
 
     public function get_link()

@@ -6,17 +6,11 @@
 * 	@author Istvan Mandak
 * 	@version $Id: adminhp.php 20089 2009-04-24 21:12:54Z cvargas1 $
 */
-/**
- * Code
- */
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
+
 // name of the language file that needs to be included
 $language_file='exercice';
 
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 $this_section=SECTION_COURSES;
 

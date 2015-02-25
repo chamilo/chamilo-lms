@@ -17,9 +17,6 @@ $cidReset = true;
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
-
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
@@ -136,7 +133,7 @@ if ($action_todo) {
     }
     $form = new FormValidator('system_announcement');
     $form->addElement('header', '', $form_title);
-    $form->add_textfield('title', get_lang('Title'), true, array('class'=>'span4'));
+    $form->addText('title', get_lang('Title'), true, array('class'=>'span4'));
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');
@@ -145,11 +142,7 @@ if ($action_todo) {
     }
 
     $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
-    if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-        $form->addElement('textarea', 'content', get_lang('Content'));
-    } else {
-        $form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
-    }
+    $form->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
     $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
 
     $group = array();
@@ -185,13 +178,8 @@ if ($action_todo) {
         $class='save';
         $form->addElement('hidden', 'action', 'edit');
     }
-
     $form->addElement('checkbox', 'send_email_test', null, get_lang('SendOnlyAnEmailToMySelfToTest'));
-
     $form->addElement('style_submit_button', 'submit', $text, 'class="'.$class.'"');
-    if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-        $values['content'] = WCAG_Rendering::HTML_to_text($values['content']);
-    }
     $form->setDefaults($values);
 
     if ($form->validate()) {
@@ -207,9 +195,6 @@ if ($action_todo) {
         }
         if ($values['lang'] == 'all') {
             $values['lang'] = null;
-        }
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            //$values['content'] = WCAG_Rendering::text_to_HTML($values['content']);
         }
 
         $sendMail = isset($values['send_mail']) ? $values['send_mail'] : null;
@@ -265,13 +250,7 @@ if ($action_todo) {
         }
         $show_announcement_list = true;
     } else {
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            echo '<div class="WCAG-form">';
-        }
         $form->display();
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            echo '</div>';
-        }
         $show_announcement_list = false;
     }
 }

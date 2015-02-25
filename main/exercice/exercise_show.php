@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Shows the exercise results
  *
@@ -17,15 +18,8 @@ use \ChamiloSession as Session;
 
 $language_file = array('exercice');
 
-// including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php'; //also defines answer type constants
-require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
-
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
+$debug = false;
 if (empty($origin) ) {
     $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
@@ -39,7 +33,7 @@ if ($origin == 'learnpath') {
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
@@ -73,10 +67,10 @@ if (api_is_course_session_coach(
 }
 
 $maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
-$track_exercise_info = get_exercise_track_exercise_info($id);
+$track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
@@ -90,6 +84,10 @@ $learnpath_id       = $track_exercise_info['orig_lp_id'];
 $learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];
 $lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
 $current_user_id    = api_get_user_id();
+
+if (apiIsExcludedUserType(true, $student_id)) {
+    api_not_allowed(true);
+}
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
@@ -157,8 +155,7 @@ function getFCK(vals,marksid) {
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
         if (maxEditors == 0) {
-            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            oHidden.value = oEditor.GetXHTML(true);
+            oHidden.value = CKEDITOR.instances[oHidden.name].getData();
         } else {
             oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
         }
@@ -218,7 +215,9 @@ if ($show_results || $show_only_total_score) {
     //Shows exercise header
     echo $objExercise->show_exercise_result_header(
         $user_info,
-        api_convert_and_format_date($exercise_date)
+        api_convert_and_format_date($exercise_date),
+        null,
+        $track_exercise_info['user_ip']
     );
 }
 
@@ -291,7 +290,8 @@ $exercise_content = null;
 $category_list = array();
 
 $useAdvancedEditor = true;
-if (count($questionList) > $maxEditors) {
+
+if (!empty($maxEditors) && count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
 
@@ -464,9 +464,8 @@ foreach ($questionList as $questionId) {
                     $url=$url_hotspot;
                 } else {
                     //show if no error
-                    //echo 'no error';
-                    $comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);
-                    $answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
+                    $comment=$answerComment = $objAnswerTmp->selectComment($nbrAnswers);
+                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
                 }
             }
 
@@ -512,7 +511,7 @@ foreach ($questionList as $questionId) {
 	$comnt = null;
 
     if ($show_results) {
-		if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+		if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_boss()) {
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
@@ -529,7 +528,7 @@ foreach ($questionList as $questionId) {
 			echo '<br />';
 
             echo '<div id="feedback_'.$name.'" style="width:100%">';
-			$comnt = trim(get_comments($id, $questionId));
+			$comnt = trim(Event::get_comments($id, $questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
@@ -544,7 +543,7 @@ foreach ($questionList as $questionId) {
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt = get_comments($id, $questionId);
+			$comnt = Event::get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
 
             if ($useAdvancedEditor) {
@@ -562,14 +561,13 @@ foreach ($questionList as $questionId) {
             } else {
                 $feedback_form->addElement('textarea', 'comments_' . $questionId);
             }
-
 			$feedback_form->addElement('html','<br>');
 			$feedback_form->setDefaults($default);
 			$feedback_form->display();
 			echo '</div>';
 
 		} else {
-			$comnt = get_comments($id, $questionId);
+			$comnt = Event::get_comments($id, $questionId);
 			echo '<br />';
 			if (!empty($comnt)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
@@ -654,7 +652,7 @@ foreach ($questionList as $questionId) {
 
     $score = array();
     if ($show_results) {
-		$score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+		$score['result'] = get_lang('Score')." : ".ExerciseLib::show_score($my_total_score, $my_total_weight, false, false);
         $score['pass']   = $my_total_score >= $my_total_weight ? true : false;
         $score['type']   = $answerType;
         $score['score']  = $my_total_score;
@@ -689,13 +687,18 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }
-        $total_score_text .= get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
+        $total_score_text .= ExerciseLib::get_question_ribbon(
+            $objExercise,
+            $my_total_score_temp,
+            $totalWeighting,
+            true
+        );
         $total_score_text .= '</div>';
 	}
 }
 
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
-    //Adding total
+    // Adding total
     $category_list['total'] = array(
         'score' => $my_total_score_temp,
         'total' => $totalWeighting
@@ -712,22 +715,21 @@ if (is_array($arrid) && is_array($arrmarks)) {
 	$marksid = implode(",",$arrmarks);
 }
 
-if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
+if ($is_allowedToEdit && $locked == false && !api_is_drh() && !api_is_student_boss()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
+		echo '<form name="myform" id="myform" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';
 		echo '<input type = "hidden" name="total_score"      value="'.$totalScore.'"> ';
 		echo '<input type = "hidden" name="my_exe_exo_id"    value="'.$exercise_id.'"> ';
 	} else {
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
+		echo ' <form name="myform" id="myform" action="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&filter=1&comments=update&exeid='.$id.'" method="post">';
 	}
 	if ($origin !='learnpath' && $origin!='student_progress') {
-
         echo '<label><input type= "checkbox" name="send_notification"> '.get_lang('SendEmail').'</label>';
 		?>
-		<button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
+        <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Ok'); ?>" onclick="getFCK('<?php echo $strids; ?>','<?php echo $marksid; ?>');">
             <?php echo get_lang('CorrectTest'); ?>
         </button>
 		</form>

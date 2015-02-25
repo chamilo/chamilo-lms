@@ -9,22 +9,11 @@
 
 // name of the language file that needs to be included
 $language_file = 'learnpath';
-
-if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
-    require_once '../newscorm/learnpath.class.php';
-    require_once '../newscorm/learnpathItem.class.php';
-    require_once '../newscorm/scorm.class.php';
-    require_once '../newscorm/scormItem.class.php';
-    require_once '../newscorm/aicc.class.php';
-    require_once '../newscorm/aiccItem.class.php';
-}
-
 require_once '../inc/global.inc.php';
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 
 $this_section = SECTION_COURSES;
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
 
 $test = $_REQUEST['test'];

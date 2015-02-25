@@ -15,8 +15,6 @@ if (!empty($_POST['language'])) {
     $_GET['language'] = $_POST['language'];
 }
 require_once '../inc/global.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 
@@ -165,8 +163,8 @@ if ($user_already_registered_show_terms == false) {
             'sessionVar'   => basename(__FILE__, '.php'),
             'imageOptions' => array(
                 'font_size' => 20,
-                'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                'font_file' => 'tahoma.ttf',
+                'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                'font_file' => 'OpenSans-Regular.ttf',
                     //'output' => 'gif'
             )
         );
@@ -184,22 +182,22 @@ if ($user_already_registered_show_terms == false) {
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
     ) {
-        $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
-        $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
-        $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
-        $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true') {
         if (api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true' &&
@@ -603,7 +601,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    event_login();
+    Event::event_login();
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

@@ -19,4 +19,4 @@
 </p>
 {% endif %}
 
-{% include 'default/work/comments.tpl' %}
+{% include template ~ '/work/comments.tpl' %}

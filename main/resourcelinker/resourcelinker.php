@@ -7,7 +7,7 @@
 * @package chamilo.resourcelinker
 * @todo reorganise code - This class is used?
 * use Database API instead of creating table names locally.
-* 
+*
 */
 
 /**
@@ -28,7 +28,7 @@ api_protect_course_script();
 	Libraries
 -----------------------------------------------------------
 */
-include_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
+
 include ('resourcelinker.inc.php');
 
 /*
@@ -799,9 +799,6 @@ if ($content == "Link")
 {
 	// including the links language file
 	include ("../lang/$language/link.inc.php");
-
-	// including the links functions file
-	require_once api_get_path(LIBRARY_PATH).'link.lib.php';
 
 	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 	if (($learnpath_id != '') and ($content == 'Link'))

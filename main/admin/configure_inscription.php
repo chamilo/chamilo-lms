@@ -12,9 +12,6 @@ require_once '../inc/global.inc.php';
 
 api_protect_admin_script();
 
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-
 // Load terms & conditions from the current lang
 if (get_setting('allow_terms_conditions') == 'true') {
     $get = array_keys($_GET);
@@ -118,14 +115,8 @@ if (!empty($action)) {
         switch ($action) {
             case 'edit_top':
                 // Filter
-                $home_top = '';
-                if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-                    $home_top = WCAG_Rendering::prepareXHTML();
-                } else {
-                    $home_top = trim(stripslashes($_POST['register_top']));
-                }
+                $home_top = trim(stripslashes($_POST['register_top']));
                 // Write
-
                 if (file_exists($homep.$topf.'_'.$lang.$ext)) {
                     if (is_writable($homep.$topf.'_'.$lang.$ext)) {
                         $fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
@@ -252,16 +243,16 @@ if ($display_all_form) {
 
     //	EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mycomptetences') == 'true') {
-        $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mydiplomas') == 'true') {
-        $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','myteach') == 'true') {
-        $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true') {
-        $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
     if (api_get_setting('extended_profile') == 'true') {
         if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
@@ -364,17 +355,8 @@ switch ($action){
         $renderer->setElementTemplate('<tr><td>{element}</td></tr>');
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
-        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
-            //TODO: review these lines
-            // Print WCAG-specific HTML editor
-            $html = '<tr><td>';
-            $html .= WCAG_Rendering::create_xhtml($open);
-            $html .= '</td></tr>';
-            $form->addElement('html', $html);
-        } else {
-            $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-            $form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-        }
+        $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
+        $form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
         $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
         $form->setDefaults($default);
         $form->display();

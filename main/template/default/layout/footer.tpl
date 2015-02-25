@@ -20,7 +20,7 @@
                         {{ plugin_footer_left }}
                     </div>
                 {% endif %}
-                 &nbsp;
+                &nbsp;
             </div>
 
             <div id="footer_center" class="span4">
@@ -30,7 +30,7 @@
                         {{ plugin_footer_center }}
                     </div>
                 {% endif %}
-                 &nbsp;
+                &nbsp;
             </div>
 
             <div id="footer_right" class="span4">
@@ -59,30 +59,9 @@
 {# Extra footer configured in admin section, only shown to non-admins #}
 {{ footer_extra_content }}
 
-{% raw %}
 <script>
 
-$("form").on("click", ' .advanced_parameters', function() {
-    var id = $(this).attr('id') + '_options';
-    var button = $(this);
-    $("#"+id).toggle(function() {
-        button.toggleClass('active');
-    });
-});
-
-
-/* Makes row highlighting possible */
-$(document).ready( function() {
-    /**
-     * Advanced options
-     * Usage
-     * <a id="link" href="url">Advanced</a>
-     * <div id="link_options">
-     *     hidden content :)
-     * </div>
-     * */
-    $(".advanced_options").on("click", function(event) {
-        event.preventDefault();
+    $("form").on("click", ' .advanced_parameters', function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#"+id).toggle(function() {
@@ -90,59 +69,76 @@ $(document).ready( function() {
         });
     });
 
-    /**
-     * <a class="advanced_options_open" href="http://" rel="div_id">Open</a>
-     * <a class="advanced_options_close" href="http://" rel="div_id">Close</a>
-     * <div id="div_id">Div content</div>
-     * */
-    $(".advanced_options_open").on("click", function(event) {
-        event.preventDefault();
-        var id = $(this).attr('rel');
-        $("#"+id).show();
-    });
+    /* Makes row highlighting possible */
+    $(document).ready( function() {
+        /**
+         * Advanced options
+         * Usage
+         * <a id="link" href="url">Advanced</a>
+         * <div id="link_options">
+         *     hidden content :)
+         * </div>
+         * */
+        $(".advanced_options").on("click", function(event) {
+            event.preventDefault();
+            var id = $(this).attr('id') + '_options';
+            var button = $(this);
+            $("#"+id).toggle(function() {
+                button.toggleClass('active');
+            });
+        });
 
-    $(".advanced_options_close").on("click", function(event) {
-        event.preventDefault();
-        var id = $(this).attr('rel');
-        $("#"+id).hide();
-    });
+        /**
+         * <a class="advanced_options_open" href="http://" rel="div_id">Open</a>
+         * <a class="advanced_options_close" href="http://" rel="div_id">Close</a>
+         * <div id="div_id">Div content</div>
+         * */
+        $(".advanced_options_open").on("click", function(event) {
+            event.preventDefault();
+            var id = $(this).attr('rel');
+            $("#"+id).show();
+        });
 
-    // Chosen select
-    $(".chzn-select").chosen({
-        disable_search_threshold: 10
-    });
+        $(".advanced_options_close").on("click", function(event) {
+            event.preventDefault();
+            var id = $(this).attr('rel');
+            $("#"+id).hide();
+        });
 
-    $(".jp-jplayer audio").addClass('skip');
+        // Chosen select
+        $(".chzn-select").chosen({
+            disable_search_threshold: 10
+        });
 
-    // Mediaelement
-    jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+        $(".jp-jplayer audio").addClass('skip');
 
-    // Table highlight.
-    $("form .data_table input:checkbox").click(function() {
-        if ($(this).is(":checked")) {
-            $(this).parentsUntil("tr").parent().addClass("row_selected");
+        // Mediaelement
+        jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
 
-        } else {
-            $(this).parentsUntil("tr").parent().removeClass("row_selected");
+        // Table highlight.
+        $("form .data_table input:checkbox").click(function() {
+            if ($(this).is(":checked")) {
+                $(this).parentsUntil("tr").parent().addClass("row_selected");
+
+            } else {
+                $(this).parentsUntil("tr").parent().removeClass("row_selected");
+            }
+        });
+
+        /* For non HTML5 browsers */
+        if ($("#formLogin".length > 1)) {
+            $("input[name=login]").focus();
         }
+
+        /* For IOS users */
+        $('.autocapitalize_off').attr('autocapitalize', 'off');
+
+        //Tool tip (in exercises)
+        var tip_options = {
+            placement : 'right'
+        };
+        $('.boot-tooltip').tooltip(tip_options);
     });
-
-    /* For non HTML5 browsers */
-    if ($("#formLogin".length > 1)) {
-        $("input[name=login]").focus();
-    }
-
-    /* For IOS users */
-    $('.autocapitalize_off').attr('autocapitalize', 'off');
-
-    //Tool tip (in exercises)
-    var tip_options = {
-        placement : 'right'
-    }
-    $('.boot-tooltip').tooltip(tip_options);
-});
-{% endraw %}
-
 </script>
 
 {{ execution_stats }}

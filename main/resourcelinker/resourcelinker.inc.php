@@ -22,7 +22,6 @@ use \ChamiloSession as Session;
 
 //include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
 //include(api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
-include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
 /**

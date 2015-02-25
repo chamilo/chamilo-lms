@@ -1,4 +1,4 @@
-{% extends "default/layout/main.tpl" %}
+{% extends template ~ "/layout/main.tpl" %}
 
 {% block body %}
 	{# Main content #}
@@ -21,7 +21,7 @@
 	    {# if user is not login show the login form #}
         {% block login_form %}
 		{% if _u.logged  == 0 %}
-			{% include "default/layout/login_form.tpl" %}
+			{% include template ~ "/layout/login_form.tpl" %}
 		{% endif %}
         {% endblock %}
 
@@ -94,7 +94,7 @@
 		{{ sniff_notification }}
 
         {% block page_body %}
-        {% include "default/layout/page_body.tpl" %}
+        {% include template ~ "/layout/page_body.tpl" %}
         {% endblock %}
 
         {# Welcome to course block  #}
@@ -131,7 +131,7 @@
         {% endif %}
 
 		{# Hot courses template  #}
-		{% include "default/layout/hot_courses.tpl" %}
+		{% include template ~ "/layout/hot_courses.tpl" %}
 
         {# Content bottom  #}
         {% if plugin_content_bottom %}

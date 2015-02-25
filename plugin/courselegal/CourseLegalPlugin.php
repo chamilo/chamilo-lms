@@ -357,8 +357,6 @@ class CourseLegalPlugin extends Plugin
         if (!is_dir($coursePath)) {
             mkdir($coursePath, api_get_permissions_for_new_directories());
         }
-
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
         $uploadOk = process_uploaded_file($file, false);
         $fileName = null;
 

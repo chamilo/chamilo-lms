@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 require_once '../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
 api_protect_course_script();
 

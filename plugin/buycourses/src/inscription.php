@@ -15,8 +15,6 @@ if (!empty($_POST['language'])) { //quick hack to adapt the registration form re
     $_GET['language'] = $_POST['language'];
 }
 require_once '../config.php';
-require_once api_get_path(CONFIGURATION_PATH) . 'profile.conf.php';
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 
 if (!empty($_SESSION['user_language_choice'])) {
     $user_selected_language = $_SESSION['user_language_choice'];

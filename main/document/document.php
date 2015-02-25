@@ -29,7 +29,7 @@
 
 use \ChamiloSession as Session;
 // Language files that need to be included
-$language_file = array('document', 'slideshow', 'gradebook', 'create_course');
+$language_file = array('document', 'gradebook', 'create_course');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
@@ -37,13 +37,7 @@ $to_user_id = null;
 $parent_id = null;
 $message = null;
 
-require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
-
-/* Libraries */
-require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'fileDisplay.lib.php';
-require_once $lib_path.'fileManage.lib.php';
 
 api_protect_course_script(true);
 
@@ -186,8 +180,8 @@ switch ($action) {
     case 'delete_item':
         if ($is_allowed_to_edit ||
             $group_member_with_upload_rights ||
-            is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-            is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
         ) {
             if (isset($_GET['deleteid'])) {
                 if (!$is_allowed_to_edit) {
@@ -274,7 +268,7 @@ switch ($action) {
             api_not_allowed();
         }
         // Launch event
-        event_download($document_data['url']);
+        Event::event_download($document_data['url']);
         // Check visibility of document and paths
         if (!($is_allowed_to_edit || $group_member_with_upload_rights)
             && !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())) {
@@ -310,8 +304,8 @@ switch ($action) {
             }
 
             //filter when I am into shared folder, I can download only my shared folder
-            if (is_any_user_shared_folder($document_data['path'], $sessionId)) {
-                if (is_my_shared_folder(api_get_user_id(), $document_data['path'], $sessionId)
+            if (DocumentManager::is_any_user_shared_folder($document_data['path'], $sessionId)) {
+                if (DocumentManager::is_my_shared_folder(api_get_user_id(), $document_data['path'], $sessionId)
                     || api_is_allowed_to_edit()
                     || api_is_platform_admin()) {
                     require 'downloadfolder.inc.php';
@@ -320,7 +314,7 @@ switch ($action) {
                 require 'downloadfolder.inc.php';
             }
             // Launch event
-            event_download($document_data['url']);
+            Event::event_download($document_data['url']);
             exit;
         }
         break;
@@ -749,13 +743,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder')) {
         $usf_dir_title = get_lang('UserFolders');
         $usf_dir_name = '/shared_folder';
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 0;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -767,13 +761,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.$userId)) {
         $usf_dir_title = $userInfo['complete_name'];
         $usf_dir_name = '/shared_folder/sf_user_'.$userId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 1;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -786,13 +780,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$sessionId)) {
         $usf_dir_title = get_lang('UserFolders').' ('.api_get_session_name($sessionId).')';
         $usf_dir_name = '/shared_folder_session_'.$sessionId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 0;
         create_unexisting_directory(
             $courseInfo,
             api_get_user_id(),
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -804,13 +798,13 @@ if ($sessionId == 0) {
     if (!file_exists($base_work_dir.'/shared_folder_session_'.$sessionId.'/sf_user_'.$userId)) {
         $usf_dir_title = $userInfo['complete_name'].'('.api_get_session_name($sessionId).')';
         $usf_dir_name = '/shared_folder_session_'.$sessionId.'/sf_user_'.$userId;
-        $groupId = 0;
+        //$groupId = 0;
         $visibility = 1;
         create_unexisting_directory(
             $courseInfo,
             $userId,
             $sessionId,
-            $groupId,
+            0,
             $to_user_id,
             $base_work_dir,
             $usf_dir_name,
@@ -933,7 +927,7 @@ $(document).ready( function() {
 </script>';
 
 // Lib for event log, stats & tracking & record of the access
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 /* 	DISPLAY */
 if ($groupId != 0) { // Add group name after for group documents
@@ -946,8 +940,8 @@ $moveForm = null;
 //Only teacher and all users into their group and each user into his/her shared folder
 if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
-    is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
-    is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
 ) {
     if (isset($_GET['move']) && $_GET['move'] != '') {
         $my_get_move = intval($_REQUEST['move']);
@@ -980,7 +974,7 @@ if ($is_allowed_to_edit ||
             );
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
-            if (is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) && !$is_allowed_to_edit) {
+            if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) && !$is_allowed_to_edit) {
                 //only main user shared folder
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();
                 $main_user_shared_folder_sub = '/shared_folder\/sf_user_'.api_get_user_id().'\//'; //all subfolders
@@ -993,7 +987,7 @@ if ($is_allowed_to_edit ||
                 }
 
                 $moveForm .= '<legend>'.get_lang('Move').'</legend>';
-                $moveForm .= build_move_to_selector(
+                $moveForm .= DocumentManager::build_move_to_selector(
                     $user_shared_folders,
                     $move_path,
                     $my_get_move,
@@ -1001,7 +995,7 @@ if ($is_allowed_to_edit ||
                 );
             } else {
                 $moveForm .= '<legend>'.get_lang('Move').'</legend>';
-                $moveForm .= build_move_to_selector(
+                $moveForm .= DocumentManager::build_move_to_selector(
                     $folders,
                     $move_path,
                     $my_get_move,
@@ -1106,7 +1100,7 @@ if ($is_allowed_to_edit ||
 //Only teacher and all users into their group
 if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
-    is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     if (isset($_POST['action']) && isset($_POST['ids'])) {
         $files = $_POST['ids'];
@@ -1223,7 +1217,7 @@ $dirForm = null;
 //Only teacher and all users into their group and any user into his/her shared folder
 if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
-    is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     // Create directory with $_POST data
     if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
@@ -1291,15 +1285,14 @@ if ($is_allowed_to_edit ||
 
     // Show them the form for the directory name
     if (isset($_GET['createdir'])) {
-        $dirForm = create_dir_form($document_id);
+        $dirForm = DocumentManager::create_dir_form($document_id);
     }
 }
 
 /* 	VISIBILITY COMMANDS */
 if ($is_allowed_to_edit) {
     if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) ||
-        (isset($_GET['set_visible']) && !empty($_GET['set_visible'])) &&
-        $_GET['set_visible'] != '*' && $_GET['set_invisible'] != '*'
+        (isset($_GET['set_visible']) && !empty($_GET['set_visible']))
     ) {
         // Make visible or invisible?
         if (isset($_GET['set_visible'])) {
@@ -1334,7 +1327,6 @@ if ($is_allowed_to_edit) {
             null,
             $sessionId)
         ) {
-            //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
             $message = Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
         } else {
             $message = Display::return_message(get_lang('ViModProb'), 'error');
@@ -1348,7 +1340,7 @@ $templateForm = null;
 //Only teacher and all users into their group
 if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
-    is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 
@@ -1385,7 +1377,6 @@ if ($is_allowed_to_edit ||
 
         // Upload the file
         if (!empty($_FILES['template_image']['name'])) {
-            require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
             $upload_ok = process_uploaded_file($_FILES['template_image']);
 
             if ($upload_ok) {
@@ -1511,7 +1502,7 @@ if (!$is_certificate_mode) {
     $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->add_textfield('keyword', '', false, array('class' => 'span2'));
+    $form->addText('keyword', '', false, array('class' => 'span2'));
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);
@@ -1538,7 +1529,7 @@ $column_show = array();
 
 if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
-    is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+    DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     // TODO:check enable more options for shared folders
     /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
@@ -1708,12 +1699,12 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                     $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
                     $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                     $user_link = '<div class="document_owner">'.
-                        get_lang('Owner').': '.display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
+                        get_lang('Owner').': '.DocumentManager::display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
                 }
             }
 
             // Icons (clickable)
-            $row[] = create_document_link($document_data, true, $count, $is_visible);
+            $row[] = DocumentManager::create_document_link($document_data, true, $count, $is_visible);
 
             $path_info = pathinfo($document_data['path']);
 
@@ -1725,7 +1716,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
 
             // Document title with link
-            $row[] = create_document_link($document_data, false, null, $is_visible).
+            $row[] = DocumentManager::create_document_link($document_data, false, null, $is_visible).
                 $session_img.'<br />'.$invisibility_span_open.
                 '<i>'.nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)).'</i>'.
                 $invisibility_span_close.
@@ -1749,12 +1740,12 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             // Admins get an edit column
             if ($is_allowed_to_edit || $group_member_with_upload_rights ||
-                is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+                DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
                 // If readonly, check if it the owner of the file or if the user is an admin
                 if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
-                    $edit_icons = build_edit_icons(
+                    $edit_icons = DocumentManager::build_edit_icons(
                         $document_data,
                         $key,
                         $is_template,
@@ -1762,7 +1753,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                         $is_visible
                     );
                 } else {
-                    $edit_icons = build_edit_icons(
+                    $edit_icons = DocumentManager::build_edit_icons(
                         $document_data,
                         $key,
                         $is_template,
@@ -1805,7 +1796,7 @@ if (!is_null($documentAndFolders)) {
         )
     ) {
         //for student does not show icon into other shared folder, and does not show into main path (root)
-        if (is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+        if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
             && $curdirpath != '/'
             || api_is_allowed_to_edit()
             || api_is_platform_admin()
@@ -1850,7 +1841,7 @@ if (isset($_GET['createdir']) && isset($_POST['dirname']) && $_POST['dirname'] !
 $selector = null;
 
 if (!$is_certificate_mode) {
-    $selector = build_directory_selector(
+    $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,
         (isset($group_properties['directory']) ? $group_properties['directory'] : array()),
@@ -1871,7 +1862,7 @@ $column_show[] = 1;
 
 if ($is_allowed_to_edit
     || $group_member_with_upload_rights
-    || is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+    || DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
     $column_show[] = 1;
 }
@@ -1930,7 +1921,7 @@ $table->set_header($column++, get_lang('Date'), true, array('style' => 'width:15
 // Admins get an edit column
 if ($is_allowed_to_edit
     || $group_member_with_upload_rights
-    || is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)) {
+    || DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)) {
     $table->set_header($column++, get_lang('Actions'), false, array('class' => 'td_actions'));
 }
 

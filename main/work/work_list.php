@@ -73,7 +73,7 @@ Display :: display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
-if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
+if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee() ) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
 }
@@ -112,48 +112,33 @@ $result = getWorkDateValidationStatus($work_data);
 echo $result['message'];
 $check_qualification = intval($my_folder_data['qualification']);
 
-if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
-    $type = 'simple';
+if (!api_is_invitee()) {
+    if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
+        $type = 'simple';
 
-    $columns = array(
-        get_lang('Type'),
-        get_lang('Title'),
-        get_lang('Qualification'),
-        get_lang('Date'),
-        get_lang('Status'),
-        get_lang('Actions')
-    );
-
-    $column_model = array(
-        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
-        array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id', 'index'=>'qualificator_id', 'width'=>'20', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-    );
-} else {
-    $type = 'complex';
-
-    $columns = array(
-        get_lang('Type'),
-        get_lang('Title'),
-        get_lang('Date'),
-        get_lang('Actions')
-    );
-
-    $column_model = array(
-        array('name'=>'type',      'index'=>'file',      'width'=>'5',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-        array('name'=>'title',     'index'=>'title',     'width'=>'60', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
-        array('name'=>'actions',   'index'=>'actions',   'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
-    );
-
-    if (ALLOW_USER_COMMENTS) {
         $columns = array(
             get_lang('Type'),
             get_lang('Title'),
-            get_lang('Feedback'),
+            get_lang('Qualification'),
+            get_lang('Date'),
+            get_lang('Status'),
+            get_lang('Actions')
+        );
+
+        $column_model = array(
+            array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+            array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
+            array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
+            array('name'=>'qualificator_id', 'index'=>'qualificator_id', 'width'=>'20', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+        );
+    } else {
+        $type = 'complex';
+
+        $columns = array(
+            get_lang('Type'),
+            get_lang('Title'),
             get_lang('Date'),
             get_lang('Actions')
         );
@@ -161,29 +146,46 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         $column_model = array(
             array('name'=>'type',      'index'=>'file',      'width'=>'5',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
             array('name'=>'title',     'index'=>'title',     'width'=>'60', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-            array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
             array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
             array('name'=>'actions',   'index'=>'actions',   'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
         );
+
+        if (ALLOW_USER_COMMENTS) {
+            $columns = array(
+                get_lang('Type'),
+                get_lang('Title'),
+                get_lang('Feedback'),
+                get_lang('Date'),
+                get_lang('Actions')
+            );
+
+            $column_model = array(
+                array('name'=>'type',      'index'=>'file',      'width'=>'5',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+                array('name'=>'title',     'index'=>'title',     'width'=>'60', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
+                array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
+                array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
+                array('name'=>'actions',   'index'=>'actions',   'width'=>'20', 'align'=>'left', 'search' => 'false', 'sortable'=>'false')
+            );
+        }
     }
+
+    $extra_params = array(
+        'autowidth' =>  'true',
+        'height' =>  'auto',
+        'sortname' => 'firstname'
+    );
+
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type;
+    ?>
+        <script>
+            $(function() {
+                <?php
+                echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
+            ?>
+            });
+        </script>
+    <?php
+    echo Display::grid_html('results');
 }
-
-$extra_params = array(
-    'autowidth' =>  'true',
-    'height' =>  'auto',
-    'sortname' => 'firstname'
-);
-
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type;
-?>
-    <script>
-        $(function() {
-            <?php
-            echo Display::grid_js('results', $url, $columns, $column_model, $extra_params);
-        ?>
-        });
-    </script>
-<?php
-echo Display::grid_html('results');
 
 Display :: display_footer();

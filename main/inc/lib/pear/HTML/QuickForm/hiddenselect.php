@@ -22,11 +22,6 @@
  */
 
 /**
- * Class for <select></select> elements
- */
-require_once 'HTML/QuickForm/select.php';
-
-/**
  * Hidden select pseudo-element
  *
  * This class takes the same arguments as a select element, but instead

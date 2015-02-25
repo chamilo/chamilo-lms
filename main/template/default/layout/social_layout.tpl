@@ -1,4 +1,4 @@
-{% extends "default/layout/layout_1_col.tpl" %}
+{% extends template ~ "/layout/layout_1_col.tpl" %}
 
 {% block content %}
     <div class="row">

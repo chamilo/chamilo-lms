@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "O upload para tal atribuição não pode ser realizada porque a pasta %s não existe";
+$FolderDoesntExistsInFileSystem = "Pasta alvo não existe no servidor.";
+$HandedOutDate = "Tempo de recepção";
+$HandedOut = "Entregues";
+$HandOutDateLimit = "Prazo de entrega";
 $Tools = "Ferramentas";
 $SendWork = "Enviar arquivo";
 $TooBig = "Não foi selecionado nenhum arquivo para enviar, ou ele é muito grande";

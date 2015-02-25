@@ -14,9 +14,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once '../gradebook/lib/be/gradebookitem.class.php';
-require_once '../gradebook/lib/be/category.class.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
@@ -281,8 +278,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
-    $form->add_textfield('keyword_code', get_lang('CourseCode'), false);
-    $form->add_textfield('keyword_title', get_lang('Title'), false);
+    $form->addText('keyword_code', get_lang('CourseCode'), false);
+    $form->addText('keyword_title', get_lang('Title'), false);
 
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';

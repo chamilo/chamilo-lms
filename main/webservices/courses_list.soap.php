@@ -12,7 +12,6 @@
  */
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'nusoap/nusoap.php';
 
 // Create the server instance
 $server = new soap_server();

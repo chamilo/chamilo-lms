@@ -5,7 +5,6 @@
 */
 //Chamilo load libraries
 require_once '../../../../../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 //Add security from Chamilo
 api_protect_course_script();
@@ -62,7 +61,7 @@ if (!empty($png_svg_files)) {
 	echo '<ul>';
 	foreach($png_svg_files as $filename) {
 		$image=$disk_path.$filename;
-		
+
 		if (strpos($filename, "svg")){
 			$new_sizes['width'] = 60;
 			$new_sizes['height'] = 60;
@@ -70,7 +69,7 @@ if (!empty($png_svg_files)) {
 		else {
 			$new_sizes = api_resize_image($image, 60, 60);
 		}
-		
+
 		echo '<li style="display:inline; padding:8px;"><a href="'.$web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}
 	echo '</ul>';
@@ -82,8 +81,8 @@ if (!empty($png_svg_files)) {
 <script>
 $('a').click(function() {
 	var href = this.href;
-	
-	// Convert Non-SVG images to data URL first 
+
+	// Convert Non-SVG images to data URL first
 	// (this could also have been done server-side by the library)
 	if(this.href.indexOf('.svg') === -1) {
 
@@ -92,7 +91,7 @@ $('a').click(function() {
 			id: href
 		});
 		window.top.postMessage(meta_str, "*");
-	
+
 		var img = new Image();
 		img.onload = function() {
 			var canvas = document.createElement("canvas");
@@ -123,7 +122,7 @@ $('a').click(function() {
 			data = '|' + href + '|' + data;
 			// This is where the magic happens!
 			window.top.postMessage(data, "*");
-			
+
 		}, 'html'); // 'html' is necessary to keep returned data as a string
 	}
 	return false;

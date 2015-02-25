@@ -50,8 +50,6 @@ if (!defined ('XAJAX_DEFAULT_CHAR_ENCODING'))
 	define ('XAJAX_DEFAULT_CHAR_ENCODING', 'utf-8' );
 }
 
-require_once(dirname(__FILE__)."/xajaxResponse.inc.php");
-
 /**
  * Communication Method Defines
  */

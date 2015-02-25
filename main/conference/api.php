@@ -43,10 +43,6 @@ if ($_SERVER['HTTP_USER_AGENT'] == 'Shockwave Flash') {
 /*==== INCLUDE ====*/
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
-require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
-require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
-require_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
-require_once ("../newscorm/learnpath.class.php");
 require_once ("../newscorm/openoffice_presentation.class.php");
 
 /*==== Variables initialisation ====*/

@@ -94,7 +94,6 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  * @return void
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
-	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
 
 	$mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
 	$mpdf->useOnlyCoreFonts = true;
@@ -219,9 +218,8 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
  * @param	array	pdf footers
  * @return void
  */
-function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
-
-	require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
+{
 	$headers_in_pdf = '<img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
 
 	if (is_array($headers_pdf)) {

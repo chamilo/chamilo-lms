@@ -11,8 +11,6 @@ $cidReset = true;
 
 // including files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
-require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'dashboard_controller.php';
 require_once 'block.class.php';
 

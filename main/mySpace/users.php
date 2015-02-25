@@ -12,7 +12,6 @@ $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -123,8 +122,11 @@ function get_users($from, $limit, $column, $direction)
         $nb_courses_student = 0;
         if (!empty($courses)) {
             foreach ($courses as $course_code) {
+                $courseInfo = api_get_course_info($course_code);
+                $courseId = $courseInfo['real_id'];
+
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
+                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $courseId, $_GET['id_session']);
                     $my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;

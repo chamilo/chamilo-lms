@@ -16,8 +16,6 @@ if (api_get_setting('allow_social_tool') !='true') {
     api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));

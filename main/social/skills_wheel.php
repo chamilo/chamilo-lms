@@ -20,7 +20,7 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 api_block_anonymous_users();
 
 //Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_js('d3/d3.v2.min.js');
+$htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
@@ -36,6 +36,8 @@ $userInfo = api_get_user_info();
 $skill = new Skill();
 $ranking = $skill->get_user_skill_ranking($load_user);
 $countSkill = count($skill->get_all());
+
+$mySkills = $skill->get_user_skills($user_id, true);
 
 $skill_condition = '';
 if (isset($_GET['skill_id'])) {
@@ -53,6 +55,7 @@ $tpl->assign('url', $url);
 $tpl->assign('userInfo', $userInfo);
 $tpl->assign('ranking', $ranking);
 $tpl->assign('countSkill', $countSkill);
+$tpl->assign('mySkills', $mySkills);
 
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');
 $tpl->assign('content', $content);

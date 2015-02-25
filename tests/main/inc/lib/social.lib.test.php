@@ -1,7 +1,7 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'social.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'main_api.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'api.lib.php');
 
 class TestSocial extends UnitTestCase{
     //public $social;

@@ -17,11 +17,7 @@ use \ChamiloSession as Session;
 
 $language_file = 'exercice';
 
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 
 $this_section = SECTION_COURSES;
 
@@ -341,7 +337,7 @@ echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCategory);
 
 // Get exercise list for this course
 
-$exercise_list = get_all_exercises_for_course_id(
+$exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     $course_info,
     $session_id,
     $selected_course,
@@ -562,7 +558,7 @@ if ($exerciseId > 0) {
                     }
                 }
 
-                $exerciseList = get_all_exercises($course_item, $session_id);
+                $exerciseList = ExerciseLib::get_all_exercises($course_item, $session_id);
 
                 if (!empty($exerciseList)) {
                     foreach ($exerciseList as $exercise) {

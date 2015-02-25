@@ -14,7 +14,6 @@ require_once '../global.inc.php';
 
 require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $group_id = api_get_group_id();
@@ -36,6 +35,7 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
+        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         echo $agenda->add_event(
             $_REQUEST['start'],
             $_REQUEST['end'],
@@ -43,7 +43,11 @@ switch ($action) {
             $_REQUEST['title'],
             $_REQUEST['content'],
             $_REQUEST['users_to_send'],
-            $add_as_announcement
+            $add_as_announcement,
+            null, //$parentEventId = null,
+            array(), //$attachmentArray = array(),
+            null, //$attachmentComment = null,
+            $comment
         );
         break;
     case 'edit_event':

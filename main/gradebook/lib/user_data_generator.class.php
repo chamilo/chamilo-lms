@@ -277,7 +277,7 @@ class UserDataGenerator
 			&& isset ($this->coursecodecache[$coursecode])) {
 			return $this->coursecodecache[$coursecode];
 		} else {
-			$name = get_course_name_from_code($coursecode);
+			$name = CourseManager::getCourseNameFromCode($coursecode);
 			$this->coursecodecache[$coursecode] = $name;
 			return $name;
 		}

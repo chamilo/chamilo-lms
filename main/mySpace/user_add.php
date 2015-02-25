@@ -42,9 +42,6 @@ exit; //@deprecated file seems to be unused
 // including necessary libraries
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'mail.lib.inc.php';
 
 // user permissions
 api_protect_admin_script(true);
@@ -172,7 +169,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+$group[] = $form->createElement('DatePicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);

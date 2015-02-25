@@ -1,5 +1,4 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 class TestMail extends UnitTestCase {
 

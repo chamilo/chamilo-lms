@@ -1,17 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * This file generates the ActionScript variables code used by the 
+ * This file generates the ActionScript variables code used by the
  * HotSpot .swf
  * @package chamilo.exercise
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
  */
-/**
- * Code
- */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+
 include('../inc/global.inc.php');
 
 // Set vars
@@ -38,10 +34,10 @@ $course_id     = api_get_course_int_id();
 
 if ($answer_type == HOT_SPOT_DELINEATION) {
 	// Query db for answers
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = ".intval($questionId)." AND hotspot_type <> 'noerror' ORDER BY id";
 } else {
-	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS 
+	$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS
 	        WHERE c_id = $course_id AND question_id = ".intval($questionId)." ORDER BY id";
 }
 $result = Database::query($sql);
@@ -69,11 +65,11 @@ while ($hotspot = Database::fetch_array($result)) {
 	// Delineation
 	if ($hotspot['hotspot_type'] == 'delineation') {
 		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
-	}	
+	}
 	// oar
 	if ($hotspot['hotspot_type'] == 'oar') {
-		$output .= "&hotspot_".$hotspot['id']."_type=delineation";	 
-	}	
+		$output .= "&hotspot_".$hotspot['id']."_type=delineation";
+	}
 	$output .= "&hotspot_".$hotspot['id']."_coord=".$hotspot['hotspot_coordinates']."";
 	$i++;
 }
@@ -86,18 +82,18 @@ for ($i; $i <= 12; $i++) {
 
 
 // Get clicks
-if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {    
+if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	foreach ($_SESSION['exerciseResultCoordinates'][$questionId] as $coordinate) {
 		$output2 .= $coordinate."|";
 	}
-} else {    
+} else {
 	// get it from db
 	$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "SELECT hotspot_coordinate
             FROM $tbl_track_e_hotspot
-            WHERE   hotspot_question_id = $questionId AND 
-                    hotspot_course_code = '$course_code' AND 
-                    hotspot_exe_id = $exe_id 
+            WHERE   hotspot_question_id = $questionId AND
+                    hotspot_course_code = '$course_code' AND
+                    hotspot_exe_id = $exe_id
             ORDER by hotspot_id";
 	$rs = @Database::query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs)) {

@@ -1,11 +1,8 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.plugin.ticket
- */
-/**
- * INIT SECTION
  */
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
@@ -18,12 +15,10 @@ if (!api_is_platform_admin() && $plugin->get('allow_student_add') != 'true') {
 }
 
 api_block_anonymous_users();
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
 $scrollTop = '';
 if (api_is_platform_admin()) {
-    $scrollTol = '$("html, body").animate({ 
+    $scrollTol = '$("html, body").animate({
                     scrollTop: $(".divTicket").offset().top - 20
                   }, "slow");';
 }
@@ -32,17 +27,17 @@ $htmlHeadXtra[] = '
 <script>
 function load_course_list (div_course, my_user_id, user_email) {
     $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            type: "GET",
-            url: "course_user_list.php",
-            data: "user_id="+my_user_id,
-            success: function(datos) {
-                $("#user_request").html(datos);
-                $("#user_id_request").val(my_user_id);
-                $("#personal_email").val(user_email);
-                $("#btnsubmit").attr("disabled", false);
-                ' . $scrollTol . '
-            }
+        contentType: "application/x-www-form-urlencoded",
+        type: "GET",
+        url: "course_user_list.php",
+        data: "user_id="+my_user_id,
+        success: function(datos) {
+            $("#user_request").html(datos);
+            $("#user_id_request").val(my_user_id);
+            $("#personal_email").val(user_email);
+            $("#btnsubmit").attr("disabled", false);
+            ' . $scrollTol . '
+        }
     });
 }
 function changeType() {
@@ -51,18 +46,18 @@ function changeType() {
     $("#project_id").val(projects[id]);
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
-	if(parseInt(course_required[id]) == 0){
-            $("#divCourse").css("display", "none");
-            if( id != "CUR"){
-                $("#divEmail").css("display", "block");
-                $("#personal_email").attr("required","required");
-            }
-            $("#course_id").disabled = true;
-            $("#course_id").value = 0;
-	}else{
-            $("#divCourse").css("display", "block");
-            $("#course_id").prop("disabled", false);
-            $("#course_id").val(0);
+	if (parseInt(course_required[id]) == 0){
+        $("#divCourse").css("display", "none");
+        if( id != "CUR"){
+            $("#divEmail").css("display", "block");
+            $("#personal_email").attr("required","required");
+        }
+        $("#course_id").disabled = true;
+        $("#course_id").value = 0;
+	} else {
+        $("#divCourse").css("display", "block");
+        $("#course_id").prop("disabled", false);
+        $("#course_id").val(0);
 	}
 }
 function handleClick2(myRadio) {
@@ -72,7 +67,7 @@ function handleClick2(myRadio) {
 }
 function validate() {
     var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-    fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
+    fckEditor1val = CKEDITOR.instances["content"].getData();
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
     var id = document.getElementById("category_id").options[selected].value;
@@ -122,7 +117,7 @@ function add_image_form() {
         id: new_elem,
         class: "controls"
     }).appendTo(filepaths);
-    
+
     input_file = $("<input/>", {
         type: "file",
         name: "attach_" + counter_image,
@@ -140,7 +135,7 @@ function add_image_form() {
 
     new_filepath_id = $("#filepath_" + counter_image);
     new_filepath_id.append(input_file, link_remove.append(img_remove));
-    
+
     if (counter_image === 6) {
         var link_attach = $("#link-more-attach");
         if (link_attach) {
@@ -205,14 +200,14 @@ function show_form_send_ticket()
 {
     global $types, $plugin;
     echo '<div class="divTicket">';
-    
+
     //Category List
     $categoryList = array();
     foreach ($types as $type) {
         $categoryList[$type['category_id']] = $type['name'] . ": " . $type['description'];
     }
     //End Category List
-    
+
     //Status List
     $statusList = array();
     $statusAttributes = array(
@@ -233,7 +228,7 @@ function show_form_send_ticket()
         $statusList[REENVIADO] = $plugin->get_lang('StatusForwarded');
     }
     //End Status List
-    
+
     //Source List
     $sourceList = array();
     $sourceAttributes = array(
@@ -253,15 +248,15 @@ function show_form_send_ticket()
         $sourceList[SRC_PRESC] = $plugin->get_lang('SrcPresential');
     }
     //End Source List
-    
+
     //Priority List
     $priorityList = array();
     $priorityList[NORMAL] = $plugin->get_lang('PriorityNormal');
     $priorityList[HIGH] = $plugin->get_lang('PriorityHigh');
     $priorityList[LOW] = $plugin->get_lang('PriorityLow');
     //End Priority List
-    
-    $form = new FormValidator('send_ticket', 
+
+    $form = new FormValidator('send_ticket',
         'POST',
         api_get_self(),
         "",
@@ -271,43 +266,43 @@ function show_form_send_ticket()
             'class' => 'span8 offset1 form-horizontal'
         )
     );
-    
+
     $form->addElement(
-        'hidden', 
-        'user_id_request', 
-        '', 
+        'hidden',
+        'user_id_request',
+        '',
         array(
             'id' => 'user_id_request'
         )
     );
-    
+
     $form->addElement(
-        'hidden', 
-        'project_id', 
-        '', 
+        'hidden',
+        'project_id',
+        '',
         array(
             'id' => 'project_id'
         )
     );
-    
+
     $form->addElement(
-        'hidden', 
-        'other_area', 
-        '', 
+        'hidden',
+        'other_area',
+        '',
         array(
             'id' => 'other_area'
         )
     );
-    
+
     $form->addElement(
-        'hidden', 
-        'email', 
-        '', 
+        'hidden',
+        'email',
+        '',
         array(
             'id' => 'email'
         )
     );
-    
+
     $form->addElement(
         'select',
         'category_id',
@@ -320,108 +315,108 @@ function show_form_send_ticket()
             'style' => 'width: 562px;'
         )
     );
-    
+
     $form->addElement(
-        'html', 
+        'html',
         Display::div(
-            '', 
+            '',
             array(
                 'id' => 'user_request'
             )
         )
     );
-    
+
     $form->addElement(
         'select',
         'status_id',
         get_lang('Status'),
         $statusList,
-        $statusAttributes    
+        $statusAttributes
     );
-    
+
     $form->addElement(
         'select',
         'source_id',
         $plugin->get_lang('Source'),
         $sourceList,
-        $sourceAttributes   
+        $sourceAttributes
     );
-    
+
     $form->addElement(
-        'text', 
-        'subject', 
-        get_lang('Subject'), 
+        'text',
+        'subject',
+        get_lang('Subject'),
         array(
             'id' => 'subject',
             'style' => 'width: 550px;'
         )
     );
-    
+
     $form->addElement(
-        'text', 
-        'personal_email', 
-        $plugin->get_lang('PersonalEmail'), 
+        'text',
+        'personal_email',
+        $plugin->get_lang('PersonalEmail'),
         array(
             'id' => 'personal_email',
             'style' => 'width: 550px;'
         )
     );
-    
-    $form->add_html_editor(
-        'content', 
+
+    $form->addHtmlEditor(
+        'content',
         get_lang('Message'),
-        false, 
-        false, 
+        false,
+        false,
         array(
-            'ToolbarSet' => 'Profile', 
-            'Width' => '600', 
+            'ToolbarSet' => 'Profile',
+            'Width' => '600',
             'Height' => '250'
         )
     );
 
     $form->addElement(
-        'text', 
-        'phone', 
-        get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . ')', 
+        'text',
+        'phone',
+        get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . ')',
         array(
             'id' => 'phone'
         )
     );
-    
+
     $form->addElement(
-        'select', 
-        'priority_id', 
-        $plugin->get_lang('Priority'), 
+        'select',
+        'priority_id',
+        $plugin->get_lang('Priority'),
         $priorityList,
         array(
             'id' => 'priority_id',
             'for' => 'priority_id'
         )
     );
-    
+
     $form->addElement('html', '<span id="filepaths">');
     $form->addElement('html', '<div id="filepath_1">');
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
     $form->addElement('html', '</div>');
     $form->addElement('html', '</span>');
-    
+
     $form->addElement('html', '<div class="controls">');
     $form->addElement('html', '<span id="link-more-attach" >');
     $form->addElement('html', '<span class="label label-info" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>');
     $form->addElement('html', '</span>');
     $form->addElement('html', '(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')');
-    
+
     $form->addElement('html', '<br/>');
     $form->addElement(
-        'button', 
-        'compose', 
-        get_lang('SendMessage'), 
+        'button',
+        'compose',
+        get_lang('SendMessage'),
         array(
             'class' => 'save',
             'id' => 'btnsubmit'
         )
     );
-    
+
     $form->display();
 }
 
@@ -591,7 +586,7 @@ if (!isset($_POST['compose'])) {
         echo '<div class="users-list">';
             $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
             $table = new SortableTable(
-                        'users', 'get_number_of_users', 
+                        'users', 'get_number_of_users',
                         'get_user_data', $order, 10
                      );
             $table->set_header(0, '', false, 'width="18px"');

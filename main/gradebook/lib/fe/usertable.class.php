@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__).'/../../../inc/global.inc.php';
-require_once dirname(__FILE__).'/../be.inc.php';
-
 /**
  * Class UserTable
  * Table to display flat view of a student's evaluations and links
@@ -113,7 +110,7 @@ class UserTable extends SortableTable
 	 */
 	private function build_type_column($item)
 	{
-		return build_type_icon_tag($item->get_icon_name());
+		return GradebookUtils::build_type_icon_tag($item->get_icon_name());
 	}
 
 	/**

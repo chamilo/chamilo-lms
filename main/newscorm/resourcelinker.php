@@ -23,7 +23,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file = 'resourcelinker';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -795,9 +795,6 @@ if ($content == 'Forum') {
 if ($content == 'Link') {
     // Including the links language file.
     include "../lang/$language/link.inc.php";
-
-    // Including the links functions file.
-    require_once api_get_path(LIBRARY_PATH).'link.lib.php';
 
     $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
     if (($learnpath_id != '') and ($content == 'Link')) {

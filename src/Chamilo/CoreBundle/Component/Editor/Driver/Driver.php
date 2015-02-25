@@ -28,7 +28,7 @@ class Driver extends \elFinderVolumeLocalFileSystem implements DriverInterface
 
     /**
      * Gets driver name.
-     * @param string
+     * @param string $name
      */
     public function setName($name)
     {
@@ -59,5 +59,13 @@ class Driver extends \elFinderVolumeLocalFileSystem implements DriverInterface
     {
         $options = $this->getAppPluginOptions();
         $this->setConnector($options['connector']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function allow()
+    {
+        return false;
     }
 }

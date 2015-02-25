@@ -767,16 +767,16 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.3.5",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fruux/sabre-vobject.git",
-                "reference": "77cb636a5bde4c19d7522c2c548b258859ddd1ef"
+                "reference": "20c72ddf7ae3e037ad348bbc83b477af56b9484e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/77cb636a5bde4c19d7522c2c548b258859ddd1ef",
-                "reference": "77cb636a5bde4c19d7522c2c548b258859ddd1ef",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/20c72ddf7ae3e037ad348bbc83b477af56b9484e",
+                "reference": "20c72ddf7ae3e037ad348bbc83b477af56b9484e",
                 "shasum": ""
             },
             "require": {
@@ -829,7 +829,7 @@
                 "jCard",
                 "vCard"
             ],
-            "time": "2015-01-10 00:54:52"
+            "time": "2015-02-23 21:12:17"
         },
         {
             "name": "symfony/console",

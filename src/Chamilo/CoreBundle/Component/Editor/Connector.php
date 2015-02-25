@@ -388,6 +388,7 @@ class Connector
 
     /**
      * @param string $driver
+     *
      * @return string
      */
     private function getDriverClass($driver)

@@ -17,25 +17,34 @@ class PersonalDriver extends Driver
      */
     public function getConfiguration()
     {
-        //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->allow()) {
+
             $userId = api_get_user_id();
             if (!empty($userId)) {
 
                 // Adding user personal files
-                $dir = \UserManager::get_user_picture_path_by_id($userId, 'system');
-                $dirWeb = \UserManager::get_user_picture_path_by_id($userId, 'web');
+                $dir = \UserManager::get_user_picture_path_by_id(
+                    $userId,
+                    'system'
+                );
+                $dirWeb = \UserManager::get_user_picture_path_by_id(
+                    $userId,
+                    'web'
+                );
 
                 $driver = array(
                     'driver' => 'PersonalDriver',
                     'alias' => get_lang('MyFiles'),
-                    'path' => $dir['dir'].'my_files',
-                    'URL' => $dirWeb['dir'].'my_files',
+                    'path' => $dir['dir'] . 'my_files',
+                    'URL' => $dirWeb['dir'] . 'my_files',
                     'accessControl' => array($this, 'access')
                 );
 
                 return $driver;
             }
-        //}
+        }
+
+        return array();
     }
 
     /**
@@ -43,10 +52,11 @@ class PersonalDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
-        $this->setConnectorFromPlugin();
-        //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->allow()) {
+            $this->setConnectorFromPlugin();
+
             return parent::upload($fp, $dst, $name, $tmpname);
-        //}
+        }
     }
 
     /**
@@ -54,9 +64,19 @@ class PersonalDriver extends Driver
      */
     public function rm($hash)
     {
-        $this->setConnectorFromPlugin();
-        //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->allow()) {
+            $this->setConnectorFromPlugin();
+
             return parent::rm($hash);
-        //}
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function allow()
+    {
+        //if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+        return !api_is_anonymous();
     }
 }

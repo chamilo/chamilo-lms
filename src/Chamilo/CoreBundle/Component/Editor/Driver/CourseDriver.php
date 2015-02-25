@@ -17,7 +17,7 @@ class CourseDriver extends Driver
      */
     public function getConfiguration()
     {
-        if (!empty($this->connector->course)) {
+        if ($this->allow()) {
             //$translator = $this->connector->translator;
             //$code = $this->connector->course->getCode();
             $courseCode = $this->connector->course['code'];
@@ -41,6 +41,8 @@ class CourseDriver extends Driver
                 )
             );
         }
+
+        return array();
     }
 
     /**
@@ -51,7 +53,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentSysPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             //$directory = $this->connector->course->getDirectory();
             $directory = $this->connector->course['directory'];
             $dataPath = $this->connector->paths['sys_data_path'];
@@ -67,7 +69,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentRelativeWebPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             $directory = $this->connector->course['directory'];
             $url = api_get_path(REL_COURSE_PATH).$directory.'/document/';
         }
@@ -82,7 +84,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentWebPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             $directory = $this->connector->course->getDirectory();
             $url = api_get_path(WEB_COURSE_PATH).$directory.'/document/';
         }
@@ -95,43 +97,47 @@ class CourseDriver extends Driver
      */
     public function upload($fp, $dst, $name, $tmpname)
     {
-        $this->setConnectorFromPlugin();
+        if ($this->allow()) {
+            $this->setConnectorFromPlugin();
 
-        // upload file by elfinder.
-        $result = parent::upload($fp, $dst, $name, $tmpname);
+            // upload file by elfinder.
+            $result = parent::upload($fp, $dst, $name, $tmpname);
 
-        $name = $result['name'];
-        $filtered = \URLify::filter($result['name'], 80);
+            $name = $result['name'];
+            $filtered = \URLify::filter($result['name'], 80);
 
-        if (strcmp($name, $filtered) != 0) {
-            /*$arg = array('target' => $file['hash'], 'name' => $filtered);
-            $elFinder->exec('rename', $arg);*/
-            $this->rename($result['hash'], $filtered);
+            if (strcmp($name, $filtered) != 0) {
+                /*$arg = array('target' => $file['hash'], 'name' => $filtered);
+                $elFinder->exec('rename', $arg);*/
+                $this->rename($result['hash'], $filtered);
+            }
+
+            $realPath = $this->realpath($result['hash']);
+
+            if (!empty($realPath)) {
+                // Getting file info
+                //$info = $elFinder->exec('file', array('target' => $file['hash']));
+                /** @var elFinderVolumeLocalFileSystem $volume */
+                //$volume = $info['volume'];
+                //$root = $volume->root();
+                //var/www/chamilogits/data/courses/NEWONE/document
+                $realPathRoot = $this->getCourseDocumentSysPath();
+
+                // Removing course path
+                $realPath = str_replace($realPathRoot, '/', $realPath);
+                add_document(
+                    $this->connector->course,
+                    $realPath,
+                    'file',
+                    intval($result['size']),
+                    $result['name']
+                );
+            }
+
+            return $result;
         }
 
-        $realPath = $this->realpath($result['hash']);
-
-        if (!empty($realPath)) {
-            // Getting file info
-            //$info = $elFinder->exec('file', array('target' => $file['hash']));
-            /** @var elFinderVolumeLocalFileSystem $volume */
-            //$volume = $info['volume'];
-            //$root = $volume->root();
-            //var/www/chamilogits/data/courses/NEWONE/document
-            $realPathRoot = $this->getCourseDocumentSysPath();
-
-            // Removing course path
-            $realPath = str_replace($realPathRoot, '/', $realPath);
-            add_document(
-                $this->connector->course,
-                $realPath,
-                'file',
-                intval($result['size']),
-                $result['name']
-            );
-        }
-
-        return $result;
+        return false;
     }
 
     /**
@@ -141,23 +147,41 @@ class CourseDriver extends Driver
     {
         // elfinder does not delete the file
         //parent::rm($hash);
-        $this->setConnectorFromPlugin();
+        if ($this->allow()) {
+            $this->setConnectorFromPlugin();
 
-        $path = $this->decode($hash);
-        $stat = $this->stat($path);
-        $stat['realpath'] = $path;
-        $this->removed[] = $stat;
+            $path = $this->decode($hash);
+            $stat = $this->stat($path);
+            $stat['realpath'] = $path;
+            $this->removed[] = $stat;
 
-        $realFilePath = $path;
-        $coursePath = $this->getCourseDocumentSysPath();
-        $filePath = str_replace($coursePath, '/', $realFilePath);
+            $realFilePath = $path;
+            $coursePath = $this->getCourseDocumentSysPath();
+            $filePath = str_replace($coursePath, '/', $realFilePath);
 
-        \DocumentManager::delete_document(
-            $this->connector->course,
-            $filePath,
-            $coursePath
-        );
+            \DocumentManager::delete_document(
+                $this->connector->course,
+                $filePath,
+                $coursePath
+            );
 
-        return true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allow()
+    {
+        //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
+        $userId = api_get_user_id();
+        return
+            isset($this->connector->course) &&
+            !empty($this->connector->course) &&
+            !api_is_anonymous($userId, true)
+        ;
     }
 }

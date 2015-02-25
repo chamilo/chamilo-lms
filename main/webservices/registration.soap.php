@@ -5557,7 +5557,8 @@ $server->wsdl->addComplexType(
     '',
     array(
         'term' => array('name' => 'term', 'type' => 'xsd:string'),
-        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string')
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -5645,10 +5646,15 @@ $server->register(
 * Web service to get a session list filtered by name, description or short description extra field
 * @param string $term Search term
 * @param string $extraFields Extrafields to include in request result
+* @param string $secretKey Secret key to check
 * @return array The list
 */
-function WSSearchSession($term, $extraFields)
+function WSSearchSession($term, $extraFields, $secretKey)
 {
+    if (!WSHelperVerifyKey($secretKey)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
     $fieldsToInclude = explode(',', $extraFields);
 
     foreach ($fieldsToInclude as &$field) {

@@ -22,10 +22,6 @@ if (!isset($_GET['cidReq'])) {
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 
-// Including additional libraries
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
-require_once 'survey.lib.php';
-
 // Breadcrumbs
 if (!empty($_user)) {
     $interbreadcrumb[] = array(
@@ -1137,7 +1133,7 @@ if ($survey_data['survey_type'] === '0') {
         if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
             if ($show == 0) {
                 echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
-            } else {                   
+            } else {
                 echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('Next').'</button>';
             }
         }
@@ -1150,8 +1146,8 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
-                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';    
-                } else {                   
+                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';
+                } else {
                     echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                 }
             }

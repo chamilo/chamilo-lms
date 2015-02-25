@@ -20,9 +20,6 @@ $current_course_tool  = TOOL_SURVEY;
 
 api_protect_course_script(true);
 
-// Including additional libraries
-require_once 'survey.lib.php';
-
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 // Coach can't view this page
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');

@@ -20,8 +20,6 @@ $language_file = array(
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh() && !api_is_student_boss()) {

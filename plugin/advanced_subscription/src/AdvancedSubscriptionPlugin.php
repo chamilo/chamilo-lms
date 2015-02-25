@@ -302,15 +302,31 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @param string $content
      * @param int $sessionId
      * @param bool $save
+     * @param array $fileAttachments
      * @return bool|int
      */
-    public function sendMailMessage($studentId, $receiverId, $subject, $content, $sessionId, $save = false)
+    public function sendMailMessage($studentId, $receiverId, $subject, $content, $sessionId, $save = false, $fileAttachments = array())
     {
-        $mailId = MessageManager::send_message(
-            $receiverId,
-            $subject,
-            $content
-        );
+        if (
+            !empty($fileAttachments) &&
+            is_array($fileAttachments) &&
+            isset($fileAttachments['files']) &&
+            isset($fileAttachments['comments'])
+        ) {
+            $mailId = MessageManager::send_message(
+                $receiverId,
+                $subject,
+                $content,
+                $fileAttachments['files'],
+                $fileAttachments['comments']
+            );
+        } else {
+            $mailId = MessageManager::send_message(
+                $receiverId,
+                $subject,
+                $content
+            );
+        }
 
         if ($save && !empty($mailId)) {
             // Save as sent message
@@ -523,6 +539,34 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 );
                 break;
             case ADVANCED_SUBSCRIPTION_ACTION_ADMIN_APPROVE:
+                $fileAttachments = array();
+                if (api_get_plugin_setting('courselegal', 'tool_enable')) {
+                    $courseLegal = CourseLegalPlugin::create();
+                    $courses = SessionManager::get_course_list_by_session_id($data['sessionId']);
+                    $course = current($courses);
+                    $data['courseId'] = $course['id'];
+                    $data['course'] = api_get_course_info_by_id($data['courseId']);
+                    $termsAndConditions = $courseLegal->getData($data['courseId'], $data['sessionId']);
+                    $termsAndConditions = $termsAndConditions['content'];
+                    $termsAndConditions = $this->renderTemplateString($termsAndConditions, $data);
+                    $tpl = new Template(get_lang('TermsAndConditions'));
+                    $tpl->assign('session', $data['session']);
+                    $tpl->assign('student', $data['student']);
+                    $tpl->assign('sessionId', $data['sessionId']);
+                    $tpl->assign('termsContent', $termsAndConditions);
+                    $termsAndConditions = $tpl->fetch('/advanced_subscription/views/terms_and_conditions_to_pdf.tpl');
+                    $pdf = new PDF();
+                    $filename = 'terms' . sha1(rand(0,99999));
+                    $pdf->content_to_pdf($termsAndConditions, null, $filename, null, 'F');
+                    $fileAttachments['file'][] = array(
+                        'name' => $filename . '.pdf',
+                        'application/pdf' => $filename . '.pdf',
+                        'tmp_name' => api_get_path(SYS_ARCHIVE_PATH) . $filename . '.pdf',
+                        'error' => UPLOAD_ERR_OK,
+                        'size' => filesize(api_get_path(SYS_ARCHIVE_PATH) . $filename . '.pdf'),
+                    );
+                    $fileAttachments['comments'][] = get_lang('TermsAndConditions');
+                }
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
                     $data['studentUserId'],
@@ -530,7 +574,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $this->get_lang('MailAdminAccept'),
                     $template->fetch('/advanced_subscription/views/admin_accepted_notice_student.tpl'),
                     $data['sessionId'],
-                    true
+                    true,
+                    $fileAttachments
                 );
                 // Mail to superior
                 $mailIds[] = $this->sendMailMessage(
@@ -1114,5 +1159,22 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         return false;
+    }
+
+    /**
+     * Return string replacing tags "{{}}"with variables assigned in $data
+     * @param string $templateContent
+     * @param array $data
+     * @return string
+     */
+    public function renderTemplateString($templateContent, $data = array())
+    {
+        $twigString = new \Twig_Environment(new \Twig_Loader_String());
+        $templateContent = $twigString->render(
+            $templateContent,
+            $data
+        );
+
+        return $templateContent;
     }
 }

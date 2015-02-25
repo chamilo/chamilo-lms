@@ -52,17 +52,11 @@ if (
 
     $data['session'] = api_get_session_info($data['sessionId']);
     $data['student'] = Usermanager::get_user_info_by_id($data['studentUserId']);
+    $data['course'] = api_get_course_info_by_id($data['courseId']);
     $data['acceptTermsUrl'] = $plugin->getQueueUrl($data);
     $data['rejectTermsUrl'] = $plugin->getTermsUrl($data, ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT);
     // Use Twig with String loader
-    $twigString = new \Twig_Environment(new \Twig_Loader_String());
-    $termsContent = $twigString->render(
-        $termsAndConditions,
-        array(
-            'session' => $data['session'],
-            'student' => $data['student'],
-        )
-    );
+    $termsContent = $plugin->renderTemplateString($termsAndConditions, $data);
 
 } else {
     $termsContent = '';

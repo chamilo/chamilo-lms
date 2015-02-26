@@ -93,7 +93,7 @@ $mode->save(array(
 $isInductionSession = new ExtraField('session');
 $isInductionSession->save(array(
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
-    'field_variable' => 'is_induccion_session',
+    'field_variable' => 'is_induction_session',
     'field_display_text' => get_lang('IsInductionSession'),
     'field_visible' => 1,
     'field_changeable' => 1
@@ -178,7 +178,7 @@ $target = new ExtraField('session');
 $target->save(array(
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'field_variable' => 'target',
-    'field_display_text' => get_lang('Target'),
+    'field_display_text' => get_lang('TargetAudience'),
     'field_visible' => 1,
     'field_changeable' => 1,
     'field_options' => implode('; ', $targetOptions)
@@ -188,7 +188,7 @@ $shortDescription = new ExtraField('session');
 $shortDescription->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'field_variable' => 'short_description',
-    'field_display_text' => get_lang('ShortSescription'),
+    'field_display_text' => get_lang('ShortDescription'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));
@@ -196,8 +196,8 @@ $shortDescription->save(array(
 $id = new ExtraField('session');
 $id->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
-    'field_variable' => 'id',
-    'field_display_text' => get_lang('Id'),
+    'field_variable' => 'code',
+    'field_display_text' => get_lang('Code'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));

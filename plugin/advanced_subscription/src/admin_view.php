@@ -59,7 +59,9 @@ if (!empty($sessionId)) {
     $isWesternNameOrder = api_is_western_name_order();
 
     foreach ($studentList['students'] as &$student) {
-        $data['studentUserId'] = intval($student['user_id']);
+        $studentId = intval($student['user_id']);
+        $data['studentUserId'] = $studentId;
+        $student['area'] = UserManager::get_user_info_by_id($studentId)['extra']['area'];
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;
         $student['acceptUrl'] = $plugin->getQueueUrl($data);

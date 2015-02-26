@@ -13,7 +13,7 @@
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.3');
+define('REQUIRED_PHP_VERSION', '5.4');
 
 define('REQUIRED_MIN_MEMORY_LIMIT',         '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');

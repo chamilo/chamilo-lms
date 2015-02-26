@@ -38,8 +38,6 @@ ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL
 
 RENAME TABLE track_e_exercices TO track_e_exercises;
 
-ALTER TABLE session_rel_user ADD COLUMN duration int;
-
 ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL;

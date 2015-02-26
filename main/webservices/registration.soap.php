@@ -5643,36 +5643,40 @@ $server->register(
 );
 
 /**
-* Web service to get a session list filtered by name, description or short description extra field
-* @param string $term Search term
-* @param string $extraFields Extrafields to include in request result
-* @param string $secretKey Secret key to check
-* @return array The list
-*/
-function WSSearchSession($term, $extraFields, $secretKey)
+ * Web service to get a session list filtered by name, description or short description extra field
+ * @param array $params Contains the following parameters
+ *   string $params['term'] Search term
+ *   string $params['extra_fields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The list
+ */
+function WSSearchSession($params)
 {
-    if (!WSHelperVerifyKey($secretKey)) {
+    if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $fieldsToInclude = explode(',', $extraFields);
+    $fieldsToInclude = array();
 
-    foreach ($fieldsToInclude as &$field) {
-        if (empty($field)) {
-            continue;
+    if (!empty($params['extrafields'])) {
+        $fieldsToInclude = explode(',', $params['extrafields']);
+        foreach ($fieldsToInclude as &$field) {
+            if (empty($field)) {
+                continue;
+            }
+
+            $field = trim($field);
         }
-
-        $field = trim($field);
     }
 
-    return SessionManager::searchSession($term, $fieldsToInclude);
+    return SessionManager::searchSession($params['term'], $fieldsToInclude);
 }
 
 /* Search session Web Service end */
 
 /* Fetch session Web Service start */
 
-// Input params for WSSearchSession
+// Input params for WSFetchSession
 $server->wsdl->addComplexType(
     'FetchSession',
     'complexType',
@@ -5680,7 +5684,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'id' => array('name' => 'term', 'type' => 'xsd:int'),
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
         'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
         'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
@@ -5699,19 +5703,20 @@ $server->register(
 );
 
 /**
-* Web service to get a session by its id. Optionally can get its extra fields values
-* @param int $id The session id
-* @param string $extraFields Extrafields to include in request result
-* @param string $secretKey Secret key to check
-* @return array The session data
-*/
-function WSFetchSession($id, $extraFields, $secretKey)
+ * Web service to get a session by its id. Optionally can get its extra fields values
+ * @param array $params Contains the following parameters:
+ *   int $params['id'] The session id
+ *   string $params['extrafields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The session data
+ */
+function WSFetchSession($params)
 {
-    if (!WSHelperVerifyKey($secretKey)) {
+    if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $fieldsToInclude = explode(',', $extraFields);
+    $fieldsToInclude = explode(',', $params['extrafields']);
 
     foreach ($fieldsToInclude as &$field) {
         if (empty($field)) {
@@ -5721,14 +5726,14 @@ function WSFetchSession($id, $extraFields, $secretKey)
         $field = trim($field);
     }
 
-    $sessionData = SessionManager::fetch($id);
+    $sessionData = SessionManager::fetch($params['id']);
 
     if ($sessionData === false) {
         return return_error(WS_ERROR_INVALID_INPUT);
     }
 
     if (!empty($extraFields)) {
-        $sessionData['extra'] = SessionManager::getFilteredExtraFields($id, $fieldsToInclude);
+        $sessionData['extra'] = SessionManager::getFilteredExtraFields($params['id'], $fieldsToInclude);
     }
 
     return array($sessionData);

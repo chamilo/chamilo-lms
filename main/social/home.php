@@ -83,59 +83,60 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_avatar_block = SocialManager::show_social_avatar_block('home');
+$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block .= SocialManager::show_social_avatar_block('home');
+$social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+$social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+/* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */
+$social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+$chat_status = $user_info['extra'];
+ if(!empty($chat_status['user_chat_status'])){
+     $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+ }else{
+     $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+ }
+
+    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+    if (api_get_setting('sso_authentication') === 'true') {
+        $subSSOClass = api_get_setting('sso_authentication_subclass');
+        $objSSO = null;
+
+        if (!empty($subSSOClass)) {
+            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+            $subSSOClass = 'sso' . $subSSOClass;
+            $objSSO = new $subSSOClass();
+        } else {
+            $objSSO = new sso();
+        }
+
+        $editProfileUrl = $objSSO->generateProfileEditingURL();
+    }
+$social_avatar_block .= '<div class="edit-profile">
+                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                         </div>';
+$social_avatar_block .= '</div>';
+
 $social_menu_block = SocialManager::show_social_menu('home');
 
-$socialRightContent = '<div class="span5">';
-$socialRightContent .= '<div class="well_border">';
-$socialRightContent .= '<h3>' . get_lang('ContactInformation') . '</h3>';
+//Search box
+$social_search_block = '<div class="panel panel-info social-search">';
+$social_search_block .= '<div class="panel-heading">Busqueda de usuarios o grupos</div>';
+$social_search_block .= '<div class="panel-body">';
+$social_search_block.= UserManager::get_search_form('');
+$social_search_block.= '</div>';
+$social_search_block.= '</div>';
 
-$list = array(
-    array(
-        'title' => get_lang('Name'),
-        'content' => api_get_person_name(
-            $user_info['firstname'],
-            $user_info['lastname']
-        )
-    ),
-    array('title' => get_lang('Email'), 'content' => $user_info['email']),
-);
-// information current user
-$socialRightContent .= '<div>' . Display::description($list) . '</div>';
-
-$editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
-
-if (api_get_setting('sso_authentication') === 'true') {
-    $subSSOClass = api_get_setting('sso_authentication_subclass');
-    $objSSO = null;
-
-    if (!empty($subSSOClass)) {
-        require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
-
-        $subSSOClass = 'sso' . $subSSOClass;
-        $objSSO = new $subSSOClass();
-    } else {
-        $objSSO = new sso();
-    }
-
-    $editProfileUrl = $objSSO->generateProfileEditingURL();
-}
-
-$socialRightContent .= '
-    <div class="form-actions">
-    <a class="btn" href="' . $editProfileUrl . '">
-        ' . get_lang('EditProfile') . '
-    </a>
-    </div></div></div>';
-$socialRightInformation = '<div class="span4">';
+//Skill
 if (api_get_setting('allow_skills_tool') == 'true') {
-    $socialRightInformation .= '<div class="well_border">';
+    $social_skill_block = '<div class="panel panel-info social-skill">';
+    $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills') . '</div>';
+
     $skill = new Skill();
     $ranking = $skill->get_user_skill_ranking(api_get_user_id());
-
     $skills = $skill->get_user_skills(api_get_user_id(), true);
 
-    $socialRightInformation .= '<h3>' . get_lang('Skills') . '</h3>';
     $lis = '';
     if (!empty($skills)) {
         foreach ($skills as $skill) {
@@ -162,8 +163,15 @@ if (api_get_setting('allow_skills_tool') == 'true') {
                 )
             );
         }
-        $socialRightInformation .= Display::tag('ul', $lis, array('class' => 'menulist'));
+        $social_skill_block .= Display::tag('ul', $lis, array('class' => 'menulist'));
     }
+    //Colocar los botones anteriores
+}
+$social_skill_block.='</div>';
+
+
+
+/*
     $socialRightInformation .= '<div class="menulist">';
     if (api_is_student() || api_is_student_boss() || api_is_drh()) {
         $socialRightInformation .= Display::url(
@@ -184,14 +192,13 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     );
     $socialRightInformation .= '</div><br />';
 }
+*/
 
-
-//Search box
-$socialRightInformation .= '<div>';
-$socialRightInformation .= UserManager::get_search_form('');
-$socialRightInformation .= '<br /></div>';
 
 //Group box by age
+$social_group_block = '<div class="panel panel-info social-group">';
+$social_group_block .= '<div class="panel-heading">'.get_lang('Group').'</div>';
+$social_group_block .= '<div class="panel-body">';
 $results = GroupPortalManager::get_groups_by_age(1, false);
 
 $groups_newest = array();
@@ -279,10 +286,8 @@ foreach ($results as $result) {
 }
 
 if (count($groups_newest) > 0) {
-    $socialRightInformation .= '<div class="social-groups-home-title">' . get_lang(
-            'Newest'
-        ) . '</div>';
-    $socialRightInformation .= Display::return_sortable_grid(
+    $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
+    $social_group_block .= Display::return_sortable_grid(
         'home_group',
         array(),
         $groups_newest,
@@ -294,10 +299,8 @@ if (count($groups_newest) > 0) {
 }
 
 if (count($groups_pop) > 0) {
-    $socialRightInformation .= '<div class="social-groups-home-title">' . get_lang(
-            'Popular'
-        ) . '</div>';
-    $socialRightInformation .= Display::return_sortable_grid(
+    $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
+    $social_group_block .= Display::return_sortable_grid(
         'home_group',
         array(),
         $groups_pop,
@@ -307,12 +310,13 @@ if (count($groups_pop) > 0) {
         array(true, true, true, true, true)
     );
 }
-$socialRightInformation .= '</div>';
+$social_group_block .= '</div></div>';
 
 $tpl = new Template(get_lang('SocialNetwork'));
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_right_content', $socialRightContent);
-$tpl->assign('socialRightInformation', $socialRightInformation);
+$tpl->assign('social_search_block', $social_search_block);
+$tpl->assign('social_skill_block', $social_skill_block);
+$tpl->assign('social_group_block', $social_group_block);
 $social_layout = $tpl->get_template('social/home.tpl');
 $tpl->display($social_layout);

@@ -614,22 +614,20 @@ class SocialManager extends UserManager
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
         $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
-        $html = '<div>';
+        $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
             $big = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'], 160, GROUP_IMAGE_SIZE_BIG);
 
-            $html .= '<div class="social-content-image">';
-            $html .= '<div class="well social-background-content">';
+
             $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id);
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">
+                $html .= '<div id="edit_image">
                             <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
                     get_lang('EditGroup').'</a></div>';
             }
-            $html .= '</div>';
-            $html .= '</div>';
+
         } else {
             if ($showUserImage) {
                 $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
@@ -642,17 +640,13 @@ class SocialManager extends UserManager
 
             //--- User image
 
-            $html .= '<div class="well social-background-content">';
+
             if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
+                $html .= '<a class="thickbox" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
             } else {
                 $html .= '<img src='.$normal_image.' width="110px" />';
             }
-            if (api_get_user_id() == $user_id) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">';
-                $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('EditProfile').'</a></div>';
-            }
-            $html .= '</div>';
+
         }
         $html .= '</div>';
         return $html;
@@ -729,7 +723,9 @@ class SocialManager extends UserManager
         $active = null;
         if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
 
-            $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
+            $html .= '<div class="panel panel-info sidebar-nav">';
+            $html .= '<div class="panel-body">';
+            $html .= '<ul class="nav nav-list">';
             $active = $show == 'home' ? 'active' : null;
             $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Home').'</a></li>';
             $active = $show == 'messages' ? 'active' : null;
@@ -754,8 +750,7 @@ class SocialManager extends UserManager
             //My files
             $active = $show == 'myfiles' ? 'active' : null;
             $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.get_lang('MyFiles').'</span></a></li>';
-            $html .='</ul>
-                  </div>';
+            $html .='</ul></div></div>';
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {

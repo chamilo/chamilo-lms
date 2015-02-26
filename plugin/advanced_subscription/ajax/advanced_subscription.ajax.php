@@ -25,6 +25,8 @@ $data['newStatus'] = intval($_REQUEST['e']);
 // $data['is_connected'] = isset($_REQUEST['is_connected']) ? boolval($_REQUEST['is_connected']) : false;
 $data['is_connected'] = true;
 $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_REQUEST['profile_completed']) : 0;
+$data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['accept_terms']) : 0;
+$data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
 // Check if data is valid or is for start subscription
@@ -51,6 +53,11 @@ if ($verified) {
             $res = AdvancedSubscriptionPlugin::create()->startSubscription($data['studentUserId'], $data['sessionId'], $data);
             // Check if queue subscription was successful
             if ($res === true) {
+                $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
+                if ($legalEnabled) {
+                    // Save terms confirmation
+                    CourseLegalPlugin::create()->saveUserLegal($data['studentUserId'], $data['courseId'], $data['sessionId']);
+                }
                 // Prepare data
                 // Get session data
                 // Assign variables
@@ -126,9 +133,8 @@ if ($verified) {
                             // Check if exist an email to render
                             if (isset($result['mailIds']['render'])) {
                                 // Render mail
-                                $message = MessageManager::get_message_by_id($result['mailIds']['render']);
-                                $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
-                                echo $message;
+                                $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                                Header::location($url);
                                 exit;
                             }
                         }
@@ -151,20 +157,27 @@ if ($verified) {
                         // Check if exist an email to render
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
-                            $message = MessageManager::get_message_by_id($result['mailIds']['render']);
-                            $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
-                            echo $message;
+                            $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                            Header::location($url);
                             exit;
                         }
                     }
                 }
             } else {
-                if (is_string($res)) {
-                    $result['errorMessage'] = $res;
+                $lastMessageId = $plugin->getLastMessageId($data['studentUserId'], $data['sessionId']);
+                if ($lastMessageId !== false) {
+                    // Render mail
+                    $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
+                    Header::location($url);
+                    exit;
                 } else {
-                    $result['errorMessage'] = 'User can not be subscribed';
+                    if (is_string($res)) {
+                        $result['errorMessage'] = $res;
+                    } else {
+                        $result['errorMessage'] = 'User can not be subscribed';
+                    }
+                    $result['pass'] = false;
                 }
-                $result['pass'] = false;
             }
 
             break;
@@ -263,9 +276,8 @@ if ($verified) {
                         // Check if exist mail to render
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
-                            $message = MessageManager::get_message_by_id($result['mailIds']['render']);
-                            $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
-                            echo $message;
+                            $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                            Header::location($url);
                             exit;
                         }
                     }

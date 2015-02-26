@@ -5743,20 +5743,20 @@ class SessionManager
         if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
             $resultData = Database::select('*', $sTable, array(
                 'where' => array(
-                    "name LIKE '%?%' " => $term,
-                    "OR description LIKE '%?%' " => $term,
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term,
                     "OR id IN (
                     SELECT session_id
                     FROM $sfvTable
-                    WHERE field_value LIKE '%?%'
+                    WHERE field_value LIKE %?%
                 ) " => $term
                 )
             ));
         } else {
             $resultData = Database::select('*', $sTable, array(
                 'where' => array(
-                    "name LIKE '%?%' " => $term,
-                    "OR description LIKE '%?%' " => $term
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term
                 )
             ));
 

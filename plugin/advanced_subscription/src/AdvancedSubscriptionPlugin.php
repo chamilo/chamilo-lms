@@ -829,7 +829,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         if (!empty($sessionId)) {
             // Assign variables
-            $fieldsArray = array('id', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
+            $fieldsArray = array('code', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
             $extraSession = new ExtraFieldValue('session');
             $extraField = new ExtraField('session');
             // Get session fields

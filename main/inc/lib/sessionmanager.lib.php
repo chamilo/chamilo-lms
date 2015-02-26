@@ -5518,10 +5518,13 @@ class SessionManager
                     if ($sessionFieldValue['session_id'] == $id) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
-                            $var = $fields[$sessionFieldValue['field_id']];
-                            $val = $sessionFieldValue['field_value'];
-                            // Assign session field value to session
-                            $session[$var] = $val;
+                            // Avoid overwriting the session's ID field
+                            if ($fields[$sessionFieldValue['field_id']] != 'id') {
+                                $var = $fields[$sessionFieldValue['field_id']];
+                                $val = $sessionFieldValue['field_value'];
+                                // Assign session field value to session
+                                $session[$var] = $val;
+                            }
                         }
                     }
                 }

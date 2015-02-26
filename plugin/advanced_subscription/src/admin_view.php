@@ -62,6 +62,7 @@ if (!empty($sessionId)) {
         $studentId = intval($student['user_id']);
         $data['studentUserId'] = $studentId;
         $student['area'] = UserManager::get_user_info_by_id($studentId)['extra']['area'];
+        $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;
         $student['acceptUrl'] = $plugin->getQueueUrl($data);
@@ -69,10 +70,7 @@ if (!empty($sessionId)) {
         $student['rejectUrl'] = $plugin->getQueueUrl($data);
         $student['complete_name'] = $isWesternNameOrder ?
             $student['firstname'] . ', ' . $student['lastname'] :
-            $student['lastname'] . ', ' . $student['firstname']
-        ;
-        $student['picture'] = UserManager::get_user_picture_path_by_id($student['user_id'], 'web', false, true);
-        $student['picture'] = UserManager::get_picture_user($student['user_id'], $student['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
+            $student['lastname'] . ', ' . $student['firstname'];
     }
     $tpl->assign('session', $studentList['session']);
     $tpl->assign('students', $studentList['students']);

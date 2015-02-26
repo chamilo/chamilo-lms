@@ -1027,14 +1027,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
         $where = array(
-            'where' =>
-            array(
+            'where' => array(
                 'q.session_id = ? AND q.status <> ? AND q.status <> ?' => array(
                     $sessionId,
                     ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED,
                     ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED,
                 )
-            )
+            ),
+            'order' => 'q.status DESC, u.lastname ASC'
         );
         $select = 'u.user_id, u.firstname, u.lastname, q.created_at, q.updated_at, q.status, q.id as queue_id';
         $students = Database::select($select, $userJoinTable, $where);
@@ -1047,11 +1047,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     break;
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
-                    $student['validation'] = get_lang('No');
+                    $student['validation'] = 'No';
                     break;
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
-                    $student['validation'] = get_lang('Yes');
+                    $student['validation'] = 'Yes';
                     break;
                 default:
                     error_log(__FILE__ . ' ' . __FUNCTION__ . ' Student status no detected');

@@ -36,7 +36,6 @@
                 <table id="student_table" class="table table-striped">
                     <tbody>
                     <tr>
-                        <th style="width: 118px;"><img src="{{ _p.web_plugin }}advanced_subscription/views/img/icon-avatar.png"/> </th>
                         <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "Area" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
@@ -46,11 +45,20 @@
                     {% set row_class = "row_odd" %}
                     {% for student in students %}
                     <tr class="{{ row_class }}">
-                        <td style="width: 118px;"><img src="{{ student.picture.file }}" class="img-circle"> </td>
-                        <td class="name">{{ student.complete_name }}</td>
+                        <td class="name">
+                            <a href="{{ student.userLink }}" target="_blank">{{ student.complete_name }}<a>
+                        </td>
                         <td>{{ student.created_at }}</td>
                         <td>{{ student.area }}</td>
-                        <td>{{ student.validation }}</td>
+                        {% set cellClass = 'important'%}
+                        {% if student.validation == 'Yes' %}
+                            {% set cellClass = 'success'%}
+                        {% endif %}
+                        <td>
+                            <span class="label label-{{ cellClass }}">
+                                {{ student.validation | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                            </span>
+                        </td>
                         <td>
                             <a
                                 class="btn btn-success btn-advanced-subscription btn-accept"

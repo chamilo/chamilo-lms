@@ -415,7 +415,7 @@ class HookAdvancedSubscription extends HookObserver implements
         global $debug;
 
         if ($debug) {
-            error_log('WSUserSubscribedInCourse');
+            error_log(__FUNCTION__);
             error_log('Params ' . print_r($params, 1));
         }
         if (!WSHelperVerifyKey($params)) {

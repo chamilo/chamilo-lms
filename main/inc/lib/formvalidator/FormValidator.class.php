@@ -367,7 +367,7 @@ EOT;
     /**
      * @param string $snippet
      */
-    public function add_html($snippet)
+    public function addHtml($snippet)
     {
         $this->addElement('html', $snippet);
     }

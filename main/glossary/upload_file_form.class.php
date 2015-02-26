@@ -59,7 +59,7 @@ class UploadFileForm extends \FormValidator
                     "Good";"Bueno";
                  </pre>';
 
-        $this->add_html($label . $help);
+        $this->addHtml($label . $help);
     }
 
     public function get_delete_all()

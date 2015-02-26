@@ -153,21 +153,6 @@ if (!empty($complete_user_list)) {
 }
 
 $group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
-$group_tutors_element->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>
-');
-
-$group_tutors_element->setButtonAttributes('add', array('class' => 'btn arrowr'));
-$group_tutors_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');

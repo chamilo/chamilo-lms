@@ -53,6 +53,8 @@ ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
 
 DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
 DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';
+DELETE FROM settings_current WHERE variable = 'advanced_filemanager';
+DELETE FROM settings_options WHERE variable = 'advanced_filemanager';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'), ('prevent_session_admins_to_manage_all_users', 'false', 'No');

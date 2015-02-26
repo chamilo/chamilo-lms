@@ -14,9 +14,6 @@ $language_file = 'survey';
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 
-// Including additional libraries
-require_once 'survey.lib.php';
-
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
     $("button").click(function() {
@@ -34,7 +31,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 
 // Is valid request
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
-if ($request_index != $is_valid_request) {
+/*if ($request_index != $is_valid_request) {
 	if ($request_index == 'save_question') {
 		unset($_POST[$request_index]);
 	} elseif ($request_index == 'add_answer') {
@@ -42,33 +39,34 @@ if ($request_index != $is_valid_request) {
 	} elseif($request_index == 'remove_answer') {
 		unset($_POST[$request_index]);
 	}
-}
+}*/
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 $course_id = api_get_course_int_id();
 
 // Getting the survey information
-$survey_data = survey_manager::get_survey($_GET['survey_id']);
-if (empty($survey_data)) {
+$surveyData = survey_manager::get_survey($_GET['survey_id']);
+
+if (empty($surveyData)) {
 	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;
 }
 
-$urlname = api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40);
-if (api_strlen(strip_tags($survey_data['title'])) > 40) {
+$urlname = api_substr(api_html_entity_decode($surveyData['title'], ENT_QUOTES), 0, 40);
+if (api_strlen(strip_tags($surveyData['title'])) > 40) {
 	$urlname .= '...';
 }
 
-if ($survey_data['survey_type'] == 1) {
+if ($surveyData['survey_type'] == 1) {
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
 	        WHERE
                 c_id = '.$course_id.' AND
@@ -108,7 +106,8 @@ $possible_types = array(
 
 // Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.
+	Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
@@ -121,82 +120,71 @@ if (!in_array($_GET['type'], $possible_types)) {
 $error_message = '';
 
 // Displaying the form for adding or editing the question
-if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) {
-	if (!isset($_POST['save_question'])) {
-		// Displaying the header
-		Display::display_header($tool_name, 'Survey');
-		echo $actions;
-		// Displys message if exists
-		if (isset($_SESSION['temp_sys_message'])) {
-			$error_message = $_SESSION['temp_sys_message'];
-			unset($_SESSION['temp_sys_message']);
-			if ($error_message == 'PleaseEnterAQuestion' ||
-                $error_message == 'PleasFillAllAnswer'||
-                $error_message == 'PleaseChooseACondition'||
-                $error_message == 'ChooseDifferentCategories'
-            ) {
-				Display::display_error_message(get_lang($error_message), true);
-			}
+
+/*if (!isset($_POST['save_question'])) {
+	// Displaying the header
+	Display::display_header($tool_name, 'Survey');
+	echo $actions;
+	// Displys message if exists
+	if (isset($_SESSION['temp_sys_message'])) {
+		$error_message = $_SESSION['temp_sys_message'];
+		unset($_SESSION['temp_sys_message']);
+		if ($error_message == 'PleaseEnterAQuestion' ||
+			$error_message == 'PleasFillAllAnswer'||
+			$error_message == 'PleaseChooseACondition'||
+			$error_message == 'ChooseDifferentCategories'
+		) {
+			Display::display_error_message(get_lang($error_message), true);
 		}
 	}
-	$ch_type = 'ch_'.$_GET['type'];
-	$form = new $ch_type;
+}*/
+$ch_type = 'ch_'.$_GET['type'];
+/** @var survey_question $surveyQuestion */
+$surveyQuestion = new $ch_type;
 
-	// The defaults values for the form
-	$form_content['answers'] = array('', '');
+// The defaults values for the form
+$formData = array();
+$formData['answers'] = array('', '');
 
-	if ($_GET['type'] == 'yesno') {
-		$form_content['answers'][0] = get_lang('Yes');
-		$form_content['answers'][1] = get_lang('No');
-	}
-
-	if ($_GET['type'] == 'personality') {
-		$form_content['answers'][0] = 1;
-		$form_content['answers'][1] = 2;
-		$form_content['answers'][2] = 3;
-		$form_content['answers'][3] = 4;
-		$form_content['answers'][4] = 5;
-
-		$form_content['values'][0] = 0;
-		$form_content['values'][1] = 0;
-		$form_content['values'][2] = 1;
-		$form_content['values'][3] = 2;
-		$form_content['values'][4] = 3;
-	}
-
-	// We are editing a question
-	if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
-		$form_content = survey_manager::get_question($_GET['question_id']);
-	}
-
-	// An action has been performed (for instance adding a possible answer, moving an answer, ...)
-	if ($_POST) {
-		$form_content = $_POST;
-		$form_content = $form->handle_action(
-            $survey_data,
-            $form_content
-        );
-	}
-
-	if ($error_message != '') {
-		$form_content['question'] = $_SESSION['temp_user_message'];
-		$form_content['answers'] = $_SESSION['temp_answers'];
-		$form_content['values'] = $_SESSION['temp_values'];
-		$form_content['horizontalvertical'] = $_SESSION['temp_horizontalvertical'];
-
-		unset($_SESSION['temp_user_message']);
-		unset($_SESSION['temp_answers']);
-		unset($_SESSION['temp_values']);
-		unset($_SESSION['temp_horizontalvertical']);
-	}
-
-	$form->create_form($survey_data, $form_content);
-	$form->render_form();
-} else {
-	$form_content = $_POST;
-	$form = new survey_question();
-	$form->handle_action($survey_data, $form_content);
+if ($_GET['type'] == 'yesno') {
+	$formData['answers'][0] = get_lang('Yes');
+	$formData['answers'][1] = get_lang('No');
 }
 
+if ($_GET['type'] == 'personality') {
+	$formData['answers'][0] = 1;
+	$formData['answers'][1] = 2;
+	$formData['answers'][2] = 3;
+	$formData['answers'][3] = 4;
+	$formData['answers'][4] = 5;
+
+	$formData['values'][0] = 0;
+	$formData['values'][1] = 0;
+	$formData['values'][2] = 1;
+	$formData['values'][3] = 2;
+	$formData['values'][4] = 3;
+}
+
+// We are editing a question
+if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
+	$formData = survey_manager::get_question($_GET['question_id']);
+}
+
+$formData = $surveyQuestion->preAction($formData);
+
+$surveyQuestion->create_form($surveyData, $formData);
+$surveyQuestion->getForm()->setDefaults($formData);
+$surveyQuestion->render_form();
+
+if ($surveyQuestion->getForm()->validate()) {
+	$values = $surveyQuestion->getForm()->getSubmitValues();
+	$surveyQuestion->handle_action($surveyData, $values);
+}
+
+Display::display_header($tool_name, 'Survey');
+$surveyQuestion->getForm()->setDefaults($formData);
+
+echo $surveyQuestion->getForm()->return_form();
 // Footer
+
 Display :: display_footer();

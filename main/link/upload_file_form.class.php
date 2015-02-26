@@ -51,7 +51,7 @@ class UploadFileForm extends \FormValidator
                     "http://mail.google.com";"Google";"";"_self";"Google";""
                     </pre>';
 
-         $this->add_html($label . $help);
+         $this->addHtml($label . $help);
     }
 
     /**

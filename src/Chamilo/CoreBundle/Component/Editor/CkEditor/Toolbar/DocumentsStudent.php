@@ -10,21 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class DocumentsStudent extends Basic
 {
-    public $plugins = array(
-        'toolbarswitch',
-        'audio',
-        'video',
-        'youtube',
-        'leaflet',
-        'widget',
-        'lineutils',
-        'mathjax',
-        'asciimath',
-        'glossary',
-        'asciisvg',
-        'mapping'
-    );
-
     /**
      * @return mixed
      */

@@ -4,10 +4,10 @@
 /**
  *	@package chamilo.survey
  *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * 	@version $Id: survey.php 22573 2009-08-03 03:38:13Z yannoo $
- *
- * 	@todo use quickforms for the forms
+ *  @author Julio Montoya
  */
+
+use ChamiloSession as Session;
 
 // Language file that needs to be included
 $language_file = 'survey';
@@ -295,6 +295,8 @@ if ($is_survey_type_1) {
 	}
 	echo $grouplist.'</table>';
 }
+
+Session::erase('answer_count');
 
 // Footer
 Display :: display_footer();

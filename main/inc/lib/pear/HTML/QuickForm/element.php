@@ -410,6 +410,7 @@ class HTML_QuickForm_element extends HTML_Common
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
                 $value = $this->_findValue($caller->_constantValues);
+
                 if (null === $value) {
                     $value = $this->_findValue($caller->_submitValues);
                     if (null === $value) {
@@ -423,6 +424,7 @@ class HTML_QuickForm_element extends HTML_Common
             case 'setGroupValue':
                 $this->setValue($arg);
         }
+
         return true;
     }
 

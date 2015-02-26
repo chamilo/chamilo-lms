@@ -431,11 +431,11 @@ EOT;
      * @param string $name
      * @param string $label						The label for the form-element
      * @param bool   $required	(optional)		Is the form-element required (default=true)
-     * @param bool   $full_page (optional)		When it is true, the editor loads completed html code for a full page.
+     * @param bool   $fullPage (optional)		When it is true, the editor loads completed html code for a full page.
      * @param array  $config (optional)	Configuration settings for the online editor.
      *
      */
-    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = null)
+    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array())
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');

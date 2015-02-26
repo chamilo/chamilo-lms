@@ -6,7 +6,7 @@
 * @author unknown, the initial survey that did not make it in 1.8 because of bad code
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
 * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
-* @todo use FormValidator for the forms
+
 * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
 * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
@@ -39,7 +39,7 @@ $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION)
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 // Check if user is anonymous or not
-if (api_is_anonymous($_user['user_id'], true)) {
+if (api_is_anonymous(api_get_user_id(), true)) {
     $isAnonymous = true;
 } else {
     $isAnonymous = false;
@@ -66,7 +66,10 @@ if ($surveyCode != "") {
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
-    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous()) || count($rowAnonymous) == 0) {
+    if (!isset($rowAnonymous['anonymous']) ||
+        ($rowAnonymous['anonymous'] == 0 && api_is_anonymous()) ||
+        count($rowAnonymous) == 0
+    ) {
         api_not_allowed(true);
     }
     // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous.
@@ -88,7 +91,7 @@ $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
-    $userid = $_user['user_id'];
+    $userid = api_get_user_id();
     // Survey_code of the survey
     $surveyCode = Database::escape_string($_GET['scode']);
     if ($isAnonymous) {
@@ -99,7 +102,8 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     }
 
     // The survey code must exist in this course, or the URL is invalid
-    $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".$surveyCode."'";
+    $sql = "SELECT * FROM $table_survey
+            WHERE c_id = $course_id AND code = '".$surveyCode."'";
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) { // Ok
         // Check availability
@@ -237,7 +241,8 @@ if (count($_POST) > 0) {
                     }
                 } else {
                     // All the other question types (open question, multiple choice, percentage, ...)
-                    if ($types[$survey_question_id] == 'percentage') {
+                    if (isset($types[$survey_question_id]) &&
+                        $types[$survey_question_id] == 'percentage') {
                         $sql = "SELECT * FROM $table_survey_question_option
                                 WHERE
                                     c_id = $course_id AND
@@ -247,15 +252,30 @@ if (count($_POST) > 0) {
                         $option_value = $row['option_text'];
                     } else {
                         $option_value = 0;
-                        if ($types[$survey_question_id] == 'open') {
+                        if (isset($types[$survey_question_id]) &&
+                            $types[$survey_question_id] == 'open'
+                        ) {
                             $option_value = $value;
-                            //$value = 0;
                         }
                     }
 
                     $survey_question_answer = $value;
-                    SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $course_id);
-                    SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
+
+                    SurveyUtil::remove_answer(
+                        $survey_invitation['user'],
+                        $survey_invitation['survey_id'],
+                        $survey_question_id,
+                        $course_id
+                    );
+
+                    SurveyUtil::store_answer(
+                        $survey_invitation['user'],
+                        $survey_invitation['survey_id'],
+                        $survey_question_id,
+                        $value,
+                        $option_value,
+                        $survey_data
+                    );
                 }
             }
         }
@@ -291,6 +311,7 @@ if (count($_POST) > 0) {
                 $option_value = $row['value'];
                 //$option_value = 0;
                 $survey_question_answer = $value;
+
                 // We save the answer after making sure that a possible previous attempt is deleted
                 SurveyUtil::remove_answer(
                     $survey_invitation['user'],
@@ -319,7 +340,12 @@ if (count($_POST) > 0) {
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
 echo '<div id="survey_title">';
-echo Display::return_icon('statistics.png', get_lang('CreateNewSurvey'),array('style'=>'display:inline-block; margin-right:5px;'),ICON_SIZE_SMALL);
+echo Display::return_icon(
+    'statistics.png',
+    get_lang('CreateNewSurvey'),
+    array('style'=>'display:inline-block; margin-right:5px;'),
+    ICON_SIZE_SMALL
+);
 echo strip_tags($survey_data['survey_title']).'</div>';
 echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
 
@@ -421,7 +447,9 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
             }
             $form->applyFilter('official_code', 'stripslashes');
             $form->applyFilter('official_code', 'trim');
-            if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile', 'officialcode') == 'true') {
+            if (api_get_setting('registration', 'officialcode') == 'true' &&
+                api_get_setting('profile', 'officialcode') == 'true'
+            ) {
                 $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
             }
         }
@@ -473,7 +501,11 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
     $form->setDefaults($user_data);
 }
 
-if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($user_data) && !isset($_GET['show'])) {
+if ($survey_data['form_fields'] &&
+    $survey_data['anonymous'] == 0 &&
+    is_array($user_data) &&
+    !isset($_GET['show'])
+) {
     if ($form->validate()) {
         $user_data = $form->exportValues();
         if (is_array($user_data)) {
@@ -540,7 +572,8 @@ if ($survey_data['shuffle'] == 1) {
 }
 
 if (isset($_GET['show']) || isset($_POST['personality'])) {
-    // Getting all the questions for this page and add them to a multidimensional array where the first index is the page.
+    // Getting all the questions for this page and add them to a
+    // multidimensional array where the first index is the page.
     // As long as there is no pagebreak fount we keep adding questions to the page
     $questions_displayed = array();
     $counter = 0;
@@ -594,7 +627,8 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_question_option.sort as option_sort
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                            ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+                            ON survey_question.question_id = survey_question_option.question_id AND
+                            survey_question_option.c_id = $course_id
                         WHERE
                             survey_question.survey_id = '".Database :: escape_string($survey_invitation['survey_id'])."' AND
                             survey_question.question_id NOT IN (
@@ -621,7 +655,8 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                             survey_question_option.sort as option_sort
                         FROM $table_survey_question survey_question
                         LEFT JOIN $table_survey_question_option survey_question_option
-                            ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+                            ON survey_question.question_id = survey_question_option.question_id AND
+                            survey_question_option.c_id = $course_id
                         WHERE
                             survey_question.survey_id = '".intval($survey_invitation['survey_id'])."' AND
                             survey_question.question_id IN (".implode(',', $paged_questions[$_GET['show']]).") AND
@@ -675,9 +710,9 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     ON (survey_question.question_id = survey_answer.question_id)
                     WHERE
                         survey_answer.survey_id='".$my_survey_id."' AND
-                       survey_answer.user='".$current_user."' AND
-                       survey_answer.c_id = $course_id AND
-                       survey_question.c_id = $course_id AND
+                        survey_answer.user='".$current_user."' AND
+                        survey_answer.c_id = $course_id AND
+                        survey_question.c_id = $course_id AND
                     GROUP BY survey_group_pri
                     ORDER BY survey_group_pri
                     ";
@@ -1116,14 +1151,18 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.$_GET['user_id'].'&amp;' : '';
 
-echo '<form id="question" name="question" method="post" action="'.api_get_self().'?'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show.'&cidReq='.$g_cr.'">';
-echo '<input type="hidden" name="language" value="'.$p_l.'" />';
+$url = api_get_self().'?'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show.'&cidReq='.$g_cr;
+$form = new FormValidator('question', 'post', $url);
+$form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
     foreach ($questions as $key => & $question) {
         $ch_type = 'ch_'.$question['type'];
         $display = new $ch_type;
-        $display->render_question($question);
+        $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+        $form->addHtml($question['survey_question']);
+        $display->render($form, $question);
+        $form->addHtml('</div></div>');
     }
 }
 
@@ -1132,13 +1171,16 @@ if ($survey_data['survey_type'] === '0') {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
             if ($show == 0) {
-                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
+                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+//                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
             } else {
-                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('Next').'</button>';
+                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                //echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('Next').'</button>';
             }
         }
         if ($show >= $numberofpages && $_GET['show']) {
-            echo '<button type="submit" name="finish_survey" class="survey-next">'.get_lang('FinishSurvey').'</button>';
+            $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+            //echo '<button type="submit" name="finish_survey" class="survey-next">'.get_lang('FinishSurvey').'</button>';
         }
     } else {
         // The normal survey as always but with the form profile
@@ -1146,14 +1188,17 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
-                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';
+                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';
                 } else {
-                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                 }
             }
 
             if ($show >= $numberofpages && $_GET['show']) {
-                echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
+                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+                //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
             }
         }
     }
@@ -1175,50 +1220,58 @@ if ($survey_data['survey_type'] === '0') {
 
         if ($personality == 0) {
             if (($show <= $numberofpages) || !$_GET['show']) {
-                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
+                //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
                 if ($survey_data['one_question_per_page'] == 0) {
                     if ($personality >= 0) {
-                        echo '<input type="hidden" name="personality" value="'.$personality.'">';
+                        $form->addHidden('personality', $personality);
+                        //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     }
                 } else {
                     if ($personality > 0) {
-                        echo '<input type="hidden" name="personality" value="'.$personality.'">';
+                        $form->addHidden('personality', $personality);
+                        //echo '<input type="hidden" name="personality" value="'.$personality.'">';
                     }
                 }
 
                 if ($numberofpages == $show) {
-                    echo '<input type="hidden" name="personality" value="'.$personality.'">';
+                    //echo '<input type="hidden" name="personality" value="'.$personality.'">';
+                    $form->addHidden('personality', $personality);
                 }
             }
         }
 
         if ($show > $numberofpages && $_GET['show'] && $personality == 0) {
-            echo '<input type="hidden" name="personality" value="'.$personality.'">';
+            //echo '<input type="hidden" name="personality" value="'.$personality.'">';
+            $form->addHidden('personality', $personality);
         } elseif ($personality > 0) {
             if ($survey_data['one_question_per_page'] == 1) {
                 if ($show >= $numberofpages) {
-                    echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
+                    $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+                    //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
                 } else {
-                    echo '<input type="hidden" name="personality" value="'.$personality.'">';
-                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                    //echo '<input type="hidden" name="personality" value="'.$personality.'">';
+                    $form->addHidden('personality', $personality);
+                    //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                    $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
                 }
             } else {
                 // if the personality test hidden input was set.
-                echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
+                //echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
+                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
             }
         }
     } elseif ($survey_data['form_fields'] == '') {
         // This is the case when the show_profile_form is true but there are not form_fields
-        //echo '<input type="submit" name="next_survey_page" value="' . get_lang('Next') . ' " class="next" />';
-        echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+        //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
     } elseif (!is_array($user_data)) {
         // If the user is not registered in the platform we do not show the form to update his information
-        echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+        //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+        $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
     }
 }
-
-echo '</form>';
-echo '</div>';
+$form->display();
 
 // Footer
 Display :: display_footer();

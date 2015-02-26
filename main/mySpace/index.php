@@ -6,7 +6,7 @@
  * @package chamilo.reporting
  */
 
-$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice');
+$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice', 'gradebook');
 
 // resetting the course id
 $cidReset = true;
@@ -149,6 +149,10 @@ if (!empty($session_id) &&
 	echo Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+    );
+    echo Display::url(
+        Display::return_icon("certificate_list.png", get_lang("GradebookSeeListOfStudentsCertificates"), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
     );
 }
 

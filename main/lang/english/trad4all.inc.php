@@ -340,6 +340,7 @@ $NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $TypeMessage = "Please type your message!";
 $ConfirmReset = "Do you really want to delete all messages?";
+$ChooseEitherDurationOrTimeLimit = "Choose either duration or time limit";
 $ClearList = "Clear the chat";
 $SessionBanner = "Session banner";
 $ShortDescription = "Short description";

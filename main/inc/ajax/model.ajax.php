@@ -145,6 +145,7 @@ if (!$sidx) {
 switch ($action) {
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
+        $userId = api_get_user_id();
         if (!(api_is_platform_admin(false, true))) {
             //exit;
         }
@@ -187,10 +188,37 @@ switch ($action) {
                 exit;
             }
         } else if(api_is_student_boss()) {
-            $users = UserManager::getUsersFollowedByStudentBoss(api_get_user_id());
-            
+            $users = UserManager::getUsersFollowedByStudentBoss($userId);
+
             $userIdList = array_keys($users);
         }
+
+        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+
+        $groupsId = array_keys($groups);
+
+        if (is_array($groupsId)) {
+            foreach ($groupsId as $groupId) {
+                $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+                if (!is_array($groupUsers)) {
+                    continue;
+                }
+
+                foreach ($groupUsers as $memberId => $member) {
+                    if ($member['user_id'] == $userId ) {
+                        continue;
+                    }
+
+                    $userIdList[] = intval($member['user_id']);
+                }
+            }
+        }
+
+        if (is_array($userIdList)) {
+            $userIdList = array_unique($userIdList);
+        }
+
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
         } else {

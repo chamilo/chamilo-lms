@@ -5402,4 +5402,28 @@ class CourseManager
         return $result;
     }
 
+    /**
+     *  @return array a list (array) of all courses.
+     */
+    public static function get_course_list()
+    {
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        return Database::store_result(self::query("SELECT *, id as real_id FROM $table"));
+    }
+
+    /**
+     * Returns course code from a given gradebook category's id
+     * @param int  Category ID
+     * @return string  Course code
+     */
+    public static function get_course_by_category($category_id)
+    {
+        $category_id = intval($category_id);
+        $info = Database::fetch_array(
+            Database::query('SELECT course_code FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).'
+            WHERE id='.$category_id), 'ASSOC'
+        );
+        return $info ? $info['course_code'] : false;
+    }
+
 }

@@ -72,18 +72,6 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	/* // Contains a private unaccessible method, Database::fix_database_parameter().
-	function testFixDatabaseParameterEmpty() {
-		$course_info = api_get_course_info();
-		$database_name= $course_info[""];
-		$res=$this->dbase->fix_database_parameter($database_name);
-		if(!is_null($res)) :
-		$this->assertTrue(is_string($res));
-		endif;
-		//var_dump($res);
-	}
-	*/
-
-	/* // Contains a private unaccessible method, Database::fix_database_parameter().
 	function testFixDatabaseParameterReturnString() {
 		$course_info = api_get_course_info();
 		$database_name= $course_info["dbName"];
@@ -141,17 +129,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetCurrentCourseDatabase() {
-		$res=$this->dbase->get_current_course_database();
-        if (empty($GLOBALS['_course']['dbName'])) {
-            $this->assertFalse($res);
-        } else {
-            $this->assertTrue(is_string($res));
-        }
-        $res=$this->dbase->get_current_course_database('___');
-        $this->assertFalse($res);
-	}
-
 	function testGetCurrentCourseGluedDatabase() {
 	    global $_course;
 	    $res=$this->dbase->get_current_course_glued_database();
@@ -184,19 +161,6 @@ class TestDatabase extends UnitTestCase {
 		$short_table_name='';
 		$res=$this->dbase->get_main_table($short_table_name);
 		$this->assertTrue(is_string($res));
-	}
-
-/* Fails for some reason on automated tests server
-    function testGetUserInfoFromIdNullIsFalse() {
-        // should be returning GLOBALS[_user] (=null) if param is null (in testing context)
-        $res=$this->dbase->get_user_info_from_id(null);
-        $this->assertFalse($res);
-    }
-*/
-	function testGetUserInfoFromIdHighValueIsArray() {
-        	// should be returning array with empty values if user doesn't exist
-	        $res=$this->dbase->get_user_info_from_id(5000000);
-        	$this->assertTrue(is_array($res));
 	}
 
 	/* // Contains a private unaccessible method, Database::glue_course_database_name().

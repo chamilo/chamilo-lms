@@ -201,7 +201,7 @@ function search_users($needle, $type)
                 }
             }
         }
-        //echo Database::fixQuery($sql);
+
         $rs = Database::query($sql);
         $i = 0;
         if ($type=='single') {

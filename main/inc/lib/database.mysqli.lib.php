@@ -55,28 +55,6 @@ class MySQLIDatabase {
     }
 
     /**
-     *	Returns the name of the database where all the personal stuff of the user is stored
-     */
-    public static function get_user_personal_database()
-    {
-        global $_configuration;
-        return $_configuration['user_personal_database'];
-    }
-
-    /**
-     *	Returns the name of the current course database.
-     *  @return    mixed   Glued database name of false if undefined
-     */
-    public static function get_current_course_database()
-    {
-        $course_info = api_get_course_info();
-        if (empty($course_info['dbName'])) {
-            return false;
-        }
-        return $course_info['dbName'];
-    }
-
-    /**
      *	Returns the glued name of the current course database.
      *  @return    mixed   Glued database name of false if undefined
      */
@@ -179,74 +157,6 @@ class MySQLIDatabase {
         Query methods
         These methods execute a query and return the result(s).
     */
-
-    /**
-     * Returns a full list of the contents of the course table as a PHP table
-     * @return a list (array) of all courses.
-     * @todo shouldn't this be in the course.lib.php script?
-     */
-    public static function get_course_list()
-    {
-        $table = self::get_main_table(TABLE_MAIN_COURSE);
-        return self::store_result(self::query("SELECT * FROM $table"));
-    }
-
-    /**
-     *	@param $user_id (integer): the id of the user
-     *	@return $user_info (array): user_id, lastname, firstname, username, email, ...
-     *	@author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
-     *	@author Roan Embrechts, first version + converted to Database API
-     *	@version 30 September 2004
-     *	@desc find all the information about a specified user. Without parameter this is the current user.
-     * 	@todo shouldn't this be in the user.lib.php script?
-     */
-    public static function get_user_info_from_id($user_id = '')
-    {
-        if (empty($user_id)) {
-            return $GLOBALS['_user'];
-        }
-        $table = self::get_main_table(TABLE_MAIN_USER);
-        $user_id = self::escape_string($user_id);
-        return self::generate_abstract_user_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'")));
-    }
-
-    /**
-     * Returns course code from a given gradebook category's id
-     * @param int  Category ID
-     * @return string  Course code
-     * @todo move this function in a gradebook-related library
-     */
-    public static function get_course_by_category($category_id)
-    {
-        $category_id = intval($category_id);
-        $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
-        return $info ? $info['course_code'] : false;
-    }
-
-    /**
-     *	This method creates an abstraction layer between database field names
-     *	and field names expected in code.
-     *
-     *	This helps when changing database names.
-     *	It's also useful now to get rid of the 'franglais'.
-     *
-     *	@todo add more array entries to abstract user info from field names
-     *	@author Roan Embrechts
-     *	@author Patrick Cool
-     *
-     * 	@todo what's the use of this function. I think this is better removed.
-     * 		There should be consistency in the variable names and the use throughout the scripts
-     */
-    public static function generate_abstract_user_field_names($result_array)
-    {
-        $result_array['firstName'] 		= $result_array['firstname'];
-        $result_array['lastName'] 		= $result_array['lastname'];
-        $result_array['mail'] 			= $result_array['email'];
-        #$result_array['picture_uri'] 	= $result_array['picture_uri'];
-        #$result_array ['user_id']		= $result_array['user_id'];
-        return $result_array;
-    }
 
     /**
      * Counts the number of rows in a table
@@ -439,42 +349,6 @@ class MySQLIDatabase {
                 "SHOW DATABASES", $connection);
         while ($row = Database::fetch_row($query_result)) {
             $result[] = $row[0];
-        }
-        return $result;
-    }
-
-    /**
-     * Returns a list of the fields that a given table contains. The list may contain all of the available field names or filtered field names by using a pattern.
-     * By using a special option, this method is able to return an indexed list of fields' properties, where field names are keys.
-     * @param string $table						This is the examined table.
-     * @param string $pattern (optional)		A pattern for filtering field names as if it was needed for the SQL LIKE clause, for example 'column_%'.
-     * @param string $database (optional)		The name of the targeted database. If it is omitted, the current database is assumed, see Database::select_db().
-     * @param bool $including_properties (optional)	When this option is true, the returned result has the following format:
-     * 												array(field_name_1 => array(0 => property_1, 1 => property_2, ...), field_name_2 => array(0 => property_1, ...), ...)
-     * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
-     * @return array							Returns in an array the retrieved list of field names.
-     */
-    public static function get_fields($table, $pattern = '', $database = '', $including_properties = false, $connection = null)
-    {
-        $result = array();
-        $query = "SHOW COLUMNS FROM `".self::escape_string($table, $connection)."`";
-        if (!empty($database)) {
-            $query .= " FROM `".self::escape_string($database, $connection)."`";
-        }
-        if (!empty($pattern)) {
-            $query .= " LIKE '".self::escape_string($pattern, $connection)."'";
-        }
-        $query_result = Database::query($query, $connection);
-        if ($including_properties) {
-            // Making an indexed list of the fields and their properties.
-            while ($row = Database::fetch_row($query_result)) {
-                $result[$row[0]] = $row;
-            }
-        } else {
-            // Making a plain, flat list.
-            while ($row = Database::fetch_row($query_result)) {
-                $result[] = $row[0];
-            }
         }
         return $result;
     }

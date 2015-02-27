@@ -1823,7 +1823,6 @@ class CourseRestorer
 						case FILE_OVERWRITE:
 							// Delete the existing survey with the same code and language and import the one of the source course
 							// getting the information of the survey (used for when the survey is shared)
-							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
 
 							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND survey_id='".self::DBUTF8escapestring(Database::result($result_check,0,0))."'";
 							$result = Database::query($sql_select_existing_survey);

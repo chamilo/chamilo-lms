@@ -78,7 +78,7 @@ class LinkForm extends \FormValidator
         if ($id) {
             $url = Chamilo::url('/main/metadata/index.php', array('eid' => "Link.$id"));
             $metadata = '<a class="control-text" href="' . $url . '">' . get_lang('AddMetadata') . '</a>';
-            $this->add_label(get_lang('Metadata'), $metadata);
+            $this->addLabel(get_lang('Metadata'), $metadata);
         }
 
         $options = array();
@@ -87,7 +87,7 @@ class LinkForm extends \FormValidator
         foreach ($categories as $category) {
             $options[$category->id] = $category->category_title;
         }
-        $this->add_select('category_id', get_lang('Category'), $options);
+        $this->addSelect('category_id', get_lang('Category'), $options);
 
         $targets = array(
             '_self' => get_lang('LinkOpenSelf'),
@@ -95,9 +95,9 @@ class LinkForm extends \FormValidator
             '_parent' => get_lang('LinkOpenParent'),
             '_top' => get_lang('LinkOpenTop')
         );
-        $this->add_select('target', get_lang('LinkTarget'), $targets);
+        $this->addSelect('target', get_lang('LinkTarget'), $targets);
         //$help = '<span class="help-block">' . get_lang('AddTargetOfLinkOnHomepage') . '</span>';
-        //$this->add_label('', $help);
+        //$this->addLabel('', $help);
 
         $this->addButton('save', get_lang('Save'));
 

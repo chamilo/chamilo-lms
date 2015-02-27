@@ -105,17 +105,17 @@ if (api_get_setting('allow_message_tool') == 'true') {
         false,
         $config
     );
-    $form->add_html('<span id="filepaths"><div id="filepath_1">');
+    $form->addHtml('<span id="filepaths"><div id="filepath_1">');
     $form->add_file('attach_1', get_lang('AttachmentFiles'));
-    $form->add_html('</div></span>');
+    $form->addHtml('</div></span>');
 
-    $form->add_label(null,
+    $form->addLabel(null,
         ' <div id="link-more-attach">
         <a href="javascript://" onclick="return add_image_form()">
             ' . get_lang('AddOneMoreFile') . '</a>
         </div>'
     );
-    $form->add_label(null,
+    $form->addLabel(null,
         api_xml_http_response_encode(
             sprintf(
                 get_lang('MaximunFileSizeX'),

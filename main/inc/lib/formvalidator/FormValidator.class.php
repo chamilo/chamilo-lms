@@ -122,7 +122,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
         $this->registerElementType('select_ajax', $dir . 'Element/select_ajax.php', 'HTML_QuickForm_Select_Ajax');
-        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
+        $this->registerElementType('SelectTheme', $dir . 'Element/SelectTheme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
         $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
@@ -146,17 +146,11 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
-        //Form template
-        $formTemplate = '<form{attributes}>
-<fieldset>
-	{content}
-	<div class="clear"></div>
-</fieldset>
-{hidden}
-</form>';
+        // Form template
+        $formTemplate = $this->getFormTemplate();
         $renderer->setFormTemplate($formTemplate);
 
-        //Element template
+        // Element template
         if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
@@ -164,29 +158,7 @@ class FormValidator extends HTML_QuickForm
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } else {
-            $element_template = '
-            <div class="control-group {error_class}">
-                <label class="control-label" {label-for}>
-                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                    {label}
-                </label>
-                <div class="controls">
-                    {element}
-
-                    <!-- BEGIN label_3 -->
-                        {label_3}
-                    <!-- END label_3 -->
-
-                    <!-- BEGIN label_2 -->
-                        <p class="help-block">{label_2}</p>
-                    <!-- END label_2 -->
-
-                    <!-- BEGIN error -->
-                        <span class="help-inline">{error}</span>
-                    <!-- END error -->
-                </div>
-            </div>';
-            $renderer->setElementTemplate($element_template);
+            $renderer->setElementTemplate($this->getElementTemplate());
 
             //Display a gray div in the buttons
             $button_element_template_simple = '<div class="form-actions">{label} {element}</div>';
@@ -229,6 +201,49 @@ EOT;
     }
 
     /**
+     * @return string
+     */
+    public function getFormTemplate()
+    {
+        return '<form{attributes}>
+        <fieldset>
+            {content}
+            <div class="clear"></div>
+        </fieldset>
+        {hidden}
+        </form>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getElementTemplate()
+    {
+        return '
+            <div class="control-group {error_class}">
+                <label class="control-label" {label-for}>
+                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                    {label}
+                </label>
+                <div class="controls">
+                    {element}
+
+                    <!-- BEGIN label_3 -->
+                        {label_3}
+                    <!-- END label_3 -->
+
+                    <!-- BEGIN label_2 -->
+                        <p class="help-block">{label_2}</p>
+                    <!-- END label_2 -->
+
+                    <!-- BEGIN error -->
+                        <span class="help-inline">{error}</span>
+                    <!-- END error -->
+                </div>
+            </div>';
+    }
+
+    /**
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
      * @param string $label						The label for the form-element
@@ -254,8 +269,8 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param bool $required
-     * @param array $attributes
+     * @param bool   $required
+     * @param array  $attributes
      */
     public function addDateRangePicker($name, $label, $required = true, $attributes = array())
     {
@@ -281,49 +296,81 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_textarea
      */
     public function addTextarea($name, $label, $attributes = array())
     {
-        $this->addElement('textarea', $name, $label, $attributes);
+        return $this->addElement('textarea', $name, $label, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
      * @param string $icon font-awesome
+     * @param string $class
      * For example plus is transformed to icon fa fa-plus
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_button
      */
-    public function addButton($name, $label, $icon = 'check', $attributes = array())
+    public function addButton($name, $label, $icon = 'check', $class = 'btn btn-default', $attributes = array())
     {
         //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
         $attributes['icon'] = $icon;
-        $this->addElement('button', $name, $label, $attributes);
+        $attributes['class'] = $class;
+
+        return $this->addElement('button', $name, $label, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
-     * @param string $trailer
+     * @param string $text
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_checkbox
      */
-    public function addCheckBox($name, $label, $trailer = '', $attributes = array())
+    public function addCheckBox($name, $label, $text = '', $attributes = array())
     {
-        $this->addElement('checkbox', $name, $label, $trailer, $attributes);
+        return $this->addElement('checkbox', $name, $label, $text, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
      * @param array  $options
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_group
      */
-    public function addRadio($name, $label, $options = array())
+    public function addCheckBoxGroup($name, $label, $options = array(), $attributes = array())
+    {
+        $group = array();
+        foreach ($options as $value => $text) {
+            $attributes['value'] = $value;
+            $group[] = $this->createElement('checkbox', null, null, $text, $attributes);
+        }
+
+        return $this->addGroup($group, $name, $label);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $options
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_radio
+     */
+    public function addRadio($name, $label, $options = array(), $attributes = array())
     {
         $group = array();
         foreach ($options as $key => $value) {
-            $group[] = $this->createElement('radio', null, null, $value, $key);
+            $group[] = $this->createElement('radio', null, null, $value, $key, $attributes);
         }
-        $this->addGroup($group, $name, $label);
+
+        return $this->addGroup($group, $name, $label);
     }
 
     /**
@@ -331,19 +378,23 @@ EOT;
      * @param string $label
      * @param string $options
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_select
      */
-    public function add_select($name, $label, $options = '', $attributes = array())
+    public function addSelect($name, $label, $options = '', $attributes = array())
     {
-        $this->addElement('select', $name, $label, $options, $attributes);
+        return $this->addElement('select', $name, $label, $options, $attributes);
     }
 
     /**
      * @param string $label
      * @param string $text
+     *
+     * @return HTML_QuickForm_label
      */
-    public function add_label($label, $text)
+    public function addLabel($label, $text)
     {
-        $this->addElement('label', $label, $text);
+        return $this->addElement('label', $label, $text);
     }
 
     /**
@@ -357,7 +408,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function add_file($name, $label, $attributes = array())
     {
@@ -367,7 +418,7 @@ EOT;
     /**
      * @param string $snippet
      */
-    public function add_html($snippet)
+    public function addHtml($snippet)
     {
         $this->addElement('html', $snippet);
     }
@@ -379,12 +430,12 @@ EOT;
      * A rule is attached to check for unwanted HTML
      * @param string $name
      * @param string $label						The label for the form-element
-     * @param boolean $required	(optional)		Is the form-element required (default=true)
-     * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
-     * @param array $config (optional)	Configuration settings for the online editor.
+     * @param bool   $required	(optional)		Is the form-element required (default=true)
+     * @param bool   $fullPage (optional)		When it is true, the editor loads completed html code for a full page.
+     * @param array  $config (optional)	Configuration settings for the online editor.
      *
      */
-    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = null)
+    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array())
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
@@ -447,17 +498,6 @@ EOT;
         $this->addRule(array($name_1, $name_2), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
     }
 
-    /**
-     * Adds a button to the form to add resources.
-     * @deprecated
-     */
-    function add_resource_button()
-    {
-        $group = array();
-        $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
-        $group[] = $this->createElement('submit', 'add_resource', get_lang('Attachment'), 'class="link_alike"');
-        $this->addGroup($group);
-    }
 
     /**
      * Adds a progress bar to the form.

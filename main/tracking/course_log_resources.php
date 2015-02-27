@@ -36,7 +36,6 @@ if (!$is_allowedToTrack) {
 
 // Including additional libraries.
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;

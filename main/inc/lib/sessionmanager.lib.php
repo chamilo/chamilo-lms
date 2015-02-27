@@ -5518,10 +5518,13 @@ class SessionManager
                     if ($sessionFieldValue['session_id'] == $id) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
-                            $var = $fields[$sessionFieldValue['field_id']];
-                            $val = $sessionFieldValue['field_value'];
-                            // Assign session field value to session
-                            $session[$var] = $val;
+                            // Avoid overwriting the session's ID field
+                            if ($fields[$sessionFieldValue['field_id']] != 'id') {
+                                $var = $fields[$sessionFieldValue['field_id']];
+                                $val = $sessionFieldValue['field_value'];
+                                // Assign session field value to session
+                                $session[$var] = $val;
+                            }
                         }
                     }
                 }
@@ -5737,21 +5740,39 @@ class SessionManager
 
         $term = Database::escape_string($term);
 
-        $resultData = Database::select('id, name, date_start, date_end, duration, description', $sTable, array(
-            'where' => array(
-                "name LIKE %?% " => $term,
-                "OR description LIKE %?% " => $term,
-                "OR id IN (
+        if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term,
+                    "OR id IN (
                     SELECT session_id
                     FROM $sfvTable
                     WHERE field_value LIKE %?%
                 ) " => $term
-            )
-        ));
+                )
+            ));
+        } else {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term
+                )
+            ));
 
-        if (empty($extraFieldsToInclude)) {
             return $resultData;
         }
+
+        foreach ($resultData as $id => &$session) {
+            $session['extra'] = self::getFilteredExtraFields($id, $extraFieldsToInclude);
+        }
+
+        return $resultData;
+    }
+
+    public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = array())
+    {
+        $extraData = array();
 
         $variables = array();
         $variablePlaceHolders = array();
@@ -5781,30 +5802,27 @@ class SessionManager
             )
         );
 
-        // Add session fields values to session list
-        foreach ($resultData as $id => &$session) {
-            foreach ($sessionFieldValueList as $sessionFieldValue) {
-                // Match session field values to session
-                if ($sessionFieldValue['session_id'] != $id) {
-                    continue;
-                }
-
-                // Check if session field value is set in session field list
-                if (!isset($fields[$sessionFieldValue['field_id']])) {
-                    continue;
-                }
-
-                $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
-                $extrafieldValue = $sessionFieldValue['field_value'];
-
-                $session['extra'][] = array(
-                    'variable' => $extrafieldVariable,
-                    'value' => $extrafieldValue
-                );
+        foreach ($sessionFieldValueList as $sessionFieldValue) {
+            // Match session field values to session
+            if ($sessionFieldValue['session_id'] != $sessionId) {
+                continue;
             }
+
+            // Check if session field value is set in session field list
+            if (!isset($fields[$sessionFieldValue['field_id']])) {
+                continue;
+            }
+
+            $extrafieldVariable = $fields[$sessionFieldValue['field_id']];
+            $extrafieldValue = $sessionFieldValue['field_value'];
+
+            $extraData[] = array(
+                'variable' => $extrafieldVariable,
+                'value' => $extrafieldValue
+            );
         }
 
-        return $resultData;
+        return $extraData;
     }
 
     public static function isValidId($sessionId)

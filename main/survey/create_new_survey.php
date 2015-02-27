@@ -21,10 +21,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 // Including additional libraries
-/** @todo check if these are all needed */
-/** @todo check if the starting / is needed. api_get_path probably ends with an / */
-//require_once api_get_path(LIBRARY_PATH).'survey.lib.php';
-require_once 'survey.lib.php';
 
 $htmlHeadXtra[] = '<script>
     function advanced_parameters() {
@@ -325,14 +321,10 @@ if ($form->validate()) {
         }
     }
 
-    if ($config['survey']['debug']) {
-        // Displaying a feedback message
-        Display::display_confirmation_message($return['message'], false);
-    } else {
-        // Redirecting to the survey page (whilst showing the return message)
-        header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
-        exit;
-    }
+    Display::addFlash(Display::return_message($return['message'], false));
+    // Redirecting to the survey page (whilst showing the return message)
+    header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
+    exit;
 } else {
     // Displaying the header
     Display::display_header($tool_name);

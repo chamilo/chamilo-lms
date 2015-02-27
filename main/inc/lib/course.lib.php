@@ -5399,8 +5399,6 @@ class CourseManager
         }
 
         $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result, array('select_all_checkbox' => true));
-        $group->setButtonAttributes('add');
-        $group->setButtonAttributes('remove');
     }
 
     /**
@@ -5423,8 +5421,6 @@ class CourseManager
         }
 
         $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
-        $group->setButtonAttributes('add');
-        $group->setButtonAttributes('remove');
     }
 
     /**

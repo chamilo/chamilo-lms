@@ -72,7 +72,7 @@ $monthsOption = array();
 
 for ($i = 1; $i <= 12; $i++) {
     $month = sprintf("%02d", $i);
-    
+
     $monthsOption[$month] = $month;
 }
 
@@ -130,7 +130,7 @@ $form->addElement('select', 'id_coach', get_lang('CoachName'), $coachesOption, a
 ));
 $form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->add_select('session_category', get_lang('SessionCategory'), $categoriesOption, array(
+$form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOption, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'

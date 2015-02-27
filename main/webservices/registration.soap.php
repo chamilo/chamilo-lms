@@ -5557,7 +5557,8 @@ $server->wsdl->addComplexType(
     '',
     array(
         'term' => array('name' => 'term', 'type' => 'xsd:string'),
-        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string')
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
     )
 );
 
@@ -5595,11 +5596,22 @@ $server->wsdl->addComplexType(
     '',
     array(
         'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'id_coach' => array('name' => 'id_coach', 'type' => 'xsd:int'),
         'name' => array('name' => 'name', 'type' => 'xsd:string'),
+        'nbr_courses' => array('name' => 'nbr_courses', 'type' => 'xsd:int'),
+        'nbr_users' => array('name' => 'nbr_users', 'type' => 'xsd:int'),
+        'nbr_classes' => array('name' => 'nbr_classes', 'type' => 'xsd:int'),
         'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'),
         'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'),
-        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
+        'nb_days_access_before_beginning' => array('name' => 'nb_days_access_before_beginning', 'type' => 'xsd:int'),
+        'nb_days_access_after_end' => array('nb_days_access_after_end' => 'duration', 'type' => 'xsd:int'),
+        'session_admin_id' => array('session_admin_id' => 'duration', 'type' => 'xsd:int'),
+        'visibility' => array('visibility' => 'duration', 'type' => 'xsd:int'),
+        'session_category_id' => array('session_category_id' => 'duration', 'type' => 'xsd:int'),
+        'promotion_id' => array('promotion_id' => 'duration', 'type' => 'xsd:int'),
         'description' => array('name' => 'description', 'type' => 'xsd:string'),
+        'show_description' => array('name' => 'description', 'type' => 'xsd:int'),
+        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:searchedSessionExtras'),
     )
 );
@@ -5631,14 +5643,80 @@ $server->register(
 );
 
 /**
-* Web service to get a session list filtered by name, description or short description extra field
-* @param string Secret key
-* @param string $extraFields Extrafields to include in request result
-* @return array The list
-*/
-function WSSearchSession($term, $extraFields)
+ * Web service to get a session list filtered by name, description or short description extra field
+ * @param array $params Contains the following parameters
+ *   string $params['term'] Search term
+ *   string $params['extra_fields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The list
+ */
+function WSSearchSession($params)
 {
-    $fieldsToInclude = explode(',', $extraFields);
+    if (!WSHelperVerifyKey($params['secret_key'])) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $fieldsToInclude = array();
+
+    if (!empty($params['extrafields'])) {
+        $fieldsToInclude = explode(',', $params['extrafields']);
+        foreach ($fieldsToInclude as &$field) {
+            if (empty($field)) {
+                continue;
+            }
+
+            $field = trim($field);
+        }
+    }
+
+    return SessionManager::searchSession($params['term'], $fieldsToInclude);
+}
+
+/* Search session Web Service end */
+
+/* Fetch session Web Service start */
+
+// Input params for WSFetchSession
+$server->wsdl->addComplexType(
+    'FetchSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+//Reister WSFetchSession
+$server->register(
+    'WSFetchSession',
+    array('SearchSession' => 'tns:FetchSession'),                    // input parameters
+    array('return' => 'tns:searchedSessionList'),       // output parameters
+    'urn:WSRegistration',                               // namespace
+    'urn:WSRegistration#WSFetchSession',                // soapaction
+    'rpc',                                              // style
+    'encoded',                                          // use
+    'This service get a session by its id. Optionally can get its extra fields values'    // documentation
+);
+
+/**
+ * Web service to get a session by its id. Optionally can get its extra fields values
+ * @param array $params Contains the following parameters:
+ *   int $params['id'] The session id
+ *   string $params['extrafields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The session data
+ */
+function WSFetchSession($params)
+{
+    if (!WSHelperVerifyKey($params['secret_key'])) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $fieldsToInclude = explode(',', $params['extrafields']);
 
     foreach ($fieldsToInclude as &$field) {
         if (empty($field)) {
@@ -5648,10 +5726,20 @@ function WSSearchSession($term, $extraFields)
         $field = trim($field);
     }
 
-    return SessionManager::searchSession($term, $fieldsToInclude);
+    $sessionData = SessionManager::fetch($params['id']);
+
+    if ($sessionData === false) {
+        return return_error(WS_ERROR_INVALID_INPUT);
+    }
+
+    if (!empty($extraFields)) {
+        $sessionData['extra'] = SessionManager::getFilteredExtraFields($params['id'], $fieldsToInclude);
+    }
+
+    return array($sessionData);
 }
 
-/* Search session Web Service end */
+/* Fetch session Web Service end */
 
 // Add more webservices by Hooks
 if (!empty($hook)) {

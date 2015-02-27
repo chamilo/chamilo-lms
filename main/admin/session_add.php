@@ -271,9 +271,9 @@ if (intval($countUsers) < 50) {
 }
 
 $form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
-$form->add_html('<div id="ajax_list_coachs"></div>');
+$form->addHtml('<div id="ajax_list_coachs"></div>');
 
-$form->add_select('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
+$form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'

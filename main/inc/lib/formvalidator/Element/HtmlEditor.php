@@ -14,9 +14,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
     /**
      * Full page
      */
-    var $fullPage;
-    var $fck_editor;
-    var $content;
+    public $fullPage;
 
     /**
      * Class Constructor
@@ -40,14 +38,11 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
-        global $fck_attribute;
-
         //$editor = Container::getHtmlEditor();
         $editor = new CkEditor();
         if ($editor) {
             $this->editor = $editor;
             $this->editor->setName($name);
-            $this->editor->processConfig($fck_attribute);
             $this->editor->processConfig($config);
         }
     }
@@ -59,6 +54,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public function toHtml()
     {
         $value = $this->getValue();
+
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
                 if (strlen(trim($value)) == 0) {
@@ -68,6 +64,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
                 }
             }
         }
+
 
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
@@ -93,6 +90,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $result = '';
         if ($this->editor) {
             $this->editor->value = $this->getValue();
+            //echo '----->';            var_dump($this->getValue(),$this->getName());
             $this->editor->setName($this->getName());
             $result = $this->editor->createHtml();
         }

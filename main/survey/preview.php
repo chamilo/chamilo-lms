@@ -8,26 +8,23 @@
  *	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modifications
  * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  *
- * 	@todo use quickforms for the forms
- * @todo security filter options better (Database::escape_string)
  */
 
 // Language file that needs to be included
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
-require_once 'survey.lib.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
 // Database table definitions
-$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
-$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation        = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+$table_survey = Database:: get_course_table(TABLE_SURVEY);
+$table_survey_question = Database:: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option = Database:: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course = Database:: get_main_table(TABLE_MAIN_COURSE);
+$table_user = Database:: get_main_table(TABLE_MAIN_USER);
+$table_survey_invitation = Database:: get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
 $userId = api_get_user_id();
@@ -49,7 +46,7 @@ if (Database::num_rows($result) > 0) {
     $userInvited = 1;
 }
 
-// We exit here if ther is no valid $_GET parameter
+// We exit here if there is no valid $_GET parameter
 if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
 	Display::display_header(get_lang('SurveyPreview'));
 	Display::display_error_message(get_lang('InvallidSurvey'), false);
@@ -70,7 +67,7 @@ if (empty($survey_data)) {
 
 $urlname = strip_tags($survey_data['title']);
 if (api_is_allowed_to_edit()) {
-        // Breadcrumbs
+	// Breadcrumbs
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 }
@@ -99,7 +96,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 
 $counter_question = 0;
 // Only a course admin is allowed to preview a survey: you are a course admin
-if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] == 'true') || api_is_allowed_to_session_edit(false, true)) {
+if (api_is_course_admin() ||
+	(api_is_course_admin() && $_GET['isStudentView'] == 'true') ||
+	api_is_allowed_to_session_edit(false, true)
+) {
 	// Survey information
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
@@ -123,7 +123,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
     $questions = array();
 
 	if (isset($_GET['show'])) {
-		// Getting all the questions for this page and add them to a multidimensional array where the first index is the page.
+		// Getting all the questions for this page and add them to a
+		// multidimensional array where the first index is the page.
 		// as long as there is no pagebreak fount we keep adding questions to the page
 		$questions_displayed = array();
 		$paged_questions = array();
@@ -159,7 +160,9 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 						survey_question_option.sort as option_sort
 					FROM $table_survey_question survey_question
 					LEFT JOIN $table_survey_question_option survey_question_option
-					ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+					ON
+						survey_question.question_id = survey_question_option.question_id AND
+						survey_question_option.c_id = $course_id
 					WHERE
 					    survey_question.survey_id = '".intval($survey_id)."' AND
 						survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']]), null, false).") AND
@@ -179,9 +182,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 					$questions[$row['sort']]['type'] = $row['type'];
 					$questions[$row['sort']]['options'][intval($row['option_sort'])] = $row['option_text'];
 					$questions[$row['sort']]['maximum_score'] = $row['max_value'];
-				}
-				// If the type is a pagebreak we are finished loading the questions for this page
-				else {
+				} else {
+					// If the type is a pagebreak we are finished loading the questions for this page
 					break;
 				}
 				$counter_question++;
@@ -197,6 +199,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 	            survey_id='".intval($survey_id)."'";
 	$result = Database::query($sql);
 	$numberofpages = Database::num_rows($result) + 1;
+
 	// Displaying the form with the questions
 	if (isset($_GET['show'])) {
 		$show = (int)$_GET['show'] + 1;
@@ -204,30 +207,39 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		$show = 0;
 	}
 
-	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show.'">';
+	$url = api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show;
+	$form = new FormValidator('question', 'post', $url);
+
 
 	if (is_array($questions) && count($questions) > 0) {
 		foreach ($questions as $key => & $question) {
 			$ch_type = 'ch_'.$question['type'];
+			/** @var survey_question $display */
 			$display = new $ch_type;
-			$display->render_question($question);
+			$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+			$form->addHtml($question['survey_question']);
+			$display->render($form, $question);
+			$form->addHtml('</div></div>');
 		}
 	}
 
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
-            echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';
+			$form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+            //echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';
         } else {
-		    echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
+			$form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');
+		    //echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
         }
 	}
 	if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
 		if ($questions_exists == false) {
 			echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
 		}
-		echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'  </button>';
+		$form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+		//echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'  </button>';
 	}
-	echo '</form>';
+	$form->display();
 } else {
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }

@@ -10,9 +10,9 @@ class ch_score extends survey_question
      * @param array $survey_data
      * @param $form_content
      */
-    public function create_form($survey_data, $formData)
+    public function createForm($survey_data, $formData)
     {
-        parent::create_form($survey_data, $formData);
+        parent::createForm($survey_data, $formData);
 
         $this->getForm()->addText('maximum_score', get_lang('MaximumScore'));
 
@@ -40,7 +40,7 @@ class ch_score extends survey_question
             }
         }
 
-        return parent :: add_remove_buttons($formData);
+        parent :: addRemoveButtons($formData);
     }
 
     /**

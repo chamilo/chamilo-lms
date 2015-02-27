@@ -10,6 +10,7 @@ class survey_question
 {
     /** @var FormValidator */
     private $form;
+    public $buttonList = array();
 
     /**
      * Generic part of any survey question: the question field
@@ -18,7 +19,7 @@ class survey_question
      *
      * @return FormValidator
      */
-    public function create_form($surveyData, $formData)
+    public function createForm($surveyData, $formData)
     {
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
         $questionId = isset($_GET['question_id']) ? intval($_GET['question_id']) : null;
@@ -104,7 +105,6 @@ class survey_question
             //$form->addRadio('choose', get_lang('Secondary'));
         }
 
-        $form->setDefaults($formData);
         $this->setForm($form);
 
         return $form;
@@ -114,7 +114,7 @@ class survey_question
      * Adds submit button
      *
      */
-    public function render_form()
+    public function renderForm()
     {
         if (isset($_GET['question_id']) and !empty($_GET['question_id'])) {
             $icon = 'pencil';
@@ -124,7 +124,9 @@ class survey_question
             $text = get_lang('CreateQuestionSurvey');
         }
 
-        $this->getForm()->addButton('save', $text, $icon);
+        $this->buttonList[] = $this->getForm()->createElement('button', 'save', $text, $icon);
+
+        $this->getForm()->addGroup($this->buttonList, 'buttons');
     }
 
     /**
@@ -145,10 +147,28 @@ class survey_question
 
     /**
      * @param array $formData
+     *
      * @return mixed
      */
-    public function preAction($formData)
+    public function preSave($formData)
     {
+        $counter = Session::read('answer_count');
+        $answerList = Session::read('answer_list');
+
+        if (empty($answerList)) {
+            $answerList = $formData['answers'];
+            Session::write('answer_list', $answerList);
+        }
+
+        if (isset($_POST['answers'])) {
+            $formData['answers'] = $_POST['answers'];
+        }
+
+        if (empty($counter)) {
+            $counter = count($answerList) - 1;
+            Session::write('answer_count', $counter);
+        }
+
         // Moving an answer up
         if (isset($_POST['move_up']) && $_POST['move_up']) {
             foreach ($_POST['move_up'] as $key => & $value) {
@@ -177,9 +197,11 @@ class survey_question
          * This solution is a little bit strange but I could not find a different solution.
          */
         if (isset($_POST['delete_answer'])) {
+            $deleted = false;
             foreach ($_POST['delete_answer'] as $key => & $value) {
-                unset($formData['answers'][$key]);
                 $deleted = $key;
+                $counter--;
+                Session::write('answer_count', $counter);
             }
             foreach ($formData['answers'] as $key => & $value) {
                 if ($key > $deleted) {
@@ -189,11 +211,6 @@ class survey_question
             }
         }
 
-        $counter = Session::read('answer_count');
-        if (empty($counter)) {
-            $counter = count($formData['answers']) - 1;
-            Session::write('answer_count', $counter);
-        }
 
         // Adding an answer
         if (isset($_POST['add_answer'])) {
@@ -212,28 +229,32 @@ class survey_question
             }
         }
 
-        foreach ($formData['answers'] as $index => $data) {
-            if ($index > $counter) {
-                unset($formData['answers'][$index]);
+        if (!isset($_POST['delete_answer'])) {
+            foreach ($formData['answers'] as $index => $data) {
+                if ($index > $counter) {
+                    unset($formData['answers'][$index]);
+                }
+            }
+
+            for ($i = 0; $i <= $counter; $i++) {
+                if (!isset($formData['answers'][$i])) {
+                    $formData['answers'][$i] = '';
+                }
             }
         }
 
-        for ($i = 0; $i < $counter; $i++) {
-            if (!isset($formData['answers'][$i])) {
-                $formData['answers'][$i] = '';
-            }
-        }
+        Session::write('answer_list', $formData['answers']);
 
         return $formData;
     }
 
     /**
-     * Handles the actions on a question and its answers
+     * @param array $surveyData
+     * @param array $formData
      *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
+     * @return mixed
      */
-    public function handle_action($surveyData, $formData)
+    public function save($surveyData, $formData)
     {
         // Saving a question
         if (isset($_POST['save_question']) &&
@@ -244,6 +265,7 @@ class survey_question
             !isset($_POST['move_up'])
         ) {
             Session::erase('answer_count');
+            Session::erase('answer_list');
             $message = survey_manager::save_question(
                 $surveyData,
                 $formData
@@ -252,17 +274,6 @@ class survey_question
             if ($message == 'QuestionAdded' || $message == 'QuestionUpdated') {
                 header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message.'&'.api_get_cidreq());
                 exit;
-
-            } else {
-                /*if ($message == 'PleaseEnterAQuestion' || $message == 'PleasFillAllAnswer'|| $message == 'PleaseChooseACondition'|| $message == 'ChooseDifferentCategories') {
-                    $_SESSION['temp_user_message'] = $formData['question'];
-                    $_SESSION['temp_horizontalvertical'] = $formData['horizontalvertical'];
-                    $_SESSION['temp_sys_message'] = $message;
-                    $_SESSION['temp_answers'] = $formData['answers'];
-                    $_SESSION['temp_values'] = $formData['values'];
-                    header('location: '.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&question_id='.intval($_GET['question_id']).'&survey_id='.intval($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');
-                    exit;
-                }*/
             }
         }
 
@@ -272,18 +283,30 @@ class survey_question
     /**
      * Adds two buttons. One to add an option, one to remove an option
      *
-     * @param FormValidator $form
      * @param array $data
      *
-     * @return FormValidator
      */
-    public function add_remove_buttons($data)
+    public function addRemoveButtons($data)
     {
-        $removeButton = $this->getForm()->addButton('remove_answer', get_lang('RemoveAnswer'), 'minus');
+        $this->buttonList['remove_answer'] = $this->getForm()->createElement(
+            'button',
+            'remove_answer',
+            get_lang('RemoveAnswer'),
+            'minus'
+        );
+
         if (count($data['answers']) <= 2) {
-            $removeButton->updateAttributes(array('disabled' => 'disabled'));
+            $this->buttonList['remove_answer']->updateAttributes(
+                array('disabled' => 'disabled')
+            );
         }
-        $this->getForm()->addButton('add_answer', get_lang('AddAnswer'), 'plus');
+
+        $this->buttonList['add_answer'] = $this->getForm()->createElement(
+            'button',
+            'add_answer',
+            get_lang('AddAnswer'),
+            'plus'
+        );
     }
 
     /**

@@ -207,16 +207,17 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $icon font-awesome
+     * @param string $style default|primary|success|info|warning|danger|link
+     * @param string $size large|default|small|extra-small
      * @param string $class Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
      *
      * @return HTML_QuickForm_button
      */
-    public function addButton($name, $label, $icon = 'check', $class = 'btn btn-default', $attributes = array())
+    public function addButton($name, $label, $icon = 'check', $style = 'default', $size = 'default', $class = 'btn', $attributes = array())
     {
-        //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
         $attributes['icon'] = $icon;
-        $attributes['class'] = $class;
+        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
 
         return $this->addElement('button', $name, $label, $attributes);
     }

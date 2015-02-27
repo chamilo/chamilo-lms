@@ -79,8 +79,8 @@ if ($surveyData['survey_type'] == 1) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']), 'name' => strip_tags($urlname));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']), 'name' => strip_tags($urlname));
 
 // Tool name
 if ($_GET['action'] == 'add') {
@@ -111,7 +111,7 @@ $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
-	Display :: display_header($tool_name,'Survey');
+	Display :: display_header($tool_name, 'Survey');
 	echo $actions;
 	Display :: display_error_message(get_lang('TypeDoesNotExist'), false);
 	Display :: display_footer();
@@ -121,23 +121,6 @@ $error_message = '';
 
 // Displaying the form for adding or editing the question
 
-/*if (!isset($_POST['save_question'])) {
-	// Displaying the header
-	Display::display_header($tool_name, 'Survey');
-	echo $actions;
-	// Displys message if exists
-	if (isset($_SESSION['temp_sys_message'])) {
-		$error_message = $_SESSION['temp_sys_message'];
-		unset($_SESSION['temp_sys_message']);
-		if ($error_message == 'PleaseEnterAQuestion' ||
-			$error_message == 'PleasFillAllAnswer'||
-			$error_message == 'PleaseChooseACondition'||
-			$error_message == 'ChooseDifferentCategories'
-		) {
-			Display::display_error_message(get_lang($error_message), true);
-		}
-	}
-}*/
 $ch_type = 'ch_'.$_GET['type'];
 /** @var survey_question $surveyQuestion */
 $surveyQuestion = new $ch_type;
@@ -170,19 +153,17 @@ if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
 	$formData = survey_manager::get_question($_GET['question_id']);
 }
 
-$formData = $surveyQuestion->preAction($formData);
-
-$surveyQuestion->create_form($surveyData, $formData);
+$formData = $surveyQuestion->preSave($formData);
+$surveyQuestion->createForm($surveyData, $formData);
 $surveyQuestion->getForm()->setDefaults($formData);
-$surveyQuestion->render_form();
+$surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
 	$values = $surveyQuestion->getForm()->getSubmitValues();
-	$surveyQuestion->handle_action($surveyData, $values);
+	$surveyQuestion->save($surveyData, $values);
 }
 
 Display::display_header($tool_name, 'Survey');
-$surveyQuestion->getForm()->setDefaults($formData);
 
 echo $surveyQuestion->getForm()->return_form();
 // Footer

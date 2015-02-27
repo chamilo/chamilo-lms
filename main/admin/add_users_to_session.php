@@ -94,6 +94,13 @@ function search_users($needle, $type)
             $order_clause = ' ORDER BY official_code, firstname, lastname, username';
         }
 
+        if (api_is_session_admin()
+            && isset($_configuration['prevent_session_admins_to_manage_all_users'])
+            && $_configuration['prevent_session_admins_to_manage_all_users'] == 'true'
+        ) {
+            $order_clause = " AND user.creator_id = " . api_get_user_id() . $order_clause;
+        }
+
         $cond_user_id = '';
 
         if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users')  == 'true') {

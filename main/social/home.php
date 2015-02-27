@@ -192,56 +192,46 @@ if (api_get_setting('allow_skills_tool') == 'true') {
 $social_skill_block.='</div>';
 
 
-
-/*
-    $socialRightInformation .= Display::url(
-        sprintf(get_lang('YourSkillRankingX'), $ranking),
-        api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php',
-        array('class' => 'btn')
-    );
-    $socialRightInformation .= '</div><br />';
-}
-*/
-
-
 //Group box by age
 $social_group_block = '<div class="panel panel-info social-group">';
 $social_group_block .= '<div class="panel-heading">'.get_lang('Group').'</div>';
 $social_group_block .= '<div class="panel-body">';
+
 $results = GroupPortalManager::get_groups_by_age(1, false);
 
 $groups_newest = array();
+
+
 if (!empty($results)) {
     foreach ($results as $result) {
         $id = $result['id'];
-        $result['description'] = Security::remove_XSS(
-            $result['description'],
-            STUDENT,
-            true
-        );
+        $result['description'] = Security::remove_XSS( $result['description'], STUDENT, true );
         $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
+
         if ($result['count'] == 1) {
             $result['count'] = '1 ' . get_lang('Member');
         } else {
             $result['count'] = $result['count'] . ' ' . get_lang('Members');
         }
+
         $group_url = "groups.php?id=$id";
-        $result['name'] = Display::url(
-                api_ucwords(cut($result['name'], 40, true)),
-                $group_url
-            ) . Display::span(
-                '<br />' . $result['count'],
-                array('class' => 'box_description_group_member')
-            );
+
+        $result['name'] = '<div class="group-name">'.Display::url(
+                          api_ucwords(cut($result['name'], 40, true)), $group_url)
+                          .'</div><div class="count-username">'.$result['count'].'</div>';
+
         $picture = GroupPortalManager::get_picture_group(
             $id,
             $result['picture_uri'],
             80
         );
-        $result['picture_uri'] = '<img class="social-groups-image" src="' . $picture['file'] . '" hspace="10" height="44" border="2" align="left" width="44" />';
-        $group_actions = '<div class="box_description_group_actions"><a href="groups.php?#tab_browse-2">' . get_lang(
-                'SeeMore'
+
+        $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
+
+        $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore'
             ) . '</a></div>';
+
+
         $groups_newest[] = array(
             Display::url(
                 $result['picture_uri'],
@@ -249,7 +239,9 @@ if (!empty($results)) {
             ),
             $result['name'],
             cut($result['description'], 120, true) . $group_actions
+
         );
+
     }
 }
 
@@ -293,18 +285,28 @@ foreach ($results as $result) {
         cut($result['description'], 120, true) . $group_actions
     );
 }
+$list=count($groups_newest);
 
 if (count($groups_newest) > 0) {
+    $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
-    $social_group_block .= Display::return_sortable_grid(
-        'home_group',
+    for($i = 0;$i < $list; $i++){
+        $social_group_block.= $groups_newest[0];
+    }
+    echo "<pre>";
+    print_r($groups_newest);
+    echo "</pre>";
+    /*$social_group_block .= Display::return_sortable_grid(
+        'list',
         array(),
         $groups_newest,
         array('hide_navigation' => true, 'per_page' => 100),
         array(),
         false,
         array(true, true, true, false)
-    );
+    );*/
+
+    $social_group_block.= "</div>";
 }
 
 if (count($groups_pop) > 0) {

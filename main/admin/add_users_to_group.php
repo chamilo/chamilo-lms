@@ -47,7 +47,7 @@ $xajax->registerFunction('search_users');
 function search_users($needle, $type, $relation_type)
 {
     global $tbl_user, $tbl_user_rel_access_url, $tbl_group_rel_user, $group_id;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = $return_origin = $return_destination = '';
     $without_user_id = $without_user_id = $condition_relation = '';
 

@@ -62,7 +62,7 @@ function search_sessions($needle, $type)
 {
     global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
 
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas

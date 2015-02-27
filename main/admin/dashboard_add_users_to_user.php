@@ -67,7 +67,7 @@ function search_users($needle,$type)
 {
     global $tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id, $userStatus;
 
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas

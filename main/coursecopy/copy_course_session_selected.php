@@ -195,7 +195,7 @@ function displayForm()
 
 function searchCourses($idSession, $type)
 {
-    $xajaxResponse = new XajaxResponse();
+    $xajaxResponse = new xajaxResponse();
     $return = null;
     $courseCode = api_get_course_id();
 

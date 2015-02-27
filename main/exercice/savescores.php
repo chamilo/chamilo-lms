@@ -21,7 +21,7 @@ $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
-$TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $score = $_REQUEST['score'];

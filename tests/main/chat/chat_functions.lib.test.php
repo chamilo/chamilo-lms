@@ -37,7 +37,7 @@ class TestChatFunctions extends UnitTestCase {
 
 	function CreateChatConnection($database_name) {
 		$session_id = 1;
-		$tbl_chat_connected = Database::get_course_chat_connected_table($database_name);
+		$tbl_chat_connected = Database::get_main_table(TABLE_MAIN_CHAT);
 		$sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id = 1";
 		$result = Database::query($sql);
 		//The user_id exists so we must do an UPDATE and not a INSERT

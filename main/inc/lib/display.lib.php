@@ -1254,7 +1254,7 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $t_track_e_access 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_code        = Database::escape_string($course_info['code']);

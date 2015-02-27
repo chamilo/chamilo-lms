@@ -110,27 +110,9 @@ class TestDatabase extends UnitTestCase {
 	}
 	*/
 
-	function testGenerateAbstractCourseFieldNames() {
-		$result_array='';
-		$res=$this->dbase->generate_abstract_course_field_names($result_array);
-		$this->assertTrue(is_array($res));
-	}
-
-	function testGenerateAbstractUserFieldNames() {
-		$result_array='';
-		$res=$this->dbase->generate_abstract_user_field_names($result_array);
-		$this->assertTrue(is_array($res));
-	}
-
 	function get_course_by_category() {
 		$category_id='1';
 		$res=$this->dbase->get_course_by_category($category_id);
-		$this->assertTrue(is_string($res));
-	}
-
-	function testGetCourseChatConnectedTable() {
-		$database_name='dokeosla';
-		$res=$this->dbase->get_course_chat_connected_table($database_name);
 		$this->assertTrue(is_string($res));
 	}
 
@@ -215,20 +197,6 @@ class TestDatabase extends UnitTestCase {
         	// should be returning array with empty values if user doesn't exist
 	        $res=$this->dbase->get_user_info_from_id(5000000);
         	$this->assertTrue(is_array($res));
-	}
-
-	function testGetUserPersonalDatabase() {
-		global $_configuration;
-		$res=$this->dbase->get_user_personal_database($_configuration);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
-	}
-
-	function testGetUserPersonalTable(){
-		$short_table_name='';
-		$res=$this->dbase->	get_user_personal_table($short_table_name);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
 	}
 
 	/* // Contains a private unaccessible method, Database::glue_course_database_name().

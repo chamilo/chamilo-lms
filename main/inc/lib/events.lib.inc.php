@@ -348,7 +348,7 @@ class Event
                 $status = Database::escape_string($status);
             }
 
-            $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
             if (!empty($question_list)) {
                 $question_list = array_map('intval', $question_list);

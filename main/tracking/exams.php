@@ -468,7 +468,7 @@ function export_complete_report_xls($filename, $array)
 
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
-    $exerciseStatsTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
     if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code(

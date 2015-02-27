@@ -51,7 +51,7 @@ $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";

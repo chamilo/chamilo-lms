@@ -261,7 +261,7 @@ if (!isset($_POST['paymentOption'])) {
 
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-                $track_e_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
                 $sql = "SELECT user.*, a.user_id is_admin, login.login_date
 					FROM $user_table

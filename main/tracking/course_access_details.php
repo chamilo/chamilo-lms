@@ -39,7 +39,7 @@ td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
 //@todo use Database library
-$TABLETRACK_ACCESS = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+$TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 Display::display_header($nameTools,"Tracking");
 
 // the variables for the days and the months

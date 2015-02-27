@@ -25,7 +25,7 @@ require_once 'database.constants.inc.php';
  *	@package chamilo.library
  */
 class MySQLIDatabase {
-    
+
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
 
@@ -42,15 +42,6 @@ class MySQLIDatabase {
     {
         global $_configuration;
         return $_configuration['main_database'];
-    }
-
-    /**
-     *	Returns the name of the statistics database.
-     */
-    public static function get_statistic_database()
-    {
-        global $_configuration;
-        return $_configuration['statistics_database'];
     }
 
     /**
@@ -183,37 +174,6 @@ class MySQLIDatabase {
         return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
     }
 
-    /**
-     * This generic method returns the correct and complete name of any statistic table
-     * of which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
-     * instead of directly using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     * @return string The full name of the requested stats table
-     */
-    public static function get_statistic_table($short_table_name)
-    {
-        return self::format_table_name(self::get_statistic_database(), $short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any scorm
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_user_personal_table($short_table_name)
-    {
-        return self::format_table_name(self::get_user_personal_database(), $short_table_name);
-    }
-
-    public static function get_course_chat_connected_table($database_name = '')
-    {
-        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), TABLE_CHAT_CONNECTED);
-    }
 
     /*
         Query methods
@@ -229,23 +189,6 @@ class MySQLIDatabase {
     {
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         return self::store_result(self::query("SELECT * FROM $table"));
-    }
-
-    /**
-     * Returns an array with all database fields for the specified course.
-     *
-     * @param string $course_code The real (system) code of the course (ID from inside the main course table)
-     * @return array Course info from the course table
-     * @todo shouldn't this be in the course.lib.php script?
-     */
-    public static function get_course_info($course_code)
-    {
-        $course_code = self::escape_string($course_code);
-        $table = self::get_main_table(TABLE_MAIN_COURSE);
-        $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE code = '$course_code'"))
-        );
-        return $result === false ? array('db_name' => '') : $result;
     }
 
     /**
@@ -279,58 +222,6 @@ class MySQLIDatabase {
         $category_id = intval($category_id);
         $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
         return $info ? $info['course_code'] : false;
-    }
-
-    /**
-     *	This method creates an abstraction layer between database field names
-     *	and field names expected in code.
-     *
-     *	This approach helps when changing database names.
-     *	It's also useful now to get rid of the 'franglais'.
-     *
-     *	@todo	add more array entries to abstract course info from field names
-     *	@author	Roan Embrechts
-     *
-     * 	@todo What's the use of this method. I think this is better removed.
-     * 		  There should be consistency in the variable names and the use throughout the scripts
-     * 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
-     */
-    public static function generate_abstract_course_field_names($result_array)
-    {
-        $visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
-        $code        = isset($result_array['code']) ? $result_array['code'] : null;
-        $title       = isset($result_array['title']) ? $result_array['title'] : null;
-        $db_name     = isset($result_array['db_name']) ? $result_array['db_name'] : null;
-        $category_code = isset($result_array['category_code']) ? $result_array['category_code'] : null;
-        $result_array['official_code'] = $visual_code;
-        $result_array['visual_code']   = $visual_code;
-        $result_array['real_code']     = $code;
-        $result_array['system_code']   = $code;
-        $result_array['title']         = $title;
-        $result_array['database']      = $db_name;
-        $result_array['faculty']       = $category_code;
-        //$result_array['directory'] = $result_array['directory'];
-        /*
-        still to do: (info taken from local.inc.php)
-
-        $_course['id'          ]         = $cData['cours_id'         ]; //auto-assigned integer
-        $_course['name'        ]         = $cData['title'            ];
-        $_course['official_code']        = $cData['visual_code'        ]; // use in echo
-        $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-        $_course['path'        ]         = $cData['directory'        ]; // use as key in path
-        $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-        $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['dbName'] . $_configuration['db_glue']; // use in all queries
-        $_course['titular'     ]         = $cData['tutor_name'       ];
-        $_course['language'    ]         = $cData['course_language'   ];
-        $_course['extLink'     ]['url' ] = $cData['department_url'    ];
-        $_course['extLink'     ]['name'] = $cData['department_name'];
-        $_course['categoryCode']         = $cData['faCode'           ];
-        $_course['categoryName']         = $cData['faName'           ];
-
-        $_course['visibility'  ]         = (bool) ($cData['visibility'] == 2 || $cData['visibility'] == 3);
-        $_course['registrationAllowed']  = (bool) ($cData['visibility'] == 1 || $cData['visibility'] == 2);
-        */
-        return $result_array;
     }
 
     /**
@@ -713,7 +604,7 @@ class MySQLIDatabase {
     public static function query($query, $connection = null, $file = null, $line = null)
     {
         global $database_connection;
-        
+
         $result = @$database_connection->query($query);
         if ($database_connection->errno) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
@@ -760,19 +651,19 @@ class MySQLIDatabase {
                 $info .= '</pre>';
                 echo $info;
             }
-            
+
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
-                
+
                 error_log('error #'.self::errno($connection));
                 error_log('error: '.self::error($connection));
-                
+
                 $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
                 error_log($info);
                 $info = 'LINE: '.(empty($line) ? ' unknown ' : $line);
                 error_log($info);
-                
+
                 if (empty($type)) {
                     if (!empty($function)) {
                         $info = 'FUNCTION: ' . $function;
@@ -788,7 +679,7 @@ class MySQLIDatabase {
                 }
                 error_log("---------------- end ----------------");
             }
-            
+
         }
         return $result;
     }
@@ -1209,20 +1100,20 @@ class MySQLIDatabase {
                             $value_array = Database::escape_string($value_array);
                             $clean_values = $value_array;
                         }
-                        if (!empty($condition) && $clean_values != '') {                                                                                      
+                        if (!empty($condition) && $clean_values != '') {
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'","%s", $condition);
                             $condition = str_replace("?","%s", $condition);
-                            
+
                             $condition = str_replace("@%s@","@-@", $condition);
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
-                            
-                            //Treat conditons as string                            
-                            $condition = vsprintf($condition, $clean_values);                                                        
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"                            
+
+                            //Treat conditons as string
+                            $condition = vsprintf($condition, $clean_values);
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
-                        }                 
+                        }
                     }
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
@@ -1230,11 +1121,11 @@ class MySQLIDatabase {
                 break;
                 case 'order':
                     $order_array = $condition_data;
-                    
+
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
                         $order_array = self::escape_string($order_array);
-                        $new_order_array = explode(',', $order_array);                            
+                        $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
                         foreach($new_order_array as $element) {
@@ -1247,19 +1138,19 @@ class MySQLIDatabase {
                                 $order = 'DESC';
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
-                                }                            
-                                $temp_value[]= $element[0].' '.$order.' ';                                       
+                                }
+                                $temp_value[]= $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';                                       
+                                $temp_value[]= $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
-                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);                                
+                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);
                         } else {
                             //$return_value .= '';
-                        }                        
-                    }                                        
+                        }
+                    }
                     break;
 
                 case 'limit':
@@ -1291,7 +1182,7 @@ class MySQLIDatabase {
     {
         $result = false;
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql    = "DELETE FROM $table_name $where_return ";        
+        $sql    = "DELETE FROM $table_name $where_return ";
         $result = self::query($sql);
         $affected_rows = self::affected_rows();
         //@todo should return affected_rows for

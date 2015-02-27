@@ -25,7 +25,6 @@ $htmlHeadXtra[] = '
 <script>
 var is_platform_id = "'.$is_platform_admin.'";
 
-<!--
 function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
 	document.user_edit.radio_expiration_date[1].checked=true;
@@ -69,7 +68,6 @@ function confirmation(name) {
         return false;
     }
 }
-//-->
 </script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
@@ -81,7 +79,9 @@ $interbreadcrumb[] = array('url' => "user_list.php","name" => get_lang('UserList
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u LEFT JOIN $table_admin a ON a.user_id = u.user_id WHERE u.user_id = '".$user_id."'";
+$sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u
+        LEFT JOIN $table_admin a ON a.user_id = u.user_id
+        WHERE u.user_id = '".$user_id."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
     header('Location: user_list.php');
@@ -203,14 +203,24 @@ $form->addGroup($group, 'password', null, '', false);
 
 // Status
 $status = array();
-$status[COURSEMANAGER] 	= get_lang('Teacher');
-$status[STUDENT] 		= get_lang('Learner');
-$status[DRH] 			= get_lang('Drh');
-$status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] 	= get_lang('RoleStudentBoss');
-$status[INVITEE] 	= get_lang('Invitee');
+$status[COURSEMANAGER] = get_lang('Teacher');
+$status[STUDENT] = get_lang('Learner');
+$status[DRH] = get_lang('Drh');
+$status[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+$status[INVITEE] = get_lang('Invitee');
 
-$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
+$form->addElement(
+    'select',
+    'status',
+    get_lang('Profile'),
+    $status,
+    array(
+        'id' => 'status_select',
+        'onchange' => 'javascript: display_drh_list();',
+        'class' => 'chzn-select'
+    )
+);
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 

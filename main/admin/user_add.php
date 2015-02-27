@@ -319,7 +319,25 @@ if( $form->validate()) {
             }
         }
 
-		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, $extra, null, $send_mail);
+        $user_id = UserManager::create_user(
+            $firstname,
+            $lastname,
+            $status,
+            $email,
+            $username,
+            $password,
+            $official_code,
+            $language,
+            $phone,
+            null,
+            $auth_source,
+            $expiration_date,
+            $active,
+            $hr_dept_id,
+            $extra,
+            null,
+            $send_mail
+        );
 
 		Security::clear_token();
 		$tok = Security::get_token();

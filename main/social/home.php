@@ -131,9 +131,31 @@ $social_search_block.= '</div>';
 //Skill
 if (api_get_setting('allow_skills_tool') == 'true') {
     $social_skill_block = '<div class="panel panel-info social-skill">';
-    $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills') . '</div>';
+    $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
+    $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="caret"></span></a>
+                             <ul class="dropdown-menu">';
+    if (api_is_student() || api_is_student_boss() || api_is_drh()) {
+        $social_skill_block .= '<li>' . Display::url(
+            get_lang('SkillsReport'),
+            api_get_path(WEB_CODE_PATH) . 'social/my_skills_report.php'
+            ) . '</li>';
+    }
+
+    $social_skill_block .= '<li>' . Display::url(
+        get_lang('SkillsWheel'),
+        api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php'
+        ) . '</li>';
+
+    $social_skill_block .= '<li>' . Display::url(
+        sprintf(get_lang('YourSkillRankingX'), $ranking),
+        api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php'
+    ) . '</li>';
+
+    $social_skill_block .= '</ul></div></div>';
 
     $skill = new Skill();
+
     $ranking = $skill->get_user_skill_ranking(api_get_user_id());
     $skills = $skill->get_user_skills(api_get_user_id(), true);
 
@@ -144,7 +166,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
 
             if (!empty($skill['icon'])) {
                 $badgeImage = Display::img(
-                    api_get_path(WEB_DATA_PATH) . $skill['iconThumb'],
+                    api_get_path(WEB_DATA_PATH) . $skill['icon'],
                     $skill['name']
                 );
             } else {
@@ -155,15 +177,15 @@ if (api_get_setting('allow_skills_tool') == 'true') {
                 );
             }
 
-            $lis .= Display::tag(
+           $lis .= Display::tag(
                 'li',
-                $badgeImage . Display::span(
-                    $skill['name'],
-                    array('class' => 'label_tag skill')
-                )
+                $badgeImage.
+                '<div class="badges-name">' . $skill['name'] . '</div>'
             );
         }
-        $social_skill_block .= Display::tag('ul', $lis, array('class' => 'menulist'));
+        $social_skill_block.= '<div class="panel-body">';
+        $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
+        $social_skill_block.= '</div>';
     }
     //Colocar los botones anteriores
 }
@@ -172,19 +194,6 @@ $social_skill_block.='</div>';
 
 
 /*
-    $socialRightInformation .= '<div class="menulist">';
-    if (api_is_student() || api_is_student_boss() || api_is_drh()) {
-        $socialRightInformation .= Display::url(
-            get_lang('SkillsReport'),
-            api_get_path(WEB_CODE_PATH) . 'social/my_skills_report.php',
-            array('class' => 'btn')
-        );
-    }
-    $socialRightInformation .= Display::url(
-        get_lang('SkillsWheel'),
-        api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php',
-        array('class' => 'btn')
-    );
     $socialRightInformation .= Display::url(
         sprintf(get_lang('YourSkillRankingX'), $ranking),
         api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php',

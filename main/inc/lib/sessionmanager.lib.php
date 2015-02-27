@@ -433,7 +433,7 @@ class SessionManager
                                 ";
         }
 
-        $select = "SELECT * FROM (SELECT
+        $select = "SELECT DISTINCT * FROM (SELECT
                 IF (
 					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'" . $today . "' " . ") <= s.nb_days_access_before_beginning) OR

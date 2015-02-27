@@ -4,6 +4,7 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2012
 *	@package chamilo.admin
 */
+use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
@@ -16,27 +17,24 @@ api_protect_admin_script();
 $plugin_name = $_GET['name'];
 
 $plugin_obj = new AppPlugin();
+$installed_plugins = $plugin_obj->get_installed_plugins();
 $plugin_info = $plugin_obj->getPluginInfo($plugin_name, true);
 
-if (empty($plugin_info)) {
-    api_not_allowed();
-}
-
-$installed_plugins = $plugin_obj->get_installed_plugins();
-
-if (!in_array($plugin_name, $installed_plugins)) {
-    api_not_allowed();
+if (!in_array($plugin_name, $installed_plugins) || empty($plugin_info)) {
+    api_not_allowed(true);
 }
 
 global $_configuration;
 $message = null;
 $content = null;
 
+$currentURL = api_get_self() . "?name=$plugin_name";
+
 if (isset($plugin_info['settings_form'])) {
     $form = $plugin_info['settings_form'];
     if (isset($form)) {
         //We override the form attributes
-        $attributes = array('action'=>api_get_self().'?name='.$plugin_name, 'method'=>'POST');
+        $attributes = array('action'=>$currentURL, 'method'=>'POST');
         $form->updateAttributes($attributes);
         $content = Display::page_header($plugin_info['title']);
         $content .= $form->toHtml();
@@ -54,10 +52,9 @@ if (isset($form)) {
         api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' =>
                                     array('Plugins', $access_url_id, $plugin_name, 'setting', "status")));
         foreach ($values as $key => $value) {
-            $key = Database::escape_string($plugin_name.'_'.$key);
             api_add_setting(
                 $value,
-                $key,
+                Database::escape_string($plugin_name.'_'.$key),
                 $plugin_name,
                 'setting',
                 'Plugins',
@@ -74,7 +71,16 @@ if (isset($form)) {
             $objPlugin->manageTab($values['show_main_menu_tab']);
         }
         $message = Display::return_message(get_lang('Updated'), 'success');
+
+        Session::write('message', $message);
+        
+        header("Location: $currentURL");
+        exit;
     }
+}
+
+if (Session::has('message')) {
+    $message = Session::read('message');
 }
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin'));
@@ -84,3 +90,5 @@ $tpl = new Template($plugin_name, true, true, false, true, false);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
+
+Session::erase('message');

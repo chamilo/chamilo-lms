@@ -12,8 +12,10 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-if (!(api_is_platform_admin(false, true))) {
-    api_not_allowed();
+$userNotAllowed = !api_is_student_boss() && !api_is_platform_admin(false, true);
+
+if ($userNotAllowed) {
+    api_not_allowed(true);
 }
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
@@ -83,7 +85,45 @@ $(function() {
     });
 });
 </script>';
-$content = Display::grid_html('user_course_report');
+
+$actions = null;
+
+if (api_is_student_boss()) {
+    $actions .= Display::url(
+        Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "auth/my_progress.php"
+    );
+    $actions .= Display::url(
+        Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "mySpace/student.php"
+    );
+    $actions .= Display::url(
+        Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
+    );
+}
+
+$content = '<div class="actions">';
+
+if (!empty($actions)) {
+    $content .= $actions;
+}
+
+if (!api_is_student_boss()) {
+    $content .= '<div class="pull-right">';
+    $content .= Display::url(
+        get_lang("CompanyReport"),
+        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php",
+        array(
+            'class' => 'btn btn-info'
+        )
+    );
+    $content .= '</div>';   
+}
+
+$content .= '</div>';
+$content .= '<h1 class="page-header">' . get_lang('CompanyReportResumed') . '</h1>';
+$content .= Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);
 $tpl->assign('content', $content);

@@ -186,6 +186,10 @@ switch ($action) {
             if (empty($userIdList) || empty($courseCodeList)) {
                 exit;
             }
+        } else if(api_is_student_boss()) {
+            $users = UserManager::getUsersFollowedByStudentBoss(api_get_user_id());
+            
+            $userIdList = array_keys($users);
         }
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);

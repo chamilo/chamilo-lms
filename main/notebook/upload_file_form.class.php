@@ -39,7 +39,7 @@ class UploadFileForm extends \FormValidator
 
         $this->add_hidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('File');
-        $this->add_file('file', $label);
+        $this->addFile('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 
         $this->addButton('save', get_lang('Save'));

@@ -36,7 +36,7 @@ class UploadFileForm extends \FormValidator
         $this->addHeader($form_name);
 
         $label = get_lang('File');
-        $this->add_file('file', $label);
+        $this->addFile('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
         //$this->add_checkbox('replace', '', get_lang('ReplaceExistingEntries'));
 

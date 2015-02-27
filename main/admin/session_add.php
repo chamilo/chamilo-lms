@@ -34,7 +34,7 @@ $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 function search_coachs($needle) {
 	global $tbl_user;
 
-	$xajax_response = new XajaxResponse();
+	$xajax_response = new xajaxResponse();
 	$return = '';
 
 	if(!empty($needle)) {

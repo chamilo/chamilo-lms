@@ -28,7 +28,7 @@ class Accessurleditcoursestourl
     function search_courses($needle, $id)
     {
         global $tbl_course;
-        $xajax_response = new XajaxResponse();
+        $xajax_response = new xajaxResponse();
         $return = '';
 
         if (!empty($needle)) {

@@ -21,7 +21,7 @@ class AddManySessionToCategoryFunctions
     function search_courses($needle,$type) {
 
 		global $tbl_course, $tbl_session, $id_session;
-		$xajax_response = new XajaxResponse();
+		$xajax_response = new xajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas

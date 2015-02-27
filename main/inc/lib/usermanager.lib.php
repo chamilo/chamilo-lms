@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\UserBundle\Entity\User;
+
 /**
  *
  * Class UserManager
@@ -40,24 +43,26 @@ class UserManager
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     * @param    string    Firstname
-     * @param    string    Lastname
-     * @param    int       Status (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param    string    e-mail address
-     * @param    string    Login
-     * @param    string    Password
-     * @param    string    Any official code (optional)
-     * @param    string    User language    (optional)
-     * @param    string    Phone number    (optional)
-     * @param    string    Picture URI        (optional)
-     * @param    string    Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param    string    Account expiration date (optional, defaults to '0000-00-00 00:00:00')
-     * @param    int        Whether the account is enabled or disabled by default
-     * @param    int        The department of HR in which the user is registered (optional, defaults to 0)
-     * @param     array    Extra fields
-     * @param    string    Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param    string Firstname
+     * @param    string Lastname
+     * @param    int    Status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param    string e-mail address
+     * @param    string Login
+     * @param    string Password
+     * @param    string Any official code (optional)
+     * @param    string User language    (optional)
+     * @param    string Phone number    (optional)
+     * @param    string Picture URI        (optional)
+     * @param    string Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param    string Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+     * @param    int     Whether the account is enabled or disabled by default
+     * @param    int     The department of HR in which the user is registered (optional, defaults to 0)
+     * @param     array Extra fields
+     * @param    string Encrypt method used if password is given encrypted. Set to an empty string by default
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
-     * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
+     * @desc The function tries to retrieve user id from the session.
+     * If it exists, the current user id is the creator id. If a problem arises,
+     * it stores the error message in global $api_failureList
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
      */
@@ -80,11 +85,12 @@ class UserManager
         $encrypt_method = '',
         $send_mail = false
     ) {
+        $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
-        global $_user, $_configuration;
+        global $_configuration;
         $original_password = $password;
         $access_url_id = 1;
 
@@ -129,8 +135,8 @@ class UserManager
             $language = api_get_setting('platformLanguage');
         }
 
-        if ($_user['user_id']) {
-            $creator_id = intval($_user['user_id']);
+        if (!empty($currentUserId)) {
+            $creator_id = $currentUserId;
         } else {
             $creator_id = '';
         }
@@ -139,8 +145,6 @@ class UserManager
         if (!self::is_username_available($loginName)) {
             return api_set_failure('login-pass already taken');
         }
-
-        //$password = "PLACEHOLDER";
 
         if (empty($encrypt_method)) {
             $password = api_get_encrypted_password($password);
@@ -155,7 +159,6 @@ class UserManager
                 return api_set_failure('encrypt_method invalid');
             }
         }
-
 
         $current_date = api_get_utc_datetime();
         $sql = "INSERT INTO $table_user
@@ -178,8 +181,10 @@ class UserManager
         $result = Database::query($sql);
 
         if ($result) {
-            //echo "id returned";
             $return = Database::insert_id();
+            $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";
+            Database::query($sql);
+
             if (api_get_multiple_access_url()) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());
             } else {
@@ -383,7 +388,7 @@ class UserManager
         }
 
         // Delete the personal course categories
-        $course_cat_table = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $course_cat_table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
@@ -396,7 +401,7 @@ class UserManager
         Database::query($sql);
 
         // Delete the personal agenda-items from this user
-        $agenda_table = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $agenda_table = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
         $sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
         Database::query($sql);
 
@@ -665,10 +670,12 @@ class UserManager
                 expiration_date='".Database::escape_string($expiration_date)."',
                 active='".Database::escape_string($active)."',
                 hr_dept_id=".intval($hr_dept_id);
+
         if (!is_null($creator_id)) {
             $sql .= ", creator_id='".intval($creator_id)."'";
         }
-        $sql .= " WHERE user_id='$user_id'";
+
+        $sql .= " WHERE id = '$user_id'";
         $return = Database::query($sql);
         if ($change_active == 1 && $return) {
             if ($active == 1) {
@@ -678,6 +685,7 @@ class UserManager
             }
             Event::addEvent($event_title, LOG_USER_ID, $user_id);
         }
+
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {
@@ -2564,7 +2572,7 @@ class UserManager
         }
 
         // Courses in which we subscribed out of any session
-        $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $sql = "SELECT
                     course.code,
@@ -3846,7 +3854,7 @@ class UserManager
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category = Database :: get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         //we filter the courses from the URL
         $join_access_url = $where_access_url = '';
@@ -4579,7 +4587,7 @@ class UserManager
      */
     public static function delete_inactive_student($student_id, $years = 2, $warning_message = false, $return_timestamp = false)
     {
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $sql = 'SELECT login_date FROM '.$tbl_track_login.'
                 WHERE login_user_id = '.intval($student_id).'
                 ORDER BY login_date DESC LIMIT 0,1';

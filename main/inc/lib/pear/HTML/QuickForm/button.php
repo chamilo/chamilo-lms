@@ -71,7 +71,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             $value = $this->_attributes['value'];
             unset($this->_attributes['value']);
             //$class = isset($this->_attributes['class']) ? $this->_attributes['class'] : 'btn btn-large';
-            $icon = $this->_attributes['icon'];
+            $icon = isset($this->_attributes['icon']) ? $this->_attributes['icon'] : 'check';
             $icon = '<i class="fa fa-'.$icon.'"></i> ';
 
             return

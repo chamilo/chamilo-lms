@@ -19,7 +19,6 @@
         </div>
         <div class="span3">
 
-            <div id="wallMessages" class="span5" style="min-height:1px"></div>
         </div>
     </div>
 {% endblock %}

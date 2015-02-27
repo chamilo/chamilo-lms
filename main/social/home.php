@@ -3,6 +3,7 @@
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
+ * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */
 /**
  * Initialization
@@ -118,17 +119,18 @@ $social_avatar_block .= '<div class="edit-profile">
                          </div>';
 $social_avatar_block .= '</div>';
 
+//Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 
 //Search box
 $social_search_block = '<div class="panel panel-info social-search">';
-$social_search_block .= '<div class="panel-heading">Busqueda de usuarios o grupos</div>';
+$social_search_block .= '<div class="panel-heading">'.get_lang("SearchUsers").'</div>';
 $social_search_block .= '<div class="panel-body">';
 $social_search_block.= UserManager::get_search_form('');
 $social_search_block.= '</div>';
 $social_search_block.= '</div>';
 
-//Skill
+//BLock Social Skill
 if (api_get_setting('allow_skills_tool') == 'true') {
     $social_skill_block = '<div class="panel panel-info social-skill">';
     $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
@@ -177,19 +179,25 @@ if (api_get_setting('allow_skills_tool') == 'true') {
                 );
             }
 
-           $lis .= Display::tag(
+            $lis .= Display::tag(
                 'li',
-                $badgeImage.
+                $badgeImage .
                 '<div class="badges-name">' . $skill['name'] . '</div>'
             );
         }
-        $social_skill_block.= '<div class="panel-body">';
+        $social_skill_block .= '<div class="panel-body">';
         $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
-        $social_skill_block.= '</div>';
+        $social_skill_block .= '</div>';
+    }else{
+
+        $social_skill_block .= '<div class="panel-body">';
+        $social_skill_block .= '<p>'. get_lang("SinCompetencias");
+        $social_skill_block .=  Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
+        $social_skill_block .= '</div>';
     }
-    //Colocar los botones anteriores
+    $social_skill_block.='</div>';
 }
-$social_skill_block.='</div>';
+
 
 
 //Group box by age
@@ -200,7 +208,6 @@ $social_group_block .= '<div class="panel-body">';
 $results = GroupPortalManager::get_groups_by_age(1, false);
 
 $groups_newest = array();
-
 
 if (!empty($results)) {
     foreach ($results as $result) {
@@ -227,21 +234,17 @@ if (!empty($results)) {
         );
 
         $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
-
         $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
-
         $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
         $groups_newest[] = array(
             Display::url(
                 $result['picture_uri'],
                 $group_url
             ),$result['name'],$group_info.$group_actions
-
         );
-
     }
 }
-
+//Top popular
 $results = GroupPortalManager::get_groups_by_popularity(1, false);
 
 $groups_pop = array();
@@ -260,28 +263,24 @@ foreach ($results as $result) {
     } else {
         $result['count'] = $result['count'] . ' ' . get_lang('Members');
     }
-    $result['name'] = Display::url(
-            api_ucwords(cut($result['name'], 40, true)),
-            $group_url
-        ) . Display::span(
-            '<br />' . $result['count'],
-            array('class' => 'box_description_group_member')
-        );
+    $result['name'] = '<div class="group-name">'.Display::url(
+            api_ucwords(cut($result['name'], 40, true)),$group_url)
+        .'</div><div class="count-username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
+
     $picture = GroupPortalManager::get_picture_group(
         $id,
         $result['picture_uri'],
         80
     );
-    $result['picture_uri'] = '<img class="social-groups-image" src="' . $picture['file'] . '" hspace="10" height="44" border="2" align="left" width="44" />';
-    $group_actions = '<div class="box_description_group_actions" ><a href="groups.php?#tab_browse-3">' . get_lang(
-            'SeeMore'
-        ) . '</a></div>';
+    $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
+    $group_actions = '<div class="group-more" ><a href="groups.php?#tab_browse-3">' . get_lang('SeeMore') . '</a></div>';
+    $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
     $groups_pop[] = array(
         Display::url($result['picture_uri'], $group_url),
-        $result['name'],
-        cut($result['description'], 120, true) . $group_actions
+        $result['name'],$group_info. $group_actions
     );
 }
+
 $list=count($groups_newest);
 
 if ($list > 0) {
@@ -296,10 +295,20 @@ if ($list > 0) {
     }
     $social_group_block.= "</div>";
 }
-
-if (count($groups_pop) > 0) {
+$list=count($groups_pop);
+if ($list > 0) {
+    $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
-    $social_group_block .= Display::return_sortable_grid(
+
+    for($i = 0;$i < $list; $i++){
+        $social_group_block.='<div class="items">';
+        $social_group_block.='<div class="group-image">' . $groups_pop[$i][0] . '</div>';
+        $social_group_block.='<div class="group-info">' . $groups_pop[$i][1];
+        $social_group_block.= $groups_pop[$i][2] . '</div>';
+        $social_group_block.="</div>";
+    }
+
+    /*$social_group_block .= Display::return_sortable_grid(
         'home_group',
         array(),
         $groups_pop,
@@ -307,9 +316,9 @@ if (count($groups_pop) > 0) {
         array(),
         false,
         array(true, true, true, true, true)
-    );
+    );*/
 }
-$social_group_block .= '</div></div>';
+$social_group_block .= '</div>';
 
 $tpl = new Template(get_lang('SocialNetwork'));
 $tpl->assign('social_avatar_block', $social_avatar_block);

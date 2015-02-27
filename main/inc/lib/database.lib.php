@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Driver\Statement;
+
 /**
  * Class Database
  *  This is the main database library for Chamilo.
@@ -17,13 +21,30 @@
  */
 class Database
 {
-    /* Variable use only in the installation process to log errors. See the Database::query function */
+    /* Variable use only in the installation process to log errors.
+    See the Database::query function */
     static $log_queries = false;
-    /*
-        Accessor methods
-        Usually, you won't need these directly but instead
-        rely on of the get_xxx_table methods.
-    */
+
+    /**
+     * @var EntityManager
+     */
+    private static $em;
+
+    /**
+     * @param EntityManager $em
+     */
+    public function setManager($em)
+    {
+        self::$em = $em;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public static function getManager()
+    {
+        return self::$em;
+    }
 
     /**
      *  Returns the name of the main database.
@@ -32,15 +53,6 @@ class Database
     {
         global $_configuration;
         return $_configuration['main_database'];
-    }
-
-    /**
-     *  Returns the name of the statistics database.
-     *  @todo use main_database
-     */
-    public static function get_statistic_database()
-    {
-        return self::get_main_database();
     }
 
     /**
@@ -173,37 +185,6 @@ class Database
         //return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
     }
 
-    /**
-     * This generic method returns the correct and complete name of any
-     * statistic table of which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
-     * instead of directly using magic words in your tool code.
-     * @deprecated use get_main_table
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_statistic_table($short_table_name)
-    {
-        return self::get_main_table($short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any user
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_user_personal_table($short_table_name)
-    {
-        return self::get_main_table($short_table_name);
-    }
-
-    public static function get_course_chat_connected_table($database_name = '')
-    {
-        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), TABLE_CHAT_CONNECTED);
-    }
-
     /*
         Query methods
         These methods execute a query and return the result(s).
@@ -217,21 +198,6 @@ class Database
     {
         $table = self::get_main_table(TABLE_MAIN_COURSE);
         return self::store_result(self::query("SELECT *, id as real_id FROM $table"));
-    }
-
-    /**
-     *  Returns an array with all database fields for the specified course.
-     *
-     *  @param string The real (system) course code (main course table ID)
-     *  @todo shouldn't this be in the course.lib.php script?
-     */
-    public static function get_course_info($course_code)
-    {
-        $course_code = self::escape_string($course_code);
-        $table = self::get_main_table(TABLE_MAIN_COURSE);
-        $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT *, id as real_id FROM $table WHERE code = '$course_code'")));
-        return $result === false ? array('db_name' => '') : $result;
     }
 
     /**
@@ -267,60 +233,6 @@ class Database
         $category_id = intval($category_id);
         $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
         return $info ? $info['course_code'] : false;
-    }
-
-    /**
-     *  This method creates an abstraction layer between database field names
-     *  and field names expected in code.
-     *
-     *  This approach helps when changing database names.
-     *  It's also useful now to get rid of the 'franglais'.
-     *
-     *  @todo   add more array entries to abstract course info from field names
-     *  @author Roan Embrechts
-     *
-     *  @todo What's the use of this method. I think this is better removed.
-     *        There should be consistency in the variable names and the
-     *            use throughout the scripts
-     *        for the database name we should consistently use or db_name
-     *            or database (db_name probably being the better one)
-     */
-    public static function generate_abstract_course_field_names($result_array)
-    {
-        $visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
-        $code        = isset($result_array['code']) ? $result_array['code'] : null;
-        $title       = isset($result_array['title']) ? $result_array['title'] : null;
-        $db_name     = isset($result_array['db_name']) ? $result_array['db_name'] : null;
-        $category_code = isset($result_array['category_code']) ? $result_array['category_code'] : null;
-        $result_array['official_code'] = $visual_code;
-        $result_array['visual_code']   = $visual_code;
-        $result_array['real_code']     = $code;
-        $result_array['system_code']   = $code;
-        $result_array['title']         = $title;
-        $result_array['database']      = $db_name;
-        $result_array['faculty']       = $category_code;
-        //$result_array['directory'] = $result_array['directory'];
-        /*
-        still to do: (info taken from local.inc.php)
-
-        $_course['id'          ]         = $cData['cours_id'         ]; //auto-assigned integer
-        $_course['name'        ]         = $cData['title'            ];
-        $_course['official_code']        = $cData['visual_code'        ]; // use in echo
-        $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-        $_course['path'        ]         = $cData['directory'        ]; // use as key in path
-        $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-        $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['dbName'] . $_configuration['db_glue']; // use in all queries
-        $_course['titular'     ]         = $cData['tutor_name'       ];
-        $_course['language'    ]         = $cData['course_language'   ];
-        $_course['extLink'     ]['url' ] = $cData['department_url'    ];
-        $_course['extLink'     ]['name'] = $cData['department_name'];
-        $_course['categoryCode']         = $cData['faCode'           ];
-        $_course['categoryName']         = $cData['faName'           ];
-
-        $_course['visibility'  ]         = (bool) ($cData['visibility'] == 2 || $cData['visibility'] == 3);
-        $_course['registrationAllowed']  = (bool) ($cData['visibility'] == 1 || $cData['visibility'] == 2);
-        */
-        return $result_array;
     }
 
     /**

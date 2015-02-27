@@ -139,8 +139,10 @@ class HookAdvancedSubscription extends HookObserver implements
                 'all',
                 '',
                 array(
-                    // user.user_id
+                    // user_field_values.value
                     'user_id' => array('name' => 'user_id', 'type' => 'xsd:int'),
+                    // user_field.user_id
+                    'user_field' => array('name' => 'user_field', 'type' => 'xsd:string'),
                     // session.id
                     'session_id' => array('name' => 'session_id', 'type' => 'xsd:int'),
                     // user.profile_completes
@@ -415,7 +417,7 @@ class HookAdvancedSubscription extends HookObserver implements
         global $debug;
 
         if ($debug) {
-            error_log('WSUserSubscribedInCourse');
+            error_log(__FUNCTION__);
             error_log('Params ' . print_r($params, 1));
         }
         if (!WSHelperVerifyKey($params)) {
@@ -473,11 +475,10 @@ class HookAdvancedSubscription extends HookObserver implements
         $result = return_error(WS_ERROR_NOT_FOUND_RESULT);
         // Check params
         if (is_array($params) && !empty($params['session_id']) && !empty($params['user_id'])) {
-            $userId = (int) $params['user_id'];
+            $userId = UserManager::get_user_id_from_original_id($params['user_id'], $params['user_field']);
             $sessionId = (int) $params['session_id'];
             // Check if user exists
-            if (
-                UserManager::is_user_id_valid($userId) &&
+            if (UserManager::is_user_id_valid($userId) &&
                 SessionManager::isValidId($sessionId)
             ) {
                 // Check if student is already subscribed

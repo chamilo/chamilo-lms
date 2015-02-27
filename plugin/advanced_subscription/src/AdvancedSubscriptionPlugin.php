@@ -829,7 +829,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         if (!empty($sessionId)) {
             // Assign variables
-            $fieldsArray = array('id', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
+            $fieldsArray = array('code', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
             $extraSession = new ExtraFieldValue('session');
             $extraField = new ExtraField('session');
             // Get session fields
@@ -843,12 +843,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
 
             $mergedArray = array_merge(array($sessionId), array_keys($fields));
-            $sessionFieldValueList = $extraSession->get_all(
-                array(
-                    'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
-                )
-            );
-            foreach ($sessionFieldValueList as $sessionFieldValue) {
+
+            $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES) .
+                " WHERE session_id = %d AND field_id IN (%d, %d, %d, %d, %d, %d, %d)";
+            $sql = vsprintf($sql, $mergedArray);
+            $sessionFieldValueList = Database::query($sql);
+            while ($sessionFieldValue = Database::fetch_assoc($sessionFieldValueList)) {
                 // Check if session field value is set in session field list
                 if (isset($fields[$sessionFieldValue['field_id']])) {
                     $var = $fields[$sessionFieldValue['field_id']];

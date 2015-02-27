@@ -5518,10 +5518,13 @@ class SessionManager
                     if ($sessionFieldValue['session_id'] == $id) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
-                            $var = $fields[$sessionFieldValue['field_id']];
-                            $val = $sessionFieldValue['field_value'];
-                            // Assign session field value to session
-                            $session[$var] = $val;
+                            // Avoid overwriting the session's ID field
+                            if ($fields[$sessionFieldValue['field_id']] != 'id') {
+                                $var = $fields[$sessionFieldValue['field_id']];
+                                $val = $sessionFieldValue['field_value'];
+                                // Assign session field value to session
+                                $session[$var] = $val;
+                            }
                         }
                     }
                 }
@@ -5737,19 +5740,26 @@ class SessionManager
 
         $term = Database::escape_string($term);
 
-        $resultData = Database::select('*', $sTable, array(
-            'where' => array(
-                "name LIKE %?% " => $term,
-                "OR description LIKE %?% " => $term,
-                "OR id IN (
+        if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term,
+                    "OR id IN (
                     SELECT session_id
                     FROM $sfvTable
                     WHERE field_value LIKE %?%
                 ) " => $term
-            )
-        ));
+                )
+            ));
+        } else {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term
+                )
+            ));
 
-        if (empty($extraFieldsToInclude)) {
             return $resultData;
         }
 

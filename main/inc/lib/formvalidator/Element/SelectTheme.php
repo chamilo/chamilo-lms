@@ -4,12 +4,12 @@
 /**
 * A dropdownlist with all themes to use with QuickForm
 */
-class HTML_QuickForm_Select_Theme extends HTML_QuickForm_select
+class SelectTheme extends HTML_QuickForm_select
 {
 	/**
 	 * Class constructor
 	 */
-	function HTML_QuickForm_Select_Theme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {	    
+	function SelectTheme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
 	    if (!isset($attributes['class'])) {
 	        //todo this was comment due a bug in infocours.php with jquery-ui 
             //$attributes['class'] = 'chzn-select';

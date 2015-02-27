@@ -5660,6 +5660,19 @@ i.size-32.icon-new-work{
 .social-skill .dropdown-menu{
   top: 30px;
 }
+.social-group .list-group-newest .items{
+  display: block;
+}
+.social-group .list-group-newest .items .group-image{
+  vertical-align: top;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.social-group .list-group-newest .items .group-image,
+.social-group .list-group-newest .items .group-info
+{
+  display: inline-block;
+}
 /* deleted bootstrap 3 update */
 
 .panel {

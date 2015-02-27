@@ -218,7 +218,7 @@ if (!empty($results)) {
 
         $result['name'] = '<div class="group-name">'.Display::url(
                           api_ucwords(cut($result['name'], 40, true)), $group_url)
-                          .'</div><div class="count-username">'.$result['count'].'</div>';
+                          .'</div><div class="count-username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$result['count'].'</div>';
 
         $picture = GroupPortalManager::get_picture_group(
             $id,
@@ -228,17 +228,14 @@ if (!empty($results)) {
 
         $result['picture_uri'] = '<img class="group-image" src="' . $picture['file'] . '" />';
 
-        $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore'
-            ) . '</a></div>';
+        $group_actions = '<div class="group-more"><a href="groups.php?#tab_browse-2">' . get_lang('SeeMore') . '</a></div>';
 
-
+        $group_info= '<div class="description"><p>' . cut($result['description'], 120, true) . "</p></div>";
         $groups_newest[] = array(
             Display::url(
                 $result['picture_uri'],
                 $group_url
-            ),
-            $result['name'],
-            cut($result['description'], 120, true) . $group_actions
+            ),$result['name'],$group_info.$group_actions
 
         );
 
@@ -287,25 +284,16 @@ foreach ($results as $result) {
 }
 $list=count($groups_newest);
 
-if (count($groups_newest) > 0) {
+if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
     for($i = 0;$i < $list; $i++){
-        $social_group_block.= $groups_newest[0];
+        $social_group_block.='<div class="items">';
+        $social_group_block.='<div class="group-image">' . $groups_newest[$i][0] . '</div>';
+        $social_group_block.='<div class="group-info">' . $groups_newest[$i][1];
+        $social_group_block.= $groups_newest[$i][2] . '</div>';
+        $social_group_block.="</div>";
     }
-    echo "<pre>";
-    print_r($groups_newest);
-    echo "</pre>";
-    /*$social_group_block .= Display::return_sortable_grid(
-        'list',
-        array(),
-        $groups_newest,
-        array('hide_navigation' => true, 'per_page' => 100),
-        array(),
-        false,
-        array(true, true, true, false)
-    );*/
-
     $social_group_block.= "</div>";
 }
 

@@ -3,7 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CourseBundle\Entity\CTool;
+//use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Chamilo\UserBundle\Entity\User;
-// @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
+
 /**
  * Class Course
  *

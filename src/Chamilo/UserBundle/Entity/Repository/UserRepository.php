@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\UserBundle\Repository;
+namespace Chamilo\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
@@ -11,14 +11,13 @@ use Chamilo\UserBundle\Entity\User as User;
 
 /**
  * Class UserRepository
- * @package Entity\Repository
+ * @package Chamilo\UserBundle\Repository
  */
 class UserRepository extends EntityRepository
 {
     public function getGroupsByUser($userId)
     {
         $user = $this->find($userId);
-
     }
 
     /**

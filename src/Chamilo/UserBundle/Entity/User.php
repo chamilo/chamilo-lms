@@ -31,14 +31,11 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
  * //Vich\Uploadable
- * UniqueEntity("username")
- * @ORM\Entity()
- * ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
-
+ * @UniqueEntity("username")
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-//class User extends BaseUser implements ParticipantInterface, ThemeUser
-class User
+class User //class User extends BaseUser implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -289,7 +286,7 @@ class User
      */
     //protected $salt;
 
-    private $isActive;
+    //private $isActive;
 
     /**
      * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")

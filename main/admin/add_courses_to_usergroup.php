@@ -148,7 +148,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 function search($needle,$type)
 {
     global $elements_in;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
 

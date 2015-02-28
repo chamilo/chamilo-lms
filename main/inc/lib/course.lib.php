@@ -997,7 +997,7 @@ class CourseManager
         }
 
         $real_course_id = $course_info['system_code'];
-        $real_course_info = Database::get_course_info($real_course_id);
+        $real_course_info = api_get_course_info($real_course_id);
         $real_course_name = $real_course_info['title'];
         $real_course_visual_code = $real_course_info['visual_code'];
         $real_course_real_code = Database::escape_string($course_info['system_code']);
@@ -2100,87 +2100,6 @@ class CourseManager
     }
 
     /**
-     * Checks all parameters needed to create a virtual course.
-     * If they are all set, the virtual course creation procedure is called.
-     *
-     * Call this function instead of create_virtual_course
-     * @param  string  Course code
-     * @param  string  Course title
-     * @param  string  Wanted course code
-     * @param  string  Course language
-     * @param  string  Course category
-     * @return bool    True on success, false on error
-     * @deprecated virtual course feature is not supported
-     */
-    public static function attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
-        //better: create parameter list, check the entire list, when false display errormessage
-        self::check_parameter_or_fail($real_course_code, 'Unspecified parameter: real course id.');
-        self::check_parameter_or_fail($course_title, 'Unspecified parameter: course title.');
-        self::check_parameter_or_fail($wanted_course_code, 'Unspecified parameter: wanted course code.');
-        self::check_parameter_or_fail($course_language, 'Unspecified parameter: course language.');
-        self::check_parameter_or_fail($course_category, 'Unspecified parameter: course category.');
-
-        return self::create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
-    }
-
-    /**
-     * This function creates a virtual course.
-     * It assumes all parameters have been checked and are not empty.
-     * It checks wether a course with the $wanted_course_code already exists.
-     *
-     * Users of this library should consider this function private,
-     * please call attempt_create_virtual_course instead of this one.
-     *
-     * note: The virtual course 'owner' id (the first course admin) is set to the CURRENT user id.
-     * @param  string  Course code
-     * @param  string  Course title
-     * @param  string  Wanted course code
-     * @param  string  Course language
-     * @param  string  Course category
-     * @return true if the course creation succeeded, false otherwise
-     * @todo research: expiration date of a course
-     * @deprecated virtual course feature is not supported
-     */
-    public static function create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
-        global $firstExpirationDelay;
-
-        $user_id = api_get_user_id();
-        $real_course_info = Database::get_course_info($real_course_code);
-        $real_course_code = $real_course_info['system_code'];
-
-        //check: virtual course creation fails if another course has the same
-        //code, real or fake.
-        if (self::course_code_exists($wanted_course_code)) {
-            Display::display_error_message($wanted_course_code.' - '.get_lang('CourseCodeAlreadyExists'));
-            return false;
-        }
-
-        //add data to course table, course_rel_user
-        $course_sys_code = $wanted_course_code;
-        $course_screen_code = $wanted_course_code;
-        $course_repository = $real_course_info['directory'];
-        $course_db_name = $real_course_info['db_name'];
-        $responsible_teacher = $real_course_info['tutor_name'];
-        $faculty_shortname = $course_category;
-        // $course_title = $course_title;
-        // $course_language = $course_language;
-        $teacher_id = $user_id;
-
-        //HACK ----------------------------------------------------------------
-        $expiration_date = time() + $firstExpirationDelay;
-        //END HACK ------------------------------------------------------------
-
-        AddCourse::register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $responsible_teacher, $faculty_shortname, $course_title, $course_language, $teacher_id, $expiration_date);
-
-        //above was the normal course creation table update call,
-        //now one more thing: fill in the target_course_code field
-        Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE)." SET target_course_code = '$real_course_code'
-                WHERE code = '".Database::escape_string($course_sys_code)."' LIMIT 1 ");
-
-        return true;
-    }
-
-    /**
      * Delete a course
      * This function deletes a whole course-area from the platform. When the
      * given course is a virtual course, the database and directory will not be
@@ -2634,7 +2553,7 @@ class CourseManager
         $codes = array();
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_user_course_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $special_course_list = self::get_special_course_list();
 
         $with_special_courses = $without_special_courses = '';
@@ -3677,7 +3596,7 @@ class CourseManager
         }
 
         // Step 1: We get all the categories of the user
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
         $result = Database::query($sql);
         $html = null;
@@ -3874,7 +3793,7 @@ class CourseManager
     {
         global $_user;
         $output = array();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM ".$table_category." WHERE user_id='".intval($_user['user_id'])."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
@@ -5481,6 +5400,30 @@ class CourseManager
         }
 
         return $result;
+    }
+
+    /**
+     *  @return array a list (array) of all courses.
+     */
+    public static function get_course_list()
+    {
+        $table = Database::get_main_table(TABLE_MAIN_COURSE);
+        return Database::store_result(self::query("SELECT *, id as real_id FROM $table"));
+    }
+
+    /**
+     * Returns course code from a given gradebook category's id
+     * @param int  Category ID
+     * @return string  Course code
+     */
+    public static function get_course_by_category($category_id)
+    {
+        $category_id = intval($category_id);
+        $info = Database::fetch_array(
+            Database::query('SELECT course_code FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).'
+            WHERE id='.$category_id), 'ASSOC'
+        );
+        return $info ? $info['course_code'] : false;
     }
 
 }

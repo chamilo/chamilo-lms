@@ -121,6 +121,15 @@ if (defined('SYSTEM_INSTALLATION')) {
                     iDatabase::query($sql);
                 }
             }
+
+            $res = iDatabase::query("SELECT user_id FROM $dbNameForm.user");
+            $result = iDatabase::query($sql);
+            $users = Database::store_result($result);
+            foreach ($users as $user) {
+                $userId = $user['user_id'];
+                $sql = "UPDATE $dbNameForm.user SET id = $userId WHERE user_id = $userId";
+                iDatabase::query($sql);
+            }
         }
     }
 

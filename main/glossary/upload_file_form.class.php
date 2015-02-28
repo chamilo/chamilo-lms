@@ -46,7 +46,7 @@ class UploadFileForm extends \FormValidator
 
         $this->addHidden(Request::PARAM_SEC_TOKEN, Access::instance()->get_token());
         $label = get_lang('ImportCSVFileLocation');
-        $this->add_file('file', $label);
+        $this->addFile('file', $label);
         $this->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
         $this->addCheckBox('deleteall', '', get_lang('DeleteAllGlossaryTerms'));
         $this->addButton('save', get_lang('Save'));

@@ -12,7 +12,7 @@
  */
 function fill_whoisonline()
 {
-	$table_e_online = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$table_e_online = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$max = 100;
 
 	//Cleaning the table

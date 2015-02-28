@@ -2541,7 +2541,7 @@ class learnpathItem
 
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database :: get_statistic_table(
+                                                    FROM ' . Database :: get_main_table(
                                                     TABLE_STATISTIC_TRACK_E_EXERCISES
                                                 ) . '
                                                     WHERE exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
@@ -3867,7 +3867,7 @@ class learnpathItem
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
-                            $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+                            $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
                             $safe_exe_id = intval($_REQUEST['exeId']);
                             $sql = "SELECT start_date,exe_date

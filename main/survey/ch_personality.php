@@ -13,9 +13,9 @@ class ch_personality extends survey_question
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    public function create_form($survey_data, $form_content)
+    public function createForm($survey_data, $form_content)
     {
-        parent::create_form($survey_data, $form_content);
+        parent::createForm($survey_data, $form_content);
         $this->html .= '	<tr>';
         $this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
         $this->html .= '	</tr>';

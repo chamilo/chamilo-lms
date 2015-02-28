@@ -63,8 +63,12 @@ ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL defaul
 ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
+ALTER TABLE user MODIFY COLUMN user_id int NOT NULL;
+ALTER TABLE user DROP PRIMARY KEY;
+ALTER TABLE user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.12' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.13' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

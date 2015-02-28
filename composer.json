@@ -10,7 +10,7 @@
     },
     "autoload": {
         "psr-0": {
-            "": "src/"
+            "Chamilo": "src/"
         },
         "classmap": [
             "main/auth",
@@ -47,7 +47,11 @@
         "mpdf/mpdf": "5.7.4",
         "barryvdh/elfinder-builds": "2.1.0.3",
         "jbroadway/urlify": "1.0.3-stable",
-        "monolog/monolog": "~1.0"
+        "monolog/monolog": "~1.0",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "symfony/doctrine-bridge": "2.6.4",
+        "symfony/validator": "2.6.4",
+        "gedmo/doctrine-extensions": "~2.3"
     },
     "extra": {
         "branch-alias": {

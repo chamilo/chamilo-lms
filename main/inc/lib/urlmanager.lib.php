@@ -1041,7 +1041,7 @@ class UrlManager
      */
     public static function searchCourseCategoryAjax($needle)
     {
-        $response = new XajaxResponse();
+        $response = new xajaxResponse();
         $return = '';
 
         if (!empty($needle)) {

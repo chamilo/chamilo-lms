@@ -25,7 +25,7 @@ class Agenda
     {
         //Table definitions
         $this->tbl_global_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-        $this->tbl_personal_agenda = Database::get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $this->tbl_personal_agenda = Database::get_main_table(TABLE_PERSONAL_AGENDA);
         $this->tbl_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $this->table_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
 

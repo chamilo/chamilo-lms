@@ -69,7 +69,7 @@ function search_users($needle, $type)
 {
     global $tbl_user, $tbl_session_rel_user, $id_session;
 
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
 
     if (!empty($needle) && !empty($type)) {
@@ -92,6 +92,13 @@ function search_users($needle, $type)
         ) {
             $showOfficialCode = true;
             $order_clause = ' ORDER BY official_code, firstname, lastname, username';
+        }
+
+        if (api_is_session_admin()
+            && isset($_configuration['prevent_session_admins_to_manage_all_users'])
+            && $_configuration['prevent_session_admins_to_manage_all_users'] == 'true'
+        ) {
+            $order_clause = " AND user.creator_id = " . api_get_user_id() . $order_clause;
         }
 
         $cond_user_id = '';
@@ -201,7 +208,7 @@ function search_users($needle, $type)
                 }
             }
         }
-        //echo Database::fixQuery($sql);
+
         $rs = Database::query($sql);
         $i = 0;
         if ($type=='single') {

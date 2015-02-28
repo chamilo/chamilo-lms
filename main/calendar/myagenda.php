@@ -62,7 +62,7 @@ $TABLECOURS 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$tbl_personal_agenda= Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+$tbl_personal_agenda= Database :: get_main_table(TABLE_PERSONAL_AGENDA);
 
 // the variables for the days and the months
 // Defining the shorts for the days

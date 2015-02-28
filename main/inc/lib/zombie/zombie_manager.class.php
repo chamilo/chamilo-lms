@@ -32,7 +32,7 @@ class ZombieManager
         $ceiling = date('Y-m-d H:i:s', $ceiling);
 
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $login_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = 'SELECT
                     user.user_id,

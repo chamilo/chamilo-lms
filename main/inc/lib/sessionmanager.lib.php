@@ -66,7 +66,7 @@ class SessionManager
      * @param string $duration
      * @param string $description Optional. The session description
      * @param int $showDescription Optional. Whether show the session description
-     * @param array $extrafields 
+     * @param array $extrafields
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -825,8 +825,8 @@ class SessionManager
         $forum_post = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $wiki = Database::get_course_table(TABLE_WIKI);
-        $table_stats_default = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_stats_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
 
@@ -5403,7 +5403,7 @@ class SessionManager
     {
         $userId = intval($userId);
 
-        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $trackLoginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $whereConditions = array(
             'login_user_id = ? ' => $userId
@@ -5446,8 +5446,8 @@ class SessionManager
     }
 
     /**
-     * Returns list of a few data from session (name, short description, start 
-     * date, end date) and the given extra fields if defined based on a 
+     * Returns list of a few data from session (name, short description, start
+     * date, end date) and the given extra fields if defined based on a
      * session category Id.
      * @param int $categoryId The internal ID of the session category
      * @param string $target Value to search for in the session field values

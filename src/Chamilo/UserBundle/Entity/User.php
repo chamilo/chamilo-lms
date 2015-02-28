@@ -32,28 +32,10 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
  * @ORM\Table(name="user")
  * //Vich\Uploadable
  * @UniqueEntity("username")
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
- * @ORM\AttributeOverrides({
- *      @ORM\AttributeOverride(name="email",
- *         column=@ORM\Column(
- *             name="email",
- *             type="string",
- *             length=255,
- *             unique=false
- *         )
- *     ),
- *     @ORM\AttributeOverride(name="emailCanonical",
- *         column=@ORM\Column(
- *             name="emailCanonical",
- *             type="string",
- *             length=255,
- *             unique=false
- *         )
- *     )
- * })
+ * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User extends BaseUser implements ParticipantInterface, ThemeUser
+class User //class User extends BaseUser implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -143,7 +125,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     //private $pictureUri;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
+     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
      * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
      */
     protected $pictureUri;
@@ -276,12 +258,12 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $classes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user")
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user")
      **/
     protected $dropBoxReceivedFiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
      **/
     protected $dropBoxSentFiles;
 
@@ -297,17 +279,17 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
      * )
      */
-    protected $groups;
+    //protected $groups;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     //protected $salt;
 
-    private $isActive;
+    //private $isActive;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
      **/
     protected $curriculumItems;
 
@@ -327,12 +309,12 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      **/
     protected $extraFields;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
      **/
     protected $resourceNodes;
 

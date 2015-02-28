@@ -440,7 +440,9 @@ class HTML_QuickForm extends HTML_Common
                     $defaultValues = $this->_recursiveFilter($filter, $defaultValues);
                 }
             }
+
             $this->_defaultValues = HTML_QuickForm::arrayMerge($this->_defaultValues, $defaultValues);
+            $this->_constantValues = $this->_defaultValues;
             foreach (array_keys($this->_elements) as $key) {
                 $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
             }
@@ -541,8 +543,9 @@ class HTML_QuickForm extends HTML_Common
      * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
-    function &createElement($elementType) {
-        $args    =  func_get_args();
+    public function &createElement($elementType)
+    {
+        $args =  func_get_args();
         $element =& HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
         return $element;
     } // end func createElement

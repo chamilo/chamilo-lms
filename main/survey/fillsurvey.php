@@ -1171,7 +1171,7 @@ if ($survey_data['survey_type'] === '0') {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
             if ($show == 0) {
-                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+                $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
 //                echo '<button type="submit" name="next_survey_page" class="survey-next">'.get_lang('StartSurvey').'</button>';
             } else {
                 $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');
@@ -1188,7 +1188,7 @@ if ($survey_data['survey_type'] === '0') {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
                 if ($show == 0) {
-                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+                    $form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
                     //echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';
                 } else {
                     $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right');

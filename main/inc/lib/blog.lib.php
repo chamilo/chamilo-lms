@@ -1124,7 +1124,7 @@ class Blog
 				$config['ToolbarSet'] = 'Project';
 			}
 			$form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
-			$form->add_file('user_upload', get_lang('AddAnAttachment'));
+			$form->addFile('user_upload', get_lang('AddAnAttachment'));
 			$form->addTextarea('post_file_comment', get_lang('FileComment'));
 			$form->addHidden('new_post_submit', 'true');
 			$form->addButton('save', get_lang('Save'));
@@ -2226,7 +2226,7 @@ class Blog
 			$config['ToolbarSet'] = 'ProjectCommentStudent';
 		}
 		$form->addHtmlEditor('comment', get_lang('Comment'), false, false, $config);
-		$form->add_file('user_upload', get_lang('AddAnAttachment'));
+		$form->addFile('user_upload', get_lang('AddAnAttachment'));
 
 		$form->addTextarea('post_file_comment', get_lang('FileComment'));
 

@@ -390,7 +390,6 @@ EOT;
         $this->addRule(array($name_1, $name_2), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
     }
 
-
     /**
      * Adds a progress bar to the form.
      *

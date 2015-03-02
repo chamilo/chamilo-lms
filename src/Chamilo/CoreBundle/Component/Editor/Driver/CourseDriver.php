@@ -23,46 +23,49 @@ class CourseDriver extends Driver implements DriverInterface
 
         $courseInfo = $this->connector->course;
 
-        $coursePath = api_get_path(SYS_COURSE_PATH);
-        $courseDir = $courseInfo['directory'] . '/document';
-        $baseDir = $coursePath . $courseDir;
+        if (!empty($courseInfo)) {
 
-        // Creates shared folder
+            $coursePath = api_get_path(SYS_COURSE_PATH);
+            $courseDir = $courseInfo['directory'] . '/document';
+            $baseDir = $coursePath . $courseDir;
 
-        if (!file_exists($baseDir.'/shared_folder')) {
-            $title = get_lang('UserFolders');
-            $folderName = '/shared_folder';
-            //$groupId = 0;
-            $visibility = 0;
-            create_unexisting_directory(
-                $courseInfo,
-                $userId,
-                $sessionId,
-                0,
-                null,
-                $baseDir,
-                $folderName,
-                $title,
-                $visibility
-            );
-        }
+            // Creates shared folder
 
-        // Creates user-course folder
-        if (!file_exists($baseDir.'/shared_folder/sf_user_'.$userId)) {
-            $title = $userInfo['complete_name'];
-            $folderName = '/shared_folder/sf_user_'.$userId;
-            $visibility = 1;
-            create_unexisting_directory(
-                $courseInfo,
-                $userId,
-                $sessionId,
-                0,
-                null,
-                $baseDir,
-                $folderName,
-                $title,
-                $visibility
-            );
+            if (!file_exists($baseDir . '/shared_folder')) {
+                $title = get_lang('UserFolders');
+                $folderName = '/shared_folder';
+                //$groupId = 0;
+                $visibility = 0;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
+
+            // Creates user-course folder
+            if (!file_exists($baseDir . '/shared_folder/sf_user_' . $userId)) {
+                $title = $userInfo['complete_name'];
+                $folderName = '/shared_folder/sf_user_' . $userId;
+                $visibility = 1;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
         }
     }
 

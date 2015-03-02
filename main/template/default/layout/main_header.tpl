@@ -99,7 +99,6 @@
                     </div>
                 </div>
             </header>
-            {% endif %}
 
             {# menu #}
             {% block menu %}

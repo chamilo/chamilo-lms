@@ -348,35 +348,6 @@ EOT;
     }
 
     /**
-     * Adds a datepicker element to the form
-     * A rule is added to check if the date is a valid one
-     * @param string $label	The label for the form-element
-     * @param string $name	The element name
-     * @deprecated
-     */
-    public function add_datepicker($name, $label)
-    {
-        $this->addElement('DatePicker', $name, $label, array('form_name' => $this->getAttribute('name')));
-        $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
-        $this->addRule($name, get_lang('InvalidDate'), 'date');
-    }
-
-    /**
-     * Adds a timewindow element to the form.
-     * 2 datepicker elements are added and a rule to check if the first date is
-     * before the second one.
-     * @param string $label	 The label for the form-element
-     * @param string $name	 The element name
-     * @deprecated
-     */
-    public function add_timewindow($name_1, $name_2, $label_1, $label_2)
-    {
-        $this->add_datepicker($name_1, $label_1);
-        $this->add_datepicker($name_2, $label_2);
-        $this->addRule(array($name_1, $name_2), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-    }
-
-    /**
      * Adds a progress bar to the form.
      *
      * Once the user submits the form, a progress bar (animated gif) is

@@ -178,6 +178,7 @@ class UserManager
                 expiration_date =     '".Database::escape_string($expiration_date)."',
                 hr_dept_id =         '".Database::escape_string($hr_dept_id)."',
                 active =             '".Database::escape_string($active)."'";
+
         $result = Database::query($sql);
 
         if ($result) {

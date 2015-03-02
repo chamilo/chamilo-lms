@@ -25,6 +25,11 @@
     {{ "YouMustAcceptTermsAndConditions"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name) }}
 </div>
 {% endif %}
+{% if percentMinimun > profileCompleted %}
+    <div class="alert alert-warning legal-terms-popup">
+        {{ "YouMustFillXPercentOfYourProfileAtLeast"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(percentMinimun, profileCompleted) }}
+    </div>
+{% endif %}
 <div class="legal-terms legal-terms-popup">
     {{ termsContent }}
 </div>

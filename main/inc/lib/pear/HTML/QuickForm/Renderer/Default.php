@@ -147,7 +147,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     *
     * @access public
     */
-    function HTML_QuickForm_Renderer_Default()
+    public function HTML_QuickForm_Renderer_Default()
     {
         parent::__construct();
     } // end constructor
@@ -158,7 +158,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access public
     * @return string
     */
-    function toHtml()
+    public function toHtml()
     {
         // _hiddenHtml is cleared in finishForm(), so this only matters when
         // finishForm() was not called (e.g. group::toHtml(), bug #3511)
@@ -186,7 +186,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access   public
     * @return   void
     */
-    function finishForm(&$form)
+    public function finishForm(&$form)
     {
         // add a required note, if one is needed
         if (!empty($form->_required) && !$form->_freezeAll) {
@@ -295,9 +295,17 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access public
     * @return void
     */
-    function renderElement(&$element, $required, $error) {
+    public function renderElement(&$element, $required, $error)
+    {
         if (!$this->_inGroup) {
-            $html = $this->_prepareTemplate($element->getName(), $element->getLabel(), $required, $error, $element->getLabelFor());
+            $html = $this->_prepareTemplate(
+                $element->getName(),
+                $element->getLabel(),
+                $required,
+                $error,
+                $element->getLabelFor()
+            );
+
             $this->_html .= str_replace('{element}', $element->toHtml(), $html);
         } elseif (!empty($this->_groupElementTemplate)) {
             $html = str_replace('{label}', $element->getLabel(), $this->_groupElementTemplate);

@@ -5483,4 +5483,28 @@ class CourseManager
         return $result;
     }
 
+    /**
+     * This function gets all the courses that are not in a session
+     * @param date Start date
+     * @param date End date
+     * @return array Not-in-session courses
+     */
+    public static function getCoursesWithoutSession($startDate = null, $endDate = null)
+    {
+        $dateConditional = ($startDate && $endDate) ?
+            " WHERE id_session IN (SELECT id FROM ".Database::get_main_table(TABLE_MAIN_SESSION).
+            " WHERE date_start = '$startDate' AND date_end = '$endDate')" :
+            null;
+        $query = "SELECT id, code, title FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE CODE NOT IN
+            (SELECT DISTINCT course_code FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional.")
+            ORDER BY id";
+
+        $result = Database::query($query);
+        $courses = array();
+        while ($row = Database::fetch_array($result)) {
+            $courses[] = $row;
+        }
+        return $courses;
+    }
+
 }

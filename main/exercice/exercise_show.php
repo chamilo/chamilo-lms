@@ -66,7 +66,7 @@ if (api_is_course_session_coach(
     }
 }
 
-$maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
+$maxEditors = isset($_configuration['exercise_max_ckeditors_in_page']) ? $_configuration['exercise_max_ckeditors_in_page'] : 0;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise

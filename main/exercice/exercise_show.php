@@ -127,7 +127,7 @@ if ($origin != 'learnpath') {
 }
 ?>
 <script>
-var maxEditors = '<?php echo intval($maxEditors); ?>';
+var maxEditors = <?php echo intval($maxEditors); ?>;
 
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
@@ -154,7 +154,7 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-        if (maxEditors == 0) {
+        if (CKEDITOR.instances[oHidden.name]) {
             oHidden.value = CKEDITOR.instances[oHidden.name].getData();
         } else {
             oHidden.value = $("textarea[name='" + oHidden.name + "']").val();

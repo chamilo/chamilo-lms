@@ -362,20 +362,6 @@ EOT;
     }
 
     /**
-     * Adds a date picker date element to the form
-     * A rule is added to check if the date is a valid one
-     * @param string $label	 The label for the form-element
-     * @param string $name	 The element name
-     * @deprecated
-     */
-    public function add_datepickerdate($name, $label)
-    {
-        $this->addElement('DatePickerDate', $name, $label, array('form_name' => $this->getAttribute('name')));
-        $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
-        $this->addRule($name, get_lang('InvalidDate'), 'date');
-    }
-
-    /**
      * Adds a timewindow element to the form.
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.

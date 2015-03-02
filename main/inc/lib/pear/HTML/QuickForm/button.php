@@ -57,7 +57,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $attributes['icon'] = $icon;
         $attributes['style'] = $style;
         $attributes['size'] = $size;
-        $attributes['class'] = $class;
+        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
 
         HTML_QuickForm_input::HTML_QuickForm_input(
             $elementName,

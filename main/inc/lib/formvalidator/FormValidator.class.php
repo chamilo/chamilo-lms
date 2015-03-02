@@ -216,10 +216,7 @@ EOT;
      */
     public function addButton($name, $label, $icon = 'check', $style = 'default', $size = 'default', $class = 'btn', $attributes = array())
     {
-        $attributes['icon'] = $icon;
-        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
-
-        return $this->addElement('button', $name, $label, $attributes);
+        return $this->addElement('button', $name, $label, $icon, $style, $size, $class, $attributes);
     }
 
     /**

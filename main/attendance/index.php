@@ -10,7 +10,6 @@
  */
 // name of the language file that needs to be included
 $language_file = array(
-    'course_description',
     'course_info',
     'userInfo',
     'admin',

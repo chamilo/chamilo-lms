@@ -322,9 +322,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                         // Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
-                            or $uData['expiration_date'] == '0000-00-00 00:00:00'
+                            or empty($uData['expiration_date'])
                         ) {
-
                             global $_configuration;
 
                             if (isset($_configuration['multiple_access_urls'])
@@ -345,7 +344,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 if ($my_user_is_admin === false) {
 
                                     // the user have the permissions to enter at this site
-                                    if (is_array($my_url_list) && in_array($current_access_url_id, $my_url_list)) {
+                                    if (is_array($my_url_list) &&
+                                        in_array($current_access_url_id, $my_url_list)
+                                    ) {
                                         ConditionalLogin::check_conditions($uData);
 
                                         $_user['user_id'] = $uData['user_id'];

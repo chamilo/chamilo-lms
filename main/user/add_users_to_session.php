@@ -64,7 +64,7 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
     function search_users($needle, $type)
     {    
     	global $tbl_user,$tbl_session_rel_user,$id_session;
-    	$xajax_response = new XajaxResponse();
+    	$xajax_response = new xajaxResponse();
     	$return = '';
     
     	if (!empty($needle) && !empty($type)) {

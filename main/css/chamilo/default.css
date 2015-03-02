@@ -63,9 +63,8 @@ a:active {
 }
 
 /* Green hover */
-.subnav .navbar-inner li a:hover {
-    background: #178ACC;
-    color: #fff;
+.sidebar-nav .nav li a:hover {
+    background: none;
 }
 .well .nav-list > li > a:hover {
   text-decoration: none;
@@ -81,6 +80,7 @@ a:active {
 .dropdown-menu{
   top: 50px;
 }
+
 /*****************************************************
  *  CHAMILO THEME STYLE                              *
  *****************************************************/
@@ -1124,7 +1124,6 @@ footer {
 #announcements{
   display: none;
 }
-
 
 }
 /*+++++++++++++++++++++++++++++++++

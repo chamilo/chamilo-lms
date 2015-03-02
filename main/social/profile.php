@@ -368,7 +368,7 @@ if (is_array($personal_course_list)) {
 }
 //Block Avatar Social
 $social_avatar_block = '<div class="panel panel-info social-avatar">';
-$social_avatar_block .= SocialManager::show_social_avatar_block('home');
+$social_avatar_block .= SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
 $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
 $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
 /* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */

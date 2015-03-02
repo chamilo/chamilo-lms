@@ -80,8 +80,43 @@ function clear_form () {
 
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
+//Block Social Avatar
+$user_info    = UserManager::get_user_info_by_id($user_id);
+$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block .= SocialManager::show_social_avatar_block('friends');
+$social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+$social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+/* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */
+$social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+$chat_status = $user_info['extra'];
+if(!empty($chat_status['user_chat_status'])){
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+}else{
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+}
 
-$social_avatar_block = SocialManager::show_social_avatar_block('friends');
+$editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+if (api_get_setting('sso_authentication') === 'true') {
+    $subSSOClass = api_get_setting('sso_authentication_subclass');
+    $objSSO = null;
+
+    if (!empty($subSSOClass)) {
+        require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+        $subSSOClass = 'sso' . $subSSOClass;
+        $objSSO = new $subSSOClass();
+    } else {
+        $objSSO = new sso();
+    }
+
+    $editProfileUrl = $objSSO->generateProfileEditingURL();
+}
+$social_avatar_block .= '<div class="edit-profile">
+                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                         </div>';
+$social_avatar_block .= '</div>';
+//Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');
 
 $user_id = api_get_user_id();
@@ -142,5 +177,5 @@ $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 
-$social_layout = $tpl->get_template('social/home.tpl');
+$social_layout = $tpl->get_template('social/friends.tpl');
 $tpl->display($social_layout);

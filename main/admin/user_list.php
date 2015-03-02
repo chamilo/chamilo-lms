@@ -7,7 +7,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('registration','admin');
+$language_file = array('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -466,7 +466,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
 		}
-        if ($user[7] == 1 && $user[10] != '0000-00-00 00:00:00') {
+        if ($user[7] == 1 && !empty($user[10])) {
             // check expiration date
             $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
@@ -474,9 +474,23 @@ function get_user_data($from, $number_of_items, $column, $direction) {
         	   $user[7] = '-1';
             }
         }
+
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
+        $users[] = array(
+            $user[0],
+            $photo,
+            $user[1],
+            $user[2],
+            $user[3],
+            $user[4],
+            $user[5],
+            $user[6],
+            $user[7],
+            api_get_local_time($user[9]),
+            $user[0]
+        );
 	}
+
 	return $users;
 }
 
@@ -635,7 +649,10 @@ function modify_filter($user_id, $url_params, $row) {
     if (api_is_platform_admin()) {
         $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
         if ($delete_user_available) {
-            if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {
+            if ($user_id != api_get_user_id() &&
+                !$user_is_anonymous &&
+                api_global_admin_can_edit_admin($user_id)
+            ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
@@ -652,26 +669,28 @@ function modify_filter($user_id, $url_params, $row) {
  * lock = the user can no longer use this account
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $active the current state of the account
- * @param int $user_id The user id
- * @param string $url_params
+ * @param string $params
+ * @param array $row
  * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $url_params, $row) {
+function active_filter($active, $params, $row)
+{
 	global $_user;
 
-	if ($active=='1') {
-		$action='Lock';
-		$image='accept';
-	} elseif ($active=='-1') {
-    	$action='edit';
-        $image='warning';
-    } elseif ($active=='0') {
-		$action='Unlock';
-		$image='error';
+    if ($active == '1') {
+        $action = 'Lock';
+        $image = 'accept';
+    } elseif ($active == '-1') {
+        $action = 'edit';
+        $image = 'warning';
+    } elseif ($active == '0') {
+        $action = 'Unlock';
+        $image = 'error';
+    }
 
-	}
     $result = '';
-    if ($action=='edit') {
+
+    if ($action == 'edit') {
         $result = Display::return_icon($image.'.png', get_lang('AccountExpired'), array(), 16);
     } elseif ($row['0']<>$_user['user_id']) {
     	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.

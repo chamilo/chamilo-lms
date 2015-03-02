@@ -307,7 +307,7 @@ if( $form->validate()) {
 		if ($user['radio_expiration_date'] == '1') {
 			$expiration_date = $user['expiration_date'];
 		} else {
-			$expiration_date = '0000-00-00 00:00:00';
+			$expiration_date = null;
 		}
 
 		$active = intval($user['active']);

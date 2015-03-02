@@ -21,7 +21,7 @@
 DROP TABLE IF EXISTS user;
 CREATE TABLE IF NOT EXISTS user (
   id int unsigned NOT NULL auto_increment,
-  user_id int unsigned NOT NULL,
+  user_id int unsigned default NULL,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
   username varchar(100) NOT NULL default '',
@@ -38,17 +38,17 @@ CREATE TABLE IF NOT EXISTS user (
   openarea text,
   teach text,
   productions varchar(250) default NULL,
-  chatcall_user_id int unsigned NOT NULL default '0',
-  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
-  chatcall_text varchar(50) NOT NULL default '',
+  chatcall_user_id int unsigned default '0',
+  chatcall_date datetime default NULL,
+  chatcall_text varchar(50) default NULL,
   language varchar(40) default NULL,
-  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  registration_date datetime NOT NULL,
+  expiration_date datetime default NULL,
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
   hr_dept_id smallint unsigned NOT NULL default 0,
-  PRIMARY KEY  (user_id),
+  PRIMARY KEY (id),
   UNIQUE KEY username (username)
 );
 ALTER TABLE user ADD INDEX (status);
@@ -59,9 +59,9 @@ ALTER TABLE user ADD INDEX (status);
 
 /*!40000 ALTER TABLE user DISABLE KEYS */;
 LOCK TABLES user WRITE;
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),'0000-00-00 00:00:00','1',NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES (1, '{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),'0000-00-00 00:00:00','1',NULL,'{ADMINLANGUAGE}');
 -- Insert anonymous user
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES (2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
 
@@ -884,7 +884,7 @@ VALUES
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.13','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.14','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 

@@ -94,8 +94,7 @@ $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 //Convert the registration date of the user
 
-//@todo remove the date_default_timezone_get() see UserManager::create_user function
-$user_data['registration_date'] = api_get_local_time($user_data['registration_date'], null, date_default_timezone_get());
+$user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
 unset($user_data['password']);
 $extra_data = UserManager :: get_extra_user_data($user_id, true);
 $user_data = array_merge($user_data, $extra_data);
@@ -273,7 +272,7 @@ if (!$user_data['platform_admin']) {
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
 	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-	$group[] = $form->createElement('DatePickerDate', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+	$group[] = $form->createElement('DatePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
 	// Active account or inactive account
@@ -300,22 +299,12 @@ $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation')
 $user_data['reset_password'] = 0;
 $expiration_date = $user_data['expiration_date'];
 
-if ($expiration_date == '0000-00-00 00:00:00') {
+if (empty($expiration_date)) {
 	$user_data['radio_expiration_date'] = 0;
-	$user_data['expiration_date'] = array();
-	$user_data['expiration_date']['d'] = date('d');
-	$user_data['expiration_date']['F'] = date('m');
-	$user_data['expiration_date']['Y'] = date('Y');
+	$user_data['expiration_date'] = date('Y-m-d');
 } else {
 	$user_data['radio_expiration_date'] = 1;
-
-	$user_data['expiration_date'] = array();
-	$user_data['expiration_date']['d'] = substr($expiration_date, 8, 2);
-	$user_data['expiration_date']['F'] = substr($expiration_date, 5, 2);
-	$user_data['expiration_date']['Y'] = substr($expiration_date, 0, 4);
-
-    $user_data['expiration_date']['H'] = substr($expiration_date, 11, 2);
-    $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
+	$user_data['expiration_date'] = $expiration_date;
 }
 $form->setDefaults($user_data);
 
@@ -355,9 +344,9 @@ if ($form->validate()) {
 		$language = $user['language'];
 
 		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
-            $expiration_date = return_datetime_from_array($user['expiration_date']);
+            $expiration_date = $user['expiration_date'];
 		} else {
-			$expiration_date = '0000-00-00 00:00:00';
+			$expiration_date = null;
 		}
 
 		$active = $user_data['platform_admin'] ? 1 : intval($user['active']);

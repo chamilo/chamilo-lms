@@ -63,12 +63,19 @@ ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL defaul
 ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
-ALTER TABLE user MODIFY COLUMN user_id int NOT NULL;
+ALTER TABLE user MODIFY COLUMN user_id int DEFAULT NULL;
 ALTER TABLE user DROP PRIMARY KEY;
 ALTER TABLE user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT;
 
+ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
+ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
+ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0';
+
+ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
+ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.13' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.14' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

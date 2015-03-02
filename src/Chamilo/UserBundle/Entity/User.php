@@ -81,23 +81,37 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * @var string
      *
+     * @ORM\Column(name="username", type="string", length=100, nullable=no, unique=true)
+     */
+    protected $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
+     */
+    protected $email;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $lastname;
+    protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $firstname;
+    protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=50, nullable=false, unique=false)
      */
-    //protected $password;
+    protected $password;
 
     /**
      * @var string
@@ -361,6 +375,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
+        $this->chatcallUserId = 0;
         //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
@@ -726,15 +741,6 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         return $this;
     }
 
-    /**
-     * Get lastname
-     *
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
 
     /**
      * Set firstname
@@ -748,39 +754,6 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         $this->firstname = $firstname;
 
         return $this;
-    }
-
-    /**
-     * Get firstname
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     /**
@@ -855,7 +828,8 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     /**
      * Set status
      *
-     * @param boolean $status
+     * @param int $status
+     *
      * @return User
      */
     public function setStatus($status)
@@ -1205,9 +1179,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      */
     public function setExpirationDate($expirationDate)
     {
-        if (!empty($expirationDate)) {
-            $this->expirationDate = $expirationDate;
-        }
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }

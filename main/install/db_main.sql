@@ -59,9 +59,9 @@ ALTER TABLE user ADD INDEX (status);
 
 /*!40000 ALTER TABLE user DISABLE KEYS */;
 LOCK TABLES user WRITE;
-INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES (1, '{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),'0000-00-00 00:00:00','1',NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES (1, '{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),NULL,'1',NULL,'{ADMINLANGUAGE}');
 -- Insert anonymous user
-INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES (2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES (2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), NULL, 1,NULL,'{ADMINLANGUAGE}');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
 

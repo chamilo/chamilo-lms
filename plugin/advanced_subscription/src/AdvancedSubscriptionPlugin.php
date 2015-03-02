@@ -50,6 +50,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function install()
     {
         $this->installDatabase();
+        $this->addAreaField();
         $this->installHook();
     }
 
@@ -60,7 +61,41 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function uninstall()
     {
         $this->uninstallHook();
+        // Note: Keeping area field data is intended so it will not be removed
         $this->uninstallDatabase();
+    }
+
+    /**
+     * addAreaField() (adds an area field if it is not already created)
+     * @return void
+     */
+    private function addAreaField()
+    {
+        $result = Database::select(
+            'field_variable',
+            'user_field',
+            array(
+                'where'=> array(
+                    'field_variable = ? ' => array(
+                        'area'
+                    )
+                )
+            )
+        );
+        if (empty($result)) {
+            require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
+            $extraField = new Extrafield('user');
+            $extraField->save(array(
+                'field_type' => 1,
+                'field_variable' => 'area',
+                'field_display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
+                'field_default_value' => null,
+                'field_order' => null,
+                'field_visible' => 1,
+                'field_changeable' => 1,
+                'field_filter' => null
+            ));
+        }
     }
 
     /**
@@ -992,14 +1027,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userJoinTable = $queueTable . ' q INNER JOIN ' . $userTable . ' u ON q.user_id = u.user_id';
         $where = array(
-            'where' =>
-            array(
+            'where' => array(
                 'q.session_id = ? AND q.status <> ? AND q.status <> ?' => array(
                     $sessionId,
                     ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED,
                     ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED,
                 )
-            )
+            ),
+            'order' => 'q.status DESC, u.lastname ASC'
         );
         $select = 'u.user_id, u.firstname, u.lastname, q.created_at, q.updated_at, q.status, q.id as queue_id';
         $students = Database::select($select, $userJoinTable, $where);
@@ -1012,11 +1047,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     break;
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_DISAPPROVED:
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED:
-                    $student['validation'] = get_lang('No');
+                    $student['validation'] = 'No';
                     break;
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED:
                 case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED:
-                    $student['validation'] = get_lang('Yes');
+                    $student['validation'] = 'Yes';
                     break;
                 default:
                     error_log(__FILE__ . ' ' . __FUNCTION__ . ' Student status no detected');

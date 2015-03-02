@@ -62,6 +62,7 @@ $strings['RecommendedNumberOfParticipants'] = 'Recommended number of participant
 $strings['PublicationEndDate'] = 'Publication end date';
 $strings['Mode'] = 'Mode';
 $strings['Postulant'] = 'Postulant';
+$strings['Area'] = 'Area';
 $strings['InscriptionDate'] = 'Inscription date';
 $strings['BossValidation'] = 'Boss validation';
 $strings['Decision'] = 'Decision';

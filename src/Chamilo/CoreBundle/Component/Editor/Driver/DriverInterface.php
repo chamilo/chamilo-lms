@@ -43,4 +43,7 @@ interface DriverInterface
      * @return bool
      */
     public function allow();
+
+    public function getConfiguration();
+    public function setup();
 }

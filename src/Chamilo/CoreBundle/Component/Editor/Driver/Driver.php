@@ -7,9 +7,10 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 
 /**
  * Class Driver
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-class Driver extends \elFinderVolumeLocalFileSystem implements DriverInterface
+class Driver extends \elFinderVolumeLocalFileSystem
 {
     /** @var string */
     public $name;
@@ -59,13 +60,5 @@ class Driver extends \elFinderVolumeLocalFileSystem implements DriverInterface
     {
         $options = $this->getAppPluginOptions();
         $this->setConnector($options['connector']);
-    }
-
-    /**
-     * @return bool
-     */
-    public function allow()
-    {
-        return false;
     }
 }

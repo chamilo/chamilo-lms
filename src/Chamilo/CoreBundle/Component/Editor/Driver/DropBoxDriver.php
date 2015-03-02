@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 
 /**
  * Class DropBoxDriver
+ * @todo finish implementation
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface

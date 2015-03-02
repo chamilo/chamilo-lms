@@ -8,9 +8,63 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  *
  */
-class CourseDriver extends Driver
+class CourseDriver extends Driver implements DriverInterface
 {
     public $name = 'CourseDriver';
+
+    /**
+     * Setups the folder
+     */
+    public function setup()
+    {
+        $userId = api_get_user_id();
+        $userInfo = api_get_user_info();
+        $sessionId = api_get_session_id();
+
+        $courseInfo = $this->connector->course;
+
+        $coursePath = api_get_path(SYS_COURSE_PATH);
+        $courseDir = $courseInfo['directory'] . '/document';
+        $baseDir = $coursePath . $courseDir;
+
+        // Creates shared folder
+
+        if (!file_exists($baseDir.'/shared_folder')) {
+            $title = get_lang('UserFolders');
+            $folderName = '/shared_folder';
+            //$groupId = 0;
+            $visibility = 0;
+            create_unexisting_directory(
+                $courseInfo,
+                $userId,
+                $sessionId,
+                0,
+                null,
+                $baseDir,
+                $folderName,
+                $title,
+                $visibility
+            );
+        }
+
+        // Creates user-course folder
+        if (!file_exists($baseDir.'/shared_folder/sf_user_'.$userId)) {
+            $title = $userInfo['complete_name'];
+            $folderName = '/shared_folder/sf_user_'.$userId;
+            $visibility = 1;
+            create_unexisting_directory(
+                $courseInfo,
+                $userId,
+                $sessionId,
+                0,
+                null,
+                $baseDir,
+                $folderName,
+                $title,
+                $visibility
+            );
+        }
+    }
 
     /**
      * {@inheritdoc}

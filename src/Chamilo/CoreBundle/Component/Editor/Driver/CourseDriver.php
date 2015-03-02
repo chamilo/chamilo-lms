@@ -162,16 +162,14 @@ class CourseDriver extends Driver implements DriverInterface
             $result = parent::upload($fp, $dst, $name, $tmpname);
 
             $name = $result['name'];
-            $filtered = \URLify::filter($result['name'], 80);
+
+            $filtered = \URLify::filter($result['name'], 80, '', true);
 
             if (strcmp($name, $filtered) != 0) {
-                /*$arg = array('target' => $file['hash'], 'name' => $filtered);
-                $elFinder->exec('rename', $arg);*/
-                $this->rename($result['hash'], $filtered);
+                $result = $this->customRename($result['hash'], $filtered);
             }
 
             $realPath = $this->realpath($result['hash']);
-
             if (!empty($realPath)) {
                 // Getting file info
                 //$info = $elFinder->exec('file', array('target' => $file['hash']));
@@ -191,6 +189,7 @@ class CourseDriver extends Driver implements DriverInterface
                     $result['name']
                 );
             }
+            //error_log(print_r($this->error(),1));
 
             return $result;
         }

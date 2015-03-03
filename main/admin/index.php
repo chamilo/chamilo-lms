@@ -103,9 +103,11 @@ if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
 
     $search_form = '
-            <form method="get" class="form-search" action="user_list.php">
-                <input class="span3" type="text" name="keyword" value="">
-                <button class="btn" type="submit">'.get_lang('Search').'</button>
+            <form method="get" class="form-inline" action="user_list.php">
+                <div class="form-group">
+                <input class="form-control" type="text" name="keyword" value="">
+                <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                </div>
             </form>';
     $blocks['users']['search_form'] = $search_form;
     $items = array(
@@ -150,9 +152,11 @@ if (api_is_platform_admin()) {
         $blocks['courses']['extraContent'] = file_get_contents($coursesBlockExtraFile);
     }
 
-    $search_form = ' <form method="get" class="form-search" action="course_list.php">
-							<input class="span3" type="text" name="keyword" value="">
-							<button class="btn" type="submit">'.get_lang('Search').'</button>
+    $search_form = ' <form method="get" class="form-inline" action="course_list.php">
+                            <div class="form-group">
+							<input class="form-control" type="text" name="keyword" value="">
+							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							</div>
 	            		</form>';
     $blocks['courses']['search_form'] = $search_form;
 
@@ -199,10 +203,12 @@ if (api_is_platform_admin()) {
         $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
     }
 
-    $search_form = ' <form method="get" action="settings.php" class="form-search">
-							<input class="span3" type="text" name="search_field" value="" >
+    $search_form = ' <form method="get" action="settings.php" class="form-inline">
+                            <div class="form-group">
+							<input class="form-control" type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
-							<button class="btn" type="submit">'.get_lang('Search').'</button>
+							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							</div>
 	            		</form>';
 	$blocks['platform']['search_form'] = $search_form;
 
@@ -258,9 +264,11 @@ if (api_is_platform_admin()) {
     $blocks['sessions']['editable'] = true;
 }
 
-$search_form = ' <form method="GET" class="form-search" action="session_list.php">
-                    <input class="span3" type="text" name="keyword" value="">
-                    <button class="btn" type="submit">'.get_lang('Search').'</button>
+$search_form = ' <form method="GET" class="form-inline" action="session_list.php">
+                    <div class="form-group">
+                    <input class="form-control" type="text" name="keyword" value="">
+                    <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                    </div>
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();

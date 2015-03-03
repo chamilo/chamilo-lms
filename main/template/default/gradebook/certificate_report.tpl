@@ -74,6 +74,10 @@
 
 <h1 class="page-header">{{ 'GradebookListOfStudentsCertificates' | get_lang }}</h1>
 
+{% if errorMessage is defined %}
+    <div class="alert alert-error">{{ errorMessage }}</div>
+{% endif %}
+
 {% if not certificateStudents is empty %}
     <p>
         <a href="{{ exportAllLink }}" class="btn btn-info">{{ 'ExportAllCertificatesToPDF' | get_lang }}</a>

@@ -5,6 +5,8 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.gradebook
  */
+use \ChamiloSession as Session;
+
 $language_file = array('gradebook', 'exercice');
 $cidReset = true;
 
@@ -28,6 +30,13 @@ $userId = api_get_user_id();
 $sessions = SessionManager::getSessionsCoachedByUser($userId);
 
 if ($selectedSession > 0) {
+    if (!SessionManager::isValidId($selectedSession)) {
+        Session::write('reportErrorMessage', get_lang('NoSession'));
+
+        header("Location: $selfUrl");
+        exit;
+    }
+
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
     if (is_array($courses)) {
@@ -65,67 +74,80 @@ $searchCourseOnly = $selectedSession <= 0 && $selectedCourse > 0;
 if ($searchSessionAndCourse || $searchCourseOnly) {
     $selectedCourseInfo = api_get_course_info_by_id($selectedCourse);
 
+    if (empty($selectedCourseInfo)) {
+        Session::write('reportErrorMessage', get_lang('NoCourse'));
+
+        header("Location: $selfUrl");
+        exit;
+    }
+
     $gradebookCategories = Category::load(null, null, $selectedCourseInfo['code'], null, false, $selectedSession);
 
-    $gradebook = current($gradebookCategories);
+    $gradebook = null;
 
-    $exportAllLink = api_get_path(WEB_CODE_PATH) . "gradebook/gradebook_display_certificate.php?";
-    $exportAllLink .= http_build_query(array(
-        "action" => "export_all_certificates",
-        "cidReq" => $selectedCourseInfo['code'],
-        "id_session" => 0,
-        "gidReq" => 0,
-        "cat_id" => $gradebook->get_id()
-    ));
+    if (!empty($gradebookCategories)) {
+        $gradebook = current($gradebookCategories);
+    }
 
-    $studentList = GradebookUtils::get_list_users_certificates($gradebook->get_id());
+    if (!is_null($gradebook)) {
+        $exportAllLink = api_get_path(WEB_CODE_PATH) . "gradebook/gradebook_display_certificate.php?";
+        $exportAllLink .= http_build_query(array(
+            "action" => "export_all_certificates",
+            "cidReq" => $selectedCourseInfo['code'],
+            "id_session" => 0,
+            "gidReq" => 0,
+            "cat_id" => $gradebook->get_id()
+        ));
 
-    $certificateStudents = array();
+        $studentList = GradebookUtils::get_list_users_certificates($gradebook->get_id());
 
-    if (is_array($studentList)) {
-        foreach ($studentList as $student) {
-            $certificateStudent = array(
-                'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
-                'certificates' => array()
-            );
+        $certificateStudents = array();
 
-            $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
-                $student['user_id'],
-                $gradebook->get_id()
-            );
+        if (is_array($studentList) && !empty($studentList)) {
+            foreach ($studentList as $student) {
+                $certificateStudent = array(
+                    'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
+                    'certificates' => array()
+                );
 
-            if (!is_array($studentCertificates)) {
-                continue;
-            }
+                $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $student['user_id'],
+                    $gradebook->get_id()
+                );
 
-            foreach ($studentCertificates as $certificate) {
-                $creationDate = new DateTime($certificate['created_at']);
-                $creationMonth = $creationDate->format('m');
-                $creationYear = $creationDate->format('Y');
-                $creationMonthYear = $creationDate->format('m Y');
-
-                if ($selectedMonth > 0 && empty($selectedYear)) {
-                    if ($creationMonth != $selectedMonth) {
-                        continue;
-                    }
-                } elseif ($selectedMonth <= 0 && !empty($selectedYear)) {
-                    if ($creationYear != $selectedYear) {
-                        continue;
-                    }
-                } elseif ($selectedMonth > 0 && !empty($selectedYear)) {
-                    if ($creationMonthYear != sprintf("%d %s", $selectedMonth, $selectedYear)) {
-                        continue;
-                    }
+                if (!is_array($studentCertificates) || empty($studentCertificates)) {
+                    continue;
                 }
 
-                $certificateStudent['certificates'][] = array(
-                    'createdAt' => api_convert_and_format_date($certificate['created_at']),
-                    'id' => $certificate['id']
-                );
-            }
+                foreach ($studentCertificates as $certificate) {
+                    $creationDate = new DateTime($certificate['created_at']);
+                    $creationMonth = $creationDate->format('m');
+                    $creationYear = $creationDate->format('Y');
+                    $creationMonthYear = $creationDate->format('m Y');
 
-            if (count($certificateStudent['certificates']) > 0) {
-                $certificateStudents[] = $certificateStudent;
+                    if ($selectedMonth > 0 && empty($selectedYear)) {
+                        if ($creationMonth != $selectedMonth) {
+                            continue;
+                        }
+                    } elseif ($selectedMonth <= 0 && !empty($selectedYear)) {
+                        if ($creationYear != $selectedYear) {
+                            continue;
+                        }
+                    } elseif ($selectedMonth > 0 && !empty($selectedYear)) {
+                        if ($creationMonthYear != sprintf("%d %s", $selectedMonth, $selectedYear)) {
+                            continue;
+                        }
+                    }
+
+                    $certificateStudent['certificates'][] = array(
+                        'createdAt' => api_convert_and_format_date($certificate['created_at']),
+                        'id' => $certificate['id']
+                    );
+                }
+
+                if (count($certificateStudent['certificates']) > 0) {
+                    $certificateStudents[] = $certificateStudent;
+                }
             }
         }
     }
@@ -133,6 +155,10 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 
 /* View */
 $template = new Template(get_lang('GradebookListOfStudentsCertificates'));
+
+if (Session::has('reportErrorMessage')) {
+    $template->assign('errorMessage', Session::read('reportErrorMessage'));
+}
 
 $template->assign('selectedSession', $selectedSession);
 $template->assign('selectedCourse', $selectedCourse);
@@ -148,3 +174,5 @@ $content = $template->fetch("default/gradebook/certificate_report.tpl");
 $template->assign('content', $content);
 
 $template->display_one_col_template();
+
+Session::erase('reportErrorMessage');

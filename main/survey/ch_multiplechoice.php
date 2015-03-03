@@ -11,9 +11,9 @@ class ch_multiplechoice extends survey_question
      * @param array $formData
      * @return FormValidator
      */
-    public function create_form($survey_data, $formData)
+    public function createForm($survey_data, $formData)
     {
-        parent::create_form($survey_data, $formData);
+        parent::createForm($survey_data, $formData);
 
         $options = array(
             'horizontal' => get_lang('Horizontal'),
@@ -22,12 +22,12 @@ class ch_multiplechoice extends survey_question
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
+        $this->getForm()->setDefaults($formData);
 
         $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
         $total = count($formData['answers']);
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
-
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
 
                 if ($key < $total-1) {
@@ -39,13 +39,12 @@ class ch_multiplechoice extends survey_question
                 }
 
                 if ($total> 2) {
-                    $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'));
+                    $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
                 }
             }
         }
-        $this->getForm()->setDefaults($formData);
 
-        return parent :: add_remove_buttons($formData);
+        parent :: addRemoveButtons($formData);
     }
 
     /**

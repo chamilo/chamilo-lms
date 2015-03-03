@@ -440,7 +440,9 @@ class HTML_QuickForm extends HTML_Common
                     $defaultValues = $this->_recursiveFilter($filter, $defaultValues);
                 }
             }
+
             $this->_defaultValues = HTML_QuickForm::arrayMerge($this->_defaultValues, $defaultValues);
+            $this->_constantValues = $this->_defaultValues;
             foreach (array_keys($this->_elements) as $key) {
                 $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
             }
@@ -541,8 +543,9 @@ class HTML_QuickForm extends HTML_Common
      * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
-    function &createElement($elementType) {
-        $args    =  func_get_args();
+    public function &createElement($elementType)
+    {
+        $args =  func_get_args();
         $element =& HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
         return $element;
     } // end func createElement
@@ -563,16 +566,30 @@ class HTML_QuickForm extends HTML_Common
      */
     public function &_loadElement($event, $type, $args)
     {
-        $lowerType = strtolower($type);
-        $className = 'HTML_QuickForm_'.$lowerType;
-        // Try classic class name HTML_QuickForm_
-        if (!class_exists($className)) {
-            // Try new class name CamelCase
-            $className = underScoreToCamelCase($type);
+        $className = null;
+
+        // Try if class exists
+        if (!class_exists($type)) {
+            // Try classic class name HTML_QuickForm_
+            $className = 'HTML_QuickForm_'.$type;
             if (!class_exists($className)) {
-                throw new \Exception("Class '$className' does not exist. ");
+                // Try classic class name HTML_QuickForm_ with strtolower
+                $lowerType = strtolower($type);
+                $className = 'HTML_QuickForm_'.$lowerType;
+                if (!class_exists($className)) {
+                    // Try new class name CamelCase
+                    $className = underScoreToCamelCase($type);
+                    if (!class_exists($className)) {
+                        throw new \Exception("Class '$className' does not exist. ");
+                    }
+                }
             }
         }
+
+        if (empty($className)) {
+            throw new \Exception("Class '$className' does not exist. ");
+        }
+
         $elementObject = new $className();
 
         for ($i = 0; $i < 5; $i++) {

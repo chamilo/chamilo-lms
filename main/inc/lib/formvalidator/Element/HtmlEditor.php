@@ -90,7 +90,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $result = '';
         if ($this->editor) {
             $this->editor->value = $this->getValue();
-            //echo '----->';            var_dump($this->getValue(),$this->getName());
             $this->editor->setName($this->getName());
             $result = $this->editor->createHtml();
         }

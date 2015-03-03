@@ -11,6 +11,8 @@
  */
 class learnpathItem
 {
+    const debug = 0; // Logging parameter.
+
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
     public $children = array(); // Contains the ids of children items.
@@ -73,7 +75,8 @@ class learnpathItem
     public $view_id;
     //var used if absolute session time mode is used
     private $last_scorm_session_time = 0;
-    const debug = 0; // Logging parameter.
+    private $prerequisiteMaxScore;
+    private $prerequisiteMinScore;
 
     /**
      * Prepares the learning path item for later launch.
@@ -140,6 +143,8 @@ class learnpathItem
         $this->display_order = $row['display_order'];
         $this->prereq_string = $row['prerequisite'];
         $this->max_time_allowed = $row['max_time_allowed'];
+        $this->setPrerequisiteMaxScore($row['prerequisite_max_score']);
+        $this->setPrerequisiteMinScore($row['prerequisite_min_score']);
 
         if (isset($row['launch_data'])) {
             $this->launch_data = $row['launch_data'];
@@ -2504,29 +2509,43 @@ class learnpathItem
                                             }
                                         }
 
-                                        // For one attempt LPs.
+                                        // For one and first attempt.
                                         if ($this->prevent_reinit == 1) {
-
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
-                                                    WHERE   exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
-                                                        AND exe_user_id = ' . $user_id . '
-                                                        AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . '
-                                                        AND status <> "incomplete"
-                                                    ORDER BY exe_date DESC
-                                                    LIMIT 0, 1';
+                                                        WHERE
+                                                            exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
+                                                            exe_user_id = ' . $user_id . ' AND
+                                                            orig_lp_id = ' . $this->lp_id . ' AND
+                                                            orig_lp_item_id = ' . $prereqs_string . ' AND
+                                                            status <> "incomplete"
+                                                        ORDER BY exe_date DESC
+                                                        LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database :: fetch_array($rs_quiz)) {
-                                                    if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
-                                                        $returnstatus = true;
+                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
+                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+
+                                                    if (isset($minScore) && isset($minScore)) {
+                                                        // Taking min/max prerequisites values see BT#5776
+                                                        //var_dump($quiz['exe_result'], $minScore, $maxScore);exit;
+                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                            $returnstatus = true;
+                                                        } else {
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $returnstatus = false;
+                                                        }
                                                     } else {
-                                                        $this->prereq_alert = get_lang(
-                                                            'LearnpathPrereqNotCompleted'
-                                                        );
-                                                        $returnstatus = false;
+                                                        // Classic way
+                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                            $returnstatus = true;
+                                                        } else {
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $returnstatus = false;
+                                                        }
                                                     }
                                                 } else {
                                                     $this->prereq_alert = get_lang(
@@ -2535,30 +2554,45 @@ class learnpathItem
                                                     $returnstatus = false;
                                                 }
                                             }
-
                                         } else {
-                                            // 3. for multiple attempts we check that there are minimun 1 item completed.
+                                            // 3. for multiple attempts we check that there are minimum 1 item completed.
 
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database :: get_statistic_table(
-                                                    TABLE_STATISTIC_TRACK_E_EXERCISES
-                                                ) . '
-                                                    WHERE exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
-                                                        AND exe_user_id = ' . $user_id . ' AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . ' ';
-                                            //error_log('results 2:'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
+                                                    FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                    WHERE
+                                                        exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
+                                                        exe_user_id = ' . $user_id . ' AND
+                                                        orig_lp_id = ' . $this->lp_id . ' AND
+                                                        orig_lp_item_id = ' . $prereqs_string . ' ';
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
                                                 while ($quiz = Database :: fetch_array($rs_quiz)) {
-                                                    if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
-                                                        $returnstatus = true;
-                                                        break;
+
+                                                    $minScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMinScore();
+                                                    $maxScore = $items[$refs_list[$this->get_id()]]->getPrerequisiteMaxScore();
+
+                                                    if (isset($minScore) && isset($minScore)) {
+
+                                                        // Taking min/max prerequisites values see BT#5776
+                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                            $returnstatus = true;
+                                                            break;
+                                                        } else {
+                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $returnstatus = false;
+                                                        }
                                                     } else {
-                                                        $this->prereq_alert = get_lang(
-                                                            'LearnpathPrereqNotCompleted'
-                                                        );
-                                                        $returnstatus = false;
+                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                            $returnstatus = true;
+                                                            break;
+                                                        } else {
+                                                            $this->prereq_alert = get_lang(
+                                                                'LearnpathPrereqNotCompleted'
+                                                            );
+                                                            $returnstatus = false;
+                                                        }
                                                     }
                                                 }
                                             } else {
@@ -2589,7 +2623,6 @@ class learnpathItem
                                             }
                                         }
 
-                                        //$returnstatus = true;
                                         if ($returnstatus && $this->prevent_reinit == 1) {
                                             // I would prefer check in the database.
                                             $lp_item_view = Database::get_course_table(
@@ -2600,7 +2633,11 @@ class learnpathItem
                                             );
 
                                             $sql = 'SELECT id FROM ' . $lp_view . '
-                                                    WHERE c_id = ' . $course_id . ' AND user_id = ' . $user_id . '  AND lp_id = ' . $this->lp_id . ' LIMIT 0, 1';
+                                                    WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        user_id = ' . $user_id . '  AND
+                                                        lp_id = ' . $this->lp_id . '
+                                                    LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
                                             $lp_id = Database :: fetch_row(
                                                 $rs_lp
@@ -2608,7 +2645,11 @@ class learnpathItem
                                             $my_lp_id = $lp_id[0];
 
                                             $sql = 'SELECT status FROM ' . $lp_item_view . '
-                                                   WHERE c_id = ' . $course_id . ' AND lp_view_id = ' . $my_lp_id . ' AND lp_item_id = ' . $refs_list[$prereqs_string] . ' LIMIT 0, 1';
+                                                   WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        lp_view_id = ' . $my_lp_id . ' AND
+                                                        lp_item_id = ' . $refs_list[$prereqs_string] . '
+                                                    LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
                                             $status_array = Database :: fetch_row(
                                                 $rs_lp
@@ -2670,11 +2711,11 @@ class learnpathItem
                         );
                     }
                     $orstatus = $orstatus || $this->parse_prereq(
-                            $condition,
-                            $items,
-                            $refs_list,
-                            $user_id
-                        );
+                        $condition,
+                        $items,
+                        $refs_list,
+                        $user_id
+                    );
                     if ($orstatus) {
                         // Shortcircuit OR.
                         if (self::debug > 1) {
@@ -2711,15 +2752,18 @@ class learnpathItem
                 }
             }
         }
+
         if (empty($this->prereq_alert)) {
             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
         }
+
         if (self::debug > 1) {
             error_log(
                 'New LP - End of parse_prereq. Error code is now ' . $this->prereq_alert,
                 0
             );
         }
+
         return false;
     }
 
@@ -3867,7 +3911,7 @@ class learnpathItem
                         $my_status = ' ';
                         $total_time = ' ';
                         if (!empty($_REQUEST['exeId'])) {
-                            $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+                            $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
                             $safe_exe_id = intval($_REQUEST['exeId']);
                             $sql = "SELECT start_date,exe_date
@@ -4315,5 +4359,37 @@ class learnpathItem
         } else {
             return $myLessonStatus;
         }
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrerequisiteMaxScore()
+    {
+        return $this->prerequisiteMaxScore;
+    }
+
+    /**
+     * @param float $prerequisiteMaxScore
+     */
+    public function setPrerequisiteMaxScore($prerequisiteMaxScore)
+    {
+        $this->prerequisiteMaxScore = $prerequisiteMaxScore;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrerequisiteMinScore()
+    {
+        return $this->prerequisiteMinScore;
+    }
+
+    /**
+     * @param float $prerequisiteMinScore
+     */
+    public function setPrerequisiteMinScore($prerequisiteMinScore)
+    {
+        $this->prerequisiteMinScore = $prerequisiteMinScore;
     }
 }

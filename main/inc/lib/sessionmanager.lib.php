@@ -66,7 +66,7 @@ class SessionManager
      * @param string $duration
      * @param string $description Optional. The session description
      * @param int $showDescription Optional. Whether show the session description
-     * @param array $extrafields 
+     * @param array $extrafields
      * @todo use an array to replace all this parameters or use the model.lib.php ...
      * @return mixed       Session ID on success, error message otherwise
      * */
@@ -157,6 +157,8 @@ class SessionManager
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
             return $msg;
+        } elseif (!empty($duration) && (!empty($start_limit) || !empty($end_limit))) {
+            return get_lang('ChooseEitherDurationOrTimeLimit');
         } else {
             $ready_to_create = false;
             if ($fix_name) {
@@ -825,8 +827,8 @@ class SessionManager
         $forum_post = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $wiki = Database::get_course_table(TABLE_WIKI);
-        $table_stats_default = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_stats_access = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+        $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
         $course = api_get_course_info_by_id($courseId);
 
@@ -1407,6 +1409,8 @@ class SessionManager
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
             return $msg;
+        } elseif (!empty($duration) && (!empty($start_limit) || !empty($end_limit))) {
+            return get_lang('ChooseEitherDurationOrTimeLimit');
         } else {
 
             $rs = Database::query("SELECT id FROM $tbl_session WHERE name='" . Database::escape_string($name) . "'");
@@ -5403,7 +5407,7 @@ class SessionManager
     {
         $userId = intval($userId);
 
-        $trackLoginTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $trackLoginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $whereConditions = array(
             'login_user_id = ? ' => $userId
@@ -5446,8 +5450,8 @@ class SessionManager
     }
 
     /**
-     * Returns list of a few data from session (name, short description, start 
-     * date, end date) and the given extra fields if defined based on a 
+     * Returns list of a few data from session (name, short description, start
+     * date, end date) and the given extra fields if defined based on a
      * session category Id.
      * @param int $categoryId The internal ID of the session category
      * @param string $target Value to search for in the session field values
@@ -5740,19 +5744,26 @@ class SessionManager
 
         $term = Database::escape_string($term);
 
-        $resultData = Database::select('*', $sTable, array(
-            'where' => array(
-                "name LIKE %?% " => $term,
-                "OR description LIKE %?% " => $term,
-                "OR id IN (
+        if (is_array($extraFieldsToInclude) && count($extraFieldsToInclude) > 0) {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term,
+                    "OR id IN (
                     SELECT session_id
                     FROM $sfvTable
                     WHERE field_value LIKE %?%
                 ) " => $term
-            )
-        ));
+                )
+            ));
+        } else {
+            $resultData = Database::select('*', $sTable, array(
+                'where' => array(
+                    "name LIKE %?% " => $term,
+                    "OR description LIKE %?% " => $term
+                )
+            ));
 
-        if (empty($extraFieldsToInclude)) {
             return $resultData;
         }
 

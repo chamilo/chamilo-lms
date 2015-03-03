@@ -7,12 +7,12 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Gedmo\Mapping\Annotation as Gedmo;
+//use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+//use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Session
- * @UniqueEntity("name")
+ * UniqueEntity("name")
  * @ORM\Table(
  *      name="session",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})},

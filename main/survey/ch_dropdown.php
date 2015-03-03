@@ -11,9 +11,9 @@ class ch_dropdown extends survey_question
      * @param $formData
      * @return FormValidator
      */
-    public function create_form($survey_data, $formData)
+    public function createForm($survey_data, $formData)
     {
-        parent::create_form($survey_data, $formData);
+        parent::createForm($survey_data, $formData);
 
         // The answers
         /*$this->html .= '	<div class="row">';
@@ -51,7 +51,7 @@ class ch_dropdown extends survey_question
             }
         }
 
-        return parent :: add_remove_buttons($formData);
+        parent :: addRemoveButtons($formData);
     }
 
     /**

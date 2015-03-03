@@ -1,8 +1,8 @@
 {# start copy from head.tpl #}
 <meta charset="{{ system_charset }}" />
-<link href="http://www.chamilo.org/documentation.php" rel="help" />
-<link href="http://www.chamilo.org/team.php" rel="author" />
-<link href="http://www.chamilo.org" rel="copyright" />
+<link href="https://chamilo.org/chamilo-lms/" rel="help" />
+<link href="https://chamilo.org/the-association/" rel="author" />
+<link href="https://chamilo.org/the-association/" rel="copyright" />
 {{ prefetch }}
 {{ favico }}
 {{ browser_specific_head }}
@@ -24,6 +24,11 @@
 <div class="error-message legal-terms-popup">
     {{ "YouMustAcceptTermsAndConditions"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(session.name) }}
 </div>
+{% endif %}
+{% if percentMinimun > profileCompleted %}
+    <div class="alert alert-warning legal-terms-popup">
+        {{ "YouMustFillXPercentOfYourProfileAtLeast"  | get_plugin_lang("AdvancedSubscriptionPlugin") | format(percentMinimun, profileCompleted) }}
+    </div>
 {% endif %}
 <div class="legal-terms legal-terms-popup">
     {{ termsContent }}

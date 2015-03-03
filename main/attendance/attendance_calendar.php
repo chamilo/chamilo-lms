@@ -38,12 +38,12 @@ if (!empty($message_information)) {
     Display::display_normal_message($message, false);
 }
 
-if ($error_repeat_date) {
+if (isset($error_repeat_date) && $error_repeat_date) {
     $message = get_lang('EndDateMustBeMoreThanStartDate');
     Display::display_error_message($message, false);
 }
 
-if ($error_checkdate) {
+if (isset($error_checkdate) && $error_checkdate) {
     $message = get_lang('InvalidDate');
     Display::display_error_message($message, false);
 }
@@ -70,13 +70,14 @@ if (isset($action) && $action == 'calendar_add') {
         )
     );
 
-    $defaults['repeat'] = $repeat;
+    $defaults['repeat'] = isset($repeat) ? $repeat : null;
 
-    if ($repeat) {
+    if ($defaults['repeat']) {
         $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
     } else {
         $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
     }
+
     $a_repeat_type = array(
         'daily' => get_lang('RepeatDaily'),
         'weekly' => get_lang('RepeatWeekly'),

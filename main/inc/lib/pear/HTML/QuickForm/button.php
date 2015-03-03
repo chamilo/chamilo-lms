@@ -48,8 +48,17 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
     public function HTML_QuickForm_button(
         $elementName = null,
         $value = null,
-        $attributes = null
+        $icon = 'check',
+        $style = 'default',
+        $size = 'default',
+        $class = 'btn',
+        $attributes = array()
     ) {
+        $attributes['icon'] = $icon;
+        $attributes['style'] = $style;
+        $attributes['size'] = $size;
+        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
+
         HTML_QuickForm_input::HTML_QuickForm_input(
             $elementName,
             null,
@@ -70,8 +79,9 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         } else {
             $value = $this->_attributes['value'];
             unset($this->_attributes['value']);
-            //$class = isset($this->_attributes['class']) ? $this->_attributes['class'] : 'btn btn-large';
-            $icon = $this->_attributes['icon'];
+            $icon = isset($this->_attributes['icon']) ? $this->_attributes['icon'] : 'check';
+
+            unset($this->_attributes['icon']);
             $icon = '<i class="fa fa-'.$icon.'"></i> ';
 
             return

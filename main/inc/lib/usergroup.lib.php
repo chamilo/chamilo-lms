@@ -849,7 +849,7 @@ class UserGroup extends Model
 
     public static function searchUserGroupAjax($needle)
     {
-        $response = new XajaxResponse();
+        $response = new xajaxResponse();
         $return = '';
 
         if (!empty($needle)) {

@@ -235,7 +235,14 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = $form->createElement('DatePicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+$group[] = $form->createElement(
+    'DatePicker',
+    'expiration_date',
+    null,
+    array(
+        'onchange' => 'javascript: enable_expiration_date();'
+    )
+);
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -258,12 +265,9 @@ $defaults['admin']['platform_admin'] = 0;
 $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
-$defaults['expiration_date'] = array();
 $days = api_get_setting('account_valid_duration');
-$time = strtotime('+'.$days.' day');
-$defaults['expiration_date']['d'] = date('d', $time);
-$defaults['expiration_date']['F'] = date('m', $time);
-$defaults['expiration_date']['Y'] = date('Y', $time);
+$defaults['expiration_date'] = date('Y-m-d', api_strtotime('+'.$days.' day'));
+
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
 $defaults = array_merge($defaults, $extra_data);
@@ -303,7 +307,7 @@ if( $form->validate()) {
 		if ($user['radio_expiration_date'] == '1') {
 			$expiration_date = $user['expiration_date'];
 		} else {
-			$expiration_date = '0000-00-00 00:00:00';
+			$expiration_date = null;
 		}
 
 		$active = intval($user['active']);
@@ -319,7 +323,25 @@ if( $form->validate()) {
             }
         }
 
-		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, $language, $phone, null, $auth_source, $expiration_date, $active, $hr_dept_id, $extra, null, $send_mail);
+        $user_id = UserManager::create_user(
+            $firstname,
+            $lastname,
+            $status,
+            $email,
+            $username,
+            $password,
+            $official_code,
+            $language,
+            $phone,
+            null,
+            $auth_source,
+            $expiration_date,
+            $active,
+            $hr_dept_id,
+            $extra,
+            null,
+            $send_mail
+        );
 
 		Security::clear_token();
 		$tok = Security::get_token();
@@ -334,7 +356,25 @@ if( $form->validate()) {
 		} else {
  			if (!empty($picture['name'])) {
 				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
+                UserManager::update_user(
+                    $user_id,
+                    $firstname,
+                    $lastname,
+                    $username,
+                    $password,
+                    $auth_source,
+                    $email,
+                    $status,
+                    $official_code,
+                    $phone,
+                    $picture_uri,
+                    $expiration_date,
+                    $active,
+                    null,
+                    $hr_dept_id,
+                    null,
+                    $language
+                );
 			}
 
 			foreach ($extra as $key => $value) {

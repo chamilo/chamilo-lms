@@ -225,7 +225,7 @@ if (api_is_course_admin() ||
 
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
         if ($show == 0) {
-			$form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'btn btn-success btn-large');
+			$form->addButton('next_survey_page', get_lang('StartSurvey'), 'arrow-right', 'success', 'large');
             //echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';
         } else {
 			$form->addButton('next_survey_page', get_lang('NextQuestion'), 'arrow-right');

@@ -215,7 +215,7 @@ if (!empty($_REQUEST['exeId']) &&
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
 
-    $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id = intval($_GET['lp_item_id']);
@@ -483,8 +483,10 @@ if ($is_allowed_to_edit) {
 
     // Loads the glossary library.
     <?php
-      if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-           if (api_get_setting('show_glossary_in_documents') == 'ismanual') { ?>
+    $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+    if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
+           if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+                ?>
             $.frameReady(function(){
                    //  $("<div>I am a div courses</div>").prependTo("body");
          }, "top.content_name",

@@ -41,7 +41,7 @@ $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 // For separate web and DB servers, reduce the bandwidth used by compressing
 // data returning from the DB server. By default, it is ignored. Uncomment
 // the following to enable compression.
-//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS; 
+//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
 
 /**
  * Database settings
@@ -296,3 +296,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['cookie_warning'] = false;
 // Allows a comment field in the course calendar events. Requires DB change
 //$_configuration['allow_agenda_event_comment'] = false;
+// Filters administration users lists by the session admin who created them.
+// Change to true to restrict the visibility
+//$_configuration['prevent_session_admins_to_manage_all_users'] = false;
+// If there are any tool available and the user is not registered hide the group
+// $_configuration['hide_course_group_if_no_tools_available'] = false;

@@ -8,9 +8,66 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  *
  */
-class CourseDriver extends Driver
+class CourseDriver extends Driver implements DriverInterface
 {
     public $name = 'CourseDriver';
+
+    /**
+     * Setups the folder
+     */
+    public function setup()
+    {
+        $userId = api_get_user_id();
+        $userInfo = api_get_user_info();
+        $sessionId = api_get_session_id();
+
+        $courseInfo = $this->connector->course;
+
+        if (!empty($courseInfo)) {
+
+            $coursePath = api_get_path(SYS_COURSE_PATH);
+            $courseDir = $courseInfo['directory'] . '/document';
+            $baseDir = $coursePath . $courseDir;
+
+            // Creates shared folder
+
+            if (!file_exists($baseDir . '/shared_folder')) {
+                $title = get_lang('UserFolders');
+                $folderName = '/shared_folder';
+                //$groupId = 0;
+                $visibility = 0;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
+
+            // Creates user-course folder
+            if (!file_exists($baseDir . '/shared_folder/sf_user_' . $userId)) {
+                $title = $userInfo['complete_name'];
+                $folderName = '/shared_folder/sf_user_' . $userId;
+                $visibility = 1;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -105,16 +162,14 @@ class CourseDriver extends Driver
             $result = parent::upload($fp, $dst, $name, $tmpname);
 
             $name = $result['name'];
-            $filtered = \URLify::filter($result['name'], 80);
+
+            $filtered = \URLify::filter($result['name'], 80, '', true);
 
             if (strcmp($name, $filtered) != 0) {
-                /*$arg = array('target' => $file['hash'], 'name' => $filtered);
-                $elFinder->exec('rename', $arg);*/
-                $this->rename($result['hash'], $filtered);
+                $result = $this->customRename($result['hash'], $filtered);
             }
 
             $realPath = $this->realpath($result['hash']);
-
             if (!empty($realPath)) {
                 // Getting file info
                 //$info = $elFinder->exec('file', array('target' => $file['hash']));
@@ -134,6 +189,7 @@ class CourseDriver extends Driver
                     $result['name']
                 );
             }
+            //error_log(print_r($this->error(),1));
 
             return $result;
         }

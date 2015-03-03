@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,10 +6,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
-// Including the global initialization file.
+
 require_once '../inc/global.inc.php';
 
 $debug = 0;
@@ -53,6 +49,7 @@ if ($dokeos_chapter) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
             $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+
             if ($prereq_check === true) {
                 $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset

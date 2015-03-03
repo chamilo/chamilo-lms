@@ -91,7 +91,7 @@ class Auth
     public function get_user_course_categories()
     {
         $user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id=$user_id ORDER BY sort ASC";
         $result = Database::query($sql);
         $output = array();
@@ -246,7 +246,7 @@ class Auth
     public function move_category($direction, $category2move)
     {
         // the database definition of the table that stores the user defined course categories
-        $table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_user_defined_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $current_user_id = api_get_user_id();
         $user_coursecategories = $this->get_user_course_categories();
@@ -288,7 +288,7 @@ class Auth
     public function get_user_course_categories_info()
     {
         $current_user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . "
                 WHERE user_id='" . $current_user_id . "'
                 ORDER BY sort ASC";
@@ -311,7 +311,7 @@ class Auth
         $title = Database::escape_string($title);
         $category_id = intval($category_id);
         $result = false;
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "UPDATE $tucc
                 SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "'
                 WHERE id='" . $category_id . "'";
@@ -330,7 +330,7 @@ class Auth
     public function delete_course_category($category_id)
     {
         $current_user_id = api_get_user_id();
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
@@ -383,7 +383,7 @@ class Auth
      */
     public function store_course_category($category_title)
     {
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data
         $current_user_id = api_get_user_id();

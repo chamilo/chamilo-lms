@@ -106,7 +106,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
         $config
     );
     $form->addHtml('<span id="filepaths"><div id="filepath_1">');
-    $form->add_file('attach_1', get_lang('AttachmentFiles'));
+    $form->addFile('attach_1', get_lang('AttachmentFiles'));
     $form->addHtml('</div></span>');
 
     $form->addLabel(null,

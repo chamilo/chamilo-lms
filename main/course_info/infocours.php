@@ -158,7 +158,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 }
 
 $group = array();
-$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
+$group[]=$form->createElement('SelectTheme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
 $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));

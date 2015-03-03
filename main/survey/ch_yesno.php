@@ -7,12 +7,12 @@
 class ch_yesno extends survey_question
 {
     /**
-     * @param array $survey_data
+     * @param array $surveyData
      * @param array $formData
      */
-    public function create_form($survey_data, $formData)
+    public function createForm($surveyData, $formData)
     {
-        parent::create_form($survey_data, $formData);
+        parent::createForm($surveyData, $formData);
 
         $options = array(
             'horizontal' => get_lang('Horizontal'),
@@ -21,6 +21,7 @@ class ch_yesno extends survey_question
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
+        $this->getForm()->setDefaults($formData);
 
         /*// Horizontal or vertical
         $this->html .= '	<div class="control-group">';
@@ -45,8 +46,6 @@ class ch_yesno extends survey_question
         $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
         $this->getForm()->addHtmlEditor('answers[0]', get_lang('AnswerOptions'), true, false, $config);
         $this->getForm()->addHtmlEditor('answers[1]', null, true, false, $config);
-
-        $this->getForm()->setDefaults($formData);
 
         /*$this->html .= '	<div class="row">';
         $this->html .= '		<label class="control-label">';

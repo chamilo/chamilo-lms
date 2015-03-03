@@ -1435,9 +1435,10 @@ class AddCourse
             "terms          TEXT                NULL," .                        // contains the indexing tags (search engine)
             "search_did     INT                 NULL," .                         // contains the internal search-engine id of this element
             "audio          VARCHAR(250),
+            prerequisite_min_score float,
+            prerequisite_max_score float,
             PRIMARY KEY  (c_id, id)
-
-            )" . $charset_clause;                   // contains the audio file that goes with the learning path step
+        )" . $charset_clause;                   // contains the audio file that goes with the learning path step
 
         Database::query($sql);
 

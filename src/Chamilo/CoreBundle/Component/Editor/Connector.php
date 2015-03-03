@@ -131,14 +131,14 @@ class Connector
 
     /**
      * @param bool $processDefaultValues
+     *
      * @return array
      */
     public function getRoots($processDefaultValues = true)
     {
         $roots = array();
-        /** @var Driver $driver */
         $drivers = $this->getDrivers();
-
+        /** @var Driver $driver */
         foreach ($drivers as $driver) {
             if ($processDefaultValues) {
                 $plugin = array(
@@ -148,6 +148,7 @@ class Connector
                     )
                 );
                 $configuration = $driver->getConfiguration();
+                $driver->setup();
                 $configuration['plugin'] = $plugin;
                 $root = $this->updateWithDefaultValues($configuration);
             }

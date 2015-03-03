@@ -20,9 +20,9 @@
         {% include template ~ "/layout/page_body.tpl" %}
         {% block content %}
             {% if content is not null %}
-                <section id="main_content">
+                <div id="main_content">
                 {{ content }}
-                </section>
+                </div>
             {% endif %}
         {% endblock %}
         &nbsp;

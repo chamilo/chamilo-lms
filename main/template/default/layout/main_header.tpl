@@ -34,15 +34,7 @@
     </form>
 {% endif %}
 
-{% if show_header == true %}
-    <div class="skip">
-        <ul>
-            <li><a href="#menu">{{ "WCAGGoMenu"|get_lang }}</a></li>
-            <li><a href="#content" accesskey="2">{{ "WCAGGoContent"|get_lang }}</a></li>
-        </ul>
-    </div>
-{% endif %}
-    <div id="page" class="container"> <!-- page section -->
+<div id="page" class="container"> <!-- page section -->
         {# Bug and help notifications #}
         {% block help_notifications %}
         <ul id="navigation" class="notification-panel">
@@ -56,7 +48,7 @@
         {% include template ~ "/layout/topbar.tpl" %}
         {% endblock %}
             <header>
-                <div class="container">
+                <div id="main" class="container">
                     {% if plugin_header_main %}
                     <div class="row">
                         <div class="col-lg-12">

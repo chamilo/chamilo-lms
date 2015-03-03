@@ -99,16 +99,19 @@
                     </div>
                 </div>
             </header>
+            <section id="menu-bar">
+                {# menu #}
+                {% block menu %}
+                {% include template ~ "/layout/menu.tpl" %}
+                {% endblock %}
+            </section>
+            <section id="breadcrumb-bar">
+                {# breadcrumb #}
+                {% block breadcrumb %}
+                {{ breadcrumb }}
+                {% endblock %}
+            </section>
 
-            {# menu #}
-            {% block menu %}
-            {% include template ~ "/layout/menu.tpl" %}
-            {% endblock %}
-
-            {# breadcrumb #}
-            {% block breadcrumb %}
-            {{ breadcrumb }}
-            {% endblock %}
 
         
         <div id="top_main_content">

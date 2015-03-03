@@ -119,8 +119,8 @@ EOT;
     public function getElementTemplate()
     {
         return '
-            <div class="control-group {error_class}">
-                <label class="control-label" {label-for}>
+            <div class="form-group {error_class}">
+                <label {label-for}>
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>

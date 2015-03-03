@@ -298,7 +298,7 @@ if ($form->validate()) {
     $end_limit = isset($params['end_limit']);
     $start_limit = isset($params['start_limit']);
 
-    if (empty($end_limit) && empty($start_limit)) {
+    if (!$end_limit && !$start_limit) {
         $nolimit = 1;
     } else {
         $nolimit = null;

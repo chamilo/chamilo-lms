@@ -74,8 +74,15 @@ ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0';
 ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
 
+DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools';
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'none', 'None');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath');
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.14' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.15' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

@@ -2126,6 +2126,8 @@ class GroupManager
 
         $orig = isset($origin) ? $origin : null;
 
+        $hideGroup = api_get_configuration_value('hide_course_group_if_no_tools_available');
+
         foreach ($group_list as $this_group) {
 
             // Validation when belongs to a session
@@ -2151,7 +2153,9 @@ class GroupManager
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CALENDAR) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_ANNOUNCEMENT) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI))
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CHAT)
+                )
                 && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
             ) {
                 $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
@@ -2168,6 +2172,9 @@ class GroupManager
                 $group_name .= $session_img;
                 $row[] = $group_name.'<br />'.stripslashes(trim($this_group['description']));
             } else {
+                if ($hideGroup) {
+                    continue;
+                }
                 $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
             }
 

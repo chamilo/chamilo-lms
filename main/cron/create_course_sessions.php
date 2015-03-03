@@ -18,14 +18,28 @@ require_once __DIR__ . "/../inc/global.inc.php";
 
 // First day of the current month to create sessions and add courses for the next month (e.g. "07")
 define("OFFSET", "15");
-
+/**
+ * If no $initialDate is supplied, returns an array with the first and last days of the current
+ * month. Otherwise, returns an array with the first and last days of the $initialDate month .
+ * @param   array   First day of the month
+ * @return  array   First and last days of the month
+ */
 function getMonthFirstAndLastDates($initialDate = null) {
     $startDate = $initialDate ? $initialDate : date("Y-m-01");
-    $nextMonthStartDate = date("Y-m-d", strtotime($startDate." + 1 month"));
-    $endDate = date("Y-m-d", strtotime($nextMonthStartDate." - 1 minute"));
+    $nextMonthStartDate = date("Y-m-d", api_strtotime($startDate." + 1 month"));
+    $endDate = date("Y-m-d", api_strtotime($nextMonthStartDate." - 1 minute"));
     return array('startDate' => $startDate, 'endDate' => $endDate);
 }
 
+/**
+ * Creates one session per course with $administratorId as the creator and
+ * adds it to the session starting on $startDate and finishing on $endDate
+ * @param   array   Courses
+ * @param   int     Administrator id
+ * @param   date    First day of the month
+ * @param   date    Last day of the month
+ * @return  void
+ */
 function createCourseSessions($courses, $administratorId, $startDate, $endDate) {
     echo "\n";
     echo $courses ?
@@ -34,7 +48,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate) 
     echo "\n=====================================================================================\n\n";
     // Loop through courses creating one session per each and adding them
     foreach ($courses as $course) {
-        $sessionName = $course['title']." (".date("M Y", strtotime($startDate)).")";
+        $sessionName = $course['title']." (".date("M Y", api_strtotime($startDate)).")";
         $sessionId = SessionManager::create_session(
             $sessionName,
             $startDate,
@@ -73,7 +87,7 @@ createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['en
 
 // Creates course sessions for the following month
 if (date("Y-m-d") >= date("Y-m-".OFFSET)) {
-    $dates = getMonthFirstAndLastDates(date("Y-m-d", strtotime(date("Y-m-01")." + 1 month")));
+    $dates = getMonthFirstAndLastDates(date("Y-m-d", api_strtotime(date("Y-m-01")." + 1 month")));
     // Get courses that don't have any session the next month
     $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);
     createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['endDate']);

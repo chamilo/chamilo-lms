@@ -340,6 +340,7 @@ $NoTimeLimits = "Sin límite de tiempo";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $TypeMessage = "Por favor, escriba su mensaje";
 $ConfirmReset = "¿Seguro que quiere borrar todos los mensajes?";
+$ChooseEitherDurationOrTimeLimit = "Elija entre duración o límite de tiempo";
 $ClearList = "Borrar la lista";
 $SessionBanner = "Banner de sesión";
 $ShortDescription = "Descripción corta";

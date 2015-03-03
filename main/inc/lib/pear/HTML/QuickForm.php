@@ -566,16 +566,30 @@ class HTML_QuickForm extends HTML_Common
      */
     public function &_loadElement($event, $type, $args)
     {
-        $lowerType = strtolower($type);
-        $className = 'HTML_QuickForm_'.$lowerType;
-        // Try classic class name HTML_QuickForm_
-        if (!class_exists($className)) {
-            // Try new class name CamelCase
-            $className = underScoreToCamelCase($type);
+        $className = null;
+
+        // Try if class exists
+        if (!class_exists($type)) {
+            // Try classic class name HTML_QuickForm_
+            $className = 'HTML_QuickForm_'.$type;
             if (!class_exists($className)) {
-                throw new \Exception("Class '$className' does not exist. ");
+                // Try classic class name HTML_QuickForm_ with strtolower
+                $lowerType = strtolower($type);
+                $className = 'HTML_QuickForm_'.$lowerType;
+                if (!class_exists($className)) {
+                    // Try new class name CamelCase
+                    $className = underScoreToCamelCase($type);
+                    if (!class_exists($className)) {
+                        throw new \Exception("Class '$className' does not exist. ");
+                    }
+                }
             }
         }
+
+        if (empty($className)) {
+            throw new \Exception("Class '$className' does not exist. ");
+        }
+
         $elementObject = new $className();
 
         for ($i = 0; $i < 5; $i++) {

@@ -40,19 +40,21 @@ class ExerciseLink extends AbstractLink
         }
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-        $sql = 'SELECT id, title from '.$this->get_exercise_table().' exe
+        $sql = 'SELECT id, title FROM '.$this->get_exercise_table().' exe
                 WHERE id NOT IN (
-                        SELECT ref_id FROM '.$tbl_grade_links.'
-                              WHERE type        = '.LINK_EXERCISE." AND
-                                    course_code = '".$this->get_course_code()."'
-                        ) AND
-                exe.c_id        = ".$this->course_id;
+                    SELECT ref_id FROM '.$tbl_grade_links.'
+                    WHERE
+                        type = '.LINK_EXERCISE." AND
+                        course_code = '".$this->get_course_code()."'
+                ) AND
+                exe.c_id = ".$this->course_id;
 
         $result = Database::query($sql);
         $cats = array();
         while ($data=Database::fetch_array($result)) {
             $cats[] = array ($data['id'], $data['title']);
         }
+
         return $cats;
     }
 
@@ -64,6 +66,9 @@ class ExerciseLink extends AbstractLink
     {
         $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $exerciseTable = $this->get_exercise_table();
+        $lpItemTable = Database :: get_course_table(TABLE_LP_ITEM);
+
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
@@ -78,8 +83,13 @@ class ExerciseLink extends AbstractLink
         // @todo
         $uploadPath = null;
 
-        $sql = 'SELECT id,title from '.$this->get_exercise_table().'
+        $sql = 'SELECT id,title FROM '.$exerciseTable.'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
+
+        $sqlLp = "SELECT e.id, e.title FROM $exerciseTable e INNER JOIN $lpItemTable i
+                  ON (e.c_id = i.c_id AND e.id = i.path)
+				  WHERE e.c_id = $this->course_id AND active = 0 AND item_type = 'quiz'
+				  $session_condition";
 
         $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
                 FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
@@ -92,12 +102,17 @@ class ExerciseLink extends AbstractLink
                     d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
                     ip.visibility='1'
                 ";
+
         require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+        $exerciseInLP = array();
         if (!$this->is_hp) {
             $result = Database::query($sql);
+            $resultLp = Database::query($sqlLp);
+            $exerciseInLP = Database::store_result($resultLp);
         } else {
             $result2 = Database::query($sql2);
         }
+
         $cats = array();
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
@@ -106,6 +121,7 @@ class ExerciseLink extends AbstractLink
                 }
             }
         }
+
         if (isset($result2)) {
             if (Database::num_rows($result2) > 0) {
                 while ($row=Database::fetch_array($result2)) {
@@ -123,10 +139,19 @@ class ExerciseLink extends AbstractLink
                             if ($title == '') {
                                 $title = basename($path);
                             }
-                            $cats[] = array ($attribute['id'], $title.'(HP)');
+                            $cats[] = array($attribute['id'], $title.'(HP)');
                         }
                     }
                 }
+            }
+        }
+
+        if (!empty($exerciseInLP)) {
+            foreach ($exerciseInLP as $exercise) {
+                $cats[] = array(
+                    $exercise['id'],
+                    $exercise['title'].' ('.get_lang('ToolLearnpath').')'
+                );
             }
         }
 
@@ -152,7 +177,8 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
-     * @param int $stud_id student id (default: all students who have results - then the average is returned)
+     * @param int $stud_id student id (default: all students who have results -
+     * then the average is returned)
      * @return	array (score, max) if student is given
      * 			array (sum of scores, number of scores) otherwise
      * 			or null if no scores available
@@ -264,6 +290,7 @@ class ExerciseLink extends AbstractLink
                 return $title;
             }
         }
+
         return $data['title'];
     }
 
@@ -285,7 +312,7 @@ class ExerciseLink extends AbstractLink
         $sql = 'SELECT count(id) from '.$this->get_exercise_table().'
                 WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
         return ($number[0] != 0);
     }
 

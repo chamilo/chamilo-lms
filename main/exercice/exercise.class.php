@@ -41,6 +41,7 @@ class Exercise
     public $edit_exercise_in_lp = false;
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
+    public $lpList = array();
     public $force_edit_exercise_in_lp = false;
     public $sessionId = 0;
     public $debug = false;
@@ -132,7 +133,8 @@ class Exercise
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
 
-            $sql = "SELECT max_score FROM $table_lp_item
+            $sql = "SELECT lp_id, max_score
+                    FROM $table_lp_item
                     WHERE   c_id = {$this->course_id} AND
                             item_type = '".TOOL_QUIZ."' AND
                             path = '".$id."'";
@@ -140,6 +142,7 @@ class Exercise
 
             if (Database::num_rows($result) > 0) {
                 $this->exercise_was_added_in_lp = true;
+                $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
             $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;

@@ -24,14 +24,12 @@ if (isset($_GET['id'])) {
 }
 
 if (api_get_setting('show_groups_to_users') == 'false') {
-    
+
 }
-
-
 
 Display :: display_header($tool_name, 'Classes');
 
-$usergroup = new Usergroup();
+$usergroup = new UserGroup();
 $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
 if (!empty($usergroup_list)) {
     echo Display::tag('h1',get_lang('MyClasses'));

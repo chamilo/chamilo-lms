@@ -82,9 +82,11 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath');
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.15' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.16' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 
 ALTER TABLE c_survey ADD visible_results INT UNSIGNED DEFAULT 0;
+ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float;
+ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float;
 

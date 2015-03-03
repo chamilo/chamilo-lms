@@ -40,19 +40,21 @@ class ExerciseLink extends AbstractLink
         }
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-        $sql = 'SELECT id, title from '.$this->get_exercise_table().' exe
+        $sql = 'SELECT id, title FROM '.$this->get_exercise_table().' exe
                 WHERE id NOT IN (
-                        SELECT ref_id FROM '.$tbl_grade_links.'
-                              WHERE type        = '.LINK_EXERCISE." AND
-                                    course_code = '".$this->get_course_code()."'
-                        ) AND
-                exe.c_id        = ".$this->course_id;
+                    SELECT ref_id FROM '.$tbl_grade_links.'
+                    WHERE
+                        type = '.LINK_EXERCISE." AND
+                        course_code = '".$this->get_course_code()."'
+                ) AND
+                exe.c_id = ".$this->course_id;
 
         $result = Database::query($sql);
         $cats = array();
         while ($data=Database::fetch_array($result)) {
             $cats[] = array ($data['id'], $data['title']);
         }
+
         return $cats;
     }
 
@@ -152,7 +154,8 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
-     * @param int $stud_id student id (default: all students who have results - then the average is returned)
+     * @param int $stud_id student id (default: all students who have results -
+     * then the average is returned)
      * @return	array (score, max) if student is given
      * 			array (sum of scores, number of scores) otherwise
      * 			or null if no scores available
@@ -264,6 +267,7 @@ class ExerciseLink extends AbstractLink
                 return $title;
             }
         }
+
         return $data['title'];
     }
 
@@ -285,7 +289,7 @@ class ExerciseLink extends AbstractLink
         $sql = 'SELECT count(id) from '.$this->get_exercise_table().'
                 WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
         return ($number[0] != 0);
     }
 

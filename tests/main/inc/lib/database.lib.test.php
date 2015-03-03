@@ -98,12 +98,6 @@ class TestDatabase extends UnitTestCase {
 	}
 	*/
 
-	function get_course_by_category() {
-		$category_id='1';
-		$res=$this->dbase->get_course_by_category($category_id);
-		$this->assertTrue(is_string($res));
-	}
-
 	function testGetCourseInfo() {
 		$course_code='AYDD';
 		$res=$this->dbase->get_course_info($course_code);

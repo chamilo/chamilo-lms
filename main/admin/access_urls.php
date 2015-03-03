@@ -107,7 +107,7 @@ echo Display::url(Display::return_icon('user.png',      get_lang('ManageUsers'),
 echo Display::url(Display::return_icon('course.png',    get_lang('ManageCourses'), array(), ICON_SIZE_MEDIUM),   api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php');
 //echo Display::url(Display::return_icon('session.png',   get_lang('ManageSessions'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php');
 
-$userGroup = new Usergroup();
+$userGroup = new UserGroup();
 if ($userGroup->getUseMultipleUrl()) {
     echo Display::url(
         Display::return_icon('class.png', get_lang('ManageUserGroup'), array(), ICON_SIZE_MEDIUM),

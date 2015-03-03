@@ -4,6 +4,7 @@
 use \ChamiloSession as Session;
 
 /**
+ * Class learnpath
  * This class defines the parent attributes and methods for Chamilo learnpaths
  * and SCORM learnpaths. It is used by the scorm class.
  *
@@ -1430,11 +1431,11 @@ class learnpath
 
     /**
      * Updates an item's prereq in place
-     * @param	integer	Element ID
-     * @param	string	Prerequisite Element ID
-     * @param	string	Prerequisite item type
-     * @param	string	Prerequisite min score
-     * @param	string	Prerequisite max score
+     * @param	integer	$id Element ID
+     * @param	string	$prerequisite_id Prerequisite Element ID
+     * @param	string	$mastery_score Prerequisite min score
+     * @param	string	$max_score Prerequisite max score
+     *
      * @return	boolean	True on success, false on error
      */
     public function edit_item_prereq($id, $prerequisite_id, $mastery_score = 0, $max_score = 100)
@@ -1473,10 +1474,11 @@ class learnpath
         Database::query($sql);
 
         if ($prerequisite_id != 'NULL' && $prerequisite_id != '') {
-            $sql = " UPDATE " . $tbl_lp_item . " SET
-                     mastery_score = " . $mastery_score .
-                //", max_score = " . $max_score . " " . // Max score cannot be changed in the form anyway - see display_item_prerequisites_form().
-                " WHERE c_id = ".$course_id." AND ref = '" . $prerequisite_id . "'"; // Will this be enough to ensure unicity?
+            // Will this be enough to ensure unicity?
+            $sql = " UPDATE $tbl_lp_item
+                     SET mastery_score = $mastery_score
+                     WHERE c_id = $course_id AND ref = '$prerequisite_id'";
+
             Database::query($sql);
         }
         // TODO: Update the item object (can be ignored for now because refreshed).
@@ -2656,6 +2658,7 @@ class learnpath
         if (!is_object($this->items[$item_id])) {
             return false;
         }
+        /** @var learnpathItem $oItem */
         $oItem = $this->items[$item_id];
         $prereq = $oItem->get_prereq_string();
 
@@ -8235,7 +8238,8 @@ class learnpath
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
         /* Current prerequisite */
-        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND id = " . $item_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND id = " . $item_id;
         $result = Database::query($sql);
         $row    = Database::fetch_array($result);
         $preq_id = $row['prerequisite'];
@@ -8246,8 +8250,8 @@ class learnpath
         $return .= '<table class="data_table">';
         $return .= '<tr>';
         $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
-        $return .= '<th width="70" height="24">' . get_lang('Minimum') . '</th>';
-        $return .= '<th width="70" height="24">' . get_lang('Maximum') . '</th>';
+        $return .= '<th width="70" >' . get_lang('Minimum') . '</th>';
+        $return .= '<th width="70">' . get_lang('Maximum') . '</th>';
         $return .= '</tr>';
 
         // Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
@@ -8257,7 +8261,8 @@ class learnpath
         $return .= '<label for="idNone">' . get_lang('None') . '</label>';
         $return .= '</tr>';
 
-        $sql 	= "SELECT * FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
+        $sql 	= "SELECT * FROM $tbl_lp_item
+                   WHERE c_id = $course_id AND lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
@@ -8288,13 +8293,15 @@ class learnpath
         unset($this->arrMenu);
 
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['id'] == $item_id)
+            if ($arrLP[$i]['id'] == $item_id) {
                 break;
+            }
             $return .= '<tr>';
             $return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
             $return .= '<label for="id' . $arrLP[$i]['id'] . '">';
             $return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
+
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
                 $return .= '<img alt="" src="../img/lp_' . $icon_name . '.png" style="margin-right:5px;" title="" />';
             } else {
@@ -8307,7 +8314,6 @@ class learnpath
             $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
 
-
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
                 $tmp_obj_lp_item = new LpItem($course_id, $arrLP[$i]['id']);
@@ -8317,19 +8323,19 @@ class learnpath
                 $tmp_obj_lp_item->update_in_bdd();
                 $arrLP[$i]['max_score'] = $tmp_obj_lp_item->max_score;
 
-                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
+                $return .= '<td class="exercise">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';
-                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
+                $return .= '<td class="exercise">';
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" /></center>';
                 $return .= '</td>';
             }
 
             if ($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES) {
-                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
+                $return .= '<td class="exercise">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
                 $return .= '</td>';
-                $return .= '<td class="exercise" style="border:1px solid #ccc;">';
+                $return .= '<td class="exercise"">';
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" /></center>';
                 $return .= '</td>';
             }

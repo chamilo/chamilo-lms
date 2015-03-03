@@ -2512,12 +2512,14 @@ class learnpathItem
                                                 //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
-                                                    WHERE   exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
-                                                        AND exe_user_id = ' . $user_id . '
-                                                        AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . '
-                                                        AND status <> "incomplete"
-                                                    ORDER BY exe_date DESC
-                                                    LIMIT 0, 1';
+                                                        WHERE
+                                                            exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
+                                                            exe_user_id = ' . $user_id . ' AND
+                                                            orig_lp_id = ' . $this->lp_id . ' AND
+                                                            orig_lp_item_id = ' . $prereqs_string . ' AND
+                                                            status <> "incomplete"
+                                                        ORDER BY exe_date DESC
+                                                        LIMIT 0, 1';
                                                 $rs_quiz = Database::query($sql);
                                                 if ($quiz = Database :: fetch_array($rs_quiz)) {
                                                     if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
@@ -2535,17 +2537,17 @@ class learnpathItem
                                                     $returnstatus = false;
                                                 }
                                             }
-
                                         } else {
                                             // 3. for multiple attempts we check that there are minimun 1 item completed.
 
                                             // Checking in the database.
                                             $sql = 'SELECT exe_result, exe_weighting
-                                                    FROM ' . Database :: get_main_table(
-                                                    TABLE_STATISTIC_TRACK_E_EXERCISES
-                                                ) . '
-                                                    WHERE exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . '
-                                                        AND exe_user_id = ' . $user_id . ' AND orig_lp_id = ' . $this->lp_id . ' AND orig_lp_item_id = ' . $prereqs_string . ' ';
+                                                    FROM ' . Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . '
+                                                    WHERE
+                                                        exe_exo_id = ' . $items[$refs_list[$prereqs_string]]->path . ' AND
+                                                        exe_user_id = ' . $user_id . ' AND
+                                                        orig_lp_id = ' . $this->lp_id . ' AND
+                                                        orig_lp_item_id = ' . $prereqs_string . ' ';
                                             //error_log('results 2:'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
 
                                             $rs_quiz = Database::query($sql);
@@ -2600,7 +2602,11 @@ class learnpathItem
                                             );
 
                                             $sql = 'SELECT id FROM ' . $lp_view . '
-                                                    WHERE c_id = ' . $course_id . ' AND user_id = ' . $user_id . '  AND lp_id = ' . $this->lp_id . ' LIMIT 0, 1';
+                                                    WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        user_id = ' . $user_id . '  AND
+                                                        lp_id = ' . $this->lp_id . '
+                                                    LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
                                             $lp_id = Database :: fetch_row(
                                                 $rs_lp
@@ -2608,7 +2614,11 @@ class learnpathItem
                                             $my_lp_id = $lp_id[0];
 
                                             $sql = 'SELECT status FROM ' . $lp_item_view . '
-                                                   WHERE c_id = ' . $course_id . ' AND lp_view_id = ' . $my_lp_id . ' AND lp_item_id = ' . $refs_list[$prereqs_string] . ' LIMIT 0, 1';
+                                                   WHERE
+                                                        c_id = ' . $course_id . ' AND
+                                                        lp_view_id = ' . $my_lp_id . ' AND
+                                                        lp_item_id = ' . $refs_list[$prereqs_string] . '
+                                                    LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
                                             $status_array = Database :: fetch_row(
                                                 $rs_lp
@@ -2670,11 +2680,11 @@ class learnpathItem
                         );
                     }
                     $orstatus = $orstatus || $this->parse_prereq(
-                            $condition,
-                            $items,
-                            $refs_list,
-                            $user_id
-                        );
+                        $condition,
+                        $items,
+                        $refs_list,
+                        $user_id
+                    );
                     if ($orstatus) {
                         // Shortcircuit OR.
                         if (self::debug > 1) {
@@ -2711,15 +2721,18 @@ class learnpathItem
                 }
             }
         }
+
         if (empty($this->prereq_alert)) {
             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
         }
+
         if (self::debug > 1) {
             error_log(
                 'New LP - End of parse_prereq. Error code is now ' . $this->prereq_alert,
                 0
             );
         }
+
         return false;
     }
 

@@ -38,7 +38,7 @@ $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' and $type == 'learnpathitem') {
-    $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+    $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_edit_item_prereq.php');
@@ -69,14 +69,15 @@ $interbreadcrumb[] = array('url' => api_get_self() . "?action=add_item&type=step
 
 // Theme calls.
 $show_learn_path = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme();
+/** @var learnpath $lp */
+$lp = $_SESSION['oLP'];
+$lp_theme_css = $lp->get_theme();
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 ?>
 <script>
-    /* <![CDATA[ */
     function stripslashes(str) {
         str=str.replace(/\\'/g,'\'');
         str=str.replace(/\\"/g,'"');
@@ -97,19 +98,19 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 
 /* DISPLAY SECTION */
 
-echo $_SESSION['oLP']->build_action_menu();
+echo $lp->build_action_menu();
 
 echo '<div class="row-fluid">';
 echo '<div class="span3">';
-echo $_SESSION['oLP']->return_new_tree();
+echo $lp->return_new_tree();
 echo '</div>';
 echo '<div class="span9">';
 if (isset($is_success) && $is_success == true) {
-    echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
+    echo $lp->display_manipulate($_GET['id'], null);
     echo Display::return_message(get_lang("PrerequisitesAdded"));
 } else {
-    echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
-    echo $_SESSION['oLP']->display_item_prerequisites_form($_GET['id']);
+    echo $lp->display_manipulate($_GET['id'], null);
+    echo $lp->display_item_prerequisites_form($_GET['id']);
 }
 echo '</div>';
 

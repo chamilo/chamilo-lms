@@ -49,8 +49,8 @@ if ($debug) {
 api_protect_course_script(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
-
-if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+if (in_array($glossaryExtraTools, array('true', 'exercise', 'exercise_and_lp'))) {
     $htmlHeadXtra[] = api_get_js('glossary.js');
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }

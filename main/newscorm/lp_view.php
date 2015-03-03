@@ -484,7 +484,8 @@ if ($is_allowed_to_edit) {
 
     // Loads the glossary library.
     <?php
-      if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+    $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+    if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                 ?>
             $.frameReady(function(){

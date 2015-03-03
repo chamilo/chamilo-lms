@@ -295,10 +295,10 @@ if ($form->validate()) {
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
 
-    $end_limit = $params['end_limit'];
-    $start_limit = $params['start_limit'];
+    $end_limit = isset($params['end_limit']);
+    $start_limit = isset($params['start_limit']);
 
-    if (empty($end_limit) && empty($start_limit)) {
+    if (!$end_limit && !$start_limit) {
         $nolimit = 1;
     } else {
         $nolimit = null;

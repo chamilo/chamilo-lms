@@ -8,9 +8,29 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * @todo add more checks in upload/rm
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-class PersonalDriver extends Driver
+class PersonalDriver extends Driver implements DriverInterface
 {
     public $name = 'PersonalDriver';
+
+    /**
+     * @inheritdoc
+     */
+    public function setup()
+    {
+        $userId = api_get_user_id();
+        $path = \UserManager::get_user_picture_path_by_id($userId, 'none');
+        if (!empty($path['dir'])) {
+            $dir = api_get_path(SYS_CODE_PATH) . $path['dir'];
+
+            if (!is_dir($dir)) {
+                mkdir($dir);
+            }
+
+            if (!is_dir($dir . 'my_files')) {
+                mkdir($dir . 'my_files');
+            }
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -28,6 +48,7 @@ class PersonalDriver extends Driver
                     $userId,
                     'system'
                 );
+
                 $dirWeb = \UserManager::get_user_picture_path_by_id(
                     $userId,
                     'web'

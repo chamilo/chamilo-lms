@@ -3,7 +3,7 @@
 
 namespace Chamilo\UserBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\UserFieldValues;
+//use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,19 +11,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Chamilo\CoreBundle\Component\Auth;
+//use Chamilo\CoreBundle\Component\Auth;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use FOS\MessageBundle\Model\ParticipantInterface;
-use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
+//use FOS\MessageBundle\Model\ParticipantInterface;
+//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use Application\Sonata\MediaBundle\Entity\Media;
-use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
+//use Application\Sonata\MediaBundle\Entity\Media;
+//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
 
 use Doctrine\Common\Collections\Collection;
-use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
+//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
+//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
+//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 
@@ -35,7 +35,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User //class User extends BaseUser implements ParticipantInterface, ThemeUser
+class User extends BaseUser //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -63,23 +63,37 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
     /**
      * @var string
      *
+     * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
+     */
+    protected $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
+     */
+    protected $email;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $lastname;
+    protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    //protected $firstname;
+    protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=50, nullable=false, unique=false)
      */
-    //protected $password;
+    protected $password;
 
     /**
      * @var string
@@ -107,7 +121,7 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
      *
      * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
      */
-    //protected $phone;
+    protected $phone;
 
     /**
      * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
@@ -343,6 +357,7 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
         $this->portals = new ArrayCollection();
         $this->dropBoxSentFiles = new ArrayCollection();
         $this->dropBoxReceivedFiles = new ArrayCollection();
+        $this->chatcallUserId = 0;
         //$this->extraFields = new ArrayCollection();
         //$this->userId = 0;
         //$this->createdAt = new \DateTime();
@@ -708,15 +723,6 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
         return $this;
     }
 
-    /**
-     * Get lastname
-     *
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
 
     /**
      * Set firstname
@@ -730,39 +736,6 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
         $this->firstname = $firstname;
 
         return $this;
-    }
-
-    /**
-     * Get firstname
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
     }
 
     /**
@@ -837,7 +810,8 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
     /**
      * Set status
      *
-     * @param boolean $status
+     * @param int $status
+     *
      * @return User
      */
     public function setStatus($status)
@@ -1183,13 +1157,12 @@ class User //class User extends BaseUser implements ParticipantInterface, ThemeU
      * Set expirationDate
      *
      * @param \DateTime $expirationDate
+     *
      * @return User
      */
     public function setExpirationDate($expirationDate)
     {
-        if (!empty($expirationDate)) {
-            $this->expirationDate = $expirationDate;
-        }
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }

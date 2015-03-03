@@ -1618,8 +1618,11 @@ function WSEditUserWithPicture($params) {
     $filename = basename($picture_url);
     $tempdir = sys_get_temp_dir();
     $tempDir = api_get_path(SYS_ARCHIVE_PATH);
-    file_put_contents($tempDir.$filename, file_get_contents($picture_url));
-    $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
+    // Make sure the file download was OK by checking the HTTP headers for OK
+    if (strpos(get_headers($picture_url)[0], "OK")) {
+        file_put_contents($tempDir . $filename, file_get_contents($picture_url));
+        $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir . $filename);
+    }
 
     if ($user_id == 0) {
         return 0;

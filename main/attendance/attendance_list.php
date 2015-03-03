@@ -30,6 +30,8 @@ if ($attendance->get_number_of_attendances() == 0) {
     $attendance->set_description(get_lang('Attendances'));
     $attendance->attendance_add();
 }
+$default_column = isset($default_column) ? $default_column : null;
+$parameters = isset($parameters) ? $parameters : null;
 $table = new SortableTable(
     'attendance_list',
     array('Attendance', 'get_number_of_attendances'),

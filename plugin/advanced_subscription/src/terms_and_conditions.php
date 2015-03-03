@@ -24,6 +24,8 @@ $data['termsRejected'] = isset($_REQUEST['r']) ? intval($_REQUEST['r']) : 0;
 // Init template
 $tpl = new Template($plugin->get_lang('plugin_title'));
 
+$requiredMinimun = $plugin->get('min_profile_percentage');
+
 if (
     !empty($data['sessionId']) &&
     !empty($data['studentUserId']) &&
@@ -74,5 +76,7 @@ $tpl->assign('student', $data['student']);
 $tpl->assign('sessionId', $data['sessionId']);
 $tpl->assign('termsContent', $termsContent);
 $tpl->assign('termsFiles', $termFiles);
+$tpl->assign('profileCompleted', $data['profile_completed']);
+$tpl->assign('percentMinimun', $requiredMinimun);
 $content = $tpl->fetch('/advanced_subscription/views/terms_and_conditions.tpl');
 echo $content;

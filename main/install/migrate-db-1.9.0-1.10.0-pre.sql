@@ -63,14 +63,30 @@ ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL defaul
 ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
-ALTER TABLE user MODIFY COLUMN user_id int NOT NULL;
+ALTER TABLE user MODIFY COLUMN user_id int DEFAULT NULL;
 ALTER TABLE user DROP PRIMARY KEY;
 ALTER TABLE user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT;
 
+ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
+ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
+ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0';
+
+ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
+ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
+
+DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools';
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'none', 'None');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise', 'Exercise');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'Learning path');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath');
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.13' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.16' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 
 ALTER TABLE c_survey ADD visible_results INT UNSIGNED DEFAULT 0;
+ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float;
+ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float;
 

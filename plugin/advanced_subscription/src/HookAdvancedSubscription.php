@@ -163,7 +163,9 @@ class HookAdvancedSubscription extends HookObserver implements
                 array(
                     // session.id
                     'id' => array('name' => 'id', 'type' => 'xsd:string'),
-                    // session.cost
+                    // session.code
+                    'code' => array('name' => 'code', 'type' => 'xsd:string'),
+                    // session.place
                     'cost' => array('name' => 'cost', 'type' => 'xsd:float'),
                     // session.place
                     'place' => array('name' => 'place', 'type' => 'xsd:string'),

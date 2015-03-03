@@ -778,10 +778,11 @@ class IndexManager
         return $html;
     }
 
-    function return_classes_block() {
+    function return_classes_block()
+    {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            $usergroup = new Usergroup();
+            $usergroup = new UserGroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
             if (!empty($usergroup_list)) {

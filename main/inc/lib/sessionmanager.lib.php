@@ -157,6 +157,8 @@ class SessionManager
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
             return $msg;
+        } elseif (!empty($duration) && (!empty($start_limit) || !empty($end_limit))) {
+            return get_lang('ChooseEitherDurationOrTimeLimit');
         } else {
             $ready_to_create = false;
             if ($fix_name) {
@@ -1407,6 +1409,8 @@ class SessionManager
         } elseif (!empty($start_limit) && !empty($end_limit) && empty($nolimit) && $date_start >= $date_end) {
             $msg = get_lang('StartDateShouldBeBeforeEndDate');
             return $msg;
+        } elseif (!empty($duration) && (!empty($start_limit) || !empty($end_limit))) {
+            return get_lang('ChooseEitherDurationOrTimeLimit');
         } else {
 
             $rs = Database::query("SELECT id FROM $tbl_session WHERE name='" . Database::escape_string($name) . "'");

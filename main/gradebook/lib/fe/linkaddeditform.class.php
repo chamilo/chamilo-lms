@@ -146,10 +146,6 @@ class LinkAddEditForm extends FormValidator
 			}
 		}
 
-		// ELEMENT: date
-		//$this->add_datepicker('date',get_lang('Date'));
-		//$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
-
 		// ELEMENT: description
 		if ($link->needs_name_and_description()) {
 			$this->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3','cols' => '34'));

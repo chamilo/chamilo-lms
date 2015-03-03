@@ -161,8 +161,6 @@ $paths = array(
     api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
 );
 
-
-
 $isDevMode = true;
 
 // the connection configuration
@@ -202,10 +200,10 @@ AnnotationRegistry::registerAutoloadNamespace(
     api_get_path(SYS_PATH)."vendor/symfony/validator"
 );
 
+
 AnnotationRegistry::registerFile(
     api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
 );
-
 
 AnnotationRegistry::registerAutoloadNamespace(
     'Gedmo\Mapping\Annotation',

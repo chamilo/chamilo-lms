@@ -62,6 +62,7 @@ $strings['RecommendedNumberOfParticipants'] = 'Número recomendado de participan
 $strings['PublicationEndDate'] = 'Fecha fin de publicación';
 $strings['Mode'] = 'Modalidad';
 $strings['Postulant'] = 'Postulante';
+$strings['Area'] = 'Área';
 $strings['InscriptionDate'] = 'Fecha de inscripción';
 $strings['BossValidation'] = 'Validación del superior';
 $strings['Decision'] = 'Decisión';
@@ -137,3 +138,4 @@ $strings['MailContentReminderMaxSuperior'] = 'Le recordamos que hemos recibido l
 $strings['MailContentReminderMaxSuperiorSecond'] = 'Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>%s</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.';
 
 $strings['YouMustAcceptTermsAndConditions'] = 'Para inscribirse al curso <strong>%s</strong>, debe aceptar estos términos y condiciones.';
+$strings['YouMustFillXPercentOfYourProfileAtLeast'] = "Debes llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>";

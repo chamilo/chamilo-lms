@@ -62,6 +62,7 @@ $strings['RecommendedNumberOfParticipants'] = 'Recommended number of participant
 $strings['PublicationEndDate'] = 'Publication end date';
 $strings['Mode'] = 'Mode';
 $strings['Postulant'] = 'Postulant';
+$strings['Area'] = 'Area';
 $strings['InscriptionDate'] = 'Inscription date';
 $strings['BossValidation'] = 'Boss validation';
 $strings['Decision'] = 'Decision';
@@ -137,3 +138,4 @@ $strings['MailContentReminderMaxSuperior'] = 'We kindly remind you that we have 
 $strings['MailContentReminderMaxSuperiorSecond'] = 'This course have limited vacancies and has received a high subscription request rate, So we recommend all areas to accept at most <strong>%s</strong> candidates. We invite you to accept or reject the inscription request by clicking the corresponding button for each collaborator.';
 
 $strings['YouMustAcceptTermsAndConditions'] = 'To subscribe to course <strong>%s</strong>, you must accept these terms and conditions.';
+$strings['YouMustFillXPercentOfYourProfileAtLeast'] = "You must fill the <strong>%d percent</strong> of your profile at least. For now you has filled the <strong>%d percent</strong>";

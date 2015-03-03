@@ -56,7 +56,6 @@ class survey_question
         $form->addHidden('question_id', $questionId);
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
         $form->addHidden('type', Security::remove_XSS($_GET['type']));
-        $form->addHidden('save_question', 1);
 
         $config = array('ToolbarSet' => 'SurveyQuestion', 'Width' => '100%', 'Height' => '120');
         $form->addHtmlEditor('question', get_lang('Question'), true, false, $config);
@@ -203,6 +202,7 @@ class survey_question
                 $counter--;
                 Session::write('answer_count', $counter);
             }
+
             foreach ($formData['answers'] as $key => & $value) {
                 if ($key > $deleted) {
                     $formData['answers'][$key - 1] = $formData['answers'][$key];
@@ -211,15 +211,14 @@ class survey_question
             }
         }
 
-
         // Adding an answer
-        if (isset($_POST['add_answer'])) {
+        if (isset($_POST['buttons']) && isset($_POST['buttons']['add_answer'])) {
             $counter++;
             Session::write('answer_count', $counter);
         }
 
         // Removing an answer
-        if (isset($_POST['remove_answer'])) {
+        if (isset($_POST['buttons']) && isset($_POST['buttons']['remove_answer'])) {
             $counter--;
             Session::write('answer_count', $counter);
             foreach ($formData['answers'] as $index => &$data) {
@@ -257,13 +256,7 @@ class survey_question
     public function save($surveyData, $formData)
     {
         // Saving a question
-        if (isset($_POST['save_question']) &&
-            !isset($_POST['add_answer']) &&
-            !isset($_POST['remove_answer']) &&
-            !isset($_POST['delete_answer']) &&
-            !isset($_POST['move_down']) &&
-            !isset($_POST['move_up'])
-        ) {
+        if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
             $message = survey_manager::save_question(

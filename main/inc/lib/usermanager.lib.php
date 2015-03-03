@@ -78,7 +78,7 @@ class UserManager
         $phone = '',
         $picture_uri = '',
         $auth_source = PLATFORM_AUTH_SOURCE,
-        $expiration_date = '0000-00-00 00:00:00',
+        $expiration_date = null,
         $active = 1,
         $hr_dept_id = 0,
         $extra = null,
@@ -160,8 +160,36 @@ class UserManager
             }
         }
 
-        $current_date = api_get_utc_datetime();
-        $sql = "INSERT INTO $table_user
+        $currentDate = api_get_utc_datetime();
+        $now = new DateTime($currentDate);
+        $manager = Database::getManager();
+
+        if (!empty($expiration_date)) {
+            $expiration_date = new \DateTime($expiration_date);
+        }
+
+        $user = new User();
+        $user->setLastname($lastName)
+            ->setFirstname($firstName)
+            ->setUsername($loginName)
+            ->setStatus($status)
+            ->setPassword($password)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPictureUri($picture_uri)
+            ->setCreatorId($creator_id)
+            ->setAuthSource($auth_source)
+            ->setPhone($phone)
+            ->setLanguage($language)
+            ->setRegistrationDate($now)
+            ->setExpirationDate($expiration_date)
+            ->setHrDeptId($hr_dept_id)
+            ->setActive($active);
+
+        $manager->persist($user);
+        $manager->flush();
+
+        /*$sql = "INSERT INTO $table_user
                 SET lastname =         '".Database::escape_string(trim($lastName))."',
                 firstname =         '".Database::escape_string(trim($firstName))."',
                 username =            '".Database::escape_string(trim($loginName))."',
@@ -178,10 +206,12 @@ class UserManager
                 expiration_date =     '".Database::escape_string($expiration_date)."',
                 hr_dept_id =         '".Database::escape_string($hr_dept_id)."',
                 active =             '".Database::escape_string($active)."'";
-        $result = Database::query($sql);
 
-        if ($result) {
-            $return = Database::insert_id();
+        $result = Database::query($sql);*/
+        $userId = $user->getId();
+
+        if (!empty($userId)) {
+            $return = $userId;
             $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";
             Database::query($sql);
 
@@ -218,6 +248,7 @@ class UserManager
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
                     $plugin = new AppPlugin();
+
                     $additionalParameters = array(
                         'smsType' => constant($plugin->getSMSPluginName().'::WELCOME_LOGIN_PASSWORD'),
                         'userId' => $return,
@@ -625,8 +656,6 @@ class UserManager
         if ($user_id === false)
             return false;
 
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
         //Checking the user language
         $languages = api_get_languages();
         if (!in_array($language, $languages['folder'])) {
@@ -636,11 +665,35 @@ class UserManager
         if ($user_info['active'] != $active) {
             $change_active = 1;
         }
-        $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',
-                language='".Database::escape_string($language)."',";
+
+        $em = Database::getManager();
+        /** @var Chamilo\UserBundle\Entity\User $user */
+
+        $user = $em->getRepository('ChamiloUserBundle:User')->find($user_id);
+
+        if (empty($user)) {
+            return false;
+        }
+
+        if (!empty($expiration_date)) {
+            $expiration_date = new \DateTime($expiration_date);
+        }
+
+        $user
+            ->setLastname($lastname)
+            ->setFirstname($firstname)
+            ->setUsername($username)
+            ->setStatus($status)
+            ->setAuthSource($auth_source)
+            ->setLanguage($language)
+            ->setEmail($email)
+            ->setOfficialCode($official_code)
+            ->setPhone($phone)
+            ->setPictureUri($picture_uri)
+            ->setExpirationDate($expiration_date)
+            ->setActive($active)
+            ->setHrDeptId($hr_dept_id)
+        ;
 
         if (!is_null($password)) {
             if ($encrypt_method == '') {
@@ -656,28 +709,14 @@ class UserManager
                     return api_set_failure('encrypt_method invalid');
                 }
             }
-            $sql .= " password='".Database::escape_string($password)."',";
-        }
-        if (!is_null($auth_source)) {
-            $sql .= " auth_source='".Database::escape_string($auth_source)."',";
-        }
-        $sql .= "
-                email='".Database::escape_string($email)."',
-                status='".Database::escape_string($status)."',
-                official_code='".Database::escape_string($official_code)."',
-                phone='".Database::escape_string($phone)."',
-                picture_uri='".Database::escape_string($picture_uri)."',
-                expiration_date='".Database::escape_string($expiration_date)."',
-                active='".Database::escape_string($active)."',
-                hr_dept_id=".intval($hr_dept_id);
-
-        if (!is_null($creator_id)) {
-            $sql .= ", creator_id='".intval($creator_id)."'";
+            //$sql .= " password='".Database::escape_string($password)."',";
+            $user->setPassword($password);
         }
 
-        $sql .= " WHERE id = '$user_id'";
-        $return = Database::query($sql);
-        if ($change_active == 1 && $return) {
+        $em->persist($user);
+        $em->flush();
+
+        if ($change_active == 1) {
             if ($active == 1) {
                 $event_title = LOG_USER_ENABLE;
             } else {
@@ -708,14 +747,21 @@ class UserManager
             } else {
                 $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$_configuration['root_web']."\n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
             }
-            @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+            api_mail_html(
+                $recipient_name,
+                $email,
+                $emailsubject,
+                $emailbody,
+                $sender_name,
+                $email_admin
+            );
         }
 
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
         }
 
-        return $return;
+        return $user->getId();
     }
 
     /**

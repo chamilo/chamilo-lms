@@ -194,8 +194,8 @@ $shortDescription->save(array(
 $id = new ExtraField('session');
 $id->save(array(
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
-    'field_variable' => 'id',
-    'field_display_text' => get_lang('Id'),
+    'field_variable' => 'code',
+    'field_display_text' => get_lang('Code'),
     'field_visible' => 1,
     'field_changeable' => 1
 ));

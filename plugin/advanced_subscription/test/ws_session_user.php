@@ -20,8 +20,10 @@ $hookPlugin = HookAdvancedSubscription::create();
 $params = array();
 // Init result array
 $params['user_id'] = intval($_REQUEST['u']);
+$params['user_field'] = 'drupal_user_id';
 $params['session_id'] = intval($_REQUEST['s']);
 $params['profile_completed'] = 100;
+$params['is_connected'] = true;
 
 /**
  * Copied code from WSHelperVerifyKey function
@@ -75,11 +77,11 @@ try {
     $client = new SoapClient(null, $options);
     // Soap call to WS
     $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', array($params));
-    echo '<pre>', print_r($result, 1) , '</pre>';
+    var_dump($result);
     if (is_object($result) && isset($result->action_url)) {
         echo '<br />';
-        echo Display::url($result->message, $result->action_url);
+        echo Display::url("message" . $result->message, $result->action_url);
     }
 } catch (\Exception $e) {
-    echo '<pre>', print_r($e, 1) , '</pre>';
+    var_dump($e);
 }

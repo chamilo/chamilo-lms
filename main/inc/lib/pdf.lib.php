@@ -345,9 +345,11 @@ class PDF
      * @param   string $pdf_name pdf name
      * @param   string $course_code course code
      * (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode the output mode can be:
-     * 'I', 'D', 'F', 'S'
-     * by default is 'D'
+     * @param string $outputMode the MPDF output mode can be:
+     * 'I' (print on standard output),
+     * 'D' (download file) (this is the default value),
+     * 'F' (save to local file) or
+     * 'S' (return as a string)
      * @return  string  Web path
      */
     public function content_to_pdf(

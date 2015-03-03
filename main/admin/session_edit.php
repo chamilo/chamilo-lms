@@ -4,9 +4,6 @@
  * Sessions edition script
  * @package chamilo.admin
  */
-/**
- * Code
- */
 
 // name of the language file that needs to be included
 $language_file ='admin';

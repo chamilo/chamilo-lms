@@ -19,7 +19,7 @@ if (!isset($manager)) {
     $pagination    = new pagination(false);
     $search_folder = null;
     if (isset($_GET['search_folder'])) {
-        $search_folder = str_replace("'", "", $_GET['search_folder']); //security fix for Chamilo by cfasanando
+        $search_folder = str_replace("'", "", Security::remove_XSS($_GET['search_folder']));
     }
 
     if (!empty($_GET['search'])) {

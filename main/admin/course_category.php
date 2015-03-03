@@ -73,7 +73,7 @@ if ($action == 'add' || $action == 'edit') {
         echo '<div class="actions">';
         echo Display::url(
             Display::return_icon('folder_up.png', get_lang("Back"), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.Security::remove_XSS($category)
         );
         echo '</div>';
 
@@ -81,7 +81,7 @@ if ($action == 'add' || $action == 'edit') {
         if (!empty($category)) {
             $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
         }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.$category;
+        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($category);
         $form = new FormValidator('course_category', 'post', $url);
         $form->addElement('header', '', $form_title);
         $form->addElement('hidden', 'formSent', 1);
@@ -129,7 +129,7 @@ if ($action == 'add' || $action == 'edit') {
     if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
         echo Display::url(
             Display::return_icon('new_folder.png', get_lang("AddACategory"), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.$category
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)
         );
     }
 

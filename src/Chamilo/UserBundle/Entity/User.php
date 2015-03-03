@@ -3,7 +3,7 @@
 
 namespace Chamilo\UserBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\UserFieldValues;
+//use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,19 +11,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Chamilo\CoreBundle\Component\Auth;
+//use Chamilo\CoreBundle\Component\Auth;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use FOS\MessageBundle\Model\ParticipantInterface;
-use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
+//use FOS\MessageBundle\Model\ParticipantInterface;
+//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use Application\Sonata\MediaBundle\Entity\Media;
-use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
+//use Application\Sonata\MediaBundle\Entity\Media;
+//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
 
 use Doctrine\Common\Collections\Collection;
-use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
+//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
+//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
+//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 

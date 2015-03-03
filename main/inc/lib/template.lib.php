@@ -486,7 +486,7 @@ class Template
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
 
-       // $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_CSS_PATH).'font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
         //THEME CSS STYLE
        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');

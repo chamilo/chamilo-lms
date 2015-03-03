@@ -696,10 +696,18 @@ class IndexManager
      */
     function display_login_form()
     {
-        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-inline'));
 
-        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'form-control'));
+        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-inline'));
+        $form->addElement('label',get_lang('UserName'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-user"></i></span>');
+        $form->addElement('text', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addHtml('</div>');
+        $form->addElement('label',get_lang('Pass'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-lock"></i></span>');
+        $form->addElement('password', 'password','', array('id' => 'password', 'class' => 'form-control'));
+        $form->addHtml('</div>');
         global $_configuration;
 
         // Captcha
@@ -738,8 +746,9 @@ class IndexManager
                 $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
-
-        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn btn-default'));
+        $form->addHtml('<div class="form-button-login">');
+        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn-primary btn-block'));
+        $form->addHtml('</div>');
 
         $html = $form->return_form();
         // The validation is located in the local.inc

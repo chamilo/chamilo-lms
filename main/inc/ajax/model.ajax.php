@@ -187,7 +187,7 @@ switch ($action) {
             if (empty($userIdList) || empty($courseCodeList)) {
                 exit;
             }
-        } else if(api_is_student_boss()) {
+        } elseif (api_is_student_boss()) {
             $users = UserManager::getUsersFollowedByStudentBoss($userId);
 
             $userIdList = array_keys($users);

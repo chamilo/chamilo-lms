@@ -212,6 +212,10 @@ if (api_is_drh()) {
         Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
         '#'
     );
+    $actions .= Display::url(
+        Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
+    );
 }
 
 $actions .= '<span style="float:right">';

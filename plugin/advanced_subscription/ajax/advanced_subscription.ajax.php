@@ -56,7 +56,7 @@ if ($verified) {
                 $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
                 if ($legalEnabled) {
                     // Save terms confirmation
-                    CourseLegalPlugin::create()->saveUserLegal($data['studentUserId'], $data['courseId'], $data['sessionId']);
+                    CourseLegalPlugin::create()->saveUserLegal($data['studentUserId'], $data['courseId'], $data['sessionId'], false);
                 }
                 // Prepare data
                 // Get session data

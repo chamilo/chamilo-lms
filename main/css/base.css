@@ -2,7 +2,7 @@
  * Common CSS for all themes
 */
 
-@import url('bootstrap.css');
+/* @import url('bootstrap.css');*/
 
 /* some changes to the bootstrap.css */
 
@@ -471,7 +471,9 @@ span.form_required  {
 form .formw {
     margin-left: 170px;
 }
-
+form .form-button-login{
+  margin-top: 5px;
+}
 form .formw input {
     float:left;
 }
@@ -598,32 +600,6 @@ footer {
 /* Sticky footer*/
 .push {
     height: 9em; /* Very important */
-}
-
-footer .container .row {
-    padding-top: 50px;
-}
-
-footer #footer_left {
-    overflow-y : auto;
-    max-height:50px;
-    padding: 5px;
-}
-
-footer #footer_right {
-    float: right;
-}
-
-#footer_right #admin_name, #footer_right #software_name{
-    text-align:right;
-}
-
-.page-header {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 #topbar_push {

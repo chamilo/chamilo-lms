@@ -832,7 +832,8 @@ class Display
     public static function url($name, $url, $extra_attributes = array())
     {
         if (!empty($url)) {
-            $extra_attributes['href']= $url;
+            $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+            $extra_attributes['href'] = $url;
         }
         return self::tag('a', $name, $extra_attributes);
     }

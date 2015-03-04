@@ -2,7 +2,7 @@
 
 <script>
 $(document).ready( function() {
-    $('.star-rating li a').live('click', function(event) {
+    $('.star-rating li a').on('click', function(event) {
         var id = $(this).parents('ul').attr('id');
         $('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
         $.ajax({
@@ -18,24 +18,22 @@ $(document).ready( function() {
             }
         });
     });
-
 });
 </script>
-
-    <section id="hot_courses">
-        <div class="row">
-            <div class="span9">
-                {% if _u.is_admin %}
-                <span class="pull-right">
-                    <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
-                        <img src="{{ "visible.png"|icon(32) }}">
-                    </a>
-                </span>
-                {% endif %}
-                {{ "HottestCourses"|display_page_subheader }}
-            </div>            
-                
-            {% include template ~ '/layout/hot_course_item.tpl' %}
+<section id="hot_courses">
+    <div class="row">
+        <div class="span9">
+            {% if _u.is_admin %}
+            <span class="pull-right">
+                <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
+                    <img src="{{ "visible.png"|icon(32) }}">
+                </a>
+            </span>
+            {% endif %}
+            {{ "HottestCourses"|display_page_subheader }}
         </div>
-    </section>
+
+        {% include template ~ '/layout/hot_course_item.tpl' %}
+    </div>
+</section>
 {% endif %}

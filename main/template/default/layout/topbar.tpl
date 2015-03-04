@@ -90,5 +90,4 @@
             {% endif %}
         </div> <!-- /container-->
     </nav><!-- /topbar -->
-    <div id="topbar_push"></div>
 {% endif %}

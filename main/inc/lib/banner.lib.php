@@ -666,8 +666,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         // View as student/teacher link
+        $view = null;
         if (!empty($view_as_student_link)) {
-            $lis.= Display::tag('span', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+            $view .= Display::tag('div', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
         }
 
         if (!empty($navigation_right)) {
@@ -678,6 +679,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if (!empty($lis)) {
+            $html .= $view;
             $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
         }
     }

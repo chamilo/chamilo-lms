@@ -222,28 +222,26 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
         $thematic_description_html =
             '<div class="thematic-postit">
-                <div class="row-fluid"><div class="span12">
+                <div class="row"><div class="col-md-12">
                     <div class="accordion" id="progress-bar-course">
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <div class="title-accordion">
-                                    <div class="row-fluid score-thematic">
-                                        <div class="span8">';
-        $thematic_description_html .=
-            '<div class="span6 name-student">
+                                    <div class="row score-thematic">
+                                        <div class="col-md-12">';
+        $thematic_description_html .=      '<div class="col-md-3 name-student">
                                                 <h2>' . $userInfo['firstName'] . '</h2>
                                                 <h3>' . $userInfo['lastName'] . '</h3>
                                             </div>
-                                            <div class="span2 score">
+                                            <div class="col-md-3 score">
                                                 <h1>' . $thematicScore . '</h1>
                                             </div>
-                                            <div class="span4">
+                                            <div class="col-md-3">
                                                 <h3>' . $thematic_advance . '</h3>
                                                 <p>' . $courseInfo['name'] . '</p>
                                             </div>
-                                        </div>';
-        $thematic_description_html .=
-            '<div class="span4">
+                                        ';
+        $thematic_description_html .=   '<div class="col-md-3">
                                             <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hide-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
                                             ' . get_lang('SeeDetail') . '
                                             </a>
@@ -251,21 +249,22 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             ' . get_lang('Hide') . '
                                             </a>
                                         </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>';
         $thematic_description_html .=
             '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
                                 <div class="accordion-inner">
-                                    <div class="row-fluid">
-                                        <div class="span4">
-                                            <div class="row-fluid">
-                                                <div class="span4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-4">
                                                     <div class="thumbnail">
                                                         <img src="' . $userInfo['avatar'] . '" class="img-polaroid">
                                                     </div>
                                                 </div>
-                                                <div class="span8">
+                                                <div class="col-md-8">
                                                     <div class="info-progress">
                                                         <div class="tittle-score">' . $thematic_advance . '&nbsp;' . $thematicScore .'
                                                         </div>
@@ -317,7 +316,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     }
 }
 
-$introduction_section .= '<div class="row course-tools-intro"><div class="span12">';
+$introduction_section .= '<div class="row"><div class="col-md-12">';
 $introduction_section .=  $thematic_description_html;
 $introduction_section .=  '</div>';
 

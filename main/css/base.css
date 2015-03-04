@@ -29,6 +29,49 @@ select {
 .title-header-tools{
   text-align: center;
 }
+
+ul#navigation {
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  top: 200px;
+  right: -10px;
+  list-style: none;
+  z-index:9999;
+}
+
+ul#navigation li {
+  width: 73px;
+}
+
+ul#navigation li a {
+  display: block;
+  margin-left: 1px;
+  width: 65px;
+  opacity: 0.6;
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+  -webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a {
+  background-color:#879DAA;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+ul#navigation .report a {
+  background-color:#8fd400;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+
 /* END CSS BASE */
 
 .button-load{
@@ -410,18 +453,18 @@ footer {
 }
 
 .actions {
-    background:#efefef;
-    border:1px solid #ccc;
-    margin-bottom: 11px;
-    height:32px;
-    padding: 2px 2px 2px 14px;
-    vertical-align:middle;
+    background:#ffffff;
+    border:1px solid #dddddd;
+    padding: 15px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
 }
 [dir=rtl] .actions {
     background:#efefef;
     border:1px solid #ccc;
     margin-bottom: 11px;
-    height:32px;
     padding: 2px 2px 2px 14px;
     vertical-align:middle;
     float: right;
@@ -445,12 +488,6 @@ footer {
     margin-bottom: 0px;
 }
 
-.actions a img {
-    padding:0px;
-    margin:0px;
-    float:left;
-}
-
 .actions fieldset {
     margin-top:0px;
 }
@@ -460,17 +497,10 @@ footer {
     color: #999999 !important;
 }
 
-.actions img {
-    padding-right:10px;
-    border: none;
-    text-decoration: none;
-    vertical-align:middle;
-}
+
 .actions a {
-    display: block;
-    float: left;
+    display: inline-block;
     margin-right: 10px;
-    vertical-align:middle;
 }
 
 .actions .btn-toolbar {
@@ -478,6 +508,7 @@ footer {
 }
 
 .actions span {
+    display: inline-block;
     margin-right: 10px;
     vertical-align:middle;
 }

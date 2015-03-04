@@ -36,9 +36,11 @@ function home_tabs($file_logged_in)
 			$data_logged_in[] = $line;
 		}
 		//tabs file for logged out users
-		$fp = fopen($file_logged_out, 'w');
-		fputs($fp, implode("\n", $data_logged_out));
-		fclose($fp);
+		if (file_exists($file_logged_out)) {
+			$fp = fopen($file_logged_out, 'w');
+			fputs($fp, implode("\n", $data_logged_out));
+			fclose($fp);
+		}
 		//tabs file for logged in users
 		$fp = fopen($file_logged_in, 'w');
 		fputs($fp, implode("\n", $data_logged_in));

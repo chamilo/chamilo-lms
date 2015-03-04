@@ -79,7 +79,7 @@ $(document).ready(function() {
     });
 
     $.datepicker.setDefaults( $.datepicker.regional[region_value] );
-    
+
 	var calendar = $('#calendar').fullCalendar({
 		header: {
 			left: 'today prev,next',

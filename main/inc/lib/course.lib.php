@@ -3449,7 +3449,7 @@ class CourseManager
     {
         $html = '<div class="course_item">';
         $html .= '<div class="row">';
-        $html .= '<div class="span7">';
+        $html .= '<div class="col-md-7">';
 
         $notifications = isset($params['notifications']) ? $params['notifications'] : null;
 
@@ -3491,9 +3491,9 @@ class CourseManager
         }
         $html .= '<div class="' . $class . '">';
         $html .= '<div class="row">';
-        $html .= '<div class="span7">';
+        $html .= '<div class="col-md-7">';
         $html .= ' <div class="row">';
-        $html .= '<div class="span1 course-box-thumbnail-box">';
+        $html .= '<div class="col-md-2 course-box-thumbnail-box">';
         if (!empty($params['link'])) {
             $html .= '<a class="thumbnail" href="' . $params['link'] . '">';
             $html .= $params['icon'];
@@ -3508,7 +3508,7 @@ class CourseManager
         $notifications = isset($params['notifications']) ? $params['notifications'] : null;
         $param_class = isset($params['class']) ? $params['class'] : null;
 
-        $html .= '<div class="span6 ' . $param_class . '">';
+        $html .= '<div class="col-md-6 ' . $param_class . '">';
         $html .= '<h3>' . $params['title'] . $notifications . '</h3> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {

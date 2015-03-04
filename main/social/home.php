@@ -127,7 +127,7 @@ $socialRightContent .= '
         ' . get_lang('EditProfile') . '
     </a>
     </div></div></div>';
-$socialRightInformation = '<div class="span4">';
+$socialRightInformation = '<div class="col-md-4">';
 if (api_get_setting('allow_skills_tool') == 'true') {
     $socialRightInformation .= '<div class="well_border">';
     $skill = new Skill();

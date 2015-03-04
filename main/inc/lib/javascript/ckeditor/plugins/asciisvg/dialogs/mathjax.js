@@ -564,7 +564,7 @@ CKEDITOR.dialog.add( 'asciisvg', function( editor ) {
                         type: 'html',
                         html: '<embed ' +
                             'type="image/svg+xml" ' +
-                            'src="' + CKEDITOR.basePath + 'plugins/asciisvg/d.svg" ' +
+                            'src="' + CKEDITOR.plugins.getPath('asciisvg') + 'd.svg" ' +
                             'style="width:300px; height:200px; ' +
                             'vertical-align:middle; float:none;" sscr="-7.5,7.5,-5,5,1,1,1,1,1,'+defaultwidth+','+defaultheight+'" />',
                         onShow: function( widget ) {

@@ -25,6 +25,9 @@ ALTER TABLE track_e_course_access DROP COLUMN course_code;
 ALTER TABLE track_e_online DROP COLUMN course;
 ALTER TABLE track_e_attempt DROP COLUMN course_code;
 
+-- not yet ready, uncomment when all user_id have been replaced by id
+-- ALTER TABLE user DROP COLUMN user_id;
+
 -- xxCOURSExx
 
 

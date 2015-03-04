@@ -552,6 +552,7 @@ class Template
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
+            'fullcalendar/lib/moment.min.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',

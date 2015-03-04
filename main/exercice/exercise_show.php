@@ -66,7 +66,7 @@ if (api_is_course_session_coach(
     }
 }
 
-$maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
+$maxEditors = isset($_configuration['exercise_max_ckeditors_in_page']) ? $_configuration['exercise_max_ckeditors_in_page'] : 0;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
@@ -127,7 +127,7 @@ if ($origin != 'learnpath') {
 }
 ?>
 <script>
-var maxEditors = '<?php echo intval($maxEditors); ?>';
+var maxEditors = <?php echo intval($maxEditors); ?>;
 
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
@@ -154,7 +154,7 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-        if (maxEditors == 0) {
+        if (CKEDITOR.instances[oHidden.name]) {
             oHidden.value = CKEDITOR.instances[oHidden.name].getData();
         } else {
             oHidden.value = $("textarea[name='" + oHidden.name + "']").val();

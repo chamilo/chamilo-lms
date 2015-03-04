@@ -247,7 +247,15 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+					$res = MessageManager::send_message(
+						$user,
+						$title,
+						$content,
+						$_FILES,
+						$file_comments,
+						$group_id,
+						$parent_id
+					);
 					if ($res) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');

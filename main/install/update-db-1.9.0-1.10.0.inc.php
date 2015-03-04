@@ -116,7 +116,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 );
 
                 foreach ($fields as $table => $key) {
-                    $sql = "UPDATE $dbNameForm.$table SET c_id = '$courseId'
+                    $sql = "UPDATE $dbNameForm.$table SET c_id = $courseId
                             WHERE $key = '$courseCode'";
                     iDatabase::query($sql);
                 }

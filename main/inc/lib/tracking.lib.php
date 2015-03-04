@@ -1534,7 +1534,7 @@ class Tracking
     	$sql = "SELECT count(*) as count_connections
                 FROM $tbl_track_e_course_access
                 WHERE
-                    c_id = '$courseId' AND
+                    c_id = $courseId AND
                     session_id = $session_id
                     $month_filter";
     	$rs = Database::query($sql);
@@ -3809,7 +3809,7 @@ class Tracking
     public static function get_documents_most_downloaded_by_course($course_code, $session_id = null, $limit = 0)
     {
         //protect data
-        $course_code = Database::escape_string($course_code);
+        $courseId = api_get_course_int_id($course_code);
         $data = array();
 
         $TABLETRACK_DOWNLOADS   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -3820,8 +3820,8 @@ class Tracking
         }
         $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
                 FROM $TABLETRACK_DOWNLOADS
-                WHERE down_cours_id = '$course_code'
-                $condition_session
+                WHERE c_id = $courseId
+                    $condition_session
                 GROUP BY down_doc_path
                 ORDER BY count_down DESC
                 LIMIT 0,  $limit";
@@ -3863,7 +3863,7 @@ class Tracking
                 FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                 WHERE cl.c_id = $course_id AND
                       sl.links_link_id = cl.id
-                      AND sl.links_cours_id = '$course_code'
+                      AND sl.c_id = $course_id
                       $condition_session
                 GROUP BY cl.title, cl.url
                 ORDER BY count_visits DESC
@@ -6407,9 +6407,10 @@ class TrackingUserLog
      * Displays the links followed for a specific user in a specific course.
      * @todo remove globals
      */
-    public function display_links_tracking_info($view, $user_id, $course_id)
+    public function display_links_tracking_info($view, $user_id, $courseCode)
     {
     	global $TABLETRACK_LINKS, $TABLECOURSE_LINKS;
+        $courseId = api_get_course_int_id($courseCode);
     	if (substr($view,3,1) == '1') {
     		$new_view = substr_replace($view,'0',3,1);
     		echo "
@@ -6423,8 +6424,8 @@ class TrackingUserLog
     		$sql = "SELECT cl.title, cl.url
                         FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                         WHERE sl.links_link_id = cl.id
-                            AND sl.links_cours_id = '".Database::escape_string($course_id)."'
-                            AND sl.links_user_id = '".intval($user_id)."'
+                            AND sl.c_id = $courseId
+                            AND sl.links_user_id = ".intval($user_id)."
                         GROUP BY cl.title, cl.url";
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
     		$results = StatsUtils::getManyResults2Col($sql);
@@ -6467,11 +6468,11 @@ class TrackingUserLog
      * @param    int        Session id (optional, default = 0)
      * @return     void
      */
-    public static function display_document_tracking_info($view, $user_id, $course_id, $session_id = 0) {
+    public static function display_document_tracking_info($view, $user_id, $course_code, $session_id = 0) {
 
     	// protect data
     	$user_id     = intval($user_id);
-    	$course_id     = Database::escape_string($course_id);
+        $courseId = api_get_course_int_id($course_code);
     	$session_id = intval($session_id);
 
     	$downloads_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -6488,9 +6489,9 @@ class TrackingUserLog
 
     		$sql = "SELECT down_doc_path
                         FROM $downloads_table
-                        WHERE down_cours_id = '".$course_id."'
-                            AND down_user_id = '$user_id'
-                            AND down_session_id = '$session_id'
+                        WHERE c_id = $courseId
+                            AND down_user_id = $user_id
+                            AND down_session_id = $session_id
                         GROUP BY down_doc_path";
 
     		echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
@@ -6724,9 +6725,11 @@ class TrackingUserLogCSV
      * Displays the links followed for a specific user in a specific course.
      * @todo remove globals
      */
-    public function display_links_tracking_info($view, $user_id, $course_id)
+    public function display_links_tracking_info($view, $userId, $courseCode)
     {
     	global $TABLETRACK_LINKS, $TABLECOURSE_LINKS;
+        $courseId = api_get_course_int_id($courseCode);
+        $userId = intval($userId);
         $line = null;
     	if (substr($view,3,1) == '1') {
     		$new_view = substr_replace($view,'0',3,1);
@@ -6734,8 +6737,8 @@ class TrackingUserLogCSV
     		$sql = "SELECT cl.title, cl.url
                         FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                         WHERE sl.links_link_id = cl.id
-                            AND sl.links_cours_id = '$course_id'
-                            AND sl.links_user_id = '$user_id'
+                            AND sl.c_id = $courseId
+                            AND sl.links_user_id = $userId
                         GROUP BY cl.title, cl.url";
     		$results = StatsUtils::getManyResults2Col($sql);
     		$title_line= get_lang('LinksTitleLinkColumn')."\n";
@@ -6760,11 +6763,11 @@ class TrackingUserLogCSV
      * @param    int        Session id (optional, default = 0)
      * @return     void
      */
-    public function display_document_tracking_info($view, $user_id, $course_id, $session_id = 0)
+    public function display_document_tracking_info($view, $user_id, $courseCode, $session_id = 0)
     {
     	// protect data
     	$user_id     = intval($user_id);
-    	$course_id     = Database::escape_string($course_id);
+        $courseId = api_get_course_int_id($courseCode);
     	$session_id = intval($session_id);
 
     	$downloads_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -6775,9 +6778,9 @@ class TrackingUserLogCSV
 
     		$sql = "SELECT down_doc_path
                         FROM $downloads_table
-                        WHERE down_cours_id = '$course_id'
-                            AND down_user_id = '$user_id'
-                            AND down_session_id = '$session_id'
+                        WHERE c_id = $courseId
+                            AND down_user_id = $user_id
+                            AND down_session_id = $session_id
                         GROUP BY down_doc_path";
 
     		$results = StatsUtils::getManyResults1Col($sql);

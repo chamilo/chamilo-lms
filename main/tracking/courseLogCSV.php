@@ -186,7 +186,7 @@ if ($is_allowedToTrack) {
         //Total
         $sql = "SELECT count(*)
                 FROM $TABLETRACK_ACCESS
-                WHERE c_id = '" . $courseId . "'
+                WHERE c_id = $courseId
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
 
@@ -195,7 +195,7 @@ if ($is_allowedToTrack) {
         // last 31 days
         $sql = "SELECT count(*)
                 FROM $TABLETRACK_ACCESS
-                WHERE c_id = '$courseId'
+                WHERE c_id = $courseId
                     AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
@@ -205,7 +205,7 @@ if ($is_allowedToTrack) {
         // last 7 days
         $sql = "SELECT count(*)
                 FROM $TABLETRACK_ACCESS
-                WHERE c_id = '$courseId'
+                WHERE c_id = $courseId
                     AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
@@ -215,7 +215,7 @@ if ($is_allowedToTrack) {
         // today
         $sql = "SELECT count(*)
                 FROM $TABLETRACK_ACCESS
-                WHERE c_id = '$courseId'
+                WHERE c_id = $courseId
                     AND ( access_date > CURDATE() )
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
@@ -236,7 +236,7 @@ if ($is_allowedToTrack) {
         $sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool )
                 FROM $TABLETRACK_ACCESS
                 WHERE access_tool IS NOT NULL
-                    AND c_id = '$courseId'
+                    AND c_id = $courseId
                 GROUP BY access_tool";
 
         $results = getManyResults3Col($sql);
@@ -261,9 +261,9 @@ if ($is_allowedToTrack) {
         $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title)
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                     WHERE
-                    	cl.c_id = $course_id AND
+                    	cl.c_id = $courseId AND
                     	sl.links_link_id = cl.id AND
-                    	sl.links_cours_id = '$_cid'
+                    	sl.c_id = $courseId
                     GROUP BY cl.title, cl.url";
 
         $results = StatsUtils::getManyResultsXCol($sql, 4);
@@ -291,7 +291,7 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path)
                     FROM $TABLETRACK_DOWNLOADS
-                    WHERE down_cours_id = '$_cid'
+                    WHERE c_id = $courseId
                     GROUP BY down_doc_path";
 
         $results = getManyResults3Col($sql);

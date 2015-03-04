@@ -5229,7 +5229,7 @@ class CourseManager
 
         $sql = "SELECT * FROM $table
                 WHERE
-                    c_id = '$courseId' AND
+                    c_id = $courseId AND
                     session_id = $sessionId AND
                     login_course_date BETWEEN '$startDate' AND '$endDate'
                 ";

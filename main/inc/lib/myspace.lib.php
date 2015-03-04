@@ -1046,22 +1046,13 @@ class MySpace
         $return .= Display::grid_html($tableId);
         return $return;
     }
-    /**
-     * get the numer of users on track_e_course_access
-     *
-     * @return integer
-     *
-     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
-     * @version Chamilo 1.9.6
-     */
-
 
     /**
      * Displays a form with all the additionally defined user fields of the profile
      * and give you the opportunity to include these in the CSV export
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     * @version Dokeos 1.8.6
+     * @version 1.8.6
      * @since November 2008
      */
     public static function display_user_overview_export_options()

@@ -304,6 +304,10 @@ class Plugin
             $root = api_get_path(SYS_PLUGIN_PATH);
             $plugin_name = $this->get_name();
 
+            $interfaceLanguageId = api_get_language_id($language_interface);
+            $interfaceLanguageInfo = api_get_language_info($interfaceLanguageId);
+            $languageParentId = intval($interfaceLanguageInfo['parent_id']);
+
             //1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
             if (is_readable($english_path)) {
@@ -315,6 +319,17 @@ class Plugin
             //2. Loading the system language
             if (is_readable($path)) {
                 include $path;
+                if (!empty($strings)) {
+                    foreach ($strings as $key => $string) {
+                        $this->strings[$key] = $string;
+                    }
+                }
+            } elseif ($languageParentId > 0) {
+                $languageParentInfo = api_get_language_info($languageParentId);
+                $languageParentFolder = $languageParentInfo['dokeos_folder'];
+
+                include "{$root}{$plugin_name}/lang/{$languageParentFolder}.php";
+
                 if (!empty($strings)) {
                     foreach ($strings as $key => $string) {
                         $this->strings[$key] = $string;

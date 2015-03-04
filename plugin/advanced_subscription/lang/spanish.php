@@ -22,7 +22,7 @@ $strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.0
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "Su perfil no es lo suficientemente completo para poder inscribirse al curso. Por favor complete su perfil";
+$strings['AdvancedSubscriptionProfileIncomplete'] = "Debe llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "Usted aún no ha completado el curso de inducción. Por favor complete el curso inducción";
 $strings['AdvancedSubscriptionCostXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s UIT para los cursos que ha seguido este año";
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año";
@@ -138,4 +138,3 @@ $strings['MailContentReminderMaxSuperior'] = 'Le recordamos que hemos recibido l
 $strings['MailContentReminderMaxSuperiorSecond'] = 'Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>%s</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.';
 
 $strings['YouMustAcceptTermsAndConditions'] = 'Para inscribirse al curso <strong>%s</strong>, debe aceptar estos términos y condiciones.';
-$strings['YouMustFillXPercentOfYourProfileAtLeast'] = "Debes llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>";

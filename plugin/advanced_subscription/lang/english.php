@@ -22,7 +22,7 @@ $strings['min_profile_percentage_help'] = "Percentage number( > 0.00 y < 100.00)
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "You are not connected to platform. Please login first";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "Your percentage completed profile require to exceed minimum percentage. Please complete percentage";
+$strings['AdvancedSubscriptionProfileIncomplete'] = "You must complete at least <strong>%d percent</strong> of your profile. You have only completed <strong>%d percent</strong> at this point";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "You have not yet completed induction course. Please complete it first";
 $strings['AdvancedSubscriptionCostXLimitReached'] = "We are sorry, you have already reached yearly limit %s TUV cost for courses ";
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "We are sorry, you have already reached yearly limit %s hours for courses";
@@ -138,4 +138,3 @@ $strings['MailContentReminderMaxSuperior'] = 'We kindly remind you that we have 
 $strings['MailContentReminderMaxSuperiorSecond'] = 'This course have limited vacancies and has received a high subscription request rate, So we recommend all areas to accept at most <strong>%s</strong> candidates. We invite you to accept or reject the inscription request by clicking the corresponding button for each collaborator.';
 
 $strings['YouMustAcceptTermsAndConditions'] = 'To subscribe to course <strong>%s</strong>, you must accept these terms and conditions.';
-$strings['YouMustFillXPercentOfYourProfileAtLeast'] = "You must fill the <strong>%d percent</strong> of your profile at least. For now you has filled the <strong>%d percent</strong>";

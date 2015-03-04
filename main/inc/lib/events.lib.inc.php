@@ -490,7 +490,6 @@ class Event
                 'question_id' => $question_id,
                 'answer' => $answer,
                 'marks' => $score,
-                'course_code' => $courseInfo['real_id'],
                 'c_id' => $course_id,
                 'session_id' => $session_id,
                 'position' => $position,

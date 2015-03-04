@@ -209,7 +209,6 @@ CREATE TABLE track_e_online (
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
   user_ip varchar(39) NOT NULL default '',
-  course varchar(40) default NULL,
   c_id int NOT NULL,
   session_id INT NOT NULL DEFAULT 0,
   access_url_id INT NOT NULL DEFAULT 1,

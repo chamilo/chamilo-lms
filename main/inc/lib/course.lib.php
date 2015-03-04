@@ -2254,7 +2254,7 @@ class CourseManager
 
             $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_stats_attempt WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_exercises WHERE c_id = $courseId";
             Database::query($sql);

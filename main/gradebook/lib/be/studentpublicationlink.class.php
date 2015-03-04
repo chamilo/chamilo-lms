@@ -47,9 +47,6 @@ class StudentPublicationLink extends AbstractLink
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
-			$course_info = Database :: get_course_info($this->get_course_code());
-			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
-			//return $url;
 			return null;
 		} else {
 			return null;
@@ -285,7 +282,7 @@ class StudentPublicationLink extends AbstractLink
 	private function get_exercise_data()
 	{
 		$tbl_name = $this->get_studpub_table();
-		$course_info = Database :: get_course_info($this->get_course_code());
+		$course_info = api_get_course_info($this->get_course_code());
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {

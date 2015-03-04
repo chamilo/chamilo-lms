@@ -1798,7 +1798,7 @@ class GroupManager
         $category = self :: get_category_from_group($group_id, $course_code);
         $number_of_groups_limit = $category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $category['groups_per_user'];
         $real_course_code = $_course['sysCode'];
-        $real_course_info = Database :: get_course_info($real_course_code);
+        $real_course_info = api_get_course_info($real_course_code);
         $real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
         //get list of all virtual courses
         $user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);

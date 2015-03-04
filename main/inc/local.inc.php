@@ -379,6 +379,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::event_login();
+                                        $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
@@ -386,6 +387,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user', $_user);
                                             Event::event_login();
+                                            $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');

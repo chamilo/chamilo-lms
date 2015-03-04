@@ -66,6 +66,9 @@ ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DE
 ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null;
 ALTER TABLE user DROP PRIMARY KEY;
 ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id;
+UPDATE user SET id = user_id;
+UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00';
+UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00';
 
 ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
@@ -82,7 +85,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath');
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.16' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.17' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

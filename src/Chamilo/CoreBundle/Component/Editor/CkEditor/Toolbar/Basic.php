@@ -57,7 +57,6 @@ class Basic extends Toolbar
 
         if (api_get_setting('enabled_googlemaps') == 'true') {
             $plugins[] = 'leaflet';
-            $plugins[] = 'mapping';
         }
 
         if (api_get_setting('math_asciimathML') == 'true') {
@@ -75,7 +74,7 @@ class Basic extends Toolbar
         }
 
         if (api_get_setting('enabled_imgmap') == 'true') {
-            // Commercial plugin
+            $plugins[] = 'mapping';
         }
 
         if (api_get_setting('block_copy_paste_for_students') == 'true') {

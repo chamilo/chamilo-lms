@@ -680,7 +680,7 @@ class IndexManager
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'panel panel-default';
+        $params['class'] = 'panel panel-primary';
         $html = null;
         if (!empty($title)) {
             $html.= '<div class="panel-heading">'.$title.'</div>';
@@ -878,12 +878,12 @@ class IndexManager
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li class="inbox-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';
+            $profile_content .= '<li class="inbox-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.Display::return_icon('inbox.png',get_lang('Inbox'),null,ICON_SIZE_SMALL).get_lang('Inbox').$cant_msg.' </a></li>';
+            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.Display::return_icon('new-message.png',get_lang('Compose'),null,ICON_SIZE_SMALL).get_lang('Compose').' </a></li>';
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
-                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
+                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitations.png',get_lang('PendingInvitations'),null,ICON_SIZE_SMALL).get_lang('PendingInvitations').$total_invitations.'</a></li>';
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
@@ -909,7 +909,7 @@ class IndexManager
             $editProfileUrl = $objSSO->generateProfileEditingURL();
         }
 
-        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.get_lang('EditProfile').'</a></li>';
+        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
         $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
         return $html;
@@ -970,8 +970,10 @@ class IndexManager
         if ($show_create_link) {
             $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+                $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreateRequest'),null,ICON_SIZE_SMALL);
                 $my_account_content .= get_lang('CreateCourseRequest');
             } else {
+                $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreate'),null,ICON_SIZE_SMALL);
                 $my_account_content .= get_lang('CourseCreate');
             }
             $my_account_content .= '</a></li>';
@@ -979,20 +981,21 @@ class IndexManager
 
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .= '<li class="order-course">'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
+        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'.Display::return_icon('history-course.png',get_lang('DisplayTrainingList'),null,ICON_SIZE_SMALL).get_lang('DisplayTrainingList').'</a></li>';
         } else {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.get_lang('HistoryTrainingSessions').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.Display::return_icon('history-course.png',get_lang('HistoryTrainingSessions'),null,ICON_SIZE_SMALL).get_lang('HistoryTrainingSessions').'</a></li>';
         }
 
         // Course catalog
 
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.get_lang('CourseCatalog').'</a></li>';
+                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.Display::return_icon('catalog-course.png',get_lang('CourseCatalog'),null,ICON_SIZE_SMALL).get_lang('CourseCatalog').'</a></li>';
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }

@@ -3493,7 +3493,7 @@ class CourseManager
         $html .= '<div class="panel-body">';
         $html .= '<div class="course-items">';
         $html .= ' <div class="row">';
-        $html .= '<div class="col-md-2 course-box-thumbnail-box">';
+        $html .= '<div class="col-md-2">';
         if (!empty($params['link'])) {
             $html .= '<a class="thumbnail" href="' . $params['link'] . '">';
             $html .= $params['icon'];
@@ -3512,10 +3512,10 @@ class CourseManager
         $html .= '<h3 class="title">' . $params['title'] . $notifications . '</h3> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
-            $html .= '<p>' . $params['description'] . '</p>';
+            $html .= '<p class="description-session">' . $params['description'] . '</p>';
         }
         if (!empty($params['subtitle'])) {
-            $html .= '<small>' . $params['subtitle'] . '</small>';
+            $html .= '<div class="subtitle-session">' . $params['subtitle'] . '</div>';
         }
         if (!empty($params['teachers'])) {
             $html .= '<h5>' . Display::return_icon('teacher.png', get_lang('Teacher'), array(),

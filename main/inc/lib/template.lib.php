@@ -490,7 +490,7 @@ class Template
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
         //THEME CSS STYLE
        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';

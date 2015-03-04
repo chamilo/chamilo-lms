@@ -122,10 +122,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
 
-            // Updating user.id field
-            $sql = "UPDATE $dbNameForm.user SET id = $userId WHERE user_id = $userId";
-            iDatabase::query($sql);
-
             // Set null registration_date = 0000-00-00 00:00:00
             $sql = "UPDATE $dbNameForm.user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00'";
             iDatabase::query($sql);

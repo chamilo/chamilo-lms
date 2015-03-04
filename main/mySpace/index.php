@@ -27,9 +27,9 @@ $csv_content = array();
 $nameTools = get_lang('MySpace');
 
 $user_id = api_get_user_id();
-$is_coach = api_is_coach($_GET['session_id']);
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
+$is_coach = api_is_coach($session_id);
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
 $is_session_admin 	= api_is_session_admin();

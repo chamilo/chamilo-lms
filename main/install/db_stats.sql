@@ -113,15 +113,14 @@ CREATE TABLE track_e_exercises (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
-  exe_cours_id varchar(40) NOT NULL default '',
   c_id int NOT NULL,
   exe_exo_id mediumint unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
   user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (exe_id),
-  KEY exe_user_id (exe_user_id),
-  KEY exe_cours_id (exe_cours_id)
+  KEY idx_tee_user_id (exe_user_id),
+  KEY idx_tee_c_id (c_id)
 );
 
 ALTER TABLE track_e_exercises ADD status varchar(20) NOT NULL default '';
@@ -179,12 +178,11 @@ CREATE TABLE track_e_hotpotatoes (
     exe_name VARCHAR( 255 ) NOT NULL ,
     exe_user_id int unsigned DEFAULT NULL ,
     exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
-    exe_cours_id varchar(40) NOT NULL,
     c_id int NOT NULL,
     exe_result smallint default 0 NOT NULL ,
     exe_weighting smallint default 0 NOT NULL,
-    KEY exe_user_id (exe_user_id),
-    KEY exe_cours_id (exe_cours_id)
+    KEY idx_tehp_user_id (exe_user_id),
+    KEY idx_tehp_c_id (c_id)
 );
 
 DROP TABLE IF EXISTS track_e_links;

@@ -785,7 +785,7 @@ if (!empty($exercise_list)) {
                         WHERE
                             exe_exo_id      = ".$row['id']." AND
                             exe_user_id     = ".$userId." AND
-                            exe_cours_id    = '".api_get_course_id()."' AND
+                            c_id    = ".api_get_course_int_id()." AND
                             status          <> 'incomplete' AND
                             orig_lp_id      = 0 AND
                             orig_lp_item_id = 0 AND

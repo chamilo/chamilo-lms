@@ -1532,14 +1532,28 @@ function api_get_course_id() {
  * @return int
  */
 function api_get_real_course_id() {
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+    return api_get_course_int_id();
 }
 
 /**
  * Returns the current course id (integer)
+ * @param   string  $code   Optional course code
  * @return int
  */
-function api_get_course_int_id() {
+function api_get_course_int_id($code = null) {
+    if (!empty($code)) {
+        $code = Database::escape_string($code);
+        $row = Database::select(
+            'id',
+            Database::get_main_table(TABLE_MAIN_COURSE),
+            array('where'=> array('code = ?' => array($code)))
+        );
+        if (is_array($row) && count($row == 1)) {
+            return $row['id'];
+        } else {
+            return false;
+        }
+    }
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
 

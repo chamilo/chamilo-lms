@@ -1877,9 +1877,10 @@ class MySpace
     public static function exercises_results($user_id, $course_code, $session_id = false)
     {
         $questions_answered = 0;
+        $courseId = api_get_course_int_id($course_code);
         $sql = 'SELECT exe_result , exe_weighting
             FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
-            WHERE exe_cours_id = '".Database::escape_string($course_code)."'
+            WHERE c_id = ' . $courseId . '
             AND exe_user_id = '".intval($user_id)."'";
         if($session_id !== false) {
             $sql .= " AND session_id = '".$session_id."' ";

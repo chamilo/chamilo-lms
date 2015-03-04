@@ -135,7 +135,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //ORIGINAL COURSE
 
                 $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                        WHERE exe_cours_id = '$origin_course_code' AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
+                        WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -162,7 +162,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!$update_database) {
 
                     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                            WHERE exe_cours_id = '$origin_course_code' AND  session_id = $new_session_id AND exe_user_id = $user_id ";
+                            WHERE c_id = $course_id AND  session_id = $new_session_id AND exe_user_id = $user_id ";
                     $res = Database::query($sql);
                     $list = array();
                     while($row = Database::fetch_array($res,'ASSOC')) {
@@ -583,9 +583,9 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
     $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $user_id = intval($user_id);
-    //$sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, exe_cours_id ORDER by exe_user_id, exe_cours_id ASC";
-    $sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session
-            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, exe_cours_id ASC";
+    //$sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, c_id ORDER by exe_user_id, c_id ASC";
+    $sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session
+            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, c_id ASC";
 
     $res = Database::query($sql);
     $course_list = array();
@@ -655,6 +655,11 @@ if (!empty($user_list)) {
             if (empty($course_reg['id_session'])) {
                 $course_reg['id_session'] = 0;
             }
+            // Recover the code for historical reasons. If it can be proven
+            // that the code can be safely replaced by c_id in the following
+            // PHP code, feel free to do so
+            $courseInfo = api_get_course_info_by_id($course_reg['c_id']);
+            $course_reg['code'] = $courseInfo['code'];
             $new_course_list[] = $course_reg['code'].'_'.$course_reg['id_session'];
         }
 

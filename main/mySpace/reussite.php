@@ -46,7 +46,7 @@ if (!empty($_GET['session'])) {
 	if (Database::num_rows($result_session) > 0) {
 		echo '<table class="data_table"><tr><th>'.get_lang('Session').'</th><th>'.get_lang('MoyenneTest').'</th><th>'.get_lang('MoyenneExamen').'</th></tr>';
 		while ($session = Database::fetch_array($result_session)) {
-			$sql_course = "SELECT title,code
+			$sql_course = "SELECT title, code, id
 				FROM $tbl_course as course
 				INNER JOIN $tbl_session_course AS rel_course
 				ON course.code = rel_course.course_code
@@ -59,7 +59,7 @@ if (!empty($_GET['session'])) {
 			while ($course = Database::fetch_array($result_course)) {
 				$sql_moy_test = "SELECT exe_result,exe_weighting
 					FROM $tbl_track_exercice
-					WHERE exe_cours_id = '".$course['code']."'";
+					WHERE c_id = ".$course['id'];
 				$result_moy_test = Database::query($sql_moy_test);
 				$result = 0;
 				$weighting = 0;
@@ -83,7 +83,7 @@ if (!empty($_GET['session'])) {
 		echo get_lang('NoSession');
 	}
 } else {
-	$sql_course = "SELECT 	title,code
+	$sql_course = "SELECT 	title, code, id
 		FROM $tbl_course as course
 		ORDER BY title ASC";
 
@@ -96,7 +96,7 @@ if (!empty($_GET['session'])) {
 		while ($course= Database::fetch_array($result_course)) {
 			$sql_moy_test = "SELECT exe_result,exe_weighting
 				FROM $tbl_track_exercice
-				WHERE exe_cours_id = '".$course['code']."'";
+				WHERE c_id = ".$course['id'];
 			$result_moy_test = Database::query($sql_moy_test);
 			$result = 0;
 			$weighting = 0;

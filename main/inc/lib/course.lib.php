@@ -2201,7 +2201,7 @@ class CourseManager
         if ($count == 0) {
             self::create_database_dump($code);
 
-            $sql = "SELECT * FROM $table_course WHERE code='" . $codeFiltered . "'";
+            $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
             $res = Database::query($sql);
             $course = Database::fetch_array($res);
             $course_tables = AddCourse::get_course_tables();
@@ -2252,31 +2252,31 @@ class CourseManager
 
             // Delete the course from the stats tables
 
-            $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '" . $codeFiltered . "'";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_stats_exercises WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_access WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_access WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_lastaccess WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_lastaccess WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_course_access WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_course_access WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_online WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_online WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_default WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_default WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_downloads WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_downloads WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_links WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_links WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_uploads WHERE c_id = '" . $courseId . "'";
+            $sql = "DELETE FROM $table_stats_uploads WHERE c_id = $courseId";
             Database::query($sql);
 
             // Delete the course from the database
-            $sql = "DELETE FROM $table_course WHERE code='" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_course WHERE code = '" . $codeFiltered . "'";
             Database::query($sql);
 
             // delete extra course fields

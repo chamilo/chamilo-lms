@@ -1007,7 +1007,7 @@ class SessionManager
             $lessons_left = $lessons_total - $lessons_done;
 
             //Exercises
-            $exercises_progress = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $user['id_session']));
+            $exercises_progress = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['real_id'], $user['id_session']));
             $exercises_done = round(($exercises_progress * $exercises_total) / 100);
             $exercises_left = $exercises_total - $exercises_done;
 

@@ -964,7 +964,7 @@ if (!empty($student_id)) {
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
-                $count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
+                $count_attempts   = Tracking::count_student_exercise_attempts($student_id, $courseInfo['real_id'], $exercise_id, 0, 0, $session_id, 2);
                 $score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
                 if (!isset($score_percentage) && $count_attempts > 0) {
@@ -1008,7 +1008,7 @@ if (!empty($student_id)) {
                 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
 				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND
 				                            exe_user_id     ="'.$student_id.'" AND
-				                            exe_cours_id    ="'.$course_code.'" AND
+				                            c_id            = '.$courseInfo['real_id'].' AND
                                             session_id      ="'.$session_id.'" AND
 				                            status          = ""
 				                            ORDER BY exe_date DESC LIMIT 1';

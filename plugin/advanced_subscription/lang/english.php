@@ -22,7 +22,7 @@ $strings['min_profile_percentage_help'] = "Percentage number( > 0.00 y < 100.00)
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "You are not connected to platform. Please login first";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "You must fill the <strong>%d percent</strong> of your profile at least. For now you has filled the <strong>%d percent</strong>";
+$strings['AdvancedSubscriptionProfileIncomplete'] = "You must complete at least <strong>%d percent</strong> of your profile. You have only completed <strong>%d percent</strong> at this point";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "You have not yet completed induction course. Please complete it first";
 $strings['AdvancedSubscriptionCostXLimitReached'] = "We are sorry, you have already reached yearly limit %s TUV cost for courses ";
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "We are sorry, you have already reached yearly limit %s hours for courses";

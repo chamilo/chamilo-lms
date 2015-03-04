@@ -425,8 +425,11 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 	}
 }
 
-function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
-	if(empty($coursecode)) return false;
+function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
+{
+	if (empty($coursecode)) {
+		return false;
+	}
 	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
 	$time_limit = Database::escape_string($time_limit);
@@ -434,6 +437,10 @@ function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
 	$courseId = api_get_course_int_id($coursecode);
+
+	if (empty($courseId)) {
+		return false;
+	}
 
 	$query = "SELECT count(login_user_id) as count
               FROM $track_online_table

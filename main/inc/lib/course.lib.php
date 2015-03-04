@@ -3485,13 +3485,13 @@ class CourseManager
     public static function course_item_html($params, $is_sub_content = false)
     {
         $html = '';
-        $class = "well course-box";
+        $class = "panel panel-default";
         if ($is_sub_content) {
             $class = "course_item";
         }
         $html .= '<div class="' . $class . '">';
-        $html .= '<div class="row">';
-        $html .= '<div class="col-md-7">';
+        $html .= '<div class="panel-body">';
+        $html .= '<div class="course-items">';
         $html .= ' <div class="row">';
         $html .= '<div class="col-md-2 course-box-thumbnail-box">';
         if (!empty($params['link'])) {
@@ -3508,8 +3508,8 @@ class CourseManager
         $notifications = isset($params['notifications']) ? $params['notifications'] : null;
         $param_class = isset($params['class']) ? $params['class'] : null;
 
-        $html .= '<div class="col-md-6 ' . $param_class . '">';
-        $html .= '<h3>' . $params['title'] . $notifications . '</h3> ';
+        $html .= '<div class="col-md-10 ' . $param_class . '">';
+        $html .= '<h3 class="title">' . $params['title'] . $notifications . '</h3> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
             $html .= '<p>' . $params['description'] . '</p>';
@@ -3531,7 +3531,7 @@ class CourseManager
 
         $html .= '</div>';
         $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $html .= '<div class="span1 pull-right course-box-actions">' . $params['right_actions'] . '</div>';
+        $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
         $html .= '</div>';
         $html .= '</div>';
         return $html;
@@ -3545,7 +3545,7 @@ class CourseManager
      */
     public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null)
     {
-        return '<div class="well">' . $main_content . $sub_content . $sub_sub_content . '</div>';
+        return '<div class="panel panel-default">' . $main_content . $sub_content . $sub_sub_content . '</div>';
     }
 
     /**

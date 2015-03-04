@@ -79,21 +79,21 @@ $(document).ready(function() {
 	});
 
 	// User name header toogle
-	$('.chatboxtitle').on('click', function(){
+	$('body').on('click', '.chatboxtitle', function(){
 		chatbox = $(this).parents(".chatbox");
 		var chat_id = chatbox.attr('id');
 		chat_id = chat_id.split('_')[1];
 		toggleChatBoxGrowth(chat_id);
 	});
 
-	//Minimize button
-	$('.chatboxhead .togglelink').on('click', function(){
+	// Minimize button
+	$('body').on('click', '.chatboxhead .togglelink', function(){
 		var chat_id =  $(this).attr('rel');
 		toggleChatBoxGrowth(chat_id);
 	});
 
-	//Close button
-	$('.chatboxhead .closelink').on('click', function(){
+	// Close button
+	$('body').on('click', '.chatboxhead .closelink', function(){
 		var chat_id =  $(this).attr('rel');
 		closeChatBox(chat_id);
 	});

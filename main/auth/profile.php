@@ -725,10 +725,10 @@ $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') ==
 
 if (api_get_setting('allow_social_tool') == 'true') {
     echo '<div class="row-fluid">';
-        echo '<div class="span3">';
+        echo '<div class="col-md-3">';
         echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
         echo '</div>';
-        echo '<div class="span9">';
+        echo '<div class="col-md-9">';
         $form->display();
     echo '</div>';
 } else {

@@ -45,9 +45,12 @@ $(document).ready(function() {
 </script>
 
 <section id="settings">
-    <div class="row">
     {% for block_item in blocks %}
-        <div id="tabs-{{ loop.index }}" class="col-md-4">
+        {% if loop.index % 2 == 0 %}
+        <div class="row">
+        {% endif %}
+
+        <div id="tabs-{{ loop.index }}" class="col-md-6">
             <div class="panel panel-default {{ block_item.class }}">
                 <div class="panel-heading">
                     {{ block_item.icon }} {{ block_item.label }}
@@ -87,8 +90,11 @@ $(document).ready(function() {
             </div>
             </div>
         </div>
+
+        {% if loop.index % 2 == 0 %}
+            </div>
+        {% endif %}
     {% endfor %}
-    </div>
 </section>
 
 {% if _u.is_admin %}

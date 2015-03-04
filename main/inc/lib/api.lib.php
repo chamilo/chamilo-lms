@@ -4078,7 +4078,7 @@ function api_get_language_id($language)
     }
     $language = Database::escape_string($language);
     $sql = "SELECT id FROM $tbl_language
-            WHERE available='1' AND dokeos_folder = '$language' LIMIT 1";
+            WHERE dokeos_folder = '$language' LIMIT 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['id'];

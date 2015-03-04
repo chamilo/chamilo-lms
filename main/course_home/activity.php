@@ -66,12 +66,12 @@ if ($enabled == 'true') {
 
 // Start of tools for CourseAdmins (teachers/tutors)
 if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
-    $content .=  '<div class="courseadminview" style="border:0px; margin-top: 0px;padding:0px;">
+    $content .=  '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
     $content .=  '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
     $content .=  get_lang('PleaseStandBy');
     $content .=  '</div>
-		<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
+		<div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
 	</div>';
 
     $content .= $pluginExtra;
@@ -190,9 +190,9 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 function return_block($title, $content, $class = null)
 {
     $html = '<div class="row course-title-tools">
-                <div class="span12">
-                    <div class="page-header">
-                        <h3>'.$title.'</h3>
+                <div class="col-md-12">
+                    <div class="title-header-tools">
+                        <h4>'.$title.'</h4>
                     </div>
                 </div>
             </div>

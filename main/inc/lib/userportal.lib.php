@@ -680,7 +680,7 @@ class IndexManager
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'panel panel-primary';
+        $params['class'] = 'panel panel-default';
         $html = null;
         if (!empty($title)) {
             $html.= '<div class="panel-heading">'.$title.'</div>';

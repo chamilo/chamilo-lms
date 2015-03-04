@@ -502,19 +502,19 @@ class Display
         $class = "";
         switch($type) {
             case 'warning':
-               $class .= 'warning-message';
+               $class .= 'alert alert-warning';
                break;
             case 'error':
-               $class .= 'error-message';
+               $class .= 'alert alert-danger';
                break;
             case 'confirmation':
             case 'confirm':
             case 'success':
-                $class .= 'confirmation-message';
+                $class .= 'alert alert-success';
                break;
             case 'normal':
             default:
-                $class .= 'normal-message';
+                $class .= 'alert alert-info';
         }
         return self::div($message, array('class'=> $class));
     }

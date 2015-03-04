@@ -126,9 +126,11 @@ Display::display_header($tool_name);
 if (!empty($return)) {
     Display::display_error_message($return,false);
 }
+
+$page = isset($_GET['page']) && $_GET['page'] == 'resume_session.php' ? 'resume_session.php' : null;
 ?>
 
-<form class="form-horizontal" method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form class="form-horizontal" method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <fieldset>
     <legend><?php echo $tool_name; ?></legend>
     <input type="hidden" name="formSent" value="1">

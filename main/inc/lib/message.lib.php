@@ -1385,7 +1385,8 @@ class MessageManager
                     $archiveFile = $row_file['path'];
                     $filename = $row_file['filename'];
                     $filesize = format_file_size($row_file['size']);
-                    $filecomment = $row_file['comment'];
+                    $filecomment = Security::remove_XSS($row_file['comment']);
+                    $filename = Security::remove_XSS($filename);
                     $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
             }

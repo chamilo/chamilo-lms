@@ -102,9 +102,33 @@ function get_group_data($from, $number_of_items, $column, $direction) {
     $status[GROUP_PERMISSION_OPEN] = get_lang('Open');
     $status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
 
+    $result = Database::select(
+        'tGroupRelGroup.group_id, tGroup.id, tGroup.name',
+        Database::get_main_table(TABLE_MAIN_GROUP_REL_GROUP).
+        " AS tGroupRelGroup RIGHT JOIN ".Database::get_main_table(TABLE_MAIN_GROUP).
+        " AS tGroup ON tGroupRelGroup.subgroup_id = tGroup.id"
+    );
+    $groupRelations = array();
+    foreach ($result as $row) {
+        $groupRelations[$row['id']] = $row;
+    }
+
     while ($group = Database::fetch_row($res)) {
+        $name = null;
+        $id = $group[0];
+        // Loops while the current group is a subgroup
+        while (isset($groupRelations[$id]['group_id'])) {
+            $name = $name ?
+                $groupRelations[$id]['name'] . " > " . $name :
+                $groupRelations[$id]['name'];
+            $id = $groupRelations[$id]['group_id'];
+        }
+        // The base group
+        $name = $name ?
+            $groupRelations[$id]['name'] . " > " . $name :
+            $groupRelations[$id]['name'];
         $group[3] = $status[$group[3]];
-        $group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';
+        $group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$name.'</a>';
         $groups[] = $group;
     }
     return $groups;

@@ -115,9 +115,9 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         } elseif ($this->_flagFrozen) {
             $label = $this->_text;
         } else {
-            $label = '<label class="radio '.$this->getAttribute('label-class').'">' .
+            $label = '<div class="radio"><label '.$this->getAttribute('label-class').'">' .
                 HTML_QuickForm_input::toHtml().$this->_text .
-                '</label>';
+                '</label></div>';
 
             return  $label;
         }

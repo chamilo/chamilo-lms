@@ -35,15 +35,13 @@
 class HTML_QuickForm_button extends HTML_QuickForm_input
 {
     /**
-     * Class constructor
-     *
-     * @param     string $elementName (optional)Input field name attribute
-     * @param     string $value (optional)Input field value
-     * @param     mixed $attributes (optional)Either a typical HTML attribute string
-     *                                      or an associative array
-     * @since     1.0
-     * @access    public
-     * @return    void
+     * @param string $elementName
+     * @param string $value
+     * @param string $icon
+     * @param string $style
+     * @param string $size
+     * @param string $class
+     * @param array  $attributes
      */
     public function HTML_QuickForm_button(
         $elementName = null,
@@ -54,6 +52,11 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $class = 'btn',
         $attributes = array()
     ) {
+        $icon = !empty($icon) ? $icon : 'check';
+        $style = !empty($style) ? $style : 'default';
+        $size = !empty($size) ? $size : 'default';
+        $class = !empty($class) ? $class : 'btn';
+
         $attributes['icon'] = $icon;
         $attributes['style'] = $style;
         $attributes['size'] = $size;

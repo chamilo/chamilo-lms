@@ -121,12 +121,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                     iDatabase::query($sql);
                 }
             }
-
-            // Set null registration_date = 0000-00-00 00:00:00
-            $sql = "UPDATE $dbNameForm.user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00'";
-            iDatabase::query($sql);
-            $sql = "UPDATE $dbNameForm.user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00'";
-            iDatabase::query($sql);
         }
     }
 

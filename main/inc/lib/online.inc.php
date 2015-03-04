@@ -106,7 +106,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     //Changing global chat status to offline
     if (api_is_global_chat_enabled()) {
         $chat = new Chat();
-        $chat->set_user_status(0);
+        $chat->setUserStatus(0);
     }
 
     // selecting the last login of the user

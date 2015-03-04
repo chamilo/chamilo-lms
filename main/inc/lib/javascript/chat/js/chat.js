@@ -61,10 +61,10 @@ $(document).ready(function() {
 		document.title = originalTitle;
 	});
 
-	/* Live conditions */
+	/* "On" conditions, divs are created dynamically */
 
     // User name header toogle
-	$('#chatboxtitlemain').on('click', function() {
+	$('body').on('click', '#chatboxtitlemain', function() {
         if (user_status == 1) {
             stopChatHeartBeat();
             $('.user_status_main').html(offline_button);

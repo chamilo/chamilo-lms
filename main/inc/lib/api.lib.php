@@ -6434,17 +6434,15 @@ function api_get_jquery_libraries_js($libraries) {
     //jquery-ui js and css
     if (in_array('jquery-ui', $libraries)) {
         //Jquery ui
-        $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        //$theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
 
-        $jquery_ui_version = '1.8.21';
-
-        //$js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
-        $js .= api_get_css($js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css');
-        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
+        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.css');
+        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.theme.css');
+        $js .= api_get_js('jquery-ui/jquery-ui.min.js');
     }
 
     if (in_array('jquery-ui-i18n', $libraries)) {
-        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+        //$js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
     }
 
     //jqgrid js and css
@@ -6476,7 +6474,7 @@ function api_get_jquery_libraries_js($libraries) {
     //jquery-ui css changes for Chamilo
     if (in_array('jquery-ui',$libraries)) {
         //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        $js .= api_get_css($js_path.'jquery-ui/default.css');
+        //$js .= api_get_css($js_path.'jquery-ui/default.css');
     }
 
     if (in_array('bxslider',$libraries)) {

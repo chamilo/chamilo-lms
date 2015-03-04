@@ -236,7 +236,7 @@ $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), 
 $group = array ();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
 $group[] = $form->createElement(
-    'DatePicker',
+    'date',
     'expiration_date',
     null,
     array(

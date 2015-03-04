@@ -584,6 +584,8 @@ class HTML_QuickForm extends HTML_Common
                     }
                 }
             }
+        } else {
+            $className = $type;
         }
 
         if (empty($className)) {

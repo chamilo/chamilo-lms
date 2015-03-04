@@ -20,7 +20,6 @@ HotPotGC($_configuration['root_sys'],1,1);
 function HotPotGC($root_sys,$flag,$userID) {
 	// flag[0,1] - print or delete the HotPotatoes temp files (.t.html)
 	$documentPath = $root_sys."courses";
-	require_once(api_get_path(LIBRARY_PATH)."fileManage.lib.php");
 	HotPotGCt($documentPath,$flag,$userID);
 }
 /**

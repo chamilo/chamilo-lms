@@ -47,9 +47,6 @@ class StudentPublicationLink extends AbstractLink
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
-			$course_info = Database :: get_course_info($this->get_course_code());
-			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
-			//return $url;
 			return null;
 		} else {
 			return null;
@@ -158,27 +155,32 @@ class StudentPublicationLink extends AbstractLink
 	public function calc_score($stud_id = null)
 	{
 		$stud_id = intval($stud_id);
-		$tbl_stats = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-		$sql = 'SELECT * FROM '.$tbl_stats."
+		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+		$sql = 'SELECT * FROM '.$table."
     			WHERE
     				c_id = {$this->course_id} AND
     				id  = '".intval($this->get_ref_id())."' AND
-    				session_id	= ".api_get_session_id()."";
+    				session_id	= ".api_get_session_id()."
+				"
+		;
+
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 
-		if (count($assignment)==0) {
-			$v_assigment_id ='0';
+		if (count($assignment) == 0) {
+			$parentId = '0';
 		} else {
-			$v_assigment_id = $assignment['id'];
+			$parentId = $assignment['id'];
 		}
-		$sql = 'SELECT * FROM '.$tbl_stats.'
+
+		$sql = 'SELECT * FROM '.$table.'
     			WHERE
     				c_id = '.$this->course_id.' AND
     				active = 1 AND
-    				parent_id ="'.$v_assigment_id.'" AND
-    				session_id='.api_get_session_id().'';
-
+    				parent_id = "'.$parentId.'" AND
+    				session_id = '.api_get_session_id() .' AND
+    				qualificator_id <> 0
+				';
 		if (!empty($stud_id)) {
 			$sql .= " AND user_id = $stud_id ";
 		}
@@ -202,7 +204,10 @@ class StudentPublicationLink extends AbstractLink
 		// for 1 student
 		if (!empty($stud_id)) {
 			if ($data = Database::fetch_array($scores)) {
-				return array($data['qualification'], $assignment['qualification']);
+				return array(
+					$data['qualification'],
+					$assignment['qualification']
+				);
 			} else {
 				return '';
 			}
@@ -224,7 +229,7 @@ class StudentPublicationLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				return array ($sum , $rescount);
+				return array($sum, $rescount);
 			}
 		}
 	}
@@ -277,7 +282,7 @@ class StudentPublicationLink extends AbstractLink
 	private function get_exercise_data()
 	{
 		$tbl_name = $this->get_studpub_table();
-		$course_info = Database :: get_course_info($this->get_course_code());
+		$course_info = api_get_course_info($this->get_course_code());
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {

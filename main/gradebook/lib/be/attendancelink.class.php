@@ -196,7 +196,8 @@ class AttendanceLink extends AbstractLink
 		return false;
 	}
 
-	public function get_name() {
+	public function get_name()
+	{
 		$this->get_attendance_data();
 		$attendance_title = isset($this->attendance_data['name']) ? $this->attendance_data['name'] : '';
 		$attendance_qualify_title = isset($this->attendance_data['attendance_qualify_title']) ? $this->attendance_data['attendance_qualify_title'] : '';

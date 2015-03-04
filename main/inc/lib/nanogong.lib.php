@@ -237,7 +237,7 @@ class Nanogong
 			if (isset($this->params['exe_id']) && isset($this->params['user_id']) &&
                 isset($this->params['question_id']) && isset($this->params['session_id']) && isset($this->params['course_id'])
             ) {
-				$attempt_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+				$attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 				$sql = "SELECT filename FROM $attempt_table
                         WHERE
                             exe_id 		= ".$this->params['exe_id']." AND
@@ -286,9 +286,6 @@ class Nanogong
 	 */
 	public function upload_file($is_nano = false)
 	{
-		require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 		if (!empty($_FILES)) {
 			$upload_ok = process_uploaded_file($_FILES['file'], false);

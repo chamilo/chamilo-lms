@@ -10,7 +10,7 @@
 $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-// Include OpenGraph NOT AVAILABLE 
+// Include OpenGraph NOT AVAILABLE
 require_once api_get_path(LIBRARY_PATH).'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
@@ -108,7 +108,6 @@ $userIsOnline = user_is_online($user_id);
 
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 
 require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
@@ -169,7 +168,7 @@ function send_message_to_user(user_id) {
                         }
                     });
                 }
-            },
+            }
         },
         close: function() {
         }

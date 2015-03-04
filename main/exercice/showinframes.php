@@ -6,7 +6,6 @@
  * 	@author Istvan Mandak
  */
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 $_course = api_get_course_info();
 

@@ -8,7 +8,6 @@
  */
 die();
 require_once '../../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit','128M');
 /**
@@ -27,7 +26,7 @@ $defined_terms = array_flip(array_keys($terms));
 $terms = null;
 echo count($defined_terms)." terms were found in language files<br />";
 
-// now get all terms found in all PHP files of Chamilo (this takes some 
+// now get all terms found in all PHP files of Chamilo (this takes some
 // time and memory)
 $used_terms = array();
 $l = strlen(api_get_path(SYS_PATH));
@@ -64,10 +63,10 @@ foreach ($files as $file) {
 // Compare defined terms VS used terms. Used terms should be smaller than
 // defined terms, and this should prove the concept that there are much
 // more variables than what we really use
-if (count($used_terms)<1) { 
-  die("No used terms<br />\n"); 
+if (count($used_terms)<1) {
+  die("No used terms<br />\n");
 } else {
-  echo "The following terms were defined but never used: <br />\n<table>"; 
+  echo "The following terms were defined but never used: <br />\n<table>";
 }
 $i = 1;
 foreach ($defined_terms as $term => $file) {
@@ -96,7 +95,7 @@ function get_all_php_files($base_path) {
         	if ($sub == '.php' or $sub == '.tpl') {
                     $files[] = $base_path.$item;
         	}
-        } 
+        }
     }
     $list = null;
     return $files;

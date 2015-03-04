@@ -15,7 +15,6 @@ $language_file = array('exercice');
 
 // including the global library
 require_once '../inc/global.inc.php';
-require_once '../gradebook/lib/be.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
@@ -27,17 +26,9 @@ $htmlHeadXtra[] = api_get_datepicker_js();
 api_protect_course_script(true, false, true);
 
 // including additional libraries
-require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
-// need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+$_course = api_get_course_info();
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
@@ -46,13 +37,13 @@ $gradebook = isset($gradebook) ? $gradebook : null;
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* 	Constants and variables */
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is_student_boss();
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
 $course_id = api_get_course_int_id();
@@ -136,9 +127,11 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
-    ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
-    $id = intval($_GET['exeid']); //filtered by post-condition
-    $track_exercise_info = get_exercise_track_exercise_info($id);
+    ($is_allowedToEdit || $is_tutor)
+) {
+    //filtered by post-condition
+    $id = intval($_GET['exeid']);
+    $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
@@ -173,8 +166,7 @@ if (isset($_REQUEST['comments']) &&
         }
     }
 
-    $loop_in_track = ($comments_exist === true) ? (count($_POST) / 2) : count($_POST);
-
+    $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
     $array_content_id_exe = array();
 
     if ($comments_exist === true) {
@@ -192,14 +184,10 @@ if (isset($_REQUEST['comments']) &&
             $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
-        $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
 
-        $result = Database::query($sql);
-        Database::result($result, 0, "question");
-
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
-                  WHERE question_id = ".$my_questionid." AND exe_id=".$id;
-        Database::query($query);
+        $sql = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments'
+                WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        Database::query($sql);
 
         //Saving results in the track recording table
         $sql = 'INSERT INTO '.$TBL_TRACK_ATTEMPT_RECORDING.' (exe_id, question_id, marks, insert_date, author, teacher_comment)
@@ -237,7 +225,12 @@ if (isset($_REQUEST['comments']) &&
         $message .= $from_name;
         $message = str_replace("#test#", Security::remove_XSS($test), $message);
         $message = str_replace("#url#", $url, $message);
-        MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
+        MessageManager::send_message_simple(
+            $student_id,
+            $subject,
+            $message,
+            api_get_user_id()
+        );
     }
 
     //Updating LP score here
@@ -422,6 +415,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('StartDate'),
         get_lang('EndDate'),
         get_lang('Score'),
+        get_lang('IP'),
         get_lang('Status'),
         get_lang('ToolLearnpath'),
         get_lang('Actions')
@@ -447,6 +441,7 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
         array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
         array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'true'),
+        array('name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'),
         array('name' => 'status', 'index' => 'revised', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
             'searchoptions' => array(

@@ -31,9 +31,9 @@ $form->addElement('header', '', get_lang('Edit'));
 $form->addElement('hidden', 'sec_token',$token);
 $form->addElement('hidden', 'attendance_id', $attendance_id);
 
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 
 // Adavanced Parameters
 
@@ -52,7 +52,7 @@ if (Gradebook::is_active()) {
         $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
         $form->addElement('html','<div id="options_field" style="display:none">');
     }
-    load_gradebook_select_in_tool($form);
+    GradebookUtils::load_gradebook_select_in_tool($form);
     $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));
     $form->applyFilter('attendance_qualify_title', 'html_filter');
     $form->addElement('text', 'attendance_weight', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
@@ -69,7 +69,7 @@ $default['description'] = Security::remove_XSS($description,STUDENT);
 $default['attendance_qualify_title'] = $attendance_qualify_title;
 $default['attendance_weight'] = $attendance_weight;
 
-$link_info = is_resource_in_course_gradebook(api_get_course_id(), 7, $attendance_id, api_get_session_id());
+$link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 7, $attendance_id, api_get_session_id());
 $default['category_id'] = $link_info['category_id'];
 $form->setDefaults($default);
 $form->display();

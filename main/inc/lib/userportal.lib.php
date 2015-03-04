@@ -8,17 +8,21 @@ use \ChamiloSession as Session;
  */
 class IndexManager
 {
-    //An instance of the template engine
-    public $tpl     = false;
-    public $name     = '';
-    public $home            = '';
-    public $default_home     = 'home/';
+    // An instance of the template engine
+    public $tpl = false;
+    public $name = '';
+    public $home = '';
+    public $default_home = 'home/';
 
+    /**
+     * Construct
+     * @param string $title
+     */
     public function __construct($title)
     {
         $this->tpl = new Template($title);
-        $this->home     = api_get_home_path();
-        $this->user_id  = api_get_user_id();
+        $this->home = api_get_home_path();
+        $this->user_id = api_get_user_id();
         $this->load_directories_preview = false;
 
         if (api_get_setting('show_documents_preview') == 'true') {
@@ -39,9 +43,7 @@ class IndexManager
 
             // Only display if the user isn't logged in.
             $this->tpl->assign('login_language_form', api_display_language_form(true));
-
             if ($setLoginForm) {
-
                 $this->tpl->assign('login_form',  self::display_login_form());
 
                 if ($loginFailed) {
@@ -49,7 +51,7 @@ class IndexManager
                 }
 
                 if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                    $login_form .= '<ul class="nav nav-list">';
+                    $login_form .= '<ul class="nav nav-pills nav-stacked">';
                     if (api_get_setting('allow_registration') != 'false') {
                         $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
                     }
@@ -65,14 +67,13 @@ class IndexManager
 
     function return_exercise_block($personal_course_list)
     {
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_list = array();
         if (!empty($personal_course_list)) {
             foreach($personal_course_list as  $course_item) {
                 $course_code     = $course_item['c'];
                 $session_id     = $course_item['id_session'];
 
-                $exercises = get_exercises_to_be_taken($course_code, $session_id);
+                $exercises = ExerciseLib::get_exercises_to_be_taken($course_code, $session_id);
 
                 foreach($exercises as $exercise_item) {
                     $exercise_item['course_code']     = $course_code;
@@ -165,8 +166,10 @@ class IndexManager
         echo self::return_notice();
     }
 
-    function return_teacher_link() {
+    function return_teacher_link()
+    {
         $html = '';
+        $show_menu = false;
         if (!empty($this->user_id)) {
             // tabs that are deactivated are added here
 
@@ -195,7 +198,7 @@ class IndexManager
         // My Account section
 
         if ($show_menu) {
-            $html .= '<ul class="nav nav-list">';
+            $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
                 $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
@@ -213,11 +216,15 @@ class IndexManager
         if (!empty($html)) {
             $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
         }
+
         return $html;
     }
 
-    /* Includes a created page */
-    function return_home_page()
+    /**
+     * Includes a created page
+     * @return string
+     */
+    public function return_home_page()
     {
         $userId = api_get_user_id();
         global $_configuration;
@@ -229,7 +236,9 @@ class IndexManager
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
-            if (isset($_configuration['hide_home_top_when_connected']) && $_configuration['hide_home_top_when_connected'] && !empty($userId)) {
+            if (isset($_configuration['hide_home_top_when_connected']) &&
+                $_configuration['hide_home_top_when_connected'] && !empty($userId)
+            ) {
                 return $html;
             }
 
@@ -241,20 +250,22 @@ class IndexManager
                 $user_selected_language = api_get_setting('platformLanguage');
             }
 
-			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
-				if (file_exists($this->home.'home_top.html')) {
-					$home_top_temp = file($this->home.'home_top.html');
-				} else {
-					$home_top_temp = file($this->default_home.'home_top.html');
-				}
-				$home_top_temp = implode('', $home_top_temp);
-			} else {
-				if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
-					$home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
-				} else {
-					$home_top_temp = file_get_contents($this->home.'home_top.html');
-				}
-			}
+            // Try language specific home
+            if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
+                $home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
+            }
+
+            // Try default language home
+            if (empty($home_top_temp)) {
+                if (file_exists($this->home.'home_top.html')) {
+                    $home_top_temp = file_get_contents($this->home.'home_top.html');
+                } else {
+                    if (file_exists($this->default_home.'home_top.html')) {
+                        $home_top_temp = file_get_contents($this->default_home . 'home_top.html');
+                    }
+                }
+            }
+
 			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
 				$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
 			} else {
@@ -263,6 +274,7 @@ class IndexManager
 			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		}
+
 		return $html;
 	}
 
@@ -300,7 +312,7 @@ class IndexManager
         $html = null;
         $home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
-            $home_menu_content = '<ul class="nav nav-list">';
+            $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $home_menu_content .= '</ul>';
             $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
@@ -311,9 +323,9 @@ class IndexManager
     function return_skills_links() {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
 
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
+            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
 
@@ -448,7 +460,6 @@ class IndexManager
 
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
             $courseCategoryCondition = null;
             if (isMultipleUrlSupport()) {
                 $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -669,12 +680,12 @@ class IndexManager
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'well sidebar-nav';
+        $params['class'] = 'panel panel-default';
         $html = null;
         if (!empty($title)) {
-            $html.= '<h4>'.$title.'</h4>';
+            $html.= '<div class="panel-heading">'.$title.'</div>';
         }
-        $html.= $content;
+        $html.= '<div class="panel-body">'.$content.'</div>';
         $html = Display::div($html, $params);
         return $html;
     }
@@ -685,9 +696,18 @@ class IndexManager
      */
     function display_login_form()
     {
-        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 user_login_icon autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2 user_password_icon'));
+
+        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-inline'));
+        $form->addElement('label',get_lang('UserName'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-user"></i></span>');
+        $form->addElement('text', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addHtml('</div>');
+        $form->addElement('label',get_lang('Pass'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-lock"></i></span>');
+        $form->addElement('password', 'password','', array('id' => 'password', 'class' => 'form-control'));
+        $form->addHtml('</div>');
         global $_configuration;
 
         // Captcha
@@ -708,8 +728,8 @@ class IndexManager
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
                         'font_size' => 20,
-                        'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
-                        'font_file' => 'tahoma.ttf',
+                        'font_path' => api_get_path(SYS_FONTS_PATH) . 'opensans/',
+                        'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
                     )
                 );
@@ -726,8 +746,9 @@ class IndexManager
                 $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
-
-        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $form->addHtml('<div class="form-button-login">');
+        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn-primary btn-block'));
+        $form->addHtml('</div>');
 
         $html = $form->return_form();
         // The validation is located in the local.inc
@@ -746,23 +767,22 @@ class IndexManager
     function return_search_block() {
         $html = '';
         if (api_get_setting('search_enabled') == 'true') {
-            $html .= '<div class="searchbox">';
             $search_btn = get_lang('Search');
-            $search_content = '<br />
-                <form action="main/search/" method="post">
-                <input type="text" id="query" class="span2" name="query" value="" />
-                <button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
-                </form></div>';
+            $search_content = '<form action="main/search/" method="post">
+                <div class="form-group">
+                <input type="text" id="query" class="form-control" name="query" value="" />
+                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+                </div></form>';
             $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
         }
         return $html;
     }
 
-    function return_classes_block() {
+    function return_classes_block()
+    {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-            $usergroup = new Usergroup();
+            $usergroup = new UserGroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
             if (!empty($usergroup_list)) {
@@ -776,7 +796,7 @@ class IndexManager
                 $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
             }
             if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-list'));
+                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-pills nav-stacked'));
                 $html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
             }
         }
@@ -787,7 +807,7 @@ class IndexManager
         $html = '';
         $booking_content = null;
         if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
-            $booking_content .='<ul class="nav nav-list">';
+            $booking_content .='<ul class="nav nav-pills nav-stacked">';
             $booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
             $booking_content .='</ul>';
             $html .= self::show_right_block(get_lang('Booking'), $booking_content, 'reservation_block');
@@ -795,16 +815,37 @@ class IndexManager
         return $html;
     }
 
-    function return_user_image_block() {
-        $img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
-        $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-        $profile_content = null;
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
-        } else {
-            $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
+    /**
+     * @return null|string
+     */
+    public function return_user_image_block()
+    {
+        $html = null;
+        if (!api_is_anonymous()) {
+            $img_array = UserManager::get_user_picture_path_by_id(
+                api_get_user_id(),
+                'web', true, true
+            );
+            $img_array = UserManager::get_picture_user(
+                api_get_user_id(),
+                $img_array['file'],
+                50,
+                USER_IMAGE_SIZE_MEDIUM,
+                ' width="90" height="90" '
+            );
+            $profile_content = null;
+            if (api_get_setting('allow_social_tool') == 'true') {
+                $profile_content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/social/home.php"><img src="' . $img_array['file'] . '"  ' . $img_array['style'] . ' ></a>';
+            } else {
+                $profile_content .= '<a style="text-align:center"  href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php"><img title="' . get_lang('EditProfile') . '" src="' . $img_array['file'] . '" ' . $img_array['style'] . '></a>';
+            }
+            $html = self::show_right_block(
+                null,
+                $profile_content,
+                'user_image_block',
+                array('style' => 'text-align:center;')
+            );
         }
-        $html = self::show_right_block(null, $profile_content, 'user_image_block', array('style' => 'text-align:center;'));
         return $html;
     }
 
@@ -817,12 +858,10 @@ class IndexManager
             return;
         }
 
-        $profile_content = '<ul class="nav nav-list">';
+        $profile_content = '<ul class="nav nav-pills nav-stacked">';
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
-            require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
             // New messages.
             $number_of_new_messages             = MessageManager::get_new_messages();
             // New contact invitations.
@@ -887,7 +926,7 @@ class IndexManager
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
                 $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
                 $content .= '<li'.$current.'>';
@@ -926,7 +965,7 @@ class IndexManager
         }
 
         // My account section
-        $my_account_content = '<ul class="nav nav-list">';
+        $my_account_content = '<ul class="nav nav-pills nav-stacked">';
 
         if ($show_create_link) {
             $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
@@ -1036,7 +1075,7 @@ class IndexManager
                         $date_session_start = $session['date_start'];
                         $date_session_end = $session['date_end'];
                         $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end  = $session['nb_days_access_after_end'];
+                        $days_access_after_end = $session['nb_days_access_after_end'];
 
                         $session_now = time();
                         $count_courses_session = 0;
@@ -1065,7 +1104,10 @@ class IndexManager
                                     }
                                 }
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
+
+                            if ($session_now > $allowed_time &&
+                                $days_access_after_end > $dif_time_after - 1
+                            ) {
                                 // Read only and accessible.
                                 $atLeastOneCourseIsVisible = true;
 
@@ -1093,7 +1135,12 @@ class IndexManager
                         if ($count_courses_session > 0) {
                             $params = array();
                             $session_box = Display::get_session_title_box($session_id);
-                            $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
+                            $params['icon'] = Display::return_icon(
+                                'window_list.png',
+                                $session_box['title'],
+                                array('id' => 'session_img_' . $session_id),
+                                ICON_SIZE_LARGE
+                            );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
                             $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
@@ -1102,7 +1149,15 @@ class IndexManager
                                 $session_link = $session_box['title'];
                                 $params['link'] = null;
                             } else {
-                                $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $session_link = Display::tag(
+                                    'a',
+                                    $session_box['title'],
+                                    array(
+                                        'href' => api_get_path(
+                                                WEB_CODE_PATH
+                                            ) . 'session/index.php?session_id=' . $session_id
+                                    )
+                                );
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
@@ -1119,15 +1174,21 @@ class IndexManager
                                 // $params['extra'] .=  $html_courses_session;
                             }
 
-                            $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
+                            $params['description'] = $session_box['description'];
+                            $params['show_description'] = $session_box['show_description'];
 
                             $parentInfo = CourseManager::course_item_html($params, true);
 
-                            if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
+                            if (isset($_configuration['show_simple_session_info']) &&
+                                $_configuration['show_simple_session_info']
+                            ) {
                                 $params['title'] = $session_box['title'];
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
-                            $sessions_with_no_category .= CourseManager::course_item_parent($parentInfo, $html_courses_session);
+                            $sessions_with_no_category .= CourseManager::course_item_parent(
+                                $parentInfo,
+                                $html_courses_session
+                            );
                         }
                     }
                 } else {

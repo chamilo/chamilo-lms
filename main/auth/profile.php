@@ -14,8 +14,6 @@ $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
 if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_SOCIAL;
 } else {
@@ -92,13 +90,6 @@ if (api_get_setting('allow_message_tool') == 'true') {
             });
 EOF;
 }
-
-//    Configuration file
-require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-
-// Libraries
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -228,7 +219,7 @@ if (api_get_setting('profile', 'language') !== 'true') {
 
 //THEME
 if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
-    $form->addElement('select_theme', 'theme', get_lang('Theme'));
+    $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
     if (api_get_setting('profile', 'theme') !== 'true') {
         $form->freeze('theme');
     }
@@ -242,11 +233,11 @@ if (api_get_setting('extended_profile') == 'true') {
     //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
     //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
     //    MY COMPETENCES
-    $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
     //    MY DIPLOMAS
-    $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
     //    WHAT I AM ABLE TO TEACH
-    $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 
     //    MY PRODUCTIONS
     $form->addElement('file', 'production', get_lang('MyProductions'));
@@ -254,7 +245,7 @@ if (api_get_setting('extended_profile') == 'true') {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
     //    MY PERSONAL OPEN AREA
-    $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
+    $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
     $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
     $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
 
@@ -734,10 +725,10 @@ $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') ==
 
 if (api_get_setting('allow_social_tool') == 'true') {
     echo '<div class="row-fluid">';
-        echo '<div class="span3">';
+        echo '<div class="col-md-3">';
         echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
         echo '</div>';
-        echo '<div class="span9">';
+        echo '<div class="col-md-9">';
         $form->display();
     echo '</div>';
 } else {

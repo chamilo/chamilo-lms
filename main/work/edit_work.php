@@ -9,7 +9,6 @@ require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
 /* Libraries */
-require_once $lib_path.'fileManage.lib.php';
 require_once 'work.lib.php';
 
 // Section (for the tabs)
@@ -53,7 +52,7 @@ $defaults['new_dir'] = Security::remove_XSS($title);
 $there_is_a_end_date = false;
 
 if (Gradebook::is_active()) {
-    $link_info = is_resource_in_course_gradebook(
+    $link_info = GradebookUtils::is_resource_in_course_gradebook(
         api_get_course_id(),
         LINK_STUDENTPUBLICATION,
         $workId

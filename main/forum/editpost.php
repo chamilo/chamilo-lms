@@ -27,11 +27,6 @@ $language_file = array('forum', 'group', 'gradebook');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once '../gradebook/lib/gradebook_functions.inc.php';
-require_once '../gradebook/lib/be/gradebookitem.class.php';
-require_once '../gradebook/lib/be/evaluation.class.php';
-require_once '../gradebook/lib/be/abstractlink.class.php';
-require_once '../gradebook/lib/gradebook_functions.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -229,10 +224,10 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
         $weight_calification = $values['weight_calification'];
         $description = '';
         $session_id = api_get_session_id();
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
         $link_id = $link_info['id'];
         if (!$link_info) {
-            add_resource_to_course_gradebook(
+            GradebookUtils::add_resource_to_course_gradebook(
                 $values['category_id'],
                 api_get_course_id(),
                 5,

@@ -607,7 +607,6 @@ class CourseSelectForm
 
 		//get destination course title
 		if(!empty($hidden_fields['destination_course'])) {
-			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
              if (!empty($hidden_fields['destination_session'])) {
                  $sessionTitle = ' (' . api_get_session_name($hidden_fields['destination_session']) . ')';
              } else {

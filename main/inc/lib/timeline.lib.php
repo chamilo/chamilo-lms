@@ -1,23 +1,28 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * This class provides methods for the timeline management.
- * @package chamilo.library
- * @package chamilo.timeline
- */
-/**
- * Init
- */
-define('TIMELINE_STATUS_ACTIVE', '1');
-define('TIMELINE_STATUS_INACTIVE', '2');
 
 /**
+ * Class Timeline
  * Timeline model class definition
+ * @package chamilo.library
  */
 class Timeline extends Model
 {
     public $table;
-    public $columns = array('headline', 'type', 'start_date', 'end_date', 'text', 'media', 'media_credit', 'media_caption', 'title_slide', 'parent_id', 'status','c_id');
+    public $columns = array(
+        'headline',
+        'type',
+        'start_date',
+        'end_date',
+        'text',
+        'media',
+        'media_credit',
+        'media_caption',
+        'title_slide',
+        'parent_id',
+        'status',
+        'c_id'
+    );
     public $is_course_model = true;
 
 	public function __construct()
@@ -83,7 +88,7 @@ class Timeline extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
-        //$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
 	    $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -148,7 +153,7 @@ class Timeline extends Model
         $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
 
 
-        //$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
 
         if ($action == 'edit') {
             // Setting the defaults

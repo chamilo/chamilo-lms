@@ -4,14 +4,12 @@
  * Definition of the AddManySessionToCategoryFunctions class
  * @package chamilo.library
  */
-/**
- * Init
- */
-require_once dirname(__FILE__).'/xajax/xajax.inc.php';
+
 /**
  * AddManySessionToCategoryFunctions class
  */
-class AddManySessionToCategoryFunctions {
+class AddManySessionToCategoryFunctions
+{
     /**
      * Search for a session based on a given search string
      * @param string A search string
@@ -23,7 +21,7 @@ class AddManySessionToCategoryFunctions {
     function search_courses($needle,$type) {
 
 		global $tbl_course, $tbl_session, $id_session;
-		$xajax_response = new XajaxResponse();
+		$xajax_response = new xajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas

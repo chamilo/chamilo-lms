@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
 $language_file[] = 'admin';
 require_once '../global.inc.php';
 
@@ -16,7 +15,7 @@ switch ($action) {
             $list_sessions = SessionManager::get_sessions_by_user($user_id, true);
             if (!empty($list_sessions)) {
                 foreach ($list_sessions as $session_item) {
-                    echo $session_item['session_name'].'<br />';
+                    echo $session_item['session_name'] . '<br />';
                 }
             } else {
                 echo get_lang('NoSessionsForThisUser');
@@ -107,6 +106,20 @@ switch ($action) {
             }
         }
         break;
+    case 'get_description':
+        $sessionId = intval($_GET['session']);
+
+        $sessionInfo = api_get_session_info($sessionId);
+        ?>
+        <h2><?php echo $sessionInfo['name'] ?></h2><br>
+        <div class="home-course-intro">
+            <div class="page-course">
+                <div class="page-course-intro">
+                    <p><?php echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None') ?></p>
+                </div>
+            </div>
+        </div>
+        <?php
     default:
         echo '';
 }

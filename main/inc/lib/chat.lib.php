@@ -1,14 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- *    This is the Chat library for Chamilo.
- *    Include/require it in your code to use its functionality.
- *
- *    @package chamilo.library.chat
- */
 
 /**
- * Chat class
+ * Class Chat
+ *
+ * @package chamilo.library.chat
  */
 class Chat extends Model
 {
@@ -36,22 +32,21 @@ class Chat extends Model
         return $status['user_chat_status'];
     }
 
-    /*
-     * Set user chat status
-     * @param int 0 if disconnected, 1 if connected
-     * @return void
-     */
-
-    function set_user_status($status)
+    /**
+    * Set user chat status
+    * @param int 0 if disconnected, 1 if connected
+    * @return void
+    */
+    public function setUserStatus($status)
     {
         UserManager::update_extra_field_value(api_get_user_id(), 'user_chat_status', $status);
     }
 
-    /*
+    /**
      * Starts a chat session and returns JSON array of status and chat history
      * @return void (prints output in JSON format)
      */
-    public function start_session()
+    public function startSession()
     {
         $items = array();
         if (isset($_SESSION['chatHistory'])) {
@@ -150,7 +145,7 @@ class Chat extends Model
      * @return array Messages list
      */
 
-    function box_session($user_id)
+    public function box_session($user_id)
     {
         $items = array();
         if (isset($_SESSION['chatHistory'][$user_id])) {
@@ -164,7 +159,7 @@ class Chat extends Model
      * @param int The ID of the user with whom the current user is chatting
      * @return void
      */
-    function save_window($user_id)
+    public function save_window($user_id)
     {
         $this->window_list[$user_id] = true;
         $_SESSION['window_list'] = $this->window_list;
@@ -177,9 +172,8 @@ class Chat extends Model
      * @param string Message
      * @return void Prints "1"
      */
-    function send($from_user_id, $to_user_id, $message)
+    public function send($from_user_id, $to_user_id, $message)
     {
-
         $user_friend_relation = SocialManager::get_relation_between_contacts($from_user_id, $to_user_id);
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
 
@@ -212,7 +206,7 @@ class Chat extends Model
             if (!empty($from_user_id) && !empty($to_user_id)) {
                 $this->save($params);
             }
-            //print_r($_SESSION['chatHistory']);
+
             echo "1";
             exit;
         } else {
@@ -225,7 +219,7 @@ class Chat extends Model
      * Close a specific chat box (user ID taken from $_POST['chatbox'])
      * @return void Prints "1"
      */
-    function close()
+    public function close()
     {
         unset($_SESSION['openChatBoxes'][$_POST['chatbox']]);
         unset($_SESSION['chatHistory'][$_POST['chatbox']]);
@@ -238,7 +232,7 @@ class Chat extends Model
      * @param string Unfiltered message
      * @return string Filterd mssage
      */
-    function sanitize($text)
+    public function sanitize($text)
     {
         $text = htmlspecialchars($text, ENT_QUOTES);
         $text = str_replace("\n\r", "\n", $text);
@@ -247,7 +241,7 @@ class Chat extends Model
         return $text;
     }
 
-    function is_chat_blocked_by_exercises()
+    public function is_chat_blocked_by_exercises()
     {
         if (isset($_SESSION['current_exercises'])) {
             foreach ($_SESSION['current_exercises'] as $attempt_status) {
@@ -256,6 +250,7 @@ class Chat extends Model
                 }
             }
         }
+
         return false;
     }
 }

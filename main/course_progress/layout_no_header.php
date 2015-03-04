@@ -7,7 +7,7 @@ api_protect_course_script(true);
 Display :: display_reduced_header();
 
 // Tracking
-event_access_tool($tool);
+Event::event_access_tool($tool);
 
 
 // Display

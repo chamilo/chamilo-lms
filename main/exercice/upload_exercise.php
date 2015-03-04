@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * 	Upload quiz: This script shows the upload quiz feature
  *  Initial work by Isaac flores on Nov 4 of 2010
@@ -15,13 +16,8 @@ $help_content = 'exercise_upload';
 
 // including the global Dokeos file
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+
 require_once api_get_path(LIBRARY_PATH) . 'pear/excelreader/reader.php';
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'unique_answer.class.php';
-require_once '../newscorm/learnpath.class.php';
-require_once '../newscorm/learnpathItem.class.php';
 
 // Security check
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -327,15 +323,15 @@ function lp_upload_quiz_action_handling() {
                     $globalScore = null;
                     $objAnswer = new Answer($question_id, $courseId);
                     $globalScore = $score_list[$i][3];
-                    
-                    // Calculate the number of correct answers to divide the 
+
+                    // Calculate the number of correct answers to divide the
                     // score between them when importing from CSV
                     $numberRightAnswers = 0;
                     foreach ($answers_data as $answer_data) {
                         if (strtolower($answer_data[3]) == 'x') {
                             $numberRightAnswers++;
                         }
-                    }                    
+                    }
                     foreach ($answers_data as $answer_data) {
                         $answerValue = $answer_data[2];
                         $correct = 0;

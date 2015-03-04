@@ -7,11 +7,9 @@
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.course_description
  */
+
 /**
- * Code
- */
-/**
- * CourseDescription can be used to instanciate objects or as a library to manage course descriptions
+ * Class CourseDescription Lanage course descriptions
  * @package chamilo.course_description
  */
 class CourseDescription
@@ -91,7 +89,7 @@ class CourseDescription
      * @return array
      */
 	public function get_description_history($description_type) {
-		$tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+		$tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
 		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		$description_id = $this->get_id_by_description_type($description_type);
@@ -228,7 +226,7 @@ class CourseDescription
      */
 	public function insert_stats($description_type)
     {
-		$tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+		$tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
 		$description_id = $this->get_id_by_description_type($description_type);
 		$course_id = api_get_real_course_id();
 		$course_code = api_get_course_id();

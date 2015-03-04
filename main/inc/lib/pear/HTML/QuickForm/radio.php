@@ -23,11 +23,6 @@
  */
 
 /**
- * Base class for <input /> form elements
- */
-require_once 'HTML/QuickForm/input.php';
-
-/**
  * HTML class for a radio type element
  *
  * @category    HTML
@@ -39,7 +34,6 @@ require_once 'HTML/QuickForm/input.php';
  */
 class HTML_QuickForm_radio extends HTML_QuickForm_input
 {
-    // {{{ properties
 
     /**
      * Radio display text
@@ -48,9 +42,6 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    private
      */
     var $_text = '';
-
-    // }}}
-    // {{{ constructor
 
     /**
      * Class constructor
@@ -64,8 +55,13 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_radio($elementName=null, $elementLabel=null, $text=null, $value=null, $attributes=null)
-    {
+    public function HTML_QuickForm_radio(
+        $elementName = null,
+        $elementLabel = null,
+        $text = null,
+        $value = null,
+        $attributes = null
+    ) {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         if (isset($value)) {
             $this->setValue($value);
@@ -74,10 +70,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $this->setType('radio');
         $this->_text = $text;
         $this->_generateId();
-    } //end constructor
-
-    // }}}
-    // {{{ setChecked()
+    }
 
     /**
      * Sets whether radio button is checked
@@ -94,10 +87,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         } else {
             $this->updateAttributes(array('checked'=>'checked'));
         }
-    } //end func setChecked
-
-    // }}}
-    // {{{ getChecked()
+    }
 
     /**
      * Returns whether radio button is checked
@@ -109,10 +99,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     function getChecked()
     {
         return $this->getAttribute('checked');
-    } //end func getChecked
-
-    // }}}
-    // {{{ toHtml()
+    }
 
     /**
      * Returns the radio element in HTML
@@ -121,22 +108,22 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->_flagFrozen) {
             $label = $this->_text;
         } else {
-            ///$label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
-            $label = '<label class="radio">' .HTML_QuickForm_input::toHtml().$this->_text . '</label>';
+            $label = '<div class="radio"><label '.$this->getAttribute('label-class').'">' .
+                HTML_QuickForm_input::toHtml().$this->_text .
+                '</label></div>';
+
             return  $label;
         }
-        return HTML_QuickForm_input::toHtml() . $label;
-    } //end func toHtml
 
-    // }}}
-    // {{{ getFrozenHtml()
+        return HTML_QuickForm_input::toHtml() . $label;
+    }
 
     /**
      * Returns the value of field without HTML tags
@@ -145,18 +132,15 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         if ($this->getChecked()) {
-            return '<tt>(x)</tt>' .
+            return '<code>(x)</code>' .
                    $this->_getPersistantData();
         } else {
-            return '<tt>( )</tt>';
+            return '<code>( )</code>';
         }
-    } //end func getFrozenHtml
-
-    // }}}
-    // {{{ setText()
+    }
 
     /**
      * Sets the radio text
@@ -166,13 +150,10 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setText($text)
+    public function setText($text)
     {
         $this->_text = $text;
-    } //end func setText
-
-    // }}}
-    // {{{ getText()
+    }
 
     /**
      * Returns the radio text
@@ -181,13 +162,10 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function getText()
+    public function getText()
     {
         return $this->_text;
-    } //end func getText
-
-    // }}}
-    // {{{ onQuickFormEvent()
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -199,7 +177,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'updateValue':
@@ -228,16 +206,14 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
             default:
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
-        return true;
-    } // end func onQuickFormLoad
 
-    // }}}
-    // {{{ exportValue()
+        return true;
+    }
 
    /**
     * Returns the value attribute if the radio is checked, null if it is not
     */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
         if (null === $value) {
@@ -245,9 +221,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         } elseif ($value != $this->getValue()) {
             $value = null;
         }
+
         return $this->_prepareValue($value, $assoc);
     }
-
-    // }}}
-} //end class HTML_QuickForm_radio
-?>
+}

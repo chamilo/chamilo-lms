@@ -12,9 +12,6 @@
 
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 // Protection
 api_protect_course_script();
@@ -68,8 +65,7 @@ if ($is_allowed_in_course == false) {
     api_not_allowed(true);
 }
 
-//Check user visibility
-//$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+// Check user visibility
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
     api_get_course_id(),
@@ -94,32 +90,31 @@ $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' 
 
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-    $js_glossary_in_documents = '	//	    $(document).ready(function() {
-                                    $.frameReady(function() {
-                                       //  $("<div>I am a div courses</div>").prependTo("body");
-                                      }, "mainFrame",
-                                      { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-                                           ]
-                                      }
-                                      );
-                                    //});';
+    $js_glossary_in_documents = '
+    $.frameReady(function() {
+       //  $("<div>I am a div courses</div>").prependTo("body");
+      }, "mainFrame",
+      { load: [
+              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_manual.js"}
+           ]
+      }
+      );
+    ';
 } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-    $js_glossary_in_documents =	'//    $(document).ready(function() {
-                                      $.frameReady(function(){
-                                       //  $("<div>I am a div courses</div>").prependTo("body");
+    $js_glossary_in_documents =	'
+      $.frameReady(function(){
+       //  $("<div>I am a div courses</div>").prependTo("body");
 
-                                      }, "mainFrame",
-                                      { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-                                            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-                                           ]
-                                      }
-                                      );
-                                //   });';
+      }, "mainFrame",
+      { load: [
+              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_automatic.js"}
+           ]
+      });
+    ';
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -130,11 +125,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-<!--
     var updateContentHeight = function() {
-        //HeaderHeight = document.getElementById("header").offsetHeight;
-        //FooterHeight = document.getElementById("footer").offsetHeight;
-        //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
         my_iframe           = document.getElementById("mainFrame");
         new_height          = my_iframe.contentWindow.document.body.scrollHeight;
         my_iframe.height    = my_iframe.contentWindow.document.body.scrollHeight + "px";
@@ -145,7 +136,6 @@ $htmlHeadXtra[] = '
          updateContentHeight();
         '.$js_glossary_in_documents.'
     }
--->
 </script>';
 
 Display::display_reduced_header();

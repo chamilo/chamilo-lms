@@ -1,26 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-*	This class provides methods for the notebook management.
-*	Include/require it in your code to use its features.
-*	@package chamilo.library
-*/
-/**
- * Code
- */
-/**
- * @package chamilo.library
- */
 
-require_once 'fckeditor/fckeditor.php';
 /**
  * Class GradeModel
+ * @package chamilo.library
  */
 class GradeModel extends Model
 {
     public $table;
     public $columns = array('id', 'name', 'description');
 
+    /**
+     * Constructor
+     */
 	public function __construct()
     {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL);
@@ -66,13 +58,6 @@ class GradeModel extends Model
      */
     public function return_form($url, $action)
     {
-        $oFCKeditor = new FCKeditor('description') ;
-        $oFCKeditor->ToolbarSet = 'grade_model';
-        $oFCKeditor->Width		= '100%';
-        $oFCKeditor->Height		= '200';
-        $oFCKeditor->Value		= '';
-        $oFCKeditor->CreateHtml();
-
         $form = new FormValidator('grades', 'post', $url);
 
         // Setting the form elements
@@ -87,7 +72,17 @@ class GradeModel extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-        $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        $form->addHtmlEditor(
+            'description',
+            get_lang('Description'),
+            false,
+            false,
+            array(
+                'ToolbarSet' => 'careers',
+                'Width' => '100%',
+                'Height' => '250'
+            )
+        );
 
         $form->addElement('label', get_lang('Components'));
 
@@ -109,7 +104,6 @@ class GradeModel extends Model
 
         $form->addElement('hidden', 'maxvalue', '100');
 		$form->addElement('hidden', 'minvalue', '0');
-
         $renderer = & $form->defaultRenderer();
 
         $component_array = array();
@@ -166,11 +160,12 @@ class GradeModel extends Model
         $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
 
         if ($action == 'edit') {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            //$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            //$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
         }
-
         if (!empty($components)) {
             $counter = 0;
             foreach ($components as $component) {

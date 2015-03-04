@@ -24,11 +24,6 @@
  */
 
 /**
- * Base class for all HTML classes
- */
-require_once 'HTML/Common.php';
-
-/**
  * Base class for form elements
  *
  * @category    HTML
@@ -83,9 +78,6 @@ class HTML_QuickForm_element extends HTML_Common
      */
     var $_persistantFreeze = false;
 
-    // }}}
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -103,7 +95,7 @@ class HTML_QuickForm_element extends HTML_Common
             $this->setName($elementName);
         }
         if (isset($elementLabel)) {
-            
+
             $labelFor = "";
             //Default Inputs generate this
             if (!empty($attributes['id'])) {
@@ -115,10 +107,7 @@ class HTML_QuickForm_element extends HTML_Common
             }
             $this->setLabel($elementLabel, $labelFor);
         }
-    } //end constructor
-
-    // }}}
-    // {{{ apiVersion()
+    }
 
     /**
      * Returns the current API version
@@ -405,7 +394,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'createElement':
@@ -420,7 +409,9 @@ class HTML_QuickForm_element extends HTML_Common
             case 'updateValue':
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
+
                 $value = $this->_findValue($caller->_constantValues);
+
                 if (null === $value) {
                     $value = $this->_findValue($caller->_submitValues);
                     if (null === $value) {
@@ -434,6 +425,7 @@ class HTML_QuickForm_element extends HTML_Common
             case 'setGroupValue':
                 $this->setValue($arg);
         }
+
         return true;
     }
 

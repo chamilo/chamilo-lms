@@ -22,12 +22,6 @@
  */
 
 /**
- * Required packages
- */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Image.php';
-
-/**
  * Element for HTML_QuickForm to display a CAPTCHA image
  *
  * The HTML_QuickForm_CAPTCHA package adds an element to the

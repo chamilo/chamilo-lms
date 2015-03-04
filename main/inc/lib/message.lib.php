@@ -1,30 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'online.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-define('MESSAGE_STATUS_NEW', '0');
-define('MESSAGE_STATUS_UNREAD', '1');
-//2 ??
-define('MESSAGE_STATUS_DELETED', '3');
-define('MESSAGE_STATUS_OUTBOX', '4');
-define('MESSAGE_STATUS_INVITATION_PENDING', '5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED', '6');
-define('MESSAGE_STATUS_INVITATION_DENIED', '7');
-define('MESSAGE_STATUS_WALL', '8');
-define('MESSAGE_STATUS_WALL_DELETE', '9');
-define('MESSAGE_STATUS_WALL_POST', '10');
-// Images
-define('IMAGE_WALL_SMALL_SIZE', 200);
-define('IMAGE_WALL_MEDIUM_SIZE', 500);
-define('IMAGE_WALL_BIG_SIZE', 2000);
-define('IMAGE_WALL_SMALL', 'small');
-define('IMAGE_WALL_MEDIUM', 'medium');
-define('IMAGE_WALL_BIG', 'big');
-
 /**
  * Class MessageManager
  *
@@ -78,15 +54,6 @@ class MessageManager
                 "</b>";
         }
         return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-    }
-
-    /**
-     * Displays the wysiwyg html editor.
-     * @deprecated
-     */
-    public static function display_html_editor_area($name, $resp)
-    {
-        api_disp_html_area($name, get_lang('TypeYourMessage'), '', '', null, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
     }
 
     /**
@@ -823,13 +790,13 @@ class MessageManager
                 $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             } else {
                 $link = '';
-                if ($_GET['f'] == 'social') {
+                if (isset($_GET['f']) && $_GET['f'] == 'social') {
                     $link = '&f=social';
                 }
                 $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName($result[4]);
                 //$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
+                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&'.$link.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             }
 
             foreach ($message as $key => $value) {
@@ -1385,7 +1352,8 @@ class MessageManager
                     $archiveFile = $row_file['path'];
                     $filename = $row_file['filename'];
                     $filesize = format_file_size($row_file['size']);
-                    $filecomment = $row_file['comment'];
+                    $filecomment = Security::remove_XSS($row_file['comment']);
+                    $filename = Security::remove_XSS($filename);
                     $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
             }
@@ -1527,7 +1495,7 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable('message_outbox', array('MessageManager', 'get_number_of_messages_sent'), array('MessageManager', 'get_message_data_sent'), 3, 20, 'DESC');
 
-        $parameters['f'] = Security::remove_XSS($_GET['f']);
+        $parameters['f'] = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
 

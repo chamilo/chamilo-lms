@@ -147,13 +147,12 @@ if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AN
 
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
-        $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
+        $message = GradebookUtils::delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
         // Delete link
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-        $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
         $link_id = $link_info['id'];
         if ($link_info !== false) {
-            remove_resource_from_course_gradebook($link_id);
+            GradebookUtils::remove_resource_from_course_gradebook($link_id);
         }
     }
 }
@@ -295,7 +294,7 @@ if (api_is_allowed_to_edit(false, true) OR
     ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)
 ) {
     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-        if (!api_is_anonymous()) {
+        if (!api_is_anonymous() && !api_is_invitee()) {
             if ($my_forum == strval(intval($my_forum))) {
                 echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.
                     Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';

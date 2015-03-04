@@ -3,6 +3,24 @@
 for more information: see languages.txt in the lang folder.
 */
 $langHGlossary = "Slovník pomoc";
+$langGlossaryContent = "Tento nástroj vám umožní vytvoriť slovník termínov pre tento kurz, ktoré potom môžu byť použité z nástroja dokumentov";
+$langForumContent = "Fórum je diskusný nástroj pre asynchrónne písomné práce.  Na rozdiel od e-mailu, fórum je pre verejnosť, alebo polo-verejné, skupinové diskusie. </br> </br>
+
+Ak chcete použiť Chamilo fórum, jednoducho môžu členovia použiť svoj prehliadač - nevyžaduje sa samostatný klientsky softvér. </br> </br>
+
+Ak chcete organizovať fóra, kliknite na nástroj Fóra. Diskusie sú organizované hierarchicky podľa nasledujúcej štruktúry: </br> </br>
+
+<b> Kategória> Fórum> Téma> Príspevok. Členovia sa môžu účinne podieľať na úpravách vo fóre, v prvom rade je nevyhnutné vytvárať kategórie a fóra; potom je na účastníkoch vytvárať témy a príspevky. V predvolenom nastavení fórum obsahuje jednu (verejnú) kategóriu, vzorovú tému a vzorový príspevok. 
+Môžete pridať kategórie do fóra, zmeniť ich názov alebo vytvoriť iné kategórie, v ktorých by ste potom mohli vytvoriť nové fóra. (Nepleťte kategórie a fóra, a pamätajte, že kategória, ktorá neobsahuje žiadne fórum je k ničomu a nie je zobrazená.)</br> </br>
+\n </br>
+Popis fóra môže obsahovať zoznam všetkých svojich členov, definíciu svojho účelu, cieľ úlohy, tému atď.</br> </br>
+
+Fórum Skupiny by nemalo byť vytvorené pomocou nástroja Fórum, ale namiesto toho pomocou nástroja Skupín, kde si môžete určiť, či vaše fórum Skupiny by malo byť súkromné alebo verejné, súčasne poskytuje miesto pre zdieľanie skupiny dokumentov. </br> </br>
+
+Výukové tipy</ br>
+Vzdelávacie fórum nie je úplne rovnaké ako fórum, na ktoré ste zvyknutí a vidíte ho na internete. Pre jednu vec, nie je možné, aby študenti zmenili svoje príspevky potom, čo boli zverejnené v kurze, je logicky archivované, umožňuje sledovanie toho, čo bolo povedané v minulosti. Okrem toho, Chamilo fóra umožňujú špecifické použitie zodpovedajúce výučbe. Napríklad, niektorí učitelia/lektori publikujú opravy priamo vo fóre nasledujúcim spôsobom:</br> </br>
+- Študent je požiadaný, aby napísal správu priamo do fóra, učiteľ ju opraví kliknutím na tlačidlo Upraviť (žltá ceruzka) a označí ju pomocou grafického editora (farba, podčiarknutie, atď.) </br>
+A konečne, ďalší študenti ťažia z prezerania opravy, ktorá bola vykonaná u jedného z nich, Všimnite si, že rovnaký princíp môže byť aplikovaný medzi študentmi, ale bude vyžadovať jeho kopírovanie/vkladanie posolstva spolužiakom, z nasledujúcich dôvodov študentom/stážistom sa nedajú editovať jeden druhému príspevky používateľa. </b>";
 $langHForum = "Fórum pomoc";
 $langHFor = "Fórum - pomoc";
 $langForContent = "Fórum je písaný a asynchrónny diskusný nástroj. Tam kde email umožní rozhovor jeden na jedného, fóra umožnia verejné alebo skoro verejné (skupinové) rozhovory.</p><p>Technicky povedané, používatelia potrebujú na využívanie Chamilo fór len internetový prehliadač.</P><p>Na zorganizovanie fór kliknite na 'Administrácia fóra'. Diskusie sú usporiadané v skupinách a podskupinách nasledovne:</p><p><b>Kategória > Fórum > Téma > Odpovede</b></p>Pre usporiadanie diskusií Vašich používateľov je nevyhnutné vopred usporiadať kategórie a fóra a na nich ponechať vytvorenie tém a odpovedí. Štandardne obsahuje Chamilo fórum len kategóriu 'Verejné', príklad fóra a príklad témy.</p><p>Prvá vec, ktorú by ste mali spraviť je zmazať príklad témy a zmeniť názov prvého fóra. Následne môžete v kategórii 'verejné' vytvoriť iné fóra, o témach, ktoré budú vyhovovať scenáru Vášho vyučovania.</p><p>Nemiešajte kategórie a fóra a nezabudnite, že prázdna kategória (bez fór) sa neobjaví študentskom pohľade.</p><p>Popisom fóra môže byť zoznam jeho členov, definícia cieľa, úlohy, témy...</p> <p>Skupinové fóra by nemali byť vytvorené prostredníctvom nástroja 'Fórum' ale cez nástroj 'Skupiny'. Tak budete môcť rozhodnúť, či budú skupinové fóra súkromné alebo verejné.</p> <b>Pedagogické tipy</b> <p>Niektorí lektori/inštruktori používajú fóra na posielanie opráv (korektúr). Študent uverejní prácu. Lektor ju opraví stlačením tlačidla upraviť (žltá ceruzka) a pomocou WYSYWIG editora (používa napríklad farby a podčiarknutia). Takto môžu aj iní študenti zistiť, čo je nesprávne a treba to opraviť.";

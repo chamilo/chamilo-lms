@@ -10,8 +10,6 @@ require_once '../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
 if (!api_is_allowed_to_edit()) {
     api_not_allowed();
@@ -280,8 +278,8 @@ if (isset($_POST['report'])) {
                 c.title AS course, access_tool AS tool
             FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
-            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.access_cours_code = c.CODE
-            WHERE access.access_cours_code = '" . $course_info['code'] . "' AND u.user_id = '$user_id' ";
+            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.c_id = c.id
+            WHERE access.c_id = " . $course_info['real_id'] . " AND u.user_id = $user_id ";
     if ($tool != '') {
         $sql.="AND access.access_tool = '$tool' ";
     }

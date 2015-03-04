@@ -24,11 +24,6 @@
  */
 
 /**
- * An abstract base class for QuickForm renderers
- */
-require_once 'HTML/QuickForm/Renderer.php';
-
-/**
  * A concrete renderer for HTML_QuickForm, based on QuickForm 2.x built-in one
  *
  * @category    HTML
@@ -152,7 +147,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     *
     * @access public
     */
-    function HTML_QuickForm_Renderer_Default()
+    public function HTML_QuickForm_Renderer_Default()
     {
         parent::__construct();
     } // end constructor
@@ -163,7 +158,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access public
     * @return string
     */
-    function toHtml()
+    public function toHtml()
     {
         // _hiddenHtml is cleared in finishForm(), so this only matters when
         // finishForm() was not called (e.g. group::toHtml(), bug #3511)
@@ -191,15 +186,15 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access   public
     * @return   void
     */
-    function finishForm(&$form)
+    public function finishForm(&$form)
     {
         // add a required note, if one is needed
         if (!empty($form->_required) && !$form->_freezeAll) {
             $this->_html .= str_replace('{requiredNote}', $form->getRequiredNote(), $this->_requiredNoteTemplate);
         }
-        // add form attributes and content        
-        $html = str_replace('{attributes}', $form->getAttributes(true), $this->_formTemplate);        
-                
+        // add form attributes and content
+        $html = str_replace('{attributes}', $form->getAttributes(true), $this->_formTemplate);
+
         if (strpos($this->_formTemplate, '{hidden}')) {
             $html = str_replace('{hidden}', $this->_hiddenHtml, $html);
         } else {
@@ -300,9 +295,17 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @access public
     * @return void
     */
-    function renderElement(&$element, $required, $error) {
+    public function renderElement(&$element, $required, $error)
+    {
         if (!$this->_inGroup) {
-            $html = $this->_prepareTemplate($element->getName(), $element->getLabel(), $required, $error, $element->getLabelFor());
+            $html = $this->_prepareTemplate(
+                $element->getName(),
+                $element->getLabel(),
+                $required,
+                $error,
+                $element->getLabelFor()
+            );
+
             $this->_html .= str_replace('{element}', $element->toHtml(), $html);
         } elseif (!empty($this->_groupElementTemplate)) {
             $html = str_replace('{label}', $element->getLabel(), $this->_groupElementTemplate);
@@ -389,7 +392,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         if (!empty($this->_groupWrap)) {
             $html = str_replace('{content}', $html, $this->_groupWrap);
         }
-        $this->_html   .= str_replace('{element}', $html, $this->_groupTemplate);        
+        $this->_html   .= str_replace('{element}', $html, $this->_groupTemplate);
         $this->_inGroup = false;
     } // end func finishGroup
 
@@ -461,7 +464,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
      * @return    void
      */
     function setFormTemplate($html) {
-        $this->_formTemplate = $html;        
+        $this->_formTemplate = $html;
     } // end func setFormTemplate
 
     /**

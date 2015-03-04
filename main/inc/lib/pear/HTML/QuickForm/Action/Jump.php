@@ -22,11 +22,6 @@
  */
 
 /**
- * Class representing an action to perform on HTTP request.
- */
-require_once 'HTML/QuickForm/Action.php';
-
-/**
  * This action performs HTTP redirect to a specific page.
  *
  * @category    HTML

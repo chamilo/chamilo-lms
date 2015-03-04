@@ -57,48 +57,17 @@ $(document).ready(function() {
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
+
+    CKEDITOR.on("instanceReady", function (e) {
+        showTemplates();
+    });
 });
 
-function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
-	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
-	var EditorFrame = null ;
-
-	if ( !isIE ) {
-		EditorFrame = window.frames[0] ;
-	} else {
-		// For this dynamic page window.frames[0] enumerates frames in a different order in IE.
-		// We need a sure method to locate the frame that contains the online editor.
-		for ( var i = 0, n = window.frames.length ; i < n ; i++ ) {
-			if ( window.frames[i].location.toString().indexOf(\'InstanceName=content\') != -1 ) {
-				EditorFrame = window.frames[i] ;
-			}
-		}
-	}
-
-	if ( !EditorFrame ) {
-		return null ;
-	}
-
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
-	return B.ClickFrame();
-};
-
-function FCKeditor_OnComplete( editorInstance) {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
-}
 </script>';
 
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
-
-require_once $lib_path.'fileManage.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
@@ -110,7 +79,7 @@ if (api_is_in_group()) {
 $dir = '/';
 
 $currentDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
-
+$readonly = false;
 if (isset($_GET['id'])) {
     $document_data = DocumentManager::get_document_data_by_id(
         $_GET['id'],
@@ -118,14 +87,13 @@ if (isset($_GET['id'])) {
         true
     );
 
-    $document_id    = $document_data['id'];
-    $file           = $document_data['path'];
-    $parent_id      = DocumentManager::get_document_id($course_info, dirname($file));
-    $dir            = dirname($document_data['path']);
-    $dir_original   =  $dir;
-
-    $doc            = basename($file);
-    $readonly       = $document_data['readonly'];
+	$document_id = $document_data['id'];
+	$file = $document_data['path'];
+	$parent_id = DocumentManager::get_document_id($course_info, dirname($file));
+	$dir = dirname($document_data['path']);
+	$dir_original = $dir;
+	$doc = basename($file);
+	$readonly = $document_data['readonly'];
 }
 
 if (empty($document_data)) {
@@ -172,7 +140,8 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']|| is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||
+	DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -208,7 +177,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-event_access_tool(TOOL_DOCUMENT);
+Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
 if (!is_allowed_to_edit()) {
@@ -223,8 +192,8 @@ if (!is_allowed_to_edit()) {
 
 if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
-	$comment 	     = Database::escape_string(trim($_POST['comment']));
-	$title 		     = Database::escape_string(trim($_POST['title']));
+	$comment = Database::escape_string(trim($_POST['comment']));
+	$title = Database::escape_string(trim($_POST['title']));
     //Just in case see BT#3525
     if (empty($title)) {
 		$title = $documen_data['title'];
@@ -235,7 +204,7 @@ if (isset($_POST['comment'])) {
     if (!empty($document_id)) {
         $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
         Database::query($query);
-        $info_message     = get_lang('fileModified');
+        $info_message = get_lang('fileModified');
     }
 }
 
@@ -279,17 +248,67 @@ if ($is_allowed_to_edit) {
 						if (!is_dir($filepath.'css')) {
 							mkdir($filepath.'css', api_get_permissions_for_new_directories());
 							$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(), null, null, null, null, $sessionId);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$doc_id,
+								'FolderCreated',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$doc_id,
+								'invisible',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
 						}
 
 						if (!is_file($filepath.'css/frames.css')) {
 							$platform_theme = api_get_setting('stylesheets');
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
-								$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), null, null, null, null, $sessionId);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(), null, null, null, null, $sessionId);
+								$doc_id = add_document(
+									$_course,
+									$dir . 'css/frames.css',
+									'file',
+									filesize($filepath . 'css/frames.css'),
+									'frames.css'
+								);
+								api_item_property_update(
+									$_course,
+									TOOL_DOCUMENT,
+									$doc_id,
+									'DocumentAdded',
+									api_get_user_id(),
+									null,
+									null,
+									null,
+									null,
+									$sessionId
+								);
+								api_item_property_update(
+									$_course,
+									TOOL_DOCUMENT,
+									$doc_id,
+									'invisible',
+									api_get_user_id(),
+									null,
+									null,
+									null,
+									null,
+									$sessionId
+								);
 							}
 						}
 
@@ -297,12 +316,32 @@ if ($is_allowed_to_edit) {
 						$document_id = DocumentManager::get_document_id($_course, $file);
 
 						if ($document_id) {
-							update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', api_get_user_id(), null, null, null, null, $sessionId);
+							update_existing_document(
+								$_course,
+								$document_id,
+								$file_size,
+								$read_only_flag
+							);
+							api_item_property_update(
+								$_course,
+								TOOL_DOCUMENT,
+								$document_id,
+								'DocumentUpdated',
+								api_get_user_id(),
+								null,
+								null,
+								null,
+								null,
+								$sessionId
+							);
 							// Update parent folders
-							item_property_update_on_folder($_course, $dir, api_get_user_id());
-							header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq());
-                            exit;
+							item_property_update_on_folder(
+								$_course,
+								$dir,
+								api_get_user_id()
+							);
+							header('Location: document.php?id=' . $document_data['parent_id'] . '&' . api_get_cidreq());
+							exit;
 						} else {
 							$msgError = get_lang('Impossible');
 						}
@@ -367,6 +406,7 @@ $document_info = api_get_item_property_info(
     $document_id,
     0
 );
+
 // Try to find this document in the session
 if (!empty($sessionId)) {
     $document_info = api_get_item_property_info(
@@ -399,7 +439,7 @@ if ($owner_id == api_get_user_id() ||
 	$form->addElement('hidden', 'showedit');
 	$form->addElement('hidden', 'origin');
 	$form->addElement('hidden', 'origin_opt');
-    $form->add_textfield('title', get_lang('Title'));
+    $form->addText('title', get_lang('Title'));
 
 	$defaults['title'] = $document_data['title'];
 
@@ -420,14 +460,14 @@ if ($owner_id == api_get_user_id() ||
     if ($showSystemFolders == 1) {
         $condition = true;
     }
+
 	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
-			$_SESSION['showedit'] = 1;
-            $form->add_html_editor('content', '', false, false, $html_editor_config);
+            $form->addHtmlEditor('content', '', false, false, $html_editor_config);
 		}
 	}
 
-	if (!$group_document && !is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
+	if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
 		//Updated on field
@@ -479,8 +519,8 @@ if ($owner_id == api_get_user_id() ||
 		Display::display_warning_message(get_lang('BrowserDontSupportsSVG'));
 	}
 	echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span2" style="width:162px">
-                <div id="frmModel" style="overflow: visible;"></div>
+            <div id="template_col" class="span3" style="width:200px">
+                <div id="frmModel"></div>
             </div>
             <div id="hide_bar_template"></div>
             <div id="doc_form" class="span9">

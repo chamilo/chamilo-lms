@@ -22,12 +22,6 @@ $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('ModifInfo');
 
-/*	Libraries */
-require_once api_get_path(INCLUDE_PATH).'conf/course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 api_protect_course_script(true);
 api_block_anonymous_users();
 $_course = api_get_course_info();
@@ -131,18 +125,18 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
 }
 $form->addElement('html', $image_html);
 
-$form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
-$form->add_textfield('department_name', get_lang('Department'), false, array('class' => 'span5'));
+$form->addText('department_name', get_lang('Department'), false, array('class' => 'span5'));
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
+$form->addText('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
 $form->applyFilter('department_url', 'html_filter');
 
 // Picture
@@ -154,7 +148,7 @@ $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'))
 
 if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $url =  PDF::get_watermark($course_code);
-    $form->add_textfield('pdf_export_watermark_text', get_lang('PDFExportWatermarkTextTitle'), false, array('size' => '60'));
+    $form->addText('pdf_export_watermark_text', get_lang('PDFExportWatermarkTextTitle'), false, array('size' => '60'));
     $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
     if ($url != false) {
         $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
@@ -164,7 +158,7 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
 }
 
 $group = array();
-$group[]=$form->createElement('select_theme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
+$group[]=$form->createElement('SelectTheme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
 $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
@@ -201,7 +195,7 @@ $group[]=$form->createElement('radio', 'unsubscribe', get_lang('Unsubscription')
 $group[]=$form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', array(get_lang("Unsubscription")), '');
 
-$form->add_textfield('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
+$form->addText('course_registration_password', get_lang('CourseRegistrationPassword'), false, array('size' => '60'));
 
 $form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
 $form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('class'=>'span6', 'rows' => 8));

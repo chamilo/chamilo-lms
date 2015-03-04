@@ -1,19 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__) . '/../../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/../be.inc.php';
-require_once dirname(__FILE__) . '/../gradebook_functions.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+/*$htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
     $("#evaluation_title").focus();
 }
 $(document).ready(function () {
     setFocus();
 });
-</script>';
+</script>';*/
 
 /**
  * Class EvalForm
@@ -166,7 +162,7 @@ class EvalForm extends FormValidator
 
         $results_and_users = array();
         foreach ($this->result_object as $result) {
-            $user = get_user_info_from_id($result->get_user_id());
+            $user = api_get_user_info($result->get_user_id());
             $results_and_users[] = array('result' => $result, 'user' => $user);
         }
         usort($results_and_users, array('EvalForm', 'sort_by_user'));
@@ -178,7 +174,7 @@ class EvalForm extends FormValidator
             $result = $result_and_user['result'];
 
             $renderer = &$this->defaultRenderer();
-            $this->add_textfield('score[' . $result->get_id() . ']', $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']), false, array('class' => "span2",
+            $this->addText('score[' . $result->get_id() . ']', $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']), false, array('class' => "span2",
                 'maxlength' => 5));
 
             $this->addRule('score[' . $result->get_id() . ']', get_lang('OnlyNumbers'), 'numeric');
@@ -246,7 +242,7 @@ class EvalForm extends FormValidator
 		   </form>'
         );
 
-        $tblusers = get_users_in_course($this->evaluation_object->get_course_code());
+        $tblusers = GradebookUtils::get_users_in_course($this->evaluation_object->get_course_code());
         $nr_users = 0;
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
@@ -275,12 +271,18 @@ class EvalForm extends FormValidator
             );
         }
 
+        $firstUser = true;
         foreach ($tblusers as $user) {
 
             $element_name = 'score[' . $user[0] . ']';
 
+            $scoreColumnProperties = array('class' => 'span1', 'maxlength' => 5);
+            if ($firstUser) {
+                $scoreColumnProperties['autofocus'] = '';
+                $firstUser = false;
+            }
             //user_id, user.username, lastname, firstname
-            $this->add_textfield($element_name, $this->build_stud_label($user[0], $user[1], $user[2], $user[3]), false, array('class' => 'span1', 'maxlength' => 5));
+            $this->addText($element_name, $this->build_stud_label($user[0], $user[1], $user[2], $user[3]), false, $scoreColumnProperties);
 
             $this->addRule($element_name, get_lang('OnlyNumbers'), 'numeric');
             $this->addRule(array($element_name, 'maxvalue'), get_lang('OverMax'), 'compare', '<=');
@@ -333,13 +335,13 @@ class EvalForm extends FormValidator
         $renderer->setElementTemplate('<span>{element}</span> ');
         $this->addElement('label', get_lang('User'), $userinfo['complete_name']);
 
-        $this->add_textfield('score', array(get_lang('Score'), null, '/ ' . $this->evaluation_object->get_max()), false, array(
+        $this->addText('score', array(get_lang('Score'), null, '/ ' . $this->evaluation_object->get_max()), false, array(
             'size' => '4',
             'class' => 'span1',
             'maxlength' => '5'
         ));
 
-        /* 		$this->add_textfield('maximum', null, false, array (
+        /* 		$this->addText('maximum', null, false, array (
           'size' => '4',
           'maxlength' => '5',
           'disabled' => 'disabled'
@@ -426,7 +428,7 @@ class EvalForm extends FormValidator
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 
-        $this->add_textfield('name', get_lang('EvaluationName'), true, array(
+        $this->addText('name', get_lang('EvaluationName'), true, array(
             'class' => 'span3',
             'maxlength' => '50',
             'id' => 'evaluation_title'
@@ -469,13 +471,13 @@ class EvalForm extends FormValidator
             }
         }
 
-        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">' . $all_categories[0]->get_weight() . '</span>] '), true, array(
+        $this->addText('weight_mask', array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">' . $all_categories[0]->get_weight() . '</span>] '), true, array(
             'size' => '4',
             'maxlength' => '5',
             'class' => 'span1'
         ));
 
-        /* $this->add_textfield('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
+        /* $this->addText('weight', array(null, null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
           'size' => '4',
           'maxlength' => '5',
           'class' => 'span1'
@@ -484,19 +486,19 @@ class EvalForm extends FormValidator
 
         if ($edit) {
             if (!$this->evaluation_object->has_results()) {
-                $this->add_textfield('max', get_lang('QualificationNumeric'), true, array(
+                $this->addText('max', get_lang('QualificationNumeric'), true, array(
                     'class' => 'span1',
                     'maxlength' => '5'
                 ));
             } else {
-                $this->add_textfield('max', array(get_lang('QualificationNumeric'), get_lang('CannotChangeTheMaxNote')), false, array(
+                $this->addText('max', array(get_lang('QualificationNumeric'), get_lang('CannotChangeTheMaxNote')), false, array(
                     'class' => 'span1',
                     'maxlength' => '5',
                     'disabled' => 'disabled'
                 ));
             }
         } else {
-            $this->add_textfield('max', get_lang('QualificationNumeric'), true, array(
+            $this->addText('max', get_lang('QualificationNumeric'), true, array(
                 'class' => 'span1',
                 'maxlength' => '5'
             ));

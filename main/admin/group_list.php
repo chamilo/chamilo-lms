@@ -10,8 +10,6 @@
 $language_file = array('registration', 'admin', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
@@ -265,11 +263,11 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_search', 'get');
     $form->addElement('header', '', $tool_name);
-    $form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
-    $form->add_textfield('keyword_lastname', get_lang('LastName'), false);
-    $form->add_textfield('keyword_username', get_lang('LoginName'), false);
-    $form->add_textfield('keyword_email', get_lang('Email'), false);
-    $form->add_textfield('keyword_officialcode', get_lang('OfficialCode'), false);
+    $form->addText('keyword_firstname', get_lang('FirstName'), false);
+    $form->addText('keyword_lastname', get_lang('LastName'), false);
+    $form->addText('keyword_username', get_lang('LoginName'), false);
+    $form->addText('keyword_email', get_lang('Email'), false);
+    $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
     $status_options = array();
     $status_options['%'] = get_lang('All');
     $status_options[STUDENT] = get_lang('Student');

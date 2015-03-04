@@ -1,10 +1,9 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php');
 
-
-class TestStatsUtils extends UnitTestCase {
-
-    public function __construct() {
+class TestStatsUtils extends UnitTestCase
+{
+    public function __construct()
+	{
         $this->UnitTestCase('Stats utilities library - main/inc/lib/statsUtil.lib.inc.test.php');
     }
 
@@ -13,7 +12,7 @@ class TestStatsUtils extends UnitTestCase {
 		$title1='';
 		$title2='';
 		ob_start();
-		$res=buildTab2col($array_of_results, $title1, $title2);
+		$res=StatsUtils::buildTab2col($array_of_results, $title1, $title2);
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
@@ -21,7 +20,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testbuildTab2ColNoTitle() {
 		$array_of_results=array();
 		ob_start();
-		$res=buildTab2ColNoTitle($array_of_results);
+		$res=StatsUtils::buildTab2ColNoTitle($array_of_results);
 		ob_end_clean();
 		$this->assertTrue(is_array($array_of_results));
 		//var_dump($array_of_results);
@@ -30,7 +29,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testbuildTabDefcon() {
 		$array_of_results=array();
 		ob_start();
-		$res=buildTabDefcon($array_of_results);
+		$res=StatsUtils::buildTabDefcon($array_of_results);
 		$this->assertTrue(is_array($array_of_results));
 		ob_end_clean();
 		//var_dump($array_of_results);
@@ -40,7 +39,7 @@ class TestStatsUtils extends UnitTestCase {
 		$sql='';
 		ob_start();
 		$days_array = array('total' => 0);
-		$res=daysTab($sql);
+		$res=StatsUtils::daysTab($sql);
 		ob_end_clean();
 		$this->assertTrue(is_array($days_array));
 		//var_dump($sql);
@@ -49,7 +48,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testgetManyResults1Col() {
 		$sql='';
 		ob_start();
-		$res=getManyResults1Col($sql);
+		$res=StatsUtils::getManyResults1Col($sql);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -58,7 +57,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testgetManyResults2Col() {
 		$sql='';
 		ob_start();
-		$res=getManyResults2Col($sql);
+		$res=StatsUtils::getManyResults2Col($sql);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -67,7 +66,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testgetManyResults3Col() {
 		$sql='';
 		ob_start();
-		$res=getManyResults3Col($sql);
+		$res=StatsUtils::getManyResults3Col($sql);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -77,7 +76,7 @@ class TestStatsUtils extends UnitTestCase {
 		$sql='';
 		$X='';
 		ob_start();
-		$res=getManyResultsXCol($sql,$X);
+		$res=StatsUtils::getManyResultsXCol($sql,$X);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -86,7 +85,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testgetOneResult() {
 		$sql='';
 		ob_start();
-		$res=getOneResult($sql);
+		$res=StatsUtils::getOneResult($sql);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -95,7 +94,7 @@ class TestStatsUtils extends UnitTestCase {
 	function testhoursTab() {
 		$sql='';
 		ob_start();
-		$res=hoursTab($sql);
+		$res=StatsUtils::hoursTab($sql);
 		ob_end_clean();
 		$this->assertTrue(is_string($sql));
 		//var_dump($sql);
@@ -105,7 +104,7 @@ class TestStatsUtils extends UnitTestCase {
 		$period_array=array();
 		$periodTitle='';
 		ob_start();
-		$res=makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???');
+		$res=StatsUtils::makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???');
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
@@ -114,13 +113,9 @@ class TestStatsUtils extends UnitTestCase {
 	function testmonthTab() {
 		$sql='';
 		ob_start();
-		$res=monthTab($sql);
+		$res=StatsUtils::monthTab($sql);
 		ob_end_clean();
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-
-
-
 }
-?>

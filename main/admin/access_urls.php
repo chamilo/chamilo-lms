@@ -24,10 +24,6 @@ $interbreadcrumb[] = array ("url" => 'index.php', 'name' => get_lang('PlatformAd
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
 $url_list = UrlManager::get_url_data();
@@ -111,7 +107,7 @@ echo Display::url(Display::return_icon('user.png',      get_lang('ManageUsers'),
 echo Display::url(Display::return_icon('course.png',    get_lang('ManageCourses'), array(), ICON_SIZE_MEDIUM),   api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php');
 //echo Display::url(Display::return_icon('session.png',   get_lang('ManageSessions'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_sessions_to_url.php');
 
-$userGroup = new Usergroup();
+$userGroup = new UserGroup();
 if ($userGroup->getUseMultipleUrl()) {
     echo Display::url(
         Display::return_icon('class.png', get_lang('ManageUserGroup'), array(), ICON_SIZE_MEDIUM),

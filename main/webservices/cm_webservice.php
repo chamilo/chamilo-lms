@@ -2,37 +2,34 @@
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
 
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'course.lib.php';
-
 /**
  * Error returned by one of the methods of the web service. Contains an error code and an error message
  */
 class WSCMError {
 	/**
 	 * Error handler. This needs to be a class that implements the interface WSErrorHandler
-	 * 
+	 *
 	 * @var WSErrorHandler
 	 */
 	protected static $_handler;
-	
+
 	/**
 	 * Error code
-	 * 
+	 *
 	 * @var int
 	 */
 	public $code;
-	
+
 	/**
 	 * Error message
-	 * 
+	 *
 	 * @var string
 	 */
 	public $message;
-	
+
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param int Error code
 	 * @param string Error message
 	 */
@@ -40,10 +37,10 @@ class WSCMError {
 		$this->code = $code;
 		$this->message = $message;
 	}
-	
+
 	/**
 	 * Sets the error handler
-	 * 
+	 *
 	 * @param WSErrorHandler Error handler
 	 */
 	public static function setErrorHandler($handler) {
@@ -51,19 +48,19 @@ class WSCMError {
 			self::$_handler = $handler;
 		}
 	}
-	
+
 	/**
 	 * Returns the error handler
-	 * 
+	 *
 	 * @return WSErrorHandler Error handler
 	 */
 	public static function getErrorHandler() {
 		return self::$_handler;
 	}
-	
+
 	/**
 	 * Transforms the error into an array
-	 * 
+	 *
 	 * @return array Associative array with code and message
 	 */
 	public function toArray() {
@@ -77,7 +74,7 @@ class WSCMError {
 interface WSCMErrorHandler {
 	/**
 	 * Handle method
-	 * 
+	 *
 	 * @param WSError Error
 	 */
 	public function handle($error);
@@ -89,11 +86,11 @@ interface WSCMErrorHandler {
 class WSCM {
 	/**
 	 * Chamilo configuration
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $_configuration;
-	
+
 	/**
 	 * Constructor
 	 */
@@ -103,13 +100,13 @@ class WSCM {
 
 	/**
 	 * Verifies the API key
-	 * 
+	 *
 	 * @param string Secret key
 	 * @return mixed WSError in case of failure, null in case of success
 	 */
 	protected function verifyKey($secret_key) {
 		$ip = trim($_SERVER['REMOTE_ADDR']);
-		// if we are behind a reverse proxy, assume it will send the 
+		// if we are behind a reverse proxy, assume it will send the
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 		  list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
@@ -133,7 +130,7 @@ class WSCM {
          * return "valid" if username e password are correct! Else, return a message error
          */
 
-        public function verifyUserPass($username, $pass) { 
+        public function verifyUserPass($username, $pass) {
             $login = $username;
             $password = $pass;
 
@@ -142,7 +139,7 @@ class WSCM {
 	    $sql = "SELECT user_id, username, password, auth_source, active, expiration_date
 	            FROM $user_table
 	            WHERE username = '".trim(addslashes($login))."'";
-	    $result = Database::query($sql); 
+	    $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
                 $uData = Database::fetch_array($result);
@@ -157,10 +154,10 @@ class WSCM {
                                 if ($uData['expiration_date']>date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
                                     return "valid";
                                 }
-                                else 
+                                else
                                     return get_lang('AccountExpired');
                             }
-                            else 
+                            else
                                 return get_lang('AccountInactive');
                         }
                         else
@@ -184,7 +181,7 @@ class WSCM {
         /**
 	 * Gets the real user id based on the user id field name and value. Note that if the user id field name is "chamilo_user_id", it will use the user id
 	 * in the system database
-	 * 
+	 *
 	 * @param string User id field name
 	 * @param string User id value
 	 * @return mixed System user id if the user was found, WSError otherwise
@@ -205,11 +202,11 @@ class WSCM {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the real course id based on the course id field name and value. Note that if the course id field name is "chamilo_course_id", it will use the course id
 	 * in the system database
-	 * 
+	 *
 	 * @param string Course id field name
 	 * @param string Course id value
 	 * @return mixed System course id if the course was found, WSError otherwise
@@ -231,11 +228,11 @@ class WSCM {
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the real session id based on the session id field name and value. Note that if the session id field name is "chamilo_session_id", it will use the session id
 	 * in the system database
-	 * 
+	 *
 	 * @param string Session id field name
 	 * @param string Session id value
 	 * @return mixed System session id if the session was found, WSError otherwise
@@ -257,29 +254,29 @@ class WSCM {
 			}
 		}
 	}
-	
+
 	/**
 	 * Handles an error by calling the WSError error handler
-	 * 
+	 *
 	 * @param WSError Error
 	 */
 	protected function handleError($error) {
 		$handler = WSCMError::getErrorHandler();
 		$handler->handle($error);
 	}
-	
+
 	/**
 	 * Gets a successful result
-	 * 
+	 *
 	 * @return array Array with a code of 0 and a message 'Operation was successful'
 	 */
 	protected function getSuccessfulResult() {
 		return array('code' => 0, 'message' => 'Operation was successful');
 	}
-	
+
 	/**
 	 * Test function. Returns the string success
-	 * 
+	 *
 	 * @return string Success
 	 */
 	public function test() {
@@ -294,7 +291,7 @@ class WSCM {
         public function nl2br_revert($string) {
             return preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $string);
         }
-	
-	
+
+
 }
 

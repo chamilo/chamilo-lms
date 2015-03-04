@@ -54,12 +54,13 @@ CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default '',
+  c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code)
+  KEY access_c_id (c_id)
 );
 
 DROP TABLE IF EXISTS track_e_lastaccess;
@@ -67,12 +68,12 @@ CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL,
+  c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code),
+  KEY access_c_id (c_id),
   KEY access_session_id (access_session_id)
 );
 
@@ -80,12 +81,11 @@ DROP TABLE IF EXISTS track_e_default;
 CREATE TABLE track_e_default (
   default_id int NOT NULL auto_increment,
   default_user_id int unsigned NOT NULL default 0,
-  default_cours_code varchar(40) NOT NULL default '',
+  c_id int not null,
   default_date datetime NOT NULL default '0000-00-00 00:00:00',
   default_event_type varchar(20) NOT NULL default '',
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
-  c_id int unsigned default NULL,
   PRIMARY KEY  (default_id)
 );
 
@@ -94,40 +94,41 @@ CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
-  down_cours_id varchar(40) NOT NULL default '',
+  c_id int NOT NULL,
   down_doc_path varchar(255) NOT NULL default '',
   down_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (down_id),
-  KEY down_user_id (down_user_id),
-  KEY down_cours_id (down_cours_id)
+  KEY idx_ted_user_id (down_user_id),
+  KEY idx_ted_c_id (c_id)
 );
 
-DROP TABLE IF EXISTS track_e_exercices;
-CREATE TABLE track_e_exercices (
+DROP TABLE IF EXISTS track_e_exercises;
+CREATE TABLE track_e_exercises (
   exe_id int NOT NULL auto_increment,
   exe_user_id int unsigned default NULL,
   exe_date datetime NOT NULL default '0000-00-00 00:00:00',
-  exe_cours_id varchar(40) NOT NULL default '',
+  c_id int NOT NULL,
   exe_exo_id mediumint unsigned NOT NULL default 0,
   exe_result float(6,2) NOT NULL default 0,
   exe_weighting float(6,2) NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (exe_id),
-  KEY exe_user_id (exe_user_id),
-  KEY exe_cours_id (exe_cours_id)
+  KEY idx_tee_user_id (exe_user_id),
+  KEY idx_tee_c_id (c_id)
 );
 
-ALTER TABLE track_e_exercices ADD status varchar(20) NOT NULL default '';
-ALTER TABLE track_e_exercices ADD data_tracking text NOT NULL default '';
-ALTER TABLE track_e_exercices ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD INDEX ( session_id ) ;
-ALTER TABLE track_e_exercices ADD orig_lp_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD orig_lp_item_id int  NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD exe_duration int UNSIGNED NOT NULL default 0;
-ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
-ALTER TABLE track_e_exercices ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
-ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+ALTER TABLE track_e_exercises ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercises ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercises ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD INDEX ( session_id ) ;
+ALTER TABLE track_e_exercises ADD orig_lp_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD exe_duration int UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercises ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
 
 DROP TABLE IF EXISTS track_e_attempt;
 CREATE TABLE track_e_attempt (
@@ -139,24 +140,25 @@ CREATE TABLE track_e_attempt (
     teacher_comment text NOT NULL,
     marks float(6,2) NOT NULL default 0,
     course_code varchar(40) NOT NULL default '',
+    c_id int NOT NULL,
     position int default 0,
     tms datetime NOT NULL default '0000-00-00 00:00:00',
     session_id INT NOT NULL DEFAULT 0,
     filename VARCHAR(255) DEFAULT NULL
 );
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
-ALTER TABLE track_e_attempt ADD INDEX (user_id); 
+ALTER TABLE track_e_attempt ADD INDEX (user_id);
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
 ALTER TABLE track_e_attempt ADD INDEX (session_id);
 
 DROP TABLE IF EXISTS track_e_attempt_recording;
 CREATE TABLE track_e_attempt_recording (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    exe_id int unsigned NOT NULL, 
-    question_id int unsigned NOT NULL,  
-    marks int NOT NULL,  
-    insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
-    author int unsigned NOT NULL,  
+    exe_id int unsigned NOT NULL,
+    question_id int unsigned NOT NULL,
+    marks int NOT NULL,
+    insert_date datetime NOT NULL default '0000-00-00 00:00:00',
+    author int unsigned NOT NULL,
     teacher_comment text NOT NULL,
     session_id INT NOT NULL DEFAULT 0
 );
@@ -170,11 +172,11 @@ CREATE TABLE track_e_hotpotatoes (
     exe_name VARCHAR( 255 ) NOT NULL ,
     exe_user_id int unsigned DEFAULT NULL ,
     exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
-    exe_cours_id varchar(40) NOT NULL ,
+    c_id int NOT NULL,
     exe_result smallint default 0 NOT NULL ,
     exe_weighting smallint default 0 NOT NULL,
-    KEY exe_user_id (exe_user_id),
-    KEY exe_cours_id (exe_cours_id)
+    KEY idx_tehp_user_id (exe_user_id),
+    KEY idx_tehp_c_id (c_id)
 );
 
 DROP TABLE IF EXISTS track_e_links;
@@ -182,12 +184,12 @@ CREATE TABLE track_e_links (
   links_id int NOT NULL auto_increment,
   links_user_id int unsigned default NULL,
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
-  links_cours_id varchar(40) NOT NULL default '' ,
+  c_id int NOT NULL,
   links_link_id int NOT NULL default 0,
   links_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (links_id),
-  KEY links_cours_id (links_cours_id),
-  KEY links_user_id (links_user_id)
+  KEY idx_tel_c_id (links_cours_id),
+  KEY idx_tel_user_id (links_user_id)
 );
 
 DROP TABLE IF EXISTS track_e_login;
@@ -195,7 +197,7 @@ CREATE TABLE track_e_login (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
+  user_ip varchar(39) NOT NULL default '',
   logout_date datetime NULL default NULL,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
@@ -206,8 +208,8 @@ CREATE TABLE track_e_online (
   login_id int NOT NULL auto_increment,
   login_user_id int unsigned NOT NULL default 0,
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
-  login_ip varchar(39) NOT NULL default '',
-  course varchar(40) default NULL,
+  user_ip varchar(39) NOT NULL default '',
+  c_id int NOT NULL,
   session_id INT NOT NULL DEFAULT 0,
   access_url_id INT NOT NULL DEFAULT 1,
   PRIMARY KEY  (login_id),
@@ -229,6 +231,7 @@ CREATE TABLE track_e_uploads (
   upload_user_id int unsigned default NULL,
   upload_date datetime NOT NULL default '0000-00-00 00:00:00',
   upload_cours_id varchar(40) NOT NULL default '',
+  c_id int unsigned default NULL,
   upload_work_id int NOT NULL default 0,
   upload_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (upload_id),
@@ -239,12 +242,13 @@ CREATE TABLE track_e_uploads (
 DROP TABLE IF EXISTS track_e_course_access;
 CREATE TABLE track_e_course_access (
   course_access_id int NOT NULL auto_increment,
-  course_code varchar(40) NOT NULL,
+  c_id int NOT NULL,
   user_id int NOT NULL,
   login_course_date datetime NOT NULL default '0000-00-00 00:00:00',
   logout_course_date datetime default NULL,
   counter int NOT NULL,
   session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (course_access_id)
 );
 
@@ -253,6 +257,7 @@ CREATE TABLE track_e_hotspot (
   hotspot_id int NOT NULL auto_increment,
   hotspot_user_id int NOT NULL,
   hotspot_course_code varchar(50) NOT NULL,
+  c_id int unsigned default NULL,
   hotspot_exe_id int NOT NULL,
   hotspot_question_id int NOT NULL,
   hotspot_answer_id int NOT NULL,
@@ -281,29 +286,27 @@ CREATE TABLE track_e_item_property (
 
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
-ALTER TABLE track_e_course_access ADD INDEX (course_code);
 ALTER TABLE track_e_course_access ADD INDEX (session_id);
 ALTER TABLE track_e_access ADD INDEX (access_session_id);
 
-ALTER TABLE track_e_online ADD INDEX (course);
 ALTER TABLE track_e_online ADD INDEX (session_id);
 
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
-ALTER TABLE track_e_downloads ADD INDEX (down_session_id);  
-ALTER TABLE track_e_links ADD INDEX (links_session_id); 
-ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);  
+ALTER TABLE track_e_downloads ADD INDEX (down_session_id);
+ALTER TABLE track_e_links ADD INDEX (links_session_id);
+ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
 
 --
 -- Table structure for LP custom storage API
 --
 DROP TABLE IF EXISTS track_stored_values;
 CREATE TABLE IF NOT EXISTS track_stored_values (
-    id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
 	user_id INT NOT NULL,
 	sco_id INT NOT NULL,
 	course_id CHAR(40) NOT NULL,
 	sv_key CHAR(64) NOT NULL,
-	sv_value TEXT NOT NULL    
+	sv_value TEXT NOT NULL
 );
 ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
 ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
@@ -324,6 +327,6 @@ ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv
 DROP TABLE IF EXISTS track_e_attempt_coeff;
 CREATE TABLE track_e_attempt_coeff (
     id int unsigned not null auto_increment primary key,
-    attempt_id INT NOT NULL, 
+    attempt_id INT NOT NULL,
     marks_coeff float(6,2)
 );

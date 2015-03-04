@@ -7,7 +7,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('registration','admin');
+$language_file = array('registration','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -324,7 +324,7 @@ function login_user($user_id) {
 
 	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+	$track_e_login_table  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
 	unset($_user['user_id']); // uid not in session ? prevent any hacking
 
@@ -446,6 +446,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
+    if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users')  == 'true') {
+        $sql .= " WHERE u.creator_id = ".api_get_user_id();
+    }
+
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
@@ -462,7 +466,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
 		}
-        if ($user[7] == 1 && $user[10] != '0000-00-00 00:00:00') {
+        if ($user[7] == 1 && !empty($user[10])) {
             // check expiration date
             $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
@@ -470,9 +474,23 @@ function get_user_data($from, $number_of_items, $column, $direction) {
         	   $user[7] = '-1';
             }
         }
+
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
+        $users[] = array(
+            $user[0],
+            $photo,
+            $user[1],
+            $user[2],
+            $user[3],
+            $user[4],
+            $user[5],
+            $user[6],
+            $user[7],
+            api_get_local_time($user[9]),
+            $user[0]
+        );
 	}
+
 	return $users;
 }
 
@@ -559,9 +577,27 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
 	if (api_is_platform_admin(true)) {
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=$user_id";
 
-		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
-            $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL($user_id, true);
+        }
+
+        if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
+            $result .= '<a href="' . $editProfileUrl . '">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		} else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
@@ -579,19 +615,44 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	} else {
-		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
-			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
-			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		} else if ($current_user_status_label == $statusname[SESSIONADMIN]) {
-			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		}
+        if ($current_user_status_label == $statusname[SESSIONADMIN]) {
+            $result .= Display::url(
+                Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                "dashboard_add_sessions_to_user.php?user={$user_id}"
+            );
+        } else {
+            if (
+                $current_user_status_label == $statusname[DRH] ||
+                UserManager::is_admin($user_id) ||
+                $current_user_status_label == $statusname[STUDENT_BOSS]
+            ) {
+                $result .= Display::url(
+                    Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'), '', ICON_SIZE_SMALL),
+                    "dashboard_add_users_to_user.php?user={$user_id}"
+                );
+            }
+
+            if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
+                $result .= Display::url(
+                    Display::return_icon('course_add.gif', get_lang('AssignCourses')),
+                    "dashboard_add_courses_to_user.php?user={$user_id}"
+                );
+
+                $result .= Display::url(
+                    Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')),
+                    "dashboard_add_sessions_to_user.php?user={$user_id}"
+                );
+            }
+        }
 	}
 
     if (api_is_platform_admin()) {
         $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
         if ($delete_user_available) {
-            if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {
+            if ($user_id != api_get_user_id() &&
+                !$user_is_anonymous &&
+                api_global_admin_can_edit_admin($user_id)
+            ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
@@ -608,26 +669,28 @@ function modify_filter($user_id, $url_params, $row) {
  * lock = the user can no longer use this account
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param int $active the current state of the account
- * @param int $user_id The user id
- * @param string $url_params
+ * @param string $params
+ * @param array $row
  * @return string Some HTML-code with the lock/unlock button
  */
-function active_filter($active, $url_params, $row) {
+function active_filter($active, $params, $row)
+{
 	global $_user;
 
-	if ($active=='1') {
-		$action='Lock';
-		$image='accept';
-	} elseif ($active=='-1') {
-    	$action='edit';
-        $image='warning';
-    } elseif ($active=='0') {
-		$action='Unlock';
-		$image='error';
+    if ($active == '1') {
+        $action = 'Lock';
+        $image = 'accept';
+    } elseif ($active == '-1') {
+        $action = 'edit';
+        $image = 'warning';
+    } elseif ($active == '0') {
+        $action = 'Unlock';
+        $image = 'error';
+    }
 
-	}
     $result = '';
-    if ($action=='edit') {
+
+    if ($action == 'edit') {
         $result = Display::return_icon($image.'.png', get_lang('AccountExpired'), array(), 16);
     } elseif ($row['0']<>$_user['user_id']) {
     	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
@@ -792,20 +855,20 @@ $form->addElement('header', get_lang('AdvancedSearch'));
 $form->addElement('html', '<table>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_firstname',get_lang('FirstName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td width="200px;">');
-$form->add_textfield('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_lastname',get_lang('LastName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_username',get_lang('LoginName'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td>');
 $form->addElement('html', '<td>');
-$form->add_textfield('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_email',get_lang('Email'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->add_textfield('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
+$form->addText('keyword_officialcode',get_lang('OfficialCode'),false,array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td><td>');
 
 $status_options = array();
@@ -842,7 +905,7 @@ if (!empty($extra_data)) {
 
     $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-    $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
+    $form->addText('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
     $form->addElement('html', '</div>');
 } else {
     $form->addElement('html', '<div id="extra_data_text" style="display:none;">');

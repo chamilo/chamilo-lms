@@ -67,20 +67,20 @@ if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixF
 if (!defined('CLI_INSTALLATION')) {
 
 	$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
-	
+
 	$mysqlRepositorySys = Database::fetch_array($result);
 	$mysqlRepositorySys = $mysqlRepositorySys['Value'];
-	
+
 	$create_database = true;
-    
+
 	if (database_exists($mysqlMainDb)) {
         $create_database = false;
-    }	
+    }
 	//Create database
 	if ($create_database) {
 		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
 		Database::query($sql) or die(Database::error());
-	}	
+	}
 }
 
 $mysqlStatsDb = $mysqlMainDb;
@@ -116,12 +116,9 @@ $installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
 load_main_database($installation_settings);
 
-//Adds the c_XXX courses tables see #3910
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php'; 
+AddCourse::drop_course_tables();
 
-drop_course_tables();
-
-create_course_tables();
+AddCourse::create_course_tables();
 
 load_database_script('db_stats.sql');
 

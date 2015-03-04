@@ -7,16 +7,14 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Code
- */
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Backup an item's values into the javascript API as "old" values (so we still have them at hand)
@@ -67,12 +65,6 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $debug = 0;
     if ($debug > 0) { error_log('In xajax_save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions)>0?$interactions[0]:'').'","'.$core_exit.'")', 0); }
     $objResponse = new xajaxResponse();
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $prereq_check = $mylp->prerequisites_match($item_id);
     if ($prereq_check === true) { // Launch the prerequisites check and set error if needed.
@@ -151,7 +143,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
 
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
                                 WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
@@ -182,12 +174,7 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     $debug = 0;
     if ($debug > 0) { error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives) > 0 ? count($objectives) : '').'")', 0); }
     $objResponse = new xajaxResponse();
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
+
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylpi =& $mylp->items[$item_id];
     if (is_array($objectives) && count($objectives)>0){
@@ -221,12 +208,6 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -'last'
      * - a real item ID
      */
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $new_item_id = 0;
     switch ($next_item) {

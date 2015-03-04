@@ -1,5 +1,6 @@
 {% if login_form %}
-    <div id="login_block" class="well sidebar-nav">
+    <div id="login_block" class="panel panel-default">
+        <div class="panel-body">
         {{ login_language_form }}
 
         {% if plugin_login_top is not null %}
@@ -19,5 +20,6 @@
                 {{ plugin_login_bottom }}
             </div>
         {% endif %}
+        </div>
     </div>
 {% endif %}

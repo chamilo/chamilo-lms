@@ -16,8 +16,6 @@ $cidReset=true;
 require_once('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 // Access restrictions
 api_protect_admin_script();
 require('../auth/ldap/authldap.php');

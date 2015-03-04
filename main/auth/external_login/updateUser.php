@@ -7,8 +7,6 @@
 
 use \ChamiloSession as Session;
 
-require_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 require_once(dirname(__FILE__) . '/functions.inc.php');
 
 //MAIN CODE
@@ -27,7 +25,7 @@ $user['manager'] = $new_user['manager'];
 $user['country_bu'] = $new_user['country_bu'];
 $user['extra'] = $new_user['extra'];
 
-if ($new_user !== false) { //User can login    
+if ($new_user !== false) { //User can login
     external_update_user($user);
     $loginFailed = false;
     $_user['user_id'] = $user['user_id'];

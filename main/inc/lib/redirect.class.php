@@ -53,7 +53,7 @@ class Redirect
             return;
         }
 
-        $url = isset($_SESSION['request_uri']) ? $_SESSION['request_uri'] : '';
+        $url = isset($_SESSION['request_uri']) ? Security::remove_XSS($_SESSION['request_uri']) : '';
         unset($_SESSION['request_uri']);
 
         if (!empty($url)) {
@@ -92,7 +92,9 @@ class Redirect
                 }
             }
             global $_configuration;
-            if (!isset($_configuration['redirect_admin_to_courses_list']) or $_configuration['redirect_admin_to_courses_list'] === 'false') {
+            if (!isset($_configuration['redirect_admin_to_courses_list']) or
+                $_configuration['redirect_admin_to_courses_list'] === 'false'
+            ) {
                 // If the user is a platform admin, redirect to the main admin page
                 if (api_is_multiple_url_enabled()) {
                     // if multiple URLs are enabled, make sure he's admin of the
@@ -139,7 +141,7 @@ class Redirect
      */
     protected static function navigate($url)
     {
-        $url = Security::remove_XSS($url);
+        //$url = Security::remove_XSS($url);
         session_write_close(); //should not be neeeded
         header("Location: $url");
         exit;

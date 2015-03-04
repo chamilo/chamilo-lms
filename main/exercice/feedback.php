@@ -7,14 +7,6 @@
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-/**
- * Code
- */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-
-include('exercise.lib.php');
 
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -22,9 +14,6 @@ $language_file='exercice';
 include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $nameTools=get_lang('ExerciseManagement');
 
 if (isset($_SESSION['gradebook'])){
@@ -72,7 +61,7 @@ Display::display_header($nameTools,"Exercise");
 		<!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 	</td>
 </tr>');
-	$form->add_html_editor('Feedback', $i.'.'.$ans, false, false, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '600', 'Height' => '200'));
+	$form->addHtmlEditor('Feedback', $i.'.'.$ans, false, false, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '600', 'Height' => '200'));
 	$form->display();
 	echo "</td>";
 	}?>

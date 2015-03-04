@@ -9,12 +9,9 @@
 $language_file = 'gradebook';
 
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/catform.class.php';
 
 api_block_anonymous_users();
-block_students();
+GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
 
@@ -109,6 +106,7 @@ if ($form->validate()) {
     $cat->set_user_id($values['hid_user_id']);
     $cat->set_parent_id($values['hid_parent_id']);
     $cat->set_weight($values['weight']);
+    $cat->setGenerateCertificates($values['generate_certificates']);
 
     if ($values['hid_parent_id'] == 0 ) {
         $cat->set_certificate_min_score($values['certif_min_score']);

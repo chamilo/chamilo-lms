@@ -110,8 +110,10 @@ define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 // Web services
 define('TABLE_MAIN_USER_API_KEY',           'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD',           'course_field');
+define('TABLE_MAIN_COURSE_FIELD_OPTIONS',    'course_field_options');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',    'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD',          'session_field');
+define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 
 // Message
@@ -132,7 +134,7 @@ define('TABLE_STATISTIC_TRACK_E_LINKS',             'track_e_links');
 define('TABLE_STATISTIC_TRACK_E_ONLINE',            'track_e_online');
 define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES',       'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS',     'track_e_course_access');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES',         'track_e_exercices');
+define('TABLE_STATISTIC_TRACK_E_EXERCISES',         'track_e_exercises');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT',           'track_e_attempt');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
 define('TABLE_STATISTIC_TRACK_E_DEFAULT',           'track_e_default');
@@ -343,6 +345,11 @@ define('TABLE_MAIN_SKILL_REL_PROFILE',      'skill_rel_profile');
 define('TABLE_MAIN_CHAT',					'chat');
 define('TABLE_TIMELINE',                    'timeline');
 
-//Gradebook model
+// Gradebook model
 define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
+
+// Hook tables
+define('TABLE_HOOK_OBSERVER', 'hook_observer');
+define('TABLE_HOOK_CALL', 'hook_call');
+define('TABLE_HOOK_EVENT', 'hook_event');

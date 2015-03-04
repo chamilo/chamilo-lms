@@ -11,10 +11,8 @@
  *	by document/download.php
  */
 
-function check_download_survey($course, $invitation, $doc_url) {
-
-	require_once 'survey.lib.php';
-
+function check_download_survey($course, $invitation, $doc_url)
+{
 	// Getting all the course information
 	$_course = CourseManager::get_course_information($course);
     $course_id = $_course['real_id'];

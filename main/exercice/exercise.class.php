@@ -1,23 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define('ALL_ON_ONE_PAGE', 1);
-define('ONE_PER_PAGE', 2);
-
-define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
-define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
-define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
-
-define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
-define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
-define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
-define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
-
-define('EXERCISE_MAX_NAME_SIZE',            80);
-
-$debug = false; //All exercise scripts should depend in this debug variable
-require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
-
 /**
  * Class Exercise
  *
@@ -58,8 +41,10 @@ class Exercise
     public $edit_exercise_in_lp = false;
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
+    public $lpList = array();
     public $force_edit_exercise_in_lp = false;
     public $sessionId = 0;
+    public $debug = false;
 
     /**
      * Constructor of the class
@@ -148,7 +133,8 @@ class Exercise
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
 
-            $sql = "SELECT max_score FROM $table_lp_item
+            $sql = "SELECT lp_id, max_score
+                    FROM $table_lp_item
                     WHERE   c_id = {$this->course_id} AND
                             item_type = '".TOOL_QUIZ."' AND
                             path = '".$id."'";
@@ -156,6 +142,7 @@ class Exercise
 
             if (Database::num_rows($result) > 0) {
                 $this->exercise_was_added_in_lp = true;
+                $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
             $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
@@ -1034,8 +1021,8 @@ class Exercise
             $editor_config = array_merge($editor_config, $type);
         }
 
-        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
-        $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
+        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" style="display:none" >');
+        $form->addHtmlEditor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 
         $form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
@@ -1213,7 +1200,7 @@ class Exercise
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
-            $form -> add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+            $form -> addHtmlEditor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
 
             $defaults = array();
 
@@ -1587,8 +1574,8 @@ class Exercise
      */
     public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
-        $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $table_track_e_attempt   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
                         orig_lp_id = 0 AND
@@ -1613,7 +1600,7 @@ class Exercise
         $sql = "SELECT exe_id
                 FROM $table_track_e_exercises
                 WHERE
-                    exe_cours_id = '".api_get_course_id()."' AND
+                    c_id = ".api_get_course_int_id()." AND
                     exe_exo_id = ".$this->id." AND
                     session_id = ".api_get_session_id()." ".
                     $sql_where;
@@ -1633,15 +1620,15 @@ class Exercise
         }
 
         $session_id = api_get_session_id();
-        // delete TRACK_E_EXERCICES table
+        // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
-                WHERE exe_cours_id = '".api_get_course_id()."'
+                WHERE c_id = ".api_get_course_int_id()."
                 AND exe_exo_id = ".$this->id."
                 $sql_where
                 AND session_id = ".$session_id."";
         Database::query($sql);
 
-        event_system(
+        Event::addEvent(
             LOG_EXERCISE_RESULT_DELETE,
             LOG_EXERCISE_ID,
             $this->id,
@@ -1726,7 +1713,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
@@ -1738,7 +1725,7 @@ class Exercise
         }
         $condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND
 					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND
-					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND
+					   c_id                 = ' . api_get_course_int_id() . ' AND
 					   status 				= ' . "'" . Database::escape_string($status). "'" . ' AND
 					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND
 					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND
@@ -1774,10 +1761,12 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
+
+        $trackValues = array();
 
         if (empty($safe_lp_id)) {
             $safe_lp_id = 0;
@@ -1788,20 +1777,29 @@ class Exercise
         if (empty($clock_expired_time)) {
             $clock_expired_time = 0;
         }
-        if ($this->expired_time != 0) {
-            $sql_fields = "expired_time_control, ";
-            $sql_fields_values = "'"."$clock_expired_time"."',";
-        } else {
-            $sql_fields = "";
-            $sql_fields_values = "";
-        }
+
         $questionList = array_map('intval', $questionList);
 
-        $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, orig_lp_item_view_id, exe_weighting)
-                VALUES($sql_fields_values '".$this->id."','" . api_get_user_id() . "','" . api_get_course_id() . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "', '" . api_get_utc_datetime() . "', '$safe_lp_id', '$safe_lp_item_id', '$safe_lp_item_view_id', '$weight')";
-        Database::query($sql);
-        $id = Database::insert_id();
+        $params = array(
+            'exe_exo_id' => $this->id ,
+            'exe_user_id' => api_get_user_id(),
+            'c_id' => api_get_course_int_id(),
+            'status' =>  'incomplete',
+            'session_id'  => api_get_session_id(),
+            'data_tracking'  => implode(',', $questionList) ,
+            'start_date' => api_get_utc_datetime(),
+            'orig_lp_id' => $safe_lp_id,
+            'orig_lp_item_id'  => $safe_lp_item_id,
+            'orig_lp_item_view_id'  => $safe_lp_item_view_id,
+            'exe_weighting'=> $weight,
+            'user_ip' => api_get_real_ip()
+        );
+
+        if ($this->expired_time != 0) {
+            $params['expired_time_control'] = $clock_expired_time;
+        }
+
+        $id = Database::insert($track_exercises, $params);
         return $id;
     }
 
@@ -2157,7 +2155,7 @@ class Exercise
 
         $questionId   = intval($questionId);
         $exeId        = intval($exeId);
-        $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
@@ -2208,8 +2206,7 @@ class Exercise
         $nano = null;
 
         if ($answerType == ORAL_EXPRESSION) {
-            require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
-            $exe_info = get_exercise_results_by_attempt($exeId);
+            $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
@@ -2341,14 +2338,14 @@ class Exercise
                             $choice[$ind] = 1;
                         }
 
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if ($studentChoice) {
                             $questionScore  +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if (isset($studentChoice)) {
@@ -2699,7 +2696,8 @@ class Exercise
                 // for free answer
                 case FREE_ANSWER:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
+                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
                         $choice = Database::result($resq,0,'answer');
                         $choice = str_replace('\r\n', '', $choice);
@@ -2726,7 +2724,8 @@ class Exercise
                     break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
-                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
+                                   WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resq   = Database::query($query);
                         $choice = Database::result($resq,0,'answer');
                         $choice = str_replace('\r\n', '', $choice);
@@ -2826,7 +2825,7 @@ class Exercise
                     }
                 case HOT_SPOT :
                     if ($from_database) {
-                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE
@@ -2864,7 +2863,7 @@ class Exercise
                 case HOT_SPOT_DELINEATION :
                     if ($from_database) {
                         // getting the user answer
-                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         $query   = "SELECT hotspot_correct, hotspot_coordinate
                                     FROM $TBL_TRACK_HOTSPOT
                                     WHERE
@@ -2966,11 +2965,7 @@ class Exercise
                             $user_array = substr($user_array,0,-1);
 
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                                // Save into db
-                                /*	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
-                                VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
-                                $result = api_sql_query($sql,__FILE__,__LINE__);*/
+
                                 $user_answer = $user_array;
 
                                 // we compare only the delineation not the other points
@@ -3161,7 +3156,7 @@ class Exercise
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
                             if ($next) {
-                                //$tbl_track_e_hotspot = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                                //$tbl_track_e_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                                 // Save into db
                                 /*	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
                                 VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
@@ -3478,24 +3473,24 @@ class Exercise
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
-                        exercise_attempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
+                        Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0); // we always insert the answer_id 1 = delineation
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        exercise_attempt_hotspot($exeId,$quesId,1, $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
+                        Event::saveExerciseAttemptHotspot($exeId,$quesId,1, $hotspot_delineation_result[1], $exerciseResultCoordinates[$quesId]);
                     } else {
                         if ($final_answer==0) {
                             $questionScore = 0;
                             $answer=0;
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId,$quesId,$idx,0,$val);
+                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,0,$val);
                                 }
                             }
                         } else {
-                            exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+                            Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0);
                             if (is_array($exerciseResultCoordinates[$quesId])) {
                                 foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
-                                    exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
+                                    Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,$choice[$idx],$val);
                                 }
                             }
                         }
@@ -3548,11 +3543,11 @@ class Exercise
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans.':'.$choice[$ans], $quesId, $exeId, $i, $this->id);
                         if ($debug) error_log('result =>'.$questionScore.' '.$ans.':'.$choice[$ans]);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
@@ -3561,47 +3556,47 @@ class Exercise
                     if ($debug) error_log("reply ".print_r($reply, 1)."");
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
                     for ($i = 0; $i < sizeof($reply); $i++) {
                         $ans = $reply[$i];
-                        exercise_attempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
                 } else {
-                    exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
+                    Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
             } elseif ($answerType == MATCHING) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
-                        exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                        Event::saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
                     }
                 }
             } elseif ($answerType == FREE_ANSWER) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
 
             } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
                 $answer = $choice;
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             } elseif ($answerType == HOT_SPOT) {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
-                        exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
+                        Event::saveExerciseAttemptHotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
                     }
                 }
             } else {
-                exercise_attempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
+                Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0,$this->id);
             }
         }
 
@@ -3610,7 +3605,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
@@ -3885,9 +3880,10 @@ class Exercise
      * @param array $user_data result of api_get_user_info()
      * @param null $start_date
      * @param null $duration
+     * @param string $ip Optional. The user IP
      * @return string
      */
-    public function show_exercise_result_header($user_data, $start_date = null, $duration = null)
+    public function show_exercise_result_header($user_data, $start_date = null, $duration = null, $ip = null)
     {
         $array = array();
 
@@ -3915,6 +3911,10 @@ class Exercise
 
         if (!empty($duration)) {
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
+        }
+
+        if (!empty($ip)) {
+            $array[] = array("title" => get_lang("IP"), "content" => $ip);
         }
 
         $html  = Display::page_header(
@@ -3979,9 +3979,10 @@ class Exercise
      * @param 	int		attempt id
      * @return 	float 	exercise result
      */
-    public function get_exercise_result($exe_id) {
+    public function get_exercise_result($exe_id)
+    {
         $result = array();
-        $track_exercise_info = get_exercise_track_exercise_info($exe_id);
+        $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
 
         if (!empty($track_exercise_info)) {
             $totalScore = 0;
@@ -4108,7 +4109,7 @@ class Exercise
         if ($is_visible) {
             if ($exerciseAttempts > 0) {
 
-                $attempt_count = get_attempt_count_not_finished(
+                $attempt_count = Event::get_attempt_count_not_finished(
                     api_get_user_id(),
                     $this->id,
                     $lp_id,
@@ -4291,7 +4292,7 @@ class Exercise
 
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -4325,7 +4326,7 @@ class Exercise
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {
@@ -4563,26 +4564,24 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : array($quizId);
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($sessionId != 0) {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "te.session_id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              te.session_id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);

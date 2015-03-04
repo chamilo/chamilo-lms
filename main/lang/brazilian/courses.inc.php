@@ -83,5 +83,7 @@ $Collapse = "Agrupar";
 $CourseDetails = "Detalhes do Curso";
 $GroupPendingInvitations = "Convites pendentes do grupo";
 $Compose = "Escrever mensagem";
+$EmptyHeaderLine = "Há uma linha vazia no cabeçalho do arquivo selecionado";
+$EnrollToCourseXSuccessful = "Você foi registrado ao curso: %s";
 $ThereAreNoCoursesInThisCategory = "Não há nenhum curso nesta categoria";
 ?>

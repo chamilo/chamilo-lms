@@ -1,13 +1,12 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	Code library for HotPotatoes integration.
 *	@package chamilo.exercise
 * 	@author Istvan Mandak
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file='exercice';
 
@@ -16,9 +15,7 @@ require '../inc/global.inc.php';
 require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 $documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $my_file = Security::remove_XSS($_GET['file']);
-
 $my_file=str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldecode($my_file));
-
 $title = GetQuizName($my_file,$documentPath);
 if ($title =='') {
 	$title = basename($my_file);
@@ -31,9 +28,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+		'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+		'name' => get_lang('ToolGradebook')
+	);
 }
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 Display::display_header($nameTools,"Exercise");

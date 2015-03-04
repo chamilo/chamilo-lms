@@ -1,5 +1,5 @@
-<?php 
-/** 
+<?php
+/**
  * Chamilo metadata/importmanifest.php
  * 2006/12/15
  * Copyright (C) 2006 rene.haentjens@UGent.be -  see metadata/md_funcs.php
@@ -44,7 +44,6 @@ $mdStore = new mdstore($is_allowed_to_edit);  // create table if needed
 
 require(api_get_path(LIBRARY_PATH) . 'xmd.lib.php');
 require(api_get_path(LIBRARY_PATH) . 'xht.lib.php');
-require(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 
 require('md_phpdig.php');
 

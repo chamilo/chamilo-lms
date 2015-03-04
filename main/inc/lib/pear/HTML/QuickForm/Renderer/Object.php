@@ -22,11 +22,6 @@
  */
 
 /**
- * An abstract base class for QuickForm renderers
- */
-require_once 'HTML/QuickForm/Renderer.php';
-
-/**
  * A concrete renderer for HTML_QuickForm, makes an object from form contents
  *
  * Based on HTML_Quickform_Renderer_Array code

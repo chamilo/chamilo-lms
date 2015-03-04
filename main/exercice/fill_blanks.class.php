@@ -70,29 +70,23 @@ class FillBlanks extends Question
                 $setValues .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
         }
-
 		// javascript
 		echo '<script>
 
-			function FCKeditor_OnComplete(editorInstance) {
-				if (window.attachEvent) {
-					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
-				} else {
-					editorInstance.EditorDocument.addEventListener("keyup", updateBlanks, true);
-				}
-			}
+            CKEDITOR.on("instanceCreated", function(e) {
+                if (e.editor.name === "answer") {
+                    e.editor.on("change", updateBlanks);
+                }
+            });
 
             var firstTime = true;
 
-            function updateBlanks() {
+            function updateBlanks(e) {
                 if (firstTime) {
                     field = document.getElementById("answer");
                     var answer = field.value;
-
                 } else {
-                    var oEditor = FCKeditorAPI.GetInstance("answer");
-                    //var answer =  oEditor.GetXHTML(true);
-                    var answer = oEditor.EditorDocument.body.innerHTML;
+                    var answer = e.editor.getData();
                 }
 
                 var blanks = answer.match(/\[[^\]]*\]/g);

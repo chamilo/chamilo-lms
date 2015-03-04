@@ -107,7 +107,7 @@ if (!$exportToXLS) {
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
                 Display::return_icon('star.png', get_lang('AdminInterface'), array(), 32),
-                api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin'
+                api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
             );
         } else {
             $menuItems[] = Display::url(
@@ -468,18 +468,26 @@ function export_complete_report_xls($filename, $array)
 
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
-    $exerciseStatsTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $courseId = api_get_course_int_id($courseInfo['code']);
 
     if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code(
             $courseInfo['code'],
+            false,
+            0,
+            null,
+            null,
             false
         );
     } else {
         $students = CourseManager::get_student_list_from_course_code(
             $courseInfo['code'],
             true,
-            $sessionId
+            $sessionId,
+            null,
+            null,
+            false
         );
     }
 
@@ -521,7 +529,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $sql = "SELECT COUNT(ex.exe_id) as count
                 FROM $exerciseStatsTable AS ex
                 WHERE
-                    ex.exe_cours_id = '".$courseInfo['code']."' AND
+                    ex.c_id = $courseId AND
                     ex.exe_exo_id = ".$exercise['id']." AND
                     exe_user_id='".$studentId."' AND
                     session_id = $sessionId
@@ -533,7 +541,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 FROM $exerciseStatsTable
                 WHERE
                     exe_user_id = ".$studentId." AND
-                    exe_cours_id = '".$courseInfo['code']."' AND
+                    c_id = $courseId AND
                     exe_exo_id = ".$exercise['id']." AND
                     session_id = $sessionId
                 ORDER BY exe_result DESC

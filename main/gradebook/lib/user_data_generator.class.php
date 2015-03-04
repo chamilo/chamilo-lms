@@ -47,13 +47,13 @@ class UserDataGenerator
 				$evals_filtered_copy = $evals;
 			}
 
-		}//isset($coursecode) && strcmp($coursecode,api_get_course_id())===0
+		}
 		if (count($result) == 0) {
 			$evals_filtered=$evals;
 		} else {
 			$evals_filtered=$evals_filtered_copy;
 		}
-		$this->items = array_merge ($evals_filtered, $links);
+		$this->items = array_merge($evals_filtered, $links);
 
 		$this->coursecodecache = array();
 		$this->categorycache = array();
@@ -143,12 +143,12 @@ class UserDataGenerator
 			$row = array ();
 			$row[] = $item;
 			$row[] = $item->get_name();
-			$row[] = $this->build_course_name ($item);
-			$row[] = $this->build_category_name ($item);
-			$row[] = $this->build_average_column ($item, $ignore_score_color);
-			$row[] = $this->build_result_column ($item, $ignore_score_color);
+			$row[] = $this->build_course_name($item);
+			$row[] = $this->build_category_name($item);
+			$row[] = $this->build_average_column($item, $ignore_score_color);
+			$row[] = $this->build_result_column($item, $ignore_score_color);
 			if ($scoredisplay->is_custom())
-				$row[] = $this->build_mask_column ($item, $ignore_score_color);
+				$row[] = $this->build_mask_column($item, $ignore_score_color);
 			$data[] = $row;
 		}
 		return $data;
@@ -277,7 +277,7 @@ class UserDataGenerator
 			&& isset ($this->coursecodecache[$coursecode])) {
 			return $this->coursecodecache[$coursecode];
 		} else {
-			$name = get_course_name_from_code($coursecode);
+			$name = CourseManager::getCourseNameFromCode($coursecode);
 			$this->coursecodecache[$coursecode] = $name;
 			return $name;
 		}

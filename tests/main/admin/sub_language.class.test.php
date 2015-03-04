@@ -1,9 +1,7 @@
 <?php
-require_once (api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
-class TestSubLanguageManager extends UnitTestCase {
-
+class TestSubLanguageManager extends UnitTestCase
+{
 	public $clean = array();
 
         public function __construct() {
@@ -52,7 +50,7 @@ class TestSubLanguageManager extends UnitTestCase {
 	    $res = SubLanguageManager::get_all_language_variable_in_file($system_path_file);
 	    $this->assertTrue(is_array($res));
 	}
-    
+
     /**
      * Add directory for sub-language
      * @param String The sub-language path directory ( /var/www/my_lms/main/lang/spanish_corporate )
@@ -65,7 +63,7 @@ class TestSubLanguageManager extends UnitTestCase {
     }
 
 	/**
-	 * 
+	 *
 	 */
 	public function testadd_file_in_language_directory(){
         $res = SubLanguageManager :: add_language_directory('test');
@@ -124,7 +122,7 @@ class TestSubLanguageManager extends UnitTestCase {
         $name ='';
         if (Database::num_rows($rs)>0) {
             $name = Database::result($rs,0,'original_name');
-        }        
+        }
 		$res = SubLanguageManager :: get_name_of_language_by_id($language_id);
 		$this->assertEqual($res,$name,'The language name from function does not match the database value');
 	}

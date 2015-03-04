@@ -547,7 +547,7 @@ class CoursesController
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
         foreach ($sessions as $session) {
-            $sessionsBlocks[] = array(
+            $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
                 'nbr_courses' => $session['nbr_courses'],
@@ -556,8 +556,11 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton($session['name'])
+                'subscribe_button' => $this->getRegisterInSessionButton($session['name']),
+                'showDescription' => $session['show_description']
             );
+
+            $sessionsBlocks[] = $sessionsBlock;
         }
 
         $tpl = new Template();

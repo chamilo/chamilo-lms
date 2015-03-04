@@ -25,8 +25,6 @@ $cidReset = true;
 
 // Including some necessary library files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'settings.lib.php';
 
 // Setting the section (for the tabs).
@@ -332,7 +330,7 @@ if (!empty($_GET['category']) &&
         // Add event configuration settings category to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -344,7 +342,7 @@ if (!empty($_GET['category']) &&
         if (is_array($keys) && count($keys) > 0) {
             foreach ($keys as $variable) {
                 if (in_array($key, $settings_to_avoid)) { continue; }
-                event_system(
+                Event::addEvent(
                     LOG_CONFIGURATION_SETTINGS_CHANGE,
                     LOG_CONFIGURATION_SETTINGS_VARIABLE,
                     $variable,
@@ -484,7 +482,7 @@ if (!empty($_GET['category'])) {
                     // add event to system log
                     $user_id = api_get_user_id();
                     $category = $_GET['category'];
-                    event_system(
+                    Event::addEvent(
                         LOG_CONFIGURATION_SETTINGS_CHANGE,
                         LOG_CONFIGURATION_SETTINGS_CATEGORY,
                         $category,

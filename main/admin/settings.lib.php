@@ -22,7 +22,7 @@ function handle_regions()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -116,7 +116,7 @@ function handle_plugins()
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -255,7 +255,7 @@ function handle_stylesheets()
             // Add event to the system log.
             $user_id = api_get_user_id();
             $category = $_GET['category'];
-            event_system(
+            Event::addEvent(
                 LOG_CONFIGURATION_SETTINGS_CHANGE,
                 LOG_CONFIGURATION_SETTINGS_CATEGORY,
                 $category,
@@ -646,7 +646,6 @@ function handle_search()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
         $xapian_path = api_get_path(SYS_PATH).'searchdb';
 
         /*
@@ -756,7 +755,7 @@ function handle_templates() {
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
     } else {
         if ($action == 'delete' && is_numeric($_GET['id'])) {
             delete_template($_GET['id']);
@@ -764,7 +763,7 @@ function handle_templates() {
             // Add event to the system log
             $user_id = api_get_user_id();
             $category = $_GET['category'];
-            event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+            Event::addEvent(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         }
         display_templates();
     }
@@ -896,7 +895,7 @@ function add_edit_template() {
     $form->addElement('header', '', $title);
 
     // Setting the form elements: the title of the template.
-    $form->add_textfield('title', get_lang('Title'), false);
+    $form->addText('title', get_lang('Title'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
@@ -949,7 +948,6 @@ function add_edit_template() {
             $values = $form->exportValues();
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
-                require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
                 $upload_ok = process_uploaded_file($_FILES['template_image']);
 
                 if ($upload_ok) {
@@ -1091,7 +1089,6 @@ function select_gradebook_default_grade_model_id() {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function update_gradebook_score_display_custom_values($values) {
-    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
     $scoredisplay = ScoreDisplay::instance();
     $scores = $values['gradebook_score_display_custom_values_endscore'];
     $displays = $values['gradebook_score_display_custom_values_displaytext'];

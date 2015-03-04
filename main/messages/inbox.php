@@ -18,6 +18,7 @@ if (isset($_GET['messages_page_nr'])) {
     }
     if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
         header('Location:inbox.php'.$social_link);
+        exit;
     }
 }
 if (api_get_setting('allow_message_tool') != 'true') {
@@ -137,7 +138,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 $social_right_content = null;
 
 if (api_get_setting('allow_social_tool') == 'true') {
-    $social_right_content .= '<div class="span9">';
+    $social_right_content .= '<div class="col-md-9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('compose_message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';

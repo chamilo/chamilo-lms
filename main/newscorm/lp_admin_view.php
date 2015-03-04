@@ -142,7 +142,6 @@ if (isset($_POST['save_audio'])) {
             }
 
             // Upload the file in the documents tool.
-            include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
             $file_path = handle_uploaded_document($_course, $_FILES[$key], api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio', api_get_user_id(), '', '', '', '', false);
 
             // Getting the filename only.

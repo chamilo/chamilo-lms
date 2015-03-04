@@ -1,5 +1,4 @@
 <?php
-
 /*
   Template to automatically create a new user with information from anywhere.
   This file is loaded by main/inc/local.inc.php
@@ -11,10 +10,7 @@
 
 use \ChamiloSession as Session;
 
-require_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 require_once(dirname(__FILE__) . '/functions.inc.php');
-
 
 //MAIN CODE
 //$login and $password variables are setted in main/inc/local.inc.php
@@ -50,7 +46,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     // Can user create course
     $is_allowedCreateCourse = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
 
-    event_login();
+    Event::event_login();
 } else {
     $loginFailed = true;
     unset($_user['user_id']);

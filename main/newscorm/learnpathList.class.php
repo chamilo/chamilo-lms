@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class learnpathList
+ * Class LearnpathList
  * This class is only a learning path list container with several practical methods for sorting the list and
  * provide links to specific paths
  * @uses	Database.lib.php to use the database
@@ -10,7 +10,7 @@
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  *
  */
-class learnpathList
+class LearnpathList
 {
     // Holds a flat list of learnpaths data from the database.
     public $list = array();

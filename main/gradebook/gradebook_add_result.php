@@ -9,16 +9,11 @@
 $language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
-require_once 'lib/be.inc.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/evalform.class.php';
-require_once 'lib/fe/displaygradebook.php';
-require_once 'lib/scoredisplay.class.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 api_block_anonymous_users();
-block_students();
+GradebookUtils::block_students();
 
 $resultadd = new Result();
 $resultadd->set_evaluation_id($_GET['selecteval']);

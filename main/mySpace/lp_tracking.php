@@ -25,10 +25,6 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 } else {
 	$this_section = SECTION_COURSES;
 }
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $session_id  = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : api_get_session_id();
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;

@@ -30,7 +30,6 @@ $language_file = array('forum', 'document', 'gradebook');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
-require_once '../gradebook/lib/gradebook_functions.inc.php';
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
@@ -116,6 +115,11 @@ if ($current_forum['forum_of_group'] != 0) {
     if (!$show_forum) {
         api_not_allowed();
     }
+}
+
+// 6. Invited users can't create new threads
+if (api_is_invitee()) {
+    api_not_allowed(true);
 }
 
 $session_toolgroup = 0;

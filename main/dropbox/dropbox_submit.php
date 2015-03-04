@@ -16,7 +16,6 @@
  * - UPLOAD NEW FILE
  */
 if (isset($_POST['submitWork'])) {
-    require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
     $error = false;
     $errormsg = '';
     /**

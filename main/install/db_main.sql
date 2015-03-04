@@ -20,7 +20,8 @@
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE IF NOT EXISTS user (
-  user_id int unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
+  user_id int unsigned default NULL,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
   username varchar(100) NOT NULL default '',
@@ -37,17 +38,17 @@ CREATE TABLE IF NOT EXISTS user (
   openarea text,
   teach text,
   productions varchar(250) default NULL,
-  chatcall_user_id int unsigned NOT NULL default '0',
-  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
-  chatcall_text varchar(50) NOT NULL default '',
+  chatcall_user_id int unsigned default '0',
+  chatcall_date datetime default NULL,
+  chatcall_text varchar(50) default NULL,
   language varchar(40) default NULL,
-  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  registration_date datetime NOT NULL,
+  expiration_date datetime default NULL,
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
   hr_dept_id smallint unsigned NOT NULL default 0,
-  PRIMARY KEY  (user_id),
+  PRIMARY KEY (id),
   UNIQUE KEY username (username)
 );
 ALTER TABLE user ADD INDEX (status);
@@ -58,9 +59,9 @@ ALTER TABLE user ADD INDEX (status);
 
 /*!40000 ALTER TABLE user DISABLE KEYS */;
 LOCK TABLES user WRITE;
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),'0000-00-00 00:00:00','1',NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES (1, '{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),NULL,'1',NULL,'{ADMINLANGUAGE}');
 -- Insert anonymous user
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES (2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), NULL, 1,NULL,'{ADMINLANGUAGE}');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
 
@@ -469,6 +470,9 @@ CREATE TABLE IF NOT EXISTS session (
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
+  description TEXT DEFAULT NULL,
+  show_description TINYINT UNSIGNED DEFAULT 0,
+  duration int,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -481,10 +485,12 @@ CREATE TABLE IF NOT EXISTS session (
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
-  id_session smallint unsigned NOT NULL default '0',
+  id_session smallint unsigned NOT NULL default 0,
   course_code char(40) NOT NULL default '',
-  nbr_users smallint unsigned NOT NULL default '0',
-  PRIMARY KEY  (id_session,course_code),
+  nbr_users smallint unsigned NOT NULL default 0,
+  position int unsigned NOT NULL default 0,
+  category varchar(255) default '',
+  PRIMARY KEY (id_session,course_code),
   KEY course_code (course_code)
 );
 
@@ -516,6 +522,7 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
+  duration int,
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 
@@ -534,6 +541,7 @@ CREATE TABLE IF NOT EXISTS session_field (
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
@@ -663,7 +671,6 @@ VALUES
 ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
-('wcag_anysurfer_public_pages', NULL, 'radio','Editor','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
 ('stylesheets', NULL, 'textfield','stylesheets','chamilo','',NULL, NULL, NULL, 1),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
@@ -727,7 +734,6 @@ VALUES
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
 ('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
 ('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
-('advanced_filemanager',NULL,'radio','Editor','true','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 1),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
 ('allow_message_tool', NULL, 'radio', 'Tools', 'true', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,1),
@@ -743,7 +749,7 @@ VALUES
 ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
 ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
 ('allow_coach_to_edit_course_session',NULL,'radio','Session','true','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
-('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
+('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
 ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
@@ -877,7 +883,8 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.17','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -977,8 +984,6 @@ VALUES
 ('allow_email_editor', 'false', 'No'),
 ('show_email_addresses','true','Yes'),
 ('show_email_addresses','false','No'),
-('wcag_anysurfer_public_pages', 'true', 'Yes'),
-('wcag_anysurfer_public_pages', 'false', 'No'),
 ('upload_extensions_list_type', 'blacklist', 'Blacklist'),
 ('upload_extensions_list_type', 'whitelist', 'Whitelist'),
 ('upload_extensions_skip', 'true', 'Remove'),
@@ -1031,8 +1036,6 @@ VALUES
 ('allow_users_to_create_courses','true','Yes'),
 ('allow_users_to_create_courses','false','No'),
 ('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
-('advanced_filemanager','true','Yes'),
-('advanced_filemanager','false','No'),
 ('allow_reservation', 'true', 'Yes'),
 ('allow_reservation', 'false', 'No'),
 ('allow_message_tool', 'true', 'Yes'),
@@ -1060,8 +1063,10 @@ VALUES
 ('show_courses_descriptions_in_catalog', 'false', 'No'),
 ('allow_coach_to_edit_course_session','true','Yes'),
 ('allow_coach_to_edit_course_session','false','No'),
-('show_glossary_in_extra_tools', 'true', 'Yes'),
-('show_glossary_in_extra_tools', 'false', 'No'),
+('show_glossary_in_extra_tools', 'none', 'None'),
+('show_glossary_in_extra_tools', 'exercise', 'Exercise'),
+('show_glossary_in_extra_tools', 'lp', 'Learning path'),
+('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath'),
 ('send_email_to_admin_when_create_course','true','Yes'),
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
@@ -1219,7 +1224,9 @@ VALUES
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
 ('enable_webcam_clip', 'true', 'Yes'),
-('enable_webcam_clip', 'false', 'No');
+('enable_webcam_clip', 'false', 'No'),
+('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
+('prevent_session_admins_to_manage_all_users', 'false', 'No');
 
 UNLOCK TABLES;
 
@@ -1363,7 +1370,8 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     document_id int unsigned DEFAULT NULL,
     locked int NOT NULL DEFAULT 0,
     default_lowest_eval_exclude TINYINT default null,
-  PRIMARY KEY  (id)
+    generate_certificates TINYINT NOT NULL DEFAULT 0,
+    PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
@@ -2714,7 +2722,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
 
 
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', 'Yes', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
 
 --
 -- Table structure for table block
@@ -2845,6 +2853,7 @@ CREATE TABLE IF NOT EXISTS skill (
   description TEXT NOT NULL,
   access_url_id int NOT NULL,
   icon varchar(255) NOT NULL,
+  criteria text DEFAULT '',
   PRIMARY KEY (id)
 );
 
@@ -2878,8 +2887,11 @@ CREATE TABLE IF NOT EXISTS skill_rel_user (
   skill_id int NOT NULL,
   acquired_skill_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   assigned_by int NOT NULL,
+  course_id INT NOT NULL DEFAULT 0,
+  session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 );
+ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
 
 DROP TABLE IF EXISTS skill_profile;
 CREATE TABLE IF NOT EXISTS skill_profile (
@@ -3006,9 +3018,9 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 DROP TABLE IF EXISTS course_type;
 CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
-    name varchar(50) not null, 
-    translation_var char(40) default 'UndefinedCourseTypeLabel', 
-    description TEXT default '', 
+    name varchar(50) not null,
+    translation_var char(40) default 'UndefinedCourseTypeLabel',
+    description TEXT default '',
     props text default ''
 );
 
@@ -3024,4 +3036,58 @@ CREATE TABLE usergroup_rel_question (
     question_id int unsigned not null,
     usergroup_id int unsigned not null,
     coefficient float(6,2)
+);
+
+-- 1.10.x-specific, non-course-related, database changes
+-- some changes to previous structure might have been applied to the tables
+-- creation statements above to increase efficiency
+
+-- Hook tables
+CREATE TABLE IF NOT EXISTS hook_observer(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    path varchar(255) NOT NULL,
+    plugin_name varchar(255) NULL,
+    PRIMARY KEY PK_hook_management_hook_observer(id)
+);
+CREATE TABLE IF NOT EXISTS hook_event(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    class_name varchar(255) UNIQUE,
+    description varchar(255),
+    PRIMARY KEY PK_hook_management_hook_event(id)
+);
+CREATE TABLE IF NOT EXISTS hook_call(
+    id int UNSIGNED NOT NULL AUTO_INCREMENT,
+    hook_event_id int UNSIGNED NOT NULL,
+    hook_observer_id int UNSIGNED NOT NULL,
+    type tinyint NOT NULL,
+    hook_order int UNSIGNED NOT NULL,
+    enabled tinyint NOT NULL,
+    PRIMARY KEY PK_hook_management_hook_call(id)
+);
+
+--
+-- Table structure for table course_field_options
+--
+
+CREATE TABLE course_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
+);
+
+--
+-- Table structure for table session_field_options
+--
+
+CREATE TABLE session_field_options (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    field_id INT NOT NULL,
+    option_value TEXT,
+    option_display_text VARCHAR(64),
+    option_order INT,
+    tms DATETIME
 );

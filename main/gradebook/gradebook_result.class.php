@@ -88,8 +88,8 @@ class GradeBookResult
         $return = array();
         $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_TRACK_EXERCISES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_EXERCISES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
         $cid = api_get_course_id();
         $course_id = api_get_course_int_id();
@@ -101,32 +101,32 @@ class GradeBookResult
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE ce.c_id = $course_id AND
 				  		te.exe_exo_id = ce.id AND
-				  		user_id=te.exe_user_id AND te.exe_cours_id='$cid'
-				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  		user_id=te.exe_user_id AND te.c_id = ce.c_id
+				  ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
             $hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
 						tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
-					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+					WHERE  tu.user_id=tth.exe_user_id AND tth.c_id = $course_id
+					ORDER BY tth.c_id ASC, tth.exe_date ASC";
 
         } else { // get only this user's results
             $sql = "SELECT '',ce.title, te.exe_result , te.exe_weighting, te.exe_date,te.exe_id
 						FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
 				  		WHERE 	ce.c_id 		= $course_id AND
 				  				te.exe_exo_id 	= ce.id AND
-				  				te.exe_user_id 	= '".$user_id."' AND
-				  				te.exe_cours_id = '$cid'
-				  		ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+				  				te.exe_user_id 	= $user_id AND
+				  				te.c_id = ce.c_id
+				  		ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
             $hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
 					FROM $TBL_TRACK_HOTPOTATOES
-					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
-					ORDER BY exe_cours_id ASC, exe_date ASC";
+					WHERE exe_user_id = '".$user_id."' AND c_id = $course_id
+					ORDER BY c_id ASC, exe_date ASC";
         }
 
-        $results=getManyResultsXCol($sql,8);
-        $hpresults=getManyResultsXCol($hpsql,7);
+        $results=StatsUtils::getManyResultsXCol($sql,8);
+        $hpresults=StatsUtils::getManyResultsXCol($hpsql,7);
 
         $NoTestRes = 0;
         $NoHPTestRes = 0;

@@ -16,13 +16,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'scorm.class.php';
-require_once 'aicc.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'scormItem.class.php';
-require_once 'aiccItem.class.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Writes an item's new values into the database and returns the operation result
@@ -450,7 +444,7 @@ function save_item(
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT login_id, login_date
             FROM $tbl_track_login

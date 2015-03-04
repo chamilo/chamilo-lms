@@ -107,7 +107,6 @@ class Security
      */
     public static function filter_filename($filename)
     {
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         return disable_dangerous_file($filename);
     }
 
@@ -314,10 +313,6 @@ class Security
 
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
-            if (!class_exists('HTMLPurifier')) {
-                // Lazy loading.
-                require realpath(__DIR__).'/htmlpurifier/library/HTMLPurifier.auto.php';
-            }
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
             if (!file_exists($cache_dir)) {
                 mkdir($cache_dir, 0777);
@@ -357,9 +352,11 @@ class Security
                 $config->set('HTML.Allowed', $allowed_html_anonymous);
             }
 
-            $config->set('Attr.EnableID', true); // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
+            // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
+            $config->set('Attr.EnableID', true);
             $config->set('CSS.AllowImportant', true);
-            $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
+            // We need for the flv player the css definition display: none;
+            $config->set('CSS.AllowTricky', true);
             $config->set('CSS.Proprietary', true);
 
             // Allow uri scheme.

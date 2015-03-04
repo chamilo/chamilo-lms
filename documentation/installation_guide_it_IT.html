@@ -72,7 +72,7 @@
 <p class="p8"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1"><b>Chamilo</b> può essere installato indifferentemente su server Windows, Linux, Mac OS X e Unix. Tuttavia raccomandiamo l’utilizzo di server Linux per sfruttarne al meglio le caratteristiche di flessibilità, controllo remoto e scalabilità.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
-<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache (1.3,2.0 or 2.2)</b>, <b>MySQL 5.1 (o MariaDB</b>) e <b>PHP 5.3 (o 5.4)</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
+<p class="p2"><span class="s1"><b>Chamilo</b> è principalmente un <b>LMS (Learning Management System)</b> che gira sulla piattaforma composta da <b>Apache (1.3,2.0 or 2.2)</b>, <b>MySQL 5.1 (o MariaDB</b>) e <b>PHP 5.4, 5.5 o 5.6</b>, meglio nota come piattaforma <b>AMP</b>.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Tutti questi software sono gratuiti e liberamente scaricabili.</span></p>
 <p class="p3"><span class="s1"></span><br></p>
@@ -108,10 +108,13 @@
 <ul>
   <li class="li2"><span class="s1">[chamilo]/main/inc/conf/</span></li>
   <li class="li2"><span class="s1">[chamilo]/main/upload/users/</span></li>
+  <li clasS="li2">[chamilo]/main/upload/sessions/</li>
+  <li class="li2">[chamilo]/main/upload/courses/</li>
   <li class="li2"><span class="s1">[chamilo]/main/default_course_document/images/</span></li>
   <li class="li2"><span class="s1">[chamilo]/archive/</span></li>
   <li class="li2"><span class="s1">[chamilo]/courses/</span></li>
   <li class="li2"><span class="s1">[chamilo]/home/</span></li>
+  <li class="li2"><span class="s1">[chamilo]/data/</span></li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Opzionalmente puoi fare lo stesso alle seguenti cartelle se vuoi consentire il caricamento dei pacchetti di stile CSS (CSS styles package) e la definizione di sotto-linguaggi (sub-language definition):</span></p>
@@ -175,7 +178,7 @@
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p1"><span class="s1">Le versioni precedenti di Chamilo richiedevano che la variabile register_globals fosse impostata come “On”. Questo non è più necessario nelle versioni attuali e future di Chamilo, per cui può essere e dovrebbe essere impostata sempre su “Off”. E’ considerata una scelta scorretta impostare register_globals su “On” in termini di sicurezza.</span></p>
-<p class="p1"><span class="s1"><b>Nota:</b> se stai utilizzando PHP 5.3 o superiori, devi impostare il tuo valore di <i>date.timezone</i> rispetto alla timezone del tuo server. Per esempio se il tuo server si trova nella timezone 'America/New_York', imposta il parametro date.timezone in php.ini come segue:</span></p>
+<p class="p1"><span class="s1"><b>Nota:</b> Devi impostare il tuo valore di <i>date.timezone</i> rispetto alla timezone del tuo server. Per esempio se il tuo server si trova nella timezone 'America/New_York', imposta il parametro date.timezone in php.ini come segue:</span></p>
 <p class="p2"><span class="s1">date.timezone = 'America/New_York'</span></p>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p3"><span class="s1"></span><br></p>

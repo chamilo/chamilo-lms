@@ -26,8 +26,6 @@ require_once 'Thematic.class.php';
 require_once 'Attendance.class.php';
 require_once 'Work.class.php';
 
-require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
-
 /**
  * Class CourseBuilder
  * Builds a course-object from a Chamilo-course.
@@ -1057,7 +1055,7 @@ class CourseBuilder
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $list_course = Database::get_course_list();
+        $list_course = CourseManager::get_course_list();
         $list = array();
         foreach($list_course as $_course) {
             $this->course = new Course();

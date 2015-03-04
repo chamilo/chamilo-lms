@@ -12,25 +12,16 @@ $language_file[] = 'registration';
 $language_file[] = 'admin';
 $cidReset = true;
 require('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'sortable_table.class.php');
-require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 require('../auth/ldap/authldap.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-/**
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-$action = $_GET["action"];
-$login_as_user_id = $_GET["user_id"];
+$action = @$_GET["action"] ?: null;
+$login_as_user_id = @$_GET["user_id"] ?: null;
 
 // Login as ...
-if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
+if ($action == "login_as" && !empty ($login_as_user_id))
 {
 	login_user($login_as_user_id);
 }
@@ -180,16 +171,16 @@ if (isset ($_POST['action']))
 }
 
 $form = new FormValidator('advanced_search','get');
-$form->add_textfield('keyword_username',get_lang('LoginName'),false);
+$form->addText('keyword_username',get_lang('LoginName'),false);
 if (api_is_western_name_order())
 {
-	$form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
-	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
+	$form->addText('keyword_firstname', get_lang('FirstName'), false);
+	$form->addText('keyword_lastname', get_lang('LastName'), false);
 }
 else
 {
-	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
-	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
+	$form->addText('keyword_lastname',get_lang('LastName'),false);
+	$form->addText('keyword_firstname',get_lang('FirstName'),false);
 }
 if (isset($_GET['id_session']))
 	$form->addElement('hidden','id_session',$_GET['id_session']);
@@ -209,10 +200,10 @@ $form->display();
 
 
 
-$parameters['keyword_username'] = $_GET['keyword_username'];
-$parameters['keyword_firstname'] = $_GET['keyword_firstname'];
-$parameters['keyword_lastname'] = $_GET['keyword_lastname'];
-$parameters['keyword_email'] = $_GET['keyword_email'];
+$parameters['keyword_username'] = @$_GET['keyword_username'] ?: null;
+$parameters['keyword_firstname'] = @$_GET['keyword_firstname'] ?: null;
+$parameters['keyword_lastname'] = @$_GET['keyword_lastname'] ?: null;
+$parameters['keyword_email'] = @$_GET['keyword_email'] ?: null;
 if (isset($_GET['id_session']))
 	$parameters['id_session'] = $_GET['id_session'];
 // Create a sortable table with user-data

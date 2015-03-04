@@ -6,9 +6,6 @@
 
 require_once '../global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];

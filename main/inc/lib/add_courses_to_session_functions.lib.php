@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once dirname(__FILE__).'/xajax/xajax.inc.php';
-//require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
-
 /**
  * Class AddCourseToSession
  */
@@ -22,7 +19,7 @@ class AddCourseToSession
 	{
 		global $tbl_course, $tbl_session_rel_course, $id_session;
 		$course_title = null;
-		$xajax_response = new XajaxResponse();
+		$xajax_response = new xajaxResponse();
 		$return = '';
 		if(!empty($needle) && !empty($type)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas

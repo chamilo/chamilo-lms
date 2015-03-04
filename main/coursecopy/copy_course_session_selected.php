@@ -8,10 +8,6 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
  * @package chamilo.backup
  */
-/**
- * Code
- */
-/* INIT SECTION */
 
 // Language files that need to be included
 $language_file = array('coursebackup', 'admin');
@@ -20,9 +16,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_course_script(true, true);
-
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'xajax/xajax.inc.php';
 
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
@@ -202,7 +195,7 @@ function displayForm()
 
 function searchCourses($idSession, $type)
 {
-    $xajaxResponse = new XajaxResponse();
+    $xajaxResponse = new xajaxResponse();
     $return = null;
     $courseCode = api_get_course_id();
 

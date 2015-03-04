@@ -6,7 +6,7 @@
  *	@package chamilo.document
  */
 /**
- * Code 
+ * Code
  */
 
 session_cache_limiter('none');
@@ -53,12 +53,12 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/scorm';
 if (is_dir($sys_course_path.$doc_url)) {
     api_not_allowed();
 }
- 
+
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;
     // Launch event
-    event_download($doc_url);
-    
+    Event::event_download($doc_url);
+
     DocumentManager::file_send_for_download($full_file_name);
 }
 exit;

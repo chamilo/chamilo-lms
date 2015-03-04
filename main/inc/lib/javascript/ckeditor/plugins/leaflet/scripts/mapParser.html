@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+
+    <script src="leaflet-providers/leaflet-providers.js"></script>
+
+    <script src="Leaflet-MiniMap/src/Control.MiniMap.js"></script>
+    <link rel="stylesheet" href="Leaflet-MiniMap/src/Control.MiniMap.css" />
+
+    <script type="text/javascript" charset="utf-8">
+      // Function to parse the URL search query parameters.
+      // It will give A, B, C given http://www.somelink.com?lat=A&lon=B&zoom=C
+      // See "http://javascriptproductivity.blogspot.com/" +
+      // "2013/02/get-url-variables-with-javascript.html".
+      function getParams(){
+        // Make an object variable to hold
+        // the parsed URL parameters' keys and vlaues.
+        var params = {};
+
+        // Remove the '?' character after the base url.
+        // x.substring(i) will return the substring of x starting at index i
+        // up to the end of the string.
+        // Drupal CMS might have a path like this (two '?' characters):
+        // mapParser.html?t=E3OD?lat=14.6760413&lon=121.0437003&...
+        // We need to handle this case also.
+        var lastIndex = window.location.search.lastIndexOf("?")
+
+        // Get the substring not including any '?' character.
+        var query_string = window.location.search.substring(lastIndex + 1);
+
+        // Explode the string using the '&' character.
+        var query_string_parts = query_string.split('&');
+
+        // Traverse the exploded tokens.
+        for(i in query_string_parts) {
+          // Explode the string using '=' to isolate keys and values.
+          key_value = query_string_parts[i].split('=');
+
+          // Insert a new key and set it to the current parsed value.
+          params[key_value[0]] = key_value[1];
+        }
+
+        // Return the parameter object contianing the keys and values.
+        return params;
+      }
+    </script>
+    <style>
+      .leaflet-popup-content {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='map_container' style="width:95%px; height:590px;" data-zoom=""></div>
+
+    <script type="text/javascript">
+      // Get the DOM node to which we will append the map.
+      // In our setup the map container is a DIV element.
+      var mapDiv = document.getElementById("map_container");
+
+      // Parse the query parameters in the URL to obtain the
+      // LAT, LON, and ZOOM values.
+      queryString = getParams();
+
+      // Convert the parameters to their numeric equivalent.
+      // Otherwise, it will not work.
+      var latitude = Number(queryString["lat"]);
+      var longitude = Number(queryString["lon"]);
+
+      // Retrieve and adjust the map's height by 10px for better layout.
+      var mapHeight = Number(queryString["height"]) - 10;
+      mapDiv.style.height = String(mapHeight) + "px";
+
+      // Retrieve the zoom level.
+      var zoom = Number(queryString["zoom"]);
+
+      // Retrive the popup text that will be used by the marker.
+      var popUpText = queryString["text"];
+
+      // Retrieve the Base Map's Tile to be used.
+      var tile = queryString["tile"];
+
+      // Retrieve the information about the inclusion of Overview map.
+      var minimap = queryString["minimap"];
+
+      // Create a map in the the target DOM container.
+      // Set the view to a given place and zoom value.
+      var map = L.map('map_container').setView([latitude, longitude], zoom);
+
+      // Choose the Map Tile provider "Esri.WorldTopoMap"
+      var mapTileProvider = tile;
+
+      // Set the base map.
+      var mapTile = L.tileLayer.provider(mapTileProvider, { attribution: "Map Tile: " + mapTileProvider });
+      mapTile.addTo(map);
+
+      // Add a marker in the given location.
+      var p1 = L.marker([latitude, longitude]);
+      p1.addTo(map);
+
+      // If the pop-up text is specified.
+      if (popUpText != '') {
+        // Replace the %20 HTML Entity by an empty space.
+        // %20 is the result of texts being piped via URL.
+        popUpText = popUpText.replace(/%20/g, ' ');
+
+        // Bind the text to the current marker.
+        p1.bindPopup(popUpText);
+      }
+
+      // Check if MiniMap needs to be shown also.
+      if (minimap == "on") {
+        // Create a new Tile Layer for the MiniMap.
+        // Per documentation, do not reuse the existing Tile object
+        // to avoid rendering issues.
+        var mapTile2 = L.tileLayer.provider(mapTileProvider);
+        var miniMap = new L.Control.MiniMap(mapTile2).addTo(map);
+      }
+
+      // Initialize the zoom data attribute.
+      mapDiv.setAttribute("data-zoom", map.getZoom());
+
+      // Add an event listener that will keep track the changes in the
+      // map's zoom levels and it will update the data attribute accordingly.
+      map.on('zoomend', function(e) {
+        mapDiv.setAttribute("data-zoom", map.getZoom());
+      });
+    </script>
+  </body>
+</html>

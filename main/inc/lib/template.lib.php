@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
-require_once api_get_path(SYS_PATH).'vendor/twig/twig/lib/Twig/Autoloader.php';
-
 /**
  * Class Template
  *
@@ -67,9 +64,6 @@ class Template
         $this->show_learnpath   = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins     = $load_plugins;
-
-        // Twig settings
-        Twig_Autoloader::register();
 
         $template_paths = array(
             api_get_path(SYS_CODE_PATH).'template', //template folder
@@ -301,35 +295,51 @@ class Template
     }
 
     /**
-     * Sets the header visibility
-     * @param bool true if we show the header
+     * return true if toolbar has to be displayed for user
+     * @return bool
      */
-    public function set_header($status)
+    public static function isToolBarDisplayedForUser()
     {
-        $this->show_header = $status;
-        $this->assign('show_header', $status);
-
         //Toolbar
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
-        $show_toolbar       = 0;
+        $show_toolbar = false;
 
         switch ($show_admin_toolbar) {
             case 'do_not_show':
                 break;
             case 'show_to_admin':
                 if (api_is_platform_admin()) {
-                    $show_toolbar = 1;
+                    $show_toolbar = true;
                 }
                 break;
             case 'show_to_admin_and_teachers':
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_toolbar = 1;
+                    $show_toolbar = true;
                 }
                 break;
             case 'show_to_all':
-                $show_toolbar = 1;
+                $show_toolbar = true;
                 break;
         }
+        return $show_toolbar;
+    }
+
+    /**
+     * Sets the header visibility
+     * @param bool true if we show the header
+     */
+    public function set_header($status)
+    {
+        $status = false;
+        $this->show_header = $status;
+        $this->assign('show_header', $status);
+
+        $show_toolbar = 0;
+
+        if (self::isToolBarDisplayedForUser()) {
+            $show_toolbar = 1;
+        }
+
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available
@@ -422,6 +432,7 @@ class Template
         //Setting app paths/URLs
         $_p = array(
             'web'        => api_get_path(WEB_PATH),
+            'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main'   => api_get_path(WEB_CODE_PATH),
             'web_css'    => api_get_path(WEB_CSS_PATH),
@@ -429,6 +440,7 @@ class Template
             'web_img'    => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib'    => api_get_path(WEB_LIBRARY_PATH),
+            'web_data'   => api_get_path(WEB_DATA_PATH),
             'web_self' => api_get_self(),
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
@@ -460,12 +472,11 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
-        //Base CSS
+        // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
-        //Default CSS responsive design
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
-
+        // Default CSS Bootstrap
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap.css');
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
@@ -475,11 +486,11 @@ class Template
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
 
-        $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_CSS_PATH).'font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
         //THEME CSS STYLE
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
@@ -541,6 +552,7 @@ class Template
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
+            'fullcalendar/lib/moment.min.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
@@ -567,6 +579,8 @@ class Template
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
+        // @todo fix this path
+        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'vendor/ckeditor/ckeditor/ckeditor.js"></script>';
 
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
@@ -804,7 +818,7 @@ class Template
         $this->assign('user_notifications', $total_invitations);
 
 
-        //Breadcrumb
+        //Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 

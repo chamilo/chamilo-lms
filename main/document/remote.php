@@ -11,7 +11,7 @@
  * @param string Course code (cidReq=...)
  * @param string Current working directory (cwd=...)
  * @return string JSON output
- */ 
+ */
 /* FIX for IE cache when using https */
 session_cache_limiter('none');
 /*==== DEBUG ====*/
@@ -31,9 +31,6 @@ if ($debug>0) {
 /*==== INCLUDE ====*/
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'document.lib.php');
-require_once ('../newscorm/learnpath.class.php');
 /*==== Variables initialisation ====*/
 $action = $_REQUEST['action']; //safe as only used in if()'s
 $seek = array('/','%2F','..');

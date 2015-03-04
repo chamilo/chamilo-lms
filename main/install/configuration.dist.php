@@ -35,6 +35,14 @@ $_configuration['db_user']     = '{DATABASE_USER}';
 // Your MySQL password
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 
+// Persistent connections may have profound effects (not always positive) on
+// your database server. Use with care.
+//$_configuration['db_persistent_connection'] = false;
+// For separate web and DB servers, reduce the bandwidth used by compressing
+// data returning from the DB server. By default, it is ignored. Uncomment
+// the following to enable compression.
+//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
+
 /**
  * Database settings
  */
@@ -275,8 +283,23 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['certificate_filter_by_official_code'] = false;
 // Max quantity of fkceditor allowed in the exercise result page otherwise
 // Textareas are used.
-//$_configuration['exercise_max_fckeditors_in_page'] = 0;
+//$_configuration['exercise_max_ckeditors_in_page'] = 0;
 // Default upload option
 //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
 // Enable add_gradebook_certificates.php cron task
 //$_configuration['add_gradebook_certificates_cron_task_enabled'] = true;
+// Which OpenBadges backpack send the badges
+//$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
+// Custom name_order_conventions
+//$_configuration['name_order_conventions'] = array(
+//  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')
+//);
+// Shows a warning message explaining that the site uses cookies
+//$_configuration['cookie_warning'] = false;
+// Allows a comment field in the course calendar events. Requires DB change
+//$_configuration['allow_agenda_event_comment'] = false;
+// Filters administration users lists by the session admin who created them.
+// Change to true to restrict the visibility
+//$_configuration['prevent_session_admins_to_manage_all_users'] = false;
+// If there are any tool available and the user is not registered hide the group
+// $_configuration['hide_course_group_if_no_tools_available'] = false;

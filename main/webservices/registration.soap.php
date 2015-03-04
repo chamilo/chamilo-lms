@@ -5,22 +5,30 @@
  */
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'nusoap/nusoap.php';
-require_once $libpath.'fileManage.lib.php';
-require_once $libpath.'fileUpload.lib.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once $libpath.'add_course.lib.inc.php';
 
 $debug = false;
 
 define('WS_ERROR_SECRET_KEY', 1);
+define('WS_ERROR_NOT_FOUND_RESULT', 2);
+define('WS_ERROR_INVALID_INPUT', 3);
+define('WS_ERROR_SETTING', 4);
+
 
 function return_error($code) {
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
-        break;
+            break;
+        case WS_ERROR_NOT_FOUND_RESULT:
+            $fault = new soap_fault('Server', '', 'No result was found for this query');
+            break;
+        case WS_ERROR_INVALID_INPUT:
+            $fault = new soap_fault('Server', '', 'The input variables are invalid o are not correctly set');
+            break;
+        case WS_ERROR_SETTING:
+            $fault = new soap_fault('Server', '', 'Please check the configuration for this webservice');
+            break;
     }
     return $fault;
 }
@@ -79,6 +87,16 @@ function WSHelperVerifyKey($params)
 
 // Create the server instance
 $server = new soap_server();
+
+/** @var HookWSRegistration $hook */
+$hook = HookWSRegistration::create();
+if (!empty($hook)) {
+    $hook->setEventData(array('server' => $server));
+    $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);
+    if (!empty($res['server'])) {
+        $server = $res['server'];
+    }
+}
 
 $server->soap_defencoding = 'UTF-8';
 
@@ -313,7 +331,6 @@ function WSCreateUsers($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             if ($_configuration['multiple_access_urls']) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -515,7 +532,6 @@ function WSCreateUser($params) {
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if ($_configuration['multiple_access_urls']) {
             if (api_get_current_access_url_id() != -1) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -807,7 +823,6 @@ function WSCreateUsersPasswordCrypted($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             if ($_configuration['multiple_access_urls']) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
@@ -1050,8 +1065,6 @@ function WSCreateUserPasswordCrypted($params) {
     if ($result) {
         $return = Database::insert_id();
 
-        //Multiple URL
-        require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         $url_id = api_get_current_access_url_id();
         UrlManager::add_user_to_url($return, $url_id);
         if ($debug) error_log("Adding user_id = $return to URL id $url_id ");
@@ -1605,8 +1618,11 @@ function WSEditUserWithPicture($params) {
     $filename = basename($picture_url);
     $tempdir = sys_get_temp_dir();
     $tempDir = api_get_path(SYS_ARCHIVE_PATH);
-    file_put_contents($tempDir.$filename, file_get_contents($picture_url));
-    $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir.$filename);
+    // Make sure the file download was OK by checking the HTTP headers for OK
+    if (strpos(get_headers($picture_url)[0], "OK")) {
+        file_put_contents($tempDir . $filename, file_get_contents($picture_url));
+        $picture_uri = UserManager::update_user_picture($user_id, $filename, $tempDir . $filename);
+    }
 
     if ($user_id == 0) {
         return 0;
@@ -2530,7 +2546,7 @@ function WSCreateCourseByTitle($params) {
         $maxlength = 40 - $dbnamelength;
 
         if (empty($wanted_code)) {
-            $wanted_code = generate_course_code(substr($title, 0, $maxlength));
+            $wanted_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
 
         // Check if exits $x_course_code into user_field_values table.
@@ -2569,7 +2585,7 @@ function WSCreateCourseByTitle($params) {
 
         $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
-        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
+        $keys = AddCourse::define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
         $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"', Database :: escape_string($wanted_code));
         $result_check = Database::query($sql_check); // I don't know why this api function doesn't work...
@@ -2766,7 +2782,7 @@ function WSEditCourse($params){
         $maxlength = 40 - $dbnamelength;
 
         if (empty($visual_code)) {
-            $visual_code = generate_course_code(substr($title, 0, $maxlength));
+            $visual_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
 
         $disk_quota = '50000'; // TODO: A hard-coded value.
@@ -2922,7 +2938,7 @@ function WSCourseDescription($params) {
                             get_lang('CourseMaterial'),
                             get_lang('HumanAndTechnicalResources'),
                             get_lang('Assessment'),
-                            get_lang('AddCat'));
+                            get_lang('AddCategory'));
 
     // TODO: Hard-coded Spanish texts.
     //$default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');
@@ -5428,7 +5444,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
+        array('ref'=>'SOAP-ENC:arrayType',
             'wsdl:arrayType'=>'tns:session[]')
     ),
     'tns:session'
@@ -5533,84 +5549,209 @@ function WSUserSubscribedInCourse ($params)
     return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
 }
 
-/* Register WSCertificatesList function */
-// Register the data structures used by the service
+
+/* Search session Web Service start */
+
+// Input params for WSSearchSession
 $server->wsdl->addComplexType(
-    'certificateDetails',
+    'SearchSession',
     'complexType',
     'struct',
     'all',
     '',
     array(
-        'id' => array('name' => 'id', 'type' => 'xsd:int'),
-        'username' => array('name' => 'username', 'type' => 'xsd:string'),
-        'course_code' => array('name' => 'course_code', 'type' => 'xsd:string'),
-        'session_id' => array('name' => 'session_id', 'type' => 'xsd:int'),
-        'cat_id' => array('name' => 'cat_id', 'type' => 'xsd:int'),
-        'created_at' => array('name' => 'created_at', 'type' => 'xsd:string'),
-        'path_certificate' => array('name' => 'path_certificate', 'type' => 'xsd:string')
+        'term' => array('name' => 'term', 'type' => 'xsd:string'),
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+//Output params for WSSearchSession
+$server->wsdl->addComplexType(
+    'searchedSessionExtra',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'variable' => array('name'=>'variable','type'=>'xsd:string'),
+        'value' => array('name'=>'value','type'=>'xsd:string')
     )
 );
 
 $server->wsdl->addComplexType(
-    'certificatesList',
+    'searchedSessionExtras',
     'complexType',
     'array',
     '',
     'SOAP-ENC:Array',
     array(),
     array(
-        array('ref'=>'SOAP:ENC:arrayType',
-            'wsdl:arrayType'=>'tns:certificateDetails[]')
+        array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:searchedSessionExtra[]')
     ),
-    'tns:certificateDetails'
+    'tns:searchedSessionExtra'
 );
-// Register the method to expose
-$server->register(
-    'WSCertificatesList',                           // method name
+
+$server->wsdl->addComplexType(
+    'searchedSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
     array(
-        'startingDate' => 'xsd:string',             // input parameters
-        'endingDate' => 'xsd:string'
-    ),
-    array('return' => 'tns:certificatesList'),      // output parameters
-    'urn:WSRegistration',                           // namespace
-    'urn:WSRegistration#WSCertificatesList',        // soapaction
-    'rpc',                                          // style
-    'encoded',                                      // use
-    'This service returns a list of certificates'   // documentation
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'id_coach' => array('name' => 'id_coach', 'type' => 'xsd:int'),
+        'name' => array('name' => 'name', 'type' => 'xsd:string'),
+        'nbr_courses' => array('name' => 'nbr_courses', 'type' => 'xsd:int'),
+        'nbr_users' => array('name' => 'nbr_users', 'type' => 'xsd:int'),
+        'nbr_classes' => array('name' => 'nbr_classes', 'type' => 'xsd:int'),
+        'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'),
+        'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'),
+        'nb_days_access_before_beginning' => array('name' => 'nb_days_access_before_beginning', 'type' => 'xsd:int'),
+        'nb_days_access_after_end' => array('nb_days_access_after_end' => 'duration', 'type' => 'xsd:int'),
+        'session_admin_id' => array('session_admin_id' => 'duration', 'type' => 'xsd:int'),
+        'visibility' => array('visibility' => 'duration', 'type' => 'xsd:int'),
+        'session_category_id' => array('session_category_id' => 'duration', 'type' => 'xsd:int'),
+        'promotion_id' => array('promotion_id' => 'duration', 'type' => 'xsd:int'),
+        'description' => array('name' => 'description', 'type' => 'xsd:string'),
+        'show_description' => array('name' => 'description', 'type' => 'xsd:int'),
+        'duration' => array('name' => 'duration', 'type' => 'xsd:string'),
+        'extra' => array('name' => 'extra', 'type' => 'tns:searchedSessionExtras'),
+    )
 );
 
-function WSCertificatesList($startingDate = '', $endingDate = '')
-{
-    global $_configuration;
-    if ($_configuration['add_gradebook_certificates_cron_task_enabled']) {
-        require_once api_get_path(SYS_CODE_PATH).'cron/add_gradebook_certificates.php';
-    }
-    $result = array();
-    $certificateTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    $userTable = Database::get_main_table(TABLE_MAIN_USER);
-    $categoryTable = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-    $query = "SELECT certificate.id, user.username, category.course_code, category.session_id,
-    certificate.user_id, certificate.cat_id, certificate.created_at, certificate.path_certificate
-    FROM $certificateTable AS certificate
-    JOIN $userTable AS user ON certificate.user_id = user.user_id
-    JOIN $categoryTable AS category ON certificate.cat_id = category.id";
-    if (!empty($startingDate) && !empty($endingDate)) {
-        $query .= " WHERE certificate.created_at BETWEEN '$startingDate' AND '$endingDate'";
-    } else if (!empty($startingDate)) {
-        $query .= " WHERE certificate.created_at >= '$startingDate'";
-    } else if (!empty($endingDate)) {
-        $query .= " WHERE certificate.created_at <= '$endingDate'";
-    }
-    $queryResult = Database::query($query);
-    $basePath = api_get_path(WEB_CODE_PATH).'upload/users/';
-    while ($row = Database::fetch_array($queryResult)) {
-        $row['path_certificate'] = $basePath.substr((string) $row['user_id'], 0, 1)
-            .'/'.$row['user_id'].'/certificate'.$row['path_certificate'];
-        $result[] = $row;
-    }
-    return $result;
+$server->wsdl->addComplexType(
+    'searchedSessionList',
+    'complexType',
+    'array', 
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+    array('ref' => 'SOAP-ENC:arrayType',
+        'wsdl:arrayType' => 'tns:searchedSession[]')
+    ),
+    'tns:searchedSession'
+);
 
+//Reister WSSearchSession
+$server->register(
+    'WSSearchSession',
+    array('SearchSession' => 'tns:SearchSession'),      // input parameters
+    array('return' => 'tns:searchedSessionList'),       // output parameters
+    'urn:WSRegistration',                               // namespace
+    'urn:WSRegistration#WSSearchSession',               // soapaction
+    'rpc',                                              // style
+    'encoded',                                          // use
+    'This service to get a session list filtered by name, description or short description extra field'    // documentation
+);
+
+/**
+ * Web service to get a session list filtered by name, description or short description extra field
+ * @param array $params Contains the following parameters
+ *   string $params['term'] Search term
+ *   string $params['extra_fields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The list
+ */
+function WSSearchSession($params)
+{
+    if (!WSHelperVerifyKey($params['secret_key'])) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $fieldsToInclude = array();
+
+    if (!empty($params['extrafields'])) {
+        $fieldsToInclude = explode(',', $params['extrafields']);
+        foreach ($fieldsToInclude as &$field) {
+            if (empty($field)) {
+                continue;
+            }
+
+            $field = trim($field);
+        }
+    }
+
+    return SessionManager::searchSession($params['term'], $fieldsToInclude);
+}
+
+/* Search session Web Service end */
+
+/* Fetch session Web Service start */
+
+// Input params for WSFetchSession
+$server->wsdl->addComplexType(
+    'FetchSession',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array('name' => 'id', 'type' => 'xsd:int'),
+        'extrafields' => array('name' => 'extrafields', 'type' => 'xsd:string'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+//Reister WSFetchSession
+$server->register(
+    'WSFetchSession',
+    array('SearchSession' => 'tns:FetchSession'),                    // input parameters
+    array('return' => 'tns:searchedSessionList'),       // output parameters
+    'urn:WSRegistration',                               // namespace
+    'urn:WSRegistration#WSFetchSession',                // soapaction
+    'rpc',                                              // style
+    'encoded',                                          // use
+    'This service get a session by its id. Optionally can get its extra fields values'    // documentation
+);
+
+/**
+ * Web service to get a session by its id. Optionally can get its extra fields values
+ * @param array $params Contains the following parameters:
+ *   int $params['id'] The session id
+ *   string $params['extrafields'] Extrafields to include in request result
+ *   string $params['secret_key'] Secret key to check
+ * @return array The session data
+ */
+function WSFetchSession($params)
+{
+    if (!WSHelperVerifyKey($params['secret_key'])) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    $fieldsToInclude = explode(',', $params['extrafields']);
+
+    foreach ($fieldsToInclude as &$field) {
+        if (empty($field)) {
+            continue;
+        }
+
+        $field = trim($field);
+    }
+
+    $sessionData = SessionManager::fetch($params['id']);
+
+    if ($sessionData === false) {
+        return return_error(WS_ERROR_INVALID_INPUT);
+    }
+
+    if (!empty($extraFields)) {
+        $sessionData['extra'] = SessionManager::getFilteredExtraFields($params['id'], $fieldsToInclude);
+    }
+
+    return array($sessionData);
+}
+
+/* Fetch session Web Service end */
+
+// Add more webservices by Hooks
+if (!empty($hook)) {
+    $hook->setEventData(array('server' => $server));
+    $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_POST);
+    if (!empty($res['server'])) {
+        $server = $res['server'];
+    }
 }
 
 // Use the request to (try to) invoke the service
@@ -5624,5 +5765,3 @@ if (isset($_configuration['registration.soap.php.decode_utf8'])) {
     }
 }
 $server->service($HTTP_RAW_POST_DATA);
-
-

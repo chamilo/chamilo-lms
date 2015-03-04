@@ -1,17 +1,17 @@
-{% extends "default/layout/main.tpl" %}
+{% extends template ~ "/layout/main.tpl" %}
 
 {% block body %}
 	{# Main content #}
 
     {# Plugin main top #}
     {% if plugin_main_top %}
-        <div id="plugin_main_top" class="span12">
+        <div id="plugin_main_top" class="col-md-12">
             {{ plugin_main_top }}
         </div>
     {% endif %}
 
 	{#  Right column #}
-	<div class="span3 menu-column">
+	<div class="col-md-3 menu-column">
         {% if plugin_menu_top %}
             <div id="plugin_menu_top">
                 {{plugin_menu_top}}
@@ -21,25 +21,26 @@
 	    {# if user is not login show the login form #}
         {% block login_form %}
 		{% if _u.logged  == 0 %}
-			{% include "default/layout/login_form.tpl" %}
+			{% include template ~ "/layout/login_form.tpl" %}
 		{% endif %}
         {% endblock %}
 
-        <div class="block_user_info">
+
 		{# User picture #}
+
         {{ user_image_block }}
 
         {# User Profile links #}
 		{{ profile_block }}
-        </div>
-        <div class="block_tools_info">
+
+
         {# Course block - admin #}
 		{{ course_block }}
 
         {# Course block - teacher #}
 		{{ teacher_block }}
-        </div>
-        <div class="user_notification">
+
+
 		{# Notice #}
 		{{ notice_block }}
 
@@ -54,7 +55,7 @@
 
 		{# Search (xapian) #}
 		{{ search_block }}
-        </div>
+
 		{# Classes #}
 		{{ classes_block }}
 
@@ -71,7 +72,7 @@
         {% endif %}
 	</div>
 
-	<div class="span9 content-column">
+	<div class="col-md-9">
         {# Plugin bottom #}
         {% if plugin_content_top %}
             <div id="plugin_content_top">
@@ -81,12 +82,8 @@
 
 		{# Portal homepage #}
         {% if home_page_block %}
-            <section id="homepage">
-                <div class="row">
-                    <div class="span9">
-                    {{ home_page_block }}
-                    </div>
-                </div>
+            <section id="homepage-home">
+                {{ home_page_block }}
             </section>
         {% endif %}
 
@@ -94,19 +91,19 @@
 		{{ sniff_notification }}
 
         {% block page_body %}
-        {% include "default/layout/page_body.tpl" %}
+        {% include template ~ "/layout/page_body.tpl" %}
         {% endblock %}
 
         {# Welcome to course block  #}
         {% if welcome_to_course_block %}
-            <section id="welcome_to_course">
+            <section id="homepage-course">
             {{ welcome_to_course_block }}
             </section>
         {% endif %}
 
         {% block content %}
         {% if content is not null %}
-            <section id="main_content">
+            <section id="page-content">
                 {{ content }}
             </section>
         {% endif %}
@@ -114,24 +111,20 @@
 
 		{# Announcements  #}
         {% if announcements_block %}
-            <section id="announcements">
+            <section id="homepage-announcements">
             {{ announcements_block }}
             </section>
         {% endif %}
 
         {# Course categories (must be turned on in the admin settings) #}
         {% if course_category_block %}
-            <section id="course_category">
-                <div class="row">
-                    <div class="span9">
-                    {{ course_category_block }}
-                    </div>
-                </div>
+            <section id="homepage-course-category">
+                {{ course_category_block }}
             </section>
         {% endif %}
 
 		{# Hot courses template  #}
-		{% include "default/layout/hot_courses.tpl" %}
+		{% include template ~ "/layout/hot_courses.tpl" %}
 
         {# Content bottom  #}
         {% if plugin_content_bottom %}
@@ -144,7 +137,7 @@
 
     {# Plugin main bottom #}
     {% if plugin_main_bottom %}
-        <div id="plugin_main_bottom" class="span12">
+        <div id="plugin_main_bottom" class="col-md-12">
             {{ plugin_main_bottom }}
         </div>
     {% endif %}

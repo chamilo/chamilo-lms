@@ -17,6 +17,14 @@ home/*
 main/upload/users/*
 !main/upload/users/index.html
 
+# Session images
+main/upload/sessions/*
+!main/upload/sessions/index.html
+
+# Course images
+main/upload/courses/*
+!main/upload/courses/index.html
+
 # Logs and databases #
 *.log
 
@@ -35,3 +43,10 @@ searchdb/*
 nbproject/*
 
 plugin/bbb/config.vm.php
+
+main/cron/incoming/*
+vendor
+data/*
+!data/index.html
+data/badges/*
+!data/badges/index.html

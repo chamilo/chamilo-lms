@@ -82,14 +82,14 @@ select#lsessions, select#lcourses, select#lexercises, select#status {
 .margin-left-fifty{
     margin-left: 50px !important;
 }
-#course_category_well h4{
+.category_well h4{
 	padding-left: 0;
 }
-#course_category_well .form-content{
+.category_well .form-content{
 	padding-left: 1em;
 	padding-right: 1em;
 }
-#course_category_well .btn{
+.category_well .btn{
 	width: 100%;
 	line-height: 30px;
 	font-size: 16px;

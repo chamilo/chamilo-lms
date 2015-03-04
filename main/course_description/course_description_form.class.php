@@ -14,7 +14,7 @@ use Security;
 
 /**
  * Edit/create a course description.
- * 
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -25,7 +25,7 @@ class CourseDescriptionForm extends \FormValidator
      *
      * @param string $action
      * @param \CourseDescription\CourseDescription $description
-     * @return \CourseDescription\CourseDescription 
+     * @return \CourseDescription\CourseDescription
      */
     static function create($action, $description = null)
     {
@@ -46,7 +46,7 @@ class CourseDescriptionForm extends \FormValidator
     /**
      *
      * @return \CourseDescription\CourseDescription
-     * 
+     *
      */
     public function get_course_description()
     {
@@ -60,7 +60,7 @@ class CourseDescriptionForm extends \FormValidator
 
     /**
      *
-     * @param \CourseDescription\CourseDescription $description 
+     * @param \CourseDescription\CourseDescription $description
      */
     function init($description = null)
     {
@@ -70,14 +70,14 @@ class CourseDescriptionForm extends \FormValidator
         $defaults['title'] = $description->title;
         $defaults['content'] = $description->content;
 
-        $this->add_header($description->get_title());
-        $this->add_hidden('description_type', $description->get_description_type());
-        $this->add_hidden('c_id', $description->c_id);
-        $this->add_hidden('id', $description->id);
-        $this->add_textfield('title', get_lang('Title'), true, array('size' => 'width: 350px;'));
+        $this->addHeader($description->get_title());
+        $this->addHidden('description_type', $description->get_description_type());
+        $this->addHidden('c_id', $description->c_id);
+        $this->addHidden('id', $description->id);
+        $this->addText('title', get_lang('Title'), true, array('size' => 'width: 350px;'));
         $this->applyFilter('title', 'html_filter');
-        $this->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
-        $this->add_button('save', get_lang('Save'), 'class="save"');
+        $this->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

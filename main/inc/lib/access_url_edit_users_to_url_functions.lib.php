@@ -4,10 +4,7 @@
  * Accessurledituserstourl class definition
  * @package chamilo.library
  */
-/**
- * Code
- */
-require_once ('xajax/xajax.inc.php');
+
 /**
  * Accessurledituserstourl class definition
  * Contains several functions dealing with displaying,
@@ -32,7 +29,7 @@ class Accessurledituserstourl
     function search_users($needle, $id)
     {
         global $tbl_user, $tbl_access_url_rel_user;
-        $xajax_response = new XajaxResponse();
+        $xajax_response = new xajaxResponse();
         $return = '';
 
         if (!empty($needle)) {

@@ -3,7 +3,6 @@
 require_once '../inc/global.inc.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'nusoap/nusoap.php';
 
 /**
  * SOAP error handler. Handles an error sending a SOAP fault
@@ -11,7 +10,7 @@ require_once $libpath.'nusoap/nusoap.php';
 class WSCMSoapErrorHandler implements WSCMErrorHandler {
 	/**
 	 * Handles the error by sending a SOAP fault through the server
-	 * 
+	 *
 	 * @param WSError Error to handle
 	 */
 	public function handle($error) {
@@ -26,17 +25,17 @@ class WSCMSoapErrorHandler implements WSCMErrorHandler {
 class WSCMSoapServer {
 	/**
 	 * SOAP server instance
-	 * 
+	 *
 	 * @var soap_server
 	 */
 	private static $_instance;
-	
+
 	/**
 	 * Private constructor
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Singleton method
 	 */
@@ -48,11 +47,11 @@ class WSCMSoapServer {
 			// Configure the service
 			self::$_instance->configureWSDL('WSCMService', 'urn:WSCMService');
 		}
-		
+
 		return self::$_instance;
 	}
 }
-			
+
 $s = WSCMSoapServer::singleton();
 
 $s->wsdl->addComplexType(

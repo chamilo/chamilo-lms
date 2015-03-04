@@ -4,10 +4,7 @@
  * Definition of the Accessurleditcoursestourl class
  * @package chamilo.library
  */
-/**
- * Init
- */
-require_once ('xajax/xajax.inc.php');
+
 /**
  * Access_url_edit_courses_to_url class
  * Contains several functions dealing with displaying,
@@ -31,7 +28,7 @@ class Accessurleditcoursestourl
     function search_courses($needle, $id)
     {
         global $tbl_course;
-        $xajax_response = new XajaxResponse();
+        $xajax_response = new xajaxResponse();
         $return = '';
 
         if (!empty($needle)) {

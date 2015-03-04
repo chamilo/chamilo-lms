@@ -1,0 +1,25 @@
+.map-button {
+    background-repeat: no-repeat !important;
+    background-position: 5px center !important;
+    padding-left: 14px !important;
+}
+
+.map-button-pointer {
+    background-image: url("../images/selector.png") !important;
+}
+
+.map-button-remove {
+    background-image: url("../images/remove.png") !important;
+}
+
+.map-button-active {
+    outline: 1px solid #666 !important;
+    background-color: #ddd !important;
+}
+
+.map-canvas-drawer {
+    height: 310px;
+    position: relative;
+    overflow: auto;
+    width: 468px;
+}

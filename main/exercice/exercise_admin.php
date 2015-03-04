@@ -14,13 +14,8 @@
 
 use \ChamiloSession as Session;
 
-$language_file='exercice';
-
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
+$language_file = 'exercice';
 require_once '../inc/global.inc.php';
-require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(null,true)) {
@@ -35,18 +30,6 @@ $htmlHeadXtra[] = '<script>
         } else {
             document.getElementById(\'options\').style.display = \'none\';
             document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-        }
-    }
-
-    function FCKeditor_OnComplete( editorInstance ) {
-       if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-          HideFCKEditorByInstanceName (editorInstance.Name);
-       }
-    }
-
-    function HideFCKEditorByInstanceName ( editorInstanceName ) {
-        if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-              document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
         }
     }
 

@@ -48,9 +48,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-//checking for extra field with filter on
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
-
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
     api_not_allowed();
@@ -68,7 +65,7 @@ if (empty($group_id)) {
 function search_users($needle, $type)
 {
     global $tbl_user, $tbl_group_rel_user, $group_id;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
 
     if (!empty($needle) && !empty($type)) {

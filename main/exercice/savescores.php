@@ -9,22 +9,11 @@
 
 // name of the language file that needs to be included
 $language_file = 'learnpath';
-
-if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
-    require_once '../newscorm/learnpath.class.php';
-    require_once '../newscorm/learnpathItem.class.php';
-    require_once '../newscorm/scorm.class.php';
-    require_once '../newscorm/scormItem.class.php';
-    require_once '../newscorm/aicc.class.php';
-    require_once '../newscorm/aiccItem.class.php';
-}
-
 require_once '../inc/global.inc.php';
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 
 $this_section = SECTION_COURSES;
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
 
 $test = $_REQUEST['test'];
@@ -32,7 +21,7 @@ $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
-$TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $score = $_REQUEST['score'];
@@ -40,7 +29,6 @@ $origin = $_REQUEST['origin'];
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
 $lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
 $course_id = $courseInfo['real_id'];
-$_cid = api_get_course_id();
 $jscript2run = '';
 
 /**
@@ -54,10 +42,11 @@ $jscript2run = '';
  */
 function save_scores($file, $score)
 {
-    global $origin, $_user, $_cid, $TABLETRACK_HOTPOTATOES;
+    global $origin, $_user, $TABLETRACK_HOTPOTATOES;
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();
+    $c_id = api_get_course_int_id();
 
     if ($_user['user_id']) {
         $user_id = $_user['user_id'];
@@ -65,11 +54,11 @@ function save_scores($file, $score)
         // anonymous
         $user_id = "NULL";
     }
-    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
+    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, c_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
 			".intval($user_id).",
 			'".Database::escape_string($date)."',
-			'".Database::escape_string($_cid)."',
+			$c_id,
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
 

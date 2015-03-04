@@ -40,19 +40,21 @@ class ExerciseLink extends AbstractLink
         }
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-        $sql = 'SELECT id, title from '.$this->get_exercise_table().' exe
+        $sql = 'SELECT id, title FROM '.$this->get_exercise_table().' exe
                 WHERE id NOT IN (
-                        SELECT ref_id FROM '.$tbl_grade_links.'
-                              WHERE type        = '.LINK_EXERCISE." AND
-                                    course_code = '".$this->get_course_code()."'
-                        ) AND
-                exe.c_id        = ".$this->course_id;
+                    SELECT ref_id FROM '.$tbl_grade_links.'
+                    WHERE
+                        type = '.LINK_EXERCISE." AND
+                        course_code = '".$this->get_course_code()."'
+                ) AND
+                exe.c_id = ".$this->course_id;
 
         $result = Database::query($sql);
         $cats = array();
         while ($data=Database::fetch_array($result)) {
             $cats[] = array ($data['id'], $data['title']);
         }
+
         return $cats;
     }
 
@@ -64,6 +66,9 @@ class ExerciseLink extends AbstractLink
     {
         $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $exerciseTable = $this->get_exercise_table();
+        $lpItemTable = Database :: get_course_table(TABLE_LP_ITEM);
+
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
@@ -78,8 +83,13 @@ class ExerciseLink extends AbstractLink
         // @todo
         $uploadPath = null;
 
-        $sql = 'SELECT id,title from '.$this->get_exercise_table().'
+        $sql = 'SELECT id,title FROM '.$exerciseTable.'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
+
+        $sqlLp = "SELECT e.id, e.title FROM $exerciseTable e INNER JOIN $lpItemTable i
+                  ON (e.c_id = i.c_id AND e.id = i.path)
+				  WHERE e.c_id = $this->course_id AND active = 0 AND item_type = 'quiz'
+				  $session_condition";
 
         $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
                 FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
@@ -92,12 +102,17 @@ class ExerciseLink extends AbstractLink
                     d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' AND
                     ip.visibility='1'
                 ";
+
         require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
+        $exerciseInLP = array();
         if (!$this->is_hp) {
             $result = Database::query($sql);
+            $resultLp = Database::query($sqlLp);
+            $exerciseInLP = Database::store_result($resultLp);
         } else {
             $result2 = Database::query($sql2);
         }
+
         $cats = array();
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
@@ -106,6 +121,7 @@ class ExerciseLink extends AbstractLink
                 }
             }
         }
+
         if (isset($result2)) {
             if (Database::num_rows($result2) > 0) {
                 while ($row=Database::fetch_array($result2)) {
@@ -123,10 +139,19 @@ class ExerciseLink extends AbstractLink
                             if ($title == '') {
                                 $title = basename($path);
                             }
-                            $cats[] = array ($attribute['id'], $title.'(HP)');
+                            $cats[] = array($attribute['id'], $title.'(HP)');
                         }
                     }
                 }
+            }
+        }
+
+        if (!empty($exerciseInLP)) {
+            foreach ($exerciseInLP as $exercise) {
+                $cats[] = array(
+                    $exercise['id'],
+                    $exercise['title'].' ('.get_lang('ToolLearnpath').')'
+                );
             }
         }
 
@@ -138,13 +163,14 @@ class ExerciseLink extends AbstractLink
      */
     public function has_results()
     {
-        $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $session_id = api_get_session_id();
+        $course_id = api_get_course_int_id($this->get_course_code());
         $sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats."
                 WHERE
                     session_id = $session_id AND
-                    exe_cours_id = '".Database::escape_string($this->get_course_code())."'".' AND
-                    exe_exo_id   = '.(int)$this->get_ref_id();
+                    c_id = $course_id AND
+                    exe_exo_id   = ".(int)$this->get_ref_id();
         $result = Database::query($sql);
         $number=Database::fetch_row($result);
         return ($number[0] != 0);
@@ -152,20 +178,22 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
-     * @param int $stud_id student id (default: all students who have results - then the average is returned)
+     * @param int $stud_id student id (default: all students who have results -
+     * then the average is returned)
      * @return	array (score, max) if student is given
      * 			array (sum of scores, number of scores) otherwise
      * 			or null if no scores available
      */
     public function calc_score($stud_id = null)
     {
-        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblHp = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
 
         /* the following query should be similar (in conditions) to the one used
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
+        $courseId = $this->getCourseId();
         if (!$this->is_hp) {
             $sql = "SELECT * FROM $tblStats
                     WHERE
@@ -176,21 +204,18 @@ class ExerciseLink extends AbstractLink
                         session_id = $session_id";
 
             if (isset($stud_id)) {
-                $course_code_exe = $this->get_course_code();
-                $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
+                $sql .= " AND c_id = $courseId AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
 
         } else {
-            $course_code_exe = $this->get_course_code();
-            $courseId =  $this->getCourseId();
             $sql = "SELECT * FROM $tblHp hp, $tblDoc doc
                      WHERE
-                        hp.exe_cours_id = '$course_code_exe' AND
-                        hp.exe_user_id = '$stud_id'  AND
+                        hp.c_id = $courseId AND
+                        hp.exe_user_id = $stud_id  AND
                         hp.exe_name = doc.path AND
-                        doc.c_id = $courseId AND
-                        doc.id = ".intval($this->get_ref_id())."";
+                        doc.c_id = hp.c_id AND
+                        doc.id = ".intval($this->get_ref_id());
         }
 
         $scores = Database::query($sql);
@@ -221,7 +246,7 @@ class ExerciseLink extends AbstractLink
             if ($student_count == 0) {
                 return null;
             } else {
-                return array ($sum , $student_count);
+                return array($sum, $student_count);
             }
         }
     }
@@ -260,9 +285,11 @@ class ExerciseLink extends AbstractLink
                 if ($title == '') {
                     $title = basename($data['path']);
                 }
+
                 return $title;
             }
         }
+
         return $data['title'];
     }
 
@@ -284,7 +311,7 @@ class ExerciseLink extends AbstractLink
         $sql = 'SELECT count(id) from '.$this->get_exercise_table().'
                 WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
         $result = Database::query($sql);
-        $number=Database::fetch_row($result);
+        $number = Database::fetch_row($result);
         return ($number[0] != 0);
     }
 
@@ -334,20 +361,22 @@ class ExerciseLink extends AbstractLink
     private function get_exercise_data()
     {
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
         if ($this->is_hp == 1) {
             $tbl_exercise = Database :: get_course_table(TABLE_DOCUMENT);
         } else {
             $tbl_exercise = $this->get_exercise_table();
         }
-        if ($tbl_exercise=='') {
+
+        $ref_id = intval($this->get_ref_id());
+
+        if ($tbl_exercise == '') {
             return false;
         } elseif (!isset($this->exercise_data)) {
             if ($this->is_hp == 1) {
-                $ref_id = intval($this->get_ref_id());
-                $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip
+                $sql = "SELECT * FROM $tbl_exercise ex
+                        INNER JOIN $TBL_ITEM_PROPERTY ip
+                        ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
                         WHERE
-                            ip.ref = ex.id AND
                             ip.c_id = $this->course_id AND
                             ex.c_id = $this->course_id AND
                             ip.ref = $ref_id AND
@@ -359,10 +388,10 @@ class ExerciseLink extends AbstractLink
                 $sql = 'SELECT * FROM '.$tbl_exercise.'
                         WHERE
                             c_id = '.$this->course_id.' AND
-                            id = '.(int)$this->get_ref_id().' ';
+                            id = '.$ref_id.' ';
             }
             $result = Database::query($sql);
-            $this->exercise_data=Database::fetch_array($result);
+            $this->exercise_data = Database::fetch_array($result);
         }
 
         return $this->exercise_data;

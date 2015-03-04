@@ -14,7 +14,6 @@ $cidReset = true;
 
 // Including some necessary dokeos files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -34,7 +33,7 @@ $tool_name = get_lang('ModifyClassInfo');
 $class_id = intval($_GET['idclass']);
 $class = ClassManager :: get_class_info($class_id);
 $form = new FormValidator('edit_class', 'post', 'class_edit.php?idclass='.$class_id);
-$form->add_textfield('name',get_lang('ClassName'));
+$form->addText('name',get_lang('ClassName'));
 $form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
 $form->setDefaults(array('name'=>$class['name']));
 if($form->validate())

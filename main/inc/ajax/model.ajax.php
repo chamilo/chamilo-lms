@@ -145,6 +145,7 @@ if (!$sidx) {
 switch ($action) {
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
+        $userId = api_get_user_id();
         if (!(api_is_platform_admin(false, true))) {
             //exit;
         }
@@ -186,7 +187,38 @@ switch ($action) {
             if (empty($userIdList) || empty($courseCodeList)) {
                 exit;
             }
+        } elseif (api_is_student_boss()) {
+            $users = UserManager::getUsersFollowedByStudentBoss($userId);
+
+            $userIdList = array_keys($users);
         }
+
+        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+
+        $groupsId = array_keys($groups);
+
+        if (is_array($groupsId)) {
+            foreach ($groupsId as $groupId) {
+                $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+                if (!is_array($groupUsers)) {
+                    continue;
+                }
+
+                foreach ($groupUsers as $memberId => $member) {
+                    if ($member['user_id'] == $userId ) {
+                        continue;
+                    }
+
+                    $userIdList[] = intval($member['user_id']);
+                }
+            }
+        }
+
+        if (is_array($userIdList)) {
+            $userIdList = array_unique($userIdList);
+        }
+
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
         } else {
@@ -274,19 +306,17 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results':
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_id = $_REQUEST['exerciseId'];
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
             $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
         }
-        $count = get_count_exam_results($exercise_id, $whereCondition);
+        $count = ExerciseLib::get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
-        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $hotpot_path = $_REQUEST['path'];
-        $count = get_count_exam_hotpotatoes_results($hotpot_path);
+        $count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
@@ -656,18 +686,18 @@ switch ($action) {
         break;
     case 'get_exercise_results':
         $course = api_get_course_info();
-        // Used inside get_exam_results_data()
+        // Used inside ExerciseLib::get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-        if ($is_allowedToEdit) {
+        if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
-                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
+                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score',  'user_ip', 'status', 'lp', 'actions'
             );
             $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
             if ($officialCodeInList == true) {
                 $columns = array_merge(array('official_code'), $columns);
             }
         }
-        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
+        $result = ExerciseLib::get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();
@@ -677,7 +707,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
+        $result = ExerciseLib::get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_work_student_list_overview':
         if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -708,7 +738,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
+        $result = ExerciseLib::get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {
@@ -852,7 +882,6 @@ switch ($action) {
             'firstname',
             'lastname',
         );
-        require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
         foreach ($lessons as $lesson_id => $lesson) {
             $columns[] = $lesson_id;
@@ -1328,7 +1357,6 @@ if (in_array($action, $allowed_actions)) {
 
     if ($operation && $operation == 'excel') {
         $j = 1;
-        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
         $array = array();
         if (empty($column_names)) {
@@ -1349,7 +1377,6 @@ if (in_array($action, $allowed_actions)) {
             case 'xls':
                 //TODO add date if exists
                 $file_name = (!empty($action)) ? $action : 'company_report';
-                require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
                 $browser = new Browser();
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
                     Export::export_table_xls_html($array, $file_name, 'ISO-8859-15');

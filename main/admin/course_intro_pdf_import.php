@@ -14,11 +14,6 @@ api_protect_admin_script();
 // temporary configuration of in which folder to upload the file in each course.
 // Should default to '', and start with a '/' and end without it, if defined
 $subDir = '';
-
-//require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-//require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
 $tool_name = get_lang('ImportPDFIntroToCourses');
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -105,9 +100,6 @@ function import_pdfs($file, $subDir = '/') {
         error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
         return $errors;
     }
-    require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'app_view.php';
-    require_once '../course_description/course_description_controller.php';
     $list = scandir($baseDir.$uploadPath);
     $i = 0;
     foreach ($list as $file) {

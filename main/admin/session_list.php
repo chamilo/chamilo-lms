@@ -48,7 +48,6 @@ $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
 $courseList = array();
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
 if (!empty($courseId)) {
-    require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = getParentsToString($courseInfo['categoryCode']);
     $courseList[] = array('id' => $courseInfo['id'], 'text' => $parents.$courseInfo['title']);

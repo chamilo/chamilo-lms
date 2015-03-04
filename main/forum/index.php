@@ -56,9 +56,6 @@ $this_section = SECTION_COURSES;
 // Notification for unauthorized people.
 api_protect_course_script(true);
 
-// Including additional library scripts.
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 $nameTools = get_lang('Forums');
 $_course = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -134,7 +131,7 @@ $whatsnew_post_info = Session::read('whatsnew_post_info');
 
 /* TRACKING */
 
-event_access_tool(TOOL_FORUM);
+Event::event_access_tool(TOOL_FORUM);
 
 /*
     RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS

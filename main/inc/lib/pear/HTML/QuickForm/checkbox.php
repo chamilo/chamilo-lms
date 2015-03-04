@@ -23,10 +23,6 @@
  * @link        http://pear.php.net/package/HTML_QuickForm
  */
 
-/**
- * Base class for <input /> form elements
- */
-require_once 'HTML/QuickForm/input.php';
 
 /**
  * HTML class for a checkbox type field
@@ -66,13 +62,23 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_checkbox($elementName=null, $elementLabel=null, $text='', $attributes=null)
-    {
+    public function HTML_QuickForm_checkbox(
+        $elementName = null,
+        $elementLabel = null,
+        $text = '',
+        $attributes = null
+    ) {
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_text = $text;
         $this->setType('checkbox');
-        $this->updateAttributes(array('value'=>1));
+
+        if (!isset($attributes['value'])) {
+            $this->updateAttributes(array('value' => 1));
+        } else {
+            $this->updateAttributes(array('value' => $attributes['value']));
+        }
+
         $this->_generateId();
     } //end constructor
 
@@ -121,17 +127,20 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         if (0 == strlen($this->_text)) {
             $label = '';
         } elseif ($this->_flagFrozen) {
             $label = $this->_text;
         } else {
-            //$label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
-            $label = '<label class="checkbox">' . HTML_QuickForm_input::toHtml().$this->_text . '</label>';
+            $label = '<label class="checkbox '.$this->getAttribute('label-class').' ">' .
+                HTML_QuickForm_input::toHtml().$this->_text
+                . '</label>';
+
             return $label;
         }
+
         return HTML_QuickForm_input::toHtml() . $label;
     } //end func toHtml
 
@@ -148,10 +157,10 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
     function getFrozenHtml()
     {
         if ($this->getChecked()) {
-            return '<tt>[x]</tt>' .
+            return '<code>[x]</code>' .
                    $this->_getPersistantData();
         } else {
-            return '<tt>[ ]</tt>';
+            return '<code>[ ]</code>';
         }
     } //end func getFrozenHtml
 
@@ -273,7 +282,4 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         }
         return $this->_prepareValue($value, $assoc);
     }
-
-    // }}}
-} //end class HTML_QuickForm_checkbox
-?>
+}

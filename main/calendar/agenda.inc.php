@@ -257,7 +257,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false)
 
     //Check my personal calendar items
     if (api_get_setting('allow_personal_agenda') == 'true' && empty($_SESSION['user']) && empty($_SESSION['group'])) {
-        $tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+        $tbl_personal_agenda = Database :: get_main_table(TABLE_PERSONAL_AGENDA);
         // 1. creating the SQL statement for getting the personal agenda items in MONTH view
         $sql = "SELECT id, title, text as content , date as start_date, enddate as end_date, parent_event_id FROM ".$tbl_personal_agenda."
                 WHERE user='".api_get_user_id()."' ".$show_all_current_personal;
@@ -3535,16 +3535,12 @@ function show_add_form($id = '', $type = null)
      */
     function agenda_import_ical($course_info, $file)
     {
-        require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
         $charset = api_get_system_encoding();
         $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
         if (!@move_uploaded_file($file['tmp_name'], $filepath)) {
             error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
             return false;
         }
-
-        require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
 
         $ical = new vcalendar();
         $ical->setConfig('directory', dirname($filepath));

@@ -14,12 +14,6 @@ use ChamiloSession as Session;
  *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
 
-require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
 $addDocumentToWork = api_get_configuration_value('add_document_to_work');
 define('ADD_DOCUMENT_TO_WORK', $addDocumentToWork);
 $workUserComments = api_get_configuration_value('work_user_comments');
@@ -338,7 +332,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    $linkInfo = is_resource_in_course_gradebook(
+    $linkInfo = GradebookUtils::is_resource_in_course_gradebook(
         api_get_course_id(),
         3,
         $id,
@@ -698,12 +692,11 @@ function display_student_publications_list(
 
             $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.$icon.'</a>';
 
-            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3, $workId, api_get_session_id());
+            $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 3, $workId, api_get_session_id());
             $link_id = $link_info['id'];
             $count  = 0;
             if ($link_info !== false) {
-                $gradebook_data = get_resource_from_course_gradebook($link_id);
+                $gradebook_data = GradebookUtils::get_resource_from_course_gradebook($link_id);
                 $count = $gradebook_data['weight'];
             }
             if ($count > 0) {
@@ -1165,7 +1158,6 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND parent_id = $id";
             Database::query($sql);
 
-            require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
             $new_dir = $work_data_url.'_DELETED_'.$id;
 
             if (api_get_setting('permanently_remove_deleted_files') == 'true') {
@@ -1192,7 +1184,7 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = is_resource_in_course_gradebook(
+            $link_info = GradebookUtils::is_resource_in_course_gradebook(
                 api_get_course_id(),
                 3,
                 $id,
@@ -1200,7 +1192,7 @@ function deleteDirWork($id)
             );
             $link_id = $link_info['id'];
             if ($link_info !== false) {
-                remove_resource_from_course_gradebook($link_id);
+                GradebookUtils::remove_resource_from_course_gradebook($link_id);
             }
             return true;
         }
@@ -2273,10 +2265,11 @@ function get_work_user_list(
         $sql = " $select
                 FROM $work_condition  $user_condition
                 WHERE $extra_conditions $where_condition $condition_session
+                    AND u.status != " . INVITEE . "
                 ORDER BY $column $direction";
 
         if (!empty($start) && !empty($limit)) {
-            $sql .= "LIMIT $start, $limit";
+            $sql .= " LIMIT $start, $limit";
         }
         $result = Database::query($sql);
         $works = array();
@@ -2367,7 +2360,7 @@ function get_work_user_list(
                 }
 
                 // Type.
-                $work['type'] = build_document_icon_tag('file', $work['url']);
+                $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
 
                 // File name.
                 $link_to_download = null;
@@ -2544,8 +2537,9 @@ function send_email_on_homework_creation($course_id)
                 $emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
                 $emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 
+                $plugin = new AppPlugin();
                 $additionalParameters = array(
-                    'smsType' => ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE,
+                    'smsType' => constant($plugin->getSMSPluginName().'::ASSIGNMENT_BEEN_CREATED_COURSE'),
                     'userId' => $student["user_id"],
                     'courseTitle' => $course_id
                 );
@@ -3749,11 +3743,11 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             // File and text.
             $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
             $form->add_real_progress_bar('uploadWork', 'file');
-            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             break;
         case 1:
             // Only text.
-            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
             $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
             break;
         case 2:
@@ -3888,44 +3882,6 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
 }
 
 /**
- * @author Sebastien Piraux <piraux_seb@hotmail.com>
- * @author Julio Montoya
- * @desc Record information for upload event
- * @param int $docId
- * @param int $userId
- * @param string $courseCode
- * @param int $sessionId
- * @return int
- */
-function event_upload($docId, $userId, $courseCode, $sessionId)
-{
-    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-    $reallyNow = api_get_utc_datetime();
-    $userId = intval($userId);
-    $docId = intval($docId);
-    $sessionId = intval($sessionId);
-    $courseCode = Database::escape_string($courseCode);
-
-    $sql = "INSERT INTO ".$table."
-                ( upload_user_id,
-                  upload_cours_id,
-                  upload_work_id,
-                  upload_date,
-                  upload_session_id
-                )
-                VALUES (
-                 ".$userId.",
-                 '".$courseCode."',
-                 '".$docId."',
-                 '".$reallyNow."',
-                 '".$sessionId."'
-                )";
-    Database::query($sql);
-
-    return 1;
-}
-
-/**
  * @param array $workInfo
  * @param array $values
  * @param array $courseInfo
@@ -4013,7 +3969,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $groupId
             );
             sendAlertToTeacher($workId, $courseInfo, $sessionId);
-            event_upload($workId, $userId, $courseInfo['code'], $sessionId);
+            Event::event_upload($workId);
             $message = Display::return_message(get_lang('DocAdd'));
         }
     } else {
@@ -4258,12 +4214,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     if (!empty($params['category_id'])) {
 
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-
-        $link_info = is_resource_in_course_gradebook(
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(
             $courseInfo['code'],
             LINK_STUDENTPUBLICATION,
             $workId,
@@ -4277,7 +4228,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         if (isset($params['make_calification']) && $params['make_calification'] == 1) {
             if (empty($linkId)) {
-                add_resource_to_course_gradebook(
+                GradebookUtils::add_resource_to_course_gradebook(
                     $params['category_id'],
                     $courseInfo['code'],
                     LINK_STUDENTPUBLICATION,
@@ -4290,7 +4241,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     api_get_session_id()
                 );
             } else {
-                update_resource_from_course_gradebook(
+                GradebookUtils::update_resource_from_course_gradebook(
                     $linkId,
                     $courseInfo['code'],
                     $params['weight']
@@ -4298,7 +4249,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             }
         } else {
             // Delete everything of the gradebook for this $linkId
-            remove_resource_from_course_gradebook($linkId);
+            GradebookUtils::remove_resource_from_course_gradebook($linkId);
         }
     }
 }
@@ -4417,7 +4368,7 @@ function getFormWork($form, $defaults = array())
     // Create the form that asks for the directory name
     $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
     $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
-    $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+    $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
     $form->addElement(
         'advanced_settings',
         '<a href="javascript: void(0);" onclick="javascript: return plus();">
@@ -4463,7 +4414,7 @@ function getFormWork($form, $defaults = array())
     }
 
     // Loading Gradebook select
-    load_gradebook_select_in_tool($form);
+    GradebookUtils::load_gradebook_select_in_tool($form);
 
     $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
     $form->addElement('html', '</div>');
@@ -4931,7 +4882,7 @@ function getFileContents($id, $course_info, $sessionId = 0)
                     $title = $row['filename'];
                 }
                 $title = str_replace(' ', '_', $title);
-                event_download($title);
+                Event::event_download($title);
                 if (Security::check_abs_path(
                     $full_file_name,
                     api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
@@ -4966,7 +4917,6 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
     switch ($format) {
         case 'pdf':
             if (!empty($workPerUser)) {
-                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
                 $pdf = new PDF();
 
                 $content = null;
@@ -5060,7 +5010,6 @@ function exportAllStudentWorkFromPublication(
     switch ($format) {
         case 'pdf':
             if (!empty($workList)) {
-                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
 
                 $table = new HTML_Table(array('class' => 'data_table'));
                 $headers = array(
@@ -5191,7 +5140,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
 
         // Start download of created file
         $name = basename(replace_dangerous_char($userInfo['complete_name'])).'.zip';
-        event_download($name.'.zip (folder)');
+        Event::event_download($name.'.zip (folder)');
         if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
             DocumentManager::file_send_for_download($tempZipFile, true, $name);
             @unlink($tempZipFile);

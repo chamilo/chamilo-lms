@@ -27,7 +27,7 @@ class Diagnoser
 
         $sections = array('chamilo', 'php', 'mysql', 'webserver');
 
-        if (!in_array($_GET['section'], $sections)) {
+        if (!in_array(trim($_GET['section']), $sections)) {
             $current_section = 'chamilo';
         } else {
             $current_section = $_GET['section'];

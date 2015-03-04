@@ -155,7 +155,8 @@ if (empty($select_year) && empty($select_month)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
 	display_student_links();
-	display_courseadmin_links();
+    // Deprecated since 2014-10-31
+	//display_courseadmin_links();
 }
 
 echo '</div><br /><br />';

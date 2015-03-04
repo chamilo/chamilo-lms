@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'learnpathItem.class.php';
-
 /**
  * Class aiccBlock
  * Class defining the Block elements in an AICC Course Structure file.

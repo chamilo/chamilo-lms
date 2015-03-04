@@ -111,10 +111,10 @@ class CourseLegalPlugin extends Plugin
     * @param int $userId
     * @param int $courseCode
     * @param int $sessionId
-    *
+    * @param boolean $sendEmail Optional. Indicate whether the mail must be sent. Default is true
     * @return bool
     */
-    public function saveUserLegal($userId, $courseCode, $sessionId)
+    public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
     {
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
@@ -136,7 +136,9 @@ class CourseLegalPlugin extends Plugin
             );
             $id = Database::insert($table, $values);
 
-            $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
+            if ($sendEmail) {
+                $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
+            }
         }
 
         return $id;
@@ -357,8 +359,6 @@ class CourseLegalPlugin extends Plugin
         if (!is_dir($coursePath)) {
             mkdir($coursePath, api_get_permissions_for_new_directories());
         }
-
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
         $uploadOk = process_uploaded_file($file, false);
         $fileName = null;
 

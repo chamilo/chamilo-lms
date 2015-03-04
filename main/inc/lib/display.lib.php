@@ -142,7 +142,13 @@ class Display
         echo self::return_introduction_section($tool, $editor_config);
     }
 
-    public static function return_introduction_section($tool, $editor_config = null) {
+    /**
+     * @param string $tool
+     * @param array $editor_config
+     * @return null
+     */
+    public static function return_introduction_section($tool, $editor_config = null)
+    {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
@@ -826,7 +832,8 @@ class Display
     public static function url($name, $url, $extra_attributes = array())
     {
         if (!empty($url)) {
-            $extra_attributes['href']= $url;
+            $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+            $extra_attributes['href'] = $url;
         }
         return self::tag('a', $name, $extra_attributes);
     }
@@ -1248,7 +1255,7 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $t_track_e_access 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_code        = Database::escape_string($course_info['code']);
@@ -1259,9 +1266,9 @@ class Display
 
         // Get the user's last access dates to all tools of this course
         $sql = "SELECT *
-                FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
+                FROM $t_track_e_access
                 WHERE
-                    access_cours_code = '".$course_code."' AND
+                    c_id = $course_id AND
                     access_user_id = '$user_id' AND
                     access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sql);
@@ -1364,7 +1371,6 @@ class Display
                 }
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
-                    require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
                     if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
@@ -1556,11 +1562,8 @@ class Display
             $session['active'] = $active;
             $session['session_category_id'] = $session_info['session_category_id'];
 
-            if (array_key_exists('show_description', $session_info)) {
-                if (!empty($session_info['show_description'])) {
-                    $session['description'] = $session_info['description'];
-                }
-            }
+            $session['description'] = $session_info['description'];
+            $session['show_description'] = $session_info['show_description'];
 
             $output = $session;
         }
@@ -1789,14 +1792,18 @@ class Display
      * @param array $items
      * @return null|string
      */
-    public static function actions($items)
+    public static function actions($items, $class = 'new_actions')
     {
         $html = null;
         if (!empty($items)) {
-            $html = '<div class="new_actions"><ul class="nav nav-pills">';
+            $html = '<div class="'.$class.'"><ul class="nav nav-pills">';
             foreach ($items as $value) {
                 $class = null;
                 if (isset($value['active']) && $value['active']) {
+                    $class = 'class ="active"';
+                }
+
+                if (basename($_SERVER['REQUEST_URI']) == basename($value['url']) ) {
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";

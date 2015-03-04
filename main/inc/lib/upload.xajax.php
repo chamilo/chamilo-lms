@@ -6,7 +6,6 @@
  * Code
  */
 include(dirname(__FILE__).'/../global.inc.php');
-require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 $xajax_upload = new Xajax();
 $xajax_upload -> registerFunction ('updateProgress');
 $xajax_upload -> processRequests();
@@ -18,7 +17,7 @@ $xajax_upload -> processRequests();
  */
 function updateProgress($div_id, $upload_id, $waitAfterupload = false) {
 
-	$objResponse = new XajaxResponse();
+	$objResponse = new xajaxResponse();
 	$ul_info = uploadprogress_get_info($upload_id);
 	$percent = intval($ul_info['bytes_uploaded']*100/$ul_info['bytes_total']);
 	if($waitAfterupload && $ul_info['est_sec']<2) {

@@ -22,11 +22,6 @@
  */
 
 /**
- * Class representing an action to perform on HTTP request.
- */
-require_once 'HTML/QuickForm/Action.php';
-
-/**
  * This action allows to go to a specific page of a multipage form.
  *
  * Please note that the name for this action in addAction() should NOT be

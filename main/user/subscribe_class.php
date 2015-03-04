@@ -127,7 +127,7 @@ function reg_filter($class_id) {
 
 // Build search-form
 $form = new FormValidator('search_class', 'get', '', '', null, false);
-$form->add_textfield('keyword', '', false);
+$form->addText('keyword', '', false);
 $form->addElement('button', 'submit', get_lang('SearchButton'));
 
 // Build table

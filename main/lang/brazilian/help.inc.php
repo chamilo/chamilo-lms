@@ -2,6 +2,23 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$langHGlossary = "Glossário da ajuda";
+$langGlossaryContent = "Esta ferramenta permite você a criar termos no glossário deste curso, que poderá ser usado através das ferramentas de documentação.";
+$langForumContent = "O fórum é uma ferramenta de discussão assíncrona de trabalho. Diferente de um e-mail, um fórum é público, ou semi-público ou discussão em grupo.
+
+Para usar o fórum do sistema Chamilo, membros podem simplesmente usar seus próprios navegadores de internet - não há necessidade de um software à parte.
+
+Para organizar fóruns, clique na ferramenta de fóruns. Discussões podem ser organizadas hierarquicamente de acordo com a seguinte estrutura: Categoria> Fórum> Tópico> Publicação garantindo assim que os membros possam participar do fórum de forma concisa e eficaz. É essencial que em primeira instância sejam criados categorias e fóruns; cabe a cada participante criar tópicos e publicações. Como padrão, o fórum conterá apenas uma categoria (pública), um exemplo de tópico e publicação. Você poderá adicionar fóruns para a categoria, mudar o título ou criar outras categorias nas quais poderão ser criados novos fóruns. (Não confunda categorias e fóruns, e lembre-se que cada CATEGORIA QUE NÃO CONTENHA UM FÓRUM É INÚTIL E NÃO SERÁ MOSTRADA.)
+
+\n
+
+A descrição do fórum deve incluir uma lista de membros, uma definição de seu propósito, e uma tarefa alvo, um tema e etc.
+
+Grupos de fóruns não deverão ser criados através da ferramenta de Fórum e sim pela Ferramenta de Grupos, onde você pode determinar quais grupos devem ser privados ou públicos, ao mesmo tempo prover um local para compartilhar os documentos dos grupos.
+
+Dicas de ensino: Um fórum de aprendizagem não é o mesmo tipo de fórum que estas acostumado a presenciar pela internet. Uma coisa é certa, não é possível que aprendizes alterem suas publicações para um uso relevante de ensino. Por exemplo, alguns professores/treinadores publicam correções diretamente nos fóruns da seguinte maneira:
+- É solicitado à um aprendiz que publique um relatório diretamente no fórum, o professor à corrige clicando em EDITAR (lápis amarelo) e marca usando o editor gráfico (cores, sublinhados e etc.). Finalmente, outros aprendizes se beneficiarão da visualização das correções que foram feitas na produção deles mesmos. Note que o mesmo princípio poderá ser aplicado entre aprendizes, mas será exigido que o aprendiz copie e cole a mensagem de seu companheiro aprendiz, porque estudantes/estagiário não poderão editar as publicações alheias ou de terceiros. <li>";
+$langHForum = "Fórum de ajuda";
 $langHFor = "Ajuda dos Fóruns";
 $langForContent = "O fórum é uma ferramenta de discussão escrita e assíncrona. Da mesma forma que o e-mail permite o diálogo um-a-um, os fóruns permitem diálogos públicos ou semi-públicos (grupo).</p><p>Tecnicamente falando, os usuários precisam apenas dos seus navegadores para usar os fóruns do Chamilo.</P><p>Para organizar fóruns, clique em 'Administração do Fórum'. As discussões são organizadas em conjuntos e sub-conjuntos como o seguinte: </p><p><b>Categoria > Fórum > Tópico > Respostas</b></p>Para estruturar as discussões dos seus usuários, é necessário organizar as categorias e fóruns de antemão, deixando a criação de tópicos e respostas para eles. Por padrão, o fórum do Chamilo contém apenas a categoria 'Público', um fórum e um tópico como exemplo.</p><p>A primeira coisa que você deve fazer é deletar o tópico de exemplo e modificar o primeiro nome do fórum. Então, você pode criar, na categoria 'público', outros fóruns, divididos por temas, para preencher o os requisitos do seu cenário de aprendizado.</p><p>Não misture categorias e fóruns, e não se esqueça de que uma categoria vazia (sem fóruns) não aparece na visão de estudante.</p><p>A descrição de um fórum pode ser a lista de seus membros, a definição de um objetivo, uma tarefa, um tema...</p> <p>Fóruns de grupo não devem ser criados através da ferramenta Fórum mas através da ferramenta Grupos. Lá você poderá decidir se quer que os fóruns dos seus grupos sejam públicos ou privados.</p> <b>Utilização pedagógica avançada</b> <p>Alguns professores / instrutores utilizam o fórum para postar correções. Um estudante/trainee publica um artigo. O professor o corrige utilizando o botão de edição (lápis amarelo) executando o editor WYSYWIG para corrigi-lo (utilizando cores e sublinhados para mostrar erros e correções por exemplo) e outros estudantes/trainees se beneficiam com essa correção.";
 $langHDropbox = "Escaninho";

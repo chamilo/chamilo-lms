@@ -17,18 +17,6 @@ $tool_name = get_lang('CourseRequestEdit');
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
-// Including a configuration file.
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
@@ -84,13 +72,13 @@ if ($course_validation_feature) {
         );
 
         // Course code.
-        $form->add_textfield('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
+        $form->addText('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
         $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
 
         // The teacher.
-        $titular = $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
+        $titular = $form->addText('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
 
         // Description of the requested course.
         $form->addElement('textarea', 'description', get_lang('Description'), array('style' => 'border:#A5ACB2 solid 1px; font-family:arial,verdana,helvetica,sans-serif; font-size:12px', 'rows' => '3', 'cols' => '116'));

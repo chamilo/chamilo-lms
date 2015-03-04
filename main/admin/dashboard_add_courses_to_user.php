@@ -11,9 +11,7 @@ $language_file = 'admin';
 // resetting the course id
 $cidReset = true;
 
-// including some necessary dokeos files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
 
@@ -63,7 +61,7 @@ function search_courses($needle, $type)
 {
     global $_configuration, $tbl_course, $tbl_course_rel_access_url,$user_id;
 
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas

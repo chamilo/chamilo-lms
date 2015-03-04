@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Copy resources from one course in a session to another one.
  *
@@ -7,10 +8,6 @@
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
  * @package chamilo.backup
  */
-/**
- * Code
- */
-/*  INIT SECTION  */
 
 // Language files that need to be included
 $language_file = array('coursebackup', 'admin');
@@ -18,10 +15,8 @@ $language_file = array('coursebackup', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
-api_protect_course_script(true, true);
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
+api_protect_global_admin_script();
 
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
@@ -143,7 +138,7 @@ function display_form()
 function search_courses($id_session, $type)
 {
     global $tbl_course, $tbl_session_rel_course, $course_list;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $select_destination = '';
     $return = null;
 

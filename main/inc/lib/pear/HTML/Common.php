@@ -77,7 +77,7 @@ class HTML_Common
      * @param    int     $tabOffset      Indent offset in tabs
      * @access   public
      */
-    function HTML_Common($attributes = null, $tabOffset = 0)
+    public function HTML_Common($attributes = null, $tabOffset = 0)
     {
         $this->setAttributes($attributes);
         $this->setTabOffset($tabOffset);
@@ -130,11 +130,11 @@ class HTML_Common
 
     /**
      * Returns an HTML formatted attribute string
-     * @param    array   $attributes
+     * @param array   $attributes
      * @return   string
      * @access   private
      */
-    function _getAttrString($attributes)
+    public function _getAttrString($attributes)
     {
         $strAttr = '';
 
@@ -142,17 +142,16 @@ class HTML_Common
             $charset = HTML_Common::charset();
             foreach ($attributes as $key => $value) {
             	// Modified by Ivan Tcholakov, 16-MAR-2010
-                //$strAttr .= ' ' . $key . '="' . htmlspecialchars($value, ENT_COMPAT, $charset) . '"';
-                $strAttr .= ' ' . $key . '="' . @htmlspecialchars($value, ENT_COMPAT, $charset) . '"';
-                //
+                $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
+                $strAttr .= ' ' . $key . '= "' . $value. '"';
             }
         }
         return $strAttr;
-    } // end func _getAttrString
+    }
 
     /**
-     * Returns a valid atrributes array from either a string or array
-     * @param    mixed   $attributes     Either a typical HTML attribute string or an associative array
+     * Returns a valid attributes array from either a string or array
+     * @param    mixed   $attributes  Either a typical HTML attribute string or an associative array
      * @access   private
      * @return   array
      */
@@ -470,5 +469,4 @@ class HTML_Common
         }
         return $charset;
     } // end func charset
-} // end class HTML_Common
-?>
+}

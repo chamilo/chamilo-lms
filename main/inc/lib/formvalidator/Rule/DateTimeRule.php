@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/Rule.php';
-
 /**
  * Class DateTimeRule
  * @author Julio Montoya

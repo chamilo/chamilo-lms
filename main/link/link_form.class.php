@@ -13,7 +13,7 @@ use Chamilo;
 
 /**
  * Edit/Create link form.
- * 
+ *
  * @license /licence.txt
  * @author Laurent Opprecht <laurent@opprecht.info>
  */
@@ -63,23 +63,22 @@ class LinkForm extends \FormValidator
         $this->add_hidden('session_id', $link->session_id);
 
         $form_name = $category->id ? get_lang('LinkMod') : get_lang('LinkAdd');
-        $this->add_header($form_name);
+        $this->addHeader($form_name);
 
-
-        $this->add_textfield('url', get_lang('Url'), $required = true, array('class' => 'span6'));
+        $this->addText('url', get_lang('Url'), $required = true, array('class' => 'span6'));
         $this->addRule('url', get_lang('MalformedUrl'), 'regex', '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i');
 
-        $this->add_textfield('title', get_lang('Title'), $required = false, array('class' => 'span6'));
+        $this->addText('title', get_lang('Title'), $required = false, array('class' => 'span6'));
 
-        $this->add_textarea('description', get_lang('Description'), array('class' => 'span3'));
+        $this->addTextarea('description', get_lang('Description'), array('class' => 'span3'));
 
-        $this->add_checkbox('on_homepage', '', get_lang('OnHomepage'));
+        $this->addCheckBox('on_homepage', '', get_lang('OnHomepage'));
 
         $id = $link->id;
         if ($id) {
             $url = Chamilo::url('/main/metadata/index.php', array('eid' => "Link.$id"));
             $metadata = '<a class="control-text" href="' . $url . '">' . get_lang('AddMetadata') . '</a>';
-            $this->add_label(get_lang('Metadata'), $metadata);
+            $this->addLabel(get_lang('Metadata'), $metadata);
         }
 
         $options = array();
@@ -88,7 +87,7 @@ class LinkForm extends \FormValidator
         foreach ($categories as $category) {
             $options[$category->id] = $category->category_title;
         }
-        $this->add_select('category_id', get_lang('Category'), $options);
+        $this->addSelect('category_id', get_lang('Category'), $options);
 
         $targets = array(
             '_self' => get_lang('LinkOpenSelf'),
@@ -96,11 +95,11 @@ class LinkForm extends \FormValidator
             '_parent' => get_lang('LinkOpenParent'),
             '_top' => get_lang('LinkOpenTop')
         );
-        $this->add_select('target', get_lang('LinkTarget'), $targets);
+        $this->addSelect('target', get_lang('LinkTarget'), $targets);
         //$help = '<span class="help-block">' . get_lang('AddTargetOfLinkOnHomepage') . '</span>';
-        //$this->add_label('', $help);
+        //$this->addLabel('', $help);
 
-        $this->add_button('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

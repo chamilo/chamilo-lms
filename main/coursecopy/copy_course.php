@@ -15,7 +15,6 @@ $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 // Including additional libraries
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';

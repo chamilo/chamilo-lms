@@ -19,10 +19,6 @@ $language_file = 'survey';
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 
-// Including additional libraries
-require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 $this_section = SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(false, true)) {
@@ -78,7 +74,8 @@ $(function() {
 
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
-$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
+$sql = "SELECT * FROM $table_survey
+		WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 1) {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
@@ -109,20 +106,6 @@ foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
-$users->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>
-');
-$users->setButtonAttributes('add', array('class' => 'btn arrowr'));
-$users->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 
 // Additional users
 $form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 5));

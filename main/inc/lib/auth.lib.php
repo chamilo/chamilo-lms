@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
-
 /**
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
@@ -94,7 +91,7 @@ class Auth
     public function get_user_course_categories()
     {
         $user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . " WHERE user_id=$user_id ORDER BY sort ASC";
         $result = Database::query($sql);
         $output = array();
@@ -249,7 +246,7 @@ class Auth
     public function move_category($direction, $category2move)
     {
         // the database definition of the table that stores the user defined course categories
-        $table_user_defined_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_user_defined_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         $current_user_id = api_get_user_id();
         $user_coursecategories = $this->get_user_course_categories();
@@ -291,7 +288,7 @@ class Auth
     public function get_user_course_categories_info()
     {
         $current_user_id = api_get_user_id();
-        $table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $table_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT * FROM " . $table_category . "
                 WHERE user_id='" . $current_user_id . "'
                 ORDER BY sort ASC";
@@ -314,7 +311,7 @@ class Auth
         $title = Database::escape_string($title);
         $category_id = intval($category_id);
         $result = false;
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "UPDATE $tucc
                 SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "'
                 WHERE id='" . $category_id . "'";
@@ -333,7 +330,7 @@ class Auth
     public function delete_course_category($category_id)
     {
         $current_user_id = api_get_user_id();
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $category_id = intval($category_id);
         $result = false;
@@ -386,7 +383,7 @@ class Auth
      */
     public function store_course_category($category_title)
     {
-        $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data
         $current_user_id = api_get_user_id();
@@ -518,7 +515,11 @@ class Auth
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+            $count_connections_last_month = Tracking::get_course_connections_count(
+                $row['id'],
+                0,
+                api_get_utc_datetime(time() - (30 * 86400))
+            );
 
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
 
@@ -598,8 +599,6 @@ class Auth
      */
     public function browseSessions($date = null, $limit = array())
     {
-        require_once api_get_path(LIBRARY_PATH) . 'sessionmanager.lib.php';
-
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -607,7 +606,7 @@ class Auth
         $userId = api_get_user_id();
         $limitFilter = getLimitFilterFromArray($limit);
 
-        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username "
+        $sql = "SELECT s.id, s.name, s.nbr_courses, s.nbr_users, s.date_start, s.date_end, u.lastname, u.firstname, u.username, description, show_description "
             . "FROM $sessionTable AS s "
             . "INNER JOIN $userTable AS u "
             . "ON s.id_coach = u.user_id "
@@ -631,7 +630,7 @@ class Auth
                 if ($session['nbr_courses'] > 0) {
                     $session['coach_name'] = api_get_person_name($session['firstname'], $session['lastname']);
                     $session['coach_name'] .= " ({$session['username']})";
-                    $session['is_subscribed'] = SessionManager::isUserSusbcribedAsStudent($session['id'], $userId);
+                    $session['is_subscribed'] = SessionManager::isUserSubscribedAsStudent($session['id'], $userId);
 
                     $sessionsToBrowse[] = $session;
                 }

@@ -7,7 +7,6 @@
 // Language files that need to be included.
 $language_file = array('admin');
 require_once '../global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 api_protect_admin_script();
 
@@ -34,6 +33,78 @@ switch ($action) {
 
     case 'version':
         echo version_check();
+        break;
+
+    case 'save_block_extra':
+        $content = isset($_POST['content']) ? Security::remove_XSS($_POST['content']) : null;
+        $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
+
+        if (empty($blockName)) {
+            die;
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId == -1) {
+                die;
+            }
+
+            $urlInfo = api_get_access_url($accessUrlId);
+            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+            $cleanUrl = str_replace('/', '-', $url);
+
+            $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+        } else {
+            $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
+        }
+
+        if (!is_dir($newUrlDir)) {
+            mkdir($newUrlDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        if (!is_writable($newUrlDir)) {
+            die;
+        }
+
+        $fullFilePath = "{$newUrlDir}{$blockName}_extra.html";
+
+        file_put_contents($fullFilePath, $content);
+
+        break;
+
+    case 'get_extra_content':
+        $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
+
+        if (empty($blockName)) {
+            die;
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId == -1) {
+                die;
+            }
+
+            $urlInfo = api_get_access_url($accessUrlId);
+            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
+            $cleanUrl = str_replace('/', '-', $url);
+
+            $newUrlDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
+        } else {
+            $newUrlDir = api_get_path(SYS_PATH) . "home/admin/";
+        }
+
+        if (!Security::check_abs_path("{$newUrlDir}{$blockName}_extra.html", $newUrlDir)) {
+            die;
+        }
+
+        if (!file_exists("{$newUrlDir}{$blockName}_extra.html")) {
+            die;
+        }
+
+        echo file_get_contents("{$newUrlDir}{$blockName}_extra.html");
         break;
 }
 

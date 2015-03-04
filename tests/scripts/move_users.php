@@ -66,10 +66,11 @@ function moveUserFromCourseToCourse($originCourse, $destinationCourse, $debug = 
     }
     $output .= 'Moving students who have no exe results from course '.$originCourse.' to course '.$destinationCourse.$eol;
     $tableCRU = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $tableTEE = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $tableTEE = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $courseId = api_get_course_int_id($originCourse);
     // Get the users who have passed an exam in the course of origin
     $sql = "SELECT distinct(exe_user_id) FROM $tableTEE
-        WHERE exe_cours_id = '$originCourse'";
+        WHERE c_id = $courseId";
         //AND status != 'incomplete'";
     $output .= "$sql".$eol;
     $res = Database::query($sql);

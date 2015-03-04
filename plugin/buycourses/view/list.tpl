@@ -21,15 +21,15 @@ $(function() {
 <div id="tabs-1">
 <div class="row">
     <div class="span3">
-        <div id="course_category_well" class="well">
+        <div class="category_well well">
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
                 <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
-                <input type="text" id="course_name" />
+                <input type="text" class="name" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_min" class="span1"/>
+                <input type="text" class="pricemin span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_max" class="span1"/>
+                <input type="text" class="pricemax span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
                         <select id="courses_category">
@@ -38,7 +38,7 @@ $(function() {
                         </select>
                     {% endfor %}
                 <br>
-                 <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_filter" />
+                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="courses_filter" />
             </div>
         </div>
     </div>
@@ -95,24 +95,24 @@ $(function() {
 {% if sessionsAreIncluded == "YES" %}
 <div id="tabs-2" class="row">
     <div class="span3">
-        <div id="course_category_well" class="well">
+        <div class="category_well well">
             <div class="form-content">
                 <h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4>
-                <label class="control-label">{{ 'CourseName'|get_lang }}:</label>
-                <input type="text" id="course_name" />
+                <label class="control-label">{{ 'SessionName'|get_lang }}:</label>
+                <input type="text" class="name" />
                 <label class="control-label">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_min" class="span1"/>
+                <input type="text" class="pricemin span1"/>
                 <label class="control-label">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:</label>
-                <input type="text" id="price_max" class="span1"/>
+                <input type="text" class="pricemax span1"/>
                     {% for category in categories %}
                         <label class="control-label">{{ 'Categories'|get_lang }}:</label>
-                        <select id="courses_category">
+                        <select id="sessions_category">
                             <option value="" selected="selected"></option>
                                 <option value="{{ category.code }}">{{ category.name }}</option>
                         </select>
                     {% endfor %}
                 <br>
-                 <input type="button" class="btn btn-primary" value="{{ 'Search'|get_lang }}" id="confirm_filter" />
+                 <input type="button" class="filter btn btn-primary" value="{{ 'Search'|get_lang }}" id="sessions_filter" />
             </div>
         </div>
     </div>

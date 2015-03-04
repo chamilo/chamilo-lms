@@ -5,12 +5,8 @@
  * Responses to AJAX calls
  */
 
-require_once '../../exercice/exercise.class.php';
-require_once '../../exercice/question.class.php';
-require_once '../../exercice/answer.class.php';
 require_once '../global.inc.php';
-require_once '../../exercice/exercise.lib.php';
-
+$debug = false;
 api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
@@ -46,9 +42,9 @@ switch ($action) {
             $sidx = 1;
         }
 
-        $track_exercise = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $minutes = intval($_REQUEST['minutes']);
         $now = time() - 60 * $minutes;
@@ -294,7 +290,7 @@ switch ($action) {
                 $total_score   = $exercise_stat_info['exe_result'];
 
                 //Getting the list of attempts
-                $attempt_list  = get_all_exercise_event_by_exe_id($exe_id);
+                $attempt_list  = Event::getAllExerciseEventByExeId($exe_id);
             }
 
             // Updating Reminder algorythm.
@@ -403,12 +399,26 @@ switch ($action) {
                     if ($debug) {
                         error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
                     }
-                    delete_attempt($exe_id, api_get_user_id(), $course_code, $session_id, $my_question_id);
+                    Event::delete_attempt(
+                        $exe_id,
+                        api_get_user_id(),
+                        $course_id,
+                        $session_id,
+                        $my_question_id
+                    );
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-                        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_code, $session_id, $my_question_id);
+                        Event::delete_attempt_hotspot(
+                            $exe_id,
+                            api_get_user_id(),
+                            $course_id,
+                            $session_id,
+                            $my_question_id
+                        );
                     }
 
-                    if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
+                    if (isset($attempt_list[$my_question_id]) &&
+                        isset($attempt_list[$my_question_id]['marks'])
+                    ) {
                         $total_score -= $attempt_list[$my_question_id]['marks'];
                     }
                 }
@@ -442,7 +452,11 @@ switch ($action) {
                     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
                 }
 
-                $key = get_time_control_key($exercise_id, $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id']);
+                $key = ExerciseLib::get_time_control_key(
+                    $exercise_id,
+                    $exercise_stat_info['orig_lp_id'],
+                    $exercise_stat_info['orig_lp_item_id']
+                );
 
                 if (isset($_SESSION['duration_time'][$key]) && !empty($_SESSION['duration_time'][$key])) {
                     $duration = $now - $_SESSION['duration_time'][$key];
@@ -458,7 +472,7 @@ switch ($action) {
 
                 $_SESSION['duration_time'][$key] = time();
 
-                update_event_exercice(
+                Event::update_event_exercice(
                     $exe_id,
                     $objExercise->selectId(),
                     $total_score,

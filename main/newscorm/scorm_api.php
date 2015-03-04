@@ -23,10 +23,7 @@
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'scorm.class.php';
+require_once '../inc/global.inc.php';
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
 /** @var learnpath $oLP */
@@ -1975,6 +1972,7 @@ function attach_glossary_into_scorm(type) {
     my_protocol = location.protocol;
     my_pathname=location.pathname;
     work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
+    var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>';
 
     if (type == 'automatic') {
         $.ajax({
@@ -1982,7 +1980,7 @@ function attach_glossary_into_scorm(type) {
             beforeSend: function(object) {
             },
             type: "POST",
-            url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
+            url: ajaxRequestUrl,
             data: "glossary_data=true",
             success: function(datas) {
                 if (datas.length==0) {
@@ -2062,7 +2060,7 @@ function attach_glossary_into_scorm(type) {
                     $.ajax({
                         contentType: "application/x-www-form-urlencoded",
                         type: "POST",
-                        url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
+                        url: ajaxRequestUrl,
                         data: "glossary_id="+my_glossary_id,
                         success: function(data) {
                             show_description.html(data);
@@ -2109,7 +2107,7 @@ function attach_glossary_into_scorm(type) {
                 $.ajax({
                     contentType: "application/x-www-form-urlencoded",
                     type: "POST",
-                    url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
+                    url: ajaxRequestUrl,
                     data: "glossary_name="+is_glossary_name,
                     success: function(data) {
                          show_description.html(data);

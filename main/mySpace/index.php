@@ -1,22 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Homepage for the MySpace directory
  * @package chamilo.reporting
  */
-/**
- * code
- */
-$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice');
+
+$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice', 'gradebook');
 
 // resetting the course id
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-
-// including additional libraries
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-require_once 'myspace.lib.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // the section (for the tabs)
@@ -32,9 +27,9 @@ $csv_content = array();
 $nameTools = get_lang('MySpace');
 
 $user_id = api_get_user_id();
-$is_coach = api_is_coach($_GET['session_id']);
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
+$is_coach = api_is_coach($session_id);
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
 $is_session_admin 	= api_is_session_admin();
@@ -48,19 +43,6 @@ api_block_anonymous_users();
 
 if (!$export_csv) {
     Display :: display_header($nameTools);
-} else {
-    if ($_GET['view'] == 'admin') {
-        if ($display == 'useroverview') {
-            MySpace::export_tracking_user_overview();
-            exit;
-        } elseif ($display == 'sessionoverview') {
-            MySpace::export_tracking_session_overview();
-            exit;
-        } elseif ($display == 'courseoverview') {
-            MySpace::export_tracking_course_overview();
-            exit;
-        }
-    }
 }
 
 // Database table definitions
@@ -87,15 +69,38 @@ $menu_items = array();
 if ($is_platform_admin) {
     if ($view == 'admin') {
         $title = get_lang('CoachList');
-        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=teacher');
-        $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM),
+            api_get_self().'?view=teacher'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+        );
     } else {
-        $menu_items[] = Display::url(Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), '');
-        $menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
-        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
-        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+        $menu_items[] = Display::url(
+            Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), '');
+        $menu_items[] = Display::url(
+            Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM),
+            //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
+            api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
+        );
+        $menu_items[] = Display::url(
+            Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
+        );
     }
 }
 
@@ -121,7 +126,9 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
-if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogressoverview','progressoverview','exerciseprogress', 'surveyoverview'))) {
+if (!empty($session_id) &&
+    !in_array($display, array('accessoverview','lpprogressoverview','progressoverview','exerciseprogress', 'surveyoverview'))
+) {
     echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
@@ -139,12 +146,21 @@ if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogres
         echo "</div><br />";
     }
 } else {
-	echo Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php");
+	echo Display::url(
+        Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+    );
+    echo Display::url(
+        Display::return_icon("certificate_list.png", get_lang("GradebookSeeListOfStudentsCertificates"), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+    );
 }
 
 // Actions menu
 $nb_menu_items = count($menu_items);
-if (empty($session_id) || in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
+if (empty($session_id) ||
+    in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))
+) {
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
             echo $item;
@@ -188,8 +204,8 @@ $inactiveTime = time() - (3600 * 24 * 7);
 $nb_students = 0;
 $numberTeachers = 0;
 $countHumanResourcesUsers = 0;
-
 $daysAgo = 7;
+$studentIds = array();
 if (!empty($students)) {
     // Students
     $nb_students = count($students);

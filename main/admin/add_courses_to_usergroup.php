@@ -12,8 +12,6 @@ $cidReset = true;
 
 // Including some necessary files.
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('search');
@@ -102,7 +100,7 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-$searchForm->add_header(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('AdvancedSearch'));
 $renderer =& $searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
@@ -150,7 +148,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 function search($needle,$type)
 {
     global $elements_in;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
 

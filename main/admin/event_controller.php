@@ -4,9 +4,7 @@
  * Global events controller class
  * @package chamilo.admin
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = array('admin');
 $cidReset = true;
@@ -19,26 +17,26 @@ if (api_get_setting('activate_email_template') != 'true') {
 
 class eventController { // extends Controller {
     public function showAction() {
-               
+
     }
-    
+
     public function newAction() {
-        
+
     }
-    
+
     public function addAction() {
-        
+
     }
-    
+
     public function listingAction() {
         $event_email_template = new EventEmailTemplate();
-        return $event_email_template->display(); 
+        return $event_email_template->display();
     }
-    
+
     public function deleteAction($id) {
          $event_email_template = new EventEmailTemplate();
-        return $event_email_template->delete($id); 
-    }    
+        return $event_email_template->delete($id);
+    }
 }
 
 $event_controller = new eventController();
@@ -67,7 +65,7 @@ switch ($action) {
 //jqgrid will use this URL to do the selects
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_event_email_template';
 
-//The order is important you need to check the the $column variable in the model.ajax.php file 
+//The order is important you need to check the the $column variable in the model.ajax.php file
 $columns        = array(get_lang('Subject'), get_lang('EventTypeName'), get_lang('Language'), get_lang('Status'), get_lang('Actions'));
 
 //Column config
@@ -78,16 +76,16 @@ $column_model   = array(
                         array('name'=>'language_id',        'index'=>'language_id',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'activated',        'index'=>'activated',        'width'=>'80',   'align'=>'left'),
                         array('name'=>'actions',        'index'=>'actions',     'width'=>'100')
-                       );            
-//Autowidth             
+                       );
+//Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto 
+//height auto
 $extra_params['height'] = 'auto';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('event_email_template',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).' 
+    '.Display::grid_js('event_email_template',  $url,$columns,$column_model,$extra_params, array(), $action_links,true).'
 });
 </script>';
 

@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'learnpathItem.class.php';
-
 /**
  * Class aiccItem
  * This class handles the elements from an AICC Descriptor file.

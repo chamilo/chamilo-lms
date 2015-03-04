@@ -1,0 +1,5 @@
+This plugin, as the rest of Chamilo, is released under the GNU/GPLv3 license.
+
+The Kannel library included is provided under the ICS license, compatible
+with GNU/GPLv3. See https://github.com/mediaburst/kannel-php/issues/3 for
+details.

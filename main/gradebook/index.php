@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Gradebook controller
  * @package chamilo.gradebook
@@ -25,18 +26,6 @@ $_SESSION['gradebook_dest'] = 'index.php';
 
 $this_section = SECTION_COURSES;
 
-require_once 'lib/be.inc.php';
-require_once 'lib/scoredisplay.class.php';
-require_once 'lib/gradebook_functions.inc.php';
-require_once 'lib/fe/catform.class.php';
-require_once 'lib/fe/evalform.class.php';
-require_once 'lib/fe/linkform.class.php';
-require_once 'lib/gradebook_data_generator.class.php';
-require_once 'lib/fe/gradebooktable.class.php';
-require_once 'lib/fe/displaygradebook.php';
-require_once 'lib/fe/userform.class.php';
-require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
 /*
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
@@ -126,7 +115,9 @@ if (isset($_GET['isStudentView'])) {
     }
 }
 
-if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
+if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
+    (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')
+) {
     Display :: display_header();
     //Introduction tool: student view
     Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
@@ -162,7 +153,7 @@ if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['stu
 // ACTIONS
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {
-    block_students();
+    GradebookUtils::block_students();
     $coursecat= Category :: get_not_created_course_categories($stud_id);
     if (!count($coursecat) == 0) {
         foreach ($coursecat as $row) {
@@ -190,7 +181,7 @@ if (isset ($_GET['visiblelog'])) {
 
 //move a category
 if (isset ($_GET['movecat'])) {
-    block_students();
+    GradebookUtils::block_students();
     $cats= Category :: load($_GET['movecat']);
     if (!isset ($_GET['targetcat'])) {
         $move_form= new CatForm(CatForm :: TYPE_MOVE,
@@ -221,7 +212,7 @@ if (isset ($_GET['movecat'])) {
 
 //move an evaluation
 if (isset ($_GET['moveeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     $evals= Evaluation :: load($_GET['moveeval']);
     if (!isset ($_GET['targetcat'])) {
 
@@ -255,7 +246,7 @@ if (isset ($_GET['moveeval'])) {
 
 //move a link
 if (isset ($_GET['movelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     $link= LinkFactory :: load($_GET['movelink']);
     $move_form = new LinkForm(
         LinkForm :: TYPE_MOVE,
@@ -277,7 +268,7 @@ if (isset ($_GET['movelink'])) {
 
 //parameters for categories
 if (isset ($_GET['visiblecat'])) {
-    block_students();
+    GradebookUtils::block_students();
 
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
@@ -298,7 +289,7 @@ if (isset ($_GET['visiblecat'])) {
     }
 }
 if (isset($_GET['deletecat'])) {
-    block_students();
+    GradebookUtils::block_students();
     $cats = Category :: load($_GET['deletecat']);
     if (isset($cats[0])) {
         //delete all categories,subcategories and results
@@ -314,7 +305,7 @@ if (isset($_GET['deletecat'])) {
 }
 //parameters for evaluations
 if (isset ($_GET['visibleeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
@@ -334,7 +325,7 @@ if (isset ($_GET['visibleeval'])) {
 }
 //parameters for evaluations
 if (isset($_GET['lockedeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     $locked = Security::remove_XSS($_GET['lockedeval']);
     if (isset($_GET['typelocked']) && api_is_platform_admin()){
         $type_locked = 0;
@@ -352,7 +343,7 @@ if (isset($_GET['lockedeval'])) {
 
 }
 if (isset ($_GET['deleteeval'])) {
-    block_students();
+    GradebookUtils::block_students();
     $eval= Evaluation :: load($_GET['deleteeval']);
     if ($eval[0] != null) {
         $eval[0]->delete_with_results();
@@ -362,7 +353,7 @@ if (isset ($_GET['deleteeval'])) {
 }
 //parameters for links
 if (isset ($_GET['visiblelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     if (isset ($_GET['set_visible'])) {
         $visibility_command= 1;
     } else {
@@ -386,7 +377,7 @@ if (isset ($_GET['visiblelink'])) {
 $course_id = api_get_course_int_id();
 
 if (isset ($_GET['deletelink'])) {
-    block_students();
+    GradebookUtils::block_students();
     $get_delete_link = intval($_GET['deletelink']);
     //fixing #5229
     if (!empty($get_delete_link)) {
@@ -415,7 +406,7 @@ if (isset ($_GET['deletelink'])) {
 }
 
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
-    block_students();
+    GradebookUtils::block_students();
 
     if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
         die ('Error: movecat or moveeval not defined');
@@ -450,7 +441,7 @@ switch ($action) {
 
 //actions on the sortabletable
 if (isset ($_POST['action'])) {
-    block_students();
+    GradebookUtils::block_students();
     $number_of_selected_items= count($_POST['id']);
 
     if ($number_of_selected_items == '0') {
@@ -735,15 +726,16 @@ $no_qualification = false;
 
 // Show certificate link.
 $certificate = array();
+
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);
-    $course_id     = Database::get_course_by_category($category_id);
+    $course_id     = CourseManager::get_course_by_category($category_id);
     $show_message  = $cat->show_message_resource_delete($course_id);
 
     if ($show_message == '') {
         // Student
-        if (!api_is_allowed_to_edit()) {
+        if (!api_is_allowed_to_edit() && !apiIsExcludedUserType()) {
             $certificate = Category::register_user_certificate(
                 $category_id,
                 $stud_id

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Propriétés du cours";
 $langModifDone = "Les informations ont été modifiées";
-$langDelCourse = "Supprimer ce cours";
+$langDelCourse = "Détruire ce cours de manière définitive";
 $langProfessors = "Co-responsables";
 $langFaculty = "Catégorie";
 $langConfidentiality = "Confidentialité";

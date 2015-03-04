@@ -40,7 +40,6 @@ $nameTools = get_lang('ImportBackup');
 Display::display_header($nameTools);
 
 // Include additional libraries
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseArchiver.class.php';
 require_once 'classes/CourseRestorer.class.php';

@@ -1,15 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-// PLUGIN PLACES
-define('SOCIAL_LEFT_PLUGIN', 1);
-define('SOCIAL_CENTER_PLUGIN', 2);
-define('SOCIAL_RIGHT_PLUGIN', 3);
-define('CUT_GROUP_NAME', 50);
-
-//This require is necessary because we use constants that need to be loaded before the SocialManager class
-require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-
 /**
  * Class SocialManager
  *
@@ -464,13 +455,7 @@ class SocialManager extends UserManager
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         $course_code = $my_course['code'];
-        $course_visual_code = $my_course['course_info']['official_code'];
         $course_title = $my_course['course_info']['title'];
-
-        $course_info = Database :: get_course_info($course_code);
-
-        $course_id = $course_info['real_id'];
-
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
         $course_visibility = $course_access_settings['visibility'];
@@ -1277,7 +1262,7 @@ class SocialManager extends UserManager
                 $messages[] = $row;
             }
         }
-        
+
         return $messages;
     }
 
@@ -1569,8 +1554,8 @@ class SocialManager extends UserManager
     }
     /**
     * Delete messages delete logic
-    * @param int $id indice message to delete.
-    * @return status query
+    * @param int $id id message to delete.
+    * @return bool status query
     */
     public static function deleteMessage($id)
     {

@@ -1,0 +1,1 @@
+This plugin, as the rest of Chamilo, is released under the GNU/GPLv3 license.

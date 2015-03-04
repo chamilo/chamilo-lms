@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool show global Statistics on general platform events
  * @package chamilo.Statistics
@@ -91,10 +91,11 @@ switch ($_REQUEST['report']) {
             )
         );
         $teachers = $students = array();
+        $countInvisible = isset($_GET['count_invisible_courses']) ? $_GET['count_invisible_courses'] : null;
         foreach ($course_categories as $code => $name) {
             $name = str_replace(get_lang('Department'), "", $name);
-            $teachers[$name] = Statistics::count_users(1, $code, $_GET['count_invisible_courses']);
-            $students[$name] = Statistics::count_users(5, $code, $_GET['count_invisible_courses']);
+            $teachers[$name] = Statistics::count_users(1, $code, $countInvisible);
+            $students[$name] = Statistics::count_users(5, $code, $countInvisible);
         }
         // docents for each course category
         Statistics::print_stats(get_lang('Teachers'), $teachers);

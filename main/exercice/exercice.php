@@ -21,8 +21,6 @@ $language_file = array('exercice', 'tracking');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
-require_once '../gradebook/lib/be.inc.php';
-
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
@@ -33,15 +31,8 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/j
 api_protect_course_script(true);
 
 // including additional libraries
-require_once 'exercise.class.php';
-require_once 'exercise.lib.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-require_once 'testcategory.class.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -60,7 +51,7 @@ $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
@@ -171,7 +162,7 @@ if ($origin != 'learnpath') {
     Display :: display_reduced_header();
 }
 
-event_access_tool(TOOL_QUIZ);
+Event::event_access_tool(TOOL_QUIZ);
 
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
@@ -192,7 +183,7 @@ if ($is_allowedToEdit) {
             if ($check) {
                 // list des exercices dans un test
                 // we got variable $courseId $courseInfo session api_get_session_id()
-                $exerciseList = get_all_exercises_for_course_id(
+                $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
                     $courseInfo,
                     api_get_session_id(),
                     $courseId,
@@ -234,10 +225,9 @@ if ($is_allowedToEdit) {
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
                             $objExerciseTmp->delete();
-                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 1, $exerciseId, api_get_session_id());
+                            $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 1, $exerciseId, api_get_session_id());
                             if ($link_info !== false) {
-                                remove_resource_from_course_gradebook($link_info['id']);
+                                GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
                             }
                             Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
                         }
@@ -486,7 +476,6 @@ $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array
 
 $exercise_list = array();
 $exercise_obj = new Exercise();
-//$list_ordered = $exercise_obj->get_exercise_list_ordered();
 $list_ordered = null;
 
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
@@ -633,7 +622,13 @@ if (!empty($exercise_list)) {
                     $title = $cut_title;
                 }
 
-                $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                $count_exercise_not_validated = intval(
+                    Event::count_exercise_result_not_validated(
+                        $my_exercise_id,
+                        $courseId,
+                        $session_id
+                    )
+                );
 
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
                 $move = null;
@@ -754,7 +749,7 @@ if (!empty($exercise_list)) {
                 }
 
                 //Attempts
-                //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
+                //$attempts = ExerciseLib::get_count_exam_results($row['id']).' '.get_lang('Attempts');
                 //$item .=  Display::tag('td',$attempts);
                 $item .= Display::tag('td', $number_of_questions);
             } else {
@@ -790,7 +785,7 @@ if (!empty($exercise_list)) {
                         WHERE
                             exe_exo_id      = ".$row['id']." AND
                             exe_user_id     = ".$userId." AND
-                            exe_cours_id    = '".api_get_course_id()."' AND
+                            c_id    = ".api_get_course_int_id()." AND
                             status          <> 'incomplete' AND
                             orig_lp_id      = 0 AND
                             orig_lp_item_id = 0 AND
@@ -813,7 +808,7 @@ if (!empty($exercise_list)) {
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                                $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                             } else {
                                 //No attempts
                                 $attempt_text = get_lang('NotAttempted');
@@ -853,7 +848,7 @@ if (!empty($exercise_list)) {
                         if ($num > 0) {
                             $row_track = Database :: fetch_array($qryres);
                             $attempt_text = get_lang('LatestAttempt').' : ';
-                            $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                            $attempt_text .= ExerciseLib::show_score($row_track['exe_result'], $row_track['exe_weighting']);
                         } else {
                             $attempt_text = get_lang('NotAttempted');
                         }
@@ -996,7 +991,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
         } else {
             // Student only
             if ($active == 1) {
-                $attempt = getLatestHotPotatoResult(
+                $attempt = ExerciseLib::getLatestHotPotatoResult(
                     $path,
                     $userId,
                     api_get_course_int_id(),
@@ -1009,7 +1004,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 if (!empty($attempt)) {
                     $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     $attemptText = get_lang('LatestAttempt').' : ';
-                    $attemptText .= show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
+                    $attemptText .= ExerciseLib::show_score($attempt['exe_result'], $attempt['exe_weighting']).' ';
                     $attemptText .= $actions;
                 } else {
                     // No attempts.

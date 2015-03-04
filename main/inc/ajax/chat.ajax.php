@@ -17,7 +17,6 @@ if (api_is_anonymous()) {
 
 // Course Chat
 if ($action == 'preview') {
-    require_once api_get_path(SYS_PATH).'vendor/autoload.php';
     require_once api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php';
 
     echo saveMessage(
@@ -48,8 +47,8 @@ if (!isset($_SESSION['openChatBoxes'])) {
 
 $chat = new Chat();
 if ($chat->is_chat_blocked_by_exercises()) {
-    //Disconnecting the user
-    $chat->set_user_status(0);
+    // Disconnecting the user
+    $chat->setUserStatus(0);
     exit;
 }
 
@@ -64,11 +63,11 @@ switch ($action) {
         $chat->send(api_get_user_id(), $to_user_id, $message);
         break;
     case 'startchatsession':
-        $chat->start_session();
+        $chat->startSession();
         break;
     case 'set_status':
         $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
-        $chat->set_user_status($status);
+        $chat->setUserStatus($status);
         break;
     default:
         echo '';

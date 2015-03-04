@@ -22,11 +22,6 @@
  */
 
 /**
- * HTML class for static data
- */
-require_once 'HTML/QuickForm/static.php';
-
-/**
  * A pseudo-element used for adding raw HTML to form
  *
  * Intended for use with the default renderer only, template-based

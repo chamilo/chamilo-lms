@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AssignedCourses = "Pridelené kurzy";
 $SleepingStudents = "Spiaci študenti";
 $SleepingTeachers = "Spiaci učitelia";
 $InactiveUsers = "Neaktívni používatelia";

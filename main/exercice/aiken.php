@@ -16,15 +16,8 @@ $language_file = array('exercice', 'gradebook');
 require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 $main_path = api_get_path(SYS_CODE_PATH);
-require_once $lib_path.'document.lib.php';
-require_once $lib_path.'fileUpload.lib.php';
-require_once $lib_path.'fileManage.lib.php';
 
 // including additional libraries
-require_once 'exercise.class.php';
-require_once 'question.class.php';
-require_once 'answer.class.php';
-require_once 'unique_answer.class.php';
 require_once $main_path.'exercice/export/aiken/aiken_import.inc.php';
 require_once $main_path.'exercice/export/aiken/aiken_classes.php';
 

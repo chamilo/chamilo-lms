@@ -64,9 +64,9 @@
                                             <li>
                                                 {% if skill_list[skill_data.skill_id].name is not null %}
                                                     {% if skill_data.found %}
-                                                        <img src="{{ _p.web }}main/img/icons/22/award_red_start.png" />{{ skill_list[skill_data.skill_id].name }}
+                                                        <img src="{{ _p.web }}main/img/icons/22/award_red_start.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
                                                     {% else %}
-                                                        <img src="{{ _p.web }}main/img/icons/22/award_green.png" />{{ skill_list[skill_data.skill_id].name }}
+                                                        <img src="{{ _p.web }}main/img/icons/22/award_green.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
                                                     {% endif %}
 
                                                 {% else %}

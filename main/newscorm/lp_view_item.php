@@ -10,19 +10,9 @@
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @package chamilo.learnpath
  */
-/**
- * Code
- */
+
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
-require_once 'back_compat.inc.php';
-require_once 'learnpath.class.php';
-require_once 'learnpathItem.class.php';
-require_once 'learnpath_functions.inc.php';
-require_once 'resourcelinker.inc.php';
 require_once '../inc/global.inc.php';
 
 api_protect_course_script();

@@ -439,12 +439,14 @@ class DisplayGradebook
             for ($count = 0; $count < count($allEvalsLinks); $count++) {
                 $item = $allEvalsLinks[$count];
                 $score = $item->calc_score($user_id);
-                $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
-                //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
-                $item_value = $score[0] / $divide * $item->get_weight();
-                //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
-                $item_value_total += $item_value;
+                if (!empty($score)) {
+                    $divide = $score[1] == 0 ? 1 : $score[1];
+                    //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                    //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
+                    $item_value = $score[0] / $divide * $item->get_weight();
+                    //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
+                    $item_value_total += $item_value;
+                }
             }
 
             $item_total = $main_weight;

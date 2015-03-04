@@ -29,7 +29,15 @@
             </td>
             <td style="width:50%">
                 {{ event.title }}
-                <p>{{ event.description}}</p>
+
+                {% if event.description %}
+                    <p>{{ event.description}}</p>
+                {% endif %}
+
+                {% if event.comment %}
+                    <p>{{ event.comment}}</p>
+                {% endif %}
+
                 {{ event.attachment }}
             </td>
 

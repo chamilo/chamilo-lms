@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  This tool allows platform admins to add classes by uploading a CSV file
  *  @todo Add some langvars to DLTT
@@ -13,7 +14,7 @@ function validate_data($classes) {
     $errors = array();
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {
-        // 1. Check wheter ClassName is available.
+        // 1. Check of class name is available.
         if (!isset($class['name']) || strlen(trim($class['name'])) == 0) {
             $class['line'] = $index + 2;
             $class['error'] = get_lang('MissingClassName');
@@ -41,15 +42,34 @@ function validate_data($classes) {
  */
 function save_data($classes)
 {
-    $number_of_added_classes = 0;
+    $count = 0;
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {
+        $usersToAdd = isset($class['users']) ? $class['users'] : null;
+        unset($class['users']);
         $id = $usergroup->save($class);
         if ($id) {
-            $number_of_added_classes++;
+            if (!empty($usersToAdd)) {
+                $usersToAddList = explode(',', $usersToAdd);
+                $userIdList = array();
+                foreach ($usersToAddList as $username) {
+                    $userInfo = api_get_user_info_from_username($username);
+                    $userIdList[] = $userInfo['user_id'];
+                }
+                if (!empty($userIdList)) {
+                    $usergroup->subscribe_users_to_usergroup(
+                        $id,
+                        $userIdList,
+                        false
+                    );
+                }
+            }
+
+            $count++;
         }
     }
-    return $number_of_added_classes;
+
+    return $count;
 }
 
 // Language files that should be included.
@@ -113,8 +133,8 @@ $form->display();
 <p><?php echo get_lang('CSVMustLookLike') . ' (' . get_lang('MandatoryFields') . ')'; ?> :</p>
 
 <pre>
-<b>name;description</b>
-"User group 1";"Description"
+<b>name;description;</b>users
+"User group 1";"Description";admin,username1,username2
 </pre>
 <?php
 // Displaying the footer.

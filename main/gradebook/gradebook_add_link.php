@@ -160,6 +160,7 @@ $(document).ready( function() {
 
 Display::display_header(get_lang('MakeLink'));
 if (isset($typeform)) {
+    echo Display::return_message(get_lang('LearningPathGradebookWarning'), 'warning');
     $typeform->display();
 }
 if (isset($addform)) {

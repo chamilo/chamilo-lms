@@ -3,9 +3,7 @@
 /**
  * @package chamilo.calendar
  */
-/**
- * INIT SECTION
- */
+
 // name of the language file that needs to be included
 $language_file = array('agenda', 'group', 'announcements');
 
@@ -20,7 +18,7 @@ $interbreadcrumb[] = array(
 
 $agenda = new Agenda();
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$agenda->type = $type;
+$agenda->setType($type);
 $events = $agenda->get_events(
     null,
     null,

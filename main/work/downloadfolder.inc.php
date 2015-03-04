@@ -178,11 +178,12 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 }
 
 if (!empty($files)) {
-    //logging
-    event_download(basename($work_data['title']).'.zip (folder)');
+    $fileName = replace_dangerous_char($work_data['title']);
+    // Logging
+    event_download($fileName .'.zip (folder)');
 
     //start download of created file
-    $name = basename($work_data['title']).'.zip';
+    $name = $fileName .'.zip';
     if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
         @unlink($temp_zip_file);

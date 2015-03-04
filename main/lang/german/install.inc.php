@@ -122,7 +122,7 @@ $SuggestionOnlyToEnableCSSUploadFeature = "Vorschlag erfolgt nur, wenn das CSSup
 $SuggestionOnlyToEnableSubLanguageFeature = "Vorschlag erfolgt nur, wenn das Untersprachenfeature aktiviert wurde";
 $ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Um Ihre Installation zu schützen, setzen Sie das Verzeichnis %s auf nur-lesen (oder chmod 0555 auf Linux-basierenden Systemen). Anschließend bitte das Verzeichnis %s löschen.";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Wenn Sie vorhaben Chamilo von einer älteren Version zu upgraden, möchten Sie vielleicht das <a href=\"../../documentation/changelog.html\" target=\"_blank\">Changelog</a> ansehen, um zu erfahren was neu ist und geändert wurde";
-$WelcomeToTheDokeosInstaller = "Willkommen zum Chamilo-Installer";
+$WelcomeToTheChamiloInstaller = "Willkommen zum Chamilo-Installer";
 $PHPVersionError = "Ihre PHP-Version entspricht nicht den Anforderungen dieser Software. Überprüfen Sie bite die Aktualität Ihrer PHP-Version und versuchen Sie es erneut.";
 $ExtensionSessionsNotAvailable = "Session Erweiterung nicht verfügbar";
 $ExtensionZlibNotAvailable = "Zlib Erweiterung nicht verfügbar";

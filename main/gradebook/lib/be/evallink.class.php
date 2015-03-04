@@ -19,18 +19,26 @@ abstract class EvalLink extends AbstractLink
         parent::__construct();
     }
 
-    // Functions implementing AbstractLink
-
+    /**
+     * @return bool
+     */
     public function has_results()
     {
         $eval = $this->get_evaluation();
+
         return $eval->has_results();
     }
 
-    public function calc_score($stud_id = null)
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public function calc_score($userId = null)
     {
         $eval = $this->get_evaluation();
-        return $eval->calc_score($stud_id);
+
+        return $eval->calc_score($userId);
     }
 
     public function get_link()
@@ -157,7 +165,8 @@ abstract class EvalLink extends AbstractLink
     /**
      * Lazy load function to get the linked evaluation
      */
-    protected function get_evaluation () {
+    protected function get_evaluation ()
+    {
         if (!isset($this->evaluation)) {
             if (isset($this->ref_id)) {
                 $evalarray = Evaluation::load($this->get_ref_id());
@@ -175,6 +184,7 @@ abstract class EvalLink extends AbstractLink
                 $this->set_ref_id($eval->get_id());
             }
         }
+
         return $this->evaluation;
     }
 }

@@ -122,7 +122,7 @@ $SuggestionOnlyToEnableCSSUploadFeature = "Namig: zgolj v primeru, da želite om
 $SuggestionOnlyToEnableSubLanguageFeature = "Namig: zgolj v primeru, da želite omogočiti zmožnost uporabe pod-jezikov";
 $ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Za zaščito vaših strani naredite celotno mapo %s zgolj bralno (chmod 0555 za Linux) in odstranite mapo %s .";
 $IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Če imate namen nadgraditi Chamilo iz starejše različice, boste verjetno želeli pogledati  <a href=\"../../documentation/changelog.html\" target=\"_blank\">dnevnik sprememb</a>, da bi videli, kaj je novega in kaj je bilo spremenjeno.";
-$WelcomeToTheDokeosInstaller = "Dobrodošli v Chamilo namestitev";
+$WelcomeToTheChamiloInstaller = "Dobrodošli v Chamilo namestitev";
 $PHPVersionError = "Različica nameščenega PHP ne ustreza zahtevam te programske opreme. Nadgradite/popravite namestitev PHP in poskusite znova.";
 $ExtensionSessionsNotAvailable = "Session razširitev ni na voljo";
 $ExtensionZlibNotAvailable = "Zlib razširitev ni na voljo";

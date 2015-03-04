@@ -74,10 +74,13 @@ event_access_tool(TOOL_WIKI);
 
 if ($groupId) {
     $group_properties = GroupManager::get_group_properties($groupId);
-    $interbreadcrumb[] = array("url" => api_get_path(WEB_CODE_PATH)."group/group.php", "name" => get_lang('Groups'));
     $interbreadcrumb[] = array(
-        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?gidReq=".$groupId,
-        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name'])
     );
     //ensure this tool in groups whe it's private or deactivated
     if ($group_properties['wiki_state'] == 0) {
@@ -95,8 +98,8 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true);
 
 // The page we are dealing with
 $page = isset($_GET['title']) ? $_GET['title']: 'index';
-$action = isset($_GET['action']) ? $_GET['action'] : 'showpage';
-$view = isset($_GET['view']) ? $_GET['view'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 'showpage';
+$view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 
 $wiki->page = $page;
 $wiki->action = $action;

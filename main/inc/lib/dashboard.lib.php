@@ -512,24 +512,7 @@ class DashboardManager
 	 */
 	public static function get_links_for_styles_from_dashboard_plugins() {
 
-		$possible_paths = self::get_posible_dashboard_plugins_path();
-		$enabled_blocks = self::get_enabled_dashboard_blocks();
-		$links = '';
-		foreach ($enabled_blocks as $block) {
-			$path = $block['path'];
-			$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/css/';
-			if (is_dir($dashboard_plugin_path)) {
-				$handle = @opendir($dashboard_plugin_path);
-				while (false !== ($file = readdir($handle))) {
-					if ($file <> '.' AND $file <> '..') {
-						$src = api_get_path(WEB_PLUGIN_PATH).'dashboard/'.$path.'/css/'.$file;
-						$links .= '<link rel="stylesheet" href="'.$src.'" type="text/css" />'.PHP_EOL;
-					}
-				}
-				@closedir($handle);
-			}
-		}
-		return $links;
+		return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
 	}
 
 }

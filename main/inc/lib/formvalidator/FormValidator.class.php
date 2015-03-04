@@ -556,12 +556,19 @@ EOT;
      * @return string $return_value HTML code of the form
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, august 2006
+     * @author Julio Montoya
      */
     public function return_form()
     {
         $error = false;
         $addDateLibraries = false;
-        $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
+        $dateElementTypes = array(
+            'date_range_picker',
+            'date_time_picker',
+            'date_picker',
+            'datepicker',
+            'datetimepicker'
+        );
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
             if (in_array($element->getType(), $dateElementTypes)) {

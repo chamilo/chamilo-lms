@@ -177,8 +177,8 @@ function load_platform_templates() {
     $certificateTemplateContent = file_get_contents(api_get_path(SYS_PATH) . 'main/gradebook/certificate_template/template.html');
     $certificateTemplateHTML = str_replace($search, $replace, $certificateTemplateContent);
 
-    echo '<Template title="TemplateCertificateTitle" image="' . "$certificateTemplateThumb" . '">'
-    . '<Description>TemplateCertificateDescription</Description>'
+    echo '<Template title="'.get_lang('TemplateCertificateTitle').'" image="' . "$certificateTemplateThumb" . '">'
+    . '<Description>'. get_lang('TemplateCertificateComment') . '</Description>'
     . '<Html>'
     . '<![CDATA['
     . $certificateTemplateHTML

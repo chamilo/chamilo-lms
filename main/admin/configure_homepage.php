@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Configure the portal homepage (manages multi-urls and languages)
  * @package chamilo.admin
  */
+
 /**
  * Creates menu tabs for logged and anonymous users
  *
@@ -15,36 +17,36 @@
  */
 function home_tabs($file_logged_in)
 {
-    $post = strpos($file_logged_in, "_logged_in");
-    if ($post !== false) {
-        $file_logged_out = str_replace('_logged_in','', $file_logged_in);
-        //variables initialization
-        $data_logged_out = array();
-        $data_logged_in  = array();
+	$post = strpos($file_logged_in, "_logged_in");
+	if ($post !== false) {
+		$file_logged_out = str_replace('_logged_in','', $file_logged_in);
+		//variables initialization
+		$data_logged_out = array();
+		$data_logged_in  = array();
 
-        //we read the file with all links
-        $file = file($file_logged_in);
-        foreach ($file as $line) {
-            $line = str_replace("\n", '',$line);
-            //not logged user only sees public links
-            if (!preg_match('/::private/',$line)) {
-                $data_logged_out[] = $line;
-            }
-            //logged user only sees all links
-            $data_logged_in[] = $line;
-        }
-        //tabs file for logged out users
-        $fp = fopen($file_logged_out, 'w');
-        fputs($fp, implode("\n", $data_logged_out));
-        fclose($fp);
-        //tabs file for logged in users
-        $fp = fopen($file_logged_in, 'w');
-        fputs($fp, implode("\n", $data_logged_in));
-        fclose($fp);
-    }
+		//we read the file with all links
+		$file = file($file_logged_in);
+		foreach ($file as $line) {
+			$line = str_replace("\n", '',$line);
+			//not logged user only sees public links
+			if (!preg_match('/::private/',$line)) {
+				$data_logged_out[] = $line;
+			}
+			//logged user only sees all links
+			$data_logged_in[] = $line;
+		}
+		//tabs file for logged out users
+		$fp = fopen($file_logged_out, 'w');
+		fputs($fp, implode("\n", $data_logged_out));
+		fclose($fp);
+		//tabs file for logged in users
+		$fp = fopen($file_logged_in, 'w');
+		fputs($fp, implode("\n", $data_logged_in));
+		fclose($fp);
+	}
 }
 
-$language_file = array('index','admin', 'accessibility');
+$language_file = array('index', 'admin', 'accessibility');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -78,10 +80,17 @@ $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
 $_languages = api_get_languages();
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array(
+	'url' => 'index.php',
+	'name' => get_lang('PlatformAdmin')
+);
 
 if (!empty($action)) {
-	$interbreadcrumb[] = array('url' => 'configure_homepage.php', 'name' => get_lang('ConfigureHomePage'));
+	$interbreadcrumb[] = array(
+		'url' => 'configure_homepage.php',
+		'name' => get_lang('ConfigureHomePage')
+	);
+
 	switch ($action) {
 		case 'edit_top':
 			$tool_name = get_lang('EditHomePage');
@@ -134,6 +143,8 @@ if (!empty($_SESSION['user_language_choice'])) {
 	$lang = api_get_setting('platformLanguage');
 }
 
+$languageGet = isset($_GET['language']) ? Security::remove_XSS($_GET['language']) : $lang;
+
 // Ensuring availability of main files in the corresponding language
 
 if (api_is_multiple_url_enabled()) {
@@ -165,29 +176,30 @@ $noticef = 'home_notice'; //noticef for Notice File
 $menutabs= 'home_tabs'; //menutabs for tabs Menu
 $mtloggedin= 'home_tabs_logged_in'; //menutabs for tabs Menu
 $ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
-				// faster than hardcoded strings
+// faster than hardcoded strings
 $homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
-    if (api_is_multiple_url_enabled()) {
-        if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
-            if (!file_exists($homep.$my_file.$ext)) {
-                touch($homep.$my_file.$ext);
-            }
-            @copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
-        }
-    } else {
-        if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
-            if (!file_exists($homep.$my_file.$ext)) {
-                touch($homep.$my_file.$ext);
-            }
-            @copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
-        }
-    }
+	if (api_is_multiple_url_enabled()) {
+		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
+			if (!file_exists($homep.$my_file.$ext)) {
+				touch($homep.$my_file.$ext);
+			}
+			@copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
+		}
+	} else {
+		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
+			if (!file_exists($homep.$my_file.$ext)) {
+				touch($homep.$my_file.$ext);
+			}
+			@copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
+		}
+	}
 }
+
 if (api_is_multiple_url_enabled()) {
-    $homep = $homep_new;
+	$homep = $homep_new;
 }
 
 // Check WCAG settings and prepare edition using WCAG
@@ -224,25 +236,22 @@ if (!empty($action)) {
 				}
 
 				// Write
-				if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+				if (is_writable($homep)) {
+					// Default
 					if (is_writable($homep.$topf.'_'.$lang.$ext)) {
 						$fp = fopen($homep.$topf.'_'.$lang.$ext, 'w');
 						fputs($fp, $home_top);
 						fclose($fp);
 
-                    foreach ($_languages['name'] as $key => $value) {
-                        $lang_name = $_languages['folder'][$key];
-                        if (isset($_POST[$lang_name])) {
-                            if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-                                if (is_writable($homep.$topf.'_'.$lang_name.$ext)) {
-                                    $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-                                    fputs($fp, $home_top);
-                                    fclose($fp);
-                                }
-                            }
-                        }
-                    }
-
+						// Language
+						foreach ($_languages['name'] as $key => $value) {
+							$lang_name = $_languages['folder'][$key];
+							if (isset($_POST[$lang_name])) {
+								$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+								fputs($fp, $home_top);
+								fclose($fp);
+							}
+						}
 					} else {
 						$errorMsg = get_lang('HomePageFilesNotWritable');
 					}
@@ -252,22 +261,28 @@ if (!empty($action)) {
 					fputs($fp, $home_top);
 					fclose($fp);
 
-                    foreach ($_languages['name'] as $key => $value) {
-                        $lang_name = $_languages['folder'][$key];
-                        if (isset($_POST[$lang_name])) {
-                            if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-                                $fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
-                                fputs($fp, $home_top);
-                                fclose($fp);
-                            }
-                        }
-                    }
-                }
+					foreach ($_languages['name'] as $key => $value) {
+						$lang_name = $_languages['folder'][$key];
+						if (isset($_POST[$lang_name])) {
+							if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
+								$fp = fopen($homep.$topf.'_'.$lang_name.$ext, 'w');
+								fputs($fp, $home_top);
+								fclose($fp);
+							}
+						}
+					}
+				}
 
-                if (EventsMail::check_if_using_class('portal_homepage_edited')) {
-                    EventsDispatcher::events('portal_homepage_edited',array('about_user' => api_get_user_id()));
-                }
-                event_system(LOG_HOMEPAGE_CHANGED, 'edit_top', cut(strip_tags($home_top), 254), api_get_utc_datetime(), api_get_user_id());
+				if (EventsMail::check_if_using_class('portal_homepage_edited')) {
+					EventsDispatcher::events('portal_homepage_edited',array('about_user' => api_get_user_id()));
+				}
+				event_system(
+					LOG_HOMEPAGE_CHANGED,
+					'edit_top',
+					cut(strip_tags($home_top), 254),
+					api_get_utc_datetime(),
+					api_get_user_id()
+				);
 				break;
 			case 'edit_notice':
 				// Filter
@@ -283,32 +298,32 @@ if (!empty($action)) {
 						if ($errorMsg == '') {
 							fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
 
-                            foreach ($_languages['name'] as $key => $value) {
-                                $lang_name = $_languages['folder'][$key];
-                                if (isset($_POST[$lang_name])) {
-                                    if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
-                                        if (is_writable($homep.$noticef.'_'.$lang_name.$ext)) {
-                                            $fp = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
-                                            fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
-                                            fclose($fp);
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
+							foreach ($_languages['name'] as $key => $value) {
+								$lang_name = $_languages['folder'][$key];
+								if (isset($_POST[$lang_name])) {
+									if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+										if (is_writable($homep.$noticef.'_'.$lang_name.$ext)) {
+											$fp = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
+											fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
+											fclose($fp);
+										}
+									}
+								}
+							}
+						} else {
 							fputs($fp, '');
 
-                            foreach ($_languages['name'] as $key => $value) {
-                                $lang_name = $_languages['folder'][$key];
-                                if (isset($_POST[$lang_name])) {
-                                    if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
-                                        $fp1 = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
-                                        fputs($fp1, '');
-                                        fclose($fp1);
-                                    }
-                                }
-                            }
-                        }
+							foreach ($_languages['name'] as $key => $value) {
+								$lang_name = $_languages['folder'][$key];
+								if (isset($_POST[$lang_name])) {
+									if (file_exists($homep.$noticef.'_'.$lang_name.$ext)) {
+										$fp1 = fopen($homep.$noticef.'_'.$lang_name.$ext, 'w');
+										fputs($fp1, '');
+										fclose($fp1);
+									}
+								}
+							}
+						}
 						fclose($fp);
 					} else {
 						$errorMsg .= "<br/>\n".get_lang('HomePageFilesNotWritable');
@@ -319,7 +334,7 @@ if (!empty($action)) {
 					fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
 					fclose($fp);
 				}
-                event_system(LOG_HOMEPAGE_CHANGED, 'edit_notice', cut(strip_tags($notice_title), 254), api_get_utc_datetime(), api_get_user_id());
+				event_system(LOG_HOMEPAGE_CHANGED, 'edit_notice', cut(strip_tags($notice_title), 254), api_get_utc_datetime(), api_get_user_id());
 				break;
 			case 'edit_news':
 				//Filter
@@ -365,7 +380,7 @@ if (!empty($action)) {
 						}
 					}
 				}
-                event_system(LOG_HOMEPAGE_CHANGED, 'edit_news', strip_tags(cut($home_news, 254)), api_get_utc_datetime(), api_get_user_id());
+				event_system(LOG_HOMEPAGE_CHANGED, 'edit_news', strip_tags(cut($home_news, 254)), api_get_utc_datetime(), api_get_user_id());
 				break;
 			case 'insert_tabs':
 			case 'edit_tabs':
@@ -375,7 +390,7 @@ if (!empty($action)) {
 				$insert_where   = intval($_POST['insert_where']);
 				$link_name      = trim(stripslashes($_POST['link_name']));
 				$link_url       = trim(stripslashes($_POST['link_url']));
-                $add_in_tab     = intval($_POST['add_in_tab']);
+				$add_in_tab     = intval($_POST['add_in_tab']);
 
 				// WCAG
 				if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
@@ -437,33 +452,33 @@ if (!empty($action)) {
 						// If the file doesn't exist, then create it and
 						// fill it with default text
 
-                        $fp = @fopen($homep.$filename, 'w');
-                        if ($fp) {
-                            if (empty($link_html)) {
-                                fputs($fp, get_lang('MyTextHere'));
-                                home_tabs($homep.$filename);
-                            } else {
-                            	fputs($fp, $link_html);
-                            	home_tabs($homep.$filename);
-                            }
-                            fclose($fp);
-                        }
+						$fp = @fopen($homep.$filename, 'w');
+						if ($fp) {
+							if (empty($link_html)) {
+								fputs($fp, get_lang('MyTextHere'));
+								home_tabs($homep.$filename);
+							} else {
+								fputs($fp, $link_html);
+								home_tabs($homep.$filename);
+							}
+							fclose($fp);
+						}
 					}
 					// If the requested action is to edit a link, open the file and
 					// write to it (if the file doesn't exist, create it)
 					if (in_array($action, array('edit_link'))  && !empty($link_html)) {
-						  $fp = @fopen($homep.$filename, 'w');
-						  if ($fp) {
-							 fputs($fp, $link_html);
-							 home_tabs($homep.$filename);
-							 fclose($fp);
-						  }
+						$fp = @fopen($homep.$filename, 'w');
+						if ($fp) {
+							fputs($fp, $link_html);
+							home_tabs($homep.$filename);
+							fclose($fp);
+						}
 					}
 
-                    $class_add_in_tab = 'class="show_menu"';
-                    if (!$add_in_tab) {
-                        $class_add_in_tab = 'class="hide_menu"';
-                    }
+					$class_add_in_tab = 'class="show_menu"';
+					if (!$add_in_tab) {
+						$class_add_in_tab = 'class="hide_menu"';
+					}
 
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
@@ -491,15 +506,15 @@ if (!empty($action)) {
 							home_tabs($homep.$menuf.'_'.$lang.$ext);
 							fclose($fp);
 
-                            foreach ($_languages['name'] as $key => $value) {
-                                $lang_name = $_languages['folder'][$key];
-                                if (isset($_POST[$lang_name])) {
-                                    $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-                                    fputs($fp, $home_menu);
-                                    home_tabs($homep.$menuf.'_'.$lang_name.$ext);
-                                    fclose($fp);
-                                }
-                            }
+							foreach ($_languages['name'] as $key => $value) {
+								$lang_name = $_languages['folder'][$key];
+								if (isset($_POST[$lang_name])) {
+									$fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+									fputs($fp, $home_menu);
+									home_tabs($homep.$menuf.'_'.$lang_name.$ext);
+									fclose($fp);
+								}
+							}
 
 							if (file_exists($homep.$menuf.$ext)) {
 								if (is_writable($homep.$menuf.$ext)) {
@@ -519,23 +534,29 @@ if (!empty($action)) {
 						home_tabs($homep.$menuf.'_'.$lang.$ext);
 						fclose($fp);
 
-                        foreach ($_languages['name'] as $key => $value) {
-                            $lang_name = $_languages['folder'][$key];
-                            if (isset($_POST[$lang_name])) {
-                                $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-                                fputs($fp, $home_menu);
-                                home_tabs($homep.$menuf.'_'.$lang_name.$ext);
-                                fclose($fp);
-                            }
-                        }
-                    }
+						foreach ($_languages['name'] as $key => $value) {
+							$lang_name = $_languages['folder'][$key];
+							if (isset($_POST[$lang_name])) {
+								$fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+								fputs($fp, $home_menu);
+								home_tabs($homep.$menuf.'_'.$lang_name.$ext);
+								fclose($fp);
+							}
+						}
+					}
 				}
-                event_system(LOG_HOMEPAGE_CHANGED, $action, cut($link_name.':'.$link_url, 254), api_get_utc_datetime(), api_get_user_id());
+			event_system(
+				LOG_HOMEPAGE_CHANGED,
+				$action,
+				cut($link_name . ':' . $link_url, 254),
+				api_get_utc_datetime(),
+				api_get_user_id()
+			);
 				break;
 		} //end of switch($action)
 
 		if (empty($errorMsg)) {
-			header('Location: '.api_get_self());
+			header('Location: '.api_get_self().'?language='.$languageGet);
 			exit();
 		}
 	} else {
@@ -651,7 +672,7 @@ if (!empty($action)) {
 				} elseif (is_file($homep.$mtloggedin.$lang.$ext) && is_readable($homep.$mtloggedin.$lang.$ext)) {
 					$home_menu = @file($homep.$mtloggedin.$lang.$ext);
 				} elseif (touch($homep.$mtloggedin.'_'.$lang.$ext)) {
-                    $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+					$home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -678,11 +699,11 @@ if (!empty($action)) {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
 
-                if (empty($home_menu)) {
-                    if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-                        $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-                    }
-                }
+				if (empty($home_menu)) {
+					if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+						$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+					}
+				}
 
 				if (empty($home_menu)) {
 					$home_menu = array();
@@ -723,11 +744,11 @@ if (!empty($action)) {
 							$target_blank = true;
 						}
 
-                        if (strstr($enreg, 'hide_menu')) {
+						if (strstr($enreg, 'hide_menu')) {
 							$add_in_tab = false;
 						} else {
-                            $add_in_tab = true;
-                        }
+							$add_in_tab = true;
+						}
 
 						// Remove dangerous HTML tags from the link itself (this is an
 						// additional measure in case a link previously contained
@@ -782,32 +803,32 @@ switch ($action) {
 		// Display for edit_notice case
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
-		<legend><?php echo $tool_name; ?></legend>
-		<input type="hidden" name="formSent" value="1"/>
-		<?php
-		if (!empty($errorMsg)) {
-			Display::display_normal_message($errorMsg);
-		}
-		?>
-		<table border="0" cellpadding="5" cellspacing="0">
-		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
-		<tr>
-		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" style="width: 350px;"/></td>
-		</tr>
-		<tr>
-		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
-		</tr>
-        <tr>
-          <td><label><?php echo get_lang('ApplyAllLanguages'); ?></label>
-          <td><input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
-        </tr>
-		<tr>
-		  <td>&nbsp;</td>
-		  <td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
-		</tr>
-		</table>
+			<legend><?php echo $tool_name; ?></legend>
+			<input type="hidden" name="formSent" value="1"/>
+			<?php
+			if (!empty($errorMsg)) {
+				Display::display_normal_message($errorMsg);
+			}
+			?>
+			<table border="0" cellpadding="5" cellspacing="0">
+				<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
+				<tr>
+					<td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
+					<td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" style="width: 350px;"/></td>
+				</tr>
+				<tr>
+					<td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
+					<td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
+				</tr>
+				<tr>
+					<td><label><?php echo get_lang('ApplyAllLanguages'); ?></label>
+					<td><input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button></td>
+				</tr>
+			</table>
 		</form>
 		<?php
 		break;
@@ -815,7 +836,7 @@ switch ($action) {
 	case 'edit_tabs':
 	case 'insert_link':
 	case 'edit_link':
-       $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
+		$menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
 		if (!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg);
 		}
@@ -830,37 +851,37 @@ switch ($action) {
 
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
 		if (!empty($link_name)) {
-        $default['link_name'] = $link_name;
-    	}
+			$default['link_name'] = $link_name;
+		}
 		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
-        $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
-        $form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
-        
-        $options = array('-1' => get_lang('FirstPlace'));
+		$linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
+		$form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+
+		$options = array('-1' => get_lang('FirstPlace'));
 
 		$selected = '';
 
 		if ($action == 'insert_link' || $action == 'insert_tabs') {
-            $add_in_tab = 1;
+			$add_in_tab = 1;
 			if (is_array($home_menu)){
 				foreach ($home_menu as $key => $enreg) {
 					if (strlen($enreg = trim(strip_tags($enreg))) > 0) {
-                        $options[$key] = get_lang('After').' &quot;'.$enreg.'&quot;';
-                        $formSentCheck = (!empty($_POST['formSent']) ? true : false);
-                        $selected = $formSentCheck && $insert_where == $key ? $key : '';
+						$options[$key] = get_lang('After').' &quot;'.$enreg.'&quot;';
+						$formSentCheck = (!empty($_POST['formSent']) ? true : false);
+						$selected = $formSentCheck && $insert_where == $key ? $key : '';
 					}
 				}
 			}
-            $default['insert_link'] = $selected;
-            $form->addElement('select', 'insert_where', get_lang('InsertThisLink') , $options);
+			$default['insert_link'] = $selected;
+			$form->addElement('select', 'insert_where', get_lang('InsertThisLink') , $options);
 		}
 
 		$target_blank_checkbox = $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
 
-        if ($action == 'insert_tabs' || $action == 'edit_tabs') {
-            $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);
-            $default['add_in_tab'] = $add_in_tab;
-        }
+		if ($action == 'insert_tabs' || $action == 'edit_tabs') {
+			$form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);
+			$default['add_in_tab'] = $add_in_tab;
+		}
 
 		if (!empty($target_blank)) { $target_blank_checkbox->setChecked(true); }
 
@@ -873,31 +894,31 @@ switch ($action) {
 			}
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		} else {
-            if (in_array($action, array('edit_tabs','insert_tabs'))) {
-                if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-                    $form->addElement('html', get_lang('Content').' ('.get_lang('Optional').')');
-                    $form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:(!empty($link_html) ? $link_html : '')));
-                } else {
-                    $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
-                    $form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-                }
-            }
-            $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
-            $form->addElement('html','<table id="table_langs" style="margin-left:159px;"><tr>');
-            $i = 0;
-            foreach ($_languages['name'] as $key => $value) {
-                $i++;
-                $lang_name = $_languages['folder'][$key];
-                $html_langs = '<td width="300">';
-                $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
-                $html_langs .= '</td>';
-                if ($i%5 == 0) {
-                $html_langs .= '</tr><tr>';
-                }
-                $form->addElement('html', $html_langs);
-            }
-            $form->addElement('html','</tr></table><br/>');
-      		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+			if (in_array($action, array('edit_tabs','insert_tabs'))) {
+				if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
+					$form->addElement('html', get_lang('Content').' ('.get_lang('Optional').')');
+					$form->addElement('html', WCAG_Rendering::create_xhtml(isset($_POST['link_html'])?$_POST['link_html']:(!empty($link_html) ? $link_html : '')));
+				} else {
+					$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
+					$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+				}
+			}
+			$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
+			$form->addElement('html','<table id="table_langs" style="margin-left:159px;"><tr>');
+			$i = 0;
+			foreach ($_languages['name'] as $key => $value) {
+				$i++;
+				$lang_name = $_languages['folder'][$key];
+				$html_langs = '<td width="300">';
+				$html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
+				$html_langs .= '</td>';
+				if ($i % 5 == 0) {
+					$html_langs .= '</tr><tr>';
+				}
+				$form->addElement('html', $html_langs);
+			}
+			$form->addElement('html','</tr></table><br/>');
+			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		}
 
 		$form->setDefaults($default);
@@ -920,7 +941,13 @@ switch ($action) {
 		}
 
 		$default = array();
-		$form = new FormValidator('configure_homepage_'.$action, 'post', api_get_self().'?action='.$action, '', array('style' => 'margin: 0px;'));
+		$form = new FormValidator(
+			'configure_homepage_'.$action,
+			'post',
+			api_get_self().'?action='.$action,
+			'',
+			array('style' => 'margin: 0px;')
+		);
 		$renderer =& $form->defaultRenderer();
 		$renderer->setHeaderTemplate('');
 		$renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
@@ -944,6 +971,7 @@ switch ($action) {
 			$html .= '</select></td></tr>';
 			$form->addElement('html', $html);
 		}
+
 		if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
 			//TODO: review these lines
 			// Print WCAG-specific HTML editor
@@ -955,23 +983,28 @@ switch ($action) {
 			$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
 			$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		}
-        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'),array('id' => 'all_langs'));
-        $form->addElement('html','<table id="table_langs" style="margin-left:5px;"><tr>');
-        $i = 0;
-        foreach ($_languages['name'] as $key => $value) {
-            $i++;
-            $lang_name = $_languages['folder'][$key];
-			//if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-                $html_langs = '<td width="300">';
-                $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
-                $html_langs .= '</td>';
-                if($i%5 == 0) {
-                    $html_langs .= '</tr><tr>';
-                }
-                $form->addElement('html', $html_langs);
-			//}
-        }
-        $form->addElement('html','</tr></table><br/>');
+		$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'),array('id' => 'all_langs'));
+		$form->addElement('html','<table id="table_langs" style="margin-left:5px;"><tr>');
+
+		$currentLanguage = api_get_interface_language();
+		$i = 0;
+		foreach ($_languages['name'] as $key => $value) {
+			$lang_name = $_languages['folder'][$key];
+			$i++;
+
+			$checked = null;
+			if ($languageGet == $lang_name)  {
+				$checked = "checked";
+			}
+			$html_langs = '<td width="300">';
+			$html_langs .= '<label><input type="checkbox" '.$checked.' id="lang" name="'.$lang_name.'" />&nbsp;'.$value.'<label/>';
+			$html_langs .= '</td>';
+			if ($i % 5 == 0) {
+				$html_langs .= '</tr><tr>';
+			}
+			$form->addElement('html', $html_langs);
+		}
+		$form->addElement('html','</tr></table><br/>');
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($default);
 		$form->display();
@@ -980,208 +1013,211 @@ switch ($action) {
 	default: // When no action applies, default page to update campus homepage
 		?>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%">
-		<tr>
-		  <td width="70%" valign="top">
-		  	<div class="actions">
-			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a>
-			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
-		  	</div>
-
-			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
-			  <td colspan="2">
-				<?php
-					//print home_top contents
-					if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-						$home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
-					} else {
-						$home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
-					}
-					$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-					echo $open;
-				?>
-			  </td>
-			</tr>
-			<tr>
-			<?php
+				<td width="70%" valign="top">
+					<div class="actions">
+						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
+							<?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?>
+						</a>
+						<a href="<?php echo api_get_self(); ?>?action=edit_top&language=<?php echo $languageGet; ?>">
+							<?php echo get_lang('EditHomePage'); ?>
+						</a>
+					</div>
 
-			$access_url_id = 1;
-			// we only show the category options for the main chamilo installation
-			if (api_is_multiple_url_enabled()) {
-				$access_url_id = api_get_current_access_url_id();
-			}
-			echo '<td width="50%">';
-			if ($access_url_id == 1) {
-				echo '<div class="actions">';
-				echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
+					<table border="0" cellpadding="5" cellspacing="0" width="100%">
+						<tr>
+							<td colspan="2">
+								<?php
+								//print home_top contents
+								if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+									$home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
+								} else {
+									$home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
+								}
+								$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+								echo $open;
+								?>
+							</td>
+						</tr>
+						<tr>
+							<?php
+
+							$access_url_id = 1;
+							// we only show the category options for the main chamilo installation
+							if (api_is_multiple_url_enabled()) {
+								$access_url_id = api_get_current_access_url_id();
+							}
+							echo '<td width="50%">';
+							if ($access_url_id == 1) {
+								echo '<div class="actions">';
+								echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
 					  <a href="course_category.php">'.get_lang('EditCategories').'</a>';
-				echo '</div>';
-			}
-			echo '</td>
+								echo '</div>';
+							}
+							echo '</td>
 				  <td width="50%">
 				  <br />';
-			/* <!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>--> */
-			echo '</td></tr>
+							/* <!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>--> */
+							echo '</td></tr>
 				<tr>
 				<td width="50%" valign="top">
 				<table border="0" cellpadding="5" cellspacing="0" width="100%">';
-				if ($access_url_id == 1) {
-					if (sizeof($Categories)) {
-						foreach ($Categories as $enreg) {
-							echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
-						}
-						unset($Categories);
-					} else {
-						echo get_lang('NoCategories');
-					}
-				}
+							if ($access_url_id == 1) {
+								if (sizeof($Categories)) {
+									foreach ($Categories as $enreg) {
+										echo '<tr><td>'.Display::return_icon('folder_document.gif', $enreg['name']).'&nbsp;'.$enreg['name'].'</td></tr>';
+									}
+									unset($Categories);
+								} else {
+									echo get_lang('NoCategories');
+								}
+							}
 
-				echo '</table>';
-				?>
-			  </td>
-			  <!--<td width="50%" valign="top">
+							echo '</table>';
+							?>
+							</td>
+							<!--<td width="50%" valign="top">
 				<?php
-				if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
-					$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
-					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-					echo $open;
-				} else {
-					$open = @(string)file_get_contents($homep.$newsf.$ext);
-					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-					echo $open;
-				}
-			?>
+							if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
+								$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+								echo $open;
+							} else {
+								$open = @(string)file_get_contents($homep.$newsf.$ext);
+								$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+								echo $open;
+							}
+							?>
 			  </td>-->
+						</tr>
+					</table>
+					<?php
+
+					// Add new page
+
+					$home_menu = '';
+
+					if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
+						$home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
+					} else {
+						$home_menu = @file($homep.$mtloggedin.$ext);
+					}
+
+					if (empty($home_menu)) {
+						if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+							$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
+						}
+					}
+
+					if (empty($home_menu)) {
+						$home_menu = array();
+					}
+
+					if (!empty($home_menu)) {
+						$home_menu = implode("\n", $home_menu);
+						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+						$home_menu = explode("\n", $home_menu);
+					}
+					$link_list = '';
+					$tab_counter = 0;
+					foreach ($home_menu as $enreg) {
+						$enreg = trim($enreg);
+						if (!empty($enreg)) {
+							$edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
+							$delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+							$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
+								array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
+								$enreg);
+							$tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);
+
+							$link_list .= Display::tag('tr', Display::tag('td', $tab_string));
+							$tab_counter++;
+						}
+					}
+					?>
+					<div class="actions">
+						<a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
+					</div>
+					<?php
+					echo '<table class="data_table">';
+					echo $link_list;
+					echo '</table>';
+					?>
+				</td>
+				<td width="10%" valign="top"></td>
+				<td width="20%" rowspan="3" valign="top">
+					<div id="login_block" class="well sidebar-nav">
+						<?php echo api_display_language_form(); ?>
+						<form id="formLogin">
+							<div><label><?php echo get_lang('LoginName'); ?></label></div>
+							<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
+							<div><label><?php echo get_lang('UserPassword'); ?></label></div>
+							<div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
+							<div><button class="btn" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
+						</form>
+					</div>
+
+					<div id="profile_block" class="well sidebar-nav">
+						<h4><?php echo get_lang('MenuUser'); ?></h4>
+						<ul class="nav nav-list">
+							<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
+							<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
+						</ul>
+					</div>
+
+					<div id="notice_block" class="well sidebar-nav">
+						<h4><?php echo get_lang('Notice'); ?>
+							<a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
+						</h4>
+						<?php
+						$home_notice = '';
+						if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
+							$home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
+						} else {
+							$home_notice = @(string)file_get_contents($homep.$noticef.$ext);
+						}
+						$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+						echo '<div class="homepage_notice">';
+						echo $home_notice;
+						echo '</div>';
+						?>
+					</div>
+					<div class="well sidebar-nav">
+						<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
+						<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php echo get_lang('InsertLink'); ?></a>
+						<h4><?php echo api_ucfirst(get_lang('General')); ?></h4>
+						<ul class="menulist">
+							<?php
+							$home_menu = '';
+							if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
+								$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
+							} else {
+								$home_menu = @file($homep.$menuf.$ext);
+							}
+							if (empty($home_menu)) {
+								$home_menu = array();
+							}
+							if (!empty($home_menu)) {
+								$home_menu = implode("\n", $home_menu);
+								$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+								$home_menu = explode("\n", $home_menu);
+							}
+							$i = 0;
+							foreach ($home_menu as $enreg) {
+								$enreg = trim($enreg);
+								if (!empty($enreg)) {
+									$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+									$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+									echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
+									$i++;
+								}
+							}
+							?>
+						</ul>
+					</div>
+				</td>
 			</tr>
-			</table>
-			<?php
-
-			// Add new page
-
-			$home_menu = '';
-
-            if (file_exists($homep.$mtloggedin.'_'.$lang.$ext)) {
-                $home_menu = @file($homep.$mtloggedin.'_'.$lang.$ext);
-            } else {
-                $home_menu = @file($homep.$mtloggedin.$ext);
-            }
-
-            if (empty($home_menu)) {
-                if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-                    $home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
-                }
-            }
-
-            if (empty($home_menu)) {
-                $home_menu = array();
-            }
-
-            if (!empty($home_menu)) {
-                $home_menu = implode("\n", $home_menu);
-                $home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-                $home_menu = explode("\n", $home_menu);
-            }
-            $link_list = '';
-            $tab_counter = 0;
-            foreach ($home_menu as $enreg) {
-                $enreg = trim($enreg);
-                if (!empty($enreg)) {
-                    $edit_link   = ' <a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-                    $delete_link = ' <a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-                    $tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
-                                              array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
-                                              $enreg);
-                    $tab_string = str_replace(array('<li>', '</li>','class="hide_menu"', 'hide_menu'), '', $tab_string);
-
-                    $link_list .= Display::tag('tr', Display::tag('td', $tab_string));
-                    $tab_counter++;
-                }
-            }
-            ?>
-            <div class="actions">
-                <a href="<?php echo api_get_self(); ?>?action=insert_tabs"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); echo get_lang('InsertLink'); ?></a>
-            </div>
-            <?php
-            echo '<table class="data_table">';
-            echo $link_list;
-            echo '</table>';
-			?>
-		  </td>
-		  <td width="10%" valign="top"></td>
-		  <td width="20%" rowspan="3" valign="top">
-
-		    <div id="login_block" class="well sidebar-nav">
-                <?php echo api_display_language_form(); ?>
-                <form id="formLogin">
-                    <div><label><?php echo get_lang('LoginName'); ?></label></div>
-                    <div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
-                    <div><label><?php echo get_lang('UserPassword'); ?></label></div>
-                    <div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
-                    <div><button class="btn" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
-                </form>
-			</div>
-
-			<div id="profile_block" class="well sidebar-nav">
-				<h4><?php echo get_lang('MenuUser'); ?></h4>
-				<ul class="nav nav-list">
-				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('Registration')); ?></span></li>
-				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
-				</ul>
-			</div>
-
-			<div id="notice_block" class="well sidebar-nav">
-                <h4><?php echo get_lang('Notice'); ?>
-                    <a href="<?php echo api_get_self(); ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
-                </h4>
-            <?php
-            $home_notice = '';
-            if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-                $home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
-            } else {
-                $home_notice = @(string)file_get_contents($homep.$noticef.$ext);
-            }
-            $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            echo '<div class="homepage_notice">';
-            echo $home_notice;
-            echo '</div>';
-            ?>
-            </div>
-           	<div class="well sidebar-nav">
-                <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('addd.gif', get_lang('InsertLink')); ?></a>
-                <a href="<?php echo api_get_self(); ?>?action=insert_link"><?php echo get_lang('InsertLink'); ?></a>
-    			<h4><?php echo api_ucfirst(get_lang('General')); ?></h4>
-    				<ul class="menulist">
-    				<?php
-    					$home_menu = '';
-    					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-    						$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
-    					} else {
-    						$home_menu = @file($homep.$menuf.$ext);
-    					}
-    					if (empty($home_menu)) {
-    						$home_menu = array();
-    					}
-    					if (!empty($home_menu)) {
-    						$home_menu = implode("\n", $home_menu);
-    						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-    						$home_menu = explode("\n", $home_menu);
-    					}
-    					$i = 0;
-    					foreach ($home_menu as $enreg) {
-    						$enreg = trim($enreg);
-    						if (!empty($enreg)) {
-    							$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-    							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
-    							$i++;
-    						}
-    					}
-    				?>
-    				</ul>
-			     </div>
-		  </td>
-		</tr>
 		</table>
 		<?php
 		break;

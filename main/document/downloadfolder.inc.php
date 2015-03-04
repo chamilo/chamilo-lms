@@ -93,6 +93,11 @@ function fixDocumentNameCallback($p_event, &$p_header)
         $documentData['to_group_id']
     );
 
+    // Changes file.phps to file.php
+    $basename = basename($documentNameFixed);
+    $basenamePHPFixed = str_replace('.phps', '.php', $basename);
+    $documentNameFixed = str_replace($basename, $basenamePHPFixed, $basenamePHPFixed);
+
     $p_header['stored_filename'] = $documentNameFixed;
 
     return 1;

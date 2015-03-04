@@ -148,8 +148,10 @@ class ResultTable extends SortableTable
 			$edit_column .= ' <a href="' . api_get_self() . '?delete_mark=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
 		}
 		if ($this->evaluation->get_course_code() == null) {
-			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
+			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();">
+			<img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
+		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '&'.api_get_cidreq().'">
+		    <img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
 		}
 		// Evaluation's origin is a link
 		if ($this->evaluation->get_category_id() < 0) {

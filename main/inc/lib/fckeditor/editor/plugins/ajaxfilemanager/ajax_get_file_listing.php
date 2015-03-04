@@ -19,13 +19,13 @@ if (!isset($manager)) {
     $pagination    = new pagination(false);
     $search_folder = null;
     if (isset($_GET['search_folder'])) {
-        $search_folder = str_replace("'", "", $_GET['search_folder']); //security fix for Chamilo by cfasanando
+        $search_folder = str_replace("'", "", Security::remove_XSS($_GET['search_folder']));
     }
 
     if (!empty($_GET['search'])) {
         include_once(CLASS_SEARCH);
 
-        $search = new Search($search_folder); //security fix for Chamilo by cfasanando
+        $search = new Search($search_folder);
         $search->addSearchKeyword('recursive', @$_GET['search_recursively']);
         $search->addSearchKeyword('mtime_from', @$_GET['search_mtime_from']);
         $search->addSearchKeyword('mtime_to', @$_GET['search_mtime_to']);

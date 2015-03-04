@@ -412,8 +412,9 @@ class SubLanguageManager
         // select language - if case several languages match, get the last (more recent) one
         $sql = "SELECT english_name
                 FROM " . $adminLanguagesTable . "
-                WHERE isocode ='$isocode'
-                    AND available = 1
+                WHERE
+                    isocode ='$isocode' AND
+                    available = 1
                 ORDER BY id
                 DESC LIMIT 1";
         $res = Database::query($sql);
@@ -434,7 +435,9 @@ class SubLanguageManager
         if (empty($preferences)) {
             return false;
         }
+
         $preferencesArray = explode(',', $preferences);
+
         if (count($preferencesArray) > 0) {
             foreach ($preferencesArray as $pref) {
                 $s = strpos($pref, ';');
@@ -444,6 +447,7 @@ class SubLanguageManager
                     $code = $pref;
                 }
                 $name = self::getLanguageFromIsocode($code);
+
                 if ($name !== false) {
                     return $name;
                 }

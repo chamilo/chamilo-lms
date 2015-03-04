@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Gradebook controller
  * @package chamilo.gradebook
@@ -126,7 +127,9 @@ if (isset($_GET['isStudentView'])) {
     }
 }
 
-if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
+if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
+    (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')
+) {
     Display :: display_header();
     //Introduction tool: student view
     Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
@@ -735,6 +738,7 @@ $no_qualification = false;
 
 // Show certificate link.
 $certificate = array();
+
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);

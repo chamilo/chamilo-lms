@@ -12,7 +12,6 @@
  * @author Julio Montoya
  * @package chamilo.exercise
  **/
-
 class UniqueAnswer extends Question
 {
     static $typePicture = 'mcua.png';

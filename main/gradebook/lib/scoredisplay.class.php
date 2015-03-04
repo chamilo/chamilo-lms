@@ -364,9 +364,11 @@ class ScoreDisplay
                 return $this->display_as_div($score).' (' . $this->display_as_percent($score) . ')'.$custom;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM :         // X - Good!
                 $custom = $this->display_custom($score);
+
                 if (!empty($custom)) {
                     $custom = ' - '.$custom;
                 }
+
                 return $this->display_simple_score($score).$custom;
                 break;
             case SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS:

@@ -11,6 +11,41 @@ require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 class MySpace
 {
     /**
+     * Get admin actions
+     * @return string
+     */
+    public static function getAdminActions()
+    {
+        $actions = array(
+            //array('url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php', 'content' => get_lang('Home')),
+            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=coaches', 'content' => get_lang('DisplayCoaches')),
+            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=user', 'content' => get_lang('DisplayUserOverview')),
+            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=session', 'content' => get_lang('DisplaySessionOverview')),
+            array('url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course', 'content' => get_lang('DisplayCourseOverview')),
+            array('url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin', 'content' => get_lang('LPQuestionListResults')),
+            array('url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin', 'content' => get_lang('LPExerciseResultsBySession')),
+        );
+
+        return Display :: actions($actions, null);
+    }
+
+    public static function getTopMenu()
+    {
+        $menu_items = array();
+        $menu_items[] = Display::url(Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),api_get_path(WEB_CODE_PATH)."auth/my_progress.php" );
+        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), 32), api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher');
+        $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), 32), '#');
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu = null;
+        foreach ($menu_items as $item) {
+            $menu .= $item;
+        }
+        $menu .= '<br />';
+
+        return $menu;
+    }
+
+    /**
      * This function serves exporting data in CSV format.
      * @param array $header         The header labels.
      * @param array $data           The data array.
@@ -156,9 +191,10 @@ class MySpace
      * @param array $row the row information (the other columns)
      * @return string html code
      */
-    function course_info_tracking_filter($user_id, $url_params, $row) {
+    public static function course_info_tracking_filter($user_id, $url_params, $row)
+    {
         // the table header
-        $return .= '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         /*$return .= '  <tr>';
         $return .= '        <th>'.get_lang('Course').'</th>';
         $return .= '        <th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
@@ -226,10 +262,11 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since October 2008
      */
-    function display_tracking_user_overview() {
+    public static function display_tracking_user_overview()
+    {
         MySpace::display_user_overview_export_options();
 
-        $t_head .= '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $t_head = '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         //$t_head .= '  <caption>'.get_lang('CourseInformation').'</caption>';
         $t_head .=      '<tr>';
         $t_head .= '        <th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
@@ -265,6 +302,202 @@ class MySpace
         $table->set_column_filter(4, array('MySpace','course_info_tracking_filter'));
         $table->display();
     }
+
+    public static function display_tracking_coach_overview($export_csv)
+    {
+        global $_configuration;
+
+        if ($export_csv) {
+            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+        } else {
+            $is_western_name_order = api_is_western_name_order();
+        }
+        $sort_by_first_name = api_sort_by_first_name();
+        $tracking_column = isset($_GET['tracking_list_coaches_column']) ? $_GET['tracking_list_coaches_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
+        $tracking_direction = (isset($_GET['tracking_list_coaches_direction']) && in_array(strtoupper($_GET['tracking_list_coaches_direction']), array('ASC', 'DESC', 'ASCENDING', 'DESCENDING', '0', '1'))) ? $_GET['tracking_list_coaches_direction'] : 'DESC';
+        // Prepare array for column order - when impossible, use some of user names.
+        if ($is_western_name_order) {
+            $order = array(0 => 'firstname', 1 => 'lastname', 2 => ($sort_by_first_name ? 'firstname' : 'lastname'), 3 => 'login_date', 4 => ($sort_by_first_name ? 'firstname' : 'lastname'), 5 => ($sort_by_first_name ? 'firstname' : 'lastname'));
+        } else {
+            $order = array(0 => 'lastname', 1 => 'firstname', 2 => ($sort_by_first_name ? 'firstname' : 'lastname'), 3 => 'login_date', 4 => ($sort_by_first_name ? 'firstname' : 'lastname'), 5 => ($sort_by_first_name ? 'firstname' : 'lastname'));
+        }
+        $table = new SortableTable('tracking_list_coaches_myspace', array('MySpace', 'count_coaches'), null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
+        $parameters['view'] = 'admin';
+        $table->set_additional_parameters($parameters);
+        if ($is_western_name_order) {
+            $table -> set_header(0, get_lang('FirstName'), true);
+            $table -> set_header(1, get_lang('LastName'), true);
+        } else {
+            $table -> set_header(0, get_lang('LastName'), true);
+            $table -> set_header(1, get_lang('FirstName'), true);
+        }
+        $table -> set_header(2, get_lang('TimeSpentOnThePlatform'), false);
+        $table -> set_header(3, get_lang('LastConnexion'), false);
+        $table -> set_header(4, get_lang('NbStudents'), false);
+        $table -> set_header(5, get_lang('CountCours'), false);
+        $table -> set_header(6, get_lang('NumberOfSessions'), false);
+        $table -> set_header(7, get_lang('Sessions'), false);
+
+        if ($is_western_name_order) {
+            $csv_header[] = array (
+                get_lang('FirstName', ''),
+                get_lang('LastName', ''),
+                get_lang('TimeSpentOnThePlatform', ''),
+                get_lang('LastConnexion', ''),
+                get_lang('NbStudents', ''),
+                get_lang('CountCours', ''),
+                get_lang('NumberOfSessions', '')
+            );
+        } else {
+            $csv_header[] = array (
+                get_lang('LastName', ''),
+                get_lang('FirstName', ''),
+                get_lang('TimeSpentOnThePlatform', ''),
+                get_lang('LastConnexion', ''),
+                get_lang('NbStudents', ''),
+                get_lang('CountCours', ''),
+                get_lang('NumberOfSessions', '')
+            );
+        }
+
+        $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
+
+        $sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
+			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
+			GROUP BY user_id ";
+
+        if ($_configuration['multiple_access_urls']) {
+            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+					FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login , $tbl_session_rel_access_url session_rel_url
+					WHERE scu.id_user=user_id AND scu.status=2 AND login_user_id=user_id AND access_url_id = $access_url_id AND session_rel_url.session_id=id_session
+					GROUP BY user_id ";
+            }
+        }
+        if (!empty($order[$tracking_column])) {
+            $sqlCoachs .= "ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
+        }
+
+        $result_coaches = Database::query($sqlCoachs);
+        $total_no_coaches = Database::num_rows($result_coaches);
+        $global_coaches = array();
+        while ($coach = Database::fetch_array($result_coaches)) {
+            $global_coaches[$coach['user_id']] = $coach;
+        }
+
+        $sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+			FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.'
+			WHERE id_coach=user_id AND login_user_id=user_id
+			GROUP BY user_id
+			ORDER BY login_date '.$tracking_direction;
+
+        if ($_configuration['multiple_access_urls']) {
+            $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+					FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.' , '.$tbl_session_rel_access_url.' as session_rel_url
+					WHERE id_coach=user_id AND login_user_id=user_id  AND access_url_id = '.$access_url_id.' AND  session_rel_url.session_id=session.id
+					GROUP BY user_id
+					ORDER BY login_date '.$tracking_direction;
+            }
+        }
+
+        $result_sessions_coach = Database::query($sql_session_coach);
+        $total_no_coaches += Database::num_rows($result_sessions_coach);
+        while ($coach = Database::fetch_array($result_sessions_coach)) {
+            $global_coaches[$coach['user_id']] = $coach;
+        }
+
+        $all_datas = array();
+
+        foreach ($global_coaches as $id_coach => $coaches) {
+
+            $time_on_platform   = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($coaches['user_id']));
+            $last_connection    = Tracking :: get_last_connection_date($coaches['user_id']);
+            $nb_students        = count(Tracking :: get_student_followed_by_coach($coaches['user_id']));
+            $nb_courses         = count(Tracking :: get_courses_followed_by_coach($coaches['user_id']));
+            $nb_sessions        = count(Tracking :: get_sessions_coached_by_user($coaches['user_id']));
+
+            $table_row = array();
+            if ($is_western_name_order) {
+                $table_row[] = $coaches['firstname'];
+                $table_row[] = $coaches['lastname'];
+            } else {
+                $table_row[] = $coaches['lastname'];
+                $table_row[] = $coaches['firstname'];
+            }
+            $table_row[] = $time_on_platform;
+            $table_row[] = $last_connection;
+            $table_row[] = $nb_students;
+            $table_row[] = $nb_courses;
+            $table_row[] = $nb_sessions;
+            $table_row[] = '<a href="session.php?id_coach='.$coaches['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+            $all_datas[] = $table_row;
+
+            if ($is_western_name_order) {
+                $csv_content[] = array(
+                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
+                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
+                    $time_on_platform,
+                    $last_connection,
+                    $nb_students,
+                    $nb_courses,
+                    $nb_sessions
+                );
+            } else {
+                $csv_content[] = array(
+                    api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
+                    api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
+                    $time_on_platform,
+                    $last_connection,
+                    $nb_students,
+                    $nb_courses,
+                    $nb_sessions
+                );
+            }
+        }
+
+        if ($tracking_column != 3) {
+            if ($tracking_direction == 'DESC') {
+                usort($all_datas, array('MySpace','rsort_users'));
+            } else {
+                usort($all_datas, array('MySpace','sort_users'));
+            }
+        }
+
+        if ($export_csv && $tracking_column != 3) {
+            usort($csv_content, 'sort_users');
+        }
+        if ($export_csv) {
+            $csv_content = array_merge($csv_header, $csv_content);
+        }
+
+        foreach ($all_datas as $row) {
+            $table -> addRow($row, 'align="right"');
+        }
+        $table -> display();
+    }
+
+    public static function count_coaches() {
+        global $total_no_coaches;
+        return $total_no_coaches;
+    }
+
+    public static function sort_users($a, $b) {
+        return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
+    }
+
+    public static function rsort_users($a, $b) {
+        return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
+    }
+
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
@@ -520,7 +753,7 @@ class MySpace
         $table = Display::grid_js($tableId, $url, $column, $column_model, $extra_params, array(), '', true);
 
         $return = '<script>$(function() {' . $table .
-                'jQuery("#' . $tableId . '").jqGrid("navGrid","#' . $tableId . '_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+            'jQuery("#' . $tableId . '").jqGrid("navGrid","#' . $tableId . '_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#' . $tableId . '").jqGrid("navButtonAdd","#' . $tableId . '_pager",{
                        caption:"",
                        title:"' . get_lang('ExportExcel') . '",
@@ -611,7 +844,7 @@ class MySpace
      */
     static function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to)
     {
-       //The order is important you need to check the the $column variable in the model.ajax.php file
+        //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LastName'),
             get_lang('FirstName'),
@@ -724,37 +957,37 @@ class MySpace
                 "startColumnName"   => 'courses',
                 "numberOfColumns"   =>  7,
                 "titleText"         =>  get_lang('Global'),
-                ),
+            ),
             'lessons' => array(
                 "startColumnName"   => 'lessons_total',
                 "numberOfColumns"   =>  4,
                 "titleText"         =>  get_lang('LearningPaths'),
-                ),
+            ),
             'exercises' => array(
                 "startColumnName"   => 'exercises_total',
                 "numberOfColumns"   =>  4,
                 "titleText"         =>  get_lang('Exercises'),
-                ),
+            ),
             'forums' => array(
                 "startColumnName"   => 'forums_total',
                 "numberOfColumns"   =>  4,
                 "titleText"         =>  get_lang('Forums'),
-                ),
+            ),
             'assignments' => array(
                 "startColumnName"   => 'assigments_total',
                 "numberOfColumns"   =>  4,
                 "titleText"         =>  get_lang('Assignments'),
-                ),
+            ),
             'wikis' => array(
                 "startColumnName"   => 'wiki_total',
                 "numberOfColumns"   =>  5,
                 "titleText"         =>  get_lang('Wiki'),
-                ),
+            ),
             'surveys' => array(
                 "startColumnName"   => 'surveys_total',
                 "numberOfColumns"   =>  4,
                 "titleText"         =>  get_lang('Survey'),
-                ),
+            ),
         );
         //height auto
         $extra_params['height'] = 'auto';
@@ -849,10 +1082,9 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since November 2008
      */
-    function display_user_overview_export_options() {
+    public static function display_user_overview_export_options()
+    {
         // include the user manager and formvalidator library
-
-
         if ($_GET['export'] == 'options') {
             // get all the defined extra fields
             $extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false, 1);
@@ -928,10 +1160,10 @@ class MySpace
     /**
      * Display a sortable table that contains an overview of all the reporting progress of all courses
      */
-    function display_tracking_course_overview() {
+    public static function display_tracking_course_overview() {
         //MySpace::display_user_overview_export_options();
 
-        $t_head .= '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $t_head = '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         //$t_head .= '  <caption>'.get_lang('CourseInformation').'</caption>';
         $t_head .=      '<tr>';
         $t_head .= '        <th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
@@ -950,7 +1182,7 @@ class MySpace
 
         $addparams = array('view' => 'admin', 'display' => 'courseoverview');
 
-        $table = new SortableTable('tracking_session_overview', array('MySpace','get_total_number_courses'), array('MySpace','get_course_data_tracking_overview'), 1);
+        $table = new SortableTable('tracking_session_overview', array('MySpace', 'get_total_number_courses'), array('MySpace','get_course_data_tracking_overview'), 1);
         $table->additional_parameters = $addparams;
 
         $table->set_header(0, '', false, null, array('style' => 'display: none'));
@@ -965,7 +1197,8 @@ class MySpace
      *
      * @return integer Total number of courses
      */
-    public function get_total_number_courses() {
+    public static function get_total_number_courses()
+    {
         // database table definition
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         return Database::count_rows($main_course_table);
@@ -980,7 +1213,8 @@ class MySpace
      * @param string Order direction
      * @return array Results
      */
-    public function get_course_data_tracking_overview($from, $number_of_items, $column, $direction) {
+    public static function get_course_data_tracking_overview($from, $number_of_items, $column, $direction)
+    {
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
@@ -1004,10 +1238,11 @@ class MySpace
      * @param array $row the row information (the other columns)
      * @return string html code
      */
-    function course_tracking_filter($course_code, $url_params, $row) {
+    public static function course_tracking_filter($course_code, $url_params, $row)
+    {
         $course_code = $row[0];
         // the table header
-        $return .= '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 
         // database table definition
         $tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1107,7 +1342,8 @@ class MySpace
      * This function exports the table that we see in display_tracking_course_overview()
      *
      */
-    function export_tracking_course_overview() {
+    public static function export_tracking_course_overview()
+    {
         // database table definition
         $tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1248,10 +1484,11 @@ class MySpace
      * Display a sortable table that contains an overview of all the reporting progress of all sessions and all courses the user is subscribed to
      * @author Guillaume Viguier <guillaume@viguierjust.com>
      */
-    function display_tracking_session_overview() {
+    public static function display_tracking_session_overview()
+    {
         //MySpace::display_user_overview_export_options();
 
-        $t_head .= '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $t_head = '    <table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         //$t_head .= '  <caption>'.get_lang('CourseInformation').'</caption>';
         $t_head .=      '<tr>';
         $t_head .= '        <th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
@@ -1277,7 +1514,7 @@ class MySpace
         $table->set_header(0, '', false, null, array('style' => 'display: none'));
         $table->set_header(1, get_lang('Session'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
         $table->set_header(2, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
-        $table->set_column_filter(2, array('MySpace','session_tracking_filter'));
+        $table->set_column_filter(2, array('MySpace', 'session_tracking_filter'));
         $table->display();
     }
 
@@ -1286,7 +1523,8 @@ class MySpace
      *
      * @return integer Total number of sessions
      */
-    public function get_total_number_sessions() {
+    public static function get_total_number_sessions()
+    {
         // database table definition
         $main_session_table = Database :: get_main_table(TABLE_MAIN_SESSION);
         return Database::count_rows($main_session_table);
@@ -1301,7 +1539,8 @@ class MySpace
      * @param string Order direction
      * @return array Results
      */
-    public function get_session_data_tracking_overview($from, $number_of_items, $column, $direction) {
+    public static function get_session_data_tracking_overview($from, $number_of_items, $column, $direction)
+    {
         //global $_configuration;
         // database table definition
         //$access_url_id = api_get_current_access_url_id();
@@ -1337,10 +1576,11 @@ class MySpace
      * @param array $row the row information (the other columns)
      * @return string html code
      */
-    function session_tracking_filter($session_id, $url_params, $row) {
+    public static function session_tracking_filter($session_id, $url_params, $row)
+    {
         $session_id = $row[0];
         // the table header
-        $return .= '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         /*$return .= '  <tr>';
         $return .= '        <th>'.get_lang('Course').'</th>';
         $return .= '        <th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
@@ -1463,7 +1703,8 @@ class MySpace
      * This function exports the table that we see in display_tracking_session_overview()
      *
      */
-    function export_tracking_session_overview() {
+    public static function export_tracking_session_overview()
+    {
         // database table definition
         $tbl_session_rel_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1612,7 +1853,6 @@ class MySpace
         exit;
     }
 
-
     /**
      * Get general information about the exercise performance of the user
      * the total obtained score (all the score on all the questions)
@@ -1626,7 +1866,8 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since November 2008
      */
-    function exercises_results($user_id, $course_code, $session_id = false) {
+    public static function exercises_results($user_id, $course_code, $session_id = false)
+    {
         $questions_answered = 0;
         $sql = 'SELECT exe_result , exe_weighting
             FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
@@ -1651,7 +1892,12 @@ class MySpace
             $percentage = null;
         }
 
-        return array('score_obtained' => $score_obtained, 'score_possible' => $score_possible, 'questions_answered' => $questions_answered, 'percentage' => $percentage);
+        return array(
+            'score_obtained' => $score_obtained,
+            'score_possible' => $score_possible,
+            'questions_answered' => $questions_answered,
+            'percentage' => $percentage
+        );
     }
 
     /**
@@ -1661,9 +1907,8 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since October 2008
      */
-    function export_tracking_user_overview() {
-
-
+    public static function export_tracking_user_overview()
+    {
         // database table definitions
         $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -1788,7 +2033,8 @@ class MySpace
      * Get data for courses list in sortable with pagination
      * @return array
      */
-    static function get_course_data($from, $number_of_items, $column, $direction) {
+    public static function get_course_data($from, $number_of_items, $column, $direction)
+    {
         global $courses, $csv_content, $charset, $session_id;
 
         // definition database tables
@@ -1894,7 +2140,8 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since October 2008
      */
-    function get_number_of_users_tracking_overview() {
+    public static function get_number_of_users_tracking_overview()
+    {
         // database table definition
         $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
         return Database::count_rows($main_user_table);
@@ -1907,7 +2154,8 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since October 2008
      */
-    function get_user_data_tracking_overview($from, $number_of_items, $column, $direction) {
+    public static function get_user_data_tracking_overview($from, $number_of_items, $column, $direction)
+    {
         global $_configuration;
         // database table definition
         $access_url_id = api_get_current_access_url_id();
@@ -1933,7 +2181,7 @@ class MySpace
                     lastname        AS col1,
                     firstname       AS col2,
                     ").
-                    "username       AS col3,
+            "username       AS col3,
                     user.user_id        AS col4
                 FROM
                     $main_user_table as user $condition_multi_url
@@ -1956,7 +2204,8 @@ class MySpace
      * @version Dokeos 1.8.6
      * @since November 2008
      */
-    function get_user_overview_export_extra_fields($user_id) {
+    public static function get_user_overview_export_extra_fields($user_id)
+    {
         // include the user manager
 
         $extra_data = UserManager::get_extra_user_data($user_id, true);
@@ -1972,7 +2221,8 @@ class MySpace
      * @return array with the username, the sufix
      * @author Julio Montoya Armas
      */
-    function make_username($firstname, $lastname, $username, $language = null, $encoding = null) {
+    public static function make_username($firstname, $lastname, $username, $language = null, $encoding = null)
+    {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         // if username exist
@@ -2006,7 +2256,8 @@ class MySpace
      * @return array with the $usernames array and the $user_array array
      * @author Julio Montoya Armas
      */
-    function check_user_in_array($usernames, $user_array) {
+    public static function check_user_in_array($usernames, $user_array)
+    {
         $user_list = array_keys($usernames);
         $username = $user_array['username'].$user_array['sufix'];
 
@@ -2028,7 +2279,8 @@ class MySpace
      * @return 0 if the user is not subscribed  otherwise it returns the user_id of the given username
      * @author Julio Montoya Armas
      */
-    function user_available_in_session($username, $course_list, $id_session) {
+    public static function user_available_in_session($username, $course_list, $id_session)
+    {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $id_session = intval($id_session);
@@ -2036,7 +2288,11 @@ class MySpace
         foreach($course_list as $enreg_course) {
             $sql_select = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
                             ON (rel.id_user=u.user_id)
-                            WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";
+                            WHERE
+                                rel.id_session='$id_session' AND
+                                u.status='5' AND
+                                u.username ='$username' AND
+                                rel.course_code='$enreg_course'";
             $rs = Database::query($sql_select);
             if (Database::num_rows($rs) > 0) {
                 return Database::result($rs, 0, 0);
@@ -2053,7 +2309,7 @@ class MySpace
     Of course, if in the database there is a user with the name jmontoya, the newly created two users registered would be jmontoya2 and jmontoya3.
     @param $users list of users
     @author Julio Montoya Armas
-    */
+     */
     function check_all_usernames($users, $course_list, $id_session) {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $usernames = array();
@@ -2152,7 +2408,7 @@ class MySpace
             $user['UserName'] = trim($user['UserName']);
 
             if (empty($user['UserName'])) {
-                 $user['UserName'] = UserManager::create_username($user['FirstName'], $user['LastName']);
+                $user['UserName'] = UserManager::create_username($user['FirstName'], $user['LastName']);
             }
             $new_users[] = $user;
         }
@@ -2486,7 +2742,7 @@ function get_connections_to_course_by_date($user_id, $course_code, $start_date, 
 function convert_to_array($sql_result){
     $result_to_print = '<table>';
     foreach ($sql_result as $key => $data) {
-            $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+        $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
     }
     $result_to_print .= '</table>';
     $result_to_print = array("result"=>$result_to_print);
@@ -2506,7 +2762,7 @@ function convert_to_string($sql_result){
     $result_to_print = '<table>';
     if (!empty($sql_result)) {
         foreach ($sql_result as $key => $data) {
-                $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
+            $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
         }
     }
     $result_to_print .= '</table>';
@@ -2551,7 +2807,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             $main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
             $main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
             if ($i > 500) {
-                    break;
+                break;
             }
             $i++;
         }
@@ -2592,7 +2848,7 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         $data = $data_set->GetData();
 
         if ($cache->IsInCache($graph_id, $data_set->GetData())) {
-        //if (0) {
+            //if (0) {
             //if we already created the img
             //  echo 'in cache';
             $img_file = $cache->GetHash($graph_id, $data_set->GetData());
@@ -2619,13 +2875,13 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
             $test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
 
             if (count($main_date) == 1) {
-                    //Draw a graph
-                    echo '<strong>'.$labels.'</strong><br/>';
-                    $test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
+                //Draw a graph
+                echo '<strong>'.$labels.'</strong><br/>';
+                $test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
             } else {
-                    //Draw the line graph
-                    $test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
-                    $test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
+                //Draw the line graph
+                $test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+                $test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
             }
 
             // Finish the graph
@@ -2647,4 +2903,5 @@ function grapher($sql_result, $start_date, $end_date, $type = "") {
         $foo_img = api_convert_encoding('<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>','UTF-8');
         return $foo_img;
     }
+
 }

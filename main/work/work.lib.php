@@ -2276,7 +2276,7 @@ function get_work_user_list(
                 ORDER BY $column $direction";
 
         if (!empty($start) && !empty($limit)) {
-            $sql .= "LIMIT $start, $limit";
+            $sql .= " LIMIT $start, $limit";
         }
         $result = Database::query($sql);
         $works = array();

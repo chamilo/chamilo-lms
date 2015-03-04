@@ -244,7 +244,7 @@ class SortableTable extends HTML_Table
     public function return_table()
     {
         $empty_table = false;
-        $this->processHeaders();
+
         $content = $this->get_table_html();
 
         if ($this->get_total_number_of_items() == 0) {
@@ -574,6 +574,8 @@ class SortableTable extends HTML_Table
 
         $table_data = $this->get_table_data($from);
 
+        $this->processHeaders();
+
         if (is_array($table_data)) {
             $count = 1;
             foreach ($table_data as & $row) {
@@ -697,6 +699,7 @@ class SortableTable extends HTML_Table
     public function processHeaders()
     {
         $counter = 0;
+
         foreach ($this->headers as $column => $columnInfo) {
             $label = $columnInfo['label'];
             $sortable = $columnInfo['sortable'];
@@ -743,7 +746,6 @@ class SortableTable extends HTML_Table
 
             $counter++;
         }
-
     }
 
     /**

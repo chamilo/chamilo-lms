@@ -1,11 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *	@package chamilo.admin
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -29,14 +28,15 @@ $form->addElement('header', $tool_name);
 $form->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="save"');
 
 if ($form->validate()) {
-    $user_group = new UserGroup;
-    $header = array(array('id', 'name', 'description'));
-    $data = $user_group->get_all_for_export();
+    $userGroup = new UserGroup();
+    $header = array(array('id', 'name', 'description', 'users'));
+    $data = $userGroup->getDataToExport();
     $data = array_merge($header, $data);
     $filename = 'export_classes_'.api_get_local_time();
     Export::export_table_csv($data, $filename);
     exit;
 }
+
 Display :: display_header($tool_name);
 $form->display();
 Display::display_footer();

@@ -3401,13 +3401,15 @@ function api_item_property_update(
     if (is_null($to_user_id) && is_null($to_group_id)) {
         $to_group_id = 0;
     }
+
+    $to_filter = null;
     if (!is_null($to_user_id)) {
         // Set filter to intended user.
-        $to_filter = " AND to_user_id= '$to_user_id' $condition_session";
+        $to_filter = " AND to_user_id= '$to_user_id' ";
     } else {
         // Set filter to intended group.
         if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
-            $to_filter = " AND to_group_id = '$to_group_id' $condition_session";
+            $to_filter = " AND to_group_id = '$to_group_id' ";
         }
     }
 
@@ -3462,6 +3464,7 @@ function api_item_property_update(
                             ref = '$item_id' AND
                             id_session = '$session_id'";
                 $rs = Database::query($sql);
+
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
                             SET
@@ -3493,7 +3496,7 @@ function api_item_property_update(
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
-                            ref='$item_id' AND
+                            ref = '$item_id' AND
                             id_session = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
@@ -3501,7 +3504,7 @@ function api_item_property_update(
                             SET
                                 lastedit_type = '".str_replace('_', '', ucwords($tool))."Invisible',
                                 lastedit_date = '$time',
-                                lastedit_user_id='$user_id',
+                                lastedit_user_id = '$user_id',
                                 visibility = '$visibility',
                                 id_session = '$session_id' $set_type
                             WHERE $filter";
@@ -3522,7 +3525,6 @@ function api_item_property_update(
         default : // The item will be added or updated.
             $set_type = ", lastedit_type='$lastedit_type' ";
             $visibility = '1';
-            //$filter .= $to_filter; already added
             $sql = "UPDATE $TABLE_ITEMPROPERTY
                     SET
                       lastedit_date = '$time',
@@ -3776,8 +3778,8 @@ function api_get_languages_combo($name = 'language', $chozen=true) {
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
  * @return void Display the box directly
  */
-function api_display_language_form($hide_if_no_choice = false) {
-
+function api_display_language_form($hide_if_no_choice = false)
+{
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
     if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
@@ -3788,7 +3790,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     if (isset($_SESSION['user_language_choice'])) {
         $user_selected_language = $_SESSION['user_language_choice'];
     }
-
     if (empty($user_selected_language)) {
         $user_selected_language = api_get_setting('platformLanguage');
     }
@@ -3807,7 +3808,6 @@ function api_display_language_form($hide_if_no_choice = false) {
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
     $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
-
 
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
@@ -6416,24 +6416,28 @@ function api_is_multiple_url_enabled() {
  * Returns a md5 unique id
  * @todo add more parameters
  */
-
 function api_get_unique_id() {
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
     return $id;
 }
 
+/**
+ * Get home path
+ * @return string
+ */
 function api_get_home_path() {
     $home = 'home/';
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
-        $url_info      = api_get_access_url($access_url_id);
-        $url           = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url     = replace_dangerous_char($url);
-        $clean_url     = str_replace('/', '-', $clean_url);
-        $clean_url     .= '/';
+        $url_info = api_get_access_url($access_url_id);
+        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+        $clean_url = replace_dangerous_char($url);
+        $clean_url = str_replace('/', '-', $clean_url);
+        $clean_url .= '/';
         // if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-        if ($clean_url != 'localhost/')
-            $home          = 'home/'.$clean_url;
+        //if ($clean_url != 'localhost/') {
+            $home = 'home/' . $clean_url;
+        //}
     }
     return $home;
 }
@@ -7493,4 +7497,21 @@ function api_register_campus($listCampus = true) {
         Database::query($sql);
     }
     // Reload the settings.
+}
+
+/**
+ * Set the Site Use Cookie Warning for 1 year
+ */
+function api_set_site_use_cookie_warning_cookie()
+{
+    setcookie("ChamiloUsesCookies", "ok", time()+31556926);
+}
+
+/**
+ * Return true if the Site Use Cookie Warning Cookie warning exists
+ * @return bool
+ */
+function api_site_use_cookie_warning_cookie_exist()
+{
+    return isset($_COOKIE['ChamiloUsesCookies']);
 }

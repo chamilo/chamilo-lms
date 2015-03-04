@@ -36,6 +36,7 @@ switch ($action) {
             break;
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
+        $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         echo $agenda->add_event(
             $_REQUEST['start'],
             $_REQUEST['end'],
@@ -43,7 +44,11 @@ switch ($action) {
             $_REQUEST['title'],
             $_REQUEST['content'],
             $_REQUEST['users_to_send'],
-            $add_as_announcement
+            $add_as_announcement,
+            null, //$parentEventId = null,
+            array(), //$attachmentArray = array(),
+            null, //$attachmentComment = null,
+            $comment
         );
         break;
     case 'edit_event':

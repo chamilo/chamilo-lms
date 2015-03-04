@@ -13,6 +13,9 @@ $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script();
 
+set_time_limit(0);
+ini_set('max_execution_time', 0);
+
 require_once 'lib/gradebook_functions.inc.php';
 require_once 'lib/be.inc.php';
 require_once 'lib/gradebook_data_generator.class.php';
@@ -104,7 +107,12 @@ if (!empty($cats)) {
 
     $total_resource_weight = 0;
     if (!empty($datagen)) {
-        $data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
+        $data_array = $datagen->get_data(
+            GradebookDataGenerator :: GDG_SORT_NAME,
+            0,
+            null,
+            true
+        );
 
         if (!empty($data_array)) {
             $newarray = array();

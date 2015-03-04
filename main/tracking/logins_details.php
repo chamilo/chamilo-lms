@@ -145,8 +145,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             case "month" :
                 $sql = "SELECT access_date
                         FROM $TABLETRACK_ACCESS
-                        WHERE access_user_id = '$uInfo'
-                        AND c_id = '" . $courseId . "'
+                        WHERE access_user_id = $uInfo
+                        AND c_id = $courseId
                         AND MONTH(access_date) = MONTH( FROM_UNIXTIME('$reqdate') )
                         AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                         GROUP BY DAYOFMONTH(access_date)
@@ -156,8 +156,8 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             case "week" :
                 $sql = "SELECT access_date
                         FROM $TABLETRACK_ACCESS
-                        WHERE access_user_id = '$uInfo'
-                        AND c_id = '" . $courseId . "'
+                        WHERE access_user_id = $uInfo
+                        AND c_id = $courseId
                         AND WEEK(access_date) = WEEK( FROM_UNIXTIME('$reqdate') )
                         AND YEAR(access_date) = YEAR(FROM_UNIXTIME('$reqdate'))
                         GROUP BY DAYOFMONTH(access_date)
@@ -188,11 +188,11 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
                 // displayed date is the last login date
                 $sql = "SELECT access_tool, count(access_tool)
                         FROM $TABLETRACK_ACCESS
-                        WHERE access_user_id = '$uInfo'
+                        WHERE access_user_id = $uInfo
                             AND access_tool IS NOT NULL
                             AND access_date > '" . $results[$j] . "'
                             AND access_date < '" . $limit . "'
-                            AND c_id  = '" . $courseId . "'
+                            AND c_id = $courseId
                         GROUP BY access_tool
                         ORDER BY access_tool ASC";
                 $results2 = StatsUtils::getManyResults2Col($sql);

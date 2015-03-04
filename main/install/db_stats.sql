@@ -54,15 +54,13 @@ CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL default '',
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
   user_ip varchar(39) NOT NULL default '',
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_c_id (c_id),
-  KEY access_cours_code (access_cours_code)
+  KEY access_c_id (c_id)
 );
 
 DROP TABLE IF EXISTS track_e_lastaccess;
@@ -70,13 +68,11 @@ CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
-  access_cours_code varchar(40) NOT NULL,
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
-  KEY access_cours_code (access_cours_code),
   KEY access_c_id (c_id),
   KEY access_session_id (access_session_id)
 );

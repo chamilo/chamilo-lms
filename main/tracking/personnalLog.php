@@ -123,7 +123,7 @@ api_display_tool_title($nameTools);
                 $sql = "SELECT access_tool, count(access_tool), c_id
                             FROM $TABLETRACK_ACCESS
                             WHERE
-                                access_user_id = '".$_user['user_id']."' AND
+                                access_user_id = " . $_user['user_id'] . " AND
                                 access_date > '".$value."' AND
                                 access_date < '".$previousDate."'
                             GROUP BY access_tool, c_id

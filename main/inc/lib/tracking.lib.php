@@ -6180,9 +6180,9 @@ class TrackingUserLog
 
     		$sql = "SELECT UNIX_TIMESTAMP(access_date), count(access_date)
                         FROM $track_access_table
-                        WHERE access_user_id = '$user_id'
-                        AND c_id = '$course_id'
-                        AND access_session_id = '$session_id'
+                        WHERE access_user_id = $user_id
+                        AND c_id = $course_id
+                        AND access_session_id = $session_id
                         GROUP BY YEAR(access_date),MONTH(access_date)
                         ORDER BY YEAR(access_date),MONTH(access_date) ASC";
 
@@ -6584,9 +6584,9 @@ class TrackingUserLogCSV
     		$title[1]= get_lang('LoginsAndAccessTools').get_lang('LoginsDetails');
     		$sql = "SELECT UNIX_TIMESTAMP(access_date), count(access_date)
                     FROM $track_access_table
-                    WHERE access_user_id = '$user_id'
-                    AND c_id = '".$course_id."'
-                    AND access_session_id = '$session_id'
+                    WHERE access_user_id = $user_id
+                    AND c_id = $course_id
+                    AND access_session_id = $session_id
                     GROUP BY YEAR(access_date),MONTH(access_date)
                     ORDER BY YEAR(access_date),MONTH(access_date) ASC";
     		//$results = getManyResults2Col($sql);

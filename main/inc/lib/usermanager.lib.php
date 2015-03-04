@@ -3631,7 +3631,7 @@ class UserManager
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if (api_get_multiple_access_url()) {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active
                     FROM $tbl_url_rel_user as url
                     INNER JOIN $table_admin as admin
                     ON (admin.user_id=url.user_id)
@@ -3639,7 +3639,7 @@ class UserManager
                     ON (u.user_id=admin.user_id)
                     WHERE access_url_id ='".$access_url_id."'";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active
                     FROM $table_admin as admin
                     INNER JOIN $table_user u
                     ON (u.user_id=admin.user_id)";

@@ -469,6 +469,7 @@ function export_complete_report_xls($filename, $array)
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
     $exerciseStatsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $courseId = api_get_course_int_id($courseInfo['code']);
 
     if (empty($sessionId)) {
         $students = CourseManager::get_student_list_from_course_code(
@@ -528,7 +529,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $sql = "SELECT COUNT(ex.exe_id) as count
                 FROM $exerciseStatsTable AS ex
                 WHERE
-                    ex.exe_cours_id = '".$courseInfo['code']."' AND
+                    ex.c_id = $courseId AND
                     ex.exe_exo_id = ".$exercise['id']." AND
                     exe_user_id='".$studentId."' AND
                     session_id = $sessionId
@@ -540,7 +541,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 FROM $exerciseStatsTable
                 WHERE
                     exe_user_id = ".$studentId." AND
-                    exe_cours_id = '".$courseInfo['code']."' AND
+                    c_id = $courseId AND
                     exe_exo_id = ".$exercise['id']." AND
                     session_id = $sessionId
                 ORDER BY exe_result DESC

@@ -37,7 +37,6 @@ class DropboxLink extends EvalLink
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
-			$course_info = Database :: get_course_info($this->get_course_code());
 			return null;
 		} else {
 			return null;

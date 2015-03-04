@@ -149,7 +149,7 @@ $is_allowedToTrack = $is_courseAdmin;
                 $sql = "SELECT UNIX_TIMESTAMP( access_date )
                         FROM $TABLETRACK_ACCESS
                         WHERE YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                        AND c_id = '$courseId'
+                        AND c_id = $courseId
                         AND access_tool IS NULL ";
                 if ($displayType == "month") {
                     $sql .= "ORDER BY UNIX_TIMESTAMP( access_date)";
@@ -172,7 +172,7 @@ $is_allowedToTrack = $is_courseAdmin;
                         FROM $TABLETRACK_ACCESS
                         WHERE MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
                         AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                        AND c_id = '$courseId'
+                        AND c_id = $courseId
                         AND access_tool IS NULL ";
                 if($displayType == "day")
                 {
@@ -194,7 +194,7 @@ $is_allowedToTrack = $is_courseAdmin;
                         WHERE DAYOFMONTH(access_date) = DAYOFMONTH(FROM_UNIXTIME( '$reqdate' ) )
                         AND MONTH(access_date) = MONTH (FROM_UNIXTIME( '$reqdate' ) )
                         AND YEAR( access_date ) = YEAR( FROM_UNIXTIME( '$reqdate' ) )
-                        AND c_id = '$courseId'
+                        AND c_id = $courseId
                         AND access_tool IS NULL
                         ORDER BY HOUR( access_date )";
                 $hours_array = StatsUtils::hoursTab($sql,$reqdate);

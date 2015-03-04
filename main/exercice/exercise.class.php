@@ -1600,7 +1600,7 @@ class Exercise
         $sql = "SELECT exe_id
                 FROM $table_track_e_exercises
                 WHERE
-                    exe_cours_id = '".api_get_course_id()."' AND
+                    c_id = ".api_get_course_int_id()." AND
                     exe_exo_id = ".$this->id." AND
                     session_id = ".api_get_session_id()." ".
                     $sql_where;
@@ -1622,7 +1622,7 @@ class Exercise
         $session_id = api_get_session_id();
         // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
-                WHERE exe_cours_id = '".api_get_course_id()."'
+                WHERE c_id = ".api_get_course_int_id()."
                 AND exe_exo_id = ".$this->id."
                 $sql_where
                 AND session_id = ".$session_id."";
@@ -1725,7 +1725,7 @@ class Exercise
         }
         $condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND
 					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND
-					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND
+					   c_id                 = ' . api_get_course_int_id() . ' AND
 					   status 				= ' . "'" . Database::escape_string($status). "'" . ' AND
 					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND
 					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND
@@ -1783,7 +1783,6 @@ class Exercise
         $params = array(
             'exe_exo_id' => $this->id ,
             'exe_user_id' => api_get_user_id(),
-            'exe_cours_id' => api_get_course_id(),
             'c_id' => api_get_course_int_id(),
             'status' =>  'incomplete',
             'session_id'  => api_get_session_id(),
@@ -4567,24 +4566,22 @@ class Exercise
         $ids = implode(',', $ids);
         $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($sessionId != 0) {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "te.session_id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              te.session_id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);

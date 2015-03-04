@@ -104,7 +104,7 @@ class MySpace
 
         $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
                 WHERE   user_id = '.$user_id.' AND
-                        c_id="'.$courseId.'" AND
+                        c_id = '.$courseId.' AND
                         session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -1046,22 +1046,13 @@ class MySpace
         $return .= Display::grid_html($tableId);
         return $return;
     }
-    /**
-     * get the numer of users on track_e_course_access
-     *
-     * @return integer
-     *
-     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
-     * @version Chamilo 1.9.6
-     */
-
 
     /**
      * Displays a form with all the additionally defined user fields of the profile
      * and give you the opportunity to include these in the CSV export
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-     * @version Dokeos 1.8.6
+     * @version 1.8.6
      * @since November 2008
      */
     public static function display_user_overview_export_options()
@@ -1877,9 +1868,10 @@ class MySpace
     public static function exercises_results($user_id, $course_code, $session_id = false)
     {
         $questions_answered = 0;
+        $courseId = api_get_course_int_id($course_code);
         $sql = 'SELECT exe_result , exe_weighting
             FROM '.Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
-            WHERE exe_cours_id = '".Database::escape_string($course_code)."'
+            WHERE c_id = ' . $courseId . '
             AND exe_user_id = '".intval($user_id)."'";
         if($session_id !== false) {
             $sql .= " AND session_id = '".$session_id."' ";
@@ -2686,7 +2678,7 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
                 FROM ' . $tbl_track_course . '
                 WHERE
                     user_id = ' . intval($user_id) . ' AND
-                    c_id = "' . intval($courseId) . '" '.$strg_sd.' '.$strg_ed.' '.'
+                    c_id = ' . intval($courseId) . ' '.$strg_sd.' '.$strg_ed.' '.'
                 ORDER BY login_course_date ASC';
 
         $rs = Database::query($sql);
@@ -2735,7 +2727,7 @@ function get_connections_to_course_by_date($user_id, $courseId, $start_date, $en
                 FROM $tbl_track_course
                 WHERE
                   user_id = $user_id AND
-                  c_id = '$courseId' AND
+                  c_id = $courseId AND
                   login_course_date BETWEEN '$start_date' AND '$end_date' AND
                   logout_course_date BETWEEN '$start_date' AND '$end_date'
                 ORDER BY login_course_date ASC";

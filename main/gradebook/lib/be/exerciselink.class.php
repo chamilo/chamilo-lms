@@ -165,11 +165,12 @@ class ExerciseLink extends AbstractLink
     {
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $session_id = api_get_session_id();
+        $course_id = api_get_course_int_id($this->get_course_code());
         $sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats."
                 WHERE
                     session_id = $session_id AND
-                    exe_cours_id = '".Database::escape_string($this->get_course_code())."'".' AND
-                    exe_exo_id   = '.(int)$this->get_ref_id();
+                    c_id = $course_id AND
+                    exe_exo_id   = ".(int)$this->get_ref_id();
         $result = Database::query($sql);
         $number=Database::fetch_row($result);
         return ($number[0] != 0);
@@ -192,6 +193,7 @@ class ExerciseLink extends AbstractLink
         /* the following query should be similar (in conditions) to the one used
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
+        $courseId = $this->getCourseId();
         if (!$this->is_hp) {
             $sql = "SELECT * FROM $tblStats
                     WHERE
@@ -202,21 +204,18 @@ class ExerciseLink extends AbstractLink
                         session_id = $session_id";
 
             if (isset($stud_id)) {
-                $course_code_exe = $this->get_course_code();
-                $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
+                $sql .= " AND c_id = $courseId AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
 
         } else {
-            $course_code_exe = $this->get_course_code();
-            $courseId =  $this->getCourseId();
             $sql = "SELECT * FROM $tblHp hp, $tblDoc doc
                      WHERE
-                        hp.exe_cours_id = '$course_code_exe' AND
-                        hp.exe_user_id = '$stud_id'  AND
+                        hp.c_id = $courseId AND
+                        hp.exe_user_id = $stud_id  AND
                         hp.exe_name = doc.path AND
-                        doc.c_id = $courseId AND
-                        doc.id = ".intval($this->get_ref_id())."";
+                        doc.c_id = hp.c_id AND
+                        doc.id = ".intval($this->get_ref_id());
         }
 
         $scores = Database::query($sql);

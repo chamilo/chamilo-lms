@@ -120,11 +120,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for}>
+                <label {label-for} class="col-sm-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="controls">
+                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->

@@ -81,11 +81,11 @@ $my_msg = 'No change.';
 if ($action == 'mark') {
 	if (!empty($_POST['score']) AND $_POST['score'] < $obj_question->selectWeighting() AND $_POST['score'] >= 0) {
 		//mark the user mark into the database using something similar to the following function:
-
+		$my_int_cid = api_get_course_int_id($my_cid);
 		$exercise_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 		#global $origin, $tbl_learnpath_user, $learnpath_id, $learnpath_item_id;
 		$sql = "SELECT * FROM $exercise_table
-			    WHERE exe_user_id = ".intval($my_usr)." AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = ".intval($my_exe)."
+			    WHERE exe_user_id = ".intval($my_usr)." AND c_id = $my_int_cid AND exe_exo_id = ".intval($my_exe)."
 			    ORDER BY exe_date DESC";
 		#echo $sql;
 		$res = Database::query($sql);
@@ -104,14 +104,14 @@ if ($action == 'mark') {
 			$reallyNow = time();
 			$sql = "INSERT INTO $exercise_table (
 					   exe_user_id,
-					   exe_cours_id,
+					   c_id,
 					   exe_exo_id,
 					   exe_result,
 					   exe_weighting,
 					   exe_date
 					  ) VALUES (
 					   ".intval($my_usr).",
-					   '".Database::escape_string($my_cid)."',
+					   $my_int_cid,
 					   ".intval($my_exe).",
 					   '".Database::escape_string($my_score)."',
 					   '".Database::escape_string($obj_question->selectWeighting())."',

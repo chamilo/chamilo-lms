@@ -4,9 +4,7 @@
  * Student report
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
  // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
@@ -219,8 +217,14 @@ if (api_is_drh()) {
 }
 
 $actions .= '<span style="float:right">';
-$actions .= Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-$actions .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
+$actions .= Display::url(
+    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);',
+    array('onclick'=>'javascript: window.print();')
+);
+$actions .= Display::url(
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    api_get_self().'?export=csv&keyword='.$keyword
+);
 $actions .= '</span>';
 $actions .= '</div>';
 

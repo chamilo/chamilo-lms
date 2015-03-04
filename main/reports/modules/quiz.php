@@ -21,12 +21,13 @@ function reports_modules_quiz_init_forEachCourses($course_code, $course_id, $cou
 }
 
 function reports_modules_quiz_quizVal($quiz, $key_id) {
+	$courseId = api_get_course_int_id($quiz['course_code']);
 	return array('type'=> 'sql', 'sql' => 
 			'select '.$key_id.', exe_user_id as uid, '.
 			'session_id, -1 as attempt, exe_result as score, '.
 			REPORTS_PROGRESS_COMPLETED.' as progress, '.
 			'exe_duration as time, exe_date as ts from '.
 			Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).
-			' where exe_cours_id = '."'".$quiz['course_code']."'".
+			' where c_id = ' . $courseId .
 			' and exe_exo_id='.$quiz['child_id']);
 }

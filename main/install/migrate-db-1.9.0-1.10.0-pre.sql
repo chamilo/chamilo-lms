@@ -63,9 +63,9 @@ ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL defaul
 ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT '';
 
-ALTER TABLE user MODIFY COLUMN user_id int DEFAULT NULL;
+ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null;
 ALTER TABLE user DROP PRIMARY KEY;
-ALTER TABLE user ADD COLUMN id int NOT NULL PRIMARY KEY AUTO_INCREMENT;
+ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id;
 
 ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;

@@ -106,7 +106,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     //Changing global chat status to offline
     if (api_is_global_chat_enabled()) {
         $chat = new Chat();
-        $chat->set_user_status(0);
+        $chat->setUserStatus(0);
     }
 
     // selecting the last login of the user
@@ -161,7 +161,7 @@ function LoginDelete($user_id)
 {
 	$online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = intval($user_id);
-	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".$user_id."'";
+	$query = "DELETE FROM " . $online_table . " WHERE login_user_id = $user_id";
 	Database::query($query);
 }
 
@@ -403,7 +403,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $number_of_items = intval($number_of_items);
 
 	$query = "SELECT login_user_id, login_date FROM $track_online_table
-              WHERE login_user_id <> 2 AND c_id='$courseId' AND login_date >= '$current_date'
+              WHERE login_user_id <> 2 AND c_id = $courseId AND login_date >= '$current_date'
               LIMIT $from, $number_of_items ";
 
 	$result = Database::query($query);
@@ -425,20 +425,26 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 	}
 }
 
-function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null) {
-	if(empty($coursecode)) return false;
+function who_is_online_in_this_course_count($uid, $time_limit, $coursecode=null)
+{
+	if (empty($coursecode)) {
+		return false;
+	}
 	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
 	$time_limit = Database::escape_string($time_limit);
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-	$courseInfo = api_get_course_info($coursecode);
+	$courseId = api_get_course_int_id($coursecode);
 
-	$courseId = $courseInfo['real_id'];
+	if (empty($courseId)) {
+		return false;
+	}
+
 	$query = "SELECT count(login_user_id) as count
-              FROM ".$track_online_table ."
-              WHERE login_user_id <> 2 AND c_id='".$courseId."' AND login_date >= '$current_date' ";
+              FROM $track_online_table
+              WHERE login_user_id <> 2 AND c_id = $courseId AND login_date >= '$current_date' ";
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
 		$row = Database::fetch_array($result);

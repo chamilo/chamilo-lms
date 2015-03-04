@@ -37,73 +37,73 @@ $userInfo = api_get_user_info();
 $code = isset($code) ? $code : null;
 
 ?>
-    <script>
-        $(document).ready( function() {
-            $('.star-rating li a').live('click', function(event) {
-                var id = $(this).parents('ul').attr('id');
-                $('#vote_label2_' + id).html("<?php echo get_lang('Loading'); ?>");
-                $.ajax({
-                    url: $(this).attr('data-link'),
-                    success: function(data) {
-                        $("#rating_wrapper_"+id).html(data);
-                        if(data == 'added') {
-                            //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
-                        }
-                        if(data == 'updated') {
-                            //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
-                        }
+<script>
+    $(document).ready( function() {
+        $('.star-rating li a').on('click', function(event) {
+            var id = $(this).parents('ul').attr('id');
+            $('#vote_label2_' + id).html("<?php echo get_lang('Loading'); ?>");
+            $.ajax({
+                url: $(this).attr('data-link'),
+                success: function(data) {
+                    $("#rating_wrapper_"+id).html(data);
+                    if(data == 'added') {
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
                     }
-                });
-            });
-
-            $('.courses-list-btn').toggle(function (e) {
-                e.preventDefault();
-
-                var $el = $(this);
-                var sessionId = getSessionId(this);
-
-                $el.children('img').remove();
-                $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
-
-                $.ajax({
-                    url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
-                    type: 'GET',
-                    dataType: 'json',
-                    data: {
-                        a: 'display_sessions_courses',
-                        session: sessionId
-                    },
-                    success: function (response){
-                        var $container = $el.prev('.course-list');
-                        var $courseList = $('<ul>');
-                        $.each(response, function (index, course) {
-                            $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
-                        });
-
-                        $container.append($courseList).show(250);
+                    if(data == 'updated') {
+                        //$('#vote_label2_' + id).html("{'Saved'|get_lang}");
                     }
-                });
-            }, function (e) {
-                e.preventDefault();
-                var $el = $(this);
-                var $container = $el.prev('.course-list');
-                $container.hide(250).empty();
-                $el.children('img').remove();
-                $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
+                }
             });
-
-            var getSessionId = function (el) {
-                var parts = el.id.split('_');
-                return parseInt(parts[1], 10);
-            };
-
-            <?php if ($showSessions) { ?>
-            $('#date').datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
-            <?php } ?>
         });
-    </script>
+
+        $('.courses-list-btn').toggle(function (e) {
+            e.preventDefault();
+
+            var $el = $(this);
+            var sessionId = getSessionId(this);
+
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_minus.gif'); ?>');
+
+            $.ajax({
+                url: '<?php echo api_get_path(WEB_AJAX_PATH) . 'course.ajax.php' ?>',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    a: 'display_sessions_courses',
+                    session: sessionId
+                },
+                success: function (response){
+                    var $container = $el.prev('.course-list');
+                    var $courseList = $('<ul>');
+                    $.each(response, function (index, course) {
+                        $courseList.append('<li><div><strong>' + course.name + '</strong><br>' + course.coachName + '</div></li>');
+                    });
+
+                    $container.append($courseList).show(250);
+                }
+            });
+        }, function (e) {
+            e.preventDefault();
+            var $el = $(this);
+            var $container = $el.prev('.course-list');
+            $container.hide(250).empty();
+            $el.children('img').remove();
+            $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
+        });
+
+        var getSessionId = function (el) {
+            var parts = el.id.split('_');
+            return parseInt(parts[1], 10);
+        };
+
+        <?php if ($showSessions) { ?>
+        $('#date').datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+        <?php } ?>
+    });
+</script>
 
     <div class="row">
         <div class="span3">

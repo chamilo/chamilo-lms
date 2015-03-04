@@ -89,7 +89,7 @@ class ExerciseResult
                 WHERE
                     ce.c_id = $course_id AND
                     te.status != 'incomplete' AND
-                    te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and  $session_id_and AND
+                    te.c_id = ce.c_id $user_id_and  $session_id_and AND
                     ce.active <>-1";
 		} else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
@@ -116,9 +116,9 @@ class ExerciseResult
                     WHERE
                         ce.c_id = $course_id AND
                         te.status != 'incomplete' AND
-                        te.exe_cours_id='" . Database :: escape_string($cid) . "'  $user_id_and $session_id_and AND
+                        te.c_id = ce.c_id $user_id_and $session_id_and AND
                         ce.active <>-1 AND
-                    ORDER BY userpart2, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
+                    ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
 		}
 
 		$results = array();

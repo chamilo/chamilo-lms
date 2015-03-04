@@ -226,12 +226,12 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                                 <div class="span12">
                                     '.$user_info['complete_name'].'
                                 </div>
-                                <div class="span4">
+                                <div class="col-md-4">
                                     <div class="media">
                                     '.$img.'
                                     </div>
                                 </div>
-                                <div class="span5">
+                                <div class="col-md-5">
                                     <div class="media">
                                     '.$invitations.'
                                     </div>

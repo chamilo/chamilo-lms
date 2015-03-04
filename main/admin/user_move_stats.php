@@ -135,7 +135,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 //ORIGINAL COURSE
 
                 $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                        WHERE exe_cours_id = '$origin_course_code' AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
+                        WHERE c_id = $course_id AND  session_id = $origin_session_id AND exe_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -162,7 +162,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!$update_database) {
 
                     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                            WHERE exe_cours_id = '$origin_course_code' AND  session_id = $new_session_id AND exe_user_id = $user_id ";
+                            WHERE c_id = $course_id AND  session_id = $new_session_id AND exe_user_id = $user_id ";
                     $res = Database::query($sql);
                     $list = array();
                     while($row = Database::fetch_array($res,'ASSOC')) {
@@ -190,7 +190,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
                 //3. track_e_course_access
                 $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
-                        WHERE c_id  = '$course_id' AND session_id = $origin_session_id  AND user_id = $user_id ";
+                        WHERE c_id  = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -200,7 +200,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list))
                     foreach ($list as $id => $data) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS SET session_id = '$new_session_id' WHERE course_access_id = $id";
+                            $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS SET session_id = $new_session_id WHERE course_access_id = $id";
                             if ($debug) echo $sql;
                             $res = Database::query($sql);
                             if ($debug) var_dump($res);
@@ -210,7 +210,9 @@ if (isset($_REQUEST['load_ajax'])) {
                 //4. track_e_lastaccess
 
                 $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
-                        WHERE c_id = '$course_id' AND access_session_id = $origin_session_id  AND access_user_id = $user_id ";
+                        WHERE c_id = $course_id
+                        AND access_session_id = $origin_session_id
+                        AND access_user_id = $user_id ";
                 $res = Database::query($sql);
                 $list = array();
                 while($row = Database::fetch_array($res,'ASSOC')) {
@@ -219,7 +221,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list))
                     foreach ($list as $id) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS SET access_session_id = '$new_session_id' WHERE access_id = $id";
+                            $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS SET access_session_id = $new_session_id WHERE access_id = $id";
                             if ($debug) echo $sql;
                             $res = Database::query($sql);
                             if ($debug) var_dump($res);
@@ -249,7 +251,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (!empty($list))
                     foreach ($list as $id=>$data) {
                         if ($update_database) {
-                            $sql = "UPDATE $TBL_LP_VIEW SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id ";
+                            $sql = "UPDATE $TBL_LP_VIEW SET session_id = $new_session_id WHERE c_id = $course_id AND id = $id ";
                             if ($debug) var_dump($sql);
                             $res = Database::query($sql);
                             if ($debug) var_dump($res);
@@ -297,7 +299,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['ref'];
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_AGENDA SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id ";
+                        $sql = "UPDATE $TBL_AGENDA SET session_id = $new_session_id WHERE c_id = $course_id AND id = $id ";
                         if ($debug) var_dump($sql);
                         $res_update = Database::query($sql);
                         if ($debug) var_dump($res_update);
@@ -361,7 +363,7 @@ if (isset($_REQUEST['load_ajax'])) {
                                     //Creating directory
                                     $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .
                                         "url         = '".$created_dir."',
-	                                       c_id        = '".$course_id."',
+	                                       c_id        = $course_id,
 	                                       title        = '".$parent_data['title']."',
 	                                       description  = '".$parent_data['description']." folder_moved_from_session_id_$origin_session_id ',
 	                                       author       = '',
@@ -424,15 +426,15 @@ if (isset($_REQUEST['load_ajax'])) {
                                 //Creating a new work
                                 $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .
                                     "url         = '" . $new_url . "',
-                                               c_id        = '".$course_id."',
+                                               c_id        = $course_id,
                                                title       = '" . $data['title']. "',
                                                description = '" . $data['description'] . " file moved',
                                                author      = '" . $data['author'] . "',
                                                active       = '" . $data['active']. "',
                                                accepted     = '" . $data['accepted']. "',
-                                               post_group_id = '" . $data['post_group_id'] . "',
+                                               post_group_id = " . $data['post_group_id'] . ",
                                                sent_date    =  '".$data['sent_date'] ."',
-                                               parent_id    =  '".$new_parent_id ."' ,
+                                               parent_id    =  ".$new_parent_id ." ,
                                                session_id = ".$new_session_id;
 
                                 if ($debug) echo $sql_add_publication;
@@ -472,12 +474,12 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['id'];
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = '$new_session_id' WHERE c_id = $course_id AND id = $id";
+                        $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND id = $id";
                         if ($debug) var_dump($sql);
                         $res = Database::query($sql);
                         if ($debug) var_dump($res);
 
-                        $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = '$new_session_id' WHERE file_id = $id";
+                        $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = $new_session_id WHERE file_id = $id";
                         if ($debug)
                             var_dump($sql);
                         $res = Database::query($sql);
@@ -496,7 +498,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while($row = Database::fetch_array($res,'ASSOC')) {
                     $id = $row['notebook_id'];
                     if ($update_database) {
-                        $sql = "UPDATE $TBL_NOTEBOOK SET session_id = '$new_session_id' WHERE c_id = $course_id AND notebook_id = $id";
+                        $sql = "UPDATE $TBL_NOTEBOOK SET session_id = $new_session_id WHERE c_id = $course_id AND notebook_id = $id";
                         if ($debug) var_dump($sql);
                         $res = Database::query($sql);
                         if ($debug) var_dump($res);
@@ -583,9 +585,9 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
     $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $user_id = intval($user_id);
-    //$sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, exe_cours_id ORDER by exe_user_id, exe_cours_id ASC";
-    $sql = "SELECT DISTINCT exe_user_id, exe_cours_id as code, session_id as id_session
-            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, exe_cours_id ASC";
+    //$sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, c_id ORDER by exe_user_id, c_id ASC";
+    $sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session
+            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, c_id ASC";
 
     $res = Database::query($sql);
     $course_list = array();
@@ -655,6 +657,11 @@ if (!empty($user_list)) {
             if (empty($course_reg['id_session'])) {
                 $course_reg['id_session'] = 0;
             }
+            // Recover the code for historical reasons. If it can be proven
+            // that the code can be safely replaced by c_id in the following
+            // PHP code, feel free to do so
+            $courseInfo = api_get_course_info_by_id($course_reg['c_id']);
+            $course_reg['code'] = $courseInfo['code'];
             $new_course_list[] = $course_reg['code'].'_'.$course_reg['id_session'];
         }
 

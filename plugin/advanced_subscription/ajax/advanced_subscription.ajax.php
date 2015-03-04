@@ -5,7 +5,6 @@
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
  * @package chamilo.plugin.advanced_subscription
  */
-
 /**
  * Init
  */
@@ -32,7 +31,7 @@ $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
 // Check if data is valid or is for start subscription
 $verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';
 if ($verified) {
-    switch($data['action']) {
+    switch ($data['action']) {
         case 'check': // Check minimum requirements
             try {
                 $res = AdvancedSubscriptionPlugin::create()->isAllowedToDoRequest($data['studentUserId'], $data);
@@ -50,18 +49,33 @@ if ($verified) {
             break;
         case 'subscribe': // Subscription
             // Start subscription to queue
-            $res = AdvancedSubscriptionPlugin::create()->startSubscription($data['studentUserId'], $data['sessionId'], $data);
+            $res = AdvancedSubscriptionPlugin::create()->startSubscription(
+                $data['studentUserId'],
+                $data['sessionId'],
+                $data
+            );
             // Check if queue subscription was successful
             if ($res === true) {
                 $legalEnabled = api_get_plugin_setting('courselegal', 'tool_enable');
                 if ($legalEnabled) {
                     // Save terms confirmation
-                    CourseLegalPlugin::create()->saveUserLegal($data['studentUserId'], $data['courseId'], $data['sessionId']);
+                    CourseLegalPlugin::create()->saveUserLegal(
+                        $data['studentUserId'],
+                        $data['courseId'],
+                        $data['sessionId'],
+                        false
+                    );
                 }
                 // Prepare data
                 // Get session data
                 // Assign variables
-                $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
+                $fieldsArray = array(
+                    'description',
+                    'target',
+                    'mode',
+                    'publication_end_date',
+                    'recommended_number_of_participants'
+                );
                 $sessionArray = api_get_session_info($data['sessionId']);
                 $extraSession = new ExtraFieldValue('session');
                 $extraField = new ExtraField('session');
@@ -75,7 +89,11 @@ if ($verified) {
                 }
 
                 $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
-                $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+                $sessionFieldValueList = $extraSession->get_all(
+                    array(
+                        'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+                    )
+                );
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
                     // Check if session field value is set in session field list
                     if (isset($fields[$sessionFieldValue['field_id']])) {
@@ -87,8 +105,18 @@ if ($verified) {
                 }
                 // Get student data
                 $studentArray = api_get_user_info($data['studentUserId']);
-                $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
-                $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
+                $studentArray['picture'] = UserManager::get_user_picture_path_by_id(
+                    $studentArray['user_id'],
+                    'web',
+                    false,
+                    true
+                );
+                $studentArray['picture'] = UserManager::get_picture_user(
+                    $studentArray['user_id'],
+                    $studentArray['picture']['file'],
+                    22,
+                    USER_IMAGE_SIZE_MEDIUM
+                );
                 // Get superior data if exist
                 $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                 if (!empty($superiorId)) {
@@ -124,7 +152,10 @@ if ($verified) {
                         $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) .
                             'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
                         // Send mails
-                        $result['mailIds'] = $plugin->sendMail($data, ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST_NO_BOSS);
+                        $result['mailIds'] = $plugin->sendMail(
+                            $data,
+                            ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST_NO_BOSS
+                        );
                         // Check if mails were sent
                         if (!empty($result['mailIds'])) {
                             $result['error'] = false;
@@ -189,7 +220,13 @@ if ($verified) {
                 if ($res === true) {
                     // Prepare data
                     // Prepare session data
-                    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
+                    $fieldsArray = array(
+                        'description',
+                        'target',
+                        'mode',
+                        'publication_end_date',
+                        'recommended_number_of_participants'
+                    );
                     $sessionArray = api_get_session_info($data['sessionId']);
                     $extraSession = new ExtraFieldValue('session');
                     $extraField = new ExtraField('session');
@@ -203,7 +240,9 @@ if ($verified) {
                     }
 
                     $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
-                    $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+                    $sessionFieldValueList = $extraSession->get_all(
+                        array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray)
+                    );
                     foreach ($sessionFieldValueList as $sessionFieldValue) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
@@ -215,8 +254,18 @@ if ($verified) {
                     }
                     // Prepare student data
                     $studentArray = api_get_user_info($data['studentUserId']);
-                    $studentArray['picture'] = UserManager::get_user_picture_path_by_id($studentArray['user_id'], 'web', false, true);
-                    $studentArray['picture'] = UserManager::get_picture_user($studentArray['user_id'], $studentArray['picture']['file'], 22, USER_IMAGE_SIZE_MEDIUM);
+                    $studentArray['picture'] = UserManager::get_user_picture_path_by_id(
+                        $studentArray['user_id'],
+                        'web',
+                        false,
+                        true
+                    );
+                    $studentArray['picture'] = UserManager::get_picture_user(
+                        $studentArray['user_id'],
+                        $studentArray['picture']['file'],
+                        22,
+                        USER_IMAGE_SIZE_MEDIUM
+                    );
                     // Prepare superior data
                     $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                     if (!empty($superiorId)) {
@@ -240,7 +289,8 @@ if ($verified) {
                     $data['admins'] = $adminsArray;
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
-                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
+                    $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH)
+                        . 'advanced_subscription/src/admin_view.php?s=' . $data['sessionId'];
                     // Check if exist and action in data
                     if (empty($data['mailAction'])) {
                         // set action in data by new status
@@ -264,7 +314,12 @@ if ($verified) {
 
                     // Student Session inscription
                     if ($data['newStatus'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
-                        SessionManager::suscribe_users_to_session($data['sessionId'], array($data['studentUserId']), null, false);
+                        SessionManager::suscribe_users_to_session(
+                            $data['sessionId'],
+                            array($data['studentUserId']),
+                            null,
+                            false
+                        );
                     }
 
                     // Send mails

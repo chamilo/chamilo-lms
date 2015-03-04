@@ -115,11 +115,9 @@ if (api_is_platform_admin()) {
         array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
         array('url'=>'user_update_import.php', 'label' => get_lang('EditUserListCSV')),
     );
+    $items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
+    $items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
 
-    if (api_get_setting('allow_social_tool') == 'true') {
-        $items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
-        $items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
-    }
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }

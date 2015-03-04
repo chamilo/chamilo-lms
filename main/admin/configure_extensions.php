@@ -4,9 +4,7 @@
  * Edition of extensions configuration
  * @package chamilo.admin
  */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 $language_file='admin';
 $cidReset=true;
@@ -154,17 +152,18 @@ if (isset($_POST['activeExtension'])) {
 $listActiveServices = array();
 
 // get the list of active services
-$sql = 'SELECT variable FROM '.$tbl_settings_current.' WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
+$sql = 'SELECT variable FROM '.$tbl_settings_current.'
+		WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
 $rs = Database::query($sql);
 while($row = Database::fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
 
-$javascript_service_displayed = '';
-if(isset($_GET['display'])){
+/*$javascript_service_displayed = '';
+if (isset($_GET['display'])) {
 	$javascript_service_displayed = 'document.getElementById("extension_content_'.$_GET['display'].'").style.display = "block"';
-}
+}*/
 
 // javascript to handle accordion behaviour
 $javascript_message = '';
@@ -223,8 +222,6 @@ $nameTool = get_lang('ConfigureExtensions');
 Display::display_header($nameTool);
 
 ?>
-
-
 <div id="message" style="display: none">
 	<?php
 	if(!empty($message))
@@ -299,7 +296,7 @@ Display::display_header($nameTool);
 	</div>
 
  */ ?>
-    
+
 	<!-- PPT2LP -->
 	<div id="main_ppt2lp">
 		<div id="extension_header_ppt2lp" class="accordion_header">
@@ -441,7 +438,7 @@ Display::display_header($nameTool);
 	</div>
 	*/
     /*
-   
+
 	<!-- SEARCH -->
 	<div id="main_search">
 		<div id="extension_header_search" class="accordion_header">

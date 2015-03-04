@@ -161,7 +161,7 @@ function show_compose_to_user ($receiver_id) {
 function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
-	$param_f 		= isset($_GET['f']) ? Security::remove_XSS($_GET['f']):'';
+	$param_f 		= isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
 	$form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
@@ -244,7 +244,15 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+					$res = MessageManager::send_message(
+						$user,
+						$title,
+						$content,
+						$_FILES,
+						$file_comments,
+						$group_id,
+						$parent_id
+					);
 					if ($res) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');

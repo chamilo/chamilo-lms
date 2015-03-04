@@ -790,13 +790,13 @@ class MessageManager
                 $message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             } else {
                 $link = '';
-                if ($_GET['f'] == 'social') {
+                if (isset($_GET['f']) && $_GET['f'] == 'social') {
                     $link = '&f=social';
                 }
                 $message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName($result[4]);
                 //$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
                 $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
+                $message[3] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&'.$link.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>';
             }
 
             foreach ($message as $key => $value) {
@@ -1352,7 +1352,8 @@ class MessageManager
                     $archiveFile = $row_file['path'];
                     $filename = $row_file['filename'];
                     $filesize = format_file_size($row_file['size']);
-                    $filecomment = $row_file['comment'];
+                    $filecomment = Security::remove_XSS($row_file['comment']);
+                    $filename = Security::remove_XSS($filename);
                     $links_attach_file[] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment) ? '&nbsp;-&nbsp;<i>'.$filecomment.'</i>' : '');
                 }
             }
@@ -1494,7 +1495,7 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable('message_outbox', array('MessageManager', 'get_number_of_messages_sent'), array('MessageManager', 'get_message_data_sent'), 3, 20, 'DESC');
 
-        $parameters['f'] = Security::remove_XSS($_GET['f']);
+        $parameters['f'] = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false, array('style' => 'width:15px;'));
 

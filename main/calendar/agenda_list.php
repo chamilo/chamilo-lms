@@ -17,7 +17,7 @@ $interbreadcrumb[] = array(
 
 $agenda = new Agenda();
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
-$agenda->type = $type;
+$agenda->setType($type);
 $events = $agenda->get_events(
     null,
     null,

@@ -1288,7 +1288,7 @@ class Tracking
     		$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
     	} else {
     		$user_id = intval($user_id);
-    		$condition_user = " AND user_id = '$user_id' ";
+    		$condition_user = " AND user_id = $user_id ";
     	}
 
     	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
@@ -1428,7 +1428,7 @@ class Tracking
     	        FROM '.$tbl_track_login.'
                 WHERE
                     user_id = '.$student_id.' AND
-                    c_id = "'.$courseId.'" AND
+                    c_id = '.$courseId.' AND
                     session_id = '.$session_id.'
                 ORDER BY login_course_date ASC LIMIT 0,1';
     	$rs = Database::query($sql);
@@ -3719,7 +3719,7 @@ class Tracking
             ),
             #TABLE_STATISTIC_TRACK_E_HOTPOTATOES,
             /*TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array(
-                'course'    => 'course_code',
+                'course'    => 'c_id',
                 'session'   => 'session_id',
                 'user'      => 'user_id',
                 'start_date'=> 'login_course_date',

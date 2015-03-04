@@ -24,6 +24,6 @@ function reports_modules_course_val($course, $key_id) {
 			'NULL as progress, '.
 			'(sum(logout_course_date) - sum(login_course_date)) as time, null as ts from '.
 			Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS).
-			' where c_id = '."'".$course['real_id']."'".
+			' where c_id = ' . $course['real_id'] .
 			' group by user_id');
 }

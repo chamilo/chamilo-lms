@@ -104,7 +104,7 @@ class MySpace
 
         $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
                 WHERE   user_id = '.$user_id.' AND
-                        c_id="'.$courseId.'" AND
+                        c_id = '.$courseId.' AND
                         session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
         $rs = Database::query($sql);
@@ -2678,7 +2678,7 @@ function get_stats($user_id, $courseId, $start_date = null, $end_date = null)
                 FROM ' . $tbl_track_course . '
                 WHERE
                     user_id = ' . intval($user_id) . ' AND
-                    c_id = "' . intval($courseId) . '" '.$strg_sd.' '.$strg_ed.' '.'
+                    c_id = ' . intval($courseId) . ' '.$strg_sd.' '.$strg_ed.' '.'
                 ORDER BY login_course_date ASC';
 
         $rs = Database::query($sql);
@@ -2727,7 +2727,7 @@ function get_connections_to_course_by_date($user_id, $courseId, $start_date, $en
                 FROM $tbl_track_course
                 WHERE
                   user_id = $user_id AND
-                  c_id = '$courseId' AND
+                  c_id = $courseId AND
                   login_course_date BETWEEN '$start_date' AND '$end_date' AND
                   logout_course_date BETWEEN '$start_date' AND '$end_date'
                 ORDER BY login_course_date ASC";

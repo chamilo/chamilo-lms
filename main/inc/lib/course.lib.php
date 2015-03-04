@@ -4676,7 +4676,7 @@ class CourseManager
         $now = api_get_utc_datetime(time());
         $sql = "SELECT COUNT(course_access_id) course_count, a.c_id, visibility
                 FROM $table_course c INNER JOIN $table_course_access a
-                ON (c.code = a.c_id) INNER JOIN $table_course_url u ON u.course_code = c.code
+                ON (c.id = a.c_id) INNER JOIN $table_course_url u ON u.course_code = c.code
                 WHERE
                     u.access_url_id = " . api_get_current_access_url_id() . " AND
                     login_course_date <= '$now' AND

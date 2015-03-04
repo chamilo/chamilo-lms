@@ -51,7 +51,7 @@ class IndexManager
                 }
 
                 if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                    $login_form .= '<ul class="nav nav-list">';
+                    $login_form .= '<ul class="nav nav-pills nav-stacked">';
                     if (api_get_setting('allow_registration') != 'false') {
                         $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
                     }
@@ -198,7 +198,7 @@ class IndexManager
         // My Account section
 
         if ($show_menu) {
-            $html .= '<ul class="nav nav-list">';
+            $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
                 $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
@@ -312,7 +312,7 @@ class IndexManager
         $html = null;
         $home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
-            $home_menu_content = '<ul class="nav nav-list">';
+            $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $home_menu_content .= '</ul>';
             $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
@@ -323,7 +323,7 @@ class IndexManager
     function return_skills_links() {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
 
             $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
@@ -680,12 +680,12 @@ class IndexManager
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'well sidebar-nav';
+        $params['class'] = 'panel panel-default';
         $html = null;
         if (!empty($title)) {
-            $html.= '<h4>'.$title.'</h4>';
+            $html.= '<div class="panel-heading">'.$title.'</div>';
         }
-        $html.= $content;
+        $html.= '<div class="panel-body">'.$content.'</div>';
         $html = Display::div($html, $params);
         return $html;
     }
@@ -696,9 +696,18 @@ class IndexManager
      */
     function display_login_form()
     {
-        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 user_login_icon autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2 user_password_icon'));
+
+        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-inline'));
+        $form->addElement('label',get_lang('UserName'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-user"></i></span>');
+        $form->addElement('text', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addHtml('</div>');
+        $form->addElement('label',get_lang('Pass'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-lock"></i></span>');
+        $form->addElement('password', 'password','', array('id' => 'password', 'class' => 'form-control'));
+        $form->addHtml('</div>');
         global $_configuration;
 
         // Captcha
@@ -737,8 +746,9 @@ class IndexManager
                 $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
-
-        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $form->addHtml('<div class="form-button-login">');
+        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn-primary btn-block'));
+        $form->addHtml('</div>');
 
         $html = $form->return_form();
         // The validation is located in the local.inc
@@ -757,13 +767,12 @@ class IndexManager
     function return_search_block() {
         $html = '';
         if (api_get_setting('search_enabled') == 'true') {
-            $html .= '<div class="searchbox">';
             $search_btn = get_lang('Search');
-            $search_content = '<br />
-                <form action="main/search/" method="post">
-                <input type="text" id="query" class="span2" name="query" value="" />
-                <button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
-                </form></div>';
+            $search_content = '<form action="main/search/" method="post">
+                <div class="form-group">
+                <input type="text" id="query" class="form-control" name="query" value="" />
+                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+                </div></form>';
             $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
         }
         return $html;
@@ -787,7 +796,7 @@ class IndexManager
                 $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
             }
             if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-list'));
+                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-pills nav-stacked'));
                 $html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
             }
         }
@@ -798,7 +807,7 @@ class IndexManager
         $html = '';
         $booking_content = null;
         if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
-            $booking_content .='<ul class="nav nav-list">';
+            $booking_content .='<ul class="nav nav-pills nav-stacked">';
             $booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
             $booking_content .='</ul>';
             $html .= self::show_right_block(get_lang('Booking'), $booking_content, 'reservation_block');
@@ -849,7 +858,7 @@ class IndexManager
             return;
         }
 
-        $profile_content = '<ul class="nav nav-list">';
+        $profile_content = '<ul class="nav nav-pills nav-stacked">';
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
@@ -917,7 +926,7 @@ class IndexManager
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
                 $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
                 $content .= '<li'.$current.'>';
@@ -956,7 +965,7 @@ class IndexManager
         }
 
         // My account section
-        $my_account_content = '<ul class="nav nav-list">';
+        $my_account_content = '<ul class="nav nav-pills nav-stacked">';
 
         if ($show_create_link) {
             $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';

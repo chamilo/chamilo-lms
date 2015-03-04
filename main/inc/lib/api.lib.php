@@ -1546,9 +1546,11 @@ function api_get_course_int_id($code = null) {
         $row = Database::select(
             'id',
             Database::get_main_table(TABLE_MAIN_COURSE),
-            array('where'=> array('code = ?' => array($code)))
+            array('where'=> array('code = ?' => array($code))),
+            'first'
         );
-        if (is_array($row) && count($row == 1)) {
+
+        if (is_array($row) && isset($row['id'])) {
             return $row['id'];
         } else {
             return false;

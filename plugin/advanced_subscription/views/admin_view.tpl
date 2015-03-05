@@ -50,14 +50,16 @@
                         </td>
                         <td>{{ student.created_at }}</td>
                         <td>{{ student.area }}</td>
-                        {% set cellClass = 'important'%}
+                        {% set cellClass = 'important"'%}
                         {% if student.validation == 'Yes' %}
-                            {% set cellClass = 'success'%}
+                            {% set cellClass = 'success"'%}
                         {% endif %}
                         <td>
+                            {% if student.validation != '' %}
                             <span class="label label-{{ cellClass }}">
                                 {{ student.validation | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </span>
+                            {% endif %}
                         </td>
                         <td>
                             <a
@@ -114,7 +116,7 @@
         $("a.btn-advanced-subscription").click(function(event){
             event.preventDefault();
             var confirmed = false;
-            var studentName = $(this).closest("tr").find(".name").html();
+            var studentName = $.trim($(this).closest("tr").find(".name").text());
             if (studentName) {
                 ;
             } else {

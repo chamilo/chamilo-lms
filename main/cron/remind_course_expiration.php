@@ -15,7 +15,7 @@ if (php_sapi_name() != 'cli') {
 }
 
 // Days before expiration date to send reminders
-define("OFFSET", 30);
+define("OFFSET", 2);
 $today = gmdate("Y-m-d");
 $expirationDate = gmdate("Y-m-d", strtotime($today." + ".OFFSET." day"));
 

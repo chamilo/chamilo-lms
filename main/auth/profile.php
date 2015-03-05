@@ -287,7 +287,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
 }
 //    SUBMIT
 if (is_profile_editable()) {
-    $form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
+    $form->addButtonUpdate(get_lang('SaveSettings'), 'apply_change');
 } else {
     $form->freeze();
 }

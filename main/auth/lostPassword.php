@@ -84,7 +84,7 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 	$form = new FormValidator('lost_password');
     $form->addElement('header', $tool_name);
 	$form->addElement('text', 'user', array(get_lang('LoginOrEmailAddress'), get_lang('EnterEmailUserAndWellSendYouPassword')), array('size'=>'40'));
-	$form->addElement('style_submit_button', 'submit', get_lang('Send'),'class="btn"');
+	$form->addButtonSend(get_lang('Send'));
 
 	// Setting the rules
 	$form->addRule('user', get_lang('ThisFieldIsRequired'), 'required');

@@ -238,27 +238,36 @@ EOT;
     /**
      * @param string $label
      */
-    public function addButtonCreate($label)
+    public function addButtonCreate($label, $name = 'submit')
     {
-        $this->addButton('submit', $label, 'plus', 'primary');
+        $this->addButton($name, $label, 'plus', 'primary');
     }
 
     /**
      * Shortcut to create/add button
      * @param string $label
      */
-    public function addButtonUpdate($label)
+    public function addButtonUpdate($label, $name = 'submit')
     {
-        return $this->addButton('submit', $label, 'pencil', 'primary');
+        return $this->addButton($name, $label, 'pencil', 'primary');
     }
 
     /**
      * Shortcut to delete button
      * @param string $label
      */
-    public function addButtonDelete($label)
+    public function addButtonDelete($label, $name = 'submit')
     {
-        return $this->addButton('submit', $label, 'trash', 'danger');
+        return $this->addButton($name, $label, 'trash', 'danger');
+    }
+
+    /**
+     * Shortcut to "send" button
+     * @param string $label
+     */
+    public function addButtonSend($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'paper-plane', 'primary');
     }
 
     /**

@@ -365,7 +365,7 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addElement('button', 'submit', get_lang('RegisterUser'), array('class' => 'btn btn-primary btn-large'));
+$form->addButtonCreate(get_lang('RegisterUser'));
 
 if ($form->validate()) {
     $values = $form->getSubmitValues(1);

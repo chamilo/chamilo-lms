@@ -460,6 +460,7 @@ footer {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
 }
 [dir=rtl] .actions {
     background:#efefef;
@@ -469,7 +470,6 @@ footer {
     vertical-align:middle;
     float: right;
 }
-
 .actions .actions-pagination {
   float:right;
   margin-top:2px;
@@ -487,26 +487,19 @@ footer {
 .actions form {
     margin-bottom: 0px;
 }
-
 .actions fieldset {
     margin-top:0px;
 }
-
-
 .muted {
-    color: #999999 !important;
+  color: #999999 !important;
 }
-
-
 .actions a {
     display: inline-block;
     margin-right: 10px;
 }
-
 .actions .btn-toolbar {
     margin : 0px;
 }
-
 .actions span {
     display: inline-block;
     margin-right: 10px;
@@ -516,11 +509,9 @@ footer {
     margin-right: 10px;
     vertical-align:middle;
 }
-
 .actions fieldset {
     margin-top:0px;
 }
-
 #friend-container .thumbnail {
     min-height: 140px;
 }

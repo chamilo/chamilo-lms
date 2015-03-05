@@ -19,8 +19,8 @@ $htmlHeadXtra[] = '
 
 var hide_bar = function() {
     $("#template_col").hide();
-    $("#doc_form").removeClass("span9");
-    $("#doc_form").addClass("span11");
+    $("#doc_form").removeClass("col-md-9");
+    $("#doc_form").addClass("col-md-11");
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
         },
         function() {
             $("#template_col").show();
-            $("#doc_form").removeClass("span11");
-            $("#doc_form").addClass("span9");
+            $("#doc_form").removeClass("col-md-11");
+            $("#doc_form").addClass("col-md-9");
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
@@ -279,9 +279,9 @@ function document_exists($filename) {
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
+    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="form-control" id="document_title"');
 } else {
-	$form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
+	$form->addElement('text', 'title', get_lang('Title'), 'class="form-control" id="document_title"');
 }
 
 // Show read-only box only in groups
@@ -396,9 +396,9 @@ if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir
 }
 
 if ($is_certificate_mode)
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
+	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="btn-default"');
 else
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateDoc'), 'class="save"');
+	$form->addElement('style_submit_button', 'submit','<i class="fa fa-file-text"></i> '. get_lang('CreateDoc'), 'class="btn-primary"');
 
 $form->setDefaults($defaults);
 
@@ -587,12 +587,12 @@ if ($form->validate()) {
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
     // HTML-editor
-    echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span3" style="width:200px">
+    echo '<div class="row" style="overflow:hidden">
+            <div id="template_col" class="col-md-3" style="width:200px">
                 <div id="frmModel" ></div>
             </div>
             <div id="hide_bar_template"></div>
-            <div id="doc_form" class="span9">
+            <div id="doc_form" class="col-md-9">
                     '.$form->return_form().'
             </div>
           </div>';

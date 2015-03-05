@@ -381,12 +381,12 @@ switch ($action) {
 
             if (file_exists($copyfile)) {
                 $message = get_lang('CopyAlreadyDone').'</p><p>';
-                $message .= '<a class = "btn" '.
+                $message .= '<a class = "btn btn-default" '.
                         'href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$parent_id.'">'.
                         get_lang("No").
                     '</a>'.
                     '&nbsp;&nbsp;|&nbsp;&nbsp;'.
-                    '<a class = "btn" href="'.api_get_self().'?'.
+                    '<a class = "btn btn-default" href="'.api_get_self().'?'.
                         api_get_cidreq().'&amp;action=copytomyfiles&amp;id='.$document_info['id'].
                         '&amp;copy=yes">'.
                     get_lang('Yes').
@@ -1368,7 +1368,7 @@ if ($is_allowed_to_edit ||
         $templateForm .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
         $templateForm .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
         $templateForm .= '</table>';
-        $templateForm .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
+        $templateForm .= '<button type="submit" class="btn-default" name="create_template">'.get_lang('CreateTemplate').'</button>';
         $templateForm .= '</form>';
     } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
 
@@ -1513,7 +1513,7 @@ if (!$is_certificate_mode) {
     $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
-    $form->addText('keyword', '', false, array('class' => 'span2'));
+    $form->addText('keyword', '', false, array('class' => 'col-md-2'));
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);

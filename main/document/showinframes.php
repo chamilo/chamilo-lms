@@ -348,7 +348,8 @@ if ($show_web_odf) {
     echo '</div>';
 } else {
     // ViewerJS already have download button
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><i class="fa fa-download"></i>
+'.get_lang('Download').'</a>';
 }
 
 echo '</div>';

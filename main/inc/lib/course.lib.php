@@ -4978,7 +4978,7 @@ class CourseManager
     }
 
     /**
-     * @param string $course_code
+     * @param int $courseId
      * @param array $teachers
      * @param bool $deleteTeachersNotInList
      * @param bool $editTeacherInSessions
@@ -4986,7 +4986,7 @@ class CourseManager
      * @return bool
      */
     public static function updateTeachers(
-        $course_code,
+        $courseId,
         $teachers,
         $deleteTeachersNotInList = true,
         $editTeacherInSessions = false,
@@ -4998,6 +4998,9 @@ class CourseManager
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $course_code = $courseInfo['code'];
 
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $alreadyAddedTeachers = CourseManager::get_teacher_list_from_course_code($course_code);
@@ -5023,7 +5026,7 @@ class CourseManager
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
                 $sql = 'SELECT 1 FROM ' . $course_user_table . '
-                        HERE user_id = "' . $userId . '" AND course_code = "' . $course_code . '" ';
+                        WHERE user_id = "' . $userId . '" AND course_code = "' . $course_code . '" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
                     $sql = 'UPDATE ' . $course_user_table . ' SET status = "1"

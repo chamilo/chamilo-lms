@@ -71,6 +71,9 @@
 
     /* Makes row highlighting possible */
     $(document).ready( function() {
+
+        moment.locale('{{ locale }}');
+
         /**
          * Advanced options
          * Usage

@@ -147,6 +147,7 @@ class Agenda
                     'enddate' => $end,
                     'all_day' => $allDay
                 );
+
                 $id = Database::insert(
                     $this->tbl_personal_agenda,
                     $attributes
@@ -881,8 +882,14 @@ class Agenda
      * @param string $format
      * @return array|string
      */
-    public function get_events($start, $end, $course_id = null, $groupId = null, $user_id = 0, $format = 'json')
-    {
+    public function get_events(
+        $start,
+        $end,
+        $course_id = null,
+        $groupId = null,
+        $user_id = 0,
+        $format = 'json'
+    ) {
         switch ($this->type) {
             case 'admin':
                 $this->get_platform_events($start, $end);
@@ -941,7 +948,7 @@ class Agenda
                 }
                 break;
         }
-
+//var_dump($this->events);
         if (!empty($this->events)) {
             switch ($format) {
                 case 'json':
@@ -1140,12 +1147,12 @@ class Agenda
                 $event['type'] = 'personal';
 
                 if (!empty($row['date']) && $row['date'] != '0000-00-00 00:00:00') {
-                    $event['start'] = $this->format_event_date($row['date']);
+                    $event['start'] = $this->formatEventDate($row['date']);
                     $event['start_date_localtime'] = api_get_local_time($row['date']);
                 }
 
                 if (!empty($row['enddate']) && $row['enddate'] != '0000-00-00 00:00:00') {
-                    $event['end'] = $this->format_event_date($row['enddate']);
+                    $event['end'] = $this->formatEventDate($row['enddate']);
                     $event['end_date_localtime'] = api_get_local_time($row['enddate']);
                 }
                 $event['description'] = $row['text'];
@@ -1390,11 +1397,11 @@ class Agenda
                 }
 
                 if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
-                    $event['start'] = $this->format_event_date($row['start_date']);
+                    $event['start'] = $this->formatEventDate($row['start_date']);
                     $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
                 if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
-                    $event['end'] = $this->format_event_date($row['end_date']);
+                    $event['end'] = $this->formatEventDate($row['end_date']);
                     $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
 
@@ -1504,11 +1511,11 @@ class Agenda
                 }
 
                 if (!empty($row['start_date']) && $row['start_date'] != '0000-00-00 00:00:00') {
-                    $event['start'] = $this->format_event_date($row['start_date']);
+                    $event['start'] = $this->formatEventDate($row['start_date']);
                     $event['start_date_localtime'] = api_get_local_time($row['start_date']);
                 }
                 if (!empty($row['end_date']) && $row['end_date'] != '0000-00-00 00:00:00') {
-                    $event['end'] = $this->format_event_date($row['end_date']);
+                    $event['end'] = $this->formatEventDate($row['end_date']);
                     $event['end_date_localtime'] = api_get_local_time($row['end_date']);
                 }
 
@@ -1528,12 +1535,12 @@ class Agenda
     /**
      * Format needed for the Fullcalendar js lib
      *
-     * @param string $utc_time
+     * @param string $utcTime
      * @return bool|string
      */
-    function format_event_date($utc_time)
+    private function formatEventDate($utcTime)
     {
-        return date('c', api_strtotime(api_get_local_time($utc_time)));
+        return date('c', api_strtotime(api_get_local_time($utcTime)));
     }
 
     /**

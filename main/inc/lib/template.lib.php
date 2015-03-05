@@ -147,6 +147,8 @@ class Template
         }
 
         $this->assign('template', $this->templateFolder);
+        $this->assign('locale', api_get_language_isocode());
+
         $this->assign('css_styles', $this->theme);
         $this->assign('login_class', null);
 
@@ -488,6 +490,8 @@ class Template
 
         $css[] = api_get_path(WEB_CSS_PATH).'font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs3.css';
+
         //THEME CSS STYLE
        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
@@ -553,6 +557,7 @@ class Template
             'modernizr.js',
             'jquery.min.js',
             'fullcalendar/lib/moment.min.js',
+            'daterange/daterangepicker.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',

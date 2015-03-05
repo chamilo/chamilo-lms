@@ -46,45 +46,16 @@ $(document).ready(function() {
 	allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
 	$('#users_to_send_id').bind('change', function() {
-
 	    var selected_counts = $("#users_to_send_id option:selected").size();
-
-	    //alert(selected_counts);
-       /* if (selected_counts >= 1 && $("#users_to_send_id option[value='everyone']").attr('selected') == 'selected') {
-            clean_user_select();
-
-            $('#users_to_send_id option').eq(0).attr('selected', 'selected');
-            //deleting the everyone
-            $("#users_to_send_id").trigger("liszt:updated");
-            deleted_items = true;
-
-        }*/
-        //$("#users_to_send_id").trigger("chosen:updated");
-     /*
-	    if (selected_counts >= 1) {
-	        $('#users_to_send_id option').eq(0).removeAttr('selected');
-
-
-	    }
-
-	   */
-	    //clean_user_select();
-	    //$("#users_to_send_id").trigger("liszt:updated");
-	    //alert($("#users_to_send_id option[value='everyone']").attr('selected'));
-	    if ($("#users_to_send_id option[value='everyone']").attr('selected') == 'selected') {
-            //clean_user_select();
-            //$('#users_to_send_id option').eq(0).attr('selected', 'selected');
-            //$("#users_to_send_id").trigger("liszt:updated");
-        }
     });
 
     $.datepicker.setDefaults( $.datepicker.regional[region_value] );
-    
+
 	var calendar = $('#calendar').fullCalendar({
 		header: {
 			left: 'today prev,next',
 			center: 'title',
-			right: 'month,agendaWeek,agendaDay, test'
+			right: 'month,agendaWeek,agendaDay'
 		},
         {% if use_google_calendar == 1 %}
             eventSources: [
@@ -106,20 +77,26 @@ $(document).ready(function() {
         firstDay: 1,
 		selectable	: true,
 		selectHelper: true,
-
         viewDisplay: function(view) {
             /* When changing the view update the qtips */
-            var api = $('.qtip').qtip('api'); // Access the API of the first tooltip on the page
+            /*var api = $('.qtip').qtip('api'); // Access the API of the first tooltip on the page
             if (api) {
                 api.destroy();
                 //api.render();
-            }
+            }*/
         },
 		// Add event
-		select: function(start, end, allDay, jsEvent, view) {
+		select: function(start, end, jsEvent, view) {
 			//Removing UTC stuff
-            var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
-            var end_date  = $.datepicker.formatDate("yy-mm-dd", end) + " " + end.toTimeString().substr(0, 8);
+            //var start_date = $.datepicker.formatDate("yy-mm-dd", start) + " " + start.toTimeString().substr(0, 8);
+            //var end_date  = $.datepicker.formatDate("yy-mm-dd", end) + " " + end.toTimeString().substr(0, 8);
+            var start_date = start.format("YY-MM-DD");
+            var end_date = end.format("YY-MM-DD");
+
+            var allDay = true;
+            if (end.hasTime()) {
+                allDay = false;
+            }
 
 			$('#visible_to_input').show();
 			$('#add_as_announcement_div').show();
@@ -135,23 +112,19 @@ $(document).ready(function() {
 			//$("#users_to_send_id").trigger("chosen:updated");
 
 			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start_date+'&end='+end_date+'&all_day='+allDay+'&view='+view.name;
-                var start_date_value = $.datepicker.formatDate('{{ js_format_date }}', start);
-                var end_date_value  = $.datepicker.formatDate('{{ js_format_date }}', end);
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.unix()+'&end='+end.unix()+'&all_day='+allDay+'&view='+view.name;
+                var start_date_value = start.format('{{ js_format_date }}');
+                var end_date_value = end.format('{{ js_format_date }}');
 
-				$('#start_date').html(start_date_value + " " +  start.toTimeString().substr(0, 8));
+                $('#start_date').html(start_date_value);
 
-				if (view.name != 'month') {
-					$('#start_date').html(start_date_value + " " +  start.toTimeString().substr(0, 8));
-					if (start.toDateString() == end.toDateString()) {
-						$('#end_date').html(' - '+end.toTimeString().substr(0, 8));
-					} else {
-						$('#end_date').html(' - '+start_date_value+" " + end.toTimeString().substr(0, 8));
-					}
-				} else {
-					$('#start_date').html(start_date_value);
-					$('#end_date').html(' ');
-				}
+                if (start_date_value == end_date_value) {
+                    $('#end_date').html(' - ' + end_date_value);
+                } else {
+                    $('#start_date').html('');
+                    $('#end_date').html(start_date_value+" - " + end_date_value);
+                }
+
 				$('#color_calendar').html('{{ type_label }}');
 				$('#color_calendar').removeClass('group_event');
 				$('#color_calendar').addClass('label_tag');
@@ -164,9 +137,9 @@ $(document).ready(function() {
 						'{{ "Add" | get_lang }}' : function() {
 							var bValid = true;
 							bValid = bValid && checkLength(title, "title", 1, 255);
-							//bValid = bValid && checkLength( content, "content", 1, 255 );
 
 							var params = $("#add_event_form").serialize();
+
 							$.ajax({
 								url: url+'&'+params,
 								success:function(data) {
@@ -188,7 +161,6 @@ $(document).ready(function() {
                                         var position =String(window.location).indexOf("&user");
                                         var url_length = String(window.location).length;
                                         var url = String(window.location).substring(0, position)+temp;
-
                                         /*if (position > 0) {
                                             window.location.replace(url);
                                         } else {
@@ -226,13 +198,14 @@ $(document).ready(function() {
 		},
 		eventRender: function(event, element) {
             if (event.attachment) {
-                element.qtip({
+                /*element.qtip({
                     hide: {
                         delay: 2000
                     },
 		            content: event.attachment,
 		            position: { at:'top right' , my:'bottom right'}
 		        }).removeData('qtip'); // this is an special hack to add multiple qtip in the same target
+		        */
             }
 			if (event.description) {
                 var comment = '';
@@ -240,17 +213,17 @@ $(document).ready(function() {
                     comment = event.comment;
                 }
 
-				element.qtip({
+				/*element.qtip({
                     hide: {
                         delay: 2000
                     },
 		            content: event.description + ' ' + comment,
 		            position: { at:'top left' , my:'bottom left'}
-		        });
+		        });*/
 			}
 	    },
 		eventClick: function(calEvent, jsEvent, view) {
-            var start_date = $.datepicker.formatDate("yy-mm-dd", calEvent.start) + " " + calEvent.start.toTimeString().substr(0, 8);
+            var start_date = calEvent.start.format("YY-MM-DD");
 
             if (calEvent.allDay == 1) {
                 var end_date 	= '';
@@ -258,7 +231,7 @@ $(document).ready(function() {
                 var end_date 	= '';
                 if (calEvent.end && calEvent.end != '') {
                     //var end_date 	= Math.round(calEvent.end.getTime() / 1000);
-                    var end_date  = $.datepicker.formatDate("yy-mm-dd", calEvent.end) + " " + calEvent.end.toTimeString().substr(0, 8);
+                    var end_date  = calEvent.end.format("YY-MM-DD");
                 }
             }
 
@@ -280,13 +253,13 @@ $(document).ready(function() {
                 $('#color_calendar').removeClass('group_event');
                 $('#color_calendar').addClass(calEvent.type+'_event');
 
-                my_start_month = calEvent.start.getMonth() +1;
-
-                $('#start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
-
-                if (end_date != '') {
-                    my_end_month = calEvent.end.getMonth() +1;
-                    $('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
+                //my_start_month = calEvent.start.getMonth() +1;
+                //$('#start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
+                $('#start_date').html(calEvent.start.format("YY-MM-DD"));
+                if (calEvent.end) {
+                    //my_end_month = calEvent.end.getMonth() +1;
+                    //$('#end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear());
+                    $('#end_date').html(' - '+calEvent.end.format("YY-MM-DD"));
                 }
 
                 if ($("#title").parent().find('#title_edit').length == 0) {
@@ -318,7 +291,7 @@ $(document).ready(function() {
 
 				$("#dialog-form").dialog("open");
 
-				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&start='+start_date+'&end='+end_date+'&all_day='+calEvent.allDay+'&view='+view.name;
+				var url = '{{ web_agenda_ajax_url }}&a=edit_event&id='+calEvent.id+'&start='+calEvent.start.unix()+'&end='+calEvent.end.unix()+'&all_day='+calEvent.allDay+'&view='+view.name;
 				var delete_url = '{{ web_agenda_ajax_url }}&a=delete_event&id='+calEvent.id;
 
 				$("#dialog-form").dialog({
@@ -453,13 +426,15 @@ $(document).ready(function() {
 				});
 			} else {
 			    //Simple form
-                my_start_month = calEvent.start.getMonth() +1;
-                $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear());
+                //my_start_month = calEvent.start.getMonth() +1;
+                $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
 
                 if (end_date != '') {
                     my_end_month = calEvent.end.getMonth() +1;
-                    $('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
-                    $('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
+                    //$('#simple_start_date').html(calEvent.start.getDate() +"/"+ my_start_month +"/"+calEvent.start.getFullYear() +" - "+calEvent.start.toLocaleTimeString());
+                    $('#simple_start_date').html(calEvent.start.format("YY-MM-DD"));
+                    //$('#simple_end_date').html(' '+calEvent.end.getDate() +"/"+ my_end_month +"/"+calEvent.end.getFullYear() +" - "+calEvent.end.toLocaleTimeString());
+                    $('#simple_end_date').html(' ' + calEvent.end.format("YY-MM-DD"));
                 }
 
                 $("#simple_title").html(calEvent.title);
@@ -487,30 +462,30 @@ $(document).ready(function() {
 		},
 		editable: true,
 		events: "{{web_agenda_ajax_url}}&a=get_events",
-		eventDrop: function(event, day_delta, minute_delta, all_day, revert_func) {
+		eventDrop: function(event, delta, revert_func) {
 			$.ajax({
 				url: '{{ web_agenda_ajax_url }}',
 				data: {
                     a: 'move_event',
                     id: event.id,
-                    day_delta: day_delta,
-                    minute_delta: minute_delta
+                    day_delta: delta.days(),
+                    minute_delta: delta.minutes()
 				}
 			});
 		},
-        eventResize: function(event, day_delta, minute_delta, revert_func) {
+        eventResize: function(event, delta, revert_func) {
             $.ajax({
 				url: '{{ web_agenda_ajax_url }}',
 				data: {
                     a: 'resize_event',
                     id: event.id,
-                    day_delta: day_delta,
-                    minute_delta: minute_delta
+                    day_delta: delta.days(),
+                    minute_delta: delta.minutes()
 				}
 			});
         },
-		axisFormat: 'HH(:mm)',
-		timeFormat: 'HH:mm{ - HH:mm}',
+		axisFormat: 'h(:mm)a',
+		timeFormat: 'h:mm',
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();

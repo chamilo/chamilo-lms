@@ -15,9 +15,9 @@ if (php_sapi_name() != 'cli') {
 }
 
 // Days before expiration date to send reminders
-define("OFFSET", 2);
-$today = date("Y-m-d");
-$expirationDate = date("Y-m-d", strtotime($today." + ".OFFSET." day"));
+define("OFFSET", 30);
+$today = gmdate("Y-m-d");
+$expirationDate = gmdate("Y-m-d", strtotime($today." + ".OFFSET." day"));
 
 $query = "SELECT DISTINCT category.session_id, certificate.user_id FROM ".
     Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY)." AS category
@@ -64,7 +64,6 @@ foreach ($sessions as $sessionId => $userIds) {
 }
 
 if ($usersToBeReminded) {
-    global $_configuration;
     $today = date_create($today);
     $platformLanguage = api_get_setting("platformLanguage");
     $subject = sprintf(
@@ -89,15 +88,28 @@ if ($usersToBeReminded) {
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        foreach ($sessions as $session) {
+        foreach ($sessions as $sessionId => $session) {
             $daysRemaining = date_diff($today, date_create($session['date_end']));
+            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)."ON id = access_url_id";
+            $result = Database::select(
+                'url',
+                Database::get_main_table(TABLE_MAIN_ACCESS_URL).$join,
+                array(
+                    'where' => array(
+                        'session_id = ?' => array(
+                            $sessionId
+                        )
+                    ),
+                    'limit' => '1'
+                )
+            );
             $body = sprintf(
                 get_lang('MailCronCourseExpirationReminderBody', null, $platformLanguage),
                 $userCompleteName,
                 $session['name'],
                 $session['date_end'],
                 $daysRemaining->format("%d"),
-                $_configuration['root_web'],
+                $result[0]['url'],
                 api_get_setting("siteName")
             );
             api_mail_html(

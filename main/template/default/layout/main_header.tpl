@@ -58,7 +58,9 @@
                     {% endif %}
                     <div class="row">
                         <div class="col-lg-3">
-                            {{ logo }}
+                            <div class="logo">
+                                {{ logo }}
+                            </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="col-4">

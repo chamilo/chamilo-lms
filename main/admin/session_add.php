@@ -364,9 +364,7 @@ $(function() {
 });
 </script>';
 
-$form->addElement('button', 'submit', get_lang('NextStep'), array(
-    'class' => 'save'
-));
+$form->addButtonNext(get_lang('NextStep'));
 
 $formDefaults = array(
     'nb_days_acess_before' => $nb_days_acess_before,

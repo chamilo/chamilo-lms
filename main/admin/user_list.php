@@ -801,8 +801,8 @@ if (!empty($action)) {
 $form = new FormValidator('search_simple', 'get', '', '', array('class' => 'form-search'), false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
-$form->addElement('text','keyword', get_lang('keyword'), 'size="25"');
-$form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="btn"');
+$form->addElement('text','keyword', get_lang('keyword'));
+$form->addButtonSearch(get_lang('Search'));
 $form->addElement(
     'static',
     'search_advanced_link',

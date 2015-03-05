@@ -5,8 +5,6 @@
  *	@package chamilo.admin
  */
 
-/* INITIALIZATION SECTION */
-
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
 
@@ -126,7 +124,7 @@ $(function() {
 </script>';
 
 $form->add_progress_bar();
-$form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
+$form->addButtonCreate(get_lang('CreateCourse'));
 
 // Set some default values.
 $values['course_language']  = api_get_setting('platformLanguage');

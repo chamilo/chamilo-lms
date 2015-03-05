@@ -214,9 +214,69 @@ EOT;
      *
      * @return HTML_QuickForm_button
      */
-    public function addButton($name, $label, $icon = 'check', $style = 'default', $size = 'default', $class = 'btn', $attributes = array())
+    public function addButton(
+        $name,
+        $label,
+        $icon = 'check',
+        $style = 'default',
+        $size = 'default',
+        $class = 'btn',
+        $attributes = array()
+    ) {
+        return $this->addElement(
+            'button',
+            $name,
+            $label,
+            $icon,
+            $style,
+            $size,
+            $class,
+            $attributes
+        );
+    }
+
+    /**
+     * @param string $label
+     */
+    public function addButtonCreate($label)
     {
-        return $this->addElement('button', $name, $label, $icon, $style, $size, $class, $attributes);
+        $this->addButton('submit', $label, 'plus', 'primary');
+    }
+
+    /**
+     * Shortcut to create/add button
+     * @param string $label
+     */
+    public function addButtonUpdate($label)
+    {
+        return $this->addButton('submit', $label, 'pencil', 'primary');
+    }
+
+    /**
+     * Shortcut to delete button
+     * @param string $label
+     */
+    public function addButtonDelete($label)
+    {
+        return $this->addButton('submit', $label, 'trash', 'danger');
+    }
+
+    /**
+     * Shortcut to search button
+     * @param string $label
+     */
+    public function addButtonSearch($label)
+    {
+        return $this->addButton('submit', $label, 'search');
+    }
+
+    /**
+     * Shortcut to update button
+     * @param string $label
+     */
+    public function addButtonNext($label)
+    {
+        return $this->addButton('submit', $label, 'arrow-right', 'primary');
     }
 
     /**

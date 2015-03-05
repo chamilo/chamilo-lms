@@ -274,8 +274,9 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-$html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-$html_results_enabled[] = $form-> createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'primary');
+$html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+');
+
 $form->addGroup($html_results_enabled);
 
 // Validate form

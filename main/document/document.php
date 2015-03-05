@@ -1506,7 +1506,7 @@ if (!$is_certificate_mode) {
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+    $form->addButtonSearch(get_lang('Search'));
     $actions .= $form->return_form();
     $actions .= '</span>';
 }

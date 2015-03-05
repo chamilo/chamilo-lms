@@ -64,7 +64,7 @@ $renderer = $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
-$form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+$form->addButtonSearch(get_lang('Search'));
 $form->addElement('static', 'additionalactions', null, $actions);
 $form->display();
 echo '</div>';

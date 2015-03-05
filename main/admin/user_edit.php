@@ -295,6 +295,7 @@ $(document).ready(function(){
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
 
+
 // Set default values
 $user_data['reset_password'] = 0;
 $expiration_date = $user_data['expiration_date'];

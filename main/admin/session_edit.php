@@ -4,9 +4,6 @@
  * Sessions edition script
  * @package chamilo.admin
  */
-/**
- * Code
- */
 
 // name of the language file that needs to be included
 $language_file ='admin';
@@ -253,9 +250,7 @@ $(function() {
 });
 </script>';
 
-$form->addElement('button', 'submit', get_lang('ModifyThisSession'), array(
-    'class' => 'save'
-));
+$form->addButtonUpdate(get_lang('ModifyThisSession'));
 
 $formDefaults = array(
     'id_coach' => $infos['id_coach'],

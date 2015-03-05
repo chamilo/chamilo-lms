@@ -149,8 +149,7 @@ $defaults['publicated_on']  = date('Y-m-d 08:00:00');
 $defaults['expired_on']     = date('Y-m-d 08:00:00',time()+86400);
 
 $form->setDefaults($defaults);
-$form->addElement('style_submit_button', 'Submit',get_lang('CreateLearningPath'),'class="save"');
-
+$form->addButtonCreate(get_lang('CreateLearningPath'));
 
 $form->display();
 // Footer

@@ -156,7 +156,7 @@ $obj->fill_grade_model_select_in_form($form);
 $form->addElement('html','</div>');
 
 // Submit button.
-$form->addElement('button', 'submit', $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
+$form->addButtonCreate($course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'));
 
 // The progress bar of this form.
 $form->add_progress_bar();

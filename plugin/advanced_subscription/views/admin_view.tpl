@@ -50,9 +50,9 @@
                         </td>
                         <td>{{ student.created_at }}</td>
                         <td>{{ student.area }}</td>
-                        {% set cellClass = 'important"'%}
+                        {% set cellClass = 'important'%}
                         {% if student.validation == 'Yes' %}
-                            {% set cellClass = 'success"'%}
+                            {% set cellClass = 'success'%}
                         {% endif %}
                         <td>
                             {% if student.validation != '' %}

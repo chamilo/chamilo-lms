@@ -474,11 +474,10 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
-        // Base CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-
         // Default CSS Bootstrap
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap.css');
+        // Base CSS
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';

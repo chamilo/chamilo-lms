@@ -1774,7 +1774,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             }
 
             if ((isset($_GET['keyword']) &&
-                search_keyword($document_name, $_GET['keyword'])) ||
+                DocumentManager::search_keyword($document_name, $_GET['keyword'])) ||
                 !isset($_GET['keyword']) || empty($_GET['keyword'])
             ) {
                 $sortable_data[] = $row;

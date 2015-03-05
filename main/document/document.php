@@ -66,6 +66,8 @@ $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
 
+$currentUrl = api_get_self().'?'.api_get_cidreq();
+
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
@@ -1136,10 +1138,12 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
+                            Display::addFlash(Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation'));
                         } else {
-                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
+                            Display::addFlash(Display::return_message(get_lang('ViModProb'), 'error'));
                         }
+                        header('Location: '.$currentUrl);
+                        exit;
                         break;
                     case 'set_visible':
                         $visibilityCommand = 'visible';
@@ -1155,10 +1159,12 @@ if ($is_allowed_to_edit ||
                             null,
                             $sessionId
                         )) {
-                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation');
+                            Display::addFlash(Display::return_message(get_lang('VisibilityChanged').': '.$data['title'], 'confirmation'));
                         } else {
-                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
+                            Display::addFlash(Display::return_message(get_lang('ViModProb'), 'error'));
                         }
+                        header('Location: '.$currentUrl);
+                        exit;
                         break;
                     case 'delete':
                         // Check all documents scheduled for deletion
@@ -1327,11 +1333,16 @@ if ($is_allowed_to_edit) {
             null,
             $sessionId)
         ) {
-            $message = Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
+            Display::addFlash(
+                Display::return_message(get_lang('VisibilityChanged'), 'confirmation')
+            );
         } else {
-            $message = Display::return_message(get_lang('ViModProb'), 'error');
+            Display::addFlash(
+                Display::return_message(get_lang('ViModProb'), 'error')
+            );
         }
-        Session::write('message', $message);
+        header('Location: '.$currentUrl);
+        exit;
     }
 }
 $templateForm = null;
@@ -1941,7 +1952,7 @@ if (count($documentAndFolders) > 1) {
         $table->set_form_actions($form_action, 'ids');
     }
 }
-
+$flashMessage = Display::getFlashToString();
 Display::display_header('', 'Doc');
 
 /* Introduction section (editable by course admins) */
@@ -1958,6 +1969,8 @@ if (!empty($message)) {
     echo $message;
 }
 
+echo $flashMessage;
+
 Session::erase('message');
 
 echo $actions;
@@ -1970,7 +1983,6 @@ $table->display();
 
 if (count($documentAndFolders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
-
         // Getting the course quota
         $course_quota = DocumentManager::get_course_quota();
 

@@ -136,11 +136,11 @@ $htmlHeadXtra[] = '
 
     $(function() {
 
-        $(".item_data").live("mouseover", function(event) {
+        $(".item_data").on("mouseover", function(event) {
             $(".button_actions", this).show();
         });
 
-        $(".item_data").live("mouseout", function() {
+        $(".item_data").on("mouseout", function() {
             $(".button_actions",this).hide();
         });
 
@@ -500,7 +500,6 @@ switch ($action) {
 
                 if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
                 	$publicated_on  = $_REQUEST['publicated_on'];
-                	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
                 } else {
                 	$publicated_on = null;
                 }

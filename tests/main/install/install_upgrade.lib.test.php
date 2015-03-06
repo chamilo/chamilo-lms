@@ -57,12 +57,6 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertFalse($res);
 	}
 */
-	public function testLoadDatabaseScript() {
-		$chamilo_path_folder= api_get_path(SYS_PATH);
-		$db_script= $chamilo_path_folder.'main/install/db_stats.sql';
-		$res = load_database_script($db_script);
-		$this->assertTrue(is_null($res));
-	}
 
 	public function testSplitSqlFile() {
 		$ret='';

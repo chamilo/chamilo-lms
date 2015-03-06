@@ -80,3 +80,7 @@
 .legal-terms-title {
     text-align: center;
 }
+
+#decisionColumn {
+    width: 148px;
+}

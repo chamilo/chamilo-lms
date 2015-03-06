@@ -2,13 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class FormValidator
- * create/manipulate/validate user input.
+ * Objects of this class can be used to create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
 {
-    const LAYOUT_HORIZONTAL = 'horizontal';
-    const LAYOUT_INLINE = 'inline';
     public $with_progress_bar = false;
 
     /**
@@ -18,7 +15,6 @@ class FormValidator extends HTML_QuickForm
      * @param string $action (optional			Action (default is $PHP_SELF)
      * @param string $target (optional			Form's target defaults to '_self'
      * @param mixed $attributes (optional)		Extra attributes for <form> tag
-     * @param string $layout
      * @param bool $trackSubmit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
@@ -28,25 +24,11 @@ class FormValidator extends HTML_QuickForm
         $action = '',
         $target = '',
         $attributes = null,
-        $layout = self::LAYOUT_HORIZONTAL,
         $trackSubmit = true
     ) {
         // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
-        }
-
-        if (isset($attributes['class']) && strpos($attributes['class'], 'form-search') !== false) {
-            $layout = 'inline';
-        }
-
-        switch ($layout) {
-            case self::LAYOUT_HORIZONTAL:
-                $attributes['class'] = 'form-horizontal';
-                break;
-            case self::LAYOUT_INLINE:
-                $attributes['class'] = 'form-inline';
-                break;
         }
 
         parent::__construct($name, $method, $action, $target, $attributes, $trackSubmit);
@@ -138,11 +120,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for} class="col-xs-12 col-md-2 control-label" >
+                <label {label-for} class="col-sm-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="col-xs-12 col-md-10">
+                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -316,24 +298,13 @@ EOT;
     }
 
     /**
-     * Shortcut to export button
+     * Shortcut to import button
      * @param string $label
      */
     public function addButtonExport($label, $name = 'submit')
     {
         return $this->addButton($name, $label, 'check', 'primary');
     }
-
-    /**
-     * Shortcut to filter button
-     * @param string $label
-     */
-    public function addButtonFilter($label, $name = 'submit')
-    {
-        return $this->addButton($name, $label, 'filter', 'primary');
-    }
-
-
 
     /**
      * @param string $name

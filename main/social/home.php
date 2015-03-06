@@ -131,7 +131,14 @@ $social_search_block.= '</div>';
 $social_search_block.= '</div>';
 
 //BLock Social Skill
+$social_skill_block = '';
+
 if (api_get_setting('allow_skills_tool') == 'true') {
+    $skill = new Skill();
+
+    $ranking = $skill->get_user_skill_ranking(api_get_user_id());
+    $skills = $skill->get_user_skills(api_get_user_id(), true);
+
     $social_skill_block = '<div class="panel panel-info social-skill">';
     $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
     $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -155,11 +162,6 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     ) . '</li>';
 
     $social_skill_block .= '</ul></div></div>';
-
-    $skill = new Skill();
-
-    $ranking = $skill->get_user_skill_ranking(api_get_user_id());
-    $skills = $skill->get_user_skills(api_get_user_id(), true);
 
     $lis = '';
     if (!empty($skills)) {

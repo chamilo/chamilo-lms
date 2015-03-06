@@ -486,9 +486,10 @@ $socialAutoExtendLink = Display::url(
 );
 
 /* $socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4); */
+$socialRightInformation = null;
 
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
-
+$social_right_content = null;
 
 if ($show_full_profile) {
 
@@ -579,6 +580,8 @@ if ($show_full_profile) {
 
  //If there are information to show Block Extra Information
 
+    $social_extra_info_block = null;
+
     if (!empty($extra_information_value)) {
         $social_extra_info_block .=  $extra_information;
     }
@@ -639,6 +642,8 @@ if ($show_full_profile) {
         }
     }
 
+    //Block My Groups
+    $social_group_info_block = null;
 
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
@@ -677,9 +682,11 @@ if ($show_full_profile) {
             $i++;
         }
         $my_groups .= '</div>';
-        //Block My Groups
         $social_group_info_block .=  $my_groups;
     }
+
+    //Block Social Course
+    $social_course_block = null;
 
     $my_courses = null;
     // COURSES LIST
@@ -700,23 +707,23 @@ if ($show_full_profile) {
         }
         $my_courses .=  '</div></div>';
 
-        //Block Social Course
-
         $social_course_block .=  $my_courses;
     }
 
     //Block Social Sessions
+    $social_session_block = null;
 
-    $sessions  = '<div class="panel panel-info">';
-    $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
-    $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
-    $sessions .= '</div>';
-    $social_session_block .= $sessions;
-
+    if (count($sessionList) > 0) {
+        $sessions  = '<div class="panel panel-info">';
+        $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
+        $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
+        $sessions .= '</div>';
+        $social_session_block = $sessions;
+    }
 
     // Block Social User Feeds
-
     $user_feeds = SocialManager::get_user_feeds($user_id);
+    $social_rss_block = null;
 
     if (!empty($user_feeds)) {
         $rss  = '<div class="panel panel-info social-rss">';
@@ -726,8 +733,15 @@ if ($show_full_profile) {
 
     }
 
+    $social_skill_block = null;
+
     //BLock Social Skill
-    if (api_get_setting('allow_skills_tool') == 'true') {
+    if (api_get_setting('allow_skills_tool') == 'true') {        
+        $skill = new Skill();
+
+        $ranking = $skill->get_user_skill_ranking(api_get_user_id());
+        $skills = $skill->get_user_skills(api_get_user_id(), true);
+
         $social_skill_block = '<div class="panel panel-info social-skill">';
         $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
         $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -751,11 +765,6 @@ if ($show_full_profile) {
             ) . '</li>';
 
         $social_skill_block .= '</ul></div></div>';
-
-        $skill = new Skill();
-
-        $ranking = $skill->get_user_skill_ranking(api_get_user_id());
-        $skills = $skill->get_user_skills(api_get_user_id(), true);
 
         $lis = '';
         if (!empty($skills)) {

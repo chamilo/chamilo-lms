@@ -34,7 +34,7 @@ $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 function search_coachs($needle) {
 	global $tbl_user;
 
-	$xajax_response = new XajaxResponse();
+	$xajax_response = new xajaxResponse();
 	$return = '';
 
 	if(!empty($needle)) {
@@ -271,9 +271,9 @@ if (intval($countUsers) < 50) {
 }
 
 $form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
-$form->add_html('<div id="ajax_list_coachs"></div>');
+$form->addHtml('<div id="ajax_list_coachs"></div>');
 
-$form->add_select('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
+$form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'
@@ -364,9 +364,7 @@ $(function() {
 });
 </script>';
 
-$form->addElement('button', 'submit', get_lang('NextStep'), array(
-    'class' => 'save'
-));
+$form->addButtonNext(get_lang('NextStep'));
 
 $formDefaults = array(
     'nb_days_acess_before' => $nb_days_acess_before,
@@ -394,8 +392,8 @@ if ($form->validate()) {
     $coach_username = $params['coach_username'];
     $id_session_category = $params['session_category'];
     $id_visibility = $params['session_visibility'];
-    $end_limit = isset($params['end_limit']) ? true : false;
-    $start_limit = isset($params['start_limit']) ? true : false;
+    $end_limit = isset($params['end_limit']);
+    $start_limit = isset($params['start_limit']);
     $duration = isset($params['duration']) ? $params['duration'] : null;
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;

@@ -17,34 +17,40 @@ $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-$course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
-$noPHP_SELF = true;
+$courseId = isset($_GET['id']) ? $_GET['id'] : null;
+
+if (empty($courseId)) {
+    api_not_allowed(true);
+}
+
+$courseInfo = api_get_course_info_by_id($courseId);
+
+if (empty($courseInfo)) {
+    api_not_allowed(true);
+}
+
 $tool_name = get_lang('ModifyCourseInfo');
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('CourseList'));
 
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
-//Get the course infos
-$sql = "SELECT * FROM $course_table WHERE code='" . Database::escape_string($course_code) . "'";
-$result = Database::query($sql);
-if (Database::num_rows($result) != 1) {
-    header('Location: course_list.php');
-    exit();
-}
-$course = Database::fetch_array($result, 'ASSOC');
-
-$course_info = api_get_course_info($course_code);
+$course_code = $courseInfo['code'];
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='" . $course_code . "'" . $order_clause;
+$sql = "SELECT user.user_id,lastname,firstname
+        FROM $table_user as user,$table_course_user as course_user
+        WHERE
+            course_user.status='1' AND
+            course_user.user_id=user.user_id AND
+            course_user.course_code='" . $course_code . "'" .
+        $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
 while ($obj = Database::fetch_object($res)) {
-    $course_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+    $course_teachers[] = $obj->user_id;
 }
 
 // Get all possible teachers without the course teachers
@@ -54,16 +60,18 @@ if (api_is_multiple_url_enabled()) {
             FROM $table_user as u
             INNER JOIN $access_url_rel_user_table url_rel_user
             ON (u.user_id=url_rel_user.user_id)
-            WHERE url_rel_user.access_url_id=" . api_get_current_access_url_id() . " AND status=1" . $order_clause;
+            WHERE
+                url_rel_user.access_url_id=" . api_get_current_access_url_id() . " AND
+                status=1" . $order_clause;
 } else {
     $sql = "SELECT user_id, lastname, firstname
             FROM $table_user WHERE status='1'" . $order_clause;
 }
+$courseInfo['tutor_name'] = null;
 
 $res = Database::query($sql);
 $teachers = array();
 $allTeachers = array();
-
 $platform_teachers[0] = '-- ' . get_lang('NoManager') . ' --';
 while ($obj = Database::fetch_object($res)) {
     $allTeachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
@@ -71,8 +79,10 @@ while ($obj = Database::fetch_object($res)) {
         $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     }
 
-    if (isset($course_teachers[$obj->user_id]) && $course['tutor_name'] == $course_teachers[$obj->user_id]) {
-        $course['tutor_name'] = $obj->user_id;
+    if (isset($course_teachers[$obj->user_id]) &&
+        $courseInfo['tutor_name'] == $course_teachers[$obj->user_id]
+    ) {
+        $courseInfo['tutor_name'] = $obj->user_id;
     }
     // We add in the array platform teachers
     $platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
@@ -83,16 +93,16 @@ if (count($course_teachers) == 0) {
     $sql = 'SELECT tutor_name FROM ' . $course_table . ' WHERE code="' . $course_code . '"';
     $res = Database::query($sql);
     $tutor_name = Database::result($res, 0, 0);
-    $course['tutor_name'] = array_search($tutor_name, $platform_teachers);
+    $courseInfo['tutor_name'] = array_search($tutor_name, $platform_teachers);
 }
 
 // Build the form
-$form = new FormValidator('update_course');
-$form->addElement('header', get_lang('Course') . '  #' . $course_info['real_id'] . ' ' . $course_code);
+$form = new FormValidator('update_course', 'post', api_get_self().'?id='.$courseId);
+$form->addElement('header', get_lang('Course') . '  #' . $courseInfo['real_id'] . ' ' . $course_code);
 $form->addElement('hidden', 'code', $course_code);
 
 //title
-$form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
@@ -101,53 +111,30 @@ $element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), 
 $element->freeze();
 
 // Visual code
-$form->add_textfield('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
+$form->addText('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
 
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$group = array(
-    $form->createElement('select', 'platform_teachers', '', $teachers, ' id="platform_teachers" multiple=multiple size="4" style="width:300px;"'),
-    $form->createElement('select', 'course_teachers', '',   $course_teachers, ' id="course_teachers" multiple=multiple size="4" style="width:300px;"')
-);
+$form->addElement('advmultiselect', 'course_teachers', get_lang('CourseTeachers'), $allTeachers);
 
-$element_template = <<<EOT
-    <div class="control-group">
-        <label>
-            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-        </label>
-        <div class="controls">
-            <table cellpadding="0" cellspacing="0">
-                <tr>
-                    <!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<td>{element}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-EOT;
+$courseInfo['course_teachers'] = $course_teachers;
 
-$renderer = $form->defaultRenderer();
-$renderer->setElementTemplate($element_template, 'group');
-$form->addGroup($group, 'group', get_lang('CourseTeachers'), '</td><td width="80" align="center">' .
-    '<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))"><br><br>'.
-    '<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))"></td><td>'
-);
-
-if (array_key_exists('add_teachers_to_sessions_courses', $course)) {
+if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
 }
 
-$coursesInSession = SessionManager::get_session_by_course($course['code']);
+$coursesInSession = SessionManager::get_session_by_course($courseInfo['code']);
 if (!empty($coursesInSession)) {
     foreach ($coursesInSession as $session) {
         $sessionId = $session['id'];
-        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $course['code']);
+        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['code']);
         $teachers = $allTeachers;
 
         $sessionTeachers = array();
         foreach ($coaches as $coachId) {
             $userInfo = api_get_user_info($coachId);
-            $sessionTeachers[$coachId] = $userInfo['complete_name'];
+            $sessionTeachers[] = $coachId;
 
             if (isset($teachers[$coachId])) {
                 unset($teachers[$coachId]);
@@ -161,23 +148,17 @@ if (!empty($coursesInSession)) {
         $platformTeacherName = 'platform_teachers_by_session';
         $coachName = 'coaches_by_session';
 
-        $group = array(
-            $form->createElement('select', $platformTeacherName, '', $teachers, ' id="' . $platformTeacherId . '" multiple=multiple size="4" style="width:300px;"'),
-            $form->createElement('select', $coachName, '', $sessionTeachers, ' id="' . $coachId . '" multiple=multiple size="4" style="width:300px;"')
-        );
-
-        $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate($element_template, $groupName);
         $sessionUrl = api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=' . $sessionId;
-        $form->addGroup($group, $groupName,
-            Display::url($session['name'], $sessionUrl, array('target' => '_blank')) . ' - ' . get_lang('Coaches'),
-            '</td>
-            <td width="80" align="center">
-                <input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'' . $platformTeacherId . '\'), document.getElementById(\'' . $coachId . '\'));">
-                <br><br>
-                <input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'' . $coachId . '\'), document.getElementById(\'' . $platformTeacherId . '\'));">
-            </td><td>'
+        $form->addElement(
+            'advmultiselect',
+            $groupName,
+            Display::url(
+                $session['name'], $sessionUrl, array('target' => '_blank')
+            ) . ' - ' . get_lang('Coaches'),
+            $allTeachers
         );
+        $courseInfo[$groupName] = $sessionTeachers;
+
     }
 }
 
@@ -191,12 +172,11 @@ if (!empty($course['category_code'])) {
 
 $form->addElement('select_ajax', 'category_code', get_lang('CourseFaculty'), null, array('url' => $url, 'defaults' => $categoryList));
 
-
-$form->add_textfield('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
+$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->add_textfield('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
+$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
 $form->applyFilter('department_url', 'html_filter');
 $form->applyFilter('department_url', 'trim');
 
@@ -252,21 +232,19 @@ $extra = $extra_field->addElements($form, $course_code);
 
 $htmlHeadXtra[] = '
 <script>
-
 $(function() {
     ' . $extra['jquery_ready_content'] . '
 });
 </script>';
 
-$form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'), 'onclick="valide()"; class="save"');
+$form->addButton('submit', get_lang('ModifyCourseInfo'), 'pencil', 'primary');
 
 // Set some default values
-$course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) / 1024 / 1024, 1);
-$course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
-$course['real_code'] = $course['code'];
-$course['add_teachers_to_sessions_courses'] = isset($course['add_teachers_to_sessions_courses']) ? $course['add_teachers_to_sessions_courses'] : 0;
+$courseInfo['disk_quota'] = round(DocumentManager::get_course_quota($courseInfo['code']) / 1024 / 1024, 1);
+$courseInfo['real_code'] = $courseInfo['code'];
+$courseInfo['add_teachers_to_sessions_courses'] = isset($courseInfo['add_teachers_to_sessions_courses']) ? $courseInfo['add_teachers_to_sessions_courses'] : 0;
 
-$form->setDefaults($course);
+$form->setDefaults($courseInfo);
 
 // Validate form
 if ($form->validate()) {
@@ -281,8 +259,8 @@ if ($form->validate()) {
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
     ) {
         // Check if
-        if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN &&
-            $visibility != $course_info['visibility']
+        if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN &&
+            $visibility != $courseInfo['visibility']
         ) {
             $num = CourseManager::countActiveCourses($urlId);
             if ($num >= $_configuration[$urlId]['hosting_limit_active_courses']) {
@@ -296,7 +274,6 @@ if ($form->validate()) {
         }
     }
 
-    $course_code = $course['code'];
     $visual_code = $course['visual_code'];
     $visual_code = CourseManager::generate_course_code($visual_code);
 
@@ -317,7 +294,7 @@ if ($form->validate()) {
 
     $tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
     $tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
-    $teachers = $course['group']['course_teachers'];
+    $teachers = $course['course_teachers'];
 
     $title = $course['title'];
     $category_code = $course['category_code'];
@@ -329,7 +306,6 @@ if ($form->validate()) {
     $subscribe = $course['subscribe'];
     $unsubscribe = $course['unsubscribe'];
     $course['course_code'] = $course_code;
-    $courseId = $course['id'];
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://' . $department_url;
@@ -352,7 +328,6 @@ if ($form->validate()) {
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');
     $courseFieldValue->save_field_values($course);
-
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 
     // Updating teachers
@@ -368,16 +343,16 @@ if ($form->validate()) {
             }
         }
 
-        CourseManager::updateTeachers($course_code, $teachers, false, true, false);
+        CourseManager::updateTeachers($courseId, $teachers, false, true, false);
     } else {
         // Normal behaviour
-        CourseManager::updateTeachers($course_code, $teachers, true, false);
+        CourseManager::updateTeachers($courseId, $teachers, true, false);
 
         // Updating session coaches
         $sessionCoaches = $course['session_coaches'];
         if (!empty($sessionCoaches)) {
-            foreach ($sessionCoaches as $sessionId => $teacherInfo) {
-                $coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : null;
+            foreach ($sessionCoaches as $sessionId => $coachesToSubscribe) {
+                //$coachesToSubscribe = isset($teacherInfo['coaches_by_session']) ? $teacherInfo['coaches_by_session'] : null;
                 if (!empty($coachesToSubscribe)) {
                     SessionManager::updateCoaches(
                         $sessionId,
@@ -400,13 +375,13 @@ if ($form->validate()) {
                 user_course_cat='0'";
     Database::query($sql);
 
-    if (array_key_exists('add_teachers_to_sessions_courses', $course_info)) {
+    if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
         $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
-                WHERE id = " . $course_info['real_id'];
+                WHERE id = " . $courseInfo['real_id'];
         Database::query($sql);
     }
 
-    $course_id = $course_info['real_id'];
+    $course_id = $courseInfo['real_id'];
     /* $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
       $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id "; */
     if ($visual_code_is_used) {
@@ -421,7 +396,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
-echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $course_info['course_public_url'], array('target' => '_blank'));
+echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $courseInfo['course_public_url'], array('target' => '_blank'));
 echo '</div>';
 
 echo "<script>

@@ -158,7 +158,7 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
                 $s .=  $form->return_form();
             } elseif ($answerType == ORAL_EXPRESSION) {
@@ -188,7 +188,7 @@ class ExerciseLib
                 $config = array(
                     'ToolbarSet' => 'TestFreeAnswer'
                 );
-                $form->add_html_editor("choice[" . $questionId . "]", null, false, false, $config);
+                $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 //$form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
                 $s .=  $form->return_form();
             }
@@ -1133,7 +1133,7 @@ class ExerciseLib
     {
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCICES = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $TBL_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
         $exe_id = intval($exe_id);
@@ -1142,11 +1142,11 @@ class ExerciseLib
             $sql = " SELECT q.*, tee.*
                 FROM $TBL_EXERCICES as q
                 INNER JOIN $TBL_TRACK_EXERCICES as tee
-                ON q.id=tee.exe_exo_id
+                ON q.id = tee.exe_exo_id
                 INNER JOIN $TBL_COURSE c
-                ON c.code = tee.exe_cours_id
-                WHERE tee.exe_id=$exe_id
-                AND q.c_id=c.id";
+                ON c.id = tee.c_id
+                WHERE tee.exe_id = $exe_id
+                AND q.c_id = c.id";
 
             $res_fb_type = Database::query($sql);
             $result = Database::fetch_array($res_fb_type, 'ASSOC');
@@ -1302,7 +1302,7 @@ class ExerciseLib
         $in_get_count = false,
         $where_condition = null
     ) {
-        $course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
         /* by default in_column = 1 If parameters given,
     it is the name of the column witch is the bdd field name*/
         if ($in_column == 1) {
@@ -1321,7 +1321,7 @@ class ExerciseLib
 
         $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
             JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
-            WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+            WHERE thp.c_id = $courseId AND exe_name LIKE '$in_hotpot_path%'";
 
         // just count how many answers
         if ($in_get_count) {
@@ -1336,10 +1336,9 @@ class ExerciseLib
         $res = Database::query($sql);
         $result = array();
         $apiIsAllowedToEdit = api_is_allowed_to_edit();
-        $urlBase = api_get_path(
-                WEB_CODE_PATH
-            ) . 'exercice/hotpotatoes_exercise_report.php?action=delete&' . api_get_cidreq(
-            ) . '&id=';
+        $urlBase = api_get_path(WEB_CODE_PATH) .
+            'exercice/hotpotatoes_exercise_report.php?action=delete&' .
+            api_get_cidreq() . '&id=';
         while ($data = Database::fetch_array($res)) {
             $actions = null;
 
@@ -1387,13 +1386,12 @@ class ExerciseLib
         );
 
         $courseInfo = api_get_course_info_by_id($courseId);
-        $courseCode = $courseInfo['code'];
         $exercisePath = Database::escape_string($exercisePath);
         $userId = intval($userId);
 
         $sql = "SELECT * FROM $table
             WHERE
-                exe_cours_id = '$courseCode' AND
+                c_id = $courseId AND
                 exe_name LIKE '$exercisePath%' AND
                 exe_user_id = $userId
             ORDER BY id
@@ -1445,7 +1443,7 @@ class ExerciseLib
         $TBL_GROUP_REL_USER = Database:: get_course_table(TABLE_GROUP_USER);
         $TBL_GROUP = Database:: get_course_table(TABLE_GROUP);
         $TBL_TRACK_EXERCICES = Database:: get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $TBL_TRACK_HOTPOTATOES = Database:: get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTPOTATOES
@@ -1474,7 +1472,7 @@ class ExerciseLib
         FROM $TBL_TRACK_EXERCICES ttte LEFT JOIN $TBL_TRACK_ATTEMPT_RECORDING tr
         ON (ttte.exe_id = tr.exe_id)
         WHERE
-            exe_cours_id = '$course_code' AND
+            c_id = $course_id AND
             exe_exo_id = $exercise_id AND
             ttte.session_id = " . $sessionId . "
     )";
@@ -1564,8 +1562,8 @@ class ExerciseLib
             }
 
             $sqlFromOption = " , $TBL_GROUP_REL_USER AS gru ";
-            $sqlWhereOption = "  AND gru.c_id = " . api_get_course_int_id(
-                ) . " AND gru.user_id = user.user_id ";
+            $sqlWhereOption = "  AND gru.c_id = " . $course_id .
+                " AND gru.user_id = user.user_id ";
 
             $first_and_last_name = api_is_western_name_order(
             ) ? "firstname, lastname" : "lastname, firstname";
@@ -1592,7 +1590,8 @@ class ExerciseLib
                     revised,
                     group_name,
                     group_id,
-                    orig_lp_id";
+                    orig_lp_id,
+                    te.user_ip";
             }
 
             $sql = " $sql_select
@@ -1601,8 +1600,8 @@ class ExerciseLib
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
                 WHERE
                     te.status != 'incomplete' AND
-                    te.exe_cours_id='" . api_get_course_id() . "' $session_id_and AND
-                    ce.active <>-1 AND ce.c_id=" . api_get_course_int_id() . "
+                    te.c_id = " . $course_id . " $session_id_and AND
+                    ce.active <>-1 AND ce.c_id = " . $course_id . "
                     $exercise_where
                     $extra_where_conditions
                 ";
@@ -1629,14 +1628,14 @@ class ExerciseLib
                     $sqlFromOption
                 WHERE
                     user.user_id=tth.exe_user_id
-                    AND tth.exe_cours_id = '" . api_get_course_id() . "'
+                    AND tth.c_id = " . $course_id . "
                     $hotpotatoe_where
                     $sqlWhereOption
                     AND user.status NOT IN(" . api_get_users_status_ignored_in_reports(
                     'string'
                 ) . ")
                 ORDER BY
-                    tth.exe_cours_id ASC,
+                    tth.c_id ASC,
                     tth.exe_date DESC";
         }
 
@@ -2722,7 +2721,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -2732,18 +2731,19 @@ class ExerciseLib
         $exercise_id = intval($exercise_id);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
+        $courseId = api_get_course_int_id($course_code);
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
     		FROM $track_exercises e
     		INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND
-    		    e.exe_cours_id = a.course_code AND
+    		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
     		WHERE
     		    exe_exo_id 	= $exercise_id AND
-                course_code = '$course_code' AND
+                a.c_id = $courseId AND
                 e.session_id = $session_id AND
                 question_id = $question_id AND
                 status = ''
@@ -2771,7 +2771,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -2783,7 +2783,7 @@ class ExerciseLib
 
         $question_id = intval($question_id);
         $exercise_id = intval($exercise_id);
-        $course_code = Database::escape_string($course_code);
+        $courseId = api_get_course_int_id($course_code);
         $session_id = intval($session_id);
 
         if (empty($session_id)) {
@@ -2803,13 +2803,13 @@ class ExerciseLib
     		INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND
-    		    e.exe_cours_id = a.course_code AND
+    		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
-                a.course_code = '$course_code' AND
+                a.c_id = $courseId AND
                 e.session_id = $session_id AND
                 question_id = $question_id AND
                 answer <> '0' AND
@@ -2841,7 +2841,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_hotspot = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_HOTSPOT
@@ -2915,7 +2915,7 @@ class ExerciseLib
         $current_answer = null
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -2928,6 +2928,7 @@ class ExerciseLib
         $question_id = intval($question_id);
         $answer_id = intval($answer_id);
         $exercise_id = intval($exercise_id);
+        $courseId = api_get_course_int_id($course_code);
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
@@ -2959,13 +2960,13 @@ class ExerciseLib
     		INNER JOIN $track_attempt a
     		ON (
     		    a.exe_id = e.exe_id AND
-    		    e.exe_cours_id = a.course_code AND
+    		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
-                a.course_code = '$course_code' AND
+                a.c_id = $courseId AND
                 e.session_id = $session_id AND
                 $answer_condition
                 question_id = $question_id AND
@@ -3130,7 +3131,7 @@ class ExerciseLib
         $session_id
     ) {
         $track_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCICES
+            TABLE_STATISTIC_TRACK_E_EXERCISES
         );
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
@@ -3301,7 +3302,8 @@ class ExerciseLib
                     $exercise_stat_info['start_date'],
                     DATE_TIME_FORMAT_LONG
                 ),
-                $exercise_stat_info['duration']
+                $exercise_stat_info['duration'],
+                $exercise_stat_info['user_ip']
             );
         }
 

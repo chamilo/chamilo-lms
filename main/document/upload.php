@@ -288,7 +288,7 @@ $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename')
 $form->addElement('html', '</div>');
 
 // Button upload document
-$form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'), 'class="upload"');
+$form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
 $form->add_real_progress_bar('DocumentUpload', 'file');
 
 $fileExistsOption = api_get_configuration_value('document_if_file_exists_option');

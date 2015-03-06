@@ -45,10 +45,18 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_text($elementName=null, $elementLabel=null, $attributes=null)
-    {
+    public function HTML_QuickForm_text(
+        $elementName = null,
+        $elementLabel = null,
+        $attributes = array()
+    ) {
+        if (is_array($attributes) || empty($attributes)) {
+            $attributes['class'] = 'form-control';
+        }
+
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
+
         $this->setType('text');
     }
 

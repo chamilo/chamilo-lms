@@ -9,6 +9,6 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
  * Class ToolbarStartExpanded
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class ToolbarStartExpanded extends Toolbar
+class ToolbarStartExpanded extends Basic
 {
 }

@@ -31,9 +31,9 @@ $form->addElement('header', '', get_lang('Edit'));
 $form->addElement('hidden', 'sec_token',$token);
 $form->addElement('hidden', 'attendance_id', $attendance_id);
 
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
+$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 
 // Adavanced Parameters
 
@@ -61,7 +61,7 @@ if (Gradebook::is_active()) {
 
     $form->addElement('html','</div>');
 }
-$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+$form->addButtonUpdate(get_lang('Save'));
 
 // set default values
 $default['title'] = Security::remove_XSS($title);

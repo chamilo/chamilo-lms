@@ -279,7 +279,7 @@ if (isset($_POST['report'])) {
             FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.c_id = c.id
-            WHERE access.c_id = '" . $course_info['real_id'] . "' AND u.user_id = '$user_id' ";
+            WHERE access.c_id = " . $course_info['real_id'] . " AND u.user_id = $user_id ";
     if ($tool != '') {
         $sql.="AND access.access_tool = '$tool' ";
     }

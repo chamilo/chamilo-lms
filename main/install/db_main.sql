@@ -20,7 +20,8 @@
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE IF NOT EXISTS user (
-  user_id int unsigned NOT NULL auto_increment,
+  id int unsigned NOT NULL auto_increment,
+  user_id int unsigned default NULL,
   lastname varchar(60) default NULL,
   firstname varchar(60) default NULL,
   username varchar(100) NOT NULL default '',
@@ -37,17 +38,17 @@ CREATE TABLE IF NOT EXISTS user (
   openarea text,
   teach text,
   productions varchar(250) default NULL,
-  chatcall_user_id int unsigned NOT NULL default '0',
-  chatcall_date datetime NOT NULL default '0000-00-00 00:00:00',
-  chatcall_text varchar(50) NOT NULL default '',
+  chatcall_user_id int unsigned default '0',
+  chatcall_date datetime default NULL,
+  chatcall_text varchar(50) default NULL,
   language varchar(40) default NULL,
-  registration_date datetime NOT NULL default '0000-00-00 00:00:00',
-  expiration_date datetime NOT NULL default '0000-00-00 00:00:00',
+  registration_date datetime NOT NULL,
+  expiration_date datetime default NULL,
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
   hr_dept_id smallint unsigned NOT NULL default 0,
-  PRIMARY KEY  (user_id),
+  PRIMARY KEY (id),
   UNIQUE KEY username (username)
 );
 ALTER TABLE user ADD INDEX (status);
@@ -58,9 +59,9 @@ ALTER TABLE user ADD INDEX (status);
 
 /*!40000 ALTER TABLE user DISABLE KEYS */;
 LOCK TABLES user WRITE;
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),'0000-00-00 00:00:00','1',NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code,phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES (1, '{ADMINLASTNAME}','{ADMINFIRSTNAME}','{ADMINLOGIN}','{ADMINPASSWORD}','{PLATFORM_AUTH_SOURCE}','{ADMINEMAIL}',1,'ADMIN','{ADMINPHONE}',1,NOW(),NULL,'1',NULL,'{ADMINLANGUAGE}');
 -- Insert anonymous user
-INSERT INTO user (lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES ('Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), '0000-00-00 00:00:00', 1,NULL,'{ADMINLANGUAGE}');
+INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, creator_id, registration_date, expiration_date,active,openid,language) VALUES (2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', 1, NOW(), NULL, 1,NULL,'{ADMINLANGUAGE}');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE user ENABLE KEYS */;
 
@@ -733,7 +734,6 @@ VALUES
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
 ('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
 ('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
-('advanced_filemanager',NULL,'radio','Editor','true','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 1),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
 ('allow_message_tool', NULL, 'radio', 'Tools', 'true', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,1),
@@ -749,7 +749,7 @@ VALUES
 ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
 ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
 ('allow_coach_to_edit_course_session',NULL,'radio','Session','true','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
-('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
+('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
 ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
@@ -883,7 +883,9 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.10','DatabaseVersion','', NULL, NULL, 0);
+('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
+('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1035,8 +1037,6 @@ VALUES
 ('allow_users_to_create_courses','true','Yes'),
 ('allow_users_to_create_courses','false','No'),
 ('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
-('advanced_filemanager','true','Yes'),
-('advanced_filemanager','false','No'),
 ('allow_reservation', 'true', 'Yes'),
 ('allow_reservation', 'false', 'No'),
 ('allow_message_tool', 'true', 'Yes'),
@@ -1064,8 +1064,10 @@ VALUES
 ('show_courses_descriptions_in_catalog', 'false', 'No'),
 ('allow_coach_to_edit_course_session','true','Yes'),
 ('allow_coach_to_edit_course_session','false','No'),
-('show_glossary_in_extra_tools', 'true', 'Yes'),
-('show_glossary_in_extra_tools', 'false', 'No'),
+('show_glossary_in_extra_tools', 'none', 'None'),
+('show_glossary_in_extra_tools', 'exercise', 'Exercise'),
+('show_glossary_in_extra_tools', 'lp', 'Learning path'),
+('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath'),
 ('send_email_to_admin_when_create_course','true','Yes'),
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
@@ -1223,7 +1225,11 @@ VALUES
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
 ('enable_webcam_clip', 'true', 'Yes'),
-('enable_webcam_clip', 'false', 'No');
+('enable_webcam_clip', 'false', 'No'),
+('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
+('prevent_session_admins_to_manage_all_users', 'false', 'No'),
+('documents_default_visibility_defined_in_course', 'true', 'Yes');
+('documents_default_visibility_defined_in_course', 'false', 'No');
 
 UNLOCK TABLES;
 
@@ -3088,3 +3094,378 @@ CREATE TABLE session_field_options (
     option_order INT,
     tms DATETIME
 );
+
+
+DROP TABLE IF EXISTS personal_agenda;
+CREATE TABLE personal_agenda (
+  id int NOT NULL auto_increment,
+  user int unsigned,
+  title text,
+  `text` text,
+  `date` datetime DEFAULT NULL,
+  enddate datetime DEFAULT NULL,
+  course varchar(255),
+  parent_event_id int NULL,
+  all_day int NOT NULL DEFAULT 0,
+  PRIMARY KEY id (id)
+);
+
+DROP TABLE IF EXISTS personal_agenda_repeat;
+CREATE TABLE personal_agenda_repeat (
+  cal_id INT DEFAULT 0 NOT NULL,
+  cal_type VARCHAR(20),
+  cal_end INT,
+  cal_frequency INT DEFAULT 1,
+  cal_days CHAR(7),
+  PRIMARY KEY (cal_id)
+);
+
+DROP TABLE IF EXISTS personal_agenda_repeat_not;
+CREATE TABLE personal_agenda_repeat_not (
+  cal_id INT NOT NULL,
+  cal_date INT NOT NULL,
+  PRIMARY KEY ( cal_id, cal_date )
+);
+
+DROP TABLE IF EXISTS user_course_category;
+CREATE TABLE user_course_category (
+  id int unsigned NOT NULL auto_increment,
+  user_id int unsigned NOT NULL default 0,
+  title text NOT NULL,
+  sort int,
+  PRIMARY KEY  (id)
+);
+
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_user (user);
+ALTER TABLE personal_agenda ADD INDEX idx_personal_agenda_parent (parent_event_id);
+ALTER TABLE user_course_category ADD INDEX idx_user_c_cat_uid (user_id);
+
+DROP TABLE IF EXISTS track_c_browsers;
+CREATE TABLE track_c_browsers (
+  id int NOT NULL auto_increment,
+  browser varchar(255) NOT NULL default '',
+  counter int NOT NULL default 0,
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS track_c_countries;
+CREATE TABLE track_c_countries (
+  id int NOT NULL auto_increment,
+  code varchar(40) NOT NULL default '',
+  country varchar(50) NOT NULL default '',
+  counter int NOT NULL default 0,
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS track_c_os;
+CREATE TABLE track_c_os (
+  id int NOT NULL auto_increment,
+  os varchar(255) NOT NULL default '',
+  counter int NOT NULL default 0,
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS track_c_providers;
+CREATE TABLE track_c_providers (
+  id int NOT NULL auto_increment,
+  provider varchar(255) NOT NULL default '',
+  counter int NOT NULL default 0,
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS track_c_referers;
+CREATE TABLE track_c_referers (
+  id int NOT NULL auto_increment,
+  referer varchar(255) NOT NULL default '',
+  counter int NOT NULL default 0,
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS track_e_access;
+CREATE TABLE track_e_access (
+  access_id int NOT NULL auto_increment,
+  access_user_id int unsigned default NULL,
+  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int not null,
+  access_tool varchar(30) default NULL,
+  access_session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
+  PRIMARY KEY  (access_id),
+  KEY access_user_id (access_user_id),
+  KEY access_c_id (c_id)
+);
+
+DROP TABLE IF EXISTS track_e_lastaccess;
+CREATE TABLE track_e_lastaccess (
+  access_id bigint NOT NULL auto_increment,
+  access_user_id int unsigned default NULL,
+  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int not null,
+  access_tool varchar(30) default NULL,
+  access_session_id int unsigned default NULL,
+  PRIMARY KEY  (access_id),
+  KEY access_user_id (access_user_id),
+  KEY access_c_id (c_id),
+  KEY access_session_id (access_session_id)
+);
+
+DROP TABLE IF EXISTS track_e_default;
+CREATE TABLE track_e_default (
+  default_id int NOT NULL auto_increment,
+  default_user_id int unsigned NOT NULL default 0,
+  c_id int not null,
+  default_date datetime NOT NULL default '0000-00-00 00:00:00',
+  default_event_type varchar(20) NOT NULL default '',
+  default_value_type varchar(20) NOT NULL default '',
+  default_value text NOT NULL,
+  PRIMARY KEY  (default_id)
+);
+
+DROP TABLE IF EXISTS track_e_downloads;
+CREATE TABLE track_e_downloads (
+  down_id int NOT NULL auto_increment,
+  down_user_id int unsigned default NULL,
+  down_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int NOT NULL,
+  down_doc_path varchar(255) NOT NULL default '',
+  down_session_id INT NOT NULL DEFAULT 0,
+  PRIMARY KEY  (down_id),
+  KEY idx_ted_user_id (down_user_id),
+  KEY idx_ted_c_id (c_id)
+);
+
+DROP TABLE IF EXISTS track_e_exercises;
+CREATE TABLE track_e_exercises (
+  exe_id int NOT NULL auto_increment,
+  exe_user_id int unsigned default NULL,
+  exe_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int NOT NULL,
+  exe_exo_id mediumint unsigned NOT NULL default 0,
+  exe_result float(6,2) NOT NULL default 0,
+  exe_weighting float(6,2) NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
+  PRIMARY KEY  (exe_id),
+  KEY idx_tee_user_id (exe_user_id),
+  KEY idx_tee_c_id (c_id)
+);
+
+ALTER TABLE track_e_exercises ADD status varchar(20) NOT NULL default '';
+ALTER TABLE track_e_exercises ADD data_tracking text NOT NULL default '';
+ALTER TABLE track_e_exercises ADD start_date datetime NOT NULL default '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD steps_counter SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD session_id SMALLINT UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD INDEX ( session_id ) ;
+ALTER TABLE track_e_exercises ADD orig_lp_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD orig_lp_item_id int  NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD exe_duration int UNSIGNED NOT NULL default 0;
+ALTER TABLE track_e_exercises ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_exercises ADD COLUMN orig_lp_item_view_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_exercises ADD COLUMN questions_to_check TEXT  NOT NULL DEFAULT '';
+
+DROP TABLE IF EXISTS track_e_attempt;
+CREATE TABLE track_e_attempt (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  exe_id int default NULL,
+  user_id int NOT NULL default 0,
+  question_id int NOT NULL default 0,
+  answer text NOT NULL,
+  teacher_comment text NOT NULL,
+  marks float(6,2) NOT NULL default 0,
+  course_code varchar(40) NOT NULL default '',
+  c_id int NOT NULL,
+  position int default 0,
+  tms datetime NOT NULL default '0000-00-00 00:00:00',
+  session_id INT NOT NULL DEFAULT 0,
+  filename VARCHAR(255) DEFAULT NULL
+);
+ALTER TABLE track_e_attempt ADD INDEX (exe_id);
+ALTER TABLE track_e_attempt ADD INDEX (user_id);
+ALTER TABLE track_e_attempt ADD INDEX (question_id);
+ALTER TABLE track_e_attempt ADD INDEX (session_id);
+
+DROP TABLE IF EXISTS track_e_attempt_recording;
+CREATE TABLE track_e_attempt_recording (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  exe_id int unsigned NOT NULL,
+  question_id int unsigned NOT NULL,
+  marks int NOT NULL,
+  insert_date datetime NOT NULL default '0000-00-00 00:00:00',
+  author int unsigned NOT NULL,
+  teacher_comment text NOT NULL,
+  session_id INT NOT NULL DEFAULT 0
+);
+ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
+ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
+ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
+
+DROP TABLE IF EXISTS track_e_hotpotatoes;
+CREATE TABLE track_e_hotpotatoes (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  exe_name VARCHAR( 255 ) NOT NULL ,
+  exe_user_id int unsigned DEFAULT NULL ,
+  exe_date DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL ,
+  c_id int NOT NULL,
+  exe_result smallint default 0 NOT NULL ,
+  exe_weighting smallint default 0 NOT NULL,
+  KEY idx_tehp_user_id (exe_user_id),
+  KEY idx_tehp_c_id (c_id)
+);
+
+DROP TABLE IF EXISTS track_e_links;
+CREATE TABLE track_e_links (
+  links_id int NOT NULL auto_increment,
+  links_user_id int unsigned default NULL,
+  links_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int NOT NULL,
+  links_link_id int NOT NULL default 0,
+  links_session_id INT NOT NULL DEFAULT 0,
+  PRIMARY KEY  (links_id),
+  KEY idx_tel_c_id (links_cours_id),
+  KEY idx_tel_user_id (links_user_id)
+);
+
+DROP TABLE IF EXISTS track_e_login;
+CREATE TABLE track_e_login (
+  login_id int NOT NULL auto_increment,
+  login_user_id int unsigned NOT NULL default 0,
+  login_date datetime NOT NULL default '0000-00-00 00:00:00',
+  user_ip varchar(39) NOT NULL default '',
+  logout_date datetime NULL default NULL,
+  PRIMARY KEY  (login_id),
+  KEY login_user_id (login_user_id)
+);
+
+DROP TABLE IF EXISTS track_e_online;
+CREATE TABLE track_e_online (
+  login_id int NOT NULL auto_increment,
+  login_user_id int unsigned NOT NULL default 0,
+  login_date datetime NOT NULL default '0000-00-00 00:00:00',
+  user_ip varchar(39) NOT NULL default '',
+  c_id int NOT NULL,
+  session_id INT NOT NULL DEFAULT 0,
+  access_url_id INT NOT NULL DEFAULT 1,
+  PRIMARY KEY  (login_id),
+  KEY login_user_id (login_user_id)
+);
+DROP TABLE IF EXISTS track_e_open;
+CREATE TABLE track_e_open (
+  open_id int NOT NULL auto_increment,
+  open_remote_host tinytext NOT NULL,
+  open_agent tinytext NOT NULL,
+  open_referer tinytext NOT NULL,
+  open_date datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (open_id)
+);
+
+DROP TABLE IF EXISTS track_e_uploads;
+CREATE TABLE track_e_uploads (
+  upload_id int NOT NULL auto_increment,
+  upload_user_id int unsigned default NULL,
+  upload_date datetime NOT NULL default '0000-00-00 00:00:00',
+  upload_cours_id varchar(40) NOT NULL default '',
+  c_id int unsigned default NULL,
+  upload_work_id int NOT NULL default 0,
+  upload_session_id INT NOT NULL DEFAULT 0,
+  PRIMARY KEY  (upload_id),
+  KEY upload_user_id (upload_user_id),
+  KEY upload_cours_id (upload_cours_id)
+);
+
+DROP TABLE IF EXISTS track_e_course_access;
+CREATE TABLE track_e_course_access (
+  course_access_id int NOT NULL auto_increment,
+  c_id int NOT NULL,
+  user_id int NOT NULL,
+  login_course_date datetime NOT NULL default '0000-00-00 00:00:00',
+  logout_course_date datetime default NULL,
+  counter int NOT NULL,
+  session_id int NOT NULL default 0,
+  user_ip varchar(39) NOT NULL default '',
+  PRIMARY KEY  (course_access_id)
+);
+
+DROP TABLE IF EXISTS track_e_hotspot;
+CREATE TABLE track_e_hotspot (
+  hotspot_id int NOT NULL auto_increment,
+  hotspot_user_id int NOT NULL,
+  hotspot_course_code varchar(50) NOT NULL,
+  c_id int unsigned default NULL,
+  hotspot_exe_id int NOT NULL,
+  hotspot_question_id int NOT NULL,
+  hotspot_answer_id int NOT NULL,
+  hotspot_correct tinyint(3) unsigned NOT NULL,
+  hotspot_coordinate text NOT NULL,
+  PRIMARY KEY  (hotspot_id),
+  KEY hotspot_course_code (hotspot_course_code),
+  KEY hotspot_user_id (hotspot_user_id),
+  KEY hotspot_exe_id (hotspot_exe_id),
+  KEY hotspot_question_id (hotspot_question_id)
+);
+
+DROP TABLE IF EXISTS track_e_item_property;
+
+CREATE TABLE track_e_item_property (
+  id int NOT NULL auto_increment PRIMARY KEY,
+  course_id int NOT NULL,
+  item_property_id int NOT NULL,
+  title varchar(255),
+  content text,
+  progress int NOT NULL default 0,
+  lastedit_date datetime NOT NULL default '0000-00-00 00:00:00',
+  lastedit_user_id int  NOT NULL,
+  session_id int NOT NULL default 0
+);
+
+ALTER TABLE track_e_course_access ADD INDEX (user_id);
+ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
+ALTER TABLE track_e_course_access ADD INDEX (session_id);
+ALTER TABLE track_e_access ADD INDEX (access_session_id);
+
+ALTER TABLE track_e_online ADD INDEX (session_id);
+
+ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
+ALTER TABLE track_e_downloads ADD INDEX (down_session_id);
+ALTER TABLE track_e_links ADD INDEX (links_session_id);
+ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
+
+--
+-- Table structure for LP custom storage API
+--
+DROP TABLE IF EXISTS track_stored_values;
+CREATE TABLE IF NOT EXISTS track_stored_values (
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  sco_id INT NOT NULL,
+  course_id CHAR(40) NOT NULL,
+  sv_key CHAR(64) NOT NULL,
+  sv_value TEXT NOT NULL
+);
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+
+DROP TABLE IF EXISTS track_stored_value_stack;
+CREATE TABLE IF NOT EXISTS track_stored_values_stack (
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  sco_id INT NOT NULL,
+  stack_order INT NOT NULL,
+  course_id CHAR(40) NOT NULL,
+  sv_key CHAR(64) NOT NULL,
+  sv_value TEXT NOT NULL
+);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
+
+DROP TABLE IF EXISTS track_e_attempt_coeff;
+CREATE TABLE track_e_attempt_coeff (
+  id int unsigned not null auto_increment primary key,
+  attempt_id INT NOT NULL,
+  marks_coeff float(6,2)
+);
+
+-- Course
+
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_user ( id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_comment ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
+

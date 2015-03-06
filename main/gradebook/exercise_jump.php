@@ -15,7 +15,7 @@ api_block_anonymous_users();
 $this_section=SECTION_COURSES;
 
 $course_code = api_get_course_id();
-$course_info = Database::get_course_info($course_code);
+$course_info = api_get_course_info($course_code);
 $course_title = $course_info['title'];
 $course_code = $return_result['code'];
 $gradebook = Security::remove_XSS($_GET['gradebook']);
@@ -39,9 +39,33 @@ if (isset($_GET['doexercise'])) {
     header('Location: '.$doExerciseUrl);
     exit;
 } else {
+    $url = api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq);
     if (isset($_GET['gradebook'])) {
-        $add_url = '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
+        $url .= '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
+
+        // Check if exercise is inserted inside a LP, if that's the case
+        $exerciseId = $_GET['exerciseId'];
+        $exercise = new Exercise();
+        $exercise->read($exerciseId);
+        if (!empty($exercise->id)) {
+            if ($exercise->exercise_was_added_in_lp) {
+                if (!empty($exercise->lpList)) {
+                    $count = count($exercise->lpList);
+                    if ($count == 1) {
+                        // If the exercise was added once redirect to the LP
+                        $firstLp = current($exercise->lpList);
+                        if (isset($firstLp['lp_id'])) {
+                            $url = api_get_path(WEB_CODE_PATH) . 'newscorm/lp_controller.php?' . api_get_cidreq() . '&lp_id=' . $firstLp['lp_id'] . '&action=view&isStudentView=true';
+                        }
+                    } else {
+                        // If the exercise was added multiple times show the LP list
+                        $url = api_get_path(WEB_CODE_PATH) . 'newscorm/lp_controller.php?' . api_get_cidreq().'&action=list';
+                    }
+                }
+            }
+        }
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&'.$add_url);
+
+    header('Location: '.$url);
     exit;
 }

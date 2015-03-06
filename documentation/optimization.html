@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8" />
 	<title>Chamilo Optimization Guide</title>
+    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -20,11 +21,11 @@
                 <ul class="nav">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="readme.html">About</a></li>
-                    <li><a href="license.html">License</a></li>            
-                    <li><a href="credits.html">Credits</a></li>            
-                    <li><a href="dependencies.html">Dependencies</a></li>            
+                    <li><a href="license.html">License</a></li>
+                    <li><a href="credits.html">Credits</a></li>
+                    <li><a href="dependencies.html">Dependencies</a></li>
                     <li><a href="changelog.html">Changelog</a></li>
-                </ul>        
+                </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </div>
@@ -347,7 +348,7 @@ SetEnvIfNoCase Request_URI \
 
 # Make sure proxies don't deliver the wrong content
 Header append Vary User-Agent env=!dont-vary
-</Location> 
+</Location>
 </pre>
 <hr />
 Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.
@@ -375,6 +376,9 @@ or
 $platform_email['SMTP_MAILER']       = 'mail';
 </pre>
 In fact, the complete loading of mail.conf.php can also be avoided if loaded conditionally (with <i>require_once</i>) when sending an e-mail (which is the only case where it is useful).
+<p>
+As an additional node, on very active portals with a lot of courses for each users, the icons that appear next to the courses illustrating changes in the corresponding course might be heavyweighted. You can alter slightly the behaviour by not querying for notifications you don't care about, like dropbox, notebook or chat. Change this in main/inc/lib/display.lib.php, in function show_notification().
+</p>
 <hr />
 <h2><a name="9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
 <p>It might have come to your attention that file downloads through Chamilo might get slow, under default conditions, in particular using Apache 2.</p>

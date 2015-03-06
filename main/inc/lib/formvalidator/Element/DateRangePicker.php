@@ -14,7 +14,7 @@ class DateRangePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        $attributes['class'] = 'span3';
+        $attributes['class'] = 'form-control';
         HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
         $this->_type = 'date_range_picker';

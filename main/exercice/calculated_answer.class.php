@@ -260,9 +260,9 @@ class CalculatedAnswer extends Question
             $table,
             array(
                 'where' => array(
-                    'question_id = ? AND course_code = ?' => array(
+                    'question_id = ? AND c_id = ?' => array(
                         $this->id,
-                        $this->course['code']
+                        $this->course['real_id']
                     )
                 )
             )

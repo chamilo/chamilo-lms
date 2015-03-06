@@ -36,9 +36,11 @@ function home_tabs($file_logged_in)
 			$data_logged_in[] = $line;
 		}
 		//tabs file for logged out users
-		$fp = fopen($file_logged_out, 'w');
-		fputs($fp, implode("\n", $data_logged_out));
-		fclose($fp);
+		if (file_exists($file_logged_out)) {
+			$fp = fopen($file_logged_out, 'w');
+			fputs($fp, implode("\n", $data_logged_out));
+			fclose($fp);
+		}
 		//tabs file for logged in users
 		$fp = fopen($file_logged_in, 'w');
 		fputs($fp, implode("\n", $data_logged_in));
@@ -864,12 +866,12 @@ switch ($action) {
 
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {
 			$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-			$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+			$form->addHtmlEditor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		} else {
 			if (in_array($action, array('edit_tabs','insert_tabs'))) {
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
-				$form->add_html_editor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+				$form->addHtmlEditor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 			}
 			$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
 			$form->addElement('html','<table id="table_langs" style="margin-left:159px;"><tr>');
@@ -941,7 +943,7 @@ switch ($action) {
 		}
 
 		$default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-		$form->add_html_editor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+		$form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
 		$form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'),array('id' => 'all_langs'));
 		$form->addElement('html','<table id="table_langs" style="margin-left:5px;"><tr>');
 

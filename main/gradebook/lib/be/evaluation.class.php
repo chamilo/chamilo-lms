@@ -19,6 +19,9 @@ class Evaluation implements GradebookItem
 	private $visible;
 	private $sessionId;
 
+	/**
+	 * Construct
+	 */
 	public function __construct()
 	{
 	}
@@ -309,6 +312,9 @@ class Evaluation implements GradebookItem
 		}
 	}
 
+	/**
+	 * @param $idevaluation
+	 */
 	public function add_evaluation_log($idevaluation)
 	{
 		if (!empty($idevaluation)) {
@@ -466,26 +472,40 @@ class Evaluation implements GradebookItem
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$results = Result::load(null, $stud_id, $this->id);
 		$rescount = 0;
 		$sum = 0;
+		$bestResult = 0;
+		$weight = 0;
+		$sumResult = 0;
+
 		foreach ($results as $res) {
 			$score = $res->get_score();
 			if ((!empty ($score)) || ($score == '0')) {
 				$rescount++;
-				$sum += ($score / $this->get_max());
+				$sum += $score / $this->get_max();
+				$sumResult += $score;
+				if ($score > $bestResult) {
+					$bestResult = $score;
+				}
+				$weight = $this->get_max();
 			}
 		}
 
 		if ($rescount == 0) {
 			return null;
-		}
-		else if (isset($stud_id)) {
-			return array ($score, $this->get_max());
+		} else if (isset($stud_id)) {
+			return array($score, $this->get_max());
 		} else {
-			return array ($sum, $rescount);
+			if ($type == 'best') {
+				return array($bestResult, $weight);
+			}
+			if ($type == 'average') {
+				return array($sumResult/$rescount, $weight);
+			}
+			return array($sum, $rescount);
 		}
 	}
 
@@ -495,7 +515,8 @@ class Evaluation implements GradebookItem
 	 * to disable this element.
 	 * @return array 2-dimensional array - every element contains 3 subelements (id, name, level)
 	 */
-	public function get_target_categories() {
+	public function get_target_categories()
+	{
 		// - course independent evaluation
 		//   -> movable to root or other course independent categories
 		// - evaluation inside a course
@@ -536,7 +557,6 @@ class Evaluation implements GradebookItem
 		}
 		return $targets;
 	}
-
 
 	/**
 	 * Move this evaluation to the given category.
@@ -579,13 +599,14 @@ class Evaluation implements GradebookItem
 
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+
 		return $alleval;
 	}
 
 	/**
 	 * Get a list of students that do not have a result record for this evaluation
 	 */
-	public function get_not_subscribed_students ($first_letter_user = '')
+	public function get_not_subscribed_students($first_letter_user = '')
 	{
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
@@ -600,8 +621,9 @@ class Evaluation implements GradebookItem
 			.' ORDER BY lastname';
 
 		$result = Database::query($sql);
-		$db_users = Database::store_result($result);
-		return $db_users;
+		$users = Database::store_result($result);
+
+		return $users;
 	}
 
 	/**
@@ -610,7 +632,7 @@ class Evaluation implements GradebookItem
 	 * @return array evaluation objects matching the search criterium
 	 * @todo can be written more efficiently using a new (but very complex) sql query
 	 */
-	public function find_evaluations ($name_mask,$selectcat)
+	public function find_evaluations($name_mask,$selectcat)
 	{
 		$rootcat = Category::load($selectcat);
 		$evals = $rootcat[0]->get_evaluations((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);

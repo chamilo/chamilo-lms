@@ -47,7 +47,7 @@ class LinkAddEditForm extends FormValidator
 		// ELEMENT: name
 		if ($form_type == self :: TYPE_ADD || $link->is_allowed_to_change_name()) {
 			if ($link->needs_name_and_description()) {
-				$this->add_textfield('name', get_lang('Name'), true, array('size'=>'40', 'maxlength'=>'40'));
+				$this->addText('name', get_lang('Name'), true, array('size'=>'40', 'maxlength'=>'40'));
 			} else {
 				$select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
 				foreach ($link->get_all_links() as $newlink) {
@@ -90,7 +90,7 @@ class LinkAddEditForm extends FormValidator
 			}
 		}
 
-		$this->add_textfield(
+		$this->addText(
 			'weight_mask',
 			array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
 			true,
@@ -106,7 +106,7 @@ class LinkAddEditForm extends FormValidator
 		/*
 
         // ELEMENT: weight
-        $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
+        $this->addText('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
             'maxlength' => '5',
             'class' => 'span1'
@@ -135,9 +135,9 @@ class LinkAddEditForm extends FormValidator
 		// ELEMENT: max
 		if ($link->needs_max()) {
 			if ($form_type == self :: TYPE_EDIT && $link->has_results()) {
-				$this->add_textfield('max', get_lang('QualificationNumeric'), false, array ('size' => '4','maxlength' => '5', 'disabled' => 'disabled'));
+				$this->addText('max', get_lang('QualificationNumeric'), false, array ('size' => '4','maxlength' => '5', 'disabled' => 'disabled'));
 			} else {
-				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array ('size' => '4','maxlength' => '5'));
+				$this->addText('max', get_lang('QualificationNumeric'), true, array ('size' => '4','maxlength' => '5'));
 				$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 				$this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 			}
@@ -145,10 +145,6 @@ class LinkAddEditForm extends FormValidator
 				$defaults['max'] = $link->get_max();
 			}
 		}
-
-		// ELEMENT: date
-		//$this->add_datepicker('date',get_lang('Date'));
-		//$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
 
 		// ELEMENT: description
 		if ($link->needs_name_and_description()) {

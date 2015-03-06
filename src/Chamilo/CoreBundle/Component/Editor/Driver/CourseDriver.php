@@ -8,16 +8,73 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  *
  */
-class CourseDriver extends Driver
+class CourseDriver extends Driver implements DriverInterface
 {
     public $name = 'CourseDriver';
+
+    /**
+     * Setups the folder
+     */
+    public function setup()
+    {
+        $userId = api_get_user_id();
+        $userInfo = api_get_user_info();
+        $sessionId = api_get_session_id();
+
+        $courseInfo = $this->connector->course;
+
+        if (!empty($courseInfo)) {
+
+            $coursePath = api_get_path(SYS_COURSE_PATH);
+            $courseDir = $courseInfo['directory'] . '/document';
+            $baseDir = $coursePath . $courseDir;
+
+            // Creates shared folder
+
+            if (!file_exists($baseDir . '/shared_folder')) {
+                $title = get_lang('UserFolders');
+                $folderName = '/shared_folder';
+                //$groupId = 0;
+                $visibility = 0;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
+
+            // Creates user-course folder
+            if (!file_exists($baseDir . '/shared_folder/sf_user_' . $userId)) {
+                $title = $userInfo['complete_name'];
+                $folderName = '/shared_folder/sf_user_' . $userId;
+                $visibility = 1;
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    $sessionId,
+                    0,
+                    null,
+                    $baseDir,
+                    $folderName,
+                    $title,
+                    $visibility
+                );
+            }
+        }
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getConfiguration()
     {
-        if (!empty($this->connector->course)) {
+        if ($this->allow()) {
             //$translator = $this->connector->translator;
             //$code = $this->connector->course->getCode();
             $courseCode = $this->connector->course['code'];
@@ -41,6 +98,8 @@ class CourseDriver extends Driver
                 )
             );
         }
+
+        return array();
     }
 
     /**
@@ -51,7 +110,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentSysPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             //$directory = $this->connector->course->getDirectory();
             $directory = $this->connector->course['directory'];
             $dataPath = $this->connector->paths['sys_data_path'];
@@ -67,7 +126,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentRelativeWebPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             $directory = $this->connector->course['directory'];
             $url = api_get_path(REL_COURSE_PATH).$directory.'/document/';
         }
@@ -82,7 +141,7 @@ class CourseDriver extends Driver
     public function getCourseDocumentWebPath()
     {
         $url = null;
-        if (isset($this->connector->course)) {
+        if ($this->allow()) {
             $directory = $this->connector->course->getDirectory();
             $url = api_get_path(WEB_COURSE_PATH).$directory.'/document/';
         }
@@ -97,41 +156,45 @@ class CourseDriver extends Driver
     {
         $this->setConnectorFromPlugin();
 
-        // upload file by elfinder.
-        $result = parent::upload($fp, $dst, $name, $tmpname);
+        if ($this->allow()) {
 
-        $name = $result['name'];
-        $filtered = \URLify::filter($result['name'], 80);
+            // upload file by elfinder.
+            $result = parent::upload($fp, $dst, $name, $tmpname);
 
-        if (strcmp($name, $filtered) != 0) {
-            /*$arg = array('target' => $file['hash'], 'name' => $filtered);
-            $elFinder->exec('rename', $arg);*/
-            $this->rename($result['hash'], $filtered);
+            $name = $result['name'];
+
+            $filtered = \URLify::filter($result['name'], 80, '', true);
+
+            if (strcmp($name, $filtered) != 0) {
+                $result = $this->customRename($result['hash'], $filtered);
+            }
+
+            $realPath = $this->realpath($result['hash']);
+            if (!empty($realPath)) {
+                // Getting file info
+                //$info = $elFinder->exec('file', array('target' => $file['hash']));
+                /** @var elFinderVolumeLocalFileSystem $volume */
+                //$volume = $info['volume'];
+                //$root = $volume->root();
+                //var/www/chamilogits/data/courses/NEWONE/document
+                $realPathRoot = $this->getCourseDocumentSysPath();
+
+                // Removing course path
+                $realPath = str_replace($realPathRoot, '/', $realPath);
+                add_document(
+                    $this->connector->course,
+                    $realPath,
+                    'file',
+                    intval($result['size']),
+                    $result['name']
+                );
+            }
+            //error_log(print_r($this->error(),1));
+
+            return $result;
         }
 
-        $realPath = $this->realpath($result['hash']);
-
-        if (!empty($realPath)) {
-            // Getting file info
-            //$info = $elFinder->exec('file', array('target' => $file['hash']));
-            /** @var elFinderVolumeLocalFileSystem $volume */
-            //$volume = $info['volume'];
-            //$root = $volume->root();
-            //var/www/chamilogits/data/courses/NEWONE/document
-            $realPathRoot = $this->getCourseDocumentSysPath();
-
-            // Removing course path
-            $realPath = str_replace($realPathRoot, '/', $realPath);
-            add_document(
-                $this->connector->course,
-                $realPath,
-                'file',
-                intval($result['size']),
-                $result['name']
-            );
-        }
-
-        return $result;
+        return false;
     }
 
     /**
@@ -143,21 +206,39 @@ class CourseDriver extends Driver
         //parent::rm($hash);
         $this->setConnectorFromPlugin();
 
-        $path = $this->decode($hash);
-        $stat = $this->stat($path);
-        $stat['realpath'] = $path;
-        $this->removed[] = $stat;
+        if ($this->allow()) {
 
-        $realFilePath = $path;
-        $coursePath = $this->getCourseDocumentSysPath();
-        $filePath = str_replace($coursePath, '/', $realFilePath);
+            $path = $this->decode($hash);
+            $stat = $this->stat($path);
+            $stat['realpath'] = $path;
+            $this->removed[] = $stat;
 
-        \DocumentManager::delete_document(
-            $this->connector->course,
-            $filePath,
-            $coursePath
-        );
+            $realFilePath = $path;
+            $coursePath = $this->getCourseDocumentSysPath();
+            $filePath = str_replace($coursePath, '/', $realFilePath);
 
-        return true;
+            \DocumentManager::delete_document(
+                $this->connector->course,
+                $filePath,
+                $coursePath
+            );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function allow()
+    {
+        //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
+        return
+            isset($this->connector->course) &&
+            !empty($this->connector->course) &&
+            !api_is_anonymous()
+        ;
     }
 }

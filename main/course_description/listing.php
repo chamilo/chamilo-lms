@@ -53,7 +53,8 @@ $user_info = api_get_user_info();
 if (isset($descriptions) && count($descriptions) > 0) {
 	foreach ($descriptions as $id => $description) {
         if (!empty($description)) {
-            echo '<div class="sectiontitle">';
+            echo '<div class="panel panel-info">';
+            echo '<div class="panel-heading">';
 
             if (api_is_allowed_to_edit(null,true) && !$history) {
                 if (api_get_session_id() == $description['session_id']) {
@@ -75,9 +76,9 @@ if (isset($descriptions) && count($descriptions) > 0) {
 
             echo $description['title'];
             echo '</div>';
-            echo '<div class="sectioncomment">';
+            echo '<div class="panel-body">';
             echo $description['content'];
-            echo '</div>';
+            echo '</div></div>';
         }
     }
 } else {

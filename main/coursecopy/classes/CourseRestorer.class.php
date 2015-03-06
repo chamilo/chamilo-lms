@@ -1131,7 +1131,7 @@ class CourseRestorer
 			$table = Database :: get_course_table(TABLE_AGENDA);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $event->content,
                     $this->course->code,
@@ -1208,7 +1208,7 @@ class CourseRestorer
 					$course_destination=$this->course->destination_path;
 				}
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $description_content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $cd->content,
                     $this->course->code,
@@ -1240,7 +1240,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $announcement->content,
                     $this->course->code,
@@ -1342,7 +1342,7 @@ class CourseRestorer
 				}
 
 				if ($id != -1) {
-					// check resources inside html from fckeditor tool and copy correct urls into recipient course
+					// check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $quiz->description,
                         $this->course->code,
@@ -1438,7 +1438,7 @@ class CourseRestorer
 			$table_ans 		= Database::get_course_table(TABLE_QUIZ_ANSWER);
             $table_options	= Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
-			// check resources inside html from fckeditor tool and copy correct urls into recipient course
+			// check resources inside html from ckeditor tool and copy correct urls into recipient course
             $question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question->description,
                 $this->course->code,
@@ -1513,7 +1513,7 @@ class CourseRestorer
                 $correct_answers = array();
 				foreach ($question->answers as $index => $answer) {
 
-					// check resources inside html from fckeditor tool and copy correct urls into recipient course
+					// check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                         $answer['answer'],
                         $this->course->code,
@@ -1717,7 +1717,7 @@ class CourseRestorer
 
 				$result_check = Database::query($sql_check);
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $survey->title = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $survey->title,
                     $this->course->code,
@@ -1823,7 +1823,6 @@ class CourseRestorer
 						case FILE_OVERWRITE:
 							// Delete the existing survey with the same code and language and import the one of the source course
 							// getting the information of the survey (used for when the survey is shared)
-							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
 
 							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND survey_id='".self::DBUTF8escapestring(Database::result($result_check,0,0))."'";
 							$result = Database::query($sql_select_existing_survey);
@@ -1902,7 +1901,7 @@ class CourseRestorer
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
-			// check resources inside html from fckeditor tool and copy correct urls into recipient course
+			// check resources inside html from ckeditor tool and copy correct urls into recipient course
             $question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                 $question->survey_question,
                 $this->course->code,
@@ -1927,7 +1926,7 @@ class CourseRestorer
 			$new_id = Database::insert_id();
 			foreach ($question->answers as $index => $answer) {
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $answer['option_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $answer['option_text'],
                     $this->course->code,
@@ -2376,7 +2375,7 @@ class CourseRestorer
     				$condition_session = " , session_id = '$session_id' ";
     			}
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $glossary->description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $glossary->description,
                     $this->course->code,
@@ -2429,7 +2428,7 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_WIKI] as $id => $wiki) {
 				// the sql statement to insert the groups from the old course to the new course
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $wiki->content,
                     $this->course->code,
@@ -2478,7 +2477,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_THEMATIC] as $id => $thematic) {
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $thematic->content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $thematic->content,
                     $this->course->code,
@@ -2533,7 +2532,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ATTENDANCE] as $id => $obj) {
 
-				// check resources inside html from fckeditor tool and copy correct urls into recipient course
+				// check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $obj->params['description'],
                     $this->course->code,
@@ -2576,7 +2575,7 @@ class CourseRestorer
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_WORK] as $obj) {
 
-                // check resources inside html from fckeditor tool and copy correct urls into recipient course
+                // check resources inside html from ckeditor tool and copy correct urls into recipient course
                 $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                     $obj->params['description'],
                     $this->course->code,

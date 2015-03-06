@@ -41,7 +41,7 @@ $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 // For separate web and DB servers, reduce the bandwidth used by compressing
 // data returning from the DB server. By default, it is ignored. Uncomment
 // the following to enable compression.
-//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS; 
+//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
 
 /**
  * Database settings
@@ -283,7 +283,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['certificate_filter_by_official_code'] = false;
 // Max quantity of fkceditor allowed in the exercise result page otherwise
 // Textareas are used.
-//$_configuration['exercise_max_fckeditors_in_page'] = 0;
+//$_configuration['exercise_max_ckeditors_in_page'] = 0;
 // Default upload option
 //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
 // Which OpenBadges backpack send the badges
@@ -296,3 +296,13 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['cookie_warning'] = false;
 // Allows a comment field in the course calendar events. Requires DB change
 //$_configuration['allow_agenda_event_comment'] = false;
+// Filters administration users lists by the session admin who created them.
+// Change to true to restrict the visibility
+//$_configuration['prevent_session_admins_to_manage_all_users'] = false;
+// If there are any tool available and the user is not registered hide the group
+// $_configuration['hide_course_group_if_no_tools_available'] = false;
+
+// Attach a document to a work
+// $_configuration['add_document_to_work'] = false;
+// Allow user comments in work
+// $_configuration['work_user_comments'] = false;

@@ -10,6 +10,9 @@ class ForumThreadLink extends AbstractLink
 	private $forum_thread_table = null;
 	private $itemprop_table = null;
 
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -118,7 +121,7 @@ class ForumThreadLink extends AbstractLink
 	 * @param int $stud_id
 	 * @return array|null
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
@@ -127,7 +130,8 @@ class ForumThreadLink extends AbstractLink
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 
-		$sql = "SELECT * FROM $thread_qualify WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
+		$sql = "SELECT * FROM $thread_qualify
+				WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
 		if (isset($stud_id)) {
 			$sql .= ' AND user_id = '."'".intval($stud_id)."'";
 		}
@@ -149,17 +153,25 @@ class ForumThreadLink extends AbstractLink
 			}
 		} else {
 			// all students -> get average
-			$students=array();  // user list, needed to make sure we only
+			$students = array();  // user list, needed to make sure we only
 			// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
+			$bestResult = 0;
+			$weight = 0;
+			$sumResult = 0;
 
-			while ($data=Database::fetch_array($scores)) {
+			while ($data = Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['user_id'],$students))) {
 					if ($assignment['thread_qualify_max'] != 0) {
 						$students[$data['user_id']] = $data['qualify'];
 						$rescount++;
-						$sum += ($data['qualify'] / $assignment['thread_qualify_max']);
+						$sum += $data['qualify'] / $assignment['thread_qualify_max'];
+						$sumResult += $data['qualify'];
+						if ($data['qualify'] > $bestResult) {
+							$bestResult = $data['qualify'];
+						}
+						$weight = $assignment['thread_qualify_max'];
 					}
 				}
 			}
@@ -167,7 +179,13 @@ class ForumThreadLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				return array ($sum , $rescount);
+				if ($type == 'average') {
+					return array($sumResult/$rescount, $weight);
+				}
+				if ($type == 'best') {
+					return array($bestResult, $weight);
+				}
+				return array($sum , $rescount);
 			}
 		}
 	}

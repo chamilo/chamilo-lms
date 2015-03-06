@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Chamilo Installation Guide</title>
+    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -77,9 +78,12 @@ optimal flexibility, remote control and scalability. <br />
 
 <br />
 
-Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache (2.2 recommended)</span>, <span style="font-weight: bold;">MySQL 5.1 or 5.5 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3, 5.4 or 5.5 (5.5 recommended for greater efficiency)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
-
-
+Chamilo is mainly a LMS running (the so called <span style="font-weight: bold;">AMP</span> trilogy): <br />
+<ul>
+<li><span style="font-weight: bold;">Apache (2.2 recommended)</span></li>
+<li><span style="font-weight: bold;">MySQL 5.1 or 5.5 (or MariaDB)</span></li>
+<li><span style="font-weight: bold;">PHP 5.4, 5.5 or 5.6 (5.6 recommended for greater efficiency)</span></li>
+</ul>
 <br />
 
 All these pieces of software are free software and freely available. <br />
@@ -144,10 +148,13 @@ The following directories need to be readable, writeable and executable by your 
 <ul>
   <li>[chamilo]/main/inc/conf/</li>
   <li>[chamilo]/main/upload/users/</li>
+  <li>[chamilo]/main/upload/sessions/</li>
+  <li>[chamilo]/main/upload/courses/</li>
   <li>[chamilo]/main/default_course_document/images/</li>
   <li>[chamilo]/archive/</li>
   <li>[chamilo]/courses/</li>
   <li>[chamilo]/home/</li>
+  <li>[chamilo]/data/</li>
 </ul>
 Optionally, you can do the same to the following directories if you want to
 enable CSS styles package upload and sub-language definition:
@@ -281,7 +288,7 @@ Past Chamilo versions required register_globals to be set to On. This is
 no longer necessary, this can (and should) be set to Off.
 <span class="muted">It is considered a bad choice in terms of security to set register_globals to On.</a></p>
 
-<p><strong>Note:</strong> if you are using PHP 5.3 or higher, you need to set
+<p><strong>Note:</strong> You need to set
 your <em>date.timezone</em> setting to whatever your server's timezone is.
 For example, if your server is in the 'America/New_York' timezone, set this
 in your php.ini:</p>
@@ -325,16 +332,16 @@ previous version of Chamilo LMS (1.*) or Dok€os (&lt;2.0)</h2>
 Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
 Chamilo or Dok€os directories and databases. If you are unsure how to achieve this
 please ask your hosting provider for advice.<br />
-<em>Chamilo LMS 1.10 comes with a new database structure in comparison to 1.9, and so between 1.9 and 1.8. 
+<em>Chamilo LMS 1.10 comes with a new database structure in comparison to 1.9, and so between 1.9 and 1.8.
 Although the upgrade script takes the migration in charge, it might be generating
-a very heavy load on your server during the upgrade, and will change your 
-database completely, preserving the data as well as possible (we have tested 
-the procedure many times, but remember this is GNU/GPLv3 and we cannot be held 
+a very heavy load on your server during the upgrade, and will change your
+database completely, preserving the data as well as possible (we have tested
+the procedure many times, but remember this is GNU/GPLv3 and we cannot be held
 responsible for what would happen to your data without professional supervision).
-This is why we *really* recommend you take a full backup of your system before 
+This is why we *really* recommend you take a full backup of your system before
 you upgrade.</em>
 <br />
-<div class="muted"> NOTE: For very heavy Chamilo databases, some of our official 
+<div class="muted"> NOTE: For very heavy Chamilo databases, some of our official
 providers have developed improved migration procedures that use more memory but
 process the upgrades up to 20 times faster. If this is the kind of thing you
 need, we highly recommend you contact them (see reference below).</div>

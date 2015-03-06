@@ -120,12 +120,8 @@ AddCourse::drop_course_tables();
 
 AddCourse::create_course_tables();
 
-load_database_script('db_stats.sql');
-
 $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
-
-load_database_script('db_user.sql');
 
 locking_settings();
 

@@ -19,13 +19,12 @@ class DropboxLink extends EvalLink
 		$this->set_type(LINK_DROPBOX);
 	}
 
-
 	/**
 	 *
 	 * Returns the URL of a document
 	 * This function is loaded when using a gradebook as a tab (gradebook = -1) see issue #2705
 	 */
-	public function get_view_url ($stud_id)
+	public function get_view_url($stud_id)
 	{
 		// find a file uploaded by the given student,
 		// with the same title as the evaluation name
@@ -37,7 +36,6 @@ class DropboxLink extends EvalLink
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
-			$course_info = Database :: get_course_info($this->get_course_code());
 			return null;
 		} else {
 			return null;

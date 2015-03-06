@@ -176,7 +176,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
         }
     }
 }
-$form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+$form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
 
 $defaults['title'] 			= $work_item['title'];
 $defaults["description"] 	= $work_item['description'];

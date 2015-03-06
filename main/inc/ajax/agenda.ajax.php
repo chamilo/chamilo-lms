@@ -27,7 +27,7 @@ $group_id = api_get_group_id();
 $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 $agenda = new Agenda();
-$agenda->type = $type;
+$agenda->setType($type);
 
 switch ($action) {
     case 'add_event':
@@ -36,13 +36,14 @@ switch ($action) {
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
+        $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
         echo $agenda->add_event(
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
             $_REQUEST['title'],
             $_REQUEST['content'],
-            $_REQUEST['users_to_send'],
+            $userToSend,
             $add_as_announcement,
             null, //$parentEventId = null,
             array(), //$attachmentArray = array(),
@@ -100,8 +101,8 @@ switch ($action) {
         $groupId = current($result['groups']);
         $userId = current($result['users']);
 
-        $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : null;
-        $end = isset($_REQUEST['end']) ? $_REQUEST['end'] : null;
+        $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
+        $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
         $events = $agenda->get_events(
             $start,

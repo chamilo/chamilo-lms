@@ -19,8 +19,8 @@ $htmlHeadXtra[] = '
 
 var hide_bar = function() {
     $("#template_col").hide();
-    $("#doc_form").removeClass("span9");
-    $("#doc_form").addClass("span11");
+    $("#doc_form").removeClass("col-md-9");
+    $("#doc_form").addClass("col-md-11");
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
         },
         function() {
             $("#template_col").show();
-            $("#doc_form").removeClass("span11");
-            $("#doc_form").addClass("span9");
+            $("#doc_form").removeClass("col-md-11");
+            $("#doc_form").addClass("col-md-9");
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
@@ -44,15 +44,6 @@ $(document).ready(function() {
         showTemplates();
     });
 });
-
-function setFocus() {
-   $("#document_title").focus();
-}
-
-$(window).load(function () {
-	setFocus();
-});
-
 </script>';
 
 //I'm in the certification module?
@@ -77,13 +68,16 @@ $sessionId = api_get_session_id();
 $userId = api_get_user_id();
 $_course = api_get_course_info();
 $groupId = api_get_group_id();
+$document_data = array();
 
-$document_data = DocumentManager::get_document_data_by_id(
-    $_REQUEST['id'],
-    $courseCode,
-    true,
-    0
-);
+if (isset($_REQUEST['id'])) {
+    $document_data = DocumentManager::get_document_data_by_id(
+        $_REQUEST['id'],
+        $courseCode,
+        true,
+        0
+    );
+}
 
 if (!empty($sessionId) && empty($document_data)) {
     $document_data = DocumentManager::get_document_data_by_id(
@@ -276,9 +270,9 @@ function document_exists($filename) {
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
+    $form->addText('title', get_lang('CertificateName'), true, array('autofocus'));
 } else {
-	$form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
+	$form->addText('title', get_lang('Title'), true, array('autofocus'));
 }
 
 // Show read-only box only in groups
@@ -289,7 +283,7 @@ $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
-$form->add_html_editor('content','', false, false, $html_editor_config);
+$form->addHtmlEditor('content','', false, false, $html_editor_config);
 
 // Comment-field
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
@@ -392,10 +386,11 @@ if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir
 	}
 }
 
-if ($is_certificate_mode)
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
-else
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateDoc'), 'class="save"');
+if ($is_certificate_mode) {
+	$form->addButtonCreate(get_lang('CreateCertificate'));
+} else {
+	$form->addButtonCreate(get_lang('CreateDoc'));
+}
 
 $form->setDefaults($defaults);
 
@@ -544,13 +539,21 @@ if ($form->validate()) {
 	$array_len = count($dir_array);
 
 	// Interbreadcrumb for the current directory root path
-	if (empty($document_data['parents'])) {
-		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-	} else {
-		foreach($document_data['parents'] as $document_sub_data) {
-			$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
-		}
-	}
+    if (!empty($document_data)) {
+        if (empty($document_data['parents'])) {
+            $interbreadcrumb[] = array(
+                'url' => '#',
+                'name' => $document_data['title']
+            );
+        } else {
+            foreach ($document_data['parents'] as $document_sub_data) {
+                $interbreadcrumb[] = array(
+                    'url' => $document_sub_data['document_url'],
+                    'name' => $document_sub_data['title']
+                );
+            }
+        }
+    }
 
 	Display :: display_header($nameTools, "Doc");
 	// actions
@@ -577,11 +580,11 @@ if ($form->validate()) {
 	}
     // HTML-editor
     echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span3" style="width:200px">
+            <div id="template_col" class="col-md-3" style="width:200px">
                 <div id="frmModel" ></div>
             </div>
             <div id="hide_bar_template"></div>
-            <div id="doc_form" class="span9">
+            <div id="doc_form" class="col-md-9">
                     '.$form->return_form().'
             </div>
           </div>';

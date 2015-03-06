@@ -39,9 +39,16 @@ $debug = false;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
-if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+
+$showGlossary = in_array($glossaryExtraTools, array('true', 'exercise', 'exercise_and_lp'));
+if ($origin == 'learnpath') {
+    $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+}
+if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('glossary.js');
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
@@ -59,7 +66,6 @@ $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_i
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 $learnpath_item_view_id	= isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
 
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 $reminder = isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
 $remind_question_id = isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
 $exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
@@ -79,7 +85,7 @@ $currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']
 $error = '';
 
 //Table calls
-$exercice_attemp_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$exercice_attemp_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
     we delete the objExercise from the session in order to get the latest
@@ -148,7 +154,7 @@ $current_expired_time_key = ExerciseLib::get_time_control_key($objExercise->id, 
 $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
-	// Get the expired time of the current exercice in track_e_exercices
+	// Get the expired time of the current exercice in track_e_exercises
 	$total_seconds = $objExercise->expired_time*60;
 }
 
@@ -358,7 +364,7 @@ if ($time_control) {
 	        if ($debug) {error_log('7.9. $clock_expired_time: '.$clock_expired_time); }
 
 			// First we update the attempt to today
-			/* How the expired time is changed into "track_e_exercices" table,
+			/* How the expired time is changed into "track_e_exercises" table,
                then the last attempt for this student should be changed too */
 	        $sql = "UPDATE $exercice_attemp_table SET
 	                tms = '".api_get_utc_datetime()."'

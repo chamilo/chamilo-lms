@@ -1,3 +1,5 @@
+/* Ckeditor global configuration file */
+
 CKEDITOR.editorConfig = function( config ) {
     // Define changes to default configuration here.
     // For complete reference see:
@@ -16,6 +18,9 @@ CKEDITOR.editorConfig = function( config ) {
     config.templates_files  = [
         '{{ _p.web_main ~ 'inc/lib/elfinder/templates.php'}}'
     ];
+
+    // Allows to use "class" attribute inside divs and spans.
+    config.allowedContent = true;
 
     config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
 };

@@ -102,21 +102,23 @@ class LearnpathLink extends AbstractLink
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
 		$session_id = api_get_session_id();
 
 		$sql = "SELECT * FROM $tbl_stats
-                WHERE   c_id = ".$this->course_id." AND
-                        lp_id = ".$this->get_ref_id()." AND
-                        session_id = $session_id ";
+                WHERE
+                	c_id = ".$this->course_id." AND
+                    lp_id = ".$this->get_ref_id()." AND
+                    session_id = $session_id ";
 
 		if (isset($stud_id))
 			$sql .= ' AND user_id = '.intval($stud_id);
 
 		// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
+
 		$scores = Database::query($sql);
 		// for 1 student
 		if (isset($stud_id)) {
@@ -124,26 +126,38 @@ class LearnpathLink extends AbstractLink
 				return array ($data['progress'], 100);
 			} else
 				return null;
-		}
-		// all students -> get average
-		else {
-			$students=array();  // user list, needed to make sure we only
+		} else {
+			// all students -> get average
+			$students = array();  // user list, needed to make sure we only
 			// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
-
-			while ($data=Database::fetch_array($scores)) {
+			$bestResult = 0;
+			$sumResult = 0;
+			while ($data = Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['user_id'], $students))) {
 					$students[$data['user_id']] = $data['progress'];
 					$rescount++;
-					$sum += ($data['progress'] / 100);
+					$sum += $data['progress'] / 100;
+					$sumResult += $data['progress'];
+
+					if ($data['progress'] > $bestResult) {
+						$bestResult = $data['progress'];
+					}
 				}
 			}
 
-			if ($rescount == 0)
+			if ($rescount == 0) {
 				return null;
-			else
-				return array ($sum , $rescount);
+			} else {
+				if ($type == 'average') {
+					return array($sumResult/$rescount, 100);
+				}
+				if ($type == 'best') {
+					return array($bestResult, 100);
+				}
+				return array($sum, $rescount);
+			}
 		}
 	}
 

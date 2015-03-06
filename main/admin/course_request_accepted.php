@@ -148,7 +148,7 @@ $form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
 $renderer = $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text', 'keyword', get_lang('keyword'));
-$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+$form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';

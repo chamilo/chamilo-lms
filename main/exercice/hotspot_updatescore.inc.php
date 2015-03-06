@@ -47,7 +47,7 @@ foreach ($coords as $coord) {
 }
 $coordinates = substr($coordinates,0,-1);
 
-$TBL_TRACK_E_HOTSPOT   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+$TBL_TRACK_E_HOTSPOT   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
 // update db
 $update_id = $_SESSION['exerciseResult'][$questionId]['ids'][$answerId];

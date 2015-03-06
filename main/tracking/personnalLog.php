@@ -51,7 +51,7 @@ $TABLETRACK_ACCESS      = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCES
 $TABLETRACK_LINKS 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 $TABLETRACK_LOGIN 		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TABLETRACK_EXERCICES   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 
 $limitOfDisplayedLogins = 25; // number of logins to display
@@ -123,7 +123,7 @@ api_display_tool_title($nameTools);
                 $sql = "SELECT access_tool, count(access_tool), c_id
                             FROM $TABLETRACK_ACCESS
                             WHERE
-                                access_user_id = '".$_user['user_id']."' AND
+                                access_user_id = " . $_user['user_id'] . " AND
                                 access_date > '".$value."' AND
                                 access_date < '".$previousDate."'
                             GROUP BY access_tool, c_id
@@ -211,7 +211,7 @@ api_display_tool_title($nameTools);
                     FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
                     WHERE te.exe_user_id = '".$_user['user_id']."'
                         AND te.exe_exo_id = ce.id
-                    ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+                    ORDER BY te.c_id ASC, ce.title ASC, te.exe_date ASC";
 
         echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
         $results = getManyResultsXCol($sql,4);

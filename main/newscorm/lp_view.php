@@ -215,7 +215,7 @@ if (!empty($_REQUEST['exeId']) &&
     global $src;
     $_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
 
-    $TBL_TRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
     $safe_item_id = intval($_GET['lp_item_id']);
@@ -332,7 +332,8 @@ $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
-$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
+$sql = "SELECT audio FROM " . $tbl_lp_item . "
+        WHERE c_id = $course_id AND lp_id = '" . $_SESSION['oLP']->lp_id."'";
 $res_media= Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {
@@ -360,31 +361,29 @@ if ($is_allowed_to_edit) {
     echo '<div id="header">';
     //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
 
-                    // Return to course home.
-                    if ($is_allowed_to_edit) {
-                        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
-                    } else {
-                        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
-                    }
+    // Return to course home.
+    if ($is_allowed_to_edit) {
+        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
+    } else {
+        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
+    }
 
-                    $name = get_lang('CourseHomepageLink');
-                    // Return to lp list
-                    if (api_get_course_setting('lp_return_link') == 1) {
-                        $url .= '&redirectTo=lp_list';
-                        $name = get_lang('LearningPathList');
-                    }
+    $name = get_lang('CourseHomepageLink');
+    // Return to lp list
+    if (api_get_course_setting('lp_return_link') == 1) {
+        $url .= '&redirectTo=lp_list';
+        $name = get_lang('LearningPathList');
+    }
 
-                    echo Display::url(
-                        $name,
-                        $url,
-                        array(
-                            'class' => 'home btn btn-small btn-info',
-                            'target' => '_self',
-                            'onclick' => 'javascript: window.parent.API.save_asset();'
-                        )
-                    );
-
-
+    echo Display::url(
+        $name,
+        $url,
+        array(
+            'class' => 'home btn btn-small btn-info',
+            'target' => '_self',
+            'onclick' => 'javascript: window.parent.API.save_asset();'
+        )
+    );
     echo '</div>';
 ?>
         <!-- end header -->
@@ -484,39 +483,37 @@ if ($is_allowed_to_edit) {
 
     // Loads the glossary library.
     <?php
-      if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+    $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+    if (in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'))) {
            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                 ?>
             $.frameReady(function(){
                    //  $("<div>I am a div courses</div>").prependTo("body");
          }, "top.content_name",
           { load: [
-                  {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
-                  {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                  {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-                  {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-
+              { type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
+              { type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+              { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+              { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
           ] }
           );
-    <?php
-        } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-      ?>
+    <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
     $.frameReady(function(){
         //  $("<div>I am a div courses</div>").prependTo("body");
       },
         "top.content_name",
       {
       load: [
-          {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
-          {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-          {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-          {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
+          { type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
+          { type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+          { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+          { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
       ]}
       );
-  <?php
-       }
+    <?php }
+    }
+  ?>
   }
-  ?>}
     $(document).ready(function() {
         updateContentHeight();
         $('#hide_bar').children().click(function(){

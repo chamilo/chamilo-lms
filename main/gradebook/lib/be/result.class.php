@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Defines a gradebook Result object
  * @author Bert Steppé, Stijn Konings
@@ -82,24 +83,32 @@ class Result
         $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sessionId = api_get_session_id();
 
         if (is_null($id) && is_null($user_id) && !is_null($evaluation_id)) {
+            // Verified_if_exist_evaluation
+            $sql = 'SELECT COUNT(*) AS count FROM ' . $tbl_grade_results . '
+                    WHERE evaluation_id="' . Database::escape_string($evaluation_id) . '";';
+            $result = Database::query($sql);
+            $existEvaluation = Database::result($result, 0, 0);
 
-            $sql_verified_if_exist_evaluation = 'SELECT COUNT(*) AS count FROM ' . $tbl_grade_results . ' WHERE evaluation_id="' . Database::escape_string($evaluation_id) . '";';
-            $res_verified_if_exist_evaluation = Database::query($sql_verified_if_exist_evaluation);
-            $info_verified_if_exist_evaluation = Database::result($res_verified_if_exist_evaluation, 0, 0);
-
-            if ($info_verified_if_exist_evaluation != 0) {
+            if ($existEvaluation != 0) {
 
                 $sql_course_rel_user = '';
-                if (api_get_session_id()) {
-                    $sql_course_rel_user = 'SELECT course_code, id_user as user_id, status FROM ' . $tbl_session_rel_course_user . '
-												 WHERE status=0 AND course_code="' . api_get_course_id() . '" AND id_session=' . api_get_session_id();
+                if ($sessionId) {
+                    $sql = 'SELECT course_code, id_user as user_id, status
+                            FROM ' . $tbl_session_rel_course_user . '
+							WHERE
+							    status=0 AND
+							    course_code="' . api_get_course_id() . '" AND
+							    id_session=' . $sessionId;
                 } else {
-                    $sql_course_rel_user = 'SELECT course_code,user_id,status FROM ' . $tbl_course_rel_course . ' WHERE status ="' . STUDENT . '" AND course_code="' . api_get_course_id() . '" ';
+                    $sql = 'SELECT course_code,user_id,status
+                            FROM ' . $tbl_course_rel_course . '
+                            WHERE status ="' . STUDENT . '" AND course_code="' . api_get_course_id() . '" ';
                 }
 
-                $res_course_rel_user = Database::query($sql_course_rel_user);
+                $res_course_rel_user = Database::query($sql);
 
                 $list_user_course_list = array();
                 while ($row_course_rel_user = Database::fetch_array($res_course_rel_user, 'ASSOC')) {
@@ -107,12 +116,16 @@ class Result
                 }
                 $current_date = api_get_utc_datetime();
                 for ($i = 0; $i < count($list_user_course_list); $i++) {
-                    $sql_verified = 'SELECT COUNT(*) AS count FROM ' . $tbl_grade_results . ' WHERE user_id="' . intval($list_user_course_list[$i]['user_id']) . '" AND evaluation_id="' . intval($evaluation_id) . '";';
+                    $sql_verified = 'SELECT COUNT(*) AS count
+                                    FROM ' . $tbl_grade_results . '
+                                    WHERE
+                                        user_id="' . intval($list_user_course_list[$i]['user_id']) . '" AND
+                                        evaluation_id="' . intval($evaluation_id) . '";';
                     $res_verified = Database::query($sql_verified);
                     $info_verified = Database::result($res_verified, 0, 0);
                     if ($info_verified == 0) {
                         $sql_insert = 'INSERT INTO ' . $tbl_grade_results . '(user_id,evaluation_id,created_at,score)
-									 VALUES ("' . intval($list_user_course_list[$i]['user_id']) . '","' . intval($evaluation_id) . '","' . $current_date . '",0);';
+									   VALUES ("' . intval($list_user_course_list[$i]['user_id']) . '","' . intval($evaluation_id) . '","' . $current_date . '",0);';
                         $res_insert = Database::query($sql_insert);
                     }
                 }
@@ -191,7 +204,6 @@ class Result
      */
     public function add_result__log($userid, $evaluationid)
     {
-
         if (isset($userid) && isset($evaluationid)) {
             $tbl_grade_results_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
             $result = new Result();
@@ -247,5 +259,4 @@ class Result
         $sql = 'DELETE FROM ' . $tbl_grade_results . ' WHERE id = ' . $this->id;
         Database::query($sql);
     }
-
 }

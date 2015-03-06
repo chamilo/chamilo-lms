@@ -47,7 +47,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
     }
 
-    $form->addElement('DatePicker', 'custom_start_date', get_lang('StartDate'), array('form_name'=>'thematic_advance'));
+    $form->addElement('DatePicker', 'custom_start_date', get_lang('StartDate'));
     $form->addElement('html', '</div>');
 
     if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {
@@ -70,9 +70,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
     $form->addElement('html', '</div>');
 
-    $form->add_textfield('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element', 'autofocus' => 'autofocus'));
+    $form->addText('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element', 'autofocus' => 'autofocus'));
 
-    $form->add_html_editor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
+    $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
     //$form->addElement('textarea', 'content', get_lang('Content'));
 
     if ($action == 'thematic_advance_add') {
@@ -99,7 +99,6 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
             } else {
                 echo '<script> datetime_by_attendance("'.$attendance_select_item_id.'", 0); </script>';
             }
-
         }
     }
 

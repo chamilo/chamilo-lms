@@ -185,8 +185,6 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             $lp_id = Security::remove_XSS($_GET['lp_id']);
         }
         echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-3\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
-    } else {
-        //echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png', get_lang('BackToLinksOverview'),'',ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 
@@ -421,8 +419,6 @@ if (empty($_GET['action']) ||
             Display::return_icon('new_link.png', get_lang('LinkAdd'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=addcategory&amp;urlview='.$urlview.'">'.
             Display::return_icon('new_folder.png', get_lang('CategoryAdd'),'',ICON_SIZE_MEDIUM).'</a>';
-
-        /* "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=importcsv&amp;urlview=".$urlview."\">".get_lang('CsvImport')."</a>\n", // RH*/
     }
     // Making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
     // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).

@@ -1,17 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$config['survey']['debug'] = false;
-
-$htmlHeadXtra[] = '<script>
-function setFocus(){
-    $("#search_title").focus();
-}
-$(document).ready(function () {
-    setFocus();
-});
-</script>';
-
 /**
  * Class survey_manager
  * @package chamilo.survey
@@ -927,10 +916,12 @@ class survey_manager
             }
 
             if ($form_content['type'] != 'percentage') {
-                for ($i = 0; $i < count($form_content['answers']); $i++) {
-                    if (strlen($form_content['answers'][$i]) < 1) {
-                        $empty_answer = true;
-                        break;
+                if (isset($form_content['answers'])) {
+                    for ($i = 0; $i < count($form_content['answers']); $i++) {
+                        if (strlen($form_content['answers'][$i]) < 1) {
+                            $empty_answer = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -946,7 +937,7 @@ class survey_manager
 
             if (!$empty_answer) {
                 // Table definitions
-                $tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+                $tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
                 // Getting all the information of the survey
                 $survey_data = survey_manager::get_survey($form_content['survey_id']);
@@ -980,6 +971,10 @@ class survey_manager
                         }
                     }
 
+                    $questionComment = isset($form_content['question_comment']) ? $form_content['question_comment'] : null;
+                    $maxScore = isset($form_content['maximum_score']) ? $form_content['maximum_score'] : null;
+                    $display = isset($form_content['horizontalvertical']) ? $form_content['horizontalvertical'] : null;
+
                     // Adding the question to the survey_question table
                     $sql = "INSERT INTO $tbl_survey_question
 					        (c_id, survey_id,survey_question,survey_question_comment,type,display, sort, shared_question_id, max_value".$additional['column'].")
@@ -987,13 +982,13 @@ class survey_manager
 								$course_id,
 								'".Database::escape_string($form_content['survey_id'])."',
 								'".Database::escape_string($form_content['question'])."',
-								'".Database::escape_string($form_content['question_comment'])."',
+								'".Database::escape_string($questionComment)."',
 								'".Database::escape_string($form_content['type'])."',
-								'".Database::escape_string($form_content['horizontalvertical'])."',
+								'".Database::escape_string($display)."',
 								'".Database::escape_string($max_sort+1)."',
 								'".Database::escape_string($form_content['shared_question_id'])."',
-								'".Database::escape_string($form_content['maximum_score'])."'".
-                        $additional['value']."
+								'".Database::escape_string($maxScore)."'".
+                                $additional['value']."
                             )";
                     Database::query($sql);
                     $question_id = Database::insert_id();
@@ -1012,16 +1007,22 @@ class survey_manager
                             $additionalsets = ',survey_group_pri = \'0\', survey_group_sec1 = \''.Database::escape_string($_POST['assigned1']).'\', survey_group_sec2 = \''.Database::escape_string($_POST['assigned2']).'\' ';
                         }
                     }
-                    $setadditionals = $additional['set'][1].$additional['set'][2].$additional['set'][3];
+                    if (isset($additional['set'])) {
+                        $setadditionals = $additional['set'][1] . $additional['set'][2] . $additional['set'][3];
+                    }
+
+                    $maxScore = isset($form_content['maximum_score']) ? $form_content['maximum_score'] : null;
+                    $questionComment = isset($form_content['question_comment']) ? $form_content['question_comment'] : null;
 
                     // Adding the question to the survey_question table
                     $sql = "UPDATE $tbl_survey_question SET
                                 survey_question 		= '".Database::escape_string($form_content['question'])."',
-                                survey_question_comment = '".Database::escape_string($form_content['question_comment'])."',
+                                survey_question_comment = '".Database::escape_string($questionComment)."',
                                 display 				= '".Database::escape_string($form_content['horizontalvertical'])."',
-                                max_value 				= '".Database::escape_string($form_content['maximum_score'])."'" .
-                        $additionalsets."
-                            WHERE c_id = $course_id AND question_id = '".intval($form_content['question_id'])."'";
+                                max_value 				= '".Database::escape_string($maxScore)."'
+                            $additionalsets
+                            WHERE c_id = $course_id AND question_id = ".intval($form_content['question_id'])."
+                        ";
                     Database::query($sql);
                     $return_message = 'QuestionUpdated';
                 }
@@ -1045,6 +1046,7 @@ class survey_manager
         } else {
             $return_message = 'PleaseEnterAQuestion';
         }
+
         return $return_message;
     }
 
@@ -1288,16 +1290,17 @@ class survey_manager
         }
 
         $counter = 1;
-        if (is_array($form_content['answers'])) {
-            //foreach ($form_content['answers'] as $key => $answer) {
+        if (isset($form_content['answers']) && is_array($form_content['answers'])) {
             for ($i = 0; $i < count($form_content['answers']); $i++) {
+                $values = isset($form_content['values']) ? $form_content['values'][$i] : null;
+
                 $sql = "INSERT INTO $table_survey_question_option (c_id, question_id, survey_id, option_text, value,sort) VALUES (
-                            $course_id,
-                            '".intval($form_content['question_id'])."',
-                            '".intval($form_content['survey_id'])."',
-                            '".Database::escape_string($form_content['answers'][$i])."',
-                            '".Database::escape_string($form_content['values'][$i])."',
-                            '".Database::escape_string($counter)."')";
+                        $course_id,
+                        '".intval($form_content['question_id'])."',
+                        '".intval($form_content['survey_id'])."',
+                        '".Database::escape_string($form_content['answers'][$i])."',
+                        '".Database::escape_string($values)."',
+                        '".Database::escape_string($counter)."')";
                 Database::query($sql);
                 $counter++;
             }
@@ -1531,953 +1534,6 @@ class survey_manager
     }
 }
 
-/**
- * Class survey_question
- */
-class survey_question
-{
-    // The html code of the form
-    public $html;
-
-    /**
-     * This function does the generic part of any survey question: the question field
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     *
-     * @todo the form_text has to become a wysiwyg editor or adding a question_comment field
-     * @todo consider adding a question_comment form element
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
-        $questionId = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
-        $tool_name = Display::return_icon(
-                survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
-                get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
-                array('align' => 'middle', 'height' => '22px')
-            ).' ';
-
-        if ($action == 'add') {
-            $tool_name .= get_lang('AddQuestion');
-        }
-        if ($action == 'edit') {
-            $tool_name .= get_lang('EditQuestion');
-        }
-
-        if ($_GET['type'] == 'yesno') {
-            $tool_name .= ': '.get_lang('YesNo');
-        } else if ($_GET['type'] == 'multiplechoice') {
-            $tool_name .= ': '.get_lang('UniqueSelect');
-        } else {
-            $tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
-        }
-
-        $formContent = isset($form_content['question']) ? $form_content['question'] : null;
-        $sharedQuestionId = isset($form_content['shared_question_id']) ? $form_content['shared_question_id'] : null;
-
-        $url = api_get_self().'?action='.$action.'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.$questionId;
-
-        $this->html .= '<form class="form-horizontal" id="question_form" name="question_form" method="post" action="'.$url.'">';
-        $this->html .= '<legend>'.$tool_name.'</legend>';
-        $this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
-        $this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$questionId.'"/>';
-        $this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.Security::remove_XSS($sharedQuestionId).'"/>';
-        $this->html .= '		<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_GET['type']).'"/>';
-
-        // question field
-        $this->html .= '	<div class="control-group">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="controls">';
-        $this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($formContent), STUDENT), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        if ($survey_data['survey_type'] == 1) {
-            $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-            $sql = 'SELECT id,name FROM '.$table_survey_question_group.' WHERE survey_id = '.(int)$_GET['survey_id'].' ORDER BY name';
-            $rs = Database::query($sql);
-            $glist = null;
-            while ($row = Database::fetch_array($rs, 'NUM')) {
-                $glist .= '<option value="'.$row[0].'" >'.$row[1].'</option>';
-            }
-
-            $grouplist = $grouplist1 = $grouplist2 = $glist;
-
-            if (!empty($form_content['assigned'])) {
-                $grouplist = str_replace('<option value="'.$form_content['assigned'].'"','<option value="'.$form_content['assigned'].'" selected',$glist);
-            }
-
-            if (!empty($form_content['assigned1'])) {
-                $grouplist1 = str_replace('<option value="'.$form_content['assigned1'].'"','<option value="'.$form_content['assigned1'].'" selected',$glist);
-            }
-
-            if (!empty($form_content['assigned2'])) {
-                $grouplist2 = str_replace('<option value="'.$form_content['assigned2'].'"','<option value="'.$form_content['assigned2'].'" selected',$glist);
-            }
-
-            $this->html .= '	<tr><td colspan="">
-			<fieldset style="border:1px solid black"><legend>'.get_lang('Condition').'</legend>
-
-			<b>'.get_lang('Primary').'</b><br />
-			'.'<input type="radio" name="choose" value="1" '.(($form_content['choose'] == 1) ? 'checked' : '').
-                '><select name="assigned">'.$grouplist.'</select><br />';
-
-            $this->html .= '
-			<b>'.get_lang('Secondary').'</b><br />
-			'.'<input type="radio" name="choose" value="2" '.(($form_content['choose']==2)?'checked':'').
-                '><select name="assigned1">'.$grouplist1.'</select> '.
-                '<select name="assigned2">'.$grouplist2.'</select>'
-                .'</fieldset><br />';
-        }
-
-        return $this->html;
-    }
-
-    /**
-     * This functions displays the form after the html variable has correctly been finished
-     * (adding a submit button, closing the table and closing the form)
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     *
-     */
-    function render_form()
-    {
-        if (isset($_GET['question_id']) and !empty($_GET['question_id'])) {
-            $class = 'save';
-            $text = get_lang('ModifyQuestionSurvey');
-        } else {
-            $class = 'add';
-            $text = get_lang('CreateQuestionSurvey');
-        }
-
-        if ($_GET['type'] == 'yesno' || $_GET['type'] == 'open'|| $_GET['type'] == 'percentage' || $_GET['type'] == 'comment' || $_GET['type'] == 'pagebreak') {
-            $this->html .= '	<div class="control-group">';
-            $this->html .= '		<div class="controls">';
-        }
-        $this->html .= '			<button class="'.$class.'"type="submit" name="save_question">'.$text.'</button>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        //$this->html .= '	</table>';
-
-        $this->html .= '</form>';
-        echo $this->html;
-    }
-
-    /**
-     * This function handles the actions on a question and its answers
-     *
-     * @todo consider using $form_content instead of $_POST
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    public function handle_action($survey_data, $form_content)
-    {
-        $course_id = api_get_course_int_id();
-        global $config;
-
-        // Moving an answer up
-        if (isset($_POST['move_up']) && $_POST['move_up']) {
-            foreach ($_POST['move_up'] as $key => & $value) {
-                $id1		= $key;
-                $content1 	= $form_content['answers'][$id1];
-                $id2		= $key - 1;
-                $content2	= $form_content['answers'][$id2];
-                $form_content['answers'][$id1] = $content2;
-                $form_content['answers'][$id2] = $content1;
-            }
-        }
-
-        // Moving an answer down
-        if (isset($_POST['move_down']) && $_POST['move_down']) {
-            foreach ($_POST['move_down'] as $key => & $value) {
-                $id1		= $key;
-                $content1 	= $form_content['answers'][$id1];
-                $id2		= $key + 1;
-                $content2	= $form_content['answers'][$id2];
-                $form_content['answers'][$id1] = $content2;
-                $form_content['answers'][$id2] = $content1;
-            }
-        }
-
-        // Adding an answer
-        if (isset($_POST['add_answer'])) {
-            $form_content['answers'][] = '';
-        }
-
-        // Removing an answer
-        if (isset($_POST['remove_answer'])) {
-            $max_answer = count($form_content['answers']);
-            unset($form_content['answers'][$max_answer - 1]);
-        }
-
-        // Saving a question
-        if (isset($_POST['save_question'])) {
-            $message = survey_manager::save_question(
-                $survey_data,
-                $form_content
-            );
-
-            if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {
-                $sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE c_id = '.$course_id.' AND survey_id = '.intval($_GET['survey_id']);
-                $res = Database :: fetch_array (Database::query($sql));
-
-                if ($config['survey']['debug']) {
-                    Display :: display_header();
-                    Display :: display_confirmation_message($message.'<br />'.get_lang('ReturnTo').' <a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.get_lang('Survey').'</a>', false);
-                } else {
-                    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'&message='.$message);
-                    exit;
-                }
-            } else {
-                if ($message == 'PleaseEnterAQuestion' || $message == 'PleasFillAllAnswer'|| $message == 'PleaseChooseACondition'|| $message == 'ChooseDifferentCategories') {
-                    $_SESSION['temp_user_message'] = $form_content['question'];
-                    $_SESSION['temp_horizontalvertical'] = $form_content['horizontalvertical'];
-                    $_SESSION['temp_sys_message'] = $message;
-                    $_SESSION['temp_answers'] = $form_content['answers'];
-                    $_SESSION['temp_values'] = $form_content['values'];
-                    header('location: '.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&question_id='.intval($_GET['question_id']).'&survey_id='.intval($_GET['survey_id']).'&action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'');
-                    exit;
-                }
-            }
-        }
-
-        /**
-         * This solution is a little bit strange but I could not find a different solution.
-         */
-        if ($_POST['delete_answer']) {
-            foreach ($_POST['delete_answer'] as $key => & $value) {
-                unset($form_content['answers'][$key]);
-                $deleted = $key;
-            }
-            foreach ($form_content['answers'] as $key => & $value) {
-                if ($key > $deleted) {
-                    $form_content['answers'][$key - 1] = $form_content['answers'][$key];
-                    unset($form_content['answers'][$key]);
-                }
-            }
-        }
-        return $form_content;
-    }
-
-    /**
-     * This functions adds two buttons. One to add an option, one to remove an option
-     *
-     * @param string $form_content
-     * @return string code
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @author Julio Montoya - 2013
-     * @version January 2007
-     */
-    function add_remove_buttons($form_content)
-    {
-        if (count($form_content['answers']) <= 2) {
-            $remove_answer_attribute = 'disabled="disabled"';
-        }
-
-        $return = '	<div class="row">';
-        $return .= '		<div class="formw">';
-        $return .= '		<input type="hidden" name="is_executable" id="is_executable" value="-" />';
-        $return .= '			<button class="minus" type="submit" name="remove_answer" "'.$remove_answer_attribute.'">'.get_lang('RemoveAnswer').' </button>';
-        $return .= '			<button class="plus" type="submit" name="add_answer">'.get_lang('AddAnswer').'</button>';
-
-        return $return;
-    }
-
-    /**
-     * Render the question. In this case this starts with the form tag
-     *
-     * @param string $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content)
-    {
-        $this->html = '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.intval($_GET['survey_id']).'">';
-        echo $this->html;
-    }
-}
-
-class ch_yesno extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the yesno questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-        // Horizontal or vertical
-        $this->html .= '	<div class="control-group">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('DisplayAnswersHorVert');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="controls">';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
-        if (empty($form_content['horizontalvertical']) or $form_content['horizontalvertical'] == 'horizontal') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= '/>'.get_lang('Horizontal').'<br />';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
-        if (isset($form_content['horizontalvertical']) && $form_content['horizontalvertical'] == 'vertical') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= ' />'.get_lang('Vertical').'';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        // The options
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('AnswerOptions');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $this->html .= '			<table>';
-        $this->html .= '	<tr>';
-        $this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
-
-        $this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-        $this->html .= '		<td><input style="width:22px" src="../img/icons/22/down.png"  type="image" class="down" value="move_down[0]" name="move_down[0]"/></td>';
-        $this->html .= '	</tr>';
-        $this->html .= '	<tr>';
-        $this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
-        //$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
-        $this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-        $this->html .= '		<td><input style="width:22px" type="image" src="../img/icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
-        $this->html .= '	</tr>';
-        $this->html .= '			</table>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-    }
-
-    /**
-     * Render the yes not question type
-     *
-     * @param string $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array())
-    {
-        if (is_array($form_content['options'])) { // Check if data is correct
-            foreach ($form_content['options'] as $key => & $value) {
-                if ($form_content['display'] == 'vertical') {
-                    $this->html .= '<label class="radio">';
-                } else {
-                    $this->html .= '<label class="radio inline">';
-                }
-                $value_to_show = $value;
-
-                if (substr_count($value, '<p>') == 1) {
-                    $value_to_show = substr($value, 3, (strlen($value) - 7));
-                }
-                $this->html .= '<input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
-                if (is_array($answers)) {
-                    if (in_array($key,$answers)) {
-                        $this->html .= 'checked="checked"';
-                    }
-                }
-                $this->html .= '/>';
-                $this->html .= $value_to_show.'</label>';
-                if ($form_content['display'] == 'vertical') {
-                    //$this->html .= '<br />';
-                }
-            }
-        }
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo $this->html;
-        echo '</div>';
-    }
-}
-
-class ch_multiplechoice extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the multiple choice questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-        // Horizontal or vertical
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('DisplayAnswersHorVert');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
-        if (empty($form_content['horizontalvertical']) or $form_content['horizontalvertical'] == 'horizontal') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= '/>'.get_lang('Horizontal').'</label><br />';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
-        if (isset($form_content['horizontalvertical']) && $form_content['horizontalvertical'] == 'vertical') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= ' />'.get_lang('Vertical').'</label>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        // The Options
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('AnswerOptions');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $total_number_of_answers = count($form_content['answers']);
-        $this->html .= ' 			<table>';
-        if (is_array($form_content['answers'])) { // Check if data is correct
-            foreach ($form_content['answers'] as $key => $value) {
-                $this->html .= '	<tr>';
-                $this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-                //$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-                $this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-                $this->html .= '		<td>';
-                if ($key<$total_number_of_answers-1) {
-                    $this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-                }
-                if ($key>0) {
-                    $this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-                }
-                if ($total_number_of_answers> 2) {
-                    $this->html .= '			<input style="width:22px" type="image" src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-                }
-                $this->html .= ' 		</td>';
-                $this->html .= '	</tr>';
-            }
-        }
-        // The buttons for adding or removing
-        $this->html .= ' 			</table>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        $this->html .= parent :: add_remove_buttons($form_content);
-    }
-
-    /**
-     * render the multiple choice question type
-     *
-     * @param string $form_content
-     *
-     * @todo it would make more sense to consider yesno as a special case of multiplechoice and not the other way around
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array())
-    {
-        $question = new ch_yesno();
-        $question->render_question($form_content, $answers);
-    }
-}
-
-class ch_personality extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the multiple response questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-        $this->html .= '	<tr>';
-        $this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
-        $this->html .= '	</tr>';
-        // Horizontal or vertical
-        $this->html .= '	<tr>';
-        $this->html .= '		<td align="right" valign="top">&nbsp;</td>';
-        $this->html .= '		<td>';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
-        if (empty($form_content['horizontalvertical']) || $form_content['horizontalvertical'] == 'horizontal') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= '/>'.get_lang('Horizontal').'</label><br />';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
-
-        if (isset($form_content['horizontalvertical']) && $form_content['horizontalvertical'] == 'vertical') {
-            $this->html .= 'checked="checked"';
-        }
-
-        $this->html .= ' />'.get_lang('Vertical').'</label>';
-        $this->html .= '		</td>';
-        $this->html .= '		<td>&nbsp;</td>';
-        $this->html .= '	</tr>';
-        $this->html .= '		<tr>
-								<td colspan="">&nbsp;</td>
-							</tr>';
-
-        // The options
-        $this->html .= '	<tr>';
-        $this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
-        $this->html .= '	</tr>';
-        $total_number_of_answers = count($form_content['answers']);
-
-        $question_values = array();
-
-        // Values of question options
-        if (is_array($form_content['values'])) { // Check if data is correct
-            foreach ($form_content['values'] as $key => & $value) {
-                $question_values [] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
-            }
-        }
-        $count = 0;
-        if (is_array($form_content['answers'])) {
-            foreach ($form_content['answers'] as $key => & $value) {
-                $this->html .= '	<tr>';
-                $this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-                //$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-                $this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-                $this->html .= '		<td>';
-
-                if ($total_number_of_answers > 2) {
-                    $this->html .= $question_values[$count];
-                }
-
-                if ($key < $total_number_of_answers - 1) {
-                    $this->html .= '		<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-                }
-                if ($key > 0) {
-                    $this->html .= '		<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-                }
-                if ($total_number_of_answers > 2) {
-                    $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-                }
-                $this->html .= ' 		</td>';
-                $this->html .= '	</tr>';
-                $count++;
-            }
-        }
-        // The buttons for adding or removing
-        //$this->html .= parent :: add_remove_buttons($form_content);
-    }
-
-    /**
-     * Render the multiple response question type
-     *
-     * @param string $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array()) {
-        $question = new ch_yesno();
-        $question->render_question($form_content, $answers);
-    }
-}
-
-class ch_multipleresponse extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the multiple response questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function create_form($survey_data, $form_content) {
-
-        $this->html = parent::create_form($survey_data, $form_content);
-        // Horizontal or vertical
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('DisplayAnswersHorVert');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="horizontal" ';
-        if (empty($form_content['horizontalvertical']) || $form_content['horizontalvertical'] == 'horizontal') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= '/>'.get_lang('Horizontal').'</label><br />';
-        $this->html .= '		  <input name="horizontalvertical" type="radio" value="vertical" ';
-        if (isset($form_content['horizontalvertical']) && $form_content['horizontalvertical'] == 'vertical') {
-            $this->html .= 'checked="checked"';
-        }
-        $this->html .= ' />'.get_lang('Vertical').'</label>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        // The options
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('AnswerOptions');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $total_number_of_answers = count($form_content['answers']);
-        $this->html .= ' 			<table>';
-        if (is_array($form_content['answers'])) { // Values of question options
-            foreach ($form_content['answers'] as $key => & $value) {
-                $this->html .= '	<tr>';
-                $this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
-                //$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-                $this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-                $this->html .= '		<td>';
-                if ($key<$total_number_of_answers - 1) {
-                    $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-                }
-
-                if ($key > 0) {
-                    $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-                }
-
-                if ($total_number_of_answers > 2) {
-                    $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-                }
-                $this->html .= ' 		</td>';
-                $this->html .= '	</tr>';
-            }
-        }
-        // The buttons for adding or removing
-        $this->html .= ' 			</table>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-        $this->html .= parent :: add_remove_buttons($form_content);
-    }
-
-    /**
-     * Render the multiple response question type
-     *
-     * @param unknown_type $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array())
-    {
-        foreach ($form_content['options'] as $key => & $value) {
-            if ($form_content['display'] == 'vertical') {
-                $this->html .= '<label class="checkbox"><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
-            } else {
-                $this->html .= '<label class="checkbox inline"><input name="question'.$form_content['question_id'].'[]" type="checkbox" value="'.$key.'"';
-            }
-            if (is_array($answers)) {
-                if (in_array($key, $answers)) {
-                    $this->html .= 'checked="checked"';
-                }
-            }
-            if (substr_count($value, '<p>') == 1) {
-                $this->html .= '/>'.substr($value, 3, (strlen($value) - 7)).'</label>';
-                if ($form_content['display'] == 'vertical') {
-                    $this->html .= '<br />';
-                }
-            } else {
-                $this->html .= '/>'.$value.'</label>';
-            }
-        }
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '<div class="control-group">';
-        echo $this->html;
-        echo '</div>';
-        echo '</div>';
-    }
-}
-
-class ch_dropdown extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the dropdown questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-        // The answers
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('AnswerOptions');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $total_number_of_answers = count($form_content['answers']);
-        $this->html .= ' 			<table>';
-        foreach ($form_content['answers'] as $key => & $value) {
-            $this->html .= '	<tr>';
-            $this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
-            $this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.stripslashes($form_content['answers'][$key]).'" /></td>';
-            $this->html .= '		<td>';
-            if ($key < $total_number_of_answers - 1) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-            }
-            if ($key > 0) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-            }
-            if ($total_number_of_answers> 2) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-            }
-            $this->html .= ' 		</td>';
-            $this->html .= '	</tr>';
-        }
-        // The buttons for adding or removing
-        $this->html .= ' 			</table>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-        $this->html .= parent :: add_remove_buttons($form_content);
-    }
-
-    /**
-     * Render the dropdown question type
-     *
-     * @param unknown_type $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array())
-    {
-        foreach ($form_content['options'] as $key => & $value) {
-            $this->html .= '<option value="'.$key.'" ';
-            if (is_array($answers)) {
-                if (in_array($key, $answers)) {
-                    $this->html .= 'selected="selected"';
-                }
-            }
-            $this->html .= '>'.$value.'</option>';
-        }
-
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '<div class="survey_question_options">';
-        echo '<select name="question'.$form_content['question_id'].'" id="select">';
-        echo $this->html;
-        echo '</select>';
-        echo '</div>';
-        echo '</div>';
-        /*
-			<option value="test">test</option>
-		*/
-    }
-}
-
-
-class ch_open extends survey_question
-{
-
-    /**
-     * This function creates the form elements for the open questions
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     *
-     * @todo add a limit for the number of characters that can be type
-     * @todo add a checkbox weither the answer is a textarea or a wysiwyg editor
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-    }
-
-    /**
-     * render the open question type
-     *
-     * @param unknown_type $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content, $answers = array())
-    {
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '<div class="survey_question_options">';
-        if (is_array($answers)) {
-            $content = implode('', $answers);
-        } else {
-            $content = $answers;
-        }
-        echo '<label for="question'.$form_content['question_id'].'"></label>
-              <textarea name="question'.$form_content['question_id'].'" id="textarea" style="width: 400px; height: 130px;">'.$content.'</textarea>';
-        echo '</div>';
-        echo '</div>';
-    }
-}
-
-
-class ch_comment extends survey_question
-{
-
-    /**
-     * This function creates the form elements for a comment.
-     * A comment is nothing more than a block of text that the user can read
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     *
-     * @param array $form_content
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-    }
-
-    /**
-     * Render the comment "question" type
-     *
-     * @param unknown_type $form_content
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     */
-    function render_question($form_content)
-    {
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '</div>';
-    }
-}
-
-class ch_pagebreak extends survey_question
-{
-
-    /**
-     * This function creates the form elements for a comment.
-     * A comment is nothing more than a block of text that the user can read
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version January 2007
-     *
-     * @param array $form_content
-     */
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-    }
-}
-
-
-class ch_percentage extends survey_question
-{
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-    }
-
-    function render_question($form_content, $answers = array()) {
-        $this->html .= '<option value="--">--</option>';
-        foreach ($form_content['options'] as $key => & $value) {
-            $this->html .= '<option value="'.$key.'" ';
-            if (is_array($answers)) {
-                if (in_array($key, $answers)) {
-                    $this->html .= 'selected="selected"';
-                }
-            }
-            $this->html .= '>'.$value.'</option>';
-        }
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '<div class="survey_question_options">';
-        echo '<select name="question'.$form_content['question_id'].'" id="select">';
-        echo $this->html;
-        echo '</select>';
-        echo '</div>';
-        echo '</div>';
-    }
-}
-
-class ch_score extends survey_question
-{
-    function create_form($survey_data, $form_content)
-    {
-        $this->html = parent::create_form($survey_data, $form_content);
-        // The maximum score that can be given
-        $this->html .= '	<div class="control-group">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= '			<span class="form_required">*</span>'.get_lang('MaximumScore');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="controls">';
-        $this->html .= '			<input type="text" name="maximum_score" value="'.$form_content['maximum_score'].'">';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-
-        // The answers
-        $this->html .= '	<div class="row">';
-        $this->html .= '		<label class="control-label">';
-        $this->html .= 				get_lang('AnswerOptions');
-        $this->html .= '		</label>';
-        $this->html .= '		<div class="formw">';
-        $total_number_of_answers = count($form_content['answers']);
-        $this->html .= ' 			<table>';
-        foreach ($form_content['answers'] as $key => & $value) {
-            $this->html .= '	<tr>';
-            $this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-            //$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-            $this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', stripslashes($form_content['answers'][$key]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-            $this->html .= '		<td>';
-            if ($key<$total_number_of_answers - 1) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-            }
-            if ($key > 0) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-            }
-            if ($total_number_of_answers > 2) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-            }
-            $this->html .= ' 		</td>';
-            $this->html .= '	</tr>';
-        }
-        // The buttons for adding or removing
-        $this->html .= ' 			</table>';
-        $this->html .= '		</div>';
-        $this->html .= '	</div>';
-        $this->html .= parent :: add_remove_buttons($form_content);
-    }
-
-    function render_question($form_content, $answers = array())
-    {
-        /*
-		echo '<div style="border: 1px solid red;">';
-		echo '<pre>';
-		print_r($answers);
-		echo '</pre></div>';
-		*/
-        $this->html = '<table>';
-        foreach ($form_content['options'] as $key => & $value) {
-            $this->html .= '<tr>
-								<td>'.$value.'</td>';
-            $this->html .= '	<td>';
-            $this->html .= '<select name="question'.$form_content['question_id'].'['.$key.']">';
-            $this->html .= '<option value="--">--</option>';
-            for ($i=1; $i <= $form_content['maximum_score']; $i++) {
-                $this->html .= '<option value="'.$i.'"';
-                if ($answers[$key] == $i) {
-                    $this->html .= 'selected="selected" ';
-                }
-                $this->html .= '>'.$i.'</option>';
-            }
-            $this->html .= '</select>';
-            $this->html .= '	</td>';
-            $this->html .= '</tr>';
-        }
-        $this->html .= '</table>';
-        echo '<div class="survey_question_wrapper">';
-        echo '<div class="survey_question">'.$form_content['survey_question'].'</div>';
-        echo '<div class="survey_question_options">';
-        //echo '<select name="question'.$form_content['question_id'].'" id="select">';
-        echo $this->html;
-        //echo '</select>';
-        echo '</div>';
-        echo '</div>';
-    }
-}
 
 /**
  * This class offers a series of general utility functions for survey querying and display
@@ -2495,8 +1551,7 @@ class SurveyUtil
     static function check_first_last_question($survey_id, $continue = true)
     {
         // Table definitions
-        $tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $course_id = api_get_course_int_id();
 
         // Getting the information of the question

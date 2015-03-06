@@ -171,16 +171,16 @@ if (isset ($_POST['action']))
 }
 
 $form = new FormValidator('advanced_search','get');
-$form->add_textfield('keyword_username',get_lang('LoginName'),false);
+$form->addText('keyword_username',get_lang('LoginName'),false);
 if (api_is_western_name_order())
 {
-	$form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
-	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
+	$form->addText('keyword_firstname', get_lang('FirstName'), false);
+	$form->addText('keyword_lastname', get_lang('LastName'), false);
 }
 else
 {
-	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
-	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
+	$form->addText('keyword_lastname',get_lang('LastName'),false);
+	$form->addText('keyword_firstname',get_lang('FirstName'),false);
 }
 if (isset($_GET['id_session']))
 	$form->addElement('hidden','id_session',$_GET['id_session']);

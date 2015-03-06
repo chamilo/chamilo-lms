@@ -35,21 +35,33 @@
 class HTML_QuickForm_button extends HTML_QuickForm_input
 {
     /**
-     * Class constructor
-     *
-     * @param     string $elementName (optional)Input field name attribute
-     * @param     string $value (optional)Input field value
-     * @param     mixed $attributes (optional)Either a typical HTML attribute string
-     *                                      or an associative array
-     * @since     1.0
-     * @access    public
-     * @return    void
+     * @param string $elementName
+     * @param string $value
+     * @param string $icon
+     * @param string $style
+     * @param string $size
+     * @param string $class
+     * @param array  $attributes
      */
     public function HTML_QuickForm_button(
         $elementName = null,
         $value = null,
-        $attributes = null
+        $icon = 'check',
+        $style = 'default',
+        $size = 'default',
+        $class = 'btn',
+        $attributes = array()
     ) {
+        $icon = !empty($icon) ? $icon : 'check';
+        $style = !empty($style) ? $style : 'default';
+        $size = !empty($size) ? $size : 'default';
+        $class = !empty($class) ? $class : 'btn';
+
+        $attributes['icon'] = $icon;
+        $attributes['style'] = $style;
+        $attributes['size'] = $size;
+        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
+
         HTML_QuickForm_input::HTML_QuickForm_input(
             $elementName,
             null,
@@ -70,16 +82,16 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         } else {
             $value = $this->_attributes['value'];
             unset($this->_attributes['value']);
-            $icon = null;
-            //$class = isset($this->_attributes['class']) ? $this->_attributes['class'] : 'btn btn-large';
-            switch ($this->_attributes['name']) {
-                case 'save':
-                case 'submit':
-                    $icon = '<i class="fa fa-check"></i> ';
-                    break;
-            }
+            $icon = isset($this->_attributes['icon']) ? $this->_attributes['icon'] : 'check';
 
-            return $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' />'.$icon.$value.'</button>';
+            unset($this->_attributes['icon']);
+            $icon = '<i class="fa fa-'.$icon.'"></i> ';
+
+            return
+                $this->_getTabs() . '
+                <button' . $this->_getAttrString($this->_attributes) . ' />'.
+                $icon.$value.
+                '</button>';
         }
     }
 

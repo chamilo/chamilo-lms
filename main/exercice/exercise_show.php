@@ -33,8 +33,8 @@ if ($origin == 'learnpath') {
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_QUESTIONS         	= Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_ATTEMPT		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_EXERCICES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+$TBL_TRACK_ATTEMPT		= Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 // General parameters passed via POST/GET
 if ($debug) { error_log('Entered exercise_result.php: '.print_r($_POST,1)); }
@@ -66,7 +66,7 @@ if (api_is_course_session_coach(
     }
 }
 
-$maxEditors = isset($_configuration['exercise_max_fckeditors_in_page']) ? $_configuration['exercise_max_fckeditors_in_page'] : 0;
+$maxEditors = isset($_configuration['exercise_max_ckeditors_in_page']) ? $_configuration['exercise_max_ckeditors_in_page'] : 0;
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh() || api_is_student_boss();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
@@ -127,7 +127,7 @@ if ($origin != 'learnpath') {
 }
 ?>
 <script>
-var maxEditors = '<?php echo intval($maxEditors); ?>';
+var maxEditors = <?php echo intval($maxEditors); ?>;
 
 function showfck(sid,marksid) {
 	document.getElementById(sid).style.display='block';
@@ -154,7 +154,7 @@ function getFCK(vals,marksid) {
 		var oHidden = document.createElement("input");
 		oHidden.type = "hidden";
 		oHidden.name = "comments_"+ids[k];
-        if (maxEditors == 0) {
+        if (CKEDITOR.instances[oHidden.name]) {
             oHidden.value = CKEDITOR.instances[oHidden.name].getData();
         } else {
             oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
@@ -215,7 +215,9 @@ if ($show_results || $show_only_total_score) {
     //Shows exercise header
     echo $objExercise->show_exercise_result_header(
         $user_info,
-        api_convert_and_format_date($exercise_date)
+        api_convert_and_format_date($exercise_date),
+        null,
+        $track_exercise_info['user_ip']
     );
 }
 

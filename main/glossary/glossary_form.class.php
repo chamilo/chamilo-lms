@@ -76,9 +76,9 @@ class GlossaryForm extends \FormValidator
         $form_name = $glossary->id ? get_lang('TermEdit') : get_lang('TermAddNew');
         $this->addHeader($form_name);
 
-        $this->add_textfield('name', get_lang('TermName'), $required = true, array('class' => 'span3'));
-        $this->add_html_editor('description', get_lang('TermDefinition'), true, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
-        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addText('name', get_lang('TermName'), $required = true, array('class' => 'span3'));
+        $this->addHtmlEditor('description', get_lang('TermDefinition'), true, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

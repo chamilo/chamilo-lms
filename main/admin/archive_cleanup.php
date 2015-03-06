@@ -22,7 +22,7 @@ api_protect_admin_script(true);
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
 $form = new FormValidator('archive_cleanup_form');
-$form->addElement('style_submit_button','proceed', get_lang('ArchiveDirCleanupProceedButton'),'class="save"');
+$form->addButton('proceed', get_lang('ArchiveDirCleanupProceedButton'));
 
 $message = null;
 

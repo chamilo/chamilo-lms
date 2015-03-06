@@ -12,8 +12,8 @@ $connector = new Connector();
 $driverList = array(
     'PersonalDriver',
     'CourseDriver',
-    'CourseUserDriver',
-    'HomeDriver'
+    //'CourseUserDriver',
+    //'HomeDriver'
 );
 $connector->setDriverList($driverList);
 

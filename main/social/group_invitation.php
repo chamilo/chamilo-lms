@@ -65,7 +65,7 @@ if (empty($group_id)) {
 function search_users($needle, $type)
 {
     global $tbl_user, $tbl_group_rel_user, $group_id;
-    $xajax_response = new XajaxResponse();
+    $xajax_response = new xajaxResponse();
     $return = '';
 
     if (!empty($needle) && !empty($type)) {

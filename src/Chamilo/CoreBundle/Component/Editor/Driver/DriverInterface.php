@@ -19,7 +19,7 @@ interface DriverInterface
 
     /**
      * Gets driver name.
-     * @param string
+     * @param string $name
      */
     public function setName($name);
 
@@ -38,4 +38,12 @@ interface DriverInterface
      * @return Connector
      */
     public function setConnectorFromPlugin();
+
+    /**
+     * @return bool
+     */
+    public function allow();
+
+    public function getConfiguration();
+    public function setup();
 }

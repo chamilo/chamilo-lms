@@ -145,6 +145,7 @@ if (!$sidx) {
 switch ($action) {
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
+        $userId = api_get_user_id();
         if (!(api_is_platform_admin(false, true))) {
             //exit;
         }
@@ -186,7 +187,38 @@ switch ($action) {
             if (empty($userIdList) || empty($courseCodeList)) {
                 exit;
             }
+        } elseif (api_is_student_boss()) {
+            $users = UserManager::getUsersFollowedByStudentBoss($userId);
+
+            $userIdList = array_keys($users);
         }
+
+        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+
+        $groupsId = array_keys($groups);
+
+        if (is_array($groupsId)) {
+            foreach ($groupsId as $groupId) {
+                $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+                if (!is_array($groupUsers)) {
+                    continue;
+                }
+
+                foreach ($groupUsers as $memberId => $member) {
+                    if ($member['user_id'] == $userId ) {
+                        continue;
+                    }
+
+                    $userIdList[] = intval($member['user_id']);
+                }
+            }
+        }
+
+        if (is_array($userIdList)) {
+            $userIdList = array_unique($userIdList);
+        }
+
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
         } else {
@@ -658,7 +690,7 @@ switch ($action) {
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
         if ($is_allowedToEdit || api_is_student_boss()) {
             $columns = array(
-                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
+                'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score',  'user_ip', 'status', 'lp', 'actions'
             );
             $officialCodeInList = api_get_configuration_value('show_official_code_exercise_result_list');
             if ($officialCodeInList == true) {

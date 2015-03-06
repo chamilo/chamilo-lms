@@ -322,9 +322,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                         // Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
-                            or $uData['expiration_date'] == '0000-00-00 00:00:00'
+                            or empty($uData['expiration_date'])
                         ) {
-
                             global $_configuration;
 
                             if (isset($_configuration['multiple_access_urls'])
@@ -345,7 +344,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 if ($my_user_is_admin === false) {
 
                                     // the user have the permissions to enter at this site
-                                    if (is_array($my_url_list) && in_array($current_access_url_id, $my_url_list)) {
+                                    if (is_array($my_url_list) &&
+                                        in_array($current_access_url_id, $my_url_list)
+                                    ) {
                                         ConditionalLogin::check_conditions($uData);
 
                                         $_user['user_id'] = $uData['user_id'];
@@ -378,6 +379,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::event_login();
+                                        $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
@@ -385,6 +387,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user', $_user);
                                             Event::event_login();
+                                            $logging_in = true;
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
@@ -746,7 +749,7 @@ if (isset($uidReset) && $uidReset) {
 
         $user_table     = Database::get_main_table(TABLE_MAIN_USER);
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $track_e_login  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT user.*, a.user_id is_admin, login.login_date
             FROM $user_table
@@ -933,7 +936,7 @@ if (isset($cidReset) && $cidReset) {
             }
 
             if ($save_course_access) {
-                $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+                $course_tracking_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
                 /*
                 * When $_configuration['session_lifetime'] is too big 100 hours (in order to let users take exercises with no problems)

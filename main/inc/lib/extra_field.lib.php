@@ -629,7 +629,7 @@ class ExtraField extends Model
                         }
                         break;
                     case ExtraField::FIELD_TYPE_TEXTAREA:
-                        $form->add_html_editor(
+                        $form->addHtmlEditor(
                             'extra_'.$field_details['field_variable'],
                             $field_details['field_display_text'],
                             false,
@@ -1499,12 +1499,12 @@ EOF;
                 $form->freeze('field_options');
             }
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
-            $form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addButtonUpdate(get_lang('Modify'));
         } else {
             $defaults['field_visible']    = 0;
             $defaults['field_changeable'] = 0;
             $defaults['field_filter']     = 0;
-            $form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addButtonCreate(get_lang('Add'));
         }
 
         /*if (!empty($defaults['created_at'])) {

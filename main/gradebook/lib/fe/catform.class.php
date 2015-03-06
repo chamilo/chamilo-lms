@@ -194,7 +194,7 @@ class CatForm extends FormValidator
     private function build_basic_form()
     {
         $this->addElement('hidden', 'zero', 0);
-        $this->add_textfield(
+        $this->addText(
             'name',
             get_lang('CategoryName'),
             true,
@@ -216,7 +216,14 @@ class CatForm extends FormValidator
         } else {
             $value = 100;
         }
-        $this->add_textfield('weight', array(get_lang('TotalWeight'), get_lang('TotalSumOfWeights')), true, array('value'=>$value, 'class'=>'span1','maxlength'=>'5'));
+        $this->addText('weight',
+            array(
+                get_lang('TotalWeight'),
+                get_lang('TotalSumOfWeights')
+            ),
+            true,
+            array('value' => $value, 'class' => 'span1', 'maxlength' => '5')
+        );
         $this->addRule('weight', get_lang('ThisFieldIsRequired'), 'required');
 
         if (api_is_platform_admin() || api_is_drh()) {
@@ -267,10 +274,10 @@ class CatForm extends FormValidator
             }
         }
 
-        if (isset($this->category_object) && $this->category_object->get_parent_id(
-            ) == 0
+        if (isset($this->category_object) &&
+            $this->category_object->get_parent_id() == 0
         ) {
-            $this->add_textfield(
+            $this->addText(
                 'certif_min_score',
                 get_lang('CertificateMinScore'),
                 false,
@@ -301,8 +308,7 @@ class CatForm extends FormValidator
         $this->addElement(
             'textarea',
             'description',
-            get_lang('Description'),
-            array('class' => 'span3', 'cols' => '34')
+            get_lang('Description')
         );
 
         if (isset($this->category_object) &&
@@ -365,20 +371,10 @@ class CatForm extends FormValidator
         }
 
         if ($this->form_type == self :: TYPE_ADD) {
-            $this->addElement(
-                'style_submit_button',
-                null,
-                get_lang('AddCategory'),
-                'class="save"'
-            );
+            $this->addButtonCreate(get_lang('AddCategory'));
         } else {
             $this->addElement('hidden', 'editcat', intval($_GET['editcat']));
-            $this->addElement(
-                'style_submit_button',
-                null,
-                get_lang('EditCategory'),
-                'class="save"'
-            );
+            $this->addButtonUpdate(get_lang('EditCategory'));
         }
 
         //if (!empty($grading_contents)) {

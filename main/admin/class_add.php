@@ -29,8 +29,8 @@ $interbreadcrumb[] = array ('url' => 'class_list.php', 'name' => get_lang('Class
 $tool_name = get_lang("AddClasses");
 
 $form = new FormValidator('add_class');
-$form->add_textfield('name', get_lang('ClassName'));
-$form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
+$form->addText('name', get_lang('ClassName'));
+$form->addButtonCreate(get_lang('Ok'));
 if ($form->validate()) {
     $values = $form->exportValues();
     ClassManager::create_class($values['name']);

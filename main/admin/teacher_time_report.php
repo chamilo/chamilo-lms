@@ -51,11 +51,6 @@ $sessionsList = SessionManager::get_sessions_list(array(), array('name'));
 
 $teacherList = UserManager::getTeachersList();
 
-$htmlHeadXtra[] = '
-<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/moment.min.js"></script>
-<link rel="stylesheet" href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/daterangepicker-bs2.css">
-<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/daterangepicker.js"></script>';
-
 $withFilter = false;
 
 $reportTitle = get_lang('TimeReportIncludingAllCoursesAndSessionsByTeacher');

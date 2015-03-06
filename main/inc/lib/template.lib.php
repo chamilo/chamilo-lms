@@ -147,6 +147,8 @@ class Template
         }
 
         $this->assign('template', $this->templateFolder);
+        $this->assign('locale', api_get_language_isocode());
+
         $this->assign('css_styles', $this->theme);
         $this->assign('login_class', null);
 
@@ -330,6 +332,7 @@ class Template
      */
     public function set_header($status)
     {
+        $status = false;
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
@@ -471,11 +474,10 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
+        // Default CSS Bootstrap
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap.css');
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-
-        // Default CSS responsive design
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
@@ -485,11 +487,13 @@ class Template
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
 
-        $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_CSS_PATH).'font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs3.css';
+
         //THEME CSS STYLE
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
@@ -551,6 +555,8 @@ class Template
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
+            'fullcalendar/lib/moment.min.js',
+            'daterange/daterangepicker.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
@@ -816,7 +822,7 @@ class Template
         $this->assign('user_notifications', $total_invitations);
 
 
-        //Breadcrumb
+        //Block Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 

@@ -35,7 +35,7 @@ $form = new FormValidator('profile_search');
 
 $form->addElement('header', get_lang('SearchSkills'));
 $form->addElement('select', 'skills', null, null, array('id'=>'skills'));
-$form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="btn"');
+$form->addButtonSearch(get_lang('Search'));
 
 $profiles = $skill_profile->get_all();
 

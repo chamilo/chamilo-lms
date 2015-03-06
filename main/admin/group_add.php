@@ -10,7 +10,7 @@ $language_file = array('admin', 'registration', 'userInfo');
 $cidReset = true;
 
 // Including necessary libraries.
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 
 // Section for the tabs
@@ -96,7 +96,7 @@ $defaults['status'] = GROUP_PERMISSION_OPEN;
 $form->setDefaults($defaults);
 
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$form->addButtonCreate(get_lang('Add'));
 
 // Validate form
 if( $form->validate()) {

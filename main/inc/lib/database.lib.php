@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Driver\Statement;
+
 /**
  * Class Database
  *  This is the main database library for Chamilo.
@@ -17,13 +21,30 @@
  */
 class Database
 {
-    /* Variable use only in the installation process to log errors. See the Database::query function */
+    /* Variable use only in the installation process to log errors.
+    See the Database::query function */
     static $log_queries = false;
-    /*
-        Accessor methods
-        Usually, you won't need these directly but instead
-        rely on of the get_xxx_table methods.
-    */
+
+    /**
+     * @var EntityManager
+     */
+    private static $em;
+
+    /**
+     * @param EntityManager $em
+     */
+    public function setManager($em)
+    {
+        self::$em = $em;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public static function getManager()
+    {
+        return self::$em;
+    }
 
     /**
      *  Returns the name of the main database.
@@ -32,38 +53,6 @@ class Database
     {
         global $_configuration;
         return $_configuration['main_database'];
-    }
-
-    /**
-     *  Returns the name of the statistics database.
-     *  @todo use main_database
-     */
-    public static function get_statistic_database()
-    {
-        return self::get_main_database();
-    }
-
-    /**
-     *  Returns the name of the database where all the personal stuff of the user is stored
-     *  @todo use main_database
-     */
-    public static function get_user_personal_database()
-    {
-        return self::get_main_database();
-    }
-
-    /**
-     *  Returns the name of the current course database.
-     *  @return    mixed   Glued database name of false if undefined
-     */
-    public static function get_current_course_database()
-    {
-        $course_info = api_get_course_info();
-        if (empty($course_info['dbName'])) {
-            return false;
-        }
-
-        return $course_info['dbName'];
     }
 
     /**
@@ -170,181 +159,12 @@ class Database
             //exit;
         }
         return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);
-        //return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any
-     * statistic table of which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
-     * instead of directly using magic words in your tool code.
-     * @deprecated use get_main_table
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_statistic_table($short_table_name)
-    {
-        return self::get_main_table($short_table_name);
-    }
-
-    /**
-     * This generic method returns the correct and complete name of any user
-     * table of which you pass the short name as a parameter. Please, define
-     * table names as constants in this library and use them instead of directly
-     * using magic words in your tool code.
-     *
-     * @param string $short_table_name, the name of the table
-     */
-    public static function get_user_personal_table($short_table_name)
-    {
-        return self::get_main_table($short_table_name);
-    }
-
-    public static function get_course_chat_connected_table($database_name = '')
-    {
-        return self::format_glued_course_table_name(self::fix_database_parameter($database_name), TABLE_CHAT_CONNECTED);
     }
 
     /*
         Query methods
         These methods execute a query and return the result(s).
     */
-
-    /**
-     *  @return array a list (array) of all courses.
-     *  @todo shouldn't this be in the course.lib.php script?
-     */
-    public static function get_course_list()
-    {
-        $table = self::get_main_table(TABLE_MAIN_COURSE);
-        return self::store_result(self::query("SELECT *, id as real_id FROM $table"));
-    }
-
-    /**
-     *  Returns an array with all database fields for the specified course.
-     *
-     *  @param string The real (system) course code (main course table ID)
-     *  @todo shouldn't this be in the course.lib.php script?
-     */
-    public static function get_course_info($course_code)
-    {
-        $course_code = self::escape_string($course_code);
-        $table = self::get_main_table(TABLE_MAIN_COURSE);
-        $result = self::generate_abstract_course_field_names(
-            self::fetch_array(self::query("SELECT *, id as real_id FROM $table WHERE code = '$course_code'")));
-        return $result === false ? array('db_name' => '') : $result;
-    }
-
-    /**
-     * Gets user details from the "user" table
-     * @param $user_id (integer): the id of the user
-     * @return $user_info (array): user_id, lname, fname, username, email, ...
-     * @author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
-     * @author Roan Embrechts, first version + converted to Database API
-     * @version 30 September 2004
-     * @deprecated use api_get_user_info();
-     * @desc find all the information about a specified user. Without parameter this is the current user.
-     * @todo shouldn't this be in the user.lib.php script?
-     */
-    public static function get_user_info_from_id($user_id = '')
-    {
-        if (empty($user_id)) {
-            return $GLOBALS['_user'];
-        }
-        $table = self::get_main_table(TABLE_MAIN_USER);
-        $user_id = self::escape_string($user_id);
-        return self::generate_abstract_user_field_names(
-            self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'")));
-    }
-
-    /**
-     * Returns course code from a given gradebook category's id
-     * @param int  Category ID
-     * @return string  Course code
-     * @todo move this function in a gradebook-related library
-     */
-    public static function get_course_by_category($category_id)
-    {
-        $category_id = intval($category_id);
-        $info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
-        return $info ? $info['course_code'] : false;
-    }
-
-    /**
-     *  This method creates an abstraction layer between database field names
-     *  and field names expected in code.
-     *
-     *  This approach helps when changing database names.
-     *  It's also useful now to get rid of the 'franglais'.
-     *
-     *  @todo   add more array entries to abstract course info from field names
-     *  @author Roan Embrechts
-     *
-     *  @todo What's the use of this method. I think this is better removed.
-     *        There should be consistency in the variable names and the
-     *            use throughout the scripts
-     *        for the database name we should consistently use or db_name
-     *            or database (db_name probably being the better one)
-     */
-    public static function generate_abstract_course_field_names($result_array)
-    {
-        $visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
-        $code        = isset($result_array['code']) ? $result_array['code'] : null;
-        $title       = isset($result_array['title']) ? $result_array['title'] : null;
-        $db_name     = isset($result_array['db_name']) ? $result_array['db_name'] : null;
-        $category_code = isset($result_array['category_code']) ? $result_array['category_code'] : null;
-        $result_array['official_code'] = $visual_code;
-        $result_array['visual_code']   = $visual_code;
-        $result_array['real_code']     = $code;
-        $result_array['system_code']   = $code;
-        $result_array['title']         = $title;
-        $result_array['database']      = $db_name;
-        $result_array['faculty']       = $category_code;
-        //$result_array['directory'] = $result_array['directory'];
-        /*
-        still to do: (info taken from local.inc.php)
-
-        $_course['id'          ]         = $cData['cours_id'         ]; //auto-assigned integer
-        $_course['name'        ]         = $cData['title'            ];
-        $_course['official_code']        = $cData['visual_code'        ]; // use in echo
-        $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-        $_course['path'        ]         = $cData['directory'        ]; // use as key in path
-        $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-        $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['dbName'] . $_configuration['db_glue']; // use in all queries
-        $_course['titular'     ]         = $cData['tutor_name'       ];
-        $_course['language'    ]         = $cData['course_language'   ];
-        $_course['extLink'     ]['url' ] = $cData['department_url'    ];
-        $_course['extLink'     ]['name'] = $cData['department_name'];
-        $_course['categoryCode']         = $cData['faCode'           ];
-        $_course['categoryName']         = $cData['faName'           ];
-
-        $_course['visibility'  ]         = (bool) ($cData['visibility'] == 2 || $cData['visibility'] == 3);
-        $_course['registrationAllowed']  = (bool) ($cData['visibility'] == 1 || $cData['visibility'] == 2);
-        */
-        return $result_array;
-    }
-
-    /**
-     *  This method creates an abstraction layer between database field names
-     *  and field names expected in code.
-     *
-     *  This helps when changing database names.
-     *  It's also useful now to get rid of the 'franglais'.
-     *
-     *  @todo add more array entries to abstract user info from field names
-     *  @author Roan Embrechts
-     *  @author Patrick Cool
-     *
-     *  @todo what's the use of this function. I think this is better removed.
-     *      There should be consistency in the variable names and the use throughout the scripts
-     */
-    public static function generate_abstract_user_field_names($result_array) {
-        $result_array['firstName']      = $result_array['firstname'];
-        $result_array['lastName']       = $result_array['lastname'];
-        $result_array['mail']           = $result_array['email'];
-        #$result_array['picture_uri']   = $result_array['picture_uri'];
-        #$result_array ['user_id']      = $result_array['user_id'];
-        return $result_array;
-    }
 
     /**
      * Counts the number of rows in a table
@@ -466,13 +286,6 @@ class Database
      */
     public static function escape_string($string, $connection = null, $addFix = true)
     {
-        // Fixes security problem when there's no "" or '' between a variable.
-        // See #7440 for more info
-        /*
-        if ($addFix) {
-            //$string = "__@$string@__";
-        }
-        */
         return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
@@ -562,41 +375,6 @@ class Database
     }
 
     /**
-     * Returns a list of the fields that a given table contains. The list may contain all of the available field names or filtered field names by using a pattern.
-     * By using a special option, this method is able to return an indexed list of fields' properties, where field names are keys.
-     * @param string $table                     This is the examined table.
-     * @param string $pattern (optional)        A pattern for filtering field names as if it was needed for the SQL's LIKE clause, for example 'column_%'.
-     * @param string $database (optional)       The name of the targeted database. If it is omited, the current database is assumed, see Database::select_db().
-     * @param bool $including_properties (optional) When this option is true, the returned result has the followong format:
-     *                                              array(field_name_1 => array(0 => property_1, 1 => property_2, ...), fieald_name_2 => array(0 => property_1, ...), ...)
-     * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
-     * @return array                            Returns in an array the retrieved list of field names.
-     */
-    public static function get_fields($table, $pattern = '', $database = '', $including_properties = false, $connection = null) {
-        $result = array();
-        $query = "SHOW COLUMNS FROM `".self::escape_string($table, $connection)."`";
-        if (!empty($database)) {
-            $query .= " FROM `".self::escape_string($database, $connection)."`";
-        }
-        if (!empty($pattern)) {
-            $query .= " LIKE '".self::escape_string($pattern, $connection)."'";
-        }
-        $query_result = Database::query($query, $connection);
-        if ($including_properties) {
-            // Making an indexed list of the fields and their properties.
-            while ($row = Database::fetch_row($query_result)) {
-                $result[$row[0]] = $row;
-            }
-        } else {
-            // Making a plain, flat list.
-            while ($row = Database::fetch_row($query_result)) {
-                $result[] = $row[0];
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Returns information about the type of the current connection and the server host name.
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
      * @return string/boolean                   Returns string data on success or FALSE on failure.
@@ -680,36 +458,6 @@ class Database
     }
 
     /**
-     * Removes "__@" prefix and @__ suffix added by Database::escape_string()
-     * See #7440 for more info
-     * @param string $query
-     * @return mixed
-     */
-    public static function fixQuery($query)
-    {
-        // LIKE condition
-        $query = str_replace("'%__@", "'%", $query);
-        $query = str_replace("@__%'", "%'", $query);
-
-        $query = str_replace('@__%"', "%'", $query);
-        $query = str_replace('"%__@', "'%", $query);
-
-        // Fixing doubles
-        $query = str_replace("__@__@", "__@", $query);
-        $query = str_replace("@__@__", "@__", $query);
-
-        $query = str_replace("'__@", "'", $query);
-        $query = str_replace('"__@', "'", $query);
-        $query = str_replace("__@", "'", $query);
-
-        $query = str_replace("@__'", "'", $query);
-        $query = str_replace('@__"', "'", $query);
-        $query = str_replace("@__", "'", $query);
-
-        return $query;
-    }
-
-    /**
      * This method returns a resource
      * Documentation has been added by Arthur Portugal
      * Some adaptations have been implemented by Ivan Tcholakov, 2009, 2010
@@ -745,8 +493,6 @@ class Database
             $file = $connection;
             $connection = null;
         }
-
-        //$query = self::fixQuery($query);
 
         // Check if the table contains a c_ (means a course id)
         if (api_get_setting('server_type') === 'test' && strpos($query, 'c_')) {
@@ -1030,37 +776,6 @@ class Database
         You should not access these from outside the class
         No effort is made to keep the names / results the same.
     */
-
-    /**
-     *  Glues a course database.
-     *  glue format from local.inc.php.
-     */
-    private static function glue_course_database_name($database_name) {
-        return self::get_course_table_prefix().$database_name.self::get_database_glue();
-    }
-
-    /**
-     *  @param string $database_name, can be empty to use current course db
-     *
-     *  @return the glued parameter if it is not empty,
-     *  or the current course database (glued) if the parameter is empty.
-     */
-    private static function fix_database_parameter($database_name) {
-        if (empty($database_name)) {
-            $course_info = api_get_course_info();
-            return $course_info['dbNameGlu'];
-        }
-        return self::glue_course_database_name($database_name);
-    }
-
-    /**
-     *  Structures a course database and table name to ready them
-     *  for querying. The course database parameter is considered glued:
-     *  e.g. COURSE001`.`
-     */
-    private static function format_glued_course_table_name($database_name_with_glue, $table) {
-        return '`'.$database_name_with_glue.$table.'`';
-    }
 
     /**
      *  Structures a database and table name to ready them

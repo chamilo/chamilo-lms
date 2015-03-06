@@ -51,7 +51,7 @@ $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
 $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
@@ -785,7 +785,7 @@ if (!empty($exercise_list)) {
                         WHERE
                             exe_exo_id      = ".$row['id']." AND
                             exe_user_id     = ".$userId." AND
-                            exe_cours_id    = '".api_get_course_id()."' AND
+                            c_id    = ".api_get_course_int_id()." AND
                             status          <> 'incomplete' AND
                             orig_lp_id      = 0 AND
                             orig_lp_item_id = 0 AND

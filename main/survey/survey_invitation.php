@@ -15,9 +15,6 @@ $language_file = 'survey';
 // Including the global initialization file
 require '../inc/global.inc.php';
 
-// Including additional libraries
-require_once 'survey.lib.php';
-
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
 	Display :: display_header(get_lang('ToolSurvey'));

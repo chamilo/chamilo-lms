@@ -13,13 +13,10 @@
  * @todo (busy) organise code into functions
  * @package chamilo.install
  */
-/**
- * Init
- */
+
 /*		CONSTANTS */
 
 use \ChamiloSession as Session;
-
 
 define('SYSTEM_INSTALLATION',                   1);
 define('INSTALL_TYPE_UPDATE',                   'update');
@@ -314,7 +311,7 @@ if ($encryptPassForm == '1') {
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.min.js"></script>
-	<script type="text/javascript" >
+	<script type="text/javascript">
 		$(document).ready( function() {
 
             $("#button_please_wait").hide();
@@ -332,7 +329,7 @@ if ($encryptPassForm == '1') {
 					$('#dbUserForm').attr('value','chamilo_main');
 			}
 
-			$("button").addClass('btn');
+			$("button").addClass('btn btn-default');
 
     		//Allow Chamilo install in IE
     		$("button").click(function() {
@@ -495,7 +492,7 @@ if ($encryptPassForm == '1') {
                 </ol>
             </div>
             <div id="note">
-				<a class="btn" href="../../documentation/installation_guide.html" target="_blank">
+				<a class="btn btn-default" href="../../documentation/installation_guide.html" target="_blank">
                     <?php echo get_lang('ReadTheInstallationGuide'); ?>
                 </a>
 			</div>

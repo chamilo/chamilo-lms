@@ -1,7 +1,7 @@
 <meta charset="{{ system_charset }}" />
-<link href="http://www.chamilo.org/documentation.php" rel="help" />
-<link href="http://www.chamilo.org/team.php" rel="author" />
-<link href="http://www.chamilo.org" rel="copyright" />
+<link href="https://chamilo.org/chamilo-lms/" rel="help" />
+<link href="https://chamilo.org/the-association/" rel="author" />
+<link href="https://chamilo.org/the-association/" rel="copyright" />
 {{ prefetch }}
 {{ favico }}
 {{ browser_specific_head }}
@@ -19,17 +19,23 @@
 
 // External plugins not part of the default Ckeditor package.
 var plugins = [
-    'oembed',
-    'wordcount',
-    'asciisvg',
-    'video',
-    'toolbarswitch',
-    'audio',
-    'youtube',
-    'leaflet',
     'asciimath',
+    'asciisvg',
+    'audio',
+    //'ckeditor_wiris',
+    'dialogui',
     'glossary',
-    'mapping'
+    'justify',
+    'leaflet',
+    'mapping',
+    'maximize',
+    'oembed',
+    'toolbar',
+    'toolbarswitch',
+    'video',
+    'wikilink',
+    'wordcount',
+    'youtube'
 ];
 
 plugins.forEach(function(plugin) {

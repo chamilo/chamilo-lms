@@ -43,7 +43,7 @@ if (!empty($error_message)) {
     Display::display_normal_message($error_message, false);
 }
 
-$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+$sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course';
 $courseList = array();
 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;

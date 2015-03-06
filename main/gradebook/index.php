@@ -36,7 +36,7 @@ var show_icon = "../img/view_more_stats.gif";
 var hide_icon = "../img/view_less_stats.gif";
 
 $(document).ready(function() {
-    $(".view_children").live("click", function() {
+    $("body").on("click", ".view_children", function() {
         var id = $(this).attr("data-cat-id");
         $(".hidden_"+id).removeClass("hidden");
         $(this).removeClass("view_children");
@@ -44,7 +44,7 @@ $(document).ready(function() {
         $(this).attr("class", "hide_children");
     });
 
-    $(".hide_children").live("click", function(event) {
+    $("body").on("click", ".hide_children", function(event) {
         var id = $(this).attr("data-cat-id");
         $(".hidden_"+id).addClass("hidden");
         $(this).removeClass("hide_children");
@@ -132,8 +132,10 @@ if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) &&
     Display :: display_footer();
     exit;
 } else {
-    if (!isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
-        //	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') && ($status<>1 && !api_is_platform_admin()) || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true' && $status<>1 && !api_is_platform_admin()) ) {
+    if (!isset($_GET['selectcat']) &&
+        ($_SESSION['studentview']=='studentview') ||
+        (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true')
+    ) {
         Display :: display_header(get_lang('Gradebook'));
 
         //Introduction tool: student view
@@ -730,7 +732,7 @@ $certificate = array();
 if ($category != '0') {
     $cat = new Category();
     $category_id   = intval($_GET['selectcat']);
-    $course_id     = Database::get_course_by_category($category_id);
+    $course_id     = CourseManager::get_course_by_category($category_id);
     $show_message  = $cat->show_message_resource_delete($course_id);
 
     if ($show_message == '') {

@@ -5837,7 +5837,8 @@ class DocumentManager
      * Check if the file name or folder searched exist
      * @return return bool Return true when exist
      */
-    function search_keyword($document_name, $keyword) {
+    public static function search_keyword($document_name, $keyword)
+    {
         if (api_strripos($document_name, $keyword) !== false) {
             return true;
         } else {

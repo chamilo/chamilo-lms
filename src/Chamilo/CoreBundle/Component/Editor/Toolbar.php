@@ -18,7 +18,7 @@ class Toolbar
 
     /**
      * @param string $toolbar
-     * @param array $config
+     * @param array  $config
      * @param string $prefix
      */
     public function __construct(
@@ -45,7 +45,12 @@ class Toolbar
      */
     public function getPluginsToString()
     {
-        $plugins = array_filter(array_merge($this->getDefaultPlugins(), $this->getPlugins()));
+        $plugins = array_filter(
+            array_merge(
+                $this->getDefaultPlugins(),
+                $this->getPlugins(),
+                $this->getConditionalPlugins())
+        );
 
         return
             $this->getConfigAttribute('extraPlugins').
@@ -53,6 +58,16 @@ class Toolbar
     }
 
     /**
+     * Get plugins by default in all editors in the platform
+     * @return array
+     */
+    public function getDefaultPlugins()
+    {
+        return $this->defaultPlugins;
+    }
+
+    /**
+     * Get fixed plugins depending of the toolbar
      * @return array
      */
     public function getPlugins()
@@ -61,11 +76,12 @@ class Toolbar
     }
 
     /**
+     * Get dynamic/conditional plugins depending of platform/course settings.
      * @return array
      */
-    public function getDefaultPlugins()
+    public function getConditionalPlugins()
     {
-        return $this->defaultPlugins;
+        return array();
     }
 
     /**

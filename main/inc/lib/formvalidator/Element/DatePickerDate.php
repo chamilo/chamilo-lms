@@ -3,6 +3,7 @@
 
 /**
  * Form element to select a date and hour (with popup datepicker)
+ * @deprecated use DatePicker
  */
 class DatePickerDate extends HTML_QuickForm_date
 {

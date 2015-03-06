@@ -5,8 +5,6 @@
  *	@package chamilo.admin
  */
 
-/* INITIALIZATION SECTION */
-
 // Language files that need to be included.
 $language_file = array('admin', 'create_course');
 
@@ -46,12 +44,12 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true, array ('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->addText('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
@@ -75,12 +73,12 @@ $form->addElement(
 );
 
 // Course department
-$form->add_textfield('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));
+$form->addText('department_name', get_lang('CourseDepartment'), false, array ('size' => '60'));
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 // Department URL
-$form->add_textfield('department_url', get_lang('CourseDepartmentURL'), false, array ('size' => '60'));
+$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array ('size' => '60'));
 $form->applyFilter('department_url', 'html_filter');
 
 $form->addElement('select_language', 'course_language', get_lang('CourseLanguage'));
@@ -126,7 +124,7 @@ $(function() {
 </script>';
 
 $form->add_progress_bar();
-$form->addElement('style_submit_button', 'submit', get_lang('CreateCourse'), 'class="add"');
+$form->addButtonCreate(get_lang('CreateCourse'));
 
 // Set some default values.
 $values['course_language']  = api_get_setting('platformLanguage');

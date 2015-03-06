@@ -456,13 +456,7 @@ class SocialManager extends UserManager
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         $course_code = $my_course['code'];
-        $course_visual_code = $my_course['course_info']['official_code'];
         $course_title = $my_course['course_info']['title'];
-
-        $course_info = Database :: get_course_info($course_code);
-
-        $course_id = $course_info['real_id'];
-
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
         $course_visibility = $course_access_settings['visibility'];

@@ -373,8 +373,9 @@ define('SCORE_IGNORE_SPLIT', 8);    //  ??
 define('SCORE_DIV_PERCENT_WITH_CUSTOM', 9);    // X / Y (XX %) - Good!
 define('SCORE_CUSTOM', 10);    // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11);    // X - Good!
-
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12);    // X - Good!
+
+define('SCORE_ONLY_SCORE', 13);    // X - Good!
 
 define('SCORE_BOTH', 1);
 define('SCORE_ONLY_DEFAULT', 2);

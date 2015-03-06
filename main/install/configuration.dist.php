@@ -301,3 +301,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['prevent_session_admins_to_manage_all_users'] = false;
 // If there are any tool available and the user is not registered hide the group
 // $_configuration['hide_course_group_if_no_tools_available'] = false;
+
+// Attach a document to a work
+// $_configuration['add_document_to_work'] = false;
+// Allow user comments in work
+// $_configuration['work_user_comments'] = false;

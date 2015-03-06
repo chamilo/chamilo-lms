@@ -3463,3 +3463,9 @@ CREATE TABLE track_e_attempt_coeff (
   marks_coeff float(6,2)
 );
 
+-- Course
+
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_user ( id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_comment ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
+

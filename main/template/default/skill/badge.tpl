@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="span12">
+    <div class="col-md-12">
         <div class="badges-tabs">
         <ul class="nav nav-tabs">
             <li class="active">
@@ -17,8 +17,8 @@
             <div class="tab-pane active">
                 <div class="openbadges-introduction">
                     <h1 class="title"><img src="{{ 'badges.png' | icon(64) }}">Chamilo ahora tiene OpenBadges</h1>
-                    <div class="row-fluid">
-                        <div class="span6">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6">
                             <p class="lead">
                                 Ahora puede obtener reconocimiento de habilidades por aprender en cualquier curso de tu campus virtual Chamilo LMS.
                             </p>
@@ -28,8 +28,8 @@
                                 Para más información sobre los Open Badges en <a href="http://openbadges.org">http://openbadges.org/</a>.
                             </p>
                         </div>
-                        <div class="span6">
-                            <img src="{{ 'openbadges.png' | icon() }}">
+                        <div class="col-xs-12 col-md-6">
+                            <img class="img-responsive" src="{{ 'openbadges.png' | icon() }}">
                         </div>
                     </div>
 

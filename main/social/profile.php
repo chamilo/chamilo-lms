@@ -375,7 +375,7 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 //Block Avatar Social
-$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block = '<div class="panel panel-default social-avatar">';
 $social_avatar_block .= SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
 $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
 $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
@@ -478,7 +478,7 @@ $social_wall_block = $wallSocialAddPost;
 
 //Social Post Wall
 $post_wall = wallSocialPost($my_user_id,$friendId) ;
-$social_post_wall_block  = '<div class="panel panel-info social-post">';
+$social_post_wall_block  = '<div class="panel panel-default social-post">';
 $social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
 $social_post_wall_block .='<div class="panel-body">';
 if(empty($post_wall)){
@@ -511,7 +511,7 @@ if ($show_full_profile) {
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
 
-        $extra_information .= '<div class="panel panel-info">';
+        $extra_information .= '<div class="panel panel-default">';
         $extra_information .= '<div class="panel-heading">'.get_lang('ExtraInformation').'</div>';
         $extra_information .='<div class="panel-body">';
         $extra_information_value = '';
@@ -660,7 +660,7 @@ if ($show_full_profile) {
         } else {
             $count_groups = count($results);
         }
-        $my_groups .= '<div class="panel panel-info">';
+        $my_groups .= '<div class="panel panel-default">';
         $my_groups .= '<div class="panel-heading">'.get_lang('MyGroups').' ('.$count_groups.') </div>';
 
         if ($i > $max_numbers_of_group) {
@@ -697,7 +697,7 @@ if ($show_full_profile) {
     $my_courses = null;
     // COURSES LIST
     if ( is_array($list) ) {
-        $my_courses .=  '<div class="panel panel-info">';
+        $my_courses .=  '<div class="panel panel-default">';
         $my_courses .=  '<div class="panel-heading">'.api_ucfirst(get_lang('MyCourses')).'</div>';
         $my_courses .=  '<div class="panel-body">';
 
@@ -719,7 +719,7 @@ if ($show_full_profile) {
     //Block Social Sessions
 
     if (count($sessionList) > 0) {
-        $sessions  = '<div class="panel panel-info">';
+        $sessions  = '<div class="panel panel-default">';
         $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
         $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
         $sessions .= '</div>';
@@ -730,7 +730,7 @@ if ($show_full_profile) {
     $user_feeds = SocialManager::get_user_feeds($user_id);
 
     if (!empty($user_feeds)) {
-        $rss  = '<div class="panel panel-info social-rss">';
+        $rss  = '<div class="panel panel-default social-rss">';
         $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
         $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
         $social_rss_block =  $rss;
@@ -744,9 +744,9 @@ if ($show_full_profile) {
         $ranking = $skill->get_user_skill_ranking($my_user_id);
         $skills = $skill->get_user_skills($my_user_id, true);
 
-        $social_skill_block = '<div class="panel panel-info social-skill">';
+        $social_skill_block = '<div class="panel panel-default social-skill">';
         $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
-        $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+        $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="caret"></span></a>
                              <ul class="dropdown-menu">';
         if (api_is_student() || api_is_student_boss() || api_is_drh()) {
@@ -1000,7 +1000,7 @@ function listMyFriends($user_id, $link_shared, $show_full_profile)
 
 function wallSocialAddPost()
 {
-    $html  = '<div class="panel panel-info social-wall">';
+    $html  = '<div class="panel panel-default social-wall">';
     $html .= '<div class="panel-heading">' . get_lang('SocialWall') . '</div>';
     $html .= '<div class="panel-body">';
     $html .=
@@ -1009,7 +1009,8 @@ function wallSocialAddPost()
         <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
         <br />
         <input class="" name="picture" type="file" accept="image/*" style="width:80%;">
-        <input type="submit" name="social_wall_new_msg_main_submit" value="'.get_lang('Post').'" class="pull-right btn btn-success" />
+        <button type="submit" name="social_wall_new_msg_main_submit"  class="pull-right btn btn-success" />
+        <i class="fa fa-pencil"></i> '.get_lang('Post').'</button>
     </form>';
     $html.= '</div></div>';
 

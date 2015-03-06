@@ -1,7 +1,7 @@
 {% extends "default/layout/main.tpl" %}
 
 {% block body %}
-    <div class="span12">
+    <div class="col-md-12">
         <div class="badges-tabs">
         <ul class="nav nav-tabs">
             <li>

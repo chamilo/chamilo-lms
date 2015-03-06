@@ -84,7 +84,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 
-$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block = '<div class="panel panel-default social-avatar">';
 $social_avatar_block .= SocialManager::show_social_avatar_block('home');
 $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
 $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
@@ -123,7 +123,7 @@ $social_avatar_block .= '</div>';
 $social_menu_block = SocialManager::show_social_menu('home');
 
 //Search box
-$social_search_block = '<div class="panel panel-info social-search">';
+$social_search_block = '<div class="panel panel-default social-search">';
 $social_search_block .= '<div class="panel-heading">'.get_lang("SearchUsers").'</div>';
 $social_search_block .= '<div class="panel-body">';
 $social_search_block.= UserManager::get_search_form('');
@@ -139,7 +139,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     $ranking = $skill->get_user_skill_ranking(api_get_user_id());
     $skills = $skill->get_user_skills(api_get_user_id(), true);
 
-    $social_skill_block = '<div class="panel panel-info social-skill">';
+    $social_skill_block = '<div class="panel panel-default social-skill">';
     $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
     $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="caret"></span></a>
@@ -203,7 +203,7 @@ if (api_get_setting('allow_skills_tool') == 'true') {
 
 
 //Group box by age
-$social_group_block = '<div class="panel panel-info social-group">';
+$social_group_block = '<div class="panel panel-default social-group">';
 $social_group_block .= '<div class="panel-heading">'.get_lang('Group').'</div>';
 $social_group_block .= '<div class="panel-body">';
 

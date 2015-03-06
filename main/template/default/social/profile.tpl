@@ -2,14 +2,14 @@
 
 {% block content %}
 <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
         {{ social_avatar_block }}
         {{ social_extra_info_block }}
         <div class="social-menu">
             {{ social_menu_block }}
         </div>
     </div>
-    <div id="wallMessages" class="span6">
+    <div id="wallMessages" class="col-md-6">
         {{ social_wall_block }}
         {{ social_post_wall_block }}
         {{ socialAutoExtendLink }}
@@ -22,7 +22,7 @@
        <!--- <div id="display_response_id" class="span5"></div> -->
 
     </div>
-    <div class="span3">
+    <div class="col-md-3">
 
             {{ social_skill_block }}
             {{ social_group_info_block }}

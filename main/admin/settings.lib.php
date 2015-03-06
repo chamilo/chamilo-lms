@@ -895,7 +895,7 @@ function add_edit_template() {
     $form->addElement('header', '', $title);
 
     // Setting the form elements: the title of the template.
-    $form->add_textfield('title', get_lang('Title'), false);
+    $form->addText('title', get_lang('Title'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));

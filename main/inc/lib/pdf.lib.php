@@ -340,18 +340,24 @@ class PDF
 
     /**
      * Converts an html string to PDF
-     * @param   string  $document_html valid html
-     * @param   string  $css CSS content of a CSS file
-     * @param   string  $pdf_name pdf name
-     * @param   string  $course_code course code
+     * @param   string $document_html valid html
+     * @param   string $css CSS content of a CSS file
+     * @param   string $pdf_name pdf name
+     * @param   string $course_code course code
      * (if you are using html that are located in the document tool you must provide this)
+     * @param string $outputMode the MPDF output mode can be:
+     * 'I' (print on standard output),
+     * 'D' (download file) (this is the default value),
+     * 'F' (save to local file) or
+     * 'S' (return as a string)
      * @return  string  Web path
      */
     public function content_to_pdf(
         $document_html,
         $css = '',
         $pdf_name = '',
-        $course_code = null
+        $course_code = null,
+        $outputMode = 'D'
     ) {
         global $_configuration;
 
@@ -433,10 +439,15 @@ class PDF
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
             $pdf_name = replace_dangerous_char($pdf_name);
-            $output_file = $pdf_name.'.pdf';
+            // Save temporally into Archive folder
+            $output_file = api_get_path(SYS_ARCHIVE_PATH) . $pdf_name.'.pdf';
         }
-        $this->pdf->Output($output_file, 'D'); // F to save the pdf in a file
-        exit;
+        $this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
+        if ($outputMode == 'F') {
+            // Do NOT exit when export to file
+        } else {
+            exit;
+        }
     }
 
     /**

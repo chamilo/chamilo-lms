@@ -10,7 +10,7 @@
 $language_file = array('userInfo', 'index');
 $cidReset = true;
 require_once '../inc/global.inc.php';
-// Include OpenGraph NOT AVAILABLE 
+// Include OpenGraph NOT AVAILABLE
 require_once api_get_path(LIBRARY_PATH).'opengraph/OpenGraph.php';
 
 if (api_get_setting('allow_social_tool') !='true') {
@@ -21,13 +21,21 @@ if (api_get_setting('allow_social_tool') !='true') {
 
 $user_id = api_get_user_id();
 
-$friendId = isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+$friendId = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
 
 $isAdmin = api_is_platform_admin($user_id);
 
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
+
+//Initialize blocks
+$social_extra_info_block = null;
+$social_course_block = null;
+$social_group_info_block = null;
+$social_rss_block = null;
+$social_skill_block = null;
+$social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
@@ -168,7 +176,7 @@ function send_message_to_user(user_id) {
                         }
                     });
                 }
-            },
+            }
         },
         close: function() {
         }
@@ -380,26 +388,29 @@ if(!empty($chat_status['user_chat_status'])){
     $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
 }
 
-$editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+if (api_get_user_id() === $friendId) {
+    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
 
-if (api_get_setting('sso_authentication') === 'true') {
-    $subSSOClass = api_get_setting('sso_authentication_subclass');
-    $objSSO = null;
+    if (api_get_setting('sso_authentication') === 'true') {
+        $subSSOClass = api_get_setting('sso_authentication_subclass');
+        $objSSO = null;
 
-    if (!empty($subSSOClass)) {
-        require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+        if (!empty($subSSOClass)) {
+            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
 
-        $subSSOClass = 'sso' . $subSSOClass;
-        $objSSO = new $subSSOClass();
-    } else {
-        $objSSO = new sso();
+            $subSSOClass = 'sso' . $subSSOClass;
+            $objSSO = new $subSSOClass();
+        } else {
+            $objSSO = new sso();
+        }
+
+        $editProfileUrl = $objSSO->generateProfileEditingURL();
     }
-
-    $editProfileUrl = $objSSO->generateProfileEditingURL();
+    $social_avatar_block .= '<div class="edit-profile">
+                                <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                             </div>';
 }
-$social_avatar_block .= '<div class="edit-profile">
-                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
-                         </div>';
+
 $social_avatar_block .= '</div>';
 
 //Social Block Menu
@@ -471,7 +482,7 @@ $social_post_wall_block  = '<div class="panel panel-info social-post">';
 $social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
 $social_post_wall_block .='<div class="panel-body">';
 if(empty($post_wall)){
-    $social_post_wall_block .= '<p>'.get_lang("NingunaPublicacion").'</p>';
+    $social_post_wall_block .= '<p>'.get_lang("NoPosts").'</p>';
 }else{
     $social_post_wall_block .= $post_wall;
 }
@@ -486,9 +497,10 @@ $socialAutoExtendLink = Display::url(
 );
 
 /* $socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4); */
+$socialRightInformation = null;
 
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
-
+$social_right_content = null;
 
 if ($show_full_profile) {
 
@@ -580,7 +592,7 @@ if ($show_full_profile) {
  //If there are information to show Block Extra Information
 
     if (!empty($extra_information_value)) {
-        $social_extra_info_block .=  $extra_information;
+        $social_extra_info_block =  $extra_information;
     }
 
     // MY GROUPS
@@ -639,7 +651,7 @@ if ($show_full_profile) {
         }
     }
 
-
+    //Block My Groups
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
         $count_groups = 0;
@@ -677,9 +689,10 @@ if ($show_full_profile) {
             $i++;
         }
         $my_groups .= '</div>';
-        //Block My Groups
-        $social_group_info_block .=  $my_groups;
+        $social_group_info_block =  $my_groups;
     }
+
+    //Block Social Course
 
     $my_courses = null;
     // COURSES LIST
@@ -700,34 +713,37 @@ if ($show_full_profile) {
         }
         $my_courses .=  '</div></div>';
 
-        //Block Social Course
-
         $social_course_block .=  $my_courses;
     }
 
     //Block Social Sessions
 
-    $sessions  = '<div class="panel panel-info">';
-    $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
-    $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
-    $sessions .= '</div>';
-    $social_session_block .= $sessions;
-
+    if (count($sessionList) > 0) {
+        $sessions  = '<div class="panel panel-info">';
+        $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
+        $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
+        $sessions .= '</div>';
+        $social_session_block = $sessions;
+    }
 
     // Block Social User Feeds
-
     $user_feeds = SocialManager::get_user_feeds($user_id);
 
     if (!empty($user_feeds)) {
         $rss  = '<div class="panel panel-info social-rss">';
         $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
         $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
-        $social_rss_block .=  $rss;
+        $social_rss_block =  $rss;
 
     }
 
     //BLock Social Skill
-    if (api_get_setting('allow_skills_tool') == 'true') {
+    if (api_get_setting('allow_skills_tool') == 'true') {        
+        $skill = new Skill();
+
+        $ranking = $skill->get_user_skill_ranking($my_user_id);
+        $skills = $skill->get_user_skills($my_user_id, true);
+
         $social_skill_block = '<div class="panel panel-info social-skill">';
         $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
         $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -751,11 +767,6 @@ if ($show_full_profile) {
             ) . '</li>';
 
         $social_skill_block .= '</ul></div></div>';
-
-        $skill = new Skill();
-
-        $ranking = $skill->get_user_skill_ranking(api_get_user_id());
-        $skills = $skill->get_user_skills(api_get_user_id(), true);
 
         $lis = '';
         if (!empty($skills)) {
@@ -787,8 +798,8 @@ if ($show_full_profile) {
         }else{
 
             $social_skill_block .= '<div class="panel-body">';
-            $social_skill_block .= '<p>'. get_lang("SinCompetencias");
-            $social_skill_block .=  Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
+            $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
+            $social_skill_block .= '<p>' . Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
             $social_skill_block .= '</div>';
         }
         $social_skill_block.='</div>';

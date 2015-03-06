@@ -455,7 +455,7 @@ function HotPotGCt($folder, $flag, $user_id)
  */
 function deleteAttempt($id)
 {
-    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $id = intval($id);
     $sql = "DELETE FROM $table WHERE id = $id";
     Database::query($sql);

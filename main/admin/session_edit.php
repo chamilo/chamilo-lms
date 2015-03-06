@@ -4,9 +4,6 @@
  * Sessions edition script
  * @package chamilo.admin
  */
-/**
- * Code
- */
 
 // name of the language file that needs to be included
 $language_file ='admin';
@@ -72,7 +69,7 @@ $monthsOption = array();
 
 for ($i = 1; $i <= 12; $i++) {
     $month = sprintf("%02d", $i);
-    
+
     $monthsOption[$month] = $month;
 }
 
@@ -92,13 +89,13 @@ foreach ($coaches as $coach) {
     $coachesOption[$coach['user_id']] = "$personName ({$coach['username']})";
 }
 
-$Categories = SessionManager::get_all_session_category();
+$categoriesList = SessionManager::get_all_session_category();
 
 $categoriesOption = array(
     '0' => get_lang('None')
 );
 
-if ($Categories != false) {
+if ($categoriesList != false) {
     foreach ($categoriesList as $categoryItem) {
         $categoriesOption[$categoryItem['id']] = $categoryItem['name'];
     }
@@ -130,7 +127,7 @@ $form->addElement('select', 'id_coach', get_lang('CoachName'), $coachesOption, a
 ));
 $form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->add_select('session_category', get_lang('SessionCategory'), $categoriesOption, array(
+$form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOption, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'
@@ -253,9 +250,7 @@ $(function() {
 });
 </script>';
 
-$form->addElement('button', 'submit', get_lang('ModifyThisSession'), array(
-    'class' => 'save'
-));
+$form->addButtonUpdate(get_lang('ModifyThisSession'));
 
 $formDefaults = array(
     'id_coach' => $infos['id_coach'],
@@ -295,10 +290,10 @@ if ($form->validate()) {
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1: 0;
 
-    $end_limit = $params['end_limit'];
-    $start_limit = $params['start_limit'];
+    $end_limit = isset($params['end_limit']);
+    $start_limit = isset($params['start_limit']);
 
-    if (empty($end_limit) && empty($start_limit)) {
+    if (!$end_limit && !$start_limit) {
         $nolimit = 1;
     } else {
         $nolimit = null;

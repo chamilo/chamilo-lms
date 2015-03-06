@@ -41,6 +41,7 @@ class Exercise
     public $edit_exercise_in_lp = false;
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
+    public $lpList = array();
     public $force_edit_exercise_in_lp = false;
     public $sessionId = 0;
     public $debug = false;
@@ -132,7 +133,8 @@ class Exercise
 
             $this->review_answers = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;
 
-            $sql = "SELECT max_score FROM $table_lp_item
+            $sql = "SELECT lp_id, max_score
+                    FROM $table_lp_item
                     WHERE   c_id = {$this->course_id} AND
                             item_type = '".TOOL_QUIZ."' AND
                             path = '".$id."'";
@@ -140,6 +142,7 @@ class Exercise
 
             if (Database::num_rows($result) > 0) {
                 $this->exercise_was_added_in_lp = true;
+                $this->lpList = Database::store_result($result, 'ASSOC');
             }
 
             $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
@@ -1019,7 +1022,7 @@ class Exercise
         }
 
         $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" style="display:none" >');
-        $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
+        $form->addHtmlEditor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 
         $form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
@@ -1197,7 +1200,7 @@ class Exercise
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
             // add the text_when_finished textbox
-            $form -> add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
+            $form -> addHtmlEditor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
 
             $defaults = array();
 
@@ -1571,7 +1574,7 @@ class Exercise
      */
     public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
     {
-        $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $table_track_e_attempt   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
@@ -1597,7 +1600,7 @@ class Exercise
         $sql = "SELECT exe_id
                 FROM $table_track_e_exercises
                 WHERE
-                    exe_cours_id = '".api_get_course_id()."' AND
+                    c_id = ".api_get_course_int_id()." AND
                     exe_exo_id = ".$this->id." AND
                     session_id = ".api_get_session_id()." ".
                     $sql_where;
@@ -1617,9 +1620,9 @@ class Exercise
         }
 
         $session_id = api_get_session_id();
-        // delete TRACK_E_EXERCICES table
+        // delete TRACK_E_EXERCISES table
         $sql = "DELETE FROM $table_track_e_exercises
-                WHERE exe_cours_id = '".api_get_course_id()."'
+                WHERE c_id = ".api_get_course_int_id()."
                 AND exe_exo_id = ".$this->id."
                 $sql_where
                 AND session_id = ".$session_id."";
@@ -1710,7 +1713,7 @@ class Exercise
         $lp_item_view_id = 0,
         $status = 'incomplete'
     ) {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if (empty($lp_id)) {
             $lp_id = 0;
         }
@@ -1722,7 +1725,7 @@ class Exercise
         }
         $condition = ' WHERE exe_exo_id 	= ' . "'" . $this->id . "'" .' AND
 					   exe_user_id 			= ' . "'" . api_get_user_id() . "'" . ' AND
-					   exe_cours_id 		= ' . "'" . api_get_course_id() . "'" . ' AND
+					   c_id                 = ' . api_get_course_int_id() . ' AND
 					   status 				= ' . "'" . Database::escape_string($status). "'" . ' AND
 					   orig_lp_id 			= ' . "'" . $lp_id . "'" . ' AND
 					   orig_lp_item_id 		= ' . "'" . $lp_item_id . "'" . ' AND
@@ -1758,10 +1761,12 @@ class Exercise
         $questionList = array(),
         $weight = 0
     ) {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $safe_lp_id = intval($safe_lp_id);
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
+
+        $trackValues = array();
 
         if (empty($safe_lp_id)) {
             $safe_lp_id = 0;
@@ -1778,7 +1783,6 @@ class Exercise
         $params = array(
             'exe_exo_id' => $this->id ,
             'exe_user_id' => api_get_user_id(),
-            'exe_cours_id' => api_get_course_id(),
             'c_id' => api_get_course_int_id(),
             'status' =>  'incomplete',
             'session_id'  => api_get_session_id(),
@@ -1788,6 +1792,7 @@ class Exercise
             'orig_lp_item_id'  => $safe_lp_item_id,
             'orig_lp_item_view_id'  => $safe_lp_item_view_id,
             'exe_weighting'=> $weight,
+            'user_ip' => api_get_real_ip()
         );
 
         if ($this->expired_time != 0) {
@@ -1795,7 +1800,6 @@ class Exercise
         }
 
         $id = Database::insert($track_exercises, $params);
-
         return $id;
     }
 
@@ -3601,7 +3605,7 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+            $stat_table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE ' . $stat_table . ' SET
                         exe_result = exe_result + ' . floatval($questionScore) . '
                     WHERE exe_id = ' . $exeId;
@@ -3876,9 +3880,10 @@ class Exercise
      * @param array $user_data result of api_get_user_info()
      * @param null $start_date
      * @param null $duration
+     * @param string $ip Optional. The user IP
      * @return string
      */
-    public function show_exercise_result_header($user_data, $start_date = null, $duration = null)
+    public function show_exercise_result_header($user_data, $start_date = null, $duration = null, $ip = null)
     {
         $array = array();
 
@@ -3906,6 +3911,10 @@ class Exercise
 
         if (!empty($duration)) {
             $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
+        }
+
+        if (!empty($ip)) {
+            $array[] = array("title" => get_lang("IP"), "content" => $ip);
         }
 
         $html  = Display::page_header(
@@ -4283,7 +4292,7 @@ class Exercise
 
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = intval($exe_id);
         $sql_track = "SELECT * FROM $track_exercises WHERE exe_id = $exe_id ";
         $result = Database::query($sql_track);
@@ -4317,7 +4326,7 @@ class Exercise
         $exercise_info = self::get_stat_track_exercise_info_by_exe_id($exe_id);
         $question_id = intval($question_id);
         $exe_id = intval($exe_id);
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($exercise_info) {
 
             if (empty($exercise_info['questions_to_check'])) {
@@ -4555,26 +4564,24 @@ class Exercise
         $ids = is_array($quizId) ? $quizId : array($quizId);
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
-        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $track_exercises = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         if ($sessionId != 0) {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "te.session_id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              te.session_id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
 
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
         } else {
-            $sql = "SELECT * FROM $track_exercises te "
-              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
-              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
-              . "WHERE "
-              . "c.id = %s AND "
-              . "cq.id IN (%s) "
-              . "ORDER BY cq.id ";
+            $sql = "SELECT * FROM $track_exercises te
+              INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id AND te.c_id = cq.c_id
+              WHERE
+              te.id = %s AND
+              cq.id IN (%s)
+              ORDER BY cq.id";
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);

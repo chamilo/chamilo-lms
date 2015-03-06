@@ -133,7 +133,7 @@ if ($action_todo) {
     }
     $form = new FormValidator('system_announcement');
     $form->addElement('header', '', $form_title);
-    $form->add_textfield('title', get_lang('Title'), true, array('class'=>'span4'));
+    $form->addText('title', get_lang('Title'), true, array('class'=>'span4'));
     $language_list = api_get_languages();
     $language_list_with_keys = array();
     $language_list_with_keys['all'] = get_lang('All');
@@ -142,7 +142,7 @@ if ($action_todo) {
     }
 
     $form->addElement('select', 'lang',get_lang('Language'), $language_list_with_keys);
-    $form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
+    $form->addHtmlEditor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'PortalNews', 'Width' => '100%', 'Height' => '300'));
     $form->addDateRangePicker('range', get_lang('StartTimeWindow'), true, array('id' => 'date_range'));
 
     $group = array();

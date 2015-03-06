@@ -7,7 +7,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  * Class TestQuestionDescription
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class TestQuestionDescription
+class TestQuestionDescription extends Basic
 {
     /**
      * @return mixed

@@ -150,6 +150,73 @@ if (!$_configuration['db_host']) {
     die();
 }
 
+// Doctrine ORM configuration
+
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+
+$paths = array(
+    api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity',
+    api_get_path(SYS_PATH).'src/Chamilo/UserBundle/Entity',
+    api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
+);
+
+$isDevMode = true;
+
+// the connection configuration
+$dbParams = array(
+    'driver' => 'pdo_mysql',
+    'host' => $_configuration['db_host'],
+    'user' => $_configuration['db_user'],
+    'password' => $_configuration['db_password'],
+    'dbname' => $_configuration['main_database'],
+);
+
+$isSimpleMode = false;
+$proxyDir = null;
+$cache = null;
+
+$config = Setup::createAnnotationMetadataConfiguration(
+    $paths,
+    $isDevMode,
+    $proxyDir,
+    $cache,
+    $isSimpleMode
+);
+
+$config->setEntityNamespaces(
+    array(
+        'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+        'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
+        'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity'
+    )
+);
+
+$entityManager = EntityManager::create($dbParams, $config);
+
+use Doctrine\Common\Annotations\AnnotationRegistry;
+AnnotationRegistry::registerAutoloadNamespace(
+    'Symfony\Component\Validator\Constraint',
+    api_get_path(SYS_PATH)."vendor/symfony/validator"
+);
+
+
+AnnotationRegistry::registerFile(
+    api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+);
+
+AnnotationRegistry::registerAutoloadNamespace(
+    'Gedmo\Mapping\Annotation',
+    api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
+);
+
+/*$repo = $entityManager->getRepository('ChamiloCoreBundle:Session');
+$repo = $entityManager->getRepository('ChamiloUserBundle:User');
+$repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
+
+$database = new \Database();
+$database->setManager($entityManager);
+
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;

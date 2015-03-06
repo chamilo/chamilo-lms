@@ -167,6 +167,7 @@ if (!empty($group_member_list)) {
         $selected_users[] = $user['user_id'];
     }
 }
+
 $group_members_element = $form->addElement(
     'advmultiselect',
     'group_members',
@@ -174,21 +175,6 @@ $group_members_element = $form->addElement(
     $possible_users,
     'style="width: 280px;"'
 );
-
-$group_members_element->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>');
-
-$group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'));
-$group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
 // submit button
@@ -224,6 +210,7 @@ switch ($action) {
 }
 
 $defaults = $current_group;
+
 $defaults['group_members'] = $selected_users;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $defaults['action'] = $action;

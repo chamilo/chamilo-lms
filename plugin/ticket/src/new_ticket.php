@@ -362,7 +362,7 @@ function show_form_send_ticket()
         )
     );
 
-    $form->add_html_editor(
+    $form->addHtmlEditor(
         'content',
         get_lang('Message'),
         false,

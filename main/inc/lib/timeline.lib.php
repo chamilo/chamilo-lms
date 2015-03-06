@@ -88,7 +88,7 @@ class Timeline extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
-        //$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
 	    $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -153,7 +153,7 @@ class Timeline extends Model
         $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
 
 
-        //$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
+        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
 
         if ($action == 'edit') {
             // Setting the defaults

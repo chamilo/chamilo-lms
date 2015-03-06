@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Guide d'installation de Chamilo</title>
+    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -81,7 +82,7 @@ distribution Debian (ou sa petite soeur Ubuntu)<br />
 Chamilo est un système de gestion de l'apprentissage (LMS) qui fonctionne
 principallement sur base d'un <span style="font-weight: bold;">serveur web (Apache 2.2
 recommandé)</span>, de <span style="font-weight: bold;">MySQL (5.1 ou 5.5) ou de MariaDB
-(5 ou 10)</span> et de <span style="font-weight: bold;">PHP 5.3, 5.4 ou 5.5 (5.5 recommandé
+(5 ou 10)</span> et de <span style="font-weight: bold;">PHP 5.4, 5.5 ou 5.6 (5.6 recommandé
 pour une plus grande efficacité)</span> (la trilogie aussi appelée
 <span style="font-weight: bold;">AMP</span>). <br />
 
@@ -176,10 +177,13 @@ Remplacez [chamilo] par le répertoire où vous avez placé le contenu du zip:
 <ul>
   <li>[chamilo]/main/inc/conf/</li>
   <li>[chamilo]/main/upload/users/</li>
+  <li>[chamilo]/main/upload/sessions/</li>
+  <li>[chamilo]/main/upload/courses/</li>
   <li>[chamilo]/main/default_course_document/images/</li>
   <li>[chamilo]/archive/</li>
   <li>[chamilo]/courses/</li>
   <li>[chamilo]/home/</li>
+  <li>[chamilo]/data/</li>
 </ul>
 Optionnellement, vous pouvez faire la même chose pour les répertoires suivants
 si vous souhaitez permettre l'envoi de styles CSS ou la définition de nouvelles
@@ -325,7 +329,7 @@ devrait désormais être configuré à Off (bien que les dernières versions de 
 ne proposent même plus ce paramètre de configuration et le mettent d'office à Off).
 <span class="muted">L'activation du register_globals est désormais largement considérée comme un mauvais choix au niveau sécurité.</span></p>
 
-<p><strong>Note:</strong> si vous utilisez PHP 5.3 ou supérieur, vous
+<p><strong>Note:</strong> Vous
 <em>devez</em> configurer le paramètre <em>date.timezone</em> à la zone horaire
 de votre serveur. Par exemple, si votre serveur est dans la zone horaire
 'America/New_York', configurez-le de la manière suivante dans votre php.ini:</p>

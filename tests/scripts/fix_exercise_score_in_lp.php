@@ -11,7 +11,7 @@ require_once '../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
-$tableExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tableExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $sql = "SELECT
@@ -22,14 +22,14 @@ $sql = "SELECT
             exe_exo_id,
             orig_lp_id,
             orig_lp_item_view_id,
-            exe_cours_id,
+            c_id,
             c.code,
             c.id real_id,
             session_id
         FROM $tableExercise t INNER JOIN $tableCourse c
-        ON c.code = t.exe_cours_id
+        ON c.id = t.c_id
         WHERE orig_lp_id != '' AND orig_lp_item_view_id = 0 AND status = ''
-        ORDER by session_id, exe_cours_id, exe_user_id, orig_lp_id, exe_exo_id
+        ORDER by session_id, c_id, exe_user_id, orig_lp_id, exe_exo_id
 ";
 
 $result = Database::query($sql);

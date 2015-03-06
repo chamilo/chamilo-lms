@@ -69,16 +69,16 @@ class NotebookForm extends \FormValidator
         $form_name = $notebook->id ? get_lang('ModifyNote') : get_lang('NoteAddNew');
         $this->addHeader($form_name);
 
-        $this->add_textfield('title', get_lang('NoteTitle'), $required = true, array('class' => 'span3'));
+        $this->addText('title', get_lang('NoteTitle'), $required = true, array('class' => 'span3'));
 
         if (api_is_allowed_to_edit()) {
             $toolbar = array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300');
         } else {
             $toolbar = array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student');
         }
-        $this->add_html_editor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
+        $this->addHtmlEditor('description', get_lang('NoteComment'), true, api_is_allowed_to_edit(), $toolbar);
 
-        $this->addButton('save', get_lang('Save'), array('class' => 'btn save'));
+        $this->addButton('save', get_lang('Save'));
 
         $this->setDefaults($defaults);
     }

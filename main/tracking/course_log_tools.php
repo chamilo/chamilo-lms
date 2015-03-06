@@ -38,7 +38,6 @@ if (!$is_allowedToTrack) {
 
 // Including additional libraries.
 require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 
 $TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
 

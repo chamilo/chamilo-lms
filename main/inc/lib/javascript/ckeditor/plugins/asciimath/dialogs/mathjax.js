@@ -10,7 +10,7 @@ CKEDITOR.dialog.add( 'asciimath', function( editor ) {
     var preview,
         lang = editor.lang.asciimath;
 
-    var imagePath = CKEDITOR.basePath+'plugins/asciimath/images/';
+    var imagePath = CKEDITOR.plugins.getPath('asciimath') + "images/";
 
     return {
         title: lang.title,

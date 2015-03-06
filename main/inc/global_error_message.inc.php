@@ -114,7 +114,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$length = strlen($IncorrectPhpVersionDescription);
 				$read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
 				$IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
-				$IncorrectPhpVersionDescription .= '<br /><a class="btn" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
+				$IncorrectPhpVersionDescription .= '<br /><a class="btn btn-default" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			}
 			$global_error_message['description'] = $IncorrectPhpVersionDescription;
 			break;
@@ -129,7 +129,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 										<div class="install-mascot">
                                         <p class="download-info">
                                             <button class="btn btn-primary btn-large" type="submit" value="INSTALL Chamilo" >INSTALL Chamilo</button>
-                                            <a class="btn btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
+                                            <a class="btn btn-default btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
                                         </p>
                                         </div>
 										</form>';

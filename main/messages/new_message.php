@@ -161,12 +161,12 @@ function show_compose_to_user ($receiver_id) {
 function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
-	$param_f 		= isset($_GET['f']) ? Security::remove_XSS($_GET['f']):'';
+	$param_f 		= isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
 
 	$form = new FormValidator('compose_message', null, api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
 	if (empty($group_id)) {
 		if (isset($select_from_user_list)) {
-			$form->add_textfield(
+			$form->addText(
                 'id_text_name',
                 get_lang('SendMessageTo'),
                 true,
@@ -199,8 +199,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->add_textfield('title', get_lang('Subject'), true, array('class' => 'span4'));
-	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
+	$form->addText('title', get_lang('Subject'), true, array('class' => 'span4'));
+	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {
 	    $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
@@ -244,7 +244,15 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+					$res = MessageManager::send_message(
+						$user,
+						$title,
+						$content,
+						$_FILES,
+						$file_comments,
+						$group_id,
+						$parent_id
+					);
 					if ($res) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');

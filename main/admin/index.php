@@ -4,9 +4,6 @@
  * Index page of the admin tools
  * @package chamilo.admin
  */
-/**
- * Code
- */
 
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
@@ -32,7 +29,6 @@ if (api_is_multiple_url_enabled()) {
         $urlInfo = api_get_access_url($accessUrlId);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $urlInfo['url']));
         $cleanUrl = str_replace('/', '-', $url);
-
         $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
     }
 } else {
@@ -43,11 +39,6 @@ if (api_is_multiple_url_enabled()) {
 $message = '';
 
 if (api_is_platform_admin()) {
-    /* deprecated since 2014-10-30 (all main/install/ files were checked against direct execution)
-    if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
-        $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
-    }
-    */
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
         $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
     }
@@ -103,9 +94,11 @@ if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
 
     $search_form = '
-            <form method="get" class="form-search" action="user_list.php">
-                <input class="span3" type="text" name="keyword" value="">
-                <button class="btn" type="submit">'.get_lang('Search').'</button>
+            <form method="get" class="form-inline" action="user_list.php">
+                <div class="form-group">
+                <input class="form-control" type="text" name="keyword" value="">
+                <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                </div>
             </form>';
     $blocks['users']['search_form'] = $search_form;
     $items = array(
@@ -115,11 +108,9 @@ if (api_is_platform_admin()) {
         array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
         array('url'=>'user_update_import.php', 'label' => get_lang('EditUserListCSV')),
     );
+    $items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
+    $items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
 
-    if (api_get_setting('allow_social_tool') == 'true') {
-        $items[] = array('url'=>'group_add.php', 	'label' => get_lang('AddGroups'));
-        $items[] = array('url'=>'group_list.php', 	'label' => get_lang('GroupList'));
-    }
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
@@ -150,9 +141,11 @@ if (api_is_platform_admin()) {
         $blocks['courses']['extraContent'] = file_get_contents($coursesBlockExtraFile);
     }
 
-    $search_form = ' <form method="get" class="form-search" action="course_list.php">
-							<input class="span3" type="text" name="keyword" value="">
-							<button class="btn" type="submit">'.get_lang('Search').'</button>
+    $search_form = ' <form method="get" class="form-inline" action="course_list.php">
+                            <div class="form-group">
+							<input class="form-control" type="text" name="keyword" value="">
+							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							</div>
 	            		</form>';
     $blocks['courses']['search_form'] = $search_form;
 
@@ -199,10 +192,12 @@ if (api_is_platform_admin()) {
         $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
     }
 
-    $search_form = ' <form method="get" action="settings.php" class="form-search">
-							<input class="span3" type="text" name="search_field" value="" >
+    $search_form = ' <form method="get" action="settings.php" class="form-inline">
+                            <div class="form-group">
+							<input class="form-control" type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
-							<button class="btn" type="submit">'.get_lang('Search').'</button>
+							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							</div>
 	            		</form>';
 	$blocks['platform']['search_form'] = $search_form;
 
@@ -258,9 +253,11 @@ if (api_is_platform_admin()) {
     $blocks['sessions']['editable'] = true;
 }
 
-$search_form = ' <form method="GET" class="form-search" action="session_list.php">
-                    <input class="span3" type="text" name="keyword" value="">
-                    <button class="btn" type="submit">'.get_lang('Search').'</button>
+$search_form = ' <form method="GET" class="form-inline" action="session_list.php">
+                    <div class="form-group">
+                    <input class="form-control" type="text" name="keyword" value="">
+                    <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                    </div>
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
@@ -286,7 +283,6 @@ $items[] = array('url'=>'extra_fields.php?type=session', 	'label' => get_lang('M
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;
-
 
 /* Settings */
 if (api_is_platform_admin()) {
@@ -326,24 +322,7 @@ if (api_is_platform_admin()) {
 
     $blocks['settings']['search_form'] = null;
 
-    /* Extensions */
-    /*
-    $blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
-    $blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
-    $blocks['extensions']['class'] = 'block-admin-extensions';
-
-
-    $items = array();
-    $items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
-    $items[] = array('url'=>'configure_extensions.php?display=ppt2lp', 	'label' => get_lang('Ppt2lp'));
-    //$items[] = array('url'=>'configure_extensions.php?display=ephorus', 	'label' => get_lang('EphorusPlagiarismPrevention'));
-    $items[] = array('url'=>'configure_extensions.php?display=search', 	'label' => get_lang('SearchEngine'));
-    $items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
-    $items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));
-    $blocks['extensions']['items'] = $items;
-    */
-
-    //Skills
+    // Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
         $blocks['skills']['icon']  = Display::return_icon('logo.png', get_lang('Skills'), array(), ICON_SIZE_SMALL, false);
         $blocks['skills']['label'] = get_lang('Skills');
@@ -369,7 +348,6 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['label'] = 'Chamilo.org';
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
-
     $items = array();
     $items[] = array('url'=>'http://www.chamilo.org/', 	'label' => get_lang('ChamiloHomepage'));
     $items[] = array('url'=>'http://www.chamilo.org/forum', 	'label' => get_lang('ChamiloForum'));
@@ -385,11 +363,6 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['items'] = $items;
     $blocks['chamilo']['extra'] = null;
     $blocks['chamilo']['search_form'] = null;
-
-    // Try to display a maximum before we check the chamilo version and all that.
-    //session_write_close(); //close session to avoid blocking concurrent access
-    //flush(); //send data to client as much as allowed by the web server
-    //ob_flush();
 
     //Version check
     $blocks['version_check']['icon']  = Display::return_icon('logo.png', 'Chamilo.org', array(), ICON_SIZE_SMALL, false);

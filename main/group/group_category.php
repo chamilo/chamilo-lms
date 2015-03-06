@@ -108,7 +108,7 @@ if (isset($_GET['id'])) {
 if (api_get_setting('allow_group_categories') == 'true') {
     $form->addElement('header', $nameTools);
     $form->addElement('html', '<div class="row"><div class="span6">');
-	$form->add_textfield('title', get_lang('Title'));
+	$form->addText('title', get_lang('Title'));
 
     // Groups per user
     $possible_values = array();

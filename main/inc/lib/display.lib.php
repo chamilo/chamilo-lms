@@ -502,19 +502,19 @@ class Display
         $class = "";
         switch($type) {
             case 'warning':
-               $class .= 'warning-message';
+               $class .= 'alert alert-warning';
                break;
             case 'error':
-               $class .= 'error-message';
+               $class .= 'alert alert-danger';
                break;
             case 'confirmation':
             case 'confirm':
             case 'success':
-                $class .= 'confirmation-message';
+                $class .= 'alert alert-success';
                break;
             case 'normal':
             default:
-                $class .= 'normal-message';
+                $class .= 'alert alert-info';
         }
         return self::div($message, array('class'=> $class));
     }
@@ -832,7 +832,8 @@ class Display
     public static function url($name, $url, $extra_attributes = array())
     {
         if (!empty($url)) {
-            $extra_attributes['href']= $url;
+            $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+            $extra_attributes['href'] = $url;
         }
         return self::tag('a', $name, $extra_attributes);
     }
@@ -1254,7 +1255,7 @@ class Display
      */
     public static function show_notification($course_info)
     {
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $t_track_e_access 	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_code        = Database::escape_string($course_info['code']);

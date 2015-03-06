@@ -66,7 +66,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 			$Resource = $_POST['resource'];
 
 			foreach ($Resource as $Code_course => $Sessions) {
-				$_course 		= Database::get_course_info($Code_course);
+				$_course 		= api_get_course_info($Code_course);
 				$tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
 				$tbl_property 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 				$course_id 		= $_course['real_id'];

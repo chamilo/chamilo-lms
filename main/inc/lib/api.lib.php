@@ -13,7 +13,7 @@
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.3');
+define('REQUIRED_PHP_VERSION', '5.4');
 
 define('REQUIRED_MIN_MEMORY_LIMIT',         '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
@@ -373,8 +373,9 @@ define('SCORE_IGNORE_SPLIT', 8);    //  ??
 define('SCORE_DIV_PERCENT_WITH_CUSTOM', 9);    // X / Y (XX %) - Good!
 define('SCORE_CUSTOM', 10);    // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11);    // X - Good!
-
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12);    // X - Good!
+
+define('SCORE_ONLY_SCORE', 13);    // X - Good!
 
 define('SCORE_BOTH', 1);
 define('SCORE_ONLY_DEFAULT', 2);
@@ -1177,11 +1178,13 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 /**
  * Function used to protect an admin script.
  *
- * The function blocks access when the user has no platform admin rights with an error message printed on default output
+ * The function blocks access when the user has no platform admin rights
+ * with an error message printed on default output
  * @param bool Whether to allow session admins as well
  * @param bool Whether to allow HR directors as well
  * @param string An optional message (already passed through get_lang)
- * @return bool True if user is allowed, false otherwise. The function also outputs an error message in case not allowed
+ * @return bool True if user is allowed, false otherwise.
+ * The function also outputs an error message in case not allowed
  * @author Roan Embrechts (original author)
  */
 function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null) {
@@ -1532,14 +1535,30 @@ function api_get_course_id() {
  * @return int
  */
 function api_get_real_course_id() {
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+    return api_get_course_int_id();
 }
 
 /**
  * Returns the current course id (integer)
+ * @param   string  $code   Optional course code
  * @return int
  */
-function api_get_course_int_id() {
+function api_get_course_int_id($code = null) {
+    if (!empty($code)) {
+        $code = Database::escape_string($code);
+        $row = Database::select(
+            'id',
+            Database::get_main_table(TABLE_MAIN_COURSE),
+            array('where'=> array('code = ?' => array($code))),
+            'first'
+        );
+
+        if (is_array($row) && isset($row['id'])) {
+            return $row['id'];
+        } else {
+            return false;
+        }
+    }
     return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
 }
 
@@ -1677,8 +1696,8 @@ function api_get_course_info($course_code = null, $strict = false)
 function api_get_course_info_by_id($id = null) {
     if (!empty($id)) {
         $id = intval($id);
-        $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table   = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
@@ -2575,7 +2594,11 @@ function api_get_user_platform_status($user_id = null) {
     //Session
     if ($session_id && $course_id) {
         $session_status = array('id' => $session_id, 'course_id' => $course_id);
-        $session_user_status = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+        $session_user_status = SessionManager::get_user_status_in_course_session(
+            $user_id,
+            $course_code,
+            $session_id
+        );
         switch ($session_user_status) {
             case 0:
                 $session_status['status'] = 'student';
@@ -2864,14 +2887,6 @@ function api_display_tool_view_option() {
         return '';
     }
 
-    /*// Uncomment to remove student view link from document view page
-    if (strpos($_SERVER['REQUEST_URI'], 'document/headerpage.php') !== false) {
-        $sourceurl = str_replace('document/headerpage.php', 'document/showinframes.php', $_SERVER['REQUEST_URI']);
-        //showinframes doesn't handle student view anyway...
-        //return '';
-        $is_framed = true;
-    }*/
-
     // Uncomment to remove student view link from document view page
     if (strpos($_SERVER['REQUEST_URI'], 'newscorm/lp_header.php') !== false) {
         if (empty($_GET['lp_id'])) {
@@ -2900,15 +2915,15 @@ function api_display_tool_view_option() {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-mini btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
+            $output_string .= '<a class="btn btn-success btn-xs" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
-            $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+            $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
         }
     } else {
-        $output_string .= '<a class="btn btn-mini" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
+        $output_string .= '<a class="btn btn-primary btn-xs" href="'.$sourceurl.'&isStudentView=true" target="_self">'.get_lang('StudentView').'</a>';
     }
     return $output_string;
 }
@@ -3164,12 +3179,13 @@ function api_is_anonymous($user_id = null, $db_check = false) {
     }
     if ($db_check) {
         $info = api_get_user_info($user_id);
-        if ($info['status'] == 6) {
+        if ($info['status'] == ANONYMOUS) {
             return true;
         }
     }
-    global $_user;
-    if (!isset($_user)) {
+
+    $_user = api_get_user_info();
+    if ($_user['user_id'] == 0) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
         global $use_anonymous;
@@ -3490,7 +3506,6 @@ function api_item_property_delete(
                 $groupCondition
             ";
     Database::query($sql);
-
 }
 
 /**
@@ -3870,7 +3885,7 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
  */
 function api_get_track_item_property_history($tool, $ref)
 {
-    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
     $course_id = api_get_real_course_id(); //numeric
     $course_code = api_get_course_id(); //alphanumeric
     $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
@@ -4061,7 +4076,7 @@ function api_get_language_id($language)
     }
     $language = Database::escape_string($language);
     $sql = "SELECT id FROM $tbl_language
-            WHERE available='1' AND dokeos_folder = '$language' LIMIT 1";
+            WHERE dokeos_folder = '$language' LIMIT 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['id'];
@@ -4214,60 +4229,6 @@ function api_get_themes() {
     return array($list_dir, $list_name);
 }
 
-
-
-/* WYSIWYG EDITOR
-   Functions for the WYSIWYG html editor.
-   Please, try to avoid using the following two functions. The preferable way to put
-   an editor's instance on a page is through using a FormValidator's class method. */
-
-/**
- * Displays the WYSIWYG editor for online editing of html
- * @param string $name The name of the form-element
- * @param string $content The default content of the html-editor
- * @param int $height The height of the form element
- * @param int $width The width of the form element
- * @param string $attributes (optional) attributes for the form element
- * @param array $editor_config (optional) Configuration options for the html-editor
- * @deprecated
- */
-function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $_configuration, $_course, $fck_attribute;
-    $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
-    $editor->setValue($content);
-    // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-    if( $height != '') {
-        $fck_attribute['Height'] = $height;
-    }
-    if( $width != '') {
-        $fck_attribute['Width'] = $width;
-    }
-    echo $editor->toHtml();
-}
-
-/**
- * Returns generated html for showing the WYSIWYG editor on the page
- * @param string $name The name of the form-element
- * @param string $content The default content of the html-editor
- * @param int $height The height of the form element
- * @param int $width The width of the form element
- * @param string $attributes (optional) attributes for the form element
- * @param array $editor_config (optional) Configuration options for the html-editor
- * @deprecated
- */
-function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
-    global $fck_attribute;
-    $editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
-    $editor->setValue($content);
-    // The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-    if ($height != '') {
-        $fck_attribute['Height'] = $height;
-    }
-    if ($width != '') {
-        $fck_attribute['Width'] = $width;
-    }
-    return $editor->toHtml();
-}
 
 /**
  * Find the largest sort value in a given user_course_category
@@ -4871,12 +4832,14 @@ function api_get_settings_options($var) {
     $result = Database::query($sql);
     $settings_options_array = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        //$temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
         $settings_options_array[] = $row;
     }
     return $settings_options_array;
 }
 
+/**
+ * @param array $params
+ */
 function api_set_setting_option($params) {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
     if (empty($params['id'])) {
@@ -4886,6 +4849,9 @@ function api_set_setting_option($params) {
     }
 }
 
+/**
+ * @param array $params
+ */
 function api_set_setting_simple($params) {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $url_id = api_get_current_access_url_id();
@@ -4898,6 +4864,9 @@ function api_set_setting_simple($params) {
     }
 }
 
+/**
+ * @param int $id
+ */
 function api_delete_setting_option($id) {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
     if (!empty($id)) {
@@ -4913,8 +4882,11 @@ function api_delete_setting_option($id) {
  * @param string    The category if any (in most cases, this will remain null)
  * @param int       The access_url for which this parameter is valid
  */
-function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url = 1) {
-    if (empty($var)) { return false; }
+function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url = 1)
+{
+    if (empty($var)) {
+        return false;
+    }
     $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $var = Database::escape_string($var);
     $value = Database::escape_string($value);
@@ -4954,7 +4926,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
             }
             $res = Database::query($select);
 
-            if (Database::num_rows($res) > 0) { // We have a setting for access_url 1, but none for the current one, so create one.
+            if (Database::num_rows($res) > 0) {
+                // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);
                 $insert = "INSERT INTO $t_settings " .
                         "(variable,subkey," .
@@ -5015,8 +4988,11 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
  * @param int       Access URL. Optional. Defaults to 1
  * @param array     Optional array of filters on field type
  */
-function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = array()) {
-    if (empty($category)) { return false; }
+function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = array())
+{
+    if (empty($category)) {
+        return false;
+    }
     $category = Database::escape_string($category);
     $t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
@@ -6131,8 +6107,10 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 /**
  * Function used to protect a "global" admin script.
  * The function blocks access when the user has no global platform admin rights.
- * Global admins are the admins that are registered in the main.admin table AND the users who have access to the "principal" portal.
- * That means that there is a record in the main.access_url_rel_user table with his user id and the access_url_id=1
+ * Global admins are the admins that are registered in the main.admin table
+ * AND the users who have access to the "principal" portal.
+ * That means that there is a record in the main.access_url_rel_user table
+ * with his user id and the access_url_id=1
  *
  * @author Julio Montoya
  */
@@ -6191,6 +6169,12 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     }
 }
 
+/**
+ * @param int $admin_id_to_check
+ * @param int  $my_user_id
+ * @param bool $allow_session_admin
+ * @return bool
+ */
 function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
 {
     if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id, $allow_session_admin)) {
@@ -6396,7 +6380,8 @@ function api_browser_support($format = "")
 
 /**
  * This function checks if exist path and file browscap.ini
- * In order for this to work, your browscap configuration setting in php.ini must point to the correct location of the browscap.ini file on your system
+ * In order for this to work, your browscap configuration setting in php.ini
+ * must point to the correct location of the browscap.ini file on your system
  * http://php.net/manual/en/function.get-browser.php
  *
  * @return bool
@@ -6435,7 +6420,6 @@ function api_get_jquery_js() {
     return api_get_js('jquery.min.js');
 }
 
-
 /**
  * Returns the jquery-ui library js headers
  * @param   bool    add the jqgrid library
@@ -6473,17 +6457,15 @@ function api_get_jquery_libraries_js($libraries) {
     //jquery-ui js and css
     if (in_array('jquery-ui', $libraries)) {
         //Jquery ui
-        $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        //$theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
 
-        $jquery_ui_version = '1.8.21';
-
-        //$js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
-        $js .= api_get_css($js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css');
-        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
+        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.css');
+        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.theme.css');
+        $js .= api_get_js('jquery-ui/jquery-ui.min.js');
     }
 
     if (in_array('jquery-ui-i18n', $libraries)) {
-        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+        //$js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
     }
 
     //jqgrid js and css
@@ -6515,7 +6497,7 @@ function api_get_jquery_libraries_js($libraries) {
     //jquery-ui css changes for Chamilo
     if (in_array('jquery-ui',$libraries)) {
         //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        $js .= api_get_css($js_path.'jquery-ui/default.css');
+        //$js .= api_get_css($js_path.'jquery-ui/default.css');
     }
 
     if (in_array('bxslider',$libraries)) {
@@ -6630,16 +6612,6 @@ function api_get_home_path() {
     return $home;
 }
 
-function api_get_course_table_condition($and = true) {
-    $course_id = api_get_course_int_id();
-    $condition = '';
-    $condition_add = $and ? " AND " : " WHERE ";
-    if (!empty($course_id)) {
-        $condition = " $condition_add c_id = $course_id";
-    }
-    return $condition;
-}
-
 /**
  *
  * @param int Course id
@@ -6673,7 +6645,8 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
  * Blocks a page if the item was added in a gradebook
  *
  * @param int       exercise id, work id, thread id,
- * @param int       LINK_EXERCISE, LINK_STUDENTPUBLICATION, LINK_LEARNPATH LINK_FORUM_THREAD, LINK_ATTENDANCE see gradebook/lib/be/linkfactory
+ * @param int       LINK_EXERCISE, LINK_STUDENTPUBLICATION, LINK_LEARNPATH LINK_FORUM_THREAD, LINK_ATTENDANCE
+ * see gradebook/lib/be/linkfactory
  * @param string    course code
  * @return boolean
  */
@@ -6770,7 +6743,7 @@ function api_user_is_login($user_id = null) {
  * Guess the real ip for register in the database, even in reverse proxy cases.
  * To be recognized, the IP has to be found in either $_SERVER['REMOTE_ADDR'] or
  * in $_SERVER['HTTP_X_FORWARDED_FOR'], which is in common use with rproxies.
- * @return string the real ip of teh user.
+ * @return string the user's real ip (unsafe - escape it before inserting to db)
  * @author Jorge Frisancho Jibaja <jrfdeft@gmail.com>, USIL - Some changes to allow the use of real IP using reverse proxy
  * @version CEV CHANGE 24APR2012
  */
@@ -6779,7 +6752,7 @@ function api_get_real_ip(){
     global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+        list($ip1, $ip2) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
     if (!empty($debug)) error_log('Real IP: '.$ip);
@@ -6831,7 +6804,6 @@ function api_check_ip_in_range($ip,$range) {
     return false;
 }
 
-
 function api_check_user_access_to_legal($course_visibility) {
     $course_visibility_list = array(COURSE_VISIBILITY_OPEN_WORLD, COURSE_VISIBILITY_OPEN_PLATFORM);
     return in_array($course_visibility, $course_visibility_list) || api_is_drh();
@@ -6842,9 +6814,12 @@ function api_check_user_access_to_legal($course_visibility) {
  *
  * @return bool
  */
-function api_is_global_chat_enabled(){
-    $global_chat_is_enabled = !api_is_anonymous() && api_get_setting('allow_global_chat') == 'true' && api_get_setting('allow_social_tool') == 'true';
-    return $global_chat_is_enabled;
+function api_is_global_chat_enabled()
+{
+    return
+        !api_is_anonymous() &&
+        api_get_setting('allow_global_chat') == 'true' &&
+        api_get_setting('allow_social_tool') == 'true';
 }
 
 /**
@@ -7330,7 +7305,6 @@ function api_get_user_blocked_by_captcha($username)
     }
     return false;
 }
-
 
 /**
  * Remove tags from HTML anf return the $in_number_char first non-HTML char
@@ -7824,7 +7798,6 @@ function api_create_protected_dir($name, $parentDirectory)
 
     return $isCreated;
 }
-
 
 /**
  * Sends an HTML email using the phpmailer class (and multipart/alternative to downgrade gracefully)

@@ -138,7 +138,7 @@ $tpl->assign('button_text',
 
 //see http://docs.jquery.com/UI/Datepicker/$.datepicker.formatDate
 
-$tpl->assign('js_format_date', 'D d M yy');
+$tpl->assign('js_format_date', 'll');
 $region_value = api_get_language_isocode();
 
 if ($region_value == 'en') {

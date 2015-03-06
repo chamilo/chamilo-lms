@@ -7,17 +7,24 @@ namespace Chamilo\CoreBundle\Component\Editor\Driver;
  * Class HomeDriver
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
-class HomeDriver extends Driver
+class HomeDriver extends Driver implements DriverInterface
 {
     public $name = 'HomeDriver';
+
+    /**
+     * @inheritdoc
+     */
+    public function setup()
+    {
+
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getConfiguration()
     {
-        //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
-        if (api_is_platform_admin()) {
+        if ($this->allow()) {
             $home = api_get_path(SYS_PATH).'home';
 
             return array(
@@ -28,6 +35,8 @@ class HomeDriver extends Driver
                 'accessControl' => array($this, 'access'),
             );
         }
+
+        return array();
     }
 
     /**
@@ -36,7 +45,9 @@ class HomeDriver extends Driver
     public function upload($fp, $dst, $name, $tmpname)
     {
         $this->setConnectorFromPlugin();
-        if ($this->connector->security->isGranted('ROLE_ADMIN')) {
+
+        if ($this->allow()) {
+
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }
@@ -47,8 +58,19 @@ class HomeDriver extends Driver
     public function rm($hash)
     {
         $this->setConnectorFromPlugin();
-        if ($this->connector->security->isGranted('ROLE_ADMIN')) {
+
+        if ($this->allow()) {
+
             return parent::rm($hash);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function allow()
+    {
+        //if ($this->connector->security->isGranted('ROLE_ADMIN')) {
+        return api_is_platform_admin();
     }
 }

@@ -311,7 +311,7 @@ switch ($action) {
 
         $form->addElement('text', 'title', get_lang('EmailTitle'));
         $form->addElement('hidden', 'id');
-        $form->add_html_editor(
+        $form->addHtmlEditor(
             'content',
             get_lang('Description'),
             false,
@@ -460,7 +460,6 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array("url"=>"../group/group_space.php?".api_get_cidreq(), "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     //we are not in the learning path
     Display::display_header($nameTools,get_lang('Announcements'));
@@ -478,7 +477,7 @@ if ((api_is_allowed_to_edit(false,true) OR
     (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 ) {
     echo '<div class="actions">';
-    if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify','view'))) {
+    if (in_array($action, array('add', 'modify','view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
             Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
     } else {
@@ -487,7 +486,7 @@ if ((api_is_allowed_to_edit(false,true) OR
     }
     $show_actions = true;
 } else {
-    if (in_array($_GET['action'], array('view'))) {
+    if (in_array($action, array('view'))) {
         echo '<div class="actions">';
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
             Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
@@ -513,8 +512,6 @@ Display::showFlash();
 
 echo $content;
 
-
-/*		FOOTER		*/
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     //we are not in learnpath tool
     Display::display_footer();

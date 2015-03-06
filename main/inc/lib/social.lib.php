@@ -456,13 +456,7 @@ class SocialManager extends UserManager
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         $course_code = $my_course['code'];
-        $course_visual_code = $my_course['course_info']['official_code'];
         $course_title = $my_course['course_info']['title'];
-
-        $course_info = Database :: get_course_info($course_code);
-
-        $course_id = $course_info['real_id'];
-
         $course_access_settings = CourseManager :: get_access_settings($course_code);
 
         $course_visibility = $course_access_settings['visibility'];
@@ -613,7 +607,6 @@ class SocialManager extends UserManager
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
-        $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
         $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -630,18 +623,12 @@ class SocialManager extends UserManager
             }
 
         } else {
-            if ($showUserImage) {
-                $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
-            } else {
-                $img_array = UserManager::get_user_picture_path_by_id(null, 'web', true, true);
-            }
+            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
 
             //--- User image
-
-
             if ($img_array['file'] != 'unknown.jpg') {
                 $html .= '<a class="thickbox" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
             } else {

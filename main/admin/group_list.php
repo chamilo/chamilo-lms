@@ -263,11 +263,11 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_search', 'get');
     $form->addElement('header', '', $tool_name);
-    $form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
-    $form->add_textfield('keyword_lastname', get_lang('LastName'), false);
-    $form->add_textfield('keyword_username', get_lang('LoginName'), false);
-    $form->add_textfield('keyword_email', get_lang('Email'), false);
-    $form->add_textfield('keyword_officialcode', get_lang('OfficialCode'), false);
+    $form->addText('keyword_firstname', get_lang('FirstName'), false);
+    $form->addText('keyword_lastname', get_lang('LastName'), false);
+    $form->addText('keyword_username', get_lang('LoginName'), false);
+    $form->addText('keyword_email', get_lang('Email'), false);
+    $form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
     $status_options = array();
     $status_options['%'] = get_lang('All');
     $status_options[STUDENT] = get_lang('Student');
@@ -278,7 +278,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
     $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
     $form->addGroup($active_group, '', get_lang('ActiveAccount'), '<br/>', false);
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
+    $form->addButtonSearch(get_lang('SearchUsers'));
     $defaults['keyword_active'] = 1;
     $defaults['keyword_inactive'] = 1;
     $form->setDefaults($defaults);
@@ -355,8 +355,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->addElement('text', 'keyword', get_lang('keyword'));
-    $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-    //$form->addElement('static','search_advanced_link',null,'<a href="user_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
+    $form->addButtonSearch(get_lang('Search'));
     echo '<div class="actions" style="width:100%;">';
     if (api_is_platform_admin()) {
         echo '<span style="float:right;">'.

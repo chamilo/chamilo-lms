@@ -1116,16 +1116,16 @@ class Blog
 			);
 			$form->addHidden('post_title_edited', 'false');
 			$form->addHeader(get_lang('NewPost'));
-			$form->add_textfield('title', get_lang('Title'));
+			$form->addText('title', get_lang('Title'));
 			$config = array();
 			if (!api_is_allowed_to_edit()) {
 				$config['ToolbarSet'] = 'ProjectStudent';
 			} else {
 				$config['ToolbarSet'] = 'Project';
 			}
-			$form->add_html_editor('full_text', get_lang('Content'), false, false, $config);
-			$form->add_file('user_upload', get_lang('AddAnAttachment'));
-			$form->add_textarea('post_file_comment', get_lang('FileComment'));
+			$form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
+			$form->addFile('user_upload', get_lang('AddAnAttachment'));
+			$form->addTextarea('post_file_comment', get_lang('FileComment'));
 			$form->addHidden('new_post_submit', 'true');
 			$form->addButton('save', get_lang('Save'));
 
@@ -1169,14 +1169,14 @@ class Blog
 		);
 
 		$form->addHeader(get_lang('EditPost'));
-		$form->add_textfield('title', get_lang('Title'));
+		$form->addText('title', get_lang('Title'));
 
 		if (!api_is_allowed_to_edit()) {
 			$config['ToolbarSet'] = 'ProjectStudent';
 		} else {
 			$config['ToolbarSet'] = 'Project';
 		}
-		$form->add_html_editor('full_text', get_lang('Content'), false, false, $config);
+		$form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
 
 		$form->addHidden('action', '');
 		$form->addHidden('edit_post_submit', 'true');
@@ -2217,7 +2217,7 @@ class Blog
 			$header = get_lang('ExecuteThisTask');
 		}
 		$form->addHeader($header);
-		$form->add_textfield('title', get_lang('Title'));
+		$form->addText('title', get_lang('Title'));
 
 		$config = array();
 		if (!api_is_allowed_to_edit()) {
@@ -2225,10 +2225,10 @@ class Blog
 		} else {
 			$config['ToolbarSet'] = 'ProjectCommentStudent';
 		}
-		$form->add_html_editor('comment', get_lang('Comment'), false, false, $config);
-		$form->add_file('user_upload', get_lang('AddAnAttachment'));
+		$form->addHtmlEditor('comment', get_lang('Comment'), false, false, $config);
+		$form->addFile('user_upload', get_lang('AddAnAttachment'));
 
-		$form->add_textarea('post_file_comment', get_lang('FileComment'));
+		$form->addTextarea('post_file_comment', get_lang('FileComment'));
 
 		$form->addHidden('action', null);
 		$form->addHidden('comment_parent_id', 0);

@@ -20,8 +20,6 @@ $language_file = array(
 
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
-
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_create_course() && !api_is_session_admin() && !api_is_drh() && !api_is_student_boss()) {
@@ -164,7 +162,7 @@ if (isset($_GET['details'])) {
 
 // Database Table Definitions
 $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$tbl_stats_exercices = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = intval($_GET['user_id']);
@@ -201,7 +199,7 @@ if ($check) {
                     $session_id
                 );
 
-                //@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334
+                //@todo delete the stats.track_e_exercises records. First implement this http://support.chamilo.org/issues/1334
                 $message = Display::return_message(
                     get_lang('LPWasReset'),
                     'success'
@@ -695,9 +693,9 @@ if (!empty($student_id)) {
                         $scoretotal = array();
                         if (isset($cats) && isset($cats[0])) {
                             if (!empty($session_id)) {
-                                $scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);
+                                $scoretotal= $cats[0]->calc_score($student_id, null, $course_code, $session_id);
                             } else {
-                                $scoretotal= $cats[0]->calc_score($student_id, $course_code);
+                                $scoretotal= $cats[0]->calc_score($student_id, null, $course_code);
                             }
                         }
 
@@ -966,7 +964,7 @@ if (!empty($student_id)) {
         if (Database :: num_rows($result_exercices) > 0) {
             while ($exercices = Database :: fetch_array($result_exercices)) {
                 $exercise_id = intval($exercices['id']);
-                $count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
+                $count_attempts   = Tracking::count_student_exercise_attempts($student_id, $courseInfo['real_id'], $exercise_id, 0, 0, $session_id, 2);
                 $score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
                 if (!isset($score_percentage) && $count_attempts > 0) {
@@ -1010,7 +1008,7 @@ if (!empty($student_id)) {
                 $sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . '
 				                     WHERE  exe_exo_id      ="'.$exercise_id.'" AND
 				                            exe_user_id     ="'.$student_id.'" AND
-				                            exe_cours_id    ="'.$course_code.'" AND
+				                            c_id            = '.$courseInfo['real_id'].' AND
                                             session_id      ="'.$session_id.'" AND
 				                            status          = ""
 				                            ORDER BY exe_date DESC LIMIT 1';

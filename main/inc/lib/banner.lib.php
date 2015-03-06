@@ -166,11 +166,11 @@ function return_logo($theme) {
     $site_name = api_get_setting('siteName');
     if (file_exists($logo)) {
         $site_name = api_get_setting('Institution').' - '.$site_name;
-        $html .= '<div id="logo">';
+
             $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';
-            $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
+            $logo = Display::img($image_url, $site_name, array('title'=>$site_name,'class'=>'img-responsive'));
             $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
-        $html .= '</div>';
+
     } else {
         $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';
         $iurl  = api_get_setting('InstitutionUrl');
@@ -519,21 +519,22 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
+
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
+                $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
                 break;
             case 'course_code':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
+                $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
                 break;
             case 'session_name_and_course_title':
-                $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 break;
             default:
                 if (api_get_session_id() != -1 ) {
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
                 } else {
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_IMG_PATH).'home.png', $_course['name']).' '.$course_title;
                 }
                 break;
         }
@@ -652,7 +653,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $bread_check = trim(strip_tags($bread));
                 if (!empty($bread_check)) {
                     if ($final_navigation_count-1 > $i) {
-                        $bread .= '<span class="divider">/</span>';
+                        $bread .= '';
                     }
                     $lis.= Display::tag('li', $bread);
                     $i++;
@@ -665,8 +666,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         // View as student/teacher link
+        $view = null;
         if (!empty($view_as_student_link)) {
-            $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+            $view .= Display::tag('div', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
         }
 
         if (!empty($navigation_right)) {
@@ -677,7 +679,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
 
         if (!empty($lis)) {
-            $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb','style'=>'margin-top: 0'));
+            $html .= $view;
+            $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
         }
     }
     return $html ;

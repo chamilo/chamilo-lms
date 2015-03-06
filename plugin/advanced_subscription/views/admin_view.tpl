@@ -36,31 +36,43 @@
                 <table id="student_table" class="table table-striped">
                     <tbody>
                     <tr>
-                        <th style="width: 118px;"><img src="{{ _p.web_plugin }}advanced_subscription/views/img/icon-avatar.png"/> </th>
                         <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th>{{ "Area" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                     </tr>
                     {% set row_class = "row_odd" %}
                     {% for student in students %}
                     <tr class="{{ row_class }}">
-                        <td style="width: 118px;"><img src="{{ student.picture.file }}" class="img-circle"> </td>
-                        <td class="name">{{ student.complete_name }}</td>
+                        <td class="name">
+                            <a href="{{ student.userLink }}" target="_blank">{{ student.complete_name }}<a>
+                        </td>
                         <td>{{ student.created_at }}</td>
-                        <td>{{ student.validation }}</td>
+                        <td>{{ student.area }}</td>
+                        {% set cellClass = 'important'%}
+                        {% if student.validation == 'Yes' %}
+                            {% set cellClass = 'success'%}
+                        {% endif %}
+                        <td>
+                            {% if student.validation != '' %}
+                            <span class="label label-{{ cellClass }}">
+                                {{ student.validation | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                            </span>
+                            {% endif %}
+                        </td>
                         <td>
                             <a
                                 class="btn btn-success btn-advanced-subscription btn-accept"
                                 href="{{ student.acceptUrl }}"
                             >
-                                {{ 'Accept' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                                {{ 'AcceptInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                             <a
                                 class="btn btn-danger btn-advanced-subscription btn-reject"
                                 href="{{ student.rejectUrl }}"
                             >
-                                {{ 'Reject' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
+                                {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
                         </td>
                     </tr>
@@ -104,7 +116,7 @@
         $("a.btn-advanced-subscription").click(function(event){
             event.preventDefault();
             var confirmed = false;
-            var studentName = $(this).closest("tr").find(".name").html();
+            var studentName = $.trim($(this).closest("tr").find(".name").text());
             if (studentName) {
                 ;
             } else {

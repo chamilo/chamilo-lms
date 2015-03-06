@@ -47,9 +47,6 @@ class StudentPublicationLink extends AbstractLink
 
 		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
-			$course_info = Database :: get_course_info($this->get_course_code());
-			//$url = api_get_path(WEB_PATH).'main/gradebook/open_document.php?file='.$course_info['directory'].'/'.$fileurl[0];
-			//return $url;
 			return null;
 		} else {
 			return null;
@@ -155,7 +152,7 @@ class StudentPublicationLink extends AbstractLink
 	 * @param null $stud_id
 	 * @return array|null
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$stud_id = intval($stud_id);
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -219,12 +216,22 @@ class StudentPublicationLink extends AbstractLink
 			// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
+			$bestResult = 0;
+			$weight = 0;
+			$sumResult = 0;
+
 			while ($data = Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['user_id'], $students))) {
 					if ($assignment['qualification'] != 0) {
 						$students[$data['user_id']] = $data['qualification'];
 						$rescount++;
 						$sum += $data['qualification'] / $assignment['qualification'];
+						$sumResult += $data['qualification'];
+
+						if ($data['qualification'] > $bestResult) {
+							$bestResult = $data['qualification'];
+						}
+						$weight = $assignment['qualification'];
 					}
 				}
 			}
@@ -232,6 +239,12 @@ class StudentPublicationLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
+				if ($type == 'best') {
+					return array($bestResult, $weight);
+				}
+				if ($type == 'average') {
+					return array($sumResult/$rescount, $weight);
+				}
 				return array($sum, $rescount);
 			}
 		}
@@ -285,7 +298,7 @@ class StudentPublicationLink extends AbstractLink
 	private function get_exercise_data()
 	{
 		$tbl_name = $this->get_studpub_table();
-		$course_info = Database :: get_course_info($this->get_course_code());
+		$course_info = api_get_course_info($this->get_course_code());
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {

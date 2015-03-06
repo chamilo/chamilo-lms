@@ -139,7 +139,7 @@ class SurveyLink extends AbstractLink
 	 * @param int $stud_id
 	 * @return array|null
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		// Note: Max score is assumed to be always 1 for surveys,
 		// only student's participation is to be taken into account.
@@ -179,13 +179,26 @@ class SurveyLink extends AbstractLink
 			// for all the students -> get average
 			$rescount = 0;
 			$sum = 0;
+			$bestResult = 0;
+			$weight = 0;
 			while ($data = Database::fetch_array($sql_result)) {
 				$sum += $data['answered'] ? $max_score : 0;
 				$rescount++;
+				if ($data['answered'] > $bestResult) {
+					$bestResult = $data['answered'];
+					$weight = $assignment['qualification'];
+				}
 			}
 			$sum = $sum / $max_score;
+
 			if ($rescount == 0) {
 				return null;
+			}
+			if ($type == 'best') {
+				return array($bestResult, $rescount);
+			}
+			if ($type == 'average') {
+				return array($sum, $rescount);
 			}
 			return array($sum, $rescount);
 		}

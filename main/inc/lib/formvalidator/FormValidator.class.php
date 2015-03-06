@@ -2,133 +2,57 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Objects of this class can be used to create/manipulate/validate user input.
+ * Class FormValidator
+ * create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
 {
+    const LAYOUT_HORIZONTAL = 'horizontal';
+    const LAYOUT_INLINE = 'inline';
     public $with_progress_bar = false;
-    /**
-     * Create a form validator based on an array of form data:
-     *
-     *         array(
-     *             'name' => 'zombie_report_parameters',    //optional
-     *             'method' => 'GET',                       //optional
-     *             'items' => array(
-     *                 array(
-     *                     'name' => 'ceiling',
-     *                     'label' => 'Ceiling',            //optional
-     *                     'type' => 'date',
-     *                     'default' => date()              //optional
-     *                 ),
-     *                 array(
-     *                     'name' => 'active_only',
-     *                     'label' => 'ActiveOnly',
-     *                     'type' => 'checkbox',
-     *                     'default' => true
-     *                 ),
-     *                 array(
-     *                     'name' => 'submit_button',
-     *                     'type' => 'style_submit_button',
-     *                     'value' => get_lang('Search'),
-     *                     'attributes' => array('class' => 'search')
-     *                 )
-     *             )
-     *         );
-     *
-     * @param array $form_data
-     *
-     * @return FormValidator
-     */
-    public static function create($form_data)
-    {
-        if (empty($form_data)) {
-            return null;
-        }
-        $form_name = isset($form_data['name']) ? $form_data['name'] : 'form';
-        $form_method = isset($form_data['method']) ? $form_data['method'] : 'POST';
-        $form_action = isset($form_data['action']) ? $form_data['action'] : '';
-        $form_target = isset($form_data['target']) ? $form_data['target'] : '';
-        $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
-        $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
-        $reset = null;
-        $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
-
-        $defaults = array();
-        foreach ($form_data['items'] as $item) {
-            $name = $item['name'];
-            $type = isset($item['type']) ? $item['type'] : 'text';
-            $label = isset($item['label']) ? $item['label'] : '';
-            if ($type == 'wysiwyg') {
-                $element = $result->add_html_editor($name, $label);
-            } else {
-                $element = $result->addElement($type, $name, $label);
-            }
-            if (isset($item['attributes'])) {
-                $attributes = $item['attributes'];
-                $element->setAttributes($attributes);
-            }
-            if (isset($item['value'])) {
-                $value = $item['value'];
-                $element->setValue($value);
-            }
-            if (isset($item['default'])) {
-                $defaults[$name] = $item['default'];
-            }
-            if (isset($item['rules'])) {
-                $rules = $item['rules'];
-                foreach ($rules as $rule) {
-                    $message = $rule['message'];
-                    $type = $rule['type'];
-                    $format = isset($rule['format']) ? $rule['format'] : null;
-                    $validation = isset($rule['validation']) ? $rule['validation'] : 'server';
-                    $force = isset($rule['force']) ? $rule['force'] : false;
-                    $result->addRule($name, $message, $type, $format, $validation, $reset, $force);
-                }
-            }
-        }
-        $result->setDefaults($defaults);
-
-        return $result;
-    }
 
     /**
      * Constructor
-     * @param string $form_name					Name of the form
+     * @param string $name					Name of the form
      * @param string $method (optional			Method ('post' (default) or 'get')
      * @param string $action (optional			Action (default is $PHP_SELF)
      * @param string $target (optional			Form's target defaults to '_self'
      * @param mixed $attributes (optional)		Extra attributes for <form> tag
-     * @param bool $track_submit (optional)		Whether to track if the form was
+     * @param string $layout
+     * @param bool $trackSubmit (optional)		Whether to track if the form was
      * submitted by adding a special hidden field (default = true)
      */
-    public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
-    {
+    public function __construct(
+        $name,
+        $method = 'post',
+        $action = '',
+        $target = '',
+        $attributes = null,
+        $layout = self::LAYOUT_HORIZONTAL,
+        $trackSubmit = true
+    ) {
         // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
 
-        parent::__construct($form_name, $method, $action, $target, $attributes, $track_submit);
+        if (isset($attributes['class']) && strpos($attributes['class'], 'form-search') !== false) {
+            $layout = 'inline';
+        }
+
+        switch ($layout) {
+            case self::LAYOUT_HORIZONTAL:
+                $attributes['class'] = 'form-horizontal';
+                break;
+            case self::LAYOUT_INLINE:
+                $attributes['class'] = 'form-inline';
+                break;
+        }
+
+        parent::__construct($name, $method, $action, $target, $attributes, $trackSubmit);
 
         // Load some custom elements and rules
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
-
-        $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
-        $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
-        $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
-        $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
-        $this->registerElementType('datepicker', $dir . 'Element/datepicker_old.php', 'HTML_QuickForm_datepicker');
-        $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
-        $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
-        $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
-        $this->registerElementType('select_ajax', $dir . 'Element/select_ajax.php', 'HTML_QuickForm_Select_Ajax');
-        $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
-        $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
-        $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType('captcha', 'HTML/QuickForm/CAPTCHA.php', 'HTML_QuickForm_CAPTCHA');
-        $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
-        $this->registerElementType('number', $dir . 'Element/Number.php', 'Number');
 
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
         $this->registerRule('datetime', null, 'DateTimeRule', $dir . 'Rule/DateTimeRule.php');
@@ -146,31 +70,79 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
-        //Form template
-        $formTemplate = '<form{attributes}>
-<fieldset>
-	{content}
-	<div class="clear"></div>
-</fieldset>
-{hidden}
-</form>';
+        // Form template
+        $formTemplate = $this->getFormTemplate();
         $renderer->setFormTemplate($formTemplate);
 
-        //Element template
-        if (isset($attributes['class']) && $attributes['class'] == 'well form-inline') {
-            $element_template = ' {label}  {element} ';
-            $renderer->setElementTemplate($element_template);
+        // Element template
+        if (isset($attributes['class']) && $attributes['class'] == 'form-inline') {
+            $elementTemplate = ' {label}  {element} ';
+            $renderer->setElementTemplate($elementTemplate);
         } elseif (isset($attributes['class']) && $attributes['class'] == 'form-search') {
-            $element_template = ' {label}  {element} ';
-            $renderer->setElementTemplate($element_template);
+            $elementTemplate = ' {label}  {element} ';
+            $renderer->setElementTemplate($elementTemplate);
         } else {
-            $element_template = '
-            <div class="control-group {error_class}">
-                <label class="control-label" {label-for}>
+            $renderer->setElementTemplate($this->getElementTemplate());
+
+            // Display a gray div in the buttons
+            $templateSimple = '<div class="form-actions">{label} {element}</div>';
+            $renderer->setElementTemplate($templateSimple, 'submit_in_actions');
+
+            //Display a gray div in the buttons + makes the button available when scrolling
+            $templateBottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
+            $renderer->setElementTemplate($templateBottom, 'submit_fixed_in_bottom');
+
+            //When you want to group buttons use something like this
+            /* $group = array();
+              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
+              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
+              $form->addGroup($group, 'buttons_in_action');
+             */
+            $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
+
+            $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
+            $renderer->setElementTemplate($templateSimpleRight, 'buttons_in_action_right');
+        }
+
+        //Set Header template
+        $renderer->setHeaderTemplate('<legend>{header}</legend>');
+
+        //Set required field template
+        HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
+        $noteTemplate = <<<EOT
+	<div class="control-group">
+		<div class="controls">{requiredNote}</div>
+	</div>
+EOT;
+        $renderer->setRequiredNoteTemplate($noteTemplate);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormTemplate()
+    {
+        return '<form{attributes}>
+        <fieldset>
+            {content}
+            <div class="clear"></div>
+        </fieldset>
+        {hidden}
+        </form>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getElementTemplate()
+    {
+        return '
+            <div class="form-group {error_class}">
+                <label {label-for} class="col-sm-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="controls">
+                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -186,57 +158,17 @@ class FormValidator extends HTML_QuickForm
                     <!-- END error -->
                 </div>
             </div>';
-            $renderer->setElementTemplate($element_template);
-
-            //Display a gray div in the buttons
-            $button_element_template_simple = '<div class="form-actions">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');
-
-            //Display a gray div in the buttons + makes the button available when scrolling
-            $button_element_template_in_bottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
-            $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');
-
-            //When you want to group buttons use something like this
-            /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
-              $form->addGroup($group, 'buttons_in_action');
-             */
-            $renderer->setElementTemplate($button_element_template_simple, 'buttons_in_action');
-
-            $button_element_template_simple_right = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
-            $renderer->setElementTemplate($button_element_template_simple_right, 'buttons_in_action_right');
-
-            /*
-              $renderer->setElementTemplate($button_element_template, 'submit_button');
-              $renderer->setElementTemplate($button_element_template, 'submit');
-              $renderer->setElementTemplate($button_element_template, 'button');
-             *
-             */
-        }
-
-        //Set Header template
-        $renderer->setHeaderTemplate('<legend>{header}</legend>');
-
-        //Set required field template
-        HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
-        $required_note_template = <<<EOT
-	<div class="control-group">
-		<div class="controls">{requiredNote}</div>
-	</div>
-EOT;
-        $renderer->setRequiredNoteTemplate($required_note_template);
     }
 
     /**
      * Adds a text field to the form.
      * A trim-filter is attached to the field.
-     * @param string $label						The label for the form-element
-     * @param string $name						The element name
-     * @param boolean $required	(optional)		Is the form-element required (default=true)
-     * @param array $attributes (optional)		List of attributes for the form-element
+     * @param string $label					The label for the form-element
+     * @param string $name					The element name
+     * @param bool   $required	(optional)	Is the form-element required (default=true)
+     * @param array  $attributes (optional)	List of attributes for the form-element
      */
-    function add_textfield($name, $label, $required = true, $attributes = array())
+    public function addText($name, $label, $required = true, $attributes = array())
     {
         $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -254,8 +186,8 @@ EOT;
      *
      * @param string $name
      * @param string $label
-     * @param bool $required
-     * @param array $attributes
+     * @param bool   $required
+     * @param array  $attributes
      */
     public function addDateRangePicker($name, $label, $required = true, $attributes = array())
     {
@@ -281,46 +213,176 @@ EOT;
      * @param string $name
      * @param string $label
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_textarea
      */
-    public function add_textarea($name, $label, $attributes = array())
+    public function addTextarea($name, $label, $attributes = array())
     {
-        $this->addElement('textarea', $name, $label, $attributes);
+        return $this->addElement('textarea', $name, $label, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
+     * @param string $icon font-awesome
+     * @param string $style default|primary|success|info|warning|danger|link
+     * @param string $size large|default|small|extra-small
+     * @param string $class Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_button
      */
-    public function addButton($name, $label, $attributes = array())
-    {
-        //$attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'btn btn-default';
-        $this->addElement('button', $name, $label, $attributes);
+    public function addButton(
+        $name,
+        $label,
+        $icon = 'check',
+        $style = 'default',
+        $size = 'default',
+        $class = 'btn',
+        $attributes = array()
+    ) {
+        return $this->addElement(
+            'button',
+            $name,
+            $label,
+            $icon,
+            $style,
+            $size,
+            $class,
+            $attributes
+        );
     }
+
+    /**
+     * @param string $label
+     */
+    public function addButtonCreate($label, $name = 'submit')
+    {
+        $this->addButton($name, $label, 'plus', 'primary');
+    }
+
+    /**
+     * Shortcut to create/add button
+     * @param string $label
+     */
+    public function addButtonUpdate($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'pencil', 'primary');
+    }
+
+    /**
+     * Shortcut to delete button
+     * @param string $label
+     */
+    public function addButtonDelete($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'trash', 'danger');
+    }
+
+    /**
+     * Shortcut to "send" button
+     * @param string $label
+     */
+    public function addButtonSend($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'paper-plane', 'primary');
+    }
+
+    /**
+     * Shortcut to search button
+     * @param string $label
+     */
+    public function addButtonSearch($label)
+    {
+        return $this->addButton('submit', $label, 'search');
+    }
+
+    /**
+     * Shortcut to update button
+     * @param string $label
+     */
+    public function addButtonNext($label)
+    {
+        return $this->addButton('submit', $label, 'arrow-right', 'primary');
+    }
+
+    /**
+     * Shortcut to import button
+     * @param string $label
+     */
+    public function addButtonImport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
+     * Shortcut to export button
+     * @param string $label
+     */
+    public function addButtonExport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
+     * Shortcut to filter button
+     * @param string $label
+     */
+    public function addButtonFilter($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'filter', 'primary');
+    }
+
+
 
     /**
      * @param string $name
      * @param string $label
-     * @param string $trailer
+     * @param string $text
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_checkbox
      */
-    public function addCheckBox($name, $label, $trailer = '', $attributes = array())
+    public function addCheckBox($name, $label, $text = '', $attributes = array())
     {
-        $this->addElement('checkbox', $name, $label, $trailer, $attributes);
+        return $this->addElement('checkbox', $name, $label, $text, $attributes);
     }
 
     /**
      * @param string $name
      * @param string $label
      * @param array  $options
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_group
      */
-    public function addRadio($name, $label, $options = array())
+    public function addCheckBoxGroup($name, $label, $options = array(), $attributes = array())
+    {
+        $group = array();
+        foreach ($options as $value => $text) {
+            $attributes['value'] = $value;
+            $group[] = $this->createElement('checkbox', null, null, $text, $attributes);
+        }
+
+        return $this->addGroup($group, $name, $label);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array  $options
+     * @param array  $attributes
+     *
+     * @return HTML_QuickForm_radio
+     */
+    public function addRadio($name, $label, $options = array(), $attributes = array())
     {
         $group = array();
         foreach ($options as $key => $value) {
-            $group[] = $this->createElement('radio', null, null, $value, $key);
+            $group[] = $this->createElement('radio', null, null, $value, $key, $attributes);
         }
-        $this->addGroup($group, $name, $label);
+
+        return $this->addGroup($group, $name, $label);
     }
 
     /**
@@ -328,19 +390,23 @@ EOT;
      * @param string $label
      * @param string $options
      * @param array  $attributes
+     *
+     * @return HTML_QuickForm_select
      */
-    public function add_select($name, $label, $options = '', $attributes = array())
+    public function addSelect($name, $label, $options = '', $attributes = array())
     {
-        $this->addElement('select', $name, $label, $options, $attributes);
+        return $this->addElement('select', $name, $label, $options, $attributes);
     }
 
     /**
      * @param string $label
      * @param string $text
+     *
+     * @return HTML_QuickForm_label
      */
-    public function add_label($label, $text)
+    public function addLabel($label, $text)
     {
-        $this->addElement('label', $label, $text);
+        return $this->addElement('label', $label, $text);
     }
 
     /**
@@ -354,7 +420,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function add_file($name, $label, $attributes = array())
     {
@@ -364,24 +430,20 @@ EOT;
     /**
      * @param string $snippet
      */
-    public function add_html($snippet)
+    public function addHtml($snippet)
     {
         $this->addElement('html', $snippet);
     }
 
     /**
-     * Adds a HTML-editor to the form to fill in a title.
-     * A trim-filter is attached to the field.
-     * A HTML-filter is attached to the field (cleans HTML)
-     * A rule is attached to check for unwanted HTML
+     * Adds a HTML-editor to the form
      * @param string $name
-     * @param string $label						The label for the form-element
-     * @param boolean $required	(optional)		Is the form-element required (default=true)
-     * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
-     * @param array $config (optional)	Configuration settings for the online editor.
-     *
+     * @param string $label				 The label for the form-element
+     * @param bool   $required	(optional) Is the form-element required (default=true)
+     * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page.
+     * @param array  $config (optional)	Configuration settings for the online editor.
      */
-    public function add_html_editor($name, $label, $required = true, $fullPage = false, $config = null)
+    public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array())
     {
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
@@ -402,69 +464,14 @@ EOT;
     }
 
     /**
-     * Adds a datepicker element to the form
-     * A rule is added to check if the date is a valid one
-     * @param string $label						The label for the form-element
-     * @param string $name						The element name
-     * @deprecated
-     */
-    function add_datepicker($name, $label)
-    {
-        $this->addElement('DatePicker', $name, $label, array('form_name' => $this->getAttribute('name')));
-        $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
-        $this->addRule($name, get_lang('InvalidDate'), 'date');
-    }
-
-    /**
-     * Adds a date picker date element to the form
-     * A rule is added to check if the date is a valid one
-     * @param string $label						The label for the form-element
-     * @param string $name						The element name
-     * @deprecated
-     */
-    public function add_datepickerdate($name, $label)
-    {
-        $this->addElement('DatePickerDate', $name, $label, array('form_name' => $this->getAttribute('name')));
-        $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
-        $this->addRule($name, get_lang('InvalidDate'), 'date');
-    }
-
-    /**
-     * Adds a timewindow element to the form.
-     * 2 datepicker elements are added and a rule to check if the first date is
-     * before the second one.
-     * @param string $label						The label for the form-element
-     * @param string $name						The element name
-     * @deprecated
-     */
-    public function add_timewindow($name_1, $name_2, $label_1, $label_2)
-    {
-        $this->add_datepicker($name_1, $label_1);
-        $this->add_datepicker($name_2, $label_2);
-        $this->addRule(array($name_1, $name_2), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-    }
-
-    /**
-     * Adds a button to the form to add resources.
-     * @deprecated
-     */
-    function add_resource_button()
-    {
-        $group = array();
-        $group[] = $this->createElement('static', 'add_resource_img', null, '<img src="' . api_get_path(WEB_IMG_PATH) . 'attachment.gif" alt="' . get_lang('Attachment') . '"/>');
-        $group[] = $this->createElement('submit', 'add_resource', get_lang('Attachment'), 'class="link_alike"');
-        $this->addGroup($group);
-    }
-
-    /**
      * Adds a progress bar to the form.
      *
      * Once the user submits the form, a progress bar (animated gif) is
      * displayed. The progress bar will disappear once the page has been
      * reloaded.
      *
-     * @param int $delay (optional)				The number of seconds between the moment the user
-     * @param string $label (optional)			Custom label to be shown
+     * @param int $delay (optional)	 The number of seconds between the moment the user
+     * @param string $label (optional)	Custom label to be shown
      * submits the form and the start of the progress bar.
      */
     public function add_progress_bar($delay = 2, $label = '')
@@ -595,29 +602,26 @@ EOT;
         $return_value = '';
         $js = null;
         if ($addDateLibraries) {
-
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
-            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
-            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
+            $js .= '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
+            $js .= '<link href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
 
             $isoCode = api_get_language_isocode();
 
             if ($isoCode != 'en') {
                 $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isoCode.'.js" type="text/javascript"></script>';
+                $js .= '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/i18n/jquery-ui-timepicker-' . $isoCode . '.js" type="text/javascript"></script>';
                 $js .= '<script>
                 $(function(){
-                    moment.lang("'.$isoCode.'");
-                    $.datepicker.setDefaults($.datepicker.regional["'.$isoCode.'"]);
+                    moment.lang("' . $isoCode . '");
+                    $.datepicker.setDefaults($.datepicker.regional["' . $isoCode . '"]);
                 });
                 </script>';
             }
         }
 
         if ($error) {
-            $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
+            $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'),
+                'warning');
         }
 
         $return_value .= $js;
@@ -626,12 +630,98 @@ EOT;
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
             $return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
         }
+
         return $return_value;
+    }
+
+    /**
+     * Create a form validator based on an array of form data:
+     *
+     *         array(
+     *             'name' => 'zombie_report_parameters',    //optional
+     *             'method' => 'GET',                       //optional
+     *             'items' => array(
+     *                 array(
+     *                     'name' => 'ceiling',
+     *                     'label' => 'Ceiling',            //optional
+     *                     'type' => 'date',
+     *                     'default' => date()              //optional
+     *                 ),
+     *                 array(
+     *                     'name' => 'active_only',
+     *                     'label' => 'ActiveOnly',
+     *                     'type' => 'checkbox',
+     *                     'default' => true
+     *                 ),
+     *                 array(
+     *                     'name' => 'submit_button',
+     *                     'type' => 'style_submit_button',
+     *                     'value' => get_lang('Search'),
+     *                     'attributes' => array('class' => 'search')
+     *                 )
+     *             )
+     *         );
+     *
+     * @param array $form_data
+     * @deprecated use normal FormValidator construct
+     *
+     * @return FormValidator
+     */
+    public static function create($form_data)
+    {
+        if (empty($form_data)) {
+            return null;
+        }
+        $form_name = isset($form_data['name']) ? $form_data['name'] : 'form';
+        $form_method = isset($form_data['method']) ? $form_data['method'] : 'POST';
+        $form_action = isset($form_data['action']) ? $form_data['action'] : '';
+        $form_target = isset($form_data['target']) ? $form_data['target'] : '';
+        $form_attributes = isset($form_data['attributes']) ? $form_data['attributes'] : null;
+        $form_track_submit = isset($form_data['track_submit']) ? $form_data['track_submit'] : true;
+        $reset = null;
+        $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
+
+        $defaults = array();
+        foreach ($form_data['items'] as $item) {
+            $name = $item['name'];
+            $type = isset($item['type']) ? $item['type'] : 'text';
+            $label = isset($item['label']) ? $item['label'] : '';
+            if ($type == 'wysiwyg') {
+                $element = $result->addHtmlEditor($name, $label);
+            } else {
+                $element = $result->addElement($type, $name, $label);
+            }
+            if (isset($item['attributes'])) {
+                $attributes = $item['attributes'];
+                $element->setAttributes($attributes);
+            }
+            if (isset($item['value'])) {
+                $value = $item['value'];
+                $element->setValue($value);
+            }
+            if (isset($item['default'])) {
+                $defaults[$name] = $item['default'];
+            }
+            if (isset($item['rules'])) {
+                $rules = $item['rules'];
+                foreach ($rules as $rule) {
+                    $message = $rule['message'];
+                    $type = $rule['type'];
+                    $format = isset($rule['format']) ? $rule['format'] : null;
+                    $validation = isset($rule['validation']) ? $rule['validation'] : 'server';
+                    $force = isset($rule['force']) ? $rule['force'] : false;
+                    $result->addRule($name, $message, $type, $format, $validation, $reset, $force);
+                }
+            }
+        }
+        $result->setDefaults($defaults);
+
+        return $result;
     }
 }
 
 /**
- * Cleans HTML text
+ * Cleans HTML text filter
  * @param string $html			HTML to clean
  * @param int $mode (optional)
  * @return string				The cleaned HTML

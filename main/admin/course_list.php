@@ -219,7 +219,7 @@ function modify_filter($code)
         //'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
         '<a href="'.api_get_path(WEB_COURSE_PATH).$icourse['path'].'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
         '<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
-        '<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
+        '<a href="course_edit.php?id='.$icourse['real_id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
         '<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
         '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 }
@@ -278,8 +278,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
-    $form->add_textfield('keyword_code', get_lang('CourseCode'), false);
-    $form->add_textfield('keyword_title', get_lang('Title'), false);
+    $form->addText('keyword_code', get_lang('CourseCode'), false);
+    $form->addText('keyword_title', get_lang('Title'), false);
 
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -308,7 +308,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
+    $form->addButtonSearch(get_lang('SearchCourse'));
     $defaults['keyword_language'] = '%';
     $defaults['keyword_visibility'] = '%';
     $defaults['keyword_subscribe'] = '%';
@@ -340,13 +340,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);
+    $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $form->addElement('text', 'keyword', null);
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
+    $form->addButtonSearch(get_lang('SearchCourse'));
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
     // Create a filter by session
-    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
     $sessionList = array();
     if (!empty($sessionId)) {

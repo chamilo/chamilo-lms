@@ -22,7 +22,7 @@ $strings['min_profile_percentage_help'] = "Percentage number( > 0.00 y < 100.00)
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "You are not connected to platform. Please login first";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "Your percentage completed profile require to exceed minimum percentage. Please complete percentage";
+$strings['AdvancedSubscriptionProfileIncomplete'] = "You must complete at least <strong>%d percent</strong> of your profile. You have only completed <strong>%d percent</strong> at this point";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "You have not yet completed induction course. Please complete it first";
 $strings['AdvancedSubscriptionCostXLimitReached'] = "We are sorry, you have already reached yearly limit %s TUV cost for courses ";
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "We are sorry, you have already reached yearly limit %s hours for courses";
@@ -37,7 +37,7 @@ $strings['AdvancedSubscriptionQueueStart'] = "Your subscription request is pendi
 $strings['AdvancedSubscriptionQueueBossDisapproved'] = "We are sorry, your subscription was rejected by your boss.";
 $strings['AdvancedSubscriptionQueueBossApproved'] = "Your subscription request has been accepted by your boss, now is pending for vacancies.";
 $strings['AdvancedSubscriptionQueueAdminDisapproved'] = "We are sorry, your subscription was rejected by the administrator.";
-$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulation, your subscription request has been accepted by administrator";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulations!, your subscription request has been accepted by administrator.";
 $strings['AdvancedSubscriptionQueueDefaultX'] = "There was an error, queue status %d is not defined by system.";
 
 // Mail translations
@@ -48,6 +48,9 @@ $strings['MailStudentRequestSelect'] = 'Student registration requests selection'
 $strings['MailAdminAccept'] = 'Registration request accepted by administrator';
 $strings['MailAdminReject'] = 'Registration request rejected by administrator';
 $strings['MailStudentRequestNoBoss'] = 'Student registration request without boss';
+$strings['MailRemindStudent'] = 'Subscription request reminder';
+$strings['MailRemindSuperior'] = 'Subscription request are pending your approval';
+$strings['MailRemindAdmin'] = 'Course subscription are pending your approval';
 
 // TPL langs
 // Admin view
@@ -59,6 +62,7 @@ $strings['RecommendedNumberOfParticipants'] = 'Recommended number of participant
 $strings['PublicationEndDate'] = 'Publication end date';
 $strings['Mode'] = 'Mode';
 $strings['Postulant'] = 'Postulant';
+$strings['Area'] = 'Area';
 $strings['InscriptionDate'] = 'Inscription date';
 $strings['BossValidation'] = 'Boss validation';
 $strings['Decision'] = 'Decision';
@@ -75,60 +79,62 @@ $strings['MailThankYou'] = 'Thank you.';
 $strings['MailThankYouCollaboration'] = 'Thank you for your help.';
 
 // Admin Accept
-$strings['MailTitleAdminAcceptToAdmin'] = 'Information: Has been received inscription validation';
-$strings['MailContentAdminAcceptToAdmin'] = 'We have received and registered your inscription validation for student <strong>%s</strong> to course <strong>%s</strong>';
-$strings['MailTitleAdminAcceptToStudent'] = 'Accepted: Your inscription to course %s was confirmed!';
-$strings['MailContentAdminAcceptToStudent'] = 'We are pleased to inform your course registration <strong>%s</strong> starting at <strong>%s</strong> was validated by administrators. We hope to keep all your encouragement and participate in another course or, on another occasion, this same course.';
-$strings['MailTitleAdminAcceptToSuperior'] = 'Information: Inscription validation for %s to course %s';
-$strings['MailContentAdminAcceptToSuperior'] = 'Inscription for student <strong>%s</strong> to course <strong>%s</strong> starting at <strong>%s</strong>, was pending status, has been validated a few minutes ago. We hope you help us to assure full availability for your collaborator during the course period.';
+$strings['MailTitleAdminAcceptToAdmin'] = 'Notification: subscription validation received';
+$strings['MailContentAdminAcceptToAdmin'] = 'We have received and registered your subscription validation for student <strong>%s</strong> to course <strong>%s</strong>';
+$strings['MailTitleAdminAcceptToStudent'] = 'Accepted: Your subscription to course %s has been accepted!';
+$strings['MailContentAdminAcceptToStudent'] = 'We are pleased to inform you that your registration to course <strong>%s</strong> starting on <strong>%s</strong> was validated by an administrator. We wish you good luck and hope you will consider participating to another course soon.';
+$strings['MailTitleAdminAcceptToSuperior'] = 'Notification: Subscription validation of %s to course %s';
+$strings['MailContentAdminAcceptToSuperior'] = 'Subscription of student <strong>%s</strong> to course <strong>%s</strong> starting on <strong>%s</strong> was pending but has been validated a few minutes ago. We kindly hope we can count on you to ensure the necessary availability of your collaborator during the course period.';
 
 // Admin Reject
-$strings['MailTitleAdminRejectToAdmin'] = 'Information: Has been received inscription refusal';
-$strings['MailContentAdminRejectToAdmin'] = 'We have received and registered your inscription refusal for student <strong>%s</strong> to course <strong>%s</strong>';
-$strings['MailTitleAdminRejectToStudent'] = 'Your inscription to course %s was refused';
-$strings['MailContentAdminRejectToStudent'] = 'We regret that your inscription to course <strong>%s</strong> starting at <strong>%s</strong> was rejected because of lack of vacancies. We hope to keep all your encouragement and participate in another course or, on another occasion, this same course.';
-$strings['MailTitleAdminRejectToSuperior'] = 'Information: Inscription refusal for student %s to course %s';
-$strings['MailContentAdminRejectToSuperior'] = 'The inscription for <strong>%s</strong> to course <strong>%s</strong>, it was accepted earlier, was rejected because of lack of vacancies. Our sincere apologies.';
+$strings['MailTitleAdminRejectToAdmin'] = 'Notification: Rejection received';
+$strings['MailContentAdminRejectToAdmin'] = 'We have received and registered your rejection for the subscription of student <strong>%s</strong> to course <strong>%s</strong>';
+$strings['MailTitleAdminRejectToStudent'] = 'Your subscription to course %s was rejected';
+$strings['MailContentAdminRejectToStudent'] = 'We regret to inform you that your subscription to course <strong>%s</strong> starting on <strong>%s</strong> was rejected because of a lack of vacancies. We hope you will consider participating to another course soon.';
+$strings['MailTitleAdminRejectToSuperior'] = 'Notification: Subscription refusal for student %s to course %s';
+$strings['MailContentAdminRejectToSuperior'] = 'The subscription of <strong>%s</strong> to course <strong>%s</strong> that you previously validated was rejected because of a lack of vacancies. Our sincere apologies.';
 
 // Superior Accept
-$strings['MailTitleSuperiorAcceptToAdmin'] = 'Approval for %s to course %s ';
-$strings['MailContentSuperiorAcceptToAdmin'] = 'The inscription for student <strong>%s</strong> to course <strong>%s</strong> has been accepted by superior. You can manage inscriptions <a href="%s"><strong>HERE</strong></a>';
-$strings['MailTitleSuperiorAcceptToSuperior'] = 'Confirmation: Has been received approval for %s';
-$strings['MailContentSuperiorAcceptToSuperior'] = 'We have received and registered your choice to accept inscription to course <strong>%s</strong> for your collaborator <strong>%s</strong>';
-$strings['MailContentSuperiorAcceptToSuperiorSecond'] = 'Now, the inscription is pending for availability of vacancies. We will keep you informed about status for this step';
-$strings['MailTitleSuperiorAcceptToStudent'] = 'Accepted: Your inscription to course %s has been approved by your superior';
-$strings['MailContentSuperiorAcceptToStudent'] = 'We are pleased to inform your inscription to course <strong>%s</strong> has been accepted by your superior. Now, your inscription is pending to availability of vacancies. We will notify you as soon as it is validated.';
+$strings['MailTitleSuperiorAcceptToAdmin'] = 'Approval for subscription of %s to course %s ';
+$strings['MailContentSuperiorAcceptToAdmin'] = 'The subscription of student <strong>%s</strong> to course <strong>%s</strong> has been accepted by his superior. You can <a href="%s">manage subscriptions here</a>';
+$strings['MailTitleSuperiorAcceptToSuperior'] = 'Confirmation: Approval received for %s';
+$strings['MailContentSuperiorAcceptToSuperior'] = 'We have received and registered you validation of subscription to course <strong>%s</strong> of your collaborator <strong>%s</strong>';
+$strings['MailContentSuperiorAcceptToSuperiorSecond'] = 'The subscription is now pending for a vacancies confirmation. We will keep you informed about changes of status for this subscription';
+$strings['MailTitleSuperiorAcceptToStudent'] = 'Accepted: Your subscription to course %s has been approved by your superior';
+$strings['MailContentSuperiorAcceptToStudent'] = 'We are pleased to inform you that your subscription to course <strong>%s</strong> has been accepted by your superior. Your inscription is now pending for a vacancies confirmation. We will notify you as soon as it is confirmed.';
 
 // Superior Reject
-$strings['MailTitleSuperiorRejectToStudent'] = 'Information: Your inscription to course %s has been refused';
-$strings['MailContentSuperiorRejectToStudent'] = 'We regret to inform your inscription to course <strong>%s</strong> was NOT accepted. We hope to keep all your encouragement and participate in another course or, on another occasion, this same course.';
-$strings['MailTitleSuperiorRejectToSuperior'] = 'Confirmation: Has been received inscription refusal for %s';
-$strings['MailContentSuperiorRejectToSuperior'] = 'We have received and registered your choice to reject inscription to course <strong>%s</strong> for your collaborator <strong>%s</strong>';
+$strings['MailTitleSuperiorRejectToStudent'] = 'Notification: Your subscription to course %s has been refused';
+$strings['MailContentSuperiorRejectToStudent'] = 'We regret to inform your subscription to course <strong>%s</strong> was NOT accepted. We hope this will not reduce your motivation and encourage you to register to another course or, on another occasion, this same course soon.';
+$strings['MailTitleSuperiorRejectToSuperior'] = 'Confirmation: Rejection of subscription received for %s';
+$strings['MailContentSuperiorRejectToSuperior'] = 'We have received and registered your rejection of subscription to course <strong>%s</strong> for your collaborator <strong>%s</strong>';
 
 // Student Request
-$strings['MailTitleStudentRequestToStudent'] = 'Information: Has been received inscription validation';
-$strings['MailContentStudentRequestToStudent'] = 'We have received and registered your inscripción request to course <strong>%s</strong> starting at <strong>%s</strong>';
-$strings['MailContentStudentRequestToStudentSecond'] = 'Your inscription is pending approval, first from your superior, then the availability of vacancies. An email has been sent to your superior for review and approval of your request.';
-$strings['MailTitleStudentRequestToSuperior'] = 'Course inscription request from your collaborator';
-$strings['MailContentStudentRequestToSuperior'] = 'We have received an inscription request for <strong>%s</strong> to course <strong>%s</strong>, starting at <strong>%s</strong>. Course details: <strong>%s</strong>.';
-$strings['MailContentStudentRequestToSuperiorSecond'] = 'Your are welcome to accept or reject this inscription, clicking the corresponding button.';
+$strings['MailTitleStudentRequestToStudent'] = 'Notification: Subscription approval received';
+$strings['MailContentStudentRequestToStudent'] = 'We have received and registered your subscription request to course <strong>%s</strong> starting on <strong>%s</strong>';
+$strings['MailContentStudentRequestToStudentSecond'] = 'Your subscription is pending approval, first from your superior, then for the availability of vacancies. An email has been sent to your superior for review and approval. We will inform you when this situation changes.';
+$strings['MailTitleStudentRequestToSuperior'] = 'Course subscription request from your collaborator';
+$strings['MailContentStudentRequestToSuperior'] = 'We have received an subscription request of <strong>%s</strong> to course <strong>%s</strong>, starting on <strong>%s</strong>. Course details: <strong>%s</strong>.';
+$strings['MailContentStudentRequestToSuperiorSecond'] = 'Your are welcome to accept or reject this subscription, clicking the corresponding button.';
 
 // Student Request No Boss
-$strings['MailTitleStudentRequestNoSuperiorToStudent'] = 'Has been received your inscription request for %s';
-$strings['MailContentStudentRequestNoSuperiorToStudent'] = 'We have received and registered your inscription to course <strong>%s</strong> starting at <strong>%s</strong>.';
-$strings['MailContentStudentRequestNoSuperiorToStudentSecond'] = 'Your inscription is pending availability of vacancies. Soon you will get the result of your request approval.';
-$strings['MailTitleStudentRequestNoSuperiorToAdmin'] = 'Inscription request for %s to course %s';
-$strings['MailContentStudentRequestNoSuperiorToAdmin'] = 'The inscription for <strong>%s</strong> to course <strong>%s</strong> has been approved by default, missing superior. You can manage inscriptions <a href="%s"><strong>HERE</strong></a>';
+$strings['MailTitleStudentRequestNoSuperiorToStudent'] = 'Your subscription request for %s has been received';
+$strings['MailContentStudentRequestNoSuperiorToStudent'] = 'We have received and registered your subscription to course <strong>%s</strong> starting on <strong>%s</strong>.';
+$strings['MailContentStudentRequestNoSuperiorToStudentSecond'] = 'Your subscription is pending availability of vacancies. You will get the results of your request approval (or rejection) soon.';
+$strings['MailTitleStudentRequestNoSuperiorToAdmin'] = 'Subscription request of %s to course %s';
+$strings['MailContentStudentRequestNoSuperiorToAdmin'] = 'The subscription of <strong>%s</strong> to course <strong>%s</strong> has been approved by default (no direct superior defined). You can <a href="%s">manage subscriptions here</strong></a>';
 
 // Reminders
-$strings['MailTitleReminderAdmin'] = 'Inscription to %s are pending confirmation';
-$strings['MailContentReminderAdmin'] = 'The inscription below to course <strong>%s</strong> are pending validation to be accepted. Please, go to <a href="%s">Administration page</a> to validate them.';
-$strings['MailTitleReminderStudent'] = 'Information: Your request is pending approval to course %s';
-$strings['MailContentReminderStudent'] = 'This email is to confirm we have received and registered your inscription request to course <strong>%s</strong>, starting at <strong>%s</strong>.';
-$strings['MailContentReminderStudentSecond'] = 'Your inscription has not yet been approved by your superior, so we send him an reminder email.';
-$strings['MailTitleReminderSuperior'] = 'Course inscription request for your collaborators';
-$strings['MailContentReminderSuperior'] = 'We remind you, we have received inscription requests below to course <strong>%s</strong> for your collaborators. This course is starting at <strong>%s</strong>. Course details: <strong>%s</strong>.';
-$strings['MailContentReminderSuperiorSecond'] = 'We invite you to accept or reject inscription request, clicking corresponding button for each collaborator.';
-$strings['MailTitleReminderMaxSuperior'] = 'Reminder: Course inscription request for your collaborators';
-$strings['MailContentReminderMaxSuperior'] = 'We remind you, we have received inscription requests below to course <strong>%s</strong> for your collaborators. This course is starting at <strong>%s</strong>. Course details: <strong>%s</strong>.';
-$strings['MailContentReminderMaxSuperiorSecond'] = 'This course have limited vacancies and has received a high inscription request rate, So we recommend all areas to accept at most <strong>%s</strong> candidates. We invite you to accept or reject inscription request, clicking corresponding button for each collaborator.';
+$strings['MailTitleReminderAdmin'] = 'Subscriptions to %s are pending confirmation';
+$strings['MailContentReminderAdmin'] = 'The subscription requests for course <strong>%s</strong> are pending validation to be accepted. Please, go to <a href="%s">Administration page</a> to validate them.';
+$strings['MailTitleReminderStudent'] = 'Information: Your subscription request is pending approval for course %s';
+$strings['MailContentReminderStudent'] = 'This email is just to confirm we have received and registered your subscription request to course <strong>%s</strong>, starting on <strong>%s</strong>.';
+$strings['MailContentReminderStudentSecond'] = 'Your subscription has not been approved by your superior yet, so we sent him a e-mail reminder.';
+$strings['MailTitleReminderSuperior'] = 'Course subscription request for your collaborators';
+$strings['MailContentReminderSuperior'] = 'We kindly remind you that we have received the subscription requests below to course <strong>%s</strong> from your collaborators. This course is starting on <strong>%s</strong>. Course details: <strong>%s</strong>.';
+$strings['MailContentReminderSuperiorSecond'] = 'We invite you to accept or reject this subscription request by clicking the corresponding button for each collaborator.';
+$strings['MailTitleReminderMaxSuperior'] = 'Reminder: Course subscription request for your collaborators';
+$strings['MailContentReminderMaxSuperior'] = 'We kindly remind you that we have received the subscription requests below to course <strong>%s</strong> from your collaborators. This course is starting on <strong>%s</strong>. Course details: <strong>%s</strong>.';
+$strings['MailContentReminderMaxSuperiorSecond'] = 'This course have limited vacancies and has received a high subscription request rate, So we recommend all areas to accept at most <strong>%s</strong> candidates. We invite you to accept or reject the inscription request by clicking the corresponding button for each collaborator.';
+
+$strings['YouMustAcceptTermsAndConditions'] = 'To subscribe to course <strong>%s</strong>, you must accept these terms and conditions.';

@@ -237,7 +237,7 @@ class Nanogong
 			if (isset($this->params['exe_id']) && isset($this->params['user_id']) &&
                 isset($this->params['question_id']) && isset($this->params['session_id']) && isset($this->params['course_id'])
             ) {
-				$attempt_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+				$attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 				$sql = "SELECT filename FROM $attempt_table
                         WHERE
                             exe_id 		= ".$this->params['exe_id']." AND

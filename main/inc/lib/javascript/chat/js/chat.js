@@ -61,10 +61,10 @@ $(document).ready(function() {
 		document.title = originalTitle;
 	});
 
-	/* Live conditions */
+	/* "On" conditions, divs are created dynamically */
 
     // User name header toogle
-	$('#chatboxtitlemain').live('click', function() {
+	$('body').on('click', '#chatboxtitlemain', function() {
         if (user_status == 1) {
             stopChatHeartBeat();
             $('.user_status_main').html(offline_button);
@@ -79,25 +79,24 @@ $(document).ready(function() {
 	});
 
 	// User name header toogle
-	$('.chatboxtitle').live('click', function(){
+	$('body').on('click', '.chatboxtitle', function(){
 		chatbox = $(this).parents(".chatbox");
 		var chat_id = chatbox.attr('id');
 		chat_id = chat_id.split('_')[1];
 		toggleChatBoxGrowth(chat_id);
 	});
 
-	//Minimize button
-	$('.chatboxhead .togglelink').live('click', function(){
+	// Minimize button
+	$('body').on('click', '.chatboxhead .togglelink', function(){
 		var chat_id =  $(this).attr('rel');
 		toggleChatBoxGrowth(chat_id);
 	});
 
-	//Close button
-	$('.chatboxhead .closelink').live('click', function(){
+	// Close button
+	$('body').on('click', '.chatboxhead .closelink', function(){
 		var chat_id =  $(this).attr('rel');
 		closeChatBox(chat_id);
 	});
-
 });
 
 

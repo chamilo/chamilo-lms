@@ -830,7 +830,7 @@ if ($modifyAnswers) {
                             $config = array(
                               'ToolbarSet'  => 'TestProposedAnswer'
                             );
-                            $form->add_html_editor('comment['.$i.']', null, false, false, $config);
+                            $form->addHtmlEditor('comment['.$i.']', null, false, false, $config);
                             $renderer = $form->defaultRenderer();
                             $form_template = '{content}';
                             $renderer->setFormTemplate($form_template);

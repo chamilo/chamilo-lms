@@ -210,7 +210,7 @@ class ExerciseShowFunctions
 
 	/**
 	 * Display the answers to a multiple choice question
-	 *
+	 * @param int $feedback_type Feedback type
 	 * @param integer Answer type
 	 * @param integer Student choice
 	 * @param string  Textual answer

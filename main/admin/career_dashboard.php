@@ -48,8 +48,7 @@ foreach ($careers as $item) {
 }
 
 $form->addElement('select', 'filter', get_lang('Career'), $career_select_list, array('id'=>'filter_1', 'class'=>'chzn-select'));
-$form->addElement('style_submit_button', 'submit', get_lang('Filter'), 'class="search"');
-
+$form->addButtonSearch(get_lang('Filter'));
 
 // action links
 echo '<div class="actions" style="margin-bottom:20px">';

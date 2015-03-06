@@ -28,7 +28,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function HTML_QuickForm_advanced_settings($text = null)
+    public function HTML_QuickForm_advanced_settings($text = null)
     {
         $this->HTML_QuickForm_static(null, null, $text);
         $this->_type = 'html';
@@ -44,17 +44,19 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderHtml($this);
-    } // end func accept
+    }
 
-
-    function toHtml() {
-         return '<div class="control-group ">
-                    <label class="control-label"></label>
-                    <div class="controls">
+    public function toHtml()
+    {
+         return '<div class="form-group ">
+                    <label class="control-label col-sm-2"></label>
+                    <div class="col-sm-10">
+                    <div class="form-control-static">
                     '.HTML_QuickForm_static::toHtml().'
-                        </div>
+                    </div>
+                    </div>
                  </div>
 
                 ';
-    } //end func toHtml
-} //end class HTML_QuickForm_html
+    }
+}

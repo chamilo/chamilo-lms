@@ -941,9 +941,9 @@ class ImportCsv
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 
                     if ($addTeacherToSession) {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, true, false);
+                        CourseManager::updateTeachers($courseInfo['real_id'], $row['teachers'], false, true, false);
                     } else {
-                        CourseManager::updateTeachers($courseInfo['id'], $row['teachers'], false, false);
+                        CourseManager::updateTeachers($courseInfo['real_id'], $row['teachers'], false, false);
                     }
 
                     if ($result) {

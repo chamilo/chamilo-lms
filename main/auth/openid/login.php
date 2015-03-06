@@ -20,9 +20,10 @@ require_once 'xrds.lib.php';
 
 function openid_form() {
     //get_lang('OpenIdAuthentication')
+
     $form = new FormValidator('openid_login', 'post', null, null, array('class' => 'form-vertical form_login'));
-    $form->addElement('text', 'openid_url', array(get_lang('OpenIDURL'), Display::url(get_lang('OpenIDWhatIs'), 'main/auth/openid/whatis.php')), array('class' => 'openid_input'));
-    $form->addElement('button', 'submit', get_lang('Login'));
+    $form -> addElement('text', 'openid_url', array(get_lang('OpenIDURL'), Display::url(get_lang('OpenIDWhatIs'), 'main/auth/openid/whatis.php')), array('class' => 'openid_input'));
+    $form -> addElement('button', 'submit', get_lang('Login'));
     return $form->return_form();
     /*
       return '<label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'">'.Display::return_icon('info3.gif',get_lang('Info')).'</a></label>

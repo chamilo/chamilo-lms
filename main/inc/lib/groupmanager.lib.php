@@ -1798,7 +1798,7 @@ class GroupManager
         $category = self :: get_category_from_group($group_id, $course_code);
         $number_of_groups_limit = $category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $category['groups_per_user'];
         $real_course_code = $_course['sysCode'];
-        $real_course_info = Database :: get_course_info($real_course_code);
+        $real_course_info = api_get_course_info($real_course_code);
         $real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
         //get list of all virtual courses
         $user_subscribed_course_list = CourseManager :: get_list_of_virtual_courses_for_specific_user_and_real_course($_user['user_id'], $real_course_code);
@@ -2126,6 +2126,8 @@ class GroupManager
 
         $orig = isset($origin) ? $origin : null;
 
+        $hideGroup = api_get_configuration_value('hide_course_group_if_no_tools_available');
+
         foreach ($group_list as $this_group) {
 
             // Validation when belongs to a session
@@ -2151,7 +2153,9 @@ class GroupManager
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CALENDAR) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_ANNOUNCEMENT) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
-                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI))
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CHAT)
+                )
                 && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
             ) {
                 $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
@@ -2168,6 +2172,9 @@ class GroupManager
                 $group_name .= $session_img;
                 $row[] = $group_name.'<br />'.stripslashes(trim($this_group['description']));
             } else {
+                if ($hideGroup) {
+                    continue;
+                }
                 $row[] = $this_group['name'].'<br />'.stripslashes(trim($this_group['description']));
             }
 
@@ -2685,7 +2692,7 @@ class GroupManager
     public static function getSearchForm()
     {
         $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
-        $form = new FormValidator('search_groups', 'get', $url, null, array('class' => 'form-search'));
+        $form = new FormValidator('search_groups', 'get', $url, null, array(), FormValidator::LAYOUT_INLINE);
         $form->addElement('text', 'keyword');
         $form->addElement('button', 'submit', get_lang('Search'));
         return $form->toHtml();

@@ -28,9 +28,9 @@ $form = new FormValidator('attendance_add','POST','index.php?action=attendance_a
 $form->addElement('header', '', get_lang('CreateANewAttendance'));
 $form->addElement('hidden', 'sec_token', $token);
 
-$form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
+$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
+$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
 
 // Adavanced Parameters
 
@@ -54,5 +54,5 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
 
     $form->addElement('html','</div>');
 }
-$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+$form->addButtonCreate(get_lang('Save'));
 $form->display();

@@ -107,7 +107,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('header', get_lang('Add'));
     $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
-    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
+    $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 
     // Setting the rules
@@ -147,7 +147,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('header', '', get_lang('Modify'));
     $form->addElement('hidden', 'id', intval($_GET['id']));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-    $form->add_html_editor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
+    $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
 
     // Setting the defaults

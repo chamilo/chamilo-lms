@@ -618,7 +618,7 @@ class Statistics
         }
         $form = new FormValidator('courselastvisit', 'get');
         $form->addElement('hidden','report','courselastvisit');
-        $form->add_textfield('date_diff',get_lang('Days'),true);
+        $form->addText('date_diff',get_lang('Days'),true);
         $form->addRule('date_diff','InvalidNumber','numeric');
         $form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
         if (!isset($_GET['date_diff'])) {

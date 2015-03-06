@@ -14,20 +14,22 @@ class HtmlEditor extends HTML_QuickForm_textarea
     /**
      * Full page
      */
-    var $fullPage;
-    var $fck_editor;
-    var $content;
+    public $fullPage;
 
     /**
-     * Class constructor
-     * @param string  HTML editor name/id
-     * @param string  HTML editor  label
-     * @param array  Attributes for the textarea
-     * @param array $config	Optional configuration settings for the online editor.
+     * Class Constructor
+     * @param string  $name
+     * @param string  $elementLabel HTML editor  label
+     * @param array  $attributes Attributes for the textarea
+     * @param array $config Optional configuration settings for the online editor.
      * @return bool
      */
-    public function HtmlEditor($name = null, $elementLabel = null, $attributes = null, $config = null)
-    {
+    public function HtmlEditor(
+        $name = null,
+        $elementLabel = null,
+        $attributes = null,
+        $config = array()
+    ) {
         if (empty($name)) {
             return false;
         }
@@ -36,14 +38,11 @@ class HtmlEditor extends HTML_QuickForm_textarea
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
-        global $fck_attribute;
-
         //$editor = Container::getHtmlEditor();
         $editor = new CkEditor();
         if ($editor) {
             $this->editor = $editor;
             $this->editor->setName($name);
-            $this->editor->processConfig($fck_attribute);
             $this->editor->processConfig($config);
         }
     }
@@ -55,6 +54,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public function toHtml()
     {
         $value = $this->getValue();
+
         if ($this->editor) {
             if ($this->editor->getConfigAttribute('fullPage')) {
                 if (strlen(trim($value)) == 0) {
@@ -64,6 +64,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
                 }
             }
         }
+
 
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();

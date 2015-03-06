@@ -41,7 +41,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh() || api_is
 $is_tutor = api_is_allowed_to_edit(true);
 
 $TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_EXERCICES = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 $TBL_TRACK_ATTEMPT = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
@@ -415,6 +415,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('StartDate'),
         get_lang('EndDate'),
         get_lang('Score'),
+        get_lang('IP'),
         get_lang('Status'),
         get_lang('ToolLearnpath'),
         get_lang('Actions')
@@ -440,6 +441,7 @@ if ($is_allowedToEdit || $is_tutor) {
         array('name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
         array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
         array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'true'),
+        array('name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'),
         array('name' => 'status', 'index' => 'revised', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
             //for the bottom bar
             'searchoptions' => array(

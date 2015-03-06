@@ -6,7 +6,7 @@
  * @package chamilo.reporting
  */
 
-$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice');
+$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice', 'gradebook');
 
 // resetting the course id
 $cidReset = true;
@@ -27,9 +27,9 @@ $csv_content = array();
 $nameTools = get_lang('MySpace');
 
 $user_id = api_get_user_id();
-$is_coach = api_is_coach($_GET['session_id']);
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
+$is_coach = api_is_coach($session_id);
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
 $is_session_admin 	= api_is_session_admin();
@@ -149,6 +149,10 @@ if (!empty($session_id) &&
 	echo Display::url(
         Display::return_icon('stats.png', get_lang('MyStats'),'',ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
+    );
+    echo Display::url(
+        Display::return_icon("certificate_list.png", get_lang("GradebookSeeListOfStudentsCertificates"), array(), ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
     );
 }
 

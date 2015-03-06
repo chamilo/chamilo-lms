@@ -21,7 +21,7 @@ $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
-$TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TABLETRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $score = $_REQUEST['score'];
@@ -29,7 +29,6 @@ $origin = $_REQUEST['origin'];
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
 $lpViewId = isset($_REQUEST['lp_view_id']) ? intval($_REQUEST['lp_view_id']) : null;
 $course_id = $courseInfo['real_id'];
-$_cid = api_get_course_id();
 $jscript2run = '';
 
 /**
@@ -43,10 +42,11 @@ $jscript2run = '';
  */
 function save_scores($file, $score)
 {
-    global $origin, $_user, $_cid, $TABLETRACK_HOTPOTATOES;
+    global $origin, $_user, $TABLETRACK_HOTPOTATOES;
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();
+    $c_id = api_get_course_int_id();
 
     if ($_user['user_id']) {
         $user_id = $_user['user_id'];
@@ -54,11 +54,11 @@ function save_scores($file, $score)
         // anonymous
         $user_id = "NULL";
     }
-    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
+    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, c_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
 			".intval($user_id).",
 			'".Database::escape_string($date)."',
-			'".Database::escape_string($_cid)."',
+			$c_id,
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
 

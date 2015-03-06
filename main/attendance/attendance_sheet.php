@@ -30,7 +30,8 @@ if (api_is_allowed_to_edit(null, true) ||
         'post',
         'index.php?action=attendance_sheet_list&' . api_get_cidreq() . $param_gradebook . '&attendance_id=' . $attendance_id,
         null,
-        array('class' => 'form-search pull-left')
+        array(),
+        FormValidator::LAYOUT_INLINE
     );
 
     $values = array(
@@ -57,7 +58,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     $form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
-    $form->addElement('style_submit_button', null, get_lang('Filter'), 'class="filter"');
+    $form->addButtonFilter(get_lang('Filter'));
 
     if (isset($_REQUEST['filter'])) {
         if (in_array($_REQUEST['filter'], array_keys($values))) {
@@ -232,6 +233,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 echo '<div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
                 echo '<table class="tableWithFloatingHeader data_table" width="100%">';
                 echo '<thead>';
+                $result = null;
                 if (count($attendant_calendar) > 0 ) {
                     foreach ($attendant_calendar as $calendar) {
                         $date = $calendar['date'];

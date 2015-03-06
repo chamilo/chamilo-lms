@@ -394,7 +394,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'createElement':
@@ -409,7 +409,9 @@ class HTML_QuickForm_element extends HTML_Common
             case 'updateValue':
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
+
                 $value = $this->_findValue($caller->_constantValues);
+
                 if (null === $value) {
                     $value = $this->_findValue($caller->_submitValues);
                     if (null === $value) {
@@ -423,6 +425,7 @@ class HTML_QuickForm_element extends HTML_Common
             case 'setGroupValue':
                 $this->setValue($arg);
         }
+
         return true;
     }
 

@@ -1040,7 +1040,8 @@ function display_language_selection() { ?>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
-        <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
+        <button type="submit" name="step1" class="btn btn-default next" value="<?php echo get_lang('Next'); ?>">
+            <?php echo get_lang('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
         <br /><br />
@@ -1316,6 +1317,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/users/').'</td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/sessions/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/sessions/').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/courses/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/courses/').'</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
             </tr>
@@ -1414,6 +1423,18 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         if (!is_writable($checked_writable)) {
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
+        }
+
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
+        }
+
+        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
+        if (!is_writable($checkedWritable)) {
+            $notwritable[] = $checkedWritable;
+            @chmod($checkedWritable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';

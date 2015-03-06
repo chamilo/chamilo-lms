@@ -51,7 +51,7 @@ class IndexManager
                 }
 
                 if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                    $login_form .= '<ul class="nav nav-list">';
+                    $login_form .= '<ul class="nav nav-pills nav-stacked">';
                     if (api_get_setting('allow_registration') != 'false') {
                         $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
                     }
@@ -166,8 +166,10 @@ class IndexManager
         echo self::return_notice();
     }
 
-    function return_teacher_link() {
+    function return_teacher_link()
+    {
         $html = '';
+        $show_menu = false;
         if (!empty($this->user_id)) {
             // tabs that are deactivated are added here
 
@@ -196,7 +198,7 @@ class IndexManager
         // My Account section
 
         if ($show_menu) {
-            $html .= '<ul class="nav nav-list">';
+            $html .= '<ul class="nav nav-pills nav-stacked">';
             if ($show_create_link) {
                 $html .= '<li class="add-course"><a href="' . api_get_path(WEB_CODE_PATH) . 'create_course/add_course.php">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
             }
@@ -310,7 +312,7 @@ class IndexManager
         $html = null;
         $home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
-            $home_menu_content = '<ul class="nav nav-list">';
+            $home_menu_content = '<ul class="nav nav-pills nav-stacked">';
             $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $home_menu_content .= '</ul>';
             $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
@@ -321,7 +323,7 @@ class IndexManager
     function return_skills_links() {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
 
             $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/my_skills_report.php'));
 
@@ -678,12 +680,12 @@ class IndexManager
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'well sidebar-nav';
+        $params['class'] = 'panel panel-default';
         $html = null;
         if (!empty($title)) {
-            $html.= '<h4>'.$title.'</h4>';
+            $html.= '<div class="panel-heading">'.$title.'</div>';
         }
-        $html.= $content;
+        $html.= '<div class="panel-body">'.$content.'</div>';
         $html = Display::div($html, $params);
         return $html;
     }
@@ -694,9 +696,18 @@ class IndexManager
      */
     function display_login_form()
     {
-        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 user_login_icon autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2 user_password_icon'));
+
+        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-inline'));
+        $form->addElement('label',get_lang('UserName'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-user"></i></span>');
+        $form->addElement('text', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addHtml('</div>');
+        $form->addElement('label',get_lang('Pass'));
+        $form->addHtml('<div class="input-group">');
+        $form->addHtml('<span class="input-group-addon"><i class="fa fa-lock"></i></span>');
+        $form->addElement('password', 'password','', array('id' => 'password', 'class' => 'form-control'));
+        $form->addHtml('</div>');
         global $_configuration;
 
         // Captcha
@@ -735,8 +746,9 @@ class IndexManager
                 $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
-
-        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $form->addHtml('<div class="form-button-login">');
+        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn-primary btn-block'));
+        $form->addHtml('</div>');
 
         $html = $form->return_form();
         // The validation is located in the local.inc
@@ -755,22 +767,22 @@ class IndexManager
     function return_search_block() {
         $html = '';
         if (api_get_setting('search_enabled') == 'true') {
-            $html .= '<div class="searchbox">';
             $search_btn = get_lang('Search');
-            $search_content = '<br />
-                <form action="main/search/" method="post">
-                <input type="text" id="query" class="span2" name="query" value="" />
-                <button class="save" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
-                </form></div>';
+            $search_content = '<form action="main/search/" method="post">
+                <div class="form-group">
+                <input type="text" id="query" class="form-control" name="query" value="" />
+                <button class="btn btn-default" type="submit" name="submit" value="'.$search_btn.'" />'.$search_btn.' </button>
+                </div></form>';
             $html .= self::show_right_block(get_lang('Search'), $search_content, 'search_block');
         }
         return $html;
     }
 
-    function return_classes_block() {
+    function return_classes_block()
+    {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            $usergroup = new Usergroup();
+            $usergroup = new UserGroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
             if (!empty($usergroup_list)) {
@@ -784,7 +796,7 @@ class IndexManager
                 $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
             }
             if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-list'));
+                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-pills nav-stacked'));
                 $html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
             }
         }
@@ -795,7 +807,7 @@ class IndexManager
         $html = '';
         $booking_content = null;
         if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
-            $booking_content .='<ul class="nav nav-list">';
+            $booking_content .='<ul class="nav nav-pills nav-stacked">';
             $booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
             $booking_content .='</ul>';
             $html .= self::show_right_block(get_lang('Booking'), $booking_content, 'reservation_block');
@@ -803,16 +815,37 @@ class IndexManager
         return $html;
     }
 
-    function return_user_image_block() {
-        $img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
-        $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-        $profile_content = null;
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
-        } else {
-            $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
+    /**
+     * @return null|string
+     */
+    public function return_user_image_block()
+    {
+        $html = null;
+        if (!api_is_anonymous()) {
+            $img_array = UserManager::get_user_picture_path_by_id(
+                api_get_user_id(),
+                'web', true, true
+            );
+            $img_array = UserManager::get_picture_user(
+                api_get_user_id(),
+                $img_array['file'],
+                50,
+                USER_IMAGE_SIZE_MEDIUM,
+                ' width="90" height="90" '
+            );
+            $profile_content = null;
+            if (api_get_setting('allow_social_tool') == 'true') {
+                $profile_content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/social/home.php"><img src="' . $img_array['file'] . '"  ' . $img_array['style'] . ' ></a>';
+            } else {
+                $profile_content .= '<a style="text-align:center"  href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php"><img title="' . get_lang('EditProfile') . '" src="' . $img_array['file'] . '" ' . $img_array['style'] . '></a>';
+            }
+            $html = self::show_right_block(
+                null,
+                $profile_content,
+                'user_image_block',
+                array('style' => 'text-align:center;')
+            );
         }
-        $html = self::show_right_block(null, $profile_content, 'user_image_block', array('style' => 'text-align:center;'));
         return $html;
     }
 
@@ -825,7 +858,7 @@ class IndexManager
             return;
         }
 
-        $profile_content = '<ul class="nav nav-list">';
+        $profile_content = '<ul class="nav nav-pills nav-stacked">';
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
@@ -845,12 +878,12 @@ class IndexManager
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li class="inbox-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';
+            $profile_content .= '<li class="inbox-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.Display::return_icon('inbox.png',get_lang('Inbox'),null,ICON_SIZE_SMALL).get_lang('Inbox').$cant_msg.' </a></li>';
+            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.Display::return_icon('new-message.png',get_lang('Compose'),null,ICON_SIZE_SMALL).get_lang('Compose').' </a></li>';
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
-                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
+                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('invitations.png',get_lang('PendingInvitations'),null,ICON_SIZE_SMALL).get_lang('PendingInvitations').$total_invitations.'</a></li>';
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
@@ -876,7 +909,7 @@ class IndexManager
             $editProfileUrl = $objSSO->generateProfileEditingURL();
         }
 
-        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.get_lang('EditProfile').'</a></li>';
+        $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
         $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
         return $html;
@@ -893,7 +926,7 @@ class IndexManager
         // Main navigation section.
         // Tabs that are deactivated are added here.
         if (!empty($this->tpl->menu_navigation)) {
-            $content = '<ul class="nav nav-list">';
+            $content = '<ul class="nav nav-pills nav-stacked">';
             foreach ($this->tpl->menu_navigation as $section => $navigation_info) {
                 $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
                 $content .= '<li'.$current.'>';
@@ -932,13 +965,15 @@ class IndexManager
         }
 
         // My account section
-        $my_account_content = '<ul class="nav nav-list">';
+        $my_account_content = '<ul class="nav nav-pills nav-stacked">';
 
         if ($show_create_link) {
             $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+                $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreateRequest'),null,ICON_SIZE_SMALL);
                 $my_account_content .= get_lang('CreateCourseRequest');
             } else {
+                $my_account_content .= Display::return_icon('new-course.png',get_lang('CourseCreate'),null,ICON_SIZE_SMALL);
                 $my_account_content .= get_lang('CourseCreate');
             }
             $my_account_content .= '</a></li>';
@@ -946,20 +981,21 @@ class IndexManager
 
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .= '<li class="order-course">'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        $img_order= Display::return_icon('order-course.png',get_lang('SortMyCourses'),null,ICON_SIZE_SMALL);
+        $my_account_content .= '<li class="order-course">'.Display::url($img_order.get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'.Display::return_icon('history-course.png',get_lang('DisplayTrainingList'),null,ICON_SIZE_SMALL).get_lang('DisplayTrainingList').'</a></li>';
         } else {
-            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.get_lang('HistoryTrainingSessions').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.Display::return_icon('history-course.png',get_lang('HistoryTrainingSessions'),null,ICON_SIZE_SMALL).get_lang('HistoryTrainingSessions').'</a></li>';
         }
 
         // Course catalog
 
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.get_lang('CourseCatalog').'</a></li>';
+                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.Display::return_icon('catalog-course.png',get_lang('CourseCatalog'),null,ICON_SIZE_SMALL).get_lang('CourseCatalog').'</a></li>';
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }

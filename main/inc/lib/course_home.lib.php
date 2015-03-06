@@ -869,7 +869,7 @@ class CourseHome
                 switch ($theme) {
                     case 'activity_big':
                         $data = '';
-                        $html .= '<div class="span4 course-tool">';
+                        $html .= '<div class="col-xs-6 col-md-3 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $toolId = isset($item['tool']['id']) ? $item['tool']['id'] : null;
                         if (isset($item['tool']['custom_image'])) {
@@ -895,7 +895,7 @@ class CourseHome
 
                         break;
                     case 'activity':
-                        $html .= '<div class="offset2 span4 course-tool">';
+                        $html .= '<div class="offset2 col-md-4 course-tool">';
                         $html .= $item['extra'];
                         $html .= $item['visibility'];
                         $html .= $item['icon'];

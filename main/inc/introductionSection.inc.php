@@ -56,36 +56,9 @@ $toolbar_set = 'IntroductionTool';
 $width = '100%';
 $height = '300';
 
-// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
-global $fck_attribute;
+$editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
 
-if (is_array($fck_attribute)) {
-    if (isset($fck_attribute['ToolbarSet'])) {
-        $toolbar_set = $fck_attribute['ToolbarSet'];
-    }
-    if (isset($fck_attribute['Width'])) {
-        $toolbar_set = $fck_attribute['Width'];
-    }
-    if (isset($fck_attribute['Height'])) {
-        $toolbar_set = $fck_attribute['Height'];
-    }
-}
-
-if (is_array($editor_config)) {
-    if (!isset($editor_config['ToolbarSet'])) {
-        $editor_config['ToolbarSet'] = $toolbar_set;
-    }
-    if (!isset($editor_config['Width'])) {
-        $editor_config['Width'] = $width;
-    }
-    if (!isset($editor_config['Height'])) {
-        $editor_config['Height'] = $height;
-    }
-} else {
-    $editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
-}
-
-$form->add_html_editor('intro_content', null, null, false, $editor_config);
+$form->addHtmlEditor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
@@ -249,28 +222,26 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
         $thematic_description_html =
             '<div class="thematic-postit">
-                <div class="row-fluid"><div class="span12">
+                <div class="row"><div class="col-md-12">
                     <div class="accordion" id="progress-bar-course">
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <div class="title-accordion">
-                                    <div class="row-fluid score-thematic">
-                                        <div class="span8">';
-        $thematic_description_html .=
-            '<div class="span6 name-student">
+                                    <div class="row score-thematic">
+                                        <div class="col-md-12">';
+        $thematic_description_html .=      '<div class="col-md-3 name-student">
                                                 <h2>' . $userInfo['firstName'] . '</h2>
                                                 <h3>' . $userInfo['lastName'] . '</h3>
                                             </div>
-                                            <div class="span2 score">
+                                            <div class="col-md-3 score">
                                                 <h1>' . $thematicScore . '</h1>
                                             </div>
-                                            <div class="span4">
+                                            <div class="col-md-3">
                                                 <h3>' . $thematic_advance . '</h3>
                                                 <p>' . $courseInfo['name'] . '</p>
                                             </div>
-                                        </div>';
-        $thematic_description_html .=
-            '<div class="span4">
+                                        ';
+        $thematic_description_html .=   '<div class="col-md-3">
                                             <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hide-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
                                             ' . get_lang('SeeDetail') . '
                                             </a>
@@ -278,21 +249,22 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             ' . get_lang('Hide') . '
                                             </a>
                                         </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>';
         $thematic_description_html .=
             '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
                                 <div class="accordion-inner">
-                                    <div class="row-fluid">
-                                        <div class="span4">
-                                            <div class="row-fluid">
-                                                <div class="span4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-4">
                                                     <div class="thumbnail">
                                                         <img src="' . $userInfo['avatar'] . '" class="img-polaroid">
                                                     </div>
                                                 </div>
-                                                <div class="span8">
+                                                <div class="col-md-8">
                                                     <div class="info-progress">
                                                         <div class="tittle-score">' . $thematic_advance . '&nbsp;' . $thematicScore .'
                                                         </div>
@@ -344,7 +316,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     }
 }
 
-$introduction_section .= '<div class="row course-tools-intro"><div class="span12">';
+$introduction_section .= '<div class="row"><div class="col-md-12">';
 $introduction_section .=  $thematic_description_html;
 $introduction_section .=  '</div>';
 

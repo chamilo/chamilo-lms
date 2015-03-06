@@ -103,7 +103,7 @@ class Career extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
-        $form->add_html_editor(
+        $form->addHtmlEditor(
             'description',
             get_lang('Description'),
             false,

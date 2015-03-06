@@ -6,13 +6,15 @@
 
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
 
 if (isset($_GET['messages_page_nr'])) {
-	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
+	if (api_get_setting('allow_social_tool')=='true' &&
+        api_get_setting('allow_message_tool')=='true'
+    ) {
 		$social_link = '';
 		if ($_REQUEST['f']=='social') {
 			$social_link = '&f=social';

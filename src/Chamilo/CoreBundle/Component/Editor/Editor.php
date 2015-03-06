@@ -50,6 +50,9 @@ class Editor
     /** @var \Template */
     public $template;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->toolbarSet = 'Basic';
@@ -112,9 +115,11 @@ class Editor
     /**
      * Converts a PHP variable into its Javascript equivalent.
      * The code of this method has been "borrowed" from the function drupal_to_js() within the Drupal CMS.
-     * @param mixed $var    The variable to be converted into Javascript syntax
-     * @return string        Returns a string
-     * Note: This function is similar to json_encode(), in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
+     * @param mixed $var  The variable to be converted into Javascript syntax
+     *
+     * @return string    Returns a string
+     * Note: This function is similar to json_encode(),
+     * in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
      * @link http://drupal.org/
      */
     protected function toJavascript($var)
@@ -159,7 +164,7 @@ class Editor
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function setConfigAttribute($key, $value)
     {
@@ -168,6 +173,7 @@ class Editor
 
     /**
      * @param string $key
+     *
      * @return mixed
      */
     public function getConfigAttribute($key)

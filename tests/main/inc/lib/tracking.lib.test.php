@@ -389,8 +389,8 @@ class TestTrackingUserLog extends UnitTestCase {
 		ob_start();
 		$view = '';
 		$user_id = 1;
-		$course_id = 1;
-		$res = TrackingUserLog::display_exercise_tracking_info($view, $user_id, $course_id);
+		$courseCode = 'TEST';
+		$res = TrackingUserLog::display_exercise_tracking_info($view, $user_id, $courseCode);
 		$this->assertTrue(is_null($res)); 
 		ob_end_clean();
 		//var_dump($res);
@@ -444,8 +444,8 @@ class TestTrackingUserLogCSV extends UnitTestCase {
 		//ob_start();
 		$view = '';
 		$user_id = 1;
-		$course_id = 1;
-		$res = TrackingUserLogCSV::display_exercise_tracking_info($view, $user_id, $course_id);
+		$courseCode = 'TEST';
+		$res = TrackingUserLogCSV::display_exercise_tracking_info($view, $user_id, $courseCode);
 		$this->assertTrue(is_array($res)); 
 		//ob_end_clean();
 		//var_dump($res);

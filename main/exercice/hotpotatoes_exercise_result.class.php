@@ -23,7 +23,7 @@ class HotpotatoesExerciseResult
     {
 		$return = array();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_TRACK_HOTPOTATOES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $TBL_TRACK_HOTPOTATOES	= Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
         $cid             = api_get_course_id();
         $course_id       = api_get_course_int_id();
@@ -45,9 +45,9 @@ class HotpotatoesExerciseResult
                     tth.exe_date
                     FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
                     WHERE   tu.user_id=tth.exe_user_id AND
-                            tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
+                            tth.c_id = $course_id AND
                             tth.exe_name = '$hotpotato_name'
-                    ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+                    ORDER BY tth.c_id ASC, tth.exe_date ASC";
         } else {
             $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
             // get only this user's results
@@ -56,9 +56,9 @@ class HotpotatoesExerciseResult
                     FROM $TBL_TRACK_HOTPOTATOES
                     WHERE
                         exe_user_id = '" . $user_id . "' AND
-                        exe_cours_id = '" . Database :: escape_string($cid) . "' AND
+                        c_id = $course_id AND
                         tth.exe_name = '$hotpotato_name'
-                    ORDER BY exe_cours_id ASC, exe_date ASC";
+                    ORDER BY c_id ASC, exe_date ASC";
         }
 
         $results = array();

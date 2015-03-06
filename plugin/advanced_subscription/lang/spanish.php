@@ -22,7 +22,7 @@ $strings['min_profile_percentage_help'] = 'Número porcentage ( > 0.00 y < 100.0
 
 /* String for error message about requirements */
 $strings['AdvancedSubscriptionNotConnected'] = "Usted no está conectado en la plataforma. Por favor ingrese su usuario / constraseña para poder inscribirse";
-$strings['AdvancedSubscriptionProfileIncomplete'] = "Su perfil no es lo suficientemente completo para poder inscribirse al curso. Por favor complete su perfil";
+$strings['AdvancedSubscriptionProfileIncomplete'] = "Debe llenar el <strong>%d porciento</strong> de tu perfil como mínimo. Por ahora has llenado el <strong>%d porciento</strong>";
 $strings['AdvancedSubscriptionIncompleteInduction'] = "Usted aún no ha completado el curso de inducción. Por favor complete el curso inducción";
 $strings['AdvancedSubscriptionCostXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s UIT para los cursos que ha seguido este año";
 $strings['AdvancedSubscriptionTimeXLimitReached'] = "Lo sentimos, usted ya ha alcanzado el límite anual de %s horas para los cursos que ha seguido este año";
@@ -31,14 +31,14 @@ $strings['AdvancedSubscriptionNotMoreAble'] = "Lo sentimos, usted ya no cumple c
 $strings['AdvancedSubscriptionIncompleteParams'] = "Los parámetros enviados no están completos o no son los correctos.";
 $strings['AdvancedSubscriptionIsNotEnabled'] = "La inscripción avanzada no está activada";
 
-$strings['AdvancedSubscriptionNoQueue'] = "You are not subscribed for this course.";
-$strings['AdvancedSubscriptionNoQueueIsAble'] = "You are not subscribed, but you are qualified for this course.";
-$strings['AdvancedSubscriptionQueueStart'] = "Your subscription request is pending for approval by your boss, please wait attentive.";
-$strings['AdvancedSubscriptionQueueBossDisapproved'] = "We are sorry, your subscription was rejected by your boss.";
-$strings['AdvancedSubscriptionQueueBossApproved'] = "Your subscription request has been accepted by your boss, now is pending for vacancies.";
-$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "We are sorry, your subscription was rejected by the administrator.";
-$strings['AdvancedSubscriptionQueueAdminApproved'] = "Congratulation, your subscription request has been accepted by administrator";
-$strings['AdvancedSubscriptionQueueDefaultX'] = "There was an error, queue status %d is not defined by system.";
+$strings['AdvancedSubscriptionNoQueue'] = "Usted no está inscrito para este curso.";
+$strings['AdvancedSubscriptionNoQueueIsAble'] = "Usted no está inscrito, pero está calificado para este curso.";
+$strings['AdvancedSubscriptionQueueStart'] = "Su solicitud de inscripción está pendiente de la aprobación de su jefe, por favor espere atentamente.";
+$strings['AdvancedSubscriptionQueueBossDisapproved'] = "Lo sentimos, tu inscripción fue rechazada por tu jefe.";
+$strings['AdvancedSubscriptionQueueBossApproved'] = "Tu solicitud de inscripción ha sido aceptado por tu jefe, ahora está en espera de vacantes.";
+$strings['AdvancedSubscriptionQueueAdminDisapproved'] = "Lo sentimos, Tu inscripción ha sido rechazada por el administrador.";
+$strings['AdvancedSubscriptionQueueAdminApproved'] = "¡Felicitaciones! Tu inscripción ha sido aceptada por el administrador.";
+$strings['AdvancedSubscriptionQueueDefaultX'] = "Hubo un error el estado en cola %d no está definido en el sistema.";
 
 // Mail translations
 $strings['MailStudentRequest'] = 'Solicitud de registro de estudiante';
@@ -48,6 +48,9 @@ $strings['MailStudentRequestSelect'] = 'Selección de solicitudes de registro de
 $strings['MailAdminAccept'] = 'Solicitud de registro aceptada por administrador';
 $strings['MailAdminReject'] = 'Solicitud de registro rechazada por administrador';
 $strings['MailStudentRequestNoBoss'] = 'Solicitud de registro de estudiante sin superior';
+$strings['MailRemindStudent'] = 'Recordatorio de la solicitud de inscripción';
+$strings['MailRemindSuperior'] = 'Solicitudes de inscripción estan pendientes de tu aprobación';
+$strings['MailRemindAdmin'] = 'Inscripciones de cursos estan pendientes de tu aprobación';
 
 // TPL translations
 // Admin view
@@ -59,6 +62,7 @@ $strings['RecommendedNumberOfParticipants'] = 'Número recomendado de participan
 $strings['PublicationEndDate'] = 'Fecha fin de publicación';
 $strings['Mode'] = 'Modalidad';
 $strings['Postulant'] = 'Postulante';
+$strings['Area'] = 'Área';
 $strings['InscriptionDate'] = 'Fecha de inscripción';
 $strings['BossValidation'] = 'Validación del superior';
 $strings['Decision'] = 'Decisión';
@@ -132,3 +136,5 @@ $strings['MailContentReminderSuperiorSecond'] = 'Le invitamos a aprobar o desapr
 $strings['MailTitleReminderMaxSuperior'] = 'Recordatorio: Solicitud de consideración de curso para colaborador(es)';
 $strings['MailContentReminderMaxSuperior'] = 'Le recordamos que hemos recibido las siguientes solicitudes de suscripción al curso <strong>%s</strong> de parte de sus colaboradores. El curso se iniciará el <strong>%s</strong>. Detalles del curso: <strong>%s</strong>.';
 $strings['MailContentReminderMaxSuperiorSecond'] = 'Este curso tiene una cantidad de cupos limitados y ha recibido una alta tasa de solicitudes de inscripción, por lo que recomendamos que cada área apruebe un máximo de <strong>%s</strong> candidatos. Le invitamos a aprobar o desaprobar las suscripciones, dando clic en el botón correspondiente a continuación para cada colaborador.';
+
+$strings['YouMustAcceptTermsAndConditions'] = 'Para inscribirse al curso <strong>%s</strong>, debe aceptar estos términos y condiciones.';

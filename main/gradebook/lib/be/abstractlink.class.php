@@ -451,13 +451,6 @@ abstract class AbstractLink implements GradebookItem
     abstract function get_link();
     abstract function is_valid_link();
     abstract function get_type_name();
-
-    // The following methods are already defined in GradebookItem,
-    // and must be implemented by the subclass as well !
-    //	abstract function get_name();
-    //	abstract function get_description();
-    //  abstract function calc_score($stud_id = null);
-
     abstract function needs_name_and_description();
     abstract function needs_max();
     abstract function needs_results();

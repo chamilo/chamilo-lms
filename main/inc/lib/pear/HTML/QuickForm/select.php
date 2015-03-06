@@ -72,8 +72,15 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_select($elementName=null, $elementLabel=null, $options=null, $attributes=null)
-    {
+    public function HTML_QuickForm_select(
+        $elementName = null,
+        $elementLabel = null,
+        $options = null,
+        $attributes = null
+    ) {
+        if (is_array($attributes) || empty($attributes)) {
+            $attributes['class'] = 'form-control';
+        }
         HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';

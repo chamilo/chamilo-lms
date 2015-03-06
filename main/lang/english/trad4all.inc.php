@@ -316,7 +316,11 @@ $YourVersionNotUpToDate = "Your version is not up-to-date";
 $Hotpotatoes = "Hotpotatoes";
 $CourseCategoriesAreGlobal = "Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.";
 $UserIsNotATeacher = "User is not a teacher";
+$ConvertToMultipleAnswer = "Convert to multiple answer";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisible for learner but you have access as teacher.";
+$PreventSessionAdminsToManageAllUsersTitle = "Prevent session admins to manage all users";
+$IsOpenSession = "Open session";
+$AllowVisitors = "Allow visitors";
 $DeleteAllAttendances = "Delete all created attendances";
 $Unsubscribe = "Unsubscribe";
 $AddForum = "Add a forum";
@@ -324,13 +328,39 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
+$PublicationStartDate = "Published start date";
+$ShowStatus = "Show status";
+$Mode = "Mode";
+$Schedule = "Schedule";
+$Place = "Place/Location";
+$RecommendedNumberOfParticipants = "Recommended number of participants";
 $WCAGGoMenu = "Goto menu";
 $WCAGGoContent = "Goto content";
 $NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
+$NoPosts = "No posts";
+$WithoutAchievedSkills = "Without achieved skills";
 $TypeMessage = "Please type your message!";
 $ConfirmReset = "Do you really want to delete all messages?";
+$MailCronCourseExpirationReminderBody = "Dear %s,
+
+It has come to our attention that you have not completed the course %s although its expiration date had been set on %s, remaining %s days to finish it.
+
+We remind you that you have only the possibility to follow this course once a year, that is why we invite you insistently to complete your course on time.
+
+You can return to the course connecting to the platform through this address: %s
+
+Best Regards,
+
+%s Team";
+$MailCronCourseExpirationReminderSubject = "Urgent: %s course expiration reminder";
+$ExerciseAndLearningPath = "Exercise and learning path";
+$LearningPathGradebookWarning = "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-blogging situations.";
+$ChooseEitherDurationOrTimeLimit = "Choose either duration or time limit";
 $ClearList = "Clear the chat";
+$SessionBanner = "Session banner";
+$ShortDescription = "Short description";
+$TargetAudience = "Target audience";
 $CallSent = "Chat call has been sent. Waiting for the approval of your partner.";
 $ChatDenied = "Your call has been denied by your partner.";
 $Send = "Send message";
@@ -1058,11 +1088,18 @@ $LastPage = "Last page";
 $Coachs = "Coachs";
 $CourseProgram = "Description";
 $ThisCourseDescriptionIsEmpty = "There is no course description so far.";
+$Vacancies = "Vacancies";
 $QuestionPlan = "Help";
+$Cost = "Cost";
 $NewBloc = "Other";
+$TeachingHours = "Lecture hours";
+$Area = "Area";
+$InProcess = "In process";
 $CourseDescriptionUpdated = "The description has been updated";
 $CourseDescriptionDeleted = "Description has been deleted";
+$PreventSessionAdminsToManageAllUsersComment = "By enabling this option, session admins will only be able to see, in the administration page, the users they created.";
 $FieldTypeFile = "File upload";
+$ConvertToUniqueAnswer = "Convert to unique answer";
 $NextWeek = "Next Week";
 $DragAndDropAnElementHere = "Drag and drop an element here";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
@@ -1076,6 +1113,7 @@ $AttendanceCalendar = "Attendance calendar";
 $QualifyAttendanceGradebook = "Grade the attendance list in the assessment tool";
 $CreateANewAttendance = "Create a new attendance list";
 $Attendance = "Attendance";
+$IsInductionSession = "Induction-type session";
 $GeneralDescription = "Description";
 $GeneralDescriptionQuestions = "What is the goal of the training? Are there prerequisites? How is this training connected to other training?";
 $GeneralDescriptionInformation = "Describe the training (number of hours, sser number, location) and trainer (name, office, Tel., e-mail, office hours . . . .).";
@@ -1106,7 +1144,9 @@ $ShowThumbnails = "Show Thumbnails";
 $SetSlideshowOptions = "Gallery settings";
 $SlideshowOptions = "Slideshow Options";
 $NoResizing = "NO RESIZING";
+$Brochure = "Brochure";
 $SlideShow = "Slideshow";
+$PublicationEndDate = "Published end date";
 $ViewSlideshow = "View Slideshow";
 $UploadADocument = "Upload a document";
 $langNameOfLang['bosnian'] = "bosnian";

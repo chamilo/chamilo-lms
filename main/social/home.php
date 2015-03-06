@@ -193,8 +193,8 @@ if (api_get_setting('allow_skills_tool') == 'true') {
     }else{
 
         $social_skill_block .= '<div class="panel-body">';
-        $social_skill_block .= '<p>'. get_lang("SinCompetencias");
-        $social_skill_block .=  Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
+        $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
+        $social_skill_block .= '<p>' . Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
         $social_skill_block .= '</div>';
     }
     $social_skill_block.='</div>';

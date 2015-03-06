@@ -482,7 +482,7 @@ $social_post_wall_block  = '<div class="panel panel-info social-post">';
 $social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
 $social_post_wall_block .='<div class="panel-body">';
 if(empty($post_wall)){
-    $social_post_wall_block .= '<p>'.get_lang("NingunaPublicacion").'</p>';
+    $social_post_wall_block .= '<p>'.get_lang("NoPosts").'</p>';
 }else{
     $social_post_wall_block .= $post_wall;
 }
@@ -798,8 +798,8 @@ if ($show_full_profile) {
         }else{
 
             $social_skill_block .= '<div class="panel-body">';
-            $social_skill_block .= '<p>'. get_lang("SinCompetencias");
-            $social_skill_block .=  Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
+            $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
+            $social_skill_block .= '<p>' . Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
             $social_skill_block .= '</div>';
         }
         $social_skill_block.='</div>';

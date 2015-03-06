@@ -316,7 +316,11 @@ $YourVersionNotUpToDate = "Su versión está actualizada";
 $Hotpotatoes = "Hotpotatoes";
 $CourseCategoriesAreGlobal = "Las categorías de cursos son globales en la configuración de múltiples portales, pero los cambios son permitidos solamente en la sesión administrativa del portal principal.";
 $UserIsNotATeacher = "El usuario no es un profesor.";
+$ConvertToMultipleAnswer = "Convertir a respuesta múltiple";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visible para un estudiante pero podrá acceder a él como profesor";
+$PreventSessionAdminsToManageAllUsersTitle = "Impedir a los admins de sesiones de gestionar todos los usuarios";
+$IsOpenSession = "Sesión abierta";
+$AllowVisitors = "Permitir visitantes";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Unsubscribe = "Dar de baja";
 $AddForum = "Añadir un foro";
@@ -324,13 +328,38 @@ $ReplyShort = "Re:";
 $SendToAllUsers = "Enviar a todos los usuarios";
 $SelectACategory = "Seleccione una categoría";
 $AdvancedEdit = "Edición avanzada";
+$PublicationStartDate = "Fecha de inicio publicada";
+$ShowStatus = "Mostrar estado";
+$Mode = "Modalidad";
+$Schedule = "Horario";
+$Place = "Ubicación";
+$RecommendedNumberOfParticipants = "Número recomendado de participantes";
 $WCAGGoMenu = "Ir al menú";
 $WCAGGoContent = "Ir al contenido";
 $NoTimeLimits = "Sin límite de tiempo";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
+$NoPosts = "Sin publicaciones";
+$WithoutAchievedSkills = "Sin competencias logradas";
 $TypeMessage = "Por favor, escriba su mensaje";
 $ConfirmReset = "¿Seguro que quiere borrar todos los mensajes?";
+$MailCronCourseExpirationReminderBody = "Estimado %s,
+
+Ha llegado a nuestra atención que no ha completado el curso %s aunque su fecha de vencimiento haya sido establecida al %s, quedando %s días para terminarlo.
+
+Le recordamos que solo tiene la posibilidad de seguir este curso una vez al año, razón por la cual le invitamos con insistencia a completar su curso en el plazo que queda.
+
+Puede regresar al curso conectándose a la plataforma en esta dirección: %s
+
+Saludos cordiales,
+
+El equipo de %s";
+$MailCronCourseExpirationReminderSubject = "Urgente: Recordatorio de vencimiento de curso %s";
+$LearningPathGradebookWarning = "Advertencia: Es posible utilizar en una evaluación un ejercicio agregado a una lección. Sin embargo, si la lección  ya está incluida, este ejercicio puede ser parte de la evaluación del curso. La evaluación de una lección se realiza de acuerdo con el porcentaje de progreso, mientras que la evaluación de un ejercicio se realiza de acuerdo con la puntuación obtenida. Por último, el resultado de las encuestas se basa en la respuesta o no de la encuesta, lo que significa que el resultado se obtiene a partir de 0 (no responde) o 1 (responde) según corresponda. Asegúrese de probar las combinaciones a organizar su Evaluación para evitar problemas.";
+$ChooseEitherDurationOrTimeLimit = "Elija entre duración o límite de tiempo";
 $ClearList = "Borrar la lista";
+$SessionBanner = "Banner de sesión";
+$ShortDescription = "Descripción corta";
+$TargetAudience = "Público objetivo";
 $CallSent = "Una petición de chat ha sido enviada. Esperando la aprobación de la persona contactada.";
 $ChatDenied = "Su llamada ha sido rechazada por la persona contactada";
 $Send = "Enviar";
@@ -1058,11 +1087,18 @@ $LastPage = "Última página";
 $Coachs = "Tutores";
 $CourseProgram = "Descripción del curso";
 $ThisCourseDescriptionIsEmpty = "Descripción no disponible";
+$Vacancies = "Vacantes";
 $QuestionPlan = "Cuestiones clave";
+$Cost = "Costo";
 $NewBloc = "Apartado personalizado";
+$TeachingHours = "Horas lectivas";
+$Area = "Área";
+$InProcess = "En proceso";
 $CourseDescriptionUpdated = "La descripción del curso ha sido actualizada";
 $CourseDescriptionDeleted = "La descripción del curso ha sido borrada";
+$PreventSessionAdminsToManageAllUsersComment = "Por activar esta opción, los administradores de sesiones podrán ver, en las páginas de administración, exclúsivamente los usuarios que ellos mismos han creado.";
 $FieldTypeFile = "Subida de archivo";
+$ConvertToUniqueAnswer = "Convertir a respuesta única";
 $NextWeek = "Semana siguiente";
 $DragAndDropAnElementHere = "Arrastrar y soltar un elemento aquí";
 $ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
@@ -1076,6 +1112,7 @@ $AttendanceCalendar = "Calendario de asistencia";
 $QualifyAttendanceGradebook = "Calificar la lista de asistencia";
 $CreateANewAttendance = "Crear una lista de asistencia";
 $Attendance = "Asistencia";
+$IsInductionSession = "Sesión de tipo inducción";
 $GeneralDescription = "Descripción general";
 $GeneralDescriptionQuestions = "¿Cuál es el objetivo de este curso? ¿Hay requisitos previos? ¿Qué relación tiene con otros cursos?";
 $GeneralDescriptionInformation = "Descripción del curso (número de horas, código, lugar donde se desarrollará, etc.). Profesorado (nombre, despacho, teléfono, correo electrónico, etc.).";
@@ -1106,7 +1143,9 @@ $ShowThumbnails = "Mostrar miniaturas";
 $SetSlideshowOptions = "Opciones de la presentación";
 $SlideshowOptions = "Opciones de la presentación";
 $NoResizing = "Presentación en su tamaño original";
+$Brochure = "Brochure";
 $SlideShow = "Presentación";
+$PublicationEndDate = "Fecha de fin publicada";
 $ViewSlideshow = "Ver presentación";
 $UploadADocument = "Enviar un documento";
 $langNameOfLang['bosnian'] = "bosnio";

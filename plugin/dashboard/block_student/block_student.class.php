@@ -187,7 +187,7 @@ class BlockStudent extends Block
 	 				$cats = Category::load(null, null, $course_code, null, null, null, false);
 	 				$scoretotal = array();
 	 				if (isset($cats) && isset($cats[0])) {
-		 				$scoretotal= $cats[0]->calc_score($student_id, $course_code);
+		 				$scoretotal= $cats[0]->calc_score($student_id, null, $course_code);
 	 				}
 
 	 				if (!empty($scoretotal)) {

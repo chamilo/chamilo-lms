@@ -54,5 +54,5 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
 
     $form->addElement('html','</div>');
 }
-$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+$form->addButtonCreate(get_lang('Save'));
 $form->display();

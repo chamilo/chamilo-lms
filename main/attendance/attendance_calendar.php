@@ -91,7 +91,7 @@ if (isset($action) && $action == 'calendar_add') {
 
     $defaults['repeat_type'] = 'weekly';
 
-    $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+    $form->addButtonCreate(get_lang('Save'));
     $form->setDefaults($defaults);
     $form->display();
 } else {

@@ -86,7 +86,7 @@ $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
+$form->addButtonUpdate(get_lang('ModifyInformation'));
 
 // Set default values
 $form->setDefaults($group_data);

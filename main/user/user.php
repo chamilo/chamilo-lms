@@ -426,18 +426,6 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-/**
- * Display search form
- */
-function display_user_search_form()
-{
-    echo '<form method="get" action="user.php">';
-    echo get_lang("SearchForUser") . "&nbsp;&nbsp;";
-    echo '<input type="text" name="keyword" value="'.Security::remove_XSS($_GET['keyword']).'"/>';
-    echo '<input type="submit" value="'.get_lang('SearchButton').'"/>';
-    echo '</form>';
-}
-
 if (!$is_allowed_in_course) {
     api_not_allowed(true);
 }
@@ -512,7 +500,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $renderer = $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->addText('keyword', '', false);
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
+    $form->addButtonSearch(get_lang('SearchButton'));
     $form->addElement('static', 'additionalactions', null, $actions);
     $form->display();
     echo '</div>';

@@ -289,6 +289,24 @@ EOT;
     }
 
     /**
+     * Shortcut to import button
+     * @param string $label
+     */
+    public function addButtonImport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
+     * Shortcut to import button
+     * @param string $label
+     */
+    public function addButtonExport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
      * @param string $name
      * @param string $label
      * @param string $text

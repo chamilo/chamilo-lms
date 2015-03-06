@@ -185,7 +185,7 @@ switch ($action) {
         $form->addElement('hidden', 'action', 'add');
         $defaults = isset($_POST) ? $_POST : array();
         $form = getFormWork($form, $defaults);
-        $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
+        $form->addButtonCreate(get_lang('CreateDirectory'));
 
         if ($form->validate()) {
             $result = addDir(
@@ -287,10 +287,10 @@ switch ($action) {
         if (api_is_allowed_to_edit() || api_is_coach()) {
             // Work list
             $content .= '<div class="row">';
-            $content .= '<div class="span9">';
+            $content .= '<div class="col-md-9">';
             $content .= showTeacherWorkGrid();
             $content .= '</div>';
-            $content .= '<div class="span3">';
+            $content .= '<div class="col-md-3">';
             $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {

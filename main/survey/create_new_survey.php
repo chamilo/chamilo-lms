@@ -235,11 +235,12 @@ $form->addElement('html', '</div><br />');
 if (isset($_GET['survey_id']) && $_GET['action'] == 'edit') {
     $class = 'save';
     $text = get_lang('ModifySurvey');
+    $form->addButtonUpdate(get_lang('ModifySurvey'), 'submit_survey');
 } else {
     $class = 'add';
     $text = get_lang('CreateSurvey');
+    $form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
 }
-$form->addElement('style_submit_button', 'submit_survey', $text, 'class="'.$class.'"');
 
 // Setting the rules
 if ($_GET['action'] == 'add') {

@@ -268,7 +268,7 @@ $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
-$form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
+$form_search->addButtonSearch(get_lang('SearchUsers'));
 $form_search->display();
 echo '</div>';
 

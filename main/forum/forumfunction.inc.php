@@ -221,7 +221,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     $form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
     //$form->applyFilter('forum_category_comment', 'html_filter');
-    $form->addElement('style_submit_button', 'SubmitForumCategory', get_lang('CreateCategory'), 'class="add"');
+    $form->addButtonCreate(get_lang('CreateCategory'), 'SubmitForumCategory');
 
     // Setting the rules.
     $form->addRule('forum_category_title', get_lang('ThisFieldIsRequired'), 'required');
@@ -368,13 +368,11 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
 
     // The OK button
     if (isset($_GET['id']) && $_GET['action'] == 'edit') {
-        $class = 'save';
-        $text = get_lang('ModifyForum');
+        $form->addButtonUpdate(get_lang('ModifyForum'), 'SubmitForum');
     } else {
-        $class = 'add';
-        $text = get_lang('CreateForum');
+        $form->addButtonCreate(get_lang('CreateForum'), 'SubmitForum');
     }
-    $form->addElement('style_submit_button', 'SubmitForum', $text, 'class="'.$class.'"');
+
     // setting the rules
     $form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
@@ -2362,21 +2360,6 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
     $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
-    // Setting the class and text of the form title and submit button.
-    if ($action == 'quote') {
-        $class = 'save';
-        $text = get_lang('QuoteMessage');
-    } elseif ($action == 'replythread') {
-        $class = 'save';
-        $text = get_lang('ReplyToThread');
-    } elseif ($action == 'replymessage') {
-        $class = 'save';
-        $text = get_lang('ReplyToMessage');
-    } else {
-        $class = 'add';
-        $text = get_lang('CreateThread');
-    }
-
     // Initialize the object.
     $myThread = isset($_GET['thread']) ? $_GET['thread'] : '';
     $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
@@ -2459,7 +2442,16 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 
     $form->addElement('html', '</div>');
 
-    $form->addElement('style_submit_button', 'SubmitPost', $text, 'class="'.$class.'"');
+    // Setting the class and text of the form title and submit button.
+    if ($action == 'quote') {
+        $form->addButtonCreate(get_lang('QuoteMessage'), 'SubmitPost');
+    } elseif ($action == 'replythread') {
+        $form->addButtonCreate(get_lang('ReplyToThread'), 'SubmitPost');
+    } elseif ($action == 'replymessage') {
+        $form->addButtonCreate(get_lang('ReplyToMessage'), 'SubmitPost');
+    } else {
+        $form->addButtonCreate(get_lang('CreateThread'), 'SubmitPost');
+    }
 
     if (!empty($form_values)) {
         $defaults['post_title'] = prepare4display($form_values['post_title']);
@@ -2895,7 +2887,7 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
     }
 
     $form->addElement('html', '</div>');
-    $form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
+    $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
     // Setting the default values for the form elements.
     $defaults['post_title'] = $current_post['post_title'];
@@ -3783,7 +3775,7 @@ function forum_search()
     $form->addElement('text', 'search_term', get_lang('SearchTerm'), 'class="input_titles" id="search_title"');
     $form->applyFilter('search_term', 'html_filter');
     $form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation'));
-    $form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');
+    $form->addButtonSearch(get_lang('Search'));
 
     // Setting the rules.
     $form->addRule('search_term', get_lang('ThisFieldIsRequired'), 'required');

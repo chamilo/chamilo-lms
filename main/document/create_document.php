@@ -19,8 +19,8 @@ $htmlHeadXtra[] = '
 
 var hide_bar = function() {
     $("#template_col").hide();
-    $("#doc_form").removeClass("span9");
-    $("#doc_form").addClass("span11");
+    $("#doc_form").removeClass("col-md-9");
+    $("#doc_form").addClass("col-md-11");
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
         },
         function() {
             $("#template_col").show();
-            $("#doc_form").removeClass("span11");
-            $("#doc_form").addClass("span9");
+            $("#doc_form").removeClass("col-md-11");
+            $("#doc_form").addClass("col-md-9");
             $(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
@@ -44,15 +44,6 @@ $(document).ready(function() {
         showTemplates();
     });
 });
-
-function setFocus() {
-   $("#document_title").focus();
-}
-
-$(window).load(function () {
-	setFocus();
-});
-
 </script>';
 
 //I'm in the certification module?
@@ -279,9 +270,9 @@ function document_exists($filename) {
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
+    $form->addText('title', get_lang('CertificateName'), true, array('autofocus'));
 } else {
-	$form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
+	$form->addText('title', get_lang('Title'), true, array('autofocus'));
 }
 
 // Show read-only box only in groups
@@ -395,10 +386,11 @@ if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir
 	}
 }
 
-if ($is_certificate_mode)
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
-else
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateDoc'), 'class="save"');
+if ($is_certificate_mode) {
+	$form->addButtonCreate(get_lang('CreateCertificate'));
+} else {
+	$form->addButtonCreate(get_lang('CreateDoc'));
+}
 
 $form->setDefaults($defaults);
 
@@ -588,11 +580,11 @@ if ($form->validate()) {
 	}
     // HTML-editor
     echo '<div class="row-fluid" style="overflow:hidden">
-            <div id="template_col" class="span3" style="width:200px">
+            <div id="template_col" class="col-md-3" style="width:200px">
                 <div id="frmModel" ></div>
             </div>
             <div id="hide_bar_template"></div>
-            <div id="doc_form" class="span9">
+            <div id="doc_form" class="col-md-9">
                     '.$form->return_form().'
             </div>
           </div>';

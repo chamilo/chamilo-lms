@@ -50,7 +50,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $elementLabel = null,
         $attributes = array()
     ) {
-        if (is_array($attributes)) {
+        if (is_array($attributes) || empty($attributes)) {
             $attributes['class'] = 'form-control';
         }
 

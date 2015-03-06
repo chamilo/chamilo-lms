@@ -29,6 +29,14 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
+//Initialize blocks
+$social_extra_info_block = null;
+$social_course_block = null;
+$social_group_info_block = null;
+$social_rss_block = null;
+$social_skill_block = null;
+$social_session_block = null;
+
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
     $idMessage = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg_main'], $messageId, MESSAGE_STATUS_WALL_POST);
@@ -580,10 +588,8 @@ if ($show_full_profile) {
 
  //If there are information to show Block Extra Information
 
-    $social_extra_info_block = null;
-
     if (!empty($extra_information_value)) {
-        $social_extra_info_block .=  $extra_information;
+        $social_extra_info_block =  $extra_information;
     }
 
     // MY GROUPS
@@ -643,8 +649,6 @@ if ($show_full_profile) {
     }
 
     //Block My Groups
-    $social_group_info_block = null;
-
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
         $count_groups = 0;
@@ -682,11 +686,10 @@ if ($show_full_profile) {
             $i++;
         }
         $my_groups .= '</div>';
-        $social_group_info_block .=  $my_groups;
+        $social_group_info_block =  $my_groups;
     }
 
     //Block Social Course
-    $social_course_block = null;
 
     $my_courses = null;
     // COURSES LIST
@@ -711,7 +714,6 @@ if ($show_full_profile) {
     }
 
     //Block Social Sessions
-    $social_session_block = null;
 
     if (count($sessionList) > 0) {
         $sessions  = '<div class="panel panel-info">';
@@ -723,17 +725,14 @@ if ($show_full_profile) {
 
     // Block Social User Feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
-    $social_rss_block = null;
 
     if (!empty($user_feeds)) {
         $rss  = '<div class="panel panel-info social-rss">';
         $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
         $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
-        $social_rss_block .=  $rss;
+        $social_rss_block =  $rss;
 
     }
-
-    $social_skill_block = null;
 
     //BLock Social Skill
     if (api_get_setting('allow_skills_tool') == 'true') {        

@@ -59,7 +59,7 @@ $form->addElement('hidden', 'sec_token',$token);
 $form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
 $form->addHtmlEditor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
-$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+$form->addButtonCreate(get_lang('Save'));
 
 // Set some default values
 if (!empty($description_title)) {

@@ -120,11 +120,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for} class="col-sm-2 control-label" >
+                <label {label-for} class="col-xs-12 col-md-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="col-sm-10">
+                <div class="col-xs-12 col-md-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -286,6 +286,24 @@ EOT;
     public function addButtonNext($label)
     {
         return $this->addButton('submit', $label, 'arrow-right', 'primary');
+    }
+
+    /**
+     * Shortcut to import button
+     * @param string $label
+     */
+    public function addButtonImport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
+     * Shortcut to import button
+     * @param string $label
+     */
+    public function addButtonExport($label, $name = 'submit')
+    {
+        return $this->addButton($name, $label, 'check', 'primary');
     }
 
     /**

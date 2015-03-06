@@ -487,9 +487,9 @@ if ($owner_id == api_get_user_id() ||
 	}
 
 	if ($is_certificate_mode) {
-		$form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
+		$form->addButtonUpdate(get_lang('SaveCertificate'));
     } else {
-		$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
+		$form->addButtonUpdate(get_lang('SaveDocument'));
     }
 
 	$defaults['filename'] = $filename;

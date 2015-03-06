@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8" />
 	<title>Chamilo Security Guide</title>
+    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -44,7 +45,7 @@ Subscribe to our free security alerts mailing-list: <a href="http://lists.chamil
 <p>To  avoid being a risk to yourself and others, you should download and install a recent browser. We recommend <a href="http://www.getfirefox.com" target="_blank">the latest stable version of Firefox</a>.</p>
 
 <h2><a name="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
-<p>It is considered unsafe to leave the configuration file inside the main/inc/conf/ directory, as it will be directly accessible for all users, which could lead crackers to download it, uninterpreted, and read through your configuration, which could lead to illicit 
+<p>It is considered unsafe to leave the configuration file inside the main/inc/conf/ directory, as it will be directly accessible for all users, which could lead crackers to download it, uninterpreted, and read through your configuration, which could lead to illicit
 access to your database if that one isn't well protected and many other stuff we'd prefer to avoid. To secure it, move the configuration file out of your web directory. If your
 Chamilo installation is in /var/www/, move your configuration to /etc/chamilo/configuration.php, for example. Then create a new main/inc/conf/configuration.php file, open it, and write the following:</p>
 <p>

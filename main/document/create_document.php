@@ -279,9 +279,9 @@ function document_exists($filename) {
 
 // Add group to the form
 if ($is_certificate_mode) {
-    $form->addElement('text', 'title', get_lang('CertificateName'), 'class="form-control" id="document_title"');
+    $form->addText('title', get_lang('CertificateName'), true, array('autofocus'));
 } else {
-	$form->addElement('text', 'title', get_lang('Title'), 'class="form-control" id="document_title"');
+	$form->addText('title', get_lang('Title'), true, array('autofocus'));
 }
 
 // Show read-only box only in groups
@@ -395,10 +395,11 @@ if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir
 	}
 }
 
-if ($is_certificate_mode)
-	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="btn-default"');
-else
-	$form->addElement('style_submit_button', 'submit','<i class="fa fa-file-text"></i> '. get_lang('CreateDoc'), 'class="btn-primary"');
+if ($is_certificate_mode) {
+	$form->addButtonCreate(get_lang('CreateCertificate'));
+} else {
+	$form->addButtonCreate(get_lang('CreateDoc'));
+}
 
 $form->setDefaults($defaults);
 

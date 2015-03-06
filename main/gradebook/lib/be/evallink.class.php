@@ -165,7 +165,7 @@ abstract class EvalLink extends AbstractLink
     /**
      * Lazy load function to get the linked evaluation
      */
-    protected function get_evaluation ()
+    protected function get_evaluation()
     {
         if (!isset($this->evaluation)) {
             if (isset($this->ref_id)) {

@@ -259,8 +259,8 @@ $form_search = new FormValidator(
     'GET',
     api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(),
     '',
-    array('class' => 'form-search'),
-    false
+    array(),
+    FormValidator::LAYOUT_INLINE
 );
 $renderer = $form_search->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span>');

@@ -218,22 +218,86 @@ if ($group_id != 0) {
     }
 }
 $create_thread_link = '';
-
+$user_info    = UserManager::get_user_info_by_id($user_id);
 if ($group_id != 0) {
-    $social_avatar_block = SocialManager::show_social_avatar_block(
+    //Block Social Avatar
+    $social_avatar_block = '<div class="panel panel-info social-avatar">';
+    $social_avatar_block .= SocialManager::show_social_avatar_block(
         'groups',
         $group_id
     );
+    $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+    $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+    $chat_status = $user_info['extra'];
+    if(!empty($chat_status['user_chat_status'])){
+        $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+    }else{
+        $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+    }
+    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+    if (api_get_setting('sso_authentication') === 'true') {
+        $subSSOClass = api_get_setting('sso_authentication_subclass');
+        $objSSO = null;
+
+        if (!empty($subSSOClass)) {
+            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+            $subSSOClass = 'sso' . $subSSOClass;
+            $objSSO = new $subSSOClass();
+        } else {
+            $objSSO = new sso();
+        }
+
+        $editProfileUrl = $objSSO->generateProfileEditingURL();
+    }
+    $social_avatar_block .= '<div class="edit-profile">
+                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                         </div>';
+    $social_avatar_block .= '</div>';
+
+    //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 } else {
     $show_menu = 'browse_groups';
     if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
         $show_menu = $_GET['view'];
     }
-    $social_avatar_block = SocialManager::show_social_avatar_block(
-        $show_menu,
-        $group_id
-    );
+    //Block Social Avatar
+    $social_avatar_block  = '<div class="panel panel-info social-avatar">';
+    $social_avatar_block .= SocialManager::show_social_avatar_block($show_menu,$group_id);
+    $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+    $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+    $chat_status = $user_info['extra'];
+    if(!empty($chat_status['user_chat_status'])){
+        $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+    }else{
+        $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+    }
+    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+    if (api_get_setting('sso_authentication') === 'true') {
+        $subSSOClass = api_get_setting('sso_authentication_subclass');
+        $objSSO = null;
+
+        if (!empty($subSSOClass)) {
+            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+            $subSSOClass = 'sso' . $subSSOClass;
+            $objSSO = new $subSSOClass();
+        } else {
+            $objSSO = new sso();
+        }
+
+        $editProfileUrl = $objSSO->generateProfileEditingURL();
+    }
+    $social_avatar_block .= '<div class="edit-profile">
+                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                         </div>';
+    $social_avatar_block .= '</div>';
+
     $social_menu_block = SocialManager::show_social_menu($show_menu, $group_id);
 }
 
@@ -888,5 +952,5 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->get_template('social/groups.tpl');
 $tpl->display($social_layout);

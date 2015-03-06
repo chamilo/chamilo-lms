@@ -338,8 +338,24 @@ $WCAGGoMenu = "Goto menu";
 $WCAGGoContent = "Goto content";
 $NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
+$NoPosts = "No posts";
+$WithoutAchievedSkills = "Without achieved skills";
 $TypeMessage = "Please type your message!";
 $ConfirmReset = "Do you really want to delete all messages?";
+$MailCronCourseExpirationReminderBody = "Dear %s,
+
+It has come to our attention that you have not completed the course %s although its expiration date had been set on %s, remaining %s days to finish it.
+
+We remind you that you have only the possibility to follow this course once a year, that is why we invite you insistently to complete your course on time.
+
+You can return to the course connecting to the platform through this address: %s
+
+Best Regards,
+
+%s Team";
+$MailCronCourseExpirationReminderSubject = "Urgent: %s course expiration reminder";
+$ExerciseAndLearningPath = "Exercise and learning path";
+$LearningPathGradebookWarning = "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-blogging situations.";
 $ChooseEitherDurationOrTimeLimit = "Choose either duration or time limit";
 $ClearList = "Clear the chat";
 $SessionBanner = "Session banner";

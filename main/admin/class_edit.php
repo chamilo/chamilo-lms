@@ -34,7 +34,7 @@ $class_id = intval($_GET['idclass']);
 $class = ClassManager :: get_class_info($class_id);
 $form = new FormValidator('edit_class', 'post', 'class_edit.php?idclass='.$class_id);
 $form->addText('name',get_lang('ClassName'));
-$form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
+$form->addButtonUpdate(get_lang('Ok'));
 $form->setDefaults(array('name'=>$class['name']));
 if($form->validate())
 {

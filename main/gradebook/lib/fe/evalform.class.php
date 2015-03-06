@@ -507,10 +507,7 @@ class EvalForm extends FormValidator
             $this->setDefaults($defaults);
         }
 
-        $this->addElement('textarea', 'description', get_lang('Description'), array(
-            'rows' => '3',
-            'class' => 'span3',
-        ));
+        $this->addElement('textarea', 'description', get_lang('Description'));
 
         $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'));

@@ -61,7 +61,7 @@ if (Gradebook::is_active()) {
 
     $form->addElement('html','</div>');
 }
-$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+$form->addButtonUpdate(get_lang('Save'));
 
 // set default values
 $default['title'] = Security::remove_XSS($title);

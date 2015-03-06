@@ -798,7 +798,7 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple', 'get', '', '', array('class' => 'form-search'), false);
+$form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword', get_lang('keyword'));

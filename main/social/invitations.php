@@ -91,8 +91,44 @@ if (is_array($_GET) && count($_GET)>0) {
         }
     }
 }
+//Block Avatar Social
+$user_info    = UserManager::get_user_info_by_id($user_id);
 
-$social_avatar_block = SocialManager::show_social_avatar_block('invitations');
+$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block .= SocialManager::show_social_avatar_block('invitations');
+$social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+$social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+/* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */
+$social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+$chat_status = $user_info['extra'];
+if(!empty($chat_status['user_chat_status'])){
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+}else{
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+}
+
+$editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+if (api_get_setting('sso_authentication') === 'true') {
+    $subSSOClass = api_get_setting('sso_authentication_subclass');
+    $objSSO = null;
+
+    if (!empty($subSSOClass)) {
+        require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+        $subSSOClass = 'sso' . $subSSOClass;
+        $objSSO = new $subSSOClass();
+    } else {
+        $objSSO = new sso();
+    }
+
+    $editProfileUrl = $objSSO->generateProfileEditingURL();
+}
+$social_avatar_block .= '<div class="edit-profile">
+                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                         </div>';
+$social_avatar_block .= '</div>';
+//Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');
 $social_right_content = '<div class="span9">
                             <div id="id_response" align="center"></div>
@@ -217,5 +253,5 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->get_template('social/invitations.tpl');
 $tpl->display($social_layout);

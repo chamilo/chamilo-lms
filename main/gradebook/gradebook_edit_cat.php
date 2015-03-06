@@ -77,7 +77,13 @@ function check_skills() {
 </script>';
 
 $catedit = Category::load($edit_cat);
-$form = new CatForm(CatForm::TYPE_EDIT, $catedit[0], 'edit_cat_form');
+$form = new CatForm(
+    CatForm::TYPE_EDIT,
+    $catedit[0],
+    'edit_cat_form',
+    'post',
+    api_get_self().'?'.api_get_cidreq().'&editcat='.$edit_cat
+);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();

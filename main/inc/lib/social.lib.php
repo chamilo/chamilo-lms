@@ -420,17 +420,18 @@ class SocialManager extends UserManager
             if (!empty($rss->items)) {
                 $icon_rss = '';
                 if (!empty($feed)) {
-                    $icon_rss = Display::url(Display::return_icon('rss.png', '', array(), 32), Security::remove_XSS($feed['rssfeeds']), array('target' => '_blank'));
+                    $icon_rss = Display::url(Display::return_icon('social_rss.png', '', array(), 22), Security::remove_XSS($feed['rssfeeds']), array('target' => '_blank'));
                 }
-                $res .= '<h2>'.$rss->channel['title'].''.$icon_rss.'</h2>';
-                $res .= '<div class="social-rss-channel-items">';
+
+                $res .= '<h3 class="title-rss">'.$icon_rss.' '.$rss->channel['title'].'</h3>';
+                $res .= '<div class="rss-items">';
                 foreach ($rss->items as $item) {
                     if ($limit >= 0 and $i > $limit) {
                         break;
                     }
-                    $res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
-                    $res .= '<div class="social-rss-item-date">'.api_get_local_time($item['date_timestamp']).'</div>';
-                    $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+                    $res .= '<h4 class="rss-title"><a href="'.$item['link'].'">'.$item['title'].'</a></h4>';
+                    $res .= '<div class="rss-date">'.api_get_local_time($item['date_timestamp']).'</div>';
+                    $res .= '<div class="rss-content"><p>'.$item['description'].'</p></div>';
                     $i++;
                 }
                 $res .= '</div>';
@@ -606,47 +607,34 @@ class SocialManager extends UserManager
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
-        $showUserImage = user_is_online($user_id) || api_is_platform_admin();
 
-        $html = '<div>';
+        $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
             //--- Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
             $big = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'], 160, GROUP_IMAGE_SIZE_BIG);
 
-            $html .= '<div class="social-content-image">';
-            $html .= '<div class="well social-background-content">';
+
             $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id);
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">
+                $html .= '<div id="edit_image">
                             <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
                     get_lang('EditGroup').'</a></div>';
             }
-            $html .= '</div>';
-            $html .= '</div>';
+
         } else {
-            if ($showUserImage) {
-                $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
-            } else {
-                $img_array = UserManager::get_user_picture_path_by_id(null, 'web', true, true);
-            }
+            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
 
             //--- User image
-
-            $html .= '<div class="well social-background-content">';
             if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="thumbnail thickbox" href="'.$big_image.'"><img src='.$normal_image.' /> </a>';
+                $html .= '<a class="thickbox" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
             } else {
                 $html .= '<img src='.$normal_image.' width="110px" />';
             }
-            if (api_get_user_id() == $user_id) {
-                $html .= '<div id="edit_image" class="hidden_message" style="display:none">';
-                $html .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('EditProfile').'</a></div>';
-            }
-            $html .= '</div>';
+
         }
         $html .= '</div>';
         return $html;
@@ -723,7 +711,9 @@ class SocialManager extends UserManager
         $active = null;
         if (!in_array($show, array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends'))) {
 
-            $html .= '<div class="well sidebar-nav"><ul class="nav nav-list">';
+            $html .= '<div class="panel panel-info sidebar-nav">';
+            $html .= '<div class="panel-body">';
+            $html .= '<ul class="nav nav-list">';
             $active = $show == 'home' ? 'active' : null;
             $html .= '<li class="home-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Home').'</a></li>';
             $active = $show == 'messages' ? 'active' : null;
@@ -748,8 +738,7 @@ class SocialManager extends UserManager
             //My files
             $active = $show == 'myfiles' ? 'active' : null;
             $html .= '<li class="myfiles-icon '.$active.'"><a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">'.get_lang('MyFiles').'</span></a></li>';
-            $html .='</ul>
-                  </div>';
+            $html .='</ul></div></div>';
         }
 
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -761,8 +750,9 @@ class SocialManager extends UserManager
         }
 
         if ($show == 'shared_profile') {
-            $html .= '<div class="well sidebar-nav">
-                    <ul class="nav nav-list">';
+            $html .= '<div class="panel panel-info sidebar-nav">';
+            $html .= '<div class="panel-body">';
+            $html .=  '<ul class="nav nav-list">';
 
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
@@ -834,7 +824,7 @@ class SocialManager extends UserManager
                     }
                 }
             }
-            $html .= '</ul></div>';
+            $html .= '</ul></div></div>';
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
@@ -1284,8 +1274,7 @@ class SocialManager extends UserManager
 
         $isOwnWall = (api_get_user_id() == $userId  && $userId == $friendId);
         $messages = self::getWallMessages($userId, MESSAGE_STATUS_WALL, $idMessage, $start, $limit, $offset);
-        $formattedList = '<div class="mediaPost" style="width:calc(100%-14px);
-        display:block;padding-left:14px">';
+        $formattedList = '<div class="sub-mediapost">';
         $users = array();
 
         // The messages are ordered by date descendant, for comments we need ascendant
@@ -1302,50 +1291,38 @@ class SocialManager extends UserManager
                 : $users[$userIdLoop]['lastname'] . ' ' . $users[$userIdLoop]['firstname'];
             $url = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userIdLoop;
             $media = '';
-            $media .= '<div class="media" style="width:100%; display:inline-block; margin-bottom:5px;">';
-            $media .= '<div class="media-body" style="width: 100%; height: 32px; margin-bottom:5px;">';
-            $media .= '<div class="pull-left" style="width: 32px; height: 100%;">';
-            $media .= '<a href="'.$url.'" >'
-            . '<img class="" src="'. $users[$userIdLoop]['avatar'] .'" '
-            . 'alt="'.$users[$userIdLoop]['complete_name'].'" style="width: 32px; height: 32px;"> '
-            . '</a>';
-            $media .= '</div>';
-            $media .= '<div class="pull-left" style="padding-left:4px;width: calc(100% - 36px);height: 100%;">';
-            $media .= '<div style="width: 100%; height: 50%;">';
-            $media .= '<h4 class="media-heading" style="width: inherit;">'
-            . '<a href="'.$url.'">'.$nameComplete.'</a></h4>';
-            $media .= '</div>';
-            $media .= '<div style="width: 100%; height: 50%;">';
-            $media .= '<div class="pull-left" style="height: 100%;">';
-            $media .= '<small><span class="time timeago" title="'.$date.'">'.$date.'</span></small>';
-            $media .= '</div>';
-            $media .= '</div>';
-            $media .= '</div>';
-            $media .= '</div>';
+            $media .= '<div class="rep-post">';
             if ($isOwnWall) {
-                $media .= '<div style="width: 100%;height:20px">';
-                $media .= '<div><a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-                $message['id'].'">'.get_lang('SocialMessageDelete').'</a></div>';
+                $media .= '<div class="pull-right deleted-mgs">';
+                $media .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
+                    $message['id'].'">'.get_lang('x').'</a>';
                 $media .= '</div>';
             }
-            $media .= '<div style="width:100%;text-align:justify;">';
-            $media .= '<span class="content">'.Security::remove_XSS($message['content']).'</span>';
+            $media .= '<div class="user-image">';
+            $media .= '<a href="'.$url.'" ><img src="'. $users[$userIdLoop]['avatar'] .
+                       '" alt="'.$users[$userIdLoop]['complete_name'].'" class="avatar-thumb"></a>';
             $media .= '</div>';
-            $media .= '</div>'; // end media
+            $media .= '<div class="user-data">';
+            $media .= '<div class="username">' . '<a href="'.$url.'">'.$nameComplete.'</a></div>';
+            $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+            $media .= '</div>';
+            $media .= '<div class="msg-content">';
+            $media .= '<p>'.Security::remove_XSS($message['content']).'</p>';
+            $media .= '</div></div>';
+
             $formattedList .= $media;
         }
 
         $formattedList .= '</div>';
 
-        $formattedList .= '<div class="mediaPost" style="display:inline-block;">';
+        $formattedList .= '<div class="mediapost-form">';
             $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$idMessage.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
-                '" name="social_wall_new_msg" rows="1" cols="80" style="width: 98%"></textarea>
-                <br />
+                '" name="social_wall_new_msg" rows="1" style="width:80%;" ></textarea>
                 <input type="submit" name="social_wall_new_msg_submit"
-                value="'.get_lang('Post').'" class="float right btn" />
+                value="'.get_lang('Post').'" class="pull-right btn" />
                 </form>';
         $formattedList .= '</div>';
         return $formattedList;
@@ -1441,40 +1418,29 @@ class SocialManager extends UserManager
 
         $htmlDelete = '';
         if ($isOwnWall) {
-            $htmlDelete .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-            $message['id'].'">'.get_lang('SocialMessageDelete').'</a>';
+            $htmlDelete .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
+            $message['id'].'">'.get_lang('x').'</a>';
         }
 
         $html = '';
-        $html .= '<div class="mediaPost" style="width: 100%; display:inline-block; margin-bottom:5px;">';
-        $html .= '<div class="media-body" style="width: 100%; height: 40px; margin-bottom:5px;">';
-        $html .= '<div class="pull-left" style="width: 40px; height: 100%;">';
-        $html .= '<a href="'.$urlAuthor.'">'.'<img class="" src="'.$avatarAuthor.
-        '" alt="'.$nameCompleteAuthor.'" style="width: 40px; height: 40px;"></a>';
-        $html .= '</div>';
-        $html .= '<div class="pull-left" style="padding-left:4px; width: calc(100% - 44px);height: 100%;">';
-        $html .= '<div style="width: 100%; height: 50%;">';
-        $html .= '<h4 class="media-heading" style="width: inherit;">';
-        $html .= '<a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</h4>';
-        $html .= '</div>';
-        $html .= '<div style="width: 100%; height: 50%;">';
-        $html .= '<div class="pull-left" style="height: 100%;">';
-        $html .= '<small><span class="time timeago" title="'.$date.'">'.$date.'</span></small>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
+        $html .= '<div class="top-mediapost" >';
         if ($isOwnWall) {
-            $html .= '<div style="width: 100%;height:20px">';
+            $html .= '<div class="pull-right deleted-mgs">';
             $html .= $htmlDelete;
             $html .= '</div>';
         }
-        $html .= '<div style="width: 100%;">';
+        $html .= '<div class="user-image" >';
+        $html .= '<a href="'.$urlAuthor.'">'.'<img class="avatar-thumb" src="'.$avatarAuthor.'" alt="'.$nameCompleteAuthor.'"></a>';
+        $html .= '</div>';
+        $html .= '<div class="user-data">';
+        $html .= '<div class="username"><a href="'.$urlAuthor.'">'.$nameCompleteAuthor.'</a>'.$htmlReceiver.'</div>';
+        $html .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
+        $html .= '</div>';
+        $html .= '<div class="msg-content">';
+        $html .= '<div class="img-post">';
         $html .= $wallImage;
         $html .= '</div>';
-        $html .= '<div style="width:100%;text-align:justify;">';
-        $html .= '<span class="content">'.
-            Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</span>';
+        $html .= '<p>'. Security::remove_XSS(self::readContentWithOpenGraph($message['content'])).'</p>';
         $html .= '</div>';
         $html .= '</div>'; // end mediaPost
 

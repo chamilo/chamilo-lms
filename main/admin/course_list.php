@@ -308,7 +308,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
+    $form->addButtonSearch(get_lang('SearchCourse'));
     $defaults['keyword_language'] = '%';
     $defaults['keyword_visibility'] = '%';
     $defaults['keyword_subscribe'] = '%';
@@ -340,13 +340,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);
+    $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $form->addElement('text', 'keyword', null);
-    $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
+    $form->addButtonSearch(get_lang('SearchCourse'));
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
     // Create a filter by session
-    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+    $sessionFilter = new FormValidator('course_filter', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
     $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
     $sessionList = array();
     if (!empty($sessionId)) {

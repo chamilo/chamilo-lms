@@ -693,9 +693,9 @@ if (!empty($student_id)) {
                         $scoretotal = array();
                         if (isset($cats) && isset($cats[0])) {
                             if (!empty($session_id)) {
-                                $scoretotal= $cats[0]->calc_score($student_id, $course_code, $session_id);
+                                $scoretotal= $cats[0]->calc_score($student_id, null, $course_code, $session_id);
                             } else {
-                                $scoretotal= $cats[0]->calc_score($student_id, $course_code);
+                                $scoretotal= $cats[0]->calc_score($student_id, null, $course_code);
                             }
                         }
 

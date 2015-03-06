@@ -482,13 +482,7 @@ $(document).ready(function() {
             <div class="skill-home">
                 <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
             </div>
-            <!-- Legend -->
-            <div class="legend">
-                <h4 class="title-skill">{{ "Legend"|get_lang }}</h4>
-                <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
-                <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
-            </div>
-            <!-- End Legend -->
+
 
             <!-- ACCORDION -->
 
@@ -559,6 +553,19 @@ $(document).ready(function() {
                                 <li><a href="#" id="lead">{{ 'Gray' | get_lang }}</a></li>
                                 <li><a href="#" id="light-yellow">{{ 'Corn' | get_lang }}</a></li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                            <h4 class="title-skill">{{ "Legend"|get_lang }}</h4>
+                        </a>
+                    </div>
+                    <div id="collapseFour" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
+                            <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
                         </div>
                     </div>
                 </div>

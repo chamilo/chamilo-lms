@@ -30,7 +30,7 @@ $tool_name = get_lang("AddClasses");
 
 $form = new FormValidator('add_class');
 $form->addText('name', get_lang('ClassName'));
-$form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
+$form->addButtonCreate(get_lang('Ok'));
 if ($form->validate()) {
     $values = $form->exportValues();
     ClassManager::create_class($values['name']);

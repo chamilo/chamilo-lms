@@ -152,7 +152,7 @@ class StudentPublicationLink extends AbstractLink
 	 * @param null $stud_id
 	 * @return array|null
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$stud_id = intval($stud_id);
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -216,12 +216,22 @@ class StudentPublicationLink extends AbstractLink
 			// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
+			$bestResult = 0;
+			$weight = 0;
+			$sumResult = 0;
+
 			while ($data = Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['user_id'], $students))) {
 					if ($assignment['qualification'] != 0) {
 						$students[$data['user_id']] = $data['qualification'];
 						$rescount++;
 						$sum += $data['qualification'] / $assignment['qualification'];
+						$sumResult += $data['qualification'];
+
+						if ($data['qualification'] > $bestResult) {
+							$bestResult = $data['qualification'];
+						}
+						$weight = $assignment['qualification'];
 					}
 				}
 			}
@@ -229,6 +239,12 @@ class StudentPublicationLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
+				if ($type == 'best') {
+					return array($bestResult, $weight);
+				}
+				if ($type == 'average') {
+					return array($sumResult/$rescount, $weight);
+				}
 				return array($sum, $rescount);
 			}
 		}

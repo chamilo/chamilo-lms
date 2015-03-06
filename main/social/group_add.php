@@ -81,5 +81,5 @@ $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 //$tpl->assign('actions', $actions);
 //$tpl->assign('message', $show_message);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->get_template('social/home.tpl');
 $tpl->display($social_layout);

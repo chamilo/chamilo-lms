@@ -4,6 +4,11 @@
     <script>
         (function () {
             var designer = null;
+            $(document).on('ready',function(){
+                $('.help-badges').tooltip();
+                $('.help-badges-img').tooltip();
+            }
+            );
 
             $(document).on('ready', function () {
                 $('#btn-open-designer').on('click', function (e) {
@@ -40,38 +45,36 @@
         })();
     </script>
     <div class="span12">
-        <h1 class="page-header">{{ 'Badges' | get_lang }}</h1>
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerDetails' | get_lang }}</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Skills' | get_lang }}</a>
-            </li>
-            <li class="active">
-                <a href="#">{{ 'Edit' | get_lang }}</a>
-            </li>
-        </ul>
+
+        <div class="badges-tabs">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+                </li>
+                <li>
+                    <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Insignias Actuales' | get_lang }}</a>
+                </li>
+                <li class="active">
+                    <a href="#">{{ 'Edit' | get_lang }}</a>
+                </li>
+            </ul>
+        </div>
+
         <div class="tab-content">
             <div class="tab-pane active">
-                <div class="row">
-                    <div class="span3">
-                        <p>{{ 'DesignANewBadgeComment' | get_lang }}</p>
-                        <p>
-                            <button id="btn-open-designer" class="btn btn-info btn-large btn-block" type="button">{{ 'DesignNewBadge' | get_lang }}</button>
-                        </p>
-                        <hr>
-                        <div class="well well-small {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
+                <div class="openbadges-introduction">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="block-edit">
+                            <div class="block-title">{{ 'SkillInfo' | get_lang }}</div>
                         </div>
                     </div>
+                </div>
+                <div class="row-fluid">
                     <div class="span9">
                         <form action="{{ _p.web_self_query_vars }}" class="form-horizontal" method="post" enctype="multipart/form-data">
                             <fieldset>
-                                <legend>{{ 'SkillInfo' | get_lang }}</legend>
+
                                 <div class="control-group">
                                     <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>
                                     <div class="controls">
@@ -87,7 +90,7 @@
                                 <div class="control-group">
                                     <label class="control-label" for="image">{{ 'Image' | get_lang }}</label>
                                     <div class="controls">
-                                        <input type="file" name="image" id="image" class="input-xxlarge" accept="image/*">
+                                        <input data-placement="left" data-toggle="tooltip" title="{{ 'Medidas de la insignia 200 x 200 pixeles en formato PNG' | get_lang }}" type="file" name="image" id="image" class="help-badges-img input-xxlarge" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -98,10 +101,20 @@
                                 </div>
                             </fieldset>
                             <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">{{ 'Create'| get_lang }}</button>
+                                <button type="submit" class="btn btn-info btn-large">{{ 'Guardar Insignia'| get_lang }}</button>
                             </div>
                         </form>
                     </div>
+                    <div class="span3">
+                        <div class="create-badges">
+                            <button id="btn-open-designer" class="help-badges btn btn-info btn-large btn-block" data-toggle="tooltip" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">{{ 'DesignNewBadge' | get_lang }}</button>
+                        </div>
+                        <p class="badges-text">Vista previa de la imagen</p>
+                        <div class="badges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
+                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

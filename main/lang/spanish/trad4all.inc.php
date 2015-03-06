@@ -338,8 +338,23 @@ $WCAGGoMenu = "Ir al menú";
 $WCAGGoContent = "Ir al contenido";
 $NoTimeLimits = "Sin límite de tiempo";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
+$NoPosts = "Sin publicaciones";
+$WithoutAchievedSkills = "Sin competencias logradas";
 $TypeMessage = "Por favor, escriba su mensaje";
 $ConfirmReset = "¿Seguro que quiere borrar todos los mensajes?";
+$MailCronCourseExpirationReminderBody = "Estimado %s,
+
+Ha llegado a nuestra atención que no ha completado el curso %s aunque su fecha de vencimiento haya sido establecida al %s, quedando %s días para terminarlo.
+
+Le recordamos que solo tiene la posibilidad de seguir este curso una vez al año, razón por la cual le invitamos con insistencia a completar su curso en el plazo que queda.
+
+Puede regresar al curso conectándose a la plataforma en esta dirección: %s
+
+Saludos cordiales,
+
+El equipo de %s";
+$MailCronCourseExpirationReminderSubject = "Urgente: Recordatorio de vencimiento de curso %s";
+$LearningPathGradebookWarning = "Advertencia: Es posible utilizar en una evaluación un ejercicio agregado a una lección. Sin embargo, si la lección  ya está incluida, este ejercicio puede ser parte de la evaluación del curso. La evaluación de una lección se realiza de acuerdo con el porcentaje de progreso, mientras que la evaluación de un ejercicio se realiza de acuerdo con la puntuación obtenida. Por último, el resultado de las encuestas se basa en la respuesta o no de la encuesta, lo que significa que el resultado se obtiene a partir de 0 (no responde) o 1 (responde) según corresponda. Asegúrese de probar las combinaciones a organizar su Evaluación para evitar problemas.";
 $ChooseEitherDurationOrTimeLimit = "Elija entre duración o límite de tiempo";
 $ClearList = "Borrar la lista";
 $SessionBanner = "Banner de sesión";

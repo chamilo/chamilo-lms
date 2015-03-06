@@ -492,6 +492,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = array();
+        /* $badges_default = "hola"; */
 
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -499,7 +500,12 @@ class Skill extends Model
                 $a                  = $skill_rel_skill->get_skill_parents($row['id']);
                 $row['level']       = count($a) - 1;
                 $row['gradebooks']  = self::get_gradebooks_by_skill($row['id']);
+                /* if($row['icon']=="") {
+                    $row['icon'] = $badges_default;
+                }*/
                 $skills[$row['id']] = $row;
+
+
             }
         }
 
@@ -740,6 +746,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
+
         $clean_skill = array();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
@@ -752,7 +759,6 @@ class Skill extends Model
                             sha1($skill['name'])
                         );
                     }
-
                     $clean_skill[$skill['id']] = array_merge(
                         $skill,
                         array(

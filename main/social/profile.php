@@ -21,13 +21,21 @@ if (api_get_setting('allow_social_tool') !='true') {
 
 $user_id = api_get_user_id();
 
-$friendId = isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
+$friendId = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
 
 $isAdmin = api_is_platform_admin($user_id);
 
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
+
+//Initialize blocks
+$social_extra_info_block = null;
+$social_course_block = null;
+$social_group_info_block = null;
+$social_rss_block = null;
+$social_skill_block = null;
+$social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
@@ -366,8 +374,46 @@ if (is_array($personal_course_list)) {
     //to avoid repeted courses
     $course_list_code = array_unique_dimensional($course_list_code);
 }
+//Block Avatar Social
+$social_avatar_block = '<div class="panel panel-info social-avatar">';
+$social_avatar_block .= SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
+$social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
+$social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
+/* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */
+$social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
+$chat_status = $user_info['extra'];
+if(!empty($chat_status['user_chat_status'])){
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
+}else{
+    $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
+}
 
-$social_avatar_block = SocialManager::show_social_avatar_block('shared_profile', null, $user_id);
+if (api_get_user_id() === $friendId) {
+    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+    if (api_get_setting('sso_authentication') === 'true') {
+        $subSSOClass = api_get_setting('sso_authentication_subclass');
+        $objSSO = null;
+
+        if (!empty($subSSOClass)) {
+            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
+
+            $subSSOClass = 'sso' . $subSSOClass;
+            $objSSO = new $subSSOClass();
+        } else {
+            $objSSO = new sso();
+        }
+
+        $editProfileUrl = $objSSO->generateProfileEditingURL();
+    }
+    $social_avatar_block .= '<div class="edit-profile">
+                                <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
+                             </div>';
+}
+
+$social_avatar_block .= '</div>';
+
+//Social Block Menu
 $social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 
 //Setting some session info
@@ -385,6 +431,7 @@ foreach ($sessionList as $session) {
 $friend_html = listMyFriends($user_id, $link_shared ,$show_full_profile);
 $social_left_content = '<div class="well sidebar-nav">' .$friend_html . '</div>';
 
+/*
 $personal_info = null;
 if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
     $personal_info .= '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
@@ -423,11 +470,24 @@ if ($show_full_profile) {
     }
     $personal_info .=  '</dl>';
 }
+*/
+//Social Block Wall
 
 $wallSocialAddPost = wallSocialAddPost();
-$social_right_content = SocialManager::social_wrapper_div($wallSocialAddPost, 5);
+$social_wall_block = $wallSocialAddPost;
 
-$social_right_content .= wallSocialPost($my_user_id, $friendId);
+//Social Post Wall
+$post_wall = wallSocialPost($my_user_id,$friendId) ;
+$social_post_wall_block  = '<div class="panel panel-info social-post">';
+$social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
+$social_post_wall_block .='<div class="panel-body">';
+if(empty($post_wall)){
+    $social_post_wall_block .= '<p>'.get_lang("NoPosts").'</p>';
+}else{
+    $social_post_wall_block .= $post_wall;
+}
+$social_post_wall_block .= '</div></div>';
+
 $socialAutoExtendLink = Display::url(
     get_lang('SeeMore'),
     $socialAjaxUrl . '?u='. $my_user_id . '&a=listWallMessage&start=10&length=5',
@@ -436,22 +496,24 @@ $socialAutoExtendLink = Display::url(
     )
 );
 
-$socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4);
+/* $socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4); */
+$socialRightInformation = null;
 
 //$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
-
+$social_right_content = null;
 
 if ($show_full_profile) {
 
-    // Extra information
+    // Block Extra information
     $t_uf    = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
     $t_ufo    = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
     $extra_user_data = UserManager::get_extra_user_data($user_id);
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
 
-        $extra_information .= '<div><h3>'.get_lang('ExtraInformation').'</h3></div>';
-        $extra_information .='<div class="social-profile-info">';
+        $extra_information .= '<div class="panel panel-info">';
+        $extra_information .= '<div class="panel-heading">'.get_lang('ExtraInformation').'</div>';
+        $extra_information .='<div class="panel-body">';
         $extra_information_value = '';
         foreach($extra_user_data as $key=>$data) {
             //Avoding parameters
@@ -524,17 +586,20 @@ if ($show_full_profile) {
         if (!empty($extra_information_value)) {
             $extra_information .= $extra_information_value;
         }
-        $extra_information .= '</div>'; //social-profile-info
+        $extra_information .= '</div></div>'; //social-profile-info
     }
-    //     if there are information to show
+
+ //If there are information to show Block Extra Information
+
     if (!empty($extra_information_value)) {
-        $socialRightInformation .=  SocialManager::social_wrapper_div($extra_information, 4);
+        $social_extra_info_block =  $extra_information;
     }
 
     // MY GROUPS
     $results = GroupPortalManager::get_groups_by_user($my_user_id, 0);
     $grid_my_groups = array();
     $max_numbers_of_group = 4;
+
     if (is_array($results) && count($results) > 0) {
         $i = 1;
         foreach ($results as $result) {
@@ -586,6 +651,7 @@ if ($show_full_profile) {
         }
     }
 
+    //Block My Groups
     if (count($grid_my_groups) > 0) {
         $my_groups = '';
         $count_groups = 0;
@@ -594,7 +660,8 @@ if ($show_full_profile) {
         } else {
             $count_groups = count($results);
         }
-        $my_groups .=  '<div><h3>'.get_lang('MyGroups').' ('.$count_groups.') </h3></div>';
+        $my_groups .= '<div class="panel panel-info">';
+        $my_groups .= '<div class="panel-heading">'.get_lang('MyGroups').' ('.$count_groups.') </div>';
 
         if ($i > $max_numbers_of_group) {
             if (api_get_user_id() == $user_id) {
@@ -609,34 +676,30 @@ if ($show_full_profile) {
                     .'</a></div>';
             }
         }
-        /*
-        Display::display_sortable_grid(
-            'shared_profile_mygroups',
-            array(),
-            $grid_my_groups,
-            array('hide_navigation'=>true, 'per_page' => 2),
-            $query_vars,
-            false,
-            array(true, true, true,false)
-        );
-        */
+
         $total = count($grid_my_groups);
         $i = 1;
         foreach($grid_my_groups as $group) {
+            $my_groups .= '<div class="panel-body">';
             $my_groups .=  $group[0];
+            $my_groups .= '</div>';
             if ($i < $total) {
                 $my_groups .=  ', ';
             }
             $i++;
         }
-        $socialRightInformation .=  SocialManager::social_wrapper_div($my_groups, 4);
+        $my_groups .= '</div>';
+        $social_group_info_block =  $my_groups;
     }
+
+    //Block Social Course
 
     $my_courses = null;
     // COURSES LIST
     if ( is_array($list) ) {
-        $my_courses .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
-        $my_courses .=  '<div class="social-content-training">';
+        $my_courses .=  '<div class="panel panel-info">';
+        $my_courses .=  '<div class="panel-heading">'.api_ucfirst(get_lang('MyCourses')).'</div>';
+        $my_courses .=  '<div class="panel-body">';
 
         //Courses without sessions
         $i=1;
@@ -648,23 +711,100 @@ if ($show_full_profile) {
                 $i++;
             }
         }
-        $my_courses .=  '</div>';        //social-content-training
-        $socialRightInformation .=  SocialManager::social_wrapper_div($my_courses, 4);
+        $my_courses .=  '</div></div>';
+
+        $social_course_block .=  $my_courses;
     }
 
+    //Block Social Sessions
 
-    $sessions =  '<div><h3>'.api_ucfirst(get_lang('MySessions')).'</h3></div>';
-    $sessions .=  "<div class='social-content-training'>$htmlSessionList</div>";
-    $socialRightInformation .=  SocialManager::social_wrapper_div($sessions, 4);
+    if (count($sessionList) > 0) {
+        $sessions  = '<div class="panel panel-info">';
+        $sessions .= '<div class="panel-heading">'.api_ucfirst(get_lang('MySessions')).'</div>';
+        $sessions .= '<div class="panel-body">'.$htmlSessionList.'</div>';
+        $sessions .= '</div>';
+        $social_session_block = $sessions;
+    }
 
-
-    // user feeds
+    // Block Social User Feeds
     $user_feeds = SocialManager::get_user_feeds($user_id);
+
     if (!empty($user_feeds)) {
-        $rss =  '<div><h3>'.get_lang('RSSFeeds').'</h3></div>';
-        $rss .=  '<div class="social-content-training">'.$user_feeds.'</div>';
-        $socialRightInformation .=  SocialManager::social_wrapper_div($rss, 4);
+        $rss  = '<div class="panel panel-info social-rss">';
+        $rss .= '<div class="panel-heading">'.get_lang('RSSFeeds').'</div>';
+        $rss .= '<div class="panel-body">'.$user_feeds.'</div></div>';
+        $social_rss_block =  $rss;
+
     }
+
+    //BLock Social Skill
+    if (api_get_setting('allow_skills_tool') == 'true') {        
+        $skill = new Skill();
+
+        $ranking = $skill->get_user_skill_ranking($my_user_id);
+        $skills = $skill->get_user_skills($my_user_id, true);
+
+        $social_skill_block = '<div class="panel panel-info social-skill">';
+        $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
+        $social_skill_block .= '<div class="btn-group pull-right"> <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="caret"></span></a>
+                             <ul class="dropdown-menu">';
+        if (api_is_student() || api_is_student_boss() || api_is_drh()) {
+            $social_skill_block .= '<li>' . Display::url(
+                    get_lang('SkillsReport'),
+                    api_get_path(WEB_CODE_PATH) . 'social/my_skills_report.php'
+                ) . '</li>';
+        }
+
+        $social_skill_block .= '<li>' . Display::url(
+                get_lang('SkillsWheel'),
+                api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php'
+            ) . '</li>';
+
+        $social_skill_block .= '<li>' . Display::url(
+                sprintf(get_lang('YourSkillRankingX'), $ranking),
+                api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php'
+            ) . '</li>';
+
+        $social_skill_block .= '</ul></div></div>';
+
+        $lis = '';
+        if (!empty($skills)) {
+            foreach ($skills as $skill) {
+                $badgeImage = null;
+
+                if (!empty($skill['icon'])) {
+                    $badgeImage = Display::img(
+                        api_get_path(WEB_DATA_PATH) . $skill['icon'],
+                        $skill['name']
+                    );
+                } else {
+                    $badgeImage = Display::return_icon(
+                        'award_red.png',
+                        $skill['name'],
+                        array('title' => $skill['name'])
+                    );
+                }
+
+                $lis .= Display::tag(
+                    'li',
+                    $badgeImage .
+                    '<div class="badges-name">' . $skill['name'] . '</div>'
+                );
+            }
+            $social_skill_block .= '<div class="panel-body">';
+            $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
+            $social_skill_block .= '</div>';
+        }else{
+
+            $social_skill_block .= '<div class="panel-body">';
+            $social_skill_block .= '<p>'. get_lang("WithoutAchievedSkills") . '</p>';
+            $social_skill_block .= '<p>' . Display::url(get_lang('SkillsWheel'),api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php').'</p>';
+            $social_skill_block .= '</div>';
+        }
+        $social_skill_block.='</div>';
+    }
+
 
     //--Productions
     $production_list =  UserManager::build_production_list($user_id);
@@ -782,10 +922,17 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('social_wall_block', $social_wall_block);
+$tpl->assign('social_post_wall_block', $social_post_wall_block);
+$tpl->assign('social_extra_info_block', $social_extra_info_block);
+$tpl->assign('social_course_block', $social_course_block);
+$tpl->assign('social_group_info_block', $social_group_info_block);
+$tpl->assign('social_rss_block', $social_rss_block);
+$tpl->assign('social_skill_block', $social_skill_block);
+$tpl->assign('social_session_block', $social_session_block);
 $tpl->assign('socialRightInformation', $socialRightInformation);
 $tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
 
 /*
@@ -853,16 +1000,18 @@ function listMyFriends($user_id, $link_shared, $show_full_profile)
 
 function wallSocialAddPost()
 {
-    $html = '';
-    $html .= '<h3>' . get_lang('SocialWall') . '</h3>';
+    $html  = '<div class="panel panel-info social-wall">';
+    $html .= '<div class="panel-heading">' . get_lang('SocialWall') . '</div>';
+    $html .= '<div class="panel-body">';
     $html .=
         '<form name="social_wall_main" method="POST" enctype="multipart/form-data">
             <label for="social_wall_new_msg_main" class="hide">' . get_lang('SocialWallWhatAreYouThinkingAbout') . '</label>
         <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
         <br />
-        <input class="" name="picture" type="file" accept="image/*">
-        <input type="submit" name="social_wall_new_msg_main_submit" value="'.get_lang('Post').'" class="float right btn btn-primary" />
+        <input class="" name="picture" type="file" accept="image/*" style="width:80%;">
+        <input type="submit" name="social_wall_new_msg_main_submit" value="'.get_lang('Post').'" class="pull-right btn btn-success" />
     </form>';
+    $html.= '</div></div>';
 
     return $html;
 }
@@ -876,7 +1025,7 @@ function wallSocialPost($userId, $friendId)
         $post = $array[$i]['html'];
         $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
 
-        $html .= SocialManager::social_wrapper_div($post.$comment, 5);
+        $html .= $post.$comment;
     }
 
     return $html;

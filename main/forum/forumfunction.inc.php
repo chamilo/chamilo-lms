@@ -480,7 +480,7 @@ function show_edit_forumcategory_form($inputvalues = array())
         array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200')
     );
 
-    $form->addElement('style_submit_button', 'SubmitEditForumCategory', get_lang('ModifyCategory'), 'class="save"');
+    $form->addButtonUpdate(get_lang('ModifyCategory'), 'SubmitEditForumCategory');
 
     // Setting the default values.
     $defaultvalues['forum_category_id'] = $inputvalues['cat_id'];

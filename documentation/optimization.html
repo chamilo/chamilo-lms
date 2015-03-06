@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8" />
 	<title>Chamilo Optimization Guide</title>
+    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -20,11 +21,11 @@
                 <ul class="nav">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="readme.html">About</a></li>
-                    <li><a href="license.html">License</a></li>            
-                    <li><a href="credits.html">Credits</a></li>            
-                    <li><a href="dependencies.html">Dependencies</a></li>            
+                    <li><a href="license.html">License</a></li>
+                    <li><a href="credits.html">Credits</a></li>
+                    <li><a href="dependencies.html">Dependencies</a></li>
                     <li><a href="changelog.html">Changelog</a></li>
-                </ul>        
+                </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </div>
@@ -347,7 +348,7 @@ SetEnvIfNoCase Request_URI \
 
 # Make sure proxies don't deliver the wrong content
 Header append Vary User-Agent env=!dont-vary
-</Location> 
+</Location>
 </pre>
 <hr />
 Don't have time or resources to optimize your Chamilo installation yourself? Hire an <a href="http://www.chamilo.org/en/providers">official Chamilo provider</a> and get it sorted out professionally by specialists.

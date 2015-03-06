@@ -1040,7 +1040,8 @@ function display_language_selection() { ?>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
-        <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
+        <button type="submit" name="step1" class="btn btn-default next" value="<?php echo get_lang('Next'); ?>">
+            <?php echo get_lang('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
         <br /><br />

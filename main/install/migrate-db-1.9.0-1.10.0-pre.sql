@@ -90,7 +90,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No');
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.17' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.19' WHERE variable = 'chamilo_database_version';
 
 -- xxCOURSExx
 

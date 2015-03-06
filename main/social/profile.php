@@ -739,8 +739,8 @@ if ($show_full_profile) {
     if (api_get_setting('allow_skills_tool') == 'true') {        
         $skill = new Skill();
 
-        $ranking = $skill->get_user_skill_ranking(api_get_user_id());
-        $skills = $skill->get_user_skills(api_get_user_id(), true);
+        $ranking = $skill->get_user_skill_ranking($my_user_id);
+        $skills = $skill->get_user_skills($my_user_id, true);
 
         $social_skill_block = '<div class="panel panel-info social-skill">';
         $social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');

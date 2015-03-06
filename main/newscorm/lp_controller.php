@@ -34,16 +34,22 @@ $language_file[] = 'exercice';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LEARNPATH;
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' ||
-    api_get_setting('show_glossary_in_documents') == 'isautomatic'
-) {
-    $htmlHeadXtra[] = '<script>
-<!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
--->
-</script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+
+$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+$showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+
+if ($showGlossary) {
+    if (api_get_setting('show_glossary_in_documents') == 'ismanual' ||
+        api_get_setting('show_glossary_in_documents') == 'isautomatic'
+    ) {
+        $htmlHeadXtra[] = '<script>
+    <!--
+        var jQueryFrameReadyConfigPath = \'' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery.min.js\';
+    -->
+    </script>';
+            $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
+            $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+    }
 }
 
 $htmlHeadXtra[] = '<script>

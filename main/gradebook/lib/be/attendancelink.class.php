@@ -19,11 +19,17 @@ class AttendanceLink extends AbstractLink
 		$this->set_type(LINK_ATTENDANCE);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_type_name()
 	{
 		return get_lang('Attendance');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_allowed_to_change_name()
 	{
 		return false;
@@ -100,7 +106,6 @@ class AttendanceLink extends AbstractLink
 		return $my_cats;
 	}
 
-
 	/**
 	 * Has anyone done this exercise yet ?
 	 */
@@ -119,7 +124,7 @@ class AttendanceLink extends AbstractLink
 	 * @param int $stud_id
 	 * @return array|null
 	 */
-	public function calc_score($stud_id = null)
+	public function calc_score($stud_id = null, $type = null)
 	{
 		$tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$session_id = api_get_session_id();
@@ -146,23 +151,37 @@ class AttendanceLink extends AbstractLink
 				return array (0, $attendance['attendance_qualify_max']);
 			}
 		} else {// all students -> get average
-			$students=array();  // user list, needed to make sure we only
+			$students = array();  // user list, needed to make sure we only
 			// take first attempts into account
 			$rescount = 0;
 			$sum = 0;
-			while ($data=Database::fetch_array($scores)) {
-				if (!(array_key_exists($data['user_id'],$students))) {
+			$sumResult = 0;
+			$bestResult = 0;
+
+			while ($data = Database::fetch_array($scores)) {
+				if (!(array_key_exists($data['user_id'], $students))) {
 					if ($attendance['attendance_qualify_max'] != 0) {
 						$students[$data['user_id']] = $data['score'];
 						$rescount++;
-						$sum += ($data['score'] / $attendance['attendance_qualify_max']);
+						$sum += $data['score'] / $attendance['attendance_qualify_max'];
+						$sumResult += $data['score'];
+						if ($data['score'] > $bestResult) {
+							$bestResult = $data['score'];
+						}
+						$weight = $attendance['attendance_qualify_max'];
 					}
 				}
 			}
 			if ($rescount == 0) {
 				return null;
 			} else {
-				return array ($sum , $rescount);
+				if ($type == 'best') {
+					return array($bestResult, $weight);
+				}
+				if ($type == 'average') {
+					return array($sumResult/$rescount, $weight);
+				}
+				return array($sum , $rescount);
 			}
 		}
 	}

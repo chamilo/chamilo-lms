@@ -5605,8 +5605,11 @@ function WSCertificatesList($startingDate = '', $endingDate = '')
     $queryResult = Database::query($query);
     $basePath = api_get_path(WEB_CODE_PATH).'upload/users/';
     while ($row = Database::fetch_array($queryResult)) {
-        $row['path_certificate'] = $basePath.substr((string) $row['user_id'], 0, 1)
-            .'/'.$row['user_id'].'/certificate'.$row['path_certificate'];
+        $certificatePath = $basePath;
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $certificatePath .= substr((string) $row['user_id'], 0, 1).'/';
+        }
+        $row['path_certificate'] = $certificatePath.$row['user_id'].'/certificate'.$row['path_certificate'];
         $result[] = $row;
     }
     return $result;

@@ -1,7 +1,5 @@
 <?php
-require_once __DIR__.'/../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+/* For licensing terms, see /license.txt */
 
 /**
  * Adds gradebook certificates to gradebook_certificate table from users
@@ -9,6 +7,10 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
  * @package chamilo.cron
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
+
+require_once __DIR__.'/../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 /**
  * Get all categories and users ids from gradebook

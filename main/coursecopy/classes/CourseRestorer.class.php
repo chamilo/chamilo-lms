@@ -894,7 +894,7 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
                 $params = (array)$forum->obj;
                 if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
-                    $cat_id = $this->restore_forum_category($params['forum_category']);
+                    $cat_id = $this->restore_forum_category($params['forum_category'], $sessionId);
                 } else {
                     $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
                 }
@@ -929,7 +929,7 @@ class CourseRestorer
 				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {
 					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
 						if ($topic->obj->forum_id == $id) {
-							$this->restore_topic($topic_id, $new_id);
+							$this->restore_topic($topic_id, $new_id, $sessionId);
 							$forum_topics ++;
 						}
 					}
@@ -946,7 +946,7 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */
-    public function restore_forum_category($my_id = null)
+    public function restore_forum_category($my_id = null, $sessionId = 0)
     {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
@@ -969,7 +969,14 @@ class CourseRestorer
                     }
                     $params = (array) $forum_cat->obj;
                     $params['c_id'] = $this->destination_course_id;
-                    $params['cat_comment']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['cat_comment'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+                    $params['cat_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $params['cat_comment'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+                    $params['session_id'] = intval($sessionId);
                     unset($params['cat_id']);
                     $params = self::DBUTF8_array($params);
                     $new_id = Database::insert($forum_cat_table, $params);
@@ -985,14 +992,14 @@ class CourseRestorer
 	/**
 	 * Restore a forum-topic
 	 */
-    public function restore_topic($thread_id, $forum_id)
+    public function restore_topic($thread_id, $forum_id, $sessionId = 0)
     {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
         $params = (array)$topic->obj;
         $params = self::DBUTF8_array($params);
-        $params['c_id']     = $this->destination_course_id;
+        $params['c_id'] = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
         $params['thread_poster_id'] = $this->first_teacher_id;
         $params['thread_date'] = api_get_utc_datetime();
@@ -1000,19 +1007,31 @@ class CourseRestorer
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
+        $params['session_id'] = intval($sessionId);
         unset($params['thread_id']);
 
         $new_id = Database::insert($table, $params);
-        api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);
+        api_item_property_update(
+            $this->destination_course_info,
+            TOOL_FORUM_THREAD,
+            $new_id,
+            'ThreadAdded',
+            api_get_user_id(),
+            0,
+            0,
+            null,
+            null,
+            $sessionId
+        );
 
 		$this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
 
 		$topic_replies = -1;
 
-		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){
+		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post) {
 			if ($post->obj->thread_id == $thread_id) {
 				$topic_replies++;
-				$this->restore_post($post_id, $new_id, $forum_id);
+				$this->restore_post($post_id, $new_id, $forum_id, $sessionId);
 			}
 		}
 		return $new_id;
@@ -1022,7 +1041,7 @@ class CourseRestorer
 	 * Restore a forum-post
 	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
 	 */
-    public function restore_post($id, $topic_id, $forum_id)
+    public function restore_post($id, $topic_id, $forum_id, $sessionId = 0)
     {
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$post = $this->course->resources[RESOURCE_FORUMPOST][$id];
@@ -1033,9 +1052,26 @@ class CourseRestorer
         $params['poster_id'] = $this->first_teacher_id;
         $params['post_date'] = api_get_utc_datetime();
         unset($params['post_id']);
-        $params['post_text']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['post_text'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+        $params['post_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+            $params['post_text'],
+            $this->course->code,
+            $this->course->destination_path,
+            $this->course->backup_path,
+            $this->course->info['path']
+        );
         $new_id = Database::insert($table_post, $params);
-        api_item_property_update($this->destination_course_info, TOOL_FORUM_POST, $new_id, 'PostAdded', api_get_user_id(), 0, 0, null, null);
+        api_item_property_update(
+            $this->destination_course_info,
+            TOOL_FORUM_POST,
+            $new_id,
+            'PostAdded',
+            api_get_user_id(),
+            0,
+            0,
+            null,
+            null,
+            $sessionId
+        );
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		return $new_id;
 	}
@@ -1050,7 +1086,8 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link) {
 				$cat_id = $this->restore_link_category($link->category_id, $session_id);
-				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE c_id = ".$this->destination_course_id."  AND category_id='" . self::DBUTF8escapestring($cat_id). "'";
+				$sql = "SELECT MAX(display_order) FROM  $link_table
+				        WHERE c_id = ".$this->destination_course_id." AND category_id='" . self::DBUTF8escapestring($cat_id). "'";
 				$result = Database::query($sql);
     			list($max_order) = Database::fetch_array($result);
 
@@ -1060,13 +1097,13 @@ class CourseRestorer
     			}
 
 				$sql = "INSERT INTO ".$link_table." SET
-				            c_id            = ".$this->destination_course_id." ,
-				            url             = '".self::DBUTF8escapestring($link->url)."',
-				            title           = '".self::DBUTF8escapestring($link->title)."',
-				            description     = '".self::DBUTF8escapestring($link->description)."',
-				            category_id     = '".$cat_id."',
-				            on_homepage     = '".$link->on_homepage."',
-				            display_order   = '".($max_order+1)."' $condition_session";
+                        c_id            = ".$this->destination_course_id." ,
+                        url             = '".self::DBUTF8escapestring($link->url)."',
+                        title           = '".self::DBUTF8escapestring($link->title)."',
+                        description     = '".self::DBUTF8escapestring($link->description)."',
+                        category_id     = '".$cat_id."',
+                        on_homepage     = '".$link->on_homepage."',
+                        display_order   = '".($max_order+1)."' $condition_session";
 
 				Database::query($sql);
 				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::insert_id();
@@ -2597,14 +2634,15 @@ class CourseRestorer
                                     api_get_user_id(),
                                     $this->destination_course_info,
                                     0,
-                                    0
+                                    $sessionId
                                 );
                             } else {
                                 $workId = $workData['id'];
                                 updateWork(
                                     $workId,
                                     $obj->params,
-                                    $this->destination_course_info
+                                    $this->destination_course_info,
+                                    $sessionId
                                 );
                                 updatePublicationAssignment(
                                     $workId,

@@ -300,9 +300,12 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Change to true to restrict the visibility
 //$_configuration['prevent_session_admins_to_manage_all_users'] = false;
 // If there are any tool available and the user is not registered hide the group
-// $_configuration['hide_course_group_if_no_tools_available'] = false;
+//$_configuration['hide_course_group_if_no_tools_available'] = false;
 
 // Attach a document to a work
-// $_configuration['add_document_to_work'] = false;
+//$_configuration['add_document_to_work'] = false;
 // Allow user comments in work
-// $_configuration['work_user_comments'] = false;
+//$_configuration['work_user_comments'] = false;
+
+// Decode UTF-8 from Web Services (option passed to SOAP)
+//$_configuration['registration.soap.php.decode_utf8'] = false;

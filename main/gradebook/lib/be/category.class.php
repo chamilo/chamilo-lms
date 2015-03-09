@@ -1636,10 +1636,6 @@ class Category implements GradebookItem
             return false;
         }
 
-        $alleval_course = $category->get_evaluations($user_id, true);
-        $alllink_course = $category->get_links($user_id, true);
-        $evals_links = array_merge($alleval_course, $alllink_course);
-
         //@todo move these in a function
         $sum_categories_weight_array = array();
         if (isset($cats_course) && !empty($cats_course)) {
@@ -1649,26 +1645,11 @@ class Category implements GradebookItem
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
             } else {
-                $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
+                $sum_categories_weight_array[$category_id] = $category->get_weight();
             }
         }
 
-        $main_weight = $cats_course[0]->get_weight();
-
-        $item_total_value = 0;
-        for ($count=0; $count < count($evals_links); $count++) {
-            /** @var AbstractLink $item */
-            $item = $evals_links[$count];
-            $score = $item->calc_score($user_id);
-            $item_value = 0;
-            if (!empty($score)) {
-                $divide = $score[1] == 0 ? 1 : $score[1];
-                $item_value = $score[0] / $divide * $item->get_weight();
-            }
-            $item_total_value += $item_value;
-        }
-
-        $item_total_value = (float)$item_total_value;
+        $main_weight = $category->get_weight();
 
         $cattotal = Category::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
@@ -1677,16 +1658,14 @@ class Category implements GradebookItem
         $scoredisplay = ScoreDisplay::instance();
         $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
 
-        // Show certificate
-        $certificate_min_score = $cats_course[0]->get_certificate_min_score();
-
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (isset($certificate_min_score) &&
-            $item_total_value >= $certificate_min_score
-        ) {
-            $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
+        if (!self::userIsApprovedInCourse($user_id, $category)) {
+            return false;
+        }
+
+            $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
             if (empty($my_certificate)) {
                 GradebookUtils::register_user_info_about_certificate(
                     $category_id,
@@ -1694,7 +1673,7 @@ class Category implements GradebookItem
                     $my_score_in_gradebook,
                     api_get_utc_datetime()
                 );
-                $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
+                $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
             }
             $html = array();
             if (!empty($my_certificate)) {
@@ -1746,9 +1725,6 @@ class Category implements GradebookItem
                 }
                 return $html;
             }
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -1834,4 +1810,40 @@ class Category implements GradebookItem
             }
         }
     }
+
+    /**
+     * Check whether a user has been approved in a course by its gradebook
+     * @param int $userId The user ID
+     * @param \Category $category The gradebook category
+     * @return boolean
+     */
+    public static function userIsApprovedInCourse($userId, \Category $category)
+    {
+        $courseEvaluations = $category->get_evaluations($userId, true);
+        $courseLinks = $category->get_links($userId, true);
+
+        $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);
+
+        $totalItemValue = 0;
+
+        for ($i = 0; $i < count($evaluationsAndLinks); $i++) {
+            $item = $evaluationsAndLinks[$i];
+            $score = $item->calc_score($userId);
+            $itemValue = 0;
+
+            if (!empty($score)) {
+                $divider = $score[1] == 0 ? 1 : $score[1];
+                $itemValue = $score[0] / $divider * $item->get_weight();
+            }
+
+            $totalItemValue += $itemValue;
+        }
+
+        $totalItemValue = floatval($totalItemValue);
+
+        $minCertificateScore = $category->get_certificate_min_score();
+
+        return !empty($minCertificateScore) && $totalItemValue >= $minCertificateScore;
+    }
+
 }

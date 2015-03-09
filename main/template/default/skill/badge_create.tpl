@@ -46,7 +46,7 @@
     </script>
     <div class="col-md-12">
 
-        <div class="badges-tabs">
+        <div class="openbadges-tabs">
             <ul class="nav nav-tabs">
                 <li>
                     <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
@@ -108,13 +108,13 @@
                         </form>
                     </div>
                     <div class="col-md-3">
-                        <div class="create-badges">
+                        <div class="create-openbadges">
                             <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
                                 <i class="fa fa-plus"></i> {{ 'DesignNewBadge' | get_lang }}
                             </button>
                         </div>
-                        <p class="badges-text">Vista previa de la imagen</p>
-                        <div class="badges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
+                        <p class="openbadges-text">Vista previa de la imagen</p>
+                        <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
                             <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
                         </div>
                     </div>

@@ -780,9 +780,9 @@ if ($show_full_profile) {
                     );
                 } else {
                     $badgeImage = Display::return_icon(
-                        'award_red.png',
+                        'badges-default.png',
                         $skill['name'],
-                        array('title' => $skill['name'])
+                        array('title' => $skill['name']),ICON_SIZE_BIG
                     );
                 }
 

@@ -5346,7 +5346,10 @@ i.size-32.icon-new-work{
   padding-left: 5%;
   font-size: 14px;
 }
-.badges-tablet .table thead{
+.openbadges-tablet{
+ margin-top: 15px;
+}
+.openbadges-tablet .table thead{
   background-color: #E2ECEB;
   border-top: 1px solid #677F8F;
   border-bottom: 1px solid #677F8F;
@@ -5355,41 +5358,41 @@ i.size-32.icon-new-work{
   font-size: 16px;
   color: #456176;
 }
-.badges-tablet .table thead tr th{
+.openbadges-tablet .table thead tr th{
   font-weight: normal;
 }
-.badges-tablet .table td{
+.openbadges-tablet .table td{
   border-top: 1px solid #677F8F;
   vertical-align: middle;
 
 }
-.badges-tabs ul.nav-tabs li a{
+.openbadges-tabs ul.nav-tabs li a{
   background-color: #E2ECEB;
   border-top: 1px solid #677F8F;
   border-right: 1px solid #677F8F;
   border-left: 1px solid #677F8F;
   border-bottom: 1px solid #677F8F;
 }
-.badges-tabs ul.nav-tabs .active a{
+.openbadges-tabs ul.nav-tabs .active a{
   background: #fff;
   border-bottom: 1px solid #ffffff;
 }
-.badges-tabs .nav-tabs{
+.openbadges-tabs .nav-tabs{
   border-bottom: 1px solid #677F8F;
 }
-.create-badges{
+.create-openbadges{
   text-align: center;
   margin-bottom: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.badges-img, .badges-view{
+.openbadges-img, .openbadges-view{
   text-align: center;
   padding: 10px;
   margin-top: 10px;
   border: 1px solid #b2b2b2;
 }
-.badges-text{
+.openbadges-text{
   text-align: center;
 }
 /* Social Profile */

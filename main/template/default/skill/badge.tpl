@@ -3,7 +3,7 @@
 {% block body %}
 
     <div class="col-md-12">
-        <div class="badges-tabs">
+        <div class="openbadges-tabs">
         <ul class="nav nav-tabs">
             <li class="active">
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>

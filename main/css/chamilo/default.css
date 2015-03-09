@@ -6332,9 +6332,9 @@ button.close {
 .show {
   display: block !important;
 }
-.invisible {
+/*.invisible {
   visibility: hidden;
-}
+}*/
 .text-hide {
   font: 0/0 a;
   color: transparent;

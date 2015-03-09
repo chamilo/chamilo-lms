@@ -1665,66 +1665,66 @@ class Category implements GradebookItem
             return false;
         }
 
+        $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
+        if (empty($my_certificate)) {
+            GradebookUtils::register_user_info_about_certificate(
+                $category_id,
+                $user_id,
+                $my_score_in_gradebook,
+                api_get_utc_datetime()
+            );
             $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
-            if (empty($my_certificate)) {
-                GradebookUtils::register_user_info_about_certificate(
-                    $category_id,
-                    $user_id,
-                    $my_score_in_gradebook,
-                    api_get_utc_datetime()
+        }
+        $html = array();
+        if (!empty($my_certificate)) {
+            $certificate_obj = new Certificate($my_certificate['id']);
+            $fileWasGenerated = $certificate_obj->html_file_is_generated();
+
+            if (!empty($fileWasGenerated)) {
+                $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
+                $certificates = Display::url(
+                    '&nbsp;'.get_lang('DownloadCertificate'),
+                    $url,
+                    array(
+                        'target' => '_blank',
+                        'class' => 'btn'
+                    )
                 );
-                $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
-            }
-            $html = array();
-            if (!empty($my_certificate)) {
-                $certificate_obj = new Certificate($my_certificate['id']);
-                $fileWasGenerated = $certificate_obj->html_file_is_generated();
+                $exportToPDF = Display::url(
+                    Display::return_icon(
+                        'pdf.png',
+                        get_lang('ExportToPDF'),
+                        array(),
+                        ICON_SIZE_MEDIUM
+                    ),
+                    "$url&action=export"
+                );
+                $html = array(
+                    'certificate_link' => $certificates,
+                    'pdf_link' => $exportToPDF
+                );
 
-                if (!empty($fileWasGenerated)) {
-                    $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
-                    $certificates = Display::url(
-                        '&nbsp;'.get_lang('DownloadCertificate'),
-                        $url,
-                        array(
-                            'target' => '_blank',
-                            'class' => 'btn'
-                        )
-                    );
-                    $exportToPDF = Display::url(
-                        Display::return_icon(
-                            'pdf.png',
-                            get_lang('ExportToPDF'),
-                            array(),
-                            ICON_SIZE_MEDIUM
-                        ),
-                        "$url&action=export"
-                    );
-                    $html = array(
-                        'certificate_link' => $certificates,
-                        'pdf_link' => $exportToPDF
-                    );
+                if (api_get_setting('allow_skills_tool') == 'true') {
+                    $courseId = api_get_course_int_id();
+                    $sessionId = api_get_session_id();
 
-                    if (api_get_setting('allow_skills_tool') == 'true') {
-                        $courseId = api_get_course_int_id();
-                        $sessionId = api_get_session_id();
+                    $objSkillRelUser = new SkillRelUser();
+                    $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
 
-                        $objSkillRelUser = new SkillRelUser();
-                        $userSkills = $objSkillRelUser->get_user_skills($user_id, $courseId, $sessionId);
-
-                        if (!empty($userSkills)) {
-                            $html['badge_link'] = Display::url(
-                                get_lang('DownloadBadges'),
-                                api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
-                                array(
-                                    'target' => '_blank',
-                                    'class' => 'btn'
-                                )
-                            );
-                        }
+                    if (!empty($userSkills)) {
+                        $html['badge_link'] = Display::url(
+                            get_lang('DownloadBadges'),
+                            api_get_path(WEB_CODE_PATH) . "gradebook/get_badges.php?user=$user_id",
+                            array(
+                                'target' => '_blank',
+                                'class' => 'btn'
+                            )
+                        );
                     }
                 }
-                return $html;
             }
+            return $html;
+        }
     }
 
     /**

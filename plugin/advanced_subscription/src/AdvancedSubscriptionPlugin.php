@@ -237,12 +237,18 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $whereSession
         );
 
+        $expendedTimeMax = $plugin->get('yearly_hours_limit');
+        $expendedTime = 0;
+
         $numberOfApprovedInductionSessions = 0;
 
         if (is_array($sessions) && count($sessions) > 0) {
             foreach ($sessions as $session) {
-                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
-                $uitUser += $var['field_value'];
+                $costField = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
+                $uitUser += $costField['field_value'];
+
+                $teachingHoursField = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
+                $expendedTime += $teachingHoursField['field_value'];
 
                 $inductionField = $extra->get_values_by_handler_and_field_variable(
                     $session['id'],
@@ -285,7 +291,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-
         if ($uitMax < $uitUser) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),
@@ -296,16 +301,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
             if (!$collectErrors) {
                 throw new \Exception($errorMessage);
-            }
-        }
-
-        $expendedTimeMax = $plugin->get('yearly_hours_limit');
-        $expendedTime = 0;
-
-        if (is_array($sessions) && count($sessions) > 0) {
-            foreach ($sessions as $session) {
-                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
-                $expendedTime += $var['field_value'];
             }
         }
 

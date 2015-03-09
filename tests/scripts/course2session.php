@@ -11,7 +11,7 @@
 exit;
 require __DIR__ . '/../../main/inc/global.inc.php';
 
-$debug = 0;
+$debug = 1;
 
 // List of tables that will need an update
 $tables = array(
@@ -94,11 +94,11 @@ $userTables = array(
     'track_e_course_access' => array('c' => 'c_id', 's' => 'session_id'),
     'track_e_downloads' => array('c' => 'c_id', 's' => 'down_session_id'),
     'track_e_exercices' => array('c' => 'c_id', 's' => 'session_id'),
-    'track_e_item_property' => array('c' => 'c_id', 's' => 'session_id'),
+    'track_e_item_property' => array('c' => 'course_id', 's' => 'session_id'),
     'track_e_lastaccess' => array('c' => 'c_id', 's' => 'access_session_id'),
     'track_e_links' => array('c' => 'c_id', 's' => 'links_session_id'),
     'track_e_online' => array('c' => 'c_id', 's' => 'session_id'),
-    'track_e_uploads' => array('c' => 'c_id', 's' => 'upload_session_id'),
+    'track_e_uploads' => array('c' => 'upload_cours_id', 's' => 'upload_session_id'),
     'user_rel_course_vote' => array('c' => 'c_id', 's' => 'session_id'),
 );
 
@@ -113,21 +113,62 @@ $month = date('m');
 $end = api_strtotime($year.'-'.$month.'-01 00:00:00') - 1;
 $start = $end - (2*365*86400);
 
+// Prepare a list of admin users to avoid removing their relation to the base course
+$sql = 'SELECT user_id FROM admin';
+$resultAdmin = Database::query($sql);
+$admins = array();
+while ($row = Database::fetch_assoc($resultAdmin)) {
+    $admins[] = $row['user_id'];
+}
+
 $res = Database::select('id, title, code', TABLE_MAIN_COURSE);
 foreach ($res as $course) {
     if ($debug) {
         echo $course['title'] . PHP_EOL;
     }
-    $sessionTitle = $course['title'] . $month . '-' . $year;
-    $id = SessionManager::create_session($sessionTitle, $year, $month, 0, $year, $month, 28, 0, 0, 0, 'info@contidosdixitais.com', 0, SESSION_VISIBLE_READ_ONLY);
-    if ($id === false && $debug) {
-        echo "Could not create session $sessionTitle" . PHP_EOL;
+    $sessionTitle = $course['title'] . ' ' . $month . '-' . $year . ' - a';
+    $startDate = ($year-2) . '-' . $month . '-01';
+    $endDate = $year . '-' . $month . '-01';
+    $id = SessionManager::create_session(
+        $sessionTitle,
+        $startDate,
+        $endDate,
+        0,
+        0,
+        0,
+        'info@contidosdixitais.com',
+        0,
+        SESSION_VISIBLE_READ_ONLY
+    );
+    while ($id == 'SessionNameAlreadyExists') {
+        if ($debug) {
+            echo "Could not create session $sessionTitle" . PHP_EOL;
+        }
+        // Increase the last letter
+        $sessionTitle = substr($sessionTitle, 0, -1) . chr(ord(substr($sessionTitle, -1, 1))+1);
+        $id = SessionManager::create_session(
+            $sessionTitle,
+            $startDate,
+            $endDate,
+            0,
+            0,
+            0,
+            'info@contidosdixitais.com',
+            0,
+            SESSION_VISIBLE_READ_ONLY
+        );
+    }
+    if ($debug) {
+        echo "Session $sessionTitle created with ID $id" . PHP_EOL;
     }
     SessionManager::add_courses_to_session($id, array($course['code']));
-    $resultUsers = Database::select('user_id', TABLE_MAIN_COURSE_USER, array('where course_code = ?' => array($course['code'])));
+    $resultUsers = Database::query("SELECT user_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER). " WHERE course_code = '" . $course['code'] . "'");
     $users = array();
-    foreach ($resultUsers as $user_id) {
-        $users[] = $user_id;
+    while ($row = Database::fetch_assoc($resultUsers)) {
+        $users[] = $row['user_id'];
+    }
+    if ($debug) {
+        echo count($users) . " users in course " . $course['title'] . " will be moved to session $id (unless they're admins)" . PHP_EOL;
     }
     SessionManager::subscribe_users_to_session_course($users, $id, $course['code']);
     foreach ($userTables as $table => $fields) {
@@ -142,9 +183,13 @@ foreach ($res as $course) {
         }
         $resultChange = Database::query($sql);
     }
-    // Now clean up by unsubscribing the user from the course itself manually
+    // Now clean up by un-subscribing the user from the course itself manually
     // to avoid deleting other stuff
     foreach ($users as $user) {
+        if (in_array($user, $admins)) {
+            // Skip un-subscribing of admin users
+            continue;
+        }
         $sql = "DELETE FROM course_rel_user WHERE user_id = $user AND course_code = '" . $course['code'] . "'";
         if ($debug) {
             echo $sql . PHP_EOL;

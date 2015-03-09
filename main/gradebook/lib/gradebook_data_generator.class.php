@@ -119,28 +119,45 @@ class GradebookDataGenerator
         // Generate the data to display
         $data = array();
         /** @var GradebookItem $item */
+        $totalWeight = 0;
         foreach ($visibleitems as $item) {
-            $row = array ();
+            $row = array();
             $row[] = $item;
             $row[] = $item->get_name();
             // display the 2 first line of description, and all description on mouseover (https://support.chamilo.org/issues/6588)
             $row[] = '<span title="'.api_remove_tags_with_space($item->get_description()).'">'.
                 api_get_short_text_from_html($item->get_description(), 160).'</span>';
+            $totalWeight += $item->get_weight();
             $row[] = $item->get_weight();
             if (count($this->evals_links) > 0) {
                 if (!api_is_allowed_to_edit() || $status_user != 1 ) {
-                    $row[] = $this->build_result_column($item, $ignore_score_color);
-                    $row['best'] = $this->buildBestResultColumn($item);
-                    $row['average'] = $this->buildAverageResultColumn($item);
+                    $row[] = $this->build_result_column($item, $ignore_score_color)['display'];
+                    $row['result_score'] = $this->build_result_column($item, $ignore_score_color)['score'];
+                    $row['best'] = $this->buildBestResultColumn($item)['display'];
+                    $row['best_score'] = $this->buildBestResultColumn($item)['score'];
+                    $row['average'] = $this->buildAverageResultColumn($item)['display'];
+                    $row['average_score'] = $this->buildAverageResultColumn($item)['score'];
                     $row[] = $item;
                 }
             } else {
-                $row[] = $this->build_result_column($item, $ignore_score_color, true);
-                $row['best'] = $this->buildBestResultColumn($item);
-                $row['average'] = $this->buildAverageResultColumn($item);
+                $row[] = $this->build_result_column($item, $ignore_score_color, true)['display'];
+                $row['result_score'] = $this->build_result_column($item, $ignore_score_color)['score'];
+                $row['best'] = $this->buildBestResultColumn($item)['display'];
+                $row['best_score'] = $this->buildBestResultColumn($item)['score'];
+                $row['average'] = $this->buildAverageResultColumn($item)['display'];
+                $row['average_score'] = $this->buildAverageResultColumn($item)['score'];
             }
             $data[] = $row;
         }
+
+        // Total
+        /*$totalRow = [];
+        $totalRow[] = null;
+        $totalRow[] = get_lang('Total');
+        $totalRow[] = null; // Description
+        $totalRow[] = $totalWeight;
+        $data[] = $totalRow;*/
+
         return $data;
     }
 
@@ -161,7 +178,10 @@ class GradebookDataGenerator
 
         $scoreDisplay = ScoreDisplay :: instance();
 
-        return $scoreDisplay->display_score($score, SCORE_DIV);
+        return array(
+            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'score' => $score
+        );
     }
 
     /**
@@ -172,7 +192,11 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score(null, 'average');
         $scoreDisplay = ScoreDisplay :: instance();
-        return $scoreDisplay->display_score($score, SCORE_DIV);
+
+        return array(
+            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'score' => $score
+        );
     }
 
     /**
@@ -195,11 +219,21 @@ class GradebookDataGenerator
                             $displaytype |= SCORE_IGNORE_SPLIT;
                         }
                         if ($forceSimpleResult) {
-                            return $scoredisplay->display_score($score, SCORE_DIV);
+                            return
+                                array(
+                                    'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                                    'score' => $score
+                                );
                         }
-                        return get_lang('Total') . ' : '. $scoredisplay->display_score($score, $displaytype);
+                        return array(
+                            'display' => get_lang('Total') . ' : '. $scoredisplay->display_score($score, $displaytype),
+                            'score' => $score
+                        );
                     } else {
-                        return '';
+                        return array(
+                            'display' => null,
+                            'score' => $score
+                        );
                     }
                     break;
                 // evaluation and link
@@ -209,10 +243,17 @@ class GradebookDataGenerator
                     if ($ignore_score_color) {
                         $displaytype |= SCORE_IGNORE_SPLIT;
                     }*/
-                    return $scoredisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM);
+                    return array(
+                        'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                        'score' => $score,
+                    );
             }
         }
-        return null;
+
+        return array(
+            'display' => null,
+            'score' => null
+        );
     }
 
     /**

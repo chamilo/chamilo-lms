@@ -164,6 +164,11 @@ class GradebookTable extends SortableTable
         $total_categories_weight = 0;
         $scoredisplay = ScoreDisplay :: instance();
 
+        $totalResult = [0, 0];
+        $totalGlobal = [0, 0];
+        $totalBest = [0, 0];
+        $totalAverage = [0, 0];
+
         // Categories.
         foreach ($data_array as $data) {
 
@@ -239,13 +244,15 @@ class GradebookTable extends SortableTable
                 $score = $item->calc_score(api_get_user_id());
 
                 if (!empty($score[1])) {
+                    $categoryScoreArray = $score;
                     $completeScore = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
                     $score = $score[0]/$score[1]*$item->get_weight();
-
                     $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
+
                     $categoryScore = $scoredisplay->display_score(array($score, $mainCategoryWeight), SCORE_DIV);
                     $scoreToDisplay = Display::tip($score, $completeScore);
                 } else {
+                    $categoryScoreArray = [0, $item->get_weight()];
                     $scoreToDisplay = '-';
                     $categoryScore = null;
                 }
@@ -256,21 +263,38 @@ class GradebookTable extends SortableTable
                     $best = isset($data['best']) ? $data['best'] : null;
                     $average = isset($data['average']) ? $data['average'] : null;
 
-                    //if (!is_null($value_data)) {
-                        // Student result
-                        $row[] = Display::tag('h4', $value_data);
-                        // Global
-                        $row[] = Display::tag('h4', $categoryScore);
-                        // Best
-                        $row[] = Display::tag('h4', $best);
-                        // Average
-                        $row[] = Display::tag('h4', $average);
+                    $totalResult = [
+                        $totalResult[0] + $data['result_score'][0],
+                        $totalResult[1] + $data['result_score'][1],
+                    ];
 
+                    $totalGlobal = [
+                        $totalGlobal[0] +  $categoryScoreArray[0],
+                        $totalGlobal[1] + $categoryScoreArray[1],
+                    ];
+
+                    $totalBest = [
+                        $totalBest[0] + $data['best_score'][0],
+                        $totalBest[1] + $data['best_score'][1],
+                    ];
+
+                    $totalAverage = [
+                        $totalAverage[0] + $data['average_score'][0],
+                        $totalAverage[1] + $data['average_score'][1],
+                    ];
+
+                    // Student result
+                    $row[] = $value_data;
+                    // Global
+                    $row[] = $categoryScore;
+                    // Best
+                    $row[] = $best;
+                    // Average
+                    $row[] = $average;
+
+                    if (get_class($item) == 'Category') {
                         $row[] = $this->build_edit_column($item);
-
-                    /*} else {
-
-                    }*/
+                    }
                 } else {
                     $row[] = $scoreToDisplay;
 
@@ -300,20 +324,20 @@ class GradebookTable extends SortableTable
                     $data_array = $sub_cat_info->get_data($sorting, $from, $this->per_page);
                     $total_weight = 0;
 
-                    //$score = $cats[0]->calc_score(api_get_user_id());
-                    //$categoryScore = $scoredisplay->display_score(array($score, $cats[0]->get_weight()), SCORE_DIV);
-
                     // Links.
                     foreach ($data_array as $data) {
+
                         $row = array();
                         $item = $data[0];
 
                         //if the item is invisible, wrap it in a span with class invisible
-                        $invisibility_span_open  = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
-                        $invisibility_span_close = (api_is_allowed_to_edit() && $item->is_visible() == '0') ? '</span>' : '';
+                        $invisibility_span_open = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '<span class="invisible">' : '';
+                        $invisibility_span_close = api_is_allowed_to_edit() && $item->is_visible() == '0' ? '</span>' : '';
 
-                        $main_categories[$parent_id]['children'][$item->get_id()]['name']   = $item->get_name();
-                        $main_categories[$parent_id]['children'][$item->get_id()]['weight'] = $item->get_weight();
+                        if (isset($item)) {
+                            $main_categories[$parent_id]['children'][$item->get_id()]['name'] = $item->get_name();
+                            $main_categories[$parent_id]['children'][$item->get_id()]['weight'] = $item->get_weight();
+                        }
 
                         if (api_is_allowed_to_edit(null, true)) {
                             $row[] = $this->build_id_column($item);
@@ -348,16 +372,18 @@ class GradebookTable extends SortableTable
                                 $row[] = $this->build_edit_column($item);
                             }
                         } else {
-                            //students get the results and certificates columns
+                            // Students get the results and certificates columns
                             $eval_n_links = array_merge($alleval, $alllink);
 
-                            if (count($eval_n_links)> 0 && $status_user!=1 ) {
+                            if (count($eval_n_links)> 0 && $status_user != 1) {
                                 $value_data = isset($data[4]) ? $data[4] : null;
+
                                 if (!is_null($value_data)) {
                                     $score = $item->calc_score(api_get_user_id());
                                     $new_score = $data[3] * $score[0] / $score[1];
                                     $new_score = floatval(number_format($new_score, api_get_setting('gradebook_number_decimals')));
-                                    //$row[] = Display::tip($new_score, $data[4]);
+
+                                    // Result
                                     $row[] = $value_data;
 
                                     $best = isset($data['best']) ? $data['best'] : null;
@@ -368,13 +394,14 @@ class GradebookTable extends SortableTable
                                         array($new_score, $cattotal[0]->get_weight()),
                                         SCORE_DIV
                                     );
-                                    $row[] = Display::tag('h4', $categoryScore);
+                                    $row[] = $categoryScore;
                                     // Best
-                                    $row[] = Display::tag('h4', $best);
+                                    $row[] = $best;
                                     // Average
-                                    $row[] = Display::tag('h4', $average);
+                                    $row[] = $average;
                                 }
                             }
+
                             if (!empty($cats)) {
                                 $row[] = null;
                             }
@@ -413,6 +440,7 @@ class GradebookTable extends SortableTable
         } //end looping categories
 
         if (api_is_allowed_to_edit()) {
+            // Total for teacher.
             if (count($main_cat) > 1) {
                 $main_weight = intval($main_cat[0]->get_weight());
 
@@ -421,7 +449,54 @@ class GradebookTable extends SortableTable
                 } else {
                     $total = Display::badge($total_categories_weight.' / '.$main_weight, 'warning');
                 }
-                $row = array(null, null, '<h3>'.get_lang('Total').'</h3>', null, $total);
+                $row = array(
+                    null,
+                    null,
+                    '<h3>' . get_lang('Total') . '</h3>',
+                    null,
+                    $total
+                );
+                $sortable_data[] = $row;
+            }
+        } else {
+            // Total for student.
+            if (count($main_cat) > 1) {
+                $main_weight = intval($main_cat[0]->get_weight());
+
+                $global = null;
+                $average = null;
+
+                $totalResult = $scoredisplay->display_score(
+                    $totalResult,
+                    SCORE_DIV
+                );
+
+                $totalGlobal = $scoredisplay->display_score(
+                    $totalGlobal,
+                    SCORE_DIV
+                );
+
+                $totalBest = $scoredisplay->display_score(
+                    $totalBest,
+                    SCORE_DIV
+                );
+
+                $totalAverage = $scoredisplay->display_score(
+                    $totalAverage,
+                    SCORE_DIV
+                );
+
+                $row = array(
+                    null,
+                    '<h3>' . get_lang('Total') . '</h3>',
+                    null,
+                    $main_weight,
+                    $totalResult,
+                    $totalGlobal,
+                    $totalBest,
+                    $totalAverage,
+                );
+
                 $sortable_data[] = $row;
             }
         }
@@ -430,7 +505,9 @@ class GradebookTable extends SortableTable
         $view = isset($_GET['view']) ? $_GET['view']: null;
         if (api_is_allowed_to_edit()) {
 
-            if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $view <> 'presence') {
+            if (isset($_GET['selectcat']) &&
+                $_GET['selectcat'] > 0 && $view <> 'presence'
+            ) {
                 $id_cat = intval($_GET['selectcat']);
                 $category = Category::load($id_cat);
 
@@ -492,7 +569,9 @@ class GradebookTable extends SortableTable
                         $certificate_min_score = intval($certificate_min_scores[$x]);
                         $course_code = $course_codes[$x];
 
-                        if (empty($certificate_min_score) || ($certificate_min_score > $weight_category)) {
+                        if (empty($certificate_min_score) ||
+                            ($certificate_min_score > $weight_category)
+                        ) {
                             $warning_message .= $course_code .'&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').'&nbsp;'.$weight_category.'<br />';
                         }
                     }
@@ -558,7 +637,7 @@ class GradebookTable extends SortableTable
      * @param array $attributes
      * @return string
      */
-    private function build_type_column ($item, $attributes = array())
+    private function build_type_column($item, $attributes = array())
     {
         return GradebookUtils::build_type_icon_tag($item->get_icon_name(), $attributes);
     }
@@ -592,11 +671,9 @@ class GradebookTable extends SortableTable
             case 'E' :
                 $cat = new Category();
                 $course_id = CourseManager::get_course_by_category($_GET['selectcat']);
-
                 $show_message = $cat->show_message_resource_delete($course_id);
 
                 // course/platform admin can go to the view_results page
-
                 if (api_is_allowed_to_edit() && $show_message===false) {
                     if ($item->get_type() == 'presence') {
                         return '&nbsp;'

@@ -565,7 +565,7 @@ class DisplayGradebook
                                     '',
                                     ICON_SIZE_MEDIUM
                                 ),
-                                "gradebook_display_certificate.php?$my_api_cidreq&amp;cat_id=" . intval($_GET['selectcat'])
+                                "gradebook_display_certificate.php?$my_api_cidreq&cat_id=" . intval($_GET['selectcat'])
                             )
                             . "</td>";
                     }

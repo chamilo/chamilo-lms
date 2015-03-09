@@ -40,7 +40,7 @@
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "Area" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
-                        <th id="decisionColumn">{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
+                        <th class="decision-column">{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                     </tr>
                     {% set row_class = "row_odd" %}
                     {% for student in students %}

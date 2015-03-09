@@ -81,6 +81,6 @@
     text-align: center;
 }
 
-#decisionColumn {
+.decision-column {
     width: 148px;
 }

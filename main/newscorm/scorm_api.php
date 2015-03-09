@@ -336,14 +336,20 @@ function LMSInitialize() {
             update_toc(olms.lesson_status, olms.lms_item_id);
         }
 
-        <?php if (api_get_setting('show_glossary_in_documents') == 'ismanual') { ?>
-            if (olms.lms_item_type == 'sco') {
+        <?php
+        $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+        $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+        if ($showGlossary) {
+            if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+                ?>
+                if (olms.lms_item_type == 'sco') {
+                    attach_glossary_into_scorm('automatic');
+                } else {
+                    attach_glossary_into_scorm('manual');
+                }
+                <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
                 attach_glossary_into_scorm('automatic');
-            } else {
-                attach_glossary_into_scorm('manual');
-            }
-            <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
-            attach_glossary_into_scorm('automatic');
+            <?php } ?>
         <?php } ?>
         return('true');
     }

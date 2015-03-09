@@ -309,10 +309,10 @@ function userCourseList()
  */
 function checkUserBuy($parameter, $user, $type = 'COURSE')
 {
-    $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND id_user='" . intval($user) . "';";
+    $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND %s ='" . intval($user) . "';";
     $sql = $type === 'SESSION' ?
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session') :
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code');
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session', 'id_user') :
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code', 'user_id');
     Database::query($sql);
     if (Database::affected_rows() > 0) {
         return true;

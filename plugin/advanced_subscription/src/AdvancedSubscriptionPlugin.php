@@ -208,18 +208,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        $checkInduction = $plugin->get('check_induction');
-        // @TODO: check if user have completed at least one induction session
-        $completedInduction = true;
-
-        if ($checkInduction && !$completedInduction) {
-            $this->errorMessages[] = $this->get_lang('AdvancedSubscriptionIncompleteInduction');
-
-            if (!$collectErrors) {
-                throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
-            }
-        }
-
         $uitMax = $plugin->get('yearly_cost_unit_converter');
         $uitMax *= $plugin->get('yearly_cost_limit');
         $uitUser = 0;
@@ -249,12 +237,54 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $whereSession
         );
 
+        $numberOfApprovedInductionSessions = 0;
+
         if (is_array($sessions) && count($sessions) > 0) {
             foreach ($sessions as $session) {
                 $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
                 $uitUser += $var['field_value'];
+
+                $inductionField = $extra->get_values_by_handler_and_field_variable(
+                    $session['id'],
+                    'is_induccion_session'
+                );
+
+                if ($inductionField === false) {
+                    continue;
+                }
+                
+                $isInductionSession = boolval($inductionField['field_value']);
+
+                if ($isInductionSession) {
+                    $numberOfApprovedCourses = 0;
+                    $sessionCourses = SessionManager::get_course_list_by_session_id($session['id']);
+
+                    foreach ($sessionCourses as $course) {
+                        $courseCategories = Category::load(
+                            null,
+                            null,
+                            $course['code'],
+                            null,
+                            null,
+                            $session['id'],
+                            false
+                        );
+
+                        if (
+                            count($courseCategories) > 0 &&
+                            Category::userIsApprovedInCourse($userId, $courseCategories[0])
+                        ) {
+                            $numberOfApprovedCourses++;
+                        }
+                    }
+
+                    if ($numberOfApprovedCourses === count($sessionCourses)) {
+                        $numberOfApprovedInductionSessions++;
+                    }
+                }
             }
         }
+
 
         if ($uitMax < $uitUser) {
             $errorMessage = sprintf(
@@ -305,6 +335,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
             if (!$collectErrors) {
                 throw new \Exception($errorMessage);
+            }
+        }
+
+        $checkInduction = $plugin->get('check_induction');
+        $completedInduction = $numberOfApprovedInductionSessions > 0;
+
+        if ($checkInduction == 'true' && !$completedInduction) {
+            $this->errorMessages[] = $this->get_lang('AdvancedSubscriptionIncompleteInduction');
+
+            if (!$collectErrors) {
+                throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
             }
         }
 

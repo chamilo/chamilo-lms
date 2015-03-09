@@ -5875,12 +5875,12 @@ function WSDeleteGroup($params)
 
 /* Delete group Web Service end */
 
-/* Bind group Web Service start */
+/* Bind group to parent Web Service start */
 // Register the data structures used by the service
 
-// Input params for WSBindGroup
+// Input params for GroupBindToParent
 $server->wsdl->addComplexType(
-    'bindGroup',
+    'groupBindToParent',
     'complexType',
     'struct',
     'all',
@@ -5893,18 +5893,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSBindGroup',            // method name
-    array('bindGroup' => 'tns:bindGroup'),  // input parameters
-    array('return' => 'xsd:string'),        // output parameters
-    'urn:WSRegistration',                   // namespace
-    'urn:WSRegistration#WSBindGroup',       // soapaction
-    'rpc',                                  // style
-    'encoded',                              // use
-    'This service binds a group'            // documentation
+$server->register('GroupBindToParent',                      // method name
+    array('groupBindToParent' => 'tns:groupBindToParent'),  // input parameters
+    array('return' => 'xsd:string'),                        // output parameters
+    'urn:WSRegistration',                                   // namespace
+    'urn:WSRegistration#GroupBindToParent',                 // soapaction
+    'rpc',                                                  // style
+    'encoded',                                              // use
+    'This service binds a group to a parent'                // documentation
 );
 
-// Define the method WSBindGroup
-function WSBindGroup($params)
+// Define the method GroupBindToParent
+function GroupBindToParent($params)
 {
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
@@ -5914,12 +5914,12 @@ function WSBindGroup($params)
 
 /* Bind group Web Service end */
 
-/* Unbind group Web Service start */
+/* Unbind group from parent Web Service start */
 // Register the data structures used by the service
 
-// Input params for WSUnbindGroup
+// Input params for GroupUnbindFromParent
 $server->wsdl->addComplexType(
-    'unbindGroup',
+    'groupUnbindFromParent',
     'complexType',
     'struct',
     'all',
@@ -5931,18 +5931,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUnbindGroup',              // method name
-    array('unbindGroup' => 'tns:unbindGroup'),  // input parameters
-    array('return' => 'xsd:string'),            // output parameters
-    'urn:WSRegistration',                       // namespace
-    'urn:WSRegistration#WSUnbindGroup',         // soapaction
-    'rpc',                                      // style
-    'encoded',                                  // use
-    'This service unbinds a group'              // documentation
+$server->register('GroupUnbindFromParent',                          // method name
+    array('groupUnbindFromParent' => 'tns:groupUnbindFromParent'),  // input parameters
+    array('return' => 'xsd:string'),                                // output parameters
+    'urn:WSRegistration',                                           // namespace
+    'urn:WSRegistration#GroupUnbindFromParent',                     // soapaction
+    'rpc',                                                          // style
+    'encoded',                                                      // use
+    'This service unbinds a group from its parent'                  // documentation
 );
 
-// Define the method WSUnbindGroup
-function WSUnbindGroup($params)
+// Define the method GroupUnbindFromParent
+function GroupUnbindFromParent($params)
 {
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);
@@ -5991,12 +5991,12 @@ function WSAddUserToGroup($params)
 
 /* Add user to group Web Service end */
 
-/* Update user role Web Service start */
+/* Update user role in group Web Service start */
 // Register the data structures used by the service
 
-// Input params for WSUpdateUserRole
+// Input params for WSUpdateUserRoleInGroup
 $server->wsdl->addComplexType(
-    'updateUserRole',
+    'updateUserRoleInGroup',
     'complexType',
     'struct',
     'all',
@@ -6010,18 +6010,18 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUpdateUserRole',                   // method name
-    array('updateUserRole' => 'tns:updateUserRole'),    // input parameters
-    array('return' => 'xsd:string'),                    // output parameters
-    'urn:WSRegistration',                               // namespace
-    'urn:WSRegistration#WSUpdateUserRole',              // soapaction
-    'rpc',                                              // style
-    'encoded',                                          // use
-    'This service updates a user role'                  // documentation
+$server->register('WSUpdateUserRoleInGroup',                        // method name
+    array('updateUserRoleInGroup' => 'tns:updateUserRoleInGroup'),  // input parameters
+    array('return' => 'xsd:string'),                                // output parameters
+    'urn:WSRegistration',                                           // namespace
+    'urn:WSRegistration#WSUpdateUserRoleInGroup',                   // soapaction
+    'rpc',                                                          // style
+    'encoded',                                                      // use
+    'This service updates a user role in group'                     // documentation
 );
 
-// Define the method WSUpdateUserRole
-function WSUpdateUserRole($params)
+// Define the method WSUpdateUserRoleInGroup
+function WSUpdateUserRoleInGroup($params)
 {
     if (!WSHelperVerifyKey($params['secret_key'])) {
         return return_error(WS_ERROR_SECRET_KEY);

@@ -333,21 +333,25 @@ abstract class AbstractLink implements GradebookItem
     /**
      * @param int $idevaluation
      */
-    public static function add_link_log($idevaluation)
+    public static function add_link_log($idevaluation, $nameLog = null)
     {
         $tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
         $dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
         $current_date_server=api_get_utc_datetime();
-        $arreval=get_object_vars($dateobject[0]);
-        $description_log=isset($arreval['description'])?$arreval['description']:'';
-        if (isset($_POST['name_link'])) {
-            $name_log=isset($_POST['name_link'])?Security::remove_XSS($_POST['name_link']):$arreval['course_code'];
-        } elseif ($_POST['link_'.$idevaluation]) {
-            $name_log=$_POST['link_'.$idevaluation];
+        $arreval = get_object_vars($dateobject[0]);
+        $description_log = isset($arreval['description']) ? $arreval['description']:'';
+        if (empty($nameLog)) {
+            if (isset($_POST['name_link'])) {
+                $name_log = isset($_POST['name_link']) ? Security::remove_XSS($_POST['name_link']) : $arreval['course_code'];
+            } elseif (isset($_POST['link_' . $idevaluation]) && $_POST['link_' . $idevaluation]) {
+                $name_log = $_POST['link_' . $idevaluation];
+            } else {
+                $name_log = $arreval['course_code'];
+            }
         } else {
-            $name_log=$arreval['course_code'];
+            $name_log = $nameLog;
         }
-        $sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
+        $sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log, name,description,created_at,weight,visible,type,user_id_log)
               VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
 
         Database::query($sql);

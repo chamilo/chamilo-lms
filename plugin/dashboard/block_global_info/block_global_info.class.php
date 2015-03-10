@@ -67,15 +67,16 @@ class BlockGlobalInfo extends Block
     	$data   = array();
         $content = $this->get_content_html();
     	$html = '
-    	            <li class="widget color-red" id="intro">
-    	                <div class="widget-head">
-    	                    <h3>'.get_lang('GlobalPlatformInformation').'</h3>
-    	                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+    	            <div class="panel panel-default" id="intro">
+    	                <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
+    	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+    	                    <i class="fa fa-times"></i>
+    	                    </a></div>
     	                </div>
-    	                <div class="widget-content">
+    	                <div class="panel-body">
     	                   '.$content.'
     	                </div>
-    	            </li>
+    	            </div>
     			';
     	$data['column'] = $column;
     	$data['content_html'] = $html;
@@ -90,11 +91,11 @@ class BlockGlobalInfo extends Block
      public function get_content_html()
      {
          $global_data = $this->get_global_information_data();
-         $content = '<div style="margin:10px;">';
-         $content .= '<h3><font color="#000">'.get_lang('GlobalPlatformInformation').'</font></h3>';
+         //$content = '<div style="margin:10px;">';
+         $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
          $data_table = null;
          if (!empty($global_data)) {
-             $data_table = '<table class="data_table" width:"95%">';
+             $data_table = '<table class="table table-bordered" width:"95%">';
              $i = 1;
              foreach ($global_data as $data) {
                  if ($i%2 == 0) {
@@ -114,7 +115,7 @@ class BlockGlobalInfo extends Block
              $data_table .= get_lang('ThereIsNoInformationAboutThePlatform');
          }
          $content .= $data_table;
-         $content .= '</div>';
+         //$content .= '</div>';
 
          return $content;
     }

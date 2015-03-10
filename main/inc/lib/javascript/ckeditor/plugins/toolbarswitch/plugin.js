@@ -34,6 +34,9 @@ function switchMe(editor, callback) {
 	var origContentCss = editor.config.contentsCss;
 	var origExtraPlugins = editor.config.extraPlugins;
 
+        var origMinToolbar = editor.config.toolbar_minToolbar;
+        var origMaxToolbar = editor.config.toolbar_maxToolbar;
+
 	var origToolbar =  editor.config.toolbar;
 	var origSmallToolbar = editor.config.smallToolbar;
 	var origMaximizedToolbar = editor.config.maximizedToolbar;
@@ -56,13 +59,17 @@ function switchMe(editor, callback) {
 	CKEDITOR.replace(id, {
 		customConfig : origCustomConfig,
 		contentsCss : origContentCss,
+		toolbar_minToolbar: origMinToolbar,
+		toolbar_maxToolbar: origMaxToolbar,
 		toolbar : newToolbar,
 		smallToolbar: origSmallToolbar,
 		maximizedToolbar: origMaximizedToolbar,
 		extraPlugins : origExtraPlugins,
 		on: {
 			instanceReady: function(e) {
-				CKeditor_OnComplete(e.editor);
+				if (typeof CKeditor_OnComplete !== 'undefined') {
+					CKeditor_OnComplete(e.editor);
+                                }
 				if (callback) {
 					callback.call(null, e);
 				}

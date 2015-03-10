@@ -202,7 +202,6 @@ class GradebookUtils
 
                 // Locking button
                 if (api_get_setting('gradebook_locking_enabled') == 'true') {
-
                     if ($cat->is_locked()) {
                         if (api_is_platform_admin()) {
                             $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\'' . addslashes(get_lang('ConfirmToUnlockElement')) . '\')) return false;" href="' . api_get_self() . '?' . api_get_cidreq() . '&category_id=' . $cat->get_id() . '&action=unlock">' .
@@ -215,7 +214,6 @@ class GradebookUtils
                         $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\'' . addslashes(get_lang('ConfirmToLockElement')) . '\')) return false;" href="' . api_get_self() . '?' . api_get_cidreq() . '&category_id=' . $cat->get_id() . '&action=lock">' .
                             Display::return_icon('unlock.png', get_lang('LockEvaluation'), '', ICON_SIZE_SMALL) . '</a>';
                         $modify_icons .= '&nbsp;<a href="#" >' . Display::return_icon('pdf_na.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL) . '</a>';
-                        //$modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                     }
                 }
 
@@ -233,13 +231,14 @@ class GradebookUtils
                     }
                 }
 
-                $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id().'">' .
+               $modify_icons .= '<a href="gradebook_edit_all.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id().'">' .
                     Display::return_icon(
                         'percentage.png',
                         get_lang('EditAllWeights'),
                         '',
                         ICON_SIZE_SMALL
                     ) . '</a>';
+
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' .$cat->get_id() . '&cidReq=' . $cat->get_course_code() . '&id_session='.$cat->get_session_id(). '">' .
                     Display::return_icon(
                         'stats.png',
@@ -1097,5 +1096,75 @@ class GradebookUtils
         $users = Database::store_result($result);
 
         return $users;
+    }
+
+    /**
+     * @param int $linkId
+     * @param float $weight
+     */
+    public static function updateLinkWeight($linkId, $name, $weight)
+    {
+        $linkId = intval($linkId);
+        $weight = floatval($weight);
+        $course_id = api_get_course_int_id();
+
+        AbstractLink::add_link_log($linkId, $name);
+        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+
+        $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $tbl_forum_thread = Database:: get_course_table(TABLE_FORUM_THREAD);
+        $tbl_work = Database:: get_course_table(TABLE_STUDENT_PUBLICATION);
+        $tbl_attendance = Database:: get_course_table(TABLE_ATTENDANCE);
+
+        $sql = 'UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($weight)."'".'
+                WHERE id = '.$linkId;
+
+        Database::query($sql);
+
+        // Update weight for attendance
+        $sql = 'SELECT ref_id FROM '.$table_link.'
+                WHERE id = '.$linkId.' AND type='.LINK_ATTENDANCE;
+
+        $rs_attendance  = Database::query($sql);
+        if (Database::num_rows($rs_attendance) > 0) {
+            $row_attendance = Database::fetch_array($rs_attendance);
+            $sql = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.$weight.'
+                    WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
+            Database::query($sql);
+        }
+        // Update weight into forum thread
+        $sql = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.$weight.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    thread_id = (
+                        SELECT ref_id FROM '.$table_link.'
+                        WHERE id='.$linkId.' AND type='.LINK_FORUM_THREAD.'
+                    )
+                ';
+        Database::query($sql);
+        //Update weight into student publication(work)
+        $sql = 'UPDATE '.$tbl_work.' SET weight='.$weight.'
+                WHERE
+                    c_id = '.$course_id.' AND id = (
+                    SELECT ref_id FROM '.$table_link.'
+                    WHERE id='.$linkId.' AND type = '.LINK_STUDENTPUBLICATION.'
+                ) ';
+        Database::query($sql);
+    }
+
+    /**
+     * @param int $id
+     * @param float $weight
+     */
+    public static function updateEvaluationWeight($id, $weight)
+    {
+        $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        $id = intval($id);
+        $evaluation = new Evaluation();
+        $evaluation->add_evaluation_log($id);
+        $sql = 'UPDATE '.$table_evaluation.'
+               SET weight = '."'".Database::escape_string($weight)."'".'
+               WHERE id = '.$id;
+        Database::query($sql);
     }
 }

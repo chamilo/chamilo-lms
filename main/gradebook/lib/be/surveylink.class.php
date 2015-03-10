@@ -102,7 +102,7 @@ class SurveyLink extends AbstractLink
 					SELECT ref_id FROM '.$tbl_grade_links.'
 					WHERE
 						type = '.LINK_SURVEY.' AND
-						course_code = '".$this->get_course_code()."'
+						course_code = "'.$this->get_course_code().'"
 					)
 					AND srv.session_id = '.api_get_session_id();
 

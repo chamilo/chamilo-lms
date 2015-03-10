@@ -296,14 +296,14 @@ $(document).ready(function() {
                 <!-- ACCORDION -->
                 <div class="accordion" id="accordion2">
                     {% if mySkills is not empty %}
-                        <div class="accordion-group">
+                        <div class="panel panel-default">
                             <div class="accordion-heading">
-                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                    <h4 class="title-skill">{{ 'MySkills'|get_lang }}</h4>
+                                <a   data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                    {{ 'MySkills'|get_lang }}
                                 </a>
                             </div>
-                            <div id="collapseOne" class="accordion-body collapse">
-                                <div class="accordion-inner">
+                            <div id="collapseOne" class="panel-collapse collapse">
+                                <div class="panel-body">
                                     <!-- MY SKILLS -->
                                     <div id="my_skills" class="skill-items">
                                         <ul class="skill-winner">
@@ -319,21 +319,21 @@ $(document).ready(function() {
                             </div>
                         </div>
                     {% endif %}
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                <h4 class="title-skill">{{ 'GetNewSkills' | get_lang }}</h4>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                                {{ 'GetNewSkills' | get_lang }}
                             </a>
                         </div>
-                        <div id="collapseTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
                                 <!-- SEARCH -->
                                 <div class="search-skill">
                                     <p>{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
                                     <form id="skill_search" class="form-search">
                                         <select id="skill_id" name="skill_id" /></select>
                                         <div class="button-skill">
-                                            <a class="btn btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                            <a class="btn btn-default btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
                                             <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
                                         </div>
                                         <ul id="skill_holder" class="holder_simple"></ul>
@@ -349,14 +349,14 @@ $(document).ready(function() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                <h4 class="title-skill">{{ 'DisplayOptions' | get_lang }}</h4>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                                {{ 'DisplayOptions' | get_lang }}
                             </a>
                         </div>
-                        <div id="collapseThree" class="accordion-body collapse">
-                            <div class="accordion-inner">
+                        <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
                                 <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
                                 <ul>
                                     <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
@@ -368,14 +368,14 @@ $(document).ready(function() {
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-                                <h4 class="title-skill">{{ "Legend"|get_lang }}</h4>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a   data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+                                {{ "Legend"|get_lang }}
                             </a>
                         </div>
-                        <div id="collapseFour" class="accordion-body collapse">
-                            <div class="accordion-inner">
+                        <div id="collapseFour" class="panel-collapse collapse">
+                            <div class="panel-body">
                                 <p><span class="label-info">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouAcquired"|get_lang }}</p>
                                 <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
                                 <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>

@@ -61,6 +61,9 @@ class Category implements GradebookItem
         return $this->user_id;
     }
 
+    /**
+     * @return float
+     */
     public function get_certificate_min_score()
     {
         if (!empty($this->certificate_min_score)) {
@@ -78,56 +81,89 @@ class Category implements GradebookItem
         return $this->course_code;
     }
 
+    /**
+     * @return mixed
+     */
     public function get_parent_id()
     {
         return $this->parent;
     }
 
+    /**
+     * @return mixed
+     */
     public function get_weight()
     {
         return $this->weight;
     }
 
+    /**
+     * @return bool
+     */
     public function is_locked()
     {
         return isset($this->locked) && $this->locked == 1 ? true : false;
     }
 
+    /**
+     * @return mixed
+     */
     public function is_visible()
     {
         return $this->visible;
     }
 
+    /**
+     * @param int $id
+     */
     public function set_id($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @param string $name
+     */
     public function set_name($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @param string $description
+     */
     public function set_description($description)
     {
         $this->description = $description;
     }
 
+    /**
+     * @param int $user_id
+     */
     public function set_user_id($user_id)
     {
         $this->user_id = $user_id;
     }
 
+    /**
+     * @param string $course_code
+     */
     public function set_course_code($course_code)
     {
         $this->course_code = $course_code;
     }
 
-    public function set_certificate_min_score ($min_score = null)
+    /**
+     * @param float $min_score
+     */
+    public function set_certificate_min_score($min_score = null)
     {
         $this->certificate_min_score = $min_score;
     }
 
+    /**
+     * @param int $parent
+     */
     public function set_parent_id($parent)
     {
         $this->parent = intval($parent);
@@ -172,6 +208,10 @@ class Category implements GradebookItem
         return 'category';
     }
 
+    /**
+     * @param bool $from_db
+     * @return array|resource
+     */
     public function get_skills($from_db = true)
     {
         if ($from_db) {
@@ -185,6 +225,9 @@ class Category implements GradebookItem
         return $skills;
     }
 
+    /**
+     * @return array
+     */
     public function get_skills_for_select()
     {
         $skills = $this->get_skills();
@@ -781,8 +824,12 @@ class Category implements GradebookItem
      * @return    array (score sum, weight sum)
      *             or null if no scores available
      */
-    public function calc_score($stud_id = null, $type = null, $course_code = '', $session_id = null)
-    {
+    public function calc_score(
+        $stud_id = null,
+        $type = null,
+        $course_code = '',
+        $session_id = null
+    ) {
         // Get appropriate subcategories, evaluations and links
         if (!empty($course_code)) {
             $cats  = $this->get_subcategories($stud_id, $course_code, $session_id);
@@ -799,17 +846,24 @@ class Category implements GradebookItem
         $ressum = 0;
         $weightsum = 0;
         $bestResult = 0;
+        $students = [];
 
         if (!empty($cats)) {
             /** @var Category $cat */
             foreach ($cats as $cat) {
-                $score = $cat->calc_score($stud_id, $type, $course_code, $session_id);
+                $score = $cat->calc_score(
+                    $stud_id,
+                    $type,
+                    $course_code,
+                    $session_id
+                );
 
                 if ($cat->get_weight() != 0) {
                     $catweight = $cat->get_weight();
                     $rescount++;
                     $weightsum += $catweight;
                 }
+
                 if (isset($score)) {
                     $ressum += $score[0]/$score[1] * $catweight;
                     $bestResult += $ressum;
@@ -821,21 +875,21 @@ class Category implements GradebookItem
             /** @var Evaluation $eval */
             foreach ($evals as $eval) {
                 $evalres = $eval->calc_score($stud_id, $type);
-
+                if ($type == 'ranking') {
+                    var_dump($evalres);
+                }
+                $students[$stud_id] = $evalres[0];
                 if (isset($evalres) && $eval->get_weight() != 0) {
                     $evalweight = $eval->get_weight();
                     $weightsum += $evalweight;
                     $rescount++;
-                    $ressum += $evalres[0]/$evalres[1] * $evalweight;
+                    $ressum += $evalres[0] / $evalres[1] * $evalweight;
                 } else {
                     if ($eval->get_weight() != 0) {
                         $evalweight = $eval->get_weight();
                         $weightsum += $evalweight;
                     }
                 }
-            }
-            if ($type == 'best') {
-                //var_dump($ressum);
             }
         }
 
@@ -848,6 +902,7 @@ class Category implements GradebookItem
            foreach ($links as $link) {
                 $linkres = $link->calc_score($stud_id, $type);
                 if (!empty($linkres) && $link->get_weight() != 0) {
+                    $students[$stud_id] = $linkres[0];
                     $linkweight = $link->get_weight();
                     $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
                     $rescount++;
@@ -861,22 +916,27 @@ class Category implements GradebookItem
                     }
                 }
             }
-            if ($type == 'best') {
-                //var_dump($ressum);
-            }
         }
 
         if ($rescount == 0) {
             return null;
         } else {
-            if ($type == 'best') {
-                return array($ressum, $weightsum);
+            switch ($type) {
+                case 'best':
+                    return array($ressum, $weightsum);
+                    break;
+                case 'average':
+                    return array($ressum, $weightsum);
+                    break;
+                case 'ranking':
+                    //var_dump($students);
+                    return null;
+                    return AbstractLink::getCurrentUserRanking($students);
+                    break;
+                default:
+                    return array($ressum, $weightsum);
+                    break;
             }
-            if ($type == 'average') {
-                return array($ressum, $weightsum);
-            }
-
-            return array($ressum, $weightsum);
         }
     }
 

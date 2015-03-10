@@ -80,9 +80,9 @@ if (!$lastingAdministrators) {
 $administratorId = intval($administrators[$lastingAdministrators - 1]['user_id']);
 
 // Creates course sessions for the current month
-$dates = getMonthFirstAndLastDates();
+$dates = getMonthFirstAndLastDates(date('Y-m-').'01');
 // Get courses that don't have any session
-$courses = CourseManager::getCoursesWithoutSession();
+$courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);
 createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['endDate']);
 
 // Creates course sessions for the following month

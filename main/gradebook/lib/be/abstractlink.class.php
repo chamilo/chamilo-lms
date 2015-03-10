@@ -521,4 +521,29 @@ abstract class AbstractLink implements GradebookItem
         $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
         Database::query($sql);
     }
+
+    /**
+     * Get current user ranking
+     * @param array $studentList Array with user id and scores
+     * Example: [1 => 5.00, 2 => 8.00]
+     */
+    public static function getCurrentUserRanking($studentList)
+    {
+        $ranking = null;
+        $currentUserId = api_get_user_id();
+        if (!empty($studentList) && !empty($currentUserId)) {
+            asort($studentList);
+            $ranking = $count = count($studentList);
+
+            foreach ($studentList as $userId => $position) {
+                if ($currentUserId == $userId) {
+                    break;
+                }
+                $ranking--;
+            }
+            return array($ranking, $count);
+        }
+
+        return array();
+    }
 }

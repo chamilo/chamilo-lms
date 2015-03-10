@@ -297,12 +297,12 @@ class SortableTable extends HTML_Table
             if (count($this->form_actions) > 0) {
                 $html .= '<div class="btn-toolbar">';
                     $html .= '<div class="btn-group">';
-                    $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
-                    $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+                    $html .= '<a class="btn btn-default" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
+                    $html .= '<a class="btn btn-default" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                     $html .= '</div>';
                     $html .= '<div class="btn-group">
-                                <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>
-                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>';
                     $html .= '<ul class="dropdown-menu">';

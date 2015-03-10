@@ -85,7 +85,7 @@ if (isset($_GET['editres'])) {
         exit;
     }
 }
-
+$file_type = null;
 if (isset($_GET['import'])) {
     $interbreadcrumb[] = array('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
     $import_result_form = new DataForm(
@@ -101,7 +101,6 @@ if (isset($_GET['import'])) {
     }
 
     $eval[0]->check_lock_permissions();
-
     if ($_POST['formSent']) {
         if (!empty($_FILES['import_file']['name'])) {
             $values = $import_result_form->exportValues();

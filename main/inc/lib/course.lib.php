@@ -106,9 +106,14 @@ class CourseManager
 
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
-                        if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
-                            GradebookUtils::create_default_course_gradebook($course_info['code'],
-                                $params['gradebook_model_id']);
+                        if (isset($params['gradebook_model_id']) &&
+                            !empty($params['gradebook_model_id']) &&
+                            $params['gradebook_model_id'] != '-1'
+                        ) {
+                            GradebookUtils::create_default_course_gradebook(
+                                $course_info['code'],
+                                $params['gradebook_model_id']
+                            );
                         }
                     }
                     // If parameter defined, copy the contents from a specific
@@ -152,7 +157,7 @@ class CourseManager
     {
         return Database::fetch_array(Database::query(
                 "SELECT *, id as real_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-            WHERE code='" . Database::escape_string($course_code) . "'"), 'ASSOC'
+                WHERE code='" . Database::escape_string($course_code) . "'"), 'ASSOC'
         );
     }
 
@@ -288,9 +293,10 @@ class CourseManager
      */
     public static function get_access_settings($course_code)
     {
-        return Database::fetch_array(Database::query(
-                "SELECT visibility, subscribe, unsubscribe from " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-            WHERE code = '" . Database::escape_string($course_code) . "'")
+        return Database::fetch_array(Database::query("
+                SELECT visibility, subscribe, unsubscribe
+                FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
+                WHERE code = '" . Database::escape_string($course_code) . "'")
         );
     }
 
@@ -305,7 +311,7 @@ class CourseManager
     {
         $result = Database::fetch_array(Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-            WHERE course_code = '" . Database::escape_string($course_code) . "' AND user_id = " . intval($user_id))
+                WHERE course_code = '" . Database::escape_string($course_code) . "' AND user_id = " . intval($user_id))
         );
 
         return $result['status'];
@@ -431,7 +437,10 @@ class CourseManager
                 if (Database::num_rows($rs) == 0) {
                     // Delete in table session_rel_user
                     $sql = "DELETE FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . "
-                            WHERE id_session ='" . $session_id . "' AND id_user='$uid' AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
+                            WHERE
+                                id_session ='" . $session_id . "' AND
+                                id_user='$uid' AND
+                                relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
                     Database::query($sql);
                 }
             }
@@ -527,7 +536,8 @@ class CourseManager
         //$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 
         // A preliminary check whether the user has bben already registered on the platform.
-        if (Database::num_rows(@Database::query("SELECT status FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
+        if (Database::num_rows(@Database::query(
+                "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
                 WHERE user_id = '$user_id' ")) == 0
         ) {
             return false; // The user has not been registered to the platform.
@@ -535,7 +545,8 @@ class CourseManager
 
         // Check whether the user has not been already subscribed to the course.
         if (empty($session_id)) {
-            if (Database::num_rows(@Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
+            if (Database::num_rows(@Database::query("
+                    SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                     WHERE user_id = '$user_id' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND course_code = '$course_code'")) > 0
             ) {
                 return false; // The user has been already subscribed to the course.
@@ -545,10 +556,12 @@ class CourseManager
         if (!empty($session_id)) {
 
             // Check whether the user has not already been stored in the session_rel_course_user table
-            if (Database::num_rows(@Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE course_code = '" . $course_code . "'
-                    AND id_session ='" . $session_id . "'
-                    AND id_user = '" . $user_id . "'")) > 0
+            if (Database::num_rows(@Database::query("
+                    SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
+                    WHERE
+                        course_code = '" . $course_code . "' AND
+                        id_session ='" . $session_id . "' AND
+                        id_user = '" . $user_id . "'")) > 0
             ) {
                 return false;
             }
@@ -633,7 +646,9 @@ class CourseManager
     {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $sql = "SELECT course_code FROM $table_field cf INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
+        $sql = "SELECT course_code
+                FROM $table_field cf
+                INNER JOIN $t_cfv cfv ON cfv.field_id=cf.id
                 WHERE field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
@@ -776,28 +791,15 @@ class CourseManager
      */
     public static function get_real_course_list()
     {
-        $sql_result = Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                        WHERE target_course_code IS NULL");
+        $sql_result = Database::query("
+            SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
+            WHERE target_course_code IS NULL"
+        );
         $real_course_list = array();
         while ($result = Database::fetch_array($sql_result)) {
             $real_course_list[$result['code']] = $result;
         }
         return $real_course_list;
-    }
-
-    /**
-     * Lists all virtual courses
-     * @return array   Course info (course code => details) of all virtual courses on the platform
-     * @deprecated virtual course feature is not supported
-     */
-    public static function get_virtual_course_list()
-    {
-        $sql_result = Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " WHERE target_course_code IS NOT NULL");
-        $virtual_course_list = array();
-        while ($result = Database::fetch_array($sql_result)) {
-            $virtual_course_list[$result['code']] = $result;
-        }
-        return $virtual_course_list;
     }
 
     /**
@@ -987,182 +989,6 @@ class CourseManager
     }
 
     /**
-     * Find out for which courses the user is registered and determine a visual course code and course title from that.
-     * Takes virtual courses into account
-     *
-     * Default case: the name and code stay what they are.
-     *
-     * Scenarios:
-     * - User is registered in real course and virtual courses; name / code become a mix of all
-     * - User is registered in real course only: name stays that of real course
-     * - User is registered in virtual course only: name becomes that of virtual course
-     * - user is not registered to any of the real/virtual courses: name stays that of real course
-     * (I'm not sure about the last case, but this seems not too bad)
-     *
-     * @author Roan Embrechts
-     * @param int $user_id , the id of the user
-     * @param array $course_info , an array with course info that you get using Database::get_course_info($course_system_code);
-     * @return array An array with indices
-     *    $return_result['title'] - the course title of the combined courses
-     *    $return_result['code']  - the course code of the combined courses
-     * @deprecated use api_get_course_info()
-     */
-    public static function determine_course_title_from_course_info($user_id, $course_info)
-    {
-        if ($user_id != strval(intval($user_id))) {
-            return array();
-        }
-
-        $real_course_id = $course_info['system_code'];
-        $real_course_info = api_get_course_info($real_course_id);
-        $real_course_name = $real_course_info['title'];
-        $real_course_visual_code = $real_course_info['visual_code'];
-        $real_course_real_code = Database::escape_string($course_info['system_code']);
-
-        //is the user registered in the real course?
-        $result = Database::fetch_array(Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                WHERE user_id = '$user_id' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND course_code = '$real_course_real_code'"));
-        $user_is_registered_in_real_course = !empty($result);
-
-        //get a list of virtual courses linked to the current real course and to which the current user is subscribed
-        $user_subscribed_virtual_course_list = self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id,
-            $real_course_id);
-        $virtual_courses_exist = count($user_subscribed_virtual_course_list) > 0;
-
-        //now determine course code and name
-        if ($user_is_registered_in_real_course && $virtual_courses_exist) {
-            $course_info['name'] = self::create_combined_name($user_is_registered_in_real_course, $real_course_name,
-                $user_subscribed_virtual_course_list);
-            $course_info['official_code'] = self::create_combined_code($user_is_registered_in_real_course,
-                $real_course_visual_code, $user_subscribed_virtual_course_list);
-        } elseif ($user_is_registered_in_real_course) {
-            //course name remains real course name
-            $course_info['name'] = $real_course_name;
-            $course_info['official_code'] = $real_course_visual_code;
-        } elseif ($virtual_courses_exist) {
-            $course_info['name'] = self::create_combined_name($user_is_registered_in_real_course, $real_course_name,
-                $user_subscribed_virtual_course_list);
-            $course_info['official_code'] = self::create_combined_code($user_is_registered_in_real_course,
-                $real_course_visual_code, $user_subscribed_virtual_course_list);
-        } else {
-            //course name remains real course name
-            $course_info['name'] = $real_course_name;
-            $course_info['official_code'] = $real_course_visual_code;
-        }
-
-        $return_result['title'] = $course_info['name'];
-        $return_result['code'] = $course_info['official_code'];
-        return $return_result;
-    }
-
-    /**
-     * Create a course title based on all real and virtual courses the user is registered in.
-     * @param boolean $user_is_registered_in_real_course
-     * @param string $real_course_name , the title of the real course
-     * @param array $virtual_course_list , the list of virtual courses
-     * @deprecated
-     */
-    public static function create_combined_name(
-        $user_is_registered_in_real_course,
-        $real_course_name,
-        $virtual_course_list
-    ) {
-        $complete_course_name = array();
-
-        if ($user_is_registered_in_real_course) {
-            // Add the real name to the result.
-            $complete_course_name[] = $real_course_name;
-        }
-
-        // Add course titles of all virtual courses.
-        foreach ($virtual_course_list as $current_course) {
-            $complete_course_name[] = $current_course['title'];
-        }
-
-        // 'CombinedCourse' is from course_home language file.
-        return (($user_is_registered_in_real_course || count($virtual_course_list) > 1) ? get_lang('CombinedCourse') . ' ' : '') . implode(' &amp; ',
-            $complete_course_name);
-    }
-
-    /**
-     *    Create a course code based on all real and virtual courses the user is registered in.
-     * @deprecated
-     */
-    public static function create_combined_code(
-        $user_is_registered_in_real_course,
-        $real_course_code,
-        $virtual_course_list
-    ) {
-        $complete_course_code = array();
-
-        if ($user_is_registered_in_real_course) {
-            // Add the real code to the result
-            $complete_course_code[] = $real_course_code;
-        }
-
-        // Add codes of all virtual courses.
-        foreach ($virtual_course_list as $current_course) {
-            $complete_course_code[] = $current_course['visual_code'];
-        }
-
-        return implode(' &amp; ', $complete_course_code);
-    }
-
-    /**
-     *    Return course info array of virtual course
-     *
-     *    Note this is different from getting information about a real course!
-     *
-     * @param $real_course_code , the id of the real course which the virtual course is linked to
-     * @deprecated virtual courses doesn't exist anymore
-     */
-    public static function get_virtual_course_info($real_course_code)
-    {
-        $sql_result = Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE target_course_code = '" . Database::escape_string($real_course_code) . "'");
-        $result = array();
-        while ($virtual_course = Database::fetch_array($sql_result)) {
-            $result[] = $virtual_course;
-        }
-        return $result;
-    }
-
-    /**
-     * @param string $system_code , the system code of the course
-     * @return true if the course is a virtual course, false otherwise
-     * @deprecated virtual courses doesn't exist anymore
-     */
-    public static function is_virtual_course_from_system_code($system_code)
-    {
-        $result = Database::fetch_array(Database::query("SELECT target_course_code FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE code = '" . Database::escape_string($system_code) . "'"));
-        return !empty($result['target_course_code']);
-    }
-
-    /**
-     *    Returns whether the course code given is a visual code
-     * @param  string  Visual course code
-     * @return true if the course is a virtual course, false otherwise
-     * @deprecated virtual courses doesn't exist anymore
-     */
-    public static function is_virtual_course_from_visual_code($visual_code)
-    {
-        $result = Database::fetch_array(Database::query("SELECT target_course_code FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE visual_code = '" . Database::escape_string($visual_code) . "'"));
-        return !empty($result['target_course_code']);
-    }
-
-    /**
-     * @return true if the real course has virtual courses that the user is subscribed to, false otherwise
-     * @deprecated virtual courses doesn't exist anymore
-     */
-    public static function has_virtual_courses_from_code($real_course_code, $user_id)
-    {
-        return count(self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id,
-                $real_course_code)) > 0;
-    }
-
-    /**
      *  Return an array of arrays, listing course info of all virtual course
      *  linked to the real course ID $real_course_code
      *
@@ -1179,21 +1005,6 @@ class CourseManager
             $result_array[] = $result;
         }
         return $result_array;
-    }
-
-    /**
-     * This function returns the course code of the real course
-     * to which a virtual course is linked.
-     * @deprecated
-     * @param the course code of the virtual course
-     * @return the course code of the real course
-     */
-    public static function get_target_of_linked_course($virtual_course_code)
-    {
-        //get info about the virtual course
-        $result = Database::fetch_array(Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . "
-                WHERE code = '" . Database::escape_string($virtual_course_code) . "'"));
-        return $result['target_course_code'];
     }
 
     /**
@@ -1381,7 +1192,7 @@ class CourseManager
     }
 
     /**
-     * Return user info array of all users registered in the specified real or virtual course
+     * Return user info array of all users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      * @param string $course_code
      * @param int $session_id
@@ -1707,8 +1518,11 @@ class CourseManager
      * @param   int $session_id
      * @return  int
      */
-    public static function get_users_count_in_course($course_code, $session_id = 0)
-    {
+    public static function get_users_count_in_course(
+        $course_code,
+        $session_id = 0,
+        $status = null
+    ) {
         // variable initialisation
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
@@ -1794,7 +1608,7 @@ class CourseManager
     }
 
     /**
-     *  Return user info array of all users registered in the specified real or virtual course
+     *  Return user info array of all users registered in a course
      *  This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string $course_code
@@ -1873,7 +1687,7 @@ class CourseManager
     }
 
     /**
-     * Return user info array of all teacher-users registered in the specified real or virtual course
+     * Return user info array of all teacher-users registered in a course
      * This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string $course_code
@@ -5578,15 +5392,20 @@ class CourseManager
      * This function gets all the courses that are not in a session
      * @param date Start date
      * @param date End date
+     * @param   bool    $includeClosed Whether to include closed and hidden courses
      * @return array Not-in-session courses
      */
-    public static function getCoursesWithoutSession($startDate = null, $endDate = null)
+    public static function getCoursesWithoutSession($startDate = null, $endDate = null, $includeClosed = false)
     {
         $dateConditional = ($startDate && $endDate) ?
             " WHERE id_session IN (SELECT id FROM " . Database::get_main_table(TABLE_MAIN_SESSION) .
             " WHERE date_start = '$startDate' AND date_end = '$endDate')" :
             null;
-        $query = "SELECT id, code, title FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " WHERE CODE NOT IN
+        $visibility = ($includeClosed ? '' : 'visibility NOT IN (0, 4) AND ');
+
+        $query = "SELECT id, code, title FROM " . Database::get_main_table(TABLE_MAIN_COURSE)
+            . " WHERE  $visibility
+            code NOT IN
             (SELECT DISTINCT course_code FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE) . $dateConditional . ")
             ORDER BY id";
 

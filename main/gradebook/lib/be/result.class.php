@@ -69,8 +69,6 @@ class Result
         $this->score = $score;
     }
 
-// CRUD FUNCTIONS
-
     /**
      * Retrieve results and return them as an array of Result objects
      * @param $id result id
@@ -87,7 +85,8 @@ class Result
 
         if (is_null($id) && is_null($user_id) && !is_null($evaluation_id)) {
             // Verified_if_exist_evaluation
-            $sql = 'SELECT COUNT(*) AS count FROM ' . $tbl_grade_results . '
+            $sql = 'SELECT COUNT(*) AS count
+                    FROM ' . $tbl_grade_results . '
                     WHERE evaluation_id="' . Database::escape_string($evaluation_id) . '";';
             $result = Database::query($sql);
             $existEvaluation = Database::result($result, 0, 0);

@@ -48,12 +48,8 @@ class SessionManager
      * Create a session
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code
      * @param	string 		name
-     * @param 	integer		Start year (yyyy)
-     * @param 	integer		Start month (mm)
-     * @param 	integer		Start day (dd)
-     * @param 	integer		End year (yyyy)
-     * @param 	integer		End month (mm)
-     * @param 	integer		End day (dd)
+     * @param 	string		Start date (YYYY-MM-DD)
+     * @param 	string		End date (YYYY-MM-DD)
      * @param 	integer		Number of days that the coach can access the session before the start date
      * @param 	integer		Number of days that the coach can access the session after the end date
      * @param 	integer		If 1, means there are no date limits

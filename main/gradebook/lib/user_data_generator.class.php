@@ -154,9 +154,11 @@ class UserDataGenerator
 		return $data;
 	}
 
-	// Sort functions
-	// Make sure to only use functions as defined in the GradebookItem interface !
-
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_type($item1, $item2)
 	{
 		if ($item1->get_item_type() == $item2->get_item_type()) {
@@ -166,6 +168,11 @@ class UserDataGenerator
 		}
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_course($item1, $item2)
 	{
 		$name1 = api_strtolower($this->get_course_name_from_code_cached($item1->get_course_code()));
@@ -173,6 +180,11 @@ class UserDataGenerator
 		return api_strnatcmp($name1, $name2);
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_category($item1, $item2)
 	{
 		$cat1 = $this->get_category_cached($item1->get_category_id());
@@ -182,11 +194,21 @@ class UserDataGenerator
 		return api_strnatcmp($name1, $name2);
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_name($item1, $item2)
 	{
 		return api_strnatcmp($item1->get_name(),$item2->get_name());
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_average($item1, $item2)
 	{
 		$score1 = $this->avgcache[$item1->get_item_type() . $item1->get_id()];
@@ -194,6 +216,11 @@ class UserDataGenerator
 		return $this->compare_scores($score1, $score2);
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_score($item1, $item2)
 	{
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
@@ -201,6 +228,11 @@ class UserDataGenerator
 		return $this->compare_scores($score1, $score2);
 	}
 
+	/**
+	 * @param $item1
+	 * @param $item2
+	 * @return int
+	 */
 	function sort_by_mask($item1, $item2)
 	{
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
@@ -208,7 +240,12 @@ class UserDataGenerator
 		return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
 	}
 
-	function compare_scores ($score1, $score2)
+	/**
+	 * @param $score1
+	 * @param $score2
+	 * @return int
+	 */
+	function compare_scores($score1, $score2)
 	{
 		if (!isset($score1)) {
 			return (isset($score2) ? 1 : 0);
@@ -221,19 +258,32 @@ class UserDataGenerator
 		}
 	}
 
-	private function build_course_name ($item)
+	/**
+	 * @param $item
+	 * @return mixed
+	 */
+	private function build_course_name($item)
 	{
 		return $this->get_course_name_from_code_cached($item->get_course_code());
 	}
 
-	private function build_category_name ($item)
+	/**
+	 * @param $item
+	 * @return string
+	 */
+	private function build_category_name($item)
 	{
 		$cat = $this->get_category_cached($item->get_category_id());
 
 		return $this->get_category_name_to_display($cat);
 	}
 
-	private function build_average_column ($item, $ignore_score_color)
+	/**
+	 * @param $item
+	 * @param $ignore_score_color
+	 * @return string
+	 */
+	private function build_average_column($item, $ignore_score_color)
 	{
 		if (isset($this->avgcache)) {
 			$avgscore = $this->avgcache[$item->get_item_type() . $item->get_id()];
@@ -249,7 +299,12 @@ class UserDataGenerator
 		return $scoredisplay->display_score($avgscore, $displaytype);
 	}
 
-	private function build_result_column ($item, $ignore_score_color)
+	/**
+	 * @param $item
+	 * @param $ignore_score_color
+	 * @return string
+	 */
+	private function build_result_column($item, $ignore_score_color)
 	{
 		$studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
 		$scoredisplay = ScoreDisplay :: instance();
@@ -260,6 +315,11 @@ class UserDataGenerator
 		return $scoredisplay->display_score($studscore, $displaytype, SCORE_ONLY_DEFAULT);
 	}
 
+	/**
+	 * @param $item
+	 * @param $ignore_score_color
+	 * @return string
+	 */
 	private function build_mask_column($item, $ignore_score_color)
 	{
 		$studscore = $this->scorecache[$item->get_item_type() . $item->get_id()];
@@ -271,8 +331,12 @@ class UserDataGenerator
 		return $scoredisplay->display_score($studscore, $displaytype, SCORE_ONLY_CUSTOM);
 	}
 
-
-	private function get_course_name_from_code_cached ($coursecode) {
+	/**
+	 * @param $coursecode
+	 * @return mixed
+	 */
+	private function get_course_name_from_code_cached($coursecode)
+	{
 		if (isset ($this->coursecodecache)
 			&& isset ($this->coursecodecache[$coursecode])) {
 			return $this->coursecodecache[$coursecode];
@@ -283,7 +347,12 @@ class UserDataGenerator
 		}
 	}
 
-	private function get_category_cached ($category_id) {
+	/**
+	 * @param $category_id
+	 * @return null
+	 */
+	private function get_category_cached($category_id)
+	{
 		if (isset ($this->categorycache)
 			&& isset ($this->categorycache[$category_id])) {
 			return $this->categorycache[$category_id];
@@ -297,7 +366,12 @@ class UserDataGenerator
 		}
 	}
 
-	private function get_category_name_to_display ($cat) {
+	/**
+	 * @param $cat
+	 * @return string
+	 */
+	private function get_category_name_to_display($cat)
+	{
 		if (isset($cat)) {
 			if ($cat->get_parent_id() == '0' || $cat->get_parent_id() == null){
 				return '';

@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$OpenBadgesBannerText = "Un nouveau standard ouvert pour reconnaître et vérifier l'apprentissage, en combinaison avec les compétences de Chamilo. Utilisez les onglets pour le configurer.";
-$OpenBadgesIntroduction = "Nous vous présentons OpenBadges";
+$OpenBadgesBannerText = "Vous pouvez maintenant créer des insignes qui reconnaissent les compétences appris par vos utilisateurs, les récompensent pour leurs efforts et au travers desquels ils pourront démontrer leurs compétences acquises sur leur page de profil. Pour plus d'informations au sujet d'OpenBadges: <a href='http://openbadges.org'>http://openbadges.org</a>.";
+$OpenBadgesIntroduction = "Vous pouvez maintenant élaborer des badges pour récompenser l'acquisition de compétences au travers des cours sur ce campus virtuel.";
 $DesignANewBadgeComment = "Élaborez un nouveau badge, téléchargez-le et utilisez-le dans le formulaire du badge.";
 $TheBadgesWillBeSentToThatBackpack = "Les badges seront envoyés vers ce sac à dos";
 $BackpackDetails = "Détails du sac à dos";
@@ -339,12 +339,29 @@ $WCAGGoMenu = "Aller au menu";
 $WCAGGoContent = "Aller au contenu";
 $NoTimeLimits = "Pas de limite de temps";
 $SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
+$OpenBadgesTitle = "Chamilo supporte le standard OpenBadges";
+$NoPosts = "Aucune publication";
+$WithoutAchievedSkills = "Aucune compétence acquise";
 $TypeMessage = "Veuillez introduire votre message !";
 $ConfirmReset = "Etes-vous sûr de vouloir supprimer tous les messages ?";
+$MailCronCourseExpirationReminderBody = "Cher/Chère %s,
+
+Nous avons remarqué que vous n'avez pas terminé le cours %s alors que sa date de fin a été établie au %s, vous laissant %s jour(s) pour le terminer. Nous vous rappelons que vous ne disposez de la possibilité de suivre ce cours qu'une fois par an. Nous vous invitons donc avec insistance à le compléter dans le délai qu'il vous reste. Vous pouvez retrouver le cours en vous connectant à la plate-forme à cette adresse: %s
+
+-- 
+
+Cordialement,
+
+L'équipe de support de %s";
+$MailCronCourseExpirationReminderSubject = "Urgent: Rappel d'expiration prochaine du cours %s";
+$ExerciseAndLearningPath = "Exercices et parcours";
+$LearningPathGradebookWarning = "Avertissement: Il est possible d'utiliser des exercices faisant partie d'un parcours dans le cahier de notes. Cependant, si le parcours lui-même est déjà inclus, cet exercice fera peut-être déjà partie de l'évaluation du parcours. L'évaluation d'un parcours se fait selon son pourcentage de progression, alors que l'évaluation d'une exercice se fait selon le score obtenu. Enfin, l'évaluation des enquêtes se fait sur base de la réponse ou non à l'enquête, ce qui signifie que le 'score' obtenu est de 0 (non répondu) ou 1 (répondu) selon les cas. Veillez à tester les combinaisons que vous organisez dans votre cahier de notes pour éviter les casse-têtes.";
+$ChooseEitherDurationOrTimeLimit = "Vous devez choisir entre une durée et une période définie par des dates";
 $ClearList = "Effacer la liste";
 $SessionBanner = "Banner de session";
 $ShortDescription = "Courte description";
 $TargetAudience = "Public cible";
+$OpenBadgesActionCall = "Convertissez votre campus en ligne en un lieu d'apprentissage par compétences.";
 $CallSent = "Une demande de \"chat\" a été envoyée. En attente d'approbation de la personne contactée.";
 $ChatDenied = "Votre appel a été refusé par la personne contactée.";
 $Send = "Envoyer";
@@ -440,7 +457,7 @@ $dateFormatShort = "%a %d %b %Y";
 $dateFormatLong = "%A %d %B %Y";
 $dateTimeFormatLong = "%A %d %B %Y à %H:%M";
 $timeNoSecFormat = "%H:%M";
-$Yes = "oui";
+$Yes = "Oui";
 $No = "Non";
 $Next = "Suivant";
 $Allowed = "Autorisé";

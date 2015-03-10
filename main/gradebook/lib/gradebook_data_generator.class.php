@@ -80,7 +80,7 @@ class GradebookDataGenerator
      * 4: date
      * 5: student's score (if student logged in)
      */
-    public function get_data($sorting = 0, $start = 0, $count = null, $ignore_score_color = false)
+    public function get_data($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $studentList = array())
     {
         //$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         // do some checks on count, redefine if invalid value
@@ -112,38 +112,110 @@ class GradebookDataGenerator
         // get selected items
         $visibleitems = array_slice($allitems, $start, $count);
         //status de user in course
-        $user_id = api_get_user_id();
+        $userId = api_get_user_id();
         $course_code = api_get_course_id();
-        $status_user = api_get_status_of_user_in_course($user_id, $course_code);
+        $sessionId = api_get_session_id();
+        $status_user = api_get_status_of_user_in_course($userId, $course_code);
+
+        if (empty($sessionId)) {
+            $statusToFilter = STUDENT;
+        } else {
+            $statusToFilter = 0;
+        }
+
+        $userCount = CourseManager::get_user_list_from_course_code(
+            $course_code,
+            $sessionId,
+            null,
+            null,
+            $statusToFilter,
+            true
+        );
 
         // Generate the data to display
         $data = array();
+
         /** @var GradebookItem $item */
+        $totalWeight = 0;
         foreach ($visibleitems as $item) {
-            $row = array ();
+            $row = array();
             $row[] = $item;
             $row[] = $item->get_name();
             // display the 2 first line of description, and all description on mouseover (https://support.chamilo.org/issues/6588)
             $row[] = '<span title="'.api_remove_tags_with_space($item->get_description()).'">'.
                 api_get_short_text_from_html($item->get_description(), 160).'</span>';
+            $totalWeight += $item->get_weight();
             $row[] = $item->get_weight();
             if (count($this->evals_links) > 0) {
+                // Items inside a category.
                 if (!api_is_allowed_to_edit() || $status_user != 1 ) {
-                    $row[] = $this->build_result_column($item, $ignore_score_color);
-                    $row['best'] = $this->buildBestResultColumn($item);
-                    $row['average'] = $this->buildAverageResultColumn($item);
+                    $resultColumn = $this->build_result_column(
+                        api_get_user_id(),
+                        $item,
+                        $ignore_score_color
+                    );
+
+                    $row[] = $resultColumn['display'];
+                    $row['result_score'] = $resultColumn['score'];
+
+                    // Best
+                    $best = $this->buildBestResultColumn($item);
+                    $row['best'] = $best['display'];
+                    $row['best_score'] = $best['score'];
+
+                    // Average
+                    $average = $this->buildAverageResultColumn($item);
+                    $row['average'] = $average['display'];
+                    $row['average_score'] = $average['score'];
+
+                    // Ranking
+                    $ranking = $this->buildRankingColumn($item, $userCount);
+
+                    $row['ranking'] = $ranking['display'];
+                    $row['ranking_score'] = $ranking['score'];
+
                     $row[] = $item;
                 }
             } else {
-                $row[] = $this->build_result_column($item, $ignore_score_color, true);
-                $row['best'] = $this->buildBestResultColumn($item);
-                $row['average'] = $this->buildAverageResultColumn($item);
+                // Category.
+
+                // Result
+                $result = $this->build_result_column($userId, $item, $ignore_score_color, true);
+                $row[] = $result['display'];
+                $row['result_score'] = $result['score'];
+
+                // Best
+                $best = $this->buildBestResultColumn($item);
+                $row['best'] = $best['display'];
+                $row['best_score'] = $best['score'];
+
+                // Average
+                $average = $this->buildAverageResultColumn($item);
+                $row['average'] = $average['display'];
+                $row['average_score'] = $average['score'];
+
+                // Ranking
+                $rankingStudentList = array();
+                foreach ($studentList as $user) {
+                    $score = $this->build_result_column(
+                        $user['user_id'],
+                        $item,
+                        $ignore_score_color,
+                        true
+                    );
+                    $rankingStudentList[$user['user_id']] = $score['display'][0];
+                }
+                $scoreDisplay = ScoreDisplay::instance();
+
+                $score = AbstractLink::getCurrentUserRanking($rankingStudentList);
+                $row['ranking'] = $scoreDisplay->display_score($score, SCORE_DIV);
+
             }
             $data[] = $row;
         }
+
         return $data;
     }
-
 
     /**
      * Get best result of an item
@@ -161,7 +233,10 @@ class GradebookDataGenerator
 
         $scoreDisplay = ScoreDisplay :: instance();
 
-        return $scoreDisplay->display_score($score, SCORE_DIV);
+        return array(
+            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'score' => $score
+        );
     }
 
     /**
@@ -172,18 +247,43 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score(null, 'average');
         $scoreDisplay = ScoreDisplay :: instance();
-        return $scoreDisplay->display_score($score, SCORE_DIV);
+
+        return array(
+            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'score' => $score
+        );
     }
 
     /**
      * @param GradebookItem $item
+     * @return string
+     */
+    private function buildRankingColumn(GradebookItem $item, $userCount = 0)
+    {
+        $score = $item->calc_score(null, 'ranking');
+        $score[1] = $userCount;
+        $scoreDisplay = ScoreDisplay::instance();
+
+        return array(
+            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'score' => $score
+        );
+    }
+
+    /**
+     * @param int $userId
+     * @param GradebookItem $item
      * @param $ignore_score_color
      * @return null|string
      */
-    private function build_result_column($item, $ignore_score_color, $forceSimpleResult = false)
-    {
-        $scoredisplay = ScoreDisplay :: instance();
-        $score = $item->calc_score(api_get_user_id());
+    private function build_result_column(
+        $userId,
+        $item,
+        $ignore_score_color,
+        $forceSimpleResult = false
+    ) {
+        $scoredisplay = ScoreDisplay::instance();
+        $score = $item->calc_score($userId);
 
         if (!empty($score)) {
             switch ($item->get_item_type()) {
@@ -195,11 +295,24 @@ class GradebookDataGenerator
                             $displaytype |= SCORE_IGNORE_SPLIT;
                         }
                         if ($forceSimpleResult) {
-                            return $scoredisplay->display_score($score, SCORE_DIV);
+                            return
+                                array(
+                                    'display' => $scoredisplay->display_score(
+                                        $score,
+                                        SCORE_DIV
+                                    ),
+                                    'score' => $score
+                                );
                         }
-                        return get_lang('Total') . ' : '. $scoredisplay->display_score($score, $displaytype);
+                        return array(
+                            'display' => get_lang('Total') . ' : '. $scoredisplay->display_score($score, $displaytype),
+                            'score' => $score
+                        );
                     } else {
-                        return '';
+                        return array(
+                            'display' => null,
+                            'score' => $score
+                        );
                     }
                     break;
                 // evaluation and link
@@ -209,10 +322,17 @@ class GradebookDataGenerator
                     if ($ignore_score_color) {
                         $displaytype |= SCORE_IGNORE_SPLIT;
                     }*/
-                    return $scoredisplay->display_score($score, SCORE_DIV_PERCENT_WITH_CUSTOM);
+                    return array(
+                        'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                        'score' => $score,
+                    );
             }
         }
-        return null;
+
+        return array(
+            'display' => null,
+            'score' => null
+        );
     }
 
     /**

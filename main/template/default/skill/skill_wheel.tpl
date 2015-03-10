@@ -476,9 +476,9 @@ $(document).ready(function() {
 </script>
 <div id="page-back">
 <div class="container-fluid">
-    <div class="row-fluid">
+    <div class="row">
 
-        <div class="span3 skill-options">
+        <div class="col-md-3 skill-options">
             <div class="skill-home">
                 <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
             </div>
@@ -573,7 +573,7 @@ $(document).ready(function() {
 
             <!-- END ACCORDEON -->
         </div>
-        <div id="wheel_container" class="span9">
+        <div id="wheel_container" class="col-md-9">
             <div id="skill_wheel">
                 <img src="">
             </div>

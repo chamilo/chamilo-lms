@@ -10,6 +10,9 @@ class SurveyLink extends AbstractLink
 {
 	private $survey_table = null;
 
+	/**
+	 * Constructor
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -95,9 +98,14 @@ class SurveyLink extends AbstractLink
 		$sql = 'SELECT survey_id, title, code
     			FROM '.$this->get_survey_table().' AS srv
 				WHERE survey_id NOT IN
-					(SELECT ref_id FROM '.$tbl_grade_links.'
-					WHERE type = '.LINK_SURVEY." AND course_code = '".$this->get_course_code()."'"
-			.') AND srv.session_id='.api_get_session_id().'';
+					(
+					SELECT ref_id FROM '.$tbl_grade_links.'
+					WHERE
+						type = '.LINK_SURVEY.' AND
+						course_code = '".$this->get_course_code()."'
+					)
+					AND srv.session_id = '.api_get_session_id();
+
 		$result = Database::query($sql);
 
 		$links = array();
@@ -172,7 +180,7 @@ class SurveyLink extends AbstractLink
 		if ($get_individual_score) {
 			// for 1 student
 			if ($data = Database::fetch_array($sql_result)) {
-				return array ($data['answered'] ? $max_score : 0, $max_score);
+				return array($data['answered'] ? $max_score : 0, $max_score);
 			}
 			return array(0, $max_score);
 		} else {
@@ -194,13 +202,21 @@ class SurveyLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			}
-			if ($type == 'best') {
-				return array($bestResult, $rescount);
+
+			switch ($type) {
+				case 'best':
+					return array($bestResult, $rescount);
+					break;
+				case 'average':
+					return array($sum, $rescount);
+					break;
+				case 'ranking':
+					return null;
+					break;
+				default:
+					return array($sum, $rescount);
+					break;
 			}
-			if ($type == 'average') {
-				return array($sum, $rescount);
-			}
-			return array($sum, $rescount);
 		}
 	}
 

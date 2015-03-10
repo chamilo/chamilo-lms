@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 
-$language_file = array('gradebook', 'exercice');
+$language_file = array('gradebook', 'exercice', 'tracking');
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that

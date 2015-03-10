@@ -22,30 +22,48 @@ class Category implements GradebookItem
     private $grade_model_id;
     private $generateCertificates;
 
+    /**
+     * Consctructor
+     */
     public function __construct()
     {
     }
 
+    /**
+     * @return int
+     */
     public function get_id()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function get_name()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function get_description()
     {
         return $this->description;
     }
 
+    /**
+     * @return int
+     */
     public function get_user_id()
     {
         return $this->user_id;
     }
 
+    /**
+     * @return float
+     */
     public function get_certificate_min_score()
     {
         if (!empty($this->certificate_min_score)) {
@@ -63,56 +81,89 @@ class Category implements GradebookItem
         return $this->course_code;
     }
 
+    /**
+     * @return mixed
+     */
     public function get_parent_id()
     {
         return $this->parent;
     }
 
+    /**
+     * @return mixed
+     */
     public function get_weight()
     {
         return $this->weight;
     }
 
+    /**
+     * @return bool
+     */
     public function is_locked()
     {
         return isset($this->locked) && $this->locked == 1 ? true : false;
     }
 
+    /**
+     * @return mixed
+     */
     public function is_visible()
     {
         return $this->visible;
     }
 
+    /**
+     * @param int $id
+     */
     public function set_id($id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @param string $name
+     */
     public function set_name($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @param string $description
+     */
     public function set_description($description)
     {
         $this->description = $description;
     }
 
+    /**
+     * @param int $user_id
+     */
     public function set_user_id($user_id)
     {
         $this->user_id = $user_id;
     }
 
+    /**
+     * @param string $course_code
+     */
     public function set_course_code($course_code)
     {
         $this->course_code = $course_code;
     }
 
-    public function set_certificate_min_score ($min_score = null)
+    /**
+     * @param float $min_score
+     */
+    public function set_certificate_min_score($min_score = null)
     {
         $this->certificate_min_score = $min_score;
     }
 
+    /**
+     * @param int $parent
+     */
     public function set_parent_id($parent)
     {
         $this->parent = intval($parent);
@@ -157,6 +208,10 @@ class Category implements GradebookItem
         return 'category';
     }
 
+    /**
+     * @param bool $from_db
+     * @return array|resource
+     */
     public function get_skills($from_db = true)
     {
         if ($from_db) {
@@ -170,6 +225,9 @@ class Category implements GradebookItem
         return $skills;
     }
 
+    /**
+     * @return array
+     */
     public function get_skills_for_select()
     {
         $skills = $this->get_skills();
@@ -249,7 +307,8 @@ class Category implements GradebookItem
      * @param int      $parent_id parent category
      * @param bool     $visible
      * @param int      $session_id (in case we are in a session)
-     * @param bool     $order_by Whether to show all "session" categories (true) or hide them (false) in case there is no session id
+     * @param bool     $order_by Whether to show all "session"
+     * categories (true) or hide them (false) in case there is no session id
      */
     public static function load(
         $id = null,
@@ -522,7 +581,9 @@ class Category implements GradebookItem
     {
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'UPDATE '.$tbl_grade_categories." SET name = '".Database::escape_string($this->get_name())."'".', description = ';
+        $sql = 'UPDATE '.$tbl_grade_categories." SET
+                name = '".Database::escape_string($this->get_name())."'".',
+                description = ';
         if (isset($this->description)) {
             $sql .= "'".Database::escape_string($this->get_description())."'";
         } else {
@@ -604,7 +665,7 @@ class Category implements GradebookItem
      * Update link weights see #5168
      * @param type $new_weight
      */
-    function update_children_weight($new_weight)
+    public function update_children_weight($new_weight)
     {
         $links = $this->get_links();
         $old_weight = $this->get_weight();
@@ -636,7 +697,8 @@ class Category implements GradebookItem
     public function update_category_delete($course_id)
     {
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3 WHERE course_code ="'.Database::escape_string($course_id).'"';
+        $sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3
+                WHERE course_code ="'.Database::escape_string($course_id).'"';
         Database::query($sql);
     }
 
@@ -668,7 +730,9 @@ class Category implements GradebookItem
             return null;
         } else {
             $tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates FROM '.$tbl_category.' c WHERE c.id='.intval($selectcat);
+            $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates
+                    FROM '.$tbl_category.' c
+                    WHERE c.id='.intval($selectcat);
             $result       = Database::query($sql);
             $row          = Database::fetch_array($result, 'ASSOC');
 
@@ -727,7 +791,7 @@ class Category implements GradebookItem
      */
     public function is_certificate_available($user_id)
     {
-        $score = $this->calc_score($user_id, $this->course_code);
+        $score = $this->calc_score($user_id, null, $this->course_code);
 
         if (isset($score) && isset($score[0])) {
             // Get a percentage score to compare to minimum certificate score
@@ -760,8 +824,12 @@ class Category implements GradebookItem
      * @return    array (score sum, weight sum)
      *             or null if no scores available
      */
-    public function calc_score($stud_id = null, $course_code = '', $session_id = null)
-    {
+    public function calc_score(
+        $stud_id = null,
+        $type = null,
+        $course_code = '',
+        $session_id = null
+    ) {
         // Get appropriate subcategories, evaluations and links
         if (!empty($course_code)) {
             $cats  = $this->get_subcategories($stud_id, $course_code, $session_id);
@@ -773,22 +841,32 @@ class Category implements GradebookItem
             $links = $this->get_links($stud_id);
         }
 
-        // calculate score
-        $rescount  = 0;
-        $ressum    = 0;
+        // Calculate score
+        $rescount = 0;
+        $ressum = 0;
         $weightsum = 0;
+        $bestResult = 0;
+        $students = [];
 
         if (!empty($cats)) {
             /** @var Category $cat */
             foreach ($cats as $cat) {
-                $catres = $cat->calc_score($stud_id, $course_code, $session_id);
+                $score = $cat->calc_score(
+                    $stud_id,
+                    $type,
+                    $course_code,
+                    $session_id
+                );
+
                 if ($cat->get_weight() != 0) {
                     $catweight = $cat->get_weight();
                     $rescount++;
                     $weightsum += $catweight;
                 }
-                if (isset($catres)) {
-                    $ressum += (($catres[0]/$catres[1]) * $catweight);
+
+                if (isset($score)) {
+                    $ressum += $score[0]/$score[1] * $catweight;
+                    $bestResult += $ressum;
                 }
             }
         }
@@ -796,13 +874,16 @@ class Category implements GradebookItem
         if (!empty($evals)) {
             /** @var Evaluation $eval */
             foreach ($evals as $eval) {
-                $evalres = $eval->calc_score($stud_id);
-
+                $evalres = $eval->calc_score($stud_id, $type);
+                if ($type == 'ranking') {
+                    var_dump($evalres);
+                }
+                $students[$stud_id] = $evalres[0];
                 if (isset($evalres) && $eval->get_weight() != 0) {
                     $evalweight = $eval->get_weight();
                     $weightsum += $evalweight;
                     $rescount++;
-                    $ressum += (($evalres[0]/$evalres[1]) * $evalweight);
+                    $ressum += $evalres[0] / $evalres[1] * $evalweight;
                 } else {
                     if ($eval->get_weight() != 0) {
                         $evalweight = $eval->get_weight();
@@ -813,15 +894,20 @@ class Category implements GradebookItem
         }
 
         if (!empty($links)) {
+
+            $bestResult = 0;
+            $weight = 0;
+
             /** @var EvalLink|ExerciseLink $link */
-            foreach ($links as $link) {
-                $linkres = $link->calc_score($stud_id);
+           foreach ($links as $link) {
+                $linkres = $link->calc_score($stud_id, $type);
                 if (!empty($linkres) && $link->get_weight() != 0) {
+                    $students[$stud_id] = $linkres[0];
                     $linkweight = $link->get_weight();
                     $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
                     $rescount++;
                     $weightsum += $linkweight;
-                    $ressum += ($linkres[0] / $link_res_denom) * $linkweight;
+                    $ressum += $linkres[0] / $link_res_denom * $linkweight;
                 } else {
                     // Adding if result does not exists
                     if ($link->get_weight() != 0) {
@@ -835,7 +921,22 @@ class Category implements GradebookItem
         if ($rescount == 0) {
             return null;
         } else {
-            return array($ressum, $weightsum);
+            switch ($type) {
+                case 'best':
+                    return array($ressum, $weightsum);
+                    break;
+                case 'average':
+                    return array($ressum, $weightsum);
+                    break;
+                case 'ranking':
+                    //var_dump($students);
+                    return null;
+                    return AbstractLink::getCurrentUserRanking($students);
+                    break;
+                default:
+                    return array($ressum, $weightsum);
+                    break;
+            }
         }
     }
 
@@ -872,7 +973,7 @@ class Category implements GradebookItem
      * @param string    Course code
      * @param int       Session id
      */
-    public function get_root_categories_for_student ($stud_id, $course_code = null, $session_id = null)
+    public function get_root_categories_for_student($stud_id, $course_code = null, $session_id = null)
     {
         $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -1063,7 +1164,7 @@ class Category implements GradebookItem
      */
     private function can_be_moved_to_cat ($cat)
     {
-        return ($cat->get_id() != $this->get_id());
+        return $cat->get_id() != $this->get_id();
     }
 
     /**
@@ -1073,7 +1174,7 @@ class Category implements GradebookItem
      * of all underlying categories and evaluations. All links will
      * be deleted as well !
      */
-    public function move_to_cat ($cat)
+    public function move_to_cat($cat)
     {
         $this->set_parent_id($cat->get_id());
         if ($this->get_course_code() != $cat->get_course_code()) {
@@ -1086,7 +1187,7 @@ class Category implements GradebookItem
     /**
      * Internal function used by move_to_cat()
      */
-    private function apply_course_code_to_children ()
+    private function apply_course_code_to_children()
     {
         $cats = Category::load(null, null, null, $this->id, null);
         $evals = Evaluation::load(null, null, null, $this->id, null);
@@ -1305,11 +1406,12 @@ class Category implements GradebookItem
 
     /**
      * Get appropriate subcategories visible for the user (and optionally the course and session)
-     * @param int      $stud_id student id (default: all students)
-     * @param string   Course code (optional)
-     * @param int      Session ID (optional)
-     *
-     * @return array   Array of subcategories
+     * @param int    $stud_id student id (default: all students)
+     * @param string $course_code Course code (optional)
+     * @param int    $session_id Session ID (optional)
+     * @param bool   $order
+
+     * @return array Array of subcategories
      */
     public function get_subcategories($stud_id = null, $course_code = null, $session_id = null, $order = null)
     {
@@ -1374,8 +1476,11 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    public function get_evaluations($stud_id = null, $recursive = false, $course_code = '')
-    {
+    public function get_evaluations(
+        $stud_id = null,
+        $recursive = false,
+        $course_code = ''
+    ) {
         $evals = array();
 
         if (empty($course_code)) {
@@ -1384,14 +1489,14 @@ class Category implements GradebookItem
 
         // 1 student
         if (isset($stud_id) && !empty($stud_id)) {
-            // special case: this is the root
+            // Special case: this is the root
             if ($this->id == 0) {
                 $evals = Evaluation::get_evaluations_with_result_for_student(0, $stud_id);
             } else {
                 $evals = Evaluation::load(null,null, $course_code, $this->id, api_is_allowed_to_edit() ? null : 1);
             }
         } else {
-            // all students
+            // All students
             // course admin
             if ((api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) && !api_is_platform_admin()) {
                 // root
@@ -1404,8 +1509,7 @@ class Category implements GradebookItem
                     // course independent
                     $evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
                 }
-            } elseif (api_is_platform_admin()) {
-                //platform admin
+            } else {
                 $evals = Evaluation::load(null, null, $course_code, $this->id, null);
             }
         }
@@ -1433,8 +1537,12 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    public function get_links($stud_id = null, $recursive = false, $course_code = '', $sessionId = null)
-    {
+    public function get_links(
+        $stud_id = null,
+        $recursive = false,
+        $course_code = '',
+        $sessionId = null
+    ) {
         $links = array();
 
         if (empty($course_code)) {
@@ -1458,8 +1566,9 @@ class Category implements GradebookItem
                 $this->id,
                 api_is_allowed_to_edit() ? null : 1
             );
-        } elseif (api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) {
-            // all students -> only for course/platform admin
+            //} elseif (api_is_allowed_to_edit() || api_is_drh() || api_is_session_admin()) {
+        } else {
+            // All students -> only for course/platform admin
             $links = LinkFactory::load(
                 null,
                 null,
@@ -1502,7 +1611,8 @@ class Category implements GradebookItem
     public function getCategories($catId)
     {
         $tblGradeCategories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql='SELECT * FROM '.$tblGradeCategories.' WHERE parent_id = '.intval($catId);
+        $sql = 'SELECT * FROM '.$tblGradeCategories.'
+                WHERE parent_id = '.intval($catId);
 
         $result = Database::query($sql);
         $allcats = Category::create_category_objects_from_sql_result($result);
@@ -1561,7 +1671,8 @@ class Category implements GradebookItem
     }
 
     /**
-     * This function, locks a category , only one who can unlock it is the platform administrator.
+     * This function, locks a category , only one who can unlock it is
+     * the platform administrator.
      * @param int locked 1 or unlocked 0
 
      * @return bool
@@ -1569,7 +1680,8 @@ class Category implements GradebookItem
     public function lock($locked)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
+        $sql = "UPDATE $table SET locked = '".intval($locked)."'
+                WHERE id='".intval($this->id)."'";
         Database::query($sql);
     }
 
@@ -1673,7 +1785,8 @@ class Category implements GradebookItem
         $cattotal = Category::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
 
-        //Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global
+        // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
+        // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
         $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
 

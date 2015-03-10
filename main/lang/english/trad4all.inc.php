@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$OpenBadgesBannerText = "A new online standard to recognize and verify learning in combination with Chamilo skills. Use the tabs to configure it.";
-$OpenBadgesIntroduction = "Introducing OpenBadges";
+$OpenBadgesBannerText = "You can generate badges for the skills learnt by your users, to give them recognition for their effort, through which they will be able to show off their acquired skills and competencies with icons that will be shown on their user profile. For more information on OpenBadges, check <a href='http://openbadges.org'>http://openbadges.org/</a>.";
+$OpenBadgesIntroduction = "You can now design skills learning badges for learning through your courses on this virtual campus.";
 $DesignANewBadgeComment = "Design a new badge, download it from the design tool and upload it on the platform.";
 $TheBadgesWillBeSentToThatBackpack = "The badges will be sent to this backpack";
 $BackpackDetails = "Backpack details";
@@ -338,6 +338,7 @@ $WCAGGoMenu = "Goto menu";
 $WCAGGoContent = "Goto content";
 $NoTimeLimits = "No time limits";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
+$OpenBadgesTitle = "Chamilo supports the OpenBadges standard";
 $NoPosts = "No posts";
 $WithoutAchievedSkills = "Without achieved skills";
 $TypeMessage = "Please type your message!";
@@ -361,6 +362,7 @@ $ClearList = "Clear the chat";
 $SessionBanner = "Session banner";
 $ShortDescription = "Short description";
 $TargetAudience = "Target audience";
+$OpenBadgesActionCall = "Convert your virtual campus to a skills-based learning experience";
 $CallSent = "Chat call has been sent. Waiting for the approval of your partner.";
 $ChatDenied = "Your call has been denied by your partner.";
 $Send = "Send message";

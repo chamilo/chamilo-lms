@@ -219,6 +219,7 @@ class StudentPublicationLink extends AbstractLink
 			$bestResult = 0;
 			$weight = 0;
 			$sumResult = 0;
+			$myResult = 0;
 
 			while ($data = Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['user_id'], $students))) {
@@ -239,13 +240,20 @@ class StudentPublicationLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				if ($type == 'best') {
-					return array($bestResult, $weight);
+				switch ($type) {
+					case 'best':
+						return array($bestResult, $weight);
+						break;
+					case 'average':
+						return array($sumResult/$rescount, $weight);
+						break;
+					case 'ranking':
+						return AbstractLink::getCurrentUserRanking($students);
+						break;
+					default:
+						return array($sum, $rescount);
+						break;
 				}
-				if ($type == 'average') {
-					return array($sumResult/$rescount, $weight);
-				}
-				return array($sum, $rescount);
 			}
 		}
 	}

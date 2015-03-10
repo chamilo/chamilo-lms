@@ -194,13 +194,14 @@ class ExerciseLink extends AbstractLink
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
         $courseId = $this->getCourseId();
+
         if (!$this->is_hp) {
             $sql = "SELECT * FROM $tblStats
                     WHERE
-                        exe_exo_id      = ".intval($this->get_ref_id())." AND
-                        orig_lp_id      = 0 AND
+                        exe_exo_id = ".intval($this->get_ref_id())." AND
+                        orig_lp_id = 0 AND
                         orig_lp_item_id = 0 AND
-                        status      <> 'incomplete' AND
+                        status <> 'incomplete' AND
                         session_id = $session_id";
 
             if (isset($stud_id)) {
@@ -210,7 +211,7 @@ class ExerciseLink extends AbstractLink
 
         } else {
             $sql = "SELECT * FROM $tblHp hp, $tblDoc doc
-                     WHERE
+                    WHERE
                         hp.c_id = $courseId AND
                         hp.exe_user_id = $stud_id  AND
                         hp.exe_name = doc.path AND
@@ -237,10 +238,11 @@ class ExerciseLink extends AbstractLink
             $bestResult = 0;
             $weight = 0;
             $sumResult = 0;
+
             while ($data = Database::fetch_array($scores, 'ASSOC')) {
-                if (!in_array($data['exe_user_id'], $students)) {
+                if (!isset($students[$data['exe_user_id']])) {
                     if ($data['exe_weighting'] != 0) {
-                        $students[] = $data['exe_user_id'];
+                        $students[$data['exe_user_id']] = $data['exe_result'];
                         $student_count++;
                         if ($data['exe_result'] > $bestResult) {
                             $bestResult = $data['exe_result'];
@@ -251,16 +253,24 @@ class ExerciseLink extends AbstractLink
                     }
                 }
             }
+
             if ($student_count == 0) {
                 return null;
             } else {
-                if ($type == 'best') {
-                    return array($bestResult, $weight);
+                switch ($type) {
+                    case 'best':
+                        return array($bestResult, $weight);
+                        break;
+                    case 'average':
+                        return array($sumResult/$student_count, $weight);
+                        break;
+                    case 'ranking':
+                        return AbstractLink::getCurrentUserRanking($students);
+                        break;
+                    default:
+                        return array($sum, $student_count);
+                        break;
                 }
-                if ($type == 'average') {
-                    return array($sumResult/$student_count, $weight);
-                }
-                return array($sum, $student_count);
             }
         }
     }

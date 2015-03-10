@@ -18,10 +18,6 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
     echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.
         Display::return_icon('new_attendance_list.png',get_lang('CreateANewAttendance'),'',ICON_SIZE_MEDIUM).'</a>';
-
-    /*echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_logins">'.
-        Display::return_icon('attendance_list.png',get_lang('Logins'),'',ICON_SIZE_MEDIUM).'</a>';*/
-
     echo '</div>';
 }
 $attendance = new Attendance();
@@ -46,7 +42,16 @@ $table->set_header(3, get_lang('CountDoneAttendance'), true, array('style'=>'wid
 
 if (api_is_allowed_to_edit(null, true)) {
     $table->set_header(4, get_lang('Actions'), false, array('style'=>'text-align:center'));
-    $table->set_form_actions(array ('attendance_delete_select' => get_lang('DeleteAllSelectedAttendances')));
+    $actions = array(
+        'attendance_set_invisible_select' => get_lang('SetInvisible'),
+        'attendance_set_visible_select' => get_lang('SetVisible')
+    );
+
+    $allow = api_get_configuration_value('allow_delete_attendance');
+    if ($allow) {
+        $actions['attendance_delete_select'] = get_lang('DeleteAllSelectedAttendances');
+    }
+    $table->set_form_actions($actions);
 }
 
 if ($table->get_total_number_of_items() > 0) {

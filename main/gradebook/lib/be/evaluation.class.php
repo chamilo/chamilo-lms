@@ -268,7 +268,12 @@ class Evaluation implements GradebookItem
 	 */
 	public function add()
 	{
-		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset ($this->eval_max) && isset($this->visible)) {
+		if (isset($this->name) &&
+			isset($this->user_id) &&
+			isset($this->weight) &&
+			isset ($this->eval_max) &&
+			isset($this->visible)
+		) {
 			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
 			$sql = 'INSERT INTO '.$tbl_grade_evaluations
@@ -424,14 +429,15 @@ class Evaluation implements GradebookItem
 		}
 		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
-		return ($number[0] != 0);
+		return $number[0] != 0;
 	}
 
 	/**
 	 * Are there any results for this evaluation yet ?
 	 * The 'max' property should not be changed then.
 	 */
-	public function has_results() {
+	public function has_results()
+	{
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql='SELECT count(id) AS number FROM '.$tbl_grade_results
 			.' WHERE evaluation_id = '.intval($this->id);
@@ -444,7 +450,8 @@ class Evaluation implements GradebookItem
 	/**
 	 * Delete all results for this evaluation
 	 */
-	public function delete_results() {
+	public function delete_results()
+	{
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE evaluation_id = '.intval($this->id);
 		Database::query($sql);
@@ -453,7 +460,8 @@ class Evaluation implements GradebookItem
 	/**
 	 * Delete this evaluation and all underlying results.
 	 */
-	public function delete_with_results(){
+	public function delete_with_results()
+	{
 		$this->delete_results();
 		$this->delete();
 	}
@@ -461,7 +469,8 @@ class Evaluation implements GradebookItem
 	/**
 	 * Check if the given score is possible for this evaluation
 	 */
-	public function is_valid_score ($score) {
+	public function is_valid_score ($score)
+	{
 		return (is_numeric($score) && $score >= 0 && $score <= $this->eval_max);
 	}
 
@@ -481,9 +490,11 @@ class Evaluation implements GradebookItem
 		$weight = 0;
 		$sumResult = 0;
 
+		$students = [];
+		/** @var Result $res */
 		foreach ($results as $res) {
 			$score = $res->get_score();
-			if ((!empty ($score)) || ($score == '0')) {
+			if (!empty($score) || $score == '0') {
 				$rescount++;
 				$sum += $score / $this->get_max();
 				$sumResult += $score;
@@ -492,6 +503,7 @@ class Evaluation implements GradebookItem
 				}
 				$weight = $this->get_max();
 			}
+			$students[$res->get_user_id()] = $score;
 		}
 
 		if ($rescount == 0) {
@@ -499,13 +511,20 @@ class Evaluation implements GradebookItem
 		} else if (isset($stud_id)) {
 			return array($score, $this->get_max());
 		} else {
-			if ($type == 'best') {
-				return array($bestResult, $weight);
+			switch ($type) {
+				case 'best':
+					return array($bestResult, $weight);
+					break;
+				case 'average':
+					return array($sumResult/$rescount, $weight);
+					break;
+				case 'ranking':
+					return AbstractLink::getCurrentUserRanking($students);
+					break;
+				default:
+					return array($sum, $rescount);
+					break;
 			}
-			if ($type == 'average') {
-				return array($sumResult/$rescount, $weight);
-			}
-			return array($sum, $rescount);
 		}
 	}
 

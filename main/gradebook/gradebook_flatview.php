@@ -97,6 +97,11 @@ if (!empty($keyword)) {
 }
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
+$addparams = array('selectcat' => $cat[0]->get_id());
+if (isset($_GET['search'])) {
+    $addparams['search'] = $keyword;
+}
+
 // Main course category
 $mainCourseCategory = Category::load(
     null,
@@ -235,11 +240,6 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report')
     } else {
         api_not_allowed(true);
     }
-}
-
-$addparams = array ('selectcat' => $cat[0]->get_id());
-if (isset($_GET['search'])) {
-    $addparams['search'] = $keyword;
 }
 
 $this_section = SECTION_COURSES;

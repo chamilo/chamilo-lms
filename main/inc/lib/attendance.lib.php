@@ -101,7 +101,7 @@ class Attendance
 	 */
 	public static function get_attendance_data($from, $number_of_items, $column, $direction)
 	{
-		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+		$tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 		$course_id = api_get_course_int_id();
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
@@ -114,8 +114,10 @@ class Attendance
 		}
 
 		$active_plus = '';
-		if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') || !api_is_allowed_to_edit(null, true)) {
-			$active_plus = 'AND att.active = 1';
+		if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') ||
+			!api_is_allowed_to_edit(null, true)
+		) {
+			$active_plus = ' AND att.active = 1';
 		}
 
 		$sql = "SELECT
@@ -127,7 +129,9 @@ class Attendance
                     att.active AS col5,
                     att.session_id
 				FROM $tbl_attendance att
-				WHERE c_id = $course_id $active_plus $condition_session
+				WHERE
+					att.active <> 2 AND
+					c_id = $course_id $active_plus $condition_session
 				ORDER BY col$column $direction
 				LIMIT $from,$number_of_items ";
 
@@ -139,11 +143,13 @@ class Attendance
 			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 		}
 		$user_info = api_get_user_info();
+		$allowDelete = api_get_configuration_value('allow_delete_attendance');
+
 		while ($attendance = Database::fetch_row($res)) {
 
 			$student_param = '';
 			if (api_is_drh() && $_GET['student_id']) {
-				$student_param = '&student_id='.Security::remove_XSS($_GET['student_id']);
+				$student_param = '&student_id='.intval($_GET['student_id']);
 			}
 
 			$session_star = '';
@@ -182,12 +188,20 @@ class Attendance
 				$actions .= '<center>';
 
 				if (api_is_platform_admin()) {
-					$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+					$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.
+						Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+					// Visible
 					if ($attendance[5] == 1) {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+							Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
 					} else {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+							Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
 						$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
+					}
+					if ($allowDelete) {
+						$actions .= '<a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
+							Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
 					}
 				} else {
 					$is_locked_attendance = self::is_locked_attendance($attendance[0]);
@@ -195,8 +209,21 @@ class Attendance
 						$actions .= Display::return_icon('edit_na.png', get_lang('Edit')).'&nbsp;';
 						$actions .= Display::return_icon('visible.png', get_lang('Hide'));
 					} else {
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
-						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+						$actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.
+							Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+
+						if ($attendance[5] == 1) {
+							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_invisible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+								Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+						} else {
+							$actions .= ' <a href="index.php?'.api_get_cidreq().'&action=attendance_set_visible&attendance_id='.$attendance[0].$param_gradebook.'">'.
+								Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
+							$attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
+						}
+						if ($allowDelete) {
+							$actions .= ' <a href="index.php?' . api_get_cidreq() . '&action=attendance_delete&attendance_id=' . $attendance[0] . $param_gradebook . '">' .
+								Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+						}
 					}
 				}
 
@@ -346,9 +373,9 @@ class Attendance
 			// add link to gradebook
 			if ($link_to_gradebook && !empty($this->category_id)) {
 				$description = '';
-				$link_id = GradebookUtils::is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
+				$link_id = is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
 				if (!$link_id) {
-					GradebookUtils::add_resource_to_course_gradebook(
+					add_resource_to_course_gradebook(
 						$this->category_id,
 						$course_code,
 						7,
@@ -409,7 +436,7 @@ class Attendance
 
 	/**
 	 * Delete attendances
-	 * @param 	int|array	   one or many attendances id
+	 * @param 	int|array	$attendance_id   one or many attendances id
 	 * @return 	int    		   affected rows
 	 */
 	public function attendance_delete($attendance_id)
@@ -421,19 +448,20 @@ class Attendance
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
-				$sql = "UPDATE $tbl_attendance SET active = 0
+				$sql = "UPDATE $tbl_attendance SET active = 2
 						WHERE c_id = $course_id AND id = '$id'";
 				Database::query($sql);
 				$affected_rows = Database::affected_rows();
 				if (!empty($affected_rows)) {
 					// update row item property table
-					api_item_property_update($_course, TOOL_ATTENDANCE, $id,"delete", $user_id);
+					api_item_property_update($_course, TOOL_ATTENDANCE, $id, "delete", $user_id);
 				}
 			}
 		} else  {
 			$attendance_id	= intval($attendance_id);
-			$sql = "UPDATE $tbl_attendance SET active = 0
+			$sql = "UPDATE $tbl_attendance SET active = 2
 					WHERE c_id = $course_id AND id = '$attendance_id'";
+
 			Database::query($sql);
 			$affected_rows = Database::affected_rows();
 			if (!empty($affected_rows)) {
@@ -447,6 +475,58 @@ class Attendance
 				);
 			}
 		}
+		return $affected_rows;
+	}
+
+	/**
+	 * Changes visibility
+	 * @param 	int|array	$attendanceId   one or many attendances id
+	 * @param status
+	 * @return 	int affected rows
+	 */
+	public function changeVisibility($attendanceId, $status = 1)
+	{
+		$_course = api_get_course_info();
+		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
+		$user_id = api_get_user_id();
+		$course_id = api_get_course_int_id();
+		$status = intval($status);
+
+		$action = 'visible';
+		if ($status == 0) {
+			$action = 'invisible';
+		}
+
+		if (is_array($attendanceId)) {
+			foreach ($attendanceId as $id) {
+				$id	= intval($id);
+				$sql = "UPDATE $tbl_attendance SET active = $status
+						WHERE c_id = $course_id AND id = '$id'";
+				Database::query($sql);
+				$affected_rows = Database::affected_rows();
+				if (!empty($affected_rows)) {
+					// update row item property table
+					api_item_property_update($_course, TOOL_ATTENDANCE, $id, $action, $user_id);
+				}
+			}
+		} else  {
+			$attendanceId	= intval($attendanceId);
+			$sql = "UPDATE $tbl_attendance SET active = $status
+					WHERE c_id = $course_id AND id = '$attendanceId'";
+			Database::query($sql);
+			$affected_rows = Database::affected_rows();
+			if (!empty($affected_rows)) {
+				// update row item property table
+				api_item_property_update(
+					$_course,
+					TOOL_ATTENDANCE,
+					$attendanceId,
+					$action,
+					$user_id
+				);
+			}
+		}
+
 		return $affected_rows;
 	}
 
@@ -1520,7 +1600,6 @@ class Attendance
 
 		$sessionId = api_get_session_id();
 		$courseCode  = api_get_course_id();
-		$courseId = api_get_course_int_id();
 		if (!empty($sessionId)) {
 			$users = CourseManager:: get_user_list_from_course_code(
 				$courseCode,
@@ -1559,7 +1638,7 @@ class Attendance
 		}
 
 		$accessData = CourseManager::getCourseAccessPerCourseAndSession(
-			$courseId,
+			$courseCode,
 			$sessionId,
 			$dateTimeStartOriginal->format('Y-m-d H:i:s'),
 			$dateTimeEnd->format('Y-m-d H:i:s')

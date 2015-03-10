@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Gradebook link to student publication item
  * @author Bert Steppé
@@ -51,12 +52,14 @@ class ForumThreadLink extends AbstractLink
 
 		$result = Database::query($sql);
 
-		$cats=array();
+		$cats = array();
 		while ($data=Database::fetch_array($result)) {
-			if ( isset($data['thread_title_qualify']) and $data['thread_title_qualify']!=""){
-				$cats[] = array ($data['thread_id'], $data['thread_title_qualify']);
+			if (isset($data['thread_title_qualify']) and
+				$data['thread_title_qualify'] != ""
+			) {
+				$cats[] = array($data['thread_id'], $data['thread_title_qualify']);
 			} else {
-				$cats[] = array ($data['thread_id'], $data['thread_title']);
+				$cats[] = array($data['thread_id'], $data['thread_title']);
 			}
 		}
 		return $cats;
@@ -71,6 +74,7 @@ class ForumThreadLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
+
 		$tbl_grade_links 	= Database :: get_course_table(TABLE_FORUM_THREAD);
 		$tbl_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$session_id = api_get_session_id();
@@ -98,11 +102,10 @@ class ForumThreadLink extends AbstractLink
 				$cats[] = array ($data['thread_id'], $data['thread_title']);
 			}
 		}
-		$my_cats=isset($cats)?$cats:null;
+		$my_cats = isset($cats) ? $cats : null;
 
 		return $my_cats;
 	}
-
 
 	/**
 	 * Has anyone done this exercise yet ?
@@ -162,7 +165,7 @@ class ForumThreadLink extends AbstractLink
 			$sumResult = 0;
 
 			while ($data = Database::fetch_array($scores)) {
-				if (!(array_key_exists($data['user_id'],$students))) {
+				if (!(array_key_exists($data['user_id'], $students))) {
 					if ($assignment['thread_qualify_max'] != 0) {
 						$students[$data['user_id']] = $data['qualify'];
 						$rescount++;
@@ -179,13 +182,20 @@ class ForumThreadLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				if ($type == 'average') {
-					return array($sumResult/$rescount, $weight);
+				switch ($type) {
+					case 'best':
+						return array($bestResult, $weight);
+						break;
+					case 'average':
+						return array($sumResult/$rescount, $weight);
+						break;
+					case 'ranking':
+						return AbstractLink::getCurrentUserRanking($students);
+						break;
+					default:
+						return array($sum, $rescount);
+						break;
 				}
-				if ($type == 'best') {
-					return array($bestResult, $weight);
-				}
-				return array($sum , $rescount);
 			}
 		}
 	}

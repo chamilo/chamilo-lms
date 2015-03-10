@@ -156,6 +156,11 @@ class AttendanceController
      */
     public function attendance_delete($attendance_id)
     {
+        $allowDeleteAttendance = api_get_configuration_value('allow_delete_attendance');
+        if ($allowDeleteAttendance == false) {
+            $this->attendance_list();
+            return false;
+        }
         $attendance = new Attendance();
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_delete($attendance_id);
@@ -165,6 +170,41 @@ class AttendanceController
         }
         $this->attendance_list();
     }
+
+    /**
+     * It's used for make attendance visible
+     * render to attendance_list view
+     * @param int	attendance id
+     */
+    public function attendanceSetVisible($attendanceId)
+    {
+        $attendance = new Attendance();
+        if (!empty($attendanceId)) {
+            $affectedRows = $attendance->changeVisibility($attendanceId, 1);
+        }
+        if ($affectedRows) {
+            $message['message_attendance_delete'] = true;
+        }
+        $this->attendance_list();
+    }
+
+    /**
+     * It's used for make attendance invisible
+     * render to attendance_list view
+     * @param int	attendance id
+     */
+    public function attendanceSetInvisible($attendanceId)
+    {
+        $attendance = new Attendance();
+        if (!empty($attendanceId)) {
+            $affectedRows = $attendance->changeVisibility($attendanceId, 0);
+        }
+        if ($affectedRows) {
+            $message['message_attendance_delete'] = true;
+        }
+        $this->attendance_list();
+    }
+
 
     /**
      * Restores an attendance entry and fallback to attendances rendering

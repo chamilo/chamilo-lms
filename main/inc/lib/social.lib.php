@@ -462,18 +462,6 @@ class SocialManager extends UserManager
         $course_visibility = $course_access_settings['visibility'];
 
         $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
-        //function logic - act on the data
-        $is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course_code);
-        if ($is_virtual_course) {
-            // If the current user is also subscribed in the real course to which this
-            // virtual course is linked, we don't need to display the virtual course entry in
-            // the course list - it is combined with the real course entry.
-            $target_course_code = CourseManager :: get_target_of_linked_course($course_code);
-            $is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-            if ($is_subscribed_in_target_course) {
-                return; //do not display this course entry
-            }
-        }
 
         $s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
 

@@ -129,7 +129,6 @@ if (isset($action) && $action == 'calendar_add') {
                             Display::return_icon('delete.png', get_lang('Delete'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>';
                         echo '</span>';
                     }
-
                 }
             }
             echo '</div>';

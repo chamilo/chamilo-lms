@@ -289,3 +289,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Filters administration users lists by the session admin who created them.
 // Change to true to restrict the visibility
 //$_configuration['prevent_session_admins_to_manage_all_users'] = false;
+// Show delete option in attendance
+//$_configuration['allow_delete_attendance'] = false;

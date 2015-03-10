@@ -309,3 +309,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 
 // Decode UTF-8 from Web Services (option passed to SOAP)
 //$_configuration['registration.soap.php.decode_utf8'] = false;
+
+// Show delete option in attendance
+//$_configuration['allow_delete_attendance'] = false;
+

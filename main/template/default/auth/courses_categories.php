@@ -106,9 +106,10 @@ $code = isset($code) ? $code : null;
 </script>
 
     <div class="row">
-        <div class="span3">
-            <div id="course_category_well" class="well">
-                <ul class="nav nav-list">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><?php echo get_lang('Search'); ?></div>
+                <div class="panel-body">
                     <?php if ($showCourses) { ?>
                     <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
                         <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
@@ -118,32 +119,34 @@ $code = isset($code) ? $code : null;
                                 <div class="control-group">
                                     <div class="controls">
                                         <div class="input-append">
-                                            <input class="span2" type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
-                                            <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                                            <input type="text" name="search_term" value="<?php echo (empty($_POST['search_term']) ? '' : api_htmlentities(Security::remove_XSS($_POST['search_term']))); ?>" />
+                                            <div class="btn-group">
+                                            <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-search"></i> <?php echo get_lang('Search'); ?></button>
+                                            <?php
+                                            $hidden_links = 0;
+                                            } else {
+                                                $hidden_links = 1;
+                                            }
+
+                                            /* Categories will only show down to 4 levels, if you want more,
+                                             * you will have to patch the following code. We don't recommend
+                                             * it, as this can considerably slow down your system
+                                             */
+                                            if (!empty($browse_course_categories)) {
+                                            echo '<a class="btn btn-default btn-sm" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a>';
+                                            ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
-                        <?php
-                        $hidden_links = 0;
-                    } else {
-                        $hidden_links = 1;
-                    }
-
-                    /* Categories will only show down to 4 levels, if you want more,
-                     * you will have to patch the following code. We don't recommend
-                     * it, as this can considerably slow down your system
-                     */
-                    if (!empty($browse_course_categories)) {
-                    echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
-                    ?>
-                </ul>
+                </div>
             </div>
-            <div class="well">
-                <ul class="nav nav-list">
+            <div class="panel panel-default">
+                <div class="panel-heading">
                     <?php
-                    echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
+                    echo get_lang('CourseCategories').'</div>';
 
                     $action = 'display_courses';
                     // level 1
@@ -168,8 +171,10 @@ $code = isset($code) ? $code : null;
                                 $category_link = ''.$category_name.' ('.$count_courses_lv1.')';
                             }
                         }
+                        echo '<div class="panel-body">';
+                        echo '<ul class="nav nav-pills nav-stacked">';
                         echo '<li>'.$category_link.'</li>';
-
+                        echo '</ul></div>';
                         // level 2
                         if (!empty($browse_course_categories[$category_code])) {
                             foreach ($browse_course_categories[$category_code] as $subcategory1) {
@@ -243,17 +248,17 @@ $code = isset($code) ? $code : null;
             }
             ?>
             <?php if ($showSessions) { ?>
-                <div class="well">
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><?php echo get_lang('Sessions'); ?></li>
-                        <li>
+                <div class="panel panel-default">
+
+                        <div class="panel-heading"><?php echo get_lang('Sessions'); ?></div>
+                        <div class="panel-body">
                             <?php if ($action == 'display_sessions' && $_SERVER['REQUEST_METHOD'] != 'POST') { ?>
                                 <strong><?php echo get_lang('Sessions'); ?></strong>
                             <?php } else { ?>
                                 <a href="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>"><?php echo get_lang('SessionList'); ?></a>
                             <?php } ?>
-                        </li>
-                        <li class="nav-header"><?php echo get_lang('SearchActiveSessions') ?></li>
+
+                        <p><?php echo get_lang('SearchActiveSessions') ?></p>
                         <form class="form-search" method="post" action="<?php echo getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
                             <div class="input-append">
                                 <?php echo Display::input('date', 'date', $date, array(
@@ -261,18 +266,18 @@ $code = isset($code) ? $code : null;
                                     'id' => 'date',
                                     'readonly' => ''
                                 )); ?>
-                                <button class="btn" type="submit"><?php echo get_lang('Search'); ?></button>
+                                <button class="btn btn-default" type="submit"><?php echo get_lang('Search'); ?></button>
                             </div>
                         </form>
-                    </ul>
+                    </div>
                 </div>
             <?php } ?>
         </div>
 
-        <div class="span9">
-            <div class="page-header">
+        <div class="col-md-9">
+
                 <h2><?php echo get_lang('CourseCatalog')?></h2>
-            </div>
+
             <?php if ($showCourses && $action != 'display_sessions') { ?>
                 <?php if (!empty($message)) { Display::display_confirmation_message($message, false); }
                 if (!empty($error)) { Display::display_error_message($error, false); }
@@ -317,7 +322,7 @@ $code = isset($code) ? $code : null;
                         display_thumbnail($course, $icon_title);
 
                         // display course title and button bloc
-                        echo '<div class="span4">';
+                        echo '<div class="col-md-8">';
                         display_title($course);
                         // display button line
                         echo '<div class="btn-toolbar">';
@@ -355,7 +360,7 @@ $code = isset($code) ? $code : null;
                         echo '</div>'; // span4
 
                         // display counter
-                        echo '<div class="span2">';
+                        echo '<div class="col-md-2">';
                         echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                         echo '</div>';
 
@@ -394,7 +399,7 @@ function display_thumbnail($course, $icon_title)
     }
 
     // course image
-    echo '<div class="span2">';
+    echo '<div class="col-md-2">';
     echo '<div class="thumbnail">';
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
         echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';

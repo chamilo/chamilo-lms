@@ -50,7 +50,7 @@
         });
     </script>
 
-    <div class="span3">
+    <div class="col-md-3">
         {% if showCourses %}
             <div class="well">
                 {% if not hiddenLinks %}
@@ -102,25 +102,25 @@
             </div>
         {% endif %}
     </div>
-    <div class="span9">
+    <div class="col-md-9">
         {% for session in sessions_blocks %}
             <div class="well well-small session-group" id="session-{{ session.id }}">
-                <div class="row-fluid">
-                    <div class="span9">
-                        <div class="row-fluid padding-clear">
-                            <div class="span2">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="row padding-clear">
+                            <div class="col-md-2">
                                 <span class="thumbnail">
                                     {{ session.icon }}
                                 </span>
                             </div>
-                            <div class="span10 border-info">
+                            <div class="col-md-10 border-info">
                                 <h3>{{ session.name }}</h3>
                                 <div class="tutor">
                                     <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
                                 </div>
                             </div>
                         </div>
-                        <div class="row-fluid">
+                        <div class="row">
                             <div class="accordion" id="session-{{ session.id }}-accordion">
                                 <div class="accordion-group">
                                     <div class="accordion-heading">
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="span3">
+                    <div class="col-md-3">
                         {% if session.showDescription %}
                             <div class="buttom-subscribed">
                                 <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">{{ 'Description' | get_lang }}</a>

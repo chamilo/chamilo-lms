@@ -483,14 +483,19 @@ class CoursesController
 
     /**
      * Get a HTML button for subscribe to session
-     * @param string $sessionName The session name
+     * @param string $sessionData The session data
      * @return string The button
      */
-    public function getRegisterInSessionButton($sessionName)
+    public function getRegisterInSessionButton($sessionData)
     {
-        $sessionName = urlencode($sessionName);
+        global $_configuration;
 
-        $url = api_get_path(WEB_PATH) . "main/inc/email_editor.php?action=subscribe_me_to_session&session=$sessionName";
+        $sessionData = urlencode($sessionData);
+
+        $url = api_get_path(WEB_CODE_PATH);
+        $url .= $_configuration['catalog_allow_session_auto_subscription'] ?
+            "auth/courses.php?action=subscribe_to_session&session_id=$sessionData&user_id=".api_get_user_id() :
+            "inc/email_editor.php?action=subscribe_me_to_session&session=$sessionData";
 
         return Display::url(get_lang('Subscribe'), $url, array(
             'class' => 'btn btn-large btn-primary',
@@ -526,6 +531,8 @@ class CoursesController
      */
     public function sessionsList($action, $nameTools, $limit = array())
     {
+        global $_configuration;
+
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
 
@@ -547,6 +554,9 @@ class CoursesController
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
         foreach ($sessions as $session) {
+            $subscribeSessionTarget = $_configuration['catalog_allow_session_auto_subscription'] ?
+                $session['id'] :
+                $session['name'];
             $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
@@ -556,7 +566,7 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton($session['name']),
+                'subscribe_button' => $this->getRegisterInSessionButton($subscribeSessionTarget),
                 'showDescription' => $session['show_description']
             );
 

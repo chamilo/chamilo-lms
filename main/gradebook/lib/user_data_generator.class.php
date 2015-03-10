@@ -146,7 +146,7 @@ class UserDataGenerator
 			$row[] = $this->build_course_name($item);
 			$row[] = $this->build_category_name($item);
 			$row[] = $this->build_average_column($item, $ignore_score_color);
-			$row[] = $this->build_result_column($item, $ignore_score_color)['display'];
+			$row[] = $this->build_result_column($item, $ignore_score_color);
 			if ($scoredisplay->is_custom())
 				$row[] = $this->build_mask_column($item, $ignore_score_color);
 			$data[] = $row;

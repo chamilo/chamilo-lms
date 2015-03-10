@@ -422,10 +422,10 @@ class ScoreDisplay
     private function display_as_div($score)
     {
         if ($score == 1) {
-            return '0/0';
+            return '0 / 0';
         } else {
-            $score[0] =$this->format_score($score[0]);
-            $score[1] =$this->format_score($score[1]);
+            $score[0] = isset($score[0]) ? $this->format_score($score[0]) : 0;
+            $score[1] = isset($score[1]) ? $this->format_score($score[1]) : 0;
             return  $score[0] . ' / ' . $score[1];
         }
     }

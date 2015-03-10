@@ -150,13 +150,21 @@ class LearnpathLink extends AbstractLink
 			if ($rescount == 0) {
 				return null;
 			} else {
-				if ($type == 'average') {
-					return array($sumResult/$rescount, 100);
+
+				switch ($type) {
+					case 'best':
+						return array($bestResult, 100);
+						break;
+					case 'average':
+						return array($sumResult/$rescount, 100);
+						break;
+					case 'ranking':
+						return AbstractLink::getCurrentUserRanking($students);
+						break;
+					default:
+						return array($sum, $rescount);
+						break;
 				}
-				if ($type == 'best') {
-					return array($bestResult, 100);
-				}
-				return array($sum, $rescount);
 			}
 		}
 	}

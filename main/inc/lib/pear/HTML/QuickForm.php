@@ -88,6 +88,8 @@ define('QUICKFORM_INVALID_DATASOURCE',     -9);
  */
 class HTML_QuickForm extends HTML_Common
 {
+    const MAX_ELEMENT_ARGUMENT = 10;
+
     private $dateTimePickerLibraryAdded;
 
     /**
@@ -592,18 +594,35 @@ class HTML_QuickForm extends HTML_Common
             throw new \Exception("Class '$className' does not exist. ");
         }
 
-        $elementObject = new $className();
-
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < self::MAX_ELEMENT_ARGUMENT; $i++) {
             if (!isset($args[$i])) {
                 $args[$i] = null;
             }
         }
-        $err = $elementObject->onQuickFormEvent($event, $args, $this);
-        if ($err !== true) {
-            return $err;
+
+        /** @var HTML_QuickForm_element $element */
+
+        $element = new $className(
+            $args[0],
+            $args[1],
+            $args[2],
+            $args[3],
+            $args[4],
+            $args[5],
+            $args[6],
+            $args[7],
+            $args[8],
+            $args[9]
+        );
+
+        if ($event != 'createElement') {
+            $err = $element->onQuickFormEvent($event, $args, $this);
+            if ($err !== true) {
+                return $err;
+            }
         }
-        return $elementObject;
+
+        return $element;
     }
 
     // }}}
@@ -637,7 +656,9 @@ class HTML_QuickForm extends HTML_Common
         $elementName = $elementObject->getName();
 
         // Add the element if it is not an incompatible duplicate
-        if (!empty($elementName) && isset($this->_elementIndex[$elementName])) {
+        if (!empty($elementName) &&
+            isset($this->_elementIndex[$elementName])
+        ) {
             if ($this->_elements[$this->_elementIndex[$elementName]]->getType() == $elementObject->getType()) {
                 $this->_elements[] =& $elementObject;
                 $elKeys = array_keys($this->_elements);

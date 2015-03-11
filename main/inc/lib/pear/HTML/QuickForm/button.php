@@ -34,42 +34,123 @@
  */
 class HTML_QuickForm_button extends HTML_QuickForm_input
 {
+    private $icon;
+    private $style;
+    private $size;
+    private $class;
+
     /**
-     * @param string $elementName
-     * @param string $value
-     * @param string $icon
-     * @param string $style
-     * @param string $size
+     * @return mixed
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param mixed $class
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * @param string $name input name example 'submit'
+     * @param string $text button text to show
+     * @param string $icon icons based in font-awesome
+     * @param string $style i.e default|primary|success|info|warning|danger|link
+     * @param string $size large|default|small|extra-small
      * @param string $class
-     * @param array  $attributes
+     * @param array $attributes
      */
     public function HTML_QuickForm_button(
-        $elementName = null,
-        $value = null,
+        $name,
+        $text,
         $icon = 'check',
         $style = 'default',
         $size = 'default',
-        $class = 'btn',
+        $class = null,
         $attributes = array()
     ) {
-        $icon = !empty($icon) ? $icon : 'check';
-        $style = !empty($style) ? $style : 'default';
-        $size = !empty($size) ? $size : 'default';
-        $class = !empty($class) ? $class : 'btn';
-
-        $attributes['icon'] = $icon;
-        $attributes['style'] = $style;
-        $attributes['size'] = $size;
-        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
+        $this->setIcon($icon);
+        $this->setStyle($style);
+        $this->setSize($size);
+        $this->setClass($class);
 
         HTML_QuickForm_input::HTML_QuickForm_input(
-            $elementName,
+            $name,
             null,
             $attributes
         );
         $this->_persistantFreeze = false;
-        $this->setValue($value);
+        $this->setValue($text);
         $this->setType('submit');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param mixed $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = !empty($icon) ? 'fa fa-'.$icon : null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStyle()
+    {
+        return $this->style;
+    }
+
+    /**
+     * @param mixed $style
+     */
+    public function setStyle($style)
+    {
+        $style = !empty($style) ? 'btn-'.$style : null;
+        $this->style = $style;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param mixed $size
+     */
+    public function setSize($size)
+    {
+        switch ($size) {
+            case 'large':
+                $size = 'btn-lg';
+                break;
+            case 'small':
+                $size = 'btn-sm';
+                break;
+            case 'extra-small':
+                $size = 'btn-xs';
+                break;
+            case 'default':
+                $size = null;
+                break;
+        }
+
+        $size = !empty($size) ? $size : null;
+        $this->size = $size;
     }
 
     /**
@@ -81,15 +162,21 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
             return $this->getFrozenHtml();
         } else {
             $value = $this->_attributes['value'];
-            unset($this->_attributes['value']);
-            $icon = isset($this->_attributes['icon']) ? $this->_attributes['icon'] : 'check';
 
-            unset($this->_attributes['icon']);
-            $icon = '<i class="fa fa-'.$icon.'"></i> ';
+            unset($this->_attributes['value']);
+            unset($this->_attributes['class']);
+
+            $icon = $this->getIcon();
+
+            if (!empty($icon)) {
+                $icon = '<i class="' . $this->getIcon() . '"></i> ';
+            }
+
+            $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
 
             return
                 $this->_getTabs() . '
-                <button' . $this->_getAttrString($this->_attributes) . ' />'.
+                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . ' />'.
                 $icon.$value.
                 '</button>';
         }

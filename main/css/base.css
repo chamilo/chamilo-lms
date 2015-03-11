@@ -4328,7 +4328,7 @@ a.forum_group_link {
     left: 0;
     position: fixed;
     right: 0;
-    top: 38px;
+    top: 0px;
     z-index: 1030;
 }
 
@@ -4461,6 +4461,9 @@ footer {
     bottom: 0;
     left: 0px;
     margin-bottom: 0px;
+    background:#ECF0F1;
+    padding: 20px;
+    border-top: 3px solid #DCE4EC;
 }
 
 .doc_folder {

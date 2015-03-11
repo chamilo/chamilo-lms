@@ -7,9 +7,7 @@
 * @package chamilo.exercise
 * @author Olivier Brouckaert, Julio Montoya
 */
-/**
- * Code
- */
+
 // name of the language file that needs to be included
 
 use \ChamiloSession as Session;

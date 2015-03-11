@@ -291,7 +291,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        if ($uitMax < $uitUser) {
+        if ($uitMax <= $uitUser) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),
                 $uitMax

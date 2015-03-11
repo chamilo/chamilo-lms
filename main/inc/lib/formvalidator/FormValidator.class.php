@@ -138,11 +138,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for} class="col-sm-2 control-label" >
+                <label {label-for} class="col-md-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="col-sm-10">
+                <div class="col-md-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -266,7 +266,7 @@ EOT;
      */
     public function addButtonCreate($label, $name = 'submit')
     {
-        return $this->addButton($name, $label, 'plus', 'primary');
+        return $this->addButton($name, $label, 'plus-square', 'btn btn-success');
     }
 
     /**
@@ -305,7 +305,7 @@ EOT;
         if (empty($label))  {
             $label = get_lang('Search');
         }
-        return $this->addButton('submit', $label, 'search');
+        return $this->addButton('submit', $label, 'search','btn btn-primary');
     }
 
     /**

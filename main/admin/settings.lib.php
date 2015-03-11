@@ -346,9 +346,10 @@ function handle_stylesheets()
     }
 
     if ($is_style_changeable) {
-        $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'), array('class' => 'btn btn-primary'));
-        $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'), array('class' => 'btn'));
-        $group[] = $form_change->createElement('button', 'download', get_lang('Download'), array('class' => 'btn'));
+        //$group[] = $form_change->addButtonSave(get_lang('SaveSettings'),'submit');
+        $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'));
+        $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'));
+        $group[] = $form_change->createElement('button', 'download', get_lang('Download'));
         $form_change->addGroup($group);
 
         if ($show_upload_form) {

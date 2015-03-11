@@ -258,7 +258,7 @@ EOT;
      */
     public function addButtonSave($label, $name = 'submit')
     {
-        $this->addButton($name, $label, 'check', 'primary');
+        return $this->addButton($name, $label, 'check', 'primary');
     }
 
     /**
@@ -266,7 +266,7 @@ EOT;
      */
     public function addButtonCreate($label, $name = 'submit')
     {
-        $this->addButton($name, $label, 'plus', 'primary');
+        return $this->addButton($name, $label, 'plus', 'primary');
     }
 
     /**
@@ -343,8 +343,6 @@ EOT;
     {
         return $this->addButton($name, $label, 'filter', 'primary');
     }
-
-
 
     /**
      * @param string $name

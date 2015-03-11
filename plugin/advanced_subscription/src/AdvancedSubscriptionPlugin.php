@@ -320,7 +320,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $expendedNumMax = $plugin->get('courses_count_limit');
         $expendedNum = count($sessions);
 
-        if ($expendedNumMax < $expendedNum) {
+        if ($expendedNumMax <= $expendedNum) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCourseXLimitReached'),
                 $expendedNumMax

@@ -5384,12 +5384,12 @@ class learnpath
         } else {
             $return_audio = '<table class="data_table">';
             $return_audio .= '<tr>';
-            $return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
+            $return_audio .= '<th width="40%">' . get_lang('Title') . '</th>';
             $return_audio .= '<th>' . get_lang('Audio') . '</th>';
             $return_audio .= '</tr>';
 
             if ($update_audio != 'true') {
-                $return .= '<div class="span12">';
+                $return .= '<div class="col-md-12">';
                 $return .= self::return_new_tree($update_audio);
                 $return .='</div>';
                 $return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
@@ -5400,7 +5400,7 @@ class learnpath
 
             // We need to close the form when we are updating the mp3 files.
             if ($update_audio == 'true') {
-                $return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
+                $return .= '<div><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
             }
         }
 
@@ -5618,9 +5618,10 @@ class learnpath
             }
         }
 
-        $return .= '<div class="lp_tree well">';
+        $return .= '<div class="panel panel-default">';
+        $return .= '<div class="panel-heading">'.$this->name.'</div>';
+        $return .= '<div class="panel-body">';
         $return .= '<ul id="lp_item_list">';
-        $return .='<h4>'.$this->name.'</h4><br>';
 
         $tree = self::print_recursive($elements, $default_data, $default_content);
 
@@ -5635,7 +5636,7 @@ class learnpath
         if ($update_audio == 'true') {
             $return = $return_audio;
         } else {
-            $return .= '</div>';
+            $return .= '</div></div>';
         }
         return $return;
     }

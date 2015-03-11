@@ -238,7 +238,7 @@ EOT;
         $icon = 'check',
         $style = 'default',
         $size = 'default',
-        $class = 'btn',
+        $class = null,
         $attributes = array()
     ) {
         return $this->addElement(

@@ -100,11 +100,11 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
 
 echo $lp->build_action_menu();
 
-echo '<div class="row-fluid">';
-echo '<div class="span3">';
+echo '<div class="row">';
+echo '<div class="col-md-3">';
 echo $lp->return_new_tree();
 echo '</div>';
-echo '<div class="span9">';
+echo '<div class="col-md-9">';
 if (isset($is_success) && $is_success == true) {
     echo $lp->display_manipulate($_GET['id'], null);
     echo Display::return_message(get_lang("PrerequisitesAdded"));

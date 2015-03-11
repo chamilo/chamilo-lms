@@ -5170,7 +5170,7 @@ i.size-32.icon-new-work{
     font-size: 16px;
     font-weight: normal;
 }
-/* Open Badges */
+/* CSS BASE BOOSTRAP 3 */
 .openbadges-introduction{
   line-height: 30px;
   margin-bottom: 30px;
@@ -5466,4 +5466,12 @@ i.size-32.icon-new-work{
   line-height: 18px;
   font-size: 12px;
   color: #666;
+}
+.menu-column .nav li a{
+  padding: 5px;
+  font-size: 12px;
+}
+.menu-column .nav li a img{
+  vertical-align: bottom;
+  margin-right: 5px;
 }

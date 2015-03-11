@@ -8402,7 +8402,7 @@ class learnpath
                 ORDER BY display_order ";
         $rs = Database::query($sql);
         $return = '';
-        $return .= '<select name="prerequisites" >';
+        $return .= '<select name="prerequisites" class="form-control">';
         $return .= '<option value="0">'.get_lang('None').'</option>';
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {

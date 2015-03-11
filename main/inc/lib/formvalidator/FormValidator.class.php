@@ -256,6 +256,14 @@ EOT;
     /**
      * @param string $label
      */
+    public function addButtonSave($label, $name = 'submit')
+    {
+        $this->addButton($name, $label, 'check', 'primary');
+    }
+
+    /**
+     * @param string $label
+     */
     public function addButtonCreate($label, $name = 'submit')
     {
         $this->addButton($name, $label, 'plus', 'primary');
@@ -292,8 +300,11 @@ EOT;
      * Shortcut to search button
      * @param string $label
      */
-    public function addButtonSearch($label)
+    public function addButtonSearch($label = null)
     {
+        if (empty($label))  {
+            $label = get_lang('Search');
+        }
         return $this->addButton('submit', $label, 'search');
     }
 

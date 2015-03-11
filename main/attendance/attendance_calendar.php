@@ -47,7 +47,7 @@ if (isset($error_checkdate) && $error_checkdate) {
     Display::display_error_message($message, false);
 }
 
-$groupList = GroupManager::get_group_list();
+$groupList = GroupManager::get_group_list(null, null, 1);
 $groupIdList = array('--');
 foreach ($groupList as $group) {
     $groupIdList[$group['id']] = $group['name'];

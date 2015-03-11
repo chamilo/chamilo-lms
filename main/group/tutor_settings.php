@@ -11,8 +11,6 @@
  *	@todo course admin functionality to create groups based on who is in which course (or class).
  */
 
-/*	INIT SECTION */
-
 // Name of the language file that needs to be included
 $language_file = 'group';
 
@@ -155,7 +153,7 @@ if (!empty($complete_user_list)) {
 $group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');
 
 // submit button
-$form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
+$form->addButtonSave(get_lang('SaveSettings'));
 
 if ($form->validate()) {
     $values = $form->exportValues();

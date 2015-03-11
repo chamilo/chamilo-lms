@@ -78,7 +78,7 @@ class GroupManager
      * @param string $course_code Default is current course
      * @return array An array with all information about the groups.
      */
-    public static function get_group_list($category = null, $course_code = null)
+    public static function get_group_list($category = null, $course_code = null, $status = null)
     {
         $course_info = api_get_course_info($course_code);
         $session_id = api_get_session_id();
@@ -96,6 +96,7 @@ class GroupManager
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
                     g.session_id,
+                    g.status,
                     ug.user_id is_member
                 FROM $table_group g
                 LEFT JOIN $table_group_user ug
@@ -116,6 +117,10 @@ class GroupManager
             }
         } else {
             $session_condition = api_get_session_condition($session_id, true);
+        }
+
+        if (!is_null($status)) {
+            $sql .= "  AND  g.status = '".intval($status)."' ";
         }
 
         $sql .= " AND g.c_id = $course_id ";
@@ -471,6 +476,7 @@ class GroupManager
         if ($db_object) {
             $result['id'] = $db_object->id;
             $result['name'] = $db_object->name;
+            $result['status'] = $db_object->status;
             $result['tutor_id'] = isset($db_object->tutor_id) ? $db_object->tutor_id : null;
             $result['description'] = $db_object->description;
             $result['maximum_number_of_students'] = $db_object->max_student;
@@ -1949,24 +1955,28 @@ class GroupManager
                 return false;
         }
 
-        $user_is_in_group = self :: is_user_in_group($user_id, $group_id);
+        $user_is_in_group = self::is_user_in_group($user_id, $group_id);
 
         // Check group properties
-        $group_info = self :: get_group_properties($group_id);
+        $groupInfo = self::get_group_properties($group_id);
 
-        if (empty($group_info)) {
+        if (empty($groupInfo)) {
             return false;
         }
 
-        if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
+        if (!$user_is_in_group && $groupInfo['status'] == 0) {
             return false;
-        } elseif ($group_info[$state_key] == self::TOOL_PUBLIC) {
+        }
+
+        if ($groupInfo[$state_key] == self::TOOL_NOT_AVAILABLE) {
+            return false;
+        } elseif ($groupInfo[$state_key] == self::TOOL_PUBLIC) {
             return true;
         } elseif (api_is_allowed_to_edit(false, true)) {
             return true;
-        } elseif ($group_info['tutor_id'] == $user_id) { //this tutor implementation was dropped
+        } elseif ($groupInfo['tutor_id'] == $user_id) { //this tutor implementation was dropped
             return true;
-        } elseif ($group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
+        } elseif ($groupInfo[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
             return false;
         } else {
             return $user_is_in_group;
@@ -2139,13 +2149,21 @@ class GroupManager
             // Create a new table-row
             $row = array();
 
+            if (!api_is_allowed_to_edit(false, true)) {
+                if ($this_group['status'] == 0) {
+                    continue;
+                }
+            }
+
             // Checkbox
             if (api_is_allowed_to_edit(false, true) && count($group_list) > 1) {
                 $row[] = $this_group['id'];
             }
 
+
             // Group name
             if ((api_is_allowed_to_edit(false, true) ||
+                    (
                     in_array($user_id, $tutorsids_of_group) ||
                     $this_group['is_member'] ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_FORUM) ||
@@ -2155,10 +2173,16 @@ class GroupManager
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI) ||
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CHAT)
+                    )
                 )
                 && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
             ) {
-                $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
+
+                $groupNameClass = null;
+                if ($this_group['status'] == 0) {
+                    $groupNameClass = 'muted';
+                }
+                $group_name = '<a class="'.$groupNameClass.'" href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
                     $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
@@ -2218,9 +2242,19 @@ class GroupManager
             }
             $url = api_get_path(WEB_CODE_PATH).'group/';
             // Edit-links
-            if (api_is_allowed_to_edit(false, true)  && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)) {
+            if (api_is_allowed_to_edit(false, true) &&
+                !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
+            ) {
                 $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
                     Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+
+                if ($this_group['status'] == 1) {
+                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true,false) . '&category=' . $category_id . '&amp;action=set_invisible&amp;id=' . $this_group['id'] . '" title="' . get_lang('Hide') . '">' .
+                        Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL) . '</a>&nbsp;';
+                } else {
+                    $edit_actions .= '<a href="' . api_get_self() . '?' . api_get_cidreq(true, false) . '&category=' . $category_id . '&amp;action=set_visible&amp;id=' . $this_group['id'] . '" title="' . get_lang('Show') . '">' .
+                        Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL) . '</a>&nbsp;';
+                }
 
                 $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('GroupMembers').'">'.
                     Display::return_icon('user.png', get_lang('GroupMembers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
@@ -2694,7 +2728,45 @@ class GroupManager
         $url = api_get_path(WEB_CODE_PATH).'group/group_overview.php?'.api_get_cidreq();
         $form = new FormValidator('search_groups', 'get', $url, null, array(), FormValidator::LAYOUT_INLINE);
         $form->addElement('text', 'keyword');
-        $form->addElement('button', 'submit', get_lang('Search'));
+        $form->addButtonSearch();
         return $form->toHtml();
+    }
+
+    /**
+     * @param int $groupId
+     * @param int $status
+     */
+    public static function setStatus($groupId, $status)
+    {
+        $groupInfo = self::get_group_properties($groupId);
+
+        $courseId = api_get_course_int_id();
+        if (!empty($groupInfo)) {
+            $table = Database::get_course_table(TABLE_GROUP);
+            $params = array(
+                'status' => intval($status)
+            );
+            Database::update(
+                $table,
+                $params,
+                array('c_id = ? AND id = ?' => array($courseId, $groupId))
+            );
+        }
+    }
+
+    /**
+     * @param int $groupId
+     */
+    public static function setVisible($groupId)
+    {
+        self::setStatus($groupId, 1);
+    }
+
+    /**
+     * @param int $groupId
+     */
+    public static function setInvisible($groupId)
+    {
+        self::setStatus($groupId, 0);
     }
 }

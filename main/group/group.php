@@ -14,9 +14,9 @@
  *	@author Isaac Flores, code cleaning and improvements
  *	@package chamilo.group
  */
-/*		INIT SECTION	*/
+
 // Name of the language file that needs to be included
-$language_file = 'group';
+$language_file = array('group', 'document');
 
 require_once '../inc/global.inc.php';
 
@@ -73,6 +73,14 @@ $my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
+        case 'set_visible':
+            GroupManager::setVisible($my_get_id);
+            Display :: display_confirmation_message(get_lang('ItemUpdated'));
+            break;
+        case 'set_invisible':
+            GroupManager::setInvisible($my_get_id);
+            Display :: display_confirmation_message(get_lang('ItemUpdated'));
+            break;
         case 'self_reg':
             if (GroupManager::is_self_registration_allowed($userId, $my_group_id)) {
                 GroupManager::subscribe_users($userId, $my_group_id);
@@ -138,7 +146,6 @@ if (api_is_allowed_to_edit(false, true)) {
                 GroupManager :: delete_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupDel'));
                 break;
-
             case 'fill_one':
                 GroupManager :: fill_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
@@ -191,7 +198,7 @@ echo '</div>';
 /*  List all categories */
 if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
-        $group_list = GroupManager :: get_group_list($category['id']);
+        $group_list = GroupManager::get_group_list($category['id']);
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
 
         $actions = null;

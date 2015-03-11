@@ -34,7 +34,7 @@ if (empty($current_group)) {
 
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
-$interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
 
@@ -57,7 +57,7 @@ if ($current_group['doc_state'] != 1 &&
     $current_group['chat_state'] != 1 &&
     $forum_state_public != 1
 ) {
-    if (!api_is_allowed_to_edit(null,true) &&
+    if (!api_is_allowed_to_edit(null, true) &&
         !GroupManager::is_user_in_group($user_id, $group_id)) {
         api_not_allowed($print_headers);
     }

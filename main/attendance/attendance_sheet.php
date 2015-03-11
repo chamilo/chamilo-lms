@@ -75,7 +75,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
     $form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));
 
-    $groupList = GroupManager::get_group_list();
+    $groupList = GroupManager::get_group_list(null, null, 1);
     $groupIdList = array('--');
     foreach ($groupList as $group) {
         $groupIdList[$group['id']] = $group['name'];

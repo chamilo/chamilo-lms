@@ -76,7 +76,8 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'delete_grading') {
 $form_search = new FormValidator('search_settings', 'get', api_get_self() , null, array('class'=>'well form-inline'));
 $form_search->addElement('text', 'search_field');
 $form_search->addElement('hidden', 'category', 'search_setting');
-$form_search->addElement('style_submit_button', 'submit_button', get_lang('Search'), 'value="submit_button", class="search"');
+// Button rules: arg1 = type, arg2 = name, arg3 = text, arg4 = icon (fa-[...]), arg5 = class, arg6 = array('style' => 'display: block;', 'size' => 32, ...)
+$form_search->addElement('button', 'submit_button', get_lang('Search'), 'search', 'btn btn-primary');
 $form_search->setDefaults(array('search_field' => (isset($_REQUEST['search_field'])?$_REQUEST['search_field']:null)));
 
 $form_search_html = $form_search->return_form();

@@ -58,7 +58,8 @@ if (api_get_setting('profile', 'picture') == 'true') {
         'style_submit_button',
         'apply_change',
         get_lang('SaveSettings'),
-        'class="save"'
+        'floppy-o',
+        'btn btn-success'
     );
 
     if ($form->validate()) {

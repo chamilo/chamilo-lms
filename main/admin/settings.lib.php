@@ -638,7 +638,7 @@ function handle_search()
 
     $default_values['search_enabled'] = $search_enabled;
 
-    $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
+    $form->addElement('style_submit_button', 'submit', get_lang('Save'));
     $form->setDefaults($default_values);
 
     echo '<div id="search-options-form">';
@@ -1340,7 +1340,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
     if (!empty($settings)) {
         $form->setDefaults($default_values);
     }
-    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'floppy-o','btn btn-success');
     return $form;
 }
 

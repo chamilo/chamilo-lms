@@ -109,9 +109,9 @@ if (api_is_allowed_to_edit(null, true) ||
         echo '<div class="actions">';
         echo '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
             Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
-        if (count($users_in_course) > 0) {
+        //if (count($users_in_course) > 0) {
             $form->display();
-        }
+        //}
         echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'">'.
             Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';

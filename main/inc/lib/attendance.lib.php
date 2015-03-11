@@ -587,6 +587,7 @@ class Attendance
 				'',
 				'lastname'
 			);
+
 			if (!empty($groupId)) {
 				$students = GroupManager::getStudents($groupId);
 				if (!empty($students)) {
@@ -604,7 +605,7 @@ class Attendance
 			$uid = $user_data['user_id'];
 			$status = $user_data['status'];
 
-			if (!empty($studentInGroup)) {
+			if (!empty($groupId)) {
 				if (!isset($studentInGroup[$uid])) {
 					continue;
 				}

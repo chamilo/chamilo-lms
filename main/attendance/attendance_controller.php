@@ -452,11 +452,11 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $courseInfo = CourseManager::get_course_information($course_id);
-
         $attendance->set_course_id($courseInfo['code']);
+        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
         $data_array = array();
         $data_array['attendance_id'] = $attendance_id;
-        $data_array['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
+        $data_array['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
 
         $filter_type = 'today';
 
@@ -470,7 +470,7 @@ class AttendanceController
             $filter_type = 'calendar_id';
         }
 
-        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id);
+        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id, $groupId);
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);

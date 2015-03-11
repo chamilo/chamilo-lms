@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Form element to select a date and hour (with popup datepicker)
+ * Form element to select a date.
  *
  * Class DatePicker
  */
@@ -18,7 +18,7 @@ class DatePicker extends HTML_QuickForm_text
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
-        //$attributes['class'] = '';
+        $attributes['class'] = 'form-control';
 
         HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         $this->_appendName = true;

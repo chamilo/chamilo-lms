@@ -1758,7 +1758,7 @@ class Display
      * @param string $type
      * @return string
      */
-    public static function label($content, $type = null)
+    public static function label($content, $type = 'default')
     {
         $class = '';
         switch ($type) {
@@ -1776,6 +1776,9 @@ class Display
                 break;
             case 'inverse':
                 $class = 'label-inverse';
+                break;
+            default:
+                $class = 'label-default';
                 break;
         }
 

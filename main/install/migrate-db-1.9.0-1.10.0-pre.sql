@@ -89,17 +89,18 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No');
 
--- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.19' WHERE variable = 'chamilo_database_version';
-
 -- xxCOURSExx
 
 ALTER TABLE c_survey ADD visible_results INT UNSIGNED DEFAULT 0;
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float;
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float;
 ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
+ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1;
 
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
-CREATE TABLE IF NOT EXISTS c_student_publication_rel_user ( id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
-CREATE TABLE IF NOT EXISTS c_student_publication_comment ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
+CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
+-- Do not move this query
+UPDATE settings_current SET selected_value = '1.10.0.21' WHERE variable = 'chamilo_database_version';

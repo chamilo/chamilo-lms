@@ -563,12 +563,16 @@ class Attendance
 	/**
 	 * Get registered users inside current course
 	 * @param 	int	   $attendance_id attendance id for showing attendance result field (optional)
+	 * @param int $groupId
 	 * @return 	array  users data
 	 */
-	public function get_users_rel_course($attendance_id = 0)
+	public function get_users_rel_course($attendance_id = 0, $groupId = null)
 	{
 		$current_session_id = api_get_session_id();
 		$current_course_id  = api_get_course_id();
+
+		$studentInGroup = array();
+
 		if (!empty($current_session_id)) {
 			$a_course_users = CourseManager:: get_user_list_from_course_code(
 				$current_course_id,
@@ -583,13 +587,29 @@ class Attendance
 				'',
 				'lastname'
 			);
+
+			if (!empty($groupId)) {
+				$students = GroupManager::getStudents($groupId);
+				if (!empty($students)) {
+					foreach ($students as $student) {
+						$studentInGroup[$student['user_id']] = true;
+					}
+				}
+			}
 		}
+
 		// get registered users inside current course
 		$a_users = array();
-		foreach ($a_course_users as $key =>$user_data) {
-			$value	= array();
-			$uid 	= $user_data['user_id'];
+		foreach ($a_course_users as $key => $user_data) {
+			$value = array();
+			$uid = $user_data['user_id'];
 			$status = $user_data['status'];
+
+			if (!empty($groupId)) {
+				if (!isset($studentInGroup[$uid])) {
+					continue;
+				}
+			}
 
 			$user_status_in_session = null;
 			$user_status_in_course  = null;
@@ -607,8 +627,14 @@ class Attendance
 				);
 			}
 
-			//Not taking into account DRH or COURSEMANAGER
-			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER || $user_status_in_session == 2) continue;
+			// Not taking into account DRH or COURSEMANAGER
+			if ($uid <= 1 ||
+				$status == DRH ||
+				$user_status_in_course == COURSEMANAGER ||
+				$user_status_in_session == 2
+			) {
+				continue;
+			}
 
 			if (!empty($attendance_id)) {
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
@@ -617,24 +643,26 @@ class Attendance
 			}
 
 			// user's picture
-			$image_path 	= UserManager::get_user_picture_path_by_id($uid, 'web', false);
-			$user_profile 	= UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+			$image_path = UserManager::get_user_picture_path_by_id($uid, 'web', false);
+			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 
 			if (!empty($image_path['file'])) {
-				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
+				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  >
+						  <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
 			} else {
 				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
 			}
 
-			$value['photo']      = $photo;
-			$value['firstname']  = $user_data['firstname'];
-			$value['lastname']	 = $user_data['lastname'];
-			$value['username']   = $user_data['username'];
-			$value['user_id']    = $uid;
+			$value['photo'] = $photo;
+			$value['firstname'] = $user_data['firstname'];
+			$value['lastname'] = $user_data['lastname'];
+			$value['username'] = $user_data['username'];
+			$value['user_id'] = $uid;
 
 			//Sending only 5 items in the array instead of 60
 			$a_users[$key] = $value;
 		}
+
 		return $a_users;
 	}
 
@@ -1171,17 +1199,37 @@ class Attendance
 
 	/**
 	 * Get all attendance calendar data inside current attendance
-	 * @param	int	attendance id
+	 * @param	int	$attendance_id
+	 * @param	string $type
+	 * @param	int $calendar_id
+	 * @param	int $groupId
+	 *
 	 * @return	array attendance calendar data
 	 */
-	public function get_attendance_calendar($attendance_id, $type = 'all', $calendar_id = null)
-	{
+	public function get_attendance_calendar(
+		$attendance_id,
+		$type = 'all',
+		$calendar_id = null,
+		$groupId = null
+	) {
 		global $dateFormatShort, $timeNoSecFormat;
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
 		$course_id = api_get_course_int_id();
+		$groupCondition = null;
+
 		$sql = "SELECT * FROM $tbl_attendance_calendar
 				WHERE c_id = $course_id AND attendance_id = '$attendance_id' ";
+
+		if (!empty($groupId)) {
+			$groupId = intval($groupId);
+			$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+			$sql = "SELECT c.* FROM $tbl_attendance_calendar c INNER JOIN $table g
+					ON c.c_id = g.c_id AND c.id = g.calendar_id
+					WHERE c.c_id = $course_id AND g.group_id = '$groupId' ";
+
+		}
+
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
 			$type = 'all';
 		}
@@ -1211,10 +1259,11 @@ class Attendance
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs,'ASSOC')) {
-				$row['db_date_time']    = $row['date_time'];
-				$row['date_time']       = api_get_local_time($row['date_time']);
-				$row['date']            = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
-				$row['time']            = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
+				$row['db_date_time'] = $row['date_time'];
+				$row['date_time'] = api_get_local_time($row['date_time']);
+				$row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
+				$row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
+				$row['groups'] = $this->getGroupListByAttendanceCalendar($row['id'], $course_id);
 				if ($type == 'today') {
 					if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
 						$data[] = $row;
@@ -1302,10 +1351,11 @@ class Attendance
 
 	/**
 	 * Add new datetime inside attendance calendar table
-	 * @param	int	attendance id
+	 * @param	int		$attendance_id
+	 * @param 	array 	$groupList
 	 * @return	int affected rows
 	 */
-	public function attendance_calendar_add($attendance_id)
+	public function attendance_calendar_add($attendance_id, $groupList = array())
 	{
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$affected_rows = 0;
@@ -1319,12 +1369,14 @@ class Attendance
 		        	attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$sql = "INSERT INTO $tbl_attendance_calendar SET
-					c_id			= $course_id,
-					date_time		= '".Database::escape_string($this->date_time)."',
-					attendance_id 	= '$attendance_id'";
-			Database::query($sql);
+			$params = array(
+				'c_id' =>  $course_id,
+				'date_time' => $this->date_time,
+				'attendance_id' => $attendance_id
+			);
+			$id = Database::insert($tbl_attendance_calendar, $params);
 			$affected_rows = Database::affected_rows();
+			$this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
 		}
 
 		// update locked attendance
@@ -1338,30 +1390,124 @@ class Attendance
 	}
 
 	/**
-	 * save repeated date inside attendance calendar table
-	 * @param   int $attendance_id
-	 * @param   int $start_date start date in tms
-	 * @param   int $end_date end date in tms
-	 * @param   string $repeat_type daily, weekly, monthlyByDate
+	 * @param int   $calendarId
+	 * @param int 	 $courseId
+	 * @param array $groupList
 	 */
-	public function attendance_repeat_calendar_add($attendance_id, $start_date, $end_date, $repeat_type)
+	public function addAttendanceCalendarToGroup($calendarId, $courseId, $groupList)
 	{
+		if (empty($groupList)) {
+			return false;
+		}
+
+		$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+
+		foreach ($groupList as $groupId) {
+			$result = $this->getAttendanceCalendarGroup(
+				$calendarId,
+				$courseId,
+				$groupId
+			);
+
+			if (empty($result)) {
+				$params = array(
+					'calendar_id' => $calendarId,
+					'c_id' => $courseId,
+					'group_id' => $groupId,
+				);
+				Database::insert($table, $params);
+			}
+		}
+	}
+
+	/**
+	 * @param int $calendarId
+	 * @param int $courseId
+	 * @param int $groupId
+	 * @return array
+	 */
+	public function getGroupListByAttendanceCalendar($calendarId, $courseId)
+	{
+		$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+		return Database::select(
+			'*',
+			$table,
+			array('where'=>
+				array(
+					'calendar_id = ? AND c_id = ?' => array($calendarId, $courseId)
+				)
+			)
+		);
+	}
+
+	/**
+	 * @param int $calendarId
+	 * @param int $courseId
+	 * @param int $groupId
+	 * @return array
+	 */
+	public function getAttendanceCalendarGroup($calendarId, $courseId, $groupId)
+	{
+		$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+		return Database::select(
+			'*',
+			$table,
+			array('where'=>
+				array(
+					'calendar_id = ? AND c_id = ? AND group_id = ?' => array($calendarId, $courseId, $groupId)
+				)
+			)
+		);
+	}
+
+	/**
+	 * @param int $calendarId
+	 * @param int $courseId
+	 * @param int $groupId
+	 * @return array
+	 */
+	public function deleteAttendanceCalendarGroup($calendarId, $courseId)
+	{
+		$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
+		Database::delete(
+			$table,
+			array(
+				'calendar_id = ? AND c_id = ?' => array($calendarId, $courseId)
+			)
+		);
+	}
+
+	/**
+	 * save repeated date inside attendance calendar table
+	 * @param int $attendance_id
+	 * @param int $start_date start date in tms
+	 * @param int $end_date end date in tms
+	 * @param string $repeat_type daily, weekly, monthlyByDate
+	 * @param array $groupList
+	 */
+	public function attendance_repeat_calendar_add(
+		$attendance_id,
+		$start_date,
+		$end_date,
+		$repeat_type,
+		$groupList = array()
+	) {
 		$attendance_id = intval($attendance_id);
 		// save start date
 		$datetimezone = api_get_utc_datetime($start_date);
 		$this->set_date_time($datetimezone);
-		$res = $this->attendance_calendar_add($attendance_id);
+		$res = $this->attendance_calendar_add($attendance_id, $groupList);
 
-		//86400 = 24 hours in seconds
-		//604800 = 1 week in seconds
+		// 86400 = 24 hours in seconds
+		// 604800 = 1 week in seconds
 		// Saves repeated dates
-		switch($repeat_type) {
+		switch ($repeat_type) {
 			case 'daily':
 				$j = 1;
 				for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
 					$datetimezone = api_get_utc_datetime($i);
 					$this->set_date_time($datetimezone);
-					$this->attendance_calendar_add($attendance_id);
+					$this->attendance_calendar_add($attendance_id, $groupList);
 					$j++;
 				}
 				break;
@@ -1370,7 +1516,7 @@ class Attendance
 				for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {
 					$datetimezone = api_get_utc_datetime($i);
 					$this->set_date_time($datetimezone);
-					$this->attendance_calendar_add($attendance_id);
+					$this->attendance_calendar_add($attendance_id, $groupList);
 					$j++;
 				}
 				break;
@@ -1380,7 +1526,7 @@ class Attendance
 				for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
 					$datetimezone = api_get_utc_datetime($i);
 					$this->set_date_time($datetimezone);
-					$this->attendance_calendar_add($attendance_id);
+					$this->attendance_calendar_add($attendance_id, $groupList);
 					$j++;
 				}
 				break;
@@ -1460,7 +1606,7 @@ class Attendance
 	public function attendance_calendar_delete($calendar_id, $attendance_id , $all_delete = false)
 	{
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-		$tbl_attendance_sheet 	 = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+		$tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 
 		$attendance_id = intval($attendance_id);
 		// get all registered users inside current course
@@ -1481,6 +1627,8 @@ class Attendance
 					$sql = "DELETE FROM $tbl_attendance_calendar
 							WHERE c_id = $course_id AND id = '".intval($cal['id'])."'";
 					Database::query($sql);
+
+					$this->deleteAttendanceCalendarGroup($cal['id'], $course_id);
 				}
 			}
 		} else {
@@ -1492,6 +1640,8 @@ class Attendance
 			$sql = "DELETE FROM $tbl_attendance_calendar
 					WHERE c_id = $course_id AND id = '".intval($calendar_id)."'";
 			Database::query($sql);
+
+			$this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
 		}
 
 		$affected_rows = Database::affected_rows();

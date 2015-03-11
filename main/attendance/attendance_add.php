@@ -30,10 +30,15 @@ $form->addElement('hidden', 'sec_token', $token);
 
 $form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');
-$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150')
+);
 
 // Adavanced Parameters
-
 $advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
 if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
     $form -> addElement('advanced_settings',$advanced);

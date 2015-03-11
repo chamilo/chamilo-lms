@@ -178,7 +178,7 @@ $group_members_element = $form->addElement(
 $form->addFormRule('check_group_members');
 
 // submit button
-$form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
+$form->addButtonSave(get_lang('SaveSettings'));
 
 if ($form->validate()) {
     $values = $form->exportValues();

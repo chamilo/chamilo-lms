@@ -34,81 +34,81 @@
     </form>
 {% endif %}
 
-<div id="page" class="container"> <!-- page section -->
-        {# Bug and help notifications #}
-        {% block help_notifications %}
-        <ul id="navigation" class="notification-panel">
-            {{ help_content }}
-            {{ bug_notification_link }}
-        </ul>
-        {% endblock %}
 
-        {# topbar #}
-        {% block topbar %}
-        {% include template ~ "/layout/topbar.tpl" %}
-        {% endblock %}
-            <header>
-                <div id="main" class="container">
-                    {% if plugin_header_main %}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            {{ plugin_header_main }}
+{% if show_header == true %}
+
+<div id="page" class="container"><!-- page section -->
+    {# Bug and help notifications #}
+    {% block help_notifications %}
+    <ul id="navigation" class="notification-panel">
+        {{ help_content }}
+        {{ bug_notification_link }}
+    </ul>
+    {% endblock %}
+
+    {# topbar #}
+    {% block topbar %}
+    {% include template ~ "/layout/topbar.tpl" %}
+    {% endblock %}
+        <header>
+            <div id="main" class="container">
+                {% if plugin_header_main %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{ plugin_header_main }}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="logo">
+                            {{ logo }}
                         </div>
                     </div>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="logo">
-                                {{ logo }}
+                    <div class="col-lg-9">
+                        <div class="col-4">
+                            {% if plugin_header_left is not null %}
+                            <div id="plugin_header_left">
+                                {{ plugin_header_left }}
                             </div>
+                            {% endif %}
                         </div>
-                        <div class="col-lg-9">
-                            <div class="col-4">
-                                {% if plugin_header_left is not null %}
-                                <div id="plugin_header_left">
-                                    {{ plugin_header_left }}
-                                </div>
-                                {% endif %}
+                        <div class="col-4">
+                            {% if plugin_header_center is not null %}
+                            <div id="plugin_header_center">
+                                {{ plugin_header_center }}
                             </div>
-                            <div class="col-4">
-                                {% if plugin_header_center is not null %}
-                                <div id="plugin_header_center">
-                                    {{ plugin_header_center }}
-                                </div>
-                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="col-4">
+                            {% if plugin_header_right is not null %}
+                            <div id="plugin_header_right">
+                                {{ plugin_header_right }}
                             </div>
-                            <div class="col-4">
-                                {% if plugin_header_right is not null %}
-                                <div id="plugin_header_right">
-                                    {{ plugin_header_right }}
-                                </div>
-                                {% endif %}
-                                <div class="section-notifications">
-                                    <ul id="notifications" class="nav nav-pills pull-right">
-                                        {{ notification_menu }}
-                                    </ul>
-                                </div>
+                            {% endif %}
+                            <div class="section-notifications">
+                                <ul id="notifications" class="nav nav-pills pull-right">
+                                    {{ notification_menu }}
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-            </header>
-            <section id="menu-bar">
-                {# menu #}
-                {% block menu %}
-                {% include template ~ "/layout/menu.tpl" %}
-                {% endblock %}
-            </section>
-            <section id="breadcrumb-bar">
-                {# breadcrumb #}
-                {% block breadcrumb %}
-                {{ breadcrumb }}
-                {% endblock %}
-            </section>
-
-
-        
-        <div id="top_main_content">
-
-        {# course navigation links/shortcuts need to be activated by the admin #}
-        {% include template ~ "/layout/course_navigation.tpl" %}
+            </div>
+        </header>
+        <section id="menu-bar">
+            {# menu #}
+            {% block menu %}
+            {% include template ~ "/layout/menu.tpl" %}
+            {% endblock %}
+        </section>
+        <section id="breadcrumb-bar">
+            {# breadcrumb #}
+            {% block breadcrumb %}
+            {{ breadcrumb }}
+            {% endblock %}
+        </section>
+    <div id="top_main_content">
+    {# course navigation links/shortcuts need to be activated by the admin #}
+    {% include template ~ "/layout/course_navigation.tpl" %}
+{% endif %}

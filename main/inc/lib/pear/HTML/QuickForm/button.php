@@ -50,7 +50,6 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $extra = array(),
         $attributes = array()
     ) {
-        error_log(print_r(func_get_args(),1));
         $icon = !empty($icon) ? $icon : 'check';
         $class = !empty($class) ? $class : 'btn btn-default';
         if ($class == 'primary') {

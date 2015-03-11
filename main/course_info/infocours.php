@@ -162,8 +162,8 @@ $group[]=$form->createElement('SelectTheme', 'course_theme', null, array('class'
 $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
-
-$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '. get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '. get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // COURSE ACCESS
@@ -199,8 +199,8 @@ $form->addText('course_registration_password', get_lang('CourseRegistrationPassw
 
 $form->addElement('checkbox', 'activate_legal', array(null, get_lang('ShowALegalNoticeWhenEnteringTheCourse')), get_lang('ActivateLegal'));
 $form->addElement('textarea', 'legal', get_lang('CourseLegalAgreement'), array('class'=>'span6', 'rows' => 8));
-
-$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // Documents
@@ -212,8 +212,8 @@ if (api_get_setting('documents_default_visibility_defined_in_course') == 'true')
         $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible')
     );
     $form->addGroup($group, '', array(get_lang("DocumentsDefaultVisibility")), '');
-
-    $form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+    $form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+    //$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 
     $form->addElement('html', '</div></div>');
 }
@@ -246,7 +246,8 @@ $group = array();
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', get_lang('QuizEmailAlert'), get_lang('QuizEmailAlertActivate'), 1);
 $group[]=$form->createElement('radio', 'email_alert_manager_on_new_quiz', null, get_lang('QuizEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("QuizEmailAlert")), '');
-$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 
 $form->addElement('html', '</div></div>');
 
@@ -272,8 +273,8 @@ $group = array();
 $group[]=$form->createElement('radio', 'allow_user_view_user_list', get_lang('AllowUserViewUserList'), get_lang('AllowUserViewUserListActivate'), 1);
 $group[]=$form->createElement('radio', 'allow_user_view_user_list', null, get_lang('AllowUserViewUserListDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowUserViewUserList")), '');
-
-$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // CHAT SETTINGS
@@ -283,8 +284,8 @@ $group = array();
 $group[]=$form->createElement('radio', 'allow_open_chat_window', get_lang('AllowOpenchatWindow'), get_lang('AllowOpenChatWindowActivate'), 1);
 $group[]=$form->createElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenChatWindowDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("AllowOpenchatWindow")), '');
-
-$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '. get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '. get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // LEARNING PATH
@@ -327,7 +328,8 @@ if (isset($_configuration['allow_lp_return_link']) && $_configuration['allow_lp_
 }
 
 if (is_settings_editable()) {
-    $form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+    $form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+    //$form->addElement('style_submit_button', null, '<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 } else {
     // Is it allowed to edit the course settings?
     if (!is_settings_editable()) {
@@ -346,8 +348,8 @@ $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse',
 $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
 $group[]=$form->createElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
 $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")), '');
-
-$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // Document settings
@@ -359,8 +361,8 @@ $group = array(
 
 );
 $form->addGroup($group, '', array(get_lang("ShowSystemFolders")), '');
-
-$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
+$form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+//$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn btn-primary"');
 $form->addElement('html', '</div></div>');
 
 // Certificate settings
@@ -370,8 +372,8 @@ if (api_get_setting('allow_public_certificates')=='true') {
     $group[]=$form->createElement('radio', 'allow_public_certificates', get_lang('AllowPublicCertificates'), get_lang('Yes'), 1);
     $group[]=$form->createElement('radio', 'allow_public_certificates', null, get_lang('No'), 0);
     $form->addGroup($group, '', array(get_lang("AllowPublicCertificates")), '');
-
-    $form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn  btn-primary"');
+    $form->addButtonSave(get_lang('SaveSettings'),'submit_save');
+    //$form->addElement('style_submit_button', null,'<i class="fa fa-floppy-o"></i> '.get_lang('SaveSettings'), 'class="btn  btn-primary"');
     $form->addElement('html', '</div></div>');
 }
 

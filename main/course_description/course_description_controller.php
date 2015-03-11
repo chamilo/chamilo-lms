@@ -34,7 +34,7 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $data = array();
         $course_description_data = $course_description->get_description_data();
-        $data['descriptions'] = $course_description_data['descriptions'];
+        $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : null;
         $data['default_description_titles'] = $course_description->get_default_description_title();
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
         $data['default_description_icon'] = $course_description->get_default_description_icon();

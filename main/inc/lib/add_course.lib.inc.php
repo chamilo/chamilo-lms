@@ -1162,6 +1162,7 @@ class AddCourse
             $add_to_all_tables
             id int unsigned NOT NULL auto_increment,
             name varchar(100) default NULL,
+            status tinyint DEFAULT 1,
             category_id int unsigned NOT NULL default 0,
             description text,
             max_student int unsigned NOT NULL default 8,

@@ -304,7 +304,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        if ($expendedTimeMax < $expendedTime) {
+        if ($expendedTimeMax <= $expendedTime) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionTimeXLimitReached'),
                 $expendedTimeMax

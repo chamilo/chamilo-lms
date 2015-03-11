@@ -38,29 +38,38 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      * @param string $elementName
      * @param string $value
      * @param string $icon
-     * @param string $style
-     * @param string $size
      * @param string $class
+     * @param array  $extra
      * @param array  $attributes
      */
     public function HTML_QuickForm_button(
         $elementName = null,
         $value = null,
         $icon = 'check',
-        $style = 'default',
-        $size = 'default',
-        $class = 'btn',
+        $class = 'btn btn-default',
+        $extra = array(),
         $attributes = array()
     ) {
+        error_log(print_r(func_get_args(),1));
         $icon = !empty($icon) ? $icon : 'check';
-        $style = !empty($style) ? $style : 'default';
-        $size = !empty($size) ? $size : 'default';
-        $class = !empty($class) ? $class : 'btn';
+        $class = !empty($class) ? $class : 'btn btn-default';
+        if ($class == 'primary') {
+            $class == 'btn btn-primary';
+        }
+        if ($class == 'btn') {
+            $class == 'btn btn-default';
+        }
+        $style = !empty($extra['style']) ? $extra['style'] : '';
+        $size = !empty($extra['size']) ? $extra['size'] : '';
 
         $attributes['icon'] = $icon;
-        $attributes['style'] = $style;
-        $attributes['size'] = $size;
-        $attributes['class'] = $class.' btn-'.$style.($size=='default'?'':' btn-'.$size);
+        if ($style != '') {
+            $attributes['style'] = $style;
+        }
+        if ($size != '') {
+            $attributes['size'] = $size;
+        }
+        $attributes['class'] = $class;
 
         HTML_QuickForm_input::HTML_QuickForm_input(
             $elementName,

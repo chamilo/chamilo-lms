@@ -332,7 +332,6 @@ class Template
      */
     public function set_header($status)
     {
-        $status = false;
         $this->show_header = $status;
         $this->assign('show_header', $status);
 

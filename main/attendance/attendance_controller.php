@@ -545,10 +545,10 @@ class AttendanceController
             $changed = 1;
 
             for ($i= 0; $i <= $rows; $i++) {
-                $row = $data_table[$i];
+                $row = isset($data_table[$i]) ? $data_table[$i] : null;
                 $key = 1;
                 $max_dates_per_page = 10;
-                $item = $data_table[$i];
+                $item = isset($data_table[$i]) ? $data_table[$i] : null;
                 $count_j = 0;
 
                 if (!empty($item)) {
@@ -567,14 +567,13 @@ class AttendanceController
             }
 
             $content = null;
-
             if (!empty($tables)) {
                 foreach ($tables as $sub_table) {
                     $content .= Export::convert_array_to_html($sub_table).'<br /><br />';
                 }
             }
         } else {
-            $content .= Export::convert_array_to_html($data_table, array('header_attributes' =>   array('align' => 'center')));
+            $content = Export::convert_array_to_html($data_table, array('header_attributes' =>  array('align' => 'center')));
         }
 
         $params = array(

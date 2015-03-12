@@ -75,7 +75,8 @@ ul#navigation .report a {
 .button-load{
   background: url("../img/icons/64/file_upload.png") no-repeat center 20px;
   padding-top: 70px;
-  }
+}
+
 /* START COURSE PROGRESS */
 .thematic-postit{
   padding-top: 5px;
@@ -403,35 +404,18 @@ form .formw input {
     width: 110px;
 }
 
-html, body {
+html {
     margin: 0;
     padding: 0;
-}
-
-html {
     position: relative;
     min-height: 100%;
 }
 
 body {
+    margin-bottom: 80px;
     /* hack ignored by non-IE to enable ie to support :hover on button */
     behavior:url("/main/css/csshover3.htc");
-    margin: 0;
-    padding: 0;
     background-color: #fff;
-    height: 100%; /* stick */
-}
-
-/* Sticky footer*/
-#wrapper {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -9em; /* Do not change this value */
-}
-
-#topbar {
-    z-index:9000; /* bug when using full area fckeditor */
 }
 
 footer {
@@ -3890,10 +3874,6 @@ a:active{
 
 }
 
-/*#homepage, #hot_courses, #announcements {*/
-#top_main_content section{
-    /* margin-left: 5px; */
-}
 .welcome_course li {
     float:left;
     list-style-type: none;

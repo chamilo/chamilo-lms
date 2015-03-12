@@ -52,7 +52,7 @@
                     <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
                 </li>
                 <li>
-                    <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Insignias Actuales' | get_lang }}</a>
+                    <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'BadgePreview' | get_lang }}</a>
                 </li>
                 <li class="active">
                     <a href="#">{{ 'Edit' | get_lang }}</a>
@@ -113,7 +113,7 @@
                                 <i class="fa fa-plus"></i> {{ 'DesignNewBadge' | get_lang }}
                             </button>
                         </div>
-                        <p class="openbadges-text">Vista previa de la imagen</p>
+                        <p class="openbadges-text">{{'OpenBadgeImagePreview' | get_lang }}</p>
                         <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
                             <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
                         </div>

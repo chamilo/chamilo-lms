@@ -492,7 +492,6 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = array();
-        /* $badges_default = "hola"; */
 
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -500,26 +499,11 @@ class Skill extends Model
                 $a                  = $skill_rel_skill->get_skill_parents($row['id']);
                 $row['level']       = count($a) - 1;
                 $row['gradebooks']  = self::get_gradebooks_by_skill($row['id']);
-                /* if($row['icon']=="") {
-                    $row['icon'] = $badges_default;
-                }*/
                 $skills[$row['id']] = $row;
 
 
             }
         }
-
-        /*
-        if ($load_user_data && $user_id) {
-            $passed_skills = $this->get_user_skills($user_id);
-            foreach ($skills as &$skill) {
-                $skill['done_by_user'] = 0;
-                if (in_array($skill['id'], $passed_skills)) {
-                    $skill['done_by_user'] = 1;
-                }
-            }
-        }*/
-
 
         //Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {

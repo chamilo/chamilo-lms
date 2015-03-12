@@ -350,52 +350,6 @@ form .formw input {
 
 /* New changes Chamilo 1.9 */
 
-.well h4 {
-    padding: 3px 15px;
-}
-
-#login_block #formLogin,
-#login_block #lang_form,
-#notice_block .homepage_notice {
-    padding: 3px 15px;
-}
-
-.nav-list > .active > a,
-.nav-list > .active > a:hover {
-    background-color: #999999;
-}
-
-.sidebar-nav {
-    padding:  8px 0px;
-}
-
-.sidebar-nav-skill-wheel {
-    padding-top:  0px;
-}
-
-.well_border {
-    /* border: 1px solid rgba(0, 0, 0, 0.05);*/
-    border: 1px solid #E1E1E0;
-    border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
-    margin-bottom: 20px;
-    min-height: 20px;
-    padding: 19px;
-}
-
-.well_login {
-    margin: 0 auto;
-    width: 200px;
-}
-
-.well_login button {
-    margin-left: 0px;
-}
-
-#progress_bar img {
-    height:26px;
-}
-
 #lp_navigation_elem .buttons{
     margin-bottom: 5px;
 }
@@ -410,13 +364,6 @@ html {
     padding: 0;
     position: relative;
     min-height: 100%;
-}
-
-body {
-    margin-bottom: 80px;
-    /* hack ignored by non-IE to enable ie to support :hover on button */
-    behavior:url("/main/css/csshover3.htc");
-    background-color: #fff;
 }
 
 footer {

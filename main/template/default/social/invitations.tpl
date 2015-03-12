@@ -8,22 +8,8 @@
             {{ social_menu_block }}
         </div>
     </div>
-    <div id="wallMessages" class="col-md-5" style="min-height:1px">
-        <div class="row">
-            <div class="col-md-12">
-                <div id="message_ajax_reponse" class=""></div>
-            </div>
-        </div>
-        <div class="row">
-            {{ social_right_content}}
-        </div>
-        <div id="display_response_id" class="span5"></div>
-        {{ socialAutoExtendLink }}
-    </div>
-    <div class="col-md-4">
-        <div class="row">
-            {{ socialRightInformation}}
-        </div>
+    <div class="col-md-9">
+        {{ social_invitations_block }}
     </div>
 </div>
 {% endblock %}

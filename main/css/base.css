@@ -5406,3 +5406,10 @@ i.size-32.icon-new-work{
   vertical-align: bottom;
   margin-right: 5px;
 }
+/* START LECCION */
+#learning_path_breadcrumb_zone .buttom-home{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+}
+/* END LECCION */

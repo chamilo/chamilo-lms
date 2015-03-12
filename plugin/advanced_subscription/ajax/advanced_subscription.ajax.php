@@ -208,6 +208,8 @@ if ($verified) {
                         $result['errorMessage'] = 'User can not be subscribed';
                     }
                     $result['pass'] = false;
+                    $url = $plugin->getTermsUrl($data, ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL);
+                    Header::location($url);
                 }
             }
 

@@ -1195,17 +1195,32 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getTermsUrl($params, $mode = ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/terms_and_conditions.php?' .
-            'a=' . Security::remove_XSS($params['action']) . '&' .
-            's=' . intval($params['sessionId']) . '&' .
-            'current_user_id=' . intval($params['currentUserId']) . '&' .
-            'e=' . intval($params['newStatus']) . '&' .
-            'u=' . intval($params['studentUserId']) . '&' .
-            'q=' . intval($params['queueId']) . '&' .
-            'is_connected=' . 1 . '&' .
-            'profile_completed=' . intval($params['profile_completed']) . '&' .
-            'r=' . intval($mode) . '&' .
-            'v=' . $this->generateHash($params);
+        $urlParams = array(
+            'a' => Security::remove_XSS($params['action']),
+            's' => intval($params['sessionId']),
+            'current_user_id' => intval($params['currentUserId']),
+            'e' => intval($params['newStatus']),
+            'u' => intval($params['studentUserId']),
+            'q' => intval($params['queueId']),
+            'is_connected' => 1,
+            'profile_completed' => intval($params['profile_completed']),
+            'v' => $this->generateHash($params)
+        );
+
+        switch ($mode) {
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP:
+                // no break
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL:
+                $urlParams['r'] = 0;
+                break;
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT:
+                $urlParams['r'] = 1;
+                break;
+        }
+
+        $url = api_get_path(WEB_PLUGIN_PATH) . "advanced_subscription/src/terms_and_conditions.php?";
+        $url .= http_build_query($urlParams);
+
         // Launch popup
         if ($mode == ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP) {
             $url = 'javascript:void(window.open(\'' . $url .'\',\'AdvancedSubscriptionTerms\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=700px,height=600px\', \'100\' ))';

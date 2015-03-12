@@ -99,8 +99,8 @@ if (isset($lp_item->audio) && !empty($lp_item->audio)) {
 }
 
 $page = $_SESSION['oLP']->build_action_menu(true);
-$page .= '<div class="row-fluid" style="overflow:hidden">';
-$page .= '<div id="lp_sidebar" class="span4">';
+$page .= '<div class="row" style="overflow:hidden">';
+$page .= '<div id="lp_sidebar" class="col-md-4">';
 $page .= $_SESSION['oLP']->return_new_tree(null, true);
 
 // Show the template list.
@@ -108,7 +108,7 @@ $page .= '</div>';
 
 $recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
 
-$page .= '<div id="doc_form" class="span8">';
+$page .= '<div id="doc_form" class="col-md-8">';
 
 $tpl = new Template(null);
 $tpl->assign('unique_file_id', api_get_unique_id());

@@ -83,7 +83,7 @@ class Display
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
-            self::$global_template->set_css_files();
+            self::$global_template->set_css_custom_files();
             self::$global_template->set_js_files();
         }
         if (!empty($page_header)) {
@@ -1891,15 +1891,14 @@ class Display
      */
     public static function group_button($title, $elements)
     {
-        $html = '<div class="btn-toolbar">
-            <div class="btn-group">
-            <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>
+        $html = '<div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'.$title.'  <span class="caret"></span></button>
             <ul class="dropdown-menu">';
         foreach ($elements as $item) {
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
         $html .= '</ul>
-            </div> </div>';
+            </div>';
         return $html;
     }
 

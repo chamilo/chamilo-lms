@@ -4,6 +4,11 @@
     <script>
         (function () {
             var designer = null;
+            $(document).on('ready',function(){
+                $('.help-badges').tooltip();
+                $('.help-badges-img').tooltip();
+            }
+            );
 
             $(document).on('ready', function () {
                 $('#btn-open-designer').on('click', function (e) {
@@ -39,69 +44,81 @@
             });
         })();
     </script>
-    <div class="span12">
-        <h1 class="page-header">{{ 'Badges' | get_lang }}</h1>
-        <ul class="nav nav-tabs">
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerDetails' | get_lang }}</a>
-            </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Skills' | get_lang }}</a>
-            </li>
-            <li class="active">
-                <a href="#">{{ 'Edit' | get_lang }}</a>
-            </li>
-        </ul>
+    <div class="col-md-12">
+
+        <div class="openbadges-tabs">
+            <ul class="nav nav-tabs">
+                <li>
+                    <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+                </li>
+                <li>
+                    <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'BadgePreview' | get_lang }}</a>
+                </li>
+                <li class="active">
+                    <a href="#">{{ 'Edit' | get_lang }}</a>
+                </li>
+            </ul>
+        </div>
+
         <div class="tab-content">
             <div class="tab-pane active">
+                <div class="openbadges-introduction">
                 <div class="row">
-                    <div class="span3">
-                        <p>{{ 'DesignANewBadgeComment' | get_lang }}</p>
-                        <p>
-                            <button id="btn-open-designer" class="btn btn-info btn-large btn-block" type="button">{{ 'DesignNewBadge' | get_lang }}</button>
-                        </p>
-                        <hr>
-                        <div class="well well-small {{ skill.icon ? '' : 'hide' }}" id="badge-container">
-                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
+                    <div class="col-md-12">
+                        <div class="block-edit">
+                            <div class="block-title">{{ 'SkillInfo' | get_lang }}</div>
                         </div>
                     </div>
-                    <div class="span9">
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
                         <form action="{{ _p.web_self_query_vars }}" class="form-horizontal" method="post" enctype="multipart/form-data">
                             <fieldset>
-                                <legend>{{ 'SkillInfo' | get_lang }}</legend>
-                                <div class="control-group">
-                                    <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>
-                                    <div class="controls">
-                                        <input type="text" name="name" id="name" class="input-xxlarge" value="{{ skill.name }}">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="name">{{ 'Name' | get_lang }}</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="name" id="name" class="form-control" value="{{ skill.name }}">
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="name">{{ 'Description' | get_lang }}</label>
-                                    <div class="controls">
-                                        <textarea name="description" id="description" class="input-xxlarge" rows="4">{{ skill.description }}</textarea>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="name">{{ 'Description' | get_lang }}</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="description" id="description" class="form-control" rows="4">{{ skill.description }}</textarea>
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="image">{{ 'Image' | get_lang }}</label>
-                                    <div class="controls">
-                                        <input type="file" name="image" id="image" class="input-xxlarge" accept="image/*">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="image">{{ 'Image' | get_lang }}</label>
+                                    <div class="col-sm-10">
+                                        <input data-placement="left" data-toggle="tooltip" title="{{ 'Medidas de la insignia 200 x 200 pixeles en formato PNG' | get_lang }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="criteria">{{ 'CriteriaToEarnTheBadge' | get_lang }}</label>
-                                    <div class="controls">
-                                        <textarea name="criteria" id="criteria" class="input-xxlarge" rows="10">{{ skill.criteria }}</textarea>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="criteria">{{ 'CriteriaToEarnTheBadge' | get_lang }}</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="criteria" id="criteria" class="form-control" rows="10">{{ skill.criteria }}</textarea>
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">{{ 'Create'| get_lang }}</button>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-primary btn-large"><i class="fa fa-floppy-o"></i> {{ 'Guardar Insignia'| get_lang }}</button>
+                                </div>
                             </div>
                         </form>
                     </div>
+                    <div class="col-md-3">
+                        <div class="create-openbadges">
+                            <button id="btn-open-designer" class="help-badges btn btn-primary btn-large btn-block" data-toggle="tooltip" data-placement="bottom" title="{{ 'DesignANewBadgeComment' | get_lang }}" type="button">
+                                <i class="fa fa-plus"></i> {{ 'DesignNewBadge' | get_lang }}
+                            </button>
+                        </div>
+                        <p class="openbadges-text">{{'OpenBadgeImagePreview' | get_lang }}</p>
+                        <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
+                            <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

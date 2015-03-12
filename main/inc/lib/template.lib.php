@@ -460,9 +460,11 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files
+     * Set theme, include mainstream CSS files
+     * @return void
+     * @see setCssCustomFiles() for additional CSS sheets
      */
-    public function set_css_files()
+    public function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
@@ -489,19 +491,43 @@ class Template
         }
 
         // Base CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'bootstrap.css');
 
         //Extra CSS files
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
 
+        $css[] = api_get_path(WEB_CSS_PATH) . 'font-awesome.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/mediaelement/mediaelementplayer.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/daterangepicker-bs3.css';
+
         //THEME CSS STYLE
-       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-       // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+
+        $css_file_to_string = null;
+        foreach ($css as $file) {
+            $css_file_to_string .= api_get_css($file);
+        }
+
+        if (!$disable_js_and_css_files) {
+            $this->assign('css_static_file_to_string', $css_file_to_string);
+        }
+    }
+    /**
+     * Prepare custom CSS to be added at the very end of the <head> section
+     * @return void
+     * @see setCssFiles() for the mainstream CSS files
+     */
+    public function setCssCustomFiles()
+    {
+        global $disable_js_and_css_files;
+        // Base CSS
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
@@ -540,9 +566,13 @@ class Template
         }
 
         if (!$disable_js_and_css_files) {
-            $this->assign('css_file_to_string', $css_file_to_string);
+            $this->assign('css_custom_file_to_string', $css_file_to_string);
 
-            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'), 'print');
+            $style_print = '';
+            if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
+                $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'),
+                    'print');
+            }
             $this->assign('css_style_print', $style_print);
         }
 
@@ -709,8 +739,9 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $this->set_css_files();
+        $css = $this->setCssFiles();
         $this->set_js_files();
+        $this->setCssCustomFiles($css);
         //$this->set_js_files_post();
 
         $browser = api_browser_support('check_browser');

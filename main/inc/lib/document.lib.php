@@ -5775,7 +5775,7 @@ class DocumentManager
         $form->addElement('hidden', 'id', intval($dirId));
         $form->addElement('header', '', get_lang('CreateDir'));
         $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
-        $form->addElement('style_submit_button', 'submit', get_lang('CreateFolder'), 'class="add"');
+        $form->addElement('style_submit_button', 'submit','<i class="fa fa-folder-open"></i> '. get_lang('CreateFolder'), 'class="btn-primary"');
         $new_folder_text = $form->return_form();
         return $new_folder_text;
     }

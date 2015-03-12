@@ -11,12 +11,12 @@
 
     {#  Plugin top  #}
     {% if plugin_content_top %}
-        <div id="plugin_content_top" class="col-md-12">
+        <div id="plugin_content_top" class="col-md-12 movil">
             {{ plugin_content_top }}
         </div>
     {% endif %}
 
-    <div class="col-md-12">
+    <div class="col-xs-12 col-md-12">
         {% include template ~ "/layout/page_body.tpl" %}
         {% block content %}
             {% if content is not null %}

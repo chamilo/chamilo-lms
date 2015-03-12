@@ -66,15 +66,17 @@ class BlockTeacher extends Block
 		$teacher_content_html = $this->get_teachers_content_html_for_drh();
 
 		$html = '
-                <li class="widget color-blue" id="intro">
-                    <div class="widget-head">
-                        <h3>'.get_lang('TeachersInformationsList').'</h3>
-                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+                <div class="panel panel-default" id="intro">
+                    <div class="panel-heading">
+                        '.get_lang('TeachersInformationsList').'
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <i class="fa fa-times"></i>
+                        </a></div>
                     </div>
-                    <div class="widget-content">
+                    <div class="panel-body">
                         '.$teacher_content_html.'
                     </div>
-                </li>
+                </div>
 				';
 
     	$data['column'] = $column;
@@ -91,8 +93,8 @@ class BlockTeacher extends Block
     public function get_teachers_content_html_for_platform_admin()
     {
 	 	$teachers = $this->teachers;
-		$content = '<div style="margin:10px;">';
-		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
+		//$content = '<div style="margin:10px;">';
+		$content = '<h4>'.get_lang('YourTeachers').'</h4>';
 
         $teachers_table = null;
 		if (count($teachers) > 0) {
@@ -140,7 +142,7 @@ class BlockTeacher extends Block
 			<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
 		}
 
-		$content .= '</div>';
+		//$content .= '</div>';
 
  		return $content;
 	}
@@ -148,8 +150,8 @@ class BlockTeacher extends Block
 	public function get_teachers_content_html_for_drh()
     {
   		$teachers = $this->teachers;
- 		$content = '<div style="margin:10px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
+ 		//$content = '<div style="margin:10px;">';
+ 		$content = '<h4>'.get_lang('YourTeachers').'</h4>';
         $teachers_table = null;
  		if (count($teachers) > 0) {
  			$a_last_week = get_last_week();
@@ -191,7 +193,7 @@ class BlockTeacher extends Block
  		if (count($teachers) > 0) {
 			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
 		}
-		$content .= '</div>';
+		//$content .= '</div>';
 
   		return $content;
   	}

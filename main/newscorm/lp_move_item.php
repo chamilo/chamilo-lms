@@ -159,12 +159,12 @@ function confirmation(name)
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid">';
-echo '<div class="span3">';
+echo '<div class="row">';
+echo '<div class="col-md-3">';
     echo $_SESSION['oLP']->return_new_tree();
 echo '</div>';
 
-echo '<div class="span9">';
+echo '<div class="col-md-9">';
 
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';

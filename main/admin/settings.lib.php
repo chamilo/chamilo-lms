@@ -92,13 +92,13 @@ function handle_regions()
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
+    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
 function handle_extensions()
 {
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
-    echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';
+    echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
 
 }
 /**
@@ -175,12 +175,12 @@ function handle_plugins()
 
             echo '<div class="btn-group">';
             if (in_array($plugin, $installed_plugins)) {
-                echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn'));
-                echo Display::url(get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn'));
+                echo Display::url('<i class="fa fa-cogs"></i> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
+                echo Display::url('<i class="fa fa-th-large"></i> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                echo Display::url("readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn ajax', '_target' => '_blank'));
+                echo Display::url("<i class='fa fa-file-text-o'></i> readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn btn-default', '_target' => '_blank'));
             }
             echo '</div>';
             echo '</td></tr>';
@@ -189,7 +189,7 @@ function handle_plugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
+    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -368,10 +368,7 @@ function handle_stylesheets()
                 $( "#tabs" ).tabs();
             });
             </script>';
-            echo Display::tabs(
-                array(get_lang('Update'), get_lang('UploadNewStylesheet')),
-                array($form_change->return_form(), $form->return_form())
-            );
+            echo Display::tabs(array(get_lang('Update'), get_lang('UploadNewStylesheet')), array($form_change->return_form(), $form->return_form()));
         } else {
             $form_change->display();
         }
@@ -946,7 +943,7 @@ function add_edit_template() {
         $form->setDefaults($defaults);
     }
     // Setting the form elements: the submit button.
-    $form->addButtonSave(get_lang('Ok'));
+    $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 
     // Setting the rules: the required fields.
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -1138,9 +1135,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
     $i = 0;
     foreach ($settings as $row) {
-        if (in_array($row['variable'], array_keys($settings_to_avoid))) {
-            continue;
-        }
+        if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
@@ -1356,6 +1351,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
         $form->setDefaults($default_values);
     }
     $form->addButtonSave(get_lang('SaveSettings'));
+    //$form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
     return $form;
 }
 

@@ -25,7 +25,6 @@
 		{% endif %}
         {% endblock %}
 
-
 		{# User picture #}
 
         {{ user_image_block }}
@@ -40,6 +39,8 @@
         {# Course block - teacher #}
 		{{ teacher_block }}
 
+        {# Skills #}
+        {{ skills_block }}
 
 		{# Notice #}
 		{{ notice_block }}
@@ -50,6 +51,7 @@
 		{# Links that are not added in the tabs #}
 		{{ navigation_course_links }}
 
+
 		{# Reservation block  #}
 		{{ reservation_block }}
 
@@ -59,8 +61,7 @@
 		{# Classes #}
 		{{ classes_block }}
 
-		{# Skills #}
-		{{ skills_block }}
+
 
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}

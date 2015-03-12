@@ -117,8 +117,8 @@ function confirmation(name) {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid">';
-echo '<div class="span3">';
+echo '<div class="row">';
+echo '<div class="col-md-3">';
 
 $path_item = isset($_GET['path_item']) ? $_GET['path_item'] : 0;
 $path_item = Database::escape_string($path_item);
@@ -139,7 +139,7 @@ if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
 }
 
 echo '</div>';
-echo '<div class="span9">';
+echo '<div class="col-md-9">';
 
 if (isset($is_success) && $is_success === true) {
     $msg = '<div class="lp_message" style="margin-bottom:10px;">';

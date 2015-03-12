@@ -29,8 +29,8 @@
 {% if order_user_list is not null %}
     {% for count, user_list in order_user_list %}
         <div class="page-items-profile">
-            <div class="row-fluid">
-                <div class="span12">
+            <div class="row">
+                <div class="col-md-12">
                     <h4 class="title-skill">
                         {% if count == total_search_skills %}
                             {{ "CompleteMatch"|get_lang }}
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row">
                 {% for user in user_list %}
                     <div class="block-items">
                         <div class="border-items">

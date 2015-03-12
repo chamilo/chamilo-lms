@@ -44,6 +44,15 @@ $(document).ready(function() {
         showTemplates();
     });
 });
+
+function setFocus() {
+   $("#document_title").focus();
+}
+
+$(window).load(function () {
+	setFocus();
+});
+
 </script>';
 
 //I'm in the certification module?
@@ -579,7 +588,7 @@ if ($form->validate()) {
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
 	}
     // HTML-editor
-    echo '<div class="row-fluid" style="overflow:hidden">
+    echo '<div class="row" style="overflow:hidden">
             <div id="template_col" class="col-md-3" style="width:200px">
                 <div id="frmModel" ></div>
             </div>

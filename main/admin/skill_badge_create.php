@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $skillThumbPath = sprintf("%s%s%s-small.png", $sysDataPath, $fileDir, $fileName);
 
             $skillImageThumb = new Image($skillImagePath);
-            $skillImageThumb->resize(ICON_SIZE_SMALL, ICON_SIZE_SMALL);
+            $skillImageThumb->resize(ICON_SIZE_BIG, ICON_SIZE_BIG);
             $skillImageThumb->send_image($skillThumbPath);
 
             $params['icon'] = sprintf("%s%s.png", $fileDir, $fileName);

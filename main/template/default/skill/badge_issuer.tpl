@@ -1,17 +1,23 @@
 {% extends "default/layout/main.tpl" %}
 
 {% block body %}
+
+
+
+
+
+
     <div class="span12">
-        <h1 class="page-header">{{ 'Badges' | get_lang }}</h1>
+        
         <ul class="nav nav-tabs">
             <li>
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
-            <li class="active">
-                <a href="{{ _p.web_main }}admin/skill_badge_issuer.php">{{ 'IssuerDetails' | get_lang }}</a>
+            <li >
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'IssuerDetails' | get_lang }}</a>
             </li>
-            <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Skills' | get_lang }}</a>
+            <li class="active">
+                <a href="{{ _p.web_main }}admin/skill_badge_help.php">{{ 'Skills' | get_lang }}</a>
             </li>
         </ul>
         <div class="tab-content">

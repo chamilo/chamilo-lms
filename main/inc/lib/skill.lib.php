@@ -500,20 +500,10 @@ class Skill extends Model
                 $row['level']       = count($a) - 1;
                 $row['gradebooks']  = self::get_gradebooks_by_skill($row['id']);
                 $skills[$row['id']] = $row;
+
+
             }
         }
-
-        /*
-        if ($load_user_data && $user_id) {
-            $passed_skills = $this->get_user_skills($user_id);
-            foreach ($skills as &$skill) {
-                $skill['done_by_user'] = 0;
-                if (in_array($skill['id'], $passed_skills)) {
-                    $skill['done_by_user'] = 1;
-                }
-            }
-        }*/
-
 
         //Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {
@@ -740,6 +730,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
+
         $clean_skill = array();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
@@ -752,7 +743,6 @@ class Skill extends Model
                             sha1($skill['name'])
                         );
                     }
-
                     $clean_skill[$skill['id']] = array_merge(
                         $skill,
                         array(

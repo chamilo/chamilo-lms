@@ -136,11 +136,11 @@ if (is_object($_SESSION['oLP'])) {
     switch ($mode) {
         case 'fullpage':
             echo $_SESSION['oLP']->build_action_menu();
-            echo '<div class="row-fluid">';
-            echo '<div class="span3">';
+            echo '<div class="row">';
+            echo '<div class="col-md-3">';
             echo $_SESSION['oLP']->return_new_tree();
             echo '</div>';
-            echo '<div class="span9">';
+            echo '<div class="col-md-9">';
                 echo $_SESSION['oLP']->display_item($id);
             echo '</div>';
             echo '</div>';

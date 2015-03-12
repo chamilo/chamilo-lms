@@ -208,8 +208,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
+        $yearlyCostLimit = $plugin->get('yearly_cost_limit');
         $uitMax = $plugin->get('yearly_cost_unit_converter');
-        $uitMax *= $plugin->get('yearly_cost_limit');
+        $uitMax *= $yearlyCostLimit;
         $uitUser = 0;
         $now = new DateTime(api_get_utc_datetime());
         $newYearDate = $plugin->get('course_session_credit_year_start_date');
@@ -261,7 +262,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if ($uitMax <= $uitUser) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),
-                $uitMax
+                $yearlyCostLimit
             );
 
             $this->errorMessages[] = $errorMessage;

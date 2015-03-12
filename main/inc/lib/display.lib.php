@@ -1986,4 +1986,39 @@ class Display
     {
         Session::erase('flash_messages');
     }
+
+    /**
+     * Get the profile edition link for a user
+     * @param int $userId The user id
+     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * @return string The link
+     */
+    public static function getProfileEditionLink($userId, $asAdmin = false)
+    {
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+        if ($asAdmin) {
+            $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=" . intval($userId);
+        }
+
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL($userId, $asAdmin);
+        }
+
+        return $editProfileUrl;
+    }
+
 }

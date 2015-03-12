@@ -108,16 +108,15 @@ if (isset($_REQUEST['action'])) {
 }
 
 $social_right_content = '';
-$user_info    = UserManager::get_user_info_by_id($user_id);
+$userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Avatar
     $social_avatar_block = '<div class="panel panel-info social-avatar">';
     $social_avatar_block .= SocialManager::show_social_avatar_block('messages');
-    $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
-    $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
-    /* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$user_info['username'].'</div>'; */
-    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
-    $chat_status = $user_info['extra'];
+    $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
+    $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
+    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
+    $chat_status = $userInfo['extra'];
     if(!empty($chat_status['user_chat_status'])){
         $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
     }else{

@@ -460,9 +460,11 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files
+     * Set theme, include mainstream CSS files
+     * @return void
+     * @see setCssCustomFiles() for additional CSS sheets
      */
-    public function set_css_static_files()
+    public function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
@@ -501,9 +503,11 @@ class Template
         }
     }
     /**
-     * Set theme, include CSS files
+     * Prepare custom CSS to be added at the very end of the <head> section
+     * @return void
+     * @see setCssFiles() for the mainstream CSS files
      */
-    public function set_css_custom_files()
+    public function setCssCustomFiles()
     {
         global $disable_js_and_css_files;
         // Base CSS
@@ -706,9 +710,9 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $css = $this->set_css_static_files();
+        $css = $this->setCssFiles();
         $this->set_js_files();
-        $this->set_css_custom_files($css);
+        $this->setCssCustomFiles($css);
         //$this->set_js_files_post();
 
         $browser = api_browser_support('check_browser');

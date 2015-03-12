@@ -42,10 +42,18 @@ searchdb/*
 *.orig
 nbproject/*
 
+# Plugins config files
 plugin/bbb/config.vm.php
 
+# Cron temp files
 main/cron/incoming/*
+
+# Stuff updated through composer
+composer.lock
 vendor
+web/assets/*
+
+# Data directory (new directory for archive/)
 data/*
 !data/index.html
 data/badges/*

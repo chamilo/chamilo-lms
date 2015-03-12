@@ -460,9 +460,11 @@ class Template
     }
 
     /**
-     * Set theme, include CSS files
+     * Set theme, include mainstream CSS files
+     * @return void
+     * @see setCssCustomFiles() for additional CSS sheets
      */
-    public function set_css_static_files()
+    public function setCssFiles()
     {
         global $disable_js_and_css_files;
         $css = array();
@@ -474,6 +476,21 @@ class Template
         }
 
         // Default CSS Bootstrap
+
+        $bowerCSSFiles = [
+            'bootstrap/dist/css/bootstrap.min.css',
+            'bootstrap-daterangepicker/daterangepicker-bs3.css',
+            'fontawesome/css/font-awesome.min.css',
+            'jquery-ui/themes/smoothness/jquery-ui.min.css',
+            'jquery-ui/themes/smoothness/theme.css',
+            'mediaelement/build/mediaelementplayer.min.css',
+        ];
+
+        foreach ($bowerCSSFiles as $file) {
+            $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
+        }
+
+        // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'bootstrap.css');
 
         //Extra CSS files
@@ -501,9 +518,11 @@ class Template
         }
     }
     /**
-     * Set theme, include CSS files
+     * Prepare custom CSS to be added at the very end of the <head> section
+     * @return void
+     * @see setCssFiles() for the mainstream CSS files
      */
-    public function set_css_custom_files()
+    public function setCssCustomFiles()
     {
         global $disable_js_and_css_files;
         // Base CSS
@@ -572,14 +591,12 @@ class Template
 
         //JS files
         $js_files = array(
-            'modernizr.js',
-            'jquery.min.js',
-            'fullcalendar/lib/moment.min.js',
-            'daterange/daterangepicker.js',
+            //'jquery.min.js',
+            //'fullcalendar/lib/moment.min.js',
+            //'daterange/daterangepicker.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
-            'bootstrap/bootstrap.js',
-            'mediaelement/mediaelement-and-player.min.js'
+            //'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {
@@ -599,13 +616,29 @@ class Template
 
         $js_file_to_string = null;
 
-        foreach ($js_files as $js_file) {
-            $js_file_to_string .= api_get_js($js_file);
-        }
-        // @todo fix this path
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'vendor/ckeditor/ckeditor/ckeditor.js"></script>';
 
-        //Loading email_editor js
+        $bowerJsFiles = [
+            'modernizr/modernizr.js',
+            'jquery/dist/jquery.min.js',
+            'jquery-ui/jquery-ui.min.js',
+            'bootstrap/dist/js/bootstrap.min.js',
+            'ckeditor/ckeditor.js',
+            'bootstrap-daterangepicker/daterangepicker.js',
+            'jquery-timeago/jquery.timeago.js',
+            'moment/min/moment-with-locales.min.js',
+            'mediaelement/build/mediaelement-and-player.min.js'
+        ];
+
+        foreach ($bowerJsFiles as $file) {
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>';
+        }
+
+        foreach ($js_files as $file) {
+            $js_file_to_string .= api_get_js($file);
+        }
+
+
+        // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
             $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
         }
@@ -706,9 +739,9 @@ class Template
         $this->assign('title_string', $title_string);
 
         //Setting the theme and CSS files
-        $css = $this->set_css_static_files();
+        $css = $this->setCssFiles();
         $this->set_js_files();
-        $this->set_css_custom_files($css);
+        $this->setCssCustomFiles($css);
         //$this->set_js_files_post();
 
         $browser = api_browser_support('check_browser');

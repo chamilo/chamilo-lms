@@ -477,7 +477,7 @@ if ($owner_id == api_get_user_id() ||
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 
-	$form->addElement('textarea', 'comment', get_lang('Comment'), 'rows="3" style="width:300px;"');
+	$form->addElement('textarea', 'comment', get_lang('Comment'));
 
 	if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
 		$checked =& $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));

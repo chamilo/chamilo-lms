@@ -37,7 +37,7 @@
 
 {% if show_header == true %}
 
-<div id="page" class="container"><!-- page section -->
+<div id="page-wrap"><!-- page section -->
     {# Bug and help notifications #}
     {% block help_notifications %}
     <ul id="navigation" class="notification-panel">
@@ -51,7 +51,7 @@
     {% include template ~ "/layout/topbar.tpl" %}
     {% endblock %}
         <header>
-            <div id="main" class="container">
+            <section id="main" class="container">
                 {% if plugin_header_main %}
                 <div class="row">
                     <div class="col-lg-12">
@@ -94,21 +94,23 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            <section id="menu-bar">
+                {# menu #}
+                {% block menu %}
+                {% include template ~ "/layout/menu.tpl" %}
+                {% endblock %}
+            </section>
+            <section id="breadcrumb-bar">
+                <div class="container">
+                    {# breadcrumb #}
+                    {% block breadcrumb %}
+                    {{ breadcrumb }}
+                    {% endblock %}
+                </div>
+            </section>
         </header>
-        <section id="menu-bar">
-            {# menu #}
-            {% block menu %}
-            {% include template ~ "/layout/menu.tpl" %}
-            {% endblock %}
-        </section>
-        <section id="breadcrumb-bar">
-            {# breadcrumb #}
-            {% block breadcrumb %}
-            {{ breadcrumb }}
-            {% endblock %}
-        </section>
-    <div id="top_main_content">
+    <div id="top_main_content" class="container">
     {# course navigation links/shortcuts need to be activated by the admin #}
     {% include template ~ "/layout/course_navigation.tpl" %}
 {% endif %}

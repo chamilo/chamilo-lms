@@ -849,10 +849,11 @@ class survey_manager
         $tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
-        if (empty($course_id))
-        {
+        if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
+
+        $return = array();
 
         // Getting the information of the question
         $sql = "SELECT * FROM $tbl_survey_question
@@ -872,7 +873,6 @@ class survey_manager
         $sql = "SELECT * FROM $table_survey_question_option
 		        WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'";
         $result = Database::query($sql);
-        $return = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['answers'][] = $row['option_text'];
         }
@@ -2640,8 +2640,9 @@ class SurveyUtil
         $temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
 
         // Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
-        $my_temp_questions_data = ($temp_questions_data==null) ? array() : $temp_questions_data;
+        $my_temp_questions_data = $temp_questions_data == null ? array() : $temp_questions_data;
         $questions_data = array();
+
         foreach ($my_temp_questions_data as $key => & $value) {
             if ($value['type'] != 'comment' && $value['type'] != 'pagebreak') {
                 $questions_data[$value['sort']] = $value;

@@ -26,7 +26,7 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 
 $group_id = api_get_group_id();
 $user_id = api_get_user_id();
-$current_group = GroupManager :: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 
 if (empty($current_group)) {
     api_not_allowed(true);
@@ -40,7 +40,7 @@ $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 
 $forums_of_groups = get_forums_of_group($current_group['id']);
 
-$forum_state_public = 0;
+/*$forum_state_public = 0;
 if (is_array($forums_of_groups)) {
     foreach ($forums_of_groups as $key => $value) {
         if ($value['forum_group_public_private'] == 'public') {
@@ -57,18 +57,21 @@ if ($current_group['doc_state'] != 1 &&
     $current_group['chat_state'] != 1 &&
     $forum_state_public != 1
 ) {
-    if (!api_is_allowed_to_edit(null, true) &&
-        !GroupManager::is_user_in_group($user_id, $group_id)) {
-        api_not_allowed($print_headers);
-    }
+
+}*/
+
+if (!api_is_allowed_to_edit(null, true) &&
+    (!GroupManager::is_user_in_group($user_id, $group_id) ||
+        $current_group['status']  == 0
+    )
+) {
+    api_not_allowed(true);
 }
 
 /*	Header */
-
 Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
 
 /*	Introduction section (editable by course admin) */
-
 Display::display_introduction_section(TOOL_GROUP);
 
 /*	Actions and Action links */
@@ -226,8 +229,11 @@ if (api_is_allowed_to_edit(false, true) OR
         // Link to the chat area of this group
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = array(
-                'url' => "javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \"",
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), array(), 32)
+                'url' => "javascript: void(0);",
+                'content' => Display::return_icon('chat.png', get_lang('Chat'), array(), 32),
+                'url_attributes' => array(
+                    'onclick' => " window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')"
+                )
             );
         } else {
             $actions_array[] = array(

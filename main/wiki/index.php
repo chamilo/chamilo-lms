@@ -67,6 +67,7 @@ $tool_name = get_lang('ToolWiki');
 /* ACCESS */
 api_protect_course_script();
 api_block_anonymous_users();
+api_protect_course_group(GroupManager::GROUP_TOOL_WIKI);
 
 /* TRACKING */
 Event::event_access_tool(TOOL_WIKI);

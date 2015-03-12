@@ -832,41 +832,46 @@ class Display
 
     /**
      * Creates a URL anchor
+     * @param string $name
+     * @param string $url
+     * @param array $attributes
+     *
+     * @return string
      */
-    public static function url($name, $url, $extra_attributes = array())
+    public static function url($name, $url, $attributes = array())
     {
         if (!empty($url)) {
             $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-            $extra_attributes['href'] = $url;
+            $attributes['href'] = $url;
         }
-        return self::tag('a', $name, $extra_attributes);
+        return self::tag('a', $name, $attributes);
     }
 
     /**
      * Creates a div tag
      *
-     * @param $content
+     * @param string $content
      * @param array $extra_attributes
      * @return string
      */
-    public static function div($content, $extra_attributes = array())
+    public static function div($content, $attributes = array())
     {
-        return self::tag('div', $content, $extra_attributes);
+        return self::tag('div', $content, $attributes);
     }
 
     /**
      * Creates a span tag
      */
-    public static function span($content, $extra_attributes = array())
+    public static function span($content, $attributes = array())
     {
-        return self::tag('span', $content, $extra_attributes);
+        return self::tag('span', $content, $attributes);
     }
 
     /**
      * Displays an HTML input tag
      *
      */
-    public static function input($type, $name, $value, $extra_attributes = array())
+    public static function input($type, $name, $value, $attributes = array())
     {
          if (isset($type)) {
             $extra_attributes['type']= $type;
@@ -877,7 +882,7 @@ class Display
          if (isset($value)) {
             $extra_attributes['value']= $value;
         }
-        return self::tag('input', '', $extra_attributes);
+        return self::tag('input', '', $attributes);
     }
 
     /**
@@ -1828,7 +1833,8 @@ class Display
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";
-                $html .= self::url($value['content'], $value['url']);
+                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : array();
+                $html .= self::url($value['content'], $value['url'], $attributes);
                 $html .= '</li>';
             }
             $html .= '</ul></div>';

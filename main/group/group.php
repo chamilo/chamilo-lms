@@ -74,12 +74,16 @@ $my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
         case 'set_visible':
-            GroupManager::setVisible($my_get_id);
-            Display :: display_confirmation_message(get_lang('ItemUpdated'));
+            if (api_is_allowed_to_edit()) {
+                GroupManager::setVisible($my_get_id);
+                Display:: display_confirmation_message(get_lang('ItemUpdated'));
+            }
             break;
         case 'set_invisible':
-            GroupManager::setInvisible($my_get_id);
-            Display :: display_confirmation_message(get_lang('ItemUpdated'));
+            if (api_is_allowed_to_edit()) {
+                GroupManager::setInvisible($my_get_id);
+                Display:: display_confirmation_message(get_lang('ItemUpdated'));
+            }
             break;
         case 'self_reg':
             if (GroupManager::is_self_registration_allowed($userId, $my_group_id)) {

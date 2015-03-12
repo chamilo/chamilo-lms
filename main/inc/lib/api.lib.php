@@ -1230,7 +1230,6 @@ function api_block_anonymous_users($print_headers = true) {
 function api_get_navigator() {
     $navigator = 'Unknown';
     $version = 0;
-
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
@@ -1240,7 +1239,6 @@ function api_get_navigator() {
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
         $navigator = 'Chrome';
         list (, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
         $navigator = 'Mozilla';
         list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
@@ -7985,4 +7983,27 @@ function api_mail_html(
     // Clear all the addresses.
     $mail->ClearAddresses();
     return 1;
+}
+
+/**
+ * @param string $tool Possible values:
+ * GroupManager::GROUP_TOOL_*
+ *
+ */
+function api_protect_course_group($tool, $showHeader = true)
+{
+    $userId = api_get_user_id();
+    $groupId = api_get_group_id();
+
+    if (!empty($groupId)) {
+        $allow = GroupManager::user_has_access(
+            $userId,
+            $groupId,
+            $tool
+        );
+
+        if (!$allow) {
+            api_not_allowed($showHeader);
+        }
+    }
 }

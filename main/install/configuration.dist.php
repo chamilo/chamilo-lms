@@ -286,6 +286,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['exercise_max_ckeditors_in_page'] = 0;
 // Default upload option
 //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
+// Enable add_gradebook_certificates.php cron task
+//$_configuration['add_gradebook_certificates_cron_task_enabled'] = true;
 // Which OpenBadges backpack send the badges
 //$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
 // Custom name_order_conventions

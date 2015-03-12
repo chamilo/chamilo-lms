@@ -28,6 +28,7 @@ $data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['acc
 $data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
 // Init result array
 $result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
+$showJSON = true;
 // Check if data is valid or is for start subscription
 $verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';
 if ($verified) {
@@ -217,6 +218,21 @@ if ($verified) {
         case 'confirm':
             // Check if new status is set
             if (isset($data['newStatus'])) {
+                if ($data['newStatus'] === ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
+                    try {
+                        $isAllowToDoRequest = $plugin->isAllowedToDoRequest($data['studentUserId'], $data);
+                    } catch (Exception $ex) {
+                        $messageTemplate = new Template(null, false, false);
+                        $messageTemplate->assign(
+                            'content',
+                            Display::return_message($ex->getMessage(), 'error', false)
+                        );
+                        $messageTemplate->display_no_layout_template();
+                        $showJSON = false;
+                        break;
+                    }
+                }
+
                 // Update queue status
                 $res = $plugin->updateQueueStatus($data, $data['newStatus']);
                 if ($res === true) {
@@ -348,5 +364,7 @@ if ($verified) {
     }
 }
 
-// Echo result as json
-echo json_encode($result);
+if ($showJSON) {
+    // Echo result as json
+    echo json_encode($result);
+}

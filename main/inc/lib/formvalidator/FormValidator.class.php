@@ -364,7 +364,7 @@ EOT;
         if (empty($label))  {
             $label = get_lang('Search');
         }
-        return $this->addButton('submit', $label, 'search');
+        return $this->addButton('submit', $label, 'search', 'default');
     }
 
     /**

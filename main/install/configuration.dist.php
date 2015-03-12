@@ -278,6 +278,8 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['exercise_max_fckeditors_in_page'] = 0;
 // Default upload option
 //$_configuration['document_if_file_exists_option'] = 'rename'; // overwrite
+// Enable add_gradebook_certificates.php cron task
+//$_configuration['add_gradebook_certificates_cron_task_enabled'] = true;
 // Custom name_order_conventions
 //$_configuration['name_order_conventions'] = array(
 //  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')

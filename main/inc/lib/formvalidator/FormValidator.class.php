@@ -110,8 +110,9 @@ class FormValidator extends HTML_QuickForm
         //Set required field template
         HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
         $noteTemplate = <<<EOT
-	<div class="control-group">
-		<div class="controls">{requiredNote}</div>
+	<div class="form-group">
+	    <div class="col-sm-2"></div>
+		<div class="col-sm-10">{requiredNote}</div>
 	</div>
 EOT;
         $renderer->setRequiredNoteTemplate($noteTemplate);

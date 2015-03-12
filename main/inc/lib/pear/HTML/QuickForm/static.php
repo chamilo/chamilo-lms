@@ -30,7 +30,8 @@
  * @version     Release: 3.2.11
  * @since       2.7
  */
-class HTML_QuickForm_static extends HTML_QuickForm_element {
+class HTML_QuickForm_static extends HTML_QuickForm_element
+{
 
     // {{{ properties
 
@@ -54,7 +55,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
      */
     public function __construct($elementName = null, $elementLabel = null, $text = null, $attributes = null)
     {
-        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = false;
         $this->_type = 'static';
         $this->_text = $text;
@@ -128,7 +129,7 @@ class HTML_QuickForm_static extends HTML_QuickForm_element {
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         return $this->_getTabs() . $this->_text;
     } //end func toHtml

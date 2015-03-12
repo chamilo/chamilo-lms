@@ -44,7 +44,7 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function _construct($text = null)
+    public function __construct($text = null)
     {
         parent::__construct(null, null, $text);
         $this->_type = 'html';
@@ -57,13 +57,8 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function accept(&$renderer, $required = false, $error = null)
+    public function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderHtml($this);
-    }
-
-    function toHtml()
-    {
-         return parent::toHtml();
     }
 }

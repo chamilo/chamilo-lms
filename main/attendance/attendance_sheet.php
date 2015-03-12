@@ -109,11 +109,11 @@ if (api_is_allowed_to_edit(null, true) ||
         echo '<div class="actions">';
         echo '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
             Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
-        //if (count($users_in_course) > 0) {
-            $form->display();
-        //}
         echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
             Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
+        //if (count($users_in_course) > 0) {
+        $form->display();
+        //}
         echo '</div>';
     }
 
@@ -398,7 +398,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 <?php if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit(null, true)) {
                         ?>
-                        <button type="submit" class="save"><?php echo get_lang('Save') ?></button>
+                        <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
                     <?php }
                 }
                 ?>
@@ -417,8 +417,9 @@ if (api_is_allowed_to_edit(null, true) ||
             <table width="250px;">
                 <tr>
                     <td><?php echo get_lang('ToAttend').': ' ?></td>
-                    <td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>">
-                                <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center>
+                    <td>
+                        <center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>">
+                        <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center>
                     </td>
                 </tr>
             </table>
@@ -442,14 +443,14 @@ if (api_is_allowed_to_edit(null, true) ||
                 ?>
                 <tr class="<?php echo $class ?>">
                     <td>
-                        <?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?>
+                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.gif',get_lang('Presence')) : Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?>
                         <?php echo "&nbsp; ".$presence['date_time'] ?>
                     </td>
                 </tr>
             <?php }
         } else { ?>
             <tr><td>
-                    <center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td>
+                <center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td>
             </tr>
         <?php }
         ?>

@@ -180,7 +180,7 @@ if ($action == 'thematic_list') {
 
 					$edit_link = '';
 					if (api_is_allowed_to_edit(null, true)) {
-						$edit_link   = '<a class="thickbox" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'&display=no_header" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),ICON_SIZE_SMALL).'</a>';
+						$edit_link   = '<a class="ajax" href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'&display=no_header" >'.Display::return_icon('edit.png',get_lang('EditThematicAdvance'),array(),ICON_SIZE_SMALL).'</a>';
 						$edit_link  .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic['id'].'&thematic_advance_id='.$thematic_advance['id'].'">'.
                                         Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a></center>';
 
@@ -253,8 +253,8 @@ if ($action == 'thematic_list') {
 	}
 
 	$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
-	$form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+	$form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
+	$form->addButtonSave(get_lang('Save'));
 
     $show_form = true;
 

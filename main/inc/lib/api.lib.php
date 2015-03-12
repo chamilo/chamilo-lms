@@ -1230,7 +1230,6 @@ function api_block_anonymous_users($print_headers = true) {
 function api_get_navigator() {
     $navigator = 'Unknown';
     $version = 0;
-
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
         $navigator = 'Opera';
         list (, $version) = explode('Opera', $_SERVER['HTTP_USER_AGENT']);
@@ -1240,7 +1239,6 @@ function api_get_navigator() {
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false) {
         $navigator = 'Chrome';
         list (, $version) = explode('Chrome', $_SERVER['HTTP_USER_AGENT']);
-
     } elseif (strpos($_SERVER['HTTP_USER_AGENT'], 'Gecko') !== false) {
         $navigator = 'Mozilla';
         list (, $version) = explode('; rv:', $_SERVER['HTTP_USER_AGENT']);
@@ -6407,6 +6405,13 @@ function api_get_js($file) {
 }
 
 /**
+ * Returns the <script> HTML tag
+ */
+function api_get_asset($file) {
+    return '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+}
+
+/**
  * Returns the <link> HTML tag
  */
 function api_get_css($file, $media = 'screen') {
@@ -6417,8 +6422,18 @@ function api_get_css($file, $media = 'screen') {
  * Returns the js header to include the jquery library
  */
 function api_get_jquery_js() {
-    return api_get_js('jquery.min.js');
+    return api_get_asset('jquery/dist/jquery.min.js');
 }
+
+/**
+ * Returns the jquery path
+ * @return string
+ */
+function api_get_jquery_web_path() {
+    return api_get_path(WEB_PATH).'web/assets/jquery/dist/jquery.min.js';
+}
+
+
 
 /**
  * Returns the jquery-ui library js headers
@@ -6453,20 +6468,6 @@ function api_get_datepicker_js() {
 function api_get_jquery_libraries_js($libraries) {
     $js = '';
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
-    //jquery-ui js and css
-    if (in_array('jquery-ui', $libraries)) {
-        //Jquery ui
-        //$theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
-
-        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.css');
-        $js .= api_get_css($js_path.'jquery-ui/jquery-ui.theme.css');
-        $js .= api_get_js('jquery-ui/jquery-ui.min.js');
-    }
-
-    if (in_array('jquery-ui-i18n', $libraries)) {
-        //$js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-    }
 
     //jqgrid js and css
     if (in_array('jqgrid', $libraries)) {
@@ -7985,4 +7986,27 @@ function api_mail_html(
     // Clear all the addresses.
     $mail->ClearAddresses();
     return 1;
+}
+
+/**
+ * @param string $tool Possible values:
+ * GroupManager::GROUP_TOOL_*
+ *
+ */
+function api_protect_course_group($tool, $showHeader = true)
+{
+    $userId = api_get_user_id();
+    $groupId = api_get_group_id();
+
+    if (!empty($groupId)) {
+        $allow = GroupManager::user_has_access(
+            $userId,
+            $groupId,
+            $tool
+        );
+
+        if (!$allow) {
+            api_not_allowed($showHeader);
+        }
+    }
 }

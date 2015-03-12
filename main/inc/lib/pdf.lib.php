@@ -140,7 +140,12 @@ class PDF
 
         $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
         $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-        self::content_to_pdf($html, $css, $this->params['filename'], $this->params['course_code']);
+        self::content_to_pdf(
+            $html,
+            $css,
+            $this->params['filename'],
+            $this->params['course_code']
+        );
     }
 
     /**
@@ -439,8 +444,7 @@ class PDF
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
             $pdf_name = replace_dangerous_char($pdf_name);
-            // Save temporally into Archive folder
-            $output_file = api_get_path(SYS_ARCHIVE_PATH) . $pdf_name.'.pdf';
+            $output_file = $pdf_name.'.pdf';
         }
         $this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
         if ($outputMode == 'F') {

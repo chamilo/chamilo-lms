@@ -885,7 +885,7 @@ VALUES
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
 ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -3464,10 +3464,22 @@ CREATE TABLE track_e_attempt_coeff (
 );
 
 -- Course
+
 DROP TABLE IF EXISTS c_student_publication_rel_document;
-CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
 DROP TABLE IF EXISTS c_student_publication_rel_user;
-CREATE TABLE IF NOT EXISTS c_student_publication_rel_user ( id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
+CREATE TABLE IF NOT EXISTS c_student_publication_rel_user ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
 DROP TABLE IF EXISTS c_student_publication_comment;
 CREATE TABLE IF NOT EXISTS c_student_publication_comment ( id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
 
+DROP TABLE IF EXISTS c_attendance_calendar_rel_group;
+CREATE TABLE c_attendance_calendar_rel_group (
+  id int NOT NULL auto_increment PRIMARY KEY,
+  c_id INT NOT NULL,
+  group_id INT NOT NULL,
+  calendar_id INT NOT NULL
+);
+
+
+-- Version
+UPDATE settings_current SET selected_value = '1.10.0.21' WHERE variable = 'chamilo_database_version';

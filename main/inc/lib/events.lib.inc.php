@@ -146,6 +146,9 @@ class Event
      */
     public static function event_access_tool($tool, $id_session = 0)
     {
+        if (empty($tool)) {
+            return false;
+        }
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $TABLETRACK_LASTACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS); //for "what's new" notification
 

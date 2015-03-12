@@ -34,41 +34,41 @@
  */
 class HTML_QuickForm_button extends HTML_QuickForm_input
 {
+    private $icon;
+    private $style;
+    private $size;
+    private $class;
+
     /**
-     * @param string $elementName
-     * @param string $value
-     * @param string $icon
-     * @param string $style
-     * @param string $size
+     * @param string $name input name example 'submit'
+     * @param string $text button text to show
+     * @param string $icon icons based in font-awesome
+     * @param string $style i.e default|primary|success|info|warning|danger|link
+     * @param string $size large|default|small|extra-small
      * @param string $class
-     * @param array  $attributes
+     * @param array $attributes
      */
-    public function HTML_QuickForm_button(
-        $elementName = null,
-        $value = null,
+    public function __construct(
+        $name,
+        $text,
         $icon = 'check',
         $style = 'default',
         $size = 'default',
-        $class = 'btn',
+        $class = null,
         $attributes = array()
     ) {
-        $icon = !empty($icon) ? $icon : 'check';
-        $style = !empty($style) ? $style : 'default';
-        $size = !empty($size) ? $size : 'default';
-        $class = !empty($class) ? $class : 'btn';
+        $this->setIcon($icon);
+        $this->setStyle($style);
+        $this->setSize($size);
+        $this->setClass($class);
 
-        $attributes['icon'] = $icon;
-        $attributes['style'] = $style;
-        $attributes['size'] = $size;
-        $attributes['class'] = $class.' btn-'.$style.' btn-'.$size;
-
-        HTML_QuickForm_input::HTML_QuickForm_input(
-            $elementName,
+        parent::__construct(
+            $name,
             null,
             $attributes
         );
         $this->_persistantFreeze = false;
-        $this->setValue($value);
+        $this->setValue($text);
         $this->setType('submit');
     }
 
@@ -80,19 +80,110 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            $value = $this->_attributes['value'];
-            unset($this->_attributes['value']);
-            $icon = isset($this->_attributes['icon']) ? $this->_attributes['icon'] : 'check';
+            $value = null;
+            if (isset($this->_attributes['value'])) {
+                $value = $this->_attributes['value'];
+                unset($this->_attributes['value']);
+            }
 
-            unset($this->_attributes['icon']);
-            $icon = '<i class="fa fa-'.$icon.'"></i> ';
+            unset($this->_attributes['class']);
+
+            $icon = $this->getIcon();
+
+            if (!empty($icon)) {
+                $icon = '<i class="' . $this->getIcon() . '"></i> ';
+            }
+
+            $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
 
             return
                 $this->_getTabs() . '
-                <button' . $this->_getAttrString($this->_attributes) . ' />'.
-                $icon.$value.
+                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . ' />'.
+                $icon.
+                $value.
                 '</button>';
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param mixed $class
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param mixed $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = !empty($icon) ? 'fa fa-'.$icon : null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStyle()
+    {
+        return $this->style;
+    }
+
+    /**
+     * @param mixed $style
+     */
+    public function setStyle($style)
+    {
+        $style = !empty($style) ? 'btn btn-'.$style : null;
+        $this->style = $style;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param mixed $size
+     */
+    public function setSize($size)
+    {
+        switch ($size) {
+            case 'large':
+                $size = 'btn-lg';
+                break;
+            case 'small':
+                $size = 'btn-sm';
+                break;
+            case 'extra-small':
+                $size = 'btn-xs';
+                break;
+            case 'default':
+                $size = null;
+                break;
+        }
+
+        $size = !empty($size) ? $size : null;
+        $this->size = $size;
     }
 
     /**

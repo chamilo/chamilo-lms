@@ -128,7 +128,7 @@ class HTML_Table_Storage extends HTML_Common {
      */
     function HTML_Table_Storage($tabOffset = 0, $useTGroups = false)
     {
-        HTML_Common::HTML_Common(null, (int)$tabOffset);
+        parent::__construct(null, (int)$tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;
     }
 

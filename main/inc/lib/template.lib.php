@@ -332,7 +332,6 @@ class Template
      */
     public function set_header($status)
     {
-        $status = false;
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
@@ -475,7 +474,20 @@ class Template
         }
 
         // Default CSS Bootstrap
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap.css');
+
+        $bowerCSSFiles = [
+            'bootstrap/dist/css/bootstrap.min.css',
+            'bootstrap-daterangepicker/daterangepicker-bs3.css',
+            'fontawesome/css/font-awesome.min.css',
+            'jquery-ui/themes/smoothness/jquery-ui.min.css',
+            'jquery-ui/themes/smoothness/theme.css',
+            'mediaelement/build/mediaelementplayer.min.css',
+        ];
+
+        foreach ($bowerCSSFiles as $file) {
+            $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
+        }
+
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
@@ -486,10 +498,6 @@ class Template
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
-
-        $css[] = api_get_path(WEB_CSS_PATH).'font-awesome.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs3.css';
 
         //THEME CSS STYLE
        // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
@@ -553,14 +561,12 @@ class Template
 
         //JS files
         $js_files = array(
-            'modernizr.js',
-            'jquery.min.js',
-            'fullcalendar/lib/moment.min.js',
-            'daterange/daterangepicker.js',
+            //'jquery.min.js',
+            //'fullcalendar/lib/moment.min.js',
+            //'daterange/daterangepicker.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
-            'bootstrap/bootstrap.js',
-            'mediaelement/mediaelement-and-player.min.js'
+            //'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {
@@ -580,13 +586,29 @@ class Template
 
         $js_file_to_string = null;
 
-        foreach ($js_files as $js_file) {
-            $js_file_to_string .= api_get_js($js_file);
-        }
-        // @todo fix this path
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'vendor/ckeditor/ckeditor/ckeditor.js"></script>';
 
-        //Loading email_editor js
+        $bowerJsFiles = [
+            'modernizr/modernizr.js',
+            'jquery/dist/jquery.min.js',
+            'jquery-ui/jquery-ui.min.js',
+            'bootstrap/dist/js/bootstrap.min.js',
+            'ckeditor/ckeditor.js',
+            'bootstrap-daterangepicker/daterangepicker.js',
+            'jquery-timeago/jquery.timeago.js',
+            'moment/min/moment-with-locales.min.js',
+            'mediaelement/build/mediaelement-and-player.min.js'
+        ];
+
+        foreach ($bowerJsFiles as $file) {
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>';
+        }
+
+        foreach ($js_files as $file) {
+            $js_file_to_string .= api_get_js($file);
+        }
+
+
+        // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
             $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
         }

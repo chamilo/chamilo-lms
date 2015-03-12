@@ -46,7 +46,7 @@ class HTML_QuickForm_submit extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_submit($elementName=null, $value=null, $attributes=null)
+    public function __construct($elementName=null, $value=null, $attributes=null)
     {
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, null, $attributes);
         $this->setValue($value);

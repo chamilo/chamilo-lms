@@ -11,8 +11,6 @@
  *	@todo course admin functionality to create groups based on who is in which course (or class).
  */
 
-/*	INIT SECTION */
-
 // Name of the language file that needs to be included
 $language_file = 'group';
 
@@ -70,7 +68,7 @@ $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="span6">');
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+$form->addElement('textarea', 'description', get_lang('Description'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="span12">');
@@ -148,7 +146,7 @@ $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), a
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="span12">');
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
+$form->addButtonSave(get_lang('SaveSettings'));
 $form->addElement('html', '</div>');
 
 if ($form->validate()) {

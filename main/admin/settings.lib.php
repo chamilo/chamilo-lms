@@ -226,7 +226,7 @@ function handle_stylesheets()
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
+    $form->addButtonUpload(get_lang('Upload'), 'stylesheet_upload');
 
     $show_upload_form = false;
 
@@ -346,9 +346,20 @@ function handle_stylesheets()
     }
 
     if ($is_style_changeable) {
-        $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'), array('class' => 'btn btn-primary'));
-        $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'), array('class' => 'btn'));
-        $group[] = $form_change->createElement('button', 'download', get_lang('Download'), array('class' => 'btn'));
+
+        /*$group = [
+            $form_change->createElement('button', 'save', get_lang('SaveSettings')),
+            $form_change->createElement('button', 'preview', get_lang('Preview')),
+            $form_change->createElement('button', 'download', get_lang('Download'))
+        ];*/
+
+        //var_dump($group);
+        $group = [
+            $form_change->addButtonSave(get_lang('SaveSettings'), 'save', true),
+            $form_change->addButtonPreview(get_lang('Preview'), 'preview', true),
+            $form_change->addButtonDownload(get_lang('Download'), 'download', true)
+        ];
+
         $form_change->addGroup($group);
 
         if ($show_upload_form) {
@@ -357,7 +368,10 @@ function handle_stylesheets()
                 $( "#tabs" ).tabs();
             });
             </script>';
-            echo Display::tabs(array(get_lang('Update'), get_lang('UploadNewStylesheet')), array($form_change->return_form(), $form->return_form()));
+            echo Display::tabs(
+                array(get_lang('Update'), get_lang('UploadNewStylesheet')),
+                array($form_change->return_form(), $form->return_form())
+            );
         } else {
             $form_change->display();
         }
@@ -633,12 +647,11 @@ function handle_search()
             $form->addElement('select', 'search_prefilter_prefix', array(get_lang('SearchPrefilterPrefix'), $url), $sf_values, '');
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
         }
-
     }
 
     $default_values['search_enabled'] = $search_enabled;
 
-    $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
+    $form->addButtonSave(get_lang('Save'));
     $form->setDefaults($default_values);
 
     echo '<div id="search-options-form">';
@@ -933,7 +946,7 @@ function add_edit_template() {
         $form->setDefaults($defaults);
     }
     // Setting the form elements: the submit button.
-    $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
+    $form->addButtonSave(get_lang('Ok'));
 
     // Setting the rules: the required fields.
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -1125,7 +1138,9 @@ function generate_settings_form($settings, $settings_by_access_list) {
 
     $i = 0;
     foreach ($settings as $row) {
-        if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; }
+        if (in_array($row['variable'], array_keys($settings_to_avoid))) {
+            continue;
+        }
 
         if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {
@@ -1340,7 +1355,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
     if (!empty($settings)) {
         $form->setDefaults($default_values);
     }
-    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
+    $form->addButtonSave(get_lang('SaveSettings'));
     return $form;
 }
 

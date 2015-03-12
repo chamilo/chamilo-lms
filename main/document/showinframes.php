@@ -169,9 +169,9 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
        //  $("<div>I am a div courses</div>").prependTo("body");
       }, "top.mainFrame",
       { load: [
-            {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-            {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-            {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+            {type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+            {type:"script", id:"_fr4", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js"},
+            {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
             {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_manual.js"}
            ]
@@ -183,9 +183,9 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
       }, "top.mainFrame",
       {
         load: [
-            { type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-            { type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-            { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+            { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
+            { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js"},
+            { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
             { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
             { type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/plugins/glossary/fck_glossary_automatic.js"}
         ]
@@ -299,7 +299,7 @@ if (!$jplayer_supported && $execute_iframe) {
 
     $htmlHeadXtra[] = '<script type="text/javascript">
     <!--
-        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+        var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';

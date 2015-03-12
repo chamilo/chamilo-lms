@@ -18,15 +18,15 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
     }
 
-    if (!$start_date_error && !$duration_error) {
+    /*if (!$start_date_error && !$duration_error) {
         $token = md5(uniqid(rand(),TRUE));
         $_SESSION['thematic_advance_token'] = $token;
-    }
+    }*/
 
     // display form
-    $form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq(),'','style="width: 100%;"');
+    $form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq());
     $form->addElement('header',  $header_form);
-    $form->addElement('hidden', 'thematic_advance_token',$token);
+    //$form->addElement('hidden', 'thematic_advance_token',$token);
     $form->addElement('hidden', 'action', $action);
 
     if (!empty($thematic_advance_id)) {
@@ -41,7 +41,8 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $radios[] = $form->createElement('radio', 'start_date_type', null, get_lang('StartDateCustom'),'2',array('onclick' => 'check_per_custom_date(this)', 'id'=>'custom_date'));
     $form->addGroup($radios, null, get_lang('StartDateOptions'));
 
-    if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {
+    if (isset($thematic_advance_data['attendance_id']) &&
+        $thematic_advance_data['attendance_id'] == 0) {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:block">');
     } else {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
@@ -50,7 +51,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $form->addElement('DatePicker', 'custom_start_date', get_lang('StartDate'));
     $form->addElement('html', '</div>');
 
-    if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {
+    if (isset($thematic_advance_data['attendance_id']) &&
+        $thematic_advance_data['attendance_id'] == 0
+    ) {
         $form->addElement('html', '<div id="div_datetime_by_attendance" style="display:none">');
     } else {
         $form->addElement('html', '<div id="div_datetime_by_attendance" style="display:block">');
@@ -71,14 +74,12 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     $form->addElement('html', '</div>');
 
     $form->addText('duration_in_hours', get_lang('DurationInHours'), false, array('size'=>'3','id'=>'duration_in_hours_element', 'autofocus' => 'autofocus'));
-
-    $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-    //$form->addElement('textarea', 'content', get_lang('Content'));
+    $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
 
     if ($action == 'thematic_advance_add') {
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_button" class="save"');
+        $form->addButtonSave(get_lang('Save'));
     } else {
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="update_button" class="save"');
+        $form->addButtonUpdate(get_lang('Save'));
     }
     //$form->addElement('html', '<a href="#" id="save_button" onclick="save();">Save</a>');
     $attendance_select_item_id = null;
@@ -103,17 +104,23 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     }
 
     $default['start_date_type'] = 1;
-    $default['custom_start_date'] = date('d-F-Y H:i', api_strtotime(api_get_local_time()));
+    $default['custom_start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
     $default['duration_in_hours'] = 1;
 
     if (!empty($thematic_advance_data)) {
 
         // set default values
-        $default['content'] = $thematic_advance_data['content'];
-        $default['duration_in_hours'] = $thematic_advance_data['duration'];
+        $default['content'] = isset($thematic_advance_data['content']) ? $thematic_advance_data['content'] : null;
+        $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : null;
         if (empty($thematic_advance_data['attendance_id'])) {
             $default['start_date_type'] = 2;
-            $default['custom_start_date'] = date('d-F-Y H:i', api_strtotime(api_get_local_time($thematic_advance_data['start_date'])));
+            $default['custom_start_date'] = null;
+            if (isset($thematic_advance_data['start_date'])) {
+                $default['custom_start_date'] = date(
+                    'Y-m-d',
+                    api_strtotime(api_get_local_time($thematic_advance_data['start_date']))
+                );
+            }
         } else {
             $default['start_date_type'] = 1;
             if (!empty($thematic_advance_data['start_date'])) {
@@ -127,12 +134,12 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
     // error messages
     $msg_error = '';
-    if ($start_date_error) {
+    /*if ($start_date_error) {
         $msg_error .= get_lang('YouMustSelectAtleastAStartDate').'<br />';
     }
     if ($duration_error) {
         $msg_error .= get_lang('DurationInHoursMustBeNumeric');
-    }
+    }*/
 
     if (!empty($msg_error)) {
         Display::display_error_message($msg_error,false);
@@ -148,9 +155,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
     }
     echo '</div>';
     $table = new SortableTable('thematic_advance_list', array('Thematic', 'get_number_of_thematic_advances'), array('Thematic', 'get_thematic_advance_data'));
-    $table->set_additional_parameters($parameters);
+    //$table->set_additional_parameters($parameters);
     $table->set_header(0, '', false, array('style'=>'width:20px;'));
-    $table->set_header(1, get_lang('StartDate'), false );
+    $table->set_header(1, get_lang('StartDate'), false);
     $table->set_header(2, get_lang('DurationInHours'), false, array('style'=>'width:80px;'));
     $table->set_header(3, get_lang('Content'), false);
 

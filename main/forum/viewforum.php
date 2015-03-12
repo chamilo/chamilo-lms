@@ -79,7 +79,7 @@ if (!empty($groupId)) {
         (($current_forum_category && $current_forum_category['visibility'] == 0) OR
             $current_forum['visibility'] == 0 OR !$user_has_access_in_group)
     ) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
 } else {
     //Course

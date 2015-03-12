@@ -33,7 +33,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
         $text = null,
         $attributes = null
     ) {
-        $this->HTML_QuickForm_static(null, $label, $text, $attributes);
+        parent::__construct(null, $label, $text, $attributes);
         $this->_type = 'html';
     }
 

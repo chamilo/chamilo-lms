@@ -105,8 +105,8 @@ if (api_is_allowed_to_edit(null, true)) {
             $form->addElement('header', '', get_lang('TermAddNew'));
             $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
             //$form->applyFilter('glossary_title', 'html_filter');
-            $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
-            $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
+            $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Height' => '300'));
+            $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
             // setting the rules
             $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
             // The validation or display
@@ -136,10 +136,10 @@ if (api_is_allowed_to_edit(null, true)) {
                 //$form->applyFilter('glossary_title', 'html_filter');
                 $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
                 $element = $form->addElement('text', 'insert_date', get_lang('CreationDate'),array('size'=>'100'));
-                $element ->freeze();
+                $element->freeze();
                 $element = $form->addElement('text', 'update_date', get_lang('UpdateDate'),array('size'=>'100'));
-                $element ->freeze();
-                $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermUpdateButton'), 'class="save"');
+                $element->freeze();
+                $form->addButtonUpdate(get_lang('TermUpdateButton'), 'SubmitGlossary');
 
                 // setting the defaults
                 $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
@@ -196,7 +196,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $form->addElement('header', '', get_lang('ImportGlossary'));
             $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
             $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
-            $form->addElement('style_submit_button', 'SubmitImport', get_lang('Import'), 'class="save"');
+            $form->addButtonImport(get_lang('Import'), 'SubmitImport');
             $form->display();
 
             echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')';

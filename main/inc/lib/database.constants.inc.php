@@ -303,6 +303,7 @@ define('TABLE_METADATA', 'metadata');
 // Attendance Sheet
 define('TABLE_ATTENDANCE',          'attendance');
 define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
+define('TABLE_ATTENDANCE_CALENDAR_REL_GROUP', 'attendance_calendar_rel_group');
 define('TABLE_ATTENDANCE_SHEET_LOG','attendance_sheet_log');
 
 define('TABLE_ATTENDANCE_SHEET',    'attendance_sheet');

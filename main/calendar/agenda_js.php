@@ -28,9 +28,9 @@ $this_section = SECTION_MYAGENDA;
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
-$htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
-$htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.min.js');
+$htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PATH).'web/assets/fullcalendar/dist/fullcalendar.min.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
@@ -47,6 +47,8 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
         $this_section = SECTION_COURSES;
     }
 }
+
+api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
 
 $agenda = new Agenda();
 $agenda->type = $type;

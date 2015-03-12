@@ -387,16 +387,15 @@ class ThematicController
         }
 
         $thematic_id = intval($_REQUEST['thematic_id']);
-        $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
+        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? intval($_REQUEST['thematic_advance_id']) : null;
         $thematic_advance_data = array();
 
         switch ($action) {
             case 'thematic_advance_delete':
                 if (!empty($thematic_advance_id)) {
                     if (api_is_allowed_to_edit(null, true)) {
-                        $affected_rows = $thematic->thematic_advance_destroy($thematic_advance_id);
+                        $thematic->thematic_advance_destroy($thematic_advance_id);
                     }
-                    $action = 'thematic_list';
                     header('Location: index.php');
                     exit;
                 }
@@ -407,7 +406,7 @@ class ThematicController
                     exit;
                 }
 
-                if (($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) ||
+                if ((isset($_REQUEST['start_date_type']) && $_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) ||
                     (!empty($_REQUEST['duration_in_hours']) && !is_numeric($_REQUEST['duration_in_hours']))
                 ) {
                     if ($_REQUEST['start_date_type'] == 1 && empty($_REQUEST['start_date_by_attendance'])) {
@@ -429,19 +428,17 @@ class ThematicController
                         $data['thematic_advance_data'] = $thematic_advance_data;
                     }
                 } else {
-                    if ($_REQUEST['thematic_advance_token'] == $_SESSION['thematic_advance_token'] &&
-                        api_is_allowed_to_edit(null, true)
-                    ) {
-                        $thematic_advance_id = $_REQUEST['thematic_advance_id'];
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? $_REQUEST['thematic_advance_id'] : null;
                         $thematic_id = $_REQUEST['thematic_id'];
-                        $content = $_REQUEST['content'];
-                        $duration = $_REQUEST['duration_in_hours'];
+                        $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : null;
+                        $duration = isset($_REQUEST['duration_in_hours']) ? $_REQUEST['duration_in_hours'] : null;
                         if (isset($_REQUEST['start_date_type']) && $_REQUEST['start_date_type'] == 2) {
-                            $start_date = $thematic->build_datetime_from_array($_REQUEST['custom_start_date']);
+                            $start_date = $_REQUEST['custom_start_date'];
                             $attendance_id = 0;
                         } else {
-                            $start_date = $_REQUEST['start_date_by_attendance'];
-                            $attendance_id = $_REQUEST['attendance_select'];
+                            $start_date = isset($_REQUEST['start_date_by_attendance']) ? $_REQUEST['start_date_by_attendance'] : null;
+                            $attendance_id = isset($_REQUEST['attendance_select']) ? $_REQUEST['attendance_select'] : null;
                         }
                         $thematic->set_thematic_advance_attributes(
                             $thematic_advance_id,

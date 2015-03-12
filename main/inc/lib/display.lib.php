@@ -59,6 +59,7 @@ class Display
         if (isset($origin) && $origin == 'learnpath') {
             $showHeader = false;
         }
+
         self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
@@ -88,6 +89,7 @@ class Display
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
         }
+
         echo self::$global_template->show_header_template();
     }
 
@@ -98,7 +100,7 @@ class Display
     {
         global $show_learnpath, $tool_name;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);
-        echo self::$global_template ->show_header_template();
+        echo self::$global_template->show_header_template();
     }
 
     public static function display_no_header()
@@ -112,7 +114,8 @@ class Display
     /**
      * Displays the reduced page header (without banner)
      */
-    public static function set_header() {
+    public static function set_header()
+    {
         global $show_learnpath;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);
     }
@@ -120,8 +123,9 @@ class Display
     /**
      * Display the page footer
      */
-    public static function display_footer() {
-        echo self::$global_template ->show_footer_template();
+    public static function display_footer()
+    {
+        echo self::$global_template->show_footer_template();
     }
 
     public static function page()
@@ -828,41 +832,46 @@ class Display
 
     /**
      * Creates a URL anchor
+     * @param string $name
+     * @param string $url
+     * @param array $attributes
+     *
+     * @return string
      */
-    public static function url($name, $url, $extra_attributes = array())
+    public static function url($name, $url, $attributes = array())
     {
         if (!empty($url)) {
             $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
-            $extra_attributes['href'] = $url;
+            $attributes['href'] = $url;
         }
-        return self::tag('a', $name, $extra_attributes);
+        return self::tag('a', $name, $attributes);
     }
 
     /**
      * Creates a div tag
      *
-     * @param $content
+     * @param string $content
      * @param array $extra_attributes
      * @return string
      */
-    public static function div($content, $extra_attributes = array())
+    public static function div($content, $attributes = array())
     {
-        return self::tag('div', $content, $extra_attributes);
+        return self::tag('div', $content, $attributes);
     }
 
     /**
      * Creates a span tag
      */
-    public static function span($content, $extra_attributes = array())
+    public static function span($content, $attributes = array())
     {
-        return self::tag('span', $content, $extra_attributes);
+        return self::tag('span', $content, $attributes);
     }
 
     /**
      * Displays an HTML input tag
      *
      */
-    public static function input($type, $name, $value, $extra_attributes = array())
+    public static function input($type, $name, $value, $attributes = array())
     {
          if (isset($type)) {
             $extra_attributes['type']= $type;
@@ -873,7 +882,7 @@ class Display
          if (isset($value)) {
             $extra_attributes['value']= $value;
         }
-        return self::tag('input', '', $extra_attributes);
+        return self::tag('input', '', $attributes);
     }
 
     /**
@@ -1696,19 +1705,33 @@ class Display
         return $html;
     }
 
+    /**
+     * @param $percentage
+     * @param bool $show_percentage
+     * @param null $extra_info
+     * @return string
+     */
     public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
     {
         $percentage = intval($percentage);
-        $div = '<div class="progress progress-striped">
-                    <div class="bar" style="width: '.$percentage.'%;"></div>
-                </div>';
+        $div = '<div class="progress">
+                <div
+                    class="progress-bar progress-bar-striped"
+                    role="progressbar"
+                    aria-valuenow="'.$percentage.'"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style="width: '.$percentage.'%;"
+                >';
         if ($show_percentage) {
-            $div .= '<div class="progresstext">'.$percentage.'%</div>';
+            $div .= $percentage.'%';
         } else {
             if (!empty($extra_info)) {
-                $div .= '<div class="progresstext">'.$extra_info.'</div>';
+                $div .= $extra_info;
             }
         }
+        $div .= '</div>';
+
         return $div;
     }
 
@@ -1758,7 +1781,7 @@ class Display
      * @param string $type
      * @return string
      */
-    public static function label($content, $type = null)
+    public static function label($content, $type = 'default')
     {
         $class = '';
         switch ($type) {
@@ -1776,6 +1799,9 @@ class Display
                 break;
             case 'inverse':
                 $class = 'label-inverse';
+                break;
+            default:
+                $class = 'label-default';
                 break;
         }
 
@@ -1807,7 +1833,8 @@ class Display
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";
-                $html .= self::url($value['content'], $value['url']);
+                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : array();
+                $html .= self::url($value['content'], $value['url'], $attributes);
                 $html .= '</li>';
             }
             $html .= '</ul></div>';

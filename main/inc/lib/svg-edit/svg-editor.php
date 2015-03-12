@@ -26,7 +26,7 @@ if (!isset($_SESSION['draw_dir'])) {
     <link rel="stylesheet" href="svg-editor.css" type="text/css"/>
     <link rel="stylesheet" href="custom.css" type="text/css"/>
     <link rel="stylesheet" href="spinbtn/JQuerySpinBtn.css" type="text/css"/>
-    <?php echo api_get_js('jquery.min.js'); ?>
+    <?php echo api_get_jquery_js(); ?>
 
     <script src="js-hotkeys/jquery.hotkeys.min.js"></script>
     <script src="jquerybbq/jquery.bbq.min.js"></script>

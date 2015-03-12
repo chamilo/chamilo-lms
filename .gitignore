@@ -46,6 +46,7 @@ plugin/bbb/config.vm.php
 
 main/cron/incoming/*
 vendor
+web/assets/*
 data/*
 !data/index.html
 data/badges/*

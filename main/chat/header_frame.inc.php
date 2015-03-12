@@ -123,7 +123,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <head>
 <meta charset="<?php echo api_get_system_encoding(); ?>" />
 <title>Chat</title>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>bootstrap.css">
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_PATH); ?>web/assets/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-emojiarea/jquery.emojiarea.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>markdown.css">
@@ -131,8 +131,8 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/emojione/css/emojione.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/emojione/css/autocomplete.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/highlight/styles/github.css">
-<?php echo api_get_js('jquery.min.js'); ?>
-<?php echo api_get_js('bootstrap/bootstrap.js'); ?>
+<?php echo api_get_jquery_js(); ?>
+<?php echo api_get_asset('bootstrap/dist/js/bootstrap.min.js'); ?>
 <?php echo api_get_js('highlight/highlight.pack.js'); ?>
 <?php echo api_get_js('jquery-textcomplete/jquery.textcomplete.js'); ?>
 <?php echo api_get_js('emojione/js/emojione.min.js'); ?>

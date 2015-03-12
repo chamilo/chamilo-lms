@@ -44,7 +44,7 @@ if ($showGlossary) {
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
-        var jQueryFrameReadyConfigPath = \'' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery.min.js\';
+        var jQueryFrameReadyConfigPath = \'' . api_get_jquery_web_path() . '\';
     -->
     </script>';
             $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';

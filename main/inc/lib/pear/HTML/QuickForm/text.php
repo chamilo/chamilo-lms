@@ -45,7 +45,7 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    public function HTML_QuickForm_text(
+    public function __construct(
         $elementName = null,
         $elementLabel = null,
         $attributes = array()

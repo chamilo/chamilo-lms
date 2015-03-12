@@ -36,8 +36,6 @@
  */
 class HTML_QuickForm_group extends HTML_QuickForm_element
 {
-    // {{{ properties
-
     /**
      * Name of the element
      * @var       string
@@ -78,9 +76,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     */
     var $_appendName = true;
 
-    // }}}
-    // {{{ constructor
-
     /**
      * Class constructor
      *
@@ -98,7 +93,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function HTML_QuickForm_group($elementName=null, $elementLabel=null, $elements=null, $separator=null, $appendName = true)
     {
-        $this->HTML_QuickForm_element($elementName, $elementLabel);
+        parent::__construct($elementName, $elementLabel);
         $this->_type = 'group';
         if (isset($elements) && is_array($elements)) {
             $this->setElements($elements);
@@ -109,10 +104,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         if (isset($appendName)) {
             $this->_appendName = $appendName;
         }
-    } //end constructor
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the group name
@@ -125,10 +117,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function setName($name)
     {
         $this->_name = $name;
-    } //end func setName
-
-    // }}}
-    // {{{ getName()
+    }
 
     /**
      * Returns the group name
@@ -140,10 +129,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function getName()
     {
         return $this->_name;
-    } //end func getName
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets values for group's elements
@@ -175,10 +161,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                 }
             }
         }
-    } //end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns the value of the group
@@ -219,10 +202,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             }
         }
         return $value;
-    } // end func getValue
-
-    // }}}
-    // {{{ setElements()
+    }
 
     /**
      * Sets the grouped elements
@@ -238,10 +218,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         if ($this->_flagFrozen) {
             $this->freeze();
         }
-    } // end func setElements
-
-    // }}}
-    // {{{ getElements()
+    }
 
     /**
      * Gets the grouped elements
@@ -254,10 +231,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     {
         $this->_createElementsIfNotExist();
         return $this->_elements;
-    } // end func getElements
-
-    // }}}
-    // {{{ getGroupType()
+    }
 
     /**
      * Gets the group type based on its elements
@@ -279,10 +253,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             $prevType = $type;
         }
         return $type;
-    } // end func getGroupType
-
-    // }}}
-    // {{{ toHtml()
+    }
 
     /**
      * Returns Html for the group
@@ -291,20 +262,14 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @access      public
      * @return      string
      */
-    function toHtml()
+    public function toHtml()
     {
-        include_once('HTML/QuickForm/Renderer/Default.php');
-        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
-        //$renderer =& new HTML_QuickForm_Renderer_Default();
         $renderer = new HTML_QuickForm_Renderer_Default();
-        //
         $renderer->setElementTemplate('{element}');
         $this->accept($renderer);
-        return $renderer->toHtml();
-    } //end func toHtml
 
-    // }}}
-    // {{{ getElementName()
+        return $renderer->toHtml();
+    }
 
     /**
      * Returns the element name inside the group such as found in the html form
@@ -345,10 +310,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             }
         }
         return $elementName;
-    } //end func getElementName
-
-    // }}}
-    // {{{ getFrozenHtml()
+    }
 
     /**
      * Returns the value of field without HTML tags
@@ -373,10 +335,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             }
         }
         return $html;
-    } //end func getFrozenHtml
-
-    // }}}
-    // {{{ onQuickFormEvent()
+    }
 
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
@@ -415,10 +374,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
         return true;
-    } // end func onQuickFormEvent
-
-    // }}}
-    // {{{ accept()
+    }
 
    /**
     * Accepts a renderer
@@ -456,10 +412,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             }
         }
         $renderer->finishGroup($this);
-    } // end func accept
-
-    // }}}
-    // {{{ exportValue()
+    }
 
    /**
     * As usual, to get the group's value we access its elements and call
@@ -507,9 +460,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         return $value;
     }
 
-    // }}}
-    // {{{ _createElements()
-
    /**
     * Creates the group's elements.
     *
@@ -525,9 +475,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     {
         // abstract
     }
-
-    // }}}
-    // {{{ _createElementsIfNotExist()
 
    /**
     * A wrapper around _createElements()
@@ -548,9 +495,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         }
     }
 
-    // }}}
-    // {{{ freeze()
-
     function freeze()
     {
         parent::freeze();
@@ -558,9 +502,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             $this->_elements[$key]->freeze();
         }
     }
-
-    // }}}
-    // {{{ unfreeze()
 
     function unfreeze()
     {
@@ -570,9 +511,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
         }
     }
 
-    // }}}
-    // {{{ setPersistantFreeze()
-
     function setPersistantFreeze($persistant = false)
     {
         parent::setPersistantFreeze($persistant);
@@ -580,7 +518,4 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             $this->_elements[$key]->setPersistantFreeze($persistant);
         }
     }
-
-    // }}}
-} //end class HTML_QuickForm_group
-?>
+}

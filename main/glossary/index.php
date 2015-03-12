@@ -105,7 +105,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $form->addElement('header', '', get_lang('TermAddNew'));
             $form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'80', 'id'=>'glossary_title'));
             //$form->applyFilter('glossary_title', 'html_filter');
-            $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '90%', 'Height' => '300'));
+            $form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Height' => '300'));
             $form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
             // setting the rules
             $form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');

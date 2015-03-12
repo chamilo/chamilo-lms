@@ -30,7 +30,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     */
     public function HTML_QuickForm_advanced_settings($text = null)
     {
-        $this->HTML_QuickForm_static(null, null, $text);
+        parent::__construct(null, null, $text);
         $this->_type = 'html';
     }
 
@@ -52,7 +52,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
                     <label class="control-label col-sm-2"></label>
                     <div class="col-sm-10">
                     <div class="form-control-static">
-                    '.HTML_QuickForm_static::toHtml().'
+                    '.parent::toHtml().'
                     </div>
                     </div>
                  </div>

@@ -90,18 +90,18 @@ class HTML_QuickForm_element extends HTML_Common
      */
     function HTML_QuickForm_element($elementName = null, $elementLabel = null, $attributes = null)
     {
-        HTML_Common::HTML_Common($attributes);
+        parent::__construct($attributes);
         if (isset($elementName)) {
             $this->setName($elementName);
         }
         if (isset($elementLabel)) {
 
             $labelFor = "";
-            //Default Inputs generate this
+            // Default Inputs generate this
             if (!empty($attributes['id'])) {
                 $labelFor = $attributes['id'];
             }
-            //Default Labels generate this
+            // Default Labels generate this
             if (!empty($attributes['for'])) {
                 $labelFor = $attributes['for'];
             }

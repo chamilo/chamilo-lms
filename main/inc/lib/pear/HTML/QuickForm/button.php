@@ -40,22 +40,6 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
     private $class;
 
     /**
-     * @return mixed
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * @param mixed $class
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-    }
-
-    /**
      * @param string $name input name example 'submit'
      * @param string $text button text to show
      * @param string $icon icons based in font-awesome
@@ -64,7 +48,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      * @param string $class
      * @param array $attributes
      */
-    public function HTML_QuickForm_button(
+    public function __construct(
         $name,
         $text,
         $icon = 'check',
@@ -78,7 +62,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $this->setSize($size);
         $this->setClass($class);
 
-        HTML_QuickForm_input::HTML_QuickForm_input(
+        parent::__construct(
             $name,
             null,
             $attributes
@@ -86,6 +70,55 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
         $this->_persistantFreeze = false;
         $this->setValue($text);
         $this->setType('submit');
+    }
+
+    /**
+     * @return string
+     */
+    public function toHtml()
+    {
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            $value = null;
+            if (isset($this->_attributes['value'])) {
+                $value = $this->_attributes['value'];
+                unset($this->_attributes['value']);
+            }
+
+            unset($this->_attributes['class']);
+
+            $icon = $this->getIcon();
+
+            if (!empty($icon)) {
+                $icon = '<i class="' . $this->getIcon() . '"></i> ';
+            }
+
+            $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
+
+            return
+                $this->_getTabs() . '
+                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . ' />'.
+                $icon.
+                $value.
+                '</button>';
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param mixed $class
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
     }
 
     /**
@@ -151,35 +184,6 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
 
         $size = !empty($size) ? $size : null;
         $this->size = $size;
-    }
-
-    /**
-     * @return string
-     */
-    public function toHtml()
-    {
-        if ($this->_flagFrozen) {
-            return $this->getFrozenHtml();
-        } else {
-            $value = $this->_attributes['value'];
-
-            unset($this->_attributes['value']);
-            unset($this->_attributes['class']);
-
-            $icon = $this->getIcon();
-
-            if (!empty($icon)) {
-                $icon = '<i class="' . $this->getIcon() . '"></i> ';
-            }
-
-            $class = $this->getClass().' '.$this->getStyle().' '.$this->getSize();
-
-            return
-                $this->_getTabs() . '
-                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . ' />'.
-                $icon.$value.
-                '</button>';
-        }
     }
 
     /**

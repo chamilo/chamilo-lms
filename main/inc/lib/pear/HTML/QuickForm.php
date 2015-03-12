@@ -250,7 +250,7 @@ class HTML_QuickForm extends HTML_Common
      */
     public function __construct($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
     {
-        HTML_Common::HTML_Common($attributes);
+        parent::__construct($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         $action = ($action == '') ? api_get_self() : $action;
         $target = empty($target) ? array() : array('target' => $target);
@@ -547,8 +547,8 @@ class HTML_QuickForm extends HTML_Common
      */
     public function &createElement($elementType)
     {
-        $args =  func_get_args();
-        $element =& HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
+        $args = func_get_args();
+        $element = HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
         return $element;
     } // end func createElement
 

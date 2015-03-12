@@ -250,6 +250,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
+        if (isset($params['sessionId'])) {
+            $costField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'cost');
+            $uitUser += $costField['field_value'];
+
+            $teachingHoursField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'teaching_hours');
+            $expendedTime += $teachingHoursField['field_value'];
+        }
+
         if ($uitMax <= $uitUser) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),

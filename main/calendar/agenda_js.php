@@ -48,6 +48,8 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     }
 }
 
+api_protect_course_group(GroupManager::GROUP_TOOL_CALENDAR);
+
 $agenda = new Agenda();
 $agenda->type = $type;
 

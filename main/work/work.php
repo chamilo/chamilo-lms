@@ -76,23 +76,9 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if (!empty($group_id)) {
+    api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
+
     $group_properties  = GroupManager::get_group_properties($group_id);
-    $show_work = false;
-
-    if (api_is_allowed_to_edit(false, true)) {
-        $show_work = true;
-    } else {
-        // you are not a teacher
-        $show_work = GroupManager::user_has_access(
-            $user_id,
-            $group_id,
-            GroupManager::GROUP_TOOL_WORK
-        );
-    }
-
-    if (!$show_work) {
-        api_not_allowed();
-    }
 
     $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);

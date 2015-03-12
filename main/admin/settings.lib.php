@@ -92,13 +92,13 @@ function handle_regions()
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
+    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
 function handle_extensions()
 {
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
-    echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';
+    echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
 
 }
 /**
@@ -175,12 +175,12 @@ function handle_plugins()
 
             echo '<div class="btn-group">';
             if (in_array($plugin, $installed_plugins)) {
-                echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn'));
-                echo Display::url(get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn'));
+                echo Display::url('<i class="fa fa-cogs"></i> '.get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
+                echo Display::url('<i class="fa fa-th-large"></i> '.get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                echo Display::url("readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn ajax', '_target' => '_blank'));
+                echo Display::url("<i class='fa fa-file-text-o'></i> readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn btn-default', '_target' => '_blank'));
             }
             echo '</div>';
             echo '</td></tr>';
@@ -189,7 +189,7 @@ function handle_plugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
+    echo '<button class="btn btn-success" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -226,7 +226,7 @@ function handle_stylesheets()
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
+    $form->addButtonUpload(get_lang('Upload'), 'stylesheet_upload');
 
     $show_upload_form = false;
 
@@ -346,10 +346,20 @@ function handle_stylesheets()
     }
 
     if ($is_style_changeable) {
-        //$group[] = $form_change->addButtonSave(get_lang('SaveSettings'),'submit');
-        $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'));
-        $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'));
-        $group[] = $form_change->createElement('button', 'download', get_lang('Download'));
+
+        /*$group = [
+            $form_change->createElement('button', 'save', get_lang('SaveSettings')),
+            $form_change->createElement('button', 'preview', get_lang('Preview')),
+            $form_change->createElement('button', 'download', get_lang('Download'))
+        ];*/
+
+        //var_dump($group);
+        $group = [
+            $form_change->addButtonSave(get_lang('SaveSettings'), 'save', true),
+            $form_change->addButtonPreview(get_lang('Preview'), 'preview', true),
+            $form_change->addButtonDownload(get_lang('Download'), 'download', true)
+        ];
+
         $form_change->addGroup($group);
 
         if ($show_upload_form) {
@@ -634,12 +644,11 @@ function handle_search()
             $form->addElement('select', 'search_prefilter_prefix', array(get_lang('SearchPrefilterPrefix'), $url), $sf_values, '');
             $default_values['search_prefilter_prefix'] = api_get_setting('search_prefilter_prefix');
         }
-
     }
 
     $default_values['search_enabled'] = $search_enabled;
 
-    $form->addElement('style_submit_button', 'submit', get_lang('Save'));
+    $form->addButtonSave(get_lang('Save'));
     $form->setDefaults($default_values);
 
     echo '<div id="search-options-form">';
@@ -1341,7 +1350,8 @@ function generate_settings_form($settings, $settings_by_access_list) {
     if (!empty($settings)) {
         $form->setDefaults($default_values);
     }
-    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'floppy-o','btn btn-success');
+    $form->addButtonSave(get_lang('SaveSettings'));
+    //$form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
     return $form;
 }
 

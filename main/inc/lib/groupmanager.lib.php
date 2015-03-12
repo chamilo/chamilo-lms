@@ -1964,7 +1964,11 @@ class GroupManager
             return false;
         }
 
-        if (!$user_is_in_group && $groupInfo['status'] == 0) {
+        if (!$user_is_in_group) {
+            return false;
+        }
+
+        if ($groupInfo['status'] == 0) {
             return false;
         }
 

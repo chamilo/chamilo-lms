@@ -40,6 +40,7 @@ $message = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 
 api_protect_course_script(true);
+api_protect_course_group(GroupManager::GROUP_TOOL_DOCUMENTS);
 
 DocumentManager::removeGeneratedAudioTempFile();
 

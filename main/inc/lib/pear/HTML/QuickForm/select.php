@@ -34,7 +34,8 @@
  * @version     Release: 3.2.11
  * @since       1.0
  */
-class HTML_QuickForm_select extends HTML_QuickForm_element {
+class HTML_QuickForm_select extends HTML_QuickForm_element
+{
 
     // {{{ properties
 
@@ -81,7 +82,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
         if (is_array($attributes) || empty($attributes)) {
             $attributes['class'] = 'form-control';
         }
-        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';
         if (isset($options)) {

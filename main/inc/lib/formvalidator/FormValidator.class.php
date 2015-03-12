@@ -110,8 +110,9 @@ class FormValidator extends HTML_QuickForm
         //Set required field template
         HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
         $noteTemplate = <<<EOT
-	<div class="control-group">
-		<div class="controls">{requiredNote}</div>
+	<div class="form-group">
+	    <div class="col-sm-2"></div>
+		<div class="col-sm-10">{requiredNote}</div>
 	</div>
 EOT;
         $renderer->setRequiredNoteTemplate($noteTemplate);
@@ -138,11 +139,11 @@ EOT;
     {
         return '
             <div class="form-group {error_class}">
-                <label {label-for} class="col-md-2 control-label" >
+                <label {label-for} class="col-sm-2 control-label" >
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="col-md-10">
+                <div class="col-sm-10">
                     {element}
 
                     <!-- BEGIN label_3 -->
@@ -239,8 +240,22 @@ EOT;
         $style = 'default',
         $size = 'default',
         $class = null,
-        $attributes = array()
+        $attributes = array(),
+        $createElement = false
     ) {
+        if ($createElement) {
+            return $this->createElement(
+                'button',
+                $name,
+                $label,
+                $icon,
+                $style,
+                $size,
+                $class,
+                $attributes
+            );
+        }
+
         return $this->addElement(
             'button',
             $name,
@@ -256,44 +271,89 @@ EOT;
     /**
      * @param string $label
      */
-    public function addButtonSave($label, $name = 'submit')
+    public function addButtonSave($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'floppy-o', 'btn btn-success');
+        return $this->addButton(
+            $name,
+            $label,
+            'check',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * @param string $label
      */
-    public function addButtonCreate($label, $name = 'submit')
+    public function addButtonCreate($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'plus-square', 'btn btn-success');
+        return $this->addButton(
+            $name,
+            $label,
+            'plus',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * Shortcut to create/add button
      * @param string $label
      */
-    public function addButtonUpdate($label, $name = 'submit')
+    public function addButtonUpdate($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'pencil', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'pencil',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * Shortcut to delete button
      * @param string $label
      */
-    public function addButtonDelete($label, $name = 'submit')
+    public function addButtonDelete($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'trash', 'danger');
+        return $this->addButton(
+            $name,
+            $label,
+            'trash',
+            'danger',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * Shortcut to "send" button
      * @param string $label
      */
-    public function addButtonSend($label, $name = 'submit')
+    public function addButtonSend($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'paper-plane', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'paper-plane',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
@@ -305,7 +365,7 @@ EOT;
         if (empty($label))  {
             $label = get_lang('Search');
         }
-        return $this->addButton('submit', $label, 'search','btn btn-primary');
+        return $this->addButton('submit', $label, 'search', 'default');
     }
 
     /**
@@ -321,27 +381,108 @@ EOT;
      * Shortcut to import button
      * @param string $label
      */
-    public function addButtonImport($label, $name = 'submit')
+    public function addButtonImport($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'check', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'check',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * Shortcut to export button
      * @param string $label
      */
-    public function addButtonExport($label, $name = 'submit')
+    public function addButtonExport($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'check', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'check',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
      * Shortcut to filter button
      * @param string $label
      */
-    public function addButtonFilter($label, $name = 'submit')
+    public function addButtonFilter($label, $name = 'submit', $createElement = false)
     {
-        return $this->addButton($name, $label, 'filter', 'primary');
+        return $this->addButton(
+            $name,
+            $label,
+            'filter',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+    /**
+     * Shortcut to upload button
+     * @param string $label
+     */
+    public function addButtonUpload($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'upload',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+    /**
+     * Shortcut to upload button
+     * @param string $label
+     */
+    public function addButtonDownload($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'download',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+    /**
+     * Shortcut to preview button
+     * @param string $label
+     */
+    public function addButtonPreview($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'search',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
     }
 
     /**
@@ -482,6 +623,7 @@ EOT;
      * @param int $delay (optional)	 The number of seconds between the moment the user
      * @param string $label (optional)	Custom label to be shown
      * submits the form and the start of the progress bar.
+     * @deprecated ?
      */
     public function add_progress_bar($delay = 2, $label = '')
     {

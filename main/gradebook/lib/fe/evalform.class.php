@@ -109,7 +109,7 @@ class EvalForm extends FormValidator
                 $select->addoption($user[1] . ' ' . $user[2] . ' (' . $user[3] . ')', $user[0]);
             }
         }
-        $this->addElement('submit', 'submit_button', get_lang('AddUserToEval'));
+        $this->addButtonCreate(get_lang('AddUserToEval'), 'submit_button');
     }
 
     /**

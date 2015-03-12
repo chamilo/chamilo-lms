@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7b340a907a3c5eda7380f31f022d7f8f",
+    "hash": "8f031585648f47e64f98e36eabb008b0",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -1765,7 +1765,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {

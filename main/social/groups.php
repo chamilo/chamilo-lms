@@ -229,8 +229,7 @@ if ($group_id != 0) {
     $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
     $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
     $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
-    $chat_status = $userInfo['extra'];
-    if(!empty($userInfo['user_is_online_in_chat'])){
+    if (!empty($userInfo['user_is_online_in_chat'])) {
         $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
     }else{
         $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';

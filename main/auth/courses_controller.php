@@ -490,12 +490,12 @@ class CoursesController
     {
         global $_configuration;
 
-        $sessionData = urlencode($sessionData);
-
         $url = api_get_path(WEB_CODE_PATH);
         $url .= $_configuration['catalog_allow_session_auto_subscription'] ?
-            "auth/courses.php?action=subscribe_to_session&session_id=$sessionData&user_id=".api_get_user_id() :
-            "inc/email_editor.php?action=subscribe_me_to_session&session=$sessionData";
+            "auth/courses.php?action=subscribe_to_session&session_id=".
+            intval($sessionData)."&user_id=".api_get_user_id() :
+            "inc/email_editor.php?action=subscribe_me_to_session&session=".
+            Security::remove_XSS($sessionData);
 
         return Display::url(get_lang('Subscribe'), $url, array(
             'class' => 'btn btn-large btn-primary',

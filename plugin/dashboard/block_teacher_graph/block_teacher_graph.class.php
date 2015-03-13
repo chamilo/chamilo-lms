@@ -66,16 +66,17 @@ class BlockTeacherGraph extends Block
     	$data   = array();
 		$teacher_information_graph = $this->get_teachers_information_graph();
 		$html = '
-                <li class="widget color-blue" id="intro">
-                    <div class="widget-head">
-                        <h3>'.get_lang('TeachersInformationsGraph').'</h3>
-                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+                <div class="panel panel-default" id="intro">
+                    <div class="panel-heading">'.get_lang('TeachersInformationsGraph').'
+                        <div class="pull-right"><a class="btn btn-danger btn-xs"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <i class="fa fa-times"></i>
+                        </a></div>
                     </div>
-                    <div class="widget-content" align="center">
+                    <div class="panel-body" align="center">
                         <div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
                         '.$teacher_information_graph.'
                     </div>
-                </li>
+                </div>
 				';
 
     	$data['column'] = $column;

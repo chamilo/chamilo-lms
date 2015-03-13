@@ -83,8 +83,9 @@ class Display
 
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
-            self::$global_template->set_css_files();
+            self::$global_template->setCssFiles();
             self::$global_template->set_js_files();
+            self::$global_template->setCssCustomFiles();
         }
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
@@ -1891,15 +1892,14 @@ class Display
      */
     public static function group_button($title, $elements)
     {
-        $html = '<div class="btn-toolbar">
-            <div class="btn-group">
-            <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>
+        $html = '<div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'.$title.'  <span class="caret"></span></button>
             <ul class="dropdown-menu">';
         foreach ($elements as $item) {
             $html .= Display::tag('li', Display::url($item['title'], $item['href']));
         }
         $html .= '</ul>
-            </div> </div>';
+            </div>';
         return $html;
     }
 
@@ -1987,4 +1987,39 @@ class Display
     {
         Session::erase('flash_messages');
     }
+
+    /**
+     * Get the profile edition link for a user
+     * @param int $userId The user id
+     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * @return string The link
+     */
+    public static function getProfileEditionLink($userId, $asAdmin = false)
+    {
+        $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+
+        if ($asAdmin) {
+            $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=" . intval($userId);
+        }
+
+        if (api_get_setting('sso_authentication') === 'true') {
+            $subSSOClass = api_get_setting('sso_authentication_subclass');
+
+            $objSSO = null;
+
+            if (!empty($subSSOClass)) {
+                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+
+                $subSSOClass = 'sso' . $subSSOClass;
+                $objSSO = new $subSSOClass();
+            } else {
+                $objSSO = new sso();
+            }
+
+            $editProfileUrl = $objSSO->generateProfileEditingURL($userId, $asAdmin);
+        }
+
+        return $editProfileUrl;
+    }
+
 }

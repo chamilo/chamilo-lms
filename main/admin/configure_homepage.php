@@ -462,6 +462,7 @@ if (!empty($action)) {
 					// If the requested action is to create a link, make some room
 					// for the new link in the home_menu array at the requested place
 					// and insert the new link there
+                    $icon = '<i class="fa fa-external-link"></i>';
 					if ($action == 'insert_link' || $action == 'insert_tabs') {
 						for ($i = sizeof($home_menu); $i; $i--) {
 							if ($i > $insert_where) {
@@ -470,10 +471,10 @@ if (!empty($action)) {
 								break;
 							}
 						}
-						$home_menu[$insert_where + 1] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'"><span>'.$link_name.'</span></a></li>';
+						$home_menu[$insert_where + 1] = '<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank ? '_blank' : '_self').'">'.$icon.' '.$link_name.'</a></li>';
 					} else {
 						// If the request is about a link edition, change the link
-						$home_menu[$link_index]='<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'"><span>'.$link_name.'</span></a></li>';
+						$home_menu[$link_index]='<li '.$class_add_in_tab.'><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$icon.' '.$link_name.'</a></li>';
 					}
 					// Re-build the file from the home_menu array
 					$home_menu = implode("\n", $home_menu);
@@ -867,7 +868,8 @@ switch ($action) {
 		if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {
 			$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
 			$form->addHtmlEditor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+            $form->addButtonSave(get_lang('Save'),'submit');
+
 		} else {
 			if (in_array($action, array('edit_tabs','insert_tabs'))) {
 				$default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
@@ -888,7 +890,7 @@ switch ($action) {
 				$form->addElement('html', $html_langs);
 			}
 			$form->addElement('html','</tr></table><br/>');
-			$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+            $form->addButtonSave(get_lang('Save'),'submit');
 		}
 
 		$form->setDefaults($default);

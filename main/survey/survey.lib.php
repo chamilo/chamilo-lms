@@ -1957,6 +1957,7 @@ class SurveyUtil
      */
     public static function display_question_report($survey_data)
     {
+        $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
         $course_id = api_get_course_int_id();
         // Database table definitions
         $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -1966,7 +1967,7 @@ class SurveyUtil
         // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : intval($_GET['question']);
         $currentQuestion = isset($_GET['question']) ? intval($_GET['question']) : 0;
-        $question = array();
+        $questions = array();
         $surveyId = intval($_GET['survey_id']);
         $action = Security::remove_XSS($_GET['action']);
 
@@ -1976,12 +1977,14 @@ class SurveyUtil
         echo '</div>';
 
         if ($survey_data['number_of_questions'] > 0) {
-            echo '<div id="question_report_questionnumbers" class="pagination">';
-            /* echo '<ul><li class="disabled"><a href="#">'.get_lang('Question').'</a></li>'; */
+            $limitStatement = null;
+            if (!$singlePage) {
+                echo '<div id="question_report_questionnumbers" class="pagination">';
+                /* echo '<ul><li class="disabled"><a href="#">'.get_lang('Question').'</a></li>'; */
 
-            if ($currentQuestion != 0 ) {
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&amp;'.api_get_cidreq().'&amp;survey_id='.$surveyId.'&amp;question='.($offset-1).'">'.get_lang('PreviousQuestion').'</a></li>';
-            }
+                if ($currentQuestion != 0) {
+                    echo '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . $action . '&amp;' . api_get_cidreq() . '&amp;survey_id=' . $surveyId . '&amp;question=' . ($offset - 1) . '">' . get_lang('PreviousQuestion') . '</a></li>';
+                }
 
                 for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
                     if ($offset != $i - 1) {
@@ -1993,11 +1996,13 @@ class SurveyUtil
                         echo ' | ';
                     }*/
                 }
-            if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&amp;'.api_get_cidreq().'&amp;survey_id='.$surveyId.'&amp;question='.($offset+1).'">'.get_lang('NextQuestion').'</li></a>';
+                if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
+                    echo '<li><a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . $action . '&amp;' . api_get_cidreq() . '&amp;survey_id=' . $surveyId . '&amp;question=' . ($offset + 1) . '">' . get_lang('NextQuestion') . '</li></a>';
+                }
+                echo '</ul>';
+                echo '</div>';
+                $limitStatement = " LIMIT $offset, 1";
             }
-            echo '</ul>';
-            echo '</div>';
 
             // Getting the question information
             $sql = "SELECT * FROM $table_survey_question
@@ -2006,9 +2011,13 @@ class SurveyUtil
                         survey_id='".Database::escape_string($_GET['survey_id'])."' AND
                         type<>'pagebreak' AND type<>'comment'
                     ORDER BY sort ASC
-                    LIMIT ".$offset.",1";
+                    $limitStatement";
             $result = Database::query($sql);
-            $question = Database::fetch_array($result);
+            //$question = Database::fetch_array($result);
+
+            while ($row = Database::fetch_array($result)) {
+                $questions[$row['question_id']] = $row;
+            }
 
             // Navigate through the questions (next and previous)
             /*if ($currentQuestion != 0 ) {
@@ -2024,124 +2033,132 @@ class SurveyUtil
                 echo get_lang('NextQuestion').' '.Display::return_icon('action_next.png', get_lang('NextQuestion'), array('align' => 'middle'));
             }*/
         }
-        echo '<div class="title-question">';
-            echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
-        echo '</div>';
-        if ($question['type'] == 'score') {
-            /** @todo This function should return the options as this is needed further in the code */
-            $options = SurveyUtil::display_question_report_score($survey_data, $question, $offset);
-        } elseif ($question['type'] == 'open') {
-            /** @todo Also get the user who has answered this */
-            $sql = "SELECT * FROM $table_survey_answer
-                    WHERE
-                        c_id = $course_id AND
-                        survey_id='".Database::escape_string($_GET['survey_id'])."' AND
-                        question_id = '".Database::escape_string($question['question_id'])."'";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result)) {
-                echo $row['option_id'].'<hr noshade="noshade" size="1" />';
-            }
-        } else {
-            // Getting the options
-            $sql = "SELECT * FROM $table_survey_question_option
-                    WHERE
-                        c_id = $course_id AND survey_id='".Database::escape_string($_GET['survey_id'])."' AND
-                        question_id = '".Database::escape_string($question['question_id'])."'
-                    ORDER BY sort ASC";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result)) {
-                $options[$row['question_option_id']] = $row;
-            }
-            // Getting the answers
-            $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
-                    WHERE
-                        c_id = $course_id AND
-                        survey_id='".Database::escape_string($_GET['survey_id'])."' AND
-                        question_id = '".Database::escape_string($question['question_id'])."'
-                    GROUP BY option_id, value";
-            $result = Database::query($sql);
-            $number_of_answers = 0;
-            $data = array();
-            while ($row = Database::fetch_array($result)) {
-                $number_of_answers += $row['total'];
-                $data[$row['option_id']] = $row;
-            }
 
+        $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+
+        foreach ($questions as $question) {
             $chartData = array();
-            foreach ($options as $option) {
-                $optionText = strip_tags($option['option_text']);
-                $optionText = html_entity_decode($optionText);
-                $votes = $data[$option['question_option_id']]['total'];
-                if (empty($votes)) {
-                    $votes = '0';
-                }
-                array_push($chartData, array('option' => $optionText, 'votes' => $votes));
-            }
-            echo '<div id="chartContainer" class="span12">';
-            echo self::drawChart($chartData);
+            $options = array();
+            echo '<div class="title-question">';
+            echo strip_tags(isset($question['survey_question']) ? $question['survey_question'] : null);
             echo '</div>';
 
-            $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-
-            // displaying the table: headers
-
-            echo '<table id="display-survey" class="table">';
-            echo '	<tr>';
-            echo '		<th>&nbsp;</th>';
-            echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
-            echo '		<th>'.get_lang('Percentage').'</th>';
-            echo '		<th>'.get_lang('VisualRepresentation').'</th>';
-            echo '	<tr>';
-
-            // Displaying the table: the content
-            if (is_array($options)) {
-                foreach ($options as $key => & $value) {
-                    $absolute_number = null;
-                    if (isset($data[$value['question_option_id']])) {
-                        $absolute_number = $data[$value['question_option_id']]['total'];
-                    }
-                    if ($question['type'] == 'percentage' && empty($absolute_number)) {
-                        continue;
-                    }
-                    if ($number_of_answers == 0) {
-                        $answers_number = 0;
-                    } else {
-                        $answers_number = $absolute_number/$number_of_answers*100;
-                    }
-                    echo '	<tr>';
-                    echo '		<td class="center">'.$value['option_text'].'</td>';
-                    echo '		<td class="center">';
-                    if ($absolute_number!=0){
-		                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&amp;survey_id='.$surveyId.'&amp;question='.$offset.'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a>';
-		            }else{
-		                 echo '0';
-		            }
-
-		            echo '      </td>';
-                    echo '		<td class="center">'.round($answers_number, 2).' %</td>';
-                    echo '		<td class="center">';
-                    $size = $answers_number*2;
-                    if ($size > 0) {
-                        echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
-                    }else{
-                        echo '<div style="text-align: left;">'.get_lang("NoDataAvailable").'</div>';
-                    }
-                    echo ' </td>';
-                    echo ' </tr>';
+            if ($question['type'] == 'score') {
+                /** @todo This function should return the options as this is needed further in the code */
+                $options = SurveyUtil::display_question_report_score($survey_data, $question, $offset);
+            } elseif ($question['type'] == 'open') {
+                /** @todo Also get the user who has answered this */
+                $sql = "SELECT * FROM $table_survey_answer
+                    WHERE
+                        c_id = $course_id AND
+                        survey_id='" . Database::escape_string($_GET['survey_id']) . "' AND
+                        question_id = '" . Database::escape_string($question['question_id']) . "'";
+                $result = Database::query($sql);
+                while ($row = Database::fetch_array($result)) {
+                    echo $row['option_id'] . '<hr noshade="noshade" size="1" />';
                 }
+            } else {
+                // Getting the options ORDER BY sort ASC
+                $sql = "SELECT * FROM $table_survey_question_option
+                    WHERE
+                        c_id = $course_id AND
+                        survey_id='" . Database::escape_string($_GET['survey_id']) . "'
+                        AND question_id = '" . Database::escape_string($question['question_id']) . "'
+                    ORDER BY sort ASC";
+                $result = Database::query($sql);
+                while ($row = Database::fetch_array($result)) {
+                    $options[$row['question_option_id']] = $row;
+                }
+                // Getting the answers
+                $sql = "SELECT *, count(answer_id) as total FROM $table_survey_answer
+                    WHERE
+                        c_id = $course_id AND
+                        survey_id='" . Database::escape_string($_GET['survey_id']) . "'
+                        AND question_id = '" . Database::escape_string($question['question_id']) . "'
+                    GROUP BY option_id, value";
+                $result = Database::query($sql);
+                $number_of_answers = array();
+                $data = array();
+                while ($row = Database::fetch_array($result)) {
+                    if (!isset($number_of_answers[$row['question_id']])) {
+                        $number_of_answers[$row['question_id']] = 0;
+                    }
+                    $number_of_answers[$row['question_id']] += $row['total'];
+                    $data[$row['option_id']] = $row;
+                }
+
+                foreach ($options as $option) {
+                    $optionText = strip_tags($option['option_text']);
+                    $optionText = html_entity_decode($optionText);
+                    $votes = isset($data[$option['question_option_id']]['total']) ?
+                        $data[$option['question_option_id']]['total'] :
+                        '0';
+                    array_push($chartData, array('option' => $optionText, 'votes' => $votes));
+                }
+                $chartContainerId = 'chartContainer'.$question['question_id'];
+                echo '<div id="'.$chartContainerId.'" class="span12">';
+                echo self::drawChart($chartData, false, $chartContainerId);
+
+                // displaying the table: headers
+
+                echo '<table class="display-survey table">';
+                echo '	<tr>';
+                echo '		<th>&nbsp;</th>';
+                echo '		<th>' . get_lang('AbsoluteTotal') . '</th>';
+                echo '		<th>' . get_lang('Percentage') . '</th>';
+                echo '		<th>' . get_lang('VisualRepresentation') . '</th>';
+                echo '	<tr>';
+
+                // Displaying the table: the content
+                if (is_array($options)) {
+                    foreach ($options as $key => & $value) {
+                        $absolute_number = null;
+                        if (isset($data[$value['question_option_id']])) {
+                            $absolute_number = $data[$value['question_option_id']]['total'];
+                        }
+                        if ($question['type'] == 'percentage' && empty($absolute_number)) {
+                            continue;
+                        }
+                        if ($number_of_answers[$option['question_id']] == 0) {
+                            $answers_number = 0;
+                        } else {
+                            $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
+                        }
+                        echo '	<tr>';
+                        echo '		<td class="center">' . $value['option_text'] . '</td>';
+                        echo '		<td class="center">';
+                        if ($absolute_number != 0) {
+                            echo '<a href="' . api_get_path(WEB_CODE_PATH) . 'survey/reporting.php?action=' . $action . '&amp;survey_id=' . $surveyId . '&amp;question=' . $offset . '&amp;viewoption=' . $value['question_option_id'] . '">' . $absolute_number . '</a>';
+                        } else {
+                            echo '0';
+                        }
+
+                        echo '      </td>';
+                        echo '		<td class="center">' . round($answers_number, 2) . ' %</td>';
+                        echo '		<td class="center">';
+                        $size = $answers_number * 2;
+                        if ($size > 0) {
+                            echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:' . $size . 'px">&nbsp;</div>';
+                        } else {
+                            echo '<div style="text-align: left;">' . get_lang("NoDataAvailable") . '</div>';
+                        }
+                        echo ' </td>';
+                        echo ' </tr>';
+                    }
+                }
+                // displaying the table: footer (totals)
+                echo '	<tr>';
+                echo '		<td class="total"><b>' . get_lang('Total') . '</b></td>';
+                echo '		<td class="total"><b>' . ($number_of_answers[$option['question_id']] == 0 ? '0' : $number_of_answers[$option['question_id']]) . '</b></td>';
+                echo '		<td class="total">&nbsp;</td>';
+                echo '		<td class="total">&nbsp;</td>';
+                echo '	</tr>';
+
+                echo '</table>';
+
+                echo '</div>';
             }
-            // displaying the table: footer (totals)
-            echo '	<tr>';
-            echo '		<td class="total"><b>'.get_lang('Total').'</b></td>';
-            echo '		<td class="total"><b>'.($number_of_answers==0?'0':$number_of_answers).'</b></td>';
-            echo '		<td class="total">&nbsp;</td>';
-            echo '		<td class="total">&nbsp;</td>';
-            echo '	</tr>';
-
-            echo '</table>';
-
         }
-
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
 
@@ -4394,14 +4411,14 @@ class SurveyUtil
      * @param	boolean	Tells if the chart has a serie. False by default
      * @return	void 	(direct output)
      */
-    public static function drawChart($chartData, $hasSerie = false)
+    public static function drawChart($chartData, $hasSerie = false, $chartContainerId = 'chartContainer')
     {
         $htmlChart = '';
         if (api_browser_support("svg")) {
             $htmlChart .= api_get_js("d3/d3.v3.5.4.min.js");
             $htmlChart .= api_get_js("dimple.v2.1.2.min.js") . '
             <script type="text/javascript">
-            var svg = dimple.newSvg("#chartContainer", "100%", 400);
+            var svg = dimple.newSvg("#'.$chartContainerId.'", "100%", 400);
             var data = [';
             $serie = array();
             $order = array();

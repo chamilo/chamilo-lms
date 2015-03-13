@@ -578,7 +578,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     }
 
     $form->addElement('select', 'recipients', get_lang('SendTo'), $options, array('multiple' => 'multiple', 'size' => '10', 'class' => 'span4'));
-    $form->addElement('button', 'submitWork', get_lang('Upload'));
+    $form->addElement('button', 'submitWork', get_lang('Upload'),'paper-plane','btn btn-success');
     $form->display();
 }
 

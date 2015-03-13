@@ -71,24 +71,22 @@ class BlockDaily extends Block
         $column = 2;
         $data = array();
         $content = $this->get_content_html();
-        $html = '<li class="widget color-green" id="intro">
-		                <div class="widget-head">
-		                    <h3>' . get_lang('GradebookAndAttendances') . '</h3>
-		                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\'' . addslashes(
+        $html = '<div class="panel panel-default" id="intro">
+		                <div class="panel-heading">' . get_lang('GradebookAndAttendances') . '
+		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\'' . addslashes(
                 api_htmlentities(
                     get_lang('ConfirmYourChoice'),
                     ENT_QUOTES,
                     $charset
                 )
-            ) . '\')) return false;" href="index.php?action=disable_block&path=' . $this->path . '">' . Display::return_icon(
-                'close.gif',
-                get_lang('Close')
-            ) . '</a></div>
+            ) . '\')) return false;" href="index.php?action=disable_block&path=' . $this->path . '">
+                    <i class="fa fa-times"></i>
+                        </a></div>
 		                </div>
-		                <div class="widget-content">
+		                <div class="panel-body">
 		                   ' . $content . '
 		                </div>
-		            </li>
+		            </div>
 				';
         $data['column'] = $column;
         $data['content_html'] = $html;
@@ -103,10 +101,10 @@ class BlockDaily extends Block
     public function get_content_html()
     {
         $course_data = $this->get_course_information_data();
-        $content = '<div style="margin:10px;">';
-        $content .= '<h3><font color="#000">' . get_lang(
+        //$content = '<div style="margin:10px;">';
+        $content = '<h4>' . get_lang(
                 'YourCourseList'
-            ) . '</font></h3>';
+            ) . '</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
@@ -142,7 +140,7 @@ class BlockDaily extends Block
             $content .= '<div style="text-align:right;margin-top:10px;">
             <a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php">' . get_lang('SeeMore') . '</a></div>';
         }
-        $content .= '</div>';
+        //$content .= '</div>';
         return $content;
     }
 

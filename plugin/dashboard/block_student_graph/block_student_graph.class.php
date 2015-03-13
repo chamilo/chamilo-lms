@@ -72,16 +72,18 @@ class BlockStudentGraph extends Block
     	$data   = array();
 		$students_attendance_graph = $this->get_students_attendance_graph();
 
-		$html = '<li class="widget color-orange" id="intro">
-	                <div class="widget-head">
-	                    <h3>'.get_lang('StudentsInformationsGraph').'</h3>
-	                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+		$html = '<div class="panel panel-default" id="intro">
+	                <div class="panel-heading">
+	                    '.get_lang('StudentsInformationsGraph').'
+	                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+	                    <i class="fa fa-times"></i>
+	                    </a></div>
 	                </div>
-	                <div class="widget-content" align="center">
+	                <div class="panel-body" align="center">
 	                	<div style="padding:10px;"><strong>'.get_lang('AttendancesFaults').'</strong></div>
 						'.$students_attendance_graph.'
 	                </div>
-	            </li>';
+	            </div>';
     	$data['column'] = $column;
     	$data['content_html'] = $html;
     	return $data;

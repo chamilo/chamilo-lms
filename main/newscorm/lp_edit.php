@@ -161,8 +161,12 @@ $expired_on     = $_SESSION['oLP'] ->expired_on;
 $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('LearnpathPrerequisites').'</label>
-<div class="controls">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
+$form->addElement('html','<div class="form-group">');
+$items = $_SESSION['oLP']->display_lp_prerequisites_list();
+$form->addElement('html','<label class="col-md-2">'.get_lang('LearnpathPrerequisites').'</label>');
+$form->addElement('html','<div class="col-md-10">');
+$form->addElement('html',$items);
+$form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div></div></div>');
 
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
@@ -201,7 +205,8 @@ if ($enableLpExtraFields) {
 }
 
 //Submit button
-$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+//$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+$form->addButtonSave(get_lang('SaveLPSettings'));
 
 // Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
@@ -230,14 +235,14 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<div class="row">';
 
 if ($_SESSION['oLP']->get_hide_toc_frame() == 1) {
-    echo '<div class="span12">';
+    echo '<div class="col-md-12">';
     $form -> display();
     echo '</div>';
 } else{
-    echo '<div class="span6">';
+    echo '<div class="col-md-8">';
     $form -> display();
     echo '</div>';
-    echo '<div class="span6" align="center">';
+    echo '<div class="col-md-4" align="center">';
     echo '<img src="../img/course_setting_layout.png" />';
     echo '</div>';
 }

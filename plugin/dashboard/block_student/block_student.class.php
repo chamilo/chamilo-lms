@@ -58,17 +58,18 @@ class BlockStudent extends Block
     	$data   = array();
 
         $student_content_html = $this->get_students_content_html_for_drh();
-		$html = '<li class="widget color-blue" id="intro">
-                    <div class="widget-head">
-                        <h3>'.get_lang('StudentsInformationsList').'</h3>
-                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.
-                            Display::return_icon('close.gif',get_lang('Close')).'</a>
+		$html = '<div class="panel panel-default" id="intro">
+                    <div class="panel-heading">
+                        '.get_lang('StudentsInformationsList').'
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                            <i class="fa fa-times"></i>
+                        </a>
                         </div>
                     </div>
-                    <div class="widget-content">
+                    <div class="panel-body">
                         '.$student_content_html.'
                     </div>
-                    </li>';
+                    </div>';
     	$data['column'] = $column;
     	$data['content_html'] = $html;
     	return $data;
@@ -81,8 +82,8 @@ class BlockStudent extends Block
     public function get_students_content_html_for_platform_admin()
     {
  		$students = $this->students;
- 		$content = '<div style="margin:10px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
+ 		//$content = '<div style="margin:10px;">';
+ 		$content = '<h4>'.get_lang('YourStudents').'</h4>';
         $students_table = null;
  		if (count($students) > 0) {
 	 		$students_table .= '<table class="data_table">';
@@ -144,7 +145,7 @@ class BlockStudent extends Block
  		if (count($students) > 0) {
 			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=useroverview">'.get_lang('SeeMore').'</a></div>';
 		}
-		$content .= '</div>';
+		//$content .= '</div>';
 
  		return $content;
  	}
@@ -152,8 +153,8 @@ class BlockStudent extends Block
   	public function get_students_content_html_for_drh() {
   		$attendance = new Attendance();
   		$students = $this->students;
- 		$content = '<div style="margin:5px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
+ 		//$content = '<div style="margin:5px;">';
+ 		$content = '<h4>'.get_lang('YourStudents').'</h4>';
         $students_table = null;
  		if (count($students) > 0) {
 	 		$students_table .= '<table class="data_table">';
@@ -225,7 +226,7 @@ class BlockStudent extends Block
                             <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=yourstudents">'.get_lang('SeeMore').'</a>
                          </div>';
 		}
-		$content .= '</div>';
+		//$content .= '</div>';
 
   		return $content;
   	}

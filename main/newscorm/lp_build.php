@@ -125,12 +125,12 @@ function confirmation(name) {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo '<div class="row-fluid">';
-echo '<div class="span4">';
+echo '<div class="row">';
+echo '<div class="col-md-4">';
 // Build the tree with the menu items in it.
 echo $_SESSION['oLP']->return_new_tree();    
 echo '</div>';        
-echo '<div class="span8">';
+echo '<div class="col-md-8">';
 
 if (isset($is_success) && $is_success === true) {
     Display::display_confirmation_message(get_lang('ItemRemoved'));

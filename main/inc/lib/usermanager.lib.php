@@ -3850,8 +3850,8 @@ class UserManager
         $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
 
         return '
-        <form method="GET" class="well form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-                <input placeholder="'.get_lang('UsersGroups').'" type="text" class="input-small" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
+        <form method="GET" class="form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
+                <input placeholder="'.get_lang('UsersGroups').'" type="text" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
                 ' . get_lang('Type') .'
                 <select name="search_type" onchange="javascript: extra_field_toogle();">
                 <option value="0">--'.get_lang('Select').'--</option>

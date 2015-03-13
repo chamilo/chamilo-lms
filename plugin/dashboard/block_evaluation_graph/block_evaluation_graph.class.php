@@ -75,12 +75,14 @@ class BlockEvaluationGraph extends Block
 		$evaluations_base_courses_graph         = $this->get_evaluations_base_courses_graph();
 		$evaluations_courses_in_sessions_graph  = $this->get_evaluations_courses_in_sessions_graph();
 
-		$html = '<li class="widget color-orange" id="intro">
-                    <div class="widget-head">
-                        <h3>'.get_lang('EvaluationsGraph').'</h3>
-                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+		$html = '<div class="panel panel-default" id="intro">
+                    <div class="panel-heading">
+                        '.get_lang('EvaluationsGraph').'
+                        <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">
+                        <i class="fa fa-times"></i>
+                        </a></div>
                     </div>
-                    <div class="widget-content" align="center">';
+                    <div class="panel-body">';
                         if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
                             $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
                         } else {
@@ -104,7 +106,7 @@ class BlockEvaluationGraph extends Block
                             }
                         }
 		$html .= '</div>
-			     </li>';
+			     </div>';
 
     	$data['column'] = $column;
     	$data['content_html'] = $html;

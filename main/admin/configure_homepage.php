@@ -968,7 +968,7 @@ switch ($action) {
 			$form->addElement('html', $html_langs);
 		}
 		$form->addElement('html','</tr></table><br/>');
-        $form->addButtonSave(get_lang('Save'));
+		$form->addButtonSave(get_lang('Save'));
 		$form->setDefaults($default);
 		$form->display();
 

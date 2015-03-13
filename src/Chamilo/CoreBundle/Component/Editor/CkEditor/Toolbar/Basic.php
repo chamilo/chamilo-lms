@@ -26,8 +26,7 @@ class Basic extends Toolbar
         'colorbutton',
         'flash',
         'link',
-        'table',
-        'wikilink'
+        'table'
     );
 
     /**

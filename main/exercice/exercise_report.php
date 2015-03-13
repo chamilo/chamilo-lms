@@ -20,7 +20,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = api_get_datepicker_js();
 
 // Access control
 api_protect_course_script(true, false, true);

@@ -34,9 +34,9 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
+$isStudentView  = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
+$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 /* MAIN CODE */
 

@@ -493,7 +493,7 @@ $form->addElement(
     get_lang('CheckUniqueEmail')
 );
 
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';

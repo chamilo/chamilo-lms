@@ -129,7 +129,8 @@ if (!isset($_GET['action']) || isset($_GET['action']) && $_GET['action'] == 'ove
     );
     switch ($_GET['action']) {
         case 'questionreport':
-            $tool_name = get_lang('DetailedReportByQuestion');
+            $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
+            $tool_name = $singlePage ? get_lang('QuestionsOverallReport') : get_lang('DetailedReportByQuestion');
             break;
         case 'userreport':
             $tool_name = get_lang('DetailedReportByUser');
@@ -161,13 +162,15 @@ if (!isset($_GET['action']) ||
     $_GET['action'] == 'overview'
 ) {
     $myweb_survey_id = $survey_id;
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'&'.api_get_cidreq().'">'.
+    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'&amp;'.$cidReq.'&amp;single_page=1">'.
+        Display::return_icon('survey_reporting_question.gif',get_lang('QuestionsOverallReport')).' '.get_lang('QuestionsOverallReport').'</a></div><div class="sectioncomment">'.get_lang('QuestionsOverallReportDetail').' </div>';
+    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
         Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'&'.api_get_cidreq().'">'.
+    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
         Display::return_icon('survey_reporting_user.gif',get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'&'.api_get_cidreq().'">'.
+    echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
         Display::return_icon('survey_reporting_comparative.gif',get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
-    echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'&'.api_get_cidreq().'">'.
+    echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
         Display::return_icon('survey_reporting_complete.gif',get_lang('CompleteReport')).' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
 }
 

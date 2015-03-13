@@ -203,7 +203,7 @@ $text = get_lang('UpdateWork');
 $class = 'save';
 
 // fix the Ok button when we see the tool in the learn path
-$form->addElement('style_submit_button', 'editWork', $text, array('class'=> $class, 'value' => "editWork"));
+$form->addButtonUpdate($text);
 
 $form->setDefaults($defaults);
 $error_message = null;
@@ -213,49 +213,42 @@ $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$_course['path'] . '
 $succeed = false;
 if ($form->validate()) {
     if ($student_can_edit_in_session && $check) {
+        /*
+         * SPECIAL CASE ! For a work edited
+        */
+        //Get the author ID for that document from the item_property table
+        $item_to_edit_id 	= intval($_POST['item_to_edit']);
+        $is_author 			= user_is_author($item_to_edit_id);
 
-        if (isset($_POST['editWork'])) {
-            /*
-             * SPECIAL CASE ! For a work edited
-            */
-            //Get the author ID for that document from the item_property table
-            $item_to_edit_id 	= intval($_POST['item_to_edit']);
-            $is_author 			= user_is_author($item_to_edit_id);
+        if ($is_author) {
+            $work_data = get_work_data_by_id($item_to_edit_id);
 
-            if ($is_author) {
-                $work_data = get_work_data_by_id($item_to_edit_id);
-
-                if (!empty($_POST['title'])) {
-                    $title = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
-                }
-                $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
-
-                $add_to_update = null;
-                if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
-                    $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
-                    $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
-                    $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
-                }
-
-                if ($_POST['qualification'] > $_POST['qualification_over']) {
-                    $error_message .= Display::return_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'), 'error');
-                } else {
-                    $sql = "UPDATE  " . $work_table . "
-                            SET	title = '".Database::escape_string($title)."',
-                                description = '".Database::escape_string($description)."'
-                                ".$add_to_update."
-                            WHERE c_id = $course_id AND id = $item_to_edit_id";
-                    Database::query($sql);
-                }
-                api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
-
-                $succeed = true;
-                $error_message .= Display::return_message(get_lang('ItemUpdated'), 'warning');
-            } else {
-                $error_message .= Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+            if (!empty($_POST['title'])) {
+                $title = isset($_POST['title']) ? $_POST['title'] : $work_data['title'];
             }
-        } else {
-            $error_message .= Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+            $description = isset($_POST['description']) ? $_POST['description'] : $work_data['description'];
+
+            $add_to_update = null;
+            if ($is_allowed_to_edit && ($_POST['qualification'] !='' )) {
+                $add_to_update = ', qualificator_id ='."'".api_get_user_id()."', ";
+                $add_to_update .= ' qualification = '."'".Database::escape_string($_POST['qualification'])."',";
+                $add_to_update .= ' date_of_qualification = '."'".api_get_utc_datetime()."'";
+            }
+
+            if ($_POST['qualification'] > $_POST['qualification_over']) {
+                $error_message .= Display::return_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'), 'error');
+            } else {
+                $sql = "UPDATE  " . $work_table . "
+                        SET	title = '".Database::escape_string($title)."',
+                            description = '".Database::escape_string($description)."'
+                            ".$add_to_update."
+                        WHERE c_id = $course_id AND id = $item_to_edit_id";
+                Database::query($sql);
+            }
+            api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
+
+            $succeed = true;
+            $error_message .= Display::return_message(get_lang('ItemUpdated'), 'warning');
         }
         Security::clear_token();
     } else {

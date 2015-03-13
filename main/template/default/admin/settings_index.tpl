@@ -7,7 +7,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.edit-block a').on('click', function(e) {
+    $('a.edit-block').on('click', function(e) {
         e.preventDefault();
 
         var $self = $(this);
@@ -55,7 +55,7 @@ $(document).ready(function() {
                 <div class="panel-heading">
                     {{ block_item.icon }} {{ block_item.label }}
                     {% if block_item.editable and _u.is_admin %}
-                        <a class="pull-right" href="#" data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
+                        <a class="edit-block pull-right" href="#" data-label="{{ block_item.label }}" data-id="{{ block_item.class }}">
                             <img src="{{ _p.web_img }}icons/22/edit.png" alt="{{ 'Edit' | get_lang }}" title="{{ 'Edit' | get_lang }}">
                         </a>
                     {% endif %}
@@ -98,19 +98,29 @@ $(document).ready(function() {
 </section>
 
 {% if _u.is_admin %}
-<div id="modal-extra" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-extra-title" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 id="modal-extra-title">{{ 'Blocks' | get_lang }}</h3>
+    <div class="modal fade" id="modal-extra">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'Close' | get_lang }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modal-extra-title">{{ 'Blocks' | get_lang }}</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="post" id="block-extra-data">
+                        <div class="form-group">
+                            <textarea rows="15" name="content" class="form-control" id="extra-content"></textarea>
+                            <input type="hidden" name="block" id="extra-block" value="">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-block-editor-save" class="btn btn-primary">
+                        <i class="fa fa-floppy-o"></i> {{ 'Save' | get_lang }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-        <form action="#" method="post" id="block-extra-data">
-            <textarea rows="5" name="content" class="input-block-level" id="extra-content"></textarea>
-            <input type="hidden" name="block" id="extra-block" value="">
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button id="btn-block-editor-save" class="btn btn-primary">{{ 'Save' | get_lang }}</button>
-    </div>
-</div>
 {% endif %}

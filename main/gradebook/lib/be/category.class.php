@@ -178,26 +178,41 @@ class Category implements GradebookItem
         $this->session_id = (int)$session_id;
     }
 
+    /**
+     * @param $weight
+     */
     public function set_weight($weight)
     {
         $this->weight = $weight;
     }
 
+    /**
+     * @param $visible
+     */
     public function set_visible($visible)
     {
         $this->visible = $visible;
     }
 
+    /**
+     * @param int $id
+     */
     public function set_grade_model_id($id)
     {
         $this->grade_model_id = $id;
     }
 
+    /**
+     * @param $locked
+     */
     public function set_locked($locked)
     {
         $this->locked = $locked;
     }
 
+    /**
+     * @return int
+     */
     public function get_grade_model_id()
     {
         return $this->grade_model_id;
@@ -431,6 +446,7 @@ class Category implements GradebookItem
 
     /**
      * @param $result
+     *
      * @return array
      */
     private static function create_category_objects_from_sql_result($result)
@@ -733,8 +749,8 @@ class Category implements GradebookItem
             $sql = 'SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id, generate_certificates
                     FROM '.$tbl_category.' c
                     WHERE c.id='.intval($selectcat);
-            $result       = Database::query($sql);
-            $row          = Database::fetch_array($result, 'ASSOC');
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result, 'ASSOC');
 
             return $row;
         }
@@ -875,9 +891,6 @@ class Category implements GradebookItem
             /** @var Evaluation $eval */
             foreach ($evals as $eval) {
                 $evalres = $eval->calc_score($stud_id, $type);
-                if ($type == 'ranking') {
-                    var_dump($evalres);
-                }
                 $students[$stud_id] = $evalres[0];
                 if (isset($evalres) && $eval->get_weight() != 0) {
                     $evalweight = $eval->get_weight();
@@ -993,7 +1006,8 @@ class Category implements GradebookItem
                     $sql .= " AND course_code  = '".Database::escape_string($course_code)."'"
                         ." AND session_id = ".(int)$session_id;
                 } else {
-                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."' AND session_id is null OR session_id=0";
+                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."' AND
+                              session_id is null OR session_id=0";
                 }
             } else {
                 //no optional parameter, proceed as usual
@@ -1375,7 +1389,7 @@ class Category implements GradebookItem
      */
     public function get_independent_categories_with_result_for_student($cat_id, $stud_id, $cats = array())
     {
-        $creator = (api_is_allowed_to_edit() && !api_is_platform_admin()) ? api_get_user_id() : null;
+        $creator = api_is_allowed_to_edit() && !api_is_platform_admin() ? api_get_user_id() : null;
 
         $crsindcats = Category::load(
             null,

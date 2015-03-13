@@ -157,6 +157,7 @@ class GradebookDataGenerator
 
                     $row[] = $resultColumn['display'];
                     $row['result_score'] = $resultColumn['score'];
+                    $row['result_score_weight'] = $resultColumn['score_weight'];
 
                     // Best
                     $best = $this->buildBestResultColumn($item);
@@ -183,6 +184,7 @@ class GradebookDataGenerator
                 $result = $this->build_result_column($userId, $item, $ignore_score_color, true);
                 $row[] = $result['display'];
                 $row['result_score'] = $result['score'];
+                $row['result_score_weight'] = $result['score'];
 
                 // Best
                 $best = $this->buildBestResultColumn($item);
@@ -241,6 +243,7 @@ class GradebookDataGenerator
 
     /**
      * @param GradebookItem $item
+     *
      * @return string
      */
     private function buildAverageResultColumn(GradebookItem $item)
@@ -256,16 +259,23 @@ class GradebookDataGenerator
 
     /**
      * @param GradebookItem $item
+     * @param int $userCount
+     *
      * @return string
      */
     private function buildRankingColumn(GradebookItem $item, $userCount = 0)
     {
         $score = $item->calc_score(null, 'ranking');
         $score[1] = $userCount;
-        $scoreDisplay = ScoreDisplay::instance();
+
+        $scoreDisplay = null;
+        if (isset($score[0])) {
+            $scoreDisplay = ScoreDisplay::instance();
+            $scoreDisplay = $scoreDisplay->display_score($score, SCORE_DIV);
+        }
 
         return array(
-            'display' => $scoreDisplay->display_score($score, SCORE_DIV),
+            'display' => $scoreDisplay,
             'score' => $score
         );
     }
@@ -301,23 +311,38 @@ class GradebookDataGenerator
                                         $score,
                                         SCORE_DIV
                                     ),
-                                    'score' => $score
+                                    'score' => $score,
+                                    'score_weight' => $score
                                 );
                         }
+
                         return array(
-                            'display' => get_lang('Total') . ' : '. $scoredisplay->display_score($score, $displaytype),
-                            'score' => $score
+                            'display' => $scoredisplay->display_score($score, SCORE_DIV),
+                            'score' => $score,
+                            'score_weight' => $score
                         );
                     } else {
                         return array(
                             'display' => null,
-                            'score' => $score
+                            'score' => $score,
+                            'score_weight' => $score
                         );
                     }
                     break;
                 // evaluation and link
                 case 'E' :
                 case 'L' :
+                    /** @var Category $category */
+                    $category = $item->getCategory();
+                    $parentId = $category->get_parent_id();
+                    $scoreWeight = [];
+
+                    if ($parentId == 0) {
+                        $scoreWeight = [
+                            $score[0] / $score[1] * $item->get_weight(),
+                            $item->get_weight()
+                        ];
+                    }
                     /*$displaytype = SCORE_DIV_PERCENT;
                     if ($ignore_score_color) {
                         $displaytype |= SCORE_IGNORE_SPLIT;
@@ -325,13 +350,15 @@ class GradebookDataGenerator
                     return array(
                         'display' => $scoredisplay->display_score($score, SCORE_DIV),
                         'score' => $score,
+                        'score_weight' => $scoreWeight,
                     );
             }
         }
 
         return array(
             'display' => null,
-            'score' => null
+            'score' => null,
+            'score_weight' => null
         );
     }
 

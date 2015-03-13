@@ -25,7 +25,7 @@ class GradebookTable extends SortableTable
      */
     public function __construct($currentcat, $cats = array(), $evals = array(), $links = array(), $addparams = null)
     {
-        parent::__construct('gradebooklist', null, null, (api_is_allowed_to_edit()?1:0));
+        parent::__construct('gradebooklist', null, null, api_is_allowed_to_edit() ? 1 : 0);
         $this->evals_links = array_merge($evals, $links);
         $this->currentcat = $currentcat;
         $this->cats = $cats;
@@ -182,7 +182,6 @@ class GradebookTable extends SortableTable
         $scoredisplay = ScoreDisplay :: instance();
 
         $totalResult = [0, 0];
-        $totalGlobal = [0, 0];
         $totalBest = [0, 0];
         $totalAverage = [0, 0];
 
@@ -261,18 +260,11 @@ class GradebookTable extends SortableTable
                 $score = $item->calc_score(api_get_user_id());
 
                 if (!empty($score[1])) {
-                    $categoryScoreArray = $score;
                     $completeScore = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
                     $score = $score[0]/$score[1]*$item->get_weight();
                     $score = $scoredisplay->display_score(array($score, null), SCORE_SIMPLE);
-
-                    $categoryScore = $scoredisplay->display_score(
-                        array($score, $mainCategoryWeight),
-                        SCORE_DIV
-                    );
                     $scoreToDisplay = Display::tip($score, $completeScore);
                 } else {
-                    $categoryScoreArray = [0, $item->get_weight()];
                     $scoreToDisplay = '-';
                     $categoryScore = null;
                 }
@@ -285,8 +277,8 @@ class GradebookTable extends SortableTable
                     $ranking = isset($data['ranking']) ? $data['ranking'] : null;
 
                     $totalResult = [
-                        $totalResult[0] + $data['result_score'][0],
-                        $totalResult[1] + $data['result_score'][1],
+                        $totalResult[0] + $data['result_score_weight'][0],
+                        $totalResult[1] + $data['result_score_weight'][1],
                     ];
 
                     $totalBest = [
@@ -485,6 +477,8 @@ class GradebookTable extends SortableTable
 
                 $global = null;
                 $average = null;
+                // Overwrite main weight
+                $totalResult[1] = $main_weight;
 
                 $totalResult = $scoredisplay->display_score(
                     $totalResult,

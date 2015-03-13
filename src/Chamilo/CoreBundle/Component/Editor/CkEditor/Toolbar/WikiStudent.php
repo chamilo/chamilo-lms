@@ -9,5 +9,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class WikiStudent extends Basic
 {
-
+    public $plugins = array(
+        'wikilink'
+    );
 }

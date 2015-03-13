@@ -96,7 +96,7 @@ if (empty($docId)) {
     $form->addElement('hidden', 'id', $workId);
     $form->addElement('hidden', 'document_id', $docId);
     $form->addElement('label', get_lang('File'), $documentInfo['title']);
-    $form->addElement('style_submit_button', 'submit', get_lang('Add'));
+    $form->addButtonCreate(get_lang('Add'));
     if ($form->validate()) {
         $values = $form->exportValues();
         $workId = $values['id'];

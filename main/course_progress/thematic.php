@@ -283,6 +283,6 @@ if ($action == 'thematic_list') {
     $form->addElement('header', get_lang('ImportThematic'));
     $form->addElement('file', 'file');
     $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));
-    $form->addElement('style_submit_button', 'SubmitImport', get_lang('Import'), 'class="save"');
+	$form->addButtonImport(get_lang('Import'), 'SubmitImport');
     $form->display();
 }

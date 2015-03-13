@@ -54,7 +54,7 @@ class ThematicController
                         if (trim($_POST['title']) !== '') {
                             if (api_is_allowed_to_edit(null, true)) {
 
-                                $id = $_POST['thematic_id'];
+                                $id = isset($_POST['thematic_id']) ? $_POST['thematic_id'] : null;
                                 $title = $_POST['title'];
                                 $content = $_POST['content'];
                                 $session_id = api_get_session_id();
@@ -329,7 +329,7 @@ class ThematicController
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
 
-        $description_type = intval($_GET['description_type']);
+        $description_type = isset($_GET['description_type']) ? intval($_GET['description_type']) : null;
 
         if (!empty($thematic_id) && !empty($description_type)) {
             if ($action == 'thematic_plan_delete') {

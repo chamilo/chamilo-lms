@@ -618,7 +618,7 @@ class SocialManager extends UserManager
 
             //--- User image
             if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="thickbox" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
+                $html .= '<a class="ajax" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
             } else {
                 $html .= '<img src='.$normal_image.' width="110px" />';
             }
@@ -1400,7 +1400,7 @@ class SocialManager extends UserManager
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
             $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
             $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
-            $wallImage = '<a class="thumbnail thickbox" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
+            $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
 

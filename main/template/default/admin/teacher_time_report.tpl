@@ -40,7 +40,7 @@
             });
         });
     </script>
-    <div class="span12">
+    <div class="col-md-12">
         <div class="actions">
             <span class="pull-right">
                 <a href="{{ _p.web_self }}?export=pdf&from={{ selectedFrom }}&until={{ selectedUntil }}&course={{ selectedCourse }}&session={{ selectedSession }}&teacher={{ selectedTeacher }}">

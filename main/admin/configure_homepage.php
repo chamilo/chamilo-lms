@@ -968,7 +968,7 @@ switch ($action) {
 			$form->addElement('html', $html_langs);
 		}
 		$form->addElement('html','</tr></table><br/>');
-		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+        $form->addButtonSave(get_lang('Save'));
 		$form->setDefaults($default);
 		$form->display();
 

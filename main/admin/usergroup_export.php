@@ -23,7 +23,7 @@ set_time_limit(0);
 
 $form = new FormValidator('export_users');
 $form->addElement('header', $tool_name);
-$form->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="save"');
+$form->addButtonExport(get_lang('Export'));
 
 if ($form->validate()) {
     $userGroup = new UserGroup();

@@ -1232,9 +1232,11 @@ class Exercise
         }
 
         // submit
-        $text = isset($_GET['exerciseId']) ? get_lang('ModifyExercise') : get_lang('ProcedToQuestions');
-
-        $form->addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
+        if (isset($_GET['exerciseId'])) {
+            $form->addButtonSave(get_lang('ModifyExercise'), 'submitExercise');
+        } else {
+            $form->addButtonUpdate(get_lang('ProcedToQuestions'), 'submitExercise');
+        }
 
         $form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 

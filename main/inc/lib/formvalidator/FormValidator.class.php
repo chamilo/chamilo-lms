@@ -270,6 +270,10 @@ EOT;
 
     /**
      * @param string $label
+     * @param string $name
+     * @param bool $createElement
+     *
+     * @return HTML_QuickForm_button
      */
     public function addButtonSave($label, $name = 'submit', $createElement = false)
     {
@@ -287,6 +291,10 @@ EOT;
 
     /**
      * @param string $label
+     * @param string $name
+     * @param bool $createElement
+     *
+     * @return HTML_QuickForm_button
      */
     public function addButtonCreate($label, $name = 'submit', $createElement = false)
     {
@@ -303,8 +311,11 @@ EOT;
     }
 
     /**
-     * Shortcut to create/add button
      * @param string $label
+     * @param string $name
+     * @param bool $createElement
+     *
+     * @return HTML_QuickForm_button
      */
     public function addButtonUpdate($label, $name = 'submit', $createElement = false)
     {
@@ -339,8 +350,11 @@ EOT;
     }
 
     /**
-     * Shortcut to "send" button
      * @param string $label
+     * @param string $name
+     * @param bool $createElement
+     *
+     * @return HTML_QuickForm_button
      */
     public function addButtonSend($label, $name = 'submit', $createElement = false)
     {

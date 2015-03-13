@@ -78,7 +78,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
 		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
 	);
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');
+	$form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
 
 	// Setting the rules
 	$form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
@@ -125,7 +125,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_
 		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
 		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
 	);
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');
+	$form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
 	// Setting the defaults
 	$defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));

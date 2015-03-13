@@ -54,7 +54,7 @@ $form->addElement('radio', 'file_type', null, 'CSV','csv');
 
 $form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'),'1');
 $form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
-$form->addElement('style_submit_button', 'submit',get_lang('Export'),'class="save"');
+$form->addButtonExport(get_lang('Export'));
 $form->setDefaults(array('file_type'=>'csv'));
 
 if ($form->validate()) {

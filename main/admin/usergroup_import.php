@@ -103,7 +103,7 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example_class.csv" target="_blank">' . get_lang('ExampleCSVFile') . '</a>)', 'csv');
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     $classes = Import::csv_to_array($_FILES['import_file']['tmp_name']);

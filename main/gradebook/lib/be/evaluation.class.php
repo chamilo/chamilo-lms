@@ -12,6 +12,7 @@ class Evaluation implements GradebookItem
 	private $description;
 	private $user_id;
 	private $course_code;
+	/** @var Category */
 	private $category;
 	private $created_at;
 	private $weight;
@@ -24,6 +25,41 @@ class Evaluation implements GradebookItem
 	 */
 	public function __construct()
 	{
+	}
+
+	/**
+	 * @return Category
+	 */
+	public function getCategory()
+	{
+		return $this->category;
+	}
+
+	/**
+	 * @param Category $category
+	 */
+	public function setCategory($category)
+	{
+		$this->category = $category;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_category_id()
+	{
+		return $this->category->get_id();
+	}
+
+	/**
+	 * @param int $category_id
+	 */
+	public function set_category_id($category_id)
+	{
+		$categories = Category::load($category_id);
+		if (isset($categories[0])) {
+			$this->setCategory($categories[0]);
+		}
 	}
 
 	/**
@@ -71,11 +107,6 @@ class Evaluation implements GradebookItem
 	public function setSessionId($sessionId)
 	{
 		$this->sessionId = intval($sessionId);
-	}
-
-	public function get_category_id()
-	{
-		return $this->category;
 	}
 
 	public function get_date()
@@ -136,11 +167,6 @@ class Evaluation implements GradebookItem
 	public function set_course_code($course_code)
 	{
 		$this->course_code = $course_code;
-	}
-
-	public function set_category_id($category_id)
-	{
-		$this->category = $category_id;
 	}
 
 	public function set_date($date)
@@ -232,13 +258,15 @@ class Evaluation implements GradebookItem
 		return $alleval;
 	}
 
+
+
 	/**
 	 * @param array $result
 	 * @return array
 	 */
 	private static function create_evaluation_objects_from_sql_result($result)
 	{
-		$alleval=array();
+		$alleval = array();
 		if (Database::num_rows($result)) {
 			while ($data = Database::fetch_array($result)) {
 				$eval= new Evaluation();
@@ -469,9 +497,9 @@ class Evaluation implements GradebookItem
 	/**
 	 * Check if the given score is possible for this evaluation
 	 */
-	public function is_valid_score ($score)
+	public function is_valid_score($score)
 	{
-		return (is_numeric($score) && $score >= 0 && $score <= $this->eval_max);
+		return is_numeric($score) && $score >= 0 && $score <= $this->eval_max;
 	}
 
 	/**

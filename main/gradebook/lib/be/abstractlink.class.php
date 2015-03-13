@@ -61,9 +61,39 @@ abstract class AbstractLink implements GradebookItem
         return $this->course_code;
     }
 
-    public function get_category_id()
+    /**
+     * @return Category
+     */
+    public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_category_id()
+    {
+        return $this->category->get_id();
+    }
+
+    /**
+     * @param int $category_id
+     */
+    public function set_category_id($category_id)
+    {
+        $categories = Category::load($category_id);
+        if (isset($categories[0])) {
+            $this->setCategory($categories[0]);
+        }
     }
 
     public function get_date()
@@ -116,10 +146,7 @@ abstract class AbstractLink implements GradebookItem
         $this->course_id = $course_info['real_id'];
     }
 
-    public function set_category_id ($category_id)
-    {
-        $this->category = $category_id;
-    }
+
 
     public function set_date ($date)
     {
@@ -545,6 +572,12 @@ abstract class AbstractLink implements GradebookItem
                 }
                 $ranking--;
             }
+
+            // If no ranking was detected.
+            if ($ranking == 0) {
+                return [];
+            }
+
             return array($ranking, $count);
         }
 

@@ -18,7 +18,7 @@ class GlossaryManager
     {
         $glossary_data  = array();
         $glossary_table = Database::get_course_table(TABLE_GLOSSARY);
-        $session_id = intval($session_id);
+        $session_id = api_get_session_id();
         $sql_filter = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 

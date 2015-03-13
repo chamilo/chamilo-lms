@@ -1186,30 +1186,29 @@ function logit_scorm(message, priority) {
 }
 
 function log_in_log(message, priority) {
-    var ua = $.browser;
-    if (ua.mozilla || ua.webkit) {
-        // Colorize a little
-        var color = "color: black";
-        switch (priority) {
-            case 0:
-                color = "color:red;font-weight:bold";
-                break;
-            case 1:
-                color = "color:orange";
-                break;
-            case 2:
-                color = "color:green";
-                break;
-            case 3:
-                color = "color:blue";
+
+    // Colorize a little
+    var color = "color: black";
+    switch (priority) {
+        case 0:
+            color = "color:red;font-weight:bold";
             break;
-        }
+        case 1:
+            color = "color:orange";
+            break;
+        case 2:
+            color = "color:green";
+            break;
+        case 3:
+            color = "color:blue";
+        break;
+    }
+
+    if (this.console) {
         // Log in console with syntax colouring
         console.log("%c"+message, color);
     } else {
-        if (window.console) {
-            window.console.log(message);
-        }
+        window.console.log(message);
     }
 }
 

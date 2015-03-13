@@ -63,23 +63,24 @@ class UniqueAnswerNoOption extends Question
         }
 
 		$html='<table class="data_table">
-					<tr style="text-align: center;">
-						<th width="10px">
-							'.get_lang('Number').'
-						</th>
-						<th width="10px" >
-							'.get_lang('True').'
-						</th>
-						<th width="50%">
-							'.get_lang('Answer').'
-						</th>
-							'.$comment_title.'
-							'.$feedback_title.'
-						<th width="60px">
-							'.get_lang('Weighting').'
-						</th>
-					</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+				<tr style="text-align: center;">
+					<th width="10px">
+						'.get_lang('Number').'
+					</th>
+					<th width="10px" >
+						'.get_lang('True').'
+					</th>
+					<th width="50%">
+						'.get_lang('Answer').'
+					</th>
+						'.$comment_title.'
+						'.$feedback_title.'
+					<th width="60px">
+						'.get_lang('Weighting').'
+					</th>
+				</tr>';
+
+        $form->addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$defaults = array();
 		$correct = 0;

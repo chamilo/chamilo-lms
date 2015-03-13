@@ -157,7 +157,7 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 $form->setDefaults(array('subscribe' => '1', 'unsubscribe' => 1));
 $errors = array();
 

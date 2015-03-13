@@ -55,6 +55,11 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     public function toHtml()
     {
         $for = $this->getLabelFor();
-        return '<label class="control-label"' . (empty($for) ? '' : ' for="' . $for . '"') . '>' . $this->getLabel() . '</label>' . HTML_QuickForm_static::toHtml();
+        return
+            '<label class="control-label"' . empty($for) ? '' : ' for="' . $for . '"' . '>' .
+            $this->getLabel() .
+            '</label>
+            ' .
+            parent::toHtml();
     }
 }

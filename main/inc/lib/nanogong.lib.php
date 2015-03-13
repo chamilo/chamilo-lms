@@ -664,7 +664,7 @@ class Nanogong
             api_get_path(
                 WEB_AJAX_PATH
             ).'nanogong.ajax.php?a=show_form&'.$params_string.'&TB_iframe=true&height=400&width=500',
-            array('class' => 'btn thickbox')
+            array('class' => 'btn btn-default ajax')
         );
 		$html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));
 		return $html;

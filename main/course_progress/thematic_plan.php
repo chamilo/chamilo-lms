@@ -29,20 +29,35 @@ $i=1;
 echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
-if ($message == 'ok') {
+if (isset($message) && $message == 'ok') {
     Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));
 }
+$param_gradebook = null;
 if ($action == 'thematic_plan_list') {
-        $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+        $form = new FormValidator(
+			'thematic_plan_add',
+			'POST',
+			'index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook
+		);
         $form->addElement('hidden', 'action', 'thematic_plan_add');
-        $form->addElement('hidden', 'thematic_plan_token', $token);
+        //$form->addElement('hidden', 'thematic_plan_token', $token);
         $form->addElement('hidden', 'thematic_id', $thematic_id);
 
         foreach ($default_thematic_plan_title as $id => $title) {
             $form->addElement('hidden', 'description_type['.$id.']', $id);
             $form->addText('title['.$id.']', get_lang('Title'), false, array('size'=>'50'));
-            $form->addHtmlEditor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-            //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));
+			$form->addHtmlEditor(
+				'description['.$id.']',
+				get_lang('Description'),
+				false,
+				false,
+				array(
+					'ToolbarStartExpanded' => 'false',
+					'ToolbarSet' => 'TrainingDescription',
+					'Height' => '150'
+				)
+			);
+
             if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
                 $thematic_plan = $new_thematic_plan_data[$id];
                 // set default values
@@ -56,7 +71,7 @@ if ($action == 'thematic_plan_list') {
             }
             $form->setDefaults($default);
 		}
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_plan" class="save"');
+        $form->addButtonSave(get_lang('Save'));
         $form->display();
 } else if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	if ($description_type >= ADD_THEMATIC_PLAN) {

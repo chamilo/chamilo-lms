@@ -1,10 +1,11 @@
+
 $(document).ready(function() {
     $(window).load(function () {
         var my_text = $(".glossary-content").html();
         my_protocol = location.protocol;
         my_pathname=location.pathname;
         work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
-        var ajaxRequestUrl = my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php";
+        var ajaxRequestUrl = "{{ _p.web }}main/glossary/glossary_ajax_request.php";
 
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
@@ -63,7 +64,7 @@ $(document).ready(function() {
                     $.ajax({
                         contentType: "application/x-www-form-urlencoded",
                         beforeSend: function(content_object) {
-                            $("div#"+div_content_id).html("<img src='../../../../main/inc/lib/javascript/indicator.gif' />");
+                            $("div#"+div_content_id).html("<img src='{{ _p.web }}/inc/lib/javascript/indicator.gif' />");
                         },
                         type: "POST",
                         url: ajaxRequestUrl,
@@ -83,3 +84,4 @@ $(document).ready(function() {
         });
     });
 });
+

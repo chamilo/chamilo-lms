@@ -647,7 +647,7 @@ class Attendance
 			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 
 			if (!empty($image_path['file'])) {
-				$photo = '<center><a class="thickbox" href="'.$image_path['dir'].$image_path['file'].'"  >
+				$photo = '<center><a class="ajax" href="'.$image_path['dir'].$image_path['file'].'"  >
 						  <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
 			} else {
 				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';

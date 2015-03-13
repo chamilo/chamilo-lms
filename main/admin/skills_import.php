@@ -252,8 +252,7 @@ $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="skill_example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
 //$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="skill_example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
-
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
 $defaults['file_type'] = 'csv';

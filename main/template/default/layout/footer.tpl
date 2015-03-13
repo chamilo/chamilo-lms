@@ -60,7 +60,6 @@
 {{ footer_extra_content }}
 
 <script>
-
     $("form").on("click", ' .advanced_parameters', function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
@@ -71,8 +70,9 @@
 
     /* Makes row highlighting possible */
     $(document).ready( function() {
-
         moment.locale('{{ locale }}');
+        $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
+        $.datepicker.regional["local"] = $.datepicker.regional["{{ locale }}"];
 
         /**
          * Advanced options
@@ -136,7 +136,7 @@
         /* For IOS users */
         $('.autocapitalize_off').attr('autocapitalize', 'off');
 
-        //Tool tip (in exercises)
+        // Tool tip (in exercises)
         var tip_options = {
             placement : 'right'
         };

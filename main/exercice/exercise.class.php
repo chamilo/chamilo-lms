@@ -1232,9 +1232,11 @@ class Exercise
         }
 
         // submit
-        $text = isset($_GET['exerciseId']) ? get_lang('ModifyExercise') : get_lang('ProcedToQuestions');
-
-        $form->addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
+        if (isset($_GET['exerciseId'])) {
+            $form->addButtonSave(get_lang('ModifyExercise'), 'submitExercise');
+        } else {
+            $form->addButtonUpdate(get_lang('ProcedToQuestions'), 'submitExercise');
+        }
 
         $form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 
@@ -1820,7 +1822,10 @@ class Exercise
         $hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
 
         if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {
-            $html .='<a href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&num='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox btn">';
+            $html .='<a
+                href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&num='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&height=480&width=640&modal=true"
+                title=""
+                class="ajax btn btn-default">';
             if ($questionNum == count($this->questionList)) {
                 $html .= get_lang('EndTest').'</a>';
             } else {

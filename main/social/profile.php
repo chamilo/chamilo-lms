@@ -389,23 +389,8 @@ if(!empty($chat_status['user_chat_status'])){
 }
 
 if (api_get_user_id() === $friendId) {
-    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+    $editProfileUrl = Display::getProfileEditionLink(api_get_user_id());
 
-    if (api_get_setting('sso_authentication') === 'true') {
-        $subSSOClass = api_get_setting('sso_authentication_subclass');
-        $objSSO = null;
-
-        if (!empty($subSSOClass)) {
-            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
-
-            $subSSOClass = 'sso' . $subSSOClass;
-            $objSSO = new $subSSOClass();
-        } else {
-            $objSSO = new sso();
-        }
-
-        $editProfileUrl = $objSSO->generateProfileEditingURL();
-    }
     $social_avatar_block .= '<div class="edit-profile">
                                 <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
                              </div>';
@@ -671,7 +656,7 @@ if ($show_full_profile) {
                 $my_groups .=  '<div class="box_shared_profile_group_actions">'
                     .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                     .'?view=mygroups&height=390&width=610&user_id='.$user_id.'"'
-                    .' class="thickbox" title="'.get_lang('SeeAll').'" >'
+                    .' class="ajax" title="'.get_lang('SeeAll').'" >'
                     .get_lang('SeeAllMyGroups')
                     .'</a></div>';
             }
@@ -738,7 +723,7 @@ if ($show_full_profile) {
     }
 
     //BLock Social Skill
-    if (api_get_setting('allow_skills_tool') == 'true') {        
+    if (api_get_setting('allow_skills_tool') == 'true') {
         $skill = new Skill();
 
         $ranking = $skill->get_user_skill_ranking($my_user_id);
@@ -958,7 +943,7 @@ function listMyFriends($user_id, $link_shared, $show_full_profile)
                 $friendHtml.= ' : <span>'
                     .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                     .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                    .'class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
+                    .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
             }
         }
 

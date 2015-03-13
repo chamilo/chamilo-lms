@@ -6425,7 +6425,8 @@ function api_get_css($file, $media = 'screen') {
 /**
  * Returns the js header to include the jquery library
  */
-function api_get_jquery_js() {
+function api_get_jquery_js()
+{
     return api_get_asset('jquery/dist/jquery.min.js');
 }
 
@@ -6433,11 +6434,26 @@ function api_get_jquery_js() {
  * Returns the jquery path
  * @return string
  */
-function api_get_jquery_web_path() {
+function api_get_jquery_web_path()
+{
     return api_get_path(WEB_PATH).'web/assets/jquery/dist/jquery.min.js';
 }
 
+/**
+ * @return string
+ */
+function api_get_jquery_ui_js_web_path()
+{
+    return api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js';
+}
 
+/**
+ * @return string
+ */
+function api_get_jquery_ui_css_web_path()
+{
+    return api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
+}
 
 /**
  * Returns the jquery-ui library js headers
@@ -6446,7 +6462,7 @@ function api_get_jquery_web_path() {
  *
  */
 function api_get_jquery_ui_js($include_jqgrid = false) {
-    $libraries = array('jquery-ui');
+    $libraries = array();
     if ($include_jqgrid) {
        $libraries[]='jqgrid';
     }
@@ -6457,9 +6473,6 @@ function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
-function api_get_datepicker_js() {
-    return api_get_jquery_libraries_js(array('datepicker'));
-}
 
 /**
  * Returns the jquery library js and css headers
@@ -6497,12 +6510,6 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_js('jquery-upload/jquery.fileupload.js');
         $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
         $js .= api_get_css($js_path.'jquery-upload/jquery.fileupload-ui.css');
-    }
-
-    //jquery-ui css changes for Chamilo
-    if (in_array('jquery-ui',$libraries)) {
-        //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        //$js .= api_get_css($js_path.'jquery-ui/default.css');
     }
 
     if (in_array('bxslider',$libraries)) {
@@ -6908,18 +6915,6 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
 function api_get_security_key() {
     global $_configuration;
     return $_configuration['security_key'];
-}
-
-function api_get_datetime_picker_js($htmlHeadXtra) {
-
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-
-    $isocode = api_get_language_isocode();
-    if ($isocode != 'en') {
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
-    }
-    return $htmlHeadXtra;
 }
 
 function api_detect_user_roles($user_id, $course_code, $session_id = 0) {

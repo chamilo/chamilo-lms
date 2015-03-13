@@ -708,4 +708,55 @@ class SystemAnnouncementManager
 
         return $template->fetch('default/announcement/slider.tpl');
 	}
+
+    /**
+     * Get the HTML code for an announcement
+     * @param int $announcementId The announcement ID
+     * @param int $visibility The announcement visibility
+     * @return string The HTML code
+     */
+    public static function displayAnnouncement($announcementId, $visibility)
+    {
+        $selectedUserLanguage = Database::escape_string(api_get_interface_language());
+        $announcementTable = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+
+        $now = api_get_utc_datetime();
+
+        $whereConditions = [
+            "(lang = ? OR lang IS NULL) " => $selectedUserLanguage,
+            "AND (? >= date_start AND ? <= date_end) " => [$now, $now],
+            "AND id = ? " => intval($announcementId)
+        ];
+
+        switch ($visibility) {
+            case self::VISIBLE_GUEST :
+                $whereConditions["AND visible_guest = ? "] = 1;
+                break;
+            case self::VISIBLE_STUDENT :
+                $whereConditions["AND visible_student = ? "] = 1;
+                break;
+            case self::VISIBLE_TEACHER :
+                $whereConditions["AND visible_teacher = ? "] = 1;
+                break;
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $whereConditions["AND access_url_id IN (1, ?) "] = api_get_current_access_url_id();
+        }
+
+        $announcement = Database::select(
+            "*",
+            $announcementTable,
+            [
+                "where" => $whereConditions,
+                "order" => "date_start"
+            ], 'first'
+        );
+
+        $template = new Template(null, false, false);
+        $template->assign('announcement', $announcement);
+
+        return $template->fetch('default/announcement/view.tpl');
+    }
+
 }

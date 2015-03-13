@@ -367,7 +367,7 @@ $(function() {
 
     // Global popup
     $('.ajax').on('click', function() {
-        var url     = this.href;
+        var url = this.href;
         var dialog  = $("#dialog");
         if ($("#dialog").length == 0) {
             dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');

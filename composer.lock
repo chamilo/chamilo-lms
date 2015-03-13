@@ -1924,12 +1924,12 @@
             "version": "v5.7.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/finwe/mpdf.git",
+                "url": "https://github.com/mpdf/mpdf.git",
                 "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/finwe/mpdf/zipball/f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
                 "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
                 "shasum": ""
             },

@@ -4,7 +4,7 @@
 // protect a course script
 api_protect_course_script(true);
 
-Display :: display_reduced_header();
+Display::display_reduced_header();
 
 $tool = isset($tool) ? $tool : null;
 // Tracking

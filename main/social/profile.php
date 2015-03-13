@@ -656,7 +656,7 @@ if ($show_full_profile) {
                 $my_groups .=  '<div class="box_shared_profile_group_actions">'
                     .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                     .'?view=mygroups&height=390&width=610&user_id='.$user_id.'"'
-                    .' class="thickbox" title="'.get_lang('SeeAll').'" >'
+                    .' class="ajax" title="'.get_lang('SeeAll').'" >'
                     .get_lang('SeeAllMyGroups')
                     .'</a></div>';
             }
@@ -723,7 +723,7 @@ if ($show_full_profile) {
     }
 
     //BLock Social Skill
-    if (api_get_setting('allow_skills_tool') == 'true') {        
+    if (api_get_setting('allow_skills_tool') == 'true') {
         $skill = new Skill();
 
         $ranking = $skill->get_user_skill_ranking($my_user_id);
@@ -943,7 +943,7 @@ function listMyFriends($user_id, $link_shared, $show_full_profile)
                 $friendHtml.= ' : <span>'
                     .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
                     .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                    .'class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
+                    .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
             }
         }
 

@@ -623,13 +623,12 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>';
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
             $js_file_to_string .= api_get_js($file);
         }
-
 
         // Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {

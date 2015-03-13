@@ -148,6 +148,17 @@ a.tag {
     float: left;
 }
 
+/*  Edit admin panels   */
+#settings .panel .panel-heading .edit-block {
+ display: none;
+}
+#settings .panel:hover .panel-heading .edit-block {
+ display: block;
+}
+#modal-extra #extra-content {
+    resize: none;
+}
+
 /* user_portal course status icon */
 .coursestatusicons {
     border: 0px solid #000;

@@ -697,7 +697,7 @@ class IndexManager
     function display_login_form()
     {
 
-        $form = new FormValidator('formLogin', 'POST', null,  null,null,FormValidator::LAYOUT_INLINE);
+        $form = new FormValidator('formLogin', 'POST', null,  null, null, FormValidator::LAYOUT_INLINE);
         $form->addElement('label',get_lang('UserName'));
         $form->addHtml('<div class="input-group">');
         $form->addHtml('<div class="input-group-addon"><i class="fa fa-user"></i></div>');

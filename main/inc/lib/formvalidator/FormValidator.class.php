@@ -742,9 +742,6 @@ EOT;
         );
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
-            if (in_array($element->getType(), $dateElementTypes)) {
-                $addDateLibraries = true;
-            }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
@@ -752,23 +749,6 @@ EOT;
         }
         $return_value = '';
         $js = null;
-        if ($addDateLibraries) {
-            $js .= '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
-            $js .= '<link href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-
-            $isoCode = api_get_language_isocode();
-
-            if ($isoCode != 'en') {
-                $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-                $js .= '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/datetimepicker/i18n/jquery-ui-timepicker-' . $isoCode . '.js" type="text/javascript"></script>';
-                $js .= '<script>
-                $(function(){
-                    moment.lang("' . $isoCode . '");
-                    $.datepicker.setDefaults($.datepicker.regional["' . $isoCode . '"]);
-                });
-                </script>';
-            }
-        }
 
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'),

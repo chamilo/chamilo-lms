@@ -484,26 +484,18 @@ class Template
             'jquery-ui/themes/smoothness/jquery-ui.min.css',
             'jquery-ui/themes/smoothness/theme.css',
             'mediaelement/build/mediaelementplayer.min.css',
+            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
             $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
         }
 
-        // Base CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'bootstrap.css');
-
-        //Extra CSS files
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
-
-        $css[] = api_get_path(WEB_CSS_PATH) . 'font-awesome.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/mediaelement/mediaelementplayer.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/daterange/daterangepicker-bs3.css';
 
         //THEME CSS STYLE
         // $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
@@ -591,12 +583,7 @@ class Template
 
         //JS files
         $js_files = array(
-            //'jquery.min.js',
-            //'fullcalendar/lib/moment.min.js',
-            //'daterange/daterangepicker.js',
             'chosen/chosen.jquery.min.js',
-            'thickbox.js',
-            //'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {
@@ -615,7 +602,7 @@ class Template
         }
 
         $js_file_to_string = null;
-
+        $isoCode = api_get_language_isocode();
 
         $bowerJsFiles = [
             'modernizr/modernizr.js',
@@ -626,8 +613,14 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'moment/min/moment-with-locales.min.js',
-            'mediaelement/build/mediaelement-and-player.min.js'
+            'mediaelement/build/mediaelement-and-player.min.js',
+            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js'
         ];
+
+        if ($isoCode != 'en') {
+            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-' . $isoCode . '.js';
+            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-' . $isoCode . '.js';
+        }
 
         foreach ($bowerJsFiles as $file) {
             $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>';

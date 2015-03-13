@@ -24,6 +24,9 @@ class Display
     public static $global_template;
     public static $preview_style = null;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
     }
@@ -117,7 +120,7 @@ class Display
      */
     public static function set_header()
     {
-        global $show_learnpath;
+        global $show_learnpath, $tool_name;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);
     }
 
@@ -143,7 +146,8 @@ class Display
      * return: $tool return a string array list with the "define" in main_api.lib
      * @return html code for adding an introduction
      */
-    public static function display_introduction_section($tool, $editor_config = null) {
+    public static function display_introduction_section($tool, $editor_config = null)
+    {
         echo self::return_introduction_section($tool, $editor_config);
     }
 
@@ -171,7 +175,8 @@ class Display
      *	@param $full_file_name, the (path) name of the file, without .html
      *	@return return a string with the path
      */
-    public static function display_localised_html_file($full_file_name) {
+    public static function display_localised_html_file($full_file_name)
+    {
         global $language_interface;
         $localised_file_name = $full_file_name.'_'.$language_interface.'.html';
         $default_file_name = $full_file_name.'.html';
@@ -276,7 +281,8 @@ class Display
      * 					'hide_navigation' =  true to hide the navigation
      * @param array $query_vars Additional variables to add in the query-string
      * @param array $form actions Additional variables to add in the query-string
-     * @param mixed An array with bool values to know which columns show. i.e: $visibility_options= array(true, false) we will only show the first column
+     * @param mixed An array with bool values to know which columns show.
+     * i.e: $visibility_options= array(true, false) we will only show the first column
      * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
      */
     public static function display_sortable_grid(
@@ -394,7 +400,14 @@ class Display
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 
-        $table = new SortableTableFromArrayConfig($content, $column, $default_items_per_page, $table_name, $column_show, $column_order);
+        $table = new SortableTableFromArrayConfig(
+            $content,
+            $column,
+            $default_items_per_page,
+            $table_name,
+            $column_show,
+            $column_order
+        );
 
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
@@ -501,7 +514,6 @@ class Display
     {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
-            //$message = Security::remove_XSS($message);
         }
 
         $class = "";
@@ -800,7 +812,7 @@ class Display
         if (empty($additional_attributes['title'])) {
             $additional_attributes['title'] = $alt_text;
         }
-        //return '<img src="'.$image_path.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.' />';
+
         return self::tag('img', '', $additional_attributes);
     }
 
@@ -852,7 +864,7 @@ class Display
      * Creates a div tag
      *
      * @param string $content
-     * @param array $extra_attributes
+     * @param array $attributes
      * @return string
      */
     public static function div($content, $attributes = array())
@@ -875,13 +887,13 @@ class Display
     public static function input($type, $name, $value, $attributes = array())
     {
          if (isset($type)) {
-            $extra_attributes['type']= $type;
+             $attributes['type']= $type;
          }
          if (isset($name)) {
-            $extra_attributes['name']= $name;
+             $attributes['name']= $name;
          }
          if (isset($value)) {
-            $extra_attributes['value']= $value;
+             $attributes['value']= $value;
         }
         return self::tag('input', '', $attributes);
     }
@@ -889,15 +901,15 @@ class Display
     /**
      * @param $name
      * @param $value
-     * @param array $extra_attributes
+     * @param array $attributes
      * @return string
      */
-    public static function button($name, $value, $extra_attributes = array())
+    public static function button($name, $value, $attributes = array())
     {
     	if (!empty($name)) {
-    		$extra_attributes['name']= $name;
+            $attributes['name'] = $name;
     	}
-    	return self::tag('button', $value, $extra_attributes);
+    	return self::tag('button', $value, $attributes);
     }
 
     /**
@@ -1024,7 +1036,8 @@ class Display
      * @example
      * After your Display::display_header function you have to add the nex javascript code:     *
      * <script>
-     *      echo Display::grid_js('my_grid_name',  $url,$columns, $column_model, $extra_params,array()); // for more information of this function check the grid_js() function
+     *   echo Display::grid_js('my_grid_name', $url,$columns, $column_model, $extra_params,array());
+     *   // for more information of this function check the grid_js() function
      * </script>
      * //Then you have to call the grid_html
      * echo Display::grid_html('my_grid_name');
@@ -1490,7 +1503,8 @@ class Display
     /**
      * Get the session box details as an array
      * @param int       Session ID
-     * @return array    Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
+     * @return array    Empty array or session array
+     * ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
      */
     public static function get_session_title_box($session_id)
     {
@@ -1507,7 +1521,9 @@ class Display
             $active = false;
             // Request for the name of the general coach
             $sql ='SELECT tu.lastname, tu.firstname, ts.*
-                    FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table .' tu ON ts.id_coach = tu.user_id
+                    FROM '.$tbl_session.' ts
+                    LEFT JOIN '.$main_user_table .' tu
+                    ON ts.id_coach = tu.user_id
                     WHERE ts.id = '.intval($session_id);
             $rs = Database::query($sql);
             $session_info = Database::store_result($rs, 'ASSOC');
@@ -1518,7 +1534,9 @@ class Display
             $session['coach'] = '';
             $session['dates'] =  '';
 
-            if ($session_info['date_end'] == '0000-00-00' && $session_info['date_start'] == '0000-00-00') {
+            if ($session_info['date_end'] == '0000-00-00' &&
+                $session_info['date_start'] == '0000-00-00'
+            ) {
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }

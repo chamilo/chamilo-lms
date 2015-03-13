@@ -1337,7 +1337,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
                 if (
                     count($courseCategories) > 0 &&
-                    Category::userIsApprovedInCourse($userId, $courseCategories[0])
+                    Category::userFinishedCourse($userId, $courseCategories[0])
                 ) {
                     $numberOfApprovedCourses++;
                 }

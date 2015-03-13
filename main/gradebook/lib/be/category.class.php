@@ -1661,7 +1661,7 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userIsApprovedInCourse($user_id, $cats_course[0])) {
+        if (!self::userFinishedCourse($user_id, $cats_course[0])) {
             return false;
         }
 
@@ -1812,12 +1812,12 @@ class Category implements GradebookItem
     }
 
     /**
-     * Check whether a user has been approved in a course by its gradebook
+     * Check whether a user has finished a course by its gradebook
      * @param int $userId The user ID
      * @param \Category $category The gradebook category
      * @return boolean
      */
-    public static function userIsApprovedInCourse($userId, \Category $category)
+    public static function userFinishedCourse($userId, \Category $category)
     {
         $courseEvaluations = $category->get_evaluations($userId, true);
         $courseLinks = $category->get_links($userId, true);

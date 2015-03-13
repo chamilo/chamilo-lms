@@ -80,7 +80,8 @@ $actions = array(
     'display_courses',
     'display_random_courses',
     'subscribe_user_with_password',
-    'display_sessions'
+    'display_sessions',
+    'subscribe_to_session'
 );
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
@@ -207,5 +208,9 @@ switch ($action) {
         break;
     case 'display_sessions':
         $courses_controller->sessionsList($action, $nameTools, $limit);
+        break;
+    case 'subscribe_to_session':
+        SessionManager::suscribe_users_to_session($_GET['session_id'], array($_GET['user_id']));
+        header('Location: courses.php');
         break;
 }

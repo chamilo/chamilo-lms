@@ -389,23 +389,8 @@ if(!empty($chat_status['user_chat_status'])){
 }
 
 if (api_get_user_id() === $friendId) {
-    $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+    $editProfileUrl = Display::getProfileEditionLink(api_get_user_id());
 
-    if (api_get_setting('sso_authentication') === 'true') {
-        $subSSOClass = api_get_setting('sso_authentication_subclass');
-        $objSSO = null;
-
-        if (!empty($subSSOClass)) {
-            require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
-
-            $subSSOClass = 'sso' . $subSSOClass;
-            $objSSO = new $subSSOClass();
-        } else {
-            $objSSO = new sso();
-        }
-
-        $editProfileUrl = $objSSO->generateProfileEditingURL();
-    }
     $social_avatar_block .= '<div class="edit-profile">
                                 <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
                              </div>';

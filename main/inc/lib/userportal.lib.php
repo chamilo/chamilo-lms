@@ -891,23 +891,7 @@ class IndexManager
             }
         }
 
-        $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
-
-        if (api_get_setting('sso_authentication') === 'true') {
-            $subSSOClass = api_get_setting('sso_authentication_subclass');
-            $objSSO = null;
-
-            if (!empty($subSSOClass)) {
-                require_once api_get_path(SYS_CODE_PATH) . 'auth/sso/sso.' . $subSSOClass . '.class.php';
-
-                $subSSOClass = 'sso' . $subSSOClass;
-                $objSSO = new $subSSOClass();
-            } else {
-                $objSSO = new sso();
-            }
-
-            $editProfileUrl = $objSSO->generateProfileEditingURL();
-        }
+        $editProfileUrl = Display::getProfileEditionLink($user_id);
 
         $profile_content .= '<li class="profile-social"><a href="' . $editProfileUrl . '">'.Display::return_icon('edit-profile.png',get_lang('EditProfile'),null,ICON_SIZE_SMALL).get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';

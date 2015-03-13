@@ -483,19 +483,27 @@ class CoursesController
 
     /**
      * Get a HTML button for subscribe to session
-     * @param string $sessionData The session data
-     * @return string The button
+     * @param string    The session data
+     * @param boolean   Session autosubscription set. False by default.
+     * @return string   The button
      */
-    public function getRegisterInSessionButton($sessionData)
+    public function getRegisterInSessionButton(
+        $sessionData,
+        $catalogSessionAutoSubscriptionIsSet = false
+    )
     {
         global $_configuration;
 
-        $url = api_get_path(WEB_CODE_PATH);
-        $url .= $_configuration['catalog_allow_session_auto_subscription'] ?
-            "auth/courses.php?action=subscribe_to_session&session_id=".
-            intval($sessionData)."&user_id=".api_get_user_id() :
-            "inc/email_editor.php?action=subscribe_me_to_session&session=".
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+
+        $url = $webCodePath."inc/email_editor.php?action=subscribe_me_to_session&session=".
             Security::remove_XSS($sessionData);
+
+        if ($catalogSessionAutoSubscriptionIsSet &&
+            $_configuration['catalog_allow_session_auto_subscription']) {
+            $url = $webCodePath."auth/courses.php?action=subscribe_to_session&session_id=".
+                intval($sessionData)."&user_id=".api_get_user_id();
+        }
 
         return Display::url(get_lang('Subscribe'), $url, array(
             'class' => 'btn btn-large btn-primary',
@@ -553,10 +561,16 @@ class CoursesController
         // Get session search catalogue URL
         $courseUrl = getCourseCategoryUrl(1, $limit['length'], null, 0, 'subscribe');
 
+        $catalogSessionAutoSubscriptionIsSet = isset(
+            $_configuration['catalog_allow_session_auto_subscription']
+        );
+
         foreach ($sessions as $session) {
-            $subscribeSessionTarget = $_configuration['catalog_allow_session_auto_subscription'] ?
-                $session['id'] :
-                $session['name'];
+            $subscribeSessionTarget = $session['name'];
+            if ($catalogSessionAutoSubscriptionIsSet &&
+                $_configuration['catalog_allow_session_auto_subscription']) {
+                $subscribeSessionTarget = $session['id'];
+            }
             $sessionsBlock = array(
                 'id' => $session['id'],
                 'name' => $session['name'],
@@ -566,7 +580,10 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton($subscribeSessionTarget),
+                'subscribe_button' => $this->getRegisterInSessionButton(
+                    $subscribeSessionTarget,
+                    $catalogSessionAutoSubscriptionIsSet
+                ),
                 'showDescription' => $session['show_description']
             );
 

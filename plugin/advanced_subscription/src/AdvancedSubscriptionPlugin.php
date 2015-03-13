@@ -209,9 +209,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         $yearlyCostLimit = $plugin->get('yearly_cost_limit');
-        $uitMax = $plugin->get('yearly_cost_unit_converter');
-        $uitMax *= $yearlyCostLimit;
-        $uitUser = 0;
+        $maxCost = $plugin->get('yearly_cost_unit_converter');
+        $maxCost *= $yearlyCostLimit;
+        $userCost = 0;
         $now = new DateTime(api_get_utc_datetime());
         $newYearDate = $plugin->get('course_session_credit_year_start_date');
         $newYearDate = !empty($newYearDate) ?
@@ -244,7 +244,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (is_array($sessions) && count($sessions) > 0) {
             foreach ($sessions as $session) {
                 $costField = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
-                $uitUser += $costField['field_value'];
+                $userCost += $costField['field_value'];
 
                 $teachingHoursField = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
                 $expendedTime += $teachingHoursField['field_value'];
@@ -253,13 +253,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
         if (isset($params['sessionId'])) {
             $costField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'cost');
-            $uitUser += $costField['field_value'];
+            $userCost += $costField['field_value'];
 
             $teachingHoursField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'teaching_hours');
             $expendedTime += $teachingHoursField['field_value'];
         }
 
-        if ($uitMax <= $uitUser) {
+        if ($maxCost <= $userCost) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),
                 $yearlyCostLimit

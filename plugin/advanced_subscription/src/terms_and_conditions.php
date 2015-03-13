@@ -24,14 +24,7 @@ $data['termsRejected'] = isset($_REQUEST['r']) ? intval($_REQUEST['r']) : 0;
 // Init template
 $tpl = new Template($plugin->get_lang('plugin_title'));
 
-$isAllowToDoRequest = $plugin->isAllowedToDoRequest(
-    $data['studentUserId'],
-    array(
-        'is_connected' => $data['is_connected'],
-        'profile_completed' => $data['profile_completed']
-    ),
-    true
-);
+$isAllowToDoRequest = $plugin->isAllowedToDoRequest( $data['studentUserId'], $data, true);
 
 if (!$isAllowToDoRequest) {
     $tpl->assign('errorMessages', $plugin->getErrorMessages());

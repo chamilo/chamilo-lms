@@ -18,7 +18,12 @@ if (api_is_anonymous()) {
 } else {
     $visibility = api_is_allowed_to_create_course() ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
 }
-$content =  SystemAnnouncementManager ::display_announcements_slider($visibility, $_GET['id']);
+
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    $content =  SystemAnnouncementManager::display_announcements_slider($visibility, $_GET['id']);
+} else {
+    $content = SystemAnnouncementManager::displayAnnouncement($_GET['id'], $visibility);
+}
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);

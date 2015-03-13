@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7b340a907a3c5eda7380f31f022d7f8f",
+    "hash": "a996c41638ea710e2e12a278d8803b3c",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -507,6 +507,22 @@
                 ],
                 "bower-asset-ignore": []
             }
+        },
+        {
+            "name": "bower-asset/jqueryui-timepicker-addon",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/trentrichardson/jQuery-Timepicker-Addon.git",
+                "reference": "e797db2cd42d50149a77fa32ecc981a24a16dc8d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/trentrichardson/jQuery-Timepicker-Addon/zipball/e797db2cd42d50149a77fa32ecc981a24a16dc8d",
+                "reference": "e797db2cd42d50149a77fa32ecc981a24a16dc8d",
+                "shasum": ""
+            },
+            "type": "bower-asset-library"
         },
         {
             "name": "bower-asset/mediaelement",

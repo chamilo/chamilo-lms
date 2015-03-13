@@ -610,9 +610,9 @@ class Template
             'jquery-ui/jquery-ui.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'ckeditor/ckeditor.js',
+            'moment/min/moment-with-locales.min.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
-            'moment/min/moment-with-locales.min.js',
             'mediaelement/build/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js'
         ];

@@ -9534,9 +9534,9 @@ EOD;
                     $item = $this->items[$item_id];
                     switch ($item->type) {
                         case 'document':
-                            //Getting documents from a LP with chamilo documents
-                            $file_data = DocumentManager::get_document_data_by_id($item->path, $this->cc);
-                            $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$file_data['path'];
+                            // Getting documents from a LP with chamilo documents
+                            $fileData = DocumentManager::get_document_data_by_id($item->path, $this->cc);
+                            $file_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document'.$fileData['path'];
                             if (file_exists($file_path)) {
                                 $files_to_export[] = array('title'=>$item->get_title(),'path'=>$file_path);
                             }

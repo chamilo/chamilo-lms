@@ -1645,11 +1645,11 @@ class Category implements GradebookItem
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
             } else {
-                $sum_categories_weight_array[$category_id] = $category->get_weight();
+                $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
             }
         }
 
-        $main_weight = $category->get_weight();
+        $main_weight = $cats_course[0]->get_weight();
 
         $cattotal = Category::load($category_id);
         $scoretotal = $cattotal[0]->calc_score($user_id);
@@ -1661,11 +1661,11 @@ class Category implements GradebookItem
         // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
-        if (!self::userIsApprovedInCourse($user_id, $category)) {
+        if (!self::userIsApprovedInCourse($user_id, $cats_course[0])) {
             return false;
         }
 
-        $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
+        $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
         if (empty($my_certificate)) {
             GradebookUtils::register_user_info_about_certificate(
                 $category_id,
@@ -1673,7 +1673,7 @@ class Category implements GradebookItem
                 $my_score_in_gradebook,
                 api_get_utc_datetime()
             );
-            $my_certificate = GradebookUtils::get_certificate_by_user_id($category->get_id(), $user_id);
+            $my_certificate = GradebookUtils::get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
         }
         $html = array();
         if (!empty($my_certificate)) {

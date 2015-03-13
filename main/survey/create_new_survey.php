@@ -322,7 +322,7 @@ if ($form->validate()) {
         }
     }
 
-    Display::addFlash(Display::return_message($return['message'], false));
+    Display::addFlash(Display::return_message(($return['message']=='SurveyUpdatedSuccesfully'?get_lang($return['message']):$return['message']), false));
     // Redirecting to the survey page (whilst showing the return message)
     header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
     exit;

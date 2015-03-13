@@ -676,23 +676,36 @@ class SystemAnnouncementManager
         }
 
 		$sql .= " ORDER BY date_start DESC";
-		$announcements = Database::query($sql);
-		$html = '';
-		if (Database::num_rows($announcements) > 0) {
-			$html .=  Display::page_header(get_lang('SystemAnnouncements'));
-			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
-			while ($announcement = Database::fetch_object($announcements)) {
-                $content = $announcement->content;
-                $url = api_get_path(WEB_PATH).'news_list.php?id='.$announcement->id;
+		$result = Database::query($sql);
+        $announcements = [];
+
+		if (Database::num_rows($result) > 0) {
+			while ($announcement = Database::fetch_object($result)) {
+                $announcementData = [
+                    'id' => $announcement->id,
+                    'title' => $announcement->title,
+                    'content' => $announcement->content,
+                    'readMore' => null
+                ];
+
                 if (empty($id)) {
-                    if (api_strlen(strip_tags($content)) > $cut_size) {
-                        $content = cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
+                    if (api_strlen(strip_tags($announcement->content)) > $cut_size) {
+                        $announcementData['content'] = cut($announcement->content, $cut_size);
+                        $announcementData['readMore'] = true;
                     }
                 }
-                $html .=  '<li><h2>'.$announcement->title.'</h2>'.$content.'</li>';
+
+                $announcements[] = $announcementData;
 			}
-			$html .= '</ul></div>';
 		}
-		return $html;
+
+        if (count($announcements) === 0) {
+            return null;
+        }
+
+        $template = new Template(null, false, false);
+        $template->assign('announcements', $announcements);
+
+        return $template->fetch('default/announcement/slider.tpl');
 	}
 }

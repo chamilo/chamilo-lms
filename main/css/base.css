@@ -3321,21 +3321,7 @@ form .formw .freeze {
   margin-bottom: .5em;
   text-align: center;
 }
-#author_image {
-  border: 2px solid #B9C9FF;
-  float: left;
-  margin-bottom: .5em;
-  padding: 8px;
-  position: relative;
-  background-color: #f0f1fa;
-  width: 94%;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-}
-#author_image #author_icon{
-  border: 2px solid #FFFFFF;
-}
+
 #learning_path_left_zone .scorm_title{
   font-size: 20px;
   color: #666;
@@ -4300,81 +4286,6 @@ a.forum_group_link {
     padding-top:8px;
 }
 
-/* Default LP left column values */
-
-#learning_path_left_zone {
-    float:left;
-    width:315px;
-    height:100%;
-    padding-left: 8px;
-    padding-right: 4px;
-}
-
-#learning_path_left_zone #header {
-    font-size:14px;
-}
-
-#author_icon {
-    float:left;
-}
-
-#lp_navigation_elem {
-    float:left;
-}
-
-#author_image {
-    border: 1px solid #CCCCCC;
-    float: left;
-    margin: 0;
-    padding: 8px;
-    position: relative;
-    width: 94%;
-}
-
-#author_name {
-    float: left;
-    text-align:center;
-    width: 100%;
-    font-size: 11px;
-    color: #888;
-    margin-top: 2px;
-}
-
-#lp_media_file {
-    float: left;
-    text-align:center;
-    width: 94%;
-}
-
-#learning_path_toc {
-    font-size:9pt;
-    margin:0;
-}
-
-
-.ui-state-highlight_lp {
-    border: 1px solid #FEAA18;
-    background: #FFB738;
-    color: #363636;
-    height:20px;
-    width: 70%;
-}
-
-
-.bottom_actions {
-    display: block;
-}
-
-.bottom_actions_fixed {
-    position: fixed;
-    z-index: 9001;
-    bottom: 0;
-    left: 0px;
-    margin-bottom: 0px;
-    background:#ECF0F1;
-    padding: 20px;
-    border-top: 3px solid #DCE4EC;
-}
 
 .doc_folder {
     margin-right:5px;
@@ -5420,4 +5331,80 @@ i.size-32.icon-new-work{
 .menu-column .nav li a img{
   vertical-align: bottom;
   margin-right: 5px;
+}
+/* LP SCORM */
+/* Default LP left column values */
+
+#learning_path_left_zone {
+  float:left;
+  width:315px;
+  height:100%;
+  padding-left: 8px;
+  padding-right: 4px;
+}
+
+#learning_path_left_zone #header {
+  font-size:14px;
+}
+
+#author_icon {
+  float:left;
+}
+
+#lp_navigation_elem {
+  float:left;
+}
+
+#author_image {
+  border: 1px solid #CCCCCC;
+  float: left;
+  margin: 0;
+  padding: 8px;
+  position: relative;
+  width: 100%;
+}
+
+#author_name {
+  float: left;
+  text-align:center;
+  width: 100%;
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+#lp_media_file {
+  float: left;
+  text-align:center;
+  width: 94%;
+}
+
+#learning_path_toc {
+  font-size:9pt;
+  margin:0;
+}
+
+
+.ui-state-highlight_lp {
+  border: 1px solid #FEAA18;
+  background: #FFB738;
+  color: #363636;
+  height:20px;
+  width: 70%;
+}
+
+
+.bottom_actions {
+  display: block;
+}
+
+.bottom_actions_fixed {
+  position: fixed;
+  z-index: 9001;
+  bottom: 0;
+  left: 0px;
+  margin-bottom: 0px;
+  background:#ECF0F1;
+  padding: 20px;
+  border-top: 3px solid #DCE4EC;
 }

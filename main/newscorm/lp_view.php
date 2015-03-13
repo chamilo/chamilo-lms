@@ -359,10 +359,7 @@ if ($is_allowed_to_edit) {
     echo '</div>';
     echo '</div>';
 }
-    echo '<div class="row">';
-    //echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
-    echo '<div class="col-md-2">';
-    echo '<div id="learning_path_left_zone">';
+    echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
     echo '<div class="buttom-home">';
     //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
 
@@ -444,12 +441,9 @@ if ($is_allowed_to_edit) {
         <!-- end TOC layout -->
     </div>
     <!-- end left zone -->
-    </div>
-    <div class="col-md-10">
+
     <!-- right zone -->
-
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
-
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
@@ -461,8 +455,6 @@ if ($is_allowed_to_edit) {
     ?>
     </div>
     <!-- end right Zone -->
-    </div>
-    </div> <!--- End row -->
 </div>
 
 <script>
@@ -503,8 +495,8 @@ if ($is_allowed_to_edit) {
          }, "top.content_name",
           { load: [
               { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-              { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-              { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
+              { type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+              { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
               { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
           ] }
           );
@@ -516,8 +508,8 @@ if ($is_allowed_to_edit) {
       {
       load: [
           { type:"script", id:"_fr1", src:"<?php echo api_get_jquery_web_path(); ?>"},
-          { type:"script", id:"_fr4", src:"<?php echo api_get_jquery_ui_js_web_path(); ?>"},
-          { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_jquery_ui_css_web_path(); ?>"},
+          { type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+          { type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
           { type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
       ]}
       );

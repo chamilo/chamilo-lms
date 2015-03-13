@@ -485,16 +485,16 @@
         },
         {
             "name": "bower-asset/jquery-ui",
-            "version": "1.11.3",
+            "version": "1.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/jqueryui.git",
-                "reference": "7e2d6bec1c729925d9ad7c0c9ab4b561174efa99"
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jqueryui/zipball/7e2d6bec1c729925d9ad7c0c9ab4b561174efa99",
-                "reference": "7e2d6bec1c729925d9ad7c0c9ab4b561174efa99",
+                "url": "https://api.github.com/repos/components/jqueryui/zipball/c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
+                "reference": "c34f8dbf3ba57b3784b93f26119f436c0e8288e1",
                 "shasum": ""
             },
             "require": {
@@ -1781,7 +1781,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -1924,12 +1924,12 @@
             "version": "v5.7.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mpdf/mpdf.git",
+                "url": "https://github.com/finwe/mpdf.git",
                 "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
+                "url": "https://api.github.com/repos/finwe/mpdf/zipball/f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
                 "reference": "f9a374c7ea975ce8c795cec4dfd17ef55addac9c",
                 "shasum": ""
             },

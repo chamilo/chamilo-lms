@@ -97,8 +97,8 @@ switch($action) {
         $values['end']   = date('Y-m-d H:i:s',api_strtotime(api_get_local_time()) + (7 * 24 * 60 * 60));
 
         $values['range'] =
-            substr(api_get_local_time(api_get_local_time()), 0, 16).' / '.
-            substr(api_get_local_time(api_get_local_time()) + (7 * 24 * 60 * 60), 0, 16);
+            substr(api_get_local_time(time()), 0, 16).' / '.
+            substr(api_get_local_time(time() + (7 * 24 * 60 * 60)), 0, 16);
         $action_todo = true;
         break;
     case 'edit':

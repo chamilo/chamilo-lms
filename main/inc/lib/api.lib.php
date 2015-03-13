@@ -1451,7 +1451,11 @@ function _api_format_user($user, $add_password = false)
  */
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
     if ($user_id == '') {
-        return _api_format_user($GLOBALS['_user']);
+        if (isset($GLOBALS['_user'])) {
+            return _api_format_user($GLOBALS['_user']);
+        }
+        // @todo trigger an exception here
+        return false;
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE user_id='".intval($user_id)."'";

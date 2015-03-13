@@ -4,7 +4,10 @@
  * Definition of the AddManySessionToCategoryFunctions class
  * @package chamilo.library
  */
-
+/**
+ * Requires
+ */
+require_once ('xajax/xajax.inc.php');
 /**
  * AddManySessionToCategoryFunctions class
  */

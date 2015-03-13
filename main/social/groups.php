@@ -218,7 +218,7 @@ if ($group_id != 0) {
     }
 }
 $create_thread_link = '';
-$userInfo    = UserManager::get_user_info_by_id($user_id);
+$userInfo = api_get_user_info(api_get_user_id(), true);
 if ($group_id != 0) {
     //Block Social Avatar
     $social_avatar_block = '<div class="panel panel-info social-avatar">';
@@ -230,7 +230,7 @@ if ($group_id != 0) {
     $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
     $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
     $chat_status = $userInfo['extra'];
-    if(!empty($chat_status['user_chat_status'])){
+    if(!empty($userInfo['user_is_online_in_chat'])){
         $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
     }else{
         $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
@@ -253,11 +253,10 @@ if ($group_id != 0) {
     //Block Social Avatar
     $social_avatar_block  = '<div class="panel panel-info social-avatar">';
     $social_avatar_block .= SocialManager::show_social_avatar_block($show_menu,$group_id);
-    $social_avatar_block .= '<div class="lastname">'.$user_info['lastname'].'</div>';
-    $social_avatar_block .= '<div class="firstname">'.$user_info['firstname'].'</div>';
-    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$user_info['email'].'</div>';
-    $chat_status = $user_info['extra'];
-    if(!empty($chat_status['user_chat_status'])){
+    $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
+    $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
+    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
+    if (!empty($userInfo['user_is_online_in_chat'])) {
         $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
     }else{
         $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';

@@ -3131,8 +3131,8 @@ class learnpath
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        $html = '<div id="scorm_title" class="scorm_title">'.Security::remove_XSS($this->get_name()) . '</div>';
-
+        $html = '<div id="scorm_title" class="panel-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
+        $html .= '<div class="panel-body">';
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
@@ -3238,6 +3238,7 @@ class learnpath
 
             $color_counter++;
         }
+        $html .= "</div>";
         $html .= "</div>";
         return $html;
     }

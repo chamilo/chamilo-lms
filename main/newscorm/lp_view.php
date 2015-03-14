@@ -360,40 +360,45 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
     echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
-    echo '<div class="buttom-home">';
-    //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
-
-    // Return to course home.
-    if ($is_allowed_to_edit) {
-        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
-    } else {
-        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
-    }
-
-    $iconHome='<i class="fa fa-home"></i>';
-    $name = get_lang('CourseHomepageLink');
-    // Return to lp list
-    if (api_get_course_setting('lp_return_link') == 1) {
-        $url .= '&redirectTo=lp_list';
-        $name = get_lang('LearningPathList');
-    }
-
-    echo Display::url(
-        $iconHome.' '.$name,
-        $url,
-        array(
-            'class' => 'btn btn-block btn-success',
-            'target' => '_self',
-            'onclick' => 'javascript: window.parent.API.save_asset();'
-        )
-    );
-    echo '</div>';
-?>
+    echo '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
+    echo '<div class="panel panel-default">';
+    echo '<div class="panel-heading" role="tab" id="headingOne">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'. get_lang('Modulo 9 - Chamilo LMS'). '
+        </a></div>';
+    ?>
         <!-- end header -->
 
         <!-- Author image preview -->
-        <div id="author_image">
-            <div id="author_icon">
+    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <?php
+                // Return to course home.
+                if ($is_allowed_to_edit) {
+                $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
+                } else {
+                $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
+                }
+
+                $iconHome='<i class="fa fa-home"></i>';
+                $name = get_lang('CourseHomepageLink');
+                // Return to lp list
+                if (api_get_course_setting('lp_return_link') == 1) {
+                $url .= '&redirectTo=lp_list';
+                $name = get_lang('LearningPathList');
+                }
+
+                echo Display::url(
+                $iconHome.' '.$name,
+                $url,
+                array(
+                'class' => 'btn btn-default',
+                'target' => '_self',
+                'onclick' => 'javascript: window.parent.API.save_asset();'
+                )
+                );
+
+                ?>
+                <div class="image-avatar">
                 <?php
                 if ($_SESSION['oLP']->get_preview_image() != '') {
                     $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
@@ -408,33 +413,35 @@ if ($is_allowed_to_edit) {
                     echo Display :: display_icon('unknown_250_100.jpg');
                 }
                 ?>
-            </div>
-            <div id="lp_navigation_elem">
-                <?php echo $navigation_bar; ?>
-                <div id="progress_bar">
-                    <?php echo $progress_bar; ?>
                 </div>
+                <div class="navegation-bar">
+                    <?php echo $navigation_bar; ?>
+                    <div id="progress_bar">
+                        <?php echo $progress_bar; ?>
+                    </div>
+                </div>
+                <div class="description-autor">
+                    <?php echo $_SESSION['oLP']->get_author(); ?>
+                </div>
+                <?php
+                if ($show_audioplayer) {
+                    echo '<div id="lp_media_file">';
+                    echo $mediaplayer;
+                    echo '</div>';
+                }
+                ?>
             </div>
         </div>
-        <!-- end image preview Layout -->
-
-        <div id="author_name">
-            <?php echo $_SESSION['oLP']->get_author(); ?>
         </div>
 
-        <!-- media player layout -->
-        <?php
-        if ($show_audioplayer) {
-            echo '<div id="lp_media_file">';
-            echo $mediaplayer;
-            echo '</div>';
-        }
-        ?>
+    </div>
+
         <!-- end media player layout -->
 
         <!-- TOC layout -->
-        <div id="toc_id" name="toc_name" style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
-            <div id="learning_path_toc">
+
+        <div id="toc_id" name="toc_name">
+            <div id="learning_path_toc" class="panel panel-default">
                 <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
             </div>
         </div>

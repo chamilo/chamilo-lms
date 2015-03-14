@@ -1332,7 +1332,6 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
     var percentage = (nbr_complete/nbr_total)*100;
     percentage = Math.round(percentage);
 
-    var pr_text = $("#progress_text");
     var progress_bar = $("#progress_bar_value");
     progress_bar.css('width', percentage + "%");
 
@@ -1346,7 +1345,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
             mytext = percentage + '%';
             break;
     }
-    pr_text.html(mytext);
+    progress_bar.html(mytext);
     return true;
 }
 

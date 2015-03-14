@@ -2,6 +2,384 @@
  * Common CSS for all themes
 */
 
+/* some changes to the bootstrap.css */
+
+/* when doing a var_dump*/
+
+pre {
+    margin-top:40px;
+}
+html,body{
+  height: 100%;
+}
+#page-wrap{
+  margin: auto;
+  height: auto;
+  height: auto;
+  min-height: 100%;
+}
+#page-wrap:after{
+  width: 100%;
+  height: 150px;
+  display: block;
+  clear: both;
+}
+footer {
+  width: 100%;
+  height: 100px;
+  margin: 0px auto 0;
+  background-color: #f5f5f5;
+}
+
+/* chzn-select fix */
+select {
+    width : auto;
+}
+
+.invisible {
+    visibility: visible;
+}
+
+/* NEW CSS BASE */
+.logo{
+  margin-bottom: 10px;
+  padding: 5px;
+  margin-top: 10px;
+}
+.title-header-tools{
+  text-align: center;
+}
+
+ul#navigation {
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  top: 200px;
+  right: -10px;
+  list-style: none;
+  z-index:9999;
+}
+
+ul#navigation li {
+  width: 73px;
+}
+
+ul#navigation li a {
+  display: block;
+  margin-left: 1px;
+  width: 65px;
+  opacity: 0.6;
+  filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+  -webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a {
+  background-color:#879DAA;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+ul#navigation .report a {
+  background-color:#8fd400;
+  border:1px solid #FFFFFF;
+  display:block;
+  margin-left:50px;
+  opacity:0.6;
+  width:65px;
+  padding: 6px 0 8px 6px;
+}
+
+/* END CSS BASE */
+
+.button-load{
+  background: url("../img/icons/64/file_upload.png") no-repeat center 20px;
+  padding-top: 70px;
+}
+
+/* START COURSE PROGRESS */
+.thematic-postit{
+  padding-top: 5px;
+  padding-bottom: px;
+}
+.thematic-postit .tittle-score{
+  padding-bottom: 5px;
+  font-size: 16px;
+  color: #006699;
+}
+.thematic-postit .topics{
+  font-size: 12px;
+  padding-bottom: 5px;
+  color: #006699;
+}
+.thematic-postit .items-progress {
+  border-top: 2px solid #C4DDEB;
+  padding: 5px;
+  margin-top: 0px;
+  background-color: #ECF4F8;
+}
+.thematic-postit .items-progress.current {
+    border-top: 2px solid #C4DDEB;
+    padding: 5px;
+    margin-top: 0px;
+    background-color: #C4DDEB;
+}
+.thematic-postit .items-progress .date{
+  color: #666;
+  font-size: 11px;
+  display: block;
+}
+.thematic-postit .items-progress .title{
+  font-size: 14px;
+  line-height: 18px;
+  display: block;
+}
+.thematic-postit .items-progress .time{
+  display: block;
+  padding-top: 5px;
+}
+.thematic-postit .info-progress{
+  padding: 10px;
+}
+.thematic-postit .score-thematic .score{
+  text-align: right;
+}
+
+.thematic-postit .score-thematic .name-student{
+  font-weight: bold;
+  font-size: 16px;
+  padding-left: 70px;
+  margin: 0px;
+}
+.thematic-postit .score-thematic{
+  color: #666;
+}
+.thematic-postit .score-thematic p{
+  padding: 0px;
+  margin: 0px;
+}
+.thematic-postit .row-fluid.score-thematic {
+  padding-top: 5px;
+}
+.thematic-postit .accordion-heading .accordion-toggle {
+  display: inline;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  float: right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 15px;
+}
+.thematic-postit .accordion-heading .title-accordion{
+  padding:0px;
+  background:url(thematic.png) no-repeat left bottom transparent;
+}
+
+.thematic-postit .name-student h2{
+  font-size: 18px;
+  margin: 0;
+}
+.thematic-postit .accordion-heading h3, .accordion-heading h2{
+  line-height: 17px;
+}
+.thematic-postit .accordion-group{
+  border: 1px solid #D4E6F0;
+
+}
+.thematic-postit .name-student h3{
+  font-size: 13px;
+  font-weight: normal;
+  margin: 0;
+
+}
+.thematic-postit .accordion-heading {
+  background-color: #E7F1F7;
+}
+.thematic-postit .items-progress p{
+  margin-bottom: 3px;
+}
+.thematic-postit .accordion-body.collapse {
+  height: 0;
+  display: none;
+}
+.thematic-postit .accordion-body.collapse.in {
+  height: auto;
+  display: block;
+}
+
+/* END COURSE PROGRESS*/
+
+/* SESSION CATALOG*/
+.session-group .padding-clear{
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+/*.session-group .thumbnail{
+    border: none;
+    box-shadow: none;
+}*/
+.session-group .border-info{
+    /*border-bottom: 1px solid #ccc;*/
+    padding-bottom: 5px;
+}
+.session-group .buttom-subscribed{
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+.session-group .time{
+    font-size: 12px;
+}
+.session-group .accordion-heading{
+    background-color: #D2E7F3;
+}
+.session-group .accordion-group{
+    border: 1px solid #B7D7EF;
+}
+.session-group .accordion-inner{
+    border-top: 1px solid #B7D7EF;
+    background-color: #FFFFFF;
+}
+.buttom-subscribed .btn{
+    display: block;
+}
+.session-group .items-session{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.session-group .items-session li{
+    padding-bottom: 5px;
+}
+/* SESSION CATALOG END*/
+
+#main .nav .dropdown {
+  width:150px;
+  text-align: right;
+}
+
+#main .nav .dropdown:nth-child(n) {
+  width:auto;
+}
+.course-items .title{
+  margin-top: 0px;
+}
+
+/* To fix the increase/decrease buttons */
+label, input, button, select, textarea, p {
+    font-size: inherit;
+}
+
+.badge-group {
+    width: 200px;
+    position: relative;
+}
+
+.badge-group .badge {
+    float:left;
+    position:relative;
+}
+
+.badge-group  > :first-child {
+    z-index: 1000;
+}
+
+.badge-group  > :nth-child(2) {
+    z-index: 900;
+}
+
+.badge-group  > :nth-child(3) {
+    z-index: 800;
+}
+.badge-group  > :nth-child(4) {
+    z-index: 700;
+}
+.badge-group  > :nth-child(5) {
+    z-index: 600;
+}
+
+.badge-group .badge:not(:first-child) {
+    margin-left: -13px;
+    padding-left: 15px;
+}
+
+/* button with image */
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
+    padding-left:30px;
+    background-position:8px !important;
+    background-repeat:no-repeat;
+}
+
+/* button << */
+button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
+    margin: 0px 15px 0px 15px;
+    padding:15px 18px;
+    background-position:7px;
+}
+/*including "arrowl" image*/
+button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
+    background-repeat:no-repeat;
+}
+
+button.arrowl:hover, button.arrowr:hover , input.arrowl:hover, input.arrowr:hover {
+    background-position:7px;
+}
+
+/* Fixing old chamilo forms */
+
+/* fixes the * */
+span.form_required  {
+    padding-right:5px;
+}
+
+form .formw {
+    margin-left: 170px;
+}
+form .form-button-login{
+  margin-top: 5px;
+}
+form .formw input {
+    float:left;
+}
+
+.formw input[type="checkbox"], .formw input[type="radio"] {
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+/* end chamilo forms fixes */
+
+#top_main_content .span3 {
+  float: left;
+}
+[dir=rtl] #top_main_content .span3 {
+  float: right;
+}
+
+#top_main_content .control-group .span3 {
+  float: none;
+}
+#top_main_content .span9 {
+  float: left;
+}
+[dir=rtl] #top_main_content .span9 {
+  float: right;
+}
+
+/* New changes Chamilo 1.9 */
+
+#lp_navigation_elem .buttons{
+    margin-bottom: 5px;
+}
+
+#lp_navigation_elem {
+    padding-left: 15px;
+    width: 110px;
+}
+
 html {
     margin: 0;
     padding: 0;
@@ -9,12 +387,8 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin-bottom: 80px;
-}
-
 footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
     width: 100%;
     height: 80px;
@@ -146,17 +520,6 @@ a.tag {
 }
 #settings .form-search .span3 {
     float: left;
-}
-
-/*  Edit admin panels   */
-#settings .panel .panel-heading .edit-block {
- display: none;
-}
-#settings .panel:hover .panel-heading .edit-block {
- display: block;
-}
-#modal-extra #extra-content {
-    resize: none;
 }
 
 /* user_portal course status icon */
@@ -4724,23 +5087,23 @@ i.size-32.icon-new-work{
 .title-question{
   font-size: 22px;
 }
-.display-survey.table tbody tr th, .display-survey.table tbody tr:hover th{
+#display-survey.table tbody tr th, #display-survey.table tbody tr:hover th{
     background-color:#666;
     text-align: center;
     font-size: 14px;
     color: #FFFFFF;
 }
-.display-survey .total{
+#display-survey .total{
     background-color: #EBF3F5;
     text-align: center;
 }
-.display-survey .center{
+#display-survey .center{
     text-align: center;
 }
-.display-survey{
+#display-survey{
     border: 1px solid #ddd;
 }
-.display-survey.table tbody tr:hover td,.display-survey.table tbody tr:hover th{
+#display-survey.table tbody tr:hover td,#display-survey.table tbody tr:hover th{
     background-color: none;
 }
 .answered-people{
@@ -5057,360 +5420,4 @@ i.size-32.icon-new-work{
 .menu-column .nav li a img{
   vertical-align: bottom;
   margin-right: 5px;
-}
-
-/* some changes to the bootstrap.css */
-
-/* when doing a var_dump*/
-
-pre {
-    margin-top:40px;
-}
-
-/* chzn-select fix */
-select {
-    width : auto;
-}
-
-.invisible {
-    visibility: visible;
-}
-
-/* NEW CSS BASE */
-.logo{
-    margin-bottom: 10px;
-    padding: 5px;
-    margin-top: 10px;
-}
-.title-header-tools{
-    text-align: center;
-}
-
-ul#navigation {
-    position: fixed;
-    margin: 0px;
-    padding: 0px;
-    top: 200px;
-    right: -10px;
-    list-style: none;
-    z-index:9999;
-}
-
-ul#navigation li {
-    width: 73px;
-}
-
-ul#navigation li a {
-    display: block;
-    margin-left: 1px;
-    width: 65px;
-    opacity: 0.6;
-    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
-    -webkit-box-shadow: 0px 4px 3px #000;
-}
-
-ul#navigation .help a {
-    background-color:#879DAA;
-    border:1px solid #FFFFFF;
-    display:block;
-    margin-left:50px;
-    opacity:0.6;
-    width:65px;
-    padding: 6px 0 8px 6px;
-}
-ul#navigation .report a {
-    background-color:#8fd400;
-    border:1px solid #FFFFFF;
-    display:block;
-    margin-left:50px;
-    opacity:0.6;
-    width:65px;
-    padding: 6px 0 8px 6px;
-}
-
-/* END CSS BASE */
-
-.button-load{
-    background: url("../img/icons/64/file_upload.png") no-repeat center 20px;
-    padding-top: 70px;
-}
-
-/* START COURSE PROGRESS */
-.thematic-postit{
-    padding-top: 5px;
-    padding-bottom: px;
-}
-.thematic-postit .tittle-score{
-    padding-bottom: 5px;
-    font-size: 16px;
-    color: #006699;
-}
-.thematic-postit .topics{
-    font-size: 12px;
-    padding-bottom: 5px;
-    color: #006699;
-}
-.thematic-postit .items-progress {
-    border-top: 2px solid #C4DDEB;
-    padding: 5px;
-    margin-top: 0px;
-    background-color: #ECF4F8;
-}
-.thematic-postit .items-progress.current {
-    border-top: 2px solid #C4DDEB;
-    padding: 5px;
-    margin-top: 0px;
-    background-color: #C4DDEB;
-}
-.thematic-postit .items-progress .date{
-    color: #666;
-    font-size: 11px;
-    display: block;
-}
-.thematic-postit .items-progress .title{
-    font-size: 14px;
-    line-height: 18px;
-    display: block;
-}
-.thematic-postit .items-progress .time{
-    display: block;
-    padding-top: 5px;
-}
-.thematic-postit .info-progress{
-    padding: 10px;
-}
-.thematic-postit .score-thematic .score{
-    text-align: right;
-}
-
-.thematic-postit .score-thematic .name-student{
-    font-weight: bold;
-    font-size: 16px;
-    padding-left: 70px;
-    margin: 0px;
-}
-.thematic-postit .score-thematic{
-    color: #666;
-}
-.thematic-postit .score-thematic p{
-    padding: 0px;
-    margin: 0px;
-}
-.thematic-postit .row-fluid.score-thematic {
-    padding-top: 5px;
-}
-.thematic-postit .accordion-heading .accordion-toggle {
-    display: inline;
-    padding-bottom: 3px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 3px;
-    float: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 15px;
-}
-.thematic-postit .accordion-heading .title-accordion{
-    padding:0px;
-}
-
-.thematic-postit .name-student h2{
-    font-size: 18px;
-    margin: 0;
-}
-.thematic-postit .accordion-heading h3, .accordion-heading h2{
-    line-height: 17px;
-}
-.thematic-postit .accordion-group{
-    border: 1px solid #D4E6F0;
-
-}
-.thematic-postit .name-student h3{
-    font-size: 13px;
-    font-weight: normal;
-    margin: 0;
-
-}
-.thematic-postit .accordion-heading {
-    background-color: #E7F1F7;
-}
-.thematic-postit .items-progress p{
-    margin-bottom: 3px;
-}
-.thematic-postit .accordion-body.collapse {
-    height: 0;
-    display: none;
-}
-.thematic-postit .accordion-body.collapse.in {
-    height: auto;
-    display: block;
-}
-
-/* END COURSE PROGRESS*/
-
-/* SESSION CATALOG*/
-.session-group .padding-clear{
-    padding-top: 5px;
-    padding-bottom: 10px;
-}
-/*.session-group .thumbnail{
-    border: none;
-    box-shadow: none;
-}*/
-.session-group .border-info{
-    /*border-bottom: 1px solid #ccc;*/
-    padding-bottom: 5px;
-}
-.session-group .buttom-subscribed{
-    padding-top: .5em;
-    padding-bottom: .5em;
-}
-.session-group .time{
-    font-size: 12px;
-}
-.session-group .accordion-heading{
-    background-color: #D2E7F3;
-}
-.session-group .accordion-group{
-    border: 1px solid #B7D7EF;
-}
-.session-group .accordion-inner{
-    border-top: 1px solid #B7D7EF;
-    background-color: #FFFFFF;
-}
-.buttom-subscribed .btn{
-    display: block;
-}
-.session-group .items-session{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.session-group .items-session li{
-    padding-bottom: 5px;
-}
-/* SESSION CATALOG END*/
-
-#main .nav .dropdown {
-    width:150px;
-    text-align: right;
-}
-
-#main .nav .dropdown:nth-child(n) {
-    width:auto;
-}
-.course-items .title{
-    margin-top: 0px;
-}
-
-/* To fix the increase/decrease buttons */
-label, input, button, select, textarea, p {
-    font-size: inherit;
-}
-
-.badge-group {
-    width: 200px;
-    position: relative;
-}
-
-.badge-group .badge {
-    float:left;
-    position:relative;
-}
-
-.badge-group  > :first-child {
-    z-index: 1000;
-}
-
-.badge-group  > :nth-child(2) {
-    z-index: 900;
-}
-
-.badge-group  > :nth-child(3) {
-    z-index: 800;
-}
-.badge-group  > :nth-child(4) {
-    z-index: 700;
-}
-.badge-group  > :nth-child(5) {
-    z-index: 600;
-}
-
-.badge-group .badge:not(:first-child) {
-    margin-left: -13px;
-    padding-left: 15px;
-}
-
-/* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
-    padding-left:30px;
-    background-position:8px !important;
-    background-repeat:no-repeat;
-}
-
-/* button << */
-button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
-    margin: 0px 15px 0px 15px;
-    padding:15px 18px;
-    background-position:7px;
-}
-/*including "arrowl" image*/
-button.arrowl, button.arrowr, input.arrowl, input.arrowr  {
-    background-repeat:no-repeat;
-}
-
-button.arrowl:hover, button.arrowr:hover , input.arrowl:hover, input.arrowr:hover {
-    background-position:7px;
-}
-
-/* Fixing old chamilo forms */
-
-/* fixes the * */
-span.form_required  {
-    padding-right:5px;
-}
-
-form .formw {
-    margin-left: 170px;
-}
-form .form-button-login{
-    margin-top: 5px;
-}
-form .formw input {
-    float:left;
-}
-
-.formw input[type="checkbox"], .formw input[type="radio"] {
-    margin-right: 5px;
-    margin-top: 2px;
-}
-
-/* end chamilo forms fixes */
-
-#top_main_content .span3 {
-    float: left;
-}
-[dir=rtl] #top_main_content .span3 {
-    float: right;
-}
-
-#top_main_content .control-group .span3 {
-    float: none;
-}
-#top_main_content .span9 {
-    float: left;
-}
-[dir=rtl] #top_main_content .span9 {
-    float: right;
-}
-
-/* New changes Chamilo 1.9 */
-
-#lp_navigation_elem .buttons{
-    margin-bottom: 5px;
-}
-
-#lp_navigation_elem {
-    padding-left: 15px;
-    width: 110px;
 }

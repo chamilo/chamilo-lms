@@ -349,16 +349,21 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
 if ($is_allowed_to_edit) {
-    echo '<div id="learning_path_breadcrumb_zone">';
+    echo '<div class="row">';
+    echo '<div id="learning_path_breadcrumb_zone" class="col-md-12">';
     global $interbreadcrumb;
     $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
     $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
     echo return_breadcrumb($interbreadcrumb, null, null);
     echo '</div>';
+    echo '</div>';
 }
-    echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
-    echo '<div id="header">';
+    echo '<div class="row">';
+    //echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
+    echo '<div class="col-md-2">';
+    echo '<div id="learning_path_left_zone">';
+    echo '<div class="buttom-home">';
     //echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();"></a>';
 
     // Return to course home.
@@ -368,6 +373,7 @@ if ($is_allowed_to_edit) {
         $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
     }
 
+    $iconHome='<i class="fa fa-home"></i>';
     $name = get_lang('CourseHomepageLink');
     // Return to lp list
     if (api_get_course_setting('lp_return_link') == 1) {
@@ -376,10 +382,10 @@ if ($is_allowed_to_edit) {
     }
 
     echo Display::url(
-        $name,
+        $iconHome.' '.$name,
         $url,
         array(
-            'class' => 'home btn btn-small btn-info',
+            'class' => 'btn btn-block btn-success',
             'target' => '_self',
             'onclick' => 'javascript: window.parent.API.save_asset();'
         )
@@ -438,9 +444,12 @@ if ($is_allowed_to_edit) {
         <!-- end TOC layout -->
     </div>
     <!-- end left zone -->
-
+    </div>
+    <div class="col-md-10">
     <!-- right zone -->
+
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
+
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
@@ -452,6 +461,8 @@ if ($is_allowed_to_edit) {
     ?>
     </div>
     <!-- end right Zone -->
+    </div>
+    </div> <!--- End row -->
 </div>
 
 <script>

@@ -6512,11 +6512,6 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_css($js_path.'jquery-upload/jquery.fileupload-ui.css');
     }
 
-    if (in_array('bxslider',$libraries)) {
-        $js .= api_get_js('bxslider/jquery.bxSlider.min.js');
-        $js .= api_get_css($js_path.'bxslider/bx_styles/bx_styles.css');
-    }
-
     // jquery datepicker
     if (in_array('datepicker', $libraries)) {
         $languaje   = 'en-GB';

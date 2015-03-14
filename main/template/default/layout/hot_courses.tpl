@@ -22,7 +22,7 @@ $(document).ready( function() {
 </script>
 <section id="hot_courses">
     <div class="row">
-        <div class="span9">
+        <div class="col-md-12">
             {% if _u.is_admin %}
             <span class="pull-right">
                 <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">

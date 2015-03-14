@@ -228,9 +228,15 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $root_rel = substr($root_rel,0,$pos);
     $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
     //urls with subdomains (HTTP_HOST is preferred - see #6764)
-    $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
-    if (empty($request_url_root)) {
-        $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
+    $request_url_root = '';
+    if (empty($_SERVER['HTTP_HOST'])) {
+        if (empty($_SERVER['SERVER_NAME'])) {
+            $request_url_root = $protocol . 'localhost/';
+        } else {
+            $request_url_root = $protocol . $_SERVER['SERVER_NAME'] . '/';
+        }
+    } else {
+        $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
     }
     //urls with subdirs
     $request_url_sub = $request_url_root.$root_rel.'/';

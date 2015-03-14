@@ -42,7 +42,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generated from @assert ('Pippin','Took',null,null,'jo','jo') === false.
+     * Generated from @assert ('Pippin','Took',5,null,'jo','jo') === false.
      *
      * @covers UserManager::create_user
      */
@@ -50,7 +50,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
           false,
-          UserManager::create_user('Pippin','Brandybuck',null,null,'jo','jo')
+          UserManager::create_user('Pippin','Brandybuck',5,null,'jo','jo')
         );
     }
     /**
@@ -62,7 +62,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
         $_configuration[1]['hosting_limit_users'] = 50;
         $this->assertSame(
           false,
-          UserManager::create_user('Merry','Brandybuck',null,null,'jo','jo')
+          UserManager::create_user('Merry','Brandybuck',5,null,'jo','jo')
         );
     }
     /**

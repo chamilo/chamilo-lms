@@ -8004,3 +8004,25 @@ function api_protect_course_group($tool, $showHeader = true)
         }
     }
 }
+
+/**
+ * Check if Chmailo is installed correctly. If so, return the version
+ * @return array ('installed' => 0/1, 'message' => error/db version)
+ */
+function apiIsSystemInstalled ()
+{
+    $root = __DIR__.'/../../../';
+    $configFile = $root.'main/inc/conf/configuration.php';
+    if (!is_readable($configFile)) {
+        return array ('installed' => 0, 'message' => 'No config file');
+    }
+    $result = Database::query(
+        "SELECT selected _value FROM settings_current WHERE variable = 'chamilo_database_version'"
+    );
+    if ($result == false) {
+        return array ('installed' => 0, 'message' => 'No way to recover version');
+    }
+    $settingsRow = Database::fetch_assoc($result);
+    $version = $settingsRow['selected_value'];
+    return array('installed' => 1, 'message' => $version);
+}

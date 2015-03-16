@@ -1214,10 +1214,11 @@ function api_protect_teacher_script($allow_sessions_admins = false) {
  *
  * @author Roan Embrechts
  */
-function api_block_anonymous_users($print_headers = true) {
+function api_block_anonymous_users($printHeaders = true)
+{
     $_user = api_get_user_info();
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
-        api_not_allowed($print_headers);
+        api_not_allowed($printHeaders);
         return false;
     }
 
@@ -2736,7 +2737,7 @@ function api_is_coach($session_id = 0, $course_code = null, $check_student_view 
  * @return boolean True if current user is a course administrator
  */
 function api_is_session_admin() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
@@ -2745,7 +2746,7 @@ function api_is_session_admin() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == DRH;
 }
 
@@ -2754,7 +2755,7 @@ function api_is_drh() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_student() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == STUDENT;
 
 }
@@ -2763,7 +2764,7 @@ function api_is_student() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_teacher() {
-    global $_user;
+    $_user = api_get_user_info();
     return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
 }
 
@@ -2772,7 +2773,7 @@ function api_is_teacher() {
  * @return boolean
  */
 function api_is_invitee() {
-    global $_user;
+    $_user = api_get_user_info();
 
     return isset($_user['status']) && $_user['status'] == INVITEE;
 }
@@ -7661,12 +7662,13 @@ function api_register_campus($listCampus = true) {
  * @global array $_user
  * @return boolean
  */
-function api_is_student_boss ()
+function api_is_student_boss()
 {
-    global $_user;
+    $_user = api_get_user_info();
 
     return isset($_user['status']) && $_user['status'] == STUDENT_BOSS;
 }
+
 /**
  * Check whether the user type should be exclude.
  * Such as invited or anonymous users
@@ -8009,7 +8011,7 @@ function api_protect_course_group($tool, $showHeader = true)
  * Check if Chmailo is installed correctly. If so, return the version
  * @return array ('installed' => 0/1, 'message' => error/db version)
  */
-function apiIsSystemInstalled ()
+function apiIsSystemInstalled()
 {
     $root = __DIR__.'/../../../';
     $configFile = $root.'main/inc/conf/configuration.php';

@@ -46,11 +46,9 @@ $langAdminLastName = "Prezime administratora";
 $langAdminPhone = "Telefon administratora";
 $langAdminFirstName = "Ime administratora";
 $langInstituteURL = "URL ove organizacije";
-$langDokeosURL = "URL Chamiloa";
 $langUserDB = "Baza korisnika";
 $ReadThoroughly = "Pročitajte pažljivo.";
-$DokeosNeedFollowingOnServer = "Da bi Chamilo radio potrebno je da imate sledeće na vašem serveru:";
-$WarningExistingDokeosInstallationDetected = "Upozorenje!<br>Instaler je otkrio postojeću Chamilo platformu na vašem sistemu.";
+$WarningExistingLMSInstallationDetected = "Upozorenje!<br>Instaler je otkrio postojeću Chamilo platformu na vašem sistemu.";
 $NewInstallation = "Nova Instalacija";
 $CheckDatabaseConnection = "Proveri konekciju sa bazom";
 ?>

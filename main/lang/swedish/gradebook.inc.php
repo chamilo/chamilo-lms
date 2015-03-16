@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$DokeosLearningPaths = "Utbildningsväg";
 $AddResult = "Lägg till resultat";
 $ExportPDF = "Exportera till PDF";
 $Print = "Skriv ut";

@@ -1560,7 +1560,7 @@ function display_requirements(
         // Check wether a Chamilo configuration file already exists.
         elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
             echo '<div class="warning-message"><h4><center>';
-            echo get_lang('WarningExistingDokeosInstallationDetected');
+            echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
         }
 
@@ -1578,10 +1578,10 @@ function display_requirements(
         //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
         //echo ' disabled="disabled"';
         //end temp code
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromDokeos18x').'</button>';
+        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS18x').'</button>';
         echo ' <button type="submit" class="btn btn-default" name="step2_update_6" value="Upgrade from Chamilo 1.6.x"';
         if ($error) echo ' disabled="disabled"';
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromDokeos16x').'</button>';
+        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS16x').'</button>';
         echo '</p>';
     }
 }
@@ -1595,7 +1595,7 @@ function display_requirements(
 function display_license_agreement()
 {
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
-    echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
+    echo '<p>'.get_lang('LMSLicenseInfo').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
     echo '</div>';
     ?>
@@ -1613,7 +1613,7 @@ function display_license_agreement()
             </p>
             </td>
         </tr>
-        <tr><td><p style="color:#666"><br /><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
+        <tr><td><p style="color:#666"><br /><?php echo get_lang('LMSMediaLicense'); ?></p></td></tr>
         <tr>
             <td>
             <table width="100%">

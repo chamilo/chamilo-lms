@@ -46,10 +46,8 @@ $langAdminLastName = "관리자 성(last name)";
 $langAdminPhone = "관리자 전화";
 $langAdminFirstName = "관리자 이름(first name)";
 $langInstituteURL = "해당기관 URL";
-$langDokeosURL = "Chamilo URL";
 $langUserDB = "사용자 DB";
 $ReadThoroughly = "철저히 읽기";
-$DokeosNeedFollowingOnServer = "Chamilo를 작동하기 위해서는, 서버를 따라야 할 필요가 있습니다.";
-$WarningExistingDokeosInstallationDetected = "Warning !<br>인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다.";
+$WarningExistingLMSInstallationDetected = "Warning !<br>인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다.";
 $NewInstallation = "새로 설치";
 ?>

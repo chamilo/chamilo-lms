@@ -531,7 +531,7 @@ else
           <td>&nbsp;</td>
         </tr>
 		<tr>
-          <td width="26%"><b><?php echo get_lang('DokeosRelatedCourseMaterial'); ?></b></td>
+          <td width="26%"><b><?php echo get_lang('LMSRelatedCourseMaterial'); ?></b></td>
         </tr>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Dropbox&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Dropbox')."</a>"; ?></td>

@@ -46,7 +46,6 @@ $langAdminLastName = "Administrators efternavn";
 $langAdminPhone = "Administrators telefonnummer";
 $langAdminFirstName = "Administrators fornavn";
 $langInstituteURL = "Denne organisations URL";
-$langDokeosURL = "Chamilo URL";
 $langUserDB = "Bruger DB";
 $PleaseWait = "Vent venligst";
 $PleaseCheckTheseValues = "Venligst undersøg disse værdier";

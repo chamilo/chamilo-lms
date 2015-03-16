@@ -1,4 +1,4 @@
-<h3 class="page-header">{{ "SystemAnnouncements" | get_lang }}</h3>
+<h4 class="page-header">{{ "SystemAnnouncements" | get_lang }}</h4>
 
 <div id="announcements-slider" class="carousel slide" data-ride="carousel" style="height:300px;">
     <ol class="carousel-indicators">

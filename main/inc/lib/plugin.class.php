@@ -202,7 +202,7 @@ class Plugin
                     $result->addElement('html', $this->get_lang($name));
                     break;
                 case 'wysiwyg':
-                    $result->addHtmlEditor($name, $this->get_lang($name));
+                    $result->addHtmlEditor($name, $this->get_lang($name), false);
                     break;
                 case 'text':
                     $result->addElement($type, $name, array($this->get_lang($name), $help));

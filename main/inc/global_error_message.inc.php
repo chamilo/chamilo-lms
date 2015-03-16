@@ -42,7 +42,7 @@ $DatabaseUnavailableDescription = 'This portal is currently experiencing databas
 
 // Error code 6.
 $AlreadyInstalledTitle = 'Chamilo has already been installed';
-$AlreadyInstalledDescription = 'The system has already been installed. In order its content to be protected you are not allowed to start the installation script again.';
+$AlreadyInstalledDescription = 'The system has already been installed. In order to protect its contents, we have to prevent you from starting the installation script again. Please return to the main page.';
 
 // Unspecified error.
 $TechnicalIssuesTitle = 'Technical issues';

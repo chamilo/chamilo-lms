@@ -895,11 +895,13 @@ if (!empty($error)) {
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
 
             // Checking FCK
-            if (CKEDITOR.instances["choice["+question_id+"]"]) {
-                fck_content = CKEDITOR.instances["choice["+question_id+"]"].getData();
-                my_choice = {};
-                my_choice["choice["+question_id+"]"] = fck_content;
-                my_choice = $.param(my_choice);
+            if (question_id) {
+                if (CKEDITOR.instances["choice["+question_id+"]"]) {
+                    var ckContent = CKEDITOR.instances["choice["+question_id+"]"].getData();
+                    my_choice = {};
+                    my_choice["choice["+question_id+"]"] = ckContent;
+                    my_choice = $.param(my_choice);
+                }
             }
 
             if ($(\'input[name="remind_list[\'+question_id+\']"]\').is(\':checked\')) {
@@ -964,9 +966,11 @@ if (!empty($error)) {
 
             $.each(question_list, function(index, my_question_id) {
                 // Checking FCK
-                if (CKEDITOR.instances["choice["+question_id+"]"]) {
-                    fck_content = CKEDITOR.instances["choice["+question_id+"]"].getData();
-                    free_answers["free_choice["+my_question_id+"]"] = fck_content;
+                if (my_question_id) {
+                    if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
+                        var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
+                        free_answers["free_choice["+my_question_id+"]"] = ckContent;
+                    }
                 }
             });
 
@@ -1084,7 +1088,7 @@ if (!empty($error)) {
                 $exercise_actions .= $objExercise->show_button($questionId, $current_question);
                 break;
             case ALL_ON_ONE_PAGE :
-                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                $button  = '<a href="javascript://" class="btn btn-info" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
                 $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
                 $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
                 break;

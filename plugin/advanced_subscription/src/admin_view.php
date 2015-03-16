@@ -65,6 +65,7 @@ if (!empty($sessionId)) {
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;
+        $data['profile_completed'] = 100;
         $student['acceptUrl'] = $plugin->getQueueUrl($data);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_DISAPPROVED;
         $student['rejectUrl'] = $plugin->getQueueUrl($data);

@@ -4026,7 +4026,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 filetype            = 'folder',
                 post_group_id       = '".$group_id."',
                 sent_date           = '".$today."',
-                qualification       = '".(($params['qualification'] != '') ? Database::escape_string($params['qualification']) : '') ."',
+                qualification       = '".($params['qualification'] != '' ? Database::escape_string($params['qualification']) : '') ."',
                 parent_id           = '',
                 qualificator_id     = '',
                 date_of_qualification   = '0000-00-00 00:00:00',
@@ -4051,6 +4051,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 $user_id,
                 $group_id
             );
+
             updatePublicationAssignment($id, $params, $courseInfo, $group_id);
 
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
@@ -4065,7 +4066,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
 /**
  * @param int $workId
  * @param array $courseInfo
- * @return array
+ * @return int
  */
 function agendaExistsForWork($workId, $courseInfo)
 {
@@ -4176,8 +4177,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-    $expiryDate = (isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1) ? api_get_utc_datetime($params['expires_on']) : '0000-00-00 00:00:00';
-    $endDate = ((isset($params['enableEndDate']) && $params['enableEndDate']==1) ? api_get_utc_datetime($params['ends_on']) : '0000-00-00 00:00:00');
+    $expiryDate = isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '0000-00-00 00:00:00';
+    $endDate = isset($params['enableEndDate']) && $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '0000-00-00 00:00:00';
 
     $data = get_work_assignment_by_id($workId, $course_id);
 
@@ -4185,11 +4186,11 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
-                expires_on              = '".Database::escape_string($expiryDate)."',
-                ends_on                 = '".Database::escape_string($endDate)."',
-                add_to_calendar         = $agendaId,
-                enable_qualification    = '$qualification',
-                publication_id          = '$workId'";
+                expires_on = '".Database::escape_string($expiryDate)."',
+                ends_on = '".Database::escape_string($endDate)."',
+                add_to_calendar = $agendaId,
+                enable_qualification = '$qualification',
+                publication_id = '$workId'";
         Database::query($sql);
 
         $my_last_id = Database::insert_id();
@@ -4226,7 +4227,9 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
             $linkId = $link_info['id'];
         }
 
-        if (isset($params['make_calification']) && $params['make_calification'] == 1) {
+        if (isset($params['make_calification']) &&
+            $params['make_calification'] == 1
+        ) {
             if (empty($linkId)) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $params['category_id'],

@@ -307,11 +307,11 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 // Attach a document to a work
 //$_configuration['add_document_to_work'] = false;
 // Allow user comments in work
-//$_configuration['work_user_comments'] = false;
-
+// $_configuration['work_user_comments'] = false;
+// Allow student to enroll into a session without an approval needing
+//$_configuration['catalog_allow_session_auto_subscription'] = true;
 // Decode UTF-8 from Web Services (option passed to SOAP)
 //$_configuration['registration.soap.php.decode_utf8'] = false;
-
 // Show delete option in attendance
 //$_configuration['allow_delete_attendance'] = false;
 

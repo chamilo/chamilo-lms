@@ -1,13 +1,15 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
 
-before_script: composer install -n
+before_script:
+  - composer --self-update
+  - composer install -n
+  - composer update
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq php5-imagick php5-curl
+  - sudo apt-get install -qq php5-imagick php5-curl php5-intl php5-json
 
 script: phpunit -c tests/phpunit

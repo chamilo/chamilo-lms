@@ -212,17 +212,17 @@ if (api_get_setting('allow_group_categories') == 'true') {
             $actions .=
                 Display::url(
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
-                    'group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'],
+                    'group.php?'.api_get_cidreq().'&action=delete_category&id='.$category['id'],
                     array(
                         'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
                     )
                 );
             if ($index != 0) {
-                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'">'.
+                $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$category['id'].'&id2='.$group_cats[$index -1]['id'].'">'.
                     Display::return_icon('up.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
             if ($index != count($group_cats) - 1) {
-                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index +1]['id'].'">'.
+                $actions .= ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&id1='.$category['id'].'&id2='.$group_cats[$index +1]['id'].'">'.
                     Display::return_icon('down.png','&nbsp;','',ICON_SIZE_SMALL).'</a>';
             }
         }

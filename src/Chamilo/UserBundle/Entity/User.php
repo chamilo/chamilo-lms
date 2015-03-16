@@ -105,9 +105,9 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
-    private $status;
+    private $status = STUDENT;
 
     /**
      * @var string

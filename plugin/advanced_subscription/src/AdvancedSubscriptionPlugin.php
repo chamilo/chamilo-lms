@@ -208,21 +208,10 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        $checkInduction = $plugin->get('check_induction');
-        // @TODO: check if user have completed at least one induction session
-        $completedInduction = true;
-
-        if ($checkInduction && !$completedInduction) {
-            $this->errorMessages[] = $this->get_lang('AdvancedSubscriptionIncompleteInduction');
-
-            if (!$collectErrors) {
-                throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
-            }
-        }
-
-        $uitMax = $plugin->get('yearly_cost_unit_converter');
-        $uitMax *= $plugin->get('yearly_cost_limit');
-        $uitUser = 0;
+        $yearlyCostLimit = $plugin->get('yearly_cost_limit');
+        $maxCost = $plugin->get('yearly_cost_unit_converter');
+        $maxCost *= $yearlyCostLimit;
+        $userCost = 0;
         $now = new DateTime(api_get_utc_datetime());
         $newYearDate = $plugin->get('course_session_credit_year_start_date');
         $newYearDate = !empty($newYearDate) ?
@@ -249,17 +238,31 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $whereSession
         );
 
+        $expendedTimeMax = $plugin->get('yearly_hours_limit');
+        $expendedTime = 0;
+
         if (is_array($sessions) && count($sessions) > 0) {
             foreach ($sessions as $session) {
-                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
-                $uitUser += $var['field_value'];
+                $costField = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
+                $userCost += $costField['field_value'];
+
+                $teachingHoursField = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
+                $expendedTime += $teachingHoursField['field_value'];
             }
         }
 
-        if ($uitMax < $uitUser) {
+        if (isset($params['sessionId'])) {
+            $costField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'cost');
+            $userCost += $costField['field_value'];
+
+            $teachingHoursField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'teaching_hours');
+            $expendedTime += $teachingHoursField['field_value'];
+        }
+
+        if ($maxCost <= $userCost) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCostXLimitReached'),
-                $uitMax
+                $yearlyCostLimit
             );
 
             $this->errorMessages[] = $errorMessage;
@@ -269,17 +272,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         }
 
-        $expendedTimeMax = $plugin->get('yearly_hours_limit');
-        $expendedTime = 0;
-
-        if (is_array($sessions) && count($sessions) > 0) {
-            foreach ($sessions as $session) {
-                $var = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
-                $expendedTime += $var['field_value'];
-            }
-        }
-
-        if ($expendedTimeMax < $expendedTime) {
+        if ($expendedTimeMax <= $expendedTime) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionTimeXLimitReached'),
                 $expendedTimeMax
@@ -295,7 +288,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $expendedNumMax = $plugin->get('courses_count_limit');
         $expendedNum = count($sessions);
 
-        if ($expendedNumMax < $expendedNum) {
+        if ($expendedNumMax <= $expendedNum) {
             $errorMessage = sprintf(
                 $this->get_lang('AdvancedSubscriptionCourseXLimitReached'),
                 $expendedNumMax
@@ -305,6 +298,18 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
             if (!$collectErrors) {
                 throw new \Exception($errorMessage);
+            }
+        }
+
+        $checkInduction = $plugin->get('check_induction');
+        $numberOfApprovedInductionSessions = $this->getApprovedInductionSessions($userId);
+        $completedInduction = $numberOfApprovedInductionSessions > 0;
+
+        if ($checkInduction == 'true' && !$completedInduction) {
+            $this->errorMessages[] = $this->get_lang('AdvancedSubscriptionIncompleteInduction');
+
+            if (!$collectErrors) {
+                throw new \Exception($this->get_lang('AdvancedSubscriptionIncompleteInduction'));
             }
         }
 
@@ -1199,17 +1204,32 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getTermsUrl($params, $mode = ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP)
     {
-        $url = api_get_path(WEB_PLUGIN_PATH) . 'advanced_subscription/src/terms_and_conditions.php?' .
-            'a=' . Security::remove_XSS($params['action']) . '&' .
-            's=' . intval($params['sessionId']) . '&' .
-            'current_user_id=' . intval($params['currentUserId']) . '&' .
-            'e=' . intval($params['newStatus']) . '&' .
-            'u=' . intval($params['studentUserId']) . '&' .
-            'q=' . intval($params['queueId']) . '&' .
-            'is_connected=' . 1 . '&' .
-            'profile_completed=' . intval($params['profile_completed']) . '&' .
-            'r=' . intval($mode) . '&' .
-            'v=' . $this->generateHash($params);
+        $urlParams = array(
+            'a' => Security::remove_XSS($params['action']),
+            's' => intval($params['sessionId']),
+            'current_user_id' => intval($params['currentUserId']),
+            'e' => intval($params['newStatus']),
+            'u' => intval($params['studentUserId']),
+            'q' => intval($params['queueId']),
+            'is_connected' => 1,
+            'profile_completed' => intval($params['profile_completed']),
+            'v' => $this->generateHash($params)
+        );
+
+        switch ($mode) {
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP:
+                // no break
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL:
+                $urlParams['r'] = 0;
+                break;
+            case ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT:
+                $urlParams['r'] = 1;
+                break;
+        }
+
+        $url = api_get_path(WEB_PLUGIN_PATH) . "advanced_subscription/src/terms_and_conditions.php?";
+        $url .= http_build_query($urlParams);
+
         // Launch popup
         if ($mode == ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP) {
             $url = 'javascript:void(window.open(\'' . $url .'\',\'AdvancedSubscriptionTerms\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=700px,height=600px\', \'100\' ))';
@@ -1276,4 +1296,59 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
         return $templateContent;
     }
+
+    /**
+     * Get the count of approved induction sessions by a user
+     * @param int $userId The user id
+     * @return int The count of approved sessions
+     */
+    private function getApprovedInductionSessions($userId)
+    {
+        $sql = "SELECT s.id FROM session AS s "
+            . "INNER JOIN session_field_values AS sfv ON s.id = sfv.session_id "
+            . "INNER JOIN session_field AS sf ON sfv.field_id = sf.id "
+            . "INNER JOIN session_rel_user AS su ON s.id = su.id_session "
+            . "WHERE sf.field_variable = 'is_induccion_session' "
+            . "AND su.relation_type = 0 "
+            . "AND su.id_user = " . intval($userId);
+
+        $result = Database::query($sql);
+
+        if ($result === false) {
+            return 0;
+        }
+
+        $numberOfApproved = 0;
+
+        while ($session = Database::fetch_assoc($result)) {
+            $numberOfApprovedCourses = 0;
+            $courses = SessionManager::get_course_list_by_session_id($session['id']);
+
+            foreach ($courses as $course) {
+                $courseCategories = Category::load(
+                    null,
+                    null,
+                    $course['code'],
+                    null,
+                    null,
+                    $session['id'],
+                    false
+                );
+
+                if (
+                    count($courseCategories) > 0 &&
+                    Category::userFinishedCourse($userId, $courseCategories[0])
+                ) {
+                    $numberOfApprovedCourses++;
+                }
+            }
+
+            if ($numberOfApprovedCourses === count($courses)) {
+                $numberOfApproved++;
+            }
+        }
+
+        return $numberOfApproved;
+    }
+
 }

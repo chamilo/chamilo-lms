@@ -33,6 +33,7 @@ class UserManager
 
     /**
      * The default constructor only instanciates an empty user object
+     * @assert () === null
      */
     public function __construct()
     {

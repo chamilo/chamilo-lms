@@ -195,6 +195,7 @@ $config->setEntityNamespaces(
 $entityManager = EntityManager::create($dbParams, $config);
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+
 AnnotationRegistry::registerAutoloadNamespace(
     'Symfony\Component\Validator\Constraint',
     api_get_path(SYS_PATH)."vendor/symfony/validator"
@@ -223,14 +224,20 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $access_urls = api_get_access_urls();
 
     $root_rel = api_get_self();
-    $root_rel = substr($root_rel,1);
-    $pos = strpos($root_rel,'/');
-    $root_rel = substr($root_rel,0,$pos);
+    $root_rel = substr($root_rel, 1);
+    $pos = strpos($root_rel, '/');
+    $root_rel = substr($root_rel, 0, $pos);
     $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
     //urls with subdomains (HTTP_HOST is preferred - see #6764)
-    $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
-    if (empty($request_url_root)) {
-        $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
+    $request_url_root = '';
+    if (empty($_SERVER['HTTP_HOST'])) {
+        if (empty($_SERVER['SERVER_NAME'])) {
+            $request_url_root = $protocol . 'localhost/';
+        } else {
+            $request_url_root = $protocol . $_SERVER['SERVER_NAME'] . '/';
+        }
+    } else {
+        $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
     }
     //urls with subdirs
     $request_url_sub = $request_url_root.$root_rel.'/';
@@ -299,10 +306,10 @@ Chamilo::session()->start($already_installed);
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
 
 if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-	array_walk_recursive_limited($_GET,     	'stripslashes', true);
-	array_walk_recursive_limited($_POST, 	'stripslashes', true);
-	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
-	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
+    array_walk_recursive_limited($_GET, 'stripslashes', true);
+    array_walk_recursive_limited($_POST, 'stripslashes', true);
+    array_walk_recursive_limited($_COOKIE, 'stripslashes', true);
+    array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
 }
 
 // access_url == 1 is the default chamilo location
@@ -418,7 +425,7 @@ if (api_get_setting('server_type') == 'test') {
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 }
 
-/*	LOAD LANGUAGE FILES SECTION */
+/*  LOAD LANGUAGE FILES SECTION */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -482,7 +489,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
         $parent_language_array[$language_file_item] = compact($lang_list_result);
 
         //cleaning the variables
-        foreach($lang_list_result as $item) {
+        foreach ($lang_list_result as $item) {
             unset(${$item});
         }
 
@@ -495,7 +502,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
         $sub_language_array[$language_file_item] = compact($lang_list_result);
 
         //cleaning the variables
-        foreach($lang_list_result as $item) {
+        foreach ($lang_list_result as $item) {
             unset(${$item});
         }
     }
@@ -523,13 +530,13 @@ if (!empty($valid_languages)) {
         $platformLanguage = $user_selected_language;
     }
 
-    if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false ) {
+    if (!empty($language_priority4) && api_get_language_from_type($language_priority4) !== false) {
         $language_interface =  api_get_language_from_type($language_priority4);
     } else {
         $language_interface = api_get_setting('platformLanguage');
     }
 
-    if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false ) {
+    if (!empty($language_priority3) && api_get_language_from_type($language_priority3) !== false) {
         $language_interface =  api_get_language_from_type($language_priority3);
     } else {
         if (isset($_SESSION['user_language_choice'])) {
@@ -537,14 +544,14 @@ if (!empty($valid_languages)) {
         }
     }
 
-    if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false ) {
+    if (!empty($language_priority2) && api_get_language_from_type($language_priority2) !== false) {
         $language_interface =  api_get_language_from_type($language_priority2);
     } else {
         if (isset($_user['language'])) {
             $language_interface = $_user['language'];
         }
     }
-    if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false ) {
+    if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false) {
         $language_interface =  api_get_language_from_type($language_priority1);
     } else {
         if (isset($_course['language'])) {
@@ -645,7 +652,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         // is the latest logout_date still relevant?
         $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
         $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = convert_sql_date(Database::result($q_logout_date,0,'logout_date'));
+        $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry

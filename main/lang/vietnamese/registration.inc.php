@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langCourseManager = "Quản lí khóa học";
 $YourPasswordHasBeenEmailed = "Mật khẩu của bạn đã được gửi tới email";
-$lang_enter_email_and_well_send_you_password = "Nhập địa chỉ email bạn đã đăng kí, chúng tôi sẽ gửi mật khẩu cho bạn thông qua email.";
+$EnterEmailAndWeWillSendYouYourPassword = "Nhập địa chỉ email bạn đã đăng kí, chúng tôi sẽ gửi mật khẩu cho bạn thông qua email.";
 $langLogin = "đăng nhập";
 $langAction = "Hành động";
 $langPreserved = "Đã lưu";
@@ -70,7 +70,6 @@ $langPassTwice = "Bạn vừa xác nhận sai mật khẩu. Sử dụng nút qua
 $langRegAdmin = "Tạo website cho khóa học(GV)";
 $langRegStudent = "Tham gia các khóa học(HS)";
 $langConfirmation = "Xác nhận lại";
-$langPass = "Mật mã";
 $langSurname = "tên";
 $langRegistration = "đăng kí";
 $langYourAccountParam = "điền tên đăng nhập và mật khẩu của bạn";

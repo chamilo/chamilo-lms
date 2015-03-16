@@ -338,6 +338,7 @@ $RecommendedNumberOfParticipants = "Nombre recommandé de participants";
 $WCAGGoMenu = "Aller au menu";
 $WCAGGoContent = "Aller au contenu";
 $NoTimeLimits = "Pas de limite de temps";
+$Choose = "Choisissez";
 $SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
 $OpenBadgesTitle = "Chamilo supporte le standard OpenBadges";
 $NoPosts = "Aucune publication";

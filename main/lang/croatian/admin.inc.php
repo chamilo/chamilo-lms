@@ -295,7 +295,6 @@ $EditNotice = "Uredi obavijest";
 $General = "opće";
 $LostPassword = "Izgubljena zaporka";
 $Registration = "registracija";
-$Password = "zaporka";
 $InsertLink = "umetni poveznicu";
 $EditNews = "Uredi novosti";
 $EditCategories = "uredi kategorije";

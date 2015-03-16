@@ -7,6 +7,7 @@ $ReplyShort = "Odg:";
 $WCAGGoMenu = "Idi na adresu";
 $WCAGGoContent = "Idi na sadržaj";
 $NoTimeLimits = "Bez vremenskog ograničenja";
+$Choose = "Odaberi";
 $TypeMessage = "Molim Vas, otkucajte vašu poruku!";
 $ConfirmReset = "Da li zaista želite da obrišete sve poruke?";
 $ClearList = "Obriši listu";

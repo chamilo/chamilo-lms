@@ -12,6 +12,7 @@ $AdvancedEdit = "ویرایش پیشرفته";
 $WCAGGoMenu = "رفتن به فهرست";
 $WCAGGoContent = "رفتن به متن";
 $NoTimeLimits = "بدون محدودیت زمانی";
+$Choose = "انتخاب کنید";
 $SearchXapianModuleNotInstalled = "ماژول جستجوی اگزاپیان نصب نیست";
 $TypeMessage = "لطفاً پیام خود را وارد کنید!";
 $ConfirmReset = "آیا واقعاً می خواهید همۀ پیام ها را حذف کنید؟";

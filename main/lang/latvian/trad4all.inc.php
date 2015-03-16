@@ -10,6 +10,7 @@ $ReplyShort = "Atbildēt:";
 $WCAGGoMenu = "Iet uz izvēli";
 $WCAGGoContent = "Doties uz saturu";
 $NoTimeLimits = "Bez laika ierobežojuma";
+$Choose = "Izvēlies";
 $SearchXapianModuleNotInstalled = "Xapian meklēšanas modulis nav instalēts";
 $TypeMessage = "Rakstiet savu ziņu!";
 $ConfirmReset = "Vai tiešām vēlaties dzēst visu saraksti?";

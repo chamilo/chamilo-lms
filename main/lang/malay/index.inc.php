@@ -6,7 +6,6 @@ $langInvalidId = "ID Pengguna dan Katalaluan anda tidak sah.Sila login semula at
 $langWelcome = "terdapat subjek-subjek yang dipaparkan secara umum dibawah ini. Subjek-subjek lain memerlukan ID Pengguna dan Katalaluan. Anda boleh dapatkannya dengan hanya mengklik pada pautan 'Daftar'.Para pensyarah juga boleh mendaftar dengan mengklik pada pautan yang sama dan memilih status keahlian sebagai 'Pensyarah'.";
 $langPass = "Katalaluan";
 $langEnter = "Kembali ke senarai subjek";
-$langReg = "Daftar";
 $langMenu = ":: Menu ::";
 $langAdvises = "Nasihat";
 $langOtherCourses = "Senarai Subjek";

@@ -12,6 +12,7 @@ $AdvancedEdit = "تعديل متقدم";
 $WCAGGoMenu = " الذهاب للقائمة";
 $WCAGGoContent = " الذهاب للمحتوى";
 $NoTimeLimits = " لا حدود للوقت";
+$Choose = " اختر";
 $TypeMessage = "فضلا قم بطباعة رسالتك";
 $ConfirmReset = "هل تريد حذف كافة الرسائل حقا؟";
 $ClearList = "حذف القائمة";

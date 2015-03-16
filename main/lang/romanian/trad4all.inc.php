@@ -7,6 +7,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Spre meniu";
 $WCAGGoContent = "Spre continut";
 $NoTimeLimits = "Fara limite de timp";
+$Choose = "Alege";
 $TypeMessage = "Te rog scrie mesajul !";
 $ConfirmReset = "Esti sigur(a) ca doresti sa stergi toate mesajele?";
 $ClearList = "Curata lista";

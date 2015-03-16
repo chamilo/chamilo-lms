@@ -7,6 +7,7 @@ $ReplyShort = "Cevap:";
 $WCAGGoMenu = "Menüye git";
 $WCAGGoContent = "İçeriğe git";
 $NoTimeLimits = "Zaman sınırlaması yok";
+$Choose = "Seç";
 $TypeMessage = "Lütfen mesajınızı yazınız!";
 $ConfirmReset = "Bütün mesajlari silmek istiyormusunuz?";
 $ClearList = "Listeyi temizle";

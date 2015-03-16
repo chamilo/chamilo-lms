@@ -29,6 +29,7 @@ $AdvancedEdit = "Zaawansowana edycja";
 $WCAGGoMenu = "Idź do menu";
 $WCAGGoContent = "Idź do treści";
 $NoTimeLimits = "Brak ograniczeń czasowych";
+$Choose = "Wybierz";
 $SearchXapianModuleNotInstalled = "Moduł wyszukiwania Xapian nie jest zainstalowany";
 $TypeMessage = "Wpisz treść wiadomości!";
 $ConfirmReset = "Czy na pewno chcesz usunąć wszystkie wiadomości?";

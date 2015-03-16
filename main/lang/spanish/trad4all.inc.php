@@ -337,6 +337,7 @@ $RecommendedNumberOfParticipants = "Número recomendado de participantes";
 $WCAGGoMenu = "Ir al menú";
 $WCAGGoContent = "Ir al contenido";
 $NoTimeLimits = "Sin límite de tiempo";
+$Choose = "Seleccione";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";
 $OpenBadgesTitle = "Chamilo ahora tiene OpenBadges";
 $NoPosts = "Sin publicaciones";

@@ -15,6 +15,7 @@ $AdvancedEdit = "Edición avanzada";
 $WCAGGoMenu = "Ir para o menú";
 $WCAGGoContent = "Ir para o contido";
 $NoTimeLimits = "Sen límite temporal";
+$Choose = "Escoller";
 $SearchXapianModuleNotInstalled = "O módulo Xapian de PHP non está configurado no seu servidor, póñase en contacto con seu administrador.";
 $TypeMessage = "Escribe a túa mensaxe!";
 $ConfirmReset = "Queres borrar tódalas mensaxes?";

@@ -264,7 +264,6 @@ $EditNotice = "알림 수정";
 $General = "일반";
 $LostPassword = "패스워드 분실";
 $Registration = "등록";
-$Password = "패스워드";
 $InsertLink = "링크 삽입";
 $EditNews = "뉴스 수정";
 $EditCategories = "카테고리 수정";

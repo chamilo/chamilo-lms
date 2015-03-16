@@ -6,7 +6,6 @@ $langInvalidId = "ログインは减け烧けられませんでした。もし�
 $langWelcome = "ようこそ !";
 $langPass = "パスワ〖ド";
 $langEnter = "Entrer";
-$langReg = "登録";
 $langMenu = "メニュ";
 $langCourseDoesntExist = "焚桂¨このコ〖スは赂哼しません。";
 $langMenuGeneral = "ヘルプ";

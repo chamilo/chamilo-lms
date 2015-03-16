@@ -7,6 +7,7 @@ $ReplyShort = "Одг:";
 $WCAGGoMenu = " Мени Goto";
 $WCAGGoContent = "Содржина на Goto";
 $NoTimeLimits = "Нема временски ограничувања";
+$Choose = "Избери";
 $TypeMessage = "Ве молиме внесете ја вашата порака";
 $ConfirmReset = "Навистина ли сакате да ги избришете СИТЕ пораки?";
 $ClearList = "Избриши го списокот";

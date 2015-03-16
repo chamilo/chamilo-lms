@@ -8,6 +8,7 @@ $ReplyShort = "回复主题";
 $WCAGGoMenu = "至菜单";
 $WCAGGoContent = "至内容";
 $NoTimeLimits = "无时间限制";
+$Choose = "选择";
 $TypeMessage = "请输入你的消息!";
 $ConfirmReset = "真的想要删除所有消息吗？";
 $ClearList = "清除列表";

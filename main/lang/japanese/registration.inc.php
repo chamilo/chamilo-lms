@@ -38,7 +38,6 @@ $langPassTwice = "1刨誊と2刨誊で般ったパスワ〖ドを掐れました
 $langRegAdmin = "コースを作成";
 $langRegStudent = "コースに登録";
 $langConfirmation = "パスワードの確認入力";
-$langPass = "パスワ〖ド";
 $langSurname = "叹涟";
 $langRegistration = "判峡";
 $langSubscribeUserToCourse = "ユーザーをコースに登録";

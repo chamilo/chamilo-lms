@@ -7,6 +7,7 @@ $ReplyShort = "Vá:";
 $WCAGGoMenu = "Ugrás a menühöz";
 $WCAGGoContent = "Ugrás a tartalomhoz";
 $NoTimeLimits = "Nincs időkorlát";
+$Choose = "Válassz!";
 $TypeMessage = "Kérjük, írja be az üzenetét !";
 $ConfirmReset = "Valóban ki akarja törölni az összes üzenetet ?";
 $ClearList = "Lista kiürítése";

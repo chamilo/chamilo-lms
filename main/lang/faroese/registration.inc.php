@@ -8,7 +8,6 @@ $NewPass = "Nýtt loyniorð";
 $UserPicture = "Mynd";
 $langManager = "Umsitari";
 $langConfirmation = "Endurtak nýggja loyniorðið";
-$langPass = "Loyniorð";
 $langEdit = "Broyt";
 $SearchButton = "Leita";
 $langphone = "Telefon";

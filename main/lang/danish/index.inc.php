@@ -6,7 +6,6 @@ $langInvalidId = "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=c
 $langWelcome = "Velkommen!";
 $langPass = "Adgangskode";
 $langEnter = "Tilbage til min kursusoversigt";
-$langReg = "Registrering";
 $langMenu = "Menu";
 $langAdvises = "Informere";
 $langCourseDoesntExist = "<b>Advarsel :</b> Dette kursus eksisterer ikke";
@@ -24,7 +23,6 @@ $langUp = "Op";
 $langCatList = "Kategorier";
 $langCourseList = "Oversigt over kursusside";
 $langHelptwo = "Hjælp";
-$langRegAll = "Registrer";
 $EussMenu = "menu";
 $Opinio = "Mening";
 $Intranet = "Intranet";

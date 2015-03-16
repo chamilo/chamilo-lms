@@ -7,6 +7,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Dir al menú";
 $WCAGGoContent = "Dir al conteníu";
 $NoTimeLimits = "Ensin llende de tiempu";
+$Choose = "Escueya";
 $TypeMessage = "Por favor, escriba'l so mensaxe";
 $ConfirmReset = "¿ Ta seguru de querer esborrar tolos mensaxes ?";
 $ClearList = "Esborrar el llistáu";

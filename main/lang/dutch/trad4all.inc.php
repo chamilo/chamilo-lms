@@ -14,6 +14,7 @@ $ReplyShort = "Antwoord:";
 $WCAGGoMenu = "Ga naar het menu";
 $WCAGGoContent = "Ga naar de inhoud";
 $NoTimeLimits = "Geen beperking in tijd";
+$Choose = "Kies";
 $SearchXapianModuleNotInstalled = "The Xapian zoekmodule is niet geïnstalleerd";
 $TypeMessage = "Gelieve een tekst te tikken!";
 $ConfirmReset = "Bent u zeker dat u alle berichten wilt verwijderen?";

@@ -6,7 +6,6 @@ $langInvalidId = "Login non válido. Se non está inscrito,cubra o <a href='clar
 $langWelcome = "Benvida/o!";
 $langPass = "Clave de acceso";
 $langEnter = "Entrar no curso";
-$langReg = "Inscrición";
 $langMenu = "Menú";
 $langAdvises = "Suxestións";
 $langCourseDoesntExist = "<b>Aviso :</b> Este curso non existe";
@@ -24,7 +23,6 @@ $langUp = "Subir";
 $langCatList = "Categorías";
 $langCourseList = "Lista de cursos";
 $langHelptwo = "Axuda";
-$langRegAll = "rexistro";
 $EussMenu = "menú";
 $Opinio = "opinión";
 $Intranet = "Intranet";

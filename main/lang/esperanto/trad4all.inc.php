@@ -7,6 +7,7 @@ $ReplyShort = "Respondo:";
 $WCAGGoMenu = "Iri al la menuo";
 $WCAGGoContent = "Iri al la enhavo";
 $NoTimeLimits = "Sen templimo";
+$Choose = "Elektu";
 $TypeMessage = "Bonvolu tajpi tekston!";
 $ConfirmReset = "Ĉu certe, ke vi volas forigi ĉiujn mesaĝojn?";
 $ClearList = "Viŝi";

@@ -7,6 +7,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Meniu";
 $WCAGGoContent = "Turinys";
 $NoTimeLimits = "Laiko apribojimų nėra";
+$Choose = "Pasirinkti";
 $TypeMessage = "Prašome rašyti žinutes!";
 $ConfirmReset = "Ar tkrai norite ištrinti visas žinutes?";
 $ClearList = "Išvalyti sąrašą";

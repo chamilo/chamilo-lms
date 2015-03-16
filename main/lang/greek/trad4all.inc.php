@@ -12,6 +12,7 @@ $AdvancedEdit = "Επεξεργασία για προχωρημένους";
 $WCAGGoMenu = "Μενού";
 $WCAGGoContent = "Περιεχόμενο";
 $NoTimeLimits = "Χωρίς χρονικό όριο";
+$Choose = "Επιλογή γλώσσας νέων";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";
 $TypeMessage = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
 $ConfirmReset = "Θέλετε πραγματικά να διαγράψετε όλα τα μηνύματα;";

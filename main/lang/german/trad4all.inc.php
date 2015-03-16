@@ -10,6 +10,7 @@ $ReplyShort = "Aw:";
 $WCAGGoMenu = "Gehe zu Menü";
 $WCAGGoContent = "Gehe zu Inhalt";
 $NoTimeLimits = "Keine Zeitbeschränkung";
+$Choose = "Wählen";
 $SearchXapianModuleNotInstalled = "Das Xapian Such-Modul ist nicht installiert";
 $TypeMessage = "Bitte geben Sie Ihre Mitteilung ein!";
 $ConfirmReset = "Möchten sie wirklich alle Mitteilungen löschen?";

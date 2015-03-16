@@ -13,6 +13,7 @@ $AdvancedEdit = "Edizio aurreratua";
 $WCAGGoMenu = "Joan menura";
 $WCAGGoContent = "Joan edukira";
 $NoTimeLimits = "Ez dago denbora mugarik";
+$Choose = "Aukeratu";
 $SearchXapianModuleNotInstalled = "PHPren Xapian bilaketa modulua ez dago instalaturik zerbitzarian, mesedez, jarri harremanetan zure kudeatzailearekin";
 $TypeMessage = "Mesedez, idatzi ezazu mezua";
 $ConfirmReset = "Ziur al zaude mezu guztiak ezabatu nahi dituzula?";

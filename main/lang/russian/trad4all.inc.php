@@ -7,6 +7,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Перейти к меню";
 $WCAGGoContent = "Перейти к содержанию";
 $NoTimeLimits = "Время не ограничено";
+$Choose = "Выбрать";
 $TypeMessage = "Пожалуйста, введите Ваше сообщение!";
 $ConfirmReset = "Вы действительно хотите удалить все сообщения?";
 $ClearList = "Очистить список";

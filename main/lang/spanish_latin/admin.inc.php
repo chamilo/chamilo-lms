@@ -296,7 +296,6 @@ $EditNotice = "Editar notificación";
 $General = "general";
 $LostPassword = "Contraseña perdida";
 $Registration = "Inscripción";
-$Password = "contraseña";
 $InsertLink = "insertar enlace";
 $EditNews = "Editar las noticias";
 $EditCategories = "Editar las categorías";

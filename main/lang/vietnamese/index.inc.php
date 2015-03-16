@@ -6,7 +6,6 @@ $langInvalidId = "<small>Không đăng nhập được.Nếu bạn chưa phải 
 $langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on 'registration'. Professorscan create course websites clicking on registration too, but selecting then'Create course sites (professors)'.";
 $langPass = "Password";
 $langEnter = "Trở lại danh mục khoá học";
-$langReg = "Đăng ký";
 $langAdvises = "Advises";
 $langOtherCourses = "Danh mục khoá học";
 $langSupportForum = "Diễn đàn hỗ trợ";

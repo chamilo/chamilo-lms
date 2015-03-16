@@ -7,6 +7,7 @@ $ReplyShort = "回覆：";
 $WCAGGoMenu = "前往選單";
 $WCAGGoContent = "前往內容";
 $NoTimeLimits = "沒有時限";
+$Choose = "選擇";
 $TypeMessage = "請輸入你的消息!";
 $ConfirmReset = "真的想要刪除所有消息嗎？";
 $ClearList = "清除清單";

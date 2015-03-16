@@ -320,6 +320,7 @@ $AdvancedEdit = "Pokročilá úprava";
 $WCAGGoMenu = "Choď do menu";
 $WCAGGoContent = "Choď na obsah";
 $NoTimeLimits = "Bez časových obmedzení";
+$Choose = "Vybrať";
 $SearchXapianModuleNotInstalled = "Vyhľadávací modul Xapian nie je nainštalovaný";
 $TypeMessage = "Prosím napíšte svoju správu!";
 $ConfirmReset = "Naozaj chcete zmazať všetky správy?";

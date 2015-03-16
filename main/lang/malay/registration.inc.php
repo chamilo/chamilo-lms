@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langCourseManager = "Pentadbir Subjek";
 $YourPasswordHasBeenEmailed = "Katalaluan telah diemaillkan kepada anda.";
-$lang_enter_email_and_well_send_you_password = "Nyatakan alamat email(yang diisi semasa pendaftaran)dan Pentadbir Sistem akan menghantar katalaluan anda secepat mungkin.";
+$EnterEmailAndWeWillSendYouYourPassword = "Nyatakan alamat email(yang diisi semasa pendaftaran)dan Pentadbir Sistem akan menghantar katalaluan anda secepat mungkin.";
 $langLogin = "Melog Masuk";
 $langAction = "Tindakan";
 $langPreserved = "Pra Layan";
@@ -70,7 +70,6 @@ $langPassTwice = "Anda telah menaip dua katalaluan yang berbeza. Sila cuba sekal
 $langRegAdmin = "Pensyarah";
 $langRegStudent = "Pelajar";
 $langConfirmation = "Taip Semula";
-$langPass = "Katalaluan";
 $langSurname = "Nama Anda";
 $langRegistration = "Pendaftaran Pengguna Baru";
 $langYourAccountParam = "Berikut ialah Maklumat Login anda:";

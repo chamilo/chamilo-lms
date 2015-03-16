@@ -272,7 +272,6 @@ $EditNotice = "แก้ไขการแจ้งข่าว";
 $General = "เมนูรายการเชื่อมโยง";
 $LostPassword = "ลืมรหัสผ่าน";
 $Registration = "การลงทะเบียน";
-$Password = "รหัสผ่าน";
 $InsertLink = "เพิ่มการเชื่อมโยง";
 $EditNews = "แก้ไขข่าว";
 $EditCategories = "แก้ไขประเภท";

@@ -6,7 +6,6 @@ $langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröityny
 $langWelcome = "Tervetuloa!";
 $langPass = "Salasana";
 $langEnter = "Sisään.";
-$langReg = "Rekisteröinti";
 $langMenu = "Menu";
 $langAdvises = "Vinkit";
 $langCourseDoesntExist = "<b>Varoitus:</b>Tätä kurssia ei enää ole";

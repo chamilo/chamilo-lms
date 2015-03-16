@@ -139,6 +139,7 @@ $AdvancedEdit = "Edició avançada";
 $WCAGGoMenu = "Vés al menú";
 $WCAGGoContent = "Vés al contingut";
 $NoTimeLimits = "Sense límit de temps";
+$Choose = "Trieu";
 $SearchXapianModuleNotInstalled = "El mòdul Xapian de PHP no està configurat en el seu servidor";
 $TypeMessage = "Escriviu el vostre missatge !";
 $ConfirmReset = "Esteu segur de voler esborrar tots els missatges ?";

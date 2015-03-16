@@ -8,6 +8,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Vai al menù";
 $WCAGGoContent = "Vai al contenuto";
 $NoTimeLimits = "Senza limiti di tempo";
+$Choose = "Scegli";
 $SearchXapianModuleNotInstalled = "Il modulo Xapian non è installato";
 $TypeMessage = "Per favore, scrivi il tuo messaggio !";
 $ConfirmReset = "Vuoi veramente cancellare tutti i messaggi ?";

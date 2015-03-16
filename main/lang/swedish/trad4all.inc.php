@@ -8,6 +8,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Gå till meny";
 $WCAGGoContent = "Gå till innehåll";
 $NoTimeLimits = "Ingen tidsbegränsning";
+$Choose = "Välj";
 $TypeMessage = "Var vänlig skriv ditt meddelande!";
 $ConfirmReset = "Vill du verkligen radera alla meddelanden?";
 $ClearList = "Töm listan";

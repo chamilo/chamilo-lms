@@ -331,6 +331,7 @@ $AdvancedEdit = "Edição avançada";
 $WCAGGoMenu = "Ir para o menu";
 $WCAGGoContent = "Ir para o conteúdo";
 $NoTimeLimits = "Sem limite de tempo";
+$Choose = "Selecionar";
 $SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";
 $TypeMessage = "Por favor, digite a sua mensagem!";
 $ConfirmReset = "Tem a certeza que deseja excluir todas as mensagens?";

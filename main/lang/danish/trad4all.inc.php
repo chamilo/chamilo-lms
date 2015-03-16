@@ -7,6 +7,7 @@ $ReplyShort = "SV:";
 $WCAGGoMenu = "Gå til menu";
 $WCAGGoContent = "Gå til indhold";
 $NoTimeLimits = "Ingen tidsbegrænsning";
+$Choose = "Vælg";
 $TypeMessage = "Indtast venligst din meddelelse!";
 $ConfirmReset = "Ønsker du virkelig at slette alle meddelelser?";
 $ClearList = "Ryd listen";

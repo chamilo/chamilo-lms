@@ -269,7 +269,6 @@ $EditNotice = "Rediger notis";
 $General = "Generell";
 $LostPassword = "Glemt passord";
 $Registration = "Registrering";
-$Password = "passord";
 $InsertLink = "sett inn lenke";
 $EditNews = "Rediger nyheter";
 $EditCategories = "Rediger kategorier";

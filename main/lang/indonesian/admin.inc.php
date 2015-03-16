@@ -275,7 +275,6 @@ $EditNotice = "Edit pemberitahuan";
 $General = "umum";
 $LostPassword = "Lupa Password";
 $Registration = "pendaftaran";
-$Password = "password";
 $InsertLink = "masukkan link";
 $EditNews = "Edit Berita";
 $EditCategories = "edit kategori";

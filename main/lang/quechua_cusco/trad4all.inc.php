@@ -7,6 +7,7 @@ $ReplyShort = "Kuti:";
 $WCAGGoMenu = "Ajllanaman riy";
 $WCAGGoContent = "Ima kaqkunaman riy";
 $NoTimeLimits = "Sin límite de tiempo";
+$Choose = "Ajllay";
 $TypeMessage = "Ama hina kaychu, qelqa willanaykita";
 $ConfirmReset = "Cheqaychu kashanki llipin willanakunata pichanaykipaq?";
 $ClearList = "Pichay sinrita";

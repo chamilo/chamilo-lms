@@ -6,7 +6,6 @@ $langInvalidId = "Ogiltig inloggning. Om du inte är registrerad fyll i <a href=
 $langWelcome = "Välkommen!";
 $langPass = "Lösenord";
 $langEnter = "Stig in";
-$langReg = "Registrering";
 $langMenu = "Meny";
 $langAdvises = "Rådgivning";
 $langCourseDoesntExist = "<b>Varning :</b> Denna kurs existerar inte.";
@@ -24,7 +23,6 @@ $langUp = "Upp";
 $langCatList = "Kategorier";
 $langCourseList = "Kurslista";
 $langHelptwo = "Hjälp";
-$langRegAll = "registrera";
 $EussMenu = "meny";
 $Opinio = "Synpunkt";
 $Intranet = "Intranät";

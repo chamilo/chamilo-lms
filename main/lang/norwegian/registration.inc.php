@@ -27,7 +27,6 @@ $langNowGoChooseYourCourses = "NB! Trykk neste, og velg kurs fra kurskattegorili
 $langMailHasBeenSent = "En email er sendt deg med brukernavn og passord";
 $langPersonalSettings = "Dine personlige opplysninger er registrert.";
 $langManager = "Administrator";
-$langPass = "Passord";
 $langSurname = "Etternavn";
 $langSex = "Kjønn";
 $langClass = "Klasse";

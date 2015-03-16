@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $WCAGGoMenu = "Jdi do menu";
 $WCAGGoContent = "Jdi na obsah";
 $NoTimeLimits = "Žádné časové omezení";
+$Choose = "Zvolit";
 $TypeMessage = "Prosím napište Vaši správu!";
 $ConfirmReset = "Opravdu chcete smazat všechny správy?";
 $ClearList = "Vyčistit seznam";

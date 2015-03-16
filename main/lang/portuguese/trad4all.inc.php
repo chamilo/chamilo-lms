@@ -109,6 +109,7 @@ $ReplyShort = "Re:";
 $WCAGGoMenu = "Ir para o menu";
 $WCAGGoContent = "Ir para os conteúdos";
 $NoTimeLimits = "Sem limite de tempo";
+$Choose = "Seleccione";
 $TypeMessage = "Por favor, escreva a sua mensagem!";
 $ConfirmReset = "Tem a certeza que deseja eliminar todas as mensagens?";
 $ClearList = "Limpar o chat";

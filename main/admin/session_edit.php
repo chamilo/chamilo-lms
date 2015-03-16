@@ -205,14 +205,7 @@ $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
 
-$form->addElement(
-    'textarea',
-    'description',
-    get_lang('Description'),
-    array(
-        'rows' => 3
-    )
-);
+$form->addHtmlEditor('description', get_lang('Description'));
 
 $chkDescriptionAttributes = array();
 

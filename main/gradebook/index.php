@@ -801,7 +801,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                 if (!empty($grade_models)) {
                     $form_grade = new FormValidator('grade_model_settings');
                     $obj->fill_grade_model_select_in_form($form_grade, 'grade_model_id', $grade_model_id);
-                    $form_grade->addElement('style_submit_button', 'submit', get_lang('Save'), 'class="save"');
+                    $form->addButtonSave(get_lang('Save'));
 
                     if ($form_grade->validate()) {
                         $value = $form_grade->exportValue('grade_model_id');

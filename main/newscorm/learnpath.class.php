@@ -7229,7 +7229,7 @@ class learnpath
             reset($arrLP);
         }
 
-        $form->addElement('style_submit_button', 'submit_button', get_lang('SaveSection'), 'class="save"');
+        $form->addButtonSave(get_lang('SaveSection'), 'submit_button');
 
         if ($item_type == 'module' || $item_type == 'dokeos_module') {
             $form->addElement('hidden', 'parent', '0');
@@ -7357,7 +7357,7 @@ class learnpath
         $result = Database::query($sql);
         $arrLP = array ();
         while ($row = Database :: fetch_array($result)) {
-            $arrLP[] = array (
+            $arrLP[] = array(
                 'id' 				=> $row['id'],
                 'item_type' 		=> $row['item_type'],
                 'title' 			=> $row['title'],
@@ -7545,26 +7545,28 @@ class learnpath
                             $relative_prefix = '../../';
                         }
 
-                        $editor_config = array( 'ToolbarSet' 			=> 'LearningPathDocuments',
+                        $editor_config = array(
+                            'ToolbarSet'=> 'LearningPathDocuments',
                             'Width' 				=> '100%',
                             'Height' 				=> '500',
                             'FullPage' 				=> true,
                             'CreateDocumentDir' 	=> $relative_prefix,
                             'CreateDocumentWebDir' 	=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/',
                             'BaseHref' 				=> api_get_path(WEB_COURSE_PATH) . api_get_course_path().'/document/'.$relative_path
-
                         );
 
                         if ($_GET['action'] == 'add_item') {
                             $class = 'add';
                             $text = get_lang('LPCreateDocument');
-                        } else
+                        } else {
                             if ($_GET['action'] == 'edit_item') {
                                 $class = 'save';
                                 $text = get_lang('SaveDocument');
                             }
+                        }
 
-                        $form->addElement('style_submit_button', 'submit_button', $text, 'class="' . $class . '"');
+                        //$form->addElement('style_submit_button', 'submit_button', $text, 'class="' . $class . '"');
+                        $form->addButtonSave($text, 'submit_button');
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');
                         $form->addElement('html', '<div>');
@@ -7573,7 +7575,8 @@ class learnpath
                         $defaults['content_lp'] = $content;
                     }
                 } elseif (is_numeric($extra_info)) {
-                    $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
+                    $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+
                     $return = $this->display_document($extra_info, true, true, true);
                     $form->addElement('html', $return);
                 }
@@ -7585,15 +7588,16 @@ class learnpath
             $form->addElement('hidden', 'description', $item_description);
         }
         if (is_numeric($extra_info)) {
-            $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'value="submit_button", class="save"');
+            $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
             $form->addElement('hidden', 'path', $extra_info);
         } elseif (is_array($extra_info)) {
-            $form->addElement('style_submit_button', 'submit_button', get_lang('SaveDocument'), 'class="save"');
+            $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
             $form->addElement('hidden', 'path', $extra_info['path']);
         }
         $form->addElement('hidden', 'type', TOOL_DOCUMENT);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
+
         return $form->return_form();
     }
 
@@ -8246,6 +8250,7 @@ class learnpath
 
     /**
      * Return HTML form to allow prerequisites selection
+     * @todo use FormValidator
      * @param	integer Item ID
      * @return	string	HTML form
      */
@@ -8374,7 +8379,7 @@ class learnpath
         $return .= '</tr>';
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
-        $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
+        $return .= '<button class="btn btn-default" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</form>';
 
         return $return;

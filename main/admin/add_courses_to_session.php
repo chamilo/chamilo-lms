@@ -244,22 +244,26 @@ unset($Courses);
                     <?php
                     if ($ajax_search) {
                         ?>
-                        <button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+                        <button class="btn-primary" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
                     <?php
                     } else {
                         ?>
-                        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
+                        <button class="btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                            <i class="fa fa-chevron-right"></i>
+                        </button>
                         <br /><br />
-                        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
+                        <button class="btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
                     <?php
                     }
                     ?>
                     <br /><br /><br /><br /><br /><br />
                     <?php
                     if (isset($_GET['add'])) {
-                        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
+                        echo '<button class="btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
                     } else {
-                        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
+                        echo '<button class="btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
                     }
                     ?>
                 </td>

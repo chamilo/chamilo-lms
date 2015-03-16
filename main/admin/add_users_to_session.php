@@ -621,14 +621,18 @@ if (!empty($errorMsg)) {
         <?php
             if ($ajax_search) {
             ?>
-              <button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
+              <button class="btn-primary" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
+                  <i class="fa fa-chevron-right"></i>
+              </button>
             <?php
         } else {
             ?>
-                <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                <button class="btn-primary" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
+                    <i class="fa fa-chevron-right"></i>
                 </button>
                 <br /><br />
-                <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                <button class="btn-primary" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
+                    <i class="fa fa-chevron-left"></i>
                 </button>
               <?php
             }
@@ -638,9 +642,9 @@ if (!empty($errorMsg)) {
         <br />
 		<?php
 		if (!empty($addProcess)) {
-			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
+			echo '<button class="btn-success" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
         } else {
-			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
+			echo '<button class="btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
         }
 		?>
     </div>

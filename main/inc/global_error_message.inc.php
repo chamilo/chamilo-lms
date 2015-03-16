@@ -42,7 +42,7 @@ $DatabaseUnavailableDescription = 'This portal is currently experiencing databas
 
 // Error code 6.
 $AlreadyInstalledTitle = 'Chamilo has already been installed';
-$AlreadyInstalledDescription = 'The system has already been installed. In order its content to be protected you are not allowed to start the installation script again.';
+$AlreadyInstalledDescription = 'The system has already been installed. In order to protect its contents, we have to prevent you from starting the installation script again. Please return to the main page.';
 
 // Unspecified error.
 $TechnicalIssuesTitle = 'Technical issues';
@@ -57,12 +57,13 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     }
 
     $css_path = 'main/css/';
+    $css_web_path = 'web/assets/';
     $css_file              = $css_path.$theme.'default.css';
-    $bootstrap_file        = $css_path.'bootstrap.css';
-	$css_base_file         = $css_path.'base.css';
-	$css_base_chamilo_file = $css_path.'base_chamilo.css';
+    $bootstrap_file        = $css_web_path.'bootstrap/dist/css/bootstrap.min.css';
+    $css_base_file         = $css_path.'base.css';
+    //$css_base_chamilo_file = $css_path.'base_chamilo.css';
 
-    $css_list = array($bootstrap_file, $css_base_file, $css_base_chamilo_file, $css_file);
+    $css_list = array($bootstrap_file, $css_base_file, $css_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);

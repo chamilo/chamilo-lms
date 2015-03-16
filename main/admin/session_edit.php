@@ -210,7 +210,6 @@ $form->addElement(
     'description',
     get_lang('Description'),
     array(
-        'class' => 'span4',
         'rows' => 3
     )
 );
@@ -233,7 +232,6 @@ $form->addElement(
         get_lang('SessionDurationDescription')
     ),
     array(
-        'class' => 'span1',
         'maxlength' => 50
     )
 );

@@ -212,7 +212,6 @@ $form = new FormValidator('add_session', 'post', $urlAction);
 $form->addElement('header', $tool_name);
 
 $form->addElement('text', 'name', get_lang('SessionName'), array(
-    'class' => 'span4',
     'maxlength' => 50,
     'value' => $formSent ? api_htmlentities($name,ENT_QUOTES,$charset) : ''
 ));
@@ -263,7 +262,6 @@ if (intval($countUsers) < 50) {
     $form->addElement('advanced_settings', Display::return_icon('synthese_view.gif') . ' ' . get_lang('ActivityCoach'));
 } else {
     $form->addElement('text', 'coach_username', get_lang('CoachName'), array(
-        'class' => 'span4',
         'maxlength' => 50,
         'onkeyup' => "xajax_search_coachs(document.getElementById('coach_username').value)",
         'id' => 'coach_username'
@@ -332,7 +330,6 @@ $form->addElement(
     'description',
     get_lang('Description'),
     array(
-        'class' => 'span4',
         'rows' => 3
     )
 );
@@ -347,7 +344,6 @@ $form->addElement(
         get_lang('SessionDurationDescription')
     ),
     array(
-        'class' => 'span1',
         'maxlength' => 50
     )
 );

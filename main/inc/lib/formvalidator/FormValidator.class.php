@@ -586,7 +586,7 @@ EOT;
      * @param string $label
      * @param array  $attributes
      */
-    public function add_file($name, $label, $attributes = array())
+    public function addFile($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }

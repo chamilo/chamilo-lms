@@ -237,6 +237,7 @@ class FlatViewDataGenerator
             $item = $this->evals_links [$count + $items_start];
             $headers[] = $item->get_name();
         }
+
         return $headers;
     }
 
@@ -556,7 +557,7 @@ class FlatViewDataGenerator
             $divide = isset($score[1]) && !empty($score[1]) ? $score[1] : 1;
 
             // Sub cat weight
-            $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+            //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
 
             $item_value = isset($score[0]) ? $score[0]/$divide : 0;
 
@@ -722,7 +723,7 @@ class FlatViewDataGenerator
                 $score_final = ($score[0] / $score_denom) * 100;
                 $row[] = $score_final;
             }
-            $total_score = array($item_value, $item_total);
+            //$total_score = array($item_value, $item_total);
             $score_final = ($item_value / $item_total) * 100;
 
             $row[] = $score_final;

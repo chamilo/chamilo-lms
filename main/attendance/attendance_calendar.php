@@ -47,13 +47,14 @@ if (isset($error_checkdate) && $error_checkdate) {
     Display::display_error_message($message, false);
 }
 
-$groupList = GroupManager::get_group_list(null, null, 1);
-$groupIdList = array('--');
-foreach ($groupList as $group) {
-    $groupIdList[$group['id']] = $group['name'];
-}
 
 if (isset($action) && $action == 'calendar_add') {
+    $groupList = GroupManager::get_group_list(null, null, 1);
+    $groupIdList = array('--');
+    foreach ($groupList as $group) {
+        $groupIdList[$group['id']] = $group['name'];
+    }
+
     // calendar add form
     $form = new FormValidator(
         'attendance_calendar_add',
@@ -104,6 +105,12 @@ if (isset($action) && $action == 'calendar_add') {
 } else {
     // Calendar list
 
+    $groupList = GroupManager::get_group_list();
+    $groupIdList = array('--');
+    foreach ($groupList as $group) {
+        $groupIdList[$group['id']] = $group['name'];
+    }
+
     echo Display::page_subheader(get_lang('CalendarList'));
     echo '<div class="attendance-calendar-list">';
     if (!empty($attendance_calendar)) {
@@ -131,8 +138,10 @@ if (isset($action) && $action == 'calendar_add') {
                 echo '</div>';
             } else {
                 echo Display::return_icon(
-                        'lp_calendar_event.png', get_lang('DateTime')
+                        'lp_calendar_event.png',
+                        get_lang('DateTime')
                     ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
+
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {
                         echo '&nbsp;'.Display::label($groupIdList[$group['group_id']]);

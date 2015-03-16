@@ -221,27 +221,7 @@ $create_thread_link = '';
 $userInfo = api_get_user_info(api_get_user_id(), true);
 if ($group_id != 0) {
     //Block Social Avatar
-    $social_avatar_block = '<div class="panel panel-info social-avatar">';
-    $social_avatar_block .= SocialManager::show_social_avatar_block(
-        'groups',
-        $group_id
-    );
-    $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
-    $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
-    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
-    if (!empty($userInfo['user_is_online_in_chat'])) {
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
-    }else{
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
-    }
-
-    $editProfileUrl = Display::getProfileEditionLink($user_id);
-
-    $social_avatar_block .= '<div class="edit-profile">
-                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
-                         </div>';
-    $social_avatar_block .= '</div>';
-
+    $social_avatar_block = Display::getSocialUserBlock($user_id, 'groups', $group_id);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 } else {
@@ -250,24 +230,7 @@ if ($group_id != 0) {
         $show_menu = $_GET['view'];
     }
     //Block Social Avatar
-    $social_avatar_block  = '<div class="panel panel-info social-avatar">';
-    $social_avatar_block .= SocialManager::show_social_avatar_block($show_menu,$group_id);
-    $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
-    $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
-    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
-    if (!empty($userInfo['user_is_online_in_chat'])) {
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
-    }else{
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
-    }
-
-    $editProfileUrl = Display::getProfileEditionLink($user_id);
-
-    $social_avatar_block .= '<div class="edit-profile">
-                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
-                         </div>';
-    $social_avatar_block .= '</div>';
-
+    $social_avatar_block = Display::getSocialUserBlock($user_id, $show_menu, $group_id);
     $social_menu_block = SocialManager::show_social_menu($show_menu, $group_id);
 }
 

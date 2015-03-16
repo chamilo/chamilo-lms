@@ -185,7 +185,7 @@ class SessionManager
                     'nb_days_access_after_end' => $nb_days_acess_after,
                     'session_category_id' => $id_session_category,
                     'visibility' => $id_visibility,
-                    'description' => Database::escape_string($description),
+                    'description' => $description,
                     'show_description' => intval($showDescription)
                 );
                 $session_id = Database::insert($tbl_session, $values);
@@ -1432,14 +1432,14 @@ class SessionManager
                 }
                 $values['duration'] = $duration;
 
-                $values['name'] = Database::escape_string($name);
+                $values['name'] = $name;
                 $values['date_start'] = $date_start;
                 $values['date_end'] = $date_end;
                 $values['id_coach'] = $id_coach;
                 $values['nb_days_access_before_beginning'] = $nb_days_acess_before;
                 $values['nb_days_access_after_end'] = $nb_days_acess_after;
                 $values['session_category_id'] = $id_session_category;
-                $values['description'] = Database::escape_string($description);
+                $values['description'] = $description;
                 $values['show_description'] = intval($showDescription);
                 $values['visibility'] = $id_visibility;
 

@@ -205,13 +205,13 @@ $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
 
-$form->addElement(
-    'textarea',
+$form->addHtmlEditor(
     'description',
     get_lang('Description'),
+    false,
+    false,
     array(
-        'class' => 'span4',
-        'rows' => 3
+        'ToolbarSet' => 'Minimal'
     )
 );
 
@@ -233,7 +233,6 @@ $form->addElement(
         get_lang('SessionDurationDescription')
     ),
     array(
-        'class' => 'span1',
         'maxlength' => 50
     )
 );

@@ -13,9 +13,9 @@
 /*      CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
-define('COUNTRY_DATA_FILENAME',     'country_data.csv');
+define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
-define('SYSTEM_CONFIG_FILENAME',    'configuration.dist.php');
+define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /*      COMMON PURPOSE FUNCTIONS    */
 
@@ -26,7 +26,8 @@ define('SYSTEM_CONFIG_FILENAME',    'configuration.dist.php');
  * @return bool     The detected result;
  * @author Ivan Tcholakov, 2010;
  */
-function is_already_installed_system() {
+function isAlreadyInstalledSystem()
+{
     global $new_version, $_configuration;
 
     if (empty($new_version)) {
@@ -78,16 +79,20 @@ function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure =
 
 /**
  * This function checks whether a php setting matches the recommended value
- *
+ * @param   string $phpSetting A PHP setting to check
+ * @param   string  $recommendedValue A recommended value to show on screen
+ * @param   mixed  $returnSuccess What to show on success
+ * @param   mixed  $returnFailure  What to show on failure
+ * @return  string  A label to show
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version Dokeos 1.8, august 2006
  */
-function check_php_setting($php_setting, $recommended_value, $return_success = false, $return_failure = false) {
-    $current_php_value = get_php_setting($php_setting);
-    if ($current_php_value == $recommended_value) {
-        return Display::label($current_php_value.' '.$return_success, 'success');
+function checkPhpSetting($phpSetting, $recommendedValue, $returnSuccess = false, $returnFailure = false)
+{
+    $currentPhpValue = getPhpSetting($phpSetting);
+    if ($currentPhpValue == $recommendedValue) {
+        return Display::label($currentPhpValue.' '.$returnSuccess, 'success');
     } else {
-        return Display::label($current_php_value.' '.$return_success, 'important');
+        return Display::label($currentPhpValue.' '.$returnSuccess, 'important');
     }
 }
 
@@ -95,9 +100,10 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
 /**
  *  This function return the value of a php.ini setting if not "" or if exists, otherwise return false
  */
-function check_php_setting_exists($php_setting) {
-    if (ini_get($php_setting) != "") {
-        return ini_get($php_setting);
+function checkPhpSettingExists($phpSetting)
+{
+    if (ini_get($phpSetting) != "") {
+        return ini_get($phpSetting);
     }
     return false;
 }
@@ -110,7 +116,8 @@ function check_php_setting_exists($php_setting) {
  * @return boolean: ON or OFF
  * @author Joomla <http://www.joomla.org>
  */
-function get_php_setting($val) {
+function getPhpSetting($val)
+{
     return ini_get($val) == '1' ? 'ON' : 'OFF';
 }
 
@@ -121,14 +128,16 @@ function get_php_setting($val) {
  * @return  string  the string "true" or "false"
  * @author Christophe Gesch??
  */
-function true_false($var) {
+function trueFalse($var)
+{
     return $var ? 'true' : 'false';
 }
 
 /**
  * Removes memory and time limits as much as possible.
  */
-function remove_memory_and_time_limits() {
+function remove_memory_and_time_limits()
+{
     if (function_exists('ini_set')) {
         ini_set('memory_limit', -1);
         ini_set('max_execution_time', 0);
@@ -142,7 +151,8 @@ function remove_memory_and_time_limits() {
  * @return string       Returns a language identificator, i.e. 'english', 'spanish', ...
  * @author Ivan Tcholakov, 2010
  */
-function detect_browser_language() {
+function detect_browser_language()
+{
     static $language_index = array(
         'ar' => 'arabic',
         'ast' => 'asturian',
@@ -229,7 +239,8 @@ function detect_browser_language() {
 /**
  * This function checks if the given folder is writable
  */
-function check_writable($folder, $suggestion = false) {
+function check_writable($folder, $suggestion = false)
+{
     if (is_writable($folder)) {
         return Display::label(get_lang('Writable'), 'success');
     } else {
@@ -247,8 +258,9 @@ function check_writable($folder, $suggestion = false) {
  * @param   string  File path
  * @return  array   The lines of the file returned as an array
  */
-function file_to_array($filename) {
-    if(!is_readable($filename) || is_dir($filename)){
+function file_to_array($filename)
+{
+    if (!is_readable($filename) || is_dir($filename)) {
         return array();
     }
     $fp = fopen($filename, 'rb');
@@ -260,7 +272,8 @@ function file_to_array($filename) {
 /**
  * We assume this function is called from install scripts that reside inside the install folder.
  */
-function set_file_folder_permissions() {
+function set_file_folder_permissions()
+{
     @chmod('.', 0755); //set permissions on install dir
     @chmod('..', 0755); //set permissions on parent dir of install dir
     @chmod('country_data.csv.csv', 0755);
@@ -269,8 +282,10 @@ function set_file_folder_permissions() {
 /**
  * Add's a .htaccess file to the courses directory
  * @param string $url_append The path from your webroot to your chamilo root
+ * @return bool Result of writing the file
  */
-function write_courses_htaccess_file($url_append) {
+function write_courses_htaccess_file($url_append)
+{
     $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
     $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
     $fp = @ fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
@@ -285,8 +300,8 @@ function write_courses_htaccess_file($url_append) {
  * Write the main system config file
  * @param string $path Path to the config file
  */
-function write_system_config_file($path) {
-
+function write_system_config_file($path)
+{
     global $dbHostForm;
     global $dbUsernameForm;
     global $dbPassForm;
@@ -315,8 +330,8 @@ function write_system_config_file($path) {
     $config['{DATABASE_HOST}']          = $dbHostForm;
     $config['{DATABASE_USER}']          = $dbUsernameForm;
     $config['{DATABASE_PASSWORD}']      = $dbPassForm;
-    $config['TRACKING_ENABLED']         = true_false($enableTrackingForm);
-    $config['SINGLE_DATABASE']          = true_false($singleDbForm);
+    $config['TRACKING_ENABLED']         = trueFalse($enableTrackingForm);
+    $config['SINGLE_DATABASE']          = trueFalse($singleDbForm);
     $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');
     $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');
     $config['{DATABASE_PREFIX}']        = '';
@@ -333,7 +348,7 @@ function write_system_config_file($path) {
 
     $config['SESSION_LIFETIME']         = $session_lifetime;
     $config['{NEW_VERSION}']            = $new_version;
-    $config['NEW_VERSION_STABLE']       = true_false($new_version_stable);
+    $config['NEW_VERSION_STABLE']       = trueFalse($new_version_stable);
 
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
@@ -365,7 +380,8 @@ function write_system_config_file($path) {
 /**
  * Returns a list of language directories.
  */
-function & get_language_folder_list() {
+function & get_language_folder_list()
+{
     static $result;
     if (!is_array($result)) {
         $result = array();
@@ -396,7 +412,8 @@ function & get_language_folder_list() {
 /**
  * TODO: my_directory_to_array() - maybe within the main API there is already a suitable function?
  */
-function my_directory_to_array($directory) {
+function my_directory_to_array($directory)
+{
     $array_items = array();
     if ($handle = opendir($directory)) {
         while (false !== ($file = readdir($handle))) {
@@ -425,7 +442,8 @@ function my_directory_to_array($directory) {
  * @author Olivier Brouckaert
  * @author Reworked by Ivan Tcholakov, 2010
  */
-function get_config_param($param, $updatePath = '') {
+function get_config_param($param, $updatePath = '')
+{
     global $configFile, $updateFromConfigFile;
 
     // Look if we already have the queried parameter.
@@ -548,7 +566,7 @@ function get_config_param($param, $updatePath = '') {
         }
     }
 
-    if($param == 'dbGlu' && empty($val)){
+    if ($param == 'dbGlu' && empty($val)) {
         return '`.`';
     }
     //Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
@@ -586,7 +604,8 @@ function get_config_param($param, $updatePath = '') {
  * @param   string  Name of param we want
  * @return  mixed   The parameter value or null if not found
  */
-function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
+function get_config_param_from_db($host, $login, $pass, $db_name, $param = '')
+{
 
     Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
     Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
@@ -604,7 +623,8 @@ function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 /**
  * Connects to the database server.
  */
-function database_server_connect() {
+function database_server_connect()
+{
     global $dbHostForm, $dbUsernameForm, $dbPassForm;
     if (($res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm))) === false) {
         $no = Database::errno();
@@ -628,7 +648,8 @@ function database_server_connect() {
  * @param type $database_name
  * @return boolean
  */
-function database_exists($database_name) {
+function database_exists($database_name)
+{
     if (empty($database_name)) {
         return false;
     }
@@ -651,7 +672,8 @@ function database_exists($database_name) {
  *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
  *                 -1 when there is no connection established.
  */
-function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm) {
+function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm)
+{
     $dbConnect = -1;
     //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
@@ -665,15 +687,16 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
 /**
  * Fills the countries table with a list of countries.
  */
-function fill_track_countries_table($track_countries_table) {
+function fill_track_countries_table($track_countries_table)
+{
     $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
     $countries = file($file_path);
     $add_country_sql = "INSERT INTO $track_countries_table (id, code, country, counter) VALUES ";
     foreach ($countries as $line) {
-        $elems = explode(',',$line);
+        $elems = explode(',', $line);
         $add_country_sql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
     }
-    $add_country_sql = substr($add_country_sql,0,-1);
+    $add_country_sql = substr($add_country_sql, 0, -1);
     //$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
     @ Database::query($add_country_sql);
 }
@@ -687,7 +710,8 @@ function fill_track_countries_table($track_countries_table) {
  * @param string  optional path about the script for database
  * @return void
  */
-function load_main_database($installation_settings, $db_script = '') {
+function load_main_database($installation_settings, $db_script = '')
+{
     if (!empty($db_script)) {
         if (file_exists($db_script)) {
             $sql_text = file_get_contents($db_script);
@@ -710,7 +734,8 @@ function load_main_database($installation_settings, $db_script = '') {
  * Creates the structure of the stats database
  * @param   string  Name of the file containing the SQL script inside the install directory
  */
-function load_database_script($db_script) {
+function load_database_script($db_script)
+{
     $db_script = api_get_path(SYS_CODE_PATH).'install/'.$db_script;
     if (file_exists($db_script)) {
         $sql_text = file_get_contents($db_script);
@@ -718,7 +743,8 @@ function load_database_script($db_script) {
     parse_sql_queries($sql_text);
 }
 
-function parse_sql_queries($sql_text) {
+function parse_sql_queries($sql_text)
+{
 
     //split in array of sql strings
     $sql_instructions = array();
@@ -752,7 +778,8 @@ function parse_sql_queries($sql_text) {
  *                   can't get the value of a constant from within a function)
  * @return  boolean  always true
  */
-function split_sql_file(&$ret, $sql) {
+function split_sql_file(&$ret, $sql)
+{
     // do not trim, see bug #1030644
     //$sql          = trim($sql);
     $sql          = rtrim($sql, "\n\r");
@@ -767,28 +794,25 @@ function split_sql_file(&$ret, $sql) {
         $char = $sql[$i];
 
         // We are in a string, check for not escaped end of strings except for
-        // backquotes that can't be escaped
+        // back-quotes that can't be escaped
         if ($in_string) {
             for (;;) {
-                $i         = strpos($sql, $string_start, $i);
+                $i = strpos($sql, $string_start, $i);
                 // No end of string found -> add the current substring to the
                 // returned array
                 if (!$i) {
                     $ret[] = $sql;
                     return true;
-                }
-                // Backquotes or no backslashes before quotes: it's indeed the
-                // end of the string -> exit the loop
-                elseif ($string_start == '`' || $sql[$i - 1] != '\\') {
-                    $string_start      = '';
-                    $in_string         = false;
+                } elseif ($string_start == '`' || $sql[$i - 1] != '\\') {
+                    // Back-quotes or no backslashes before quotes: it's indeed the
+                    // end of the string -> exit the loop
+                    $string_start = '';
+                    $in_string = false;
                     break;
-                }
-                // one or more Backslashes before the presumed end of string...
-                else {
+                } else { // one or more Backslashes before the presumed end of string...
                     // ... first checks for escaped backslashes
-                    $j                     = 2;
-                    $escaped_backslash     = false;
+                    $j = 2;
+                    $escaped_backslash = false;
                     while ($i - $j > 0 && $sql[$i - $j] == '\\') {
                         $escaped_backslash = !$escaped_backslash;
                         $j++;
@@ -796,51 +820,53 @@ function split_sql_file(&$ret, $sql) {
                     // ... if escaped backslashes: it's really the end of the
                     // string -> exit the loop
                     if ($escaped_backslash) {
-                        $string_start  = '';
-                        $in_string     = false;
+                        $string_start = '';
+                        $in_string = false;
                         break;
-                    }
-                    // ... else loop
-                    else {
+                    } else { // ... else loop
                         $i++;
                     }
                 } // end if...elseif...else
             } // end for
-        } // end if (in string)
+            // end if (in string)
 
-        // lets skip comments (/*, -- and #)
-        elseif (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') || $char == '#' || ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')) {
+            // lets skip comments (/*, -- and #)
+        } elseif (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') ||
+            $char == '#' ||
+            ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')
+        ) {
             $i = strpos($sql, $char == '/' ? '*/' : "\n", $i);
             // didn't we hit end of string?
             if ($i === false) {
                 break;
             }
-            if ($char == '/') $i++;
-        }
+            if ($char == '/') {
+                $i++;
+            }
 
-        // We are not in a string, first check for delimiter...
-        elseif ($char == ';') {
+            // We are not in a string, first check for delimiter...
+        } elseif ($char == ';') {
             // if delimiter found, add the parsed part to the returned array
-            $ret[]      = array('query' => substr($sql, 0, $i), 'empty' => $nothing);
-            $nothing    = true;
-            $sql        = ltrim(substr($sql, min($i + 1, $sql_len)));
-            $sql_len    = strlen($sql);
+            $ret[] = array('query' => substr($sql, 0, $i), 'empty' => $nothing);
+            $nothing = true;
+            $sql = ltrim(substr($sql, min($i + 1, $sql_len)));
+            $sql_len = strlen($sql);
             if ($sql_len) {
-                $i      = -1;
+                $i = -1;
             } else {
                 // The submited statement(s) end(s) here
                 return true;
             }
-        } // end elseif (is delimiter)
+            // end elseif (is delimiter)
 
-        // ... then check for start of a string,...
-        elseif (($char == '"') || ($char == '\'') || ($char == '`')) {
-            $in_string    = true;
-            $nothing      = false;
+            // ... then check for start of a string,...
+        } elseif (($char == '"') || ($char == '\'') || ($char == '`')) {
+            $in_string = true;
+            $nothing = false;
             $string_start = $char;
-        } // end elseif (is start of string)
+        // end elseif (is start of string)
 
-        elseif ($nothing) {
+        } elseif ($nothing) {
             $nothing = false;
         }
 
@@ -870,23 +896,31 @@ function split_sql_file(&$ret, $sql) {
  * @param   string  File to parse (in the current directory)
  * @param   string  Section to return
  * @param   boolean Print (true) or hide (false) error texts when they occur
+ * @return  array Array of SQL statements
  */
-function get_sql_file_contents($file, $section, $print_errors = true) {
+function get_sql_file_contents($file, $section, $print_errors = true)
+{
     //check given parameters
     if (empty($file)) {
         $error = "Missing name of file to parse in get_sql_file_contents()";
-        if ($print_errors) echo $error;
+        if ($print_errors) {
+            echo $error;
+        }
         return false;
     }
     if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
         $error = "Section '$section' is not authorized in get_sql_file_contents()";
-        if ($print_errors) echo $error;
+        if ($print_errors) {
+            echo $error;
+        }
         return false;
     }
     $filepath = getcwd().'/'.$file;
     if (!is_file($filepath) or !is_readable($filepath)) {
         $error = "File $filepath not found or not readable in get_sql_file_contents()";
-        if ($print_errors) echo $error;
+        if ($print_errors) {
+            echo $error;
+        }
         return false;
     }
     //read the file in an array
@@ -894,7 +928,9 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
     $file_contents = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (!is_array($file_contents) or count($file_contents) < 1) {
         $error = "File $filepath looks empty in get_sql_file_contents()";
-        if ($print_errors) echo $error;
+        if ($print_errors) {
+            echo $error;
+        }
         return false;
     }
 
@@ -939,7 +975,8 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
  * @param string $title
  * @return id if inserted document
  */
-function add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null) {
+function add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null)
+{
     $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
     $sql = "INSERT INTO $table_document
     (`path`,`filetype`,`size`,`title`, `comment`)
@@ -960,7 +997,8 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
  * This function prints class=active_step $current_step=$param
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function step_active($param) {
+function step_active($param)
+{
     global $current_step;
     if ($param == $current_step) {
         echo 'class="current_step" ';
@@ -971,7 +1009,8 @@ function step_active($param) {
  * This function displays the Step X of Y -
  * @return  string  String that says 'Step X of Y' with the right values
  */
-function display_step_sequence() {
+function display_step_sequence()
+{
     global $current_step;
     return get_lang('Step'.$current_step).' &ndash; ';
 }
@@ -979,7 +1018,8 @@ function display_step_sequence() {
 /**
  * Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box($name = 'language_list', $default_language = 'english') {
+function display_language_selection_box($name = 'language_list', $default_language = 'english')
+{
     // Reading language list.
     $language_list = get_language_folder_list();
 
@@ -1031,10 +1071,13 @@ function display_language_selection_box($name = 'language_list', $default_langua
  * This function displays a language dropdown box so that the installatioin
  * can be done in the language of the user
  */
-function display_language_selection() { ?>
+function display_language_selection()
+{ ?>
     <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
     <div class="RequirementHeading">
-        <h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
+        <h2><?php echo display_step_sequence(); ?>
+            <?php echo get_lang('InstallationLanguage');?>
+        </h2>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
@@ -1063,14 +1106,20 @@ function display_language_selection() { ?>
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
+function display_requirements(
+    $installType,
+    $badUpdatePath,
+    $updatePath = '',
+    $update_from_version_8 = array(),
+    $update_from_version_6 = array()
+) {
     global $_setting;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
 
-    if ($installType == 'update')  {
+    if ($installType == 'update') {
         echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
     }
     echo '</div>';
@@ -1078,7 +1127,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
 
-    $timezone = check_php_setting_exists("date.timezone");
+    $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
         echo "<div class='warning-message'>".Display::return_icon('warning.png',get_lang('Warning'),'',ICON_SIZE_MEDIUM).get_lang("DateTimezoneSettingNotSet")."</div>";
     }
@@ -1171,47 +1220,47 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('safe_mode','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('safe_mode','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('display_errors','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('display_errors','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('file_uploads','ON').'</td>
+                <td class="requirements-value">'.checkPhpSetting('file_uploads','ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('magic_quotes_gpc','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('magic_quotes_gpc','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('magic_quotes_runtime','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('magic_quotes_runtime','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('register_globals','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('register_globals','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('session.auto_start','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('session.auto_start','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('short_open_tag','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('short_open_tag','OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.check_php_setting('session.cookie_httponly','ON').'</td>
+                <td class="requirements-value">'.checkPhpSetting('session.cookie_httponly','ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
@@ -1409,54 +1458,54 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
-        $notwritable = array();
+        $notWritable = array();
         $curdir = getcwd();
 
         $checked_writable = api_get_path(CONFIGURATION_PATH);
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'upload/users/';
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
         $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
         if (!is_writable($checkedWritable)) {
-            $notwritable[] = $checkedWritable;
+            $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);
         }
 
         $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
         if (!is_writable($checkedWritable)) {
-            $notwritable[] = $checkedWritable;
+            $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_DATA_PATH);
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_COURSE_PATH);
         if (!is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
@@ -1466,20 +1515,20 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
         $checked_writable = api_get_path(SYS_PATH).'home/';
         if (!is_writable($checked_writable)) {
-            $notwritable[] = realpath($checked_writable);
+            $notWritable[] = realpath($checked_writable);
             @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
         if (file_exists($checked_writable) && !is_writable($checked_writable)) {
-            $notwritable[] = $checked_writable;
+            $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm_file);
         }
 
         // Second, if this fails, report an error
 
         //--> The user would have to adjust the permissions manually
-        if (count($notwritable) > 0) {
+        if (count($notWritable) > 0) {
             $error = true;
             echo '<div class="error-message">';
                 echo '<center><h3>'.get_lang('Warning').'</h3></center>';
@@ -1487,7 +1536,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
             echo '</div>';
             echo '<ul>';
-            foreach ($notwritable as $value) {
+            foreach ($notWritable as $value) {
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
@@ -1528,7 +1577,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
  * - a "Back" button named step1 to go back to the first step.
  */
 
-function display_license_agreement() {
+function display_license_agreement()
+{
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
     echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
@@ -1587,7 +1637,8 @@ function display_license_agreement() {
 /**
  * Get contact registration form
  */
-function get_contact_registration_form() {
+function get_contact_registration_form()
+{
 
     $html ='
    <form class="form-horizontal">
@@ -1698,7 +1749,7 @@ function get_contact_registration_form() {
     </div>
 </fieldset></form>';
 
-return $html;
+    return $html;
 }
 
 /**
@@ -1713,22 +1764,30 @@ return $html;
  * @param   string  Additional attribute for the <tr> element
  * @return  void    Direct output
  */
-function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
+function displayDatabaseParameter(
+    $installType,
+    $parameterName,
+    $formFieldName,
+    $parameterValue,
+    $extra_notice,
+    $displayWhenUpdate = true,
+    $tr_attribute = ''
+) {
     echo "<tr ".$tr_attribute.">";
-    echo "<td>$parameter_name&nbsp;&nbsp;</td>";
+    echo "<td>$parameterName&nbsp;&nbsp;</td>";
 
-    if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
-        echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>";
+    if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
+        echo '<td><input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'.$parameterValue."</td>";
     } else {
-        $inputtype = $form_field_name == 'dbPassForm' ? 'password' : 'text';
+        $inputType = $formFieldName == 'dbPassForm' ? 'password' : 'text';
 
         //Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
-        $maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
-        if ($install_type == INSTALL_TYPE_UPDATE) {
-            echo '<input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />';
-            echo '<td>'.api_htmlentities($parameter_value)."</td>";
+        $maxLength = $formFieldName == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
+        if ($installType == INSTALL_TYPE_UPDATE) {
+            echo '<input type="hidden" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />';
+            echo '<td>'.api_htmlentities($parameterValue)."</td>";
         } else {
-            echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>";
+            echo '<td><input type="'.$inputType.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxLength.'" name="'.$formFieldName.'" id="'.$formFieldName.'" value="'.api_htmlentities($parameterValue).'" />'."</td>";
             echo "<td>$extra_notice</td>";
         }
 
@@ -1741,7 +1800,19 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
  * regarding the databases - login and password, names, prefixes, single
  * or multiple databases, tracking or not...
  */
-function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm) {
+function display_database_settings_form(
+    $installType,
+    $dbHostForm,
+    $dbUsernameForm,
+    $dbPassForm,
+    $dbPrefixForm,
+    $enableTrackingForm,
+    $singleDbForm,
+    $dbNameForm,
+    $dbStatsForm,
+    $dbScormForm,
+    $dbUserForm
+) {
 
     if ($installType == 'update') {
         global $_configuration, $update_from_version_6;
@@ -1819,11 +1890,11 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     <?php
     //database user username
     $example_login = get_lang('EG').' root';
-    display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
+    displayDatabaseParameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
 
     //database user password
     $example_password = get_lang('EG').' '.api_generate_password();
-    display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
+    displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
     echo '<input type="hidden" name="enableTrackingForm" value="1" />';
 
@@ -1838,15 +1909,15 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         $dbNameForm = replace_dangerous_char($dbNameForm);
     }
 
-    display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
+    displayDatabaseParameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
 
     //Only for updates we show this options
     if ($installType == INSTALL_TYPE_UPDATE) {
-        display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
+        displayDatabaseParameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
         if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
-            display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
+            displayDatabaseParameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
         }
-        display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
+        displayDatabaseParameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
     ?>
     <tr>
@@ -1936,13 +2007,19 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
  * Displays a parameter in a table row.
  * Used by the display_configuration_settings_form function.
  */
-function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true') {
+function display_configuration_parameter(
+    $installType,
+    $parameterName,
+    $formFieldName,
+    $parameterValue,
+    $displayWhenUpdate = 'true'
+) {
     echo "<tr>";
-    echo "<td>$parameter_name</td>";
-    if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
-        echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'.$parameter_value."</td>\n";
+    echo "<td>$parameterName</td>";
+    if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
+        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>\n";
     } else {
-        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'."</td>\n";
+        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>\n";
     }
     echo "</tr>";
 }
@@ -1950,7 +2027,23 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
 /**
  * Displays step 4 of the installation - configuration settings about Chamilo itself.
  */
-function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm) {
+function display_configuration_settings_form(
+    $installType,
+    $urlForm,
+    $languageForm,
+    $emailForm,
+    $adminFirstName,
+    $adminLastName,
+    $adminPhoneForm,
+    $campusForm,
+    $institutionForm,
+    $institutionUrlForm,
+    $encryptPassForm,
+    $allowSelfReg,
+    $allowSelfRegProf,
+    $loginForm,
+    $passForm
+) {
     if ($installType != 'update' && empty($languageForm)) {
         $languageForm = $_SESSION['install_language'];
     }
@@ -2103,15 +2196,16 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
             <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button></td>
     </tr>
-    </fieldset>
     </table>
+    </fieldset>
     <?php
 }
 
 /**
  * After installation is completed (step 6), this message is displayed.
  */
-function display_after_install_message($installType) {
+function display_after_install_message($installType)
+{
     echo '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
     echo '<div class="warning-message">';
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
@@ -2129,7 +2223,8 @@ function display_after_install_message($installType) {
  * @param   bool    (Optional) True for returning countries list with select html
  * @return  array|string countries list
  */
-function get_countries_list_from_array($combo = false) {
+function get_countries_list_from_array($combo = false)
+{
     $a_countries = array(
         "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
         "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
@@ -2174,7 +2269,8 @@ function get_countries_list_from_array($combo = false) {
 /**
  * Lockis settings that can't be changed in other portals
  */
-function locking_settings() {
+function locking_settings()
+{
     $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     foreach ($access_url_locked_settings as $setting) {
@@ -2183,7 +2279,8 @@ function locking_settings() {
     }
 }
 
-function update_dir_and_files_permissions() {
+function update_dir_and_files_permissions()
+{
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
@@ -2198,7 +2295,8 @@ function update_dir_and_files_permissions() {
     unset($_SESSION['permissions_for_new_files']);
 }
 
-function compare_setting_values($current_value, $wanted_value) {
+function compare_setting_values($current_value, $wanted_value)
+{
     $current_value_string = $current_value;
     $current_value = (float)$current_value;
     $wanted_value = (float)$wanted_value;

@@ -55,10 +55,10 @@ function isAlreadyInstalledSystem()
 /**
  * This function checks if a php extension exists or not and returns an HTML status string.
  *
- * @param   string  Name of the PHP extension to be checked
- * @param   string  Text to show when extension is available (defaults to 'Yes')
- * @param   string  Text to show when extension is available (defaults to 'No')
- * @param   boolean Whether this extension is optional (in this case show unavailable text in orange rather than red)
+ * @param   string  $extensionName Name of the PHP extension to be checked
+ * @param   string  $returnSuccess Text to show when extension is available (defaults to 'Yes')
+ * @param   string  $returnFailure Text to show when extension is available (defaults to 'No')
+ * @param   boolean $optional Whether this extension is optional (then show unavailable text in orange rather than red)
  * @return  string  HTML string reporting the status of this extension. Language-aware.
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -98,7 +98,10 @@ function checkPhpSetting($phpSetting, $recommendedValue, $returnSuccess = false,
 
 
 /**
- *  This function return the value of a php.ini setting if not "" or if exists, otherwise return false
+ * This function return the value of a php.ini setting if not "" or if exists,
+ * otherwise return false
+ * @param   string  $phpSetting The name of a PHP setting
+ * @return  mixed   The value of the setting, or false if not found
  */
 function checkPhpSettingExists($phpSetting)
 {
@@ -238,6 +241,9 @@ function detect_browser_language()
 
 /**
  * This function checks if the given folder is writable
+ * @param   string  $folder Full path to a folder
+ * @param   bool    $suggestion Whether to show a suggestion or not
+ * @return  string
  */
 function check_writable($folder, $suggestion = false)
 {
@@ -288,7 +294,7 @@ function write_courses_htaccess_file($url_append)
 {
     $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
     $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-    $fp = @ fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
+    $fp = @fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
     if ($fp) {
         fwrite($fp, $content);
         return fclose($fp);
@@ -411,6 +417,8 @@ function & get_language_folder_list()
 
 /**
  * TODO: my_directory_to_array() - maybe within the main API there is already a suitable function?
+ * @param   string  $directory  Full path to a directory
+ * @return  array   A list of files and dirs in the directory
  */
 function my_directory_to_array($directory)
 {
@@ -597,19 +605,19 @@ function get_config_param($param, $updatePath = '')
 
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
- * @param   string  DB Host
- * @param   string  DB login
- * @param   string  DB pass
- * @param   string  DB name
- * @param   string  Name of param we want
+ * @param   string  $host DB Host
+ * @param   string  $login DB login
+ * @param   string  $pass DB pass
+ * @param   string  $dbName DB name
+ * @param   string  $param Name of param we want
  * @return  mixed   The parameter value or null if not found
  */
-function get_config_param_from_db($host, $login, $pass, $db_name, $param = '')
+function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
 {
 
     Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
     Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-    Database::select_db($db_name);
+    Database::select_db($dbName);
 
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
@@ -645,7 +653,7 @@ function database_server_connect()
 
 /**
  * Database exists for the MYSQL user
- * @param type $database_name
+ * @param string $database_name The name of the database to check
  * @return boolean
  */
 function database_exists($database_name)
@@ -666,13 +674,15 @@ function database_exists($database_name)
 /**
  * In step 3. Tests establishing connection to the database server.
  * If it's a single database environment the function checks if the database exist.
- * If the database doesn't exist we check the creation permissions.
- *
+ * If the database does not exist we check the creation permissions.
+ * @param   string  $dbHostForm DB host
+ * @param   string  $dbUsernameForm DB username
+ * @param   string  $dbPassForm DB password
  * @return int      1 when there is no problem;
  *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
  *                 -1 when there is no connection established.
  */
-function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm)
+function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm)
 {
     $dbConnect = -1;
     //Checking user credentials
@@ -686,19 +696,19 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
 
 /**
  * Fills the countries table with a list of countries.
+ * @param   string  $trackCountriesTable    Table name
  */
-function fill_track_countries_table($track_countries_table)
+function fill_track_countries_table($trackCountriesTable)
 {
     $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
     $countries = file($file_path);
-    $add_country_sql = "INSERT INTO $track_countries_table (id, code, country, counter) VALUES ";
+    $addCountrySql = "INSERT INTO $trackCountriesTable (id, code, country, counter) VALUES ";
     foreach ($countries as $line) {
         $elems = explode(',', $line);
-        $add_country_sql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
+        $addCountrySql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
     }
-    $add_country_sql = substr($add_country_sql, 0, -1);
-    //$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-    @ Database::query($add_country_sql);
+    $addCountrySql = substr($addCountrySql, 0, -1);
+    @Database::query($addCountrySql);
 }
 
 /**
@@ -707,19 +717,19 @@ function fill_track_countries_table($track_countries_table)
  * have to be replaced by the settings entered by the user during installation.
  *
  * @param array $installation_settings list of settings entered by the user
- * @param string  optional path about the script for database
+ * @param string  $dbScript optional path about the script for database
  * @return void
  */
-function load_main_database($installation_settings, $db_script = '')
+function load_main_database($installation_settings, $dbScript = '')
 {
-    if (!empty($db_script)) {
-        if (file_exists($db_script)) {
-            $sql_text = file_get_contents($db_script);
+    if (!empty($dbScript)) {
+        if (file_exists($dbScript)) {
+            $sql_text = file_get_contents($dbScript);
         }
     } else {
-        $db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
-        if (file_exists($db_script)) {
-            $sql_text = file_get_contents($db_script);
+        $dbScript = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
+        if (file_exists($dbScript)) {
+            $sql_text = file_get_contents($dbScript);
         }
     }
 
@@ -732,17 +742,21 @@ function load_main_database($installation_settings, $db_script = '')
 
 /**
  * Creates the structure of the stats database
- * @param   string  Name of the file containing the SQL script inside the install directory
+ * @param   string  $dbScript Name of the file containing the SQL script inside the install directory
  */
-function load_database_script($db_script)
+function load_database_script($dbScript)
 {
-    $db_script = api_get_path(SYS_CODE_PATH).'install/'.$db_script;
-    if (file_exists($db_script)) {
-        $sql_text = file_get_contents($db_script);
+    $dbScript = api_get_path(SYS_CODE_PATH).'install/'.$dbScript;
+    if (file_exists($dbScript)) {
+        $sql_text = file_get_contents($dbScript);
     }
     parse_sql_queries($sql_text);
 }
 
+/**
+ * Parse SQL queries
+ * @param string $sql_text SQL code
+ */
 function parse_sql_queries($sql_text)
 {
 
@@ -772,10 +786,8 @@ function parse_sql_queries($sql_text)
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
  * Removes comment lines and splits up large sql files into individual queries
  * Last revision: September 23, 2001 - gandon
- * @param   array    the splitted sql commands
- * @param   string   the sql commands
- * @param   integer  the MySQL release number (because certains php3 versions
- *                   can't get the value of a constant from within a function)
+ * @param   array    $ret the split sql commands
+ * @param   string   $sql the sql commands
  * @return  boolean  always true
  */
 function split_sql_file(&$ret, $sql)
@@ -854,7 +866,7 @@ function split_sql_file(&$ret, $sql)
             if ($sql_len) {
                 $i = -1;
             } else {
-                // The submited statement(s) end(s) here
+                // The submitted statement(s) end(s) here
                 return true;
             }
             // end elseif (is delimiter)
@@ -870,7 +882,7 @@ function split_sql_file(&$ret, $sql)
             $nothing = false;
         }
 
-        // loic1: send a fake header each 30 sec. to bypass browser timeout
+        // Send a fake header each 30 sec. to bypass browser timeout
         $time1     = time();
         if ($time1 >= $time0 + 30) {
             $time0 = $time1;
@@ -915,9 +927,9 @@ function get_sql_file_contents($file, $section, $print_errors = true)
         }
         return false;
     }
-    $filepath = getcwd().'/'.$file;
-    if (!is_file($filepath) or !is_readable($filepath)) {
-        $error = "File $filepath not found or not readable in get_sql_file_contents()";
+    $filePath = getcwd().'/'.$file;
+    if (!is_file($filePath) or !is_readable($filePath)) {
+        $error = "File $filePath not found or not readable in get_sql_file_contents()";
         if ($print_errors) {
             echo $error;
         }
@@ -925,9 +937,9 @@ function get_sql_file_contents($file, $section, $print_errors = true)
     }
     //read the file in an array
     // Empty lines should not be executed as SQL statements, because errors occur, see Task #2167.
-    $file_contents = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!is_array($file_contents) or count($file_contents) < 1) {
-        $error = "File $filepath looks empty in get_sql_file_contents()";
+    $fileContents = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_array($fileContents) or count($fileContents) < 1) {
+        $error = "File $filePath looks empty in get_sql_file_contents()";
         if ($print_errors) {
             echo $error;
         }
@@ -937,7 +949,7 @@ function get_sql_file_contents($file, $section, $print_errors = true)
     //prepare the resulting array
     $section_contents = array();
     $record = false;
-    foreach ($file_contents as $index => $line) {
+    foreach ($fileContents as $index => $line) {
         if (substr($line, 0, 2) == '--') {
             //This is a comment. Check if section name, otherwise ignore
             $result = array();
@@ -970,17 +982,17 @@ function get_sql_file_contents($file, $section, $print_errors = true)
  *
  * @param array $_course
  * @param string $path
- * @param string $filetype
- * @param int $filesize
+ * @param string $fileType
+ * @param int $fileSize
  * @param string $title
  * @return id if inserted document
  */
-function add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null)
+function add_document_180($_course, $path, $fileType, $fileSize, $title, $comment = null)
 {
     $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
     $sql = "INSERT INTO $table_document
     (`path`,`filetype`,`size`,`title`, `comment`)
-    VALUES ('$path','$filetype','$filesize','".
+    VALUES ('$path','$fileType','$fileSize','".
     Database::escape_string($title)."', '$comment')";
     if (Database::query($sql)) {
         //display_message("Added to database (id ".Database::insert_id().")!");
@@ -995,6 +1007,7 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
 
 /**
  * This function prints class=active_step $current_step=$param
+ * @param   int $param  A step in the installer process
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function step_active($param)
@@ -1129,7 +1142,9 @@ function display_requirements(
 
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
-        echo "<div class='warning-message'>".Display::return_icon('warning.png',get_lang('Warning'),'',ICON_SIZE_MEDIUM).get_lang("DateTimezoneSettingNotSet")."</div>";
+        echo "<div class='warning-message'>".
+            Display::return_icon('warning.png', get_lang('Warning'), '', ICON_SIZE_MEDIUM).
+            get_lang("DateTimezoneSettingNotSet")."</div>";
     }
 
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
@@ -1220,47 +1235,47 @@ function display_requirements(
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/features.safe-mode.php">Safe Mode</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('safe_mode','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('safe_mode', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.errorfunc.php#ini.display-errors">Display Errors</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('display_errors','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('display_errors', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.file-uploads">File Uploads</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('file_uploads','ON').'</td>
+                <td class="requirements-value">'.checkPhpSetting('file_uploads', 'ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-gpc">Magic Quotes GPC</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('magic_quotes_gpc','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('magic_quotes_gpc', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.info.php#ini.magic-quotes-runtime">Magic Quotes Runtime</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('magic_quotes_runtime','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('magic_quotes_runtime', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/security.globals.php">Register Globals</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('register_globals','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('register_globals', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ref.session.php#ini.session.auto-start">Session auto start</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('session.auto_start','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('session.auto_start', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.short-open-tag">Short Open Tag</a></td>
                 <td class="requirements-recommended">'.Display::label('OFF', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('short_open_tag','OFF').'</td>
+                <td class="requirements-value">'.checkPhpSetting('short_open_tag', 'OFF').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly">Cookie HTTP Only</a></td>
                 <td class="requirements-recommended">'.Display::label('ON', 'success').'</td>
-                <td class="requirements-value">'.checkPhpSetting('session.cookie_httponly','ON').'</td>
+                <td class="requirements-value">'.checkPhpSetting('session.cookie_httponly', 'ON').'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.upload-max-filesize">Maximum upload file size</a></td>
@@ -1934,7 +1949,7 @@ function display_database_settings_form(
 
         <?php
 
-        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);
+        $dbConnect = testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm);
 
         $database_exists_text = '';
 

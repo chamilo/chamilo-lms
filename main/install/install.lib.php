@@ -62,18 +62,16 @@ function is_already_installed_system() {
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Yannick Warnier <yannick.warnier@dokeos.com>
- * @version Dokeos 1.8.1, May 2007
  */
-function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
-    if (extension_loaded($extension_name)) {
-        return Display::label($return_success, 'success');
+function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure = 'No', $optional = false)
+{
+    if (extension_loaded($extensionName)) {
+        return Display::label($returnSuccess, 'success');
     } else {
         if ($optional) {
-            return Display::label($return_failure, 'warning');
-            //return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
+            return Display::label($returnFailure, 'warning');
         } else {
-            return Display::label($return_failure, 'important');
-            //return '<strong><font color="red">'.$return_failure.'</font></strong>';
+            return Display::label($returnFailure, 'important');
         }
     }
 }
@@ -1100,58 +1098,58 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">MySQL</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
+                <td class="requirements-value">'.checkExtension('xml', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.intl.php" target="_blank">Internationalization</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('intl', get_lang('Yes'), get_lang('No')).'</td>
+                <td class="requirements-value">'.checkExtension('intl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
                <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.json.php" target="_blank">JSON</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('json', get_lang('Yes'), get_lang('No')).'</td>
+                <td class="requirements-value">'.checkExtension('json', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
 
              <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('support').'</td>
-                <td class="requirements-value">'.check_extension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
             </tr>
 
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
+                <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
+                <td class="requirements-value">'.checkExtension('iconv', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
+                <td class="requirements-value">'.checkExtension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
+                <td class="requirements-value">'.checkExtension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
 
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.check_extension('curl', get_lang('Yes'), get_lang('No'), true).'</td>
+                <td class="requirements-value">'.checkExtension('curl', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
 
           </table>';

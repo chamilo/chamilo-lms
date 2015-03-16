@@ -19,6 +19,7 @@ abstract class AbstractLink implements GradebookItem
     protected $ref_id;
     protected $user_id;
     protected $course_code;
+    /** @var Category */
     protected $category;
     protected $created_at;
     protected $weight;
@@ -26,36 +27,57 @@ abstract class AbstractLink implements GradebookItem
     protected $session_id;
     public $course_id;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->course_id = api_get_course_int_id();
     }
 
+    /**
+     * @return int
+     */
     public function get_id()
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function get_type()
     {
         return $this->type;
     }
 
+    /**
+     * @return int
+     */
     public function get_ref_id()
     {
         return $this->ref_id;
     }
 
+    /**
+     * @return int
+     */
     public function get_session_id()
     {
         return $this->session_id;
     }
 
+    /**
+     * @return int
+     */
     public function get_user_id()
     {
         return $this->user_id;
     }
 
+    /**
+     * @return string
+     */
     public function get_course_code()
     {
         return $this->course_code;
@@ -306,7 +328,7 @@ abstract class AbstractLink implements GradebookItem
             $sql = "SELECT count(*) FROM ".$tbl_grade_links."
                     WHERE
                         ref_id=".$this->get_ref_id()." AND
-                        category_id =  ".$this->category." AND
+                        category_id =  ".$this->category->get_id()." AND
                         course_code = '".$this->course_code."' AND
                         type =  ".$this->type." ";
 
@@ -332,6 +354,7 @@ abstract class AbstractLink implements GradebookItem
         } else {
             die('Error in AbstractLink add: required field empty');
         }
+
         return false;
     }
 
@@ -409,7 +432,7 @@ abstract class AbstractLink implements GradebookItem
 
         $crscats = Category::load(null,null,$this->get_course_code(),0);
         foreach ($crscats as $cat) {
-            $targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
+            $targets[] = array($cat->get_id(), $cat->get_name(), $level+1);
             $targets = $this->add_target_subcategories($targets, $level+1, $cat->get_id());
         }
 

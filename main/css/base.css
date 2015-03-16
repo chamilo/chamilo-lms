@@ -5421,3 +5421,14 @@ i.size-32.icon-new-work{
   vertical-align: bottom;
   margin-right: 5px;
 }
+
+/**
+ * Modal for user avatar preview
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ */
+#expand-image-modal img {
+    display: block;
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+}

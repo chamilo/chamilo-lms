@@ -618,7 +618,7 @@ class SocialManager extends UserManager
 
             //--- User image
             if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="ajax" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
+                $html .= '<a class="expand-image" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
             } else {
                 $html .= '<img src='.$normal_image.' width="110px" />';
             }

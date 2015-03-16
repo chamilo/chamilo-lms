@@ -409,6 +409,27 @@ $(function() {
         return false;
     });
 
+    $('a.expand-image').on('click', function(e) {
+        e.preventDefault();
+
+        var title = $(this).attr('title');
+
+        var image = new Image();
+        image.onload = function() {
+            if (title) {
+                $('#expand-image-modal').find('.modal-title').text(title);
+            } else {
+                $('#expand-image-modal').find('.modal-title').html('&nbsp;');
+            }
+
+            $('#expand-image-modal').find('.modal-body').html(image);
+            $('#expand-image-modal').modal({
+                show: true
+            });
+        };
+        image.src = this.href;
+    });
+
     // Global confirmation
     $('.popup-confirmation').on('click', function() {
         showConfirmationPopup(this);

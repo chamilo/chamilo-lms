@@ -325,7 +325,15 @@ $form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
 
 $form->addElement('html','</div>');
 
-$form->addHtmlEditor('description', get_lang('Description'));
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    array(
+        'ToolbarSet' => 'Minimal'
+    )
+);
 
 $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 

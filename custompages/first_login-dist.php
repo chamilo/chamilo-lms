@@ -88,9 +88,9 @@ if ($_GET['invalid'] == 2) {
 		}?>
 			<form id="changepassword-form" class="form" method="post">
 				<div>
-          <label for="password">*<?php echo custompages_get_lang('langPass');?></label>
+          <label for="password">*<?php echo custompages_get_lang('Password');?></label>
 					<input name="password" type="password" /><br />
-          <label for="password2">*<?php echo custompages_get_lang('langPass');?></label>
+          <label for="password2">*<?php echo custompages_get_lang('Password');?></label>
 					<input name="password2" type="password" /><br />
 				</div>
 			</form>

@@ -577,7 +577,7 @@ if (!isset($_POST['compose'])) {
               <span style="float: right;">&nbsp;</span>
               <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
                 <fieldset>
-                <span><label for="keyword">' . get_lang('langSearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
+                <span><label for="keyword">' . get_lang('SearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
                 <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
                 <div class="clear"></div>
                 </fieldset>

@@ -131,26 +131,7 @@ $userInfo    = UserManager::get_user_info_by_id($user_id);
 //LEFT CONTENT
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Avatar
-    $social_avatar_block = '<div class="panel panel-info social-avatar">';
-    $social_avatar_block .= SocialManager::show_social_avatar_block('messages');
-    $social_avatar_block .= '<div class="lastname">'.$userInfo['lastname'].'</div>';
-    $social_avatar_block .= '<div class="firstname">'.$userInfo['firstname'].'</div>';
-    /* $social_avatar_block .= '<div class="username">'.Display::return_icon('user.png','','',ICON_SIZE_TINY).$userInfo['username'].'</div>'; */
-    $social_avatar_block .= '<div class="email">'.Display::return_icon('instant_message.png').'&nbsp;' .$userInfo['email'].'</div>';
-    $chat_status = $userInfo['extra'];
-    if(!empty($chat_status['user_chat_status'])){
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('online.png').get_lang('Chat')." (".get_lang('Online').')</div>';
-    }else{
-        $social_avatar_block.= '<div class="status">'.Display::return_icon('offline.png').get_lang('Chat')." (".get_lang('Offline').')</div>';
-    }
-
-    $editProfileUrl = Display::getProfileEditionLink($user_id);
-
-    $social_avatar_block .= '<div class="edit-profile">
-                            <a class="btn" href="' . $editProfileUrl . '">' . get_lang('EditProfile') . '</a>
-                         </div>';
-    $social_avatar_block .= '</div>';
-
+    $social_avatar_block = Display::getSocialUserBlock($user_id, 'messages');
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
 }

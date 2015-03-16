@@ -49,7 +49,50 @@ select {
 .title-header-tools{
   text-align: center;
 }
+#formLogin .input-group{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+#login_block .nav-pills{
+  margin-bottom: 5px;
+  padding-top: 10px;
+  margin-top: 5px;
+}
 
+#announcements-slider .left, #announcements-slider .right{
+  position: absolute;
+  top: 50%;
+  background: #C52D2F;
+  color: #fff;
+  margin-top: -25px;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  opacity: 0.8;
+}
+#announcements-slider .left{
+  left: 10px;
+}
+#announcements-slider .right{
+  right: 10px;
+}
+#announcements-slider .carousel-indicators li{
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  margin: 0px 15px 0px 0px;
+  position: relative;
+}
+#announcements-slider .carousel-indicators .active{
+  background: #C52D2F;
+}
+.carousel-indicators{
+  bottom: 0px !important;
+}
 ul#navigation {
   position: fixed;
   margin: 0px;
@@ -4845,7 +4888,7 @@ i.size-32.icon-new-work{
 }
 
 .chosen-container {
-    min-width: 180px;
+    min-width: 100%;
 }
 
 .chzn-container-single .chzn-search {

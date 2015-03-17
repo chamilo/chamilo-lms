@@ -701,7 +701,7 @@ class IndexManager
         $form->addElement('label',get_lang('UserName'));
         $form->addHtml('<div class="input-group">');
         $form->addHtml('<div class="input-group-addon"><i class="fa fa-user"></i></div>');
-        $form->addElement('text', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addElement('input', 'login','', array('id' => 'login', 'class' => 'form-control autocapitalize_off', 'autofocus' => 'autofocus'));
         $form->addHtml('</div>');
         $form->addElement('label',get_lang('Pass'));
         $form->addHtml('<div class="input-group">');

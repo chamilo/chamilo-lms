@@ -1654,7 +1654,7 @@ class Display
 
     public static function return_default_table_class()
     {
-        return 'data_table';
+        return 'table table-bordered';
     }
 
     /**

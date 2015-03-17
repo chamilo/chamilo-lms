@@ -491,7 +491,7 @@ if (isset($list_ordered) && !empty($list_ordered)) {
     }
     $exercise_list = $new_question_list;
 }
-
+echo '<div class="table-responsive">';
 echo '<table class="'.Display::return_default_table_class().'">';
 
 /*  Listing exercises  */
@@ -509,7 +509,7 @@ if (!empty($exercise_list)) {
         if ($is_allowedToEdit) {
             $headers = array(
                 array('name' => get_lang('ExerciseName')),
-                array('name' => get_lang('QuantityQuestions'), 'params' => array('width' => '100px')),
+                array('name' => get_lang('QuantityQuestions'), 'params' => array('width' => '170px')),
                 array('name' => get_lang('Actions'), 'params' => array('width' => '180px')));
         } else {
             $headers = array(
@@ -1031,6 +1031,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
     }
 }
 echo '</table>';
+echo '</div>';
 
 if (empty($exercise_list) && $hotpotatoes_exist == false) {
     if ($is_allowedToEdit && $origin != 'learnpath') {

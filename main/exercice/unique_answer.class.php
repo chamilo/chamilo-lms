@@ -215,22 +215,20 @@ class UniqueAnswer extends Question
                 ' value = "' . $i . '"'
             );
             $answer_number->freeze();
-
+            $form->addHtml('<div class="row">');
+            $form->addHtml('<div class="col-md-1">');
             $form->addElement(
                 'radio',
                 'correct',
                 null,
                 null,
                 $i,
-                'class="checkbox" style="margin-left: 0em;"'
+                'class="checkbox"'
             );
-            $form->addElement(
-                'html_editor',
-                'answer[' . $i . ']',
-                null,
-                'style="vertical-align:middle"',
-                $editor_config
-            );
+            $form->addHtml('</div>');
+            $form->addHtml('<div class="col-md-5">');
+            $form->addHtmlEditor('answer[' . $i . ']',null,null,true, $editor_config);
+            $form->addHtml('</div>');
 
             $form->addRule(
                 'answer[' . $i . ']',
@@ -239,13 +237,9 @@ class UniqueAnswer extends Question
             );
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addElement(
-                    'html_editor',
-                    'comment[' . $i . ']',
-                    null,
-                    'style="vertical-align:middle"',
-                    $editor_config
-                );
+                $form->addHtml('<div class="col-md-5">');
+                $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
+                $form->addHtml('</div>');
                 // Direct feedback
 
                 //Adding extra feedback fields
@@ -273,7 +267,7 @@ class UniqueAnswer extends Question
                     'url' . $i,
                     get_lang('Other') . ': ',
                     array(
-                        'class' => 'span2',
+                        'class' => 'col-md-2',
                         'placeholder' => get_lang('Other')
                     )
                 );
@@ -285,20 +279,12 @@ class UniqueAnswer extends Question
                 );
 
             } else {
-                $form->addElement(
-                    'html_editor',
-                    'comment[' . $i . ']',
-                    null,
-                    'style="vertical-align:middle"',
-                    $editor_config
-                );
+                $form->addHtml('<div class="col-md-5">');
+                $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
+                $form->addHtml('</div>');
             }
-            $form->addElement(
-                'text',
-                'weighting[' . $i . ']',
-                null,
-                array('class' => "span1", 'value' => '0')
-            );
+            $form->addHtml('</div>');
+            $form->addText('weighting[' . $i . ']', null,null, array('class' => "col-md-1", 'value' => '0'));
             $form->addElement('html', '</tr>');
         }
 
@@ -316,13 +302,13 @@ class UniqueAnswer extends Question
                     'submit',
                     'lessAnswers',
                     get_lang('LessAnswer'),
-                    'class="btn minus"'
+                    'class="btn btn-primary"'
                 );
                 $form->addElement(
                     'submit',
                     'moreAnswers',
                     get_lang('PlusAnswer'),
-                    'class="btn plus"'
+                    'class="btn btn-primary"'
                 );
                 $form->addElement(
                     'submit',
@@ -336,13 +322,13 @@ class UniqueAnswer extends Question
                     'style_submit_button',
                     'lessAnswers',
                     get_lang('LessAnswer'),
-                    'class="btn minus"'
+                    'class="btn btn-primary"'
                 );
                 $form->addElement(
                     'style_submit_button',
                     'moreAnswers',
                     get_lang('PlusAnswer'),
-                    'class="btn plus"'
+                    'class="btn btn-primary"'
                 );
                 $form->addElement(
                     'style_submit_button',
@@ -356,7 +342,7 @@ class UniqueAnswer extends Question
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
         $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
 
-        $form->addElement('html', '</div></div>');
+        $form->addHtml('</div></div>');
 
         // We check the first radio button to be sure a radio button will be check
         if ($correct == 0) {

@@ -135,17 +135,21 @@ unset($_SESSION['less_answer']);
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<p class='warning-message'>".get_lang("ChoiceQuestionType")."</p>";
+    echo "<div class='alert alert-warning'>".get_lang("ChoiceQuestionType")."</div>";
 } else {
     // Title line
-    echo "<div>";
-    echo "<div style='font-weight:bold; width:50%; float:left; padding:10px 0px; text-align:center;'><span style='padding-left:50px;'>&nbsp;</span>".get_lang('Questions')."</div>";
-    echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Type')."</div>";
-    echo "<div style='font-weight:bold; width:22%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Category')."</div>";
-    echo "<div style='font-weight:bold; width:6%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Difficulty')."</div>";
-    echo "<div style='font-weight:bold; width:4%; float:left; padding:10px 0px; text-align:center;'>".get_lang('Score')."</div>";
+    echo "<div class='table-responsive'>";
+    echo "<table class='table table-condensed'>";
+    echo "<tr>";
+    echo "<th>" .get_lang('Questions'). "</th>";
+    echo "<th>" .get_lang('Type'). "</th>";
+    echo "<th>" .get_lang('Category'). "</th>";
+    echo "<th>" .get_lang('Difficulty'). "</th>";
+    echo "<th>" .get_lang('Score'). "</th>";
+    echo "</tr>";
+    echo "</table>";
     echo "</div>";
-    echo "<div style='clear:both'>&nbsp;</div>";
+
 
     echo '<div id="question_list">';
     if ($nbrQuestions) {

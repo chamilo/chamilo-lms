@@ -194,15 +194,34 @@ class ExerciseLink extends AbstractLink
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
         $courseId = $this->getCourseId();
+	$exercise = new Exercise();
+        $exercise->read($this->get_ref_id());
 
         if (!$this->is_hp) {
-            $sql = "SELECT * FROM $tblStats
-                    WHERE
-                        exe_exo_id = ".intval($this->get_ref_id())." AND
-                        orig_lp_id = 0 AND
-                        orig_lp_item_id = 0 AND
-                        status <> 'incomplete' AND
-                        session_id = $session_id";
+            
+		if ($exercise->exercise_was_added_in_lp == false) {
+			$sql = "SELECT * FROM $tblStats
+			        WHERE
+			            exe_exo_id      = ".intval($this->get_ref_id())." AND
+			            orig_lp_id      = 0 AND
+			            orig_lp_item_id = 0 AND
+			            status      <> 'incomplete' AND
+			            session_id = $session_id";
+		    } else {
+		        $lpId = null;
+		        if (!empty($exercise->lpList)) {
+		            // Taking only the first LP
+		            $lpId = current($exercise->lpList);
+		            $lpId = $lpId['lp_id'];
+		        }
+
+		        $sql = "SELECT * FROM $tblStats
+		                WHERE
+		                    exe_exo_id      = ".intval($this->get_ref_id())." AND
+		                    orig_lp_id      = $lpId AND
+		                    status      <> 'incomplete' AND
+		                    session_id = $session_id";
+		    }
 
             if (isset($stud_id)) {
                 $sql .= " AND c_id = $courseId AND exe_user_id = $stud_id ";

@@ -63,7 +63,13 @@ class LinkAddEditForm extends FormValidator
 		if (count($category_object) == 1) {
 			$this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
 		} else {
-			$select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));
+			$select_gradebook = $this->addElement(
+				'select',
+				'select_gradebook',
+				get_lang('SelectGradebook'),
+				array(),
+				array('id' => 'hide_category_id')
+			);
 			$this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
 
 			$default_weight = 0;

@@ -439,7 +439,8 @@ class FlatViewDataGenerator
                     }
 
                     if (!isset($this->params['only_total_category']) ||
-                        (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                        (isset($this->params['only_total_category']) &&
+                        $this->params['only_total_category'] == false)
                     ) {
                         if (!$show_all) {
                             $row[] = $temp_score.' ';
@@ -534,7 +535,7 @@ class FlatViewDataGenerator
 
         $evaluationsAdded = array();
 
-        for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
+        for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
             $item = $this->evals_links[$count + $items_start];
 
@@ -592,14 +593,14 @@ class FlatViewDataGenerator
             ) {
                 if (!$show_all) {
                     if (in_array($item->get_type(), array(
-                            LINK_EXERCISE,
-                            LINK_DROPBOX,
-                            LINK_STUDENTPUBLICATION,
-                            LINK_LEARNPATH,
-                            LINK_FORUM_THREAD,
-                            LINK_ATTENDANCE,
-                            LINK_SURVEY,
-                            LINK_HOTPOTATOES)
+                        LINK_EXERCISE,
+                        LINK_DROPBOX,
+                        LINK_STUDENTPUBLICATION,
+                        LINK_LEARNPATH,
+                        LINK_FORUM_THREAD,
+                        LINK_ATTENDANCE,
+                        LINK_SURVEY,
+                        LINK_HOTPOTATOES)
                     )
                     ) {
                         if (!empty($score[0])) {

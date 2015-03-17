@@ -109,8 +109,9 @@ class ScoreDisplayForm extends FormValidator
 			}
 		}
 
-        if ($displayscore->is_custom())
-            $this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
+        if ($displayscore->is_custom()) {
+			$this->addButtonSave(get_lang('Ok'));
+		}
 	}
 
 	function validate() {

@@ -192,15 +192,34 @@ class ExerciseLink extends AbstractLink
         /* the following query should be similar (in conditions) to the one used
         in exercice/exercice.php, look for note-query-exe-results marker*/
         $session_id = api_get_session_id();
-        if (!$this->is_hp) {
-            $sql = "SELECT * FROM $tblStats
-                    WHERE
-                        exe_exo_id      = ".intval($this->get_ref_id())." AND
-                        orig_lp_id      = 0 AND
-                        orig_lp_item_id = 0 AND
-                        status      <> 'incomplete' AND
-                        session_id = $session_id";
 
+        $exercise = new Exercise();
+        $exercise->read($this->get_ref_id());
+
+        if (!$this->is_hp) {
+            if ($exercise->exercise_was_added_in_lp == false) {
+                $sql = "SELECT * FROM $tblStats
+                        WHERE
+                            exe_exo_id      = ".intval($this->get_ref_id())." AND
+                            orig_lp_id      = 0 AND
+                            orig_lp_item_id = 0 AND
+                            status      <> 'incomplete' AND
+                            session_id = $session_id";
+            } else {
+                $lpId = null;
+                if (!empty($exercise->lpList)) {
+                    // Taking only the first LP
+                    $lpId = current($exercise->lpList);
+                    $lpId = $lpId['lp_id'];
+                }
+
+                $sql = "SELECT * FROM $tblStats
+                        WHERE
+                            exe_exo_id      = ".intval($this->get_ref_id())." AND
+                            orig_lp_id      = $lpId AND
+                            status      <> 'incomplete' AND
+                            session_id = $session_id";
+            }
             if (isset($stud_id)) {
                 $course_code_exe = $this->get_course_code();
                 $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";

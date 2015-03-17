@@ -141,7 +141,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();

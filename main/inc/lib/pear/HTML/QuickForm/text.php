@@ -34,6 +34,8 @@
  */
 class HTML_QuickForm_text extends HTML_QuickForm_input
 {
+    private $inputSize;
+
     /**
      * Class constructor
      *
@@ -53,11 +55,69 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         if (is_array($attributes) || empty($attributes)) {
             $attributes['class'] = 'form-control';
         }
+        $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
+        $this->setInputSize($inputSize);
+        if (!empty($inputSize)) {
+            unset($attributes['input-size']);
+        }
 
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
 
         $this->setType('text');
+
+        $renderer = FormValidator::getDefaultRenderer();
+        $renderer->setElementTemplate($this->getTemplate(), $elementName);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        $size = $this->getInputSize();
+        $size = empty($size) ? '8' : $size;
+
+        return '
+            <div class="form-group {error_class}">
+                <label {label-for} class="col-sm-2 control-label" >
+                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                    {label}
+                </label>
+                <div class="col-sm-'.$size.'">
+                    {element}
+
+                    <!-- BEGIN label_2 -->
+                        <p class="help-block">{label_2}</p>
+                    <!-- END label_2 -->
+
+                    <!-- BEGIN error -->
+                        <span class="help-inline">{error}</span>
+                    <!-- END error -->
+                </div>
+                <div class="col-sm-2">
+                    <!-- BEGIN label_3 -->
+                        {label_3}
+                    <!-- END label_3 -->
+                </div>
+            </div>';
+    }
+
+
+    /**
+     * @return null
+     */
+    public function getInputSize()
+    {
+        return $this->inputSize;
+    }
+
+    /**
+     * @param null $inputSize
+     */
+    public function setInputSize($inputSize)
+    {
+        $this->inputSize = $inputSize;
     }
 
     /**
@@ -68,9 +128,9 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setSize($size)
+    public function setSize($size)
     {
-        $this->updateAttributes(array('size'=>$size));
+        $this->updateAttributes(array('size' => $size));
     }
 
     /**
@@ -81,8 +141,20 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setMaxlength($maxlength)
+    public function setMaxlength($maxlength)
     {
-        $this->updateAttributes(array('maxlength'=>$maxlength));
-    } //end func setMaxlength
+        $this->updateAttributes(array('maxlength' => $maxlength));
+    }
+
+    /**
+     * @return string
+     */
+    public function toHtml()
+    {
+        if ($this->_flagFrozen) {
+            return $this->getFrozenHtml();
+        } else {
+            return '<input' . $this->_getAttrString($this->_attributes) . ' />';
+        }
+    }
 }

@@ -108,7 +108,7 @@ class FormValidator extends HTML_QuickForm
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
         //Set required field template
-        HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
+        $this->setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
         $noteTemplate = <<<EOT
 	<div class="form-group">
 	    <div class="col-sm-2"></div>
@@ -143,12 +143,8 @@ EOT;
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
-                <div class="col-sm-10">
+                <div class="col-sm-8">
                     {element}
-
-                    <!-- BEGIN label_3 -->
-                        {label_3}
-                    <!-- END label_3 -->
 
                     <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
@@ -157,6 +153,11 @@ EOT;
                     <!-- BEGIN error -->
                         <span class="help-inline">{error}</span>
                     <!-- END error -->
+                </div>
+                <div class="col-sm-2">
+                    <!-- BEGIN label_3 -->
+                        {label_3}
+                    <!-- END label_3 -->
                 </div>
             </div>';
     }
@@ -862,6 +863,16 @@ EOT;
         $result->setDefaults($defaults);
 
         return $result;
+    }
+
+    /**
+     * @return null
+     */
+    public static function getDefaultRenderer()
+    {
+        return
+            isset($GLOBALS['_HTML_QuickForm_default_renderer']) ?
+                $GLOBALS['_HTML_QuickForm_default_renderer'] : null;
     }
 }
 

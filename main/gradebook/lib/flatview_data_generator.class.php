@@ -740,7 +740,7 @@ class FlatViewDataGenerator
     public function get_data_to_graph2($displayWarning = true)
     {
         // do some checks on users/items counts, redefine if invalid values
-        $usertable = array ();
+        $usertable = array();
         foreach ($this->users as $user) {
             $usertable[] = $user;
         }
@@ -749,8 +749,7 @@ class FlatViewDataGenerator
 
         // generate actual data array
         $scoredisplay = ScoreDisplay :: instance();
-        $data= array ();
-        $displaytype = SCORE_DIV;
+        $data = array();
         $selected_users = $usertable;
         foreach ($selected_users as $user) {
             $row = array ();
@@ -761,36 +760,43 @@ class FlatViewDataGenerator
             $item_value_total = 0;
             $convert_using_the_global_weight = true;
 
-            $course_code     = api_get_course_id();
-            $session_id        = api_get_session_id();
-            $allcat         = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+            $course_code = api_get_course_id();
+            $session_id = api_get_session_id();
+            $allcat = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+            $parent_id = $this->category->get_parent_id();
 
             if ($parent_id == 0 && !empty($allcat)) {
 
                 foreach ($allcat as $sub_cat) {
-                    $score             = $sub_cat->calc_score($user[0]);
-                    $real_score     = $score;
-                    $main_weight  = $this->category->get_weight();
-                    $divide            = ( ($score[1])==0 ) ? 1 : $score[1];
+                    $score = $sub_cat->calc_score($user[0]);
+                    $real_score = $score;
+                    $main_weight = $this->category->get_weight();
+                    $divide = $score[1] == 0 ? 1 : $score[1];
 
-                    $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
+                    //$sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
                     $item_value     = $score[0]/$divide*$main_weight;
                     $item_total        += $sub_cat->get_weight();
 
-                    $row[] = array ($item_value, trim($scoredisplay->display_score($real_score, SCORE_CUSTOM,null, true)));
+                    $row[] = array(
+                        $item_value,
+                        trim($scoredisplay->display_score($real_score, SCORE_CUSTOM, null, true))
+                    );
                     $item_value_total += $item_value;
                     $final_score += $score[0];
                     //$final_score = ($final_score / $item_total) * 100;
 
                 }
                 $total_score = array($final_score, $item_total);
-                $row[] = array ($final_score, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
+                $row[] = array(
+                    $final_score,
+                    trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true))
+                );
             } else {
                 for ($count=0;$count < count($this->evals_links); $count++) {
                     $item = $this->evals_links [$count];
                     $score = $item->calc_score($user[0]);
-                    $divide=( ($score[1])==0 ) ? 1 : $score[1];
-                    $item_value+= $score[0]/$divide*$item->get_weight();
+                    $divide = ($score[1]) == 0 ? 1 : $score[1];
+                    $item_value += $score[0] / $divide * $item->get_weight();
                     $item_total+=$item->get_weight();
                     $score_denom=($score[1]==0) ? 1 : $score[1];
                     $score_final = ($score[0] / $score_denom) * 100;

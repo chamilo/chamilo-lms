@@ -83,7 +83,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
     }
 }
 
-$social_avatar_block = Display::getSocialUserBlock(api_get_user_id(), 'home');
+$social_avatar_block = SocialManager::getSocialUserBlock(api_get_user_id(), 'home');
 //Block Menu
 $social_menu_block = SocialManager::show_social_menu('home');
 

@@ -267,7 +267,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $simple_search_form
     );
 
-    // main graph
+    // Table
     $flatviewtable->display();
     //@todo load images with jquery
     echo '<div id="contentArea" style="text-align: center;" >';

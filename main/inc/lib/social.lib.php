@@ -760,7 +760,7 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
+                $html .= '<li><a href="#" id="btn-to-send-message" title="'.get_lang('SendMessage').'">';
                 $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
             }
 
@@ -1518,6 +1518,33 @@ class SocialManager extends UserManager
         $statusMessage = MESSAGE_STATUS_WALL_DELETE;
         $sql = "UPDATE $tblMessage SET msg_status = '$statusMessage' WHERE id = '{$id}' ";
         return Database::query($sql);
+    }
+
+    /**
+     * Generate the social block for a user
+     * @param int $userId The user id
+     * @param string $groupBlock Optional. Highlight link possible values: group_add, home, messages, messages_inbox,
+     *                          messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
+     * @param int $groupId Optional. Group ID
+     * @return string The HTML code with the social block
+     */
+    public static function getSocialUserBlock($userId, $groupBlock = '', $groupId = 0)
+    {
+        $userInfo = api_get_user_info($userId, true);
+        $socialAvarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
+
+        $profileEditionLink = null;
+
+        if (api_get_user_id() == $userId) {
+            $profileEditionLink = Display::getProfileEditionLink($userId);
+        }
+
+        $template = new Template();
+        $template->assign('user', $userInfo);
+        $template->assign('socialAvatarBlock', $socialAvarBlock);
+        $template->assign('profileEditionLink', $profileEditionLink);
+
+        return $template->fetch('default/social/user_block.tpl');
     }
 
 }

@@ -779,7 +779,7 @@ class Attendance
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$tbl_attendance_result  = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$tbl_attendance			= Database::get_course_table(TABLE_ATTENDANCE);
-		$course_id              = api_get_course_int_id();
+		$course_id = api_get_course_int_id();
 
 		$attendance_id = intval($attendance_id);
 		// fill results about presence of students
@@ -789,6 +789,7 @@ class Attendance
 		foreach ($attendance_calendar as $cal) {
 			$calendar_ids[] = $cal['id'];
 		}
+
 		// get count of presences by users inside current attendance and save like results
 		$count_presences = 0;
 		if (count($user_ids) > 0) {
@@ -800,21 +801,29 @@ class Attendance
 					        WHERE
 					        	c_id = $course_id AND
 					        	user_id = '$uid' AND
-					        	attendance_calendar_id IN(".implode(',',$calendar_ids).") AND
+					        	attendance_calendar_id IN (".implode(',', $calendar_ids).") AND
 					        	presence = 1";
 					$rs_count  = Database::query($sql);
 					$row_count = Database::fetch_array($rs_count);
 					$count_presences = $row_count['count_presences'];
 				}
+
 				// save results
 				$sql = "SELECT id FROM $tbl_attendance_result
-						WHERE c_id = $course_id AND user_id='$uid' AND attendance_id='$attendance_id'";
+						WHERE
+							c_id = $course_id AND
+							user_id = '$uid' AND
+							attendance_id = '$attendance_id' ";
 				$rs_check_result = Database::query($sql);
+
 				if (Database::num_rows($rs_check_result) > 0) {
 					// update result
 					$sql = "UPDATE $tbl_attendance_result SET
-							score='$count_presences'
-							WHERE c_id = $course_id AND user_id='$uid' AND attendance_id='$attendance_id'";
+							score = '$count_presences'
+							WHERE
+								c_id = $course_id AND
+								user_id='$uid' AND
+								attendance_id='$attendance_id'";
 					Database::query($sql);
 				} else {
 					// insert new result
@@ -827,9 +836,12 @@ class Attendance
 				}
 			}
 		}
+
 		// update attendance qualify max
 		$count_done_calendar = self::get_done_attendance_calendar($attendance_id);
-		$sql = "UPDATE $tbl_attendance SET attendance_qualify_max='$count_done_calendar'
+
+		$sql = "UPDATE $tbl_attendance SET
+				attendance_qualify_max = '$count_done_calendar'
 				WHERE c_id = $course_id AND id = '$attendance_id'";
 		Database::query($sql);
 	}
@@ -1224,15 +1236,16 @@ class Attendance
 		if (!empty($groupId)) {
 			$groupId = intval($groupId);
 			$table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
-			$sql = "SELECT c.* FROM $tbl_attendance_calendar c INNER JOIN $table g
+			$sql = "SELECT c.* FROM $tbl_attendance_calendar c
+					INNER JOIN $table g
 					ON c.c_id = g.c_id AND c.id = g.calendar_id
 					WHERE c.c_id = $course_id AND g.group_id = '$groupId' ";
-
 		}
 
 		if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done','calendar_id'))) {
 			$type = 'all';
 		}
+
 		switch ($type) {
 			case 'calendar_id':
 				$calendar_id = intval($calendar_id);

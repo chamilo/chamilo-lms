@@ -65,9 +65,9 @@ class AttendanceLink extends AbstractLink
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
 			if ( isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != ''){
-				$cats[] = array ($data['id'], $data['attendance_qualify_title']);
+				$cats[] = array($data['id'], $data['attendance_qualify_title']);
 			} else {
-				$cats[] = array ($data['id'], $data['name']);
+				$cats[] = array($data['id'], $data['name']);
 			}
 		}
 		return $cats;

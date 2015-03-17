@@ -99,7 +99,6 @@ $Learner = "Курсист";
 $Chat = "Говорилня";
 $Slides = "Слайдове";
 $WaitingForParticipants = "Чакам участници";
-$Send = "Изпращане";
 $Browse = "Разглеждане";
 $Cancel = "Отказ";
 $ChooseFile = "Избери файл за импортиране";

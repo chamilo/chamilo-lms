@@ -99,7 +99,6 @@ $Learner = "Teilnehmer";
 $Chat = "Chat";
 $Slides = "Slides";
 $WaitingForParticipants = "Auf Teilnehmer warten";
-$Send = "Senden";
 $Browse = "Browse";
 $Cancel = "Abbrechen";
 $ChooseFile = "Datei zum Importieren auswählen";

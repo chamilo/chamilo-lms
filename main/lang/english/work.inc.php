@@ -24,7 +24,6 @@ $AllFiles = "Actions on all files";
 $DefaultUpload = "Default setting for the visibility of newly posted files";
 $NewVisible = "New documents are visible for all users";
 $NewUnvisible = "New documents are only visible for the teacher(s)";
-$lang_doc_unvisible = "Your file is only visible to the teacher(s) and will therefore not be visible to you.";
 $DelLk = "Do you really want to delete this link?";
 $MustBeRegisteredUser = "Only registered users of this training can publish documents.";
 $ListDel = "Delete list";

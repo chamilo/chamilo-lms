@@ -12,7 +12,6 @@
 $use_anonymous = true;
 
 // Language files that needs to be included.
-$language_file[] = 'scormdocument';
 $language_file[] = 'scorm';
 $language_file[] = 'learnpath';
 

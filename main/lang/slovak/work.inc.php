@@ -24,7 +24,6 @@ $AllFiles = "Akcie so všetkými súbormi";
 $DefaultUpload = "Východzie nastavenie viditeľnosti novo poslaných súborov";
 $NewVisible = "Nové dokumenty sú viditeľné pre všetkých používateľov";
 $NewUnvisible = "Nové dokumenty sú viditeľné len pre lektora(ov)";
-$lang_doc_unvisible = "Váš súbor je viditeľný iba pre lektorov tohto kurzu a preto ho nebudete vidieť.";
 $DelLk = "Naozaj zmazať odkaz?";
 $MustBeRegisteredUser = "Len registrovaný používatelia tohto kurzu môžu publikovať dokumenty.";
 $ListDel = "Zmazať zoznam";

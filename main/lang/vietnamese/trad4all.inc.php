@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TitleNotification = "Từ lần ghé thăm trước";
 $WCAGGoMenu = "Chuyển đến thực đơn";
 $WCAGGoContent = "Chuyển đến nội dung";
 $Remove = "Xoá";
@@ -82,6 +83,9 @@ $CourseProgram = "Mô tả tóm tắt";
 $ThisCourseDescriptionIsEmpty = "Giáo trình này không có phần diễn giải";
 $QuestionPlan = "Câu hỏi với giáo viên";
 $NewBloc = "Khác";
+$InLnk = "Tạm ngưng hoạt động";
+$DelLk = "Bạn muốn xoá liên kết này?";
+$NameOfTheLink = "Tên của liên kết";
 $NextWeek = "Tuần kế tiếp";
 $Height = "Chiều cao";
 $ResizingComment = "thay đổi kích thước bức ảnh thep pixels";
@@ -94,4 +98,17 @@ $SlideshowOptions = "Những lựa chọn của Slide";
 $NoResizing = "Mặc định";
 $SlideShow = "Slideshow";
 $ViewSlideshow = "Xem slide";
+$ResourceAdded = "Tài nguyên đã được thêm vào.Bây giờ bạn có thể quay lại hoặc thêm tài nguyên mới";
+$LearningPath = "Quá trình học tập";
+$LevelUp = "level up";
+$AddIt = "Thêm nó";
+$MainCategory = "Danh mục chính";
+$AddToLinks = "Thêm liên kết vào khóa học";
+$DontAdd = "Không thêm";
+$ResourcesAdded = "Thêm tài nguyên mới";
+$ExternalResources = "Tài nguyên bên ngoài";
+$CourseResources = "Tài nguyên khóa học";
+$ExternalLink = "Liên kết ngoài";
+$DropboxAdd = "Thêm Dropbox cho chương này";
+$AddAssignmentPage = "Thêm các trang phân tải lên chương này.";
 ?>

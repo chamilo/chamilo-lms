@@ -3,14 +3,14 @@
 for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Mga Setting";
-$langDelCourse = "I-delete ang lugar ng kurso";
-$langUnsubscription = "Mag-Unsubscribe";
+$DelCourse = "I-delete ang lugar ng kurso";
+$Unsubscription = "Mag-Unsubscribe";
 $CourseAccessConfigTip = "Batay sa default, ang iyong kurso ay pampubliko. Subalit maaari mo itong ilarawan sa antas ng pag-access sa itaas.";
-$langOpenToTheWorld = "Publiko - ang access ay pinapayagan para sa buong mundo";
+$OpenToTheWorld = "Publiko - ang access ay pinapayagan para sa buong mundo";
 $OpenToThePlatform = " Buksan - ang access ay pinapayagan para sa mga gumagamit na rehistrado sa platform";
-$langTipLang = "Ang wikang ito ay magiging balido sa bawat bisita ng iyong website sa training.";
-$langStats = "Istatistika";
-$langSubscription = "Suskrisyon";
+$TipLang = "Ang wikang ito ay magiging balido sa bawat bisita ng iyong website sa training.";
+$Stats = "Istatistika";
+$Subscription = "Suskrisyon";
 $CourseVisibilityClosed = "Sarado - ang kurso ay maa-access lamang ng mga guro";
 $WorkEmailAlert = "I-alerto sa pamamagitan ng e-mail sa pagsumite ng gawain";
 $WorkEmailAlertActivate = "I-activate ang alerto sa e-mail sa pagsumite ng bagong gawain";
@@ -25,8 +25,8 @@ $AllowUserEditAnnouncement = "Payagan ang mga mag-aaral na i-edit ang mga anunsy
 $AllowUserEditAnnouncementActivate = "I-enable ang edisyon ng mga gumagamit";
 $AllowUserEditAnnouncementDeactivate = "I-disable ang edisyon ng mga gumagamit";
 $CourseRegistrationPassword = "Password sa pagrerehistro ng kurso";
-$langDescriptionDeleteCourse = "I-click ang link na ito para sa kabuuang pagtanggal ng kurso mula sa server.<br /><br />Maging maingant, wala nang babalikan pa!";
-$langDescriptionCopyCourse = "I-duplicate ang kurso o ang ilang mga pinag-aaralang  bagay sa isa pang kurso. Kailangan mo ng 2 kurso upang magamit ang tampok na ito: isang orihinal na kurso at isang tina-target na kurso.";
+$DescriptionDeleteCourse = "I-click ang link na ito para sa kabuuang pagtanggal ng kurso mula sa server.<br /><br />Maging maingant, wala nang babalikan pa!";
+$DescriptionCopyCourse = "I-duplicate ang kurso o ang ilang mga pinag-aaralang  bagay sa isa pang kurso. Kailangan mo ng 2 kurso upang magamit ang tampok na ito: isang orihinal na kurso at isang tina-target na kurso.";
 $DescriptionRecycleCourse = "Ang instrumentong ito ay inuubos ang laman ng kurso. Tinatanggal nito ang mga dokumento, mga forum, mga link. At pinapayagan kang pumili kung anong bahagi ang nais mong tanggalin o mapagpasyang tanggalin sa kabuuan.";
 $QuizEmailAlert = "Alerto sa e-mail sa naisumiteng bagong pagsusulit";
 $QuizEmailAlertActivate = "I-activate ang pagpapadala ng e-mail kapag ang gumagamit ay nagsumite ng bagong mga sagot sa pagsusulit";

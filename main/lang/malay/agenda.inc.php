@@ -16,5 +16,4 @@ $EditSuccess = "The agenda item has been edited";
 $AddSuccess = "Agenda item added";
 $AgendaDeleteSuccess = "The agenda item has been deleted";
 $NoAgendaItems = "There are no Agenda Items";
-$lang_september = "September";
 ?>

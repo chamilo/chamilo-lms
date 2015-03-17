@@ -7,7 +7,7 @@
  */
 
 // The language file that needs to be included.
-$language_file = array('glossary', 'admin');
+$language_file = array('admin');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';

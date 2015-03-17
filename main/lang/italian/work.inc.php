@@ -19,7 +19,6 @@ $AllFiles = "Applica a tutti i documenti";
 $DefaultUpload = "Impostazione di default per la visibilità dei nuovi file inviati";
 $NewVisible = "Tutti potranno vedere i nuovi documenti inviati";
 $NewUnvisible = "Solo i gestori del corso potranno vedere i nuovi documenti inviati";
-$lang_doc_unvisible = "Il docente ha scelto di rendere visibile il tuo documento solo ai gestori del corso, quindi anche tu non potrai vederlo.";
 $DelLk = "Vuoi veramente eliminare il collegamento?";
 $MustBeRegisteredUser = "Solo i corsisti iscritti possono pubblicare documenti.";
 $ListDel = "Elimina i documenti elencati";

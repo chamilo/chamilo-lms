@@ -22,7 +22,6 @@ $AllFiles = "Acties op alle bestanden";
 $DefaultUpload = "Standaardinstelling voor de zichtbaarheid van opgestuurde documenten";
 $NewVisible = "Nieuwe documenten zijn voor alle gebruikers zichtbaar";
 $NewUnvisible = "Nieuwe documenten zijn enkel voor de cursusbeheerder(s) zichtbaar";
-$lang_doc_unvisible = "Uw lesgever heeft er voor gekozen het document enkel zichtbaar te maken voor cursusbeheerders, bijgevolg zal het voor u niet zichtbaar zijn.";
 $DelLk = "Wilt u deze link verwijderen?";
 $MustBeRegisteredUser = "U moet geregistreerd zijn voor deze cursus om werk te kunnen publiceren.";
 $ListDel = "Verwijder lijst";

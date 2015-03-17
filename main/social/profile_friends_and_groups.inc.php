@@ -8,7 +8,7 @@
 /**
  * Initialization
  */
-$language_file = array('registration', 'messages', 'userInfo', 'admin');
+$language_file = array('registration', 'userInfo', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

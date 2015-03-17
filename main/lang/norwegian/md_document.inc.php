@@ -2,5 +2,5 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Dokumenter";
+$MdCallingTool = "Dokumenter";
 ?>

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TitleNotification = "Since your last visit";
 $WCAGGoMenu = "Ke menu";
 $WCAGGoContent = "Ke kandungan";
 $Remove = "Padam";
@@ -84,6 +85,9 @@ $CourseProgram = "Penerangan Subjek";
 $ThisCourseDescriptionIsEmpty = "Subjek ini belum diberi penerangan";
 $QuestionPlan = "Maklumat untuk Pensyarah";
 $NewBloc = "Lain-lain";
+$InLnk = "Pautan yang tidak aktif";
+$DelLk = "Anda pasti untuk padam pautan ini?";
+$NameOfTheLink = "Nama Pautan";
 $NextWeek = "Minggu Seterusnya";
 $Height = "Height";
 $ResizingComment = "resize the image to the following dimensions (in pixels)";
@@ -96,4 +100,17 @@ $SlideshowOptions = "Slideshow Options";
 $NoResizing = "NO RESIZING (default)";
 $SlideShow = "Slideshow";
 $ViewSlideshow = "View Slideshow";
+$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
+$LearningPath = "Learning Path";
+$LevelUp = "level up";
+$AddIt = "Add it";
+$MainCategory = "main category";
+$AddToLinks = "Add to the course links";
+$DontAdd = "do not add";
+$ResourcesAdded = "Added new resources";
+$ExternalResources = "External resources";
+$CourseResources = "Course resources";
+$ExternalLink = "External link";
+$DropboxAdd = "Add the dropbox page to this chapter.";
+$AddAssignmentPage = "Add the upload assignment page to this chapter.";
 ?>

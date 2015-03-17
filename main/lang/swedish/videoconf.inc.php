@@ -94,7 +94,6 @@ $Learner = "Student";
 $Chat = "Chatt";
 $Slides = "Bilder";
 $WaitingForParticipants = "Väntar på deltagare";
-$Send = "Skicka";
 $Browse = "Bläddra";
 $Cancel = "Avbryt";
 $ChooseFile = "Välj en fil att importera";

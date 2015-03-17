@@ -2,13 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLinkName = "Tên liên kết";
-$langLinkAdd = "Đã tạo liên kết mới";
-$langLinkMod = "Đã sửa liên kết";
-$langLinkDel = "Đã xoá liên kết";
-$langGiveURL = "Xin nhập địa chỉ URL";
-$langListDeleted = "Danh sách đã bị xoá";
-$langAddLink = "Thêm liên kết mới";
-$langDelList = "Xoá toàn bộ danh sách";
-$langModifyLink = "Sửa liên kết";
+$LinkName = "Tên liên kết";
+$LinkAdd = "Đã tạo liên kết mới";
+$LinkMod = "Đã sửa liên kết";
+$LinkDel = "Đã xoá liên kết";
+$GiveURL = "Xin nhập địa chỉ URL";
+$ListDeleted = "Danh sách đã bị xoá";
+$AddLink = "Thêm liên kết mới";
+$DelList = "Xoá toàn bộ danh sách";
+$ModifyLink = "Sửa liên kết";
 ?>

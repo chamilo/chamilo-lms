@@ -99,7 +99,6 @@ $Learner = "Cursist";
 $Chat = "Chat";
 $Slides = "Diapozitive";
 $WaitingForParticipants = "Asteapta participantii";
-$Send = "Trimite";
 $Browse = "Rasfoire";
 $Cancel = "Anuleaza";
 $ChooseFile = "Alege un document pentru import";

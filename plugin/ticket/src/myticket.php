@@ -6,7 +6,7 @@
  * @package chamilo.plugin.ticket
  */
 
-$language_file = array('messages', 'userInfo', 'admin');
+$language_file = array('userInfo', 'admin');
 $cidReset = true;
 //needed in order to load the plugin lang variables
 $course_plugin = 'ticket';

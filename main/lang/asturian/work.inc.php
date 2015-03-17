@@ -19,7 +19,6 @@ $AllFiles = "Tolos archivos";
 $DefaultUpload = "Configuración de visibilidá establecida por defeutu pa documentos nuevos";
 $NewVisible = "Los documentos nuevos van tar visibles pa tolos usuarios";
 $NewUnvisible = "Los documentos nuevos namás van tar visibles pal profesor(es)";
-$lang_doc_unvisible = "Esti documentu namás ta visible pal profesor(es).";
 $DelLk = "¿ Ta seguru de querer desactivar esta ferramienta ?";
 $MustBeRegisteredUser = "Namás los usuarios matriculaos nesti cursu puen unviar documentos.";
 $ListDel = "Esborrar llistáu";

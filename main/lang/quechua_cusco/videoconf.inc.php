@@ -99,7 +99,6 @@ $Learner = "Yachaqe";
 $Chat = "Chat";
 $Slides = "Diapositivas nisqakuna";
 $WaitingForParticipants = "Haykuqmasikunata suyashaspa";
-$Send = "Apachiy";
 $Browse = "Qhawaruy";
 $Cancel = "Utichiy";
 $ChooseFile = "Ajllay khipu apachinapaq";

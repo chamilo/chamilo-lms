@@ -24,7 +24,6 @@ $AllFiles = "Tots els arxius";
 $DefaultUpload = "Configuració per defecte per a la visualització dels nous arxius enviats";
 $NewVisible = "Els nous documents són visibles per a tots els usuaris";
 $NewUnvisible = "Els nous documents són només visibles per als administradors de cursos";
-$lang_doc_unvisible = "L'arxiu només és visible per al professor d'aquest curs, tampoc el pots veure tu";
 $DelLk = "Voleu realment esborrar aquest enllaç?";
 $MustBeRegisteredUser = "Només els usuaris inscrits en aquest curs poden publicar documents";
 $ListDel = "Eliminar llista";

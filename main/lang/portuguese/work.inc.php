@@ -24,7 +24,6 @@ $AllFiles = "Acções em todos os ficheiros";
 $DefaultUpload = "Configuração pré-definida para a visibilidade dos ficheiros publicados recentemente";
 $NewVisible = "Os novos documentos são visíveis para todos os utilizadores";
 $NewUnvisible = "Os novos documentos são apenas visíveis para o(s) instrutor(es)";
-$lang_doc_unvisible = "O seu ficheiro é apenas visível para o(s) instrutor(es) e por esse motivo, não será visível para si.";
 $DelLk = "Deseja mesmo eliminar esta ligação?";
 $MustBeRegisteredUser = "Apenas utilizadores registados neste curso podem publicar documentos.";
 $ListDel = "Eliminar lista";

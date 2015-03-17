@@ -3,20 +3,20 @@
 for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Pengumuman";
-$langAnnEmpty = "Senarai pengumuman telah dipadam";
+$AnnEmpty = "Senarai pengumuman telah dipadam";
 $AnnouncementModified = "Pengumuman telah diubahsuai";
 $AnnouncementAdded = "Pengumuman telah ditambah";
 $AnnouncementDeleted = "Pengumuman telah dipadam";
 $AnnouncementPublishedOn = "Diterbitkan pada";
 $AddAnnouncement = "Tambah Pengumuman";
-$langContent = "Kandungan";
+$Content = "Kandungan";
 $AnnouncementDeleteAll = "Padam senarai pengumuman";
 $professorMessage = "Mesej daripada Pensyarah anda";
-$langEmailSent = " dan emailkan kepada Pelajar berdaftar";
+$EmailSent = " dan emailkan kepada Pelajar berdaftar";
 $EmailOption = "Hantar Pengumuman ke email Pelajar berdaftar";
-$langOn = "Terdapat";
-$langRegUser = "Pelajar berdaftar untuk subjek ini";
-$langUnvalid = "tidak sah/tiada alamat email";
-$langModifAnn = "Ubahsuai pengumuman ini";
+$On = "Terdapat";
+$RegUser = "Pelajar berdaftar untuk subjek ini";
+$Unvalid = "tidak sah/tiada alamat email";
+$ModifAnn = "Ubahsuai pengumuman ini";
 $EmailTitle = "Tajuk Pengumuman";
 ?>

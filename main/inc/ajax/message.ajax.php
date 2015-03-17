@@ -4,7 +4,7 @@
  * Responses to AJAX calls
  */
 
-$language_file = array('messages','userInfo');
+$language_file = array('userInfo');
 
 require_once '../global.inc.php';
 

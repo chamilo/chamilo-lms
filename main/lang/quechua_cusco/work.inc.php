@@ -19,7 +19,6 @@ $AllFiles = "Llipin khipukuna";
 $DefaultUpload = "Kikinmanta kamachikushan musuq qelqa khipukuna qhawachikunanpaq";
 $NewVisible = "Musuq qelqa khipukunataqa llipin haykuqmasikuna qhawanqaku";
 $NewUnvisible = "Musuq qelqa khipukunaqa yachachiq(kuna)llapaq qhawana kanqa.";
-$lang_doc_unvisible = "Kay qelqa khipuqa yachachiq(kuna)llapaq qhawana kanqa.";
 $DelLk = " Cheqaychu munanki wañuchiyta kay llank'anata ?";
 $MustBeRegisteredUser = "Kay yachachinapi haykuqmasikuna qelqachikusqalla apachinqaku qelqa khipukunataqa.";
 $ListDel = "Pichay yupachasqata";

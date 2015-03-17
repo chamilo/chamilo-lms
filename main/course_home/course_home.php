@@ -31,7 +31,7 @@
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
-$language_file = array('course_home', 'courses');
+$language_file = array('courses');
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.

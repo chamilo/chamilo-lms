@@ -99,7 +99,6 @@ $Learner = "Alumne";
 $Chat = "Missatgeria (xat)";
 $Slides = "Diapositives";
 $WaitingForParticipants = "Esperant als participants";
-$Send = "Enviar";
 $Browse = "Navegador";
 $Cancel = "Cancel·lar";
 $ChooseFile = "Seleccionar l'arxiu a enviar";

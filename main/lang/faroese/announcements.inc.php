@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langModify = "Broyt";
-$langMessages = "Boð";
-$langMsg = "Boð";
+$Modify = "Broyt";
+$Messages = "Boð";
+$Msg = "Boð";
 ?>

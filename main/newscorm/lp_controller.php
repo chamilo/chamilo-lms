@@ -22,12 +22,9 @@ if (isset($_GET['action'])) {
         $language_file[] = 'hotspot';
     }
 }
-$language_file[] = 'course_home';
-$language_file[] = 'scormdocument';
 $language_file[] = 'document';
 $language_file[] = 'scorm';
 $language_file[] = 'learnpath';
-$language_file[] = 'resourcelinker';
 $language_file[] = 'registration';
 $language_file[] = 'exercice';
 

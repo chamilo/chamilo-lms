@@ -2,24 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Dokumenter";
-$langMdTitle = "Navn på lenke";
-$langMdDescription = "Beskrivelse for lenke";
-$langMdCoverage = "Generell";
-$langMdCopyright = "Ghent Universitet";
+$MdCallingTool = "Dokumenter";
+$MdTitle = "Navn på lenke";
+$MdDescription = "Beskrivelse for lenke";
+$MdCoverage = "Generell";
+$MdCopyright = "Ghent Universitet";
 $nameTools = "Utgåtte språkvariabler";
-$langTool = "Lenkers metadata";
-$langIdentifier = "Identifikasjon";
-$langKeyword = "Nøkkelord";
-$langCoverage = "Kategori";
-$langStore = "Lagre";
-$langNotFolder = "er ikke mulig siden dette ikke er en mappe";
-$langContinue = "Fortsett med";
-$langCreate = "Opprett MDE'er";
-$langRemove = "Fjern MDE'er";
-$langAllRemovedFor = "Alle poster slettet for kategori";
-$langRemainingFor = "Utgåtte poster slettet for kategori";
-$langIndex = "Indeksord";
-$langMainMD = "Åpne hoved-MDE";
-$langOrElse = "Velg en kategori for lenker";
+$Tool = "Lenkers metadata";
+$Identifier = "Identifikasjon";
+$Keyword = "Nøkkelord";
+$Coverage = "Kategori";
+$Store = "Lagre";
+$NotFolder = "er ikke mulig siden dette ikke er en mappe";
+$Continue = "Fortsett med";
+$Create = "Opprett MDE'er";
+$Remove = "Fjern MDE'er";
+$AllRemovedFor = "Alle poster slettet for kategori";
+$RemainingFor = "Utgåtte poster slettet for kategori";
+$Index = "Indeksord";
+$MainMD = "Åpne hoved-MDE";
+$OrElse = "Velg en kategori for lenker";
 ?>

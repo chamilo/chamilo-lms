@@ -2,10 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLinkName = "Navn på lenke";
-$langLinkAdd = "Legg til en lenke";
-$langLinkAdded = "Lenken ble lagt til";
-$langLinkMod = "Rediger lenke";
-$langLinkModded = "Lenken har blitt endret";
-$langLinkDel = "Slett lenke";
+$LinkName = "Navn på lenke";
+$LinkAdd = "Legg til en lenke";
+$LinkAdded = "Lenken ble lagt til";
+$LinkMod = "Rediger lenke";
+$LinkModded = "Lenken har blitt endret";
+$LinkDel = "Slett lenke";
 ?>

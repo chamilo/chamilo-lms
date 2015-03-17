@@ -99,7 +99,6 @@ $Learner = "Kursants";
 $Chat = "Tērzēšana";
 $Slides = "Slaidi";
 $WaitingForParticipants = "Gaida dalībniekus";
-$Send = "Sūtīt ziņojumu";
 $Browse = "Pārlūkot";
 $Cancel = "Atcelt";
 $ChooseFile = "Izvēlieties failu importēšanai";

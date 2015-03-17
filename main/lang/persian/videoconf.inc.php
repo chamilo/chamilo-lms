@@ -99,7 +99,6 @@ $Learner = "دانشجو";
 $Chat = "گفتگو";
 $Slides = "اسلاید ها";
 $WaitingForParticipants = "در امتظار مشارکت کنده ها";
-$Send = "ارسال پیام";
 $Browse = "مرور";
 $Cancel = "لغو کردن";
 $ChooseFile = "انتخاب یک فایل برای درون ریزی";

@@ -15,8 +15,6 @@ require('md_funcs.php');
 define('EID_TYPE', 'Mix');
 require('md_' . strtolower(EID_TYPE) . '.php');
 
-// name of the language file that needs to be included
-$language_file = 'md_mix';
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

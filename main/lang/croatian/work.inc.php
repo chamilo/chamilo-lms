@@ -19,7 +19,6 @@ $AllFiles = "Sve datoteke";
 $DefaultUpload = "Izvorna postavka o vidljivosti novoposlanih datoteka";
 $NewVisible = "Novi su dokumenti vidljivi svim korisnicima";
 $NewUnvisible = "Novi dokumenti vidljivi su samo upravitelju/ima kolegija";
-$lang_doc_unvisible = "Datoteka je vidljiva samo predavaču/ima kolegija i stoga neće biti vidljiva vama.";
 $DelLk = "Želite li izbrisati poveznicu?";
 $MustBeRegisteredUser = "Samo registrirani korisnici ovoga kolegija mogu objavljivati dokumente.";
 $ListDel = "Izbriši popis";

@@ -19,7 +19,6 @@ $AllFiles = "Wszystkie pliki";
 $DefaultUpload = "Domyślne właściwości wysłanych dokumentów";
 $NewVisible = "Wysłane dokumenty widoczne dla wszystkich";
 $NewUnvisible = "Wysłane dokumenty widoczne dla prowadzących";
-$lang_doc_unvisible = "Prowadzący może zdecydować, że Twoje dokumenty będą początkowo widoczne tylko dla niego. Dlatego możesz nie widzieć swojego dokumentu!";
 $DelLk = "Na pewno chcesz usunąć ten odnośnik?";
 $MustBeRegisteredUser = "Tylko zarejestrowani użytkownicy tego kursu mogą publikować dokumenty.";
 $ListDel = "Usuń listę";

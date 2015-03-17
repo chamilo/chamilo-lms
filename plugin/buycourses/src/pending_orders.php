@@ -19,7 +19,7 @@ $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => $plugin->get_l
 $tpl = new Template($tableName);
 
 $teacher = api_is_platform_admin();
-api_protect_course_script(true);
+api_protect_admin_script(true);
 
 if ($teacher) {
     $pendingList = pendingList($_SESSION['bc_codetext']);

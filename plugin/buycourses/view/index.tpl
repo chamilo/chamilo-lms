@@ -26,7 +26,9 @@
 
             <div class="span3">
                 <div class="thumbnail">
-                    <img src="resources/img/128/buycourses.png">
+                    <a href="src/list.php">
+                        <img src="resources/img/128/buycourses.png">
+                    </a>
                     <div class="caption">
                         <a class="btn" href="src/list.php">{{ BuyCourses }}</a>
                     </div>
@@ -35,7 +37,9 @@
             {% if isAdmin == 'true' %}
             <div class="span3">
                 <div class="thumbnail">
-                    <img src="resources/img/128/settings.png">
+                    <a href="src/configuration.php">
+                        <img src="resources/img/128/settings.png">
+                    </a>
                     <div class="caption">
                         <a class="btn" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
                     </div>
@@ -43,7 +47,9 @@
             </div>
             <div class="span3">
                 <div class="thumbnail">
-                    <img src="resources/img/128/paymentsettings.png">
+                    <a href="src/paymentsetup.php">
+                        <img src="resources/img/128/paymentsettings.png">
+                    </a>
                     <div class="caption">
                         <a class="btn" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
                     </div>
@@ -51,7 +57,9 @@
             </div>
             <div class="span3">
                 <div class="thumbnail">
-                    <img src="resources/img/128/backlogs.png">
+                    <a href="src/pending_orders.php">
+                        <img src="resources/img/128/backlogs.png">
+                    </a>
                     <div class="caption">
                         <a class="btn" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
                     </div>

@@ -4,11 +4,9 @@
  * @package chamilo.calendar
  */
 
-// name of the language file that needs to be included
-$language_file = 'agenda';
 $id=$_GET['id'];
 
-if(strstr($id,',')) {
+if (strstr($id,',')) {
 	$id=explode(',',$id);
 	$id=array_map('intval',$id);
 	$id=implode(',',$id);

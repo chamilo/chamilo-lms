@@ -5,6 +5,8 @@ for more information: see languages.txt in the lang folder.
 $MobilePhoneNumberWrong = "Fartelefonnummarið væntar tøl ella nýtir stavir";
 $FieldTypeMobilePhoneNumber = "Fartelefonnummar";
 $Username = "Brúkaranavn";
+$Month = "Máni";
+$Week = "Vika";
 $MessageEmptyMessageOrSubject = "Evnis regla og boð mugu bæði vera nýtt";
 $Messages = "Boð";
 $DeleteSelectedMessages = "Strika valdu boðini";
@@ -16,6 +18,7 @@ $DeleteMessage = "Strika hesi boðini";
 $EditDocument = "Broyt";
 $MailMarkSelectedAsUnread = "Marka sum ólisin boð";
 $MailMarkSelectedAsRead = "Marka sum lisin boð";
+$Msg = "Boð";
 $Description = "Lýsing";
 $Links = "Leinkjur";
 $Exercices = "Royndir";

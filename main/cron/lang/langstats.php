@@ -14,11 +14,11 @@
 die();
 $language_file = array(
 'gradebook', 'registration', 'admin', 'group',
-'agenda', 'help', 'reservation', 'announcements', 'hotspot',
+'help', 'reservation', 'hotspot',
 'blog', 'scormdocument', 'coursebackup',
-'index', 'scorm', 'install', 'shibboleth',
+'index', 'install', 'shibboleth',
 'learnpath', 'course_info', 'link', 'survey',
-'courses', 'md_document', 'tracking', 'create_course', 'md_link', 
+'courses', 'md_document', 'tracking', 'create_course',
 'trad4all', 'document', 'userInfo', 'dropbox',
 'videoconf', 'exercice', 'wiki',
 'work', 'forum'

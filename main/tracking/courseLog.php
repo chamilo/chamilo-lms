@@ -8,7 +8,7 @@
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking', 'scorm', 'exercice');
+$language_file = array('admin', 'tracking', 'exercice');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';

@@ -14,8 +14,6 @@
  */
 $language_file = array(
 'admin',
-'agenda',
-'announcements',
 'blog',
 'course_info',
 'coursebackup',
@@ -34,10 +32,8 @@ $language_file = array(
 'learnpath',
 'link',
 'md_document',
-'md_link',
 'registration',
 'reservation',
-'scorm',
 'scormdocument',
 'shibboleth',
 'survey',

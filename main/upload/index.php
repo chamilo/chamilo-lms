@@ -21,7 +21,6 @@
 
 // name of the language file that needs to be included
 $language_file[] = "document";
-$language_file[] = "scorm";
 $language_file[] = "learnpath";
 
 // global settings initialisation

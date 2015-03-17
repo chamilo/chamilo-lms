@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
  * This file exclusively export calendar items to iCal or similar formats
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-// name of the language file that needs to be included
-$language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...

@@ -2,9 +2,30 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ShowAllEvents = "Hiển thị tất cả các mục đã đánh dấu";
+$Month = "Tháng";
+$Hour = "Giờ";
+$Minutes = "Phút";
+$AddSuccess = "Thêm mới thành công";
+$AgendaDeleteSuccess = "Đã xóa";
+$NoAgendaItems = "Không có mục nào được đánh dấu";
 $TitleNotification = "Từ lần ghé thăm trước";
 $WCAGGoMenu = "Chuyển đến thực đơn";
 $WCAGGoContent = "Chuyển đến nội dung";
+$AnnEmpty = "Danh mục các thông báo đã được xoá";
+$AnnouncementModified = "Thông báo đã chỉnh sửa";
+$AnnouncementAdded = "ThĂ´ng bĂ¡o má»›i Ä‘Ă£ Ä‘Æ°á»£c Ä‘Æ°a vĂ o";
+$AnnouncementDeleted = "Thông báo đã bị xoá";
+$AnnouncementPublishedOn = "NgĂ y";
+$AddAnnouncement = "Tạo thông báo mới";
+$AnnouncementDeleteAll = "Xoá tất cả thông báo";
+$professorMessage = "Thư của giáo viên";
+$EmailSent = " và đã gữi cho các học sinh có đăng ký";
+$EmailOption = "Gá»­i thĂ´ng bĂ¡o nĂ y cho cĂ¡c há»";
+$On = "On";
+$RegUser = "người dùng đã đăng ký";
+$Unvalid = "không có địa chỉ email hoặc địa chỉ email không hợp lệ";
+$ModifAnn = "Sửa thông báo này";
 $Remove = "Xoá";
 $Enter = "Trở lại danh mục khoá học";
 $Description = "Mô tả tóm tắt";

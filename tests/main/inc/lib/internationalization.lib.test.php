@@ -1396,8 +1396,6 @@ class TestInternationalization extends UnitTestCase {
 	public function test_all_the_language_files() {
 		$files = array( // Only files with these names will be loaded/tested.
 			'admin.inc.php',
-			'agenda.inc.php',
-			'announcements.inc.php',
 			'blog.inc.php',
 			'coursebackup.inc.php',
 			'courses.inc.php',
@@ -1416,13 +1414,9 @@ class TestInternationalization extends UnitTestCase {
 			'learnpath.inc.php',
 			'link.inc.php',
 			'md_document.inc.php',
-			'md_link.inc.php',
 			'messages.inc.php',
 			'registration.inc.php',
 			'reservation.inc.php',
-			'resourcelinker.inc.php',
-			'scorm.inc.php',
-			'scormdocument.inc.php',
 			'survey.inc.php',
 			'tracking.inc.php',
 			'trad4all.inc.php',

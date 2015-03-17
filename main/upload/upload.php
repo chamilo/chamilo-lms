@@ -11,7 +11,6 @@
  */
 // name of the language file that needs to be included
 $language_file[] = 'document';
-$language_file[] = 'scorm';
  //the document file is loaded because most of the upload vocab relates to the document tool
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)

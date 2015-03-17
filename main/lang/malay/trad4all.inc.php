@@ -2,9 +2,30 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ShowAllEvents = "Show All Agenda Items";
+$Month = "Month";
+$Hour = "Hour";
+$Minutes = "Minutes";
+$AddSuccess = "Agenda item added";
+$AgendaDeleteSuccess = "The agenda item has been deleted";
+$NoAgendaItems = "There are no Agenda Items";
 $TitleNotification = "Since your last visit";
 $WCAGGoMenu = "Ke menu";
 $WCAGGoContent = "Ke kandungan";
+$AnnEmpty = "Senarai pengumuman telah dipadam";
+$AnnouncementModified = "Pengumuman telah diubahsuai";
+$AnnouncementAdded = "Pengumuman telah ditambah";
+$AnnouncementDeleted = "Pengumuman telah dipadam";
+$AnnouncementPublishedOn = "Diterbitkan pada";
+$AddAnnouncement = "Tambah Pengumuman";
+$AnnouncementDeleteAll = "Padam senarai pengumuman";
+$professorMessage = "Mesej daripada Pensyarah anda";
+$EmailSent = " dan emailkan kepada Pelajar berdaftar";
+$EmailOption = "Hantar Pengumuman ke email Pelajar berdaftar";
+$On = "Terdapat";
+$RegUser = "Pelajar berdaftar untuk subjek ini";
+$Unvalid = "tidak sah/tiada alamat email";
+$ModifAnn = "Ubahsuai pengumuman ini";
 $Remove = "Padam";
 $Enter = "Kembali ke senarai subjek";
 $Description = "Penerangan";

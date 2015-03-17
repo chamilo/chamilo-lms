@@ -23,7 +23,6 @@ if (isset($_GET['action'])) {
     }
 }
 $language_file[] = 'document';
-$language_file[] = 'scorm';
 $language_file[] = 'learnpath';
 $language_file[] = 'registration';
 $language_file[] = 'exercice';

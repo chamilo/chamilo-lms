@@ -148,7 +148,7 @@ if (!empty($extra_fields)) {
 }
 $user_info    = UserManager::get_user_info_by_id($user_id);
 //Block Social Avatar
-$social_avatar_block = Display::getSocialUserBlock($user_id, 'search');
+$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'search');
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
 $social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';

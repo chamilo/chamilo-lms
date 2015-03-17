@@ -221,7 +221,7 @@ $create_thread_link = '';
 $userInfo = api_get_user_info(api_get_user_id(), true);
 if ($group_id != 0) {
     //Block Social Avatar
-    $social_avatar_block = Display::getSocialUserBlock($user_id, 'groups', $group_id);
+    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'groups', $group_id);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 } else {
@@ -230,7 +230,7 @@ if ($group_id != 0) {
         $show_menu = $_GET['view'];
     }
     //Block Social Avatar
-    $social_avatar_block = Display::getSocialUserBlock($user_id, $show_menu, $group_id);
+    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, $show_menu, $group_id);
     $social_menu_block = SocialManager::show_social_menu($show_menu, $group_id);
 }
 

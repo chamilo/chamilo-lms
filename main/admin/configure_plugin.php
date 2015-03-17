@@ -89,6 +89,10 @@ if (isset($form)) {
 
         header("Location: $currentUrl");
         exit;
+    } else {
+        foreach ($form->_errors as $error) {
+            $message .= Display::return_message($error, 'error');
+        }
     }
 }
 

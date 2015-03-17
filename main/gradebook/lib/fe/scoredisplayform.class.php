@@ -10,7 +10,12 @@
  */
 class ScoreDisplayForm extends FormValidator
 {
-	function ScoreDisplayForm($form_name, $action= null) {
+	/**
+	 * @param $form_name
+	 * @param null $action
+	 */
+	public function ScoreDisplayForm($form_name, $action= null)
+	{
 		parent :: __construct($form_name, 'post', $action);
 		$displayscore = ScoreDisplay :: instance();
 		$customdisplays = $displayscore->get_custom_score_display_settings();
@@ -42,7 +47,7 @@ class ScoreDisplayForm extends FormValidator
 
         if ($displayscore->is_coloring_enabled()) {
             $this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
-            $this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
+            $this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array(
                 'size' => 5,
                 'maxlength' => 5,
                 'class'=>'span1',
@@ -62,16 +67,16 @@ class ScoreDisplayForm extends FormValidator
 		if ($displayscore->is_custom()) {
             $this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
 			$this->addElement('static', null, null, get_lang('ScoreInfo'));
-			$scorenull[]= & $this->CreateElement('static', null, null, get_lang('Between'));
+			$scorenull[]= & $this->createElement('static', null, null, get_lang('Between'));
 			$this->setDefaults(array (
 				'beginscore' => '0'
 			));
-			$scorenull[]= & $this->CreateElement('text', 'beginscore', null, array (
+			$scorenull[]= & $this->createElement('text', 'beginscore', null, array (
 				'size' => 5,
 				'maxlength' => 5,
 				'disabled' => 'disabled'
 			));
-			$scorenull[]= & $this->CreateElement('static', null, null, ' %');
+			$scorenull[]= & $this->createElement('static', null, null, ' %');
 			$this->addGroup($scorenull, '', '', ' ');
 			for ($counter= 1; $counter <= 20; $counter++) {
 				$renderer =& $this->defaultRenderer();

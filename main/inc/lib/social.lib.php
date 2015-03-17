@@ -760,7 +760,7 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="javascript:void(0);" onclick="javascript:send_message_to_user(\''.$user_id.'\');" title="'.get_lang('SendMessage').'">';
+                $html .= '<li><a href="#" id="btn-to-send-message" title="'.get_lang('SendMessage').'">';
                 $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
             }
 
@@ -1530,7 +1530,7 @@ class SocialManager extends UserManager
      */
     public static function getSocialUserBlock($userId, $groupBlock = '', $groupId = 0)
     {
-        $userInfo = api_get_user_info($userId);
+        $userInfo = api_get_user_info($userId, true);
         $socialAvarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
 
         $profileEditionLink = null;

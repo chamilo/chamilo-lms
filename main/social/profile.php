@@ -144,47 +144,6 @@ function checkLength( o, n, min, max ) {
     }
 }
 
-function send_message_to_user(user_id) {
-    var subject = $( "#subject_id" );
-    var content = $( "#content_id" );
-
-    $("#send_message_form").show();
-    $("#send_message_div").dialog({
-        modal:true,
-        height:350,
-        buttons: {
-            "'.  addslashes(get_lang('Send')).'": function() {
-                var bValid = true;
-                bValid = bValid && checkLength( subject, "subject", 1, 255 );
-                bValid = bValid && checkLength( content, "content", 1, 255 );
-
-                if ( bValid ) {
-                    var url = "'.$ajax_url.'?a=send_message&user_id="+user_id;
-                    var params = $("#send_message_form").serialize();
-                    $.ajax({
-                        url: url+"&"+params,
-                        success:function(data) {
-                            $("#message_ajax_reponse").attr("class", "");
-                            $("#message_ajax_reponse").html(data);
-                            $("#message_ajax_reponse").show();
-                            $("#send_message_div").dialog({ buttons:{}});
-                            $("#send_message_form").hide();
-                            $("#send_message_div").dialog("close");
-
-                            $("#subject_id").val("");
-                            $("#content_id").val("");
-                        }
-                    });
-                }
-            }
-        },
-        close: function() {
-        }
-    });
-    $("#send_message_div").dialog("open");
-    //prevent the browser to follow the link
-}
-
 function send_invitation_to_user(user_id) {
     var content = $( "#content_invitation_id" );
     $("#send_invitation_form").show();
@@ -878,7 +837,7 @@ if ($show_full_profile) {
         $socialRightInformation .=  SocialManager::social_wrapper_div($more_info, 4);
     }
 }
-$social_right_content .= MessageManager::generate_message_form('send_message');
+
 $social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
 
@@ -895,6 +854,13 @@ $tpl->assign('social_skill_block', $social_skill_block);
 $tpl->assign('social_session_block', $social_session_block);
 $tpl->assign('socialRightInformation', $socialRightInformation);
 $tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
+
+$formModalTpl =  new Template();
+$formModalTpl->assign('friendId', $friendId);
+$formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
+
+$tpl->assign('formModals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
 

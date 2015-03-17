@@ -42,14 +42,21 @@ function minItem(item) {
 }
 </script>';
 
-$interbreadcrumb[] = array('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = array(
+    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'name' => get_lang('ToolGradebook')
+);
 
 $select_cat = intval($_GET['selectcat']);
 $displayscore= ScoreDisplay :: instance();
 $customdisplays = $displayscore->get_custom_score_display_settings();
 
 $nr_items = (count($customdisplays) != '0' )? count($customdisplays) : '1';
-$scoreform= new ScoreDisplayForm('scoring_system_form', api_get_self() . '?selectcat=' . $select_cat.'&'.api_get_cidreq();
+$scoreform = new ScoreDisplayForm(
+    'scoring_system_form',
+    api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()
+);
+
 if ($scoreform->validate()) {
     $value_export = '';
     $value_export = $scoreform->exportValues();
@@ -78,7 +85,7 @@ if ($scoreform->validate()) {
     }
 
     if (!$ranges_ok) {
-        header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat.'&'.api_get_cidreq();
+        header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat.'&'.api_get_cidreq());
         exit;
     }
 

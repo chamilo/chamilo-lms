@@ -5,28 +5,20 @@
 *	@author Carlos Vargas
 *	This file is the calendar/print.php
 */
-// name of the language file that needs to be included
-$language_file = 'agenda';
 $id=$_GET['id'];
 
-if(strstr($id,','))
-{
+if (strstr($id,',')) {
 	$id=explode(',',$id);
 	$id=array_map('intval',$id);
 	$id=implode(',',$id);
-}
-else
-{
+} else {
 	$id=intval($id);
 }
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require('../inc/global.inc.php');
 
-
-
 $TABLEAGENDA 		= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
 $result			= Database::query($sql);
 ?>

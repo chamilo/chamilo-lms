@@ -19,7 +19,6 @@ $AllFiles = "Agadoj je ĉiuj dosieroj";
 $DefaultUpload = "Apriora agordo pri la videbleco de alŝutitaj dokumentoj";
 $NewVisible = "Novaj dokumentoj videblas al ĉiuj uzuloj";
 $NewUnvisible = "Novaj dokumentoj videblas nur al kursmastrumanto(j)";
-$lang_doc_unvisible = "Via instruisto tamen preferis videbligi la dokumenton nur al kursomastrumantoj kaj tial la dokumento ne videblos al vi.";
 $DelLk = "Ĉu vi volas forigi ĉi-ligilon?";
 $MustBeRegisteredUser = "Vi registriĝu je ĉi-kurso por rajti publikigi verkon.";
 $ListDel = "Forigu liston";

@@ -99,7 +99,6 @@ $Learner = "Aluno";
 $Chat = "Chat";
 $Slides = "Diapositivos";
 $WaitingForParticipants = "Aguardando pelos participantes";
-$Send = "Enviar mensagem";
 $Browse = "Localizar";
 $Cancel = "Cancelar";
 $ChooseFile = "Seleccionar um ficheiro para importar";

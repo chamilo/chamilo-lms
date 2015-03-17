@@ -20,9 +20,6 @@ use \ChamiloSession as Session;
 
 $use_anonymous = true;
 
-// Name of the language file that needs to be included.
-$language_file = 'resourcelinker';
-
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -387,30 +384,6 @@ if ($_GET['source_id']) {
             $from_learnpath = 'yes';
             Session::write('from_learnpath',$from_learnpath);
             break;
-        case '6': // coming from forum: reply
-            $url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
-            $url = $_SESSION['origintoolurl'];
-            $originaltoolname = get_lang('ForumReply');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
-            unset ($from_learnpath);
-            break;
-
-        /* add Frederik.Vermeire@pandora.be */
-
-        case '7': // coming from Ad_Valvas
-            if ($action == 'edit') {
-                $url = "../announcements/announcements.php?action=edit&id=49&originalresource=$originalresource";
-            } elseif ($action == 'add') {
-                $url = "../announcements/announcements.php?action=add&originalresource=$originalresource";
-            } else {
-                $url = "../announcements/announcements.php?action=add";
-            }
-            $originaltoolname = get_lang('AdValvas');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
-            unset ($from_learnpath);
-            break;
 
         /*  end add Frederik.Vermeire@pandora.be */
 
@@ -567,7 +540,7 @@ while ($row=Database::fetch_array($result_select_active)) {
           <td>&nbsp;</td>
         </tr-->
         <!--tr>
-          <td width="26%"><b><?php echo get_lang('DokeosRelatedCourseMaterial'); ?></b></td>
+          <td width="26%"><b><?php echo get_lang('LMSRelatedCourseMaterial'); ?></b></td>
         </tr-->
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Dropbox&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Dropbox')."</a>"; ?></td>

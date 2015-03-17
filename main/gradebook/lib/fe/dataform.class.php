@@ -90,7 +90,7 @@ class DataForm extends FormValidator
 		$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank">' . get_lang('ExampleXMLFile') . '</a>)', 'xml');
 		$this->addElement('checkbox','overwrite', null,get_lang('OverwriteScores'));
 		$this->addElement('checkbox','ignoreerrors',null,get_lang('IgnoreErrors'));
-		$this->addElement('style_submit_button', 'submit', get_lang('Ok'));
+		$this->addButtonImport(get_lang('Ok'));
 		$this->setDefaults(array(
 			'formSent' => '1',
 			'file_type' => 'csv'

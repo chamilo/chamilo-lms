@@ -2,6 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langScormtool = "Skeið";
+$Scormtool = "Skeið";
 $CreateCourse = "Stovna eitt skeið";
 ?>

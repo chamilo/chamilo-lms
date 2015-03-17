@@ -99,7 +99,6 @@ $Learner = "Tečajnik";
 $Chat = "Klepetalnica";
 $Slides = "Diapozitivi";
 $WaitingForParticipants = "Čakam na udeležence";
-$Send = "Pošlji";
 $Browse = "Brskaj";
 $Cancel = "Prekliči";
 $ChooseFile = "Izberi datoteko za uvoz";

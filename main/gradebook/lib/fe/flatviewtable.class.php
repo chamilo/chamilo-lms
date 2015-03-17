@@ -106,7 +106,9 @@ class FlatViewTable extends SortableTable
                 $pre_result = $new_result = array();
                 foreach ($user_results as $result) {
                     for ($i = 0; $i < count($headerName); $i++) {
-                        $pre_result[$i + 3][] = $result[$i + 1];
+                        if (isset($result[$i + 1])) {
+                            $pre_result[$i + 3][] = $result[$i + 1];
+                        }
                     }
                 }
 
@@ -128,8 +130,12 @@ class FlatViewTable extends SortableTable
                     foreach ($pre_result2 as $key => $res_array) {
                         $key_list = array();
                         foreach ($res_array as $user_result) {
-                            $resource_list[$key][$user_result[1]] += 1;
-                            $key_list[] = $user_result[1];
+                            $userResult = isset($user_result[1]) ? $user_result[1] : null;
+                            if (!isset($resource_list[$key][$userResult])) {
+                                $resource_list[$key][$userResult] = 0;
+                            }
+                            $resource_list[$key][$userResult] += 1;
+                            $key_list[] = $userResult;
                         }
 
                         foreach ($customdisplays as $display) {
@@ -298,9 +304,11 @@ class FlatViewTable extends SortableTable
                     }
                     $i++;
                 }
-            } //end foreach
+            } else {
+                echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            }
         } else {
-            echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            echo get_lang('NoResults');
         }
     }
 

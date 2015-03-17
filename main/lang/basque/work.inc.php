@@ -19,7 +19,6 @@ $AllFiles = "Fitxategi guztiak";
 $DefaultUpload = "Lehenetsi ikusgai izateko konfigurazioari hemendik aurrera bidaliko diren dokumentuetan";
 $NewVisible = "Dokumentu berriak ikusgai egongo dira erabiltzaile guztientzat";
 $NewUnvisible = "Dokumentu berriak irakasleentzat bakarrik egongo dira ikusgai";
-$lang_doc_unvisible = "Dokumentua irakasleentzat bakarrik egongo da ikusgai. Zuretzat, beraz, ikusezina izango da.";
 $DelLk = "Ziur al zaude lotura hau kendu nahi duzula?";
 $MustBeRegisteredUser = "Ikastaro honetan inskribatutako erabiltzaileek bakarrik argitaratu ahal dituzte dokumentuak";
 $ListDel = "Ezabatu zerrenda";

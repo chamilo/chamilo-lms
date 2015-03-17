@@ -2,14 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langAdministrator = "Umsitari";
-$langAdminUsers = "Brúkarar";
-$langAdminCourses = "Skeið";
-$langAddCourse = "Stovna eitt skeið";
+$Administrator = "Umsitari";
+$AdminUsers = "Brúkarar";
+$AdminCourses = "Skeið";
+$AddCourse = "Stovna eitt skeið";
 $ProfileChangesTitle = "Vangamynd";
 $Learnpath = "Skeið";
 $Chat = "Prát";
-$langNbCourses = "Skeið";
+$NbCourses = "Skeið";
 $NbUsers = "Brúkarar";
 $NumberOfCourses = "Skeið";
 $FieldTypeDate = "Dato";

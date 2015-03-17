@@ -2,15 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langProfessors = "Lærere";
-$langExplanation = "Når du klikker ok, blir det oprettet en kursusside indeholdende Diskusjonsforum, Kalender, Dokumenter osv. Som administrator av siden kan du til enhver tid redigere kursussiden efter behov og ønsker";
-$langExerciceEx = "Eksepmeltest";
-$langAntique = "Ironi";
-$langAgenda = "Kalender";
-$langVideo = "Video";
-$langCourseProgram = "Kurs beskrivelse";
-$langAnnouncements = "Annonsering";
-$langAddPageHome = "Last opp et dokument til kurssiden";
-$langCourseDesc = "Kursbeskrivelse";
-$langAgendaText = "Generell introduksjon til prosjekthåndtering";
+$Professors = "Lærere";
+$Explanation = "Når du klikker ok, blir det oprettet en kursusside indeholdende Diskusjonsforum, Kalender, Dokumenter osv. Som administrator av siden kan du til enhver tid redigere kursussiden efter behov og ønsker";
+$ExerciceEx = "Eksepmeltest";
+$Antique = "Ironi";
+$Agenda = "Kalender";
+$Video = "Video";
+$CourseProgram = "Kurs beskrivelse";
+$Announcements = "Annonsering";
+$AddPageHome = "Last opp et dokument til kurssiden";
+$CourseDesc = "Kursbeskrivelse";
+$AgendaText = "Generell introduksjon til prosjekthåndtering";
 ?>

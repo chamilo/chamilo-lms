@@ -168,9 +168,9 @@ class LinkAddEditForm extends FormValidator
 		}
 		// submit button
 		if ($form_type == self :: TYPE_ADD) {
-			$this->addElement('style_submit_button', 'submit', get_lang('CreateLink'),'class="save"');
+			$this->addButtonCreate(get_lang('CreateLink'));
 		} else {
-			$this->addElement('style_submit_button', 'submit', get_lang('LinkMod'),'class="save"');
+			$this->addButtonUpdate(get_lang('LinkMod'));
 		}
 
 		if ($form_type == self :: TYPE_ADD) {

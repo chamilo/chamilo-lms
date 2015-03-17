@@ -2,16 +2,16 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "Số dòng";
-$langLine = "dòng";
-$langLines = "dòng";
-$langLineOrLines = "dòng";
-$langMoveUp = "Di chuyển lên";
-$langMoveDown = "Di chuyển xuống";
-$langAddNewHeading = "Add new heading";
-$langCourseAdministratorOnly = "Chỉ dành cho người quản trị";
-$langDefineHeadings = "Define Headings";
-$langBackToUsersList = "Trở về danh sách người dùng";
-$langTracking = "Theo dõi";
-$langCourseManager = "Quản lý khoá học";
+$LineNumber = "Số dòng";
+$Line = "dòng";
+$Lines = "dòng";
+$LineOrLines = "dòng";
+$MoveUp = "Di chuyển lên";
+$MoveDown = "Di chuyển xuống";
+$AddNewHeading = "Add new heading";
+$CourseAdministratorOnly = "Chỉ dành cho người quản trị";
+$DefineHeadings = "Define Headings";
+$BackToUsersList = "Trở về danh sách người dùng";
+$Tracking = "Theo dõi";
+$CourseManager = "Quản lý khoá học";
 ?>

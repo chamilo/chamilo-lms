@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseManager = "Guro";
-$langGroupUserManagement = "Pangangasiwa ng mga grupo";
+$CourseManager = "Guro";
+$GroupUserManagement = "Pangangasiwa ng mga grupo";
 $AddToFriends = "Sigurado ka bang nais mong idagdag ang contact naito sa iyong mga kaibigan ?";
 $AddPersonalMessage = "Magdagdag ng personal na mensahe";
 $Friends = "Mga Kaibigan";

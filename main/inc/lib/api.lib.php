@@ -3601,7 +3601,7 @@ function api_item_property_update(
 
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
-    if ($item_id == '*') {
+    if ($item_id === '*') {
         // For all (not deleted) items of the tool
         $filter = " c_id = $course_id  AND tool = '$tool' AND visibility<>'2' $condition_session";
     }
@@ -5235,6 +5235,11 @@ function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null,
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) { // Found item for this access_url.
         $row = Database::fetch_array($res);
+        Database::update(
+            $t_settings,
+            array('selected_value' => $val),
+            array('id = ?' => array($row['id']))
+        );
         return $row['id'];
     }
 

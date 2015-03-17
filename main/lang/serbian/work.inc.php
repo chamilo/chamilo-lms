@@ -19,7 +19,6 @@ $AllFiles = "Akcija nad svim fajlovima";
 $DefaultUpload = "Početna podešavanja za vidljivost svih novo-postavljenih fajlova";
 $NewVisible = "Nova dokumenta su vidljiva za sve korisnike";
 $NewUnvisible = "Nova dokumenta su vidljiva samo za administratora kursa";
-$lang_doc_unvisible = "Vaš fajl je vidljiv za predavače kursa i samim tim nije vidljiv za vas.";
 $DelLk = "Da li zaista želite da obrišete ovaj link?";
 $MustBeRegisteredUser = "Samo polaznici prijavljeni na ovaj kurs mogu da objave dokumenta.";
 $ListDel = "Obriši listu";

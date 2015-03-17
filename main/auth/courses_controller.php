@@ -553,8 +553,7 @@ class CoursesController
 
         $key = 'name';
         $catalogSessionAutoSubscriptionAllowed = false;
-        if (isset($_configuration['catalog_allow_session_auto_subscription']) &&
-            $_configuration['catalog_allow_session_auto_subscription']) {
+        if (api_get_configuration_value('catalog_allow_session_auto_subscription')) {
             $key = 'id';
             $catalogSessionAutoSubscriptionAllowed = true;
         }

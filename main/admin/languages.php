@@ -281,7 +281,7 @@ $table = new SortableTableFromArrayConfig($language_data, 1, count($language_dat
 $table->set_header(0, '');
 $table->set_header(1, get_lang('OriginalName'));
 $table->set_header(2, get_lang('EnglishName'));
-$table->set_header(3, get_lang('DokeosFolder'));
+$table->set_header(3, get_lang('LMSFolder'));
 $table->set_header(4, get_lang('Properties'));
 $form_actions = array();
 $form_actions['makeavailable'] = get_lang('MakeAvailable');

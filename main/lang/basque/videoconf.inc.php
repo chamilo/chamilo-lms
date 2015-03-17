@@ -99,7 +99,6 @@ $Learner = "Ikaslea";
 $Chat = "Txat";
 $Slides = "Diapositibak";
 $WaitingForParticipants = "Partehartzaileei itxaroten";
-$Send = "Bidali";
 $Browse = "Arakatu";
 $Cancel = "Deuseztatu";
 $ChooseFile = "Hautatu bidali beharreko artxibategia";

@@ -14,8 +14,6 @@
  */
 /* INIT SECTION */
 
-//$language_file = 'resourcelinker';
-
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 
 use \ChamiloSession as Session;

@@ -19,7 +19,6 @@ $AllFiles = "应用于本课程所有作业";
 $DefaultUpload = "作业可见性的默认设置";
 $NewVisible = "作业对所有人都可见";
 $NewUnvisible = "作业只对课程管理员可见";
-$lang_doc_unvisible = "作业只对这门课程的教师可见, 因此对你是不可见的。";
 $DelLk = "确定要移除该工具吗?";
 $MustBeRegisteredUser = "只有此课程的注册用户可以上传作业。";
 $ListDel = "删除列表";

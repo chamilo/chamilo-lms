@@ -19,7 +19,6 @@ $AllFiles = "Semua file";
 $DefaultUpload = "Seting Default untuk kenampakan file yang baru diposting";
 $NewVisible = "Dokumen yang baru nampak untuk semua user";
 $NewUnvisible = "Dokumen yang baru hanya nampak untuk pengelola mata kuliah";
-$lang_doc_unvisible = "File anda hanya nampak untuk pengajar dan karenanya tidak nampak untuk anda.";
 $DelLk = "Apakah anda sungguh-sungguh ingin menghapus link ini?";
 $MustBeRegisteredUser = "Hanya user yang terdaftar pada mata kuliah ini yang dapat mempublikasi dokumen.";
 $ListDel = "Hapus daftar";

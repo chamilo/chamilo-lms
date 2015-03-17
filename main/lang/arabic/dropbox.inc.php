@@ -95,5 +95,5 @@ $MailingSelectNoOther = "لا يمكن دمج الإرسال مع مستلمات
 $MailingJustUploadSelectNoOther = "هكذا، لا يمكن دمج التحميل مع مستلمات أخرى";
 $NewDropboxFileUploaded = "ملف جديد تم إرساله في أداة صندوق التجميع";
 $NewDropboxFileUploadedContent = "ملف جديد تم إرساله في أداة صندوق التجميع من مقررك";
-$langAddEdit = "اضافة / تعديل";
+$AddEdit = "اضافة / تعديل";
 ?>

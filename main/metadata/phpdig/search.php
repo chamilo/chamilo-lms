@@ -24,10 +24,10 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 *   customized search.php 1.8.6 for Chamilo 1.6 assumes $template == "array"
 */
 
-// name of the language file that needs to be included
-$language_file = "md_mix";
 include('../../../main/inc/global.inc.php');
-if (! $is_allowed_in_course) api_not_allowed();
+if (!$is_allowed_in_course) {
+    api_not_allowed();
+}
 
 // start of part copied (with some changes) from standard PhpDig search.php
 $relative_script_path = '.';
@@ -35,8 +35,7 @@ $no_connect = 0;
 
 if (is_file("$relative_script_path/includes/config.php")) {
     include "$relative_script_path/includes/config.php";
-}
-else {
+} else {
     die("Cannot find config.php file.\n");
 }
 

@@ -10,7 +10,6 @@
 /**
  * Process the SCORM package and return to the SCORM tool
  */
-$language_file = 'scorm';
 $cwdir = getcwd();
 require_once '../newscorm/lp_upload.php';
 

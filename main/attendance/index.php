@@ -13,7 +13,6 @@ $language_file = array(
     'course_info',
     'userInfo',
     'admin',
-    'agenda',
     'tracking',
     'gradebook'
 );

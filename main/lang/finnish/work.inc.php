@@ -19,7 +19,6 @@ $AllFiles = "Toiminnot kaikille tiedostoille";
 $DefaultUpload = "Oletusasetukset näkyvyydestä uusille tiedostoille";
 $NewVisible = "Uudet dokumentit ovat käyttäjien nähtävillä";
 $NewUnvisible = "Uudet dokumentit ovat ainoastaan kurssin opettajan nähtävillä";
-$lang_doc_unvisible = "Lähettämäsi tiedosto on ainoastaan kurssin opettajan nähtävillä ja siksi et näe sitä itse.";
 $DelLk = "Haluatko varmasti poistaa tämän linkin?";
 $MustBeRegisteredUser = "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja.";
 $ListDel = "Poista lista";

@@ -3292,6 +3292,49 @@ class CourseManager
         return $html;
     }
 
+    public static function session_items_html($params, $is_sub_content = false)
+    {
+        $html = '';
+        $html.= '<li>';
+        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
+        $html.= $params['title']. $notifications;
+        $html.='</li>';
+        
+        return $html;
+    }
+
+    public static function session_list_html($params,$items_session, $is_sub_content = false)
+    {
+        $html = '';
+        $class = "panel-body";
+        $html .= '<div class="sessions ' . $class . '">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-sx-6 col-md-2">';
+        if (!empty($params['link'])){
+            $html.= '<a class="thumbnail" href="'.$params['link'].'">';
+            $html.= $params['icon'];
+            $html.= '</a>';
+        }else{
+            $html.= $params['icon'];
+        }
+        $html .= '</div>';
+        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
+        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
+        $html .= '<div class="col-sx-6 col-md-10">';
+        $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
+        $html .= '<h4>'.$params['title'].$notifications.'</h4>';
+        if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
+            $html .= '<p class="description-session">' . $params['description'] . '</p>';
+        }
+        if (!empty($params['subtitle'])) {
+            $html .= '<p class="alert alert-info subtitle-session"><i class="fa fa-clock-o"></i> ' . $params['subtitle'] . '</p>';
+        }
+        $html .= $items_session;
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
+    }
     /**
      * Builds the course block in user_portal.php
      * @todo use Twig
@@ -3323,7 +3366,7 @@ class CourseManager
         $param_class = isset($params['class']) ? $params['class'] : null;
 
         $html .= '<div class="col-md-10 ' . $param_class . '">';
-        $html .= '<h3 class="title">' . $params['title'] . $notifications . '</h3> ';
+        $html .= '<h4 class="title">' . $params['title'] . $notifications . '</h4> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
             $html .= '<p class="description-session">' . $params['description'] . '</p>';
@@ -3819,6 +3862,14 @@ class CourseManager
         $session_url = '';
         $session_title = '';
 
+        $params = array();
+        $params['icon'] = Display::return_icon(
+            'blackboard_blue.png',
+            api_htmlentities($course_info['name']),
+            array(),
+            ICON_SIZE_MEDIUM
+        );
+
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED ||
                 $user_in_course_status == COURSEMANAGER
@@ -3837,7 +3888,7 @@ class CourseManager
 
                     if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                         $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'];
-                        $session_title = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">' . $course_info['name'] . '</a>';
+                        $session_title = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $params['icon'] .''. $course_info['name'] . '</a>';
                     } else {
                         $session_title = $course_info['name'];
                     }
@@ -3852,14 +3903,6 @@ class CourseManager
         } else {
             $session_title = $course_info['name'];
         }
-
-        $params = array();
-        $params['icon'] = Display::return_icon(
-            'blackboard_blue.png',
-            api_htmlentities($course_info['name']),
-            array(),
-            ICON_SIZE_LARGE
-        );
 
         $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
         $iconName = basename($course_info['course_image']);
@@ -3929,7 +3972,7 @@ class CourseManager
         $params['title'] = $session_title;
         $params['extra'] = '';
 
-        $html = self::course_item_html($params, true);
+        $html = self::session_items_html($params, true);
 
         $session_category_id = null;
         if (!$nosession) {

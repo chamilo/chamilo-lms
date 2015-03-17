@@ -19,7 +19,6 @@ $AllFiles = "Műveletek az összes állománnyal";
 $DefaultUpload = "A rejtett/látható alapértelmezett beállítása az újonnan elküldött fájlokra";
 $NewVisible = "Az új dokumentumok minden felhasználó számára láthatóak";
 $NewUnvisible = "Az új dokumentumok csak a kurzus vezető(k) számára láthatóak";
-$lang_doc_unvisible = "Az ön fájlja  csak a kurzus tanárai számára látható, így ön nem láthatja azt.";
 $DelLk = "Valóban ki akarja törölni ezt a linket?";
 $MustBeRegisteredUser = "Csak regisztrált felhasználók tudnak feltölteni dokumentumokat.";
 $ListDel = "Lista törlése";

@@ -99,7 +99,6 @@ $Learner = "學員";
 $Chat = "聊天";
 $Slides = "幻燈片";
 $WaitingForParticipants = "等候參加者";
-$Send = "已傳送";
 $Cancel = "取消";
 $ChooseFile = "選取要匯入的檔案";
 $ConvertingDocument = "轉換文件";

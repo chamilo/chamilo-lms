@@ -24,7 +24,6 @@ $AllFiles = "Todos los archivos";
 $DefaultUpload = "Configuración de visibilidad por defecto para los documentos que se envíen";
 $NewVisible = "Los documentos serán visibles por todos los usuarios";
 $NewUnvisible = "Los documentos sólo serán visibles por los profesores";
-$lang_doc_unvisible = "Este documento sólo es visible por el profesor (es).";
 $DelLk = "¿ Está seguro de querer desactivar esta herramienta ?";
 $MustBeRegisteredUser = "Sólo los usuarios inscritos en este curso pueden enviar sus tareas";
 $ListDel = "Eliminar lista";

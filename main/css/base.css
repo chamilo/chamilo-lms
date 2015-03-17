@@ -5375,6 +5375,7 @@ i.size-32.icon-new-work{
   vertical-align: bottom;
   margin-right: 5px;
 }
+<<<<<<< HEAD
 /* LP SCORM */
 /* Default LP left column values */
 
@@ -5450,4 +5451,36 @@ i.size-32.icon-new-work{
   background:#ECF0F1;
   padding: 20px;
   border-top: 3px solid #DCE4EC;
+}
+.sessions-items{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sessions-items li{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.sessions-items li img{
+  margin-right: 5px;
+}
+.sessions .subtitle-session{
+}
+/**
+ * Modal for user avatar preview
+ * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ */
+#expand-image-modal img {
+    display: block;
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+}
+.question_menu{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.question_menu li{
+  display: inline-block;
 }

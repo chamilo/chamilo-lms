@@ -19,7 +19,6 @@ $AllFiles = "Alla filer";
 $DefaultUpload = "Standard inställning för visning av nyligen postade filer.";
 $NewVisible = "Nya dokument är synliga för alla användare";
 $NewUnvisible = "Nya dokument är synliga endast för kursansvarig(a)";
-$lang_doc_unvisible = "Ditt dokument är bara synligt för läraren(na) i denna kurs och är därför inte synlig för dig.";
 $DelLk = "Vill du verkligen radera denna länk?";
 $MustBeRegisteredUser = "Bara registrerade användare i denna kurs kan publicera dokument.";
 $ListDel = "Radera lista";

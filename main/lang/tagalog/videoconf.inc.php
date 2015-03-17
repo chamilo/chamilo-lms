@@ -19,6 +19,5 @@ $Close = "Isara";
 $Loading = "Naglo-load";
 $Learner = "Mag-aaral";
 $Chat = "Chat";
-$Send = "Ipadala ang mensahe";
 $Cancel = "Kanselahin";
 ?>

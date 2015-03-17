@@ -1164,7 +1164,9 @@ class IndexManager
                             $params['description'] = $session_box['description'];
                             $params['show_description'] = $session_box['show_description'];
 
-                            $parentInfo = CourseManager::course_item_html($params, true);
+                            $items_courses_session = '<ul class="sessions-items">'.$html_courses_session.'</ul>';
+                            /* Icon session no category */
+                            $parentInfo = CourseManager::session_list_html($params,$items_courses_session,true);
 
                             if (isset($_configuration['show_simple_session_info']) &&
                                 $_configuration['show_simple_session_info']
@@ -1172,9 +1174,10 @@ class IndexManager
                                 $params['title'] = $session_box['title'];
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
+
+
                             $sessions_with_no_category .= CourseManager::course_item_parent(
-                                $parentInfo,
-                                $html_courses_session
+                                $parentInfo,null
                             );
                         }
                     }
@@ -1256,12 +1259,9 @@ class IndexManager
                                 $params['icon'] = Display::return_icon(
                                         'window_list.png',
                                         $session_box['title'],
-                                        array(
-                                            'width' => '48px',
-                                            'align' => 'absmiddle',
-                                            'id' => 'session_img_' . $session_id
-                                        )
-                                    ) . ' ';
+                                        array('id' => 'session_img_' . $session_id),
+                                        ICON_SIZE_LARGE
+                                    );
 
                                 if (api_is_drh()) {
                                     $session_link = $session_box['title'];
@@ -1289,7 +1289,7 @@ class IndexManager
                                             ICON_SIZE_SMALL
                                         ) . '</a>';
                                 }
-
+                                /* Icon Session in category */
                                 $parentInfo = CourseManager::course_item_html(
                                     $params,
                                     true
@@ -1334,7 +1334,7 @@ class IndexManager
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
-                        $sessions_with_category .= CourseManager::course_item_parent(
+                         $sessions_with_category .= CourseManager::course_item_parent(
                             CourseManager::course_item_html($params, true),
                             $html_sessions
                         );

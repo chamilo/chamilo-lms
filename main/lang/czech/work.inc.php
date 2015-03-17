@@ -19,7 +19,6 @@ $AllFiles = "Akce na veškerých souborech";
 $DefaultUpload = "Výchozí nastavení viditelnosti nově zaslaných souborů";
 $NewVisible = "Nové dokumenty jsou viditelné pro všechny uživatele";
 $NewUnvisible = "Nové dokumenty jsou viditelné pouze pro správce kurzu";
-$lang_doc_unvisible = "Váš soubor je viditelný pouze pro učitele kurzu a proto Vám nebude zobrazen.";
 $DelLk = "Opravdu chcete smazat tenhle odkaz?";
 $MustBeRegisteredUser = "Jen registovaný uživatelé tohoto kurzu smí publikovat dokumenty.";
 $ListDel = "Vymazat seznam";

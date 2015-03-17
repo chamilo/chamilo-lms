@@ -13,7 +13,6 @@
 //the document file is loaded because most of the upload vocab relates to the document tool
 $language_file[] = "document";
 $language_file[] = "learnpath";
-$language_file[] = "scormdocument";
 
 require_once '../inc/global.inc.php';
 

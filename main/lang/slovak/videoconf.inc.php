@@ -99,7 +99,6 @@ $Learner = "Študent";
 $Chat = "Pokec";
 $Slides = "Snímky";
 $WaitingForParticipants = "Čakanie na účastníkov";
-$Send = "Poslať";
 $Browse = "Prehliadať";
 $Cancel = "Zrušiť";
 $ChooseFile = "Vybrať súbor na import";

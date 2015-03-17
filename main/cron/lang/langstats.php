@@ -13,15 +13,15 @@
  */
 die();
 $language_file = array(
-'accessibility', 'gradebook', 'registration', 'admin', 'group', 'reportlib', 
-'agenda', 'help', 'reservation', 'announcements', 'hotspot', 'resourcelinker', 
-'blog', 'import', 'scormbuilder', 'chat', 'scormdocument', 'coursebackup', 
-'index', 'scorm', 'course_description', 'install', 'shibboleth', 
-'course_home', 'learnpath', 'slideshow', 'course_info', 'link', 'survey', 
-'courses', 'md_document', 'tracking', 'create_course', 'md_link', 
-'trad4all', 'document', 'md_mix', 'userInfo', 'dropbox', 'md_scorm', 
-'videoconf', 'exercice', 'messages', 'wiki', 'external_module', 'myagenda', 
-'work', 'forum', 'notebook', 'glossary', 'notification'
+'gradebook', 'registration', 'admin', 'group',
+'help', 'reservation', 'hotspot',
+'blog', 'scormdocument', 'coursebackup',
+'index', 'install', 'shibboleth',
+'learnpath', 'course_info', 'link', 'survey',
+'courses', 'md_document', 'tracking', 'create_course',
+'trad4all', 'document', 'userInfo', 'dropbox',
+'videoconf', 'exercice', 'wiki',
+'work', 'forum'
 );
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';

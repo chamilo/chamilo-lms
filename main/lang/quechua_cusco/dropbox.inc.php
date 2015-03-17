@@ -81,7 +81,7 @@ $MailingSelectNoOther = "E-chaski apachiyqa mana chaqrokunmanchu hoq chaskikuqku
 $MailingJustUploadSelectNoOther = "Noqa kikiyman apachiyqa mana chaqrukunmanchu hoq runaq chaskiqninwan";
 $NewDropboxFileUploaded = "Musuq khipu apachikun T'aqapay Qelqa khipukunata nisqapi";
 $NewDropboxFileUploadedContent = "Kay yachachinapiqa, musuq khipu apachikunña T'aqapay Qelqa khipukunata nisqapi";
-$langAddEdit = "Yapay / Ruwapay";
+$AddEdit = "Yapay / Ruwapay";
 $ErrorNoFilesInFolder = "Kay wayaqaqa ch'usaqmi kashan";
 $AddComment = "Añadir comentario";
 ?>

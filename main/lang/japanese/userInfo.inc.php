@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseManager = "教員";
-$langGroupUserManagement = "グループ管理";
+$CourseManager = "教員";
+$GroupUserManagement = "グループ管理";
 $AddToFriends = "この連絡先を友人に追加してもよろしいですか ?";
 $AddPersonalMessage = "個人用のメッセージを追加";
 $Friends = "友人";

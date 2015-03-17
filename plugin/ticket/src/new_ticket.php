@@ -4,7 +4,7 @@
 /**
  * @package chamilo.plugin.ticket
  */
-$language_file = array('messages', 'userInfo', 'admin');
+$language_file = array('userInfo', 'admin');
 $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
@@ -46,7 +46,7 @@ function changeType() {
     $("#project_id").val(projects[id]);
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
-	if (parseInt(course_required[id]) == 0){
+    if (parseInt(course_required[id]) == 0){
         $("#divCourse").css("display", "none");
         if( id != "CUR"){
             $("#divEmail").css("display", "block");
@@ -54,11 +54,11 @@ function changeType() {
         }
         $("#course_id").disabled = true;
         $("#course_id").value = 0;
-	} else {
+    } else {
         $("#divCourse").css("display", "block");
         $("#course_id").prop("disabled", false);
         $("#course_id").val(0);
-	}
+    }
 }
 function handleClick2(myRadio) {
     var user_id = myRadio.value;
@@ -147,12 +147,12 @@ function add_image_form() {
 
 <style>
 div.row div.label2 {
-	float:left;
-	width:10%;
+    float:left;
+    width:10%;
 }
 div.row div.formw2 {
     width:90%;
-	float:left
+    float:left
 }
 div.divTicket {
     padding-top: 100px;
@@ -163,8 +163,8 @@ $htmlHeadXtra[] = '<script language="javascript">
                         var projects = ' . js_array($types, 'projects', 'project_id') . '
                         var course_required = ' . js_array($types, 'course_required', 'course_required') . '
                         var other_area = ' . js_array($types, 'other_area', 'other_area') . '
-                        var email = ' . js_array($types, 'email', 'email') . '
-		   </script>';
+                        var email = ' . js_array($types, 'email', 'email') .
+                        '</script>';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -256,7 +256,8 @@ function show_form_send_ticket()
     $priorityList[LOW] = $plugin->get_lang('PriorityLow');
     //End Priority List
 
-    $form = new FormValidator('send_ticket',
+    $form = new FormValidator(
+        'send_ticket',
         'POST',
         api_get_self(),
         "",
@@ -470,6 +471,7 @@ function save_ticket()
 
 /**
  * Get the total number of users on the platform
+ * @return int  The number of users
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users()
@@ -501,6 +503,7 @@ function get_number_of_users()
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ * @return  array   A list of users with their data
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -518,7 +521,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $sql = "SELECT
                 u.user_id AS col0,
                 u.official_code AS col2,
-        	$col34
+                $col34
                 u.username AS col5,
                 u.email AS col6,
                 u.status AS col7,
@@ -568,7 +571,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 }
 
 if (!isset($_POST['compose'])) {
-     if (api_is_platform_admin()) {
+    if (api_is_platform_admin()) {
         Display::display_header(get_lang('ComposeMessage'));
         $message = $plugin->get_lang('PleaseBeforeRegisterATicketSelectOneUser');
         Display::display_warning_message($message);
@@ -577,34 +580,37 @@ if (!isset($_POST['compose'])) {
               <span style="float: right;">&nbsp;</span>
               <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
                 <fieldset>
-                <span><label for="keyword">' . get_lang('langSearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
+                <span><label for="keyword">' . get_lang('SearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
                 <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
                 <div class="clear"></div>
                 </fieldset>
               </form>
             </div>';
         echo '<div class="users-list">';
-            $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
-            $table = new SortableTable(
-                        'users', 'get_number_of_users',
-                        'get_user_data', $order, 10
-                     );
-            $table->set_header(0, '', false, 'width="18px"');
-            $table->set_header(0, get_lang('Photo'), false);
-            $table->set_header(1, get_lang('OfficialCode'));
-            if (api_is_western_name_order()) {
-                $table->set_header(2, get_lang('FirstName'));
-                $table->set_header(3, get_lang('LastName'));
-            } else {
-                $table->set_header(2, get_lang('LastName'));
-                $table->set_header(3, get_lang('FirstName'));
-            }
-            $table->set_header(4, get_lang('LoginName'));
-            $table->set_header(5, get_lang('Email'));
-            $table->set_header(6, get_lang('Action'));
-            $table->display();
+        $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
+        $table = new SortableTable(
+            'users',
+            'get_number_of_users',
+            'get_user_data',
+            $order,
+            10
+        );
+        $table->set_header(0, '', false, 'width="18px"');
+        $table->set_header(0, get_lang('Photo'), false);
+        $table->set_header(1, get_lang('OfficialCode'));
+        if (api_is_western_name_order()) {
+            $table->set_header(2, get_lang('FirstName'));
+            $table->set_header(3, get_lang('LastName'));
+        } else {
+            $table->set_header(2, get_lang('LastName'));
+            $table->set_header(3, get_lang('FirstName'));
+        }
+        $table->set_header(4, get_lang('LoginName'));
+        $table->set_header(5, get_lang('Email'));
+        $table->set_header(6, get_lang('Action'));
+        $table->display();
         echo '</div>';
-     } else {
+    } else {
         $userInfo = api_get_user_info();
         $htmlHeadXtra[] = "
              <script>
@@ -614,7 +620,7 @@ if (!isset($_POST['compose'])) {
              </script>
              ";
         Display::display_header(get_lang('ComposeMessage'));
-     }
+    }
     show_form_send_ticket();
 } else {
     save_ticket();

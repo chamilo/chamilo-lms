@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langHFor = "Foroak laguntza";
-$langForContent = "Foroa eztabaidarako tresna da lan idatzi asinkronikoaren bitartez. Posta elektronikoarekin alderatuta, foroa talde eztabaida publikorako edo semipublikorako erabiltzen da. 
+$HFor = "Foroak laguntza";
+$ForContent = "Foroa eztabaidarako tresna da lan idatzi asinkronikoaren bitartez. Posta elektronikoarekin alderatuta, foroa talde eztabaida publikorako edo semipublikorako erabiltzen da. 
 
 Chamilo forum erabiltzeko, kideek beren nabigatzailea soilik erabili beharko dute - ez zaie software bezero bereizirik eskatuko.
 
@@ -19,8 +19,8 @@ Talde foroak ez lirateke Foroak tresnaren bidez sortu beharko, Taldeak tresnaren
 
 Irakaskuntzarako Iradokizunak. Ikaskuntzako foroa ez da guztiz Interneten ikusi ohi dituzun foroak bezalakoa. Gauza batean, behintzat, ikasleentzat ezinezkoa da bere mezuak aldatzea, behin eta argitaratu ondoren eta, horrela, ikastaroa bezala, hauek ere artxibatu egiten dira iraganean esan denaren segimendua egin ahal izateko. Gainera, Chamilo foroek irakaskuntzan interesgarriak diren erabilera berezi batzuk onartzen dituzte. Esate baterako, irakasle batzuek zuzenean zuzenketak argitaratzen dituzte foroen barruan hurrengo moduan:    
 Ikasle bati zuzenean forora txosten bat bidaltzea eskatzen zaio. Irakasleak Editatu klikatzen zuzendu (arkatz horia) eta HTML editatzailearen bidez edizioaren grafikoak erabiliz markatzen du (kolorea, azpimarratzea eta abar). Azkenean, beste ikasleak beraien arteko kide baten produkzioan eginiko zuzenketak ikusteaz aprobetxatzen dira. Kontuan hartu printzipio berbera aplikatu daitekeela ikasleen artean, baina beraiei, ezinbestez, beren ikaskidearen mezua kopiatzea/itsastea eskatuko zaie, ikasleek/irakasleek besteen mezuak editatu ezin dituztelako.";
-$langHDropbox = "Dokumentuak konpartitzea. Laguntza";
-$langDropboxContent = "Dokumentuak partekatzea (Dropbox) Edukiak Kudeatzeko Tresna da, berdinen arteko sare batean (p2p) era errazean elkarri datuak trukatzeko. Edozein fitxategi onartzen da: Word, Excel, PDF eta abar. Izen berberarekin badauden fitxategien gainean idatziko du eta, horrela, dokumentuaren ezabaketa baztertuko du.
+$HDropbox = "Dokumentuak konpartitzea. Laguntza";
+$DropboxContent = "Dokumentuak partekatzea (Dropbox) Edukiak Kudeatzeko Tresna da, berdinen arteko sare batean (p2p) era errazean elkarri datuak trukatzeko. Edozein fitxategi onartzen da: Word, Excel, PDF eta abar. Izen berberarekin badauden fitxategien gainean idatziko du eta, horrela, dokumentuaren ezabaketa baztertuko du.
 
 Ikasleek beren irakasleari bakarrik bidali diezaiokete fitxategia.Hala ere, sistemaren kudeatzaileak erabiltzaileen arteko parekatzea aktibatu dezake, ikasleentzako muga hori baztertzeko. Dena dela, ikastaroaren kudeatzaileak dokumentu bat ikastaroko erabiltzaile guztiei bidali ahal die. 
 
@@ -31,8 +31,8 @@ Fitxategi zerrenda, azkenenan, luzeegia bada, fitxategi guztietako batzuk zerren
 Hartutakoak karpetan, dokumentuak partekatzeko tresnak zuri bidali dizkizuten dokumentuak erakutsiko dizkizu eta Bidalitakoak karpetan, berriz, ikastaroko beste kideei bidali dizkieten fitxategiak erakutsiko ditu.
 
 Dokumentu bat pertsona bati baino gehiago bidaltzeko, aukera anitzeko koadroan markatu beharko dituzu aukeratu beharrekoak  Ktrl+klik erabiliz (aukera anitzeko koadroak orrian kide zerrenda osoa erakusten du).";
-$langHHome = "Orri nagusia. Laguntza";
-$langHomeContent = "Ikastaroaren Orri Nagusiak tresna multzo bat erakusten digu (sarrerako testua, azalpena, dokumentuen kudeatzailea eta abar). Orri hau moduluz osatua dago eta, horrexegatik, ikaslearen ikuspegiaren aurrean edozein tresna erakutsi edo ezkutatu dezakezu, \"begia\" irudikatzen duen ikonoaren gainean behin klikatuz (ezkutatutako tresnak edozein momentutan aktibatu daitezke berriro).
+$HHome = "Orri nagusia. Laguntza";
+$HomeContent = "Ikastaroaren Orri Nagusiak tresna multzo bat erakusten digu (sarrerako testua, azalpena, dokumentuen kudeatzailea eta abar). Orri hau moduluz osatua dago eta, horrexegatik, ikaslearen ikuspegiaren aurrean edozein tresna erakutsi edo ezkutatu dezakezu, \"begia\" irudikatzen duen ikonoaren gainean behin klikatuz (ezkutatutako tresnak edozein momentutan aktibatu daitezke berriro).
 
 
 Nabigazioa
@@ -52,8 +52,8 @@ Zure ikastaroa eraikitzen duzunean, saiatu urrats hauek betetzen:
 4.	Erabili Ikaskuntza Ibilbidea tresna, ikaskuntza ibilbide bat sortzeko eta, horrela, ikasleek jarraituko duten bidea egituratzeko eta bere barruan ikasteko. Horrela, beste tresnak erabiltzan ari zaren arren, hasieran ez dituzu orri nagusian erakutsi beharko.
 5.	Klikatu sortu duzun ibilbidearen ondoan dagoen begia irudikatzen duen ikonoaren gainean, zure orri nagusian agertu dadila.
 6.	Ikastaroa besteek ikusteko prest dago orain. Bere orri nagusiak sarrerako testua erakutsiko du eta, jarraian, lotura bakar bat, bere bidez ikasleak ikastaroaren barrura eta ikastaroan zehar gidatzeko. Klikatu Ikaslearen Ikuspegia botoiaren gainean (goian eskuinaldera) ikastaroa ikaslearen ikuspegitik ikusi ahal izateko.";
-$langHOnline = "Online konferentzia zuzenean Laguntza";
-$langOnlineContent = "Sarrera
+$HOnline = "Online konferentzia zuzenean Laguntza";
+$OnlineContent = "Sarrera
 
 Chamilo online konferentzia sistemak, era sinplean eta azkarrean, bostehun lagunei irakasteko, informatzeko edo biltzeko aukera emango dizu.
 
@@ -126,9 +126,9 @@ Chamilo streaming
 Zuk zeuk egin ezazu : instalatu, konfiguratu eta kudeatu Shoutcast edo AppleDarwin.
 
 Edo harremanetan jarri Chamilorekin. Zure konferentzia antolatzen lagunduko dizugu, hizlariari asistentzia emanez eta korrontea bideratzeko kostu txikiko egitura alokatuko dizugu gure zerbitzariak baliatuz : http://www.Chamilo.org/hosting.php";
-$langHClar = "Chamilo Laguntza";
-$langHDoc = "Dokumentuak Laguntza";
-$langDocContent = "Dokumentuak izeneko tresnak fitxategiak antolatzeko aukera emango dizu, hain zuzen, zuk duzun ordenagailuko fitxategien kudeatzaileak egiten duen bezala.
+$HClar = "Chamilo Laguntza";
+$HDoc = "Dokumentuak Laguntza";
+$DocContent = "Dokumentuak izeneko tresnak fitxategiak antolatzeko aukera emango dizu, hain zuzen, zuk duzun ordenagailuko fitxategien kudeatzaileak egiten duen bezala.
    
 Web orri sinpleak sortu ditzakezu ('Sortu dokumentua') edo edozein motako fitxategiak kargatu (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime etab.). Dena dela, gogoratu ezazu ikasleek software egokia eduki beharko dutela fitxategi horiek ireki eta exekutatzeko.
  
@@ -249,18 +249,18 @@ ________________________________________
 \t\t\t\t\t\t\tSortu Ikaskuntza Ibilbidea\t\t\t\t\t
 
 Ikaskuntza Ibilbide honek Edukien Aurkibide itxura du eta Edukien Aurkibide gisa erabili daiteke, baina gaitasun terminoetan askoz aukera gehiago eskaini diezaizkizueke. (Ikusi Ikaskuntza Ibilbidea Laguntza).";
-$langHUser = "Erabiltzaileak Laguntza";
-$langHExercise = "Azterketak Laguntza";
-$langHPath = "Ikaskuntza Ibilbidea Laguntza";
-$langHDescription = "Ikastaroaren deskripzioa Laguntza";
-$langHLinks = "Loturak Laguntza";
-$langHMycourses = "Ikastaroetan sartzeko orri nagusia Laguntza";
-$langHAgenda = "Agenda Laguntza";
-$langHAnnouncements = "Abisuak Laguntza";
-$langHChat = "Txat Laguntza";
-$langHWork = "Egin beharreko lanak Laguntza";
-$langHTracking = "Segimendu txostenak Laguntza";
-$langUserContent = "Erabiltzaileak gehitzea
+$HUser = "Erabiltzaileak Laguntza";
+$HExercise = "Azterketak Laguntza";
+$HPath = "Ikaskuntza Ibilbidea Laguntza";
+$HDescription = "Ikastaroaren deskripzioa Laguntza";
+$HLinks = "Loturak Laguntza";
+$HMycourses = "Ikastaroetan sartzeko orri nagusia Laguntza";
+$HAgenda = "Agenda Laguntza";
+$HAnnouncements = "Abisuak Laguntza";
+$HChat = "Txat Laguntza";
+$HWork = "Egin beharreko lanak Laguntza";
+$HTracking = "Segimendu txostenak Laguntza";
+$UserContent = "Erabiltzaileak gehitzea
 
 Aurretik plataforman badiren ikasleak banan-banan inskribatu ditzakezu zure ikastaroan eta, horretarako, 'Inskribatu erabiltzaileak ikastaro honetan' lotura gainean klikatu beharko duzu. Konprobatu beharko duzu ea ikaslegaia erregistraturik dagoen eta, gero, markatu izenaren ondoko laukitxoa eta, azkenik, inskripzioa balidatu. Plataforman oraindik erregistraturik ez badago, plataformaren kudeatzaileak edo, aukera hau aktibaturik egotekotan, erabiltzaileak berak egin beharko dute.
  
@@ -285,7 +285,7 @@ Goiburuan irakaslekidearen izena agertzeko (presidentekidea, etab.), erabili 'Ik
 Segimendua eta Norberaren orri nagusiak
 
 Erabiltzaile zerrenda erakusteaz eta beren eskubideak aldatzeaz gain, Erabiltzaileak izeneko tresnak banako segimendua egiteko aukera eman eta irakasleari banako orri nagusietarako izenburu gehigarriak zehazten utziko dio, geroan erabiltzaileek beteko dituztenak. Datu gehigarriak ikastaro horri bakarrik lotuta geldituko dira";
-$langGroupContent = "Sarrera
+$GroupContent = "Sarrera
 
 Tresna honek lantaldeak sortu eta kudeatzeko aukera emango dizu. Lehenengoz sortzean (Sortu taldeak), taldeak hutsik daude. Hauek betetzeko hainbat modu daude:
 
@@ -321,7 +321,7 @@ Behin taldeak sortu eta gero (Sortu taldeak), talde zerrenda ikusiko duzu orriar
 
 •	Editatu: Eskuz aldatu taldearen izena, deskripzioa, arduraduna, kide zerrenda.
 •	Ezabatu: Ezabatu taldea";
-$langExerciseContent = "Azterketak izeneko tresnak azterketak sortzeko aukera ematen digu, guk nahi beste galdera sartuz.
+$ExerciseContent = "Azterketak izeneko tresnak azterketak sortzeko aukera ematen digu, guk nahi beste galdera sartuz.
 
 Orriaren goialdean argi agertzen zaizkigun galdera formatuen artean hautatu dezakegu. Azterketa sortzean,  (esaterako) honako formatu hauek eduki ditzake:
 •	Aukera anitz (galdera bakarra edo galdera asko)
@@ -434,7 +434,7 @@ Inportatzeko metodoa
 Lotura erabilgarria
 
 Hot Potatoes orri nagusia : http://web.uvic.ca/hrd/halfbaked/";
-$langPathContent = "Ikastaroa izeneko tresnak euskarri ematen die bi ikuspegiri :
+$PathContent = "Ikastaroa izeneko tresnak euskarri ematen die bi ikuspegiri :
 
 •	Ikastaro berria sortzeari (zure edukiaren egile izateko aukera emanez)
 •	SCORM ikastaroa inportatzeari
@@ -486,19 +486,19 @@ SCORM (Sharable Content Object Reference Model/ Eduki Objektuak Konpartitzeko Er
 Nola sortu dezakegu SCORM ikaskuntza ibilbide bateragarria?
 
 Biderik errazena Chamiloren Ediziorako tresnak erabiltzea da. Dena dela, agian, webguneekin bateragarria den SCORM osoa sortu nahiago duzu lokalki gure ordenagailuan, zure Chamilo plataforman kargatu baino lehen. Kasu honetan, tresna sofistikatuagoak erabiltzea gomendatzen dizugu, esaterako, Lectora®, eXe Learning® edo Reload®.";
-$langDescriptionContent = "Ikastaroaren Deskripzioa izeneko tresnak modu sistematikoan zure ikastaroa, oro har, deskribatzera gonbidatzen zaitu. Deskripzioak ikasleei ikastaroaren bidez ikasiko dutenaren ikuspegi orokorra eskainiko die. Modu berean, baligarria izan daiteke ikastaroa berrikusteko eta ebaluatzeko orduan.
+$DescriptionContent = "Ikastaroaren Deskripzioa izeneko tresnak modu sistematikoan zure ikastaroa, oro har, deskribatzera gonbidatzen zaitu. Deskripzioak ikasleei ikastaroaren bidez ikasiko dutenaren ikuspegi orokorra eskainiko die. Modu berean, baligarria izan daiteke ikastaroa berrikusteko eta ebaluatzeko orduan.
  
 Deskripzioa  modu errazean egiteko, datuak bete beher dira. Izenburuak agertzen dira deskripzioaren atalei dagozkienak. Elementuek sinpleki iradokizunak egiten dituzte. Baina ikastaroaren deskripzioa independentea idatzi nahi baduzu, sinpleki, zure izenburuak eta deskripzioak sortu ditzakezu, atal pertsonalizatuaren tresna hautatzearen bidez. Honela, nahi beste atal gehitu ahalko dituzu.
  
 Deskripzioa egiteko, klikatu ‘Sortu edo editatu ikastaroaren programa’, gero erakutsi menua eta hautatu nahi duzun atala. Bestetik, ikastaroaren deskripzioa osatzeko, klikatu irudi bakoitzaren gainean bete ezazu zure testu/edukiarekin eta bidali. Une guztietan, atal bat ezabatu edo aldatu ahalko duzu, harkatza ala gurutze gorria erakusten duten ikonoen gainean klikatuz.";
-$langLinksContent = "Loturak izeneko tresnak ikasleentzako baliabideen biblioteka sortzeko aukera ematen die irakasleei, batez ere irakasleek beraiek sortu ez dituzten baliabideak direlarik.
+$LinksContent = "Loturak izeneko tresnak ikasleentzako baliabideen biblioteka sortzeko aukera ematen die irakasleei, batez ere irakasleek beraiek sortu ez dituzten baliabideak direlarik.
 
 Loturen zerrenda gero eta luzeagoa denean, erabilgarriagoa izan daiteke kategorietan antolatzea eta, horrela, ikasleei informazioa zuzena leku jakinetan aurkitzen lagunduko diegu. Lotura bakoitza editatu dezakegu berriro beste kategoria bati atxikitzeko (hala ere, lehenengo, kategoria sortu beharko dugu).  Gogoan izan, kategoria bat ezabatuz gero, barruan dituen lotura guztiak ere ezabatuko direla.
 
 Deskripzioa eremua loturaren edukiaren gaineko informazioa aurreratua emateko erabili daiteke, baita irakasleak esateko zer espero duen ikasleek egitea loturaz baliatuz ere. Adibidez, Aristotelesen inguruko orri baterako lotura egonez gero, deskripzioa eremuan azaldu daiteke ikasleak sintesiaren eta analisiaren arteko ezberdintasuna bereizi behar dituela.
 
 Azkenik, loturak noizean behin berrikustea komeni da, ea benetan aktibo dauden ikusteko.";
-$langMycoursesContent = "Sisteman identifikatu eta sartzen garen bezain laster,  orri nagusian agertuko gara. Plataforma batetik beste batera aldatu daiteke orri nagusiaren forma, sistemaren kudeatzaileak aktibatu dituen aukeren arabera. Adibidez, batzuetan ezin gara sartu ikastaro bat sortzeko, ezta irakasle gisa ere, agian eginkizun hauek erakundeko beste arduradun baten esku gelditu delako.
+$MycoursesContent = "Sisteman identifikatu eta sartzen garen bezain laster,  orri nagusian agertuko gara. Plataforma batetik beste batera aldatu daiteke orri nagusiaren forma, sistemaren kudeatzaileak aktibatu dituen aukeren arabera. Adibidez, batzuetan ezin gara sartu ikastaro bat sortzeko, ezta irakasle gisa ere, agian eginkizun hauek erakundeko beste arduradun baten esku gelditu delako.
 
 Orri nagusian, oro har, honako alderdi hauek ikusiko ditugu:
  
@@ -525,19 +525,19 @@ o	Menu Orokorra
 o	Laguntza foroa: Chamilo webguneko foroetarako sarbidea.
 o	Dokumentazioa: Chamilo webguneko dokumentazio gehigarrirako sarbidea. 
 o	Plataformaren kudeatzailea (kudeatzailearentzat bakarrik)";
-$langAgendaContent = "‘Agenda’ ikastaro bakoitzean proposatutako jardueren ikuspegi laburtua ematen duen tresna da. Agenda pantailaren goiko barran eskuragarri dago, ‘Nire agenda’n. Testu bat data bati lotzeaz gain, modu berean, beste baliabide asko: agendako gertaerak, dokumentuak, abisuak, foroen mezuak, ariketak, loturak,… ere lotuta gelditzen zaizkie datei. Horrela, nolabait, ikasleen jardueren programa kronologiko bihurtzen da. 
+$AgendaContent = "‘Agenda’ ikastaro bakoitzean proposatutako jardueren ikuspegi laburtua ematen duen tresna da. Agenda pantailaren goiko barran eskuragarri dago, ‘Nire agenda’n. Testu bat data bati lotzeaz gain, modu berean, beste baliabide asko: agendako gertaerak, dokumentuak, abisuak, foroen mezuak, ariketak, loturak,… ere lotuta gelditzen zaizkie datei. Horrela, nolabait, ikasleen jardueren programa kronologiko bihurtzen da. 
 
 Agenda tresna bi modutan agertzen da: bata, ikastaro bakoitzaren barruko egutegia eta, bestea, ikasle bakoitzarentzako eguneroko pertsonal tresna gisa, bera inskribaturik dagoen ikastaroetan dauden gertaera guztien ikuspegi orokorra emanez. (Taldeek ere beren agenda eduki dezakete.) Erabiltzaileek ikastaroaren edukia eta jarduerak erakusten dituen Agenda erreferentziako tresnatzat erabili dezakete, ikaskuntza egunez egun edo astez aste antolatzeko. Beti dago eskura.
 
 Agendan ikusgai egoteaz gain, konektatzen diren bakoitzean, gertaera berriak jakinarazten zaizkie ikasleei. Sistemak azken bisitatik zeintzuk gehitu diren ikusten du eta atariko orri nagusian ikonoak agertuko zaizkio ikastaroen ondoan, gertaera eta abisu berriak badirela adierazteko. Bisita egin ondoren, ikonoa desagertuko da.
 
 Ikasleen lana denborari erlazionaturiko modu batean antolatu nahi badugu, onena Ikaskuntza Ibilbideak tresna erabiltzea izango da, aurrerapen logikoa hainbat jardueren bitartez eta edukia edukien aurkibide formal baten bitartez diseinatzeko bide gisa. Tresna honek Agendaren printzipio berberak dituen arren, ezaugarriak aurreratuagoak dira. Ikaskuntza Ibilbideak tresnak edukien aurkibidea, agenda, sekuentzia eta segimendua biltzen ditu.";
-$langAnnouncementsContent = "‘Abisuak’ izeneko tresnak norbaiti, edo ikasle guztiei edo talde bereziei mezu elektronikoa bidaltzeko aukera ematen die irakasleei. Horrela, dokumentu berria gehitu dela ohartarazi nahi badiete, edo egin behar duten lana bidaltzeko mugaeguna gogorarazteko edo lan baten zatia bereziki ona bada partekatzeko edo nabarmentzeko. Ikastaroan sartzen direnean, abisua badela ikusiko dute. Horrelako abisuak mezu elektronikoaren bidez bidaltzea baliagarria izan daiteke denbora batean gunea bisitatu ez duten ikasleak berriro gurera erakartzeko (denbora luzean, baina ez bada kanpoan gelditu, epeak eta ikastaroa amaitu direlako).
+$AnnouncementsContent = "‘Abisuak’ izeneko tresnak norbaiti, edo ikasle guztiei edo talde bereziei mezu elektronikoa bidaltzeko aukera ematen die irakasleei. Horrela, dokumentu berria gehitu dela ohartarazi nahi badiete, edo egin behar duten lana bidaltzeko mugaeguna gogorarazteko edo lan baten zatia bereziki ona bada partekatzeko edo nabarmentzeko. Ikastaroan sartzen direnean, abisua badela ikusiko dute. Horrelako abisuak mezu elektronikoaren bidez bidaltzea baliagarria izan daiteke denbora batean gunea bisitatu ez duten ikasleak berriro gurera erakartzeko (denbora luzean, baina ez bada kanpoan gelditu, epeak eta ikastaroa amaitu direlako).
 
 Erabiltzaile jakin batzuekin harremanetan jartzea 
 
 Ikastaroko kide guztiei mezu elektroniko orokorra bidaltzeaz gain,  pertsona bati edo hainbat pertsonari, talde bati edo talde batzuei bidali diezaiekegu automatikoki mezua. Abisu berria sortzen dugunean, Ikusgai klikatu behar dugu eta ezkerraldeko zerrendetan erabiltzaileak hautatu eta geziak erabiliz hartzaile gisa markatu. Azkenean, idatzi mezua orriaren beheko eremuan eta sakatu Bidali botoia.";
-$langChatContent = "Txat tresnak denbora errealean ikasleekin zuzenean txateatzeko aukera eskaintzen du. Erabiltzaile batzuek aldi berean hartu ahal dute parte honetan. 
+$ChatContent = "Txat tresnak denbora errealean ikasleekin zuzenean txateatzeko aukera eskaintzen du. Erabiltzaile batzuek aldi berean hartu ahal dute parte honetan. 
 
 Txat tresna komertzialekin alderatuta (esaterako, MSN® Yahoo Messenger®. Skype® etab.), Chamiloren txata webean oinarriturik dago eta ez du instalazio gehigarririk eskatzen. Chamilo tresna honen funtsezko abantaila, beraz, ikasleentzako berehalako erabilgarritasuna da, txataren bidez ikastaroaren barruan erraz integratzea onartzen baitu. Bestetik, Chamilo txat tresnak automatikoki eztabaidak artxibatu eta gordeko ditu, geroago sarbidea Dokumentuak tresnaren bidez prest egoteko.  (Abisatu behar da mezuak segundo 1etik 5 segundora arte hartu dezakeela truke bakoitzarekin freskatzeko.)
 
@@ -552,7 +552,7 @@ Ikastaroari Txata gehitzea ez da beti oso ideia ona. Agian ez da sartu behar, ba
 Txata, modu berean, gure webguneko beste tresna edo dokumentu batzuekin konbinaturik erabili daiteke, beste leiho batean zabaltzen baditugu (klikatu saguaren eskuineko botoia dokumenturako edo tresnarako loturaren gainean eta beste leiho bat irekitzea aukeratuko dugu). Modu honetan, txataren barruan plataformara kargatu ditugun dokumentu jakin batzuk azaldu ditzakegu. 
 
 Txataren saio guztiak automatikoki gordeko dira eta ikastaroko erabiltzaileek bistaratuko dituzte, ikastaroaren kudeatzaileak horrela ezartzen badu. Batzuetan, txateko saioak garrantzi gutxikoak badira ere, bestetan, berriz, benetan interesgarriak eta lan dokumentu gisa hartzeko duinak dira.";
-$langWorkContent = "Ikasleei begira dagoen ‘Egin beharreko lanak’ izeneko tresnak ikasleei ikastaroan dokumentuak kargatzen eta argitaratzen uzten die eta oso tresna erabilterraza da. Aldi berean, pertsonek edo taldeek egindako galderei erantzunak onartzen ditu, edo beste dokumentu forma bat kargatzeko ere.
+$WorkContent = "Ikasleei begira dagoen ‘Egin beharreko lanak’ izeneko tresnak ikasleei ikastaroan dokumentuak kargatzen eta argitaratzen uzten die eta oso tresna erabilterraza da. Aldi berean, pertsonek edo taldeek egindako galderei erantzunak onartzen ditu, edo beste dokumentu forma bat kargatzeko ere.
 
 Hala ere, HTML dokumentuak bidaltzen badira, hauek ezin dute irudirik eduki, plataformak loturarik aurkituko ez duelako eta irudiak ikusiko ez direlako. HTML ikusteko fitxategi konprimatu batean bidali daiteke irakasleak deskargatu eta ikusi ditzala, geroago, egokia bada, Dokumentuak atalean kokatzeko. Edonola ere, gogorarazi fitxategi batzuen arteko lotura egiten denean, lotura erlatiboa izan behar dela, eta ez absolutua. 
  
@@ -565,21 +565,21 @@ Fitxategi guztiak ikusgai egitea oso erabilgarria da, esate baterako, ikasleek b
 Alderantziz, fitxategiak ikusezin eduki beharko dugu, esaterako, galdera berbera guztiei egin eta iruzurrak baztertu nahi baditugu. Dokumentuak ikusezin egitean, kontrolatzeko modua ere bada, dokumentua beste ikasle guztientzako erabilgarri ez egoteko.Lanak pribatutzat jotzen badira, ontzi batean irakaslearen eta ikaslearen arteko posta pilatuko da. Irakasle askok dokumentuak bidaltzeko mugaegunera arte ezkutatzen dituzte ikasleen lanak eta argitarapenak.  
   
 Tresna entregatzeko mugaegunak eta jarraibideak ezartzeko erabili dezakegu , hala nola gehieneko nota/kalifikazioa ezartzeko.";
-$langTrackingContent = "Txostenak izeneko tresnak (Estatistikak jasotzen dituenakº, hain zuzen) ikastaroko ikasleen parte hartzearen eta aurrerapenaren segimendua egiten utziko digu: Sistemarekin konektatu al ziren? Noiz? Zenbat aldiz? Zer puntuazio atera dute azterketan? Kargatu al da dagoeneko egin beharreko lanaren dokumentua? Noiz? SCORM ikastaroak erabiltzen baditugu, segimendua egin daiteke ikusteko zenbat denbora eman duen ikasleak modulu edo kapitulu batean. Txostenak tresnaren bidez informazioaren bi maila aztertu daitezke:
+$TrackingContent = "Txostenak izeneko tresnak (Estatistikak jasotzen dituenakº, hain zuzen) ikastaroko ikasleen parte hartzearen eta aurrerapenaren segimendua egiten utziko digu: Sistemarekin konektatu al ziren? Noiz? Zenbat aldiz? Zer puntuazio atera dute azterketan? Kargatu al da dagoeneko egin beharreko lanaren dokumentua? Noiz? SCORM ikastaroak erabiltzen baditugu, segimendua egin daiteke ikusteko zenbat denbora eman duen ikasleak modulu edo kapitulu batean. Txostenak tresnaren bidez informazioaren bi maila aztertu daitezke:
 
 •	Globala: Zenbat ikasle sartu dira ikastaro honetan? Zeinntzuk dira gehien bisitatu diren orriak eta loturak edo tresnarik erabilienak? Eta deskargatutako dokumentuak? SCORM ikastaroteako parte hartzaile kopurua?
 
 •	Pertsonala: Banako segimendua egiten du. ‘Erabiltzaileak’ tresnarekin egiten da. Zer orri bisitatu dituen Iker Zabalak? Noiz konektatu zuen azken aldian? Zer puntuazio atera da? Zer dokumentu deskargatu ditu?";
-$langHSettings = "Ikastaroaren konfigurazioa eta ezarpenak Laguntza";
-$langSettingsContent = "Ikastaroaren ezarpenak izeneko tresnak ikastaroaren parametro globalak konfiguratzen laguntzen digu: titulua, kodea, hizkuntza, irakaslearenm izena eta abar.
+$HSettings = "Ikastaroaren konfigurazioa eta ezarpenak Laguntza";
+$SettingsContent = "Ikastaroaren ezarpenak izeneko tresnak ikastaroaren parametro globalak konfiguratzen laguntzen digu: titulua, kodea, hizkuntza, irakaslearenm izena eta abar.
 
 Orriaren erdian kokatutako aukerek isilpekotasunarekin zerikusirik duten ezarpenak zehaztuko dituzte: Ikastaroa publikoa ala pribatua al da?,  Erabiltzaileak inskribatu daitezke? Ezarpen hauek era dinamikoan erabili daitezke, esate baterako, onartu autoerregistroa astebetez > eskatu ikasleei erregistratzea > itxi autoerregistratzeko sarrera > kendu sartu litezkeen sudurluzeak erabiltzaile zerrendaren bidez. Horrela, erregistraturik daudenen kontrola kontserbatuko duzu, baina, aldi berean, ez duzu lan administratibo neketsurik egin beharko.
 
 (Oharra – erakunde batzuek ez dute metodo hau erabili nahi eta erregistroa zentralizatzea erabakitzen dute. Kasu honetan, parte hartzaileek ezin dute ikastaroan inskribatu. Horretarako, irakasleak eman  beharko die sartzeko aukera. Hau konprobatzeko, begiratu kanpuseko orri nagusian (ikastaroaren orri nagusiarekiko oposizioan egon daitekeelako), ea ‘Erregistratu’ lotura dagoen ala ez ikusteko.)
 
 Orriaren beheko aldean, ikastaroaren babeskopia egin ondoren, ezabatu dezakegu. Babeskopiak fitxategia sortuko du zerbitzarian eta gure disko gogorrean lokalki kopiatzea onartuko digu. Horrela, babeskopia bi edukiko ditugu leku ezberdinetan. Ikastaroaren babeskopia atera eta gero ezabatzen badugu, ezin izango dugu gure kabuz berreskuratu, baina sistemaren kudeatzaileak egin ahalko du guretzat, baldin eta ikastaroaren kodea ematen badiogu. Ikastaroaren babeskopia ateratzea gure dokumentu guztiak gure ordenagailura ekartzeko modu ona ere bada. Winzip® bezalako tresna bat beharko dugu, fitxategia deskonprimatzeko. Kontuan eduki ikastaroaren babeskopia ateratzeak ez duela automatikoki kentzen.";
-$langHExternal = "Gehitu lotura Laguntza";
-$langExternalContent = "Chamilok moduluetako egitura du. Tresnak nahi dugunean erakutsi eta ezkutatu ditzakegu, ikaskuntza ibilbideak edo ibilbidearen zati kronologikoek eskatzen dutenaren arabera. Baina, aldi berean, guk geuk sortutako orriak edo tresnak gehitu diezaikiokegu orri nagusiari edo kanpotik ekarritakoak ere. Modu honetan, ikastaroko orri nagusia pertsonalizatu dezakezu, zure estilora egiteko.
+$HExternal = "Gehitu lotura Laguntza";
+$ExternalContent = "Chamilok moduluetako egitura du. Tresnak nahi dugunean erakutsi eta ezkutatu ditzakegu, ikaskuntza ibilbideak edo ibilbidearen zati kronologikoek eskatzen dutenaren arabera. Baina, aldi berean, guk geuk sortutako orriak edo tresnak gehitu diezaikiokegu orri nagusiari edo kanpotik ekarritakoak ere. Modu honetan, ikastaroko orri nagusia pertsonalizatu dezakezu, zure estilora egiteko.
  
 Horrela egitean, zalantzarik gabe, orriari nahi ditugun loturak gehitu diezaizkiokegu. Loturak bi motakoak izaten dira:
 
@@ -588,12 +588,12 @@ Horrela egitean, zalantzarik gabe, orriari nahi ditugun loturak gehitu diezaizki
 •	Barneko lotura: Chamilo ikastaroaren barruan sortzen dugu orri baterako edo tresna baterako lotura. Hau egiteko, lehenengo, orri (edo dokumentu edo tresna) garrantzitsu horretara joango gara, bere URL (kontrol+klika) gure zerbitzariaren helbideen barratik kopiatu eta, gero, ‘Gehitu lotura’ gaitasunera joan behar eta URLaren eremuan URL hori itsatsiko dugu, nahi dugun izena jarriz. Kasu honetan, 'Helburua=Leiho berean' hautatuko dugu, horrela Chamilo titularra goian eta orrirako lotura ingurune berean gordeko ditugulako.
 
 Behin sortu eta gero, ezingo dira loturak editatu. Hauek aldatzeko bide bakarra desaktibatzea eta ezabatzea da, geroan abiarazteko.";
-$langClarContent3 = "Garbitu edukia";
-$langClarContent4 = "Garbitu edukia";
-$langClarContent1 = "Garbitu edukia";
-$langClarContent2 = "Garbitu edukia";
-$langHGroups = "Taldeak Laguntza";
-$langGroupsContent = "Taldeak tresna honek ikasle taldeentzako espazioak sortzeko aukera emango digu eta, bide batez, ikasleei elkarlanean aritzeko bi tresna eskuratuko dizkie: bata, eztabaidatzeko foroa eta bestea, dokumentu partekatuen atala, non euren fitxategiak partekatu, kargatu eta antolatu ahalko baitituzte (irakasleenztat eta arduradunentzat bakarrik dagoen Dokumentuak modulutik guztiz aparte). Dokumentuen espazioa pribatua da, foroa, berriz, publikoa ala pribatua izan daiteke.
+$ClarContent3 = "Garbitu edukia";
+$ClarContent4 = "Garbitu edukia";
+$ClarContent1 = "Garbitu edukia";
+$ClarContent2 = "Garbitu edukia";
+$HGroups = "Taldeak Laguntza";
+$GroupsContent = "Taldeak tresna honek ikasle taldeentzako espazioak sortzeko aukera emango digu eta, bide batez, ikasleei elkarlanean aritzeko bi tresna eskuratuko dizkie: bata, eztabaidatzeko foroa eta bestea, dokumentu partekatuen atala, non euren fitxategiak partekatu, kargatu eta antolatu ahalko baitituzte (irakasleenztat eta arduradunentzat bakarrik dagoen Dokumentuak modulutik guztiz aparte). Dokumentuen espazioa pribatua da, foroa, berriz, publikoa ala pribatua izan daiteke.
  
 Aukera hau oso baliagarria izan daiteke, ikastaroan partehartzaileen azpiataletan dokumentazio eta eztabaidarako atal pribatuak edukitzeko. (Modu berean, tresna honen bidez, baliteke ikasle bakoitzak bere ‘dokumentu espazio’ pribatua edukitzea, horrela, ikasleek beste taldeak sortuz eta horrelako talde bakoitzari dokumentu espazio pribatua emanez.)
 
@@ -609,7 +609,7 @@ Taldeak betetzeko hiru modu daude:
 Editatu taldeak
 
 Taldeen espazioak editatzeak berrizendatzeko, deskripzioak gehitzeko (taldearen egin beharrekoak, arduradunaren telefono zenbakia,…), parametroak aldatzeko eta kideak aldatzeko edo moderatzailea edo arduraduna izendatzeko aukerak ematen dizkigu.  Moderatzaileentzat bakarrik den taldea sortzeko, parte hartzaileen gehieneko kopurua huts duen taldea sortu beharko dugu (besterik ezarri ez bada, moderatzaileak talde guztietan sartu ahal direlako).";
-$langGuide = "Eskuz";
+$Guide = "Eskuz";
 $HSurvey = "Inkestak Laguntza";
 $SurveyContent = "Inkestak izeneko tresnari esker, gai batzuen gainean erabiltzaileek duten iritzia jakin ahalko dugu. Esaterako, ikasleek ikastaroari zer deritzoten jakitea oso garrantzitsua izango da.  Horrela, ikastaroen barruan feedback egotea (irakasleek eta ikasleek elkar elikatzea) balio handikoa izango da.
  

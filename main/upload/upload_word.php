@@ -14,7 +14,6 @@
 // 'inc.php' is automatically appended to the file name
 $language_file[] = "document"; //the document file is loaded because most of the upload vocab relates to the document tool
 $language_file[] = "learnpath";
-$language_file[] = "scormdocument";
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
 include '../inc/global.inc.php';

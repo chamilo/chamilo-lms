@@ -99,7 +99,6 @@ $Learner = "Alumnu";
 $Chat = "Chat";
 $Slides = "Diapositives";
 $WaitingForParticipants = "Esperando polos participantes";
-$Send = "Unviar";
 $Browse = "Echar una güeyada";
 $Cancel = "Cancelar";
 $ChooseFile = "Escoyer l'archivu que va unviar";

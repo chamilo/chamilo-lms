@@ -2,14 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Käytön seuranta";
+$ToolName = "Käytön seuranta";
 $TrackingDisabled = "Seuranta on kytketty pois päältä ylläpitäjän toimesta.";
-$langShowNone = "Piilota kaikki";
-$langCourseStats = "Kurssin tilastot";
-$langToolsAccess = "Työkalujen käyttö";
-$langLinksAccess = "Linkit";
-$langExercicesTitleExerciceColumn = "Harjoitus";
-$langNoResult = "Tulosta ei vielä ole";
+$ShowNone = "Piilota kaikki";
+$CourseStats = "Kurssin tilastot";
+$ToolsAccess = "Työkalujen käyttö";
+$LinksAccess = "Linkit";
+$ExercicesTitleExerciceColumn = "Harjoitus";
+$NoResult = "Tulosta ei vielä ole";
 $MyLearnpath = "Oppimispolkuni";
 $Attempts = "Yrityksiä";
 $Correction = "Korjaus";

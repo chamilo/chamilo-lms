@@ -43,7 +43,7 @@ require_once('language.php');
         <?php if(isset($content['error']) && !empty($content['error'])){
           echo $content['info'];
         } else {
-          echo custompages_get_lang('lang_enter_email_and_well_send_you_password');
+          echo custompages_get_lang('EnterEmailAndWeWillSendYouYourPassword');
         }?>
       </div>
 		<div id="lostpassword-form-box" class="form-box">
@@ -57,7 +57,7 @@ require_once('language.php');
 				</div>
 			</form>
 			<div id="lostpassword-form-submit" class="form-submit" onclick="document.forms['lostpassword-form'].submit();">
-      <span><?php echo custompages_get_lang('langSend'); ?> </span>
+      <span><?php echo custompages_get_lang('Send'); ?> </span>
 			</div> <!-- #form-submit -->
 		</div> <!-- #form -->
 		<div id="footer">

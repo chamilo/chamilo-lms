@@ -99,7 +99,6 @@ $Learner = "Corsista";
 $Chat = "Chat";
 $Slides = "Diapositive";
 $WaitingForParticipants = "In attesa di partecipanti";
-$Send = "Invia";
 $Browse = "Sfoglia";
 $Cancel = "Annulla";
 $ChooseFile = "Scegli il file da inviare";

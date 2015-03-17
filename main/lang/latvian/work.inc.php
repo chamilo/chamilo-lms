@@ -19,7 +19,6 @@ $AllFiles = "Darbības ar visiem failiem";
 $DefaultUpload = "Iepriekšnoteikts veids, kā tiko pievienotie dokumenti tiek attēloti (redzami / neredzami)";
 $NewVisible = "Jaunie dokumenti ir redzami visiem lietotājiem";
 $NewUnvisible = "Jaunie dokumenti ir redzami, tikai kursu Lektoram / iem";
-$lang_doc_unvisible = "Jūsu fails ir redzams tikai šī kursa Lektoram un tādēļ Jūs to vairs neredzat";
 $DelLk = "Vai jūs tiešām vēlaties izdzēst šo saiti?";
 $MustBeRegisteredUser = "Publicēt dokumentus, var tikai Kursā reģistrētie lietotāji";
 $ListDel = "Dzēst sarakstu";

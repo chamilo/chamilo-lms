@@ -2,23 +2,23 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langDownloadFile = "矢今のアップロ〖ド";
-$langNameDir = "糠ディレクトリの叹涟";
-$langSize = "サイズ";
-$langRename = "叹涟を恃える";
-$langCopy = "コピ〖";
-$langTo = "to";
-$langNoSpace = "アップロ〖ドが己窃しました。ディスクスペ〖スの稍颅です。";
-$langDownloadEnd = "アップロ〖ド姜位";
-$langFileExists = "稍材墙な拎侯です<br />票じ叹涟のファイルが赂哼しています。";
-$langImpossible = "拎侯稍墙";
-$langAddComment = "肌のものにコメントに烧裁あるいはコメント饯赖する。";
-$langDocCopied = "矢今をコピ〖しました";
-$langDocDeleted = "矢今を猴近しました";
-$langElRen = "element renamed";
-$langDirMv = "ディレクトリを败瓢";
-$langComMod = "コメントを饯赖";
-$langViMod = "材粕を饯赖";
+$DownloadFile = "矢今のアップロ〖ド";
+$NameDir = "糠ディレクトリの叹涟";
+$Size = "サイズ";
+$Rename = "叹涟を恃える";
+$Copy = "コピ〖";
+$To = "to";
+$NoSpace = "アップロ〖ドが己窃しました。ディスクスペ〖スの稍颅です。";
+$DownloadEnd = "アップロ〖ド姜位";
+$FileExists = "稍材墙な拎侯です<br />票じ叹涟のファイルが赂哼しています。";
+$Impossible = "拎侯稍墙";
+$AddComment = "肌のものにコメントに烧裁あるいはコメント饯赖する。";
+$DocCopied = "矢今をコピ〖しました";
+$DocDeleted = "矢今を猴近しました";
+$ElRen = "element renamed";
+$DirMv = "ディレクトリを败瓢";
+$ComMod = "コメントを饯赖";
+$ViMod = "材粕を饯赖";
 $CreateDoc = "リッチ メディアのページ / 活動項目を作成";
 $SendDocument = "ファイルをアップロード";
 $ThisFolderCannotBeDeleted = "このフォルダーを削除できません";

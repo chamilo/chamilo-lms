@@ -24,7 +24,6 @@ $AllFiles = "Z vsemi datotekami";
 $DefaultUpload = "Privzete lastnosti za vidnost novo poslanih datotek";
 $NewVisible = "Novi dokumenti so vidni za vse uporabnike";
 $NewUnvisible = "Novi dokumenti so vidni le za vodjo(e) tečaja";
-$lang_doc_unvisible = "Vaša datoteka je vidna le za vodjo(e) tečaja in za vas tako ne bo vidna.";
 $DelLk = "Ali res želite odstraniti to povezavo?";
 $MustBeRegisteredUser = "Le registrirani uporabniki tega tečaja lahko objavijo dokumente.";
 $ListDel = "Odstrani seznam";

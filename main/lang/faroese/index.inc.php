@@ -2,9 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langHelptwo = "Hjálp";
-$langMenuGeneral = "Hjálp";
-$langHelpMaj = "Hjálp";
+$Helptwo = "Hjálp";
+$MenuGeneral = "Hjálp";
+$HelpMaj = "Hjálp";
 $Messages = "Boð";
 $Inbox = "Boðklivin";
 $Profile = "Vangamynd";

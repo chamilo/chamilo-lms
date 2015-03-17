@@ -127,7 +127,7 @@ require_once __DIR__.'/version.php';
 
 // A protection measure for already installed systems.
 
-if (is_already_installed_system()) {
+if (isAlreadyInstalledSystem()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
 	require '../inc/global_error_message.inc.php';
@@ -510,7 +510,7 @@ if ($encryptPassForm == '1') {
         $instalation_type_label  = get_lang('NewInstallation');
     }elseif ($installType == 'update') {
         $update_from_version = isset($update_from_version) ? $update_from_version : null;
-        $instalation_type_label = get_lang('UpdateFromDokeosVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+        $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
     }
     if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     	echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';

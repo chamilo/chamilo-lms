@@ -2,11 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$lang_learning_path = "Læringssti";
-$langLearnpathMystatus = "Min status";
+$LearnpathMystatus = "Min status";
 $LearnpathAddLearnpath = "Ny læringssti";
-$langUploadScorm = "SCORM og AICC import";
-$langPowerPointConvert = "PowerPoint konvertering";
+$UploadScorm = "SCORM og AICC import";
+$PowerPointConvert = "PowerPoint konvertering";
 $WoogieConversionPowerPoint = "Woogie : Word konvertering";
 $WordConvert = "Word konvertering";
 ?>

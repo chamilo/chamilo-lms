@@ -99,7 +99,6 @@ $Learner = "Tanuló";
 $Chat = "Csevegő";
 $Slides = "Diák";
 $WaitingForParticipants = "Várakozás résztvevőkre";
-$Send = "Küld";
 $Browse = "Keresés";
 $Cancel = "Mégsem";
 $ChooseFile = "Válasszon ki egy állományt az importáláshoz";

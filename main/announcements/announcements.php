@@ -15,7 +15,7 @@
 // name of the language file that needs to be included
 use \ChamiloSession as Session;
 
-$language_file = array('announcements', 'group', 'survey', 'document');
+$language_file = array('group', 'survey', 'document');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;

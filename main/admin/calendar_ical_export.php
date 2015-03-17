@@ -8,8 +8,6 @@
 /**
  * Initialisation
  */
-// name of the language file that needs to be included
-$language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...

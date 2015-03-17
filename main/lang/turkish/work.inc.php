@@ -19,7 +19,6 @@ $AllFiles = "Bütün dosyalardaki işlemler";
 $DefaultUpload = "Yeni gönderilen dosyaların varsayılan ayarları";
 $NewVisible = "Bütün kullanıcılar görebilir";
 $NewUnvisible = "Sadece ders yetkilisi görebilir";
-$lang_doc_unvisible = "Dosyanız sadece ders yetkilisi tarafından görülebilir olduğu için siz göremeyeceksiniz.";
 $DelLk = "Bu bağlantıyı silmek istiyor musunuz?";
 $MustBeRegisteredUser = "Sadece bu dersin kayıtlı kullanıcıları dosya gönderebilir.";
 $ListDel = "Listeyi sil";

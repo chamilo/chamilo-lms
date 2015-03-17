@@ -19,7 +19,6 @@ $AllFiles = "Executa actiunea pentru toate fisierele";
 $DefaultUpload = "Setarile initiale de vizibilitate a fisierelor nou postate";
 $NewVisible = "Noile documente sunt vizibile tuturor utilizatorilor";
 $NewUnvisible = "Noile documente sunt vizibile doar administratorului cursului";
-$lang_doc_unvisible = "Fisierele dumneavoastra sunt vizibile doar profesorului acestui curs si nu vor fi vizibile pentru dvs.";
 $DelLk = "Chiar vrei sa stergi acest link?";
 $MustBeRegisteredUser = "Numai utilizatorii inregistrati la acest curs pot publica documente.";
 $ListDel = "Sterge lista";

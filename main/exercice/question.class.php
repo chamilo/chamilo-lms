@@ -1401,7 +1401,7 @@ abstract class Question
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
 
-        echo '<div class="actionsbig">';
+        echo '<div class="well">';
         echo '<ul class="question_menu">';
 
         foreach ($question_type_custom_list as $i => $a_type) {
@@ -1412,7 +1412,7 @@ abstract class Question
             eval('$img = '.$a_type[1].'::$typePicture;');
             eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
             echo '<li>';
-            echo '<div class="icon_image_content">';
+            echo '<div class="icon-image">';
             if ($objExercise->exercise_was_added_in_lp == true) {
                 $img = pathinfo($img);
                 $img = $img['filename'].'_na.'.$img['extension'];

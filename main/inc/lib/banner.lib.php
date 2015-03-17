@@ -192,21 +192,6 @@ function return_logo($theme) {
         }
     }
 
-   /* //  Course title section
-    if (!empty($_cid) and $_cid != -1 and isset($_course)) {
-        //Put the name of the course in the header
-        $html .= '<div id="my_courses">';
-        $html .= '</div>';
-    } elseif (isset($nameTools) && $language_file != 'course_home') {
-        //Put the name of the user-tools in the header
-        if (!isset($user_id)) {
-            //echo '<div id="my_courses"></div>';
-        } elseif (!$noPHP_SELF) {
-            $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
-        } else {
-            $html .= '<div id="my_courses">'.$nameTools.'</div>';
-        }
-    }*/
     return $html;
 }
 
@@ -608,9 +593,10 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
+    // part 3: The tool itself. If we are on the course homepage we do not want
+    // to display the title of the course because this
     // is the same as the first part of the breadcrumbs (see part 1)
-    if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
+    if (isset($nameTools)) {
         $navigation_item['url'] = '#';
         $navigation_item['title'] = $nameTools;
         $navigation[] = $navigation_item;

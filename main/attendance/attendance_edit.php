@@ -11,7 +11,7 @@
 api_protect_course_script(true);
 
 // error messages
-if ($error) {
+if (isset($error)) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
@@ -20,7 +20,7 @@ if (isset($_SESSION['gradebook'])) {
     $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 
-if (!$error) {
+if (!isset($error)) {
     $token = Security::get_token();
 }
 

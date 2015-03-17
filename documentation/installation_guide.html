@@ -341,6 +341,13 @@ responsible for what would happen to your data without professional supervision)
 This is why we *really* recommend you take a full backup of your system before
 you upgrade.</em>
 <br />
+<br />
+Also note that Chamilo LMS 1.10 removes some deprecated language files from the
+main/lang/ directory. If you have changed language files directly (instead of
+using the recommended way of sublanguages), you should take a backup copy of
+these changed translations before you upgrade. Sublanguages might also require
+som manual work, but the upgrade procedure will not touch sublanguages directly.
+<br />
 <div class="muted"> NOTE: For very heavy Chamilo databases, some of our official
 providers have developed improved migration procedures that use more memory but
 process the upgrades up to 20 times faster. If this is the kind of thing you

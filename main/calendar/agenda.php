@@ -8,7 +8,7 @@
 use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
-$language_file = array('agenda', 'group');
+$language_file = array('group');
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;

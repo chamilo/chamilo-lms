@@ -19,7 +19,6 @@ $AllFiles = "應用於本課程所有作業";
 $DefaultUpload = "作業可見性的預設設定";
 $NewVisible = "作業對所有人都可見";
 $NewUnvisible = "作業只對課程管理員可見";
-$lang_doc_unvisible = "作業只對這門課程的教師可見, 因此對你是不可見的。";
 $DelLk = "確定要移除這連結嗎?";
 $MustBeRegisteredUser = "只有此課程的註冊用戶可以上傳作業。";
 $ListDel = "刪除清單";

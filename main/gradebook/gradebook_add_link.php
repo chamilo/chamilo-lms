@@ -67,7 +67,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
 
     if ($addform->validate()) {
         $addvalues = $addform->exportValues();
-        $link = LinkFactory :: create($typeSelected);
+        $link = LinkFactory::create($typeSelected);
         $link->set_user_id(api_get_user_id());
         $link->set_course_code(api_get_course_id());
         $link->set_category_id($addvalues['select_gradebook']);

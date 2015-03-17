@@ -13,7 +13,7 @@
 * - send to specific user (when pressing send message in the who is online list)
 */
 // name of the language file that needs to be included
-$language_file = array('messages', 'userInfo', 'admin');
+$language_file = array('userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
 

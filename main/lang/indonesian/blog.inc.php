@@ -12,10 +12,10 @@ $NewPost = "Artikel baru";
 $TaskManager = "Pengelolaan Tugas/task";
 $Member = "Anggota";
 $blog_management = "Pengelolaan Blog";
-$langWelcome = "Selamat Datang !";
-$langModule = "Modul";
-$langUserHasPermissionNot = "User tersebut tidak punya hak";
-$langUserHasPermission = "User tersebut punya hak";
-$langLegend = "Legenda";
-$langUserHasPermissionByRoleGroup = "User tersebut punya hak pada kelompok--nya";
+$Welcome = "Selamat Datang !";
+$Module = "Modul";
+$UserHasPermissionNot = "User tersebut tidak punya hak";
+$UserHasPermission = "User tersebut punya hak";
+$Legend = "Legenda";
+$UserHasPermissionByRoleGroup = "User tersebut punya hak pada kelompok--nya";
 ?>

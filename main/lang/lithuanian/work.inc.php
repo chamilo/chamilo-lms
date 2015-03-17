@@ -19,7 +19,6 @@ $AllFiles = "Veiksmai visiems failams";
 $DefaultUpload = "Naujai įkeliamų failų matomumas pagal nutylėjimą";
 $NewVisible = "Nauji dokumentai matomi visiems vartotojams";
 $NewUnvisible = "Nauji dokumentai matomi tik kursų valdytojams";
-$lang_doc_unvisible = "Jūsų failas matomas tik dėstytojui ir nebus matomas jums.";
 $DelLk = "Ar tikrai norite ištrinti šią nuorodą?";
 $MustBeRegisteredUser = "Tik kurso registruoti vartotojai gali publikuoti dokumentus.";
 $ListDel = "Ištrinti sąrašą";

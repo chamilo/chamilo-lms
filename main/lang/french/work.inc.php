@@ -24,7 +24,6 @@ $AllFiles = "Tous les fichiers";
 $DefaultUpload = "Visibilité par défaut des documents envoyés (y compris dans le futur)";
 $NewVisible = "Les nouveaux documents sont par défaut visibles par tous les membres";
 $NewUnvisible = "Les nouveaux documents sont par défaut visibles seulement par les responsables";
-$lang_doc_unvisible = "Le responsable a choisi que votre document soit visible seulement pour les responsables, par conséquent il ne sera pas visible pour vous.";
 $DelLk = "Voulez-vous réellement supprimer ce lien?";
 $MustBeRegisteredUser = "Seuls les utilisateurs enregistrés de ce cours peuvent publier des documents.";
 $ListDel = "Supprimer la liste";

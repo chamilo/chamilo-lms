@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-$language_file = 'agenda';
 require_once dirname(__FILE__).'/../../../global.inc.php';
 
 //session

@@ -5,7 +5,7 @@
  * @package chamilo.plugin.ticket
  */
 
-$language_file = array('messages', 'userInfo', 'admin');
+$language_file = array('userInfo', 'admin');
 $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();

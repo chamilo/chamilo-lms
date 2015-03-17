@@ -42,14 +42,21 @@ function minItem(item) {
 }
 </script>';
 
-$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
+$interbreadcrumb[] = array(
+    'url' => $_SESSION['gradebook_dest'].'?selectcat=1',
+    'name' => get_lang('ToolGradebook')
+);
 
 $select_cat = intval($_GET['selectcat']);
 $displayscore= ScoreDisplay :: instance();
 $customdisplays = $displayscore->get_custom_score_display_settings();
 
 $nr_items = (count($customdisplays) != '0' )? count($customdisplays) : '1';
-$scoreform= new ScoreDisplayForm('scoring_system_form', api_get_self() . '?selectcat=' . $select_cat);
+$scoreform = new ScoreDisplayForm(
+    'scoring_system_form',
+    api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq()
+);
+
 if ($scoreform->validate()) {
     $value_export = '';
     $value_export = $scoreform->exportValues();
@@ -78,7 +85,7 @@ if ($scoreform->validate()) {
     }
 
     if (!$ranges_ok) {
-        header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat);
+        header('Location: ' . api_get_self() . '?nouniqueranges=&selectcat=' . $select_cat.'&'.api_get_cidreq());
         exit;
     }
 
@@ -91,14 +98,16 @@ if ($scoreform->validate()) {
     if ($displayscore->is_custom() && !empty($scoringdisplay)) {
         $displayscore->update_custom_score_display_settings($scoringdisplay, $scorecolpercent);
     }
-    header('Location:'.api_get_self().'?scoringupdated=&selectcat='.$select_cat);
+    header('Location:'.api_get_self().'?scoringupdated=&selectcat='.$select_cat.'&'.api_get_cidreq());
     exit;
 }
 
 $this_section = SECTION_COURSES;
 Display :: display_header(get_lang('ScoreEdit'));
 
-if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')))) {
+if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') ||
+    (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')))
+) {
     if (isset ($_GET['scoringupdated'])) {
         Display::display_confirmation_message(get_lang('ScoringUpdated'), false);
     }

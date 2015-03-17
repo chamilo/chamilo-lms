@@ -99,7 +99,6 @@ $Learner = "الطالب";
 $Chat = "محادثة";
 $Slides = "شرائح العرض";
 $WaitingForParticipants = "في انتظار المشاركين";
-$Send = "ارسل رسالة";
 $Browse = "تصفح";
 $Cancel = "الغاء";
 $ChooseFile = "اختار ملف  للاستيراد";

@@ -574,7 +574,6 @@ $language_interface_initial_value = $language_interface;
  */
 $language_files = array();
 $language_files[] = 'trad4all';
-$language_files[] = 'notification';
 
 if (isset($language_file)) {
     if (!is_array($language_file)) {

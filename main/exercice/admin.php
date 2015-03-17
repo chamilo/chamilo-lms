@@ -496,8 +496,9 @@ if ($inATest) {
             }
         }
     }
-    echo '<span style="float:right">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions).'</span>';
+
     echo '</div>';
+    echo '<div class="alert alert-info">'.sprintf(get_lang('XQuestionsWithTotalScoreY'), $objExercise->selectNbrQuestions(), $maxScoreAllQuestions).'</div>';
 } else if (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

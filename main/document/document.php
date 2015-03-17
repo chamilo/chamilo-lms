@@ -90,7 +90,6 @@ if ($capturePluginInstalled) {
     });
     </script>';
 }
-
 // Create directory certificates.
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
 

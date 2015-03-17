@@ -298,9 +298,11 @@ class FlatViewTable extends SortableTable
                     }
                     $i++;
                 }
-            } //end foreach
+            } else {
+                echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            }
         } else {
-            echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            echo get_lang('NoResults');
         }
     }
 

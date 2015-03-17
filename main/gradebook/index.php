@@ -393,7 +393,9 @@ if (isset($_GET['deletelink'])) {
                     )';
             Database::query($sql);
             // clean attendance
-            $sql = 'UPDATE '.$tbl_attendance.' SET attendance_qualify_max=0, attendance_weight = 0, attendance_qualify_title=""
+            $sql = 'UPDATE '.$tbl_attendance.' SET
+                        attendance_weight = 0,
+                        attendance_qualify_title = ""
 				 	WHERE c_id = '.$course_id.' AND id = (
 				 	    SELECT ref_id FROM '.$tbl_grade_links.'
 				 	    WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.'

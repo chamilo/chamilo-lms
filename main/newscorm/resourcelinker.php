@@ -387,30 +387,6 @@ if ($_GET['source_id']) {
             $from_learnpath = 'yes';
             Session::write('from_learnpath',$from_learnpath);
             break;
-        case '6': // coming from forum: reply
-            $url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
-            $url = $_SESSION['origintoolurl'];
-            $originaltoolname = get_lang('ForumReply');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
-            unset ($from_learnpath);
-            break;
-
-        /* add Frederik.Vermeire@pandora.be */
-
-        case '7': // coming from Ad_Valvas
-            if ($action == 'edit') {
-                $url = "../announcements/announcements.php?action=edit&id=49&originalresource=$originalresource";
-            } elseif ($action == 'add') {
-                $url = "../announcements/announcements.php?action=add&originalresource=$originalresource";
-            } else {
-                $url = "../announcements/announcements.php?action=add";
-            }
-            $originaltoolname = get_lang('AdValvas');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
-            session_unregister('from_learnpath');
-            unset ($from_learnpath);
-            break;
 
         /*  end add Frederik.Vermeire@pandora.be */
 

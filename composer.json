@@ -49,7 +49,7 @@
     "minimum-stability": "stable",
 
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
 
         "ext-intl": "*",
         "ext-gd": "*",

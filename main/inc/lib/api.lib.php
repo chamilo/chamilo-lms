@@ -5235,6 +5235,11 @@ function api_add_setting($val, $var, $sk = null, $type = 'textfield', $c = null,
     $res = Database::query($select);
     if (Database::num_rows($res) > 0) { // Found item for this access_url.
         $row = Database::fetch_array($res);
+        Database::update(
+            $t_settings,
+            array('selected_value' => $val),
+            array('id = ?' => array($row['id']))
+        );
         return $row['id'];
     }
 

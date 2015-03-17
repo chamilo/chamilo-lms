@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Gradebook link to attendance item
  * @author Christian Fasanando (christian1827@gmail.com)
@@ -50,7 +51,14 @@ class AttendanceLink extends AbstractLink
 
 		$sql = 'SELECT att.id, att.name, att.attendance_qualify_title
 				FROM '.$this->get_attendance_table().' att
-				WHERE att.c_id = '.$this->course_id.' AND att.id NOT IN (SELECT ref_id FROM '.$tbl_grade_links.' WHERE type = '.LINK_ATTENDANCE.' AND course_code = "'.Database::escape_string($this->get_course_code()).'")
+				WHERE
+					att.c_id = '.$this->course_id.' AND
+					att.id NOT IN (
+						SELECT ref_id FROM '.$tbl_grade_links.'
+						WHERE
+							type = '.LINK_ATTENDANCE.' AND
+							course_code = "'.Database::escape_string($this->get_course_code()).'"
+					)
 				AND att.session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 
@@ -92,7 +100,6 @@ class AttendanceLink extends AbstractLink
     			FROM '.$tbl_attendance.' att
     			WHERE att.c_id = '.$this->course_id.' AND att.active = 1 AND att.session_id = '.$session_id;
 
-
 		$result = Database::query($sql);
 
 		while ($data=Database::fetch_array($result)) {
@@ -114,10 +121,13 @@ class AttendanceLink extends AbstractLink
 		$tbl_attendance_result = Database :: get_course_table(TABLE_ATTENDANCE_RESULT);
 		$session_id = api_get_session_id();
 		$sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result."
-				WHERE session_id = $session_id AND c_id = '.$this->course_id.' AND attendance_id = '".intval($this->get_ref_id())."'";
+				WHERE
+					session_id = $session_id AND
+					c_id = '.$this->course_id.' AND
+					attendance_id = '".intval($this->get_ref_id())."'";
 		$result = Database::query($sql);
 		$number = Database::fetch_row($result);
-		return ($number[0] != 0);
+		return $number[0] != 0;
 	}
 
 	/**
@@ -136,9 +146,9 @@ class AttendanceLink extends AbstractLink
   					att.id = '.intval($this->get_ref_id()).' AND
   					att.session_id='.intval($session_id).'';
 		$query = Database::query($sql);
-		$attendance = Database::fetch_array($query);
+		$attendance = Database::fetch_array($query, 'ASSOC');
 
-		// get results
+		// Get results
 		$sql = 'SELECT * FROM '.$tbl_attendance_result.'
   	    		WHERE c_id = '.$this->course_id.' AND attendance_id = '.intval($this->get_ref_id());
 		if (isset($stud_id)) {
@@ -147,13 +157,14 @@ class AttendanceLink extends AbstractLink
 		$scores = Database::query($sql);
 		// for 1 student
 		if (isset($stud_id)) {
-			if ($data = Database::fetch_array($scores)) {
-				return array ($data['score'], $attendance['attendance_qualify_max']);
+			if ($data = Database::fetch_array($scores, 'ASSOC')) {
+				return array($data['score'], $attendance['attendance_qualify_max']);
 			} else {
 				//We sent the 0/attendance_qualify_max instead of null for correct calculations
-				return array (0, $attendance['attendance_qualify_max']);
+				return array(0, $attendance['attendance_qualify_max']);
 			}
-		} else {// all students -> get average
+		} else {
+			// all students -> get average
 			$students = array();  // user list, needed to make sure we only
 			// take first attempts into account
 			$rescount = 0;
@@ -175,6 +186,7 @@ class AttendanceLink extends AbstractLink
 					}
 				}
 			}
+
 			if ($rescount == 0) {
 				return null;
 			} else {
@@ -229,6 +241,9 @@ class AttendanceLink extends AbstractLink
 		return false;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_name()
 	{
 		$this->get_attendance_data();
@@ -241,6 +256,9 @@ class AttendanceLink extends AbstractLink
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_description()
 	{
 		return '';
@@ -277,6 +295,9 @@ class AttendanceLink extends AbstractLink
 		return $url;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	private function get_attendance_data()
 	{
 		$tbl_name = $this->get_attendance_table();
@@ -292,6 +313,9 @@ class AttendanceLink extends AbstractLink
 		return $this->attendance_data;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_icon_name()
 	{
 		return 'attendance';

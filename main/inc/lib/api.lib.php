@@ -3601,7 +3601,7 @@ function api_item_property_update(
 
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
-    if ($item_id == '*') {
+    if ($item_id === '*') {
         // For all (not deleted) items of the tool
         $filter = " c_id = $course_id  AND tool = '$tool' AND visibility<>'2' $condition_session";
     }

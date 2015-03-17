@@ -1,0 +1,40 @@
+default:
+    formatters:
+        pretty: true
+    suites:
+#        course_suite:
+#            type: symfony_bundle
+#            bundle: ChamiloCoreBundle
+        course:
+            contexts:
+                - Chamilo\CoreBundle\Behat\CourseContext
+                - Chamilo\CoreBundle\Behat\UserContext
+                - Chamilo\CoreBundle\Behat\WebContext
+                - Chamilo\CoreBundle\Behat\CoreContext
+                - Chamilo\CoreBundle\Behat\LoginContext
+#                - Behat\MinkExtension\Context\MinkContext
+
+    extensions:
+        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+                javascript:
+                    selenium2: ~
+            browser_name: firefox
+            show_auto:    false
+            base_url: 'http://my.chamilo_test.net/app_test.php'
+
+
+        # This will erase all the database
+        VIPSoft\DoctrineDataFixturesExtension\Extension:
+              lifetime: scenario
+              autoload: false
+              fixtures:
+                    - Chamilo\CoreBundle\Migrations\Data\ORM\LoadGroupData
+                    - Chamilo\CoreBundle\Migrations\Data\ORM\LoadPageData
+                    - Chamilo\CoreBundle\Migrations\Data\ORM\LoadAdminUserData
+                    - Chamilo\CoreBundle\Migrations\Data\ORM\LoadPortalData
+
+

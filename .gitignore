@@ -38,7 +38,6 @@ tests/doctrine_console/Proxies
 
 # Symfony
 
-behat.yml
 app/config/parameters*.yml
 app/cache/*
 app/logs/*

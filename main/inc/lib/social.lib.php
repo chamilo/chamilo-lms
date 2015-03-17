@@ -1530,7 +1530,7 @@ class SocialManager extends UserManager
      */
     public static function getSocialUserBlock($userId, $groupBlock = '', $groupId = 0)
     {
-        $userInfo = api_get_user_info($userId);
+        $userInfo = api_get_user_info($userId, true);
         $socialAvarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
 
         $profileEditionLink = null;

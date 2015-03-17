@@ -5,7 +5,7 @@
         <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
         {{ user.email}}  
     </p>
-    {% if not user.extra.user_chat_status is empty %}
+    {% if user.user_is_online_in_chat != 0 %}
         <p>
             <img src="{{ "online.png" | icon }}" alt="{{ "Online" | get_lang }}">
             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})

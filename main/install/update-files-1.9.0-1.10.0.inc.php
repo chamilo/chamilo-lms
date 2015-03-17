@@ -86,28 +86,60 @@ if (defined('SYSTEM_INSTALLATION')) {
         'xhosa',
         'yoruba',
     );
+    $filesToDelete = array(
+        'accessibility',
+        'chat',
+        'course_description',
+        'course_home',
+        'external_module',
+        'glossary',
+        'import',
+        'md_mix',
+        'messages',
+        'myagenda',
+        'notebook',
+        'pedaSuggest',
+        'resourcelinker',
+        'scormbuilder',
+        'scormdocument',
+        'slideshow',
+    );
     $list = scandir($langPath);
     foreach ($list as $entry) {
         if (is_dir($langPath.$entry) && in_array($entry, $officialLanguages)) {
-            unlink($langPath.$entry.'/accessibility.inc.php');
-            unlink($langPath.$entry.'/chat.inc.php');
-            unlink($langPath.$entry.'/course_description.inc.php');
-            unlink($langPath.$entry.'/course_home.inc.php');
-            unlink($langPath.$entry.'/external_module.inc.php');
-            unlink($langPath.$entry.'/glossary.inc.php');
-            unlink($langPath.$entry.'/import.inc.php');
-            unlink($langPath.$entry.'/md_mix.inc.php');
-            unlink($langPath.$entry.'/messages.inc.php');
-            unlink($langPath.$entry.'/myagenda.inc.php');
-            unlink($langPath.$entry.'/notebook.inc.php');
-            unlink($langPath.$entry.'/pedaSuggest.inc.php');
-            unlink($langPath.$entry.'/resourcelinker.inc.php');
-            unlink($langPath.$entry.'/scormbuilder.inc.php');
-            unlink($langPath.$entry.'/scormdocument.inc.php');
-            unlink($langPath.$entry.'/slideshow.inc.php');
+            foreach ($filesToDelete as $file) {
+                if (is_file($langPath.$entry.'/'.$file.'.inc.php')) {
+                    unlink($langPath.$entry.'/'.$file.'.inc.php');
+                }
+            }
         }
     }
+    // Remove the "main/conference/" directory that wasn't used since years long
+    // past - see rrmdir function declared below
+    @rrmdir(api_get_path(SYS_CODE_PATH).'conference');
 
 } else {
     echo 'You are not allowed here !'. __FILE__;
+}
+
+/**
+ * Quick function to remove a directory with its subdirectories
+ * @param $dir
+ */
+function rrmdir($dir)
+{
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (filetype($dir."/".$object) == "dir") {
+                    @rrmdir($dir."/".$object);
+                } else {
+                    @unlink($dir."/".$object);
+                }
+            }
+        }
+        reset($objects);
+        rmdir($dir);
+    }
 }

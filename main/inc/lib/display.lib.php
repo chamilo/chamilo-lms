@@ -2042,31 +2042,4 @@ class Display
         return $editProfileUrl;
     }
 
-    /**
-     * Generate the social block for a user
-     * @param int $userId The user id
-     * @param string $groupBlock Optional. Highlight link possible values: group_add, home, messages, messages_inbox,
-     *                          messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
-     * @param int $groupId Optional. Group ID
-     * @return string The HTML code with the social block
-     */
-    public static function getSocialUserBlock($userId, $groupBlock = '', $groupId = 0)
-    {
-        $userInfo = api_get_user_info($userId);
-        $socialAvarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
-
-        $profileEditionLink = null;
-
-        if (api_get_user_id() == $userId) {
-            $profileEditionLink = Display::getProfileEditionLink($userId);
-        }
-
-        $template = new Template();
-        $template->assign('user', $userInfo);
-        $template->assign('socialAvatarBlock', $socialAvarBlock);
-        $template->assign('profileEditionLink', $profileEditionLink);
-
-        return $template->fetch('default/social/user_block.tpl');
-    }
-
 }

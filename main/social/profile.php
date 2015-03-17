@@ -375,7 +375,7 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 //Block Avatar Social
-$social_avatar_block = Display::getSocialUserBlock($user_id, 'shared_profile');
+$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'shared_profile');
 //Social Block Menu
 $social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 

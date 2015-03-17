@@ -82,7 +82,7 @@ $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNet
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
 //Block Social Avatar
 $user_info    = UserManager::get_user_info_by_id($user_id);
-$social_avatar_block = Display::getSocialUserBlock($user_id, 'friends');
+$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'friends');
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');
 

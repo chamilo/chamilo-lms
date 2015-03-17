@@ -56,7 +56,7 @@ $message  = '';
 $userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Avatar
-    $social_avatar_block = Display::getSocialUserBlock($user_id, $show_menu);
+    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, $show_menu);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu($show_menu);
     $message .='<div class="span9">';

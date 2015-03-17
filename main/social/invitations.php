@@ -94,7 +94,7 @@ if (is_array($_GET) && count($_GET)>0) {
 //Block Avatar Social
 $userInfo    = UserManager::get_user_info_by_id($user_id);
 
-$social_avatar_block = Display::getSocialUserBlock($user_id, invitations);
+$social_avatar_block = SocialManager::getSocialUserBlock($user_id, invitations);
 //Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');
 //Block Invitations

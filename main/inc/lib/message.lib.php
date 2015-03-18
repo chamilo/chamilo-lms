@@ -1386,9 +1386,9 @@ class MessageManager
      */
     public static function generate_message_form($id, $params = array())
     {
-        $form = new FormValidator('send_message', null, 'post', null, array('id' => $id.'_form', 'class' => 'form-vertical'));
-        $form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id', 'class' => 'span5'));
-        $form->addElement('textarea', 'content', get_lang('Message'), array('id' => 'content_id', 'rows' => '5', 'class' => 'span5'));
+        $form = new FormValidator('send_message');
+        $form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
+        $form->addElement('textarea', 'content', get_lang('Message'), array('id' => 'content_id', 'rows' => '5'));
 
         return $form->return_form();
     }

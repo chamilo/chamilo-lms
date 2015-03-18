@@ -103,7 +103,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
-        toogle_minipanel();
+        toggle_minipanel();
     });
     </script>';
 }

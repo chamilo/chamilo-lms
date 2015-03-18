@@ -8,7 +8,7 @@
  **/
 
 // Copy little progress bar in <tr></tr>
-function toogle_minipanel() {
+function toggle_minipanel() {
 
     // Construct mini panel
     var panel = $('#lp_navigation_elem div:first').clone();
@@ -31,7 +31,7 @@ function toogle_minipanel() {
 
     $('#learning_path_main #control .buttons img').click(function(){
         $('#learning_path_main #control tr:eq(1)').remove();
-        toogle_minipanel();
+        toggle_minipanel();
     });
     // Hiding navigation left zone
     $('#learning_path_left_zone').hide(50);
@@ -48,7 +48,7 @@ $(document).ready(function() {
     var left_width = $('#learning_path_left_zone').width();
 
    //Adding div to hide panel
-    $('#learning_path_right_zone').before('<div id="hide_bar" class="scorm-toggle arrow-left" style="float: left; width: 25px; height: 1000px;"></div>');
+    $('#learning_path_right_zone').before('<div id="hide_bar" class="scorm-toggle" style="float: left; width: 25px; height: 1000px;"></div>');
     //$('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
 
 
@@ -77,7 +77,7 @@ $(document).ready(function() {
 
     $('#hide_bar table').toggle(function(){
         if ($('#hide_bar').position().left >= left_width) {
-            toogle_minipanel();
+            toggle_minipanel();
         }
     },
     function() {

@@ -134,105 +134,7 @@ if (file_exists($timeAgoLocaleDir)) {
 
 $htmlHeadXtra[] = '<script>
 
-function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        //updateTips( "Length of " + n + " must be between " + min + " and " + max + "." );
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function send_invitation_to_user(user_id) {
-    var content = $( "#content_invitation_id" );
-    $("#send_invitation_form").show();
-    $("#send_invitation_div").dialog({
-        modal:true,
-        buttons: {
-            "'.  addslashes(get_lang('SendInvitation')).'": function() {
-                var bValid = true;
-                bValid = bValid && checkLength( content, "content", 1, 255 );
-                if (bValid) {
-                    var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
-                    var params = $("#send_invitation_form").serialize();
-                    $.ajax({
-                        url: url+"&"+params,
-                        success:function(data) {
-                            $("#message_ajax_reponse").attr("class", "");
-                            $("#message_ajax_reponse").html(data);
-                            $("#message_ajax_reponse").show();
-
-                            $("#send_invitation_div").dialog({ buttons:{}});
-
-                            $("#send_invitation_form").hide();
-                            $("#send_invitation_div").dialog("close");
-                            $("#content_invitation_id").val("");
-                        }
-                    });
-                }
-            },
-        },
-        close: function() {
-        }
-    });
-    $("#send_invitation_div").dialog("open");
-    //prevent the browser to follow the link
-}
-
-function toogle_course (element_html, course_code){
-    elem_id=$(element_html).attr("id");
-    id_elem=elem_id.split("_");
-    ident="div#div_group_"+id_elem[1];
-
-    id_button="#btn_"+id_elem[1];
-    elem_src=$(id_button).attr("src");
-    image_show=elem_src.split("/");
-    my_image=image_show[2];
-    var content = \'social_content\' + id_elem[1];
-    if (my_image=="nolines_plus.gif") {
-        $(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course";
-        $("div#"+content).show("fast");
-    } else {
-        $("div#"+content).hide("fast");
-        $(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
-        return false;
-    }
-
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-        $("div#"+content).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=toogle_course",
-        data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
-        success: function(datos) {
-         $("div#"+content).html(datos);
-        }
-    });
-}
-
 $(document).ready(function (){
-    $("input#id_btn_send_invitation").bind("click", function(){
-        if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
-            $("#form_register_friend").submit();
-        }
-    });
-
-    $("#send_message_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-
-    $("#send_invitation_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-
     var container = $("#wallMessages");
     container.jscroll({
         loadingHtml: "<div class=\"well_border\">' . get_lang('Loading') . ' </div>",
@@ -248,19 +150,6 @@ function timeAgo() {
     $(".timeago").timeago();
 }
 
-function display_hide () {
-    setTimeout("hide_display_message()",3000);
-}
-
-function hide_display_message () {
-    $("div#display_response_id").html("");
-    try {
-        $("#txt_subject_id").val("");
-        $("#txt_area_invite").val("");
-    }catch(e) {
-        $("#txt_area_invite").val("");
-    }
-}
 function register_friend(element_input) {
     if(confirm("'.get_lang('AddToFriends').'")) {
         name_button=$(element_input).attr("id");
@@ -838,7 +727,6 @@ if ($show_full_profile) {
     }
 }
 
-$social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
 
 $tpl = new Template(get_lang('Social'));
@@ -857,6 +745,7 @@ $tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
 $tpl->assign('formModals', $formModals);

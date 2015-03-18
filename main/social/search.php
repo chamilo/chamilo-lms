@@ -14,41 +14,6 @@ require_once api_get_path(LIBRARY_PATH).'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '<script>
-
-function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        //updateTips( "Length of " + n + " must be between " + min + " and " + max + "." );
-        return false;
-    } else {
-        return true;
-    }
-}
-
-$(document).ready(function (){
-    $("input#id_btn_send_invitation").bind("click", function(){
-        if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
-            $("#form_register_friend").submit();
-        }
-    });
-
-    $("#send_message_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-
-    $("#send_invitation_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-});
-</script>';
-
 if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }

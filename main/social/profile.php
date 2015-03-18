@@ -134,69 +134,7 @@ if (file_exists($timeAgoLocaleDir)) {
 
 $htmlHeadXtra[] = '<script>
 
-function checkLength( o, n, min, max ) {
-    if ( o.val().length > max || o.val().length < min ) {
-        o.addClass( "ui-state-error" );
-        //updateTips( "Length of " + n + " must be between " + min + " and " + max + "." );
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function toogle_course (element_html, course_code){
-    elem_id=$(element_html).attr("id");
-    id_elem=elem_id.split("_");
-    ident="div#div_group_"+id_elem[1];
-
-    id_button="#btn_"+id_elem[1];
-    elem_src=$(id_button).attr("src");
-    image_show=elem_src.split("/");
-    my_image=image_show[2];
-    var content = \'social_content\' + id_elem[1];
-    if (my_image=="nolines_plus.gif") {
-        $(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course";
-        $("div#"+content).show("fast");
-    } else {
-        $("div#"+content).hide("fast");
-        $(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
-        return false;
-    }
-
-     $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-        $("div#"+content).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=toogle_course",
-        data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
-        success: function(datos) {
-         $("div#"+content).html(datos);
-        }
-    });
-}
-
 $(document).ready(function (){
-    $("input#id_btn_send_invitation").bind("click", function(){
-        if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
-            $("#form_register_friend").submit();
-        }
-    });
-
-    $("#send_message_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-
-    $("#send_invitation_div").dialog({
-        autoOpen: false,
-        modal    : false,
-        width    : 550,
-        height    : 300
-       });
-
     var container = $("#wallMessages");
     container.jscroll({
         loadingHtml: "<div class=\"well_border\">' . get_lang('Loading') . ' </div>",
@@ -212,19 +150,6 @@ function timeAgo() {
     $(".timeago").timeago();
 }
 
-function display_hide () {
-    setTimeout("hide_display_message()",3000);
-}
-
-function hide_display_message () {
-    $("div#display_response_id").html("");
-    try {
-        $("#txt_subject_id").val("");
-        $("#txt_area_invite").val("");
-    }catch(e) {
-        $("#txt_area_invite").val("");
-    }
-}
 function register_friend(element_input) {
     if(confirm("'.get_lang('AddToFriends').'")) {
         name_button=$(element_input).attr("id");

@@ -1398,8 +1398,7 @@ class MessageManager
         $form = new FormValidator('send_invitation', null, 'post', null, array('id' => $id.'_form', 'class' => 'form-vertical'));
         //$form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
         $form->addElement('textarea', 'content', get_lang('AddPersonalMessage'), array('id' => 'content_invitation_id', 'rows' => '5', 'class' => 'span5'));
-        $div = Display::div($form->return_form(), array('id' => $id.'_div', 'style' => 'display:none'));
-        return $div;
+        return $form->return_form();
     }
 
     //@todo this functions should be in the message class

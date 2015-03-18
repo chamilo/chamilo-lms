@@ -144,42 +144,6 @@ function checkLength( o, n, min, max ) {
     }
 }
 
-function send_invitation_to_user(user_id) {
-    var content = $( "#content_invitation_id" );
-    $("#send_invitation_form").show();
-    $("#send_invitation_div").dialog({
-        modal:true,
-        buttons: {
-            "'.  addslashes(get_lang('SendInvitation')).'": function() {
-                var bValid = true;
-                bValid = bValid && checkLength( content, "content", 1, 255 );
-                if (bValid) {
-                    var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
-                    var params = $("#send_invitation_form").serialize();
-                    $.ajax({
-                        url: url+"&"+params,
-                        success:function(data) {
-                            $("#message_ajax_reponse").attr("class", "");
-                            $("#message_ajax_reponse").html(data);
-                            $("#message_ajax_reponse").show();
-
-                            $("#send_invitation_div").dialog({ buttons:{}});
-
-                            $("#send_invitation_form").hide();
-                            $("#send_invitation_div").dialog("close");
-                            $("#content_invitation_id").val("");
-                        }
-                    });
-                }
-            },
-        },
-        close: function() {
-        }
-    });
-    $("#send_invitation_div").dialog("open");
-    //prevent the browser to follow the link
-}
-
 function toogle_course (element_html, course_code){
     elem_id=$(element_html).attr("id");
     id_elem=elem_id.split("_");
@@ -838,7 +802,6 @@ if ($show_full_profile) {
     }
 }
 
-$social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
 
 $tpl = new Template(get_lang('Social'));
@@ -857,6 +820,7 @@ $tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
 $tpl->assign('formModals', $formModals);

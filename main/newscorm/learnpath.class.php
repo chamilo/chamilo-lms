@@ -1908,7 +1908,7 @@ class learnpath
 
         if ($this->mode == 'fullscreen') {
             $navbar = '
-                  <div class="buttons">
+                  <div class="buttons well">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
@@ -1917,7 +1917,7 @@ class learnpath
 
         } else {
             $navbar = '
-                  <div class="buttons">
+                  <div class="buttons well">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>
@@ -3131,8 +3131,8 @@ class learnpath
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        $html = '<div id="scorm_title" class="panel-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
-        $html .= '<div class="panel-body">';
+        $html = '<div id="scorm_title" class="scorm-heading">'.Security::remove_XSS($this->get_name()) . '</div>';
+        $html .= '<div class="scorm-body">';
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
         if ($is_allowed_to_edit && $hide_teacher_icons_lp == false) {
@@ -3189,7 +3189,7 @@ class learnpath
             $dirTypes = self::getChapterTypes();
 
             if (in_array($item['type'], $dirTypes)) {
-                $scorm_color_background =' scorm_item_section ';
+                $scorm_color_background ='scorm_item_section ';
                 $style_item = '';
             }
             if ($item['id'] == $this->current) {

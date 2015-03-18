@@ -856,7 +856,6 @@ $tpl->assign('socialRightInformation', $socialRightInformation);
 $tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
-$formModalTpl->assign('friendId', $friendId);
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 

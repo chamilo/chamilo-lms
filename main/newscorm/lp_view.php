@@ -88,6 +88,18 @@ $(document).ready(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
+$htmlHeadXtra[] = '<script type="text/javascript">
+        $(document).ready(function(){
+            $("#icon-down").click(function(){
+                $("#icon-up").removeClass("hidden");
+                $(this).addClass("hidden");
+            });
+             $("#icon-up").click(function(){
+                $("#icon-down").removeClass("hidden");
+                $(this).addClass("hidden");
+            });
+        });
+</script>';
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
@@ -363,7 +375,9 @@ if ($is_allowed_to_edit) {
     echo '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
     echo '<div class="panel panel-default">';
     echo '<div class="panel-heading" role="tab" id="headingOne">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'. get_lang('Modulo 9 - Chamilo LMS'). '
+        <a id="ui-option" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <i id="icon-down"class="fa fa-chevron-down hidden"></i>
+        <i id="icon-up" class="fa fa-chevron-up"></i>
         </a></div>';
     ?>
         <!-- end header -->
@@ -391,7 +405,7 @@ if ($is_allowed_to_edit) {
                 $iconHome.' '.$name,
                 $url,
                 array(
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-success btn-block',
                 'target' => '_self',
                 'onclick' => 'javascript: window.parent.API.save_asset();'
                 )
@@ -441,7 +455,7 @@ if ($is_allowed_to_edit) {
         <!-- TOC layout -->
 
         <div id="toc_id" name="toc_name">
-            <div id="learning_path_toc" class="panel panel-default">
+            <div id="learning_path_toc" class="scorm-list">
                 <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
             </div>
         </div>

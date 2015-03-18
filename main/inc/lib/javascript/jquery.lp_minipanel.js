@@ -38,7 +38,9 @@ function toogle_minipanel() {
     $('#learning_path_right_zone').css('margin-left','10px');
     $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
 }
-
+function hiddenPanel(){
+    $("#learning_path_left_zone").addClass('demo');
+}
 var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
@@ -46,13 +48,17 @@ $(document).ready(function() {
     var left_width = $('#learning_path_left_zone').width();
 
    //Adding div to hide panel
-    $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
-        '<table style="border: 0 none; width: 100%; height: 100%; cursor: pointer; background-color: #EEEEEE">' +
-        '<tr><td></td></tr></table></div>');
-    $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+    $('#learning_path_right_zone').before('<div id="hide_bar" class="scorm-toggle arrow-left" style="float: left; width: 25px; height: 1000px;"></div>');
+    //$('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+
+
+
+    $("#hider_bar").click(function(){
+        hiddenPanel();
+    });
 
     //Adding effects to hide bar
-    $('#hide_bar table').hover(function () {
+    /* $('#hide_bar table').hover(function () {
     	if ($('#hide_bar').position().left >= left_width)
     		$(this).css('backgroundImage','url(../img/hide1.png)').css('backgroundColor','#888888');
     	else if($('#hide_bar').position().left <= left_width_mini)
@@ -64,7 +70,7 @@ $(document).ready(function() {
               $(this).css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
         }
     );
-
+    */
     var original = $('#content_id').height();
 
     // Adding functionality
@@ -78,7 +84,7 @@ $(document).ready(function() {
         // Show navigation left zone
         $('#learning_path_left_zone').show(50);
         $('#learning_path_right_zone').css('marginLeft', left_width + 25 + 'px');
-        $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+        /* $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE'); */
         $('#learning_path_main  #control').remove();
         $('#content_id').css({ height: original});
     });

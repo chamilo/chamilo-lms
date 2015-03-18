@@ -199,8 +199,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->addText('title', get_lang('Subject'), true, array('class' => 'span4'));
-	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
+	$form->addText('title', get_lang('Subject'), true, array('class' => 'col-md-4'));
+	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {
 	    $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
@@ -214,16 +214,18 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	}
 
 	if (empty($group_id)) {
-        $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
+        $form->addElement('advanced_settings','<div  id="filepaths" class="form-group">
                     <div id="filepath_1">
-                        <input type="file" name="attach_1"/><br />
-                        '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
+                    <label>'.get_lang('FilesAttachment').'</label>
+                    <input type="file" name="attach_1"/>
+                    <label>'.get_lang('Description').'</label>
+                    <input id="file-descrtiption" type="text" name="legend[]" class="form-control"/>
                     </div>
-                </span>');
+                </div>');
 		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 
-	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
+	$form->addElement('style_submit_button','compose',api_xml_http_response_encode('<i class="fa fa-paper-plane"></i> '.get_lang('SendMessage')),'class="btn-success"');
 	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 
 	if (!empty($group_id) && !empty($message_id)) {
@@ -315,12 +317,13 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'messages');
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="span9">';
+    $social_right_content .= '<div class="row">';
+    $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .=  '</div>';
     $social_right_content .=  '</div>';
-    $social_right_content .= '<div class="span9">';
+    $social_right_content .= '<div class="col-md-12">';
 }
 
 // MAIN CONTENT
@@ -366,6 +369,7 @@ if (!isset($_POST['compose'])) {
     }
 }
 if (api_get_setting('allow_social_tool') == 'true') {
+    $social_right_content .=  '</div>';
     $social_right_content .=  '</div>';
 }
 

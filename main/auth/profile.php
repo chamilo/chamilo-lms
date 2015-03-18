@@ -724,8 +724,9 @@ $url_big_image      = $big_image.'?rnd='.time();
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
 if (api_get_setting('allow_social_tool') == 'true') {
-    echo '<div class="row-fluid">';
+    echo '<div class="row">';
         echo '<div class="col-md-3">';
+        echo SocialManager::getSocialUserBlock(api_get_user_id(), 'home');
         echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
         echo '</div>';
         echo '<div class="col-md-9">';

@@ -760,7 +760,7 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="#" id="btn-to-send-message" title="'.get_lang('SendMessage').'">';
+                $html .= '<li><a href="#" class="btn-to-send-message" data-send-to="' . $user_id . '" title="'.get_lang('SendMessage').'">';
                 $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
             }
 
@@ -771,7 +771,7 @@ class SocialManager extends UserManager
                 $html .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
             } else {
                 if (!$show_full_profile) {
-                    $html .= '<li><a  href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user_id.'\');" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+                    $html .= '<li><a class="btn-to-send-invitation" href="#" data-send-to="' . $user_id . '" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
                 }
             }
 

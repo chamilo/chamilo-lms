@@ -428,7 +428,7 @@ if ($is_allowed_to_edit) {
                 }
                 ?>
                 </div>
-                <div class="navegation-bar">
+                <div id="lp_navigation_elem" class="navegation-bar">
                     <?php echo $navigation_bar; ?>
                     <div id="progress_bar">
                         <?php echo $progress_bar; ?>
@@ -489,10 +489,12 @@ if ($is_allowed_to_edit) {
         var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
         var heightControl = ($('#control').is(':visible'))? $('#control').height() : 0 ;
         var heightMedia = ($('#lp_media_file').length != 0)? $('#lp_media_file').height() : 0 ;
-        var heightTitle = ($('#scorm_title').height())? $('#scorm_title').height() : 0 ;
+        //var heightTitle = ($('#scorm_title').height())? $('#scorm_title').height() : 0 ;
         var heightAction = ($('#actions_lp').height())? $('#actions_lp').height() : 0 ;
 
-        var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
+        //var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
+        var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightAction + 100;
+
         heightTop = (heightTop < 300)? heightTop : 300;
         var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
         // -40 is a static adjustement for margin, spaces on the page

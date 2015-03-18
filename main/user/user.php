@@ -496,13 +496,11 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 
     // Build search-form
-    $form = new FormValidator('search_user', 'get', '', '', null, false);
-    $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
+    $form = new FormValidator('search_user', 'get', '', '', null, FormValidator::LAYOUT_INLINE);
     $form->addText('keyword', '', false);
     $form->addButtonSearch(get_lang('SearchButton'));
-    $form->addElement('static', 'additionalactions', null, $actions);
     $form->display();
+    echo $actions;
     echo '</div>';
 }
 

@@ -390,15 +390,6 @@ form .formw input {
 
 /* New changes Chamilo 1.9 */
 
-#lp_navigation_elem .buttons{
-    margin-bottom: 5px;
-}
-
-#lp_navigation_elem {
-    padding-left: 15px;
-    width: 110px;
-}
-
 html {
     margin: 0;
     padding: 0;
@@ -3329,13 +3320,6 @@ form .formw .freeze {
   margin-top: .5em;
   font-size: 12px;
 }
-#lp_navigation_elem {
-  float: left;
-}
-#lp_navigation_elem {
-  padding-left: 15px;
-  width: 160px;
-}
 #lp_navigation_elem .buttons {
   margin-bottom: .5em;
   text-align: center;
@@ -5390,13 +5374,6 @@ i.size-32.icon-new-work{
   font-size:14px;
 }
 
-#author_icon {
-  float:left;
-}
-
-#lp_navigation_elem {
-  float:left;
-}
 
 #author_image {
   border: 1px solid #CCCCCC;

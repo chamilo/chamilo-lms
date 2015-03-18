@@ -89,7 +89,7 @@ class CalculatedAnswer extends Question
                     var answer = e.editor.getData();
                 }
                 var blanks = answer.match(/\[[^\]]*\]/g);
-                var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('VariableRanges').'</label><div class=\"controls\"><table>";
+                var fields = "<div class=\"form-group\"><label class=\"col-sm-2\">'.get_lang('VariableRanges').'</label><div class=\"col-sm-8\"><table>";
                 if (blanks!=null) {
                     if (typeof updateBlanks.randomValues === "undefined") {
                         updateBlanks.randomValues = [];
@@ -120,7 +120,15 @@ class CalculatedAnswer extends Question
 
         // answer
         $form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
-        $form->addElement('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'Test_Question_Description', 'Width' => '100%', 'Height' => '350'));
+        $form->addElement(
+            'html_editor',
+            'answer',
+            '<img src="../img/fill_field.png">',
+            array(
+                'id' => 'answer',
+                'onkeyup' => 'javascript: updateBlanks(this);'
+            ),
+            array('ToolbarSet' => 'Test_Question_Description', 'Width' => '100%', 'Height' => '350'));
 
         $form->addRule('answer', get_lang('GiveText'),'required');
         $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
@@ -137,11 +145,8 @@ class CalculatedAnswer extends Question
             )
         );
         $form->addElement(
-            'html',
-            '<div class="control-group">
-                <label class="control-label"></label>
-                <div class="controls">'.$notationListButton.'</div>
-            </div>');
+            'label', null,
+            $notationListButton);
 
         $form->addElement('label', null, get_lang('FormulaExample'));
 

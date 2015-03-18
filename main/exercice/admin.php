@@ -521,7 +521,7 @@ if (isset($_GET['message'])) {
 }
 
 if ($newQuestion || $editQuestion) {
-    // statement management
+    // Question management
     $type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
     echo '<input type="hidden" name="Type" value="'.$type.'" />';
 

@@ -705,8 +705,19 @@ class IndexManager
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
 
-        $form->addText('login', get_lang('UserName'), true, array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'icon' => 'lock'));
+        $form->addText(
+            'login',
+            get_lang('UserName'),
+            true,
+            array('id' => 'login', 'autofocus' => 'autofocus', 'icon' => 'user')
+        );
+
+        $form->addElement(
+            'password',
+            'password',
+            get_lang('Pass'),
+            array('id' => 'password', 'icon' => 'lock')
+        );
 
         global $_configuration;
 

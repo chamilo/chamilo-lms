@@ -109,10 +109,10 @@ class MultipleAnswer extends Question
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
 
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+			$form->addElement('html_editor', 'answer['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+				$form->addElement('html_editor', 'comment['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 
 			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span1", 'value' => '0'));
 			$form -> addElement ('html', '</tr>');
@@ -122,23 +122,14 @@ class MultipleAnswer extends Question
 
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 
-
-		$navigator_info = api_get_navigator();
-
 		global $text, $class;
 		if ($obj_ex->edit_exercise_in_lp == true) {
-			//ie6 fix
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-			} else {
-                // setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-			}
+			// setting the save button here and not in the question class.php
+			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
+			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
+			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		}
+
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');

@@ -283,8 +283,6 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
                 $template = $this->getForm()->getDefaultElementTemplate();
             }
             $html = str_replace('{label}', $nameLabel, $template);
-            // Default template
-            //$html = str_replace('{label}', $nameLabel, $this->_elementTemplate);
         }
         $html = str_replace('{label-for}', $labelFor, $html);
         $html = str_replace('{icon}', $icon, $html);

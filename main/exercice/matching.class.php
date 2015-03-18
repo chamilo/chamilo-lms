@@ -113,7 +113,7 @@ class Matching extends Question
             $puce->freeze();
             $group[] = $puce;
 
-            $group[] = $form->createElement('text', 'answer['.$i.']',null, 'size="60" style="margin-left: 0em;"');
+            $group[] = $form->createElement('text', 'answer['.$i.']',null);
             $group[] = $form->createElement('select', 'matches['.$i.']',null,$a_matches);
             $group[] = $form->createElement('text', 'weighting['.$i.']',null, array('class' => 'span1', 'value' => 10));
             $form -> addGroup($group, null, null, '</td><td>');

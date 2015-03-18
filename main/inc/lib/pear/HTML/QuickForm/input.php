@@ -195,12 +195,4 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
             return parent::exportValue($submitValues, $assoc);
         }
     }
-
-    /**
-     * @param string $layout
-     */
-    public function getTemplate($layout)
-    {
-
-    }
 }

@@ -28,7 +28,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
      * @access public
      * @return void
      */
-    function HTML_QuickForm_label(
+    public function __construct(
         $label = null,
         $text = null,
         $attributes = null
@@ -38,28 +38,10 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     }
 
     /**
-     * Accepts a renderer
-     *
-     * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
-     * @access public
-     * @return void
-     */
-    public function accept(&$renderer, $required = false, $error = null)
-    {
-        $renderer->renderHtml($this);
-    }
-
-    /**
      * @return string
      */
     public function toHtml()
     {
-        $for = $this->getLabelFor();
-        return
-            '<label class="control-label"' . empty($for) ? '' : ' for="' . $for . '"' . '>' .
-            $this->getLabel() .
-            '</label>
-            ' .
-            parent::toHtml();
+        return parent::toHtml();
     }
 }

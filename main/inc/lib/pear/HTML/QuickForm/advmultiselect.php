@@ -533,11 +533,9 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
 {javascript}
-
   <div class="col-sm-3"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
   <div class="col-sm-2"><div class="text-center">{add}{remove}</div></div>
-  <div class="col-sm-3">
-<!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+  <div class="col-sm-3"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
 
 ';
         }
@@ -545,6 +543,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $this->_elementTemplate = str_replace('{javascript}', '',
                 $this->_elementTemplate);
         }
+
         return $oldTemplate;
     }
 

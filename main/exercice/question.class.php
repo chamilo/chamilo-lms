@@ -1289,7 +1289,7 @@ abstract class Question
             //$course_medias = Question::prepare_course_media_select(api_get_course_int_id());
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
 
-            $form->addElement('html','</div>');
+            $form->addElement('html', '</div>');
         }
 
         if (!isset($_GET['fromExercise'])) {
@@ -1318,10 +1318,10 @@ abstract class Question
 
         // default values
         $defaults = array();
-        $defaults['questionName']           = $this -> question;
-        $defaults['questionDescription']    = $this -> description;
-        $defaults['questionLevel']          = $this -> level;
-        $defaults['questionCategory']       = $this->category;
+        $defaults['questionName'] = $this->question;
+        $defaults['questionDescription'] = $this->description;
+        $defaults['questionLevel'] = $this->level;
+        $defaults['questionCategory'] = $this->category;
 
         //$defaults['questionCategory']       = $this->category_list;
         //$defaults['parent_id']              = $this->parent_id;
@@ -1345,7 +1345,7 @@ abstract class Question
      * @param FormValidator $form
      * @param Exercise $objExercise
      */
-    public function processCreation ($form, $objExercise = null)
+    public function processCreation($form, $objExercise = null)
     {
         //$this->updateParentId($form->getSubmitValue('parent_id'));
         $this->updateTitle($form->getSubmitValue('questionName'));
@@ -1365,13 +1365,13 @@ abstract class Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
-     * @param the formvalidator instance
+     * @param the FormValidator instance
      */
     abstract function createAnswersForm ($form);
 
     /**
      * abstract function which process the creation of answers
-     * @param the formvalidator instance
+     * @param the FormValidator instance
      */
     abstract function processAnswersCreation ($form);
 

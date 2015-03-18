@@ -32,7 +32,7 @@
  * @version     Release: 3.2.11
  * @since       1.0
  */
-class HTML_QuickForm_password extends HTML_QuickForm_input
+class HTML_QuickForm_password extends HTML_QuickForm_text
 {
     // {{{ constructor
 
@@ -48,15 +48,12 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
      * @return    void
      * @throws
      */
-    function HTML_QuickForm_password($elementName=null, $elementLabel=null, $attributes=null)
+    public function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
         $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('password');
-    } //end constructor
-
-    // }}}
-    // {{{ setSize()
+    }
 
     /**
      * Sets size of password element
@@ -66,13 +63,10 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setSize($size)
+    public function setSize($size)
     {
         $this->updateAttributes(array('size'=>$size));
-    } //end func setSize
-
-    // }}}
-    // {{{ setMaxlength()
+    }
 
     /**
      * Sets maxlength of password element
@@ -82,13 +76,10 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function setMaxlength($maxlength)
+    public function setMaxlength($maxlength)
     {
         $this->updateAttributes(array('maxlength'=>$maxlength));
-    } //end func setMaxlength
-
-    // }}}
-    // {{{ getFrozenHtml()
+    }
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
@@ -98,14 +89,10 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
      * @return    string
      * @throws
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         $value = $this->getValue();
         return ('' != $value? '**********': '&nbsp;') .
                $this->_getPersistantData();
-    } //end func getFrozenHtml
-
-    // }}}
-
-} //end class HTML_QuickForm_password
-?>
+    }
+}

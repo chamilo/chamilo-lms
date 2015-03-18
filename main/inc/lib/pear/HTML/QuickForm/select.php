@@ -645,6 +645,60 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         }
     }
 
-    // }}}
-} //end class HTML_QuickForm_select
-?>
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
+    {
+        /*$size = $this->getInputSize();
+        $size = empty($size) ? '8' : $size;*/
+
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-2 control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-8">
+                        {icon}
+                        {element}
+
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                        <!-- BEGIN error -->
+                            <span class="help-inline">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
+    }
+}

@@ -1509,17 +1509,21 @@ if (!isset($folders) || $folders === false) {
 $actions = '<div class="actions">';
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
-    $actions .= '<span style="display:inline-block;">';
-    $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
-    $renderer = & $form->defaultRenderer();
-    $renderer->setElementTemplate('<span>{element}</span> ');
+
+    $form = new FormValidator(
+        'search_document',
+        'get',
+        api_get_self().'?'.api_get_cidreq(),
+        '',
+        array(),
+        FormValidator::LAYOUT_INLINE
+    );
     $form->addText('keyword', '', false, array('class' => 'col-md-2'));
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);
     $form->addButtonSearch(get_lang('Search'));
-    $actions .= $form->return_form();
-    $actions .= '</span>';
+    $actions .= $form->returnForm();
 }
 
 /* GO TO PARENT DIRECTORY */

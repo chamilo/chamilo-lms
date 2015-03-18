@@ -34,7 +34,6 @@
  */
 class HTML_QuickForm_radio extends HTML_QuickForm_input
 {
-
     /**
      * Radio display text
      * @var       string
@@ -55,14 +54,14 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    public function HTML_QuickForm_radio(
+    public function __construct(
         $elementName = null,
         $elementLabel = null,
         $text = null,
         $value = null,
         $attributes = null
     ) {
-        $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         if (isset($value)) {
             $this->setValue($value);
         }

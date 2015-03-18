@@ -9,7 +9,11 @@ class FormValidator extends HTML_QuickForm
 {
     const LAYOUT_HORIZONTAL = 'horizontal';
     const LAYOUT_INLINE = 'inline';
+    const LAYOUT_BOX = 'box';
+    const LAYOUT_BOX_NO_LABEL = 'box-no-label';
+
     public $with_progress_bar = false;
+    private $layout;
 
     /**
      * Constructor
@@ -27,7 +31,7 @@ class FormValidator extends HTML_QuickForm
         $method = 'post',
         $action = '',
         $target = '',
-        $attributes = null,
+        $attributes = array(),
         $layout = self::LAYOUT_HORIZONTAL,
         $trackSubmit = true
     ) {
@@ -40,11 +44,14 @@ class FormValidator extends HTML_QuickForm
             $layout = 'inline';
         }
 
+        $this->setLayout($layout);
+
         switch ($layout) {
             case self::LAYOUT_HORIZONTAL:
                 $attributes['class'] = 'form-horizontal';
                 break;
             case self::LAYOUT_INLINE:
+            case self::LAYOUT_BOX:
                 $attributes['class'] = 'form-inline';
                 break;
         }
@@ -82,7 +89,7 @@ class FormValidator extends HTML_QuickForm
             $elementTemplate = ' {label}  {element} ';
             $renderer->setElementTemplate($elementTemplate);
         } else {
-            $renderer->setElementTemplate($this->getElementTemplate());
+            $renderer->setElementTemplate($this->getDefaultElementTemplate());
 
             // Display a gray div in the buttons
             $templateSimple = '<div class="form-actions">{label} {element}</div>';
@@ -135,7 +142,7 @@ EOT;
     /**
      * @return string
      */
-    public function getElementTemplate()
+    public function getDefaultElementTemplate()
     {
         return '
             <div class="form-group {error_class}">
@@ -144,6 +151,7 @@ EOT;
                     {label}
                 </label>
                 <div class="col-sm-8">
+                    {icon}
                     {element}
 
                     <!-- BEGIN label_2 -->
@@ -161,6 +169,23 @@ EOT;
                 </div>
             </div>';
     }
+
+    /**
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
 
     /**
      * Adds a text field to the form.
@@ -606,11 +631,13 @@ EOT;
      * @param string $label				 The label for the form-element
      * @param bool   $required	(optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page.
-     * @param array  $config (optional)	Configuration settings for the online editor.
+     * @param array  $config (optional) Configuration settings for the online editor.
      */
     public function addHtmlEditor($name, $label, $required = true, $fullPage = false, $config = array())
     {
-        $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
+        $config['rows'] = isset($config['rows']) ? $config['rows'] : 15;
+        $config['cols'] = isset($config['cols']) ? $config['cols'] : 80;
+        $this->addElement('html_editor', $name, $label, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
@@ -731,7 +758,41 @@ EOT;
      */
     public function display()
     {
-        echo $this->return_form();
+        echo $this->returnForm();
+    }
+
+    /**
+     * Returns the HTML code of the form.
+     * @return string $return_value HTML code of the form
+     */
+    public function returnForm()
+    {
+        $error = false;
+        /** @var HTML_QuickForm_element $element */
+        foreach ($this->_elements as $element) {
+            if (!is_null(parent::getElementError($element->getName()))) {
+                $error = true;
+                break;
+            }
+        }
+        $returnValue = '';
+        $js = null;
+
+        if ($error) {
+            $returnValue = Display::return_message(
+                get_lang('FormHasErrorsPleaseComplete'),
+                'warning'
+            );
+        }
+
+        $returnValue .= $js;
+        $returnValue .= parent::toHtml();
+        // Add div-element which is to hold the progress bar
+        if (isset($this->with_progress_bar) && $this->with_progress_bar) {
+            $returnValue .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
+        }
+
+        return $returnValue;
     }
 
     /**
@@ -743,41 +804,11 @@ EOT;
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, august 2006
      * @author Julio Montoya
+     * @deprecated use returnForm()
      */
     public function return_form()
     {
-        $error = false;
-        $addDateLibraries = false;
-        $dateElementTypes = array(
-            'date_range_picker',
-            'date_time_picker',
-            'date_picker',
-            'datepicker',
-            'datetimepicker'
-        );
-        /** @var HTML_QuickForm_element $element */
-        foreach ($this->_elements as $element) {
-            if (!is_null(parent::getElementError($element->getName()))) {
-                $error = true;
-                break;
-            }
-        }
-        $return_value = '';
-        $js = null;
-
-        if ($error) {
-            $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'),
-                'warning');
-        }
-
-        $return_value .= $js;
-        $return_value .= parent::toHtml();
-        // Add div-element which is to hold the progress bar
-        if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            $return_value .= '<div id="dynamic_div" style="display:block; margin-left:40%; margin-top:10px; height:50px;"></div>';
-        }
-
-        return $return_value;
+        return $this->returnForm();
     }
 
     /**
@@ -866,7 +897,7 @@ EOT;
     }
 
     /**
-     * @return null
+     * @return HTML_QuickForm_Renderer_Default
      */
     public static function getDefaultRenderer()
     {

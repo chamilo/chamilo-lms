@@ -5485,3 +5485,7 @@ i.size-32.icon-new-work{
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
 }
+
+.actions .form-inline {
+    display:inline-block;
+}

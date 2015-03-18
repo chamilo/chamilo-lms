@@ -533,15 +533,12 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
 {javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>
+
+  <div class="col-sm-3"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
+  <div class="col-sm-2"><div class="text-center">{add}{remove}</div></div>
+  <div class="col-sm-3">
+<!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+
 ';
         }
         if ($js == false) {
@@ -1010,9 +1007,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         if ($this->selectAllCheckBox) {
             $strHtml .= '
+                    <div class="col-sm-8">
                     <label class="checkbox" >'.get_lang('SelectAll').'
                     <input type="checkbox" class="advmultiselect_checkbox" id="'.$selectId.'_select_all'.'">
                     </label>
+                    </div>
             ';
         }
 

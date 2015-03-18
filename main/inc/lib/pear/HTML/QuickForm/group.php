@@ -91,7 +91,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_group($elementName=null, $elementLabel=null, $elements=null, $separator=null, $appendName = true)
+    public function __construct($elementName=null, $elementLabel=null, $elements=null, $separator=null, $appendName = true)
     {
         parent::__construct($elementName, $elementLabel);
         $this->_type = 'group';

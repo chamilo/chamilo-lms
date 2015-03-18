@@ -37,6 +37,9 @@
  */
 class HTML_QuickForm_element extends HTML_Common
 {
+    private $layout;
+    private $icon;
+
     // {{{ properties
 
     /**
@@ -88,7 +91,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_element($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         parent::__construct($attributes);
         if (isset($elementName)) {
@@ -107,6 +110,46 @@ class HTML_QuickForm_element extends HTML_Common
             }
             $this->setLabel($elementLabel, $labelFor);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIconToHtml()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param mixed $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
     }
 
     /**
@@ -238,7 +281,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    string
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         $value = $this->getValue();
         // Modified by Ivan Tcholakov, 16-MAR-2010.
@@ -284,7 +327,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    bool
      */
-    function isFrozen()
+    public function isFrozen()
     {
         return $this->_flagFrozen;
     } // end func isFrozen
@@ -318,7 +361,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function setLabel($label, $labelFor = null)
+    public function setLabel($label, $labelFor = null)
     {
         $this->_label = $label;
         if (!empty($labelFor)) {

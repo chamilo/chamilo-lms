@@ -3299,7 +3299,7 @@ class CourseManager
         $notifications = isset($params['notifications']) ? $params['notifications'] : null;
         $html.= $params['title']. $notifications;
         $html.='</li>';
-        
+
         return $html;
     }
 
@@ -5321,8 +5321,13 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result,
-            array('select_all_checkbox' => true));
+        $form->addElement(
+            'advmultiselect',
+            'users',
+            get_lang('Users'),
+            $result,
+            array('select_all_checkbox' => true)
+        );
     }
 
     /**
@@ -5344,7 +5349,7 @@ class CourseManager
             $result[$content['value']] = $content['content'];
         }
 
-        $group = $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
+        $form->addElement('advmultiselect', 'users', get_lang('Users'), $result);
     }
 
     /**
@@ -5375,7 +5380,7 @@ class CourseManager
                     ) { // $to_already_selected is the array containing the groups (and users) that are already selected
                         $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
                         $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled";
-                        $result [] = array(
+                        $result[] = array(
                             'disabled' => $user_disabled,
                             'value' => "GROUP:" . $this_group['id'],
                             'content' => "G: " . $this_group['name'] . " - " . $this_group['userNb'] . " " . $user_label

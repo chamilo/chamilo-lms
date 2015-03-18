@@ -26,42 +26,6 @@ function checkLength( o, n, min, max ) {
     }
 }
 
-function send_invitation_to_user(user_id) {
-    var content = $( "#content_invitation_id" );
-    $("#send_invitation_form").show();
-    $("#send_invitation_div").dialog({
-        modal:true,
-        buttons: {
-            "'.addslashes(get_lang('SendInvitation')).'": function() {
-                var bValid = true;
-                bValid = bValid && checkLength( content, "content", 1, 255 );
-                if (bValid) {
-                    var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
-                    var params = $("#send_invitation_form").serialize();
-                    $.ajax({
-                        url: url+"&"+params,
-                        success:function(data) {
-                            $("#message_ajax_reponse").attr("class", "");
-                            $("#message_ajax_reponse").html(data);
-                            $("#message_ajax_reponse").show();
-
-                            $("#send_invitation_div").dialog({ buttons:{}});
-
-                            $("#send_invitation_form").hide();
-                            $("#send_invitation_div").dialog("close");
-                            $("#content_invitation_id").val("");
-                        }
-                    });
-                }
-            },
-        },
-        close: function() {
-        }
-    });
-    $("#send_invitation_div").dialog("open");
-    //prevent the browser to follow the link
-}
-
 $(document).ready(function (){
     $("input#id_btn_send_invitation").bind("click", function(){
         if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
@@ -153,7 +117,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="javascript:void(0);" onclick="javascript:send_invitation_to_user(\''.$user['user_id'].'\');"/>
+                $send_inv = '<a href="#" class="btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
                              <button class="btn btn-mini"><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button></a><br /><br />';
             }
             $send_msg = '<a href="#" class="btn-to-send-message" data-send-to="' . $user['user_id'] . '">
@@ -284,7 +248,6 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
     );
 }
 
-$social_right_content .= MessageManager::generate_invitation_form('send_invitation');
 
 $tpl = new Template($tool_name);
 $tpl->assign('social_avatar_block', $social_avatar_block);
@@ -293,6 +256,7 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));
+$formModalTpl->assign('invitationForm', MessageManager::generate_invitation_form('send_invitation'));
 $formModals = $formModalTpl->fetch('default/social/form_modals.tpl');
 
 $tpl->assign('formModals', $formModals);

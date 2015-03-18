@@ -5578,16 +5578,22 @@ ul.holder li.bit-box a.closebutton{
   visibility: hidden;
   display: none;
 }
-/* Bar toogle scorm */
-.scorm-toogle{
-  background-color: #ddd4b0;
+/* Bar toggle scorm */
+.scorm-toggle{
+  background-color: #ddd4b0 !important;
   margin-left: 10px;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
+  display: block;
+  cursor: pointer;
 }
-
-
+.scorm-toggle.arrow-right{
+  background: url("../img/arrow-right.png") no-repeat center center;
+}
+.scorm-toggle.arrow-left{
+  background: url("../img/arrow-left.png") no-repeat center center;
+}
 /* CSS Responsive */
 @media (max-width: 480px) {
   #learning_path_breadcrumb_zone {

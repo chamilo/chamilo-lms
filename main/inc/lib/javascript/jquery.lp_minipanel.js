@@ -38,7 +38,9 @@ function toogle_minipanel() {
     $('#learning_path_right_zone').css('margin-left','10px');
     $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
 }
-
+function hiddenPanel(){
+    $("#learning_path_left_zone").addClass('demo');
+}
 var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
@@ -46,8 +48,14 @@ $(document).ready(function() {
     var left_width = $('#learning_path_left_zone').width();
 
    //Adding div to hide panel
-    $('#learning_path_right_zone').before('<div id="hide_bar" class="scorm-toogle" style="float: left; width: 25px; height: 1000px;">');
-    $('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+    $('#learning_path_right_zone').before('<div id="hide_bar" class="scorm-toggle arrow-left" style="float: left; width: 25px; height: 1000px;"></div>');
+    //$('#hide_bar table').css({backgroundImage: "url(../img/hide0.png)", backgroundRepeat: "no-repeat", backgroundPosition: "center center"});
+
+
+
+    $("#hider_bar").click(function(){
+        hiddenPanel();
+    });
 
     //Adding effects to hide bar
     /* $('#hide_bar table').hover(function () {

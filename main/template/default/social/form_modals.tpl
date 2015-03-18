@@ -64,8 +64,6 @@
 
                 $frmSendMessage[0].reset();
             });
-
-            sendToUser = 0;
         });
 
         $('.btn-to-send-invitation').on('click', function(e) {
@@ -87,8 +85,6 @@
 
                 $frmSendInvitation[0].reset();
             });
-
-            sendToUser = 0;
         });
     });
 </script>

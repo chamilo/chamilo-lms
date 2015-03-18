@@ -1,7 +1,7 @@
 {#  This template is NOT used in chamilo 1.9 #}
 {% extends template ~ "/layout/main.tpl" %}
 
-{% block body %}	
+{% block body %}
 	<div id="maincontent" class="maincontent">
 		{{ plugin_courses_block}}
 		{{ home_page_block}}
@@ -9,16 +9,15 @@
 		{{ content}}
 		{{ announcements_block}}
 	</div>
-	
-	<div id="menu-wrapper">	
-		{{ login_block}}		
-		{{ profile_block}}			
-		{{ account_block}}	
+
+	<div id="menu-wrapper">
+		{{ login_block}}
+		{{ profile_block}}
+		{{ account_block}}
 		{{ teacher_block}}
 		{{ notice_block}}
 		{{ navigation_course_links}}
 		{{ plugin_courses_right_block}}
-		{{ reservation_block}}
 		{{ search_block}}
 		{{ classes_block}}
 	</div>

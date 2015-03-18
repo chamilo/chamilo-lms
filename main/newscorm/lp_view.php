@@ -99,6 +99,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
                 $(this).addClass("hidden");
             });
         });
+
 </script>';
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $htmlHeadXtra[] = '<script>

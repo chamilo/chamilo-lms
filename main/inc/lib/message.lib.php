@@ -1387,17 +1387,17 @@ class MessageManager
     public static function generate_message_form($id, $params = array())
     {
         $form = new FormValidator('send_message');
-        $form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
-        $form->addElement('textarea', 'content', get_lang('Message'), array('id' => 'content_id', 'rows' => '5'));
+        $form->addText('subject', get_lang('Subject'), false, ['id' => 'subject_id']);
+        $form->addTextarea('content', get_lang('Message'), ['id' => 'content_id', 'rows' => '5']);
 
         return $form->return_form();
     }
 
     public static function generate_invitation_form($id, $params = array())
     {
-        $form = new FormValidator('send_invitation', null, 'post', null, array('id' => $id.'_form', 'class' => 'form-vertical'));
+        $form = new FormValidator('send_invitation');
         //$form->addElement('text', 'subject', get_lang('Subject'), array('id' => 'subject_id'));
-        $form->addElement('textarea', 'content', get_lang('AddPersonalMessage'), array('id' => 'content_invitation_id', 'rows' => '5', 'class' => 'span5'));
+        $form->addTextarea('content', get_lang('AddPersonalMessage'), ['id' => 'content_invitation_id', 'rows' => 5]);
         return $form->return_form();
     }
 

@@ -12,7 +12,9 @@
                 {{ messageForm }}
             </div>
             <div class="modal-footer">
-                <button type="button" id="btn-send-message" class="btn btn-primary">{{ 'Send' | get_lang }}</button>
+                <button type="button" id="btn-send-message" class="btn btn-primary">
+                    <i class="fa fa-send"></i> {{ 'Send' | get_lang }}
+                </button>
             </div>
         </div>
     </div>
@@ -32,7 +34,9 @@
                 {{ invitationForm }}
             </div>
             <div class="modal-footer">
-                <button type="button" id="btn-send-invitation" class="btn btn-primary">{{ 'Send' | get_lang }}</button>
+                <button type="button" id="btn-send-invitation" class="btn btn-primary">
+                    <i class="fa fa-send"></i> {{ 'Send' | get_lang }}
+                </button>
             </div>
         </div>
     </div>

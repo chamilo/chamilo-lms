@@ -5578,3 +5578,23 @@ ul.holder li.bit-box a.closebutton{
   visibility: hidden;
   display: none;
 }
+/* Bar toogle scorm */
+.scorm-toogle{
+  background-color: #ddd4b0;
+  margin-left: 10px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+
+/* CSS Responsive */
+@media (max-width: 480px) {
+  #learning_path_breadcrumb_zone {
+    display: none;
+    visibility: hidden;
+  }
+  #learning_path_main{
+    margin-top: 5px;
+  }
+}

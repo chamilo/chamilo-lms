@@ -54,7 +54,7 @@ $(document).ready(function() {
 
 
     $("#hider_bar").click(function(){
-        $("#learning_path_left_zone").addClass('demo');
+        $("#learning_path_left_zone").css('display:none;');
     });
 
     //Adding effects to hide bar

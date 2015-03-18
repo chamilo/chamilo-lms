@@ -36,6 +36,8 @@
  */
 class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
 {
+    private $form;
+
    /**
     * The HTML of the form
     * @var      string
@@ -174,9 +176,29 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     */
     function startForm(&$form)
     {
+        $this->setForm($form);
+
         $this->_html = '';
         $this->_hiddenHtml = '';
+    }
+
+    /**
+     * @return FormValidator
+     */
+    public function getForm()
+    {
+        return $this->form;
+    }
+
+    /**
+     * @param mixed $form
+     */
+    public function setForm($form)
+    {
+        $this->form = $form;
     } // end func startForm
+
+
 
    /**
     * Called when visiting a form, after processing all form elements
@@ -228,51 +250,61 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
    /**
     * Helper method for renderElement
     *
-    * @param    string      Element name
-    * @param    mixed       Element label (if using an array of labels, you should set the appropriate template)
+    * @param    HTML_QuickForm_element $element
     * @param    bool        Whether an element is required
-    * @param    string      Error message associated with the element
-    * @param    string      Label for ID
+    * @param    string      $required Error message associated with the element
+    * @param    string      $error Label for ID
     * @access   private
     * @see      renderElement()
     * @return   string      Html for element
     */
-    function _prepareTemplate($name, $label, $required, $error, $labelForId = '')
+    private function _prepareTemplate(HTML_QuickForm_element $element, $required, $error)
     {
+        $name = $element->getName();
+        $label = $element->getLabel();
+        $labelForId = $element->getLabelFor();
+        $icon = $element->getIconToHtml();
+
         if (is_array($label)) {
             $nameLabel = array_shift($label);
         } else {
             $nameLabel = $label;
         }
-        if (!empty($labelForId)) {
-            $labelFor = 'for="' . $labelForId . '"';
-        } else {
-            $labelFor = '';
-        }
+
+        $labelFor = !empty($labelForId) ? 'for="' . $labelForId . '"' : '';
+
         if (isset($this->_templates[$name])) {
+            // Custom template
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
-            $html = str_replace('{label-for}', $labelFor, $html);
         } else {
-            $html = str_replace('{label}', $nameLabel, $this->_elementTemplate);
-            $html = str_replace('{label-for}', $labelFor, $html);
+            if (method_exists($element, 'getTemplate')) {
+                $template = $element->getTemplate($this->getForm()->getLayout());
+            } else {
+                $template = $this->getForm()->getDefaultElementTemplate();
+            }
+            $html = str_replace('{label}', $nameLabel, $template);
         }
+        $html = str_replace('{label-for}', $labelFor, $html);
+        $html = str_replace('{icon}', $icon, $html);
+
         if ($required) {
             $html = str_replace('<!-- BEGIN required -->', '', $html);
             $html = str_replace('<!-- END required -->', '', $html);
         } else {
             $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN required -->.*<!-- END required -->([ \t\n\r]*)?/isU", '', $html);
         }
+
         if (isset($error)) {
             $html = str_replace('{error}', $error, $html);
             $html = str_replace('{error_class}', 'error has-error', $html);
             $html = str_replace('<!-- BEGIN error -->', '', $html);
             $html = str_replace('<!-- END error -->', '', $html);
         } else {
-        	$html = str_replace('{error_class}', '', $html);
+            $html = str_replace('{error_class}', '', $html);
             $html = preg_replace("/([ \t\n\r]*)?<!-- BEGIN error -->.*<!-- END error -->([ \t\n\r]*)?/isU", '', $html);
         }
         if (is_array($label)) {
-            foreach($label as $key => $text) {
+            foreach ($label as $key => $text) {
                 $key  = is_int($key)? $key + 2: $key;
                 $html = str_replace("{label_{$key}}", $text, $html);
                 $html = str_replace("<!-- BEGIN label_{$key} -->", '', $html);
@@ -282,6 +314,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         if (strpos($html, '{label_')) {
             $html = preg_replace('/\s*<!-- BEGIN label_(\S+) -->.*<!-- END label_\1 -->\s*/is', '', $html);
         }
+
         return $html;
     } // end func _prepareTemplate
 
@@ -299,11 +332,9 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     {
         if (!$this->_inGroup) {
             $html = $this->_prepareTemplate(
-                $element->getName(),
-                $element->getLabel(),
+                $element,
                 $required,
-                $error,
-                $element->getLabelFor()
+                $error
             );
 
             $this->_html .= str_replace('{element}', $element->toHtml(), $html);
@@ -360,7 +391,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     function startGroup(&$group, $required, $error)
     {
         $name = $group->getName();
-        $this->_groupTemplate        = $this->_prepareTemplate($name, $group->getLabel(), $required, $error);
+        $this->_groupTemplate        = $this->_prepareTemplate($group, $required, $error);
         $this->_groupElementTemplate = empty($this->_groupTemplates[$name])? '': $this->_groupTemplates[$name];
         $this->_groupWrap            = empty($this->_groupWraps[$name])? '': $this->_groupWraps[$name];
         $this->_groupElements        = array();

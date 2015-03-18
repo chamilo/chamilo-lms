@@ -90,14 +90,14 @@ class FillBlanks extends Question
                 }
 
                 var blanks = answer.match(/\[[^\]]*\]/g);
-                var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('Weighting').'</label><div class=\"controls\"><table>";
+                var fields = "<div class=\"form-group\"><label class=\" col-sm-2 control-label\">'.get_lang('Weighting').'</label><div class=\"col-sm-8\"><table>";
                 if (blanks!=null) {
                     for (i=0 ; i<blanks.length ; i++){
                         if (document.getElementById("weighting["+i+"]"))
                             value = document.getElementById("weighting["+i+"]").value;
                         else
                             value = "10";
-                        fields += "<tr><td><label>"+blanks[i]+"</label></td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
+                        fields += "<tr><td><label>"+blanks[i]+"</label></td><td><input class=\"form-control\"style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
                     }
                 }
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
@@ -112,7 +112,15 @@ class FillBlanks extends Question
 
 		// answer
 		$form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
-		$form->addElement('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
+		$form->addElement(
+            'html_editor',
+            'answer',
+            '<img src="../img/fill_field.png">',
+            array(
+                'id' => 'answer',
+                'onkeyup' => '"javascript: updateBlanks(this);"'
+            ),
+            array('ToolbarSet' => 'TestQuestionDescription', 'Height' => '350'));
 
 		$form->addRule('answer', get_lang('GiveText'),'required');
 		$form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
@@ -124,7 +132,7 @@ class FillBlanks extends Question
 
 		global $text, $class;
 		// setting the save button here and not in the question class.php
-		$form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+        $form->addButtonSave($text, 'submitQuestion');
 
 		if (!empty($this->id)) {
 			$form -> setDefaults($defaults);

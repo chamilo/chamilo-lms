@@ -20,7 +20,7 @@ class DatePicker extends HTML_QuickForm_text
         }
         $attributes['class'] = 'form-control';
 
-        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;
         $this->_type = 'date_picker';
     }

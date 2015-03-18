@@ -10,7 +10,6 @@
  * 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
  */
 
-// INIT QUESTION
 if (isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;

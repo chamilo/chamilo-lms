@@ -260,13 +260,7 @@ if (Security::check_token('post') && (
     );
 
     $form->addElement('html', '<br />');
-    $form->addElement(
-        'style_submit_button',
-        null,
-        get_lang('ImportBackup'),
-        'class="save"'
-    );
-
+    $form->addButtonImport(get_lang('ImportBackup'));
     $values['backup_type'] = 'local';
     $values['import_option'] = 'full_backup';
     $values['same_file_name_option'] = FILE_OVERWRITE;

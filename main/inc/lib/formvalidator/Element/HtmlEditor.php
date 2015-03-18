@@ -24,7 +24,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
      * @param array $config Optional configuration settings for the online editor.
      * @return bool
      */
-    public function HtmlEditor(
+    public function __construct(
         $name = null,
         $elementLabel = null,
         $attributes = null,
@@ -34,7 +34,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
             return false;
         }
 
-        HTML_QuickForm_element :: HTML_QuickForm_element($name, $elementLabel, $attributes);
+        parent::__construct($name, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 

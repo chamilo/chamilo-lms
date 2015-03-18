@@ -85,8 +85,7 @@ class UniqueAnswer extends Question
                     </th>
                 </tr>';
 
-        $form->addElement(
-            'label',
+        $form->addLabel(
             get_lang('Answers') . '<br /> <img src="../img/fill_field.png">',
             $html
         );
@@ -114,9 +113,9 @@ class UniqueAnswer extends Question
                 }
                 $question = Question::read($questionid);
                 $select_question[$questionid] = 'Q' . $key . ' :' . cut(
-                        $question->selectTitle(),
-                        20
-                    );
+                    $question->selectTitle(),
+                    20
+                );
             }
         }
         $select_question[-1] = get_lang('ExitTest');
@@ -215,8 +214,6 @@ class UniqueAnswer extends Question
                 ' value = "' . $i . '"'
             );
             $answer_number->freeze();
-            $form->addHtml('<div class="row">');
-            $form->addHtml('<div class="col-md-1">');
             $form->addElement(
                 'radio',
                 'correct',
@@ -225,10 +222,8 @@ class UniqueAnswer extends Question
                 $i,
                 'class="checkbox"'
             );
-            $form->addHtml('</div>');
-            $form->addHtml('<div class="col-md-5">');
+
             $form->addHtmlEditor('answer[' . $i . ']',null,null,true, $editor_config);
-            $form->addHtml('</div>');
 
             $form->addRule(
                 'answer[' . $i . ']',
@@ -237,9 +232,7 @@ class UniqueAnswer extends Question
             );
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtml('<div class="col-md-5">');
                 $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
-                $form->addHtml('</div>');
                 // Direct feedback
 
                 //Adding extra feedback fields
@@ -279,11 +272,8 @@ class UniqueAnswer extends Question
                 );
 
             } else {
-                $form->addHtml('<div class="col-md-5">');
                 $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
-                $form->addHtml('</div>');
             }
-            $form->addHtml('</div>');
             $form->addText('weighting[' . $i . ']', null,null, array('class' => "col-md-1", 'value' => '0'));
             $form->addElement('html', '</tr>');
         }

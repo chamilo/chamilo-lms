@@ -104,7 +104,7 @@ if (Security::check_token('post') && (
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
         $form->addElement('radio', 'backup_option', '', get_lang('LetMeSelectItems'), 'select_items');
-        $form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
+        $form->addButtonSave(get_lang('CreateBackup'));
         $form->add_progress_bar();
         // When progress bar appears we have to hide the title "Please select a backup-option".
         $form->updateAttributes(

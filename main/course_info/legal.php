@@ -74,7 +74,7 @@ if ($pluginLegal && !empty($plugin)) {
 $form->addElement('hidden', 'course_code', $course_code);
 $form->addElement('hidden', 'session_id', $session_id);
 $form->addElement('checkbox', 'accept_legal', null, get_lang('AcceptLegal'));
-$form->addElement('style_submit_button', null, get_lang('Accept'), 'class="save"');
+$form->addButtonSave(get_lang('Accept'));
 
 $variable = 'accept_legal_'.$user_id.'_'.$course_info['real_id'].'_'.$session_id;
 

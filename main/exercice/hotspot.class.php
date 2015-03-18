@@ -36,12 +36,13 @@ class HotSpot extends Question
 			// setting the save button here and not in the question class.php
 			// Saving a question
 			$form->addElement('style_submit_button','submitQuestion',get_lang('GoToQuestion'), 'class="'.$class.'"');
+			//$form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
 			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
 		} else {
 			// setting the save button here and not in the question class.php
 			// Editing a question
-			$form->addElement('style_submit_button','submitQuestion',get_lang('ModifyExercise'), 'class="'.$class.'"');
+			$form->addButtonUpdate(get_lang('ModifyExercise'), 'submitQuestion');
 		}
 	}
 

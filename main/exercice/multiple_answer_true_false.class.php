@@ -121,12 +121,12 @@ class MultipleAnswerTrueFalse extends Question
 			}
 
 			$boxes_names[] = 'correct['.$i.']';
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+			$form->addElement('html_editor', 'answer['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
 			// show comment when feedback is enable
 			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+				$form->addElement('html_editor', 'comment['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			}
 			$form->addElement ('html', '</tr>');
 		}

@@ -2409,10 +2409,10 @@ div.admin_section h4 {
     margin-bottom:5px;
     clear: both;
 }
-.question-list-description-block {
+/*.question-list-description-block {
     margin-bottom:10px !important;
     margin-top: -6px !important;
-}
+}*/
 
 .thematic_advance_content {
     padding:10px;
@@ -5484,4 +5484,8 @@ i.size-32.icon-new-work{
   background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
   background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
   text-decoration: none;
+}
+
+.actions .form-inline {
+    display:inline-block;
 }

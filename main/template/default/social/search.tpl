@@ -26,4 +26,8 @@
         </div>
     </div>
 </div>
+
+    {% if formModals is defined %}
+        {{ formModals }}
+    {% endif %}
 {% endblock %}

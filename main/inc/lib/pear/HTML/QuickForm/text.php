@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a text field
@@ -39,9 +38,9 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
     /**
      * Class constructor
      *
-     * @param     string    $elementName    (optional)Input field name attribute
-     * @param     string    $elementLabel   (optional)Input field label
-     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
+     * @param string $elementName    (optional)Input field name attribute
+     * @param string $elementLabel   (optional)Input field label
+     * @param mixed  $attributes     (optional)Either a typical HTML attribute string
      *                                      or an associative array
      * @since     1.0
      * @access    public
@@ -57,8 +56,15 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         }
         $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
         $this->setInputSize($inputSize);
+        $icon = isset($attributes['icon']) ? $attributes['icon'] : null;
+        $this->setIcon($icon);
+
         if (!empty($inputSize)) {
             unset($attributes['input-size']);
+        }
+
+        if (!empty($icon)) {
+            unset($attributes['icon']);
         }
 
         parent::__construct($elementName, $elementLabel, $attributes);
@@ -67,42 +73,83 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $this->setType('text');
 
         $renderer = FormValidator::getDefaultRenderer();
-        $renderer->setElementTemplate($this->getTemplate(), $elementName);
+        //$renderer->setElementTemplate($this->getTemplate(), $elementName);
     }
 
     /**
+     * Show an icon at the left side of an input
      * @return string
      */
-    public function getTemplate()
+    public function getIconToHtml()
+    {
+        $icon = $this->getIcon();
+
+        if (empty($icon)) {
+            return '';
+        }
+
+        return '
+                <div class="input-group-addon">
+                <i class="fa fa-'.$icon.'"></i>
+                </div>';
+    }
+
+    /**
+     * @param string $layout
+     *
+     * @return string
+     */
+    public function getTemplate($layout)
     {
         $size = $this->getInputSize();
         $size = empty($size) ? '8' : $size;
 
-        return '
-            <div class="form-group {error_class}">
-                <label {label-for} class="col-sm-2 control-label" >
-                    <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
-                    {label}
-                </label>
-                <div class="col-sm-'.$size.'">
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
                     {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-2 control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-'.$size.'">
+                        {icon}
+                        {element}
 
-                    <!-- BEGIN label_2 -->
-                        <p class="help-block">{label_2}</p>
-                    <!-- END label_2 -->
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
 
-                    <!-- BEGIN error -->
-                        <span class="help-inline">{error}</span>
-                    <!-- END error -->
-                </div>
-                <div class="col-sm-2">
-                    <!-- BEGIN label_3 -->
-                        {label_3}
-                    <!-- END label_3 -->
-                </div>
-            </div>';
+                        <!-- BEGIN error -->
+                            <span class="help-inline">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
     }
-
 
     /**
      * @return null

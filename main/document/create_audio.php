@@ -216,7 +216,7 @@ $(document).ready(function(){
 		$form->addElement('select', 'lang', get_lang('Language'), $options);
 		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google', 'class' =>'span6' ));
 		//echo Display :: return_icon('info3.gif', get_lang('HelpGoogleAudio'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
-		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+		$form->addButtonSave(get_lang('SaveMP3'));
 		$defaults = array();
 		$defaults['lang'] = $selected_language;
 		$form->setDefaults($defaults);
@@ -248,8 +248,7 @@ $(document).ready(function(){
 		$form->addElement('select', 'speed', get_lang('Speed'), $speed_options, array());
 		$form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_pediaphon', 'class' =>'span6'));
 		//echo Display :: return_icon('info3.gif', get_lang('HelpPediaphon'), array('align' => 'absmiddle', 'hspace' => '3px'), false);
-
-		$form->addElement('style_submit_button', 'submit', get_lang('SaveMP3'), 'class="save"');
+		$form->addButtonSave(get_lang('SaveMP3'));
 		$defaults = array();
 		$defaults['lang'] = $selected_language;
 		$form->setDefaults($defaults);

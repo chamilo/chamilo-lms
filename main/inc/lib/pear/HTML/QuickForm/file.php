@@ -67,7 +67,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      */
     function HTML_QuickForm_file($elementName=null, $elementLabel=null, $attributes=null)
     {
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->setType('file');
     } //end constructor
 

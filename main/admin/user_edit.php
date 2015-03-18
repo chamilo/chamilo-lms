@@ -265,7 +265,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 // Registration User and Date
 $creatorInfo = api_get_user_info($user_data['creator_id']);
 $date = sprintf(get_lang('CreatedByXYOnZ'), 'user_information.php?user_id='.$user_data['creator_id'], $creatorInfo['username'], $user_data['registration_date']);
-$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('RegistrationDate').'</label><div class="controls">'.$date.'</div></div>');
+$form->addElement('label', get_lang('RegistrationDate'), $date);
 
 if (!$user_data['platform_admin']) {
 	// Expiration Date

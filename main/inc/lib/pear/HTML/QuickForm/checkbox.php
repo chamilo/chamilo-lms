@@ -68,7 +68,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         $text = '',
         $attributes = null
     ) {
-        HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_text = $text;
         $this->setType('checkbox');

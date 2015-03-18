@@ -275,7 +275,7 @@ $form->setDefaults($defaults);
 
 // Submit button
 $html_results_enabled[] = $form->createElement('button', 'submit', get_lang('Add'), 'plus', 'primary');
-$html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+');
+$html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang('Add').'+', 'plus', 'primary');
 
 $form->addGroup($html_results_enabled);
 

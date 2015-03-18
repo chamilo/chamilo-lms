@@ -15,7 +15,7 @@ class OralExpression extends Question
 	/**
 	 * Constructor
 	 */
-	function OralExpression()
+	public function __construct()
     {
 		parent::question();
 		$this -> type = ORAL_EXPRESSION;
@@ -23,15 +23,16 @@ class OralExpression extends Question
 	}
 
 	/**
-	 * function which redifines Question::createAnswersForm
-	 * @param $form FormValidator
+	 * function which redefine Question::createAnswersForm
+	 * @param FormValidator $form
 	 */
-	function createAnswersForm ($form)
+	function createAnswersForm($form)
     {
-		$form -> addElement('text','weighting',get_lang('Weighting'), array('class' => 'span1'));
+
+		$form -> addElement('text','weighting', get_lang('Weighting'), array('class' => 'span1'));
 		global $text, $class;
 		// setting the save button here and not in the question class.php
-		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		$form->addButtonSave($text, 'submitQuestion');
 		if (!empty($this->id)) {
 			$form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
 		} else {
@@ -43,14 +44,20 @@ class OralExpression extends Question
 
 	/**
 	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param the formvalidator instance
+	 * @param the FormValidator $form
 	 */
 	function processAnswersCreation($form)
     {
-		$this->weighting = $form -> getSubmitValue('weighting');
+		$this->weighting = $form ->getSubmitValue('weighting');
 		$this->save();
 	}
 
+	/**
+	 * @param null $feedback_type
+	 * @param null $counter
+	 * @param null $score
+	 * @return null|string
+	 */
 	function return_header($feedback_type = null, $counter = null, $score = null)
     {
 	    $header = parent::return_header($feedback_type, $counter, $score);

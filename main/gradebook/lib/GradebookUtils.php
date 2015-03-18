@@ -1010,6 +1010,10 @@ class GradebookUtils
         $coursecodes = array();
         $users = array();
 
+        // By default add all user in course
+        $coursecodes[api_get_course_id()] = '1';
+        $users = GradebookUtils::get_users_in_course(api_get_course_id());
+
         foreach ($evals as $eval) {
             $coursecode = $eval->get_course_code();
             // evaluation in course

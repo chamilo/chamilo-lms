@@ -1404,9 +1404,9 @@ function _api_format_user($user, $add_password = false)
     // Getting user avatar.
 
     $picture_filename   = trim($result['picture_uri']);
-    $avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-    $avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
-    $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
+    $result['avatar']             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
+    $result['avatar_small']       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
+    $result['avatar_sys_path']    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
     $dir                = 'upload/users/'.$user_id.'/';
 
     //if (!empty($picture_filename) && api_is_anonymous() ) {  //Why you have to be anonymous?
@@ -1417,15 +1417,28 @@ function _api_format_user($user, $add_password = false)
     }
     $image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
 
-    if (file_exists($image_sys_path) && !is_dir($image_sys_path)) {
-        $avatar = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
-        $avatar_small = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
-        $avatar_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
+    if ($picture_filename) {
+        if (file_exists($image_sys_path)) {
+            $result['avatar'] = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
+            $result['avatar_small'] = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
+            $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
+        } else if (api_get_configuration_value('gravatar_enabled')) {
+            $userEmail = isset($user['email']) ? $user['email'] : '';
+            $gravatarType = api_get_configuration_value('gravatar_type');
+            $avatarPaths = array(
+                'avatar' => $result['avatar'],
+                'avatar_small' => $result['avatar_small'],
+                'avatar_sys_path' => $result['avatar_sys_path']
+            );
+            foreach ($avatarPaths as $key => $value) {
+                $avatarSize = api_getimagesize($value);
+                $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
+                    $avatarSize['width'] :
+                    $avatarSize['height'];
+                $result[$key] = UserManager::getGravatar($userEmail, $avatarSize, $gravatarType);
+            }
+        }
     }
-
-    $result['avatar'] = $avatar;
-    $result['avatar_sys_path'] = $avatar_sys_path;
-    $result['avatar_small'] = $avatar_small;
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;

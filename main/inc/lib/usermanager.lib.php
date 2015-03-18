@@ -1244,21 +1244,24 @@ class UserManager
                 $base = '';
         }
 
+        $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+
         if (empty($id) || empty($type)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
         $user_id = intval($id);
 
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT picture_uri FROM $user_table WHERE user_id=".$user_id;
+        $sql = "SELECT email, picture_uri FROM $user_table WHERE user_id=".$user_id;
         $res = Database::query($sql);
 
         if (!Database::num_rows($res)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
         $user = Database::fetch_array($res);
+
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
@@ -1271,16 +1274,34 @@ class UserManager
         } else {
             $dir = $base.'upload/users/'.$user_id.'/';
         }
-        if (empty($picture_filename) && $anonymous) {
-            return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+
+        if (!$picture_filename || ($picture_filename && !file_exists($dir.$picture_filename))) {
+            if ($anonymous) {
+                return $noPicturePath;
+            }
+            if (api_get_configuration_value('gravatar_enabled')) {
+                $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
+                $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
+                    $avatarSize['width'] :
+                    $avatarSize['height'];
+                return array(
+                    'dir' => '',
+                    'file' => self::getGravatar(
+                        $user['email'],
+                        $avatarSize,
+                        api_get_configuration_value('gravatar_type')
+                    )
+                );
+            }
         }
+
         return array('dir' => $dir, 'file' => $picture_filename);
     }
 
     /**
      * Creates new user photos in various sizes of a user, or deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param     int $user_id        The user internal identitfication number.
+     * @param     int $user_id        The user internal identification number.
      * @param     string $file        The common file name for the newly created photos.
      *                                 It will be checked and modified for compatibility with the file system.
      *                                 If full name is provided, path component is ignored.
@@ -5196,5 +5217,30 @@ EOF;
         }
 
         return false;
+    }
+
+    /**
+     * Get either a Gravatar URL or complete image tag for a specified email address.
+     *
+     * @param string $email The email address
+     * @param string $s Size in pixels, defaults to 80px [ 1 - 2048 ]
+     * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
+     * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
+     * @param boole $img True to return a complete IMG tag False for just the URL
+     * @param array $atts Optional, additional key/value attributes to include in the IMG tag
+     * @return String containing either just a URL or a complete image tag
+     * @source http://gravatar.com/site/implement/images/php/
+     */
+    public static function getGravatar( $email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array() ) {
+        $url = 'http://www.gravatar.com/avatar/';
+        $url .= md5( strtolower( trim( $email ) ) );
+        $url .= "?s=$s&d=$d&r=$r";
+        if ( $img ) {
+            $url = '<img src="' . $url . '"';
+            foreach ( $atts as $key => $val )
+                $url .= ' ' . $key . '="' . $val . '"';
+            $url .= ' />';
+        }
+        return $url;
     }
 }

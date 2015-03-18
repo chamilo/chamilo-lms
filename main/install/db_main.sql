@@ -1228,7 +1228,7 @@ VALUES
 ('enable_webcam_clip', 'false', 'No'),
 ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
 ('prevent_session_admins_to_manage_all_users', 'false', 'No'),
-('documents_default_visibility_defined_in_course', 'true', 'Yes');
+('documents_default_visibility_defined_in_course', 'true', 'Yes'),
 ('documents_default_visibility_defined_in_course', 'false', 'No');
 
 UNLOCK TABLES;
@@ -3482,4 +3482,6 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 
 -- Version
+LOCK TABLES settings_current WRITE;
 UPDATE settings_current SET selected_value = '1.10.0.21' WHERE variable = 'chamilo_database_version';
+UNLOCK TABLES;

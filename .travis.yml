@@ -37,8 +37,10 @@ before_script:
   - sudo mv chash.phar /usr/local/bin/chash
   - cd ..
   - mysql -e 'create database chamilo'
+  - mysql -u root -e 'grant all privileges on chamilo.* to chamilo@localhost identified by "chamilo"'
+  - mysql -u root -e 'flush privileges'
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  - sudo chash chash:chamilo_install --silent --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="127.0.0.1" --port="3306" --dbname="chamilo" --dbuser="root" --dbpassword="" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x $(pwd)
+  - sudo chash chash:chamilo_install --silent --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="chamilo" --dbpassword="chamilo" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x $(pwd)
 
 
 script: phpunit -c tests/phpunit

@@ -22,8 +22,12 @@
     $(document).on('ready', function() {
         var $sendMessageModal = $('#send-message-modal');
 
-        $('#btn-to-send-message').on('click', function(e) {
+        var sendToUser = 0;
+
+        $('.btn-to-send-message').on('click', function(e) {
             e.preventDefault();
+
+            sendToUser = $(this).data('send-to');
 
             $sendMessageModal.modal('show');
         });
@@ -32,7 +36,7 @@
             e.preventDefault();
 
             var $frmSendMessage = $sendMessageModal.find('.modal-body form'),
-                url = '{{ _p.web_ajax }}message.ajax.php?a=send_message&user_id={{ friendId }}';
+                url = '{{ _p.web_ajax }}message.ajax.php?a=send_message&user_id=' + sendToUser;
 
             $.get(url, $frmSendMessage.serialize(), function(response) {
                 $('#send-message-alert').html(response);

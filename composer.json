@@ -54,7 +54,8 @@
         "sonata-project/user-bundle": "~2.2",
         "fxp/composer-asset-plugin": "~1.0",
 
-        "behat/behat": "3.0.*@stable",
+        "behat/behat": "2.4.*@stable",
+        "behat/mink-extension": "*@stable",
 
         "bower-asset/bootstrap": "3.3.*",
         "bower-asset/fontawesome": "4.3.*",

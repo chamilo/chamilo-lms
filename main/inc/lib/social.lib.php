@@ -760,7 +760,7 @@ class SocialManager extends UserManager
 
             // My friend profile.
             if ($user_id != api_get_user_id()) {
-                $html .= '<li><a href="#" id="btn-to-send-message" title="'.get_lang('SendMessage').'">';
+                $html .= '<li><a href="#" class="btn-to-send-message" data-send-to="' . $user_id . '" title="'.get_lang('SendMessage').'">';
                 $html .= Display::return_icon('compose_message.png', get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';
             }
 

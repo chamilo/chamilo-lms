@@ -99,8 +99,7 @@ if ($action == 'thematic_plan_list') {
 
 	$form->addText('title', get_lang('Title'), true, array('size'=>'50'));
 	$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-	//$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
-	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+	$form->addButtonSave(get_lang('Save'));
 
 	if ($description_type < ADD_THEMATIC_PLAN) {
 		$default['title'] = $default_thematic_plan_title[$description_type];

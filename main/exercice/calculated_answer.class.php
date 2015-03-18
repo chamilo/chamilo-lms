@@ -157,7 +157,8 @@ class CalculatedAnswer extends Question
 
         global $text, $class;
         // setting the save button here and not in the question class.php
-        $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+        //$form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
+        $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
             $form -> setDefaults($defaults);

@@ -99,7 +99,7 @@ if (Security::check_token('post') && (
         $form->addElement('header', get_lang('SelectOptionForBackup'));
         $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
-        $form->addElement('style_submit_button', 'submit', get_lang('RecycleCourse'), 'class="save"');
+        $form->addButtonSave(get_lang('RecycleCourse'));
         $form->setDefaults(array('recycle_option' => 'select_items'));
         // Add Security token
         $token = Security::get_token();

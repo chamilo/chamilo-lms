@@ -78,7 +78,7 @@ set_time_limit(0);
 
 $form = new FormValidator('import_classes');
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
     $classes = Import::csv_to_array($_FILES['import_file']['tmp_name']);

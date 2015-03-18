@@ -120,7 +120,7 @@ if (Security::check_token('post') && (
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
         $form->addGroup($group, '', get_lang('SameFilename'));
         $form->add_progress_bar();
-        $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'), 'class="save"');
+        $form->addButtonSave(get_lang('CopyCourse'));
         $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
 
         // Add Security token

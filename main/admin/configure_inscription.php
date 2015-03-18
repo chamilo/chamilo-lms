@@ -304,7 +304,8 @@ if (get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('disabled' => 'disabled'));
+//$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), array('disabled' => 'disabled'));
+$form->addButtonSave(get_lang('RegisterUser'));
 
 $defaults['status'] = STUDENT;
 
@@ -357,7 +358,7 @@ switch ($action){
         $form->addElement('hidden', 'formSent', '1');
         $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
         $form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
+        $form->addButtonSave(get_lang('Save'));
         $form->setDefaults($default);
         $form->display();
         break;

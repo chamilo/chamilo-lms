@@ -350,13 +350,13 @@ Display::display_header($nameTool);
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
 							}
-							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ReconfigureExtension'),'class="save"');
+							$form->addButtonSave(get_lang('ReconfigureExtension'), 'activeExtension');
 						}
 						else {
 							$defaults['host'] = 'localhost';
 							$defaults['port'] = '2002';
 							$defaults['size'] = '720x540';
-							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ActivateExtension'),'class="save"');
+							$form->addButtonSave(get_lang('ActivateExtension'), 'activeExtension');
 						}
 
 						$form -> setDefaults($defaults);

@@ -1732,6 +1732,15 @@ function api_get_course_info_by_id($id = null) {
     return $_course;
 }
 
+/**
+ * Reformat the course array (output by api_get_course_info()) in order, mostly,
+ * to switch from 'code' to 'id' in the array. This is a legacy feature and is
+ * now possibly causing massive confusion as a new "id" field has been added to
+ * the course table in 1.9.0.
+ * @param $course_data
+ * @return array
+ * @todo eradicate the false "id"=code field of the $_course array and use the int id
+ */
 function api_format_course_array($course_data) {
     global $_configuration;
 

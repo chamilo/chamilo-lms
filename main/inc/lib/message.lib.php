@@ -1329,8 +1329,8 @@ class MessageManager
 
     /**
      * Get array of links (download) for message attachment files
-     * @param int  		message id
-     * @param string	type message list (inbox/outbox)
+     * @param int  		$message_id
+     * @param string	$type message list (inbox/outbox)
      * @return array
      */
     public static function get_links_message_attachment_files($message_id, $type = '')
@@ -1342,7 +1342,8 @@ class MessageManager
         $links_attach_file = array();
         if (!empty($message_id)) {
 
-            $sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";
+            $sql = "SELECT * FROM $tbl_message_attach
+                    WHERE message_id = '$message_id'";
 
             $rs_file = Database::query($sql);
             if (Database::num_rows($rs_file) > 0) {
@@ -1363,14 +1364,15 @@ class MessageManager
 
     /**
      * Get message list by id
-     * @param int  message id
+     * @param int  $message_id
      * @return array
      */
     public static function get_message_by_id($message_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $message_id = intval($message_id);
-        $sql = "SELECT * FROM $tbl_message WHERE id = '$message_id' AND msg_status <> '".MESSAGE_STATUS_DELETED."' ";
+        $sql = "SELECT * FROM $tbl_message
+                WHERE id = '$message_id' AND msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
         $item = array();
         if (Database::num_rows($res) > 0) {

@@ -34,6 +34,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     }
     $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, $userId);
     $newItemId = 0;
+    $oldItemId = 0;
     switch ($nextItem) {
         case 'next':
             $myLP->set_current_item($currentItem);
@@ -66,6 +67,8 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
             if ($nextItem == $currentItem) {
                 // If we're opening the same item again.
                 $myLP->items[$currentItem]->restart();
+            } else {
+                $oldItemId = $currentItem;
             }
             $newItemId = $nextItem;
             $myLP->set_current_item($newItemId);
@@ -127,7 +130,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     $return .=
         "olms.lms_lp_id=".$lpId.";" .
         "olms.lms_item_id=".$newItemId.";" .
-        "olms.lms_old_item_id=0;" .
+        "olms.lms_old_item_id=".$oldItemId.";" .
         "olms.lms_initialized=0;" .
         "olms.lms_view_id=".$viewId.";" .
         "olms.lms_user_id=".$userId.";" .

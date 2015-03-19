@@ -3320,7 +3320,7 @@ CREATE TABLE track_e_links (
   links_link_id int NOT NULL default 0,
   links_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (links_id),
-  KEY idx_tel_c_id (links_cours_id),
+  KEY idx_tel_c_id (c_id),
   KEY idx_tel_user_id (links_user_id)
 );
 
@@ -3483,5 +3483,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.21' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.22' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

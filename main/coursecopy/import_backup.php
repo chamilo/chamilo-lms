@@ -161,7 +161,7 @@ if (Security::check_token('post') && (
     );
     $form->addElement('header', get_lang('SelectBackupFile'));
     $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('<div>{element}</div> ');
+    $renderer->setCustomElementTemplate('<div>{element}</div> ');
 
     $form->addElement('hidden', 'action', 'restore_backup');
 

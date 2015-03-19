@@ -155,7 +155,7 @@ elseif (isset($_POST['number_of_groups'])) {
 	</tr>
 
 EOT;
-		$renderer->setElementTemplate($element_template);
+		$renderer->setCustomElementTemplate($element_template);
         $form->addElement('header', $nameTools);
 		$form->addElement('hidden', 'action');
 		$form->addElement('hidden', 'number_of_groups');
@@ -163,6 +163,7 @@ EOT;
 		// Table heading
 		$group_el = array ();
 		$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupName').'</b>');
+
 		if (api_get_setting('allow_group_categories') == 'true') {
 			$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupCategory').'</b>');
 		}

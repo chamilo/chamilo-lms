@@ -3368,9 +3368,19 @@ class SurveyUtil
      * @version January 2007
      *
      */
-    static function save_invitations($users_array, $invitation_title, $invitation_text, $reminder = 0, $sendmail = 0, $remindUnAnswered = 0)
-    {
-        if (!is_array($users_array)) return 0; // Should not happen
+    public static function save_invitations(
+        $users_array,
+        $invitation_title,
+        $invitation_text,
+        $reminder = 0,
+        $sendmail = 0,
+        $remindUnAnswered = 0
+    ) {
+        if (!is_array($users_array)) {
+            // Should not happen
+
+            return 0;
+        }
 
         // Getting the survey information
         $survey_data = survey_manager::get_survey($_GET['survey_id']);
@@ -3386,13 +3396,38 @@ class SurveyUtil
 
         $counter = 0;  // Nr of invitations "sent" (if sendmail option)
         $course_id = api_get_course_int_id();
-
         $session_id = api_get_session_id();
 
-        foreach ($users_array as $key=>$value) {
-            if (!isset($value) || $value == '') continue;
+        $result = CourseManager::separateUsersGroups($users_array);
+
+        $groupList = $result['groups'];
+        $users_array = $result['users'];
+
+        foreach ($groupList as $groupId) {
+            $userGroupList = GroupManager::getStudents($groupId);
+            $userGroupIdList = array_column($userGroupList, 'user_id');
+            $users_array = array_merge($users_array, $userGroupIdList);
+
+            $params = array(
+                'c_id' => $course_id,
+                'session_id' => $session_id,
+                'group_id' => $groupId,
+                'survey_code' => $survey_data['code']
+            );
+            self::save_invitation($params);
+        }
+
+        $users_array = array_unique($users_array);
+
+        foreach ($users_array as $key => $value) {
+            if (!isset($value) || $value == '') {
+                continue;
+            }
+
             // Skip user if reminding only unanswered people
-            if (in_array($value, $exclude_users)) continue;
+            if (in_array($value, $exclude_users)) {
+                continue;
+            }
             // Get the unique invitation code if we already have it
             if ($reminder == 1 && array_key_exists($value, $survey_invitations)) {
                 $invitation_code = $survey_invitations[$value]['invitation_code'];
@@ -3403,8 +3438,10 @@ class SurveyUtil
             // Store the invitation if user_id not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
             $addit_users_array = isset($already_invited['additional_users']) && !empty($already_invited['additional_users']) ? explode(';', $already_invited['additional_users']) : array();
 
-            $my_alredy_invited = ($already_invited['course_users'] == null) ? array() : $already_invited['course_users'];
-            if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) || (!is_numeric($value) && !in_array($value, $addit_users_array))) {
+            $my_alredy_invited = $already_invited['course_users'] == null ? array() : $already_invited['course_users'];
+            if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) ||
+                (!is_numeric($value) && !in_array($value, $addit_users_array))
+            ) {
                 $new_user = true;
                 if (!array_key_exists($value, $survey_invitations)) {
                     $params = array(
@@ -3418,6 +3455,7 @@ class SurveyUtil
                     self::save_invitation($params);
                 }
             }
+
             // Send the email if checkboxed
             if (($new_user || $reminder == 1) && $sendmail != 0) {
                 // Make a change for absolute url
@@ -3430,14 +3468,19 @@ class SurveyUtil
                 $counter++;
             }
         }
+
         return $counter; // Number of invitations sent
     }
 
+    /**
+     * @param $params
+     * @return bool|int
+     */
     static function save_invitation($params)
     {
         // Database table to store the invitations data
         $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        if (!empty($params['c_id']) && !empty($params['user']) && !empty($params['survey_code'])) {
+        if (!empty($params['c_id']) && (!empty($params['user']) || !empty($params['group_id'])) && !empty($params['survey_code'])) {
             return Database::insert($table_survey_invitation, $params);
         }
         return false;
@@ -3580,7 +3623,7 @@ class SurveyUtil
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-        $sql = "SELECT user
+        $sql = "SELECT user, group_id
 				FROM $table_survey_invitation as table_invitation
 				WHERE
 				    table_invitation.c_id = $course_id AND
@@ -3590,16 +3633,21 @@ class SurveyUtil
 
         $defaults = array();
         $defaults['course_users'] = array();
-        $defaults['additional_users'] = array();
+        $defaults['additional_users'] = array(); // Textarea
+        $defaults['users'] = array(); // user and groups
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if (is_numeric($row['user'])) {
                 $defaults['course_users'][] = $row['user'];
+                $defaults['users'][] = 'USER:'.$row['user'];
             } else {
                 if (!empty($row['user'])) {
                     $defaults['additional_users'][] = $row['user'];
                 }
+            }
+            if (isset($row['group_id'])) {
+                $defaults['users'][] = 'GROUP:'.$row['group_id'];
             }
         }
 

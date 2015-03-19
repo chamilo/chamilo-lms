@@ -62,20 +62,16 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
-if (!empty ($_GET['gidReq'])) {
-    $toolgroup = Database::escape_string($_GET['gidReq']);
-    Session::write('toolgroup',$toolgroup);
-}
+$groupId = api_get_group_id();
 
 if ($origin == 'group') {
-    $_clean['toolgroup']=(int)$_SESSION['toolgroup'];
-    $group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
-    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['toolgroup'], 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => prepare4display($current_forum['forum_title']));
-    $interbreadcrumb[] = array('url' => 'forumsearch.php','name' => get_lang('ForumSearch'));
+    $group_properties  = GroupManager :: get_group_properties($groupId);
+    $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')');
+    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq(), 'name' => prepare4display($current_forum['forum_title']));
+    $interbreadcrumb[] = array('url' => 'forumsearch.php?'.api_get_cidreq(),'name' => get_lang('ForumSearch'));
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'', 'name' => $nameTools);
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => $nameTools);
     //$interbreadcrumb[] = array('url' => 'forumsearch.php', 'name' => );
     $nameTools = get_lang('ForumSearch');
 }

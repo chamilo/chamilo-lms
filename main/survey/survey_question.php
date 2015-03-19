@@ -116,14 +116,10 @@ class survey_question
     public function renderForm()
     {
         if (isset($_GET['question_id']) and !empty($_GET['question_id'])) {
-            $icon = 'pencil';
-            $text = get_lang('ModifyQuestionSurvey');
+            $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
         } else {
-            $icon = 'check';
-            $text = get_lang('CreateQuestionSurvey');
+            $this->buttonList[] = $this->getForm()->addButtonSave(get_lang('CreateQuestionSurvey'), 'save', true);
         }
-
-        $this->buttonList[] = $this->getForm()->createElement('button', 'save', $text, $icon);
 
         $this->getForm()->addGroup($this->buttonList, 'buttons');
     }

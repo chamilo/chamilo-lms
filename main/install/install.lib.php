@@ -12,7 +12,7 @@
 
 /*      CONSTANTS */
 
-define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
+define('SYSTEM_MAIN_DATABASE_FILE', 'main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');

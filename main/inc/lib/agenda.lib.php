@@ -2232,7 +2232,14 @@ class Agenda
             if ($this->type == 'course') {
                 $form = null;
                 if (!isset($_GET['action'])) {
-                    $form = new FormValidator('form-search');
+
+                    $form = new FormValidator(
+                        'form-search',
+                        'post',
+                        '',
+                        '',
+                        array(),
+                        FormValidator::LAYOUT_INLINE);
                     $attributes = array(
                         'multiple' => false,
                         'id' => 'select_form_id_search'

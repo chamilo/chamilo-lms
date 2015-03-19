@@ -52,7 +52,7 @@ Display::display_header($nameTools,"Exercise");
 	$form = new FormValidator('feedbackform','post',api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
 	$renderer =& $obj_registration_form->defaultRenderer();
-	$renderer->setElementTemplate(
+	$renderer->setCustomElementTemplate(
 '<tr>
 	<td align="left" style="" valign="top" width=30%>{label}
 		<!-- BEGIN required --><span style="color: #ff0000">*</span><!-- END required -->

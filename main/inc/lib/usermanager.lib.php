@@ -1770,7 +1770,16 @@ class UserManager
         $fields = array();
         $t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-        $columns = array('id', 'field_variable', 'field_type', 'field_display_text', 'field_default_value', 'field_order', 'field_filter', 'tms');
+        $columns = array(
+            'id',
+            'field_variable',
+            'field_type',
+            'field_display_text',
+            'field_default_value',
+            'field_order',
+            'field_filter',
+            'tms'
+        );
         $column = intval($column);
         $sort_direction = '';
         if (in_array(strtoupper($direction), array('ASC', 'DESC'))) {
@@ -1809,7 +1818,9 @@ class UserManager
                     10 => '<a name="'.$rowf['id'].'"></a>',
                 );
 
-                $sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";
+                $sqlo = "SELECT * FROM $t_ufo
+                        WHERE field_id = ".$rowf['id']."
+                        ORDER BY option_order ASC";
                 $reso = Database::query($sqlo);
                 if (Database::num_rows($reso) > 0) {
                     while ($rowo = Database::fetch_array($reso)) {
@@ -3771,16 +3782,17 @@ class UserManager
     }
 
     /**
-      * Get extra filtrable user fields (type select)
+      * Get extra filtrable user fields (only type select)
       * @return array
       */
     public static function get_extra_filtrable_fields()
     {
         $extraFieldList = UserManager::get_extra_fields();
+
         $extraFiltrableFields = array();
         if (is_array($extraFieldList)) {
             foreach ($extraFieldList as $extraField) {
-                //if is enabled to filter and is a "<select>" field type
+                // If is enabled to filter and is a "<select>" field type
                 if ($extraField[8] == 1 && $extraField[2] == 4) {
                     $extraFiltrableFields[] = array(
                         'name' => $extraField[3],
@@ -3791,7 +3803,7 @@ class UserManager
             }
         }
 
-        if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0 ) {
+        if (is_array($extraFiltrableFields) && count($extraFiltrableFields) > 0) {
             return $extraFiltrableFields;
         }
     }
@@ -3811,7 +3823,10 @@ class UserManager
                 if (UserManager::is_extra_field_available($extraField['variable'])) {
                     if (isset($_GET[$varName]) && $_GET[$varName]!='0') {
                         $useExtraFields = true;
-                        $extraFieldResult[]= UserManager::get_extra_user_data_by_value($extraField['variable'], $_GET[$varName]);
+                        $extraFieldResult[]= UserManager::get_extra_user_data_by_value(
+                            $extraField['variable'],
+                            $_GET[$varName]
+                        );
                     }
                 }
             }
@@ -3847,35 +3862,74 @@ class UserManager
      */
     public static function get_search_form($query)
     {
-        $extraFiltrableFields = UserManager::get_extra_filtrable_fields();
-        $extraFields = null;
-        if (is_array($extraFiltrableFields) && count($extraFiltrableFields)>0 ) {
-            foreach ($extraFiltrableFields as $extraField) {
-                $extraFields .=  '<label class="extra_field">'.$extraField['name'].'</label>';
+        $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+        $form = new FormValidator(
+            'search_user',
+            'get',
+            api_get_path(WEB_PATH).'main/social/search.php',
+            '',
+            array(),
+            FormValidator::LAYOUT_INLINE
+        );
+
+        $form->addText('q', get_lang('UsersGroups'));
+        $options = array(
+            0 => get_lang('Select'),
+            1 => get_lang('User'),
+            2 => get_lang('Group'),
+        );
+        $form->addSelect(
+            'search_type',
+            get_lang('Type'),
+            $options,
+            array('onchange' => 'javascript: extra_field_toogle();')
+        );
+
+        // Extra fields
+
+        $extraFields = UserManager::get_extra_filtrable_fields();
+        $defaults = [];
+        if (is_array($extraFields) && count($extraFields) > 0) {
+            foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
-                $extraFields .=  '&nbsp;<select name="'.$varName.'" class="extra_field">';
-                $extraFields .=  '<option value="0">--'.get_lang('Select').'--</option>';
+
+                $options = [
+                    0 => get_lang('Select')
+                ];
                 foreach ($extraField['data'] as $option) {
-                    $checked='';
+                    $checked = '';
                     if (isset($_GET[$varName])) {
-                        if ($_GET[$varName]==$option[1]) {
-                            $checked = 'selected="true"';
+                        if ($_GET[$varName] == $option[1]) {
+                            $defaults[$option[1]] = true;
                         }
                     }
-                    $extraFields .=  '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
+
+                    $options[$option[1]] = $option[1];
                 }
-                $extraFields .=  '</select>';
-                $extraFields .=  '&nbsp;&nbsp;';
+                $form->addSelect($varName, $extraField['name'], $options);
             }
         }
 
-        $searchType = isset($_GET['search_type']) ? $_GET['search_type'] : null;
+        $defaults['search_type'] = intval($searchType);
+        $defaults['q'] = api_htmlentities(Security::remove_XSS($query));
+        $form->setDefaults($defaults);
+
+        $form->addButtonSearch(get_lang('Search'));
+
+        $js = '<script>
+        extra_field_toogle();
+        function extra_field_toogle() {
+            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
+        }
+        </script>';
+
+        return $js.$form->returnForm();
 
         return '
         <form method="GET" class="form-search" action="'.api_get_path(WEB_PATH).'main/social/search.php">
                 <input placeholder="'.get_lang('UsersGroups').'" type="text" value="'.api_htmlentities(Security::remove_XSS($query)).'" name="q"/> &nbsp;
                 ' . get_lang('Type') .'
-                <select name="search_type" onchange="javascript: extra_field_toogle();">
+
                 <option value="0">--'.get_lang('Select').'--</option>
                 <option value="1"' . (($searchType=='1')?'selected="selected"':"") . '>--' . get_lang('User') .'--</option>
                 <option value="2"' . (($searchType=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
@@ -3883,13 +3937,7 @@ class UserManager
                 '.$extraFields.'
                 <button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
         </form>
-        <script>
-        extra_field_toogle();
-        function extra_field_toogle()
-        {
-            if (jQuery("select[name=search_type]").val() != "1") { jQuery(".extra_field").hide(); } else { jQuery(".extra_field").show(); }
-        }
-        </script>
+
         ';
     }
 

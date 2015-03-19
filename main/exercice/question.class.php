@@ -1254,7 +1254,7 @@ abstract class Question
 			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		');
 
-        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
+        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" style="display: none;" >');
         $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
         $form->addElement ('html','</div>');
 

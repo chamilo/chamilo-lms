@@ -3772,7 +3772,7 @@ function forum_search()
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('ForumSearch'));
-    $form->addElement('text', 'search_term', get_lang('SearchTerm'), 'class="input_titles" id="search_title"');
+    $form->addElement('text', 'search_term', get_lang('SearchTerm'), array('id' =>'search_title'));
     $form->applyFilter('search_term', 'html_filter');
     $form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation'));
     $form->addButtonSearch(get_lang('Search'));

@@ -201,7 +201,13 @@ if (!empty($userId)) {
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $course_code = api_get_course_id();
 
-$form = new FormValidator('form', 'get', null, null, array('id' => 'add_event_form'));
+$form = new FormValidator(
+    'form',
+    'get',
+    null,
+    null,
+    array('id' => 'add_event_form')
+);
 $form->addElement('html', '<div id="visible_to_input">');
 
 $sendTo = $agenda->parseAgendaFilter($userId);

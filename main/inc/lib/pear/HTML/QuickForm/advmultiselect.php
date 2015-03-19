@@ -308,6 +308,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             $attr = array('class' => $this->_tableAttributes);
             $this->_removeAttr('class', $this->_attributes);
         }
+
         $this->_tableAttributes = $this->_getAttrString($attr);
 
         // set default add button attributes
@@ -409,7 +410,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                     $this->_addButtonAttributes = array(
                         'name'  => 'add',
                         'value' => ' ',
-                        'type'  => 'button'
+                        'type'  => 'button',
+                        'class'=> 'btn btn-primary'
                     );
                 } else {
                     $this->_updateAttrArray(
@@ -420,10 +422,12 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 break;
             case 'remove':
                 if (is_null($attributes)) {
-                    $this->_removeButtonAttributes
-                        = array('name'  => 'remove',
+                    $this->_removeButtonAttributes = array(
+                        'name'  => 'remove',
                         'value' => '  ',
-                        'type'  => 'button');
+                        'type'  => 'button',
+                        'class'=> 'btn btn-primary'
+                    );
                 } else {
                     $this->_updateAttrArray($this->_removeButtonAttributes,
                         $this->_parseAttributes($attributes));
@@ -431,10 +435,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
                 break;
             case 'all':
                 if (is_null($attributes)) {
-                    $this->_allButtonAttributes
-                        = array('name'  => 'all',
+                    $this->_allButtonAttributes = array(
+                        'name'  => 'all',
                         'value' => ' Select All ',
-                        'type'  => 'button');
+                        'type'  => 'button'
+                    );
                 } else {
                     $this->_updateAttrArray($this->_allButtonAttributes,
                         $this->_parseAttributes($attributes));
@@ -533,10 +538,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         } else {
             $this->_elementTemplate = '
 {javascript}
-  <div class="col-sm-3"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
+<div class="row">
+  <div class="col-sm-5"><!-- BEGIN label_2 -->{label_2}<!-- END label_2 --> {unselected}</div>
   <div class="col-sm-2"><div class="text-center">{add}{remove}</div></div>
-  <div class="col-sm-3"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
-
+  <div class="col-sm-5"><!-- BEGIN label_3 -->{label_3}<!-- END label_3 -->{selected}</div>
+</div>
 ';
         }
         if ($js == false) {

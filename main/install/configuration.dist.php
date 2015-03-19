@@ -314,4 +314,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['registration.soap.php.decode_utf8'] = false;
 // Show delete option in attendance
 //$_configuration['allow_delete_attendance'] = false;
-
+// Enable Gravatar profile image if no local image has been given
+//$_configuration['gravatar_enabled'] = true;
+// If Gravatar is enabled, tells which type of picture we want (default is "mm"). Options: mm | identicon | monsterid | wavatar
+//$_configuration['gravatar_type'] = 'mm';

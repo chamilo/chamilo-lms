@@ -131,7 +131,7 @@ class UniqueAnswer extends Question
         }
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
-            $form->addElement('html', '<tr>');
+            $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer->correct[$i]) {
                     $correct = $i;
@@ -255,7 +255,7 @@ class UniqueAnswer extends Question
                 $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editor_config);
             }
             $form->addText('weighting[' . $i . ']', null, null, array('class' => "col-md-1", 'value' => '0'));
-            $form->addElement('html', '</tr>');
+            $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody>');

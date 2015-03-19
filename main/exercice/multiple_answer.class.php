@@ -32,6 +32,11 @@ class MultipleAnswer extends Question
      */
     function createAnswersForm($form)
     {
+        $editorConfig = array(
+            'ToolbarSet' => 'TestProposedAnswer',
+            'Width' => '100%',
+            'Height' => '125'
+        );
 
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -122,15 +127,13 @@ class MultipleAnswer extends Question
                 'class="checkbox" style="margin-left: 0em;"');
             $boxes_names[] = 'correct[' . $i . ']';
 
-            $form->addElement('html_editor', 'answer[' . $i . ']', null, array(),
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+            $form->addHtmlEditor("answer[$i]", null, null, true, $editorConfig);
             $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
 
-            $form->addElement('html_editor', 'comment[' . $i . ']', null, array(),
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+            $form->addHtmlEditor("comment[$i]", null, null, true, $editorConfig);
 
             $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "span1", 'value' => '0'));
-            $form->addElement('html', '</tr>');
+            $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody>');

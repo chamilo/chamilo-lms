@@ -45,14 +45,14 @@ class UniqueAnswer extends Question
 
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
-        $nb_answers = isset($_POST['nb_answers']) ? (int)$_POST['nb_answers'] : 4;
+        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         /*
-             Types of Feedback
-             $feedback_option[0]=get_lang('Feedback');
-            $feedback_option[1]=get_lang('DirectFeedback');
-            $feedback_option[2]=get_lang('NoFeedback');
+          Types of Feedback
+          $feedback_option[0]=get_lang('Feedback');
+          $feedback_option[1]=get_lang('DirectFeedback');
+          $feedback_option[2]=get_lang('NoFeedback');
          */
 
         $feedback_title = '';
@@ -106,8 +106,7 @@ class UniqueAnswer extends Question
                 }
                 $question = Question::read($questionid);
                 $select_question[$questionid] = 'Q' . $key . ' :' . cut(
-                    $question->selectTitle(),
-                    20
+                    $question->selectTitle(), 20
                 );
             }
         }
@@ -201,33 +200,22 @@ class UniqueAnswer extends Question
             );
 
             $answer_number = $form->addElement(
-                'text',
-                'counter[' . $i . ']',
-                null,
-                ' value = "' . $i . '"'
+                'text', 'counter[' . $i . ']', null, ' value = "' . $i . '"'
             );
             $answer_number->freeze();
             $form->addElement(
-                'radio',
-                'correct',
-                null,
-                null,
-                $i,
-                'class="checkbox"'
+                'radio', 'correct', null, null, $i, 'class="checkbox"'
             );
 
-            $form->addHtmlEditor('answer[' . $i . ']',null,null,true, $editor_config);
+            $form->addHtmlEditor('answer[' . $i . ']', null, null, true, $editor_config);
 
             $form->addRule(
-                'answer[' . $i . ']',
-                get_lang('ThisFieldIsRequired'),
-                'required'
+                'answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required'
             );
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
+                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editor_config);
                 // Direct feedback
-
                 //Adding extra feedback fields
                 $group = array();
                 $group['try' . $i] = $form->createElement(
@@ -263,11 +251,10 @@ class UniqueAnswer extends Question
                     '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}',
                     'scenario'
                 );
-
             } else {
-                $form->addHtmlEditor('comment[' . $i . ']',null,null,false,$editor_config);
+                $form->addHtmlEditor('comment[' . $i . ']', null, null, false, $editor_config);
             }
-            $form->addText('weighting[' . $i . ']', null,null, array('class' => "col-md-1", 'value' => '0'));
+            $form->addText('weighting[' . $i . ']', null, null, array('class' => "col-md-1", 'value' => '0'));
             $form->addElement('html', '</tr>');
         }
 
@@ -327,7 +314,6 @@ class UniqueAnswer extends Question
             } else {
                 $form->setDefaults(array('correct' => 1));
             }
-
         }
         $form->setConstants(array('nb_answers' => $nb_answers));
     }

@@ -5491,4 +5491,29 @@ class SessionManager
             )
         ));
     }
+
+    /**
+     * Get the count of user courses in session
+     * @param int $sessionId The session id
+     * @return array
+     */
+    public static function getTotalUserCoursesInSession($sessionId)
+    {
+        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status "
+            . "FROM session_rel_course_rel_user scu "
+            . "INNER JOIN user u ON scu.id_user = u.user_id "
+            . "WHERE scu.id_session = " . intval($sessionId) . " "
+            . "GROUP BY u.user_id";
+
+        $result = Database::query($sql);
+
+        $list = array();
+
+        while ($data = Database::fetch_assoc($result)) {
+            $list[] = $data;
+        }
+
+        return $list;
+    }
+
 }

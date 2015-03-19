@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script contains the server part of the xajax interaction process. The client part is located
+ * This script contains the server part of the ajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This script updated the TOC of the SCORM without updating the SCO's attributes
  * @package chamilo.learnpath
@@ -18,60 +18,74 @@ require_once '../inc/global.inc.php';
 
 /**
  * Get one item's details
- * @param   integer LP ID
- * @param   integer user ID
- * @param   integer View ID
- * @param   integer Current item ID
- * @param   integer New item ID
+ * @param   integer $lpId LP ID
+ * @param   integer $userId user ID
+ * @param   integer $viewId View ID
+ * @param   integer $currentItem Current item ID
+ * @param   integer $nextItem New item ID
+ * @return  string  JavaScript commands to be executed in scorm_api.php
  */
-function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) {
+function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
+{
     $debug = 0;
     $return = '';
-    if ($debug > 0) { error_log('In xajax_switch_item_toc('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')', 0); }
-    $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
-    $new_item_id = 0;
-    switch ($next_item) {
+    if ($debug > 0) {
+        error_log('In switch_item_toc('.$lpId.','.$userId.','.$viewId.','.$currentItem.','.$nextItem.')', 0);
+    }
+    $myLP = learnpath::getLpFromSession(api_get_course_id(), $lpId, $userId);
+    $newItemId = 0;
+    switch ($nextItem) {
         case 'next':
-            $mylp->set_current_item($current_item);
-            $mylp->next();
-            $new_item_id = $mylp->get_current_item_id();
-            if ($debug > 1) { error_log('In {next} - next item is '.$new_item_id.'(current: '.$current_item.')', 0); }
+            $myLP->set_current_item($currentItem);
+            $myLP->next();
+            $newItemId = $myLP->get_current_item_id();
+            if ($debug > 1) {
+                error_log('In {next} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
+            }
             break;
         case 'previous':
-            $mylp->set_current_item($current_item);
-            $mylp->previous();
-            $new_item_id = $mylp->get_current_item_id();
-            if ($debug > 1) { error_log('In {previous} - next item is '.$new_item_id.'(current: '.$current_item.')', 0); }
+            $myLP->set_current_item($currentItem);
+            $myLP->previous();
+            $newItemId = $myLP->get_current_item_id();
+            if ($debug > 1) {
+                error_log('In {previous} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
+            }
             break;
         case 'first':
-            $mylp->set_current_item($current_item);
-            $mylp->first();
-            $new_item_id = $mylp->get_current_item_id();
-            if ($debug > 1) { error_log('In {first} - next item is '.$new_item_id.'(current: '.$current_item.')', 0); }
+            $myLP->set_current_item($currentItem);
+            $myLP->first();
+            $newItemId = $myLP->get_current_item_id();
+            if ($debug > 1) {
+                error_log('In {first} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
+            }
             break;
         case 'last':
             break;
         default:
             // Should be filtered to check it's not hacked
-            if($next_item == $current_item){
+            if ($nextItem == $currentItem) {
                 // If we're opening the same item again.
-                $mylp->items[$current_item]->restart();
+                $myLP->items[$currentItem]->restart();
             }
-            $new_item_id = $next_item;
-            $mylp->set_current_item($new_item_id);
-            if ($debug > 1) { error_log('In {default} - next item is '.$new_item_id.'(current: '.$current_item.')', 0); }
+            $newItemId = $nextItem;
+            $myLP->set_current_item($newItemId);
+            if ($debug > 1) {
+                error_log('In {default} - next item is '.$newItemId.'(current: '.$currentItem.')', 0);
+            }
             break;
     }
-    $mylp->start_current_item(true);
-    if ($mylp->force_commit) {
-        $mylp->save_current();
+    $myLP->start_current_item(true);
+    if ($myLP->force_commit) {
+        $myLP->save_current();
     }
-    if (is_object($mylp->items[$new_item_id])) {
-        $mylpi = $mylp->items[$new_item_id];
+    if (is_object($myLP->items[$newItemId])) {
+        $myLPI = $myLP->items[$newItemId];
     } else {
-        if ($debug > 1) { error_log('In switch_item_details - generating new item object', 0); }
-        $mylpi = new learnpathItem($new_item_id, $user_id);
-        $mylpi->set_lp_view($view_id);
+        if ($debug > 1) {
+            error_log('In switch_item_details - generating new item object', 0);
+        }
+        $myLPI = new learnpathItem($newItemId, $userId);
+        $myLPI->set_lp_view($viewId);
     }
     /*
      * now get what's needed by the SCORM API:
@@ -82,83 +96,65 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
      * -session_time
      * -suspend_data
      */
-    $myscore = $mylpi->get_score();
-    $mymax = $mylpi->get_max();
-    if ($mymax === '') { $mymax = "''"; }
-    $mymin = $mylpi->get_min();
-    $mylesson_status = $mylpi->get_status();
-    $mylesson_location = $mylpi->get_lesson_location();
-    $mytotal_time = $mylpi->get_scorm_time('js');
-    $mymastery_score = $mylpi->get_mastery_score();
-    $mymax_time_allowed = $mylpi->get_max_time_allowed();
-    $mylaunch_data = $mylpi->get_launch_data();
+    $lessonStatus = $myLPI->get_status();
+    $interactionsCount = $myLPI->get_interactions_count();
+    /**
+     * Interactions are not returned by switch_item at the moment, but please
+     * leave commented code to allow for the addition of these in the future
+     */
     /*
-    if ($mylpi->get_type() == 'asset') {
-        // Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
-        $mylesson_status = 'completed';
-        $mylpi->set_status('completed');
-        $mylpi->save();
+    $interactionsString = '';
+    for ($i = 0; $i < $interactionsCount; $i++) {
+        $interactionsString .= ",[".$i.",'','','','','','','']";
+    }
+    if (!empty($interactionsString)) {
+        $interactionsString = substr($interactionsString, 1);
     }
     */
-    $mysession_time = $mylpi->get_total_time();
-    $mysuspend_data = $mylpi->get_suspend_data();
-    $mylesson_location = $mylpi->get_lesson_location();
-    $myic = $mylpi->get_interactions_count();
-    $myistring = '';
-    for ($i = 0; $i < $myic; $i++) {
-        $myistring .= ",[".$i.",'','','','','','','']";
-    }
-    if (!empty($myistring)) {
-        $myistring = substr($myistring, 1);
-    }
-    $mytotal = $mylp->get_total_items_count_without_chapters();
-    $mycomplete = $mylp->get_complete_items_count();
-    $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
-    $mynext = $mylp->get_next_item_id();
-    $myprevious = $mylp->get_previous_item_id();
-    $myitemtype = $mylpi->get_type();
-    $mylesson_mode = $mylpi->get_lesson_mode();
-    $mycredit = $mylpi->get_credit();
-    $mylaunch_data = $mylpi->get_launch_data();
-    $myinteractions_count = $mylpi->get_interactions_count();
-    $myobjectives_count = $mylpi->get_objectives_count();
-    $mycore_exit = $mylpi->get_core_exit();
+    $totalItems = $myLP->get_total_items_count_without_chapters();
+    $completedItems = $myLP->get_complete_items_count();
+    $progressMode = $myLP->get_progress_bar_mode();
+    $progressMode = ($progressMode == '' ? '%' : $progressMode);
+    $nextItemId = $myLP->get_next_item_id();
+    $previousItemId = $myLP->get_previous_item_id();
+    $itemType = $myLPI->get_type();
+    $lessonMode = $myLPI->get_lesson_mode();
+    $credit = $myLPI->get_credit();
+    $launchData = $myLPI->get_launch_data();
+    $objectivesCount = $myLPI->get_objectives_count();
+    $coreExit = $myLPI->get_core_exit();
 
     $return .=
-        //"saved_lesson_status='not attempted';" .
-        "olms.lms_lp_id=".$lp_id.";" .
-        "olms.lms_item_id=".$new_item_id.";" .
+        "olms.lms_lp_id=".$lpId.";" .
+        "olms.lms_item_id=".$newItemId.";" .
         "olms.lms_old_item_id=0;" .
-        //"lms_been_synchronized=0;" .
         "olms.lms_initialized=0;" .
-        //"lms_total_lessons=".$mytotal.";" .
-        //"lms_complete_lessons=".$mycomplete.";" .
-        //"lms_progress_bar_mode='".$myprogress_mode."';" .
-        "olms.lms_view_id=".$view_id.";" .
-        "olms.lms_user_id=".$user_id.";" .
-        "olms.next_item=".$new_item_id.";" . // This one is very important to replace possible literal strings.
-        "olms.lms_next_item=".$mynext.";" .
-        "olms.lms_previous_item=".$myprevious.";" .
-        "olms.lms_item_type = '".$myitemtype."';" .
-        "olms.lms_item_credit = '".$mycredit."';" .
-        "olms.lms_item_lesson_mode = '".$mylesson_mode."';" .
-        "olms.lms_item_launch_data = '".$mylaunch_data."';" .
-        "olms.lms_item_interactions_count = '".$myinteractions_count."';" .
-        "olms.lms_item_objectives_count = '".$myinteractions_count."';" .
-        "olms.lms_item_core_exit = '".$mycore_exit."';" .
+        "olms.lms_view_id=".$viewId.";" .
+        "olms.lms_user_id=".$userId.";" .
+        "olms.next_item=".$newItemId.";" . // This one is very important to replace possible literal strings.
+        "olms.lms_next_item=".$nextItemId.";" .
+        "olms.lms_previous_item=".$previousItemId.";" .
+        "olms.lms_item_type = '".$itemType."';" .
+        "olms.lms_item_credit = '".$credit."';" .
+        "olms.lms_item_lesson_mode = '".$lessonMode."';" .
+        "olms.lms_item_launch_data = '".$launchData."';" .
+        "olms.lms_item_interactions_count = '".$interactionsCount."';" .
+        "olms.lms_item_objectives_count = '".$objectivesCount."';" .
+        "olms.lms_item_core_exit = '".$coreExit."';" .
         "olms.asset_timer = 0;";
 
-    $return .= "update_toc('unhighlight','".$current_item."');".
-        "update_toc('highlight','".$new_item_id."');".
-        "update_toc('$mylesson_status','".$new_item_id."');".
-        "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+    $return .= "update_toc('unhighlight','".$currentItem."');".
+        "update_toc('highlight','".$newItemId."');".
+        "update_toc('$lessonStatus','".$newItemId."');".
+        "update_progress_bar('$completedItems','$totalItems','$progressMode');";
 
-    $mylp->set_error_msg('');
-    $mylp->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
-    $_SESSION['scorm_item_id'] = $new_item_id; // Save the new item ID for the exercise tool to use.
-    $_SESSION['lpobject'] = serialize($mylp);
+    $myLP->set_error_msg('');
+    $myLP->prerequisites_match(); // Check the prerequisites are all complete.
+    if ($debug > 1) {
+        error_log('prerequisites_match() returned '.htmlentities($myLP->error), 0);
+    }
+    $_SESSION['scorm_item_id'] = $newItemId; // Save the new item ID for the exercise tool to use.
+    $_SESSION['lpobject'] = serialize($myLP);
     return $return;
 }
 

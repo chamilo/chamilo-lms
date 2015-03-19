@@ -163,7 +163,7 @@ if (!isset($_GET['action']) ||
 ) {
     $myweb_survey_id = $survey_id;
     echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'&amp;'.$cidReq.'&amp;single_page=1">'.
-        Display::return_icon('survey_reporting_question.gif',get_lang('QuestionsOverallReport')).' '.get_lang('QuestionsOverallReport').'</a></div><div class="sectioncomment">'.get_lang('QuestionsOverallReportDetail').' </div>';
+        Display::return_icon('survey_reporting_overall.png',get_lang('QuestionsOverallReport')).' '.get_lang('QuestionsOverallReport').'</a></div><div class="sectioncomment">'.get_lang('QuestionsOverallReportDetail').' </div>';
     echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.
         Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
     echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'&'.$cidReq.'">'.

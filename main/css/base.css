@@ -2915,7 +2915,7 @@ div.admin_section h4 {
 }
 
 .ribbon .rib-total {
-    width: 275px;
+    width: 275px !important;
 }
 
 .ribbon .rib-error, .ribbon .ribbon-total-error {

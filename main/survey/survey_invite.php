@@ -67,7 +67,7 @@ Display::display_header($tool_name,'Survey');
 echo '<script>
 $(function() {
     $("#check_mail").change(function() {
-        $("#mail_text").toggle();
+        $("#mail_text_wrapper").toggle();
     });
 });
 </script>';
@@ -108,18 +108,29 @@ foreach ($complete_user_list as & $user) {
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
 
 // Additional users
-$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 5));
+$form->addElement(
+	'textarea',
+	'additional_users',
+	array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')),
+	array('rows' => 5)
+);
 
 $form->addElement('html', '<div id="check_mail">');
 $form->addElement('checkbox', 'send_mail','', get_lang('SendMail'));
 $form->addElement('html', '</div>');
 
-$form->addElement('html', '<div id="mail_text">');
+$form->addElement('html', '<div id="mail_text_wrapper">');
 
 // The title of the mail
 $form->addElement('text', 'mail_title', get_lang('MailTitle'), array('class' => 'span6'));
 // The text of the mail
-$form->addElement('html_editor', 'mail_text', array(get_lang('MailText'), get_lang('UseLinkSyntax')), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
+$form->addElement(
+	'html_editor',
+	'mail_text',
+	array(get_lang('MailText'), get_lang('UseLinkSyntax')),
+	null,
+	array('ToolbarSet' => 'Survey', 'Height' => '150')
+);
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
 if ($survey_data['anonymous'] != 1) {
@@ -129,7 +140,7 @@ if ($survey_data['anonymous'] != 1) {
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
 
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'class="save"');
+$form->addButtonSave(get_lang('PublishSurvey'));
 // The rules (required fields)
 /*if ($survey_data['send_mail'] == 0) {
     $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');

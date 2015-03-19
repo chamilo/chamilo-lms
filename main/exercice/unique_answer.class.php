@@ -61,34 +61,27 @@ class UniqueAnswer extends Question
             //Scenario
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
-            $comment_title = '<th width="500px" >' . get_lang('Comment') . '</th>';
-            $feedback_title = '<th width="350px" >' . get_lang('Scenario') . '</th>';
+            $comment_title = '<th width="50%" >' . get_lang('Comment') . '</th>';
+            $feedback_title = '<th width="50%" >' . get_lang('Scenario') . '</th>';
         } else {
-            $comment_title = '<th>' . get_lang('Comment') . '</th>';
+            $comment_title = '<th width="50%">' . get_lang('Comment') . '</th>';
         }
 
-        $html = '<table class="data_table">
+        $html = '<table class="table table-striped table-hover">
+            <thead>
                 <tr style="text-align: center;">
-                    <th width="10px">
-                        ' . get_lang('Number') . '
-                    </th>
-                    <th width="10px" >
-                        ' . get_lang('True') . '
-                    </th>
-                    <th width="50%">
-                        ' . get_lang('Answer') . '
-                    </th>
+                    <th width="10">' . get_lang('Number') . '</th>
+                    <th width="10" >' . get_lang('True') . '</th>
+                    <th width="50%">' . get_lang('Answer') . '</th>
                         ' . $comment_title . '
                         ' . $feedback_title . '
-                    <th width="50px">
-                        ' . get_lang('Weighting') . '
-                    </th>
-                </tr>';
+                    <th width="10">' . get_lang('Weighting') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
 
-        $form->addLabel(
-            get_lang('Answers') . '<br /> <img src="../img/fill_field.png">',
-            $html
-        );
+        $form->addHeader(get_lang('Answers'));
+        $form->addHtml($html);
 
         $defaults = array();
         $correct = 0;
@@ -278,8 +271,8 @@ class UniqueAnswer extends Question
             $form->addElement('html', '</tr>');
         }
 
-        $form->addElement('html', '</table>');
-        $form->addElement('html', '<br />');
+        $form->addHtml('</tbody>');
+        $form->addHtml('</table>');
 
         $navigator_info = api_get_navigator();
 
@@ -308,31 +301,15 @@ class UniqueAnswer extends Question
                 );
             } else {
                 //setting the save button here and not in the question class.php
-                $form->addElement(
-                    'style_submit_button',
-                    'lessAnswers',
-                    get_lang('LessAnswer'),
-                    'class="btn btn-primary"'
-                );
-                $form->addElement(
-                    'style_submit_button',
-                    'moreAnswers',
-                    get_lang('PlusAnswer'),
-                    'class="btn btn-primary"'
-                );
-                $form->addElement(
-                    'style_submit_button',
-                    'submitQuestion',
-                    $text,
-                    'class="' . $class . '"'
-                );
+                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+                $form->addButtonSave($text, 'submitQuestion');
             }
         }
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
 
-        $form->addHtml('</div></div>');
+        $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessAnswers');
+        $renderer->setElementTemplate('{element}', 'moreAnswers');
+        $renderer->setElementTemplate('{element}</div></div>', 'submitQuestion');
 
         // We check the first radio button to be sure a radio button will be check
         if ($correct == 0) {

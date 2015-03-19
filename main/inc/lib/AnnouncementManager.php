@@ -374,7 +374,7 @@ class AnnouncementManager
                     '0'
                 );
             } else {
-                $send_to = self::separate_users_groups($sentTo);
+                $send_to = CourseManager::separateUsersGroups($sentTo);
 
                 // Storing the selected groups
                 if (is_array($send_to['groups']) && !empty($send_to['groups'])) {
@@ -460,7 +460,7 @@ class AnnouncementManager
         // store in item_property (first the groups, then the users
 
         if (!isset($to_users)) { // !isset($to): when no user is selected we send it to everyone
-            $send_to = self::separate_users_groups($to);
+            $send_to = CourseManager::separateUsersGroups($to);
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
@@ -541,7 +541,7 @@ class AnnouncementManager
         if (!is_null($to)) {
             // !is_null($to): when no user is selected we send it to everyone
 
-            $send_to = self::separate_users_groups($to);
+            $send_to = CourseManager::separateUsersGroups($to);
 
             // storing the selected groups
             if (is_array($send_to['groups'])) {
@@ -1088,33 +1088,7 @@ class AnnouncementManager
         }
     }
 
-    /**
-     * This function separates the users from the groups
-     * users have a value USER:XXX (with XXX the groups id have a value
-     *  GROUP:YYY (with YYY the group id)
-     * @param    array   Array of strings that define the type and id of each destination
-     * @return   array   Array of groups and users (each an array of IDs)
-     */
-    public static function separate_users_groups($to)
-    {
-        $grouplist = array();
-        $userlist = array();
-        foreach ($to as $to_item) {
-            list($type, $id) = explode(':', $to_item);
-            switch ($type) {
-                case 'GROUP':
-                    $grouplist[] = intval($id);
-                    break;
-                case 'USER':
-                    $userlist[] = intval($id);
-                    break;
-            }
-        }
 
-        $send_to['groups'] = $grouplist;
-        $send_to['users'] = $userlist;
-        return $send_to;
-    }
 
     /**
      * Returns all the users and all the groups a specific announcement item

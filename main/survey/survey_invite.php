@@ -91,7 +91,11 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 }
 
 // Building the form for publishing the survey
-$form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq());
+$form = new FormValidator(
+	'publish_form',
+	'post',
+	api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq()
+);
 $form->addElement('header', '', $tool_name);
 
 // Course users
@@ -105,7 +109,17 @@ $possible_users = array();
 foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
-$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
+
+
+CourseManager::addUserGroupMultiSelect($form, array());
+
+/*$form->addElement(
+	'advmultiselect',
+	'course_users',
+	get_lang('CourseUsers'),
+	$possible_users,
+	'style="width: 250px; height: 200px;"'
+);*/
 
 // Additional users
 $form->addElement(
@@ -122,13 +136,12 @@ $form->addElement('html', '</div>');
 $form->addElement('html', '<div id="mail_text_wrapper">');
 
 // The title of the mail
-$form->addElement('text', 'mail_title', get_lang('MailTitle'), array('class' => 'span6'));
+$form->addText('mail_title', get_lang('MailTitle'), false);
 // The text of the mail
-$form->addElement(
-	'html_editor',
+$form->addHtmlEditor(
 	'mail_text',
 	array(get_lang('MailText'), get_lang('UseLinkSyntax')),
-	null,
+	false,
 	array('ToolbarSet' => 'Survey', 'Height' => '150')
 );
 $form->addElement('html', '</div>');
@@ -163,7 +176,7 @@ $form->addElement('label', null, $auto_survey_link);
 
 if ($form->validate()) {
    	$values = $form->exportValues();
-    if ($values['send_mail'] == 1) {
+    if (isset($values['send_mail']) && $values['send_mail'] == 1) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
             Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
             // Getting the invited users
@@ -183,10 +196,22 @@ if ($form->validate()) {
         }
     }
     // Save the invitation mail
-	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
+	SurveyUtil::save_invite_mail(
+		$values['mail_text'],
+		$values['mail_title'],
+		!empty($survey_data['invite_mail'])
+	);
+
 	// Saving the invitations for the course users
-	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
-    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+	$count_course_users = SurveyUtil::save_invitations(
+		$values['users'],
+		$values['mail_title'],
+		$values['mail_text'],
+		$values['resend_to_all'],
+		$values['send_mail'],
+		$values['remindUnAnswered']
+	);
+
 	// Saving the invitations for the additional users
 	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
 	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators

@@ -34,15 +34,18 @@ if (!empty($extra_fields)) {
         }
     }
 }
-$user_info    = UserManager::get_user_info_by_id($user_id);
+$user_info = UserManager::get_user_info_by_id($user_id);
 //Block Social Avatar
 $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'search');
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
-$social_right_content = '<div class="span9">'.UserManager::get_search_form($query).'</div>';
+$social_right_content = '';
+$searchForm = UserManager::get_search_form($query);
 
 $groups = array();
 $totalGroups = array();
+$users = array();
+$totalUsers = array();
 
 // I'm searching something
 if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) {
@@ -54,7 +57,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
         $from = intval(($page - 1) * $itemPerPage);
         // Get users from tags
-        $users  = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
+        $users = UserManager::get_all_user_tags($_GET['q'], 0, $from, $itemPerPage);
     }
 
     if ($_GET['search_type']=='0' || $_GET['search_type']=='2') {
@@ -89,7 +92,7 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                         <button class="btn btn-mini"><i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</button></a>';
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-                $img             = '<img src="'.$picture['file'].'">';
+                $img = '<img src="'.$picture['file'].'">';
             } else {
                 $picture = UserManager::get_picture_user(
                     $user['user_id'],
@@ -110,10 +113,9 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url);
             $invitations = $user['tag'].$send_inv.$send_msg;
 
-            $results .= '<li class="span3">
-                            <div class="">
-                            <div class="row-fluid">
-                                <div class="span12">
+            $results .= '<li class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12">
                                     '.$user_info['complete_name'].'
                                 </div>
                                 <div class="col-md-4">
@@ -125,7 +127,6 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
                                     <div class="media">
                                     '.$invitations.'
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </li>';
@@ -148,10 +149,9 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $totalUsers
     );
 
-
     $grid_groups = array();
     if (is_array($groups) && count($groups) > 0) {
-        $social_right_content .= '<div class="span9">';
+        $social_right_content .= '<div class="col-md-9">';
         $social_right_content .= Display::page_subheader(get_lang('Groups'));
 
         $social_right_content .= '<ul class="thumbnails">';
@@ -178,14 +178,14 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $item_1  = Display::tag('h3', $url_open.$name.$url_close).$members;
 
             $social_right_content .= '
-                <li class="span8">
-                    <div class="row-fluid">
-                        <div class="span1">
+                <li class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-1">
                             <div class="media">
                                 '.$item_0.'
                             </div>
                         </div>
-                        <div class="span6">
+                        <div class="col-md-6">
                             '.$item_1.'
                             <p>'.$group['description'].'</p>
                             <p>'.$tags.'</p>
@@ -213,11 +213,11 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
     );
 }
 
-
 $tpl = new Template($tool_name);
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('search_form', $searchForm);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));

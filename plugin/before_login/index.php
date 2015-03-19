@@ -36,7 +36,7 @@ if (api_is_anonymous()) {
 
     $renderer =& $form->defaultRenderer();
     $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-    $renderer->setElementTemplate('<tr><td>{element}</td></tr>');
+    $renderersetCustomElementTemplate->setCustomElementTemplate('<tr><td>{element}</td></tr>');
 
     $form->addElement('html', $option1);
     $form->addElement('checkbox', 'left', null, get_lang('Yes'));
@@ -57,7 +57,7 @@ if (api_is_anonymous()) {
         $renderer =& $form2->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-        $renderer->setElementTemplate('<tr><td>{element}</td></tr>');
+        $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
 
         $form2->addElement('html', $option2);
         $form2->addElement('checkbox', 'right', null, get_lang('Yes'));

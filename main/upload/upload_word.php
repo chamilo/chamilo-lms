@@ -153,7 +153,7 @@ $user_file_template =
         <!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
 </div>
 EOT;
-$renderer->setElementTemplate($user_file_template);
+$renderer->setCustomElementTemplate($user_file_template);
 
 $form -> addElement ('file', 'user_file','<img src="../img/word_big.gif" align="absbottom" />');
 if (api_get_setting('search_enabled')=='true') {

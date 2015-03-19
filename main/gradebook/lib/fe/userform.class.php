@@ -46,7 +46,7 @@ class UserForm extends FormValidator
 			));
 		}
 		$renderer =& $this->defaultRenderer();
-		$renderer->setElementTemplate('<span>{element}</span> ');
+		$renderer->setCustomElementTemplate('<span>{element}</span> ');
 		$this->addElement('text','keyword','');
 		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
 	}

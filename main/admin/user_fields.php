@@ -127,7 +127,7 @@ if(1)
 	// Create an add-field box
 	$form = new FormValidator('add_field','post','','',null,false);
 	$renderer =& $form->defaultRenderer();
-	$renderer->setElementTemplate('<span>{element}</span> ');
+	$renderer->setCustomElementTemplate('<span>{element}</span> ');
 	//$form->addElement('text','label',get_lang('FieldLabel'));
 	//$form->addElement('text','type',get_lang('FieldType'));
 	//$form->addElement('text','title',get_lang('FieldTitle'));

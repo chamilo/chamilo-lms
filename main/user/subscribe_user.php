@@ -61,7 +61,7 @@ if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 // Build search-form
 $form = new FormValidator('search_user', 'get', '', '', null, false);
 $renderer = $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span> ');
+$renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addText('keyword', '', false);
 $form->addElement('hidden', 'type', $type);
 $form->addButtonSearch(get_lang('Search'));

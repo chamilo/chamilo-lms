@@ -27,7 +27,7 @@ include_once $libpath.'specific_fields_manager.lib.php';
 // Create an add-field box
 $form = new FormValidator('add_field','post','','',null,false);
 $renderer =& $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span> ');
+$renderer->setCustomElementTemplate('<span>{element}</span> ');
 $form->addElement('static','search_advanced_link',null,'<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('AddSpecificSearchField').'</a>');
 
 // Create a sortable table with specific fields data

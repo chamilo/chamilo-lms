@@ -542,7 +542,7 @@ foreach ($questionList as $questionId) {
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
-			$renderer->setElementTemplate('<div align="left">{element}</div>');
+			$renderer->setCustomElementTemplate('<div align="left">{element}</div>');
 			$comnt = Event::get_comments($id, $questionId);
 			$default = array('comments_'.$questionId =>  $comnt);
 

@@ -263,7 +263,7 @@ $form_search = new FormValidator(
     FormValidator::LAYOUT_INLINE
 );
 $renderer = $form_search->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span>');
+$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', $sessionId);
 $form_search->addElement('hidden', 'id_session', $sessionId);

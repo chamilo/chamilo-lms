@@ -151,7 +151,7 @@ Display::display_footer();
 function form_special_export() {
     $form = new FormValidator('special_exports','post');
     $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('<div>{element}</div> ');
+    $renderer->setCustomElementTemplate('<div>{element}</div> ');
     $form->addElement('radio', 'backup_option', '',  get_lang('SpecialCreateFullBackup'), 'full_backup');
     $form->addElement('radio', 'backup_option', '',  get_lang('SpecialLetMeSelectItems'), 'select_items');
     $form->addElement('html','<br />');

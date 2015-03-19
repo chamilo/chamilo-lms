@@ -91,7 +91,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_
 
 -- xxCOURSExx
 
-ALTER TABLE c_survey ADD visible_results INT UNSIGNED DEFAULT 0;
+ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0;
+ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL;
+,
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float;
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float;
 ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
@@ -103,4 +105,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.21' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.22' WHERE variable = 'chamilo_database_version';

@@ -1053,7 +1053,8 @@ CREATE TABLE c_survey_invitation(
   reminder_date datetime NOT NULL,
   answered int NOT NULL default 0,
   session_id int UNSIGNED NOT NULL default 0,
-  PRIMARY KEY  (survey_invitation_id, c_id)
+  group_id INT NOT NULL,
+  PRIMARY KEY (survey_invitation_id, c_id)
 );
 
 CREATE TABLE c_survey_question  (

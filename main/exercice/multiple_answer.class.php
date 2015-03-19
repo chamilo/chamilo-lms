@@ -38,15 +38,21 @@ class MultipleAnswer extends Question
 
         $obj_ex = $_SESSION['objExercise'];
 
-        $html = '<table class="data_table">
-            <tr>
-                <th width="10px">' . get_lang('Number') . '</th>
-                <th width="10px">' . get_lang('True') . '</th>
-                <th width="50%">' . get_lang('Answer') . '</th>
-                <th>' . get_lang('Comment') . '</th>
-                <th width="50px">' . get_lang('Weighting') . '</th>
-            </tr>';
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addHeader(get_lang('Answers'));
+
+        $html = '<table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th width="10">' . get_lang('Number') . '</th>
+                    <th width="10">' . get_lang('True') . '</th>
+                    <th width="50%">' . get_lang('Answer') . '</th>
+                    <th width="50%">' . get_lang('Comment') . '</th>
+                    <th width="10">' . get_lang('Weighting') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $form->addHtml($html);
 
         $defaults = array();
         $correct = 0;
@@ -68,6 +74,8 @@ class MultipleAnswer extends Question
         }
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
+            $form->addHtml('<tr>');
+
             if (is_object($answer)) {
                 $defaults['answer[' . $i . ']'] = $answer->answer[$i];
                 $defaults['comment[' . $i . ']'] = $answer->comment[$i];
@@ -124,23 +132,23 @@ class MultipleAnswer extends Question
             $form->addElement('text', 'weighting[' . $i . ']', null, array('class' => "span1", 'value' => '0'));
             $form->addElement('html', '</tr>');
         }
-        $form->addElement('html', '</table>');
-        $form->addElement('html', '<br />');
+
+        $form->addHtml('</tbody>');
+        $form->addHtml('</table>');
 
         $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
 
         global $text, $class;
         if ($obj_ex->edit_exercise_in_lp == true) {
             // setting the save button here and not in the question class.php
-            $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-            $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-            $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+            $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+            $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+            $form->addButtonSave($text, 'submitQuestion');
         }
 
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
-        $form->addElement('html', '</div></div>');
+        $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessAnswers');
+        $renderer->setElementTemplate('{element}', 'moreAnswers');
+        $renderer->setElementTemplate('{element}</div></div>', 'submitQuestion');
 
         $defaults['correct'] = $correct;
 

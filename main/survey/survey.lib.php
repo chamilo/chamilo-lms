@@ -534,12 +534,16 @@ class survey_manager
     /**
      * @param int $survey_id
      * @param int $new_survey_id
+     * @param int $targetCourseId
      *
      * @return bool
      */
-    public static function copy_survey($survey_id, $new_survey_id = null)
+    public static function copy_survey($survey_id, $new_survey_id = null, $targetCourseId = null)
     {
         $course_id = api_get_course_int_id();
+        if (!$targetCourseId) {
+            $targetCourseId = $course_id;
+        }
 
         // Database table definitions
         $table_survey 					= Database::get_course_table(TABLE_SURVEY);
@@ -557,7 +561,7 @@ class survey_manager
         if (empty($new_survey_id)) {
             $params = $survey_data;
             $params['code'] = self::generate_unique_code($params['code']);
-            $params['c_id'] = $course_id;
+            $params['c_id'] = $targetCourseId;
             unset($params['survey_id']);
             $params['session_id'] = api_get_session_id();
             $params['title'] = $params['title'] . ' ' . get_lang('Copy');
@@ -575,7 +579,7 @@ class survey_manager
         $res = Database::query($sql);
         while($row = Database::fetch_array($res, 'ASSOC')) {
             $params = array(
-                'c_id' =>  $course_id,
+                'c_id' =>  $targetCourseId,
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id
@@ -591,7 +595,7 @@ class survey_manager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $params = array(
-                'c_id' =>  $course_id,
+                'c_id' =>  $targetCourseId,
                 'survey_id' => $new_survey_id,
                 'survey_question' => $row['survey_question'],
                 'survey_question_comment' => $row['survey_question_comment'],
@@ -615,7 +619,7 @@ class survey_manager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res ,'ASSOC')) {
             $params = array(
-                'c_id' =>  $course_id,
+                'c_id' =>  $targetCourseId,
                 'question_id' => $question_id[$row['question_id']],
                 'survey_id' => $new_survey_id,
                 'option_text' => $row['option_text'],
@@ -625,26 +629,27 @@ class survey_manager
             Database::insert($table_survey_options, $params);
         }
 
-        return true;
+        return $new_survey_id;
     }
 
     /**
      * This function duplicates a survey (and also all the question in that survey
      *
      * @param int $survey_id id of the survey that has to be duplicated
+     * @param int $courseId id of the course which survey has to be duplicated
      * @return true
      *
      * @author Eric Marguin <e.marguin@elixir-interactive.com>, Elixir Interactive
      * @version October 2007
      */
-    public static function empty_survey($survey_id)
+    public static function empty_survey($survey_id, $courseId = null)
     {
         // Database table definitions
         $table_survey_invitation      = Database :: get_course_table(TABLE_SURVEY_INVITATION);
         $table_survey_answer          = Database :: get_course_table(TABLE_SURVEY_ANSWER);
         $table_survey                 = Database :: get_course_table(TABLE_SURVEY);
 
-        $course_id = api_get_course_int_id();
+        $course_id = $courseId ? $courseId : api_get_course_int_id();
 
         $datas = survey_manager::get_survey($survey_id);
         $session_where = '';

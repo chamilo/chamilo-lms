@@ -28,8 +28,10 @@ switch ($action) {
         }
         break;
     case 'send_invitation':
-        $subject = isset($_REQUEST['subject']) ? $_REQUEST['subject'] : null;
-        SocialManager::send_invitation_friend_user($_REQUEST['user_id'], $subject, $_REQUEST['content']);
+        $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
+        $invitationContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
+
+        SocialManager::send_invitation_friend_user($_REQUEST['user_id'], $subject, $invitationContent);
         break;
     case 'find_users':
         if (api_is_anonymous()) {

@@ -874,8 +874,8 @@ function savedata(item_id) {
         olms.lms_user_id,
         olms.lms_view_id,
         item_to_save,
-        olms.session_id,
-        olms.course_id,
+        olms.lms_session_id,
+        olms.lms_course_id,
         olms.finishSignalReceived,
         olms.userNavigatesAway,
         olms.statusSignalReceived
@@ -1219,7 +1219,7 @@ function log_in_log(message, priority) {
  */
 function logit_lms(message, priority){
     if (scorm_logs) {
-        log_in_log("LMS: " + message, priority);
+        log_in_log("LMS: " + message + ' (# lms_item_id = '+olms.lms_item_id+')', priority);
     }
     return false;
 }
@@ -1469,8 +1469,8 @@ function switch_item(current_item, next_item){
             olms.lms_user_id,
             olms.lms_view_id,
             olms.lms_item_id,
-            olms.session_id,
-            olms.course_id,
+            olms.lms_session_id,
+            olms.lms_course_id,
             olms.finishSignalReceived,
             1,
             olms.statusSignalReceived

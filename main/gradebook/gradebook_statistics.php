@@ -26,9 +26,9 @@ $interbreadcrumb[]= array (
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[]= array (
-        'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
-        'name' => get_lang('ViewResult'
-    ));
+        'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+        'name' => get_lang('ViewResult')
+    );
 }
 $displayscore = ScoreDisplay :: instance();
 

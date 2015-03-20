@@ -353,7 +353,7 @@ switch ($action){
         $renderer =& $form->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
-        $renderer->setElementTemplate('<tr><td>{element}</td></tr>');
+        $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
         $renderer->setRequiredNoteTemplate('');
         $form->addElement('hidden', 'formSent', '1');
         $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);

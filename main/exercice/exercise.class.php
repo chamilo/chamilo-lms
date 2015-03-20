@@ -1851,7 +1851,7 @@ class Exercise
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
                         $prev_question = $questionNum - 2;
-                        $all_button .= '<a href="javascript://" class="btn" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
+                        $all_button .= '<a href="javascript://" class="btn btn-default" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
                     }
 
                     //Next question

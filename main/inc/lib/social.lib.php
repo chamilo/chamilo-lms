@@ -609,10 +609,10 @@ class SocialManager extends UserManager
                             <a href="'.api_get_path(WEB_CODE_PATH).'social/group_edit.php?id='.$group_id.'">'.
                     get_lang('EditGroup').'</a></div>';
             }
-
         } else {
             $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
+
             $big_image = $big_image['file'].'?'.uniqid();
             $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
 
@@ -625,6 +625,7 @@ class SocialManager extends UserManager
 
         }
         $html .= '</div>';
+
         return $html;
     }
 
@@ -1523,28 +1524,28 @@ class SocialManager extends UserManager
     /**
      * Generate the social block for a user
      * @param int $userId The user id
-     * @param string $groupBlock Optional. Highlight link possible values: group_add, home, messages, messages_inbox,
-     *                          messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
+     * @param string $groupBlock Optional. Highlight link possible values:
+     * group_add, home, messages, messages_inbox, messages_compose,
+     * messages_outbox, invitations, shared_profile, friends, groups, search
      * @param int $groupId Optional. Group ID
      * @return string The HTML code with the social block
      */
-    public static function getSocialUserBlock($userId, $groupBlock = '', $groupId = 0)
+    public static function setSocialUserBlock($template, $userId, $groupBlock = '', $groupId = 0)
     {
-        $userInfo = api_get_user_info($userId, true);
-        $socialAvarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
+        if (api_get_setting('allow_social_tool') != 'true') {
+            return '';
+        }
+        $socialAvatarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
 
         $profileEditionLink = null;
-
         if (api_get_user_id() == $userId) {
             $profileEditionLink = Display::getProfileEditionLink($userId);
         }
 
-        $template = new Template();
+        $userInfo = api_get_user_info($userId, true);
         $template->assign('user', $userInfo);
-        $template->assign('socialAvatarBlock', $socialAvarBlock);
+        $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
-
-        return $template->fetch('default/social/user_block.tpl');
+        $template->assign('social_avatar_block', $template->fetch('default/social/user_block.tpl'));
     }
-
 }

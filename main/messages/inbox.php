@@ -130,8 +130,6 @@ if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social
 $userInfo    = UserManager::get_user_info_by_id($user_id);
 //LEFT CONTENT
 if (api_get_setting('allow_social_tool') == 'true') {
-    //Block Social Avatar
-    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'messages');
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
 }
@@ -168,8 +166,9 @@ if (api_get_setting('allow_social_tool') == 'true') {
 }
 
 $tpl = new Template(null);
+// Block Social Avatar
+SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_avatar_block', $social_avatar_block);
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

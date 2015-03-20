@@ -37,6 +37,24 @@
 class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
 {
     private $form;
+    private $customElementTemplate;
+
+    /**
+     * @return mixed
+     */
+    public function getCustomElementTemplate()
+    {
+        return $this->customElementTemplate;
+    }
+
+    /**
+     * This template will be taken instead of the default templates by element
+     * @param string $customElementTemplate
+     */
+    public function setCustomElementTemplate($customElementTemplate)
+    {
+        $this->customElementTemplate = $customElementTemplate;
+    }
 
    /**
     * The HTML of the form
@@ -277,10 +295,17 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             // Custom template
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
         } else {
-            if (method_exists($element, 'getTemplate')) {
-                $template = $element->getTemplate($this->getForm()->getLayout());
+            $customElementTemplate = $this->getCustomElementTemplate();
+            if (empty($customElementTemplate)) {
+                if (method_exists($element, 'getTemplate')) {
+                    $template = $element->getTemplate(
+                        $this->getForm()->getLayout()
+                    );
+                } else {
+                    $template = $this->getForm()->getDefaultElementTemplate();
+                }
             } else {
-                $template = $this->getForm()->getDefaultElementTemplate();
+                $template = $customElementTemplate;
             }
             $html = str_replace('{label}', $nameLabel, $template);
         }

@@ -150,7 +150,6 @@ if (!$inATest) {
     echo "</table>";
     echo "</div>";
 
-
     echo '<div id="question_list">';
     if ($nbrQuestions) {
         //Always getting list from DB
@@ -158,10 +157,10 @@ if (!$inATest) {
 
         // Style for columns
         $styleQuestion = "width:50%; float:left;";
-        $styleType = "width:4%; float:left; padding-top:4px; text-align:center;";
-        $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
-        $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
-        $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
+        $styleType = "width:4%; float:left; text-align:center;";
+        $styleCat = "width:22%; float:left; text-align:center;";
+        $styleLevel = "width:6%; float:left; text-align:center;";
+        $styleScore = "width:4%; float:left; text-align:center;";
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
@@ -202,16 +201,24 @@ if (!$inATest) {
                 $edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
                 $clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
                 $delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
-                $actions     = Display::tag('div', $edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px; margin-top: 0px; position: absolute; top: 10%;'));
+                $actions = Display::tag(
+                    'div',
+                    $edit_link.$clone_link.$delete_link,
+                    array('class'=>'edition','style'=>'width:100px; right:10px; margin-top: 8px; position: absolute; top: 10%;')
+                );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
-                $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                $move = Display::return_icon(
+                    'all_directions.png',
+                    get_lang('Move'),
+                    array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;')
+                );
 
                 // Question name
                 $questionName = Display::tag(
                     'div',
                     '<a href="#" title = "'.Security::remove_XSS($title).'">'.$move.' '.cut($title, 42).'</a>',
-                    array('style'=>$styleQuestion)
+                    array('style' => $styleQuestion)
                 );
 
                 // Question type
@@ -223,7 +230,8 @@ if (!$inATest) {
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = "-";
                 }
-                $questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 42).'</a>', array('style'=>$styleCat));
+                $questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.
+                    cut($txtQuestionCat, 42).'</a>', array('style'=>$styleCat));
 
                 // Question level
                 $txtQuestionLevel = $objQuestionTmp->level;

@@ -53,7 +53,7 @@ class CatForm extends FormValidator
     protected function build_move_form()
     {
         $renderer =& $this->defaultRenderer();
-        $renderer->setElementTemplate('<span>{element}</span> ');
+        $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement(
             'static',
             null,

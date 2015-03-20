@@ -19,8 +19,6 @@
 {% if show_footer == true %}
         </div> <!-- end of #row" -->
     </div> <!-- end of #main" -->
-    </div> <!-- end of #page section -->
-</div> <!-- end of #wrapper section -->
 
 {% endif %}
 

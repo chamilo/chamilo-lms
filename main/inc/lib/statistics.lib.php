@@ -566,7 +566,7 @@ class Statistics
         // Create a search-box
         $form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php','','width=200px',false);
         $renderer =& $form->defaultRenderer();
-        $renderer->setElementTemplate('<span>{element}</span> ');
+        $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $form->addElement('hidden','report','activities');
         $form->addElement('hidden','activities_direction','DESC');
         $form->addElement('hidden','activities_column','4');

@@ -5331,6 +5331,34 @@ class CourseManager
     }
 
     /**
+     * This function separates the users from the groups
+     * users have a value USER:XXX (with XXX the groups id have a value
+     *  GROUP:YYY (with YYY the group id)
+     * @param    array   Array of strings that define the type and id of each destination
+     * @return   array   Array of groups and users (each an array of IDs)
+     */
+    public static function separateUsersGroups($to)
+    {
+        $grouplist = array();
+        $userlist = array();
+        foreach ($to as $to_item) {
+            list($type, $id) = explode(':', $to_item);
+            switch ($type) {
+                case 'GROUP':
+                    $grouplist[] = intval($id);
+                    break;
+                case 'USER':
+                    $userlist[] = intval($id);
+                    break;
+            }
+        }
+
+        $send_to['groups'] = $grouplist;
+        $send_to['users'] = $userlist;
+        return $send_to;
+    }
+
+    /**
      * this function shows the form for sending a message to a specific group or user.
      */
     /**

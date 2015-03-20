@@ -214,7 +214,7 @@ class EvalForm extends FormValidator
     protected function build_move_form()
     {
         $renderer = & $this->defaultRenderer();
-        $renderer->setElementTemplate('<span>{element}</span> ');
+        $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement('static', null, null, '"' . $this->evaluation_object->get_name() . '" ');
         $this->addElement('static', null, null, get_lang('MoveTo') . ' : ');
         $select = $this->addElement('select', 'move_cat', null, null);
@@ -332,7 +332,7 @@ class EvalForm extends FormValidator
         ));
         $userinfo = api_get_user_info($this->result_object->get_user_id());
         $renderer = & $this->defaultRenderer();
-        $renderer->setElementTemplate('<span>{element}</span> ');
+        $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement('label', get_lang('User'), $userinfo['complete_name']);
 
         $this->addText('score', array(get_lang('Score'), null, '/ ' . $this->evaluation_object->get_max()), false, array(

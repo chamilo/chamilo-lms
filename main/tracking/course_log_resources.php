@@ -106,7 +106,7 @@ $form = new FormValidator(
     false
 );
 $renderer = $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span>');
+$renderer->setCustomElementTemplate('<span>{element}</span>');
 $form->addElement('text', 'keyword', get_lang('keyword'));
 $form->addElement('hidden', 'cidReq', api_get_course_id());
 $form->addElement('hidden', 'id_session', $session_id);

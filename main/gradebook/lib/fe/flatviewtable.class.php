@@ -84,231 +84,235 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-     *
+     * Display gradebook graphs
      */
     public function display_graph_by_resource()
     {
         $headerName = $this->datagen->get_header_names();
         $total_users = $this->datagen->get_total_users_count();
 
-        if ($this->datagen->get_total_items_count() > 0 && $total_users > 0) {
-            //Removing first name
-            array_shift($headerName);
-            //Removing last name
-            array_shift($headerName);
+        $displayscore = ScoreDisplay::instance();
+        $customdisplays = $displayscore->get_custom_score_display_settings();
 
-            $displayscore = ScoreDisplay::instance();
-            $customdisplays = $displayscore->get_custom_score_display_settings();
+        if (empty($customdisplays)) {
+            echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            return '';
+        }
 
-            if (is_array($customdisplays) && count(($customdisplays))) {
+        $user_results = $this->datagen->get_data_to_graph2(false);
 
-                $user_results = $this->datagen->get_data_to_graph2(false);
-                $pre_result = $new_result = array();
-                foreach ($user_results as $result) {
-                    for ($i = 0; $i < count($headerName); $i++) {
-                        if (isset($result[$i + 1])) {
-                            $pre_result[$i + 3][] = $result[$i + 1];
-                        }
-                    }
-                }
+        //if (empty($this->datagen->get_total_items_count()) || empty($total_users)) {
+        if (empty($user_results) || empty($total_users)) {
 
-                $i = 0;
-                $show_draw = false;
-                $resource_list = array();
-                $pre_result2 = array();
-
-                foreach ($pre_result as $key => $res_array) {
-                    rsort($res_array);
-                    $pre_result2[] = $res_array;
-                }
-
-                //@todo when a display custom does not exist the order of the color does not match
-                //filling all the answer that are not responded with 0
-                rsort($customdisplays);
-
-                if ($total_users > 0) {
-                    foreach ($pre_result2 as $key => $res_array) {
-                        $key_list = array();
-                        foreach ($res_array as $user_result) {
-                            $userResult = isset($user_result[1]) ? $user_result[1] : null;
-                            if (!isset($resource_list[$key][$userResult])) {
-                                $resource_list[$key][$userResult] = 0;
-                            }
-                            $resource_list[$key][$userResult] += 1;
-                            $key_list[] = $userResult;
-                        }
-
-                        foreach ($customdisplays as $display) {
-                            if (!in_array($display['display'], $key_list))
-                                $resource_list[$key][$display['display']] = 0;
-                        }
-                        $i++;
-                    }
-                }
-
-                //fixing $resource_list
-                $max = 0;
-                $new_list = array();
-                foreach ($resource_list as $key => $value) {
-                    $new_value = array();
-
-                    foreach ($customdisplays as $item) {
-                        if ($value[$item['display']] > $max) {
-                            $max = $value[$item['display']];
-                        }
-                        $new_value[$item['display']] = strip_tags($value[$item['display']]);
-                    }
-                    $new_list[] = $new_value;
-                }
-                $resource_list = $new_list;
-
-                $i = 1;
-
-                foreach ($resource_list as $key => $resource) {
-                    // Reverse array, otherwise we get highest values first
-                    $resource = array_reverse($resource, true);
-
-                    $dataSet = new pData();
-                    $dataSet->addPoints($resource, 'Serie');
-                    $dataSet->addPoints(array_keys($resource), 'Labels');
-                    $dataSet->setSerieDescription('Labels', strip_tags($headerName[$i - 1]));
-                    $dataSet->setAbscissa('Labels');
-                    $dataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
-                    $dataSet->setAxisName(0, get_lang('Students'));
-                    $palette = array(
-                        '0' => array('R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100),
-                        '1' => array('R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100),
-                        '2' => array('R' => 148, 'G' => 170, 'B' => 208, 'Alpha' => 100),
-                        '3' => array('R' => 221, 'G' => 133, 'B' => 61, 'Alpha' => 100),
-                        '4' => array('R' => 65, 'G' => 153, 'B' => 176, 'Alpha' => 100),
-                        '5' => array('R' => 114, 'G' => 88, 'B' => 144, 'Alpha' => 100),
-                        '6' => array('R' => 138, 'G' => 166, 'B' => 78, 'Alpha' => 100),
-                        '7' => array('R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100),
-                        '8' => array('R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100),
-                    );
-                    // Cache definition
-                    $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-                    $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
-                    $chartHash = $myCache->getHash($dataSet);
-                    if ($myCache->isInCache($chartHash)) {
-                        $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
-                        $myCache->saveFromCache($chartHash, $imgPath);
-                        $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
-                    } else {
-                        /* Create the pChart object */
-                        $widthSize = 480;
-                        $heightSize = 250;
-
-                        $myPicture = new pImage($widthSize, $heightSize, $dataSet);
-
-                        /* Turn of Antialiasing */
-                        $myPicture->Antialias = false;
-
-                        /* Add a border to the picture */
-                        $myPicture->drawRectangle(
-                            0,
-                            0,
-                            $widthSize - 1,
-                            $heightSize - 1,
-                            array(
-                                'R' => 0,
-                                'G' => 0,
-                                'B' => 0
-                            )
-                        );
-
-                        /* Set the default font */
-                        $myPicture->setFontProperties(
-                            array(
-                                'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
-                                'FontSize' => 10
-                            )
-                        );
-
-                        /* Write the chart title */
-                        $myPicture->drawText(
-                            250,
-                            30,
-                            strip_tags($headerName[$i - 1]),
-                            array(
-                                'FontSize' => 12,
-                                'Align' => TEXT_ALIGN_BOTTOMMIDDLE
-                            )
-                        );
-
-                        /* Define the chart area */
-                        $myPicture->setGraphArea(50, 40, $widthSize - 20, $heightSize - 50);
-
-                        /* Draw the scale */
-                        $scaleSettings = array(
-                            'GridR' => 200,
-                            'GridG' => 200,
-                            'GridB' => 200,
-                            'DrawSubTicks' => true,
-                            'CycleBackground' => true,
-                            'Mode' => SCALE_MODE_START0
-                        );
-                        $myPicture->drawScale($scaleSettings);
-
-                        /* Turn on shadow computing */
-                        $myPicture->setShadow(
-                            true,
-                            array(
-                                'X' => 1,
-                                'Y' => 1,
-                                'R' => 0,
-                                'G' => 0,
-                                'B' => 0,
-                                'Alpha' => 10
-                            )
-                        );
-
-                        /* Draw the chart */
-                        $myPicture->setShadow(
-                            true,
-                            array(
-                                'X' => 1,
-                                'Y' => 1,
-                                'R' => 0,
-                                'G' => 0,
-                                'B' => 0,
-                                'Alpha' => 10
-                            )
-                        );
-                        $settings = array(
-                            'OverrideColors' => $palette,
-                            'Gradient' => false,
-                            'GradientMode' => GRADIENT_SIMPLE,
-                            'DisplayPos' => LABEL_POS_TOP,
-                            'DisplayValues' => true,
-                            'DisplayR' => 0,
-                            'DisplayG' => 0,
-                            'DisplayB' => 0,
-                            'DisplayShadow' => true,
-                            'Surrounding' => 10,
-                        );
-                        $myPicture->drawBarChart($settings);
-
-                        /* Render the picture (choose the best way) */
-
-                        $myCache->writeToCache($chartHash, $myPicture);
-                        $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
-                        $myCache->saveFromCache($chartHash, $imgPath);
-                        $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
-                    }
-                    echo '<img src="' . $imgPath . '" >';
-                    if ($i % 2 == 0 && $i != 0) {
-                        echo '<br /><br />';
-                    } else {
-                        echo '&nbsp;&nbsp;&nbsp;';
-                    }
-                    $i++;
-                }
-            } else {
-                echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
-            }
-        } else {
             echo get_lang('NoResults');
+            return '';
+        }
+
+        // Removing first name
+        array_shift($headerName);
+        // Removing last name
+        array_shift($headerName);
+
+        $pre_result = $new_result = array();
+        foreach ($user_results as $result) {
+            for ($i = 0; $i < count($headerName); $i++) {
+                if (isset($result[$i + 1])) {
+                    $pre_result[$i + 3][] = $result[$i + 1];
+                }
+            }
+        }
+
+        $i = 0;
+        $show_draw = false;
+        $resource_list = array();
+        $pre_result2 = array();
+
+        foreach ($pre_result as $key => $res_array) {
+            rsort($res_array);
+            $pre_result2[] = $res_array;
+        }
+
+        //@todo when a display custom does not exist the order of the color does not match
+        //filling all the answer that are not responded with 0
+        rsort($customdisplays);
+
+        if ($total_users > 0) {
+            foreach ($pre_result2 as $key => $res_array) {
+                $key_list = array();
+                foreach ($res_array as $user_result) {
+                    $userResult = isset($user_result[1]) ? $user_result[1] : null;
+                    if (!isset($resource_list[$key][$userResult])) {
+                        $resource_list[$key][$userResult] = 0;
+                    }
+                    $resource_list[$key][$userResult] += 1;
+                    $key_list[] = $userResult;
+                }
+
+                foreach ($customdisplays as $display) {
+                    if (!in_array($display['display'], $key_list))
+                        $resource_list[$key][$display['display']] = 0;
+                }
+                $i++;
+            }
+        }
+
+        //fixing $resource_list
+        $max = 0;
+        $new_list = array();
+        foreach ($resource_list as $key => $value) {
+            $new_value = array();
+
+            foreach ($customdisplays as $item) {
+                if ($value[$item['display']] > $max) {
+                    $max = $value[$item['display']];
+                }
+                $new_value[$item['display']] = strip_tags($value[$item['display']]);
+            }
+            $new_list[] = $new_value;
+        }
+        $resource_list = $new_list;
+
+        $i = 1;
+
+        foreach ($resource_list as $key => $resource) {
+            // Reverse array, otherwise we get highest values first
+            $resource = array_reverse($resource, true);
+
+            $dataSet = new pData();
+            $dataSet->addPoints($resource, 'Serie');
+            $dataSet->addPoints(array_keys($resource), 'Labels');
+            $dataSet->setSerieDescription('Labels', strip_tags($headerName[$i - 1]));
+            $dataSet->setAbscissa('Labels');
+            $dataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
+            $dataSet->setAxisName(0, get_lang('Students'));
+            $palette = array(
+                '0' => array('R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100),
+                '1' => array('R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100),
+                '2' => array('R' => 148, 'G' => 170, 'B' => 208, 'Alpha' => 100),
+                '3' => array('R' => 221, 'G' => 133, 'B' => 61, 'Alpha' => 100),
+                '4' => array('R' => 65, 'G' => 153, 'B' => 176, 'Alpha' => 100),
+                '5' => array('R' => 114, 'G' => 88, 'B' => 144, 'Alpha' => 100),
+                '6' => array('R' => 138, 'G' => 166, 'B' => 78, 'Alpha' => 100),
+                '7' => array('R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100),
+                '8' => array('R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100),
+            );
+            // Cache definition
+            $cachePath = api_get_path(SYS_ARCHIVE_PATH);
+            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+            $chartHash = $myCache->getHash($dataSet);
+            if ($myCache->isInCache($chartHash)) {
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            } else {
+                /* Create the pChart object */
+                $widthSize = 480;
+                $heightSize = 250;
+
+                $myPicture = new pImage($widthSize, $heightSize, $dataSet);
+
+                /* Turn of Antialiasing */
+                $myPicture->Antialias = false;
+
+                /* Add a border to the picture */
+                $myPicture->drawRectangle(
+                    0,
+                    0,
+                    $widthSize - 1,
+                    $heightSize - 1,
+                    array(
+                        'R' => 0,
+                        'G' => 0,
+                        'B' => 0
+                    )
+                );
+
+                /* Set the default font */
+                $myPicture->setFontProperties(
+                    array(
+                        'FontName' => api_get_path(SYS_FONTS_PATH) . 'opensans/OpenSans-Regular.ttf',
+                        'FontSize' => 10
+                    )
+                );
+
+                /* Write the chart title */
+                $myPicture->drawText(
+                    250,
+                    30,
+                    strip_tags($headerName[$i - 1]),
+                    array(
+                        'FontSize' => 12,
+                        'Align' => TEXT_ALIGN_BOTTOMMIDDLE
+                    )
+                );
+
+                /* Define the chart area */
+                $myPicture->setGraphArea(50, 40, $widthSize - 20, $heightSize - 50);
+
+                /* Draw the scale */
+                $scaleSettings = array(
+                    'GridR' => 200,
+                    'GridG' => 200,
+                    'GridB' => 200,
+                    'DrawSubTicks' => true,
+                    'CycleBackground' => true,
+                    'Mode' => SCALE_MODE_START0
+                );
+                $myPicture->drawScale($scaleSettings);
+
+                /* Turn on shadow computing */
+                $myPicture->setShadow(
+                    true,
+                    array(
+                        'X' => 1,
+                        'Y' => 1,
+                        'R' => 0,
+                        'G' => 0,
+                        'B' => 0,
+                        'Alpha' => 10
+                    )
+                );
+
+                /* Draw the chart */
+                $myPicture->setShadow(
+                    true,
+                    array(
+                        'X' => 1,
+                        'Y' => 1,
+                        'R' => 0,
+                        'G' => 0,
+                        'B' => 0,
+                        'Alpha' => 10
+                    )
+                );
+                $settings = array(
+                    'OverrideColors' => $palette,
+                    'Gradient' => false,
+                    'GradientMode' => GRADIENT_SIMPLE,
+                    'DisplayPos' => LABEL_POS_TOP,
+                    'DisplayValues' => true,
+                    'DisplayR' => 0,
+                    'DisplayG' => 0,
+                    'DisplayB' => 0,
+                    'DisplayShadow' => true,
+                    'Surrounding' => 10,
+                );
+                $myPicture->drawBarChart($settings);
+
+                /* Render the picture (choose the best way) */
+
+                $myCache->writeToCache($chartHash, $myPicture);
+                $imgPath = api_get_path(SYS_ARCHIVE_PATH) . $chartHash;
+                $myCache->saveFromCache($chartHash, $imgPath);
+                $imgPath = api_get_path(WEB_ARCHIVE_PATH) . $chartHash;
+            }
+            echo '<img src="' . $imgPath . '" >';
+            if ($i % 2 == 0 && $i != 0) {
+                echo '<br /><br />';
+            } else {
+                echo '&nbsp;&nbsp;&nbsp;';
+            }
+            $i++;
         }
     }
 

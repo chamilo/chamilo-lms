@@ -643,7 +643,8 @@ class Event
         $event_value,
         $datetime = null,
         $user_id = null,
-        $course_code = null
+        $course_code = null,
+        $sessionId = 0
     ) {
         $TABLETRACK_DEFAULT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 
@@ -673,6 +674,7 @@ class Event
 
         $event_value = Database::escape_string($event_value);
         $course_info = api_get_course_info($course_code);
+        $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
 
         if (!empty($course_info)) {
             $course_id = $course_info['real_id'];
@@ -698,6 +700,7 @@ class Event
             'default_event_type' => $event_type,
             'default_value_type' => $event_value_type,
             'default_value' => $event_value,
+            'session_id' => $sessionId
         );
         Database::insert($TABLETRACK_DEFAULT, $params);
         return true;

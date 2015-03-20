@@ -57,7 +57,7 @@ class LinkForm extends FormValidator
 	protected function build_move()
 	{
 		$renderer =& $this->defaultRenderer();
-		$renderer->setElementTemplate('<span>{element}</span> ');
+		$renderer->setCustomElementTemplate('<span>{element}</span> ');
 		$this->addElement('static',null,null,'"'.$this->link_object->get_name().'" ');
 		$this->addElement('static',null,null,get_lang('MoveTo').' : ');
 		$select = $this->addElement('select','move_cat',null,null);

@@ -42,7 +42,7 @@ class DataForm extends FormValidator
 	protected function build_pdf_export_form()
 	{
 		$renderer =& $this->defaultRenderer();
-		$renderer->setElementTemplate('<span>{element}</span>');
+		$renderer->setCustomElementTemplate('<span>{element}</span>');
 		$this->addElement('header', get_lang('ChooseOrientation'));
 		$this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
 		$this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');

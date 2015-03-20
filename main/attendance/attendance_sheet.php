@@ -96,7 +96,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     $renderer = $form->defaultRenderer();
-    $renderer->setElementTemplate('{label} {element} ');
+    $renderer->setCustomElementTemplate('{label} {element} ');
 
     $form->setDefaults(
         array(

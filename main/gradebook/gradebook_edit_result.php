@@ -32,18 +32,18 @@ if ($edit_result_form->validate()) {
         }
         next($scores);
     }
-    header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=');
+    header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&editallresults=&'.api_get_cidreq());
     exit;
 }
 
 $interbreadcrumb[] = array (
     'url' => $_SESSION['gradebook_dest'],
-    'name' => get_lang('Gradebook'
-    ));
+    'name' => get_lang('Gradebook')
+);
 $interbreadcrumb[]= array (
-    'url' => 'gradebook_view_result.php?selecteval='.$select_eval,
-    'name' => get_lang('ViewResult'
-    ));
+    'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq()
+    'name' => get_lang('ViewResult')
+);
 Display :: display_header(get_lang('EditResult'));
 DisplayGradebook :: display_header_result ($evaluation[0],null,0,0);
 echo $table;

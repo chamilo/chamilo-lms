@@ -2975,10 +2975,12 @@ class SessionManager
     }
 
     /**
-     * Gets the list of courses by session filtered by access_url
-     * @param int $session_id
-     * @param string $course_name
-     * @return array list of courses
+     * Gets the list (or the count) of courses by session filtered by access_url
+     * @param int $session_id The session id
+     * @param string $course_name The course code
+     * @param string $orderBy Field to order the data
+     * @param boolean $getCount Optional. Count the session courses
+     * @return array|int List of courses. Whether $getCount is true, return the count
      */
     public static function get_course_list_by_session_id(
         $session_id,

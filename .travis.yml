@@ -45,4 +45,5 @@ script:
   # - phpunit -c tests/phpunit
   - pwd
   - ls
+  - cat main/inc/conf/configuration.php
   - cd tests && ../vendor/behat/behat/bin/behat -v

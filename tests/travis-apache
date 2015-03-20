@@ -1,9 +1,9 @@
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
     ServerName localhost
-    DocumentRoot %TRAVIS_BUILD_DIR%/chamilo/chamilo-lms
+    DocumentRoot %TRAVIS_BUILD_DIR%/chamilo-lms
 
-    <Directory "%TRAVIS_BUILD_DIR%/chamilo/chamilo-lms">
+    <Directory "%TRAVIS_BUILD_DIR%/chamilo-lms">
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny

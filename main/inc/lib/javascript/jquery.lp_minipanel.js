@@ -25,7 +25,7 @@ function minipanel(){
     $('#learning_path_main #control tr:eq(1) div').css('width','');
 
     $('#learning_path_main #control .buttons').attr('text-align','center');
-    $('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
+    //$('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
 
     $('#learning_path_main #control .buttons img').click(function(){
         $('#learning_path_main #control tr:eq(1)').remove();

@@ -81,15 +81,19 @@ class Matching extends Question
         $form->addElement('hidden', 'nb_options', $nb_options);
 
         // DISPLAY MATCHES
-        $html = '<table class="data_table">
-					<tr>
-						<th width="10px">' . get_lang('Number') . '</th>
-						<th width="40%">' . get_lang('Answer') . '</th>
-						<th width="40%">' . get_lang('MatchesTo') . '</th>
-						<th width="50px">' . get_lang('Weighting') . '</th>
-					</tr>';
+        $html = '<table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th width="10">' . get_lang('Number') . '</th>
+                    <th width="85%">' . get_lang('Answer') . '</th>
+                    <th width="15%">' . get_lang('MatchesTo') . '</th>
+                    <th width="10">' . get_lang('Weighting') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
 
-        $form->addElement('label', get_lang('MakeCorrespond') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addHeader(get_lang('MakeCorrespond'));
+        $form->addHtml($html);
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
@@ -97,47 +101,58 @@ class Matching extends Question
         }
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
-            $form->addElement('html', '<tr><td>');
-            $group = array();
-            $puce = $form->createElement('text', null, null, 'value="' . $i . '"');
-            $puce->freeze();
-            $group[] = $puce;
+            $renderer = &$form->defaultRenderer();
 
-            $group[] = $form->createElement('text', 'answer[' . $i . ']', null);
-            $group[] = $form->createElement('select', 'matches[' . $i . ']', null, $a_matches);
-            $group[] = $form->createElement(
-                'text',
-                'weighting[' . $i . ']',
-                null,
-                array('class' => 'span1', 'value' => 10)
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "answer[$i]"
             );
-            $form->addGroup($group, null, null, '</td><td>');
-            $form->addElement('html', '</td></tr>');
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "matches[$i]"
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "weighting[$i]"
+            );
+
+            $form->addHtml('<tr>');
+
+            $form->addHtml("<td>$i</td>");
+            $form->addText("answer[$i]", null);
+            $form->addSelect("matches[$i]", null, $a_matches);
+            $form->addText("weighting[$i]", null, true, ['value' => 10]);
+            
+            $form->addHtml('</tr>');
         }
 
-        $form->addElement('html', '</table></div></div>');
+        $form->addHtml('</tbody></table>');
         $group = array();
 
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
             $group[] = $form->createElement('submit', 'lessMatches', get_lang('DelElem'), 'class="btn minus"');
             $group[] = $form->createElement('submit', 'moreMatches', get_lang('AddElem'), 'class="btn plus"');
         } else {
-            $group[] = $form->createElement('style_submit_button', 'moreMatches', get_lang('AddElem'),
-                'class="btn plus"');
-            $group[] = $form->createElement('style_submit_button', 'lessMatches', get_lang('DelElem'),
-                'class="btn minus"');
+            $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessMatches');
+            $renderer->setElementTemplate('{element}</div></div>', 'moreMatches');
+
+            $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true);
+            $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true);
         }
 
         $form->addGroup($group);
 
         // DISPLAY OPTIONS
-        $html = '<table class="data_table">
-					<tr style="text-align: center;">
-						<th width="10px">' . get_lang('Number') . '</th>
-						<th width="90%"' . get_lang('Answer') . '</th>
-					</tr>';
-        //$form -> addElement ('html', $html);
-        $form->addElement('label', null, $html);
+        $html = '<table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th width="15%">' . get_lang('Number') . '</th>
+                    <th width="85%">' . get_lang('Answer') . '</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $form->addHtml($html);
 
         if ($nb_options < 1) {
             $nb_options = 1;
@@ -145,17 +160,22 @@ class Matching extends Question
         }
 
         for ($i = 1; $i <= $nb_options; ++$i) {
-            $form->addElement('html', '<tr><td>');
-            $group = array();
-            $puce = $form->createElement('text', null, null, 'value="' . chr(64 + $i) . '"');
-            $puce->freeze();
-            $group[] = $puce;
-            $group[] = $form->createElement('text', 'option[' . $i . ']', null, array('class' => 'span6'));
-            $form->addGroup($group, null, null, '</td><td>');
-            $form->addElement('html', '</td></tr>');
+            $renderer = &$form->defaultRenderer();
+
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
+                "option[$i]"
+            );
+
+            $form->addHtml('<tr>');
+
+            $form->addHtml('<td>' . chr(64 + $i) . '</td>');
+            $form->addText("option[$i]", null);
+
+            $form->addHtml('</tr>');
         }
 
-        $form->addElement('html', '</table></div></div>');
+        $form->addHtml('</table>');
         $group = array();
         global $text, $class;
 
@@ -166,9 +186,9 @@ class Matching extends Question
             $group[] = $form->createElement('submit', 'moreOptions', get_lang('AddElem'), 'class="plus"');
         } else {
             // setting the save button here and not in the question class.php
-            $group[] = $form->createElement('style_submit_button', 'lessOptions', get_lang('DelElem'), 'class="minus"');
-            $group[] = $form->createElement('style_submit_button', 'moreOptions', get_lang('AddElem'), ' class="plus"');
-            $group[] = $form->createElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+            $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
+            $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
+            $group[] = $form->addButtonSave($text, 'submitQuestion', true);
         }
 
         $form->addGroup($group);

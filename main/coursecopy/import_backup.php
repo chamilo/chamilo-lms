@@ -96,21 +96,21 @@ if (Security::check_token('post') && (
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
         Display::display_normal_message(get_lang('ImportFinished'));
-        echo '<a class="btn" href="' . api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/index.php">' . get_lang('CourseHomepage') . '</a>';
+        echo '<a class="btn btn-default" href="' . api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/index.php">' . get_lang('CourseHomepage') . '</a>';
     } else {
         if (!$error) {
             Display::display_warning_message(get_lang('NoResourcesInBackupFile'));
-            echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+            echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
         } elseif ($filename === false) {
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
-            echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+            echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
         } else {
             if ($filename == '') {
                 Display::display_error_message(get_lang('SelectBackupFile'));
-                echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+                echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
             } else {
                 Display::display_error_message(get_lang('UploadError'));
-                echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+                echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
             }
         }
     }

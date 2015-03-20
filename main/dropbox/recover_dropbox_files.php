@@ -42,7 +42,7 @@ if (Database::num_rows($result)) {
             $rows[] = array(
                     $file['filename'],
                     api_convert_and_format_date($file['upload_date']),
-                    Display::url(get_lang('Recover'), api_get_self().'?recover_id='.$file['id'], array('class' => 'btn'))
+                    Display::url(get_lang('Recover'), api_get_self().'?recover_id='.$file['id'], array('class' => 'btn btn-default'))
             );
         }
     }

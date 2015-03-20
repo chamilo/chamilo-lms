@@ -423,8 +423,15 @@ class AnnouncementManager
      * @param string $file_comment
      * @return bool|int
      */
-    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '', $sendToUsersInSession = false)
-    {
+    public static function add_group_announcement(
+        $emailTitle,
+        $newContent,
+        $to,
+        $to_users,
+        $file = array(),
+        $file_comment = '',
+        $sendToUsersInSession = false
+    ) {
         $_course = api_get_course_info();
 
         // Database definitions
@@ -457,14 +464,22 @@ class AnnouncementManager
             self::add_announcement_attachment_file($last_id, $file_comment, $file);
         }
 
-        // store in item_property (first the groups, then the users
+        // Store in item_property (first the groups, then the users
 
-        if (!isset($to_users)) { // !isset($to): when no user is selected we send it to everyone
+        if (!isset($to_users)) {
+            // when no user is selected we send it to everyone
             $send_to = CourseManager::separateUsersGroups($to);
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
-                    api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_ANNOUNCEMENT,
+                        $last_id,
+                        "AnnouncementAdded",
+                        api_get_user_id(),
+                        $group
+                    );
                 }
             }
         } else {
@@ -472,7 +487,15 @@ class AnnouncementManager
             // storing the selected users
             if (is_array($to_users)) {
                 foreach ($to_users as $user) {
-                    api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
+                    api_item_property_update(
+                        $_course,
+                        TOOL_ANNOUNCEMENT,
+                        $last_id,
+                        "AnnouncementAdded",
+                        api_get_user_id(),
+                        '',
+                        $user
+                    );
                 }
             }
         }
@@ -1297,7 +1320,9 @@ class AnnouncementManager
         ) {
             // A.1. you are a course admin with a USER filter
             // => see only the messages of this specific user + the messages of the group (s)he is member of.
-            if (!empty($user_id)) {
+
+            //if (!empty($user_id)) {
+            if (0) {
                 if (is_array($group_memberships) && count($group_memberships) > 0 ) {
                     $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
                             FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -1306,11 +1331,14 @@ class AnnouncementManager
                                 ip.c_id = $course_id AND
                                 announcement.id = ip.ref AND
                                 ip.tool = 'announcement' AND
-                                (ip.to_user_id = $user_id OR ip.to_group_id IS NULL OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+                                (
+                                    ip.to_user_id = $user_id OR
+                                    ip.to_group_id IS NULL OR
+                                    ip.to_group_id IN (0, ".implode(", ", $group_memberships).")
+                                ) AND
+                                ip.visibility IN ('1', '0')
                                 $condition_session
-
                             ORDER BY display_order DESC";
-
                 } else {
                     $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
                             FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -1320,12 +1348,11 @@ class AnnouncementManager
                                 announcement.id = ip.ref AND
                                 ip.tool ='announcement' AND
                                 (ip.to_user_id = $user_id OR ip.to_group_id='0' OR ip.to_group_id IS NULL) AND
-                                ip.visibility='1'
+                                ip.visibility IN ('1', '0')
                             $condition_session
                             ORDER BY display_order DESC";
-
                 }
-            } elseif (api_get_group_id() != 0 ) {
+            } elseif ($group_id != 0) {
                 // A.2. you are a course admin with a GROUP filter
                 // => see only the messages of this specific group
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
@@ -1345,7 +1372,6 @@ class AnnouncementManager
                 // A.3 you are a course admin without any group or user filter
                 // A.3.a you are a course admin without user or group filter but WITH studentview
                 // => see all the messages of all the users and groups without editing possibilities
-
                 if (isset($isStudentView) and $isStudentView=="true") {
                     $sql="SELECT
                         announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
@@ -1376,7 +1402,7 @@ class AnnouncementManager
                 }
             }
         } else {
-            //STUDENT
+            // STUDENT
             if (is_array($group_memberships) && count($group_memberships)>0) {
                 if ($allowUserEditSetting && !api_is_anonymous()) {
                     if (api_get_group_id() == 0) {

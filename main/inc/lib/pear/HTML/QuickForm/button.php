@@ -98,7 +98,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
 
             return
                 $this->_getTabs() . '
-                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . ' />'.
+                <button class="'.$class.'" ' . $this->_getAttrString($this->_attributes) . '>'.
                 $icon.
                 $value.
                 '</button>';

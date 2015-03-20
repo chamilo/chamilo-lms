@@ -92,7 +92,6 @@ $Certificates = "Certificats";
 $Certificate = "Certificat";
 $ChooseUser = "Seleccionar usuaris per aquesta avaluació";
 $FirstLetter = "Primera lletra del cognom";
-$UserAdded = "L'usuari ha estat afegit";
 $ResultEdited = "Resultat actualitzat";
 $ChooseFormat = "Escollir format";
 $OutputFileType = "Tipus de fitxer de sortida";

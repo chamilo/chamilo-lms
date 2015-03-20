@@ -312,9 +312,7 @@ $LimitUsersListDefaultMaxComment = "En las pantallas de inscripción de los usua
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Oculta la etiqueta  [= ... =] cuando una variable de lenguaje no está traducida.";
 $Info = "información";
-$UserAdded = "El usuario ha sido agregado";
 $NoSearchResults = "No hay resultados en la búsqueda";
-$UserDeleted = "El usuario ha sido borrado";
 $NoClassesForThisCourse = "No existen clases dentro de este curso";
 $CourseUsage = "Uso del curso";
 $NoCoursesForThisUser = "Este usuario no pertenece a ningún curso";

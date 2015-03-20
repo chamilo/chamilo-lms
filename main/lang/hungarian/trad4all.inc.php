@@ -212,6 +212,7 @@ $ExportShort = "Exportálás";
 $WCAGGoMenu = "Ugrás a menühöz";
 $WCAGGoContent = "Ugrás a tartalomhoz";
 $NoTimeLimits = "Nincs időkorlát";
+$UserDeleted = "A felhasználó törölve lett";
 $Tool = "eszköz";
 $Choose = "Válassz!";
 $AnnEmpty = "A hirdetménylista kiürítve";

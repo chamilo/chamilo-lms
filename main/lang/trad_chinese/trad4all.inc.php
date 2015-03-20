@@ -153,6 +153,7 @@ $ExportShort = "匯出為網路學習系統(SCORM)檔";
 $WCAGGoMenu = "前往選單";
 $WCAGGoContent = "前往內容";
 $NoTimeLimits = "沒有時限";
+$UserDeleted = "此使用者已被刪除";
 $Tool = "工具";
 $Choose = "選擇";
 $AnnEmpty = "公告清單已經被刪除";

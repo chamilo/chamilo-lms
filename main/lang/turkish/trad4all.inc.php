@@ -220,6 +220,7 @@ $ExportShort = "Export short";
 $WCAGGoMenu = "Menüye git";
 $WCAGGoContent = "İçeriğe git";
 $NoTimeLimits = "Zaman sınırlaması yok";
+$UserDeleted = "Kullanıcı silindi";
 $Tool = "araç";
 $Choose = "Seç";
 $AnnEmpty = "Duyuru listesi temizlendi";

@@ -44,6 +44,7 @@ $ReplyShort = "Віпд.:";
 $WCAGGoMenu = "Перейти до меню";
 $WCAGGoContent = "Перейти до контенту";
 $NoTimeLimits = "Без ліміту часу";
+$UserDeleted = "Користувача видалено";
 $Tool = "інструмент";
 $Choose = "Вибрати";
 $AnnEmpty = "Всі оголошення видалено";

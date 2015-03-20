@@ -92,7 +92,6 @@ $Certificates = "Certifikáty";
 $Certificate = "Certifikát";
 $ChooseUser = "Vyberte používateľov pre toto hodnotenie";
 $FirstLetter = "Prvé písmeno priezviska";
-$UserAdded = "Používateľ bol pridaný";
 $ResultEdited = "Výsledok upravený";
 $ChooseFormat = "Vybrať formát";
 $OutputFileType = "Typ výstupného súboru";

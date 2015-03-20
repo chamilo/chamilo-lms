@@ -168,6 +168,7 @@ $ExportShort = "Exportación corta";
 $WCAGGoMenu = "Ir al menú";
 $WCAGGoContent = "Ir al contenido";
 $NoTimeLimits = "Sin límite de tiempo";
+$UserDeleted = "El usuario ha sido borrado";
 $Tool = "herramienta";
 $AnnEmpty = "Se han borrado todos los anuncios";
 $AnnouncementModified = "El anuncio ha sido modificado";

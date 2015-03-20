@@ -91,7 +91,6 @@ $Certificates = "Sertifikalar";
 $Certificate = "Sertifika";
 $ChooseUser = "Bu değerlendirme için kullanıcı seçin";
 $FirstLetter = "Soyadının ilk harfi";
-$UserAdded = "Kullanıcı eklendi";
 $ResultEdited = "Sonuç düzenlendi";
 $ChooseFormat = "PDF Rapor";
 $OutputFileType = "Çıktı dosya türü";

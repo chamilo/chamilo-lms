@@ -92,7 +92,6 @@ $Certificates = "Sertifikāti";
 $Certificate = "Sertifikāts";
 $ChooseUser = "Izvēlieties lietotājus šim novērtējumam";
 $FirstLetter = "Uzvārda pirmais burts";
-$UserAdded = "Lietotājs ir pievienots";
 $ResultEdited = "Rezultāts ir rediģēts";
 $ChooseFormat = "Atskaite PDF formātā";
 $OutputFileType = "Izejas faila tips";

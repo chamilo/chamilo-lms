@@ -311,9 +311,7 @@ $LimitUsersListDefaultMaxComment = "此界面允许添加用户到课程或班�
 $Plugins = "插件";
 $HideDLTTMarkupComment = "当没合适的翻译时，隐藏[=...=]符号";
 $Info = "信息";
-$UserAdded = "用户已添加";
 $NoSearchResults = "无搜索结果";
-$UserDeleted = "用户已删除";
 $NoClassesForThisCourse = "此课程无班级注册";
 $CourseUsage = "课程使用";
 $NoCoursesForThisUser = "没有此用户的课程";

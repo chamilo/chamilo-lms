@@ -172,6 +172,7 @@ $ExportShort = "Exportera kort";
 $WCAGGoMenu = "Gå till meny";
 $WCAGGoContent = "Gå till innehåll";
 $NoTimeLimits = "Ingen tidsbegränsning";
+$UserDeleted = "Användaren är raderad";
 $Tool = "verktyg";
 $Choose = "Välj";
 $AnnEmpty = "Listan över tillkännagivanden har rensats";

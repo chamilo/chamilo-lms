@@ -367,6 +367,7 @@ $AllDay = "Tot el dia";
 $WCAGGoMenu = "Vés al menú";
 $WCAGGoContent = "Vés al contingut";
 $NoTimeLimits = "Sense límit de temps";
+$UserDeleted = "L'usuari ha estat esborrat";
 $Tool = "Eina";
 $Choose = "Trieu";
 $SearchXapianModuleNotInstalled = "El mòdul Xapian de PHP no està configurat en el seu servidor";

@@ -118,7 +118,6 @@ $GroupMembers = "Членове на групата";
 $ReturnToInbox = "Към входящите съобщения";
 $Me = "Аз";
 $LeaveGroup = "Напускане на групата";
-$UserAdded = "Потребителят е регистриран в системата.";
 $Topics = "Теми";
 $StatusInThisGroup = "Статус в групата";
 $GroupDescription = "Описание на групата";

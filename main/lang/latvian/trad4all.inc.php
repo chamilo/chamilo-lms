@@ -234,6 +234,7 @@ $ExportShort = "Eksportēt kā SCORM";
 $WCAGGoMenu = "Iet uz izvēli";
 $WCAGGoContent = "Doties uz saturu";
 $NoTimeLimits = "Bez laika ierobežojuma";
+$UserDeleted = "Lietotājs tika izdzēsts";
 $Tool = "Instruments";
 $Choose = "Izvēlies";
 $SearchXapianModuleNotInstalled = "Xapian meklēšanas modulis nav instalēts";

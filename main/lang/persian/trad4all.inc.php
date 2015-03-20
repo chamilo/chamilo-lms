@@ -239,6 +239,7 @@ $AllDay = "تمام روز";
 $WCAGGoMenu = "رفتن به فهرست";
 $WCAGGoContent = "رفتن به متن";
 $NoTimeLimits = "بدون محدودیت زمانی";
+$UserDeleted = "کاربر مورد نظر حذف گردید";
 $Tool = "ابزارآموزشی";
 $Choose = "انتخاب کنید";
 $SearchXapianModuleNotInstalled = "ماژول جستجوی اگزاپیان نصب نیست";

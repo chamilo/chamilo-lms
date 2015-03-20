@@ -312,9 +312,7 @@ $LimitUsersListDefaultMaxComment = "Daca ecranele permit adaugarea utilizatorilo
 $Plugins = "Plugin-uri";
 $HideDLTTMarkupComment = "Ascunde marcajul [= ... =] cand o variabila de limba nu este tradusa";
 $Info = "informatii";
-$UserAdded = "Utilizatorul a fost adaugat";
 $NoSearchResults = "Nici un rezultat";
-$UserDeleted = "Utilizatorul este sters";
 $NoClassesForThisCourse = "Nu exista clase inscrise la acest curs";
 $CourseUsage = "Utilizarea cursului";
 $NoCoursesForThisUser = "Utilizatorul nu este inscris la curs";

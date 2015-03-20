@@ -92,7 +92,6 @@ $Certificates = "Certificaos";
 $Certificate = "Certificáu";
 $ChooseUser = "Escoyer usuarios pa esta evaluación";
 $FirstLetter = "Primer lletra del apellíu";
-$UserAdded = "Añadióse l'usuariu";
 $ResultEdited = "Resultáu actualizáu";
 $ChooseFormat = "Escoyer formatu";
 $OutputFileType = "Tipu de ficheru de salida";

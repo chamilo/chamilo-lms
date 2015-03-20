@@ -345,9 +345,7 @@ $LimitUsersListDefaultMaxComment = "Bei Auflistungen, in denen Benutzer zu Kurse
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Die [=... ] Markup Variable ausblenden, wenn eine Sprachvariable nicht vorhanden ist.";
 $Info = "Information";
-$UserAdded = "Benutzer wurde hinzugefügt";
 $NoSearchResults = "Kein Suchergebnis";
-$UserDeleted = "Benutzer wurde gelöscht";
 $NoClassesForThisCourse = "Keine Klasse hat diesen Kurs belegt";
 $CourseUsage = "Kursnutzung";
 $NoCoursesForThisUser = "Dieser Benutzer hat keinen Kurs belegt";

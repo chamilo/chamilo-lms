@@ -349,9 +349,7 @@ $LimitUsersListDefaultMaxComment = "In the screens allowing addition of users to
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Hide the [= ... =] markup when a language variable is not translated";
 $Info = "Information";
-$UserAdded = "The user is added";
 $NoSearchResults = "No search results";
-$UserDeleted = "The user is deleted";
 $NoClassesForThisCourse = "There are no classes subscribed to this course";
 $CourseUsage = "Course usage";
 $NoCoursesForThisUser = "This user isn't subscribed in a course";

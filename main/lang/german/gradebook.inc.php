@@ -92,7 +92,6 @@ $Certificates = "Zertifikate";
 $Certificate = "Zertifikat";
 $ChooseUser = "Kurstielnehmer für diese Beurteilung auswählen";
 $FirstLetter = "Erster Buchstabe des Nachnamens";
-$UserAdded = "Benutzer wurde hinzugefügt";
 $ResultEdited = "Ergebnis wurde bearbeitet";
 $ChooseFormat = "PDF Darstellung";
 $OutputFileType = "Dateiformat für Ausgabe";

@@ -559,6 +559,7 @@ $AllDay = "Todos os dias";
 $WCAGGoMenu = "Ir para o menu";
 $WCAGGoContent = "Ir para o conteúdo";
 $NoTimeLimits = "Sem limite de tempo";
+$UserDeleted = "Os usuários selecionados foram excluidos";
 $Tool = "ferramenta";
 $Choose = "Selecionar";
 $SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";

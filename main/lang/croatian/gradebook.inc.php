@@ -89,7 +89,6 @@ $Certificates = "Potvrđuje";
 $Certificate = "Potvrda";
 $ChooseUser = "Odaberite studenta za ocjenjivanje";
 $FirstLetter = "Prvo slovo prezimena";
-$UserAdded = "Korisnik je dodan";
 $ResultEdited = "Rezultat ažuriran";
 $ChooseFormat = "Odaberite format";
 $OutputFileType = "Vrsta datoteke za prenos";

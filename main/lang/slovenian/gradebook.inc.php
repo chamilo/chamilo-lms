@@ -92,7 +92,6 @@ $Certificates = "Certifikati";
 $Certificate = "Certifikat";
 $ChooseUser = "Izberi uporabnike za to ocenjevanje";
 $FirstLetter = "Prva črka priimka";
-$UserAdded = "Uporabnik je bil dodan";
 $ResultEdited = "Rezultat je bil ažuriran";
 $ChooseFormat = "Izberi format";
 $OutputFileType = "Oblika izhodne datoteke";

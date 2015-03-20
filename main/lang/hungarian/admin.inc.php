@@ -309,9 +309,7 @@ $LimitUsersListDefaultMaxComment = "Ha a felhasználók osztályokhoz vagy kurzu
 $Plugins = "Beépülő modulok";
 $HideDLTTMarkupComment = "[= ... =] jelölés elrejtése, ha egy nyelvi változó nincs lefordítva.";
 $Info = "Információ";
-$UserAdded = "A felhasználó hozzáadva";
 $NoSearchResults = "Nincs eredménye a keresésnek.";
-$UserDeleted = "A felhasználó törölve lett";
 $NoClassesForThisCourse = "Erre a kurzusra egy osztály sem iratkozott fel";
 $CourseUsage = "Kurzus használat";
 $NoCoursesForThisUser = "Ez a felhasználó nincs feliratkozva kurzusra";

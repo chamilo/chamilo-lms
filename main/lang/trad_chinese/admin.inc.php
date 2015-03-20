@@ -300,9 +300,7 @@ $LimitUsersListDefaultMaxComment = "此界面允許添加用戶到課程或班�
 $Plugins = "插件";
 $HideDLTTMarkupComment = "若語言未被翻譯時隱藏 [= ... =] 標示";
 $Info = "資訊";
-$UserAdded = "已增加這使用者";
 $NoSearchResults = "沒有搜尋結果";
-$UserDeleted = "此使用者已被刪除";
 $NoClassesForThisCourse = "沒有班級加入本課程";
 $CourseUsage = "課程用途";
 $NoCoursesForThisUser = "這使用者沒有選修課程";

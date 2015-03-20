@@ -525,6 +525,7 @@ $AllDay = "Ves dan";
 $WCAGGoMenu = "Pojdi na izbiro";
 $WCAGGoContent = "Pojdi na vsebino";
 $NoTimeLimits = "Brez časovnih omejitev";
+$UserDeleted = "Uporabnik je bil odstranjen";
 $Tool = "orodje";
 $Choose = "Izberi";
 $SearchXapianModuleNotInstalled = "Xapian iskalni modul ni nameščen";

@@ -167,6 +167,7 @@ $ExportShort = "Экспортировать как SCORM";
 $WCAGGoMenu = "Перейти к меню";
 $WCAGGoContent = "Перейти к содержанию";
 $NoTimeLimits = "Время не ограничено";
+$UserDeleted = "пользователь удален";
 $Tool = "инструмент";
 $Choose = "Выбрать";
 $AnnEmpty = "Все объявления были удалены";

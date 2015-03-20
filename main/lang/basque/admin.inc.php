@@ -325,9 +325,7 @@ $LimitUsersListDefaultMaxComment = "Ikastaroetan edo klaseetan erabiltzaileek iz
 $Plugins = "Pluginak";
 $HideDLTTMarkupComment = "Ezkutatu [= ... =] marka, hizkuntzaren aldagai bat itzulita ez dagoenean";
 $Info = "Informazioa";
-$UserAdded = "Erabiltzailea gehitu da";
 $NoSearchResults = "Emaitzarik ez bilaketan";
-$UserDeleted = "Erabiltzailea kendu da";
 $NoClassesForThisCourse = "Ez dago klase inskribaturik ikastaro honetan";
 $CourseUsage = "Ikastaroaren erabilera";
 $NoCoursesForThisUser = "Erabiltzaile honek ikastaro batean ere ez du izenik eman";

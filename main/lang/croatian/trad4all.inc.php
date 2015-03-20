@@ -175,6 +175,7 @@ $ExportShort = "Brzi prijenos";
 $WCAGGoMenu = "Pođi na izbornik";
 $WCAGGoContent = "Pođi na sadržaj";
 $NoTimeLimits = "Bez vremenskog ograničenja";
+$UserDeleted = "Korisnik izbrisan";
 $Tool = "alat";
 $AnnEmpty = "Ispražnjen popis obavijesti";
 $AnnouncementModified = "Obavijest izmijenjena";

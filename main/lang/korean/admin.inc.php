@@ -278,7 +278,6 @@ $LinkURL = "링크 URL";
 $OpenInNewWindow = "새창에서 열기";
 $Plugins = "플러그인";
 $Info = "정보";
-$UserAdded = "유저가 추가되었습니다";
 $NoSearchResults = "검색결과 없음";
 $NoClassesForThisCourse = "이 과정에 등록한 클래스가 없습니다";
 $CourseUsage = "과정 용도";

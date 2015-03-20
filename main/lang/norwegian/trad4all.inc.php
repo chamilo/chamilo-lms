@@ -41,6 +41,7 @@ $NewAnnouncement = "Ny meddelelse";
 $WCAGGoMenu = "Gå til meny";
 $WCAGGoContent = "Gå til innhold";
 $NoTimeLimits = "Ingen tidsbegrensning";
+$UserDeleted = "Brukeren ble slettet";
 $Tool = "Verktøy";
 $AnnEmpty = "Annonseringslisten er nå ryddet opp";
 $AnnouncementModified = "Annonsering ble endret";

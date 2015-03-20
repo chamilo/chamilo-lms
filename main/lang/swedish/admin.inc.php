@@ -311,9 +311,7 @@ $LimitUsersListDefaultMaxComment = "På de sidor där man lägger till användar
 $Plugins = "Insticksmoduler";
 $HideDLTTMarkupComment = "Göm uppmärkningen [= ... =] när en språkvariabel inte är översatt till det aktuella språket.";
 $Info = "Information";
-$UserAdded = "Användaren är tillagd";
 $NoSearchResults = "Inga sökträffar";
-$UserDeleted = "Användaren är raderad";
 $NoClassesForThisCourse = "Det finns inga klasser som prenumererar på denna kurs";
 $CourseUsage = "Kursutnyttjande";
 $NoCoursesForThisUser = "Denna användare prenumererar inte på någon kurs";

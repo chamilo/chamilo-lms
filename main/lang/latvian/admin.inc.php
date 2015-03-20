@@ -316,9 +316,7 @@ $LimitUsersListDefaultMaxComment = "Ekrāni ļauj pievienot Lietotājus kursiem 
 $Plugins = "Paplašinājumi / Spraudņi";
 $HideDLTTMarkupComment = "Paslēpt iezīmi [=...=] , ja valodas mainīgais nav iztulkots";
 $Info = "informācija";
-$UserAdded = "Lietotājs tika pievienots";
 $NoSearchResults = "Nekas netika atrasts";
-$UserDeleted = "Lietotājs tika izdzēsts";
 $NoClassesForThisCourse = "Nav nevienas klases, kas būtu reģistrētas šajā kursā";
 $CourseUsage = "Kursu lietošana";
 $NoCoursesForThisUser = "Šis lietotājs nav reģistrējies šajā kursā";

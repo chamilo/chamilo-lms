@@ -345,9 +345,7 @@ $LimitUsersListDefaultMaxComment = "En las pantallas de inscripción de usuarios
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Ocultar la marca [=...=] cuando una variable de idioma no esté traducida";
 $Info = "Información";
-$UserAdded = "El usuario ha sido añadido";
 $NoSearchResults = "No se han encontrado resultados";
-$UserDeleted = "Los usuarios seleccionados han sido eliminados";
 $NoClassesForThisCourse = "No hay clases inscritas en este curso";
 $CourseUsage = "Utilización del curso";
 $NoCoursesForThisUser = "Este usuario no está inscrito en ningún curso";

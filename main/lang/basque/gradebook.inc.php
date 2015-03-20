@@ -92,7 +92,6 @@ $Certificates = "Ziurtagiriak";
 $Certificate = "Ziurtagiria";
 $ChooseUser = "Hautatu erabiltzaileak ebaluazio honetarako";
 $FirstLetter = "Deituraren lehen letra";
-$UserAdded = "Erabiltzailea gehitu da";
 $ResultEdited = "Emaitza editatu da";
 $ChooseFormat = "Aukeratu formatua";
 $OutputFileType = "Irteerako fitxategi mota";

@@ -92,7 +92,6 @@ $Certificates = "Certificats";
 $Certificate = "Certificat";
 $ChooseUser = "Sélectionnez les utilisateurs pour cette acivité";
 $FirstLetter = "Première lettre du nom de famille";
-$UserAdded = "L'utilisateur a été ajouté";
 $ResultEdited = "Résultat mis à jour";
 $ChooseFormat = "Choisissez le format";
 $OutputFileType = "Format";

@@ -302,9 +302,7 @@ $LimitUsersListDefaultMaxComment = "Ekranaĵoj kun eblo aldoni uzantojn al kurso
 $Plugins = "Kromaĵoj";
 $HideDLTTMarkupComment = "Kaŝi la [=...=] aranĝon, se la lingva varieblo ne estas tradukita";
 $Info = "Informo";
-$UserAdded = "La uzulo estas aldonita";
 $NoSearchResults = "Neniu serĉrezulto";
-$UserDeleted = "La uzulo estas forigita";
 $NoClassesForThisCourse = "Ne estas klasoj aliĝintaj al ĉi-kurso";
 $CourseUsage = "Kursa uzado";
 $NoCoursesForThisUser = "Ĉi tiu uzulo aliĝis al neniu kurso";

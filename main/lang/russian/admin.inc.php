@@ -302,9 +302,7 @@ $LimitUsersListDefaultMaxComment = "На странице, где разреше
 $Plugins = "Расширение возможностей системы";
 $HideDLTTMarkupComment = "Спрятать  [= ... =] маркер, когда  переменная языка не переведена";
 $Info = "информация";
-$UserAdded = "пользователь добавлен";
 $NoSearchResults = "Поиск не дал результатов";
-$UserDeleted = "пользователь удален";
 $NoClassesForThisCourse = "Нет подписанных классов на этот курс";
 $CourseUsage = "Использование курса";
 $NoCoursesForThisUser = "Этот пользователь не подписан на курс";

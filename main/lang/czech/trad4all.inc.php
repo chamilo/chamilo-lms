@@ -85,6 +85,7 @@ $TotalMDEs = "Celkový počet zápisů do MD:";
 $WCAGGoMenu = "Jdi do menu";
 $WCAGGoContent = "Jdi na obsah";
 $NoTimeLimits = "Žádné časové omezení";
+$UserDeleted = "Uživatel byl smazán";
 $Tool = "nástroj";
 $Choose = "Zvolit";
 $AnnEmpty = "Seznam oznámení byl vyčistěn";

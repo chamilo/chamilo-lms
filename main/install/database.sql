@@ -1488,9 +1488,6 @@ INSERT INTO user_field_options (field_id, option_value, option_display_text, opt
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '8', 'Daily',2);
 INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '0', 'No',3);
 
-
-
-
 DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE IF NOT EXISTS gradebook_result_log (
     id int NOT NULL auto_increment,
@@ -3218,7 +3215,8 @@ CREATE TABLE track_e_default (
   default_event_type varchar(20) NOT NULL default '',
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
-  PRIMARY KEY  (default_id)
+  session_id INT DEFAULT NULL,
+  PRIMARY KEY (default_id)
 );
 
 DROP TABLE IF EXISTS track_e_downloads;
@@ -4727,5 +4725,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.23' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.24' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

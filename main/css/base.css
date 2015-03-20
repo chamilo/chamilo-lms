@@ -3333,7 +3333,7 @@ form .formw .freeze {
 }
 /* for section */
 .scorm_item_section.scorm_completed{
-  background:url("../img/icon_completed_section.png")no-repeat 280px center #606c88;
+  background:url("../img/icon_completed_section.png")no-repeat 98% center #606c88;
   padding-right: 1.5em;
 }
 .scorm_item_section{
@@ -3370,10 +3370,10 @@ form .formw .freeze {
 }
 /* items scorm*/
 .scorm_item_normal.scorm_completed {
-  background:url("../img/icon_completed.png") no-repeat 280px center;
+  background:url("../img/icon_completed.png") no-repeat 98% center;
 }
 .scorm_item_normal.scorm_failed{
-  background:url("../img/icon_failed.png") no-repeat 280px center;
+  background:url("../img/icon_failed.png") no-repeat 98% center;
 }
 .scorm_item_normal .scorm_item_level_0{
   padding-left: .5em;

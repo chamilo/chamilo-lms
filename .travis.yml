@@ -43,4 +43,6 @@ before_script:
 
 script:
   # - phpunit -c tests/phpunit
+  - pwd
+  - ls
   - cd tests && ../vendor/behat/behat/bin/behat -v

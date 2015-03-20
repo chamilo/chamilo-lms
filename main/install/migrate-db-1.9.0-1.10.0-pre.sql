@@ -105,4 +105,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.22' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.23' WHERE variable = 'chamilo_database_version';

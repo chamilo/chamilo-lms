@@ -1,81 +1,48 @@
 <?php
 
-use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
+use Behat\Behat\Context\ClosuredContextInterface,
+    Behat\Behat\Context\TranslatedContextInterface,
+    Behat\Behat\Context\BehatContext,
+    Behat\Behat\Exception\PendingException;
+
+use Behat\Gherkin\Node\PyStringNode,
+    Behat\Gherkin\Node\TableNode;
+
+use Behat\MinkExtension\Context\MinkContext;
+
+//
+// Require 3rd-party libraries here:
+//
+//   require_once 'PHPUnit/Autoload.php';
+//   require_once 'PHPUnit/Framework/Assert/Functions.php';
+//
 
 /**
- * Defines application features from the specific context.
+ * Features context.
  */
-class FeatureContext implements Context, SnippetAcceptingContext
+class FeatureContext extends MinkContext
 {
     /**
      * Initializes context.
+     * Every scenario gets its own context object.
      *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
+     * @param array $parameters context parameters (set them up through behat.yml)
      */
-    public function __construct()
+    public function __construct(array $parameters)
     {
-
+        // Initialize your context here
     }
-
     /**
-     * Check Chamilo is installed - otherwise try to install it
-     * @param   BeforeSuiteScope $scope The context scope
-     * @BeforeSuite
+     * @Given /^I am a platform administrator$/
      */
-    public static function prepare($scope)
+    public function iAmAPlatformAdministrator()
     {
-        // prepare system for test suite
-        // before it runs
-        require __DIR__.'/../../../main/inc/lib/api.lib.php';
-        $installed = apiIsSystemInstalled();
-        if ($installed['installed'] == 0) {
-            // Try to install Chamilo
-            //apiInstallChamilo();
-        } else {
-            // show version
-        }
-        require __DIR__.'/../../../main/inc/global.inc.php';
-    }
-
-    /**
-     * @Given I am logged in
-     */
-    public function iAmLoggedIn()
-    {
-        if (api_get_user_id() == 0) {
-            throw new Exception('I am not connected as a user yet');
-        }
-    }
-
-    /**
-     * @Given I am an administrator
-     */
-    public function iAmAnAdministrator()
-    {
-        if (!api_is_platform_admin()) {
-            throw new Exception('I am not connected as an admin');
-        }
-    }
-
-    /**
-     * @When I create a user with e-mail :arg1
-     */
-    public function iCreateAUserWithEMail($email)
-    {
-        throw new PendingException();
-    }
-
-    /**
-     * @Then the user should be added
-     */
-    public function theUserShouldBeAdded()
-    {
-        throw new PendingException();
+        return array(
+            new \Behat\Behat\Context\Step\Given('I am on homepage'),
+            new \Behat\Behat\Context\Step\Given('I fill in "login" with "admin"'),
+            new  \Behat\Behat\Context\Step\Given('I fill in "password" with "admin"'),
+            new  \Behat\Behat\Context\Step\Given('I press "submitAuth"')
+        );
     }
 
 }

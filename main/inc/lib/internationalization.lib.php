@@ -664,11 +664,8 @@ function api_strtotime($time, $timezone = null) {
  *
  * @link http://php.net/manual/en/function.strftime.php
  */
-function api_format_date($time, $format = null, $language = null) {
-
-    $system_timezone = date_default_timezone_get();
-    date_default_timezone_set(_api_get_timezone());
-
+function api_format_date($time, $format = null, $language = null)
+{
     if (is_string($time)) {
         $time = strtotime($time);
     }
@@ -683,116 +680,72 @@ function api_format_date($time, $format = null, $language = null) {
     if (is_int($format)) {
         switch ($format) {
             case DATE_FORMAT_ONLY_DAYNAME:
-                $date_format = get_lang('dateFormatOnlyDayName', '', $language);
-                if (INTL_INSTALLED) {
-        			$datetype = IntlDateFormatter::SHORT;
-        			$timetype = IntlDateFormatter::NONE;
-        		}
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
                 break;
             case DATE_FORMAT_NUMBER_NO_YEAR:
-                $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);
-        		if (INTL_INSTALLED) {
-        			$datetype = IntlDateFormatter::SHORT;
-        			$timetype = IntlDateFormatter::NONE;
-        		}
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
                 break;
-        	case DATE_FORMAT_NUMBER:
-        		$date_format = get_lang('dateFormatShortNumber', '', $language);
-        		if (INTL_INSTALLED) {
-        			$datetype = IntlDateFormatter::SHORT;
-        			$timetype = IntlDateFormatter::NONE;
-        		}
-        		break;
+            case DATE_FORMAT_NUMBER:
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
+                break;
             case TIME_NO_SEC_FORMAT:
-                $date_format = get_lang('timeNoSecFormat', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::NONE;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+                $datetype = IntlDateFormatter::NONE;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
             case DATE_FORMAT_SHORT:
-                $date_format = get_lang('dateFormatShort', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::LONG;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+                $datetype = IntlDateFormatter::LONG;
+                $timetype = IntlDateFormatter::NONE;
                 break;
             case DATE_FORMAT_LONG:
-                $date_format = get_lang('dateFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::NONE;
                 break;
             case DATE_TIME_FORMAT_LONG:
-                $date_format = get_lang('dateTimeFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
             case DATE_FORMAT_LONG_NO_DAY:
-                $date_format = get_lang('dateFormatLongNoDay', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
-			case DATE_TIME_FORMAT_SHORT:
-                $date_format = get_lang('dateTimeFormatShort', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+            case DATE_TIME_FORMAT_SHORT:
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
-			case DATE_TIME_FORMAT_SHORT_TIME_FIRST:
-                $date_format = get_lang('dateTimeFormatShortTimeFirst', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+            case DATE_TIME_FORMAT_SHORT_TIME_FIRST:
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
             case DATE_TIME_FORMAT_LONG_24H:
-                $date_format = get_lang('dateTimeFormatLong24H', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
                 break;
             default:
-                $date_format = get_lang('dateTimeFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
         }
-    } else {
-        $date_format = $format;
     }
 
-    if (0) {
-        //if using PHP 5.3 format dates like: $dateFormatShortNumber, can't be used
-        //
-        // Use ICU
-        if (is_null($language)) {
-            $language = api_get_language_isocode();
-        }
-        $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
-        //$date_formatter->setPattern($date_format);
-        $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
-
-    } else {
-        // We replace %a %A %b %B masks of date format with translated strings
-        $translated = &_api_get_day_month_names($language);
-        $date_format = str_replace(array('%A', '%a', '%B', '%b'),
-        array($translated['days_long'][(int)strftime('%w', $time )],
-            $translated['days_short'][(int)strftime('%w', $time)],
-            $translated['months_long'][(int)strftime('%m', $time) - 1],
-            $translated['months_short'][(int)strftime('%m', $time) - 1]),
-        $date_format);
-        $formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
+    // Use ICU
+    if (is_null($language)) {
+        $language = api_get_language_isocode();
     }
-    date_default_timezone_set($system_timezone);
+
+    $date_formatter = new IntlDateFormatter(
+        $language,
+        $datetype,
+        $timetype,
+        date_default_timezone_get()
+    );
+
+    $formatted_date = api_to_system_encoding(
+        $date_formatter->format($time),
+        'UTF-8'
+    );
+
     return $formatted_date;
 }
 

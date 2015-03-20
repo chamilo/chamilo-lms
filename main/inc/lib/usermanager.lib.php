@@ -1265,20 +1265,22 @@ class UserManager
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
-            /*if (!empty($picture_filename) or $preview) {
-                $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
-            } else {
-                $dir = $base.'upload/users/'.$user_id.'/';
-            }*/
-            $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
+            $userPath = 'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
+            $systemImagePath = api_get_path(SYS_CODE_PATH).$userPath;
+            $dir = $base.$userPath;
         } else {
-            $dir = $base.'upload/users/'.$user_id.'/';
+            $userPath = 'upload/users/'.$user_id.'/';
+            $systemImagePath = api_get_path(SYS_CODE_PATH).$userPath;
+            $dir = $base.$userPath;
         }
 
-        if (!$picture_filename || ($picture_filename && !file_exists($dir.$picture_filename))) {
+        if (empty($picture_filename) ||
+            (!empty($picture_filename) && !file_exists($systemImagePath.$picture_filename))
+        ) {
             if ($anonymous) {
                 return $noPicturePath;
             }
+
             if (api_get_configuration_value('gravatar_enabled')) {
                 $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
                 $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?

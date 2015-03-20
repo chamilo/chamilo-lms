@@ -9,7 +9,7 @@ class DateRangePicker extends HTML_QuickForm_text
     /**
     * Constructor
     */
-    public function DateRangePicker($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;

@@ -4,9 +4,7 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
+
 $language_file = array('userInfo');
 $cidReset=true;
 require_once '../inc/global.inc.php';
@@ -93,8 +91,7 @@ if (is_array($_GET) && count($_GET)>0) {
 }
 //Block Avatar Social
 $userInfo    = UserManager::get_user_info_by_id($user_id);
-
-$social_avatar_block = SocialManager::getSocialUserBlock($user_id, invitations);
+$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'invitations');
 //Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');
 //Block Invitations

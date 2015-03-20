@@ -3414,7 +3414,16 @@ class SurveyUtil
                 'group_id' => $groupId,
                 'survey_code' => $survey_data['code']
             );
-            self::save_invitation($params);
+
+            $invitationExists = self::invitationExists(
+                $course_id,
+                $session_id,
+                $groupId,
+                $survey_data['code']
+            );
+            if (empty($invitationExists)) {
+                self::save_invitation($params);
+            }
         }
 
         $users_array = array_unique($users_array);
@@ -3428,6 +3437,7 @@ class SurveyUtil
             if (in_array($value, $exclude_users)) {
                 continue;
             }
+
             // Get the unique invitation code if we already have it
             if ($reminder == 1 && array_key_exists($value, $survey_invitations)) {
                 $invitation_code = $survey_invitations[$value]['invitation_code'];
@@ -3476,14 +3486,44 @@ class SurveyUtil
      * @param $params
      * @return bool|int
      */
-    static function save_invitation($params)
+    public static function save_invitation($params)
     {
         // Database table to store the invitations data
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        if (!empty($params['c_id']) && (!empty($params['user']) || !empty($params['group_id'])) && !empty($params['survey_code'])) {
-            return Database::insert($table_survey_invitation, $params);
+        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        if (!empty($params['c_id']) &&
+            (!empty($params['user']) || !empty($params['group_id'])) &&
+            !empty($params['survey_code'])
+        ) {
+            return Database::insert($table, $params);
         }
         return false;
+    }
+
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $groupId
+     * @param string $surveyCode
+     * @return int
+     */
+    public static function invitationExists($courseId, $sessionId, $groupId, $surveyCode)
+    {
+        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+        $groupId = intval($groupId);
+        $surveyCode = Database::escape_string($surveyCode);
+
+        $sql = "SELECT survey_invitation_id FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    session_id = $sessionId AND
+                    group_id = $groupId AND
+                    survey_code = '$surveyCode'
+                ";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result);
     }
 
     /**
@@ -3493,7 +3533,7 @@ class SurveyUtil
      * $param string $invitation_code - the unique invitation code for the URL
      * @return	void
      */
-    static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text)
+    public static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text)
     {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
@@ -3579,8 +3619,13 @@ class SurveyUtil
         $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 
         // Counting the number of people that are invited
-        $sql = "SELECT count(user) as total FROM $table_survey_invitation
-		        WHERE c_id = $course_id AND survey_code = '".Database::escape_string($survey_code)."'";
+        $sql = "SELECT count(user) as total
+                FROM $table_survey_invitation
+		        WHERE
+		            c_id = $course_id AND
+		            survey_code = '".Database::escape_string($survey_code)."' AND
+		            user <> ''
+                ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $total_invited = $row['total'];
@@ -3588,7 +3633,10 @@ class SurveyUtil
         // Updating the field in the survey table
         $sql = "UPDATE $table_survey
 		        SET invited = '".Database::escape_string($total_invited)."'
-		        WHERE c_id = $course_id AND code = '".Database::escape_string($survey_code)."'";
+		        WHERE
+		            c_id = $course_id AND
+		            code = '".Database::escape_string($survey_code)."'
+                ";
         Database::query($sql);
     }
 
@@ -3605,7 +3653,7 @@ class SurveyUtil
      * @author Julio Montoya, adding c_id fixes - Dec 2012
      * @version January 2007
      */
-    static function get_invited_users($survey_code, $course_code = '', $session_id = 0)
+    public static function get_invited_users($survey_code, $course_code = '', $session_id = 0)
     {
         if (!empty($course_code)) {
             $course_info = api_get_course_info($course_code);
@@ -3646,7 +3694,8 @@ class SurveyUtil
                     $defaults['additional_users'][] = $row['user'];
                 }
             }
-            if (isset($row['group_id'])) {
+
+            if (isset($row['group_id']) && !empty($row['group_id'])) {
                 $defaults['users'][] = 'GROUP:'.$row['group_id'];
             }
         }
@@ -3665,7 +3714,6 @@ class SurveyUtil
         if (!empty($defaults['additional_users'])) {
             $defaults['additional_users'] = implode(';', $defaults['additional_users']);
         }
-        //error_log(print_r($defaults, 1));
         return $defaults;
     }
 
@@ -4342,7 +4390,6 @@ class SurveyUtil
                     }
                     break;
                 case UserManager::USER_FIELD_TYPE_RADIO:
-
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     if ($field_details[7] == 0) {
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
@@ -4350,7 +4397,6 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
                     }
                     break;
-
                 case UserManager::USER_FIELD_TYPE_SELECT:
                     $get_lang_variables = false;
                     if (in_array($field_details[1], array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message'))) {
@@ -4369,7 +4415,6 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
                     }
                     break;
-
                 case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     if ($field_details[7] == 0) {
@@ -4378,7 +4423,6 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
                     }
                     break;
-
                 case UserManager::USER_FIELD_TYPE_DATE:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     if ($field_details[7] == 0) {
@@ -4387,7 +4431,6 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
                     }
                     break;
-
                 case UserManager::USER_FIELD_TYPE_DATETIME:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     if ($field_details[7] == 0) {
@@ -4396,7 +4439,6 @@ class SurveyUtil
                         $field_list_array['extra_'.$field_details[1]]['visibility'] = 1;
                     }
                     break;
-
                 case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
                     $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
                     if ($field_details[7] == 0) {
@@ -4431,7 +4473,6 @@ class SurveyUtil
         $user_answer = Database::escape_string($user_answer);
 
         $course_id = api_get_course_int_id();
-
 
         $sql  = 'SELECT COUNT(*) as count FROM '.$table_survey_invitation.'
 		          WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1" AND c_id = '.$course_id.' ';

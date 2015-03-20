@@ -607,10 +607,10 @@ class Template
         $bowerJsFiles = [
             'modernizr/modernizr.js',
             'jquery/dist/jquery.min.js',
+            'moment/min/moment-with-locales.min.js',
             'jquery-ui/jquery-ui.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'ckeditor/ckeditor.js',
-            'moment/min/moment-with-locales.min.js',
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',

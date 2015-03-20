@@ -313,8 +313,6 @@ if ($group_id != 0) {
 $social_left_content = null;
 $userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
-    //Block Social Avatar
-    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'messages');
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="row">';
@@ -374,8 +372,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
 }
 
 $tpl = new Template(get_lang('ComposeMessage'));
+// Block Social Avatar
+SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
+
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_avatar_block', $social_avatar_block);
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

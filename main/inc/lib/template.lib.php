@@ -404,11 +404,11 @@ class Template
      */
     private function set_user_parameters()
     {
-        $user_info               = array();
-        $user_info['logged']     = 0;
+        $user_info = array();
+        $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
         if (api_user_is_login()) {
-            $user_info           = api_get_user_info(api_get_user_id());
+            $user_info = api_get_user_info(api_get_user_id(), true);
             $user_info['logged'] = 1;
 
             $user_info['is_admin'] = 0;
@@ -417,9 +417,9 @@ class Template
             }
 
             $user_info['messages_count'] = MessageManager::get_new_messages();
-            $this->user_is_logged_in     = true;
+            $this->user_is_logged_in = true;
         }
-        //Setting the $_u array that could be use in any template
+        // Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 

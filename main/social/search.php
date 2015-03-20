@@ -35,8 +35,7 @@ if (!empty($extra_fields)) {
     }
 }
 $user_info = UserManager::get_user_info_by_id($user_id);
-//Block Social Avatar
-$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'search');
+
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
 $social_right_content = '';
@@ -214,7 +213,8 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 }
 
 $tpl = new Template($tool_name);
-$tpl->assign('social_avatar_block', $social_avatar_block);
+// Block Social Avatar
+SocialManager::setSocialUserBlock($tpl, $user_id, 'search');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('search_form', $searchForm);

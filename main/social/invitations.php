@@ -91,7 +91,6 @@ if (is_array($_GET) && count($_GET)>0) {
 }
 //Block Avatar Social
 $userInfo    = UserManager::get_user_info_by_id($user_id);
-$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'invitations');
 //Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');
 //Block Invitations
@@ -207,7 +206,7 @@ if (count($pending_invitations) > 0) {
 }
 
 $tpl = new Template(null);
-$tpl->assign('social_avatar_block', $social_avatar_block);
+SocialManager::setSocialUserBlock($tpl, $user_id, 'invitations');
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_invitations_block',$socialInvitationsBlock);
 $tpl->assign('message', $show_message);

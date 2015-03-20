@@ -2016,10 +2016,12 @@ class Display
      */
     public static function getProfileEditionLink($userId, $asAdmin = false)
     {
-        $editProfileUrl = api_get_path(WEB_CODE_PATH) . 'auth/profile.php';
+        $editProfileUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
 
         if ($asAdmin) {
-            $editProfileUrl = api_get_path(WEB_CODE_PATH) . "admin/user_edit.php?user_id=" . intval($userId);
+            $editProfileUrl = api_get_path(
+                    WEB_CODE_PATH
+                )."admin/user_edit.php?user_id=".intval($userId);
         }
 
         if (api_get_setting('sso_authentication') === 'true') {
@@ -2028,18 +2030,55 @@ class Display
             $objSSO = null;
 
             if (!empty($subSSOClass)) {
-                require_once api_get_path(SYS_CODE_PATH) . "auth/sso/sso.$subSSOClass.class.php";
+                require_once api_get_path(
+                        SYS_CODE_PATH
+                    )."auth/sso/sso.$subSSOClass.class.php";
 
-                $subSSOClass = 'sso' . $subSSOClass;
+                $subSSOClass = 'sso'.$subSSOClass;
                 $objSSO = new $subSSOClass();
             } else {
                 $objSSO = new sso();
             }
 
-            $editProfileUrl = $objSSO->generateProfileEditingURL($userId, $asAdmin);
+            $editProfileUrl = $objSSO->generateProfileEditingURL(
+                $userId,
+                $asAdmin
+            );
         }
 
         return $editProfileUrl;
+    }
+
+    /**
+     * @param string $content
+     * @param string $title
+     * @param string $footer
+     * @param string $style
+     * @return string
+     */
+    public static function panel($content, $title = '', $footer = '', $style = '')
+    {
+        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+
+        return '
+            <div class="panel panel-default">
+                '.$title.'
+                '.self::contentPanel($content).'
+                '.$footer.'
+            </div>'
+        ;
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    public static function contentPanel($content)
+    {
+        return '<div class="panel-body">
+                '.$content.'
+                </div>';
     }
 
 }

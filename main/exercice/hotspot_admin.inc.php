@@ -562,25 +562,35 @@ if ($modifyAnswers) {
 
     $hotspot_admin_url = api_get_path(WEB_CODE_PATH) . 'exercice/admin.php?' . api_get_cidreq() . '&hotspotadmin=' . $modifyAnswers . '&exerciseId=' . $exerciseId . '&' . api_get_cidreq();
     ?>
-    <form method="post" action="<?php echo $hotspot_admin_url; ?>" id="frm_exercise" name="frm_exercise">
+    <form method="post" action="<?php echo $hotspot_admin_url; ?>" class="form-horizontal" id="frm_exercise" name="frm_exercise">
+        <div class="form-group">
+            <div class="col-sm-12">
+                <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
+                    <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
+                        <i class="fa fa-trash"></i> <?php echo get_lang('LessOAR'); ?>
+                    </button>
+                    <button type="submit" name="moreOARAnswers" value="moreOARAnswers">
+                        <i class="fa fa-plus"></i> <?php echo get_lang('MoreOAR'); ?>
+                    </button>
+                <?php } else { ?>
+                    <button type="submit" class="btn btn-danger" name="lessAnswers" value="lessAnswers">
+                        <i class="fa fa-trash"></i> <?php echo get_lang('LessHotspots'); ?>
+                    </button>
+                    <button type="submit" class="btn btn-primary" name="moreAnswers" value="moreAnswers">
+                        <i class="fa fa-plus"></i> <?php echo get_lang('MoreHotspots'); ?>
+                    </button>
+                <?php } ?>
+                <button type="submit" class="btn btn-primary" name="submitAnswers" value="submitAnswers">
+                    <i class="fa fa-save"></i> <?php echo get_lang('AddQuestionToExercise'); ?>
+                </button>
+            </div>
+        </div>
         <table border="0" cellpadding="0" cellspacing="2" width="100%">
-            <tr>
-                <td>
-                    <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
-                        <button type="submit" class="btn minus" name="lessAnswers" value="lessAnswers" ><?php echo get_lang('LessOAR'); ?></button>
-                        <button type="submit" class="btn plus" name="moreOARAnswers" value="moreOARAnswers" /><?php echo get_lang('MoreOAR'); ?></button>
-                    <?php } else { ?>
-                        <button type="submit" class="btn minus" name="lessAnswers" value="lessAnswers" ><?php echo get_lang('LessHotspots'); ?></button>
-                        <button type="submit" class="btn plus" name="moreAnswers" value="moreAnswers" /><?php echo get_lang('MoreHotspots'); ?></button>
-                    <?php } ?>
-                    <button type="submit" class="btn save" name="submitAnswers" value="submitAnswers" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
-                </td>
-            </tr>
             <tr>
                 <td>
                     <input type="hidden" name="formSent" value="1" />
                     <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
-                    <table class="data_table">
+                    <table class="table table-striped table-hover">
                         <tr>
                             <th width="5">&nbsp;</th>
                             <th> <?php echo get_lang('HotspotDescription'); ?> *</th>

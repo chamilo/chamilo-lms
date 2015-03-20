@@ -665,7 +665,7 @@ class SortableTable extends HTML_Table
         //}
         $result[] = '</select>';
         $result[] = '<noscript>';
-        $result[] = '<button class="btn save" type="submit">'.get_lang('Save').'</button>';
+        $result[] = '<button class="btn btn-success" type="submit">'.get_lang('Save').'</button>';
         $result[] = '</noscript>';
         $result[] = '</form>';
         $result = implode("\n", $result);

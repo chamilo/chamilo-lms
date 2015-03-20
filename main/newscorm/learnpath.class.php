@@ -3146,9 +3146,9 @@ class learnpath
             if ($this->get_lp_session_id() == api_get_session_id()) {
                 $html .= '<div id="actions_lp" class="actions_lp">';
                 $html .= '<div class="btn-group">';
-                $html .= "<a class='btn' href='lp_controller.php?" . api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
-                $html .= "<a class='btn' href='lp_controller.php?" . api_get_cidreq()."&amp;action=add_item&amp;type=step&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
-                $html .= '<a class="btn" href="lp_controller.php?'.api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=edit&amp;lp_id=" . $this->lp_id.'">'.get_lang('Settings').'</a>';
+                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Overview') . "</a>";
+                $html .= "<a class='btn btn-default' href='lp_controller.php?" . api_get_cidreq()."&amp;action=add_item&amp;type=step&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Edit') . "</a>";
+                $html .= '<a class="btn btn-default" href="lp_controller.php?'.api_get_cidreq()."&amp;gradebook=$gradebook&amp;action=edit&amp;lp_id=" . $this->lp_id.'">'.get_lang('Settings').'</a>';
                 $html .= '</div>';
                 $html .= '</div>';
             }
@@ -5401,7 +5401,7 @@ class learnpath
                 $return .= '<div class="col-md-12">';
                 $return .= self::return_new_tree($update_audio);
                 $return .='</div>';
-                $return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
+                $return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn btn-primary')), array('style'=>'float:left; margin-top:15px;width:100%'));
             } else {
                 $return_audio .= self::return_new_tree($update_audio);
                 $return .= $return_audio.'</table>';

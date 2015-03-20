@@ -1495,13 +1495,13 @@ class AnnouncementManager
                 (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
             ) {
                 $html .= '<div id="no-data-view">';
-                $html .= '<h2>' . get_lang('Announcements') . '</h2>';
+                $html .= '<h3>' . get_lang('Announcements') . '</h3>';
                 $html .= Display::return_icon('valves.png', '', array(), 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
                     get_lang('AddAnnouncement'),
                     api_get_self() . "?" . api_get_cidreq() . "&action=add",
-                    array('class' => 'btn')
+                    array('class' => 'btn btn-primary')
                 );
                 $html .= '</div>';
                 $html .= '</div>';

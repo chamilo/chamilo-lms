@@ -223,47 +223,47 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             $target_link = "_blank";
         }
 
-        echo '	<div class="control-group url">
-                    <label class="control-label">
+        echo '	<div class="form-group url">
+                    <label class="col-sm-2 control-label">
                         <span class="form_required">*</span> URL
                     </label>
-                    <div class="controls">
-                        <input type="text" name="urllink" class="span6" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
+                    <div class="col-sm-10">
+                        <input type="text" name="urllink" class="form-control" value="' . (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)) . '" />
                     </div>
                 </div>';
-        echo '	<div class="control-group title">
-                    <label class="control-label">
+        echo '	<div class="form-group title">
+                    <label class="col-sm-2 control-label">
                         '.get_lang('LinkName').'
                     </label>
-                    <div class="controls">
-                        <input type="text" name="title" class="span6" value="' . Security::remove_XSS($title) . '" />
+                    <div class="col-sm-10">
+                        <input type="text" name="title" class="form-control" value="' . Security::remove_XSS($title) . '" />
                     </div>
                 </div>';
-        echo '	<div class="control-group metadata">
-                    <label class="control-label">
+        echo '	<div class="form-group metadata">
+                    <label class="col-sm-2 control-label">
                         '.get_lang('Metadata').'
                     </label>
-                    <div class="controls">
+                    <div class="col-sm-10">
                         <a href="../metadata/index.php?eid='.urlencode('Link.'.$clean_link_id).'">'.get_lang('AddMetadata').'</a>
                     </div>
                 </div>';
-        echo '	<div class="control-group description">
-                    <label class="control-label">
+        echo '	<div class="form-group description">
+                    <label class="col-sm-2 control-label">
                         '.get_lang('Description').'
                     </label>
-                    <div class="controls">
-                        <textarea class="span3" cols="50" name="description">' .	Security::remove_XSS($description) . '</textarea>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" cols="50" name="description">' .	Security::remove_XSS($description) . '</textarea>
                     </div>
                 </div>';
 
         $resultcategories = Link::getLinkCategories($course_id, $session_id);
 
         if (!empty($resultcategories)) {
-            echo '	<div class="control-group category">
-                        <label class="control-label">
+            echo '	<div class="form-group category">
+                        <label class="col-sm-2 control-label">
                             '.get_lang('Category').'
                         </label>
-                        <div class="controls">';
+                        <div class="col-sm-10">';
             echo '			<select name="selectcategory">';
             echo '			<option value="0">--</option>';
             foreach ($resultcategories as $myrow) {
@@ -277,18 +277,18 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             echo '		</div>
                     </div>';
         }
-        echo '	<div class="control-group onhomepage">
-                    <label class="control-label">
+        echo '	<div class="form-group onhomepage">
+                    <label class="col-sm-2 control-label">
                     </label>
-                    <div class="controls">
+                    <div class="col-sm-10">
                         <input class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('OnHomepage').'?</label>
                     </div>
                 </div>';
-        echo '	<div class="control-group target" id="div_target">
-                    <label class="control-label">
+        echo '	<div class="form-group target" id="div_target">
+                    <label class="col-sm-2 control-label">
                         '.get_lang('LinkTarget').'
                     </label>
-                    <div class="controls">
+                    <div class="col-sm-10 controls">
                         <select  name="target_link" id="target_link">';
         $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
         foreach ($targets as $target_id => $target) {
@@ -309,11 +309,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
 
-            echo '	<div class="control-group index">
-                        <label class="control-label">
+            echo '	<div class="form-group index">
+                        <label class="col-sm-2 control-label">
                             '.get_lang('SearchFeatureDoIndexLink').'
                         </label>
-                        <div class="controls">
+                        <div class="col-sm-10">
                             <label for="index_document">
                             <input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked">
                             '.get_lang('Yes').'
@@ -347,11 +347,11 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
             }
         }
         echo '<input type="hidden" name="lp_id"  value="' . $lpId. '" />';
-        echo '<div class="control-group">
-                    <label class="control-label">
+        echo '<div class="form-group">
+                    <label class="col-sm-2 control-label">
                     </label>
-                    <div class="controls">
-                        <button class="btn save" type="submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
+                    <div class="col-sm-10">
+                        <button class="btn btn-success" type="submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
                     </div>
                 </div>';
         echo '</form>';

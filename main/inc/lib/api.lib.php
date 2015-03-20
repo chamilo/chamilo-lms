@@ -3369,9 +3369,9 @@ function api_not_allowed($print_headers = false, $message = null)
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
+        $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'col-md-3 autocapitalize_off')); //new
+        $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')); //new
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn col-md-3'));
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
@@ -3383,7 +3383,7 @@ function api_not_allowed($print_headers = false, $message = null)
             $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
             $msg .= "<div style='display:none;'>";
         }
-        $msg .= '<div class="well_login">';
+        $msg .= '<div class="well">';
         $msg .= $form->return_form();
         $msg .='</div>';
         if (api_is_cas_activated()) {

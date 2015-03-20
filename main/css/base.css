@@ -5596,6 +5596,16 @@ ul.holder li.bit-box a.closebutton{
   font-weight: bold;
   padding: 10px;
 }
+#control-bottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+#control-bottom.well{
+  margin-bottom: 0;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
 .sidebar-scorm{

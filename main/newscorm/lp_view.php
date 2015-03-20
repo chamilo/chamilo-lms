@@ -340,6 +340,7 @@ if (!api_is_invitee()) {
     $progress_bar   = $_SESSION['oLP']->getProgressBar();
 }
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
+$navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom","display:none");
 $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 
 $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
@@ -463,6 +464,7 @@ if ($is_allowed_to_edit) {
         </div>
         <!-- end TOC layout -->
     </div>
+
     <!-- end left zone
     <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div>-->
     <!-- right zone -->
@@ -477,8 +479,11 @@ if ($is_allowed_to_edit) {
         }
     ?>
     </div>
+
     <!-- end right Zone -->
-</div></div></div>
+</div>
+<?php echo $navigation_bar_bottom; ?>
+    </div></div>
 
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).

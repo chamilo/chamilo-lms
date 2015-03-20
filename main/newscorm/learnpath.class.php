@@ -1898,9 +1898,15 @@ class learnpath
      * Gets the navigation bar for the learnpath display screen
      * @return	string	The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar() {
+    public function get_navigation_bar($idBar = null, $display=null) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
+        }
+        if(empty($idBar)){
+            $idBar='control-top';
+        }
+        if(empty($display)){
+            $display='display:block';
         }
         $navbar = null;
         $lp_id = $this->lp_id;
@@ -1908,7 +1914,7 @@ class learnpath
 
         if ($this->mode == 'fullscreen') {
             $navbar = '
-                  <div class="buttons well">
+                  <div id="'.$idBar.'" class="buttons well" style="'.$display.'">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
                     <a id="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a id="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
@@ -1917,7 +1923,7 @@ class learnpath
 
         } else {
             $navbar = '
-                  <div class="buttons well">
+                  <div id="'.$idBar.'" class="buttons well" style="'.$display.'">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
                     <a id="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a id="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>

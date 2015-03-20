@@ -5,33 +5,8 @@
  Requirements: JQuery 1.4.4, JQuery UI 1.8.7
  @author Alberto Torreblanca @albert1t0
  @author Julio Montoya Cleaning/fixing some code
+ @author Alex Aragon Cleaning/fixing code update
  **/
-
-function minipanel(){
-    // Construct mini panel
-    var panel = $('#lp_navigation_elem div:first').clone();
-
-    $(panel).attr('id', 'control');
-    $('#learning_path_main').append(panel);
-
-    $('#learning_path_main #control tr').after('<tr></tr>');
-    $('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
-    $('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
-    $('#learning_path_main #control tr:eq(1) #progress_img_full').attr('height','5');
-    $('#learning_path_main #control tr:eq(1) #progress_img_limit_middle').attr('height','5');
-    $('#learning_path_main #control tr:eq(1) #progress_img_empty').attr('height','5');
-    $('#learning_path_main #control tr:eq(1) #progress_bar_img_limit_right').attr('height','5');
-    $('#learning_path_main #control tr:eq(1) #progress_text').remove();
-    $('#learning_path_main #control tr:eq(1) div').css('width','');
-
-    $('#learning_path_main #control .buttons').attr('text-align','center');
-    $('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
-
-    $('#learning_path_main #control .buttons img').click(function(){
-        $('#learning_path_main #control tr:eq(1)').remove();
-        minipanel();
-    });
-}
 
 $(document).ready(function(){
 
@@ -41,7 +16,7 @@ $(document).ready(function(){
                 $('#learning_path_right_zone').toggleClass('total');
                 $(function(){
                     $('#learning_path_right_zone').slideToggle(300);
-                    minipanel();
+                    $('#control-bottom').toggle("slow");
                 });
         }
         );

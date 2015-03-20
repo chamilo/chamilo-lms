@@ -3,7 +3,7 @@
     <p class="lead">{{ user.complete_name }}</p>
     <p>
         <img src="{{ "instant_message.png" | icon }}" atl="{{ "Email" | get_lang }}">
-        {{ user.email}}  
+        {{ user.email}}
     </p>
     {% if user.user_is_online_in_chat != 0 %}
         <p>

@@ -21,7 +21,7 @@ $evaluation= Evaluation :: load($_GET['selecteval']);
 $newstudents = $evaluation[0]->get_not_subscribed_students();
 
 if (count($newstudents) == '0') {
-	header('Location: gradebook_view_result.php?nouser=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+	header('Location: gradebook_view_result.php?nouser=&selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
 	exit;
 }
 $add_user_form= new EvalForm(EvalForm :: TYPE_ADD_USERS_TO_EVAL,
@@ -50,7 +50,7 @@ if ( isset($_POST['submit_button']) ) {
 			$result->add();
 			}
 		}
-	header('Location: gradebook_view_result.php?adduser=&selecteval=' .Security::remove_XSS($_GET['selecteval']));
+	header('Location: gradebook_view_result.php?adduser=&selecteval=' .Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq());
 	exit;
 	} elseif ($_POST['firstLetterUser']) {
 		$firstletter= $_POST['firstLetterUser'];
@@ -61,10 +61,10 @@ if ( isset($_POST['submit_button']) ) {
 }
 
 $interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
-$interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']),
-	'name' => get_lang('ViewResult'
-));
+$interbreadcrumb[]= array(
+	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq()
+	'name' => get_lang('ViewResult')
+);
 Display :: display_header(get_lang('AddUserToEval'));
 if (isset ($_GET['erroroneuser'])){
 	Display :: display_warning_message(get_lang('AtLeastOneUser'),false);

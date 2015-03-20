@@ -1494,7 +1494,14 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_outbox', array('MessageManager', 'get_number_of_messages_sent'), array('MessageManager', 'get_message_data_sent'), 3, 20, 'DESC');
+        $table = new SortableTable(
+            'message_outbox',
+            array('MessageManager', 'get_number_of_messages_sent'),
+            array('MessageManager', 'get_message_data_sent'),
+            3,
+            20,
+            'DESC'
+        );
 
         $parameters['f'] = isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
         $table->set_additional_parameters($parameters);
@@ -1506,6 +1513,7 @@ class MessageManager
 
         $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages')));
         $html .= $table->return_table();
+
         return $html;
     }
 

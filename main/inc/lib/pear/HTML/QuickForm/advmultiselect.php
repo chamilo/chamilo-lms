@@ -1013,9 +1013,11 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         if ($this->selectAllCheckBox) {
             $strHtml .= '
                     <div class="col-sm-8">
-                    <label class="checkbox" >'.get_lang('SelectAll').'
+
+                    <label >'.get_lang('SelectAll').'
                     <input type="checkbox" class="advmultiselect_checkbox" id="'.$selectId.'_select_all'.'">
                     </label>
+
                     </div>
             ';
         }

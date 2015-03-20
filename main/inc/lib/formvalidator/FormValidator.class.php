@@ -185,7 +185,6 @@ EOT;
         $this->layout = $layout;
     }
 
-
     /**
      * Adds a text field to the form.
      * A trim-filter is attached to the field.

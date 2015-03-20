@@ -85,12 +85,12 @@ if ($_GET['f']=='social') {
 	}
 }
 
-$info_delete_outbox=array();
-$info_delete_outbox=explode(',',$_GET['form_delete_outbox']);
-$count_delete_outbox=(count($info_delete_outbox)-1);
+$info_delete_outbox =array();
+$info_delete_outbox = isset($_GET['form_delete_outbox']) ? explode(',',$_GET['form_delete_outbox']) : '';
+$count_delete_outbox = count($info_delete_outbox) - 1;
 
-if( trim($info_delete_outbox[0])=='delete' ) {
-	for ($i=1;$i<=$count_delete_outbox;$i++) {
+if (isset($info_delete_outbox[0]) && trim($info_delete_outbox[0])=='delete') {
+    for ($i = 1; $i <= $count_delete_outbox; $i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
 	}
     $message_box=get_lang('SelectedMessagesDeleted').
@@ -110,16 +110,12 @@ if (isset($_REQUEST['action'])) {
 $social_right_content = '';
 $userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
-    //Block Social Avatar
-    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'messages');
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="span9">';
-        $social_right_content .= '<div class="actions">';
-        $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
-        $social_right_content .= '</div>';
+
+    $social_right_content .= '<div class="actions">';
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .= '</div>';
-    $social_right_content .= '<div class="span9">';
 }
 //MAIN CONTENT
 if ($action == 'delete') {
@@ -146,16 +142,14 @@ if ($action == 'delete') {
     $social_right_content .= MessageManager::outbox_display();
 }
 
-if (api_get_setting('allow_social_tool') == 'true') {
-    $social_right_content .= '</div>';
-}
-
 $tpl = new Template(get_lang('ComposeMessage'));
+// Block Social Avatar
+SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_avatar_block', $social_avatar_block);
+
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('social/home.tpl');
+    $social_layout = $tpl->get_template('social/inbox.tpl');
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;

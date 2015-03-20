@@ -292,7 +292,7 @@ class GradebookUtils
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
             } else {
-                $modify_icons = '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . ' &amp;cidReq=' . $eval->get_course_code() . '&id_session='.$eval->getSessionId(). '">' .
+                $modify_icons = '<a href="gradebook_edit_eval.php?editeval=' . $eval->get_id() . '&cidReq=' . $eval->get_course_code() . '&id_session='.$eval->getSessionId(). '">' .
                     Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
             }
 

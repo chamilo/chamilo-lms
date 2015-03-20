@@ -54,6 +54,7 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $course_id = api_get_course_int_id();
 $_course = api_get_course_info();
+$group_id = api_get_group_id();
 
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
@@ -453,8 +454,6 @@ if (api_is_allowed_to_edit(false,true) OR
 }*/
 
 $htmlHeadXtra[] = AnnouncementManager::to_javascript();
-
-$group_id = api_get_group_id();
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);

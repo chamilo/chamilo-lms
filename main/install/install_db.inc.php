@@ -114,11 +114,9 @@ $installation_settings['{PLATFORM_AUTH_SOURCE}']            = PLATFORM_AUTH_SOUR
 $installation_settings['{ADMINLANGUAGE}']                   = $languageForm;
 $installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
-load_main_database($installation_settings);
-
 AddCourse::drop_course_tables();
 
-load_database_script('course.sql');
+load_main_database($installation_settings);
 
 $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);

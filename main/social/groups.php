@@ -217,11 +217,13 @@ if ($group_id != 0) {
         }
     }
 }
+
+$tpl = new Template();
+
 $create_thread_link = '';
 $userInfo = api_get_user_info(api_get_user_id(), true);
 if ($group_id != 0) {
-    //Block Social Avatar
-    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'groups', $group_id);
+    SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
 } else {
@@ -229,8 +231,8 @@ if ($group_id != 0) {
     if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
         $show_menu = $_GET['view'];
     }
-    //Block Social Avatar
-    $social_avatar_block = SocialManager::getSocialUserBlock($user_id, $show_menu, $group_id);
+    // Block Social Avatar
+    SocialManager::setSocialUserBlock($tpl, $user_id, $show_menu, $group_id);
     $social_menu_block = SocialManager::show_social_menu($show_menu, $group_id);
 }
 
@@ -877,9 +879,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQ
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 
-$tpl = new Template();
 $tpl->set_help('Groups');
-$tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 

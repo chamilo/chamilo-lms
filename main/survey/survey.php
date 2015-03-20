@@ -150,7 +150,7 @@ $survey_actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php
 echo '<div class="actions">'.$survey_actions.'</div>';
 
 if ($survey_data['survey_type'] == 0) {
-	echo '<div class="actionsbig">';
+	echo '<div class="well actions">';
 	echo '<a style="padding-left:0px;" href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=yesno&amp;survey_id='.$survey_id.'">'.Display::return_icon('yesno.png', get_lang('YesNo'), null, ICON_SIZE_BIG).'</a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=multiplechoice&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcua.png', get_lang('UniqueSelect'), null, ICON_SIZE_BIG).'<br /></a>';
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=multipleresponse&amp;survey_id='.$survey_id.'">'.Display::return_icon('mcma.png', get_lang('MultipleResponse'), null, ICON_SIZE_BIG).'</a>';
@@ -162,7 +162,7 @@ if ($survey_data['survey_type'] == 0) {
 	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=pagebreak&amp;survey_id='.$survey_id.'">'.Display::return_icon('page_end.png', get_lang('Pagebreak'), null, ICON_SIZE_BIG).'</a>';
 	echo '</div>';
 } else {
-	echo '<div class="actionsbig">';
+	echo '<div class="well actions">';
 	echo '<a style="padding-left:0px;" href="'.api_get_path(WEB_CODE_PATH).'survey/question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
 	echo '</div>';
 }

@@ -82,7 +82,6 @@ $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNet
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
 //Block Social Avatar
 $user_info    = UserManager::get_user_info_by_id($user_id);
-$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'friends');
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');
 
@@ -138,9 +137,9 @@ if (count($friends) == 0) {
 }
 $social_right_content .= '</div>';
 
-
 $tpl = new Template(get_lang('Social'));
-$tpl->assign('social_avatar_block', $social_avatar_block);
+SocialManager::setSocialUserBlock($tpl, $user_id, 'friends');
+
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
 

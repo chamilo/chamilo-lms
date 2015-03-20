@@ -222,8 +222,7 @@ if (is_array($personal_course_list)) {
     //to avoid repeted courses
     $course_list_code = array_unique_dimensional($course_list_code);
 }
-//Block Avatar Social
-$social_avatar_block = SocialManager::getSocialUserBlock($user_id, 'shared_profile');
+
 //Social Block Menu
 $social_menu_block = SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 
@@ -727,10 +726,10 @@ if ($show_full_profile) {
     }
 }
 
-
-
 $tpl = new Template(get_lang('Social'));
-$tpl->assign('social_avatar_block', $social_avatar_block);
+// Block Avatar Social
+SocialManager::setSocialUserBlock($tpl, $user_id, 'shared_profile');
+
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_wall_block', $social_wall_block);
 $tpl->assign('social_post_wall_block', $social_post_wall_block);

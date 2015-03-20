@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div id="message_ajax_reponse" class=""></div>
-            </div>-
+            </div>
         </div>
         <div class="row">
             {{ social_right_content}}

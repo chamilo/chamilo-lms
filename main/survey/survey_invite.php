@@ -235,14 +235,19 @@ if ($form->validate()) {
     $table_survey = Database :: get_course_table(TABLE_SURVEY);
 	// Counting the number of people that are invited
 	$sql = "SELECT * FROM $table_survey
-	        WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
+	        WHERE
+	        	c_id = $course_id AND
+	        	code = '".Database::escape_string($survey_data['code'])."'
+			";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$total_invited = $row['invited'];
     if ($total_invited > 0) {
-    	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+    	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.
+			$survey_data['answered'].'</a> ';
     	$message .= get_lang('HaveAnswered').' ';
-    	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
+    	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.
+			$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
     	Display::display_normal_message($message, false);
     	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));

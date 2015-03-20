@@ -63,8 +63,7 @@ if (isset($_GET['editres'])) {
         $resultedit[0],
         'edit_result_form',
         null,
-        api_get_self() . '?editres=' . $resultedit[0]->get_id(
-        ) . '&selecteval=' . $select_eval_edit
+        api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' . $select_eval_edit.'&'.api_get_cidreq()
     );
     if ($edit_res_form->validate()) {
 
@@ -76,18 +75,21 @@ if (isset($_GET['editres'])) {
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval_edit);
         $row_value = isset($values['score']) ? (float) $values['score'] : 0;
-        if ((!empty($row_value)) || ($row_value == 0)) {
+        if (!empty($row_value) || $row_value == 0) {
             $result->set_score(floatval(number_format($row_value, api_get_setting('gradebook_number_decimals'))));
         }
         $result->save();
         unset($result);
-        header('Location: gradebook_view_result.php?selecteval=' . $select_eval_edit . '&editresmessage=');
+        header('Location: gradebook_view_result.php?selecteval=' . $select_eval_edit . '&editresmessage=&'.api_get_cidreq());
         exit;
     }
 }
 $file_type = null;
 if (isset($_GET['import'])) {
-    $interbreadcrumb[] = array('url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']), 'name' => get_lang('ViewResult'));
+    $interbreadcrumb[] = array(
+        'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+        'name' => get_lang('ViewResult')
+    );
     $import_result_form = new DataForm(
         DataForm :: TYPE_IMPORT,
         'import_result_form',

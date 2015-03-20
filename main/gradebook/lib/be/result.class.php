@@ -64,6 +64,9 @@ class Result
         $this->created_at = $creation_date;
     }
 
+    /**
+     * @param float $score
+     */
     public function set_score($score)
     {
         $this->score = $score;

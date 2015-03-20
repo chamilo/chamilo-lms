@@ -1910,8 +1910,8 @@ class learnpath
             $navbar = '
                   <div class="buttons well">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
-                    <a class="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
-                    <a class="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
+                    <a id="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a id="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
                     <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>
                   </div>';
 
@@ -1919,8 +1919,8 @@ class learnpath
             $navbar = '
                   <div class="buttons well">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
-                    <a class="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
-                    <a class="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>
+                    <a id="scorm-previous" href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a id="scorm-next" href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>
                   </div>';
         }
         return $navbar;

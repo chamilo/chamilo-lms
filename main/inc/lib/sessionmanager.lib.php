@@ -2983,15 +2983,22 @@ class SessionManager
     public static function get_course_list_by_session_id(
         $session_id,
         $course_name = '',
-        $orderBy = null
+        $orderBy = null,
+        $getCount = false
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $session_id = intval($session_id);
 
+        $sqlSelect = "SELECT *";
+
+        if ($getCount) {
+            $sqlSelect = "SELECT COUNT(1)";
+        }
+
         // select the courses
-        $sql = "SELECT * FROM $tbl_course c
+        $sql = "$sqlSelect FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.code = src.course_code
 		        WHERE src.id_session = '$session_id' ";
@@ -3017,6 +3024,12 @@ class SessionManager
         $num_rows = Database::num_rows($result);
         $courses = array();
         if ($num_rows > 0) {
+            if ($getCount) {
+                $count = Database::fetch_array($result);
+
+                return intval($count[0]);
+            }
+
             while ($row = Database::fetch_array($result,'ASSOC'))	{
                 $courses[$row['id']] = $row;
             }

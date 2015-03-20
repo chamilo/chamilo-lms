@@ -22,7 +22,7 @@ $xajax->registerFunction('search_users');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $id_session = intval($_GET['id_session']);
-$sessionCoursesList = SessionManager::get_course_list_by_session_id($id_session);
+$countSessionCoursesList = SessionManager::get_course_list_by_session_id($id_session, null, null, true);
 
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
@@ -380,7 +380,7 @@ if ($ajax_search) {
             continue;
         }
 
-        if ($sessionUser['count'] != count($sessionCoursesList)) {
+        if ($sessionUser['count'] != $countSessionCoursesList) {
             unset($sessionUsersList[$sessionUser['user_id']]);
         }
     }

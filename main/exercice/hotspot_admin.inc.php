@@ -547,7 +547,7 @@ if ($modifyAnswers) {
     <form method="post" action="<?php echo $hotspot_admin_url; ?>" id="frm_exercise" name="frm_exercise">
         <table border="0" cellpadding="0" cellspacing="2" width="100%">
         <tr>
-            <td colspan="2" valign="bottom">
+            <td>
             <?php if ($answerType == HOT_SPOT_DELINEATION) { ?>
                 <button type="submit" class="btn minus" name="lessAnswers" value="lessAnswers" ><?php echo get_lang('LessOAR'); ?></button>
                 <button type="submit" class="btn plus" name="moreOARAnswers" value="moreOARAnswers" /><?php echo get_lang('MoreOAR'); ?></button>
@@ -559,7 +559,7 @@ if ($modifyAnswers) {
             </td>
         </tr>
         <tr>
-            <td valign="top">
+            <td>
                 <input type="hidden" name="formSent" value="1" />
                 <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
                 <table class="data_table">
@@ -645,11 +645,11 @@ if ($modifyAnswers) {
                                 }
                             ?>
                             <tr>
-                                <td valign="top">
+                                <td>
                                     <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
                                     <input type="hidden" name="reponse[<?php echo $i; ?>]" value="delineation" />
                                 </td>
-                                <td valign="top" align="left">
+                                <td>
                                     <b><?php echo get_lang('Delineation'); ?></b><br /><br />
                                     <?php echo get_lang('MinOverlap'); ?><br/><br/>
                                     <?php echo get_lang('MaxExcess'); ?><br/><br/>
@@ -717,7 +717,7 @@ if ($modifyAnswers) {
                                     <th></th>
                                 </tr>
                                 <tr>
-                                <td colspan="2" valign="top" align="left">
+                                <td colspan="2">
                                     <?php echo get_lang('LearnerHasNoMistake'); ?>
                                     <input type="hidden" name="reponse[<?php echo $i; ?>]" value="noerror" />
                                     <input type="hidden" name="weighting[<?php echo $i; ?>]" value="0" />
@@ -774,10 +774,10 @@ if ($modifyAnswers) {
                                 </tr>
                                 <?php } ?>
                                 <tr>
-                                    <td valign="top">
+                                    <td>
                                         <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
                                     </td>
-                                    <td valign="top" align="left">
+                                    <td>
                                         <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" size="20" />
                                     </td>
 
@@ -819,10 +819,11 @@ if ($modifyAnswers) {
                             $commentValue = isset($comment[$i]) ? $comment[$i] : null;
                             $responseValue = isset($reponse[$i]) ? $reponse[$i] : null;
                             ?>
-                            <td valign="top">
+                                <tr>
+                            <td>
                                 <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
                             </td>
-                            <td valign="top" align="left">
+                            <td>
                                 <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($responseValue); ?>" size="45" />
                             </td>
                             <?php
@@ -846,7 +847,7 @@ if ($modifyAnswers) {
                             <td>&nbsp;</td>
                             <td align="left" ><?php echo $return; ?></td>
                         <?php } ?>
-                            <td valign="top">
+                            <td>
                             <?php
                             if ($answerType == HOT_SPOT_DELINEATION) {
                                 if ($_SESSION['tmp_answers']['hotspot_type'][$i] == 'oar') { ?>
@@ -921,7 +922,7 @@ if ($modifyAnswers) {
                             <th>&nbsp;</th>
                         </tr>
                         <tr>
-                            <td  colspan="2" valign="top" align="left">
+                            <td  colspan="2">
                             <?php echo get_lang('LearnerHasNoMistake'); ?>
                             </td>
                             <td colspan="2"  align="left">
@@ -961,7 +962,7 @@ if ($modifyAnswers) {
                 </td>
             </tr>
             <tr>
-                <td colspan="2" valign="top" style="border-top:none">
+                <td>
                 <script>
                     <!--
                     // Version check based upon the values entered above in "Globals"

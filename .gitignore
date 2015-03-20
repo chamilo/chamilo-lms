@@ -49,6 +49,7 @@ plugin/bbb/config.vm.php
 main/cron/incoming/*
 
 # Stuff updated through composer
+composer.lock
 vendor
 web/assets/*
 

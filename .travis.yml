@@ -37,7 +37,7 @@ before_script:
   - cd ..
   - mysql -e 'create database chamilo'
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  - sudo chmod -R 0777 archive courses home main/upload/ main/default_course_documents/images main/inc/conf searchdb main/lang main/css
+  - sudo chmod -R 0777 archive courses home main/upload/ main/default_course_document/images main/inc/conf searchdb main/lang main/css
   - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="travis" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.0 /home/travis/build/chamilo/chamilo-lms
 
 script:

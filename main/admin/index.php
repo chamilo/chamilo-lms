@@ -97,7 +97,7 @@ if (api_is_platform_admin()) {
             <form method="get" class="form-inline" action="user_list.php">
                 <div class="form-group">
                 <input class="form-control" type="text" name="keyword" value="">
-                <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> '.get_lang('Search').'</button>
                 </div>
             </form>';
     $blocks['users']['search_form'] = $search_form;
@@ -144,7 +144,7 @@ if (api_is_platform_admin()) {
     $search_form = ' <form method="get" class="form-inline" action="course_list.php">
                             <div class="form-group">
 							<input class="form-control" type="text" name="keyword" value="">
-							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							<button class="btn btn-default" type="submit"><i class="fa fa-search"></i> '.get_lang('Search').'</button>
 							</div>
 	            		</form>';
     $blocks['courses']['search_form'] = $search_form;
@@ -196,7 +196,7 @@ if (api_is_platform_admin()) {
                             <div class="form-group">
 							<input class="form-control" type="text" name="search_field" value="" >
                             <input type="hidden" value="search_setting" name="category">
-							<button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+							<button class="btn btn-default" type="submit"><i class="fa fa-search"></i> '.get_lang('Search').'</button>
 							</div>
 	            		</form>';
 	$blocks['platform']['search_form'] = $search_form;
@@ -256,7 +256,7 @@ if (api_is_platform_admin()) {
 $search_form = ' <form method="GET" class="form-inline" action="session_list.php">
                     <div class="form-group">
                     <input class="form-control" type="text" name="keyword" value="">
-                    <button class="btn btn-default" type="submit">'.get_lang('Search').'</button>
+                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> '.get_lang('Search').'</button>
                     </div>
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;

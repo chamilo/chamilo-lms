@@ -570,6 +570,7 @@ $RecommendedNumberOfParticipants = "Número recomendado de participantes";
 $WCAGGoMenu = "Ir al menú";
 $WCAGGoContent = "Ir al contenido";
 $NoTimeLimits = "Sin límite de tiempo";
+$SignUp = "¡Regístrate!";
 $UserDeleted = "Los usuarios seleccionados han sido eliminados";
 $Tool = "Herramienta";
 $Choose = "Seleccione";

@@ -45,7 +45,5 @@ script:
   # pwd shows /home/travis/build/chamilo/chamilo-lms
   #- mysql chamilo -e 'show tables;'
   # Check the configuration file was written correctly (configuration.php should appear)
-  - ls
-  - cat php_errors.log
   - ls -la main/inc/conf/
   - cd tests && ../vendor/behat/behat/bin/behat -v

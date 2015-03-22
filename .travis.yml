@@ -35,7 +35,7 @@ before_script:
   #- chmod +x chash.phar
   #- sudo mv chash.phar /usr/local/bin/chash
   #- cd ..
-  - git clone -b no-php-version-chech --single-branch https://github.com/ywarnier/chamilo-cli-install.git
+  - git clone -b nophpversioncheck --single-branch https://github.com/ywarnier/chamilo-cli-install.git
   - cp chamilo-cli-install/chamilo-cli-installer.php main/install/
   - mysql -u root -e 'create database chamilo'
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml

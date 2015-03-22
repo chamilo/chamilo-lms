@@ -4,6 +4,16 @@ Feature: Users management as admin
   As an administrator
   I need to be able to create new users
 
+  Scenario: See the users list link on the admin page
+    Given I am a platform administrator
+    And I am on "/main/admin/index.php"
+    Then I should see "Users list"
+
+  Scenario: See the user creation link on the admin page
+    Given I am a platform administrator
+    And I am on "/main/admin/index.php"
+    Then I should see "Add a user"
+
   Scenario: Create a user with only basic info
     Given I am a platform administrator
     And I am on "/main/admin/user_add.php"

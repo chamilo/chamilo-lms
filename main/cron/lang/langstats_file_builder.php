@@ -30,7 +30,6 @@ $language_file = array(
 'index',
 'install',
 'learnpath',
-'link',
 'md_document',
 'registration',
 'reservation',

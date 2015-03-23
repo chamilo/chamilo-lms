@@ -61,77 +61,77 @@ foreach ($tools as $section => $items) {
 }
 echo '</tr></table>';
 
-$course_categories = Statistics::get_course_categories();
+$course_categories = Statistics::getCourseCategories();
 echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
 switch ($_REQUEST['report']) {
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {
-            $courses[$name] = Statistics::count_courses($code);
+            $courses[$name] = Statistics::countCourses($code);
         }
         // courses for each course category
-        Statistics::print_stats(get_lang('CountCours'), $courses);
+        Statistics::printStats(get_lang('CountCours'), $courses);
         break;
     case 'tools':
-        Statistics::print_tool_stats();
+        Statistics::printToolStats();
         break;
     case 'coursebylanguage':
-        Statistics::print_course_by_language_stats();
+        Statistics::printCourseByLanguageStats();
         break;
     case 'courselastvisit':
-        Statistics::print_course_last_visit();
+        Statistics::printCourseLastVisit();
         break;
     case 'users':
         // total amount of users
-        Statistics::print_stats(
+        Statistics::printStats(
             get_lang('NumberOfUsers'),
             array(
-                get_lang('Teachers') => Statistics::count_users(1, null, $_GET['count_invisible_courses']),
-                get_lang('Students') => Statistics::count_users(5, null, $_GET['count_invisible_courses'])
+                get_lang('Teachers') => Statistics::countUsers(1, null, $_GET['count_invisible_courses']),
+                get_lang('Students') => Statistics::countUsers(5, null, $_GET['count_invisible_courses'])
             )
         );
         $teachers = $students = array();
         $countInvisible = isset($_GET['count_invisible_courses']) ? $_GET['count_invisible_courses'] : null;
         foreach ($course_categories as $code => $name) {
             $name = str_replace(get_lang('Department'), "", $name);
-            $teachers[$name] = Statistics::count_users(1, $code, $countInvisible);
-            $students[$name] = Statistics::count_users(5, $code, $countInvisible);
+            $teachers[$name] = Statistics::countUsers(1, $code, $countInvisible);
+            $students[$name] = Statistics::countUsers(5, $code, $countInvisible);
         }
         // docents for each course category
-        Statistics::print_stats(get_lang('Teachers'), $teachers);
+        Statistics::printStats(get_lang('Teachers'), $teachers);
         // students for each course category
-        Statistics::print_stats(get_lang('Students'), $students);
+        Statistics::printStats(get_lang('Students'), $students);
         break;
     case 'recentlogins':
-        Statistics::print_recent_login_stats();
+        Statistics::printRecentLoginStats();
         break;
     case 'logins':
-        Statistics::print_login_stats($_GET['type']);
+        Statistics::printLoginStats($_GET['type']);
         break;
     case 'pictures':
-        Statistics::print_user_pictures_stats();
+        Statistics::printUserPicturesStats();
         break;
     case 'no_login_users':
-        Statistics::print_users_not_logged_in_stats();
+        Statistics::printUsersNotLoggedInStats();
         break;
     case 'zombies':
         ZombieReport::create(array('report' => 'zombies'))->display();
         break;
     case 'activities':
-        Statistics::print_activities_stats();
+        Statistics::printActivitiesStats();
         break;
     case 'messagesent':
-        $messages_sent = Statistics::get_messages('sent');
-        Statistics::print_stats(get_lang('MessagesSent'), $messages_sent);
+        $messages_sent = Statistics::getMessages('sent');
+        Statistics::printStats(get_lang('MessagesSent'), $messages_sent);
         break;
     case 'messagereceived':
-        $messages_received = Statistics::get_messages('received');
-        Statistics::print_stats(get_lang('MessagesReceived'), $messages_received);
+        $messages_received = Statistics::getMessages('received');
+        Statistics::printStats(get_lang('MessagesReceived'), $messages_received);
         break;
     case 'friends':
         // total amount of friends
-        $friends = Statistics::get_friends();
-        Statistics::print_stats(get_lang('CountFriends'), $friends);
+        $friends = Statistics::getFriends();
+        Statistics::printStats(get_lang('CountFriends'), $friends);
         break;
 }
 

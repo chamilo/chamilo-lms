@@ -1412,7 +1412,6 @@ class TestInternationalization extends UnitTestCase {
 			'index.inc.php',
 			'install.inc.php',
 			'learnpath.inc.php',
-			'link.inc.php',
 			'md_document.inc.php',
 			'messages.inc.php',
 			'registration.inc.php',

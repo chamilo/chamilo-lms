@@ -208,10 +208,10 @@ function validate_link(name, btn){
         </div>
     {% endif %}
     <div class="btn-group">
-        <a href="javascript:void(0)" onclick="expand_all();return false;" class="btn" title="{{'showall'|get_lang}}">
+        <a href="javascript:void(0)" onclick="expand_all();return false;" class="btn" title="{{'ShowAll'|get_lang}}">
             <i class="size-32 icon-expand"></i>
         </a>
-        <a href="javascript:void(0)" onclick="collapse_all();return false;" class="btn" title="{{'shownone'|get_lang}}">
+        <a href="javascript:void(0)" onclick="collapse_all();return false;" class="btn" title="{{'ShowNone'|get_lang}}">
             <i class="size-32 icon-collapse"></i>
         </a>
     </div>

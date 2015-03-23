@@ -6,7 +6,7 @@
  * @package chamilo.gradebook
  */
 
-$language_file = array('gradebook', 'exercice', 'link');
+$language_file = array('gradebook', 'exercice');
 //$cidReset = true;
 require_once '../inc/global.inc.php';
 

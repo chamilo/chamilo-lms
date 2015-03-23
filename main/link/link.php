@@ -22,7 +22,7 @@
 /*	INIT SECTION */
 
 // Language files that need to be included
-$language_file = array('link', 'admin');
+$language_file = array('admin');
 
 // Including libraries
 require_once '../inc/global.inc.php';

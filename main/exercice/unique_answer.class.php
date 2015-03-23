@@ -59,20 +59,18 @@ class UniqueAnswer extends Question
 
         if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
-            $editor_config['Width'] = '250';
-            $editor_config['Height'] = '110';
-            $comment_title = '<th width="50%" >' . get_lang('Comment') . '</th>';
-            $feedback_title = '<th width="50%" >' . get_lang('Scenario') . '</th>';
+            $comment_title = '<th>' . get_lang('Comment') . '</th>';
+            $feedback_title = '<th>' . get_lang('Scenario') . '</th>';
         } else {
-            $comment_title = '<th width="50%">' . get_lang('Comment') . '</th>';
+            $comment_title = '<th >' . get_lang('Comment') . '</th>';
         }
 
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
                     <th width="10">' . get_lang('Number') . '</th>
-                    <th width="10" >' . get_lang('True') . '</th>
-                    <th width="50%">' . get_lang('Answer') . '</th>
+                    <th>' . get_lang('True') . '</th>
+                    <th>' . get_lang('Answer') . '</th>
                         ' . $comment_title . '
                         ' . $feedback_title . '
                     <th width="10">' . get_lang('Weighting') . '</th>

@@ -370,8 +370,7 @@ class Statistics
             case 'month':
                 $months = api_get_months_long();
                 $period = get_lang('PeriodMonth');
-                $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'YEAR')." GROUP BY stat_date ORDER BY login_date ";
+                $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date DESC";
                 break;
             case 'hour':
                 $period = get_lang('PeriodHour');
@@ -385,25 +384,17 @@ class Statistics
                 $sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'WEEK')." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;
         }
-        $res_last_x = Database::query($sql_last_x);
-        $result_last_x = array();
-        while ($obj = Database::fetch_object($res_last_x)) {
-            $stat_date = $obj->stat_date;
-            switch ($type) {
-                case 'month':
-                    $stat_date = explode('-', $stat_date);
-                    $stat_date[1] = $months[$stat_date[1] - 1];
-                    $stat_date = implode(' ', $stat_date);
-                    break;
-                case 'day':
-                    $stat_date = $week_days[$stat_date];
-                    break;
+        if ($type !== 'month') {
+            $res_last_x = Database::query($sql_last_x);
+            $result_last_x = array();
+            while ($obj = Database::fetch_object($res_last_x)) {
+                $stat_date = ($type === 'day') ? $week_days[$obj->stat_date] : $obj->stat_date;
+                $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            $result_last_x[$stat_date] = $obj->number_of_logins;
+            Statistics::print_stats(get_lang('LastLogins') . ' (' . $period . ')', $result_last_x, true);
+            flush(); //flush web request at this point to see something already while the full data set is loading
+            echo '<br />';
         }
-        Statistics::print_stats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
-        flush(); //flush web request at this point to see something already while the full data set is loading
-        echo '<br />';
         $res = Database::query($sql);
         $result = array();
         while ($obj = Database::fetch_object($res)) {

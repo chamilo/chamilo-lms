@@ -332,7 +332,7 @@ switch ($action) {
         $attendanceController->attendance_calendar($action, $attendance_id, $calendar_id);
         break;
     case 'calendar_logins':
-        if (api_is_allowed_to_edit(null, true)) {
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $attendanceController->getAttendanceBaseInLogin(false, true);
         }
         break;

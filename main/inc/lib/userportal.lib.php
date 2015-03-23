@@ -1136,7 +1136,7 @@ class IndexManager
                                 'window_list.png',
                                 $session_box['title'],
                                 array('id' => 'session_img_' . $session_id),
-                                ICON_SIZE_LARGE
+                                ICON_SIZE_BIG
                             );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
@@ -1270,7 +1270,7 @@ class IndexManager
                                         'window_list.png',
                                         $session_box['title'],
                                         array('id' => 'session_img_' . $session_id),
-                                        ICON_SIZE_LARGE
+                                        ICON_SIZE_BIG
                                     );
 
                                 if (api_is_drh()) {

@@ -1,6 +1,6 @@
 <form id="form_advanced_subscription_admin" class="form-search" method="post" action="/plugin/advanced_subscription/src/admin_view.php" name="form_advanced_subscription_admin">
     <div class="row">
-        <div class="span6">
+        <div class="col-md-6">
             <p class="text-title-select">{{ 'SelectASession' | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
             <select id="session-select" name="s">
                 <option value="0">
@@ -19,7 +19,7 @@
             <p>{{ session.target }}</p>
 
         </div>
-        <div class="span6">
+        <div class="col-md-6">
             <p class="separate-badge">
                 <span class="badge badge-dis">{{ session.vacancies }}</span>
                 {{ "Vacancies" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</p>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="span12">
+        <div class="col-md-12">
             <div class="student-list-table">
                 <table id="student_table" class="table table-striped">
                     <tbody>

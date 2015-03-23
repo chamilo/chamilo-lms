@@ -1117,7 +1117,7 @@ switch ($action) {
 							<div><input type="text" id="login" size="15" value="" disabled="disabled" /></div>
 							<div><label><?php echo get_lang('UserPassword'); ?></label></div>
 							<div><input type="password" id="password" size="15" value="" disabled="disabled" /></div>
-							<div><button class="btn" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
+							<div><button class="btn btn-default" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button></div>
 						</form>
 					</div>
 

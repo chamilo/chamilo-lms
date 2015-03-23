@@ -241,7 +241,7 @@ if ($_POST['formSent']) {
 			fputs($fp,"</Sessions>\n");
 		fclose($fp);
 
-		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
 	}
 }
 

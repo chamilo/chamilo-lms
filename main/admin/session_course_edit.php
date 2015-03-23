@@ -115,53 +115,53 @@ Display::display_header($tool_name);
 $tool_name = get_lang('ModifySessionCourse');
 api_display_tool_title($tool_name);
 ?>
+<div class="session-course-edit">
+
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo Security::remove_XSS($_GET['page']) ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
-<table border="0" cellpadding="5" cellspacing="0" width="600px">
-<?php
-if(!empty($errorMsg)) {
-?>
-<tr>
-  <td colspan="2">
-<?php
-	Display::display_normal_message($errorMsg);
-?>
-  </td>
-</tr>
-<?php
-}
-?>
 
-<tr>
-  <td width="25%" valign = "top"><?php echo get_lang("CoachName") ?>&nbsp;&nbsp;</td>
-  <td width="70%">
-    <select name="id_coach[]" style="width:450px;" multiple="multiple" size="7">
-	    <option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
-	    <option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>>
-            <?php echo get_lang('None') ?>
-        </option>
-<?php
-foreach($coaches as $enreg) {
-?>
-<option value="<?php echo $enreg['user_id']; ?>" <?php if(((is_array($arr_infos) && in_array($enreg['user_id'], $arr_infos)))) echo 'selected="selected"'; ?>>
-    <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?>
-</option>
-<?php
-}
-unset($coaches);
-?>
-  </select>
-    </td>
-</tr>
-<tr>
-  <td>&nbsp;</td>
-  <td>
-      <button class="save" type="submit" name="name" value="<?php echo get_lang('AssignCoach') ?>">
-          <?php echo get_lang('AssignCoach') ?>
-      </button>
-</td>
-</tr>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="title"></div>
+        <?php
+            if(!empty($errorMsg)) {
+                Display::display_normal_message($errorMsg);
+            }
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <?php echo get_lang("CoachName") ?>
+    </div>
+    <div class="col-md-8">
+
+        <select name="id_coach[]" class="form-control">
+            <option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
+            <option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>>
+                <?php echo get_lang('None') ?>
+            </option>
+            <?php
+            foreach($coaches as $enreg) {
+                ?>
+                <option value="<?php echo $enreg['user_id']; ?>" <?php if(((is_array($arr_infos) && in_array($enreg['user_id'], $arr_infos)))) echo 'selected="selected"'; ?>>
+                    <?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?>
+                </option>
+            <?php
+            }
+            unset($coaches);
+            ?>
+        </select>
+        <div class="control">
+        <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('AssignCoach') ?>">
+            <i class="fa fa-plus"></i>
+            <?php echo get_lang('AssignCoach') ?>
+        </button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
 </form>
+</div>
 <?php
 Display::display_footer();

@@ -5606,6 +5606,13 @@ ul.holder li.bit-box a.closebutton{
 #control-bottom.well{
   margin-bottom: 0;
 }
+.session-course-edit .control{
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+#multiple-add-session .control-course{
+  text-align: center;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
 .sidebar-scorm{

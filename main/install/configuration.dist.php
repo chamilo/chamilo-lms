@@ -318,3 +318,6 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['gravatar_enabled'] = true;
 // If Gravatar is enabled, tells which type of picture we want (default is "mm"). Options: mm | identicon | monsterid | wavatar
 //$_configuration['gravatar_type'] = 'mm';
+// Course log - Default columns to hide
+//$_configuration['course_log_hide_columns'] = array(1, 9);
+

@@ -35,15 +35,20 @@ class MultipleAnswerCombination extends Question
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
         $obj_ex = $_SESSION['objExercise'];
-        $html = '<table class="data_table">
-					<tr style="text-align: center;">
-						<th width="10px">' . get_lang('Number') . '</th>
-						<th width="10px">' . get_lang('True') . '</th>
-						<th width="50%">' . get_lang('Answer') . '</th>';
-        // show column comment when feedback is enable
-        $html .='<th>' . get_lang('Comment') . '</th>';
+
+        $html = '<table class="table table-striped table-hover">';
+        $html .= '<thead>';
+        $html .= '<tr>';
+        $html .= '<th width="10">' . get_lang('Number') . '</th>';
+        $html .= '<th width="10">' . get_lang('True') . '</th>';
+        $html .= '<th width="50%">' . get_lang('Comment') . '</th>';
+        $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
         $html .= '</tr>';
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $html .= '</thead>';
+        $html .= '<tbody>';
+
+        $form->addHeader(get_lang('Answers'));
+        $form->addHtml($html);
 
         $defaults = array();
         $correct = 0;
@@ -66,6 +71,8 @@ class MultipleAnswerCombination extends Question
         }
 
         for ($i = 1; $i <= $nb_answers; ++$i) {
+            $form->addHtml('<tr>');
+
             if (is_object($answer)) {
                 $defaults['answer[' . $i . ']'] = $answer->answer[$i];
                 $defaults['comment[' . $i . ']'] = $answer->comment[$i];
@@ -131,16 +138,15 @@ class MultipleAnswerCombination extends Question
             //only 1 answer the all deal ...
             //$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 
-            $form->addElement('html', '</tr>');
+            $form->addHtml('</tr>');
         }
 
-        $form->addElement('html', '</table>');
-        $form->addElement('html', '<br />');
+        $form->addElement('html', '</tbody></table>');
 
         $form->add_multiple_required_rule($boxes_names, get_lang('ChooseAtLeastOneCheckbox'), 'multiple_required');
 
         //only 1 answer the all deal ...
-        $form->addElement('text', 'weighting[1]', get_lang('Score'), array('class' => "span1", 'value' => '10'));
+        $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
         $navigator_info = api_get_navigator();
 
@@ -152,17 +158,20 @@ class MultipleAnswerCombination extends Question
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
                 $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
             } else {
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
                 // setting the save button here and not in the question class.php
+                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+                $form->addButtonSave($text, 'submitQuestion');
             }
+
+            $renderer->setElementTemplate(
+                '<div class="form-group"><div class="col-sm-offset-2 col-sm-10">{element}',
+                'lessAnswers'
+            );
+            $renderer->setElementTemplate('{element}', 'moreAnswers');
+            $renderer->setElementTemplate('{element}</div></div>', 'submitQuestion');
         }
 
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
-        $form->addElement('html', '</div></div>');
         $defaults['correct'] = $correct;
 
         if (!empty($this->id)) {

@@ -229,7 +229,7 @@ class MultipleAnswerTrueFalse extends Question
                 // setting the save button here and not in the question class.php
                 $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
                 $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
-                $buttonGroup[] = $form->addButtonSave($text, 'SubmitQuestion', true);
+                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
             }
 
             $form->addGroup($buttonGroup);

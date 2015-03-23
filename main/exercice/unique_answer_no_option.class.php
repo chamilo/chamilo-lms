@@ -268,9 +268,9 @@ class UniqueAnswerNoOption extends Question
                 $buttonGroup[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
             } else {
                 //setting the save button here and not in the question class.php
-                $buttonGroup[] = $form->addButtonDelete('lessAnswers', get_lang('LessAnswer'), true);
-                $buttonGroup[] = $form->addButtonCreate( 'moreAnswers', get_lang('PlusAnswer'), true);
-                $buttonGroup[] = $form->addButtonSave('submitQuestion', $text, true);
+                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
+                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
             }
 
             $form->addGroup($buttonGroup);

@@ -105,7 +105,7 @@ echo Display::input('hidden', 'form_sent', '1');
             <td colspan="3" align="center">
                 <br />
                 <?php
-                echo '<button class="save" type="submit"" >'.
+                echo '<button class="btn btn-success" type="submit"" >'.
                     get_lang('SubscribeTeachersToSession').'</button>';
                 ?>
             </td>

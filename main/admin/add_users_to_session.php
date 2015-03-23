@@ -563,32 +563,22 @@ if (!empty($errorMsg)) {
 	Display::display_normal_message($errorMsg); //main API
 }
 ?>
-<div class="row">
-    <div class="span5">
+<div id="multiple-add-session" class="row">
+    <div class="col-md-5">
         <div class="multiple_select_header">
-            <b><?php echo get_lang('UserListInPlatform') ?> :</b>
-
-        <?php if ($add_type=='multiple') { ?>
-            <?php echo get_lang('FirstLetterUser'); ?> :
-                <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
-                <option value = "%">--</option>
-                <?php
-                    echo Display :: get_alphabet_options();
-                ?>
-                </select>
-        <?php } ?>
+            <label><?php echo get_lang('UserListInPlatform') ?> :</label>
         </div>
             <div id="content_source">
             <?php
             if (!($add_type=='multiple')) {
               ?>
-              <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
+              <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" class="form-control" />
               <div id="ajax_list_users_single"></div>
               <?php
             } else {
             ?>
             <div id="ajax_list_users_multiple">
-            <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" class="span5">
+            <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" class="form-control">
               <?php
               foreach ($nosessionUsersList as $uid => $enreg) {
               ?>
@@ -616,13 +606,25 @@ if (!empty($errorMsg)) {
         </div>
     </div>
 
-    <div class="span2">
-        <div style="padding-top:54px;width:auto;text-align: center;">
+    <div class="col-md-3">
+        <?php if ($add_type=='multiple') { ?>
+            <?php echo get_lang('FirstLetterUser'); ?> :
+
+            <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
+                <option value = "%">--</option>
+                <?php
+                echo Display :: get_alphabet_options();
+                ?>
+            </select>
+            <br />
+            <br />
+        <?php } ?>
+        <div class="control-course">
         <?php
             if ($ajax_search) {
             ?>
               <button class="btn btn-primary" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
-                  <i class="fa fa-chevron-right"></i>
+                  <i class="fa fa-chevron-left"></i>
               </button>
             <?php
         } else {
@@ -630,7 +632,8 @@ if (!empty($errorMsg)) {
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                     <i class="fa fa-chevron-right"></i>
                 </button>
-                <br /><br />
+                <br />
+                <br />
                 <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))">
                     <i class="fa fa-chevron-left"></i>
                 </button>
@@ -649,11 +652,10 @@ if (!empty($errorMsg)) {
 		?>
     </div>
 
-    <div class="span5">
-        <div class="multiple_select_header">
-            <b><?php echo get_lang('UserListInSession') ?> :</b>
-        </div>
-        <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
+    <div class="col-md-4">
+        <label><?php echo get_lang('UserListInSession') ?> :</label>
+
+        <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="form-control">
         <?php
         foreach ($sessionUsersList as $enreg) {
         ?>

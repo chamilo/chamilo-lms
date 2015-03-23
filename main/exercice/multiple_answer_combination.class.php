@@ -153,23 +153,35 @@ class MultipleAnswerCombination extends Question
         global $text, $class;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
+            $buttonGroup = [];
+
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+                $buttonGroup[] = $form->createElement(
+                    'submit',
+                    'lessAnswers',
+                    get_lang('LessAnswer'),
+                    'class="btn minus"'
+                );
+                $buttonGroup[] = $form->createElement(
+                    'submit',
+                    'moreAnswers',
+                    get_lang('PlusAnswer'),
+                    'class="btn plus"'
+                );
+                $buttonGroup[] = $form->createElement(
+                    'submit',
+                    'submitQuestion',
+                    $text,
+                    'class="' . $class . '"'
+                );
             } else {
                 // setting the save button here and not in the question class.php
-                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
-                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
-                $form->addButtonSave($text, 'submitQuestion');
+                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
+                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
             }
 
-            $renderer->setElementTemplate(
-                '<div class="form-group"><div class="col-sm-offset-2 col-sm-10">{element}',
-                'lessAnswers'
-            );
-            $renderer->setElementTemplate('{element}', 'moreAnswers');
-            $renderer->setElementTemplate('{element}</div></div>', 'submitQuestion');
+            $form->addGroup($buttonGroup);
         }
 
         $defaults['correct'] = $correct;

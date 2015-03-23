@@ -55,23 +55,26 @@ class UniqueAnswerNoOption extends Question
         if ($obj_ex->selectFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
-            $comment_title = '<th width="500" >' . get_lang('Comment') . '</th>';
-            $feedback_title = '<th width="350px" >' . get_lang('Scenario') . '</th>';
+            $comment_title = '<th width="50%" >' . get_lang('Comment') . '</th>';
+            $feedback_title = '<th width="50%" >' . get_lang('Scenario') . '</th>';
         } else {
-            $comment_title = '<th>' . get_lang('Comment') . '</th>';
+            $comment_title = '<th width="50%">' . get_lang('Comment') . '</th>';
         }
 
-        $html = '<table class="data_table">
-				<tr style="text-align: center;">
-					<th width="10px">' . get_lang('Number') . '</th>
-					<th width="10px" >' . get_lang('True') . '</th>
-					<th width="50%">' . get_lang('Answer') . '</th>
-					' . $comment_title . '
-					' . $feedback_title . '
-					<th width="60px">' . get_lang('Weighting') . '</th>
-				</tr>';
+        $html = '<table class="table table-striped table-hover">';
+        $html .= '<thead>';
+        $html .= '<tr>';
+        $html .= '<th>' . get_lang('Number') . '</th>';
+        $html .= '<th>' . get_lang('True') . '</th>';
+        $html .= '<th width="50%">' . get_lang('Answer') . '</th>';
+        $html .= $comment_title . $feedback_title;
+        $html .= '<th>' . get_lang('Weighting') . '</th>';
+        $html .= '</tr>';
+        $html .= '</thead>';
+        $html .= '<tbody>';
 
-        $form->addElement('label', get_lang('Answers') . '<br /> <img src="../img/fill_field.png">', $html);
+        $form->addHeader(get_lang('Answers'));
+        $form->addHtml($html);
 
         $defaults = array();
         $correct = 0;
@@ -204,7 +207,7 @@ class UniqueAnswerNoOption extends Question
         //Adding the "I don't know" question answer
         //if (empty($this -> id)) {
         $i = 666;
-        $form->addElement('html', '<tr>');
+        $form->addHtml('<tr>');
 
         $defaults['answer[' . $i . ']'] = get_lang('DontKnow');
         $defaults['weighting[' . $i . ']'] = 0;
@@ -247,38 +250,31 @@ class UniqueAnswerNoOption extends Question
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
-        $form->addElement(
-            'text',
-            'weighting[' . $i . ']',
-            null,
-            array('class' => "span1", 'value' => '0', 'readonly' => 'readonly')
-        );
-        $form->addElement('html', '</tr>');
+        $form->addText("weighting[$i]", null, false, ['value' => 0, 'readonly' => 'readonly']);
+        
+        $form->addHTml('</tr>');
+        $form->addHtml('</tbody></table>');
 
-
-        $form->addElement('html', '</table>');
-        $form->addElement('html', '<br />');
         $navigator_info = api_get_navigator();
+
+        $buttonGroup = [];
 
         global $text, $class;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+                $buttonGroup[] = $form->createElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                $buttonGroup[] = $form->createElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                $buttonGroup[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
             } else {
                 //setting the save button here and not in the question class.php
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+                $buttonGroup[] = $form->addButtonDelete('lessAnswers', get_lang('LessAnswer'), true);
+                $buttonGroup[] = $form->addButtonCreate( 'moreAnswers', get_lang('PlusAnswer'), true);
+                $buttonGroup[] = $form->addButtonSave('submitQuestion', $text, true);
             }
-        }
-        $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
-        $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
-        $renderer->setElementTemplate('{element}&nbsp;', 'moreAnswers');
 
-        $form->addElement('html', '</div></div>');
+            $form->addGroup($buttonGroup);
+        }
 
         //We check the first radio button to be sure a radio button will be check
         if ($correct == 0) {

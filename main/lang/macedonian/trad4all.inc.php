@@ -148,6 +148,7 @@ $ExportShort = "Извези како SCORM";
 $WCAGGoMenu = " Мени Goto";
 $WCAGGoContent = "Содржина на Goto";
 $NoTimeLimits = "Нема временски ограничувања";
+$UserDeleted = "Корисникот е избришан";
 $Tool = "алатка";
 $Choose = "Избери";
 $AnnEmpty = "Списокот со Известувања бил избришан";

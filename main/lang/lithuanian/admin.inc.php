@@ -302,9 +302,7 @@ $LimitUsersListDefaultMaxComment = "In the screens allowing addition of users to
 $Plugins = "Įskiepiai";
 $HideDLTTMarkupComment = "Hide the [= ... =] markup when a language variable is not translated";
 $Info = "informacija";
-$UserAdded = "Vartotojas įtrauktas";
 $NoSearchResults = "Paieškos rezultatų nėra";
-$UserDeleted = "Vartotojas ištrintas";
 $NoClassesForThisCourse = "Šiame kurse nėra priregistruotų klasių";
 $CourseUsage = "Kurso naudojimas";
 $NoCoursesForThisUser = "Šis vartotojas nepriregistruotas prie kurso";

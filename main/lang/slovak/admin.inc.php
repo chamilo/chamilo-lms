@@ -348,9 +348,7 @@ $LimitUsersListDefaultMaxComment = "V obrazovkách, ktoré umožňujú pridávan
 $Plugins = "Zásuvné moduly";
 $HideDLTTMarkupComment = "Skryť značky [=...=] keď  premenná jazyka nie je preložená";
 $Info = "Informácia";
-$UserAdded = "Pužívateľ bol pridaný";
 $NoSearchResults = "Žiadne výsledky vyhľadávania";
-$UserDeleted = "Používateľ bol zmazaný";
 $NoClassesForThisCourse = "Nie sú tu zaradené žiadne triedy do tohto kurzu";
 $CourseUsage = "Štatistika kurzu";
 $NoCoursesForThisUser = "Tento používateľ nie je zaradený v žiadnom kurze";

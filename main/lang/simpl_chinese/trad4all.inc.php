@@ -202,6 +202,7 @@ $ExportShort = "以SCORM格式导出";
 $WCAGGoMenu = "至菜单";
 $WCAGGoContent = "至内容";
 $NoTimeLimits = "无时间限制";
+$UserDeleted = "用户已删除";
 $Tool = "工具";
 $Choose = "选择";
 $AnnEmpty = "通知列表已经被删除";

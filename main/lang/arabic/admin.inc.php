@@ -317,9 +317,7 @@ $LimitUsersListDefaultMaxComment = " (في الشاشات التي تسمح بإ
 $Plugins = " إدخالات";
 $HideDLTTMarkupComment = " [= ... =]  أخف العلامة عندما لايترجم متغير اللغة";
 $Info = " معلومات";
-$UserAdded = " لقد تم إضافة المستخدم";
 $NoSearchResults = " لم يتم العثور على نتائج للبحث";
-$UserDeleted = " لقد تم حذف المستخدم";
 $NoClassesForThisCourse = " و لا فصل مسجل في هذا المقرر";
 $CourseUsage = " استخدام المقرر";
 $NoCoursesForThisUser = " هذا المستخدم غير مسجل في أي مقرر";

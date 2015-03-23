@@ -92,7 +92,6 @@ $Certificates = "Certificates";
 $Certificate = "Certificate";
 $ChooseUser = "Choose users for this evaluation";
 $FirstLetter = "First letter of lastname";
-$UserAdded = "The user is added";
 $ResultEdited = "Result edited";
 $ChooseFormat = "PDF report";
 $OutputFileType = "Output file type";

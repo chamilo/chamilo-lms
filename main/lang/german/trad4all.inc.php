@@ -234,6 +234,7 @@ $ExportShort = "SCORM-Export";
 $WCAGGoMenu = "Gehe zu Menü";
 $WCAGGoContent = "Gehe zu Inhalt";
 $NoTimeLimits = "Keine Zeitbeschränkung";
+$UserDeleted = "Benutzer wurde gelöscht";
 $Tool = "Werkzeug";
 $Choose = "Wählen";
 $SearchXapianModuleNotInstalled = "Das Xapian Such-Modul ist nicht installiert";

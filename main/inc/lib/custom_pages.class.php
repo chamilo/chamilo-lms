@@ -53,7 +53,7 @@ class CustomPages
             include($file);
             exit;
         } else {
-            error_log('CustomPages::displayPage : could not read file ' . $file_name);
+            error_log('CustomPages::displayPage : could not read file ' . $file);
         }
     }
 

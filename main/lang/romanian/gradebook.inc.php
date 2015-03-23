@@ -89,7 +89,6 @@ $Certificates = "Certificate";
 $Certificate = "Certificat";
 $ChooseUser = "Alege utilizatorii pentru aceasta evaluare";
 $FirstLetter = "Prima litera a numelui";
-$UserAdded = "Utilizatorul a fost adaugat";
 $ResultEdited = "Rezultat adaugat";
 $ChooseFormat = "Alege formatul";
 $OutputFileType = "Tipul fisierului de iesire";

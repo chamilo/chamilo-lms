@@ -92,7 +92,6 @@ $Certificates = "Certificaten";
 $Certificate = "Certificaat";
 $ChooseUser = "Kies gebruikers voor deze evaluatie.";
 $FirstLetter = "Eerste letter van de achternaam";
-$UserAdded = "De gebruiker is toegevoegd.";
 $ResultEdited = "De resultaten werden gewijzigd.";
 $ChooseFormat = "Kies het formaat.";
 $OutputFileType = "Bestandsformaat van de output";

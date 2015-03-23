@@ -348,9 +348,7 @@ $LimitUsersListDefaultMaxComment = "V primeru, da je nefiltriran seznam v podro�
 $Plugins = "Vti훾niki";
 $HideDLTTMarkupComment = "Skrij [= ... =] ozna훾evanje v primeru, da jezikovni prevod ne obstaja";
 $Info = "informacija";
-$UserAdded = "Uporabnik je bil dodan";
 $NoSearchResults = "Iskanje se je zaklju훾ilo brez rezultatov";
-$UserDeleted = "Uporabnik je bil odstranjen";
 $NoClassesForThisCourse = "Tu ni nobenih razredov vpisanih v ta te훾aj.";
 $CourseUsage = "Raba te훾aja";
 $NoCoursesForThisUser = "Ta uporabnik ni vpisan v te훾aj";

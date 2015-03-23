@@ -321,9 +321,7 @@ $LimitUsersListDefaultMaxComment = "In the screens allowing addition of users to
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Hide the [= ... =] markup when a language variable is not translated";
 $Info = "Πληροφορίες";
-$UserAdded = "Ο χρήστης προστέθηκε";
 $NoSearchResults = "Δεν υπάρχουν αποτελέσματα";
-$UserDeleted = "Ο χρήστης διαγράφηκε";
 $NoClassesForThisCourse = "Δεν υπάρχουν τάξεις εγγεγραμένες στο μάθημα";
 $CourseUsage = "Χρήση μαθήματος";
 $NoCoursesForThisUser = "Ο χρήστης δεν είναι εγγεγραμμένος σε μάθημα";

@@ -124,6 +124,7 @@ $ExportShort = "SCORM-eksporto";
 $WCAGGoMenu = "Iri al la menuo";
 $WCAGGoContent = "Iri al la enhavo";
 $NoTimeLimits = "Sen templimo";
+$UserDeleted = "La uzulo estas forigita";
 $Tool = "modulo";
 $Choose = "Elektu";
 $AnnEmpty = "La anoncoj estas forigitaj";

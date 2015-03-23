@@ -324,9 +324,7 @@ $LimitUsersListDefaultMaxComment = "In schermen waar gebruikers kunnen toegevoeg
 $Plugins = "Plug-ins";
 $HideDLTTMarkupComment = "Verberg de [=...=] opmaak wanneer de taalvariabele niet vertaald is";
 $Info = "informatie";
-$UserAdded = "De gebruiker is toegevoegd.";
 $NoSearchResults = "Geen zoekresultaten";
-$UserDeleted = "De gebruiker is verwijderd.";
 $NoClassesForThisCourse = "Er zijn geen klassen ingeschreven in deze cursus";
 $CourseUsage = "Cursusgebruik";
 $NoCoursesForThisUser = "Deze gebruiker is in geen enkele cursus ingeschreven";

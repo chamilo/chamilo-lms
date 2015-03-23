@@ -174,6 +174,7 @@ $ExportShort = "تصدير إلى سكورم";
 $WCAGGoMenu = " الذهاب للقائمة";
 $WCAGGoContent = " الذهاب للمحتوى";
 $NoTimeLimits = " لا حدود للوقت";
+$UserDeleted = " لقد تم حذف المستخدم";
 $Tool = "  أداة";
 $Choose = " اختر";
 $AnnEmpty = "لقد تم مسح قائمة الإعلانات";

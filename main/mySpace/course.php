@@ -279,6 +279,12 @@ function get_courses($from, $limit, $column, $direction)
                 $data['title'],
                 $courseInfo['course_public_url'].'?id_session='.$sessionId
             );
+
+            $attendanceLink = Display::url(
+                Display::return_icon('attendance_list.png', get_lang('Attendance'), array(), ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&action=calendar_logins'
+            );
+
             $courseList[] = array(
                 $title,
                 $countStudents,
@@ -288,6 +294,7 @@ function get_courses($from, $limit, $column, $direction)
                 is_null($avgScoreInCourse) ? '-' : $avgScoreInCourse,
                 is_null($messagesInCourse) ? '-' : $messagesInCourse,
                 is_null($assignmentsInCourse) ? '-' : $assignmentsInCourse,
+                $attendanceLink,
                 $courseIcon
             );
         }
@@ -313,7 +320,8 @@ $table->set_header(4, get_lang('AvgStudentsProgress').Display :: return_icon('in
 $table->set_header(5, get_lang('AvgCourseScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 $table->set_header(6, get_lang('AvgMessages'), false);
 $table->set_header(7, get_lang('AvgAssignments'), false);
-$table->set_header(8, get_lang('Details'), false);
+$table->set_header(8, get_lang('Attendances'), false);
+$table->set_header(9, get_lang('Details'), false);
 
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));

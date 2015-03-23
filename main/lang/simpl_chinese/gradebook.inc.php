@@ -92,7 +92,6 @@ $Certificates = "证书";
 $Certificate = "证书";
 $ChooseUser = "选择评测的学生";
 $FirstLetter = "名字的第一个字母";
-$UserAdded = "用户已添加";
 $ResultEdited = "结果已修改";
 $ChooseFormat = "PDF 报表";
 $OutputFileType = "输出文件类型";

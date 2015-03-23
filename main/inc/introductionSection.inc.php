@@ -296,7 +296,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             $thematic_description_html .=
                 '<div class="col-md-6 items-progress">
                                                     <div class="topics">'.$subTitle2.'</div>
-                                                    <p class="title_topics">'.$thematic_info['title'].'</p>
+                                                    <p class="title_topics">'.$thematic_info2['title'].'</p>
                                                     <p class="date">'.$thematic_advance_info2['start_date'].'</p>
                                                     <h3 class="title">'.$thematic_advance_info2['content'].'</h3>
                                                     <p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>

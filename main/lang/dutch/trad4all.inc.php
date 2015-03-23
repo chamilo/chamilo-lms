@@ -239,6 +239,7 @@ $AllDay = "Hele dag";
 $WCAGGoMenu = "Ga naar het menu";
 $WCAGGoContent = "Ga naar de inhoud";
 $NoTimeLimits = "Geen beperking in tijd";
+$UserDeleted = "De gebruiker is verwijderd.";
 $Tool = "module";
 $Choose = "Kies";
 $SearchXapianModuleNotInstalled = "The Xapian zoekmodule is niet geïnstalleerd";

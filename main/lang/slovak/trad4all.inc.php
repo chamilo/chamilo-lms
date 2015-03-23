@@ -555,6 +555,7 @@ $AllDay = "Celý deň";
 $WCAGGoMenu = "Choď do menu";
 $WCAGGoContent = "Choď na obsah";
 $NoTimeLimits = "Bez časových obmedzení";
+$UserDeleted = "Používateľ bol zmazaný";
 $Tool = "nástroj";
 $Choose = "Vybrať";
 $SearchXapianModuleNotInstalled = "Vyhľadávací modul Xapian nie je nainštalovaný";

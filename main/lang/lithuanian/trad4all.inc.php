@@ -153,6 +153,7 @@ $ExportShort = "Eksportuoti SCORM";
 $WCAGGoMenu = "Meniu";
 $WCAGGoContent = "Turinys";
 $NoTimeLimits = "Laiko apribojimų nėra";
+$UserDeleted = "Vartotojas ištrintas";
 $Tool = "įrankis";
 $Choose = "Pasirinkti";
 $AnnEmpty = "Skelbimų sąrašas ištrintas";

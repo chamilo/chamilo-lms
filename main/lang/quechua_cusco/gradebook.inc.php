@@ -91,7 +91,6 @@ $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Seleccionar usuarios para esta evaluación";
 $FirstLetter = "Primera letra del apellido";
-$UserAdded = "Haykuqmasiqa yapachikunñan";
 $ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Ajllay formato nisqata";
 $OutputFileType = "Tipo de fichero de salida";

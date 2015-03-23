@@ -92,7 +92,6 @@ $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Seleccionar utilizadores para esta avaliação";
 $FirstLetter = "Primeira letra do último nome";
-$UserAdded = "O utilizador foi adicionado";
 $ResultEdited = "Resultado editado";
 $ChooseFormat = "Relatório em PDF";
 $OutputFileType = "Tipo de ficheiro de saída";

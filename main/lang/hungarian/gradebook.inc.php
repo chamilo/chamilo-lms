@@ -26,7 +26,6 @@ $TotalItems = "Elem összesen";
 $Average = "Átlag";
 $EditResult = "Eredmények módosítása";
 $Results = "Eredmények";
-$UserAdded = "A felhasználó hozzáadva";
 $ResultEdited = "Eredmény szerkesztve";
 $ChooseFormat = "Válasszon formátumot";
 $OutputFileType = "Kimeneti állomány formátuma";

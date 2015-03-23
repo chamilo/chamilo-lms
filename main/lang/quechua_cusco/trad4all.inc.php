@@ -210,6 +210,7 @@ $ExportShort = "SCORM nisqaq apachinan";
 $WCAGGoMenu = "Ajllanaman riy";
 $WCAGGoContent = "Ima kaqkunaman riy";
 $NoTimeLimits = "Sin límite de tiempo";
+$UserDeleted = "Haykuqmasi ajllasqaqa pichasqañan";
 $Tool = "Llank'anakuna";
 $Choose = "Ajllay";
 $AnnEmpty = "Willaykunaqa pichachikunkuña";

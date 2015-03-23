@@ -231,6 +231,7 @@ $ExportShort = "Esportación SCORM";
 $WCAGGoMenu = "Dir al menú";
 $WCAGGoContent = "Dir al conteníu";
 $NoTimeLimits = "Ensin llende de tiempu";
+$UserDeleted = "Los usuarios seleicionaos esborrárense";
 $Tool = "Ferramienta";
 $Choose = "Escueya";
 $AnnEmpty = "Les anuncies esborrárense";

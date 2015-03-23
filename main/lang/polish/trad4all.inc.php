@@ -256,6 +256,7 @@ $AllDay = "Cały dzień";
 $WCAGGoMenu = "Idź do menu";
 $WCAGGoContent = "Idź do treści";
 $NoTimeLimits = "Brak ograniczeń czasowych";
+$UserDeleted = "Użytkownik został usunięty";
 $Tool = "narzędzie";
 $Choose = "Wybierz";
 $SearchXapianModuleNotInstalled = "Moduł wyszukiwania Xapian nie jest zainstalowany";

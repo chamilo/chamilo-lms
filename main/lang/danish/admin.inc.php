@@ -300,9 +300,7 @@ $LimitUsersListDefaultMaxComment = "Hvis den første ikke-filtreret oversigt ind
 $Plugins = "Plugin";
 $HideDLTTMarkupComment = "Skjul [=...=] markup når en sprogvariable ikke er oversat";
 $Info = "information";
-$UserAdded = "Brugeren er tilføjet";
 $NoSearchResults = "Ingen resultat af søgningen";
-$UserDeleted = "Brugeren er slettet";
 $NoClassesForThisCourse = "Der er ingen klasser tilmeldt dette kursus";
 $CourseUsage = "Kursusbrug";
 $NoCoursesForThisUser = "Denne bruger er ikke tilmeldt noget kursus";

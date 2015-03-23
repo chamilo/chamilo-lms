@@ -249,6 +249,7 @@ $AllDay = "Egun osoan";
 $WCAGGoMenu = "Joan menura";
 $WCAGGoContent = "Joan edukira";
 $NoTimeLimits = "Ez dago denbora mugarik";
+$UserDeleted = "Erabiltzailea kendu da";
 $Tool = "tresna";
 $Choose = "Aukeratu";
 $SearchXapianModuleNotInstalled = "PHPren Xapian bilaketa modulua ez dago instalaturik zerbitzarian, mesedez, jarri harremanetan zure kudeatzailearekin";

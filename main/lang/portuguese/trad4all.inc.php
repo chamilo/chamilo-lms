@@ -337,6 +337,7 @@ $AllDay = "Todos os dias";
 $WCAGGoMenu = "Ir para o menu";
 $WCAGGoContent = "Ir para os conteúdos";
 $NoTimeLimits = "Sem limite de tempo";
+$UserDeleted = "O utilizador foi eliminado";
 $Tool = "ferramenta";
 $Choose = "Seleccione";
 $AnnEmpty = "A lista de anúncios foi eliminada";

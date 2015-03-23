@@ -331,9 +331,7 @@ $LimitUsersListDefaultMaxComment = "A les pantalles d'inscripció dels usuaris e
 $Plugins = "Connectors";
 $HideDLTTMarkupComment = "Amagar la marca [= ... =] quan una variable d'idioma no estigui traduïda";
 $Info = "Informació";
-$UserAdded = "L'usuari ha estat afegit";
 $NoSearchResults = "No s'han trobat resultats";
-$UserDeleted = "L'usuari ha estat esborrat";
 $NoClassesForThisCourse = "No hi ha classes en aquest curs";
 $CourseUsage = "Utilització del curs";
 $NoCoursesForThisUser = "Aquest usuari no s'ha inscrit a cap curs";

@@ -302,9 +302,7 @@ $LimitUsersListDefaultMaxComment = "На сторінках зарахуванн
 $Plugins = "Плагіни";
 $HideDLTTMarkupComment = "Сховати [= ... =] маркер, коли мовна змінна не перекладена";
 $Info = "інформація";
-$UserAdded = "Користувача додано";
 $NoSearchResults = "Пошук не дав результатів";
-$UserDeleted = "Користувача видалено";
 $NoClassesForThisCourse = "Немає класів, зарахованих на цей курс";
 $CourseUsage = "Користування курсом";
 $NoCoursesForThisUser = "Цього користувача не зараховано на курс";

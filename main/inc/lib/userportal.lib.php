@@ -53,7 +53,7 @@ class IndexManager
                 if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
                     $login_form .= '<ul class="nav nav-pills nav-stacked">';
                     if (api_get_setting('allow_registration') != 'false') {
-                        $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+                        $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('SignUp').'</a></li>';
                     }
                     if (api_get_setting('allow_lostpassword') == 'true') {
                         $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
@@ -1136,7 +1136,7 @@ class IndexManager
                                 'window_list.png',
                                 $session_box['title'],
                                 array('id' => 'session_img_' . $session_id),
-                                ICON_SIZE_LARGE
+                                ICON_SIZE_BIG
                             );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
@@ -1270,7 +1270,7 @@ class IndexManager
                                         'window_list.png',
                                         $session_box['title'],
                                         array('id' => 'session_img_' . $session_id),
-                                        ICON_SIZE_LARGE
+                                        ICON_SIZE_BIG
                                     );
 
                                 if (api_is_drh()) {

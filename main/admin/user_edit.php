@@ -293,8 +293,7 @@ $(document).ready(function(){
 
 
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
-
+$form->addButtonSave(get_lang('Save'));
 
 // Set default values
 $user_data['reset_password'] = 0;

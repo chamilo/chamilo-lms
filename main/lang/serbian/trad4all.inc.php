@@ -216,6 +216,7 @@ $ExportShort = "Izvezi kratko";
 $WCAGGoMenu = "Idi na adresu";
 $WCAGGoContent = "Idi na sadržaj";
 $NoTimeLimits = "Bez vremenskog ograničenja";
+$UserDeleted = "Korisnik je obrisan";
 $Tool = "alat";
 $Choose = "Odaberi";
 $AnnEmpty = "Lista obaveštenja je ispražnjena";

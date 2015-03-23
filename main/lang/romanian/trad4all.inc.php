@@ -178,6 +178,7 @@ $ExportShort = "Exportare scurta";
 $WCAGGoMenu = "Spre meniu";
 $WCAGGoContent = "Spre continut";
 $NoTimeLimits = "Fara limite de timp";
+$UserDeleted = "Utilizatorul este sters";
 $Tool = "unelte";
 $Choose = "Alege";
 $AnnEmpty = "Lista cu anunturi a fost stearsa";

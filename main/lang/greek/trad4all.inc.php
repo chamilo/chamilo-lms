@@ -238,6 +238,7 @@ $ExportShort = "Export as SCORM";
 $WCAGGoMenu = "Μενού";
 $WCAGGoContent = "Περιεχόμενο";
 $NoTimeLimits = "Χωρίς χρονικό όριο";
+$UserDeleted = "Ο χρήστης διαγράφηκε";
 $Tool = "εργαλείο";
 $Choose = "Επιλογή γλώσσας νέων";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";

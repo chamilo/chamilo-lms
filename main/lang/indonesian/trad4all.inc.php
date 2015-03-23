@@ -123,6 +123,7 @@ $ExportShort = "Export short";
 $WCAGGoMenu = "Ke menu";
 $WCAGGoContent = "Ke isi";
 $NoTimeLimits = "Tanpa batas waktu";
+$UserDeleted = "User tersebut telah dihapus";
 $Tool = "tool";
 $AnnEmpty = "Daftar pengumuman telah dihapus";
 $AnnouncementModified = "Pengumuman telah diubah";

@@ -312,9 +312,7 @@ $LimitUsersListDefaultMaxComment = "Nes pantalles de matriculación de los usuar
 $Plugins = "Plugins";
 $HideDLTTMarkupComment = "Escoder la marca [=...=] si una variable d'idioma ta ensin traducir.";
 $Info = "Información";
-$UserAdded = "Añadióse l'usuariu";
 $NoSearchResults = "Nun s'atoparen resultaos";
-$UserDeleted = "Los usuarios seleicionaos esborrárense";
 $NoClassesForThisCourse = "Nun hai clases nesti cursu";
 $CourseUsage = "Usu del cursu";
 $NoCoursesForThisUser = "Esti usuariu nun ta matriculáu en nengún cursu";

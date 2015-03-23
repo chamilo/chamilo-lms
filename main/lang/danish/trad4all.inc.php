@@ -155,6 +155,7 @@ $ExportShort = "Eksporter som SCORM";
 $WCAGGoMenu = "Gå til menu";
 $WCAGGoContent = "Gå til indhold";
 $NoTimeLimits = "Ingen tidsbegrænsning";
+$UserDeleted = "Brugeren er slettet";
 $Tool = "værktøj";
 $Choose = "Vælg";
 $AnnEmpty = "Meddelelseslisten er ryddet";

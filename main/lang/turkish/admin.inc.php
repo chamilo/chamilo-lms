@@ -312,9 +312,7 @@ $LimitUsersListDefaultMaxComment = "İlave kullanıcıların kurslara ya da sın
 $Plugins = "Eklentiler";
 $HideDLTTMarkupComment = "Bir Dil değişkeni tercüme edilmediğinde [=...=] işaretini gizle";
 $Info = "bilgi";
-$UserAdded = "Kullanıcı eklendi";
 $NoSearchResults = "Herhangi bir sonuç bulunamadı";
-$UserDeleted = "Kullanıcı silindi";
 $NoClassesForThisCourse = "Bu derse kayıtlı herhangi bir sınıf yok";
 $CourseUsage = "Ders kullanımı";
 $NoCoursesForThisUser = "Bu kullanıcı herhangi bir derse kayıtlı değil";

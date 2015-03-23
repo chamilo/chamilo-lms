@@ -92,7 +92,6 @@ $Certificates = "Πιστοποιητικά";
 $Certificate = "CertifiesStudentXFinishedCourseYWithGradeZ =";
 $ChooseUser = "Επιλέξτε χρήστες για την αξιολόγηση αυτή";
 $FirstLetter = "Το πρώτο γράμμα του επιθέτου";
-$UserAdded = "Ο χρήστης δεν προστέθηκε";
 $ResultEdited = "Έγινε επεξεργασία του αποτελέσματος";
 $ChooseFormat = "Αναφορά σε PDF";
 $OutputFileType = "Τύπος εξόδου αρχείου";

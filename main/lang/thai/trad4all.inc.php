@@ -120,6 +120,7 @@ $CreateDoc = "สร้างเอกสาร";
 $OrganiseDocuments = "สร้างสารบัญเนื้อหา";
 $Uncompress = "ขยายไฟล์บีบอัดบนเครื่องแม่ข่าย";
 $ExportShort = "ส่งออกไฟล์";
+$UserDeleted = "ลบชื่อผู้ใช้แล้ว";
 $Tool = "เครื่องมือ";
 $AnnEmpty = "ลบประกาศทุกรายการแล้ว";
 $AnnouncementModified = "แก้ไขประกาศแล้ว";

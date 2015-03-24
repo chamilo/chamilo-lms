@@ -28,7 +28,6 @@ $language_file = array(
 'index',
 'install',
 'learnpath',
-'md_document',
 'registration',
 'reservation',
 'scormdocument',

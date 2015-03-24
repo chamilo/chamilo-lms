@@ -1,6 +1,6 @@
 <?php
 /**
- * md_document.php for Dokeos metadata/*.php
+ * md_document.php for Chamilo metadata/*.php
  * 2005/09/20
  * Copyright 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
  *	@package chamilo.metadata

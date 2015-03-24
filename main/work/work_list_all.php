@@ -5,7 +5,6 @@ use ChamiloSession as Session;
 
 $language_file = array(
     'exercice',
-    'work',
     'document',
     'admin',
     'gradebook',

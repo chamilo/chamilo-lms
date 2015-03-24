@@ -9,7 +9,7 @@
  */
 namespace Link;
 
-$language_file = array('link', 'admin');
+$language_file = array('admin');
 require_once '../inc/global.inc.php';
 
 Controller::instance()->run();

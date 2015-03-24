@@ -9,7 +9,7 @@
  */
 
 // Language files that need to be included
-$language_file = array('admin','create_course', 'course_info', 'coursebackup');
+$language_file = array('admin');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;
@@ -23,7 +23,7 @@ echo Display::page_header($nameTools);
 
 ?>
 
-<div class="sectiontitle"><?php Display::display_icon('save_import.gif', get_lang('backup')); ?>&nbsp;&nbsp;<a href="../coursecopy/backup.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('backup'); ?></a></div>
+<div class="sectiontitle"><?php Display::display_icon('save_import.gif', get_lang('Backup')); ?>&nbsp;&nbsp;<a href="../coursecopy/backup.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('Backup'); ?></a></div>
 <div class="sectioncomment">
 		<ul>
 		    <li><a href="../coursecopy/create_backup.php?<?php echo api_get_cidreq(); ?>"><?php echo get_lang('CreateBackup'); ?></a><br/>

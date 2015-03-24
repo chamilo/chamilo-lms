@@ -27,177 +27,227 @@ class MultipleAnswerTrueFalse extends Question
 	}
 
 	/**
-	 * function which redefines Question::createAnswersForm
-	 * @param FormValidator $form
-	 */
+     * function which redefines Question::createAnswersForm
+     * @param FormValidator $form
+     */
     public function createAnswersForm($form)
     {
-		$nb_answers  = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
-		// The previous default value was 2. See task #1759.
-		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
+        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
+        // The previous default value was 2. See task #1759.
+        $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $course_id = api_get_course_int_id();
-		$obj_ex = $_SESSION['objExercise'];
+        $obj_ex = $_SESSION['objExercise'];
         $renderer = & $form->defaultRenderer();
         $defaults = array();
 
-		$html = '<table class="data_table">
-					<tr style="text-align: center;">
-						<th>
-							'.get_lang('Number').'
-						</th>
-						<th>
-							'.get_lang('True').'
-						</th>
-                        <th>
-                            '.get_lang('False').'
-                        </th>
-						<th>
-							'.get_lang('Answer').'
-						</th>';
+        $html = '<table class="table table-striped table-hover">';
+        $html .= '<thead>';
+        $html .= '<tr>';
+        $html .= '<th>' . get_lang('Number') . '</th>';
+        $html .= '<th>' . get_lang('True') . '</th>';
+        $html .= '<th>' . get_lang('False') . '</th>';
+        $html .= '<th>' . get_lang('Answer') . '</th>';
+
         // show column comment when feedback is enable
-        if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
-            $html .='<th>'.get_lang('Comment').'</th>';
+        if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            $html .= '<th>' . get_lang('Comment') . '</th>';
         }
+
         $html .= '</tr>';
-        $form -> addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $html .= '</thead>';
+        $html .= '<tbody>';
 
-		$correct = 0;
+        $form->addHeader(get_lang('Answers'));
+        $form->addHtml($html);
+
+        $correct = 0;
         $answer = null;
-		if (!empty($this -> id)) {
-			$answer = new Answer($this -> id);
-			$answer->read();
-			if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
-				$nb_answers = $answer->nbrAnswers;
-			}
-		}
 
-		$form -> addElement('hidden', 'nb_answers');
-		$boxes_names = array();
+        if (!empty($this->id)) {
+            $answer = new Answer($this->id);
+            $answer->read();
 
-		if ($nb_answers < 1) {
-			$nb_answers = 1;
-			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-		}
+            if (count($answer->nbrAnswers) > 0 && !$form->isSubmitted()) {
+                $nb_answers = $answer->nbrAnswers;
+            }
+        }
+
+        $form->addElement('hidden', 'nb_answers');
+        $boxes_names = array();
+
+        if ($nb_answers < 1) {
+            $nb_answers = 1;
+            Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+        }
 
         // Can be more options
         $option_data = Question::readQuestionOption($this->id, $course_id);
 
-		for ($i = 1 ; $i <= $nb_answers ; ++$i) {
+        for ($i = 1; $i <= $nb_answers; ++$i) {
+            $form->addHtml('<tr>');
 
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'correct[' . $i . ']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'counter[' . $i . ']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'answer[' . $i . ']'
+            );
+            $renderer->setElementTemplate(
+                '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
+                'comment[' . $i . ']'
+            );
 
-            $answer_number=$form->addElement('text', 'counter['.$i.']',null,'value="'.$i.'"');
+            $answer_number = $form->addElement('text', 'counter[' . $i . ']', null, 'value="' . $i . '"');
             $answer_number->freeze();
 
-			if (is_object($answer)) {
-				$defaults['answer['.$i.']']     = $answer -> answer[$i];
-				$defaults['comment['.$i.']']    = $answer -> comment[$i];
-				//$defaults['weighting['.$i.']']  = float_format($answer -> weighting[$i], 1);
+            if (is_object($answer)) {
+                $defaults['answer[' . $i . ']'] = $answer->answer[$i];
+                $defaults['comment[' . $i . ']'] = $answer->comment[$i];
+                //$defaults['weighting['.$i.']']  = float_format($answer -> weighting[$i], 1);
 
                 $correct = $answer->correct[$i];
-                $defaults['correct['.$i.']']    = $correct;
+                $defaults['correct[' . $i . ']'] = $correct;
 
                 $j = 1;
                 if (!empty($option_data)) {
                     foreach ($option_data as $id => $data) {
-                        $form->addElement('radio', 'correct['.$i.']', null, null, $id);
+                        $form->addElement('radio', 'correct[' . $i . ']', null, null, $id);
+
                         $j++;
+
                         if ($j == 3) {
-                        	break;
+                            break;
                         }
                     }
                 }
-			} else {
-                $form->addElement('radio', 'correct['.$i.']', null, null, 1);
-                $form->addElement('radio', 'correct['.$i.']', null, null, 2);
+            } else {
+                $form->addElement('radio', 'correct[' . $i . ']', null, null, 1);
+                $form->addElement('radio', 'correct[' . $i . ']', null, null, 2);
 
-                $defaults['answer['.$i.']']     = '';
-                $defaults['comment['.$i.']']    = '';
-                $defaults['correct['.$i.']']    = '';
-			}
+                $defaults['answer[' . $i . ']'] = '';
+                $defaults['comment[' . $i . ']'] = '';
+                $defaults['correct[' . $i . ']'] = '';
+            }
 
-			$boxes_names[] = 'correct['.$i.']';
-			$form->addElement('html_editor', 'answer['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $boxes_names[] = 'correct[' . $i . ']';
 
-			// show comment when feedback is enable
-			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$form->addElement('html_editor', 'comment['.$i.']',null, array(), array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-			}
-			$form->addElement ('html', '</tr>');
-		}
+            $form->addHtmlEditor(
+                "answer[$i]",
+                get_lang('ThisFieldIsRequired'),
+                true,
+                true,
+                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
+            );
 
-		$form->addElement('html', '</table>');
-		$form->addElement('html', '<br />');
+            // show comment when feedback is enable
+            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                $form->addElement(
+                    'html_editor',
+                    'comment[' . $i . ']',
+                    null,
+                    array(),
+                    array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                );
+            }
 
-        $form->addElement('html', '<table><tr><td></td><td>'.get_lang('Correct').'</td><td>'.get_lang('Wrong').'</td><td>'.get_lang('DoubtScore').'</td></tr>');
+            $form->addHtml('</tr>');
+        }
 
-        $renderer->setElementTemplate('<tr><td><span class="form_required">*</span>'.get_lang('Score').'&nbsp;&nbsp;&nbsp;&nbsp;</td><td>{element} &nbsp;&nbsp; <br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[1]');
-        $renderer->setElementTemplate('<td>{element} &nbsp;&nbsp;<br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[2]');
-        $renderer->setElementTemplate('<td>{element} &nbsp;&nbsp;<br /><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --></td>', 'option[3]');
+        $form->addHtml('</tbody></table>');
 
+        $correctInputTemplate = '<div class="form-group">';
+        $correctInputTemplate .= '<label class="col-sm-2 control-label">';
+        $correctInputTemplate .= '<span class="form_required">*</span>' . get_lang('Score');
+        $correctInputTemplate .= '</label>';
+        $correctInputTemplate .= '<div class="col-sm-8">';
+        $correctInputTemplate .= '<table>';
+        $correctInputTemplate .= '<tr>';
+        $correctInputTemplate .= '<td>';
+        $correctInputTemplate .= get_lang('Correct') . '{element}';
+        $correctInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
+        $correctInputTemplate .= '</td>';
+
+        $wrongInputTemplate = '<td>';
+        $wrongInputTemplate .= get_lang('Wrong') . '{element}';
+        $wrongInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
+        $wrongInputTemplate .= '</td>';
+
+        $doubtScoreInputTempalte = '<td>' . get_lang('DoubtScore') . '<br>{element}';
+        $doubtScoreInputTempalte .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
+        $doubtScoreInputTempalte .= '</td>';
+        $doubtScoreInputTempalte .= '</tr>';
+        $doubtScoreInputTempalte .= '</table>';
+        $doubtScoreInputTempalte .= '</div>';
+        $doubtScoreInputTempalte .= '</div>';
+
+        $renderer->setElementTemplate($correctInputTemplate, 'option[1]');
+        $renderer->setElementTemplate($wrongInputTemplate, 'option[2]');
+        $renderer->setElementTemplate($doubtScoreInputTempalte, 'option[3]');
+ 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'),   array('class'=>'span1','value'=>'1'));
-        $form->addElement('text', 'option[2]', get_lang('Wrong'),     array('class'=>'span1','value'=>'-0.5'));
-        $form->addElement('text', 'option[3]', get_lang('DoubtScore'),array('class'=>'span1','value'=>'0'));
+        $form->addElement('text', 'option[1]', get_lang('Correct'), array('class' => 'span1', 'value' => '1'));
+        $form->addElement('text', 'option[2]', get_lang('Wrong'), array('class' => 'span1', 'value' => '-0.5'));
+        $form->addElement('text', 'option[3]', get_lang('DoubtScore'), array('class' => 'span1', 'value' => '0'));
 
         $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('option[3]', get_lang('ThisFieldIsRequired'), 'required');
 
-        $form -> addElement ('html', '</tr><table>');
-        $form -> addElement('hidden', 'options_count', 3);
-        $form -> addElement ('html', '</table><br /><br />');
+        $form->addElement('hidden', 'options_count', 3);
 
         //Extra values True, false,  Dont known
         if (!empty($this->extra)) {
-            $scores = explode(':',$this->extra);
+            $scores = explode(':', $this->extra);
+
             if (!empty($scores)) {
-                for ($i = 1; $i <=3; $i++) {
-                    $defaults['option['.$i.']']	= $scores[$i-1];
+                for ($i = 1; $i <= 3; $i++) {
+                    $defaults['option[' . $i . ']'] = $scores[$i - 1];
                 }
             }
         }
 
-		$navigator_info = api_get_navigator();
+        $navigator_info = api_get_navigator();
 
-		global $text, $class;
-		if ($obj_ex->edit_exercise_in_lp == true) {
-			//ie6 fix
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+        global $text, $class;
 
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('submit', 'submitQuestion',$text, 'class="'.$class.'"');
-			} else {
+        if ($obj_ex->edit_exercise_in_lp == true) {
+            $buttonGroup = [];
+
+            //ie6 fix
+            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+                $buttonGroup[] = $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                $buttonGroup[] = $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
+                $buttonGroup[] = $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+            } else {
                 // setting the save button here and not in the question class.php
+                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
+                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
+            }
 
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
-                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
-			}
-		}
-		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
-		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
-		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
-		$form -> addElement ('html', '</div></div>');
-		$defaults['correct'] = $correct;
+            $form->addGroup($buttonGroup);
+        }
 
-		if (!empty($this -> id)) {
-			$form -> setDefaults($defaults);
-		} else {
-			//if ($this -> isContent == 1) {
-				$form -> setDefaults($defaults);
-			//}
-		}
-		$form->setConstants(array('nb_answers' => $nb_answers));
-	}
+        $defaults['correct'] = $correct;
 
-	/**
+        if (!empty($this->id)) {
+            $form->setDefaults($defaults);
+        } else {
+            //if ($this -> isContent == 1) {
+            $form->setDefaults($defaults);
+            //}
+        }
+        $form->setConstants(array('nb_answers' => $nb_answers));
+    }
+
+    /**
 	 * abstract function which creates the form to create / edit the answers of the question
 	 * @param FormValidator $form
 	 */

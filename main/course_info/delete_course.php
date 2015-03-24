@@ -13,7 +13,7 @@
 use \ChamiloSession as Session;
 
 // Language files that need to be included
-$language_file = array('admin', 'course_info');
+$language_file = array('admin');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

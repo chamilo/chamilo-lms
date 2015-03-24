@@ -6,10 +6,6 @@
 /**
  * Code
  */
-
-// We cannot use dropbox_init.inc.php because this one already outputs data.
-$language_file = 'dropbox';
-
 // including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
 

@@ -219,7 +219,7 @@ if ($is_allowedToTrack) {
                     AND ( access_date > CURDATE() )
                     AND access_tool IS NULL";
         $count = StatsUtils::getOneResult($sql);
-        $line .= get_lang('Thisday') . " ; " . $count . "\n";
+        $line .= get_lang('ThisDay') . " ; " . $count . "\n";
     }
 
     /* 	Tools */

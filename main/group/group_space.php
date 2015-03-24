@@ -9,9 +9,6 @@
  * @todo	Display error message if no group ID specified
  */
 
-// Name of the language file that needs to be included
-$language_file = 'group';
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GROUP;
 

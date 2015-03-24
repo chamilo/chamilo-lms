@@ -5,8 +5,6 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
-$language_file = array('userInfo', 'forum');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

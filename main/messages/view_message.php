@@ -3,7 +3,6 @@
 /**
 *	@package chamilo.messages
 */
-$language_file = array('registration', 'userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();

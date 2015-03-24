@@ -4,7 +4,7 @@
  * List sessions in an efficient and usable way
  * @package chamilo.admin
  */
-$language_file = array('admin', 'courses');
+$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

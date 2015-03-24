@@ -10,9 +10,6 @@
  */
 use \ChamiloSession as Session;
 
-// Language files that need to be included
-$language_file = array('courses');
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

@@ -2,8 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$SleepingStudents = "Alumnes inactius en els últims dies";
-$SleepingTeachers = "Docents inactius en els últims dies";
 $InactiveUsers = "Usuaris amb un compte deshabilitat";
 $ActiveUsers = "Usuaris amb un compte actiu";
 $SurveysProgress = "Progrés d'enquestes";
@@ -27,17 +25,11 @@ $ExercisesProgress = "Progrés d'exercicis";
 $ExercisesLeft = "Exercicis incomplets";
 $ExercisesDone = "Exercicis completats";
 $ExercisesTotal = "Total d'exercicis";
-$CourseDescriptionProgress = "Progrés de descripció de curs";
 $LearnpathsProgress = "Progrés de lliçons";
 $LearnpathsLeft = "Lliçons incompletes";
 $LearnpathsDone = "Lliçons completades";
 $LearnpathsTotal = "Lliçons totals";
 $TimeLoggedIn = "Temps connectat (hh:mm)";
-$AnswerIndicator = "Estat de resposta";
-$ChooseSurvey = "Escull una enquesta";
-$SearchSurvey = "Cerca enquestes";
-$ChooseExercise = "Escull un exercici";
-$SearchExercise = "Cerca exercicis";
 $ChooseSession = "Escull una sessió";
 $SearchSession = "Cerca sessions";
 $ChooseStudent = "Escull un estudiant";
@@ -117,7 +109,7 @@ $Day = "Dia";
 $LittleHour = "h.";
 $Last31days = "Als darrers 31 dies";
 $Last7days = "Als darrers 7 dies";
-$Thisday = "Aquest dia";
+$ThisDay = "Aquest dia";
 $Logins = "Accesos";
 $LoginsExplaination = "Aquí és la llista de les seves últimes connexions amb les eines que visitava durant aquestes sessions.";
 $ExercicesResults = "Puntuació dels tests realitzats";

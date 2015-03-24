@@ -7,7 +7,6 @@
 /**
  * Init section
  */
-$language_file = array('registration');
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 

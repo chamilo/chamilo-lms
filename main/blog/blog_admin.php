@@ -7,9 +7,6 @@
  *	@package chamilo.blogs
 */
 
-// name of the language file that needs to be included
-$language_file = 'blog';
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_BLOGS;
 

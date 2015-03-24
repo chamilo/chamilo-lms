@@ -131,7 +131,7 @@ function parse_csv_data($file) {
     return $courses;
 }
 
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

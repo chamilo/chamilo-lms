@@ -9,7 +9,7 @@ require_once '../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
-$language_file = array('courses', 'index', 'admin');
+$language_file = array('admin');
 $user_id = api_get_user_id();
 if (!isset($_GET['file']) || !isset($_GET['title']) || !isset($_GET['ticket_id'])) {
     api_not_allowed();

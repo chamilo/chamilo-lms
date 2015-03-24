@@ -156,14 +156,14 @@ function check_system_version()
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = Statistics::count_courses();
+        $number_of_courses = Statistics::countCourses();
 
         // The number of users
-        $number_of_users = Statistics::count_users();
-        $number_of_active_users = Statistics::count_users(null, null, null, true);
+        $number_of_users = Statistics::countUsers();
+        $number_of_active_users = Statistics::countUsers(null, null, null, true);
 
         // The number of sessions
-        $number_of_sessions = Statistics::count_sessions();
+        $number_of_sessions = Statistics::countSessions();
 
         $data = array(
             'url' => api_get_path(WEB_PATH),

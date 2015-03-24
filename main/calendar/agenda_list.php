@@ -4,9 +4,6 @@
  * @package chamilo.calendar
  */
 
-// name of the language file that needs to be included
-$language_file = array('group');
-
 require_once '../inc/global.inc.php';
 require_once 'agenda.inc.php';
 

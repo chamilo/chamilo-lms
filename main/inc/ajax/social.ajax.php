@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-$language_file = array('userInfo');
 require_once '../global.inc.php';
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;

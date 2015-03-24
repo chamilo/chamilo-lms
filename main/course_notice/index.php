@@ -7,7 +7,7 @@
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 
-$language_file = array('document', 'link', 'admin');
+$language_file = array('document', 'admin');
 require_once dirname(__FILE__) . '/../inc/global.inc.php';
 
 $controller = CourseNoticeController::instance();

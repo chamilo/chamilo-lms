@@ -8,8 +8,6 @@
 use \ChamiloSession as Session;
 define('CHAMILO_HOMEPAGE', true);
 
-$language_file = array('courses', 'index', 'userInfo');
-
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;

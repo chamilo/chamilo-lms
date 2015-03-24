@@ -1395,35 +1395,7 @@ class TestInternationalization extends UnitTestCase {
 	// Testing whether all the language files load successfully. This means that their php-syntax is correct.
 	public function test_all_the_language_files() {
 		$files = array( // Only files with these names will be loaded/tested.
-			'admin.inc.php',
-			'blog.inc.php',
-			'coursebackup.inc.php',
-			'courses.inc.php',
-			'course_info.inc.php',
-			'create_course.inc.php',
-			'document.inc.php',
-			'dropbox.inc.php',
-			'exercice.inc.php',
-			'forum.inc.php',
-			'gradebook.inc.php',
-			'group.inc.php',
-			'help.inc.php',
-			'hotspot.inc.php',
-			'index.inc.php',
-			'install.inc.php',
-			'learnpath.inc.php',
-			'link.inc.php',
-			'md_document.inc.php',
-			'messages.inc.php',
-			'registration.inc.php',
-			'reservation.inc.php',
-			'survey.inc.php',
-			'tracking.inc.php',
 			'trad4all.inc.php',
-			'userInfo.inc.php',
-			'videoconf.inc.php',
-			'wiki.inc.php',
-			'work.inc.php'
 		);
 
 		$languages = test_get_language_folder_list();

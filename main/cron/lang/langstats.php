@@ -16,7 +16,7 @@ $language_file = array(
 'gradebook', 'registration', 'admin', 'group',
 'help', 'reservation', 'hotspot',
 'scormdocument',
-'index', 'install', 'shibboleth',
+'install', 'shibboleth',
 'learnpath', 'course_info', 'survey',
 'tracking', 'create_course',
 'trad4all', 'document', 'userInfo', 'dropbox',

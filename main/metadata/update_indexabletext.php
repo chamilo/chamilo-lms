@@ -17,8 +17,6 @@ define('TPLEN', strlen(EID_TYPE) + 1);
 
 require('md_' . strtolower(EID_TYPE) . '.php');
 
-// name of the language file that needs to be included
-$language_file = 'md_' . strtolower(EID_TYPE);
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 

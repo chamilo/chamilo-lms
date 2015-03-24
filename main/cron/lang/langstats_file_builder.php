@@ -24,7 +24,6 @@ $language_file = array(
 'group',
 'help',
 'hotspot',
-'index',
 'install',
 'learnpath',
 'registration',

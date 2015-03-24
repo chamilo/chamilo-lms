@@ -16,7 +16,7 @@
  * Variables definitions and inclusions
  */
 // name of the language file that needs to be included
-$language_file = array('index', 'registration', 'userInfo');
+$language_file = array('registration', 'userInfo');
 
 $cidReset = true;
 require_once 'main/inc/global.inc.php';

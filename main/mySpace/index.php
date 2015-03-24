@@ -6,7 +6,7 @@
  * @package chamilo.reporting
  */
 
-$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice', 'gradebook');
+$language_file = array('registration', 'tracking', 'admin', 'exercice', 'gradebook');
 
 // resetting the course id
 $cidReset = true;

@@ -6,7 +6,7 @@
 */
 
 // language files that should be included
-$language_file = array('index', 'registration', 'userInfo');
+$language_file = array('registration', 'userInfo');
 
 if (!isset($_GET['cidReq'])) {
 	$cidReset = true;

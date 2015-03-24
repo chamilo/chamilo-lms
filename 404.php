@@ -3,7 +3,7 @@
 // 2011, Jean-Karim Bockstael <jeankarim@cblue.be>
 // ErrorDocument 404 /404/
 
-$language_file = array('document', 'index');
+$language_file = array('document');
 require_once '../main/inc/global.inc.php';
 
 $msg = get_lang('FileNotFound');

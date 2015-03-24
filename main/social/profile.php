@@ -7,7 +7,7 @@
 * @package chamilo.social
 */
 
-$language_file = array('userInfo', 'index');
+$language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 // Include OpenGraph NOT AVAILABLE

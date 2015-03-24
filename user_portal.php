@@ -16,7 +16,7 @@
  */
 
 use \ChamiloSession as Session;
-$language_file = array('index', 'admin', 'userInfo');
+$language_file = array('admin', 'userInfo');
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore */
 $cidReset = true;
 

@@ -9,9 +9,6 @@
 * Deletes the web-chat request form the user table
 */
 
-// name of the language file that needs to be included
-$language_file = 'index';
-
 // including necessary files
 include_once './main/inc/global.inc.php';
 

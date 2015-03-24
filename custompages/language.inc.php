@@ -59,7 +59,7 @@ $chamilo_langs = array(null => 'english', 'en' => 'english', 'fr' => 'french', '
 $available_langs = array('en','fr');
 
 // Which language files will we need ?
-$language_file = array('index', 'registration', 'admin','userInfo');
+$language_file = array('registration', 'admin','userInfo');
 
 // Let's find out which language to serve to this particular browser
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];

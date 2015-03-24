@@ -3,8 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $AssignedCourses = "Dodeljeni tečaji";
-$SleepingStudents = "Uporabniki brez aktivnosti v zadnjih dneh";
-$SleepingTeachers = "Učitelji brez aktivnosti v zadnjih dneh";
 $InactiveUsers = "Onemogočeni uporabniki";
 $ActiveUsers = "Uporabniki z aktivnim up. računom";
 $SurveysProgress = "Napredek evalvacijskih vprašalnikov";
@@ -28,17 +26,11 @@ $ExercisesProgress = "Napredek vaj/testov";
 $ExercisesLeft = "Nedokončane vaje/testi";
 $ExercisesDone = "Dokončane vaje/testi";
 $ExercisesTotal = "Skupaj vaj/testov";
-$CourseDescriptionProgress = "Napredek v opisu tečaja";
 $LearnpathsProgress = "Napredek v učnih poteh";
 $LearnpathsLeft = "Nedokončane učne poti";
 $LearnpathsDone = "Zaključene učne poti";
 $LearnpathsTotal = "Skupaj učnih poti";
 $TimeLoggedIn = "Trajanje povezave(hh:mm)";
-$AnswerIndicator = "Stanje odgovora";
-$ChooseSurvey = "Izberite evalvacijski vprašalnik";
-$SearchSurvey = "Išči evalvacijske vprašalnike";
-$ChooseExercise = "Izberite vajo/test";
-$SearchExercise = "Išči vaje/teste";
 $ChooseSession = "Izberite sejo";
 $SearchSession = "Išči seje";
 $ChooseStudent = "Izberite uporabnika";
@@ -118,7 +110,7 @@ $Day = "dan";
 $LittleHour = "u.";
 $Last31days = "V zadnjih 31 dneh";
 $Last7days = "V zadnjih 7 dneh";
-$Thisday = "Danes";
+$ThisDay = "Danes";
 $Logins = "Prijave";
 $LoginsExplaination = "Tu je seznam tvojih zadnjih vstopov z orodji, ki si jih obiskal med temi sejami.";
 $ExercicesResults = "Rezultati opravljenih vaj";

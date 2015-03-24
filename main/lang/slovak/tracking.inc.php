@@ -3,8 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $AssignedCourses = "Pridelené kurzy";
-$SleepingStudents = "Spiaci študenti";
-$SleepingTeachers = "Spiaci učitelia";
 $InactiveUsers = "Neaktívni používatelia";
 $ActiveUsers = "Aktívni používatelia";
 $SurveysProgress = "Pokrok prieskumov";
@@ -28,17 +26,11 @@ $ExercisesProgress = "Pokrok v cvičení";
 $ExercisesLeft = "Neúplné cvičenie";
 $ExercisesDone = "Dokončené cvičenia";
 $ExercisesTotal = "Celkom cvičenie";
-$CourseDescriptionProgress = "Pokrok opisov kurzu";
 $LearnpathsProgress = "Postup v Učebnej osnove";
 $LearnpathsLeft = "Neúplné učebné osnovy";
 $LearnpathsDone = "Dokončené Učebné osnovy";
 $LearnpathsTotal = "Celkom učebných osnov";
 $TimeLoggedIn = "Čas pripojenia (hh:mm)";
-$AnswerIndicator = "Stav odpovede";
-$ChooseSurvey = "Prosím, vyberte prieskum";
-$SearchSurvey = "Hľadať prieskumy";
-$ChooseExercise = "Prosím, vyberte cvičenie";
-$SearchExercise = "Vyhľadať cvičenie";
 $ChooseSession = "Prosím vyberte stretnutie";
 $SearchSession = "Hľadať stretnutie";
 $ChooseStudent = "Prosím vyberte študenta";
@@ -118,7 +110,7 @@ $Day = "deň";
 $LittleHour = "h.";
 $Last31days = "Za posledných 31 dní";
 $Last7days = "Za posledných 7 dní";
-$Thisday = "Dnes";
+$ThisDay = "Dnes";
 $Logins = "Prihlásenia";
 $LoginsExplaination = "Tu je zoznam Vaich posledných prihlásení s nástrojmi, ktoré ste po&#269;as stretnutí pouili.";
 $ExercicesResults = "Skóre testov hotové";

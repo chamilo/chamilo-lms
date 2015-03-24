@@ -2,6 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseCategoryListInX = "Categorías de cursos no sitio %s:";
+$CourseCategoryInPlatform = "Categorías de cursos dispoñibles";
+$UserGroupBelongURL = "O grupo agora pertence ao grupo seleccionado";
+$AtLeastOneUserGroupAndOneURL = "Ten que seleccionar, como mínimo, un grupo e un sitio";
+$ClassIdDoesntExists = "ID de clase non existe";
+$DeleteUsersNotInList = "Desinscribir os alumnos que non están nunha sesión na lista importada";
+$IfSessionExistsUpdate = "Se a sesión existe, actualizaría cos datos do arquivo";
+$SearchCourseBySession = "Buscar curso por sesión";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Use ::private pegado á fin da ligazón se quere amosarllo só aos usuarios identificados";
 $CourseVisibilityHidden = "Invisible - Totalmente invisible para todos os usuarios excepto para os adminsitradores.";
 $ApplyAllLanguages = "Aplicar cambio a todas as linguaxes habilitadas.";
 $CareerUpdated = "Carreira actualizada satisfactoriamente.";

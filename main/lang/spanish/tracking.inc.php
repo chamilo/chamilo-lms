@@ -3,8 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $AssignedCourses = "Cursos asignados";
-$SleepingStudents = "Alumnos inactivos desde unos días";
-$SleepingTeachers = "Docentes inactivos desde algunos días";
 $InactiveUsers = "Usuarios desactivados";
 $ActiveUsers = "Usuarios activados";
 $SurveysProgress = "Progreso de encuestas";
@@ -28,17 +26,11 @@ $ExercisesProgress = "Progreso de ejercicios";
 $ExercisesLeft = "Ejercicios incompletos";
 $ExercisesDone = "Ejercicios completados";
 $ExercisesTotal = "Total de ejercicios";
-$CourseDescriptionProgress = "Progreso de descripción de curso";
 $LearnpathsProgress = "Progreso de lecciones";
 $LearnpathsLeft = "Lecciones incompletas";
 $LearnpathsDone = "Lecciones completadas";
 $LearnpathsTotal = "Lecciones totales";
 $TimeLoggedIn = "Tiempo de permanencia (hh:mm)";
-$AnswerIndicator = "Estado de respuesta";
-$ChooseSurvey = "Elija una encuesta";
-$SearchSurvey = "Buscar encuestas";
-$ChooseExercise = "Elija un ejercicio";
-$SearchExercise = "Buscar ejercicios";
 $ChooseSession = "Elija una sesión";
 $SearchSession = "Buscar sesiones";
 $ChooseStudent = "Elija un estudiante";
@@ -118,7 +110,7 @@ $Day = "Día";
 $LittleHour = "h.";
 $Last31days = "En los últimos 31 días";
 $Last7days = "En los últimos 7 días";
-$Thisday = "Este día";
+$ThisDay = "Este día";
 $Logins = "Logins";
 $LoginsExplaination = "Este es el listado de sus accesos junto con las herramientas que ha visitado en esas sesiones.";
 $ExercicesResults = "Resultados de los ejercicios realizados";

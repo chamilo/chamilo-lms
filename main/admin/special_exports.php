@@ -155,7 +155,7 @@ function form_special_export() {
     $form->addElement('radio', 'backup_option', '',  get_lang('SpecialCreateFullBackup'), 'full_backup');
     $form->addElement('radio', 'backup_option', '',  get_lang('SpecialLetMeSelectItems'), 'select_items');
     $form->addElement('html','<br />');
-    $form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
+    $form->addButtonExport(get_lang('CreateBackup'));
     $form->add_progress_bar();
     $values['backup_option'] = 'full_backup';
     $form->setDefaults($values);

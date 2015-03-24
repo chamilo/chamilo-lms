@@ -284,7 +284,7 @@ foreach ($Sessions as $enreg) {
 }
 
 $form->addElement('select', 'session_id', get_lang('WhichSessionToExport'),  $options);
-$form->addElement('button', 'submit', get_lang('ExportSession'));
+$form->addButtonExport(get_lang('ExportSession'));
 
 $defaults = array();
 $defaults['file_type'] = 'csv';

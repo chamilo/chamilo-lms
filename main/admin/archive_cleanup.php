@@ -22,7 +22,7 @@ api_protect_admin_script(true);
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
 $form = new FormValidator('archive_cleanup_form');
-$form->addButton('proceed', get_lang('ArchiveDirCleanupProceedButton'));
+$form->addButtonSend( get_lang('ArchiveDirCleanupProceedButton'));
 
 $message = null;
 
@@ -46,7 +46,7 @@ if ($form->validate()) {
 }
 
 Display::display_header(get_lang('ArchiveDirCleanup'));
-Display::display_normal_message(get_lang('ArchiveDirCleanupDescr'));
+Display::display_warning_message(get_lang('ArchiveDirCleanupDescr'));
 
 if (isset($_GET['msg']) && isset($_GET['type'])) {
 	if (in_array($_GET['msg'], array('ArchiveDirCleanupSucceeded', 'ArchiveDirCleanupFailed')))

@@ -10,7 +10,7 @@
  * Code
  */
 // Language files that need to be included
-$language_file = array('exercice', 'admin', 'coursebackup');
+$language_file = array('exercice', 'admin');
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';

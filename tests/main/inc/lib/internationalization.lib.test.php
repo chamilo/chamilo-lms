@@ -1397,7 +1397,6 @@ class TestInternationalization extends UnitTestCase {
 		$files = array( // Only files with these names will be loaded/tested.
 			'admin.inc.php',
 			'blog.inc.php',
-			'coursebackup.inc.php',
 			'courses.inc.php',
 			'course_info.inc.php',
 			'create_course.inc.php',

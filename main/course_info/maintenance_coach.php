@@ -10,7 +10,7 @@
  * Code
  */
 // Language files that need to be included
-$language_file = array('admin', 'create_course', 'course_info', 'coursebackup');
+$language_file = array('admin', 'create_course', 'course_info');
 
 require_once '../inc/global.inc.php';
 
@@ -31,8 +31,8 @@ Display :: display_header($nameTools);
 
 echo Display::page_subheader(
     Display::return_icon(
-        'save_import.gif', get_lang('backup')
-    ) . '&nbsp;&nbsp;' . get_lang('backup')
+        'save_import.gif', get_lang('Backup')
+    ) . '&nbsp;&nbsp;' . get_lang('Backup')
 );
 
 $url = api_get_path(

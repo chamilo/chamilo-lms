@@ -15,7 +15,7 @@ die();
 $language_file = array(
 'gradebook', 'registration', 'admin', 'group',
 'help', 'reservation', 'hotspot',
-'blog', 'scormdocument', 'coursebackup',
+'blog', 'scormdocument',
 'index', 'install', 'shibboleth',
 'learnpath', 'course_info', 'survey',
 'courses', 'md_document', 'tracking', 'create_course',

@@ -7897,7 +7897,11 @@ function api_mail_html(
         $mail->Sender = $extra_headers['reply_to']['mail'];
         unset($extra_headers['reply_to']);
     }
-
+    //If the SMTP configuration only accept one sender
+    if ($platform_email['SMTP_UNIQUE_SENDER']) {
+        $senderName = $platform_email['SMTP_FROM_NAME'];
+        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
+    } 
     $mail->SetFrom($senderEmail, $senderName);
 
     $mail->Subject = $subject;

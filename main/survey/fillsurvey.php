@@ -470,7 +470,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
 
     if ($list['phone'] == 1) {
         //    PHONE
-        $form->addElement('text', 'phone', get_lang('phone'), array('size' => 20));
+        $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
         if (api_get_setting('profile', 'phone') !== 'true') {
             $form->freeze('phone');
         }

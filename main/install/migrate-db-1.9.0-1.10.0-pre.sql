@@ -87,9 +87,13 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath');
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1);
-
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No');
+
 
 -- xxCOURSExx
 
@@ -107,4 +111,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.24' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.25' WHERE variable = 'chamilo_database_version';

@@ -7,8 +7,9 @@
 /**
  * Initialization
  */
-if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
-$language_file = array('userInfo');
+if (PHP_SAPI!='cli') {
+    die('Run this script through the command line or comment this line in the code');
+}
 
 require_once '../inc/global.inc.php';
 /**

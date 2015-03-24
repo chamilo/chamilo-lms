@@ -3,7 +3,7 @@
 
 /*		INIT SECTION */
 
-$language_file = array('create_course', 'document');
+$language_file = array('document');
 require 'global.inc.php';
 
 /*	Libraries */

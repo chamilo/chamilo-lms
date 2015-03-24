@@ -4,18 +4,14 @@
 /**
 * Who is online list
 */
-
-// language files that should be included
-$language_file = array('index', 'registration', 'userInfo');
-
 if (!isset($_GET['cidReq'])) {
-	$cidReset = true;
+    $cidReset = true;
 }
 
 // including necessary files
 require_once './main/inc/global.inc.php';
 
-if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0 ) {
+if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);
 }
 
@@ -37,24 +33,24 @@ function show_image(image,width,height) {
 }
 
 $(document).ready(function (){
-	$("input#id_btn_send_invitation").bind("click", function(){
-		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
-			$("#form_register_friend").submit();
-		}
-	});
+    $("input#id_btn_send_invitation").bind("click", function(){
+        if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
+            $("#form_register_friend").submit();
+        }
+    });
 });
 
 function display_hide () {
-		setTimeout("hide_display_message()",3000);
+    setTimeout("hide_display_message()",3000);
 }
 function hide_display_message () {
-	$("div#display_response_id").html("");
-	try {
-		$("#txt_subject_id").val("");
-		$("#txt_area_invite").val("");
-	}catch(e) {
-		$("#txt_area_invite").val("");
-	}
+    $("div#display_response_id").html("");
+    try {
+        $("#txt_subject_id").val("");
+        $("#txt_area_invite").val("");
+    }catch(e) {
+        $("#txt_area_invite").val("");
+    }
 }
 
 function show_icon_edit(element_html) {
@@ -111,7 +107,7 @@ if ($_GET['chatid'] != '') {
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
-    if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0 ) {
+    if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
         $user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
     } else {
         $user_list = who_is_online(0, 9);

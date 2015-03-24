@@ -165,7 +165,7 @@ class langstats
     {
         $path = api_get_path(SYS_LANG_PATH) . 'english/';
         $vars = array();
-        $priority = array('trad4all', 'notification', 'accessibility');
+        $priority = array('trad4all');
         foreach ($priority as $file) {
             $list = SubLanguageManager::get_all_language_variable_in_file(
                 $path . $file . '.inc.php',

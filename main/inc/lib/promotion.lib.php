@@ -191,10 +191,10 @@ class Promotion extends Model
             $form->addElement('text', 'created_at', get_lang('CreatedAt'));
             $form->freeze('created_at');
         }
-      	if ($action == 'edit') {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+        if ($action == 'edit') {
+            $form->addButtonSave(get_lang('Modify'),'submit');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addButtonCreate(get_lang('Add'),'submit');
         }
 
         // Setting the defaults

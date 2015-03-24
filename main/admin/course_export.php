@@ -7,7 +7,7 @@
 /**
  * Code
  */
-$language_file = array ('admin', 'registration','create_course', 'document');
+$language_file = array ('admin', 'document');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

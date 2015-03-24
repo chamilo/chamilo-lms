@@ -2422,7 +2422,7 @@ class Blog
         $form = new FormValidator('add_blog', 'post', 'blog_admin.php?action=add');
         $form->addElement('header', get_lang('AddBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
-        $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
+        $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
 
         $form->addElement('hidden', 'new_blog_submit', 'true');
         $form->addElement('style_submit_button', null, get_lang('SaveProject'));
@@ -2458,7 +2458,7 @@ class Blog
         $form = new FormValidator('edit_blog', 'post','blog_admin.php?action=edit&blog_id='.intval($_GET['blog_id']));
         $form->addElement('header', get_lang('EditBlog'));
         $form->addElement('text', 'blog_name', get_lang('Title'));
-        $form->addElement('textarea', 'blog_subtitle', get_lang('Subtitle'));
+        $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
 
         $form->addElement('hidden', 'edit_blog_submit', 'true');
         $form->addElement('hidden', 'blog_id', $blog['blog_id']);
@@ -2538,7 +2538,7 @@ class Blog
 			$table = new SortableTableFromArrayConfig($list_content_blog, 1,20,'project');
 			//$table->set_additional_parameters($parameters);
 			$table->set_header(0, get_lang('Title'));
-			$table->set_header(1, get_lang('Subtitle'));
+			$table->set_header(1, get_lang('SubTitle'));
 			$table->set_header(2, get_lang('Modify'));
 			$table->display();
 		}

@@ -13,15 +13,14 @@
  */
 die();
 $language_file = array(
-'gradebook', 'registration', 'admin', 'group',
+'gradebook', 'admin',
 'help', 'reservation', 'hotspot',
-'blog', 'scormdocument', 'coursebackup',
-'index', 'install', 'shibboleth',
-'learnpath', 'course_info', 'survey',
-'courses', 'md_document', 'tracking', 'create_course',
-'trad4all', 'document', 'userInfo', 'dropbox',
-'videoconf', 'exercice', 'wiki',
-'work', 'forum'
+'scormdocument',
+'install', 'shibboleth',
+'learnpath', 'survey',
+'tracking',
+'trad4all', 'document',
+'exercice', 'wiki',
 );
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';

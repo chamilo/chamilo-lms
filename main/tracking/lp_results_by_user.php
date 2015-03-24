@@ -11,7 +11,7 @@
  * Code
  */
 
-$language_file = array ('registration', 'index', 'tracking', 'exercice','survey');
+$language_file = array ('tracking', 'exercice','survey');
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

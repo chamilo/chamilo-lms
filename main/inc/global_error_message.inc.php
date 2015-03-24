@@ -184,45 +184,60 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			</style>
 		</head>
 		<body>
-		<div id="wrapper">
-            <div id="main" class="container">
-                <header>
-                    <div class="row">
-                        <div id="header_left" class="span4">
-                            <div id="logo">
-                                <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">
-                            </div>
-                        </div>
-                    </div>
+		<div id="page-wrap">
+			<header>
+				<section id="main" class="container">
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="logo">
+								<a href="#">
+								 <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">
+								 </a>
+							</div>
+						</div>
+						<div class="col-lg-9">
+						</div>
+					</div>
+				</section>
 
-                    <div class="navbar subnav">
-                        <div class="navbar-inner">
-                            <div class="container">
-                                <div class="nav-collapse">
-                                    <ul class="nav nav-pills">
-                                        <li id="current" class="active">
-                                            <a target="_top" href="index.php">Homepage</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="breadcrumb">
-                        <li><a href="#">{SECTION}</a></li>
-                    </ul>
-                </header>
-                <br />
-                <section>
-                    <div style="text-align:center">
-                        {DESCRIPTION}
-                        {CODE}
-                    </div>
-                </section>
+				<section id="menu-bar">
+					<nav class="navbar navbar-default">
+					<div class="container">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle btn" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
+							<ul class="nav navbar-nav">
+								<li id="current" class="active tab-homepage">
+								<a target="_top" href="index.php">Homepage</a>
+								</li>
+							</ul>
+						</div><!-- /.navbar-collapse -->
+					</div><!-- /.container-fluid -->
+				</nav>
+				</section>
+
+				<section id="breadcrumb-bar">
+					<div class="container">
+						<ul class="breadcrumb"> <li> <a href="#">{SECTION}</a></li></ul>
+					</div>
+				</section>
+			</header>
+			<div id="top_main_content" class="container">
+				<div class="col-md-12">
+					<div style="text-align:center">
+						{DESCRIPTION}
+						{CODE}
+					</div>
+				</div>
 			</div>
-			<div class="push"/></div>
 		</div>
-
 		<footer>
             <div class="container">
                 <div class="row">

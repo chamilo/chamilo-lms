@@ -8,7 +8,7 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 $cidReset = true;
 
 exit; //@deprecated file seems to be unused

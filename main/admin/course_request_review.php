@@ -11,7 +11,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'create_course');
+$language_file = array('admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';

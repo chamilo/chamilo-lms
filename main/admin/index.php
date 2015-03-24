@@ -6,7 +6,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('admin', 'tracking','coursebackup');
+$language_file = array('admin', 'tracking');
 
 // Resetting the course id.
 $cidReset = true;

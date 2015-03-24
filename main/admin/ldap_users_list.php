@@ -8,7 +8,6 @@
  * Init
  */
 // name of the language file that needs to be included
-$language_file[] = 'registration';
 $language_file[] = 'admin';
 $cidReset = true;
 require('../inc/global.inc.php');

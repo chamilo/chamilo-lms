@@ -7,7 +7,7 @@
  */
 
 // name of the language file that needs to be included
-$language_file = array('admin', 'forum');
+$language_file = array('admin');
 require_once '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';

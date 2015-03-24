@@ -7,7 +7,6 @@
 /**
  * Initialization
  */
-$language_file = array('userInfo');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

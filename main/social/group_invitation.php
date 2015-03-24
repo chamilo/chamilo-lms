@@ -7,9 +7,6 @@
 /**
  * Initialization
  */
-// name of the language file that needs to be included
-$language_file = array('userInfo');
-
 // resetting the course id
 $cidReset = true;
 

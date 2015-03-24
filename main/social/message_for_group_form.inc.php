@@ -5,8 +5,7 @@
  * Form for group message
  * @package chamilo.social
  */
-
-$language_file = array('registration', 'userInfo', 'admin');
+$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

@@ -9,7 +9,7 @@
 /**
  * Main script
  */
-$language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
+$language_file = array ('admin', 'trad4all', 'tracking');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';

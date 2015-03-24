@@ -3,8 +3,6 @@
 for more information: see languages.txt in the lang folder.
 */
 $AssignedCourses = "Assigned courses";
-$SleepingStudents = "Students with no activity during the last few days";
-$SleepingTeachers = "Teachers with no activity in the last few days";
 $InactiveUsers = "Users who's account has been disabled";
 $ActiveUsers = "Users with an active account";
 $SurveysProgress = "Surveys progress";
@@ -28,17 +26,11 @@ $ExercisesProgress = "Exercises progress";
 $ExercisesLeft = "Incomplete exercises";
 $ExercisesDone = "Completed exercises";
 $ExercisesTotal = "Total exercises";
-$CourseDescriptionProgress = "Course descriptions progress";
 $LearnpathsProgress = "Learning paths progress";
 $LearnpathsLeft = "Incomplete learning paths";
 $LearnpathsDone = "Completed learning paths";
 $LearnpathsTotal = "Total learning paths";
 $TimeLoggedIn = "Time connected (hh:mm)";
-$AnswerIndicator = "Answer status";
-$ChooseSurvey = "Please pick a survey";
-$SearchSurvey = "Search surveys";
-$ChooseExercise = "Please pick an exercise";
-$SearchExercise = "Search exercise";
 $ChooseSession = "Please pick a session";
 $SearchSession = "Search sessions";
 $ChooseStudent = "Please pick a student";
@@ -118,7 +110,7 @@ $Day = "day";
 $LittleHour = "h.";
 $Last31days = "In the last 31 days";
 $Last7days = "In the last 7 days";
-$Thisday = "This day";
+$ThisDay = "This day";
 $Logins = "Logins";
 $LoginsExplaination = "Here is the list of your latest logins with the tools you visited during these sessions.";
 $ExercicesResults = "Score for the tests done";

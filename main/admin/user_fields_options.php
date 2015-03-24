@@ -4,7 +4,7 @@
 *	@package chamilo.admin
 */
 // name of the language file that needs to be included
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 
 // resetting the course information
 $cidReset = true;

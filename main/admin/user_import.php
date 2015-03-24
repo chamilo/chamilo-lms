@@ -9,7 +9,7 @@
  * Validate the imported data.
  */
 
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 
 $cidReset = true;
 require '../inc/global.inc.php';

@@ -724,21 +724,36 @@ class CourseHome
                 unset($lnk);
 
                 $item['extra'] = null;
+                $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
+
                 if ($is_allowed_to_edit) {
 
                     if (empty($session_id)) {
-                        if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                            $link['name'] = Display::return_icon('visible.png', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_SMALL, false);
-                            $link['cmd'] = 'hide=yes';
-                            $lnk[] = $link;
-                        }
-                        if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                            $link['name'] = Display::return_icon('invisible.png', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_SMALL, false);
-                            $link['cmd'] = 'restore=yes';
-                            $lnk[] = $link;
+                        if (isset($tool['id'])) {
+                            if ($tool['visibility'] == '1' && $toolAdmin != '1') {
+                                $link['name'] = Display::return_icon(
+                                    'visible.png',
+                                    get_lang('Deactivate'),
+                                    array('id' => 'linktool_'.$tool['id']),
+                                    ICON_SIZE_SMALL,
+                                    false
+                                );
+                                $link['cmd'] = 'hide=yes';
+                                $lnk[] = $link;
+                            }
+                            if ($tool['visibility'] == '0' && $toolAdmin != '1') {
+                                $link['name'] = Display::return_icon(
+                                    'invisible.png',
+                                    get_lang('Activate'),
+                                    array('id' => 'linktool_'.$tool['id']),
+                                    ICON_SIZE_SMALL,
+                                    false
+                                );
+                                $link['cmd'] = 'restore=yes';
+                                $lnk[] = $link;
+                            }
                         }
                     }
-
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }
@@ -746,7 +761,7 @@ class CourseHome
 
                 // Both checks are necessary as is_platform_admin doesn't take student view into account
                 if ($is_platform_admin && $is_allowed_to_edit) {
-                    if ($tool['admin'] != '1') {
+                    if ($toolAdmin != '1') {
                         $link['cmd'] = 'hide=yes';
                     }
                 }
@@ -770,7 +785,7 @@ class CourseHome
                 ) {
                     $tool['link'] = $web_code_path.$tool['link'];
                 }
-                if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
+                if ($tool['visibility'] == '0' && $toolAdmin != '1') {
                     $class = 'invisible';
                     $info = pathinfo($tool['image']);
                     $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"

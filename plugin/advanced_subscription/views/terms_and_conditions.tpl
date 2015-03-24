@@ -13,9 +13,10 @@
 {#  Improve usability in portal devices #}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ title_string }}</title>
-{{ css_file_to_string }}
-{{ css_style_print }}
+{{ css_static_file_to_string }}
 {{ js_file_to_string }}
+{{ css_custom_file_to_string }}
+{{ css_style_print }}
 {# end copy from head.tpl #}
 <h2 class="legal-terms-title legal-terms-popup">
 {{ "TermsAndConditions" | get_lang }}

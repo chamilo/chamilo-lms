@@ -885,6 +885,7 @@ VALUES
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
 ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
+('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0),
 ('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1229,7 +1230,9 @@ VALUES
 ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
 ('prevent_session_admins_to_manage_all_users', 'false', 'No'),
 ('documents_default_visibility_defined_in_course', 'true', 'Yes'),
-('documents_default_visibility_defined_in_course', 'false', 'No');
+('documents_default_visibility_defined_in_course', 'false', 'No'),
+('enabled_mathjax','true','Yes'),
+('enabled_mathjax','false','No');
 
 UNLOCK TABLES;
 
@@ -4725,5 +4728,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.24' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.25' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

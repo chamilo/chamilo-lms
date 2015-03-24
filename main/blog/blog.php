@@ -5,9 +5,6 @@
  * This file takes care of all blog navigation and displaying.
  * @package chamilo.blogs
  */
-
-// name of the language file that needs to be included
-$language_file = "blog";
 require_once '../inc/global.inc.php';
 
 $blog_id = intval($_GET['blog_id']);

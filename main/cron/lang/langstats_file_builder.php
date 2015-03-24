@@ -14,7 +14,6 @@
  */
 $language_file = array(
 'admin',
-'blog',
 'course_info',
 'create_course',
 'document',

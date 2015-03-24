@@ -121,6 +121,7 @@ $SelectedGroups = "valgte grupper";
 $Msg = "Meldinger";
 $MsgText = "Melding";
 $SelectEverybody = "Velg alle";
+$GroupDocument = "Dokumenter";
 $Title = "Tittel";
 $UsersOnline = "Brukere online";
 $Remove = "Fjern";

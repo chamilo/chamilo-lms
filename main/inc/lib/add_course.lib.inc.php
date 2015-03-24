@@ -471,15 +471,11 @@ class AddCourse
             TABLE_MAIN_GRADEBOOK_CERTIFICATE
         );
 
-        include api_get_path(
-                SYS_CODE_PATH
-            ) . 'lang/english/create_course.inc.php';
-        $file_to_include = api_get_path(
-                SYS_CODE_PATH
-            ) . 'lang/' . $language . '/create_course.inc.php';
+        include_once api_get_path(SYS_CODE_PATH) . 'lang/english/trad4all.inc.php';
+        $file_to_include = api_get_path(SYS_CODE_PATH) . 'lang/' . $language . '/trad4all.inc.php';
 
         if (file_exists($file_to_include)) {
-            include $file_to_include;
+            include_once $file_to_include;
         }
 
         $visible_for_all = 1;

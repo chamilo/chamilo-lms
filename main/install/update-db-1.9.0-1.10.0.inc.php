@@ -57,11 +57,11 @@ if (defined('SYSTEM_INSTALLATION')) {
         /**
          * Update the databases "pre" migration
          */
-        include '../lang/english/create_course.inc.php';
+        include_once '../lang/english/trad4all.inc.php';
 
         if ($languageForm != 'english') {
             // languageForm has been escaped in index.php
-            include '../lang/' . $languageForm . '/create_course.inc.php';
+            include_once '../lang/' . $languageForm . '/trad4all.inc.php';
         }
 
         // Get the main queries list (m_q_list)

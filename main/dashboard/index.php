@@ -6,7 +6,7 @@
 * @package chamilo.dashboard
 */
 // name of the language file that needs to be included
-$language_file = array('tracking', 'userInfo', 'admin', 'gradebook');
+$language_file = array('tracking', 'admin', 'gradebook');
 $cidReset = true;
 
 // including files

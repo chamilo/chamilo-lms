@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('admin', 'registration', 'userInfo');
+$language_file = array('admin', 'registration');
 require_once '../global.inc.php';
 $action = $_GET['a'];
 

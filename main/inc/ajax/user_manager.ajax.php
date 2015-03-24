@@ -3,7 +3,7 @@
 /**
  * Responses to AJAX calls
  */
-$language_file = array('admin', 'registration', 'userInfo');
+$language_file = array('admin', 'registration';
 require_once '../global.inc.php';
 $action = $_GET['a'];
 

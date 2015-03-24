@@ -10,7 +10,7 @@
  * Code
  */
 // Language files that need to be included
-$language_file = array('admin', 'create_course', 'course_info');
+$language_file = array('admin', 'create_course');
 
 require_once '../inc/global.inc.php';
 

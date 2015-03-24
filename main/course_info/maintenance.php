@@ -9,7 +9,7 @@
  */
 
 // Language files that need to be included
-$language_file = array('admin','create_course', 'course_info');
+$language_file = array('admin','create_course');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;

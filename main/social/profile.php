@@ -6,8 +6,6 @@
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 * @package chamilo.social
 */
-
-$language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 // Include OpenGraph NOT AVAILABLE

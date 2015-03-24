@@ -3,7 +3,7 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('create_course', 'registration','admin','exercice', 'course_info');
+$language_file = array('create_course', 'registration', 'admin', 'exercice');
 
 require_once '../inc/global.inc.php';
 

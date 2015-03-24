@@ -4,8 +4,6 @@
  * @author Juan Carlos Trabado herodoto@telefonica.net
  * @package chamilo.social
  */
-
-$language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

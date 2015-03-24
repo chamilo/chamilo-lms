@@ -17,9 +17,9 @@ $language_file = array(
 'help', 'reservation', 'hotspot',
 'scormdocument',
 'install', 'shibboleth',
-'learnpath', 'course_info', 'survey',
+'learnpath', 'survey',
 'tracking', 'create_course',
-'trad4all', 'document', 'userInfo', 'dropbox',
+'trad4all', 'document',
 'exercice', 'wiki',
 );
 require_once '../../inc/global.inc.php';

@@ -3,7 +3,6 @@
  * @author Juan Carlos Raña Trabado
  * @since 25/september/2010
 */
-$language_file = array('userInfo');
 //Chamilo load libraries
 require_once '../../../../../inc/global.inc.php';
 

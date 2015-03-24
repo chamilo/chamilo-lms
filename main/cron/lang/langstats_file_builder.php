@@ -14,10 +14,8 @@
  */
 $language_file = array(
 'admin',
-'course_info',
 'create_course',
 'document',
-'dropbox',
 'exercice',
 'gradebook',
 'help',
@@ -31,7 +29,6 @@ $language_file = array(
 'survey',
 'tracking',
 'trad4all',
-'userInfo',
 'wiki',
 );
 require_once '../../inc/global.inc.php';

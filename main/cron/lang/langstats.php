@@ -20,8 +20,7 @@ $language_file = array(
 'learnpath', 'course_info', 'survey',
 'tracking', 'create_course',
 'trad4all', 'document', 'userInfo', 'dropbox',
-'exercice', 'wiki',
-'work', 'forum'
+'exercice', 'wiki', 'forum'
 );
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';

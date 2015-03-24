@@ -3,7 +3,7 @@
 
 use ChamiloSession as Session;
 
-$language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
+$language_file = array('exercice', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);

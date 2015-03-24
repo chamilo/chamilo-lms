@@ -35,7 +35,6 @@ $language_file = array(
 'tracking',
 'trad4all',
 'userInfo',
-'videoconf',
 'wiki',
 'work',
 );

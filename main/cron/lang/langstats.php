@@ -20,7 +20,7 @@ $language_file = array(
 'learnpath', 'course_info', 'survey',
 'tracking', 'create_course',
 'trad4all', 'document', 'userInfo', 'dropbox',
-'videoconf', 'exercice', 'wiki',
+'exercice', 'wiki',
 'work', 'forum'
 );
 require_once '../../inc/global.inc.php';

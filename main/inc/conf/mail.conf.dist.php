@@ -16,3 +16,4 @@ $platform_email['SMTP_AUTH']         = 0;
 $platform_email['SMTP_USER']         = '';
 $platform_email['SMTP_PASS']         = '';
 $platform_email['SMTP_CHARSET']      = api_get_system_encoding();
+$platform_email['SMTP_UNIQUE_SENDER']= 0; // to send all mails from the same user

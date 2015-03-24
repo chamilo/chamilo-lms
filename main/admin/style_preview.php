@@ -10,7 +10,7 @@
 // @deprecated This page is not used
 
 exit;
-$language_file = array('create_course', 'courses', 'admin');
+$language_file = array('create_course', 'admin');
 
 require_once '../inc/global.inc.php';
 

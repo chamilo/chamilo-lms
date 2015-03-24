@@ -9,7 +9,7 @@
 */
 
 // Names of the language file that needs to be included.
-$language_file = array ('courses', 'registration');
+$language_file = array ('registration');
 
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset

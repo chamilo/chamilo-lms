@@ -12,7 +12,7 @@
 use \ChamiloSession as Session;
 
 // Language files that should be included.
-$language_file = array('learnpath', 'courses', 'index','tracking','exercice', 'admin');
+$language_file = array('learnpath', 'index', 'tracking', 'exercice', 'admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

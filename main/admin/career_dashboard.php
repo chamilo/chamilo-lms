@@ -9,7 +9,7 @@
  */
 
 // Language files that should be included.
-$language_file = array('courses', 'index', 'admin');
+$language_file = array('index', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);

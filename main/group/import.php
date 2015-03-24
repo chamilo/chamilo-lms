@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // Name of the language file that needs to be included
-$language_file = array('group', 'admin', 'registration');
+$language_file = array('admin', 'registration');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

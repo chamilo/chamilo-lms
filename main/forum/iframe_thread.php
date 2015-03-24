@@ -20,10 +20,6 @@
  *
  * @package chamilo.forum
  */
-
-// Name of the language file that needs to be included
-$language_file = 'forum';
-
 require_once '../inc/global.inc.php';
 
 /* ACCESS RIGHTS */

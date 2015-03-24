@@ -6,7 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-$language_file = array('userInfo', 'forum');
+$language_file = array('userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
-$language_file = array ('admin', 'group');
+$language_file = array ('admin');
 
 // including necessary files
 require_once 'main/inc/global.inc.php';

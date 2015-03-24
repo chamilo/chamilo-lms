@@ -23,7 +23,7 @@
  */
 
 // Language files that need to be included.
-$language_file = array('forum', 'group', 'gradebook');
+$language_file = array('gradebook');
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';

@@ -28,6 +28,7 @@ var plugins = [
     'leaflet',
     'mapping',
     'maximize',
+    'mathjax',
     'oembed',
     'toolbar',
     'toolbarswitch',

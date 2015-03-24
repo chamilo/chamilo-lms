@@ -61,7 +61,10 @@ class Basic extends Toolbar
         if (api_get_setting('math_asciimathML') == 'true') {
             $plugins[] = 'asciimath';
         }
-        $plugins[] = 'asciimath';
+
+        if (api_get_setting('enabled_mathjax') == 'true') {
+            $plugins[] = 'mathjax';
+        }
 
         if (api_get_setting('enabled_asciisvg') == 'true') {
             $plugins[] = 'asciisvg';

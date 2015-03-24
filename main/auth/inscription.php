@@ -8,7 +8,7 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('registration', 'admin');
+$language_file = array('admin');
 
 //quick hack to adapt the registration form result to the selected registration language
 if (!empty($_POST['language'])) {

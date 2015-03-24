@@ -7,7 +7,7 @@
  */
 
 // name of the language file that needs to be included
-$language_file = array('registration', 'tracking', 'exercice', 'admin', 'gradebook');
+$language_file = array('tracking', 'exercice', 'admin', 'gradebook');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

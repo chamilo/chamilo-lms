@@ -13,12 +13,12 @@
  */
 die();
 $language_file = array(
-'gradebook', 'registration', 'admin',
+'gradebook', 'admin',
 'help', 'reservation', 'hotspot',
 'scormdocument',
 'install', 'shibboleth',
 'learnpath', 'survey',
-'tracking', 'create_course',
+'tracking',
 'trad4all', 'document',
 'exercice', 'wiki',
 );

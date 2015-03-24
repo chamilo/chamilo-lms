@@ -15,9 +15,6 @@
 /**
  * Variables definitions and inclusions
  */
-// name of the language file that needs to be included
-$language_file = array('registration');
-
 $cidReset = true;
 require_once 'main/inc/global.inc.php';
 

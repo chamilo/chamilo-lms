@@ -4,7 +4,7 @@
 use \ChamiloSession as Session;
 
 // Language files that need to be included
-$language_file = array('create_course', 'admin');
+$language_file = array('admin');
 
 $cidReset = true;
 

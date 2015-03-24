@@ -13,7 +13,7 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 
 require_once '../inc/global.inc.php';
 

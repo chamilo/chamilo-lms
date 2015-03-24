@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('registration', 'tracking', 'admin', 'exercice');
+$language_file = array('tracking', 'admin', 'exercice');
 
 $cidReset = true;
 

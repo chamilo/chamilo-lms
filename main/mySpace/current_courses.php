@@ -7,7 +7,7 @@
 /**
  * Code
  */
-$language_file = array ('registration', 'tracking', 'exercice','admin');
+$language_file = array ('tracking', 'exercice','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_TRACKING;

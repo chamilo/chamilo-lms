@@ -14,7 +14,6 @@
  */
 $language_file = array(
 'admin',
-'create_course',
 'document',
 'exercice',
 'gradebook',
@@ -22,7 +21,6 @@ $language_file = array(
 'hotspot',
 'install',
 'learnpath',
-'registration',
 'reservation',
 'scormdocument',
 'shibboleth',

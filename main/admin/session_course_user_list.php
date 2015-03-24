@@ -4,7 +4,7 @@
 /**
 *	@package chamilo.admin
 */
-$language_file = array('admin', 'registration');
+$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

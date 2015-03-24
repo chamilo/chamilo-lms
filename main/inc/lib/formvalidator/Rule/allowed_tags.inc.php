@@ -300,7 +300,7 @@ $allowed_tags_student['embed']['type'] = array();
 $allowed_tags_student['embed']['src'] = array();
 $allowed_tags_student['embed']['flashvars'] = array();
 $allowed_tags_student['embed']['allowscriptaccess'] = array();
-$allowed_tags_student['embed']['allowfullscreen'] = array();
+//$allowed_tags_student['embed']['allowfullscreen'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
 
@@ -558,7 +558,7 @@ $allowed_tags_student['object'] = array();
 //$allowed_tags_student['object']['archive'] = array();
 //$allowed_tags_student['object']['border'] = array();
 $allowed_tags_student['object']['class'] = array();
-$allowed_tags_student['object']['classid'] = array();
+//$allowed_tags_student['object']['classid'] = array();
 $allowed_tags_student['object']['codebase'] = array();
 //$allowed_tags_student['object']['codetype'] = array();
 $allowed_tags_student['object']['data'] = array();
@@ -896,30 +896,31 @@ $allowed_tags_student['var']['xml:lang'] = array();
 $allowed_tags_teacher = $allowed_tags_student;
 
 // noscript
-$allowed_tags_teacher['noscript'] = array();
+//$allowed_tags_teacher['noscript'] = array();
 
 // script
-$allowed_tags_teacher['script'] = array();
-$allowed_tags_teacher['script']['type'] = array();
+//$allowed_tags_teacher['script'] = array();
+//$allowed_tags_teacher['script']['type'] = array();
 
 // TODO:
 // 1. The tags <html>, <head>, <body> should not be allowed for document fragments.
 // 2. To be checked whether HTMLPurifier "silently" passes these tags.
 
-$allowed_tags_teacher['html'] = array();
+/*$allowed_tags_teacher['html'] = array();
 $allowed_tags_teacher['html']['xmlns'] = array();
 
 $allowed_tags_teacher['head'] = array();
-$allowed_tags_teacher['head']['profile'] = array();
+$allowed_tags_teacher['head']['profile'] = array();*/
 
 // body
+/*
 $allowed_tags_teacher['body'] = array();
 $allowed_tags_teacher['body']['alink'] = array();
 $allowed_tags_teacher['body']['background'] = array();
 $allowed_tags_teacher['body']['bgcolor'] = array();
 $allowed_tags_teacher['body']['link'] = array();
 $allowed_tags_teacher['body']['text'] = array();
-$allowed_tags_teacher['body']['vlink'] = array();
+$allowed_tags_teacher['body']['vlink'] = array();*/
 
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;
 

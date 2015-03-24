@@ -102,7 +102,7 @@ class Dropbox_Work
         $this->filesize = $filesize;
         $this->title = $title;
         $this->description = $description;
-        $this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
+        $this->author = $author;
         $this->last_upload_date = api_get_utc_datetime();
         $course_id = api_get_course_int_id();
 

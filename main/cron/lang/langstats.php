@@ -18,7 +18,7 @@ $language_file = array(
 'blog', 'scormdocument',
 'index', 'install', 'shibboleth',
 'learnpath', 'course_info', 'survey',
-'courses', 'md_document', 'tracking', 'create_course',
+'md_document', 'tracking', 'create_course',
 'trad4all', 'document', 'userInfo', 'dropbox',
 'videoconf', 'exercice', 'wiki',
 'work', 'forum'

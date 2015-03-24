@@ -16,7 +16,6 @@ $language_file = array(
 'admin',
 'blog',
 'course_info',
-'courses',
 'create_course',
 'document',
 'dropbox',

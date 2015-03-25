@@ -375,53 +375,45 @@ class Statistics
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
 
+        $table_url = null;
+        $where_url = null;
+        $now = api_get_utc_datetime();
+        $where_url_last = ' WHERE login_date > DATE_SUB("' . $now . '",INTERVAL 1 %s)';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " WHERE login_user_id=user_id AND access_url_id='".$current_url_id."'";
-            $where_url_last = ' AND login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
-        } else {
-            $table_url = '';
-            $where_url = '';
-            $where_url_last = ' WHERE login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
+            $where_url_last = ' AND login_date > DATE_SUB("' . $now . '",INTERVAL 1 %s)';
         }
+
+        $period = get_lang('PeriodMonth');
+        $periodCollection = api_get_months_long();
+        $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date DESC";
+        $sql_last_x = null;
+
         switch ($type) {
-            case 'month':
-                $months = api_get_months_long();
-                $period = get_lang('PeriodMonth');
-                $sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date ";
-                $sql_last_x = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'YEAR')." GROUP BY stat_date ORDER BY login_date ";
-                break;
             case 'hour':
                 $period = get_lang('PeriodHour');
                 $sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY stat_date ";
                 $sql_last_x = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'DAY')." GROUP BY stat_date ORDER BY stat_date ";
                 break;
             case 'day':
-                $week_days = api_get_week_days_long();
+                $periodCollection = api_get_week_days_long();
                 $period = get_lang('PeriodDay');
                 $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 $sql_last_x = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url.sprintf($where_url_last,'WEEK')." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
                 break;
         }
-        $res_last_x = Database::query($sql_last_x);
-        $result_last_x = array();
-        while ($obj = Database::fetch_object($res_last_x)) {
-            $stat_date = $obj->stat_date;
-            switch ($type) {
-                case 'month':
-                    $stat_date = explode('-', $stat_date);
-                    $stat_date[1] = $months[$stat_date[1] - 1];
-                    $stat_date = implode(' ', $stat_date);
-                    break;
-                case 'day':
-                    $stat_date = $week_days[$stat_date];
-                    break;
+        if ($sql_last_x) {
+            $res_last_x = Database::query($sql_last_x);
+            $result_last_x = array();
+            while ($obj = Database::fetch_object($res_last_x)) {
+                $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
+                $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            $result_last_x[$stat_date] = $obj->number_of_logins;
+            Statistics::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
+            flush(); //flush web request at this point to see something already while the full data set is loading
+            echo '<br />';
         }
-        Statistics::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
-        flush(); //flush web request at this point to see something already while the full data set is loading
-        echo '<br />';
         $res = Database::query($sql);
         $result = array();
         while ($obj = Database::fetch_object($res)) {
@@ -429,11 +421,11 @@ class Statistics
             switch ($type) {
                 case 'month':
                     $stat_date = explode('-', $stat_date);
-                    $stat_date[1] = $months[$stat_date[1] - 1];
+                    $stat_date[1] = $periodCollection[$stat_date[1] - 1];
                     $stat_date = implode(' ', $stat_date);
                     break;
                 case 'day':
-                    $stat_date = $week_days[$stat_date];
+                    $stat_date = $periodCollection[$stat_date];
                     break;
             }
             $result[$stat_date] = $obj->number_of_logins;
@@ -457,9 +449,10 @@ class Statistics
             $table_url = '';
             $where_url='';
         }
-        $sql[get_lang('ThisDay')]    = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+        $now = api_get_utc_datetime();
+        $sql[get_lang('ThisDay')]    = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
         $sql[get_lang('Total')]      = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
             $res = Database::query($query);
@@ -797,22 +790,23 @@ class Statistics
             $table_url = '';
             $where_url='';
         }
+        $now = api_get_utc_datetime();
         $sql[get_lang('ThisDay')]    =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
         $sql[get_lang('Last7days')]  =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
         $sql[get_lang('Last31days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
         $sql[sprintf(get_lang('LastXMonths'), 6)] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= '$now' $where_url";
         $sql[get_lang('NeverConnected')]      =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";

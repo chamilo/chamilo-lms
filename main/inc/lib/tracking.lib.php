@@ -3297,10 +3297,10 @@ class Tracking
         $course_code = Database::escape_string($course_code);
         $session_id  = intval($session_id);
         $tbl_stats_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-
+        $now = api_get_utc_datetime();
         $sql = "SELECT count(*) FROM $tbl_stats_access
                 WHERE
-                    DATE_SUB(NOW(),INTERVAL $last_days DAY) <= access_date AND
+                    DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
                     c_id = '$course_id' AND
                     access_tool='".TOOL_CHAT."' AND
                     access_session_id='$session_id' ";
@@ -3436,6 +3436,7 @@ class Tracking
         $table_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tableCourse   = Database :: get_main_table(TABLE_MAIN_COURSE);
         $inner = '';
+        $now = api_get_utc_datetime();
         if ($session_id!=0) {
             $inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user
                     ON c.code = session_course_user.course_code
@@ -3447,7 +3448,7 @@ class Tracking
             INNER JOIN '.$tableCourse.' c
             ON (c.id = stats_login.c_id)
             GROUP BY user_id
-            HAVING DATE_SUB( NOW(), INTERVAL '.$since.' DAY) > max_date ';
+            HAVING DATE_SUB( "' . $now . '", INTERVAL '.$since.' DAY) > max_date ';
 
         if ($since == 'never') {
             $sql = 'SELECT course_user.user_id

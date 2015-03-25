@@ -226,8 +226,8 @@ class TicketManager
         $sql_update = "UPDATE $table_support_tickets
                        SET assigned_last_user = '$user_id'
                        WHERE ticket_id = '$ticket_id'";
-        Database::query($sql_update);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql_update);
+        if (Database::affected_rows($result) > 0) {
             $insert_id = api_get_user_id();
             $sql = "INSERT INTO $table_support_assigned_log (
                 ticket_id,
@@ -1057,8 +1057,8 @@ class TicketManager
 
             $sql .= " AND sys_insert_user_id != '$user_id'";
         }
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             Database::query(
                 "UPDATE $table_support_tickets SET status_id = 'PND'
                  WHERE ticket_id ='$ticket_id' AND status_id = 'NAT'"
@@ -1092,8 +1092,8 @@ class TicketManager
                 sys_lastedit_user_id ='$user_id',
                 sys_lastedit_datetime ='" . $now . "'
                 WHERE ticket_id ='$ticket_id'";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             return true;
         } else {
             return false;

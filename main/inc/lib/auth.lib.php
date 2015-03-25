@@ -170,14 +170,14 @@ class Auth
         $course_code = Database::escape_string($course_code);
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
-        $result = false;
+
 
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        // max_sort_value($newcategory);
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
-        Database::query("UPDATE $TABLECOURSUSER SET user_course_cat='" . $newcategory . "', sort='" . ($max_sort_value + 1) . "' WHERE course_code='" . $course_code . "' AND user_id='" . $current_user . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ");
+        $resultQuery = Database::query("UPDATE $TABLECOURSUSER SET user_course_cat='" . $newcategory . "', sort='" . ($max_sort_value + 1) . "' WHERE course_code='" . $course_code . "' AND user_id='" . $current_user . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ");
 
-        if (Database::affected_rows()) {
+        $result = false;
+        if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
 
@@ -228,9 +228,9 @@ class Auth
                             WHERE course_code='" . $source_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
             $sql_update2 = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
                             WHERE course_code='" . $target_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-            Database::query($sql_update2);
-            Database::query($sql_update1);
-            if (Database::affected_rows()) {
+            $result1 = Database::query($sql_update2);
+            $result2 = Database::query($sql_update1);
+            if (Database::affected_rows($result1) && Database::affected_rows($result2)) {
                 $result = true;
             }
         }
@@ -272,9 +272,10 @@ class Auth
                             WHERE id='" . intval($source_category['id']) . "' AND user_id='" . $current_user_id . "'";
             $sql_update2 = "UPDATE $table_user_defined_category SET sort='" . Database::escape_string($source_category['sort']) . "'
                             WHERE id='" . intval($target_category['id']) . "' AND user_id='" . $current_user_id . "'";
-            Database::query($sql_update2);
-            Database::query($sql_update1);
-            if (Database::affected_rows()) {
+
+            $result1 = Database::query($sql_update2);
+            $result2 = Database::query($sql_update1);
+            if (Database::affected_rows($result1) && Database::affected_rows($result2)) {
                 $result = true;
             }
         }
@@ -315,8 +316,8 @@ class Auth
         $sql = "UPDATE $tucc
                 SET title='" . api_htmlentities($title, ENT_QUOTES, api_get_system_encoding()) . "'
                 WHERE id='" . $category_id . "'";
-        Database::query($sql);
-        if (Database::affected_rows()) {
+        $resultQuery = Database::query($sql);
+        if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
         return $result;
@@ -336,14 +337,15 @@ class Auth
         $result = false;
         $sql_delete = "DELETE FROM $tucc
                        WHERE id='" . $category_id . "' and user_id='" . $current_user_id . "'";
-        Database::query($sql_delete);
-        if (Database::affected_rows()) {
+        $resultQuery = Database::query($sql_delete);
+        if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
         $sql = "UPDATE $TABLECOURSUSER
                 SET user_course_cat='0'
                 WHERE user_course_cat='" . $category_id . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
         Database::query($sql);
+
         return $result;
     }
 
@@ -402,8 +404,8 @@ class Auth
         if (Database::num_rows($rs) == 0) {
             $sql_insert = "INSERT INTO $tucc (user_id, title,sort)
                            VALUES ('" . $current_user_id . "', '" . api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding()) . "', '" . $nextsort . "')";
-            Database::query($sql_insert);
-            if (Database::affected_rows()) {
+            $resultQuery = Database::query($sql_insert);
+            if (Database::affected_rows($resultQuery)) {
                 $result = true;
             }
         } else {

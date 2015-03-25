@@ -3003,10 +3003,10 @@ class CourseManager
         if (is_array($courses_list)) {
             foreach ($courses_list as $course_code) {
                 $course_code = Database::escape_string($course_code);
-                $insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, status, relation_type)
-                               VALUES('$course_code', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
-                Database::query($insert_sql);
-                if (Database::affected_rows()) {
+                $sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, status, relation_type)
+                        VALUES('$course_code', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
+                $result = Database::query($sql);
+                if (Database::affected_rows($result)) {
                     $affected_rows++;
                 }
             }
@@ -3626,7 +3626,9 @@ class CourseManager
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
-            if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
+            if (isset($course_info['visibility']) &&
+                $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
+            ) {
                 continue;
             }
             $course_info['id_session'] = null;

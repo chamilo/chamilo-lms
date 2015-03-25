@@ -289,7 +289,7 @@ class GlossaryManager
 
         $sql = "DELETE FROM $t_glossary WHERE c_id = $course_id AND glossary_id='".intval($glossary_id)."'";
         $result = Database::query($sql);
-        if ($result === false or Database::affected_rows() < 1) { return false; }
+        if ($result === false or Database::affected_rows($result) < 1) { return false; }
         //update item_property (delete)
         api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, intval($glossary_id), 'delete', api_get_user_id());
 

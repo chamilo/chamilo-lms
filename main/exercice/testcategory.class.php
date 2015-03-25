@@ -106,12 +106,13 @@ class Testcategory
         $tbl_question_rel_cat = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$v_id = intval($this->id);
 		$sql = "DELETE FROM $t_cattable WHERE id=$v_id AND c_id=".api_get_course_int_id();
-		Database::query($sql);
-		if (Database::affected_rows() <= 0) {
+		$result = Database::query($sql);
+		if (Database::affected_rows($result) <= 0) {
 			return false;
 		} else {
             // remove link between question and category
-            $sql2 = "DELETE FROM $tbl_question_rel_cat WHERE category_id=$v_id AND c_id=".api_get_course_int_id();
+            $sql2 = "DELETE FROM $tbl_question_rel_cat
+            		 WHERE category_id=$v_id AND c_id=".api_get_course_int_id();
             Database::query($sql2);
             // item_property update
             $course_code = api_get_course_id();
@@ -132,8 +133,8 @@ class Testcategory
 		$v_description = Database::escape_string($this->description);
 		$sql = "UPDATE $t_cattable SET title='$v_name', description='$v_description'
 		        WHERE id = $v_id AND c_id=".api_get_course_int_id();
-		Database::query($sql);
-		if (Database::affected_rows() <= 0) {
+		$result = Database::query($sql);
+		if (Database::affected_rows($result) <= 0) {
 			return false;
 		} else {
             // item_property update

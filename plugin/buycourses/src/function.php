@@ -121,15 +121,15 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
                 WHERE id_session='".$rowSession['session_id']."' AND
                 id_user ='" . $_SESSION['_user']['user_id'] . "';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
                     WHERE session_id ='".$rowSession['session_id']."' AND
                     user_id='" . $_SESSION['_user']['user_id'] . "';";
-                Database::query($sql);
-                if (Database::affected_rows() > 0) {
+                $result = Database::query($sql);
+                if (Database::affected_rows($result) > 0) {
                     $rowSession['enrolled'] = "TMP";
                 } else {
                     $rowSession['enrolled'] = "NO";
@@ -139,8 +139,8 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                 WHERE session_id ='".$rowSession['session_id']."' AND
                 user_id='" . $_SESSION['_user']['user_id'] . "';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
             } else {
                 $rowSession['enrolled'] = "NO";
@@ -279,7 +279,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
                 AND user_id = " . intval($_SESSION['_user']['user_id']) . ";";
 
             $tmp = Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            if (Database::affected_rows($tmp) > 0) {
                 $row['enrolled'] = "YES";
             } else {
                 $row['enrolled'] = "NO";

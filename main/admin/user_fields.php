@@ -356,25 +356,23 @@ function delete_user_fields($field_id)
 	// delete the fields
 	$sql = "DELETE FROM $table_user_field WHERE id =  ".intval($field_id)." ";
 	$result = Database::query($sql);
-	if (Database::affected_rows() == 1)
-	{
+	if (Database::affected_rows($result) == 1) {
 		// delete the field options
 		$sql = "DELETE FROM $table_user_field_options WHERE field_id = ".intval($field_id)."";
-		$result = Database::query($sql);
+		Database::query($sql);
 
 		// delete the field values
 		$sql = "DELETE FROM $table_user_field_values WHERE field_id = ".intval($field_id)."";
-		$result = Database::query($sql);
+		Database::query($sql);
 
 		// recalculate the field_order because the value is used to show/hide the up/down icon
 		// and the field_order value cannot be bigger than the number of fields
 		$sql = "SELECT * FROM $table_user_field ORDER BY field_order ASC";
 		$result = Database::query($sql);
 		$i = 1;
-		while($row = Database::fetch_array($result))
-		{
+		while($row = Database::fetch_array($result)){
 			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = ".intval($row['id'])."";
-			$result_reorder = Database::query($sql_reorder);
+			Database::query($sql_reorder);
 			$i++;
 		}
 

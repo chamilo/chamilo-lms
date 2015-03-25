@@ -155,7 +155,7 @@ function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
 		values
 		('$sv_user','$sv_sco','$sv_course','$sv_key','$sv_value')";
 	$res = Database::query($sql);
-	return Database::affected_rows();
+	return Database::affected_rows($res);
 }
 
 function storage_getall($sv_user, $sv_course, $sv_sco) {

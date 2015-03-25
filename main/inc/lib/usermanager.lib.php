@@ -3579,7 +3579,7 @@ class UserManager
               } else {
               $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
               $result = Database::query($sql);
-              $last_insert_id = Database::get_last_insert_id();
+              $last_insert_id = Database::insert_id();
               } */
         } else {
 

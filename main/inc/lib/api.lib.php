@@ -1662,9 +1662,25 @@ function api_get_cidreq($addSessionId = true, $addGroupId = true)
         }
     }
 
+    $url .= '&gradebook='.intval(api_is_in_gradebook());
     $url .= '&origin='.$origin;
 
     return $url;
+}
+
+function api_is_in_gradebook()
+{
+    return Session::read('in_gradebook', false);
+}
+
+function api_set_in_gradebook()
+{
+    Session::write('in_gradebook', true);
+}
+
+function api_remove_in_gradebook()
+{
+    Session::erase('in_gradebook');
 }
 
 /**
@@ -7584,6 +7600,7 @@ function api_get_origin()
 
     return null;
 }
+
 /**
  * Get the entire setting row
  * @param string $variable
@@ -7901,7 +7918,7 @@ function api_mail_html(
     if ($platform_email['SMTP_UNIQUE_SENDER']) {
         $senderName = $platform_email['SMTP_FROM_NAME'];
         $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-    } 
+    }
     $mail->SetFrom($senderEmail, $senderName);
 
     $mail->Subject = $subject;

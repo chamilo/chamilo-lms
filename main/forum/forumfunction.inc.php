@@ -28,16 +28,6 @@ define('FORUM_NEW_POST', 0);
 get_notifications_of_user();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
-$htmlHeadXtra[] = '<script type="text/javascript">
-function setFocus(){
-    $("#forum_title").focus();
-    $("#category_title").focus();
-    $("#search_title").focus();
-}
-$(document).ready(function () {
-    setFocus();
-});
-</script>';
 $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
@@ -175,7 +165,7 @@ function handle_forum_and_forumcategories($lp_id = null)
                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
             }
         }
-        $return_message = GradebookUtils::delete_forum_forumcategory_thread($get_content, $get_id);
+        $return_message = delete_forum_forumcategory_thread($get_content, $get_id);
         Display::display_confirmation_message($return_message, false);
     }
 
@@ -217,7 +207,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     $form->addElement('hidden', 'lp_id', $lp_id);
     // Setting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
-    $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles" id="category_title"');
+    $form->addElement('text', 'forum_category_title', get_lang('Title'), array('autofocus'));
     $form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
     //$form->applyFilter('forum_category_comment', 'html_filter');
@@ -281,7 +271,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $form->addElement('hidden', 'lp_id', $lp_id);
 
     // The title of the forum
-    $form->addElement('text', 'forum_title', get_lang('Title'), 'class="input_titles" id="forum_title"');
+    $form->addElement('text', 'forum_title', get_lang('Title'), array('autofocus'));
 
     // The comment of the forum.
     $form->addElement('html_editor', 'forum_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
@@ -470,7 +460,7 @@ function show_edit_forumcategory_form($inputvalues = array())
     // Setting the form elements.
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
-    $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles"');
+    $form->addElement('text', 'forum_category_title', get_lang('Title'));
 
     $form->addElement(
         'html_editor',
@@ -2356,8 +2346,6 @@ function store_thread($current_forum, $values)
 function show_add_post_form($current_forum, $forum_setting, $action = '', $id = '', $form_values = '')
 {
     $_user = api_get_user_info();
-    $courseId = api_get_course_int_id();
-    $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
     $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
     // Initialize the object.
@@ -2368,11 +2356,9 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $form = new FormValidator(
         'thread',
         'post',
-        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($myThread).'&post='.Security::remove_XSS($my_post).'&action='.$action
+        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&'.api_get_cidreq().'&thread='.Security::remove_XSS($myThread).'&post='.Security::remove_XSS($my_post).'&action='.$action
     );
     $form->setConstants(array('forum' => '5'));
-
-    $form->addElement('header', $text);
 
     // Setting the form elements.
     $form->addElement('hidden', 'forum_id', intval($my_forum));
@@ -2386,8 +2372,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
-
-    $form->addElement('html_editor', 'post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student'));
+    $form->addHtmlEditor('post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student'));
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     $iframe = null;
@@ -2422,7 +2407,12 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
         $form->applyFilter('calification_notebook_title', 'html_filter');
 
-        $form->addElement('text', 'weight_calification', get_lang('QualifyWeight'), 'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
+        $form->addElement(
+            'text',
+            'weight_calification',
+            get_lang('QualifyWeight'),
+            array('value' => '0.00', 'onfocus' => "javascript: this.select();")
+        );
         $form->applyFilter('weight_calification', 'html_filter');
 
         $form->addElement('html', '</div>');
@@ -2822,9 +2812,23 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }
 
-    $form->addElement('text', 'post_title', get_lang('Title'), 'class="input_titles"');
+    $form->addElement('text', 'post_title', get_lang('Title'));
     $form->applyFilter('post_title', 'html_filter');
-    $form->addElement('html_editor', 'post_text', get_lang('Text'), null, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
+    $form->addElement(
+        'html_editor',
+        'post_text',
+        get_lang('Text'),
+        null,
+        api_is_allowed_to_edit(null, true) ? array(
+            'ToolbarSet' => 'Forum',
+            'Width' => '100%',
+            'Height' => '400'
+        ) : array(
+            'ToolbarSet' => 'ForumStudent',
+            'Width' => '100%',
+            'Height' => '400',
+            'UserStatus' => 'student'
+        )
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>');
@@ -2858,13 +2862,13 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         //Loading gradebook select
         GradebookUtils::load_gradebook_select_in_tool($form);
 
-        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'), 'value="'.$current_thread['thread_qualify_max'].'" style="width:40px"');
+        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'), array('value' => $current_thread['thread_qualify_max'], 'style' => 'width:40px'));
         $form->applyFilter('numeric_calification', 'html_filter');
 
-        $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'), 'value="'.$current_thread['thread_title_qualify'].'"');
+        $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'), array('value' => $current_thread['thread_title_qualify']));
         $form->applyFilter('calification_notebook_title', 'html_filter');
 
-        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, ''), 'value="'.$current_thread['thread_weight'].'" style="width:40px"');
+        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, ''), array('value' => $current_thread['thread_weight'], 'style' => 'width:40px'));
         $form->applyFilter('weight_calification', 'html_filter');
 
         $form->addElement('html', '</div>');
@@ -3772,7 +3776,7 @@ function forum_search()
 
     // Setting the form elements.
     $form->addElement('header', '', get_lang('ForumSearch'));
-    $form->addElement('text', 'search_term', get_lang('SearchTerm'), array('id' =>'search_title'));
+    $form->addElement('text', 'search_term', get_lang('SearchTerm'), array('autofocus'));
     $form->applyFilter('search_term', 'html_filter');
     $form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation'));
     $form->addButtonSearch(get_lang('Search'));

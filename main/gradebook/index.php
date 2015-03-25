@@ -879,4 +879,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
         }
     }
 }
+
+api_set_in_gradebook();
+
 Display :: display_footer();

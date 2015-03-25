@@ -22,7 +22,6 @@
  * @package chamilo.forum
  */
 
-
 use \ChamiloSession as Session;
 
 // Language file that need to be included.
@@ -122,18 +121,17 @@ if (api_is_invitee()) {
     api_not_allowed(true);
 }
 
-$session_toolgroup = 0;
-if ($origin == 'group') {
-    $session_toolgroup = intval($_SESSION['toolgroup']);
-    $group_properties = GroupManager :: get_group_properties($session_toolgroup);
-    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$session_toolgroup, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;gidReq='.$session_toolgroup.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => 'newthread.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']),'name' => get_lang('NewTopic'));
+$groupId = api_get_group_id();
+if (!empty($groupId)) {
+    $group_properties = GroupManager :: get_group_properties($groupId);
+    $interbreadcrumb[] = array('url' => '../group/group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?'.api_get_cidreq(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']),'name' => get_lang('NewTopic'));
 } else {
-    $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook, 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => 'viewforum.php?origin='.$origin.'&amp;forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => $nameTools);
+    $interbreadcrumb[] = array('url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
+    $interbreadcrumb[] = array('url' => 'viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']), 'name' => $current_forum['forum_title']);
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
@@ -158,7 +156,7 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
@@ -166,7 +164,13 @@ echo '</div>';
 echo '<div class="row">';
 echo '<div class="span12">';
 getAttachedFiles($current_forum['forum_id'], 0, 0);
-$values = show_add_post_form($current_forum, $forum_setting, 'newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
+$values = show_add_post_form(
+    $current_forum,
+    $forum_setting,
+    'newthread',
+    '',
+    isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
+);
 echo '</div></div>';
 if (!empty($values) && isset($values['SubmitPost'])) {
     // Add new thread in table forum_thread.
@@ -174,7 +178,7 @@ if (!empty($values) && isset($values['SubmitPost'])) {
 } else {
     // Only show Forum attachment ajax form when do not pass form submit
     echo '<div class="row"><div class="span12">';
-    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], $current_thread['thread_id'], 0);
+    $attachmentAjaxForm = getAttachmentAjaxForm($current_forum['forum_id'], 0, 0);
     echo $attachmentAjaxForm;
     echo '</div></div>';
 }

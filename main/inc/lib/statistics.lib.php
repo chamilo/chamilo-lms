@@ -377,11 +377,12 @@ class Statistics
 
         $table_url = null;
         $where_url = null;
-        $where_url_last = ' WHERE login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
+        $now = api_get_utc_datetime();
+        $where_url_last = ' WHERE login_date > DATE_SUB("' . $now . '",INTERVAL 1 %s)';
         if (api_is_multiple_url_enabled()) {
             $table_url = ", $access_url_rel_user_table";
             $where_url = " WHERE login_user_id=user_id AND access_url_id='".$current_url_id."'";
-            $where_url_last = ' AND login_date > DATE_SUB(NOW(),INTERVAL 1 %s)';
+            $where_url_last = ' AND login_date > DATE_SUB("' . $now . '",INTERVAL 1 %s)';
         }
 
         $period = get_lang('PeriodMonth');
@@ -448,9 +449,10 @@ class Statistics
             $table_url = '';
             $where_url='';
         }
-        $sql[get_lang('ThisDay')]    = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+        $now = api_get_utc_datetime();
+        $sql[get_lang('ThisDay')]    = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
+        $sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
         $sql[get_lang('Total')]      = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
             $res = Database::query($query);
@@ -788,22 +790,23 @@ class Statistics
             $table_url = '';
             $where_url='';
         }
+        $now = api_get_utc_datetime();
         $sql[get_lang('ThisDay')]    =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
         $sql[get_lang('Last7days')]  =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
         $sql[get_lang('Last31days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
         $sql[sprintf(get_lang('LastXMonths'), 6)] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
-            " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= NOW() $where_url";
+            " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= '$now' $where_url";
         $sql[get_lang('NeverConnected')]      =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";

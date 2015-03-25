@@ -1,6 +1,6 @@
 <!-- Topbar -->
 {% if show_toolbar == 1 %}
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar-inverse navbar-fixed-top">
         <div class="container">
 
             <div class="navbar-header">

@@ -24,7 +24,6 @@ if (isset($_GET['action'])) {
 }
 $language_file[] = 'document';
 $language_file[] = 'learnpath';
-$language_file[] = 'registration';
 $language_file[] = 'exercice';
 
 // Including the global initialization file.

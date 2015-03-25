@@ -4233,7 +4233,7 @@ CREATE TABLE IF NOT EXISTS c_lp_item (
   item_type      char(32)            not null default 'dokeos_document',
   ref            tinytext            not null default '',
   title          varchar(511)        not null,
-  description    varchar(511)        not null default '',
+  description    varchar(511)        default '',
   path           text                not null,
   min_score      float unsigned      not null default 0,
   max_score      float unsigned      default 100,
@@ -4470,7 +4470,7 @@ CREATE TABLE c_course_setting  (
   subkey      varchar(255) default NULL,
   type        varchar(255) default NULL,
   category    varchar(255) default NULL,
-  value       varchar(255) NOT NULL default '',
+  value       varchar(255) default '',
   title       varchar(255) NOT NULL default '',
   comment     varchar(255) default NULL,
   subkeytext  varchar(255) default NULL,
@@ -4729,5 +4729,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.26' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.27' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

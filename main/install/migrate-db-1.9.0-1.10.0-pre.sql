@@ -48,7 +48,6 @@ ALTER TABLE track_e_links ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL;
 ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
-
 ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL;
 
 DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
@@ -75,9 +74,10 @@ UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00
 ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0';
-
 ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
+
+ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
 
 DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools';
 
@@ -111,4 +111,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.25' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.26' WHERE variable = 'chamilo_database_version';

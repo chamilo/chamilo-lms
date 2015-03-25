@@ -161,6 +161,7 @@ CREATE TABLE IF NOT EXISTS course (
   registration_code varchar(255) NOT NULL default '',
   legal TEXT  NOT NULL,
   activate_legal INT NOT NULL DEFAULT 0,
+  add_teachers_to_sessions_courses tinyint NOT NULL default 0,
   PRIMARY KEY (id),
   UNIQUE KEY code (code)
 );
@@ -4728,5 +4729,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.25' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.26' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

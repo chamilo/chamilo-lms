@@ -466,7 +466,7 @@ function return_menu() {
                 $current = '';
             }
             if (!empty($navigation_info['title'])) {
-                $pre_lis .= '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
+                $pre_lis .= '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
             }
         }
         $lis = $pre_lis.$lis;
@@ -609,7 +609,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             if ($navigation_info['url'] == '#') {
                 $final_navigation[$index] = $navigation_info['title'];
             } else {
-                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top">'.$navigation_info['title'].'</a>';
+                $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a>';
             }
             $counter++;
         }
@@ -628,7 +628,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $lis = '';
         $i = 0;
         $final_navigation_count = count($final_navigation);
-
         if (!empty($final_navigation)) {
             // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
@@ -641,7 +640,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                     if ($final_navigation_count-1 > $i) {
                         $bread .= '';
                     }
-                    $lis.= Display::tag('li', $bread);
+                    $lis.= Display::tag('li', $bread,array('class'=>'active'));
                     $i++;
                 }
             }

@@ -200,7 +200,7 @@ if (count($pending_invitations) > 0) {
             $socialInvitationsBlock .='</div>';
         $socialInvitationsBlock .= '</div></div>';
     }
-    $socialInvitationsBlock.='</div>';
+    $socialInvitationsBlock.='</div></div>';
 }
 
 $tpl = new Template(null);

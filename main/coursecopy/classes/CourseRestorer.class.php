@@ -888,10 +888,17 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
                 $params = (array)$forum->obj;
-                if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
-                    $cat_id = $this->restore_forum_category($params['forum_category'], $sessionId);
-                } else {
-                    $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
+                $cat_id = '';
+                if (isset($this->course->resources[RESOURCE_FORUMCATEGORY]) &&
+                    isset($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']])) {
+                    if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
+                        $cat_id = $this->restore_forum_category(
+                            $params['forum_category'],
+                            $sessionId
+                        );
+                    } else {
+                        $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
+                    }
                 }
 
                 $params = self::DBUTF8_array($params);
@@ -1861,12 +1868,15 @@ class CourseRestorer
 							// Delete the existing survey with the same code and language and import the one of the source course
 							// getting the information of the survey (used for when the survey is shared)
 
-							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND survey_id='".self::DBUTF8escapestring(Database::result($result_check,0,0))."'";
-							$result = Database::query($sql_select_existing_survey);
+							$sql = "SELECT * FROM $table_sur
+							        WHERE
+							            c_id = ".$this->destination_course_id." AND
+							            survey_id='".self::DBUTF8escapestring(Database::result($result_check,0,0))."'";
+							$result = Database::query($sql);
 							$survey_data = Database::fetch_array($result,'ASSOC');
 
 							// if the survey is shared => also delete the shared content
-							if (is_numeric($survey_data['survey_share'])) {
+							if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
 								survey_manager::delete_survey($survey_data['survey_share'], true,$this->destination_course_id);
 							}
 							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
@@ -2158,7 +2168,7 @@ class CourseRestorer
 							"prerequisite = '".		self::DBUTF8escapestring($item['prerequisite'])."', " .
 							"parameters='".			self::DBUTF8escapestring($item['parameters'])."', " .
 							"audio='".				self::DBUTF8escapestring($item['audio'])."', " .
-							"launch_data = '".		self::DBUTF8escapestring($item['launch_dataprereq_type'])."'";
+							"launch_data = '".		self::DBUTF8escapestring($item['launch_data'])."'";
 
 					Database::query($sql);
 

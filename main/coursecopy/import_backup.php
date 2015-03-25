@@ -157,7 +157,7 @@ if (Security::check_token('post') && (
         'post',
         api_get_path(WEB_CODE_PATH) . 'coursecopy/import_backup.php?' . api_get_cidreq(),
         '',
-        'multipart/form-data'
+        array('enctype' => 'multipart/form-data')
     );
     $form->addElement('header', get_lang('SelectBackupFile'));
     $renderer = $form->defaultRenderer();

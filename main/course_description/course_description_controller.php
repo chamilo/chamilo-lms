@@ -72,12 +72,13 @@ class CourseDescriptionController
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 $check = Security::check_token();
+                $affected_rows = 0;
                 if ($check) {
                     $title = $_POST['title'];
                     $content = $_POST['contentDescription'];
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
-                    $progress = $_POST['progress'];
+                    $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);

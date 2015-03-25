@@ -607,7 +607,7 @@ class CourseHome
                     $properties['session_id'] = $links_row['session_id'];
                     $properties['link'] = $links_row['url'];
                     $properties['visibility'] = $links_row['visibility'];
-                    $properties['image'] = ($links_row['visibility'] == '0') ? 'file_html.gif' : 'file_html.gif';
+                    $properties['image'] = $links_row['visibility'] == '0' ? 'file_html.png' : 'file_html.png';
                     $properties['adminlink'] = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
                     $properties['target'] = $links_row['target'];
                     $tmp_all_tools_list[] = $properties;
@@ -691,6 +691,7 @@ class CourseHome
 
         if (isset($all_tools_list)) {
             $lnk = '';
+
             foreach ($all_tools_list as & $tool) {
                 $item = array();
                 $studentview = false;
@@ -727,7 +728,6 @@ class CourseHome
                 $toolAdmin = isset($tool['admin']) ? $tool['admin'] : '';
 
                 if ($is_allowed_to_edit) {
-
                     if (empty($session_id)) {
                         if (isset($tool['id'])) {
                             if ($tool['visibility'] == '1' && $toolAdmin != '1') {
@@ -771,7 +771,8 @@ class CourseHome
                 if (isset($lnk) && is_array($lnk)) {
                     foreach ($lnk as $this_link) {
                         if (empty($tool['adminlink'])) {
-                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+                            $item['visibility'] .= '<a class="make_visible_and_invisible" href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.
+                                $this_link['name'].'</a>';
                         }
                     }
                 } else {
@@ -785,7 +786,8 @@ class CourseHome
                 ) {
                     $tool['link'] = $web_code_path.$tool['link'];
                 }
-                if ($tool['visibility'] == '0' && $toolAdmin != '1') {
+
+                if ($tool['visibility'] == '0' && $toolAdmin != '1' && !isset($tool['original_link'])) {
                     $class = 'invisible';
                     $info = pathinfo($tool['image']);
                     $basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
@@ -796,7 +798,9 @@ class CourseHome
 
                 $qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&';
                 // If it's a link, we don't add the cidReq
-                if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif') {
+
+                if ($tool['image'] == 'file_html.png' || $tool['image'] == 'file_html_na.png') {
+
                     $tool['link'] = $tool['link'].$qm_or_amp;
                 } else {
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
@@ -833,7 +837,6 @@ class CourseHome
                             'target' => '_blank'
                         );
                     } else {
-
                         $tool_link_params = array(
                             'id' => 'tooldesc_'.$toolId,
                             'href' => $tool['link'],
@@ -855,7 +858,13 @@ class CourseHome
                     $tool_link_params['href'] = api_get_path(WEB_PLUGIN_PATH).$tool['original_link'].'?'.api_get_cidreq();
                 }
 
-                $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$toolId), ICON_SIZE_BIG, false);
+                $icon = Display::return_icon(
+                    $tool['image'],
+                    $tool_name,
+                    array('class' => 'tool-icon', 'id' => 'toolimage_'.$toolId),
+                    ICON_SIZE_BIG,
+                    false
+                );
 
                 // Validation when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], (!empty($_user['status']) ? $_user['status'] : ''));
@@ -866,7 +875,6 @@ class CourseHome
                 $item['icon'] = Display::url($icon, $tool_link_params['href'], $tool_link_params);
                 $item['tool'] = $tool;
                 $item['name'] = $tool_name;
-
                 $tool_link_params['id'] = 'is'.$tool_link_params['id'];
                 $item['link'] = Display::url($tool_name.$session_img, $tool_link_params['href'], $tool_link_params);
 
@@ -1019,6 +1027,8 @@ class CourseHome
         static $already_translated_icons = array(
             'file_html.gif',
             'file_html_na.gif',
+            'file_html.png',
+            'file_html_na.png',
             'scormbuilder.gif',
             'scormbuilder_na.gif',
             'blog.gif',
@@ -1028,25 +1038,12 @@ class CourseHome
         );
 
         if (in_array($tool['image'], $already_translated_icons)) {
-            $tool_name = Security::remove_XSS(stripslashes($tool['name']));
+            $toolName = Security::remove_XSS(stripslashes($tool['name']));
         } else {
-            /*
-              // The following (slow) code was made in the past for transitional purposes.
-              // We assume that the new language variables Tool* have been already translated.
-              $variable = 'Tool'.api_underscore_to_camel_case($tool['name']); // The newly opened language variables.
-              $variable_old = ucfirst($tool['name']);         // The old language variables as a second chance.
-              if (api_is_translated($variable)) {
-              $tool_name = get_lang($variable);
-              } elseif (api_is_translated($variable_old)) {
-              $tool_name = get_lang($variable_old);
-              } else {
-              $tool_name = get_lang($variable);
-              }
-             */
-            $tool_name = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
+            $toolName = get_lang('Tool'.api_underscore_to_camel_case($tool['name']));
         }
 
-        return $tool_name;
+        return $toolName;
     }
 
     /**

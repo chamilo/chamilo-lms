@@ -22,8 +22,7 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
 
     /**
      * Create a Drupal user when the Chamilo user is registered
-     * @param   HookCreateUserEventInterface    $hook   The hook
-     * @return  array|bool                              Drupal created user id
+     * @param HookCreateUserEventInterface $hook The hook
      */
     public function hookCreateUser(HookCreateUserEventInterface $hook)
     {
@@ -57,9 +56,8 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             $client = new SoapClient(null, $options);
             $drupalUserId = $client->addUser($fields, $extraFields);
             if ($drupalUserId !== false) {
-                $drupalUserId = array('drupal_user_id' => $drupalUserId);
+                UserManager::update_extra_field_value($return, 'drupal_user_id', $drupalUserId);
             }
-            return $drupalUserId;
         }
     }
 

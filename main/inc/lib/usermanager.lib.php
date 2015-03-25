@@ -276,18 +276,6 @@ class UserManager
             return api_set_failure('error inserting in Database');
         }
 
-        if (!empty($hook)) {
-            $hook->setEventData(array(
-                'return' => $return,
-                'originalPassword' => $original_password
-            ));
-            $userIds = $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
-            foreach ($userIds as $userId) {
-                $key = key($userId);
-                $extra[$key] = $userId[$key];
-            }
-        }
-
         if (is_array($extra) && count($extra) > 0) {
             $res = true;
             foreach ($extra as $fname => $fvalue) {
@@ -295,6 +283,14 @@ class UserManager
             }
         }
         self::update_extra_field_value($return, 'already_logged_in', 'false');
+
+        if (!empty($hook)) {
+            $hook->setEventData(array(
+                'return' => $return,
+                'originalPassword' => $original_password
+            ));
+            $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
+        }
         return $return;
     }
 

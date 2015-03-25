@@ -118,10 +118,12 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_list.php">'.Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>
 	 	  </div>';
         ?>
-        <form method="POST" action="session_category_list.php">
-            <input type="text" name="keyword" value="<?php echo $keyword; ?>"/>
-            <button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
+        <form method="POST" action="session_category_list.php" class="form-inline">
+            <div class="form-group">
+            <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"/>
+            <button class="btn btn-default" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><i class="fa fa-search"></i> <?php echo get_lang('Search') ?></button>
             <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
+             </div>
         </form>
         <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
     </div><br />
@@ -234,7 +236,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             <option value="delete_off_session" selected="selected"><?php echo get_lang('DeleteSelectedSessionCategory'); ?></option>
             <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
         </select>
-        <button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
+        <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
     <?php } ?>
     </table>
 

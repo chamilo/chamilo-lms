@@ -475,10 +475,10 @@ if (!empty($flat_list)) {
 } else {
     if ($is_allowed_to_edit) {
         echo '<div id="no-data-view">';
-        echo '<h2>'.get_lang('LearningPaths').'</h2>';
+        echo '<h3>'.get_lang('LearningPaths').'</h3>';
         echo Display::return_icon('scorms.png', '', array(), 64);
         echo '<div class="controls">';
-        echo Display::url(get_lang('LearnpathAddLearnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp', array('class' => 'btn'));
+        echo Display::url(get_lang('LearnpathAddLearnpath'), api_get_self().'?'.api_get_cidreq().'&action=add_lp', array('class' => 'btn btn-primary'));
         echo '</div>';
         echo '</div>';
     }

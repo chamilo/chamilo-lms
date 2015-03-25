@@ -338,7 +338,7 @@ class Nanogong
 		if (!empty($file_path)) {
 			$url = $this->get_public_url(true);
 			$actions = Display::url(Display::return_icon('save.png', get_lang('Download'), array(), ICON_SIZE_SMALL), $url, array('target'=>'_blank'));
-			$download_button = Display::url(get_lang('Download'), $url, array('class' =>'btn'));
+			$download_button = Display::url(get_lang('Download'), $url, array('class' =>'btn btn-default'));
 
 			if ($show_delete_button) {
 				$actions .= ' '.Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), "#", array('onclick'=>'delete_file();'));

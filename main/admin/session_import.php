@@ -540,7 +540,7 @@ $form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('Delete
 $form->addElement('checkbox', 'update_course_coaches', null, get_lang('CleanAndUpdateCourseCoaches'));
 $form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'));
 $form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
-$form->addElement('button', 'submit', get_lang('ImportSession'));
+$form->addButtonImport(get_lang('ImportSession'));
 
 $defaults = array('sendMail' => 'true','file_type' => 'csv');
 $form->setDefaults($defaults);

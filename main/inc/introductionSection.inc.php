@@ -277,10 +277,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             </div>
                                         </div>';
         $thematic_description_html .=
-            '<div class="span8">
-                                            <div class="row-fluid">';
+            '<div class="col-md-8">
+                                            <div class="row">';
         $thematic_description_html .=
-            '<div class="span6 items-progress'.$class1.'">
+            '<div class="col-md-6 items-progress'.$class1.'">
                                                     <div class="topics">' . $subTitle1 . '</div>
                                                     <p class="title_topics">' . $thematic_info['title'] . '</p>
                                                     <p class="date">' . $thematic_advance_info['start_date'] . '</p>
@@ -294,7 +294,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
             $thematic_description_html .=
-                '<div class="span6 items-progress">
+                '<div class="col-md-6 items-progress">
                                                     <div class="topics">'.$subTitle2.'</div>
                                                     <p class="title_topics">'.$thematic_info2['title'].'</p>
                                                     <p class="date">'.$thematic_advance_info2['start_date'].'</p>
@@ -320,7 +320,7 @@ $introduction_section .= '<div class="row"><div class="col-md-12">';
 $introduction_section .=  $thematic_description_html;
 $introduction_section .=  '</div>';
 
-$introduction_section .=  '<div class="home-course-intro span12"><div class="page-course">';
+$introduction_section .=  '<div class="home-course-intro col-md-12"><div class="page-course">';
 
 if ($intro_dispDefault) {
     if (!empty($intro_content)) {

@@ -39,7 +39,7 @@ $form = new FormValidator('import_sessions', 'post', api_get_self(), null, array
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'remove_old_relationships', null, get_lang('RemoveOldRelationships'));
 //$form->addElement('checkbox', 'send_email', null, get_lang('SendMailToUsers'));
-$form->addElement('button', 'submit', get_lang('ImportSession'));
+$form->addButtonImport(get_lang('ImportSession'));
 
 if ($form->validate()) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {

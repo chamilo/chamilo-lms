@@ -726,8 +726,8 @@ if (!empty($user_list)) {
                 echo $options;
                 echo '</select>';
                 echo '<br />';
-                echo '<button type="submit" class="save" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';
-                echo '<button type="submit" class="save" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
+                echo '<button type="submit" class="btn save" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';
+                echo '<button type="submit" class="btn save" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
                 echo '<div id ="reponse_'.$unique_id.'"></div>';
                 echo '</td>';
             }

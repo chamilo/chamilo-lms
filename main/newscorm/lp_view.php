@@ -340,6 +340,7 @@ if (!api_is_invitee()) {
     $progress_bar   = $_SESSION['oLP']->getProgressBar();
 }
 $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
+$navigation_bar_bottom = $_SESSION['oLP']->get_navigation_bar("control-bottom","display:none");
 $mediaplayer    = $_SESSION['oLP']->get_mediaplayer($autostart);
 
 $tbl_lp_item    = Database::get_course_table(TABLE_LP_ITEM);
@@ -372,7 +373,11 @@ if ($is_allowed_to_edit) {
     echo '</div>';
     echo '</div>';
 }
-    echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
+    /* button hiden left zone */
+    echo '<a id="touch-button" class="hidden-touch" href="#"></a>';
+    /* Fin left zone */
+    echo '<div class="container-fluid"><div class="row">';
+    echo '<div id="learning_path_left_zone" class="sidebar-scorm"> ';
     echo '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
     echo '<div class="panel panel-default">';
     echo '<div class="panel-heading" role="tab" id="headingOne">
@@ -448,10 +453,7 @@ if ($is_allowed_to_edit) {
             </div>
         </div>
         </div>
-
     </div>
-
-        <!-- end media player layout -->
 
         <!-- TOC layout -->
 
@@ -462,10 +464,11 @@ if ($is_allowed_to_edit) {
         </div>
         <!-- end TOC layout -->
     </div>
-    <!-- end left zone -->
 
+    <!-- end left zone
+    <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div>-->
     <!-- right zone -->
-    <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
+    <div id="learning_path_right_zone" style="height:100%" class="content-scorm">
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen
         $height = '100%';
@@ -476,8 +479,11 @@ if ($is_allowed_to_edit) {
         }
     ?>
     </div>
+
     <!-- end right Zone -->
 </div>
+<?php echo $navigation_bar_bottom; ?>
+    </div></div>
 
 <script>
     // Resize right and left pane to full height (HUB 20-05-2010).
@@ -543,7 +549,7 @@ if ($is_allowed_to_edit) {
   }
     $(document).ready(function() {
         updateContentHeight();
-        $('#hide_bar').children().click(function(){
+        $('#touch-button').children().click(function(){
             updateContentHeight();
         });
         $(window).resize(function() {

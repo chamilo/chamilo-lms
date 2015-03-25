@@ -117,7 +117,7 @@ function display_form()
     $html .= '<select id="destination" name="SessionCoursesListDestination[]" style="width:380px;" ></select></div></td>';
     $html .= '</tr></table>';
 
-    $html .= '<h3>'.get_lang('TypeOfCopy').'</h3>';
+    $html .= '<h4>'.get_lang('TypeOfCopy').'</h4>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
     $html .= get_lang('FullCopy').'</label><br/>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
@@ -125,7 +125,7 @@ function display_form()
 
     $html .= '<label class="checkbox"><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label><br /><br/>';
 
-    $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button>';
+    $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><i class="fa fa-files-o"></i> '.get_lang('CopyCourse').'</button>';
 
     // Add Security token
     $html .= '<input type="hidden" value="' . Security::get_token() . '" name="sec_token">';

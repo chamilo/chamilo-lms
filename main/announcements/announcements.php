@@ -330,7 +330,7 @@ switch ($action) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
         }
 
-        $form->addButton('save', get_lang('ButtonPublishAnnouncement'));
+       $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
         $form->setDefaults($defaults);
 
         $content = $form->return_form();

@@ -241,7 +241,7 @@ if ($_POST['formSent']) {
 			fputs($fp,"</Sessions>\n");
 		fclose($fp);
 
-		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+		$errorMsg=get_lang('UserListHasBeenExported').'<br/><a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
 	}
 }
 
@@ -284,7 +284,7 @@ foreach ($Sessions as $enreg) {
 }
 
 $form->addElement('select', 'session_id', get_lang('WhichSessionToExport'),  $options);
-$form->addElement('button', 'submit', get_lang('ExportSession'));
+$form->addButtonExport(get_lang('ExportSession'));
 
 $defaults = array();
 $defaults['file_type'] = 'csv';

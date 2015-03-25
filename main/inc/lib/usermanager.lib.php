@@ -3937,7 +3937,7 @@ class UserManager
                 <option value="2"' . (($searchType=='2')?'selected="selected"':"") . '>--' . get_lang('Group') . '--</option>
                 </select>
                 '.$extraFields.'
-                <button class="btn" type="submit" value="search">'.get_lang('Search').'</button>
+                <button class="btn btn-primary" type="submit" value="search">'.get_lang('Search').'</button>
         </form>
 
         ';

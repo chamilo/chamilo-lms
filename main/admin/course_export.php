@@ -79,7 +79,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			fputs($fp, $add);
 		}
 		fclose($fp);
-		$msg = get_lang('CoursesListHasBeenExported').'<br/><a class="btn" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+		$msg = get_lang('CoursesListHasBeenExported').'<br/><a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
 	} else {
 		$msg = get_lang('ThereAreNotSelectedCoursesOrCoursesListIsEmpty');
 	}

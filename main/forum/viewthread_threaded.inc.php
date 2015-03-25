@@ -443,7 +443,7 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
                 '&thread=' . $threadId .
                 '" onclick="javascript:if(!confirm(\'' .
                 addslashes(api_htmlentities(
-                    get_lang('ConfirmYourChoice'), ENT_QUOTESt)
+                    get_lang('ConfirmYourChoice'), ENT_QUOTES)
                 ) . '\')) return false;">' . Display::return_icon(
                     'delete.gif',
                     get_lang('Delete')

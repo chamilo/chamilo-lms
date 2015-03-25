@@ -6,11 +6,8 @@
  */
 
 $language_file = array(
-    'registration',
-    'index',
     'tracking',
     'exercice',
-    'scorm',
     'learnpath'
 );
 require_once '../inc/global.inc.php';

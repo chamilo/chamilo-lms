@@ -186,8 +186,10 @@ class Database
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
      * @return int                              Returns the number of affected rows on success, and -1 if the last query failed.
      */
-    public static function affected_rows($connection = null) {
-        return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
+    public static function affected_rows(Statement $result)
+    {
+        return $result->rowCount();
+        //return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
     }
 
     /**
@@ -286,13 +288,16 @@ class Database
      */
     public static function escape_string($string, $connection = null, $addFix = true)
     {
-        return get_magic_quotes_gpc()
+        $string = self::getManager()->getConnection()->quote($string);
+        return trim($string, "'");
+
+        /*return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
                 : mysql_real_escape_string(stripslashes($string), $connection))
             : (self::use_default_connection($connection)
                 ? mysql_real_escape_string($string)
-                : mysql_real_escape_string($string, $connection));
+                : mysql_real_escape_string($string, $connection));-*/
     }
 
 
@@ -303,10 +308,14 @@ class Database
      * @return array        Array of results as returned by php
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_array($result, $option = 'BOTH')
+    public static function fetch_array(Statement $result, $option = 'BOTH')
     {
-        if ($result === false) { return array(); }
-        return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
+        if ($result === false) {
+            return array();
+        }
+        return $result->fetch(self::customOptionToDoctrineOption($option));
+        //if ($result === false) { return array(); }
+        //return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
     }
 
     /**
@@ -315,8 +324,10 @@ class Database
      * @param resource $result  The result from a call to sql_query (e.g. Database::query).
      * @return array            Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
-    public static function fetch_assoc($result) {
-        return mysql_fetch_assoc($result);
+    public static function fetch_assoc(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_ASSOC);
+        //return mysql_fetch_assoc($result);
     }
 
     /**
@@ -327,8 +338,11 @@ class Database
      * @return  object      Object of class StdClass or the required class, containing the query result row
      * @author  Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_object($result, $class = null, $params = null) {
-        return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
+    //public static function fetch_object($result, $class = null, $params = null) {
+    public static function fetch_object(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_OBJ);
+        //return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
     }
 
     /**
@@ -336,8 +350,10 @@ class Database
      * @param resource      The result from a call to sql_query (see Database::query()).
      * @return array        Array of results as returned by php (mysql_fetch_row)
      */
-    public static function fetch_row($result) {
-        return mysql_fetch_row($result);
+    public static function fetch_row(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_NUM);
+        //return mysql_fetch_row($result);
     }
 
     /**
@@ -346,8 +362,10 @@ class Database
      * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      * Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result($result) {
-        return mysql_free_result($result);
+    public static function free_result(Statement $result)
+    {
+        $result->closeCursor();
+        //return mysql_free_result($result);
     }
 
     /**
@@ -431,8 +449,10 @@ class Database
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
      * @return int                              The last ID as returned by the DB function
      */
-    public static function insert_id($connection = null) {
-        return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
+    public static function insert_id()
+    {
+        return self::getManager()->getConnection()->lastInsertId();
+        //return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
     }
 
     /**
@@ -441,8 +461,10 @@ class Database
      * @return integer      The number of rows contained in this result
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      **/
-    public static function num_rows($result) {
-        return is_resource($result) ? mysql_num_rows($result) : false;
+    public static function num_rows(Statement $result)
+    {
+        return $result->rowCount();
+        //return is_resource($result) ? mysql_num_rows($result) : false;
     }
 
     /**
@@ -453,8 +475,13 @@ class Database
      * @param   string      Optional field name or number
      * @return  mixed       One cell of the result, or FALSE on error
      */
-    public static function result($resource, $row, $field = '') {
-        return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
+    public static function result(Statement $resource, $row, $field = '')
+    {
+        if ($resource->rowCount() > 0) {
+            $result = $resource->fetchAll(PDO::FETCH_BOTH);
+            return $result[$row][$field];
+        }
+        //return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
     }
 
     /**
@@ -470,7 +497,7 @@ class Database
      * @param string $file (optional)           On error it shows the file in which the error has been trigerred (use the "magic" constant __FILE__ as input parameter)
      * @param string $line (optional)           On error it shows the line in which the error has been trigerred (use the "magic" constant __LINE__ as input parameter)
      *
-     * @return resource                         The returned result from the query
+     * @return Statement                         The returned result from the query
      *
      * Note: The parameter $connection could be skipped. Here are examples of this method usage:
      * Database::query($query);
@@ -485,6 +512,10 @@ class Database
      */
     public static function query($query, $connection = null, $file = null, $line = null)
     {
+        $result = self::getManager()->getConnection()->executeQuery($query);
+
+        return $result;
+
         $use_default_connection = self::use_default_connection($connection);
         if ($use_default_connection) {
             // Let us do parameter shifting, thus the method would be similar
@@ -615,6 +646,26 @@ class Database
     }
 
     /**
+     * @param string $option
+     * @return int
+     */
+    public static function customOptionToDoctrineOption($option)
+    {
+        switch($option) {
+            case 'ASSOC':
+                return PDO::FETCH_ASSOC;
+                break;
+            case 'NUM':
+                return PDO::FETCH_NUM;
+                break;
+            case 'BOTH':
+            default:
+                return PDO::FETCH_BOTH;
+                break;
+        }
+    }
+
+    /**
      * Selects a database.
      * @param string $database_name             The name of the database that is to be selected.
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
@@ -632,7 +683,10 @@ class Database
      * @param  option BOTH, ASSOC, or NUM
      * @return array - the value returned by the query
      */
-    public static function store_result($result, $option = 'BOTH') {
+    public static function store_result(Statement $result, $option = 'BOTH')
+    {
+        return $result->fetchAll(self::customOptionToDoctrineOption($option));
+
         $array = array();
         if ($result !== false) { // For isolation from database engine's behaviour.
             while ($row = self::fetch_array($result, $option)) {
@@ -900,6 +954,13 @@ class Database
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
+        $result = self::getManager()->getConnection()->insert($table_name, $attributes);
+        if ($result) {
+            return self::insert_id();
+        }
+        return false;
+
+
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
@@ -1082,8 +1143,8 @@ class Database
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
         if ($show_query) { echo $sql; echo '<br />'; }
-        self::query($sql);
-        $affected_rows = self::affected_rows();
+        $result = self::query($sql);
+        $affected_rows = self::affected_rows($result);
         //@todo should return affected_rows for
         return $affected_rows;
     }
@@ -1123,8 +1184,8 @@ class Database
                 if ($show_query) {
                     var_dump($sql);
                 }
-                self::query($sql);
-                $affected_rows = self::affected_rows();
+                $result = self::query($sql);
+                $affected_rows = self::affected_rows($result);
                 return $affected_rows;
             }
         }

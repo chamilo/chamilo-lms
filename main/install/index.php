@@ -71,17 +71,15 @@ if (!empty($_POST['language_list'])) {
 
 // Language validation.
 if (!array_key_exists($install_language, get_language_folder_list())) {
-	$install_language = 'english';
+    $install_language = 'english';
 }
 
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-require api_get_path(SYS_LANG_PATH).'english/admin.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if ($install_language != 'english') {
-	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
-	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
-    include_once api_get_path(SYS_LANG_PATH).$install_language.'/admin.inc.php';
+    include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
+    include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
 }
 
 // These global variables must be set for proper working of the function get_lang(...) during the installation.

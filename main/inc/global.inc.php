@@ -137,15 +137,16 @@ $params = array(
     'client_flags' => $dbFlags,
 );
 
-if (!($conn_return = @Database::connect($params))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
 if (!$_configuration['db_host']) {
     $global_error_code = 4;
     // A configuration option about database server is missing.
+    require $includePath.'/global_error_message.inc.php';
+    die();
+}
+
+if (!($conn_return = @Database::connect($params))) {
+    $global_error_code = 3;
+    // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
     die();
 }
@@ -154,14 +155,6 @@ if (!$_configuration['db_host']) {
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
-
-$paths = array(
-    api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity',
-    api_get_path(SYS_PATH).'src/Chamilo/UserBundle/Entity',
-    api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
-);
-
-$isDevMode = true;
 
 // the connection configuration
 $dbParams = array(
@@ -172,17 +165,7 @@ $dbParams = array(
     'dbname' => $_configuration['main_database'],
 );
 
-$isSimpleMode = false;
-$proxyDir = null;
-$cache = null;
-
-$config = Setup::createAnnotationMetadataConfiguration(
-    $paths,
-    $isDevMode,
-    $proxyDir,
-    $cache,
-    $isSimpleMode
-);
+$config = Database::getDoctrineConfig();
 
 $config->setEntityNamespaces(
     array(
@@ -194,18 +177,18 @@ $config->setEntityNamespaces(
 
 $entityManager = EntityManager::create($dbParams, $config);
 
+// Registering Constraints
 use Doctrine\Common\Annotations\AnnotationRegistry;
-
 AnnotationRegistry::registerAutoloadNamespace(
     'Symfony\Component\Validator\Constraint',
     api_get_path(SYS_PATH)."vendor/symfony/validator"
 );
 
-
 AnnotationRegistry::registerFile(
     api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
 );
 
+// Registering gedmo extensions
 AnnotationRegistry::registerAutoloadNamespace(
     'Gedmo\Mapping\Annotation',
     api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
@@ -214,6 +197,22 @@ AnnotationRegistry::registerAutoloadNamespace(
 /*$repo = $entityManager->getRepository('ChamiloCoreBundle:Session');
 $repo = $entityManager->getRepository('ChamiloUserBundle:User');
 $repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
+
+if (!($conn_return = @Database::connect($params))) {
+    $global_error_code = 3;
+    // The database server is not available or credentials are invalid.
+    require $includePath.'/global_error_message.inc.php';
+    die();
+}
+
+/*try {
+    $connect = $entityManager->getConnection()->connect();
+} catch (Exception $e) {
+    $global_error_code = 3;
+    // The database server is not available or credentials are invalid.
+    require $includePath.'/global_error_message.inc.php';
+    die();
+}*/
 
 $database = new \Database();
 $database->setManager($entityManager);
@@ -264,12 +263,12 @@ if (!empty($_configuration['multiple_access_urls'])) {
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");
 
-if (!Database::select_db($_configuration['main_database'], $database_connection)) {
+/*if (!Database::select_db($_configuration['main_database'], $database_connection)) {
     $global_error_code = 5;
     // Connection to the main Chamilo database is impossible, it might be missing or restricted or its configuration option might be incorrect.
     require $includePath.'/global_error_message.inc.php';
     die();
-}
+}*/
 
 /* Initialization of the default encodings */
 // The platform's character set must be retrieved at this early moment.
@@ -694,3 +693,4 @@ define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
 // Sets the ascii_math plugin see #7134
 $_SESSION['ascii_math_loaded'] = false;
+

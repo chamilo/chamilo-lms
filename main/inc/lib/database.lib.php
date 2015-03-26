@@ -1144,4 +1144,35 @@ class Database
     public static function get_last_insert_id() {
         return mysql_insert_id();
     }
+
+    /**
+     * @return \Doctrine\ORM\Configuration
+     */
+    public static function getDoctrineConfig()
+    {
+        $isDevMode = true;
+        $isSimpleMode = false;
+        $proxyDir = null;
+        $cache = null;
+
+        $paths = array(
+            api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity',
+            api_get_path(SYS_PATH).'src/Chamilo/UserBundle/Entity',
+            api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
+        );
+
+        /*$doctrineCache = api_get_path(SYS_ARCHIVE_PATH).'doctrine/';
+
+        if (!is_dir($doctrineCache)) {
+            mkdir($doctrineCache, api_get_permissions_for_new_directories(), true);
+        }*/
+
+        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+            $paths,
+            $isDevMode,
+            $proxyDir,
+            $cache,
+            $isSimpleMode
+        );
+    }
 }

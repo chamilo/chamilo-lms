@@ -110,7 +110,7 @@ function get_group_data($from, $number_of_items, $column, $direction) {
     foreach ($result as $row) {
         $groupRelations[$row['id']] = $row;
     }
-
+    $groups = array();
     while ($group = Database::fetch_row($res)) {
         $name = null;
         $id = $group[0];

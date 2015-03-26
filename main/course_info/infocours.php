@@ -125,18 +125,18 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
 }
 $form->addElement('html', $image_html);
 
-$form->addText('title', get_lang('Title'), true, array('class' => ''));
+$form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array('style'=>'width:350px', 'class'=>'chzn-select', 'id'=>'category_code'));
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
-$form->addText('department_name', get_lang('Department'), false, array('class' => ''));
+$form->addText('department_name', get_lang('Department'), false);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->addText('department_url', get_lang('DepartmentUrl'), false, array('class' => ''));
+$form->addText('department_url', get_lang('DepartmentUrl'), false);
 $form->applyFilter('department_url', 'html_filter');
 
 // Picture
@@ -303,7 +303,9 @@ if (api_get_setting('allow_course_theme') == 'true') {
 }
 
 global $_configuration;
-if (isset($_configuration['allow_lp_return_link']) && $_configuration['allow_lp_return_link']) {
+if (isset($_configuration['allow_lp_return_link']) &&
+    $_configuration['allow_lp_return_link']
+) {
     $group = array(
         $form->createElement(
             'radio',
@@ -386,17 +388,17 @@ $all_course_information = CourseManager::get_course_information($_course['sysCod
 // Set the default values of the form
 $values = array();
 
-$values['title']                        = $_course['name'];
-$values['category_code']                = $_course['categoryCode'];
-$values['course_language']              = $_course['language'];
-$values['department_name']              = $_course['extLink']['name'];
-$values['department_url']               = $_course['extLink']['url'];
-$values['visibility']                   = $_course['visibility'];
-$values['subscribe']                    = $course_access_settings['subscribe'];
-$values['unsubscribe']                  = $course_access_settings['unsubscribe'];
+$values['title'] = $_course['name'];
+$values['category_code'] = $_course['categoryCode'];
+$values['course_language'] = $_course['language'];
+$values['department_name'] = $_course['extLink']['name'];
+$values['department_url'] = $_course['extLink']['url'];
+$values['visibility'] = $_course['visibility'];
+$values['subscribe'] = $course_access_settings['subscribe'];
+$values['unsubscribe'] = $course_access_settings['unsubscribe'];
 $values['course_registration_password'] = $all_course_information['registration_code'];
-$values['legal']                        = $all_course_information['legal'];
-$values['activate_legal']               = $all_course_information['activate_legal'];
+$values['legal'] = $all_course_information['legal'];
+$values['activate_legal'] = $all_course_information['activate_legal'];
 
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 foreach ($courseSettings as $setting) {

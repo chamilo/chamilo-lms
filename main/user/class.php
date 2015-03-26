@@ -6,8 +6,6 @@
 /**
  * INIT SECTION
  */
-// name of the language file that needs to be included
-$language_file = array('admin');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

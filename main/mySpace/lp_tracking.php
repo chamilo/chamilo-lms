@@ -4,12 +4,6 @@
  * Learning paths reporting
  * @package chamilo.reporting
  */
-
-$language_file = array(
-    'tracking',
-    'exercice',
-    'learnpath'
-);
 require_once '../inc/global.inc.php';
 
 // resetting the course id

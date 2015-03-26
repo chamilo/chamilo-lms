@@ -2,9 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
-
-$language_file = array('admin', 'exercice', 'gradebook', 'tracking');
-
 require_once '../global.inc.php';
 
 $libpath = api_get_path(LIBRARY_PATH);
@@ -984,7 +981,11 @@ switch ($action) {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
         }
-        $result = SessionManager::get_session_progress($sessionId, $courseId,
+        $result = SessionManager::get_session_progress(
+            $sessionId,
+            $courseId,
+            null,
+            null,
             array(
                 'where' => $whereCondition,
                 'order' => "$sidx $sord",

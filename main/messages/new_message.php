@@ -12,8 +12,6 @@
 * - reply on message (when pressing reply when viewing a message)
 * - send to specific user (when pressing send message in the who is online list)
 */
-// name of the language file that needs to be included
-$language_file = array('admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
 

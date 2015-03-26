@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('document');
 require_once '../../../inc/global.inc.php';
 
 // Add security from Chamilo

@@ -10,8 +10,6 @@
 // TODO: Is this file used?
 
 $nameTools = 'Reussite';
-// name of the language file that needs to be included
-$language_file = array ('trad4all', 'tracking');
 $cidReset = true;
 
 require '../inc/global.inc.php';

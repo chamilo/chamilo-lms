@@ -9,9 +9,6 @@
 
 use ChamiloSession as Session;
 
-// name of the language file that needs to be included
-$language_file = array('exercice');
-
 // including the global library
 require_once '../inc/global.inc.php';
 

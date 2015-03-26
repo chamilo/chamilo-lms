@@ -6,7 +6,6 @@
 */
 use \ChamiloSession as Session;
 
-$language_file = array('exercice');
 require_once '../inc/global.inc.php';
 api_protect_course_script(false);
 

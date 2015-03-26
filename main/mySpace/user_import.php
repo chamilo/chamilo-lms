@@ -9,8 +9,6 @@
 /**
  * Main script
  */
-$language_file = array ('admin', 'trad4all', 'tracking');
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

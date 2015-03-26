@@ -6,8 +6,6 @@
 *	@package chamilo.exercise
 * 	@author Julio Montoya Armas switchable fill in blank option added
 */
-
-$language_file = 'exercice';
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;

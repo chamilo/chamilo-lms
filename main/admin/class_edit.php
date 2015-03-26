@@ -6,9 +6,6 @@
 /**
  * Code
  */
-// Language files that should be included.
-$language_file = 'admin';
-
 // Resetting the course id.
 $cidReset = true;
 

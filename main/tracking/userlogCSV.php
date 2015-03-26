@@ -15,9 +15,6 @@
 
 $uInfo = $_REQUEST['uInfo'];
 $view = $_REQUEST['view'];
-// name of the language file that needs to be included
-$language_file = 'tracking';
-
 require_once '../inc/global.inc.php';
 
 // Roles and rights system

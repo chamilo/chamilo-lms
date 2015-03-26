@@ -16,8 +16,6 @@
 $reqdate        = $_REQUEST['reqdate'];
 $period         = $_REQUEST['period'];
 $displayType    = $_REQUEST['displayType'];
-// name of the language file that needs to be included
-$language_file = "tracking";
 require_once '../inc/global.inc.php';
 
 $courseId = api_get_course_int_id();

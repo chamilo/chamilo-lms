@@ -9,9 +9,6 @@
 //Disabling code when course code is null (gradebook as a tab) see issue #2705
 exit;
 
-
-
-$language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
 api_block_anonymous_users();
@@ -62,7 +59,7 @@ if ( isset($_POST['submit_button']) ) {
 
 $interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
 $interbreadcrumb[]= array(
-	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq()
+	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
 	'name' => get_lang('ViewResult')
 );
 Display :: display_header(get_lang('AddUserToEval'));

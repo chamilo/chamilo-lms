@@ -10,11 +10,6 @@
 /**
  * Code
  */
-/**
- * name of the language file that needs to be included
- */
-$language_file='exercice';
-
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 api_protect_course_script(true);

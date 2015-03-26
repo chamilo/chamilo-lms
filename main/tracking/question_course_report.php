@@ -5,8 +5,6 @@
  * Report
  * @package chamilo.tracking
  */
-
-$language_file = array('tracking', 'exercice', 'survey');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

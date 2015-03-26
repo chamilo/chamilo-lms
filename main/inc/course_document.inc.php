@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /*		INIT SECTION */
-
-$language_file = array('document');
 require 'global.inc.php';
 
 /*	Libraries */

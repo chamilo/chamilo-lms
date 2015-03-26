@@ -12,23 +12,7 @@
 /**
  * Requires
  */
-$language_file = array(
-'admin',
-'document',
-'exercice',
-'gradebook',
-'help',
-'hotspot',
-'install',
-'learnpath',
-'reservation',
-'scormdocument',
-'shibboleth',
-'survey',
-'tracking',
-'trad4all',
-'wiki',
-);
+$language_file = array('hotspot','shibboleth');
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php'; 
 global $_configuration;

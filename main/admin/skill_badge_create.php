@@ -7,8 +7,6 @@
  */
 use \ChamiloSession as Session;
 
-$language_file = array('document');
-
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

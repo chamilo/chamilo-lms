@@ -17,10 +17,7 @@
 /*
  * INIT SECTION
  */
-
-// name of the language file that needs to be included
-$language_file = "tracking";
-include('../inc/global.inc.php');
+include '../inc/global.inc.php';
 
 $interbreadcrumb[]= array ("url"=>"../auth/profile.php", "name"=> get_lang('ModifyProfile'));
 $nameTools = get_lang('ToolName');

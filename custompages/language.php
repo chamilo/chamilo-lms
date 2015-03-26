@@ -35,7 +35,6 @@ function custompages_get_lang($variable) {
 	return get_lang($variable, null, $_SESSION['user_language_choice']);
 }
 
-$language_file = array('admin');
 $available_langs = array('en', 'fr', 'es');
 $chamilo_langs = array(null => 'english', 'en' => 'english', 'fr' => 'french', 'nl' => 'dutch', 'de' => 'german', 'es' => 'spanish');
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];

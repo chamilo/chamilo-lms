@@ -12,8 +12,6 @@
  * @since 25/september/2010
 */
 
-$language_file = array('document');//Chamilo load lang var
-
 //Chamilo load libraries
 require_once '../../../../inc/global.inc.php';
 

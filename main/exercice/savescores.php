@@ -6,9 +6,6 @@
  * 	@author
  * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
  */
-
-// name of the language file that needs to be included
-$language_file = 'learnpath';
 require_once '../inc/global.inc.php';
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();

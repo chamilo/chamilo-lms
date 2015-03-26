@@ -22,8 +22,6 @@
  *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
  *	@package chamilo.document
  */
-
-$language_file[] = 'document';
 require_once '../inc/global.inc.php';
 
 api_protect_course_script();

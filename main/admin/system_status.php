@@ -4,9 +4,6 @@
 *	@package chamilo.admin
 * 	@author Julio Montoya <gugli100@gmail.com>
 */
-
-// Language files that should be included
-$language_file = array('admin');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

@@ -16,8 +16,6 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('exercice');
-
 require_once '../inc/global.inc.php';
 $debug = false;
 if (empty($origin) ) {

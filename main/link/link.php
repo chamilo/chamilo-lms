@@ -19,10 +19,6 @@
 
  */
 
-
-// Language files that need to be included
-$language_file = array('admin');
-
 // Including libraries
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LINK;

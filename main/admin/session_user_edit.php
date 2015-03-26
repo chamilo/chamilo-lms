@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = 'admin';
 $cidReset = true;
 
 // including the global Chamilo file

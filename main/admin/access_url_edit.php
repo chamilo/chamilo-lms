@@ -4,8 +4,6 @@
 *	@package chamilo.admin
 *	@author Julio Montoya <gugli100@gmail.com>
 */
-
-$language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

@@ -51,9 +51,6 @@ if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
 }
 $this_section = SECTION_COURSES;
-
-$language_file = "learnpath";
-
 /* Header and action code */
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

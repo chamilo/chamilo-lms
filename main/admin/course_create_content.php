@@ -6,8 +6,6 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.admin
  */
-// name of the language file that needs to be included
-$language_file = 'admin';
 include ('../inc/global.inc.php');
 $this_section=SECTION_PLATFORM_ADMIN;
 

@@ -5,9 +5,6 @@
 * 	@todo use formvalidator for the form
 */
 
-// name of the language file that needs to be included
-$language_file='admin';
-
 $cidReset=true;
 
 // including the global Dokeos file

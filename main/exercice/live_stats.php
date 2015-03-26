@@ -1,7 +1,6 @@
 <?php
 /* See license terms in /license.txt */
 
-$language_file = array('exercice','tracking');
 require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;

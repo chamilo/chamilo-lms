@@ -4,8 +4,6 @@
  * Script
  * @package chamilo.gradebook
  */
-
-$language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();

@@ -3,9 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
-// Language files that need to be included.
-$language_file = array('admin');
 require_once '../global.inc.php';
 
 api_protect_admin_script();

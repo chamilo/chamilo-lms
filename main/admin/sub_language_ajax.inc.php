@@ -4,7 +4,6 @@
  * Sub language AJAX script to update variables
  * @package chamilo.admin.sub_language
  */
-$language_file = 'admin';
 $this_script = 'sub_language';
 require_once '../inc/global.inc.php';
 

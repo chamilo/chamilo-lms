@@ -13,8 +13,6 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('admin');
-
 require_once '../inc/global.inc.php';
 
 if (empty($_user['user_id'])) {

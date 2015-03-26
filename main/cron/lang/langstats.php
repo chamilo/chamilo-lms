@@ -12,16 +12,7 @@
  * Requires
  */
 die();
-$language_file = array(
-'gradebook', 'admin',
-'help', 'reservation', 'hotspot',
-'scormdocument',
-'install', 'shibboleth',
-'learnpath', 'survey',
-'tracking',
-'trad4all', 'document',
-'exercice', 'wiki',
-);
+$language_file = array('hotspot', 'shibboleth');
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';
 /**

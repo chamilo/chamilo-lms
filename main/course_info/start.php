@@ -3,8 +3,6 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('admin', 'exercice');
-
 require_once '../inc/global.inc.php';
 
 api_protect_course_script(true);

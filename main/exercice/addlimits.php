@@ -11,9 +11,6 @@
  */
 require_once '../inc/global.inc.php';
 
-// name of the language file that needs to be included
-$language_file='exercice';
-
 /*	section (for the tabs) */
 $this_section=SECTION_COURSES;
 

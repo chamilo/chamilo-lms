@@ -8,9 +8,6 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com> Code conventions
  * @package chamilo.backup
  */
-
-// Language files that need to be included
-$language_file = array('admin');
 require_once '../inc/global.inc.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;

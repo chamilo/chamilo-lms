@@ -7,10 +7,6 @@
  * Code
 *	@author	 Bart Mollet
 */
-
-// Language files that should be included.
-$language_file = 'admin';
-
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

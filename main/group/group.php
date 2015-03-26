@@ -14,10 +14,6 @@
  *	@author Isaac Flores, code cleaning and improvements
  *	@package chamilo.group
  */
-
-// Name of the language file that needs to be included
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 $is_allowed_in_course = api_is_allowed_in_course();

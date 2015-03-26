@@ -7,8 +7,6 @@
 /**
  * Code
  */
-$language_file = array('admin', 'gradebook', 'tracking');
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

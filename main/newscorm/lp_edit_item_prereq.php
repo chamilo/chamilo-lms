@@ -18,9 +18,6 @@ api_protect_course_script();
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
-// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
-// Name of the language file that needs to be included.
-$language_file = 'learnpath';
 
 /* Constants and variables */
 

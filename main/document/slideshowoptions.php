@@ -20,9 +20,6 @@
  *	On this page the options of the slideshow can be set: maintain the original file
  *	or resize the file to a given width.
  */
-
-// Language files that need to be included
-$language_file = array('document');
 require_once '../inc/global.inc.php';
 api_protect_course_script();
 

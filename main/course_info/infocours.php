@@ -13,9 +13,6 @@
  * @author Julio Montoya <gugli100@gmail.com> Jquery support + lots of fixes
  * @package chamilo.course_info
  */
-
-// Language files that need to be included
-$language_file = array('admin', 'gradebook', 'document');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;

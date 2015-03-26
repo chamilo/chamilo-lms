@@ -7,8 +7,6 @@
 /**
  * Code
  */
-// name of the language file that needs to be included
-$language_file = array('admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 

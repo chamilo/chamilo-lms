@@ -474,7 +474,7 @@ if ($is_allowed_to_edit) {
         var IE = window.navigator.appName.match(/microsoft/i);
 
         /* Identified new height */
-        var heightControl = ($('#control').is(':visible'))? $('#control').height() : 0 ;
+        var heightControl = $('#control-bottom').height();
         var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
 
         var heightScormInfo = $('#scorm-info').height();
@@ -483,17 +483,19 @@ if ($is_allowed_to_edit) {
 
         //heightTop = (heightTop > 300)? heightTop : 300;
 
+
         var innerHeight = $(window).height();
+
+        if(innerHeight<=640){
+            $('#inner_lp_toc').css('height',  innerHeight - heightTop + "px");
+            $('#content_id').css('height', innerHeight - heightControl + "px");
+        }else{
+            $('#inner_lp_toc').css('height',  innerHeight - heightBreadcrumb - heightTop + "px");
+            $('#content_id').css('height', innerHeight - heightControl + "px");
+        }
 
         //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
 
-        $('#inner_lp_toc').css('height',  innerHeight - heightBreadcrumb - heightTop + "px");
-        if ($('#content_id')) {
-            $('#content_id').css('height', innerHeight - heightBreadcrumb - heightControl + "px");
-        }
-        if ($('#hide_bar')) {
-            $('#hide_bar').css('height', innerHeight - heightBreadcrumb - heightControl + "px");
-        }
 
     // Loads the glossary library.
     <?php

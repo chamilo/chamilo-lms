@@ -3377,7 +3377,7 @@ form .formw .freeze {
   padding-bottom: 10px;
 }
 .scorm_item_normal{
-  padding:10px;
+  padding:0;
   border-bottom: 1px solid #DCDCDC;
   border-left: 1px solid #DCDCDC;
   border-right: 1px solid #DCDCDC;
@@ -3393,6 +3393,9 @@ form .formw .freeze {
 }
 .scorm_highlight a{
   color: #ffffff !important;
+}
+#scorm-info .panel-heading{
+  padding: 5px;
 }
 /* .scorm_item_normal .scorm_item_level_1{
   padding-left: 1.8em;
@@ -5545,6 +5548,13 @@ ul.holder li.bit-box a.closebutton{
 #learning_path_left_zone #ui-option{
   width: 100%;
   display: block;
+  text-align: center;
+  cursor: pointer;
+}
+#learning_path_left_zone #ui-option #icon-up,
+#learning_path_left_zone #ui-option #icon-down{
+  width: 100%;
+  display: block;
 }
 .hidden{
   visibility: hidden;
@@ -5623,19 +5633,38 @@ ul.holder li.bit-box a.closebutton{
     width: 25.66666667%;
   }
 .content-scorm{
-    width: 74.33333333%;
+    width: 76.33333333%;
   }
   .total{
   width: 100%;
   }
+  #learning_path_right_zone{
+    width: 68%;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #learning_path_right_zone.total{
+    width: 100%;
+    visibility: visible;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 }
 /* Portrait tablet to landscape and desktop - Escritorio pequeño o Tablet */
 @media (min-width: 768px) and (max-width: 979px) {
-
-}
-/* Landscape phone to portrait tablet - Tablet o Smartphone Horizontal */
-@media (max-width: 767px) {
-
+  #learning_path_right_zone{
+    width: 58%;
+    display: block;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #learning_path_right_zone.total{
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    visibility: visible;
+  }
 }
 /* Landscape phones and down  - Solo Smartphone*/
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
@@ -5674,8 +5703,15 @@ ul.holder li.bit-box a.closebutton{
   .content-scorm{
     visibility: hidden;
   }
+  #control-bottom.well{
+    padding: 10px;
+  }
   .total{
     width: 100%;
     visibility: visible;
+  }
+  #learning_path_left_zone{
+    width: 100%;
+    display: block;
   }
 }

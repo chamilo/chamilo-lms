@@ -144,13 +144,6 @@ if (!$_configuration['db_host']) {
     die();
 }
 
-if (!($conn_return = @Database::connect($params))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
 // Doctrine ORM configuration
 
 use Doctrine\ORM\Tools\Setup;
@@ -198,21 +191,14 @@ AnnotationRegistry::registerAutoloadNamespace(
 $repo = $entityManager->getRepository('ChamiloUserBundle:User');
 $repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
 
-if (!($conn_return = @Database::connect($params))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
-/*try {
+try {
     $connect = $entityManager->getConnection()->connect();
 } catch (Exception $e) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
     die();
-}*/
+}
 
 $database = new \Database();
 $database->setManager($entityManager);

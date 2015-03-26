@@ -684,7 +684,7 @@ function database_exists($database_name)
  */
 function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
-    /*$dbParams = array(
+    $dbParams = array(
         'driver' => 'pdo_mysql',
         'host' => $dbHostForm,
         'user' => $dbUsernameForm,
@@ -698,13 +698,6 @@ function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
         $entityManager->getConnection()->connect();
     } catch (Exception $e) {
         echo $e->getMessage();
-        $dbConnect = -1;
-    }*/
-
-    //Checking user credentials
-    if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        $dbConnect = 1;
-    } else {
         $dbConnect = -1;
     }
 

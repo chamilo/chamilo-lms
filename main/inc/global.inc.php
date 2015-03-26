@@ -198,13 +198,6 @@ AnnotationRegistry::registerAutoloadNamespace(
 $repo = $entityManager->getRepository('ChamiloUserBundle:User');
 $repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
 
-if (!($conn_return = @Database::connect($params))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
 /*try {
     $connect = $entityManager->getConnection()->connect();
 } catch (Exception $e) {

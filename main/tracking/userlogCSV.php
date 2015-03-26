@@ -11,7 +11,7 @@
  * Code
  */
 
-/*	INIT SECTION */
+/* INIT SECTION */
 
 $uInfo = $_REQUEST['uInfo'];
 $view = $_REQUEST['view'];
@@ -120,7 +120,7 @@ $title_line = '';
 if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
     if (!$uInfo && !isset($uInfo)) {
         /*
-        *		Display list of user of this group
+         * Display list of user of this group
          */
 
         if ($is_allowedToTrackEverybodyInCourse) {
@@ -158,36 +158,32 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
 
         echo $navLink;
 
-        if (!settype($offset, 'integer') || !settype(
-                $step,
-                'integer'
-            )
-        ) {
+        if (!settype($offset, 'integer') || !settype($step, 'integer')) {
             die('Offset or step variables are not integers.');
         } //sanity check of integer vars
         if ($is_allowedToTrackEverybodyInCourse) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
-                        FROM $TABLECOURSUSER cu , $TABLEUSER u
-                        WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                            AND cu.course_code = '$_cid'
-                        LIMIT $offset,$step";
+                FROM $TABLECOURSUSER cu , $TABLEUSER u
+                WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                AND cu.course_code = '$_cid'
+                LIMIT $offset,$step";
         } else {
             // list of users of this group
             $sql = "SELECT u.user_id, u.firstname,u.lastname
-                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE gu.user_id = u.user_id
-                            AND gu.group_id = '$_gid'
-                        LIMIT $offset,$step";
+                FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                WHERE gu.user_id = u.user_id
+                AND gu.group_id = '$_gid'
+                LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);
         for ($i = 0; $i < sizeof($list_users); $i++) {
+            // just sum $i up
         }
 
-    } else // if uInfo is set
-    {
+    } else { // if uInfo is set
         /*
-        *		Informations about student uInfo
+         * Informations about student uInfo
          */
         // these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
         // another course, or group
@@ -199,10 +195,10 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
         } else {
             // check if user is in the group of this tutor
             $sql = "SELECT u.firstname,u.lastname, u.email
-                        FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                        WHERE gu.user_id = u.user_id
-                            AND gu.group_id = '$_gid'
-                            AND u.user_id = '$uInfo'";
+                FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
+                WHERE gu.user_id = u.user_id
+                AND gu.group_id = '$_gid'
+                AND u.user_id = '$uInfo'";
             $query = Database::query($sql);
             $tracked_user_info = @Database::fetch_assoc($query);
             if (is_array($tracked_user_info)) {
@@ -277,7 +273,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             $result=Database::query($sql);
             $ar=Database::fetch_array($result);
 
-          if (is_array($ar))
+            if (is_array($ar))
             {
                 while ($ar['id'] != '') {
                     $lp_title = stripslashes($ar['name']);
@@ -308,26 +304,21 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
                        }
                     $ar=Database::fetch_array($result);
                 }
-
-            }
-            else
-            {
+            } else {
                 $noscorm=true;
             }
 
             if ($noscorm) {
                 $line=get_lang('NoResult');
             }
-         }
-        else
-        {
+         } else {
             $new_view = substr_replace($view,'1',5,1);
         }*/
 
     }
     /*
-    *		Export to a CSV file
-    *		force the browser to save the file instead of opening it
+     * Export to a CSV file
+     * force the browser to save the file instead of opening it
      */
 
     $len = strlen($title_line . $line);
@@ -360,7 +351,6 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
     echo api_html_entity_decode($title_line, ENT_QUOTES, $charset);
     echo api_html_entity_decode($line, ENT_QUOTES, $charset);
     exit;
-} // not allowed
-else {
+} else { // not allowed
     api_not_allowed();
 }

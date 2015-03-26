@@ -117,14 +117,14 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
 // check if uid is tutor of this group
-if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
-    if(!$uInfo && !isset($uInfo) ) {
+if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
+    if (!$uInfo && !isset($uInfo)) {
         /*
         *		Display list of user of this group
          */
 
         echo "<h4>".get_lang('ListStudents')."</h4>";
-        if( $is_allowedToTrackEverybodyInCourse ) {
+        if ($is_allowedToTrackEverybodyInCourse) {
             // if user can track everybody : list user of course
 
             $sql = "SELECT count(user_id)
@@ -140,7 +140,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         $userGroupNb = StatsUtils::getOneResult($sql);
         $step = 25; // number of student per page
         if ($userGroupNb > $step) {
-            if(!isset($offset)) {
+            if (!isset($offset)) {
                     $offset=0;
             }
 
@@ -169,8 +169,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             $offset = 0;
         }
         echo $navLink;
-    //sanity check of integer vars
-    if (!settype($offset, 'integer') || !settype($step, 'integer')) die('Offset or step variables are not integers.');
+        //sanity check of integer vars
+        if (!settype($offset, 'integer') || !settype($step, 'integer')) {
+            die('Offset or step variables are not integers.');
+        }
         if ($is_allowedToTrackEverybodyInCourse) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
@@ -187,11 +189,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                     LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);
-        echo 	"<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
+        echo "<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
                     ."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
                     ."<td align='left'>",get_lang('UserName'),"</td>\n"
                     ."</tr>\n";
-        for ($i = 0 ; $i < sizeof($list_users) ; $i++) {
+        for ($i = 0; $i < sizeof($list_users); $i++) {
             echo    "<tr valign='top' align='center'>\n"
                     ."<td align='left'>"
                     ."<a href='".api_get_self()."?uInfo=",$list_users[$i][0],"'>"
@@ -205,11 +207,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         // if uInfo is set
 
         /*
-        *		Informations about student uInfo
+         * Information about student uInfo
          */
         // these checks exists for security reasons, neither a prof nor a tutor can see statistics of a user from
         // another course, or group
-        if( $is_allowedToTrackEverybodyInCourse ) {
+        if ($is_allowedToTrackEverybodyInCourse) {
             // check if user is in this course
             $tracking_is_accepted = $is_course_member;
             $tracked_user_info = api_get_user_info($uInfo);
@@ -223,7 +225,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                         AND u.user_id = '".intval($uInfo)."'";
             $query = Database::query($sql);
             $tracked_user_info = @Database::fetch_assoc($query);
-            if(is_array($tracked_user_info)) $tracking_is_accepted = true;
+            if (is_array($tracked_user_info)) {
+                $tracking_is_accepted = true;
+            }
         }
 
         if ($tracking_is_accepted) {
@@ -249,7 +253,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                 </tr>
             ";
 
-            if(!isset($view)) {
+            if (!isset($view)) {
                 $view ='0000000';
             }
             //Logins
@@ -273,8 +277,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         /*
          *		Scorm contents and Learning Path
          */
-        if(substr($view,5,1) == '1') {
-            $new_view = substr_replace($view,'0',5,1);
+        if (substr($view, 5, 1) == '1') {
+            $new_view = substr_replace($view, '0', 5, 1);
             echo "<tr>
                         <td valign='top'>
                         <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ScormAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=000001'>".get_lang('ExportAsCSV')."</a>]
@@ -324,12 +328,12 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
                                    </td>
                                    </tr>";
                             while ($ar3['status'] != '') {
-                            require_once '../newscorm/learnpathItem.class.php';
-                            $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
-                               echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
-                               echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
-                               echo "</tr>";
-                               $ar3=Database::fetch_array($result3);
+                                require_once '../newscorm/learnpathItem.class.php';
+                                $time = learnpathItem::getScormTimeFromParameter('php', $ar3['total_time']);
+                                echo "<tr><td>&nbsp;&nbsp;&nbsp;</td><td>";
+                                echo "$title</td><td align=right>{$ar3['status']}</td><td align=right>{$ar3['score']}</td><td align=right>$time</td>";
+                                echo "</tr>";
+                                $ar3=Database::fetch_array($result3);
                             }
                         } else {
                             echo "<tr>";
@@ -351,7 +355,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             echo "</table>";
             echo "</td></tr>";
         } else {
-            $new_view = substr_replace($view,'1',5,1);
+            $new_view = substr_replace($view, '1', 5, 1);
             echo "
                 <tr>
                         <td valign='top'>

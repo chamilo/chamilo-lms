@@ -6,20 +6,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Driver\Statement;
 
 /**
- * Class Database
- *  This is the main database library for Chamilo.
- *  Include/require it in your code to use its functionality.
- *  Because this library contains all the basic database calls, it could be
- *  replaced by another library for say, PostgreSQL, to actually use Chamilo
- *  with another database (this is not ready yet because a lot of code still
- *  uses the MySQL database functions extensively).
- *
- *  If trying to replicate the database layer, don't forget to look for "sql"
- *  named functions in main_api.lib.php
- *
- *  @package chamilo.library
+ * Temporal class
  */
-class Database
+class DatabaseDoctrine
 {
     /* Variable use only in the installation process to log errors.
     See the Database::query function */
@@ -51,76 +40,10 @@ class Database
      */
     public static function get_main_database()
     {
-        global $_configuration;
-        return $_configuration['main_database'];
+        return self::getManager()->getConnection()->getDatabase();
+        /*global $_configuration;
+        return $_configuration['main_database'];*/
     }
-
-    /**
-     *  Returns the glued name of the current course database.
-     *  @return    mixed   Glued database name of false if undefined
-     */
-    public static function get_current_course_glued_database()
-    {
-        $course_info = api_get_course_info();
-        if (empty($course_info['dbNameGlu'])) {
-            return false;
-        }
-        return $course_info['dbNameGlu'];
-    }
-
-    /**
-     *  The glue is the string needed between database and table.
-     *  The trick is: in multiple databases, this is a period (with backticks).
-     *  In single database, this can be e.g. an underscore so we just fake
-     *  there are multiple databases and the code can be written independent
-     *  of the single / multiple database setting.
-     */
-    public static function get_database_glue()
-    {
-        global $_configuration;
-        return $_configuration['db_glue'];
-    }
-
-    /**
-     *  Returns the database prefix.
-     *  All created COURSE databases are prefixed with this string.
-     *
-     *  TIP: This can be convenient if you have multiple system installations
-     *  on the same physical server.
-     */
-    public static function get_database_name_prefix()
-    {
-        global $_configuration;
-        return $_configuration['db_prefix'];
-    }
-
-    /**
-     *  Returns the course table prefix for single database.
-     *  Not certain exactly when this is used.
-     *  Do research.
-     *  It's used in local.inc.php.
-     */
-    public static function get_course_table_prefix()
-    {
-        global $_configuration;
-        return $_configuration['table_prefix'];
-    }
-
-    /*
-        Table name methods
-        Use these methods to get table names for queries,
-        instead of constructing them yourself.
-
-        Backticks automatically surround the result,
-        e.g. COURSE_NAME.link
-        so the queries can look cleaner.
-
-        Example:
-        $table = Database::get_course_table(TABLE_DOCUMENT);
-        $sql_query = "SELECT * FROM $table WHERE $condition";
-        $sql_result = Database::query($sql_query);
-        $result = Database::fetch_array($sql_result);
-    */
 
     /**
      * A more generic method than the other get_main_xxx_table methods,
@@ -133,9 +56,11 @@ class Database
      */
     public static function get_main_table($short_table_name)
     {
+        return $short_table_name;
+        /*
         return self::format_table_name(
-            self::get_main_database(),
-            $short_table_name);
+          self::get_main_database(),
+          $short_table_name);*/
     }
 
     /**
@@ -151,6 +76,8 @@ class Database
      */
     public static function get_course_table($short_table_name, $extra = null)
     {
+        return DB_COURSE_PREFIX.$short_table_name;
+        /*
         //forces fatal errors so we can debug more easily
         if (!empty($extra)) {
             var_dump($extra);
@@ -158,7 +85,7 @@ class Database
             echo "<h3>Dev Message: get_course_table() doesn't have a 2nd parameter</h3>";
             //exit;
         }
-        return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);
+        return self::format_table_name(self::get_main_database(), DB_COURSE_PREFIX.$short_table_name);*/
     }
 
     /*
@@ -173,7 +100,7 @@ class Database
      * @deprecated
      */
     public static function count_rows($table) {
-        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));   //
+        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
         return $obj->n;
     }
 
@@ -186,8 +113,10 @@ class Database
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
      * @return int                              Returns the number of affected rows on success, and -1 if the last query failed.
      */
-    public static function affected_rows($connection = null) {
-        return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
+    public static function affected_rows(Statement $result)
+    {
+        return $result->rowCount();
+        //return self::use_default_connection($connection) ? mysql_affected_rows() : mysql_affected_rows($connection);
     }
 
     /**
@@ -286,13 +215,16 @@ class Database
      */
     public static function escape_string($string, $connection = null, $addFix = true)
     {
-        return get_magic_quotes_gpc()
+        $string = self::getManager()->getConnection()->quote($string);
+        return trim($string, "'");
+
+        /*return get_magic_quotes_gpc()
             ? (self::use_default_connection($connection)
                 ? mysql_real_escape_string(stripslashes($string))
                 : mysql_real_escape_string(stripslashes($string), $connection))
             : (self::use_default_connection($connection)
                 ? mysql_real_escape_string($string)
-                : mysql_real_escape_string($string, $connection));
+                : mysql_real_escape_string($string, $connection));-*/
     }
 
 
@@ -303,10 +235,14 @@ class Database
      * @return array        Array of results as returned by php
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_array($result, $option = 'BOTH')
+    public static function fetch_array(Statement $result, $option = 'BOTH')
     {
-        if ($result === false) { return array(); }
-        return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
+        if ($result === false) {
+            return array();
+        }
+        return $result->fetch(self::customOptionToDoctrineOption($option));
+        //if ($result === false) { return array(); }
+        //return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
     }
 
     /**
@@ -315,8 +251,10 @@ class Database
      * @param resource $result  The result from a call to sql_query (e.g. Database::query).
      * @return array            Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
      */
-    public static function fetch_assoc($result) {
-        return mysql_fetch_assoc($result);
+    public static function fetch_assoc(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_ASSOC);
+        //return mysql_fetch_assoc($result);
     }
 
     /**
@@ -327,8 +265,11 @@ class Database
      * @return  object      Object of class StdClass or the required class, containing the query result row
      * @author  Yannick Warnier <yannick.warnier@beeznest.com>
      */
-    public static function fetch_object($result, $class = null, $params = null) {
-        return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
+    //public static function fetch_object($result, $class = null, $params = null) {
+    public static function fetch_object(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_OBJ);
+        //return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
     }
 
     /**
@@ -336,8 +277,10 @@ class Database
      * @param resource      The result from a call to sql_query (see Database::query()).
      * @return array        Array of results as returned by php (mysql_fetch_row)
      */
-    public static function fetch_row($result) {
-        return mysql_fetch_row($result);
+    public static function fetch_row(Statement $result)
+    {
+        return $result->fetch(PDO::FETCH_NUM);
+        //return mysql_fetch_row($result);
     }
 
     /**
@@ -346,8 +289,10 @@ class Database
      * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
      * Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
-    public static function free_result($result) {
-        return mysql_free_result($result);
+    public static function free_result(Statement $result)
+    {
+        $result->closeCursor();
+        //return mysql_free_result($result);
     }
 
     /**
@@ -431,8 +376,10 @@ class Database
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
      * @return int                              The last ID as returned by the DB function
      */
-    public static function insert_id($connection = null) {
-        return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
+    public static function insert_id()
+    {
+        return self::getManager()->getConnection()->lastInsertId();
+        //return self::use_default_connection($connection) ? mysql_insert_id() : mysql_insert_id($connection);
     }
 
     /**
@@ -441,8 +388,10 @@ class Database
      * @return integer      The number of rows contained in this result
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
      **/
-    public static function num_rows($result) {
-        return is_resource($result) ? mysql_num_rows($result) : false;
+    public static function num_rows(Statement $result)
+    {
+        return $result->rowCount();
+        //return is_resource($result) ? mysql_num_rows($result) : false;
     }
 
     /**
@@ -453,8 +402,13 @@ class Database
      * @param   string      Optional field name or number
      * @return  mixed       One cell of the result, or FALSE on error
      */
-    public static function result($resource, $row, $field = '') {
-        return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
+    public static function result(Statement $resource, $row, $field = '')
+    {
+        if ($resource->rowCount() > 0) {
+            $result = $resource->fetchAll(PDO::FETCH_BOTH);
+            return $result[$row][$field];
+        }
+        //return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
     }
 
     /**
@@ -470,7 +424,7 @@ class Database
      * @param string $file (optional)           On error it shows the file in which the error has been trigerred (use the "magic" constant __FILE__ as input parameter)
      * @param string $line (optional)           On error it shows the line in which the error has been trigerred (use the "magic" constant __LINE__ as input parameter)
      *
-     * @return resource                         The returned result from the query
+     * @return Statement                         The returned result from the query
      *
      * Note: The parameter $connection could be skipped. Here are examples of this method usage:
      * Database::query($query);
@@ -485,6 +439,10 @@ class Database
      */
     public static function query($query, $connection = null, $file = null, $line = null)
     {
+        $result = self::getManager()->getConnection()->executeQuery($query);
+
+        return $result;
+
         $use_default_connection = self::use_default_connection($connection);
         if ($use_default_connection) {
             // Let us do parameter shifting, thus the method would be similar
@@ -615,6 +573,26 @@ class Database
     }
 
     /**
+     * @param string $option
+     * @return int
+     */
+    public static function customOptionToDoctrineOption($option)
+    {
+        switch($option) {
+            case 'ASSOC':
+                return PDO::FETCH_ASSOC;
+                break;
+            case 'NUM':
+                return PDO::FETCH_NUM;
+                break;
+            case 'BOTH':
+            default:
+                return PDO::FETCH_BOTH;
+                break;
+        }
+    }
+
+    /**
      * Selects a database.
      * @param string $database_name             The name of the database that is to be selected.
      * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
@@ -632,7 +610,10 @@ class Database
      * @param  option BOTH, ASSOC, or NUM
      * @return array - the value returned by the query
      */
-    public static function store_result($result, $option = 'BOTH') {
+    public static function store_result(Statement $result, $option = 'BOTH')
+    {
+        return $result->fetchAll(self::customOptionToDoctrineOption($option));
+
         $array = array();
         if ($result !== false) { // For isolation from database engine's behaviour.
             while ($row = self::fetch_array($result, $option)) {
@@ -778,21 +759,6 @@ class Database
     */
 
     /**
-     *  Structures a database and table name to ready them
-     *  for querying. The database parameter is considered not glued,
-     *  just plain e.g. COURSE001
-     */
-    private static function format_table_name($database, $table) {
-        global $_configuration;
-        if ($_configuration['single_database']) {
-            $table_name =  '`'.$database.'`.`'.$table.'`';
-        } else {
-            $table_name =  '`'.$database.$_configuration['db_glue'].$table.'`';
-        }
-        return $table_name;
-    }
-
-    /**
      * This private method is to be used by the other methods in this class for
      * checking whether the input parameter $connection actually has been provided.
      * If the input parameter connection is not a resource or if it is not FALSE (in case of error)
@@ -803,16 +769,6 @@ class Database
      */
     private static function use_default_connection($connection) {
         return !is_resource($connection) && $connection !== false;
-    }
-
-    /**
-     * This private method tackles the XSS injections. It is similar to Security::remove_XSS() and works always,
-     * including the time of initialization when the class Security has not been loaded yet.
-     * @param string    The input variable to be filtered from XSS, in this class it is expected to be a string.
-     * @return string   Returns the filtered string as a result.
-     */
-    private static function remove_XSS(& $var) {
-        return class_exists('Security') ? Security::remove_XSS($var) : @htmlspecialchars($var, ENT_QUOTES, api_get_system_encoding());
     }
 
     /**
@@ -900,6 +856,12 @@ class Database
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
+        $result = self::getManager()->getConnection()->insert($table_name, $attributes);
+        if ($result) {
+            return self::insert_id();
+        }
+        return false;
+
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
@@ -930,7 +892,7 @@ class Database
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
-     */
+    */
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
     {
         $conditions = self::parse_conditions($conditions);
@@ -969,7 +931,7 @@ class Database
      * @todo known issues, it doesn't work when using
      * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
      * @param   array $conditions
-     */
+    */
     public static function parse_conditions($conditions)
     {
         if (empty($conditions)) {
@@ -1082,8 +1044,8 @@ class Database
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
         if ($show_query) { echo $sql; echo '<br />'; }
-        self::query($sql);
-        $affected_rows = self::affected_rows();
+        $result = self::query($sql);
+        $affected_rows = self::affected_rows($result);
         //@todo should return affected_rows for
         return $affected_rows;
     }
@@ -1123,8 +1085,8 @@ class Database
                 if ($show_query) {
                     var_dump($sql);
                 }
-                self::query($sql);
-                $affected_rows = self::affected_rows();
+                $result = self::query($sql);
+                $affected_rows = self::affected_rows($result);
                 return $affected_rows;
             }
         }
@@ -1132,16 +1094,33 @@ class Database
     }
 
     /**
-     * @deprecated Use api_get_language_isocode($language) instead.
+     * @return \Doctrine\ORM\Configuration
      */
-    public static function get_language_isocode($language) {
-        return api_get_language_isocode($language);
-    }
+    public static function getDoctrineConfig()
+    {
+        $isDevMode = true;
+        $isSimpleMode = false;
+        $proxyDir = null;
+        $cache = null;
 
-    /**
-     * @deprecated Use Database::insert_id() instead.
-     */
-    public static function get_last_insert_id() {
-        return mysql_insert_id();
+        $paths = array(
+            api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity',
+            api_get_path(SYS_PATH).'src/Chamilo/UserBundle/Entity',
+            api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
+        );
+
+        /*$doctrineCache = api_get_path(SYS_ARCHIVE_PATH).'doctrine/';
+
+        if (!is_dir($doctrineCache)) {
+            mkdir($doctrineCache, api_get_permissions_for_new_directories(), true);
+        }*/
+
+        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+            $paths,
+            $isDevMode,
+            $proxyDir,
+            $cache,
+            $isSimpleMode
+        );
     }
 }

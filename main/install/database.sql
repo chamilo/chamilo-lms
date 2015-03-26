@@ -459,7 +459,7 @@ DROP TABLE IF EXISTS session;
 CREATE TABLE IF NOT EXISTS session (
   id smallint unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
-  name char(50) NOT NULL default '',
+  name char(100) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
   nbr_users mediumint unsigned NOT NULL default '0',
   nbr_classes mediumint unsigned NOT NULL default '0',
@@ -4729,5 +4729,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.29' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.30' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

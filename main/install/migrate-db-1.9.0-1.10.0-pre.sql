@@ -105,6 +105,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No');
 
+ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT '';
 
 -- xxCOURSExx
 
@@ -124,4 +125,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.29' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.30' WHERE variable = 'chamilo_database_version';

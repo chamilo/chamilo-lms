@@ -79,14 +79,14 @@ ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null;
 ALTER TABLE user DROP PRIMARY KEY;
 ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id;
 UPDATE user SET id = user_id;
-UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00';
-UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00';
 
 ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL;
 ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0';
 ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL;
 ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
+UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00';
+UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00';
 
 ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
 
@@ -124,4 +124,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.28' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.29' WHERE variable = 'chamilo_database_version';

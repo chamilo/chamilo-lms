@@ -4729,5 +4729,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.28' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.29' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

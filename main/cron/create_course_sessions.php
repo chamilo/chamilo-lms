@@ -21,10 +21,11 @@ define("OFFSET", "15");
 /**
  * If no $initialDate is supplied, returns an array with the first and last days of the current
  * month. Otherwise, returns an array with the first and last days of the $initialDate month .
- * @param   array   First day of the month
+ * @param   array   $initialDate First day of the month
  * @return  array   First and last days of the month
  */
-function getMonthFirstAndLastDates($initialDate = null) {
+function getMonthFirstAndLastDates($initialDate = null)
+{
     $startDate = $initialDate ? $initialDate : date("Y-m-01");
     $nextMonthStartDate = date("Y-m-d", api_strtotime($startDate." + 1 month"));
     $endDate = date("Y-m-d", api_strtotime($nextMonthStartDate." - 1 minute"));
@@ -34,13 +35,14 @@ function getMonthFirstAndLastDates($initialDate = null) {
 /**
  * Creates one session per course with $administratorId as the creator and
  * adds it to the session starting on $startDate and finishing on $endDate
- * @param   array   Courses
- * @param   int     Administrator id
- * @param   date    First day of the month
- * @param   date    Last day of the month
+ * @param   array   $courses Courses
+ * @param   int     $administratorId Administrator id
+ * @param   date    $startDate First day of the month
+ * @param   date    $endDate Last day of the month
  * @return  void
  */
-function createCourseSessions($courses, $administratorId, $startDate, $endDate) {
+function createCourseSessions($courses, $administratorId, $startDate, $endDate)
+{
     echo "\n";
     echo $courses ?
         "Creating sessions and adding courses for the period between ".$startDate." and ".$endDate :
@@ -48,7 +50,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate) 
     echo "\n=====================================================================================\n\n";
     // Loop through courses creating one session per each and adding them
     foreach ($courses as $course) {
-        $sessionName = $course['title']." (".date("M Y", api_strtotime($startDate)).")";
+        $sessionName = $course['title']." (".date("m/Y", api_strtotime($startDate)).")";
         $sessionId = SessionManager::create_session(
             $sessionName,
             $startDate,
@@ -66,7 +68,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate) 
 }
 
 // Starts the script
-
+echo "Starting process..." . PHP_EOL;
 // Get first active administrator
 $administrators = array_reverse(UserManager::get_all_administrators());
 $lastingAdministrators = count($administrators);

@@ -614,7 +614,6 @@ function get_config_param($param, $updatePath = '')
  */
 function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
 {
-
     Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
     Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
     Database::select_db($dbName);
@@ -652,35 +651,13 @@ function database_server_connect()
 }
 
 /**
- * Database exists for the MYSQL user
- * @param string $database_name The name of the database to check
- * @return boolean
- */
-function database_exists($database_name)
-{
-    if (empty($database_name)) {
-        return false;
-    }
-    $select_database = @Database::select_db($database_name);
-    $show_database = false;
-    $sql = "SHOW DATABASES LIKE '".addslashes($database_name)."'";
-    $result = @Database::query($sql);
-    if (Database::num_rows($result)) {
-        $show_database = true;
-    }
-    return $select_database || $show_database;
-}
-
-/**
  * In step 3. Tests establishing connection to the database server.
  * If it's a single database environment the function checks if the database exist.
  * If the database does not exist we check the creation permissions.
  * @param   string  $dbHostForm DB host
  * @param   string  $dbUsernameForm DB username
  * @param   string  $dbPassForm DB password
- * @return int      1 when there is no problem;
- *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
- *                 -1 when there is no connection established.
+ * @return \Doctrine\ORM\EntityManager
  */
 function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
@@ -689,19 +666,13 @@ function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
         'host' => $dbHostForm,
         'user' => $dbUsernameForm,
         'password' => $dbPassForm,
-        ''
+        'dbname' => $dbNameForm
     );
-    $config = Database::getDoctrineConfig();
-    $entityManager = \Doctrine\ORM\EntityManager::create($dbParams, $config);
-    $dbConnect = 1;
-    try {
-        $entityManager->getConnection()->connect();
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        $dbConnect = -1;
-    }
 
-    return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
+    $database = new \Database();
+    $database->connect($dbParams);
+
+    return $database->getManager();
 }
 
 /**
@@ -1838,35 +1809,19 @@ function display_database_settings_form(
     $dbScormForm,
     $dbUserForm
 ) {
-
     if ($installType == 'update') {
-        global $_configuration, $update_from_version_6;
-
-        if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $dbHostForm         = get_config_param('dbHost');
-            $dbUsernameForm     = get_config_param('dbLogin');
-            $dbPassForm         = get_config_param('dbPass');
-            $dbPrefixForm       = get_config_param('dbNamePrefix');
-            $enableTrackingForm = get_config_param('is_trackingEnabled');
-            $singleDbForm       = get_config_param('singleDbEnabled');
-            $dbHostForm         = get_config_param('mainDbName');
-            $dbStatsForm        = get_config_param('statsDbName');
-            $dbScormForm        = get_config_param('scormDbName');
-            $dbUserForm         = get_config_param('user_personal_database');
-            $dbScormExists      = true;
-        } else {
-            $dbHostForm         = $_configuration['db_host'];
-            $dbUsernameForm     = $_configuration['db_user'];
-            $dbPassForm         = $_configuration['db_password'];
-            $dbPrefixForm       = $_configuration['db_prefix'];
-            $enableTrackingForm = $_configuration['tracking_enabled'];
-            $singleDbForm       = $_configuration['single_database'];
-            $dbNameForm         = $_configuration['main_database'];
-            $dbStatsForm        = $_configuration['statistics_database'];
-            $dbScormForm        = $_configuration['scorm_database'];
-            $dbUserForm         = $_configuration['user_personal_database'];
-            $dbScormExists      = true;
-        }
+        global $_configuration;
+        $dbHostForm         = $_configuration['db_host'];
+        $dbUsernameForm     = $_configuration['db_user'];
+        $dbPassForm         = $_configuration['db_password'];
+        $dbPrefixForm       = $_configuration['db_prefix'];
+        $enableTrackingForm = $_configuration['tracking_enabled'];
+        $singleDbForm       = $_configuration['single_database'];
+        $dbNameForm         = $_configuration['main_database'];
+        $dbStatsForm        = $_configuration['statistics_database'];
+        $dbScormForm        = $_configuration['scorm_database'];
+        $dbUserForm         = $_configuration['user_personal_database'];
+        $dbScormExists      = true;
 
         if (empty($dbScormForm)) {
             if ($singleDbForm) {
@@ -1932,16 +1887,16 @@ function display_database_settings_form(
         $dbNameForm = replace_dangerous_char($dbNameForm);
     }
 
-    displayDatabaseParameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
+    displayDatabaseParameter(
+        $installType,
+        get_lang('MainDB'),
+        'dbNameForm',
+        $dbNameForm,
+        '&nbsp;',
+        null,
+        'id="optional_param1" '.$style
+    );
 
-    //Only for updates we show this options
-    if ($installType == INSTALL_TYPE_UPDATE) {
-        displayDatabaseParameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
-        if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
-            displayDatabaseParameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
-        }
-        displayDatabaseParameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
-    }
     ?>
     <tr>
         <td></td>
@@ -1956,17 +1911,31 @@ function display_database_settings_form(
         <td>
         <?php
 
-        $dbConnect = testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm);
-
         $database_exists_text = '';
 
-        if (database_exists($dbNameForm)) {
+        try {
+            $manager = testDbConnect(
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                $dbNameForm
+            );
+        } catch (Exception $e) {
+            $database_exists_text = $e->getMessage();
+        }
+
+        $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
+
+        if (in_array($dbNameForm, $databases)) {
             $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         } else {
+
             if ($dbConnect == -1) {
                  $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';
             } else {
-                 //Try to create the database
+                $manager->getConnection()->getSchemaManager()->createDatabase($dbNameForm);
+                /*
+                //Try to create the database
                 $user_can_create_databases = false;
                 $multipleDbCheck = @Database::query("CREATE DATABASE ".mysql_real_escape_string($dbNameForm));
                 if ($multipleDbCheck !== false) {
@@ -1979,18 +1948,18 @@ function display_database_settings_form(
                 } else {
                     $dbConnect = 0;
                     $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';
-                }
+                }*/
             }
         }
 
-        if ($dbConnect == 1): ?>
+        if ($manager): ?>
         <td colspan="2">
             <?php echo $database_exists_text ?>
             <div id="db_status" class="confirmation-message">
-                Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
-                Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
-                Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
-                Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
+                Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br />
+                Database server version: <strong><?php //echo Database::get_server_info(); ?></strong><br />
+                Database client version: <strong><?php //echo Database::get_client_info(); ?></strong><br />
+                Database protocol version: <strong><?php //echo Database::get_proto_info(); ?></strong>
                 <div style="clear:both;"></div>
             </div>
         </td>
@@ -2016,7 +1985,7 @@ function display_database_settings_form(
       <td>&nbsp;</td>
       <td align="right">
           <input type="hidden" name="is_executable" id="is_executable" value="-" />
-           <?php if ($dbConnect == 1) { ?>
+           <?php if ($manager) { ?>
             <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                 <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
             </button>

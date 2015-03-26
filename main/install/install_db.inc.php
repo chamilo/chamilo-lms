@@ -72,14 +72,19 @@ if (!defined('CLI_INSTALLATION')) {
     $mysqlRepositorySys = $mysqlRepositorySys['Value'];
 
     $create_database = true;
+    /** @var \Doctrine\ORM\EntityManager $manager */
+    global $manager;
+    $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
 
-    if (database_exists($mysqlMainDb)) {
+    if (in_array($mysqlMainDb, $databases)) {
         $create_database = false;
     }
-    //Create database
+
+    // Create database
     if ($create_database) {
-        $sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
-        Database::query($sql) or die(Database::error());
+        $manager->getConnection()->getSchemaManager()->createDatabase($mysqlMainDb);
+        /*$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
+        Database::query($sql) or die(Database::error());*/
     }
 }
 
@@ -95,7 +100,7 @@ if (!defined('CLI_INSTALLATION')) {
     }
 }
 
-Database::select_db($mysqlMainDb) or die(Database::error());
+//Database::select_db($mysqlMainDb) or die(Database::error());
 
 $installation_settings = array();
 $installation_settings['{ORGANISATIONNAME}'] = $institutionForm;

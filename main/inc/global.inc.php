@@ -158,50 +158,15 @@ $dbParams = array(
     'dbname' => $_configuration['main_database'],
 );
 
-$config = Database::getDoctrineConfig();
-
-$config->setEntityNamespaces(
-    array(
-        'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
-        'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-        'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity'
-    )
-);
-
-$entityManager = EntityManager::create($dbParams, $config);
-
-// Registering Constraints
-use Doctrine\Common\Annotations\AnnotationRegistry;
-AnnotationRegistry::registerAutoloadNamespace(
-    'Symfony\Component\Validator\Constraint',
-    api_get_path(SYS_PATH)."vendor/symfony/validator"
-);
-
-AnnotationRegistry::registerFile(
-    api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
-);
-
-// Registering gedmo extensions
-AnnotationRegistry::registerAutoloadNamespace(
-    'Gedmo\Mapping\Annotation',
-    api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
-);
-
-/*$repo = $entityManager->getRepository('ChamiloCoreBundle:Session');
-$repo = $entityManager->getRepository('ChamiloUserBundle:User');
-$repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
-
 try {
-    $connect = $entityManager->getConnection()->connect();
+    $database = new \Database();
+    $database->connect($dbParams);
 } catch (Exception $e) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
     die();
 }
-
-$database = new \Database();
-$database->setManager($entityManager);
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {

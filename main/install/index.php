@@ -18,11 +18,11 @@
 
 use \ChamiloSession as Session;
 
-define('SYSTEM_INSTALLATION',                   1);
-define('INSTALL_TYPE_UPDATE',                   'update');
-define('FORM_FIELD_DISPLAY_LENGTH',             40);
-define('DATABASE_FORM_FIELD_DISPLAY_LENGTH',    25);
-define('MAX_FORM_FIELD_LENGTH',                 80);
+define('SYSTEM_INSTALLATION', 1);
+define('INSTALL_TYPE_UPDATE', 'update');
+define('FORM_FIELD_DISPLAY_LENGTH', 40);
+define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
+define('MAX_FORM_FIELD_LENGTH', 80);
 
 /*		PHP VERSION CHECK */
 
@@ -76,7 +76,6 @@ if (!array_key_exists($install_language, get_language_folder_list())) {
 
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-require api_get_path(SYS_LANG_PATH).'english/admin.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if ($install_language != 'english') {
 	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
@@ -105,10 +104,9 @@ error_reporting(E_ALL);
 // Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
 
-// Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
-$update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
-// Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2','1.8.7','1.8.7.1','1.8.8','1.8.8.2', '1.8.8.4', '1.8.8.6', '1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
+$update_from_version_6 = array();
+// Upgrading from any subversion of 1.9
+$update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
 
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
@@ -138,13 +136,13 @@ if (isAlreadyInstalledSystem()) {
 
 // Is valid request
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
-foreach ($_POST as $request_index => $request_value) {
+/*foreach ($_POST as $request_index => $request_value) {
 	if (substr($request_index, 0, 4) == 'step') {
 		if ($request_index != $is_valid_request) {
 			unset($_POST[$request_index]);
 		}
 	}
-}
+}*/
 
 $badUpdatePath = false;
 $emptyUpdatePath = true;
@@ -214,7 +212,6 @@ if (!isset($_GET['running'])) {
 	$dbPassForm		= '';
  	$dbPrefixForm   = '';
 	$dbNameForm		= 'chamilo';
-
 	$dbStatsForm    = 'chamilo';
 	$dbScormForm    = 'chamilo';
 	$dbUserForm		= 'chamilo';
@@ -223,11 +220,10 @@ if (!isset($_GET['running'])) {
 	$urlAppendPath  = api_remove_trailing_slash(api_get_path(REL_PATH));
   	$urlForm 		= api_get_path(WEB_PATH);
 	$pathForm 		= api_get_path(SYS_PATH);
-
-        $emailForm = 'webmaster@localhost';
-        if (!empty($_SERVER['SERVER_ADMIN'])) {
-            $emailForm      = $_SERVER['SERVER_ADMIN'];
-        }
+	$emailForm = 'webmaster@localhost';
+	if (!empty($_SERVER['SERVER_ADMIN'])) {
+		$emailForm      = $_SERVER['SERVER_ADMIN'];
+	}
 	$email_parts = explode('@', $emailForm);
 	if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
 		$emailForm .= '.localdomain';
@@ -242,8 +238,6 @@ if (!isset($_GET['running'])) {
 	$adminPhoneForm	= '(000) 001 02 03';
 	$institutionForm    = 'My Organisation';
 	$institutionUrlForm = 'http://www.chamilo.org';
-	// TODO: A better choice to be tested:
-	//$languageForm	    = 'english';
 	$languageForm	    = api_get_interface_language();
 
 	$checkEmailByHashSent	= 0;
@@ -300,6 +294,7 @@ if ($encryptPassForm == '1') {
 } elseif ($encryptPassForm == '0') {
 	$encryptPassForm = 'none';
 }
+
 ?>
 <!DOCTYPE html>
 <head>
@@ -320,15 +315,15 @@ if ($encryptPassForm == '1') {
 
 			 //checked
 			if ($('#singleDb1').attr('checked')==false) {
-					//$('#dbStatsForm').removeAttr('disabled');
-					//$('#dbUserForm').removeAttr('disabled');
-					$('#dbStatsForm').attr('value','chamilo_main');
-				    $('#dbUserForm').attr('value','chamilo_main');
+				//$('#dbStatsForm').removeAttr('disabled');
+				//$('#dbUserForm').removeAttr('disabled');
+				$('#dbStatsForm').attr('value','chamilo_main');
+				$('#dbUserForm').attr('value','chamilo_main');
 			} else if($('#singleDb1').attr('checked')==true){
-			        //$('#dbStatsForm').attr('disabled','disabled');
-					//$('#dbUserForm').attr('disabled','disabled');
-					$('#dbStatsForm').attr('value','chamilo_main');
-					$('#dbUserForm').attr('value','chamilo_main');
+				//$('#dbStatsForm').attr('disabled','disabled');
+				//$('#dbUserForm').attr('disabled','disabled');
+				$('#dbStatsForm').attr('value','chamilo_main');
+				$('#dbUserForm').attr('value','chamilo_main');
 			}
 
 			$("button").addClass('btn btn-default');
@@ -407,11 +402,11 @@ if ($encryptPassForm == '1') {
         $(document).ready( function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
-                        $("#id_contact_form").css("display","block");
-                        $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+					$("#id_contact_form").css("display","block");
+					$("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 } else {
-                        $("#id_contact_form").css("display","none");
-                        $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+					$("#id_contact_form").css("display","none");
+					$("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 }
             });
         });
@@ -429,21 +424,21 @@ if ($encryptPassForm == '1') {
             data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
 
             $.ajax({
-                    contentType: "application/x-www-form-urlencoded",
-                    beforeSend: function(objeto) {},
-                    type: "POST",
-                    url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
-                    data: data_post,
-                    success: function(datos) {
-                        if (datos == 'required_field_error') {
-                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
-                        } else if (datos == '1') {
-                            message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
-                        } else {
-                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
-                        }
-                        alert(message);
-                    }
+				contentType: "application/x-www-form-urlencoded",
+				beforeSend: function(objeto) {},
+				type: "POST",
+				url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+				data: data_post,
+				success: function(datos) {
+					if (datos == 'required_field_error') {
+						message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
+					} else if (datos == '1') {
+						message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+					} else {
+						message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
+					}
+					alert(message);
+				}
             });
         }
     </script>
@@ -451,11 +446,11 @@ if ($encryptPassForm == '1') {
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" class="install-chamilo">
 
-<div id="wrapper">
+<div id="page-wrap">
 <div id="main" class="container well-install">
     <header>
 		<div class="row">
-            <div id="header_left" class="span4">
+            <div id="header_left" class="col-md-4">
                 <div id="logo">
                     <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
                 </div>
@@ -481,7 +476,7 @@ if ($encryptPassForm == '1') {
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     ?>
     <div class="row">
-        <div class="span3">
+        <div class="col-md-3">
             <div class="well">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
@@ -500,9 +495,9 @@ if ($encryptPassForm == '1') {
 			</div>
         </div>
 
-        <div class="span9">
+        <div class="col-md-9">
 
-<form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
+<form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
     $instalation_type_label = '';
@@ -562,12 +557,25 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
 	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
 <?php
+
 if (@$_POST['step2']) {
 	//STEP 3 : LICENSE
 	display_license_agreement();
 } elseif (@$_POST['step3']) {
 	//STEP 4 : MYSQL DATABASE SETTINGS
-	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
+	display_database_settings_form(
+		$installType,
+		$dbHostForm,
+		$dbUsernameForm,
+		$dbPassForm,
+		$dbPrefixForm,
+		$enableTrackingForm,
+		$singleDbForm,
+		$dbNameForm,
+		$dbStatsForm,
+		$dbScormForm,
+		$dbUserForm
+	);
 } elseif (@$_POST['step4']) {
 	//STEP 5 : CONFIGURATION SETTINGS
 
@@ -634,7 +642,24 @@ if (@$_POST['step2']) {
 			if (!empty($tmp)) $allowSelfRegProf = $tmp;
 		}
 	}
-	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
+
+	display_configuration_settings_form(
+		$installType,
+		$urlForm,
+		$languageForm,
+		$emailForm,
+		$adminFirstName,
+		$adminLastName,
+		$adminPhoneForm,
+		$campusForm,
+		$institutionForm,
+		$institutionUrlForm,
+		$encryptPassForm,
+		$allowSelfReg,
+		$allowSelfRegProf,
+		$loginForm,
+		$passForm
+	);
 
 } elseif (@$_POST['step5']) {
 	//STEP 6 : LAST CHECK BEFORE INSTALL
@@ -665,30 +690,7 @@ if (@$_POST['step2']) {
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php //echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
-
-	<?php
-	if (!$singleDbForm) {
-		//Showing this data only in case a user migrates from a 3 main databases (main, user, tracking)
-		//@todo should be removed
-		if ($installType == 'update') {
-			echo '<br />';
-			echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
-			if ($installType == 'new') {
-				echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-			}
-			echo '<br />';
-			echo get_lang('UserDB').' : <strong>'.$dbUserForm.'</strong>';
-			if ($installType == 'new') {
-				echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)';
-			}
-			echo '<br />';
-		}
-	}
-
-	//echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?>
-	<?php //echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
@@ -716,7 +718,9 @@ if (@$_POST['step2']) {
 	<table width="100%">
         <tr>
             <td>
-                <button type="submit" class="btn btn-default" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
+                <button type="submit" class="btn btn-default" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
+					<i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+				</button>
             </td>
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -732,9 +736,7 @@ if (@$_POST['step2']) {
 
 <?php
 } elseif (@$_POST['step6']) {
-
 	//STEP 6 : INSTALLATION PROCESS
-
     $current_step = 7;
     $msg = get_lang('InstallExecution');
     if ($installType == 'update') {
@@ -745,7 +747,6 @@ if (@$_POST['step2']) {
           <div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>
           </div>';
 
-
     // Push the web server to send these strings before we start the real
     // installation process
     flush();
@@ -755,9 +756,16 @@ if (@$_POST['step2']) {
     }
 
 	if ($installType == 'update') {
-
 		remove_memory_and_time_limits();
-		database_server_connect();
+
+		//database_server_connect();
+		$manager = testDbConnect(
+			$dbHostForm,
+			$dbUsernameForm,
+			$dbPassForm,
+			$dbNameForm
+		);
+
 		// Initialization of the database connection encoding intentionaly is not done.
 		// This is the old style for connecting to the database server, that is implemented here.
 
@@ -778,15 +786,6 @@ if (@$_POST['step2']) {
 			$userPasswordCrypted = 'none';
 		}
 
-        //Setting the single db form
-        if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $singleDbForm   	= get_config_param('singleDbEnabled');
-        } else {
-            $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;
-        }
-
-        Log::notice("singledbForm: '$singleDbForm'");
-
 		Database::query("SET storage_engine = MYISAM;");
 
 		if (version_compare($my_old_version, '1.8.7', '>=')) {
@@ -797,64 +796,6 @@ if (@$_POST['step2']) {
 		}
 
 		switch ($my_old_version) {
-			case '1.6':
-			case '1.6.0':
-			case '1.6.1':
-			case '1.6.2':
-			case '1.6.3':
-			case '1.6.4':
-			case '1.6.5':
-				include 'update-db-1.6.x-1.8.0.inc.php';
-				include 'update-files-1.6.x-1.8.0.inc.php';
-				//intentionally no break to continue processing
-			case '1.8':
-			case '1.8.0':
-				include 'update-db-1.8.0-1.8.2.inc.php';
-				//intentionally no break to continue processing
-			case '1.8.2':
-				include 'update-db-1.8.2-1.8.3.inc.php';
-				//intentionally no break to continue processing
-			case '1.8.3':
-				include 'update-db-1.8.3-1.8.4.inc.php';
-				include 'update-files-1.8.3-1.8.4.inc.php';
-			case '1.8.4':
-				include 'update-db-1.8.4-1.8.5.inc.php';
-                include 'update-files-1.8.4-1.8.5.inc.php';
-			case '1.8.5':
-				include 'update-db-1.8.5-1.8.6.inc.php';
-                include 'update-files-1.8.5-1.8.6.inc.php';
-            case '1.8.6':
-                include 'update-db-1.8.6-1.8.6.1.inc.php';
-                include 'update-files-1.8.6-1.8.6.1.inc.php';
-            case '1.8.6.1':
-                include 'update-db-1.8.6.1-1.8.6.2.inc.php';
-                include 'update-files-1.8.6.1-1.8.6.2.inc.php';
-            case '1.8.6.2':
-                include 'update-db-1.8.6.2-1.8.7.inc.php';
-                include 'update-files-1.8.6.2-1.8.7.inc.php';
-                // After database conversion to UTF-8, new encoding initialization is necessary
-                // to be used for the next upgrade 1.8.7[.1] -> 1.8.8.
-                Database::query("SET SESSION character_set_server='utf8';");
-                Database::query("SET SESSION collation_server='utf8_general_ci';");
-                //Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
-                Database::query("SET NAMES 'utf8';");
-
-            case '1.8.7':
-            case '1.8.7.1':
-                include 'update-db-1.8.7-1.8.8.inc.php';
-                include 'update-files-1.8.7-1.8.8.inc.php';
-            case '1.8.8':
-            case '1.8.8.2':
-                //Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
-            case '1.8.8.4':
-            case '1.8.8.6':
-                include 'update-db-1.8.8-1.9.0.inc.php';
-                //include 'update-files-1.8.8-1.9.0.inc.php';
-                //Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
-
-                break;
             case '1.9.0':
             case '1.9.2':
             case '1.9.4':
@@ -874,7 +815,14 @@ if (@$_POST['step2']) {
         }
     } else {
 		set_file_folder_permissions();
-		database_server_connect();
+
+		//database_server_connect();
+		$manager = testDbConnect(
+			$dbHostForm,
+			$dbUsernameForm,
+			$dbPassForm,
+			$dbNameForm
+		);
 
 		// Initialization of the database encoding to be used.
 		Database::query("SET storage_engine = MYISAM;");
@@ -901,7 +849,7 @@ if (@$_POST['step2']) {
 }
 ?>
 </form>
-</div>                  <!-- span9-->
+</div>                  <!-- col-md-9-->
 </div>  <!-- row -->
 </div> <!-- main end-->
 <div class="push"></div>

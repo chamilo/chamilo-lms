@@ -4,6 +4,7 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 /**
  * Class Database
@@ -54,13 +55,9 @@ class Database
      *
      * @param string $short_table_name, the name of the table
      */
-    public static function get_main_table($short_table_name)
+    public static function get_main_table($table)
     {
-        return $short_table_name;
-        /*
-        return self::format_table_name(
-          self::get_main_database(),
-          $short_table_name);*/
+        return $table;
     }
 
     /**
@@ -74,9 +71,9 @@ class Database
      * @param string $database_name, optional, name of the course database
      * - if you don't specify this, you work on the current course.
      */
-    public static function get_course_table($short_table_name, $extra = null)
+    public static function get_course_table($table, $extra = null)
     {
-        return DB_COURSE_PREFIX.$short_table_name;
+        return DB_COURSE_PREFIX.$table;
         /*
         //forces fatal errors so we can debug more easily
         if (!empty($extra)) {
@@ -129,19 +126,42 @@ class Database
     }
 
     /**
-     * Opens a connection to a database server.
-     * @param array $parameters (optional)      An array that contains the necessary parameters for accessing the server.
-     * @return resource/boolean                 Returns a database connection on success or FALSE on failure.
-     * Note: Currently the array could contain MySQL-specific parameters:
-     * $parameters['server'], $parameters['username'], $parameters['password'],
-     * $parameters['new_link'], $parameters['client_flags'], $parameters['persistent'].
-     * For details see documentation about the functions mysql_connect() and mysql_pconnect().
-     * @link http://php.net/manual/en/function.mysql-connect.php
-     * @link http://php.net/manual/en/function.mysql-pconnect.php
+     * @param array $params
+     * @throws \Doctrine\ORM\ORMException
      */
-    public static function connect($parameters = array()) {
+    public function connect($params = array())
+    {
+        $config = self::getDoctrineConfig();
+        $config->setEntityNamespaces(
+            array(
+                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
+                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
+                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity'
+            )
+        );
+
+        $entityManager = EntityManager::create($params, $config);
+
+        // Registering Constraints
+        AnnotationRegistry::registerAutoloadNamespace(
+            'Symfony\Component\Validator\Constraint',
+            api_get_path(SYS_PATH)."vendor/symfony/validator"
+        );
+
+        AnnotationRegistry::registerFile(
+            api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+        );
+
+        // Registering gedmo extensions
+        AnnotationRegistry::registerAutoloadNamespace(
+            'Gedmo\Mapping\Annotation',
+            api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
+        );
+
+        $this->setManager($entityManager);
+
         // A MySQL-specific implementation.
-        if (!isset($parameters['server'])) {
+        /*if (!isset($parameters['server'])) {
             $parameters['server'] = @ini_get('mysql.default_host');
             if (empty($parameters['server'])) {
                 $parameters['server'] = 'localhost:3306';
@@ -169,7 +189,7 @@ class Database
         $client_flags = isset($parameters['client_flags']) ? $parameters['client_flags'] : null;
         return $persistent
             ? mysql_pconnect($server, $username, $password, $client_flags)
-            : mysql_connect($server, $username, $password, $new_link, $client_flags);
+            : mysql_connect($server, $username, $password, $new_link, $client_flags);*/
     }
 
     /**

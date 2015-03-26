@@ -155,8 +155,6 @@ function parse_csv_data($file)
     return $courses;
 }
 
-$language_file = array('admin', 'document');
-
 $cidReset = true;
 
 require '../inc/global.inc.php';

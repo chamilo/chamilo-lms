@@ -8,10 +8,6 @@
  *
  * 	@todo the answered column
  */
-
-// Language file that needs to be included
-$language_file = 'survey';
-
 // Including the global initialization file
 require '../inc/global.inc.php';
 

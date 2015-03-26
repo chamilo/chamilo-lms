@@ -22,9 +22,6 @@ if (isset($_GET['action'])) {
         $language_file[] = 'hotspot';
     }
 }
-$language_file[] = 'document';
-$language_file[] = 'learnpath';
-$language_file[] = 'exercice';
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
@@ -160,7 +157,7 @@ $htmlHeadXtra[] = '
             },
             stop: function(event, ui) {
                 $(ui.item).css("width", "100%");
-            },
+            }
         });
 
         $("#lp_item_list").sortable({

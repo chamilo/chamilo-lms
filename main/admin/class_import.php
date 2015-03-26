@@ -46,9 +46,6 @@ function save_data($classes) {
     return $number_of_added_classes;
 }
 
-// Language files that should be included.
-$language_file = array ('admin');
-
 // Resetting the course id.
 $cidReset = true;
 

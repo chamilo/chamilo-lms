@@ -10,7 +10,6 @@
 // @deprecated This page is not used
 
 exit;
-$language_file = array('admin');
 
 require_once '../inc/global.inc.php';
 

@@ -12,7 +12,6 @@
 
 use \ChamiloSession as Session;
 
-$language_file = 'exercice';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

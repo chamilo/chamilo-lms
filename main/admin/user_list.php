@@ -5,9 +5,6 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.admin
 */
-
-// name of the language file that needs to be included
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -782,7 +779,7 @@ if (!empty($action)) {
 
 // Create a search-box
 $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
-$form->addElement('text', 'keyword', get_lang('keyword'), array('id' => 'user-search-keyword'));
+$form->addElement('text', 'keyword', get_lang('Keyword'), array('id' => 'user-search-keyword'));
 $form->addButtonSearch(get_lang('Search'));
 $form->addElement(
     'static',

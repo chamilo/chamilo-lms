@@ -3893,11 +3893,11 @@ class Exercise
         $array = array();
 
         if (!empty($user_data)) {
-            $array[] = array('title' => get_lang("Name"), 'content' => $user_data['complete_name']);
-            $array[] = array('title' => get_lang("Username"), 'content' => $user_data['username']);
+            $array[] = array('title' => get_lang('Name'), 'content' => $user_data['complete_name']);
+            $array[] = array('title' => get_lang('Username'), 'content' => $user_data['username']);
             if (!empty($user_data['official_code'])) {
                 $array[] = array(
-                    'title' => get_lang("OfficialCode"),
+                    'title' => get_lang('OfficialCode'),
                     'content' => $user_data['official_code']
                 );
             }
@@ -3911,15 +3911,15 @@ class Exercise
         }
         */
         if (!empty($start_date)) {
-            $array[] = array('title' => get_lang("StartDate"), 'content' => $start_date);
+            $array[] = array('title' => get_lang('StartDate'), 'content' => $start_date);
         }
 
         if (!empty($duration)) {
-            $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
+            $array[] = array('title' => get_lang('Duration'), 'content' => $duration);
         }
 
         if (!empty($ip)) {
-            $array[] = array("title" => get_lang("IP"), "content" => $ip);
+            $array[] = array('title' => get_lang('IP'), 'content' => $ip);
         }
 
         $html  = Display::page_header(

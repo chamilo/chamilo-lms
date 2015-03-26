@@ -9,11 +9,6 @@
 /**
  * First, initialise the script
  */
-
-//the document file is loaded because most of the upload vocab relates to the document tool
-$language_file[] = "document";
-$language_file[] = "learnpath";
-
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';

@@ -8,12 +8,6 @@
  *
  * @package chamilo.attendance
  */
-// name of the language file that needs to be included
-$language_file = array(
-    'admin',
-    'tracking',
-    'gradebook'
-);
 
 // including files
 require_once '../inc/global.inc.php';

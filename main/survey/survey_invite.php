@@ -12,10 +12,6 @@
  * 	@todo check if the mailtext contains the **link** part, if not, add the link to the end
  * 	@todo add rules: title and text cannot be empty
  */
-
-// Language file that needs to be included
-$language_file = 'survey';
-
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 

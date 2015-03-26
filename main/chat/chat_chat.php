@@ -54,8 +54,9 @@ if (!empty($course)) {
             // Save chat files document for group into item property
             if (!empty($group_id)) {
                 $doc_id = add_document($_course, $basepath_chat, 'folder', 0, 'chat_files');
+                $now = api_get_utc_datetime();
                 $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                        VALUES ($course_id, 'document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
+                        VALUES ($course_id, 'document',1,'$now','$now',$doc_id,'FolderCreated',1,$group_id,NULL,0)";
                 Database::query($sql);
             }
         }

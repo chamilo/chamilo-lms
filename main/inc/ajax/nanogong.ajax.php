@@ -3,9 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
-$language_file = array('exercice','document');
-
 require_once '../global.inc.php';
 
 //@todo for some reason nanogong doesn't like this variables

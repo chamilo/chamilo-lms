@@ -6,9 +6,6 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
  * @package chamilo.document
  */
-
-// Language files that need to be included
-$language_file = array('document');
 require_once '../inc/global.inc.php';
 api_protect_course_script();
 

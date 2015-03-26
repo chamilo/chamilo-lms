@@ -10,10 +10,6 @@
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-
-// Language files that needs to be included.
-$language_file[] = 'learnpath';
-
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script>

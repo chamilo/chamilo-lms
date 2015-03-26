@@ -51,6 +51,9 @@
 <h3>Release name</h3>
 <h3>Security fixes</h3>
 <h3>Possibly breaking changes</h3>
+  <ul>
+    <li>We changed/fixed several calls to SQL NOW() to api_get_utc_datetime(), as our coding conventions require. This *might* have a small adverse effect of generating a hole or a superposition in connections tracking in a few admin reports. See commits <a href="https://github.com/chamilo/chamilo-lms/commit/17c04edf6bb932361ecb1f5092aaed87962d4301">17c04ed</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/df958828f8992aefcd8ef603cc7087979c753653">df95882</a>, <a href="https://github.com/chamilo/chamilo-lms/commit/b568eb4e67509a44bcafff68c580b65675cbd1d6">b568eb4</a> and <a href="https://github.com/chamilo/chamilo-lms/commit/3b8a26f3634da86fccab4db2921a6613e3c111d1">3b8a26f</a> for details</li>
+  </ul>
 <h3>Notable new Features</h3>
 <h3>Improvements (minor features) and debug</h3>
 <h3>Stylesheets and theming</h3>

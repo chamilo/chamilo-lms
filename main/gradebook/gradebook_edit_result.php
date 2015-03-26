@@ -4,8 +4,6 @@
  * Script
  * @package chamilo.gradebook
  */
-
-$language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -41,7 +39,7 @@ $interbreadcrumb[] = array (
     'name' => get_lang('Gradebook')
 );
 $interbreadcrumb[]= array (
-    'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq()
+    'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
     'name' => get_lang('ViewResult')
 );
 Display :: display_header(get_lang('EditResult'));

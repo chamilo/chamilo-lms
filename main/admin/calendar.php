@@ -5,10 +5,6 @@
 *	@author Carlos Vargas
 *	This file is the calendar/agenda.php
 */
-
-// name of the language file that needs to be included
-$language_file[] = 'admin';
-
 // resetting the course id
 $cidReset=true;
 // including some necessary files

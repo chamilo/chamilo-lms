@@ -9,8 +9,6 @@
  */
 use \ChamiloSession as Session;
 
-$language_file[] = 'learnpath';
-$language_file[] = 'exercice';
 // setting the help
 $help_content = 'exercise_upload';
 

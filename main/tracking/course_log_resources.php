@@ -8,10 +8,6 @@
 /* INIT SECTION */
 
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-
-// Language files that need to be included.
-$language_file = array('admin', 'tracking', 'exercice');
-
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
@@ -107,7 +103,7 @@ $form = new FormValidator(
 );
 $renderer = $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span>');
-$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('hidden', 'cidReq', api_get_course_id());
 $form->addElement('hidden', 'id_session', $session_id);
 $form->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');

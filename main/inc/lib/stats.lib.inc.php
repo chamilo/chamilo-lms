@@ -72,10 +72,10 @@ function decodeOpenInfos() {
     ignore_user_abort(1) ;
     // we take the last event id to prevent miss of some recorded event
     // only processed record have to be cleaned
-
+    $now = api_get_utc_datetime();
     $sql = "SELECT open_id
                 FROM $TABLETRACK_OPEN
-                WHERE open_date <= NOW()
+                WHERE open_date <= '$now'
                 ORDER BY open_id DESC
                 LIMIT 1";
     //$processBegin = StatsUtils::getOneResult($sql);

@@ -8,9 +8,6 @@
 /**
  * Code
  */
-// Name of the language file that needs to be included.
-$language_file ='exercice';
-
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
@@ -74,7 +71,7 @@ $form->addElement('hidden', 'fld', $fld);
 $form->addElement('hidden', 'imgcount', $imgcount);
 $form->addElement('hidden', 'finish', $finish);
 $form->addElement('html', GenerateHiddenList($imgparams));
-$form->addElement('advanced_settings', Display::return_icon('hotpotatoes.jpg', get_lang('Hotpotatoes')));
+$form->addElement('advanced_settings', Display::return_icon('hotpotatoes.jpg', get_lang('HotPotatoes')));
 $label = get_lang('DownloadImg').' : ';
 if ($finish == 0) {
     $label = get_lang('DownloadFile').' : ';

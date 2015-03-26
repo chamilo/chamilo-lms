@@ -9,9 +9,6 @@
  * @author Juan Carlos Ra�a Trabado
  * @since 25/september/2010
 */
-
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/editdraw';

@@ -2,10 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
-
 */
-// Language files that should be included
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

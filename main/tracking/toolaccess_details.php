@@ -19,10 +19,7 @@
 $tool = $_REQUEST['tool'];
 $period = $_REQUEST['period'];
 $reqDate = $_REQUEST['reqDate'];
-// name of the language file that needs to be included
-$language_file = "tracking";
-
-include('../inc/global.inc.php');
+include '../inc/global.inc.php';
 
 $nameTools = get_lang('ToolName');
 

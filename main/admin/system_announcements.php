@@ -8,9 +8,6 @@
 
 /* INIT SECTION */
 
-// Language files that need to be included.
-$language_file = array('admin');
-
 // Resetting the course id.
 $cidReset = true;
 

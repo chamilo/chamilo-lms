@@ -1372,8 +1372,8 @@ class IndexManager
 
         $this->tpl->assign('course_catalog_url', $course_catalog_url);
         $this->tpl->assign('course_list_url', $course_list_url);
-        $this->tpl->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
-        $this->tpl->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
+        $this->tpl->assign('course_catalog_link', Display::url(get_lang('Here'), $course_catalog_url));
+        $this->tpl->assign('course_list_link', Display::url(get_lang('Here'), $course_list_url));
         $this->tpl->assign('count_courses', $count_courses);
 
         return $this->tpl->fetch($tpl);

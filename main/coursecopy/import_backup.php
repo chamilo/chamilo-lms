@@ -7,9 +7,6 @@
  * @package chamilo.backup
  */
 
-// Language files that need to be included
-$language_file = array('exercice', 'admin');
-
 // Including the global initialization file
 require '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;

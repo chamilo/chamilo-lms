@@ -9,10 +9,6 @@
  * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  *
  */
-
-// Language file that needs to be included
-$language_file = 'survey';
-
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 

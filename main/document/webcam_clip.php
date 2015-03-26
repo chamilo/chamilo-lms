@@ -9,10 +9,6 @@
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
  * @since 7/jun/2012
 */
-
-// Name of the language file that needs to be included
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/webcamclip';

@@ -10,10 +10,6 @@
  *
  * 	@todo use quickforms for the forms
  */
-
-// Language file that needs to be included
-$language_file = 'survey';
-
 if (!isset($_GET['cidReq'])) {
     $_GET['cidReq'] = 'none'; // Prevent sql errors
     $cidReset = true;

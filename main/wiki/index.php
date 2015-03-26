@@ -7,10 +7,6 @@
  *
  * 	@package chamilo.wiki
  */
-
-// name of the language file that needs to be included
-$language_file = 'wiki';
-
 // including the global initialization file
 require_once '../inc/global.inc.php';
 require_once 'wiki.inc.php';

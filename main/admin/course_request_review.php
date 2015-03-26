@@ -10,9 +10,6 @@
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
 
-// Language files that need to be included.
-$language_file = array('admin');
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -228,7 +225,7 @@ if (!$course_validation_feature) {
 $form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
 $renderer = $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
-$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.

@@ -5,9 +5,6 @@
  *  @package chamilo.admin
  */
 
-// Language files that need to be included.
-$language_file = array('admin');
-
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -105,7 +102,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form = new FormValidator('note', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
     // Setting the form elements
     $form->addElement('header', get_lang('Add'));
-    $form->addElement('text', 'name', get_lang('name'), array('size' => '70', 'id' => 'name'));
+    $form->addElement('text', 'name', get_lang('Name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
     $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
     $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');

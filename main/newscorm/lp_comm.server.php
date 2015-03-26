@@ -10,10 +10,6 @@
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-
-// Name of the language file that needs to be included.
-$language_file[] = 'learnpath';
-
 require_once '../inc/global.inc.php';
 
 /**
@@ -152,7 +148,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         if (Database::num_rows($q_last_connection) > 0) {
             $row = Database::fetch_array($q_last_connection);
             $i_id_last_connection = $row['login_id'];
-            $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+            $now = api_get_utc_datetime();
+            $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date = '$now' WHERE login_id='$i_id_last_connection'";
             Database::query($s_sql_update_logout_date);
         }
 

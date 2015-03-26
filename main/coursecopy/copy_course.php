@@ -6,8 +6,6 @@
 /**
  * Code
  */
-// Language files that need to be included
-$language_file = array('exercice', 'admin');
 
 // Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';

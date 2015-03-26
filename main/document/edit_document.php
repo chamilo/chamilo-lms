@@ -25,9 +25,6 @@
  * not for validation at the moment)
  */
 
-// Name of the language file that needs to be included
-$language_file = array('document', 'gradebook');
-
 /*	Included libraries */
 require_once '../inc/global.inc.php';
 

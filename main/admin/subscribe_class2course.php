@@ -6,9 +6,6 @@
 /**
  * Code
  */
-// name of the language file that needs to be included
-$language_file = 'admin';
-
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -70,7 +67,7 @@ if ($_POST['formSent'])
                     ClassManager :: unsubscribe_from_course($class_id, $course_code);
                 }
             }
-            Display::display_normal_message(get_lang('ClassesUnsubscribed'));
+            Display::display_normal_message(get_lang('ClassesUnSubscribed'));
         }
     }
 }

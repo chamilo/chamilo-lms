@@ -7,7 +7,6 @@
  */
 use \ChamiloSession as Session;
 
-$language_file = array('gradebook', 'exercice');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

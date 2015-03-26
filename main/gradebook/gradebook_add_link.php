@@ -5,9 +5,6 @@
  * Script
  * @package chamilo.gradebook
  */
-
-$language_file = array('gradebook', 'exercice');
-
 require_once '../inc/global.inc.php';
 require_once '../forum/forumfunction.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;

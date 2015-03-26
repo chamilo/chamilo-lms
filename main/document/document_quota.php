@@ -4,9 +4,6 @@
  * Document quota management script
  * @package chamilo.document
  */
-
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 if (!api_is_allowed_to_edit(null, true)) {

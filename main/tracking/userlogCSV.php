@@ -73,13 +73,14 @@ $tbl_session_course_user = Database::get_main_table(
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $TABLECOURSE_GROUPSUSER = Database::get_course_table(TABLE_GROUP_USER);
+$now = api_get_utc_datetime();
 
 $sql = "SELECT 1
         FROM $tbl_session_course_user AS session_course_user
         INNER JOIN $tbl_session AS session
             ON session_course_user.id_session = session.id
-            AND ((date_start<=NOW()
-            AND date_end>=NOW())
+            AND ((date_start <= '$now'
+            AND date_end >= '$now')
             OR (date_start='0000-00-00' AND date_end='0000-00-00'))
         WHERE id_session='" . $_SESSION['id_session'] . "' AND course_code='$_cid'";
 //echo $sql;

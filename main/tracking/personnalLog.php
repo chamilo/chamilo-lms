@@ -115,9 +115,8 @@ api_display_tool_title($nameTools);
         </td>
     </tr>";
 
-                if(!isset($previousDate)) {
-                    $sql = "SELECT NOW()";
-                    $previousDate = StatsUtils::getOneResult($sql);
+                if (!isset($previousDate)) {
+                    $previousDate = api_get_utc_datetime();
                 }
 
                 $sql = "SELECT access_tool, count(access_tool), c_id

@@ -268,8 +268,9 @@ function phpdigAddLog ($id_connect,$option='start',$includes=array(),$excludes=a
          $includes = array();
     }
     sort($includes);
+    $now = api_get_utc_datetime();
     $query = 'INSERT INTO '.PHPDIG_DB_PREFIX.'logs (l_num,l_mode,l_ts,l_includes,l_excludes,l_time) '
-             .'VALUES ('.$num_results.',\''.substr($option,0,1).'\',NOW(),'
+             .'VALUES ('.$num_results.',\''.substr($option,0,1).'\',"' . $now . '",'
              .'\''.implode(' ',$includes).'\',\''.implode(' ',$excludes).'\','.(double)$time.')';
     mysql_query($query,$id_connect);
     return mysql_insert_id($id_connect);

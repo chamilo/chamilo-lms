@@ -2726,7 +2726,7 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT id, name, date_start, date_end
-                FROM $tbl_session_user, $tbl_session
+                FROM $tbl_session
                 WHERE (
                     id_coach = $user_id
                 )

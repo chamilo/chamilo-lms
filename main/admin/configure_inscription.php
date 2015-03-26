@@ -5,8 +5,6 @@
  *	This script displays a form for registering new users.
  *	@package	 chamilo.admin
  */
-
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

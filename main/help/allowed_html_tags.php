@@ -10,10 +10,6 @@
 /**
  * Code
  */
-
-// Language file that needs to be included
-$language_file = 'help';
-
 require '../inc/global.inc.php';
 
 header('Content-Type: text/html; charset='.api_get_system_encoding());

@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-$language_file[] = 'admin';
 require_once '../global.inc.php';
 
 $action = $_REQUEST['a'];

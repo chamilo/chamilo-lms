@@ -1284,7 +1284,7 @@ class Display
         $course_code        = Database::escape_string($course_info['code']);
 
         $user_id = api_get_user_id();
-        $course_id = $course_info['real_id'];
+        $course_id = intval($course_info['real_id']);
         $course_info['id_session'] = intval($course_info['id_session']);
 
         // Get the user's last access dates to all tools of this course

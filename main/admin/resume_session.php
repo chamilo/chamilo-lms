@@ -4,9 +4,6 @@
 *	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
 */
-
-// name of the language file that needs to be included
-$language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -115,9 +112,9 @@ switch ($action) {
         }
 
         if (!empty($_GET['class'])) {
-            Database::query("DELETE FROM $tbl_session_rel_class
+            $result = Database::query("DELETE FROM $tbl_session_rel_class
                              WHERE session_id='$sessionId' AND class_id=".intval($_GET['class']));
-            $nbr_affected_rows=Database::affected_rows();
+            $nbr_affected_rows = Database::affected_rows($result);
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$sessionId'");
         }
 

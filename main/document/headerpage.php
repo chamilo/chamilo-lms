@@ -7,8 +7,6 @@
 
 // Name of the language file that needs to be included
 exit;
-$language_file = 'document';
-
 require_once '../inc/global.inc.php';
 
 $noPHP_SELF = true;

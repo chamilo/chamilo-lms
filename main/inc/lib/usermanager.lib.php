@@ -2146,8 +2146,8 @@ class UserManager
             // deleting the answer of the user who has chosen this option
             $sql_delete_option_value = "DELETE FROM $table_field_options_values
             WHERE field_id = '".intval($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-            Database::query($sql_delete_option_value);
-            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
+            $result = Database::query($sql_delete_option_value);
+            $return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows($result);
         }
 
         // we now try to find the field options that are newly added
@@ -3579,7 +3579,7 @@ class UserManager
               } else {
               $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
               $result = Database::query($sql);
-              $last_insert_id = Database::get_last_insert_id();
+              $last_insert_id = Database::insert_id();
               } */
         } else {
 

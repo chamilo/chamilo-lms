@@ -121,8 +121,6 @@ Version 1.4 (Yannick Warnier)
 
 use \ChamiloSession as Session;
 
-$language_file = array('document');
-
 // including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();

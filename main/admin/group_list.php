@@ -6,8 +6,6 @@
  * 	@package chamilo.admin
 
  */
-// name of the language file that needs to be included
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -112,7 +110,7 @@ function get_group_data($from, $number_of_items, $column, $direction) {
     foreach ($result as $row) {
         $groupRelations[$row['id']] = $row;
     }
-
+    $groups = array();
     while ($group = Database::fetch_row($res)) {
         $name = null;
         $id = $group[0];
@@ -378,7 +376,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $form = new FormValidator('search_simple', 'get', '', '', null, false);
     $renderer = & $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<span>{element}</span> ');
-    $form->addElement('text', 'keyword', get_lang('keyword'));
+    $form->addElement('text', 'keyword', get_lang('Keyword'));
     $form->addButtonSearch(get_lang('Search'));
     echo '<div class="actions" style="width:100%;">';
     if (api_is_platform_admin()) {

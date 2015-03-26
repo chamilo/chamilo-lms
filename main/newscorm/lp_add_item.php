@@ -22,8 +22,6 @@ include 'resourcelinker.inc.php';
 /** @var learnpath $learnPath */
 $learnPath = $_SESSION['oLP'];
 
-$language_file = 'learnpath';
-
 $htmlHeadXtra[] = '<script>'.
 
 $learnPath->get_js_dropdown_array() .

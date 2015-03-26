@@ -5,19 +5,6 @@
  * Implements the tracking of students in the Reporting pages
  * @package chamilo.reporting
  */
-
-// name of the language file that needs to be included
-$language_file = array(
-    'registration',
-    'index',
-    'tracking',
-    'exercice',
-    'admin',
-    'gradebook',
-    'survey',
-    'forum'
-);
-
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();

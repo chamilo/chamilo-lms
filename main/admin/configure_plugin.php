@@ -7,8 +7,6 @@
  */
 use \ChamiloSession as Session;
 
-// name of the language file that needs to be included
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 

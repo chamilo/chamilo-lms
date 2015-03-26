@@ -22,8 +22,6 @@ require 'learnpath_functions.inc.php';
 require 'resourcelinker.inc.php';
 // Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
 // Name of the language file that needs to be included.
-$language_file = 'learnpath';
-
 /* Header and action code */
 
 $currentstyle = api_get_setting('stylesheets');

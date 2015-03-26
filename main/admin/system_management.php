@@ -7,7 +7,6 @@
  * @author Laurent Opprecht <laurent@opprecht.info>
  * @license see /license.txt
  */
-$language_file = array('admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once __DIR__ . '/admin_page.class.php';
@@ -38,6 +37,7 @@ class SystemManagementPage extends AdminPage
 
     function display_default()
     {
+        global $_configuration;
         $message = get_lang('RemoveOldDatabaseMessage');
         $message_table = get_lang('RemoveOldTables');
         

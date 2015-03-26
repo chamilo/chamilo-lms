@@ -32,11 +32,12 @@ class SystemAnnouncementManager
         $ann_group_db_ok =true;
 
         $groups_string = '('.implode($groups,',').')';
+        $now = api_get_utc_datetime();
         $sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date"
         ." FROM  $db_table"
         ." WHERE (lang='$user_selected_language'"
         ." OR lang IS NULL)"
-        ." AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
+        ." AND (('$now' BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 
         switch ($visible) {
             case self::VISIBLE_GUEST :

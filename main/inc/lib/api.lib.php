@@ -3777,9 +3777,9 @@ function api_item_property_update(
                       lastedit_user_id='$user_id' $set_type
                     WHERE $filter";
     }
-    Database::query($sql);
+    $result = Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
-    if (Database::affected_rows() == 0) {
+    if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, id_session)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
         $res = Database::query($sql);
@@ -3912,10 +3912,12 @@ function api_track_item_property_update($tool, $ref, $title, $content, $progress
                 lastedit_date       = '".api_get_utc_datetime()."',
                 lastedit_user_id    = '".api_get_user_id()."',
                 session_id          = '".api_get_session_id()."'";
-        Database::query($sql);
-        $affected_rows = Database::affected_rows();
+        $result = Database::query($sql);
+        $affected_rows = Database::affected_rows($result);
+
         return $affected_rows;
     }
+
     return false;
 }
 

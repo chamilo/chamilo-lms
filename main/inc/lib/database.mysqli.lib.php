@@ -1095,27 +1095,4 @@ class MySQLIDatabase {
         }
         return false;
     }
-
-     /*
-        DEPRECATED METHODS
-    */
-
-    /**
-     * @deprecated Use api_get_language_isocode($language) instead.
-     */
-    public static function get_language_isocode($language)
-    {
-        return api_get_language_isocode($language);
-    }
-
-    /**
-     * @deprecated Use Database::insert_id() instead.
-     */
-    public static function get_last_insert_id()
-    {
-        global $database_connection;
-        return $database_connection->insert_id($database_connection);
-    }
-
 }
-//end class Database

@@ -2479,8 +2479,14 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->exportValues();
-            if ($values['thread_qualify_gradebook'] == '1' && empty($values['weight_calification'])) {
-                Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>', false);
+            if (isset($values['thread_qualify_gradebook']) &&
+                $values['thread_qualify_gradebook'] == '1' &&
+                empty($values['weight_calification'])
+            ) {
+                Display::display_error_message(
+                    get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>',
+                    false
+                );
 
                 return false;
             }

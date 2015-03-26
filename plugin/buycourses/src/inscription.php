@@ -9,8 +9,6 @@
  */
 use ChamiloSession as Session;
 
-$language_file = array('admin');
-
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];
 }

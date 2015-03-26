@@ -5020,7 +5020,7 @@ function exportAllStudentWorkFromPublication(
                     get_lang('User'),
                     get_lang('HandOutDateLimit'),
                     get_lang('SentDate'),
-                    get_lang('Filename'),
+                    get_lang('FileName'),
                     get_lang('Score'),
                     get_lang('Feedback')
                 );

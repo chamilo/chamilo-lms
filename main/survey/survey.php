@@ -8,10 +8,6 @@
  */
 
 use ChamiloSession as Session;
-
-// Language file that needs to be included
-$language_file = 'survey';
-
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 

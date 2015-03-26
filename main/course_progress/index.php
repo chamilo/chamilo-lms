@@ -7,9 +7,6 @@
  * @package chamilo.course_progress
  */
 
-// name of the language file that needs to be included
-$language_file = array('admin');
-
 // including files
 require_once '../inc/global.inc.php';
 require_once 'thematic_controller.php';

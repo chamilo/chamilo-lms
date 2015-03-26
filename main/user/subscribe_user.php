@@ -5,9 +5,6 @@
 * to their course.
 * @package chamilo.user
 */
-
-// name of the language file that needs to be included
-$language_file = array('admin');
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_USER;
 
@@ -673,7 +670,7 @@ function search_additional_profile_fields($keyword)
 	while ($profiling_field_options = Database::fetch_array($result_profiling)) {
 		$profiling_field_options_exact_values[] = $profiling_field_options;
 	}
-
+    $profiling_field_options_exact_values_sql = '';
 	foreach ($profiling_field_options_exact_values as $profilingkey=>$profilingvalue){
 		$profiling_field_options_exact_values_sql .= "OR (field_id = '".$profilingvalue['field_id']."' AND field_value='".$profilingvalue['option_value']."') ";
 	}

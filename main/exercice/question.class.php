@@ -1556,7 +1556,7 @@ abstract class Question
 
         Database::query($sql);
         // Get the question ID
-        $question_id = Database::get_last_insert_id();
+        $question_id = Database::insert_id();
 
         // Get the max question_order
         $sql = "SELECT max(question_order) as max_order "

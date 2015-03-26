@@ -5,8 +5,6 @@
  * Script
  * @package chamilo.gradebook
  */
-
-$language_file = 'gradebook';
 //$cidReset = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;

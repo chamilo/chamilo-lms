@@ -17,8 +17,6 @@
 
 use \ChamiloSession as Session;
 
-// Name of the language file that needs to be included
-$language_file = 'exercice';
 $debug = false;
 require_once '../inc/global.inc.php';
 

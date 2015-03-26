@@ -5,8 +5,6 @@
  * uploaded in each course
  * @package chamilo.admin
  */
-
-$language_file = array('admin', 'document');
 $cidReset = true;
 require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

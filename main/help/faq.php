@@ -9,10 +9,6 @@
 /**
  * Code
  */
-
-// Language file that needs to be included
-$language_file = 'help';
-
 require_once '../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
 

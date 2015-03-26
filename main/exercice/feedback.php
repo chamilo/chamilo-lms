@@ -7,10 +7,6 @@
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
-
-// name of the language file that needs to be included
-$language_file='exercice';
-
 include("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 

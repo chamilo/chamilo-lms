@@ -3,8 +3,6 @@
 /**
 *	@package chamilo.admin
 */
-// name of the language file that needs to be included
-$language_file = array('admin');
 $cidReset = true;
 
 // including necessary libraries

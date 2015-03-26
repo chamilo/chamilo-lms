@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('exercice', 'document', 'admin', 'gradebook');
-
 require_once '../inc/global.inc.php';
 
 // Including necessary files

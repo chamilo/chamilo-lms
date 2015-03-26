@@ -8,7 +8,7 @@ require_once 'Resource.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
-class Event extends Resource
+class CalendarEvent extends Resource
 {
 	/**
 	 * The title
@@ -55,7 +55,8 @@ class Event extends Resource
 	 * @param string $hour
 	 * @param int $duration
 	 */
-	function Event($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0) {
+	function CalendarEvent($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0)
+	{
 		parent::Resource($id,RESOURCE_EVENT);
 
 		$this->title 				= $title;

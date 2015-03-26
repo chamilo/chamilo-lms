@@ -10,9 +10,6 @@
  * @since 5/mar/2011
 */
 
-// Name of the language file that needs to be included
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/voicerecord';

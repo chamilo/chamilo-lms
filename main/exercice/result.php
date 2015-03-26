@@ -6,10 +6,6 @@
  * @author Julio Montoya Armas  - Simple exercise result page
  *
  */
-
-// name of the language file that needs to be included
-$language_file = array('exercice');
-
 require_once '../inc/global.inc.php';
 
 if (empty($origin)) {

@@ -3,8 +3,6 @@
 /**
  * 	@package chamilo.admin
  */
-// name of the language file that needs to be included
-$language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -384,6 +382,9 @@ if ($form->validate()) {
     $course_id = $courseInfo['real_id'];
     /* $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
       $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id "; */
+
+    Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+
     if ($visual_code_is_used) {
         header('Location: course_list.php?action=show_msg&warn=' . urlencode($warn));
     } else {

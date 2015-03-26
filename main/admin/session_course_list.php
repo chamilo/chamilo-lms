@@ -3,10 +3,6 @@
 /**
 *	@package chamilo.admin
 */
-
-
-// name of the language file that needs to be included
-$language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -47,8 +43,8 @@ if ($action == 'delete') {
 		}
 		$idChecked = $my_temp;
 		$idChecked="'".implode("','", $idChecked)."'";
-		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-		$nbr_affected_rows=Database::affected_rows();
+		$result = Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
+		$nbr_affected_rows=Database::affected_rows($result);
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}

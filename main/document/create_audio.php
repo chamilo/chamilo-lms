@@ -11,7 +11,6 @@
  * TODO:clean all file
 */
 /*	INIT SECTION */
-$language_file = array('document');
 
 require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createaudio';

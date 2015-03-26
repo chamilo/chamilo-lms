@@ -9,9 +9,6 @@
  * @author Juan Carlos Raña Trabado
  * @since 30/january/2011
 */
-
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/editpaint';

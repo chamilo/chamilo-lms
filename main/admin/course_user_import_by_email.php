@@ -138,8 +138,6 @@ function parse_csv_data($file)
     return $courses;
 }
 
-// Language files that should be included,
-$language_file = array('admin');
 $cidReset = true;
 
 include '../inc/global.inc.php';

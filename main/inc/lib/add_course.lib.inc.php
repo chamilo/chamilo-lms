@@ -743,6 +743,7 @@ class AddCourse
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;
         $language_interface = $language;
+        $now = api_get_utc_datetime();
 
         //Share folder
         Database::query(
@@ -752,7 +753,7 @@ class AddCourse
         );
         $example_doc_id = Database:: insert_id();
         Database::query(
-            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
         );
 
         //Chat folder
@@ -763,7 +764,7 @@ class AddCourse
         );
         $example_doc_id = Database:: insert_id();
         Database::query(
-            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
         );
 
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -786,7 +787,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             Database::query(
@@ -796,7 +797,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             Database::query(
@@ -806,7 +807,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             Database::query(
@@ -816,7 +817,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             Database::query(
@@ -826,7 +827,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             Database::query(
@@ -836,7 +837,7 @@ class AddCourse
             );
             $example_doc_id = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)"
+                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
             );
 
             // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
@@ -962,7 +963,7 @@ class AddCourse
                                     );
                                     $image_id = Database:: insert_id();
                                     Database::query(
-                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)"
+                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,0)"
                                     );
                                 }
                             }
@@ -1003,7 +1004,7 @@ class AddCourse
                                         $example_cert_id = $image_id;
                                     }
                                     Database::query(
-                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)"
+                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,1)"
                                     );
                                 }
                             }
@@ -1023,7 +1024,7 @@ class AddCourse
             );
             // We need to add the item properties too!
             $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
+            $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,'$now','$now',$insert_id,'AgendaAdded',1,0,NULL,1)";
             Database::query($sql);
 
             /*  Links tool */
@@ -1037,7 +1038,7 @@ class AddCourse
             // We need to add the item properties too!
             $insert_id = Database:: insert_id();
             $sql = "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                    VALUES ($course_id, '" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
+                    VALUES ($course_id, '" . TOOL_LINK . "',1,'$now','$now',$insert_id,'LinkAdded',1,0,NULL,1)";
             Database::query($sql);
 
             $add_wikipedia_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
@@ -1048,7 +1049,7 @@ class AddCourse
 
             // We need to add the item properties too!
             $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
+            $sql = "INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,'$now','$now',$insert_id,'LinkAdded',1,0,NULL,1)";
             Database::query($sql);
 
             /* Annoucement tool */
@@ -1058,13 +1059,13 @@ class AddCourse
                     get_lang('AnnouncementExampleTitle')
                 ) . "', '" . self::lang2db(
                     get_lang('AnnouncementEx')
-                ) . "', NOW(), '1','0')";
+                ) . "', '$now', '1','0')";
             Database::query($sql);
 
             // We need to add the item properties too!
             $insert_id = Database:: insert_id();
             $sql = "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                    VALUES ($course_id, '" . TOOL_ANNOUNCEMENT . "',1,NOW(),NOW(),$insert_id,'AnnouncementAdded',1,0,NULL,1)";
+                    VALUES ($course_id, '" . TOOL_ANNOUNCEMENT . "',1,'$now','$now',$insert_id,'AnnouncementAdded',1,0,NULL,1)";
             Database::query($sql);
 
             /* Introduction text */
@@ -1156,7 +1157,7 @@ class AddCourse
             $insert_id = Database:: insert_id();
             Database::query(
                 "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                            VALUES ($course_id, 'forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)"
+                            VALUES ($course_id, 'forum_category',1,'$now','$now',$insert_id,'ForumCategoryAdded',1,0,NULL,1)"
             );
 
             Database::query(
@@ -1168,19 +1169,19 @@ class AddCourse
             $insert_id = Database:: insert_id();
             Database::query(
                 "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                             VALUES ($course_id, '" . TOOL_FORUM . "', 1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)"
+                             VALUES ($course_id, '" . TOOL_FORUM . "', 1,'$now','$now',$insert_id,'ForumAdded',1,0,NULL,1)"
             );
 
             Database::query(
                 "INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max, session_id)
                             VALUES ($course_id, 1, '" . self::lang2db(
                     get_lang('ExampleThread')
-                ) . "', 1, 0, 1, '', 0, 1, NOW(), 0, 10, 0)"
+                ) . "', 1, 0, 1, '', 0, 1, '$now', 0, 10, 0)"
             );
             $insert_id = Database:: insert_id();
             Database::query(
                 "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                            VALUES ($course_id, 'forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)"
+                            VALUES ($course_id, 'forum_thread',1,'$now','$now',$insert_id,'ForumThreadAdded',1,0,NULL,1)"
             );
 
             Database::query(
@@ -1188,7 +1189,7 @@ class AddCourse
                     get_lang('ExampleThread')
                 ) . "', '" . self::lang2db(
                     get_lang('ExampleThreadContent')
-                ) . "', 1, 1, 1, '', NOW(), 0, 0, 1)"
+                ) . "', 1, 1, 1, '', '$now', 0, 0, 1)"
             );
 
             /* Gradebook tool */

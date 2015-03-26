@@ -9,9 +9,6 @@
  * Init
  */
 // TODO: This file seems to be unfinished and unused.
-
-$language_file = array('tracking');
-
 require_once '../inc/global.inc.php';
 
 $nameTools = get_lang('Progression');

@@ -5,8 +5,6 @@
  * This tool show global Statistics on general platform events
  * @package chamilo.Statistics
  */
-// Language files that need to be included
-$language_file = array('admin', 'tracking');
 $cidReset = true;
 
 require_once '../../inc/global.inc.php';

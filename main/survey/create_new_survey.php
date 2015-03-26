@@ -12,9 +12,6 @@
  * 	@todo only the available platform languages should be used => need an
  *  api get_languages and and api_get_available_languages (or a parameter)
  */
-// Language file that needs to be included
-$language_file = 'survey';
-
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 

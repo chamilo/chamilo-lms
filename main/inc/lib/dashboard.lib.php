@@ -204,7 +204,8 @@ class DashboardManager
 				if (Database::num_rows($rs) > 0) {
 					// update
 					$upd = "UPDATE $tbl_block SET active = 1 WHERE path = '$selected_path'";
-					Database::query($upd);
+					$result = Database::query($upd);
+					$affected_rows = Database::affected_rows($result);
 				} else {
 					// insert
 					$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
@@ -232,10 +233,12 @@ class DashboardManager
 						$plugin_controller = Database::escape_string($plugin_info['controller']);
 					}
 
-					$ins = "INSERT INTO $tbl_block(name, description, path, controller) VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
-					Database::query($ins);
+					$ins = "INSERT INTO $tbl_block(name, description, path, controller)
+							VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
+					$result = Database::query($ins);
+					$affected_rows = Database::affected_rows($result);
 				}
-				$affected_rows = Database::affected_rows();
+
 			}
 
 		}

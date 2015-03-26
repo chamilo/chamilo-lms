@@ -5,9 +5,6 @@
  * Script
  * @package chamilo.gradebook
  */
-
-$language_file= array('gradebook','tracking');
-
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();

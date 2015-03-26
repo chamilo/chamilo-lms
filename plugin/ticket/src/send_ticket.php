@@ -8,7 +8,6 @@
 /**
  * INIT SECTION
  */
-$language_file = array('admin');
 $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
@@ -119,7 +118,7 @@ div.row div.formw2 {
 }
 div.divTicket {
     width: 70%;
-	float: center;
+	float: left;
 	margin-left: 15%;
 
 }

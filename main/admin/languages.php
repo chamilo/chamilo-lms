@@ -16,8 +16,6 @@
 /**
  * 	   INIT SECTION
  */
-// name of the language file that needs to be included
-$language_file = 'admin';
 
 // we are in the admin area so we do not need a course id
 $cidReset = true;

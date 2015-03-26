@@ -20,7 +20,6 @@
 die();
 //change filename depending on file containing mails list, with one e-mail per line.
 $list = file('input.txt');
-$language_file = array('admin');
 require_once '../../inc/global.inc.php';
 $users = Database::get_main_table(TABLE_MAIN_USER);
 /**

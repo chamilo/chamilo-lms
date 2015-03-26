@@ -17,10 +17,6 @@
  *
  * @package chamilo.forum
  */
-
-// Language files that need to be included.
-$language_file = array('document');
-
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 

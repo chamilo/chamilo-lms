@@ -3,9 +3,6 @@
 /**
  *   @package chamilo.admin
  */
-
-$language_file = array('admin');
-
 // resetting the course id
 $cidReset = true;
 

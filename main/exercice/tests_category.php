@@ -19,8 +19,6 @@ $htmlHeadXtra[] = '
 	}
 </script>';
 
-// name of the language file that needs to be included
-$language_file = 'exercice';
 $nameTools = "";
 
 require_once '../inc/global.inc.php';

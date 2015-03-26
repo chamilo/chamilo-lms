@@ -26,8 +26,8 @@ function sync()
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session='" . $row['id_session'] . "';";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session='" . $row['id_session'] . "';";
             Database::query($sql);
         } else {
@@ -56,8 +56,8 @@ function sync()
         }
 
         $sql = "SELECT 1 FROM $tableBuyCourse WHERE course_id='" . $row['id'] . "';";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $sql = "UPDATE $tableBuyCourse SET sync = 1, session_id = $courseIdSession WHERE course_id='" . $row['id'] . "';";
             Database::query($sql);
         } else {
@@ -80,8 +80,8 @@ function sync()
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $sql = "SELECT 1 FROM $tableBuySession WHERE session_id='" . $row['id'] . "';";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $sql = "UPDATE $tableBuySession SET sync = 1 WHERE session_id='" . $row['id'] . "';";
             Database::query($sql);
         } else {
@@ -198,15 +198,15 @@ function userSessionList()
             $sql = "SELECT 1 FROM $tableSessionRelUser
                 WHERE id_session ='".$rowSession['session_id']."' AND
                 id_user = $currentUserId";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
                     WHERE session_id ='".$rowSession['session_id']."' AND
                     user_id='" . $currentUserId . "';";
-                Database::query($sql);
-                if (Database::affected_rows() > 0) {
+                $result = Database::query($sql);
+                if (Database::affected_rows($result) > 0) {
                     $rowSession['enrolled'] = "TMP";
                 } else {
                     $rowSession['enrolled'] = "NO";
@@ -216,8 +216,8 @@ function userSessionList()
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                 WHERE session_id ='".$rowSession['session_id']."' AND
                 user_id='" . $currentUserId . "';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
             } else {
                 $rowSession['enrolled'] = "NO";
@@ -263,15 +263,15 @@ function userCourseList()
             $sql = "SELECT 1 FROM $tableCourseRelUser
                 WHERE course_code='" . $row['code'] . "'
                 AND user_id='" . $currentUserId . "';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $row['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuyCourseTemporal
                     WHERE course_code='" . $row['code'] . "'
                     AND user_id='" . $currentUserId . "';";
-                Database::query($sql);
-                if (Database::affected_rows() > 0) {
+                $result = Database::query($sql);
+                if (Database::affected_rows($result) > 0) {
                     $row['enrolled'] = "TMP";
                 } else {
                     $row['enrolled'] = "NO";
@@ -281,8 +281,8 @@ function userCourseList()
             $sql = "SELECT 1 FROM $tableBuyCourseTemporal
                 WHERE course_code='" . $row['code'] . "'
                 AND user_id='" . $currentUserId . "';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $row['enrolled'] = "TMP";
             } else {
                 $row['enrolled'] = "NO";
@@ -313,8 +313,8 @@ function checkUserBuy($parameter, $user, $type = 'COURSE')
     $sql = $type === 'SESSION' ?
         sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session', 'id_user') :
         sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code', 'user_id');
-    Database::query($sql);
-    if (Database::affected_rows() > 0) {
+    $result = Database::query($sql);
+    if (Database::affected_rows($result) > 0) {
         return true;
     } else {
         return false;
@@ -334,8 +334,8 @@ function checkUserBuyTransfer($parameter, $user, $type = 'COURSE')
     $sql = $type === 'SESSION' ?
         sprintf($sql, Database::get_main_table(TABLE_BUY_SESSION_TEMPORARY), 'session_id') :
         sprintf($sql, Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL), 'course_code');
-    Database::query($sql);
-    if (Database::affected_rows() > 0) {
+    $result = Database::query($sql);
+    if (Database::affected_rows($result) > 0) {
         return true;
     } else {
         return false;
@@ -522,14 +522,14 @@ function sessionInfo($code)
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableSessionRelUser
             WHERE id_user = $currentUserId";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $rowSession['enrolled'] = "YES";
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                 WHERE user_id='".$currentUserId."';";
-            Database::query($sql);
-            if (Database::affected_rows() > 0) {
+            $result = Database::query($sql);
+            if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
             } else {
                 $rowSession['enrolled'] = "NO";
@@ -538,8 +538,8 @@ function sessionInfo($code)
     } else {
         $sql = "SELECT 1 FROM $tableBuySessionTemporal
             WHERE user_id='".$currentUserId."';";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $rowSession['enrolled'] = "TMP";
         } else {
             $rowSession['enrolled'] = "NO";
@@ -583,8 +583,8 @@ function courseInfo($code)
         $sql = "SELECT 1 FROM $tableCourseRelUser
             WHERE course_code='" . $row['code'] . "'
             AND user_id='" . $currentUserId . "';";
-        Database::query($sql);
-        if (Database::affected_rows() > 0) {
+        $result = Database::query($sql);
+        if (Database::affected_rows($result) > 0) {
             $row['enrolled'] = "YES";
         } else {
             $row['enrolled'] = "NO";

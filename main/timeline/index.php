@@ -7,8 +7,6 @@
 /**
  * Init
  */
-// name of the language file that needs to be included
-$language_file = array('admin');
 require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'timeline.lib.php';  

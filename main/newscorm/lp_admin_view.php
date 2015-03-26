@@ -24,9 +24,6 @@ api_protect_course_script();
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
-// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
-$language_file = "learnpath";
-
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -179,7 +176,7 @@ $(function() {
 		items: "li",
 		handle: ".moved", //only the class "moved"
 		cursor: "move",
-		placeholder: "ui-state-highlight", //defines the yellow highlight
+		placeholder: "ui-state-highlight" //defines the yellow highlight
 	});
 
 	$("#listSubmit").click(function () {

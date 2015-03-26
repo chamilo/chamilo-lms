@@ -15,8 +15,6 @@
 
 use \ChamiloSession as Session;
 
-$language_file = array('exercice', 'tracking');
-
 // including the global library
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;

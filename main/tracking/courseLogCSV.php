@@ -19,9 +19,6 @@
 /* INIT SECTION */
 
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-// name of the language file that needs to be included
-$language_file = "tracking";
-
 require_once '../inc/global.inc.php';
 
 /* Constants and variables */

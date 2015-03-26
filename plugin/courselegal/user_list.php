@@ -1,7 +1,5 @@
 <?php
 /* For license terms, see /license.txt */
-$language_file = array('document', 'gradebook');
-
 require_once dirname(__FILE__) . '/config.php';
 
 // Course legal

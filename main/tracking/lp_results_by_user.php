@@ -10,9 +10,6 @@
 /**
  * Code
  */
-
-$language_file = array ('tracking', 'exercice','survey');
-
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';

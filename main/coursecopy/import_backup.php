@@ -7,9 +7,6 @@
  * @package chamilo.backup
  */
 
-// Language files that need to be included
-$language_file = array('exercice', 'admin');
-
 // Including the global initialization file
 require '../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -157,7 +154,7 @@ if (Security::check_token('post') && (
         'post',
         api_get_path(WEB_CODE_PATH) . 'coursecopy/import_backup.php?' . api_get_cidreq(),
         '',
-        'multipart/form-data'
+        array('enctype' => 'multipart/form-data')
     );
     $form->addElement('header', get_lang('SelectBackupFile'));
     $renderer = $form->defaultRenderer();

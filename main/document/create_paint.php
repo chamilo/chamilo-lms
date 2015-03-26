@@ -11,8 +11,6 @@
 */
 
 /*	INIT SECTION */
-$language_file = array('document');
-
 require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;

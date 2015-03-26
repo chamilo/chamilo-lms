@@ -11,6 +11,7 @@ $ParametersNotFound = "Paràmetres no trobats";
 $UsersToAdd = "Usuaris per afegir";
 $DocumentsAdded = "Documents afegits";
 $NoUsersToAdd = "Cap usuari per afegir";
+$StartSurvey = "Comença l'enquesta";
 $Subgroup = "Subgrup";
 $Subgroups = "Subgrups";
 $EnterTheLettersYouSee = "Introduïu les lletres que veieu.";
@@ -28,6 +29,7 @@ $DeleteThisItem = "Esborra aquest element";
 $RecordYourVoice = "Graveu la seva veu";
 $RecordIsNotAvailable = "Cap gravació disponible";
 $WorkNumberSubmitted = "Tasques rebudes";
+$ClassIdDoesntExists = "La classe ID no existeix";
 $WithoutCategory = "Sense categoria";
 $IncorrectScore = "Puntuació incorrecta";
 $CorrectScore = "Puntuació correcta";
@@ -53,15 +55,90 @@ $ImportGroups = "Importa grups";
 $HereIsYourFeedback = "Reposta del professor:";
 $SearchSessions = "Recerca de sessions";
 $ShowSystemFolders = "Mostra els directoris del sistema";
+$SelectADateOnTheCalendar = "Seleccioneu una data del calendari";
+$AreYouSureDeleteTestResultBeforeDateD = "Esteu segur que desitgeu eliminar els resultats d'aquest exercici abans de la data seleccionada?";
+$CleanStudentsResultsBeforeDate = "Elimina tots els resultats abans de la data seleccionada";
+$HGlossary = "Ajuda del glossari";
+$GlossaryContent = "Aquesta eina us permet crear termes de glossari per al seu curs, els quals poden després ser usats en l'eina de documents.";
+$ForumContent = "El fòrum és una eina de conversa per al treball escrit asíncron. A diferència del correu electrònic, un fòrum és per a converses públiques, semi-públiques o de grups.
+
+Per utilitzar el fòrum de Chamilo, els alumnes del curs poden simplement usar el seu navegador - no requereixen de cap altre tipus d'eina.
+
+Per organitzar els fòrums, feu clic en l'eina de fòrums. Les converses s'organitzen segons l'estructura següent: Categoria> Fòrum> Tema de conversa> Resposta. Per permetre als alumnes participar en els fòrums de manera ordenada i efectiva, és essencial crear primer categories i fòrums. Després, pertany als participants crear temes de conversa i enviar respostes. Per defecte, si el curs s'ha creat amb les dades de mostra, el fòrum conté una única categoria, un fòrum, un tema de fòrum i una resposta. Podeu afegir fòrums a la categoria, canviar el seu títol o crear altres categories dins les quals podria llavors crear nous fòrums (no confongui categories i fòrums, i recordeu que una categoria que no conté fòrums és inútil i no es mostrarà als alumnes).
+
+La descripció del fòrum pot incloure una llista dels seus membres, una definició del seu propòsit, una tasca, un objectiu, un tema, etc. 
+
+Els fòrums de grups no són creats per l'eina de fòrums directament, sinó per l'eina de grups, on pot determinar si els fòrums seran públics o privats, permetent al mateix temps als membres seus grups compartir documents i altres recursos.
+
+Consells d'ensenyament: Un fòrum d'aprenentatge no és el mateix que un fòrum dels que veu a Internet. D'una banda, no és possible que els alumnes modifiquin les seves respostes una vegada que un tema de conversa hagi estat tancat. Això és amb l'objectiu de valorar la seva contribució al fòrum. Després, alguns usuaris privilegiats (professor, tutor, assistent) poden corregir directament les respostes dins del fòrum. 
+
+Per fer-ho, poden seguir el procediment següent: 
+
+Fer clic a la icona d'edició (llapis groc) i marcar-utilitzant una funcionalitat d'edició (color, subratllat, etc.). Finalment, altres alumnes es poden beneficiar d'aquesta correcció visualitzant el fòrum novament. La mateixa idea pot ser aplicada entre alumnes però requereix utilitzar l'eina de citació per després indicar els elements incorrectes (ja que no poden editar directament la resposta d'un altre alumne).";
+$HForum = "Ajuda del fòrum";
 $LoginToGoToThisCourse = "Connecteu-vos per accedir a aquest curs";
+$AreYouSureToEmptyAllTestResults = "Esteu segur d'eliminar tots els resultats de tots els exercicis?";
+$CleanAllStudentsResultsForAllTests = "Esteu segur d'eliminar tots els resultats dels exercicis?";
 $AdditionalMailWasSentToSelectedUsers = "Addicionalment, un anunci nou s'ha enviat als usuaris seleccionats";
 $LoginDate = "Data d'accés";
 $ChooseStartDateAndEndDate = "Esculli les dates d'inici i final";
+$TestFeedbackNotShown = "Aquesta prova està configurada per no donar retroacció als alumnes. Els comentaris corresponents no es mostraran al final de la prova, però podrien ser-li útil, com a docent, en el moment de revisar els detalls de les preguntes.";
 $WorkAdded = "Tasca afegida";
+$FeedbackDisplayOptions = "Manera en la qual es mostrarà el comentari definit per a cada pregunta. Aquesta opció defineix com un estudiant visualitzarà els comentaris ingressats per a cada alternativa en cada pregunta. Recomanem avaluar les diferents opcions abans de convidar als estudiants a realitzar aquesta prova.";
+$InactiveUsers = "Usuaris amb un compte deshabilitat";
+$ActiveUsers = "Usuaris amb un compte actiu";
+$SurveysProgress = "Progrés d'enquestes";
+$SurveysLeft = "Enquestes incompletes";
+$SurveysDone = "Enquestes completades";
+$SurveysTotal = "Total d'enquestes";
+$WikiProgress = "Progrés de lectura de pàgines";
+$WikiUnread = "Pàgines de wiki no llegides";
+$WikiRead = "Pàgines de wiki llegides";
+$WikiRevisions = "Pàgines amb revisions";
+$WikiTotal = "Total de pàgines wiki";
+$AssignmentsProgress = "Progrés de tasques";
+$AssignmentsLeft = "Tasques no entregades";
+$AssignmentsDone = "Tasques entregades";
+$AssignmentsTotal = "Total de tasques";
+$ForumsProgress = "Progrés de fòrums";
+$ForumsLeft = "Fòrums no llegits";
+$ForumsDone = "Fòrums llegits";
+$ForumsTotal = "Total de fòrums";
+$ExercisesProgress = "Progrés d'exercicis";
+$ExercisesLeft = "Exercicis incomplets";
+$ExercisesDone = "Exercicis completats";
+$ExercisesTotal = "Total d'exercicis";
+$LearnpathsProgress = "Progrés de lliçons";
+$LearnpathsLeft = "Lliçons incompletes";
+$LearnpathsDone = "Lliçons completades";
+$LearnpathsTotal = "Lliçons totals";
+$TimeLoggedIn = "Temps connectat (hh:mm)";
+$ChooseSession = "Escull una sessió";
+$SearchSession = "Cerca sessions";
+$ChooseStudent = "Escull un estudiant";
+$SearchStudent = "Cerca estudiants";
+$ChooseCourse = "Escull un curs";
+$DisplaySurveyOverview = "Informe d'enquestes";
+$DisplayProgressOverview = "Informe de lectura i participació";
+$DisplayLpProgressOverview = "Informe del progrés de les lliçons";
+$DisplayExerciseProgress = "Progrés detallat dels exercicis";
+$DisplayAccessOverview = "Informe d'accessos per usuari";
 $AllowMemberLeaveGroup = "Permet als membres deixar el grup";
 $WorkFileNotUploadedDirXDoesNotExist = "La tasca no s'ha pogut enviar perquè la carpeta %s no existeix";
+$DeleteUsersNotInList = "Dóna de baixa als alumnes que no estiguin a la llista importada";
+$IfSessionExistsUpdate = "Si la sessió existeix, actualitza-la";
 $CreatedByXYOnZ = "Creat per %s el %s";
 $LoginWithExternalAccount = "Accedeix amb un compte extern";
+$ImportAikenQuizExplanationExample = "Aquest és el text de la pregunta 1 A. Resposta 1 B. Resposta 2 C. Resposta 3 ANSWER: B Aquest és el text de la pregunta 2 (noteu la línia en blanc a dalt). A. Resposta 1 B. Resposta 2 C. Resposta 3 D. Resposta 4 ANSWER: D ANSWER_EXPLANATION: aquest és un text opcional de feedback que apareixerà al costa de la resposta correcta.";
+$ImportAikenQuizExplanation = "El format Aiken és un simple format de text (arxiu .txt) amb diversos blocs amb preguntes, cada bloc separat per una línia en blanc. La primera línia és la pregunta. Les línies de respostes tenen un prefix de lletra i punt i, la resposta correcta segueix, amb el prefix 'ANSWER:'. Veure exemple a continuació.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "L'arxiu importat té com a mínim una pregunta sense resposta (o les respostes no inclouen la lletra de prefix necessària). Assegureu-vos que cada pregunta tingui com a mínim una resposta i que estigui prefixada per una lletra i un punt o un parèntesi, com segueix: A. Resposta u";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "L'arxiu importat conté com a mínim una pregunta sense cap resposta definida. Asseguri's que totes les preguntes tenen una línia tipus ANSWER: [Lletra].";
+$SearchCourseBySession = "Cerca curs per sessió";
+$ThereWasAProblemWithYourFile = "Hi ha hagut un problema desconegut en el seu arxiu. Reviseu el format i inenteu-ho de nou.";
+$YouMustUploadAZipOrTxtFile = "Heu de pujar un arxiu .txt o .zip";
+$NoTxtFileFoundInTheZip = "No s'ha trobat cap arxiu .txt en el ZIP";
+$ImportAikenQuiz = "Importa prova Aiken";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Ús: privat al final del vincle a mostrar només als usuaris connectats";
 $NumberOfGroupsToCreate = "Quantitat de grups a crear";
 $CoachesSubscribedAsATeacherInCourseX = "Tutors inscrits com a professors al curs %s";
 $EnrollStudentsFromExistingSessions = "Subscriu estudiants des de sessions existents";
@@ -112,9 +189,13 @@ $SessionsCategories = "Categories de sessions";
 $CourseSessionBlock = "Cursos i sessions";
 $Committee = "Comitè";
 $ModelType = "Model d'exercici";
+$AudioFile = "Arxiu d'àudio";
+$CourseVisibilityHidden = "Invisible - Totalment invisible per a tots els usuaris excepte dels administradors";
 $HandedOutDate = "Data de recepció";
 $HandedOut = "Entregat";
 $HandOutDateLimit = "Data límit d'entrega";
+$ApplyAllLanguages = "Aplica el canvi a tots els idiomes habilitats";
+$ExerciseWasActivatedFromXToY = "L'exercici va estar actiu des del %s fins el %s";
 $YourPasswordCannotBeTheSameAsYourUsername = "La seva contrasenya no pot ser igual al seu nom d'usuari";
 $CheckEasyPasswords = "Identifica contrasenyes massa simples";
 $PasswordVeryStrong = "Molt forta";
@@ -124,6 +205,9 @@ $PasswordNormal = "Normal";
 $PasswordWeak = "Dèbil";
 $PasswordIsTooShort = "Contrasenya massa curta";
 $BadCredentials = "Credencials errònies";
+$SelectAnAnswerToContinue = "Heu de seleccionar una resposta per poder continuar";
+$QuestionReused = "Pregunta afegida a l'exercici";
+$QuestionCopied = "Pregunta copiada a l'exercici";
 $BreadcrumbNavigationDisplayComment = "Mostra o amaga la ruta de navegació, que apareix normalment sota la barra horitzontal de pestanyes del menú principal. És altament recomanat deixar aquesta barra de navegació visible, ja que ajuda als alumnes a navegar en el sistema, identificar la seva ubicació actual i tornar a etapes anteriors de la seva navegació. En pocs casos, pot generar la necessitat d'amagar aquesta barra (per exemple en el cas d'un sistema d'exàmens) per evitar que els usuaris naveguin erròniament a pàgines que els podria confondre.";
 $BreadcrumbNavigationDisplayTitle = "Mostra la ruta de navegació";
 $AllowurlfopenIsSetToOff = "El paràmetre PHP \"allow_url_fopen\" està desactivat. Això impedeix que el mecanisme de registre funcioni correctament. Aquest paràmetre pot canviar-se a l'arxiu de configuració de PHP (php.ini) o a la configuració del Virtual Host d'Apache, mitjançant la directriu php_admin_value";
@@ -132,7 +216,31 @@ $VersionUpToDate = "La seva versió està actualitzada";
 $LatestVersionIs = "L'última versió és";
 $YourVersionNotUpToDate = "La seva versió està actualitzada";
 $Hotpotatoes = "Hotpotatoes";
+$ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = Totes les preguntes seran seleccionades. 0 = Cap pregunta serà seleccionada.";
+$EmailNotificationTemplateDescription = "Podeu modificar el correu enviat als usuaris a l'acabar l'exercici. Podeu utilitzar els termes següents: 1. {{ student.username }} 2. {{ student.firstname }} 3. {{ student.lastname }} 4. {{ student.official_code }} 5. {{ exercise.title }} 6. {{ exercise.start_time }} 7. {{ exercise.end_time }} 8. {{ course.title }} 9. {{ course.code }}";
+$EmailNotificationTemplate = "Plantilla del correu electrònic enviat a l'usuari a l'acabar l'exercici";
+$ExerciseEndButtonDisconnect = "Surt";
+$ExerciseEndButtonExerciseHome = "Llista d'exercicis";
+$ExerciseEndButtonCourseHome = "Pàgina principal del curs";
+$ExerciseEndButton = "Botó a l'acabar l'exercici";
+$HideQuestionTitle = "Oculta el títol de la pregunta";
+$QuestionSelection = "Selecció de preguntes";
+$OrderedCategoriesByParentWithQuestionsRandom = "Categories ordenades segons la categoria pare, amb preguntes desordenades";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Categories ordenades segons la categoria pare, amb preguntes ordenades";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Categories agafades a l'atzar, amb preguntes desordenades (sene agrupar preguntes)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Categories agafades a l'atzar, amb preguntes ordenades (sense agrupar preguntes)";
+$RandomCategoriesWithRandomQuestions = "Categories agafades a l'atzar amb preguntes desordenades";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Categories ordenades alfabèticament, amb preguntes desordenades";
+$RandomCategoriesWithQuestionsOrdered = "Categories agafades a l'atzar, amb preguntes ordenades";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Categories ordenades alfabèticament, amb preguntes ordenades";
+$UsingCategories = "Utilitzant categories";
+$OrderedByUser = "Ordenat segons la llista de preguntes";
+$ToReview = "Per revisar";
+$Unanswered = "Sense contestar";
+$CurrentQuestion = "Pregunta actual";
+$MediaQuestions = "Anunciats compartits";
 $CourseCategoriesAreGlobal = "Les categories de cursos són globals a la configuració de múltiples portals, però els canvis només es permeten a la sessió administrativa del portal principal.";
+$CareerUpdated = "Carrera actualitzada satisfactòriament";
 $UserIsNotATeacher = "L'usuari no és un professor";
 $ShowAllEvents = "Veure totes les activitats";
 $Month = "Mes";
@@ -421,6 +529,8 @@ $DocumentsWillBeAddedToo = "Els documents també seran afegits";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si voleu exportar un itinerari formatiu que contingui exercicis, haureu d'assegurar-vos que aquests exercicis hagin estat inclosos a l'exportació; per això haureu hagut de seleccionar-los a la llista d'exercicis.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El directori \"archive\" utilitzat per aquesta eina no té habilitat el permís d'escriptura. Contacteu amb l'administrador de la plataforma.";
 $DestinationCourse = "Curs de destinació";
+$CasMainActivateComment = "Activar l'autenticació CAS permetrà als usuaris autenticar-se amb les seves credencials CAS.";
+$UsersRegisteredInAnyGroup = "Usuaris no registrats a cap curs";
 $Camera = "Càmera";
 $Microphone = "Micròfon";
 $DeleteStream = "Eliminar flux";
@@ -504,7 +614,13 @@ $Disconnected = "Desconectar";
 $FineStroke = "Fi";
 $MediumStroke = "Mitjà";
 $ThickStroke = "Gruix";
+$ShowHotCoursesComment = "La llista de cursos amb més prestigi s'afegirà a la pàgina principal";
+$ShowHotCoursesTitle = "Mostra els cursos amb més prestigi";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Aquest element no és visible per un estudiant però podrà accedir a ell com a professor";
+$EnableIframeInclusionComment = "Permetre iframes a l'editor HTML augmentarà les capacitats d'edició dels usuaris, però pot representar un risc de seguretat. Asseguri's que pot confiar ens els seus usuaris (per exemple, vostè sap qui són) abans d'activar aquesta prestació.";
+$AddedToLPCannotBeAccessed = "Aquest exercici ha estat inclòs en una seqüència d'aprenentatge, per la qual cosa no podrà ser accessible directament pels estudiants des d'aquí. Si voleu col·locar el mateix exercici disponible a través de l'eina exercicis, feu una còpia de l'exercici en qüestió prement sobre la icona de còpia.";
+$EnableIframeInclusionTitle = "Permet iframes a l'editor HTML";
+$MailTemplateRegistrationMessage = "Benvolgut ((firstname)) ((lastname)),\n\nHa estat registrat a ((sitename)) amb la configuració següent:\n\nNom d'usuari : ((username))\nContrasenya : ((password))\n\nL'adreça de ((sitename)) és : ((url))\n\nSi té alguna dificultat, contacti amb nosaltres.\n\nCordialment:\n((admin_name)) ((admin_surname)).";
 $Explanation = "Un cop hagueu clicat Acceptar es crearà el lloc web d'un curs. el qual constarà de diverses eines: un gestor de documents, un creador d'itineraris formatius en format SCORM, un visualitzador de lliçons o itineraris formatius, la possibilitat de realitzar exàmens i lliurar treballs, discutir en fòrums i a través de xat, enviar anuncis i missatges, disposar d'una agenda, videoconferència i pissarra digital, eines per al treball en grup, realitzar enquestes i seguiment dels alumnes, etc. La vostra identificació com a creador d'aquest lloc us permetrà modificar-lo segons les vostres necessitats.";
 $CodeTaken = "Aquest codi de curs ja està agafat.<br>Utilitzeu el bot <b>Enrera</b> del vostre navegador i proveu un altre cop";
 $ExerciceEx = "Exercici d'exemple";
@@ -594,7 +710,9 @@ $NotebookAdded = "Nota afegida";
 $NotebookUpdated = "Nota actualitzada";
 $NotebookDeleted = "Nota eliminada";
 $DeleteAllAttendances = "Elimina totes les assistències creades";
+$AssignSessionsTo = "Assigna sessions a";
 $Upload = "Enviar";
+$MailTemplateRegistrationTitle = "Usuari nou a ((sitename))";
 $Unsubscribe = "Dóna de baixa";
 $AlreadyRegisteredToCourse = "Ja s'ha registrat en el curs";
 $ShowFeedback = "Mostrar comentari";
@@ -892,8 +1010,12 @@ $NameDir = "Nom del nou directori";
 $DownloadFile = "Pujar fitxer al servidor";
 $Builder = "Constructor de Camí d'aprenentatge|saber";
 $MailMarkSelectedAsUnread = "Marca com a no llegit";
+$ViewModeImpress = "Visualització actual: impressió";
+$AllowTeachersToCreateSessionsComment = "Els professors poden crear, editar i esborrar les seves pròpies sessions";
+$AllowTeachersToCreateSessionsTitle = "Permet als professors crear sessions";
 $SelectACategory = "Seleccioneu una categoria";
 $MailMarkSelectedAsRead = "Marca com a llegit";
+$MailSubjectReplyShort = "RE:";
 $AdvancedEdit = "Edició avançada";
 $ScormBuilder = "Constructor de camí - constructor de curs de format Scorm";
 $CreateDoc = "Crear un document";
@@ -903,11 +1025,934 @@ $ExportShort = "Exportació curta";
 $AllDay = "Tot el dia";
 $WCAGGoMenu = "Vés al menú";
 $WCAGGoContent = "Vés al contingut";
+$AdminBy = "Administrat per";
+$Statistiques = "Estadístiques";
+$VisioHostLocal = "Servidor per la videoconferència";
+$VisioRTMPIsWeb = "El protocol de la videoconferència funciona en mode web (la majoria de vegades no és així)";
+$ShowBackLinkOnTopOfCourseTreeComment = "Mostrar un enllaç per tornar a la jerarquia del curs. De totes maneres, sempre hi haurà un enllaç disponible al final de la llista.";
+$Used = "usat";
+$Exist = "existeix";
+$ShowBackLinkOnTopOfCourseTree = "Mostrar un enllaç per tornar enrere sobre l'arbre de categories/cursos";
+$ShowNumberOfCourses = "Mostrar nombre de cursos";
+$DisplayTeacherInCourselistTitle = "Mostrar el professor/a en el títol del curs";
+$DisplayTeacherInCourselistComment = "Mostrar professor/a del curs en la llista de comentaris.";
+$DisplayCourseCodeInCourselistComment = "Mostrar el codi del curs en cadascun dels cursos del llistat";
+$DisplayCourseCodeInCourselistTitle = "Mostrar el codi del curs en el títol";
+$ThereAreNoVirtualCourses = "No hi ha cursos virtuals a la plataforma";
+$ConfigureHomePage = "Configurar la pàgina d'inici";
+$CourseCreateActiveToolsTitle = "Mòduls actius després de crear un curs";
+$CourseCreateActiveToolsComment = "Quines eines s'han d'activar (visible) per defecte quan es crea un curs nou?";
+$CreateUser = "Crear usuari";
+$ModifyUser = "Modificar usuari";
+$buttonEditUserField = "Editar camps d'usuari";
+$ModifyCoach = "Modificar tutor";
+$ModifyThisSession = "Modificar aquesta sessió";
+$ExportSession = "Exportar sessió";
+$ImportSession = "Importar sessió";
+$CourseBackup = "Realitzar còpia de seguretat d'aquest curs";
+$CourseTitular = "Professor/a";
+$CourseFaculty = "Categoria del curs";
+$CourseDepartment = "Departament";
+$CourseDepartmentURL = "URL del departament";
+$CourseSubscription = "Inscriure's al curs";
+$PublicAccess = "Accés Públic";
+$PrivateAccess = "Accés restringit";
+$DBManagementOnlyForServerAdmin = "L'administració de la base de dades només està disponible per l'administrador del servidor.";
+$ShowUsersOfCourse = "Mostrar els usuaris del curs";
+$ShowClassesOfCourse = "Mostrar les aules inscrites en aquest curs";
+$ShowGroupsOfCourse = "Mostrar els grups d'aquest curs";
+$PhoneNumber = "Número de Telèfon";
+$AddToCourse = "Afegir a un curs";
+$DeleteFromPlatform = "Esborrar del sistema";
+$DeleteCourse = "Esborrar els cursos seleccionats";
+$DeleteFromCourse = "Anul·lar la inscripció del curs o cursos";
+$DeleteSelectedClasses = "Esborrar les classes seleccionades";
+$DeleteSelectedGroups = "Esborrar els grups seleccionats";
+$Administrator = "Administrador/a";
+$ChangePicture = "Canviar la imatge";
+$AddUsers = "Afegir usuaris";
+$AddGroups = "Afegir grups";
+$AddClasses = "Afegir aules";
+$ExportUsers = "Exportar el llistat d'usuaris";
+$NumberOfParticipants = "Nombre de membres";
+$NumberOfUsers = "Nombre d'usuaris";
+$Participants = "Membres";
+$FirstLetterClass = "Primera lletra (nom de l'aula)\t";
+$FirstLetterUser = "Primera lletra (cognoms)";
+$FirstLetterCourse = "Primera lletra (codi)";
+$ModifyUserInfo = "Modificar la informació d'un usuari";
+$ModifyClassInfo = "Modificar la informació d'una aula";
+$ModifyGroupInfo = "Modificar la informació d'un grup";
+$ModifyCourseInfo = "Modificar la informació del curs";
+$PleaseEnterClassName = "Si us plau, introduïu el nom de l'aula!";
+$PleaseEnterLastName = "Si us plau, introduïu els cognoms de l'usuari";
+$PleaseEnterFirstName = "Si us plau, introduïu el nom de l'usuari!";
+$PleaseEnterValidEmail = "Si us plau, introduïu una adreça de correu electrònic correcte!";
+$PleaseEnterValidLogin = "Si us plau, introduïu un nom d'usuari correcte!";
+$PleaseEnterCourseCode = "Si us plau, introduïu el codi del curs!";
+$PleaseEnterTitularName = "Si us plau, introduïu el nom i cognoms del professorat!";
+$PleaseEnterCourseTitle = "Si us plau, introduïu el títol del curs!";
+$AcceptedPictureFormats = "Els formats acceptats són: .JPG, .PNG i .GIF!";
+$LoginAlreadyTaken = "Aquest nom d'usuari ja està en ús!\t";
+$ImportUserListXMLCSV = "Importar llistat d'usuaris des d'un arxiu XML/CSV";
+$ExportUserListXMLCSV = "Exportar llistat d'usuaris a un fitxer XML/CSV";
+$OnlyUsersFromCourse = "Només usuaris del curs";
+$AddClassesToACourse = "Afegir aules a un curs";
+$AddUsersToACourse = "Afegir usuaris a un curs";
+$AddUsersToAClass = "Afegir ususaris a una aula";
+$AddUsersToAGroup = "Afegir ususaris a un grup";
+$AtLeastOneClassAndOneCourse = "Heu de seleccionar com a mínim una aula i un curs!";
+$AtLeastOneUser = "Com a mínim heu de seleccionar un usuari!";
+$AtLeastOneUserAndOneCourse = "Com a mínim heu de seleccionar un usuari i un curs!";
+$ClassList = "Llistat d'aules";
+$AddToThatCourse = "Afegir a aquest curs o cursos";
+$AddToClass = "Afegir a l'aula";
+$RemoveFromClass = "Treure de l'aula";
+$AddToGroup = "Afegir al grup";
+$RemoveFromGroup = " Treure del grup";
+$UsersOutsideClass = "Usuaris fora de la Classe";
+$UsersInsideClass = "Usuaris dins la classe";
+$UsersOutsideGroup = "Usuaris fora del grup";
+$UsersInsideGroup = "Usuaris dintre del grup";
+$MustUseSeparator = "S'ha d'utilitzar el caràcter \";\" com a separador";
+$CSVMustLookLike = "El fitxer CSV ha de tenir el següent aspecte";
+$XMLMustLookLike = "El fitxer XML ha de tenir el següent aspecte";
+$MandatoryFields = "Els camps en <strong>negreta</strong> són obligatoris";
+$NotXML = "L'arxiu seleccionat no és un format vàlid XML!";
+$NotCSV = "L'arxiu seleccionat no és un format CSV vàlid!";
+$NoNeededData = "L'arxiu especificat no conté totes les dades necessàries !";
+$MaxImportUsers = " No pot importar més de 500 usuaris immediatament!";
+$AdminDatabases = "Base de dades (phpMyAdmin)";
+$AdminUsers = "Usuaris";
+$AdminClasses = "Classes d'usuaris";
+$AdminGroups = "Grup d'usuaris";
+$AdminCourses = "Cursos";
+$AdminCategories = "Categoria dels cursos";
+$SubscribeUserGroupToCourse = "Subscriure un usuari /grup a un curs";
+$NoCategories = "No hi ha categories aquí";
+$AllowCoursesInCategory = "Permetre afegir cursos en aquesta categoria ?";
+$GoToForum = "Anar al fòrum";
+$CategoryCode = "Codi de categoria";
+$EditNode = "Editar aquesta categoria";
+$OpenNode = "Obrir aquesta categoria";
+$DeleteNode = "Suprimir aquesta categoria";
+$AddChildNode = "Afegir una subcategoria";
+$ViewChildren = "Veure processos subordinats";
+$TreeRebuildedIn = "Arbre reconstruit";
+$TreeRecountedIn = "Arbre reconsiderat en";
+$RebuildTree = "Reconstruir arbre";
+$RefreshNbChildren = "Actualitzar el número de processos subordinats";
+$ShowTree = "Mostrar l'arbre";
+$LogDeleteCat = "Categoria esborrada";
+$RecountChildren = "Recomptar els processos subordinats";
+$UpInSameLevel = " Cap amunt en el mateix nivell";
+$MailTo = "Enviar e-mail a:";
+$AddAdminInApache = "Afegir un usuari administrador";
+$AddFaculties = "Afegir categories";
+$SearchACourse = "Buscar un curs";
+$SearchAUser = "Buscar un usuari";
+$TechnicalTools = "Técnica";
+$Config = "Configuració del sistema";
+$LogIdentLogoutComplete = "Llista de conexions (extesa)";
+$LimitUsersListDefaultMax = "Nombre màxim d'usuaris a mostrar en una llista deplegable";
 $NoTimeLimits = "Sense límit de temps";
+$GeneralProperties = "propietats generals";
+$CourseCoach = "Tutor del curs";
+$UsersNumber = "Nombre d'usuaris";
+$PublicAdmin = "Administració pública";
+$PageAfterLoginTitle = "Pàgina inicial";
+$PageAfterLoginComment = "Pàgina a redirigir quan l'usuari es connecta";
+$TabsMyProfile = "Pestanya del Meu Perfil";
+$GlobalRole = "Objectiu principal";
+$NomOutilTodo = "Gestiona llista de pendents";
+$NomPageAdmin = "Administració";
+$SysInfo = "Informació del sistema";
+$DiffTranslation = "Compara traduccions";
+$StatOf = "Estadístiques de";
+$SpeeSubscribe = "Subscripció ràpida com comprovador de curs";
+$LogIdentLogout = "Registre de conexions i desconexions";
+$ServerStatus = "Estat del servidor MySQL :";
+$DataBase = "Base de dades";
+$Run = "treball";
+$Client = "Client MySql";
+$Server = "Servidor MySql";
+$titulary = "Propietari";
+$UpgradeBase = "Actualitzar base de dades";
+$ErrorsFound = "errors trobats";
+$Maintenance = "Manteniment";
+$Upgrade = "Actualitzar Chamilo";
+$Website = "Lloc web de Chamilo";
+$Documentation = "Documentació";
+$Contribute = "Contribueix";
+$InfoServer = "Informació del servidor";
+$SendMailToUsers = "Enviar un correu als usuaris";
+$CourseSystemCode = "Codi del sistema";
+$CourseVisualCode = "Codi visual";
+$SystemCode = "Codi de sistema";
+$VisualCode = "Codi visual";
+$AddCourse = "Crear un curs";
+$AdminManageVirtualCourses = "Administrar cursos virtuals";
+$AdminCreateVirtualCourse = "Crear un curs virtual";
+$AdminCreateVirtualCourseExplanation = "El curs virtual compartirà enmagatzament (directori i base de dades) amb un curs 'real' exsitent";
+$RealCourseCode = "Codi del curs real";
+$CourseCreationSucceeded = "El curs ha estat creat satisfactoriament";
+$OnTheHardDisk = "En el disc dur";
+$IsVirtualCourse = "És un curs virtual";
+$AnnouncementUpdated = "Anunci actualitzat";
+$PermissionsForNewFiles = "Permisos per a arxius nous";
+$PermissionsForNewFilesComment = "La possibilitat de definir la configuració dels permisos assinats als nous fitxers, augmenta la seguretat contra els atacs de crackers que podrien enviar material perillós a la plataforma. La configuració per defecte (0555) hauria de ser suficient per dotar el vostre servidor d'un nivell de protecció raonable. El format proporcionat utilitza la terminologia UNIX Propietari-Grup-Altres, amb els permisos de Lectura-Escriptura-Execució.";
+$Guest = "Convidat";
+$LoginAsThisUserColumnName = "Entrar com a";
+$LoginAsThisUser = "Entrar";
+$SelectPicture = "Seleccioneu una imatge ...";
+$DontResetPassword = "No esborreu la contrasenya";
+$ParticipateInCommunityDevelopment = "Participar en el desenvolupament";
+$CourseAdmin = "Administrador del curs";
+$PlatformLanguageTitle = "Idioma de la plataforma";
+$ServerStatusComment = "Quin tipus de servidor utilitzeu? Això activa o desactiva algunes opcions específiques. En un servidor de desenvolupament hi ha una funcionalitat que indica les cadenes de caràcters no traduïdes.";
+$ServerStatusTitle = "Tipus de servidor";
+$PlatformLanguages = "Idiomes de la plataforma Chamilo";
+$PlatformLanguagesExplanation = "Aquesta eina gestiona el menú de selecció d'idioma a la pàgina d'entrada. Com a administrador de la plataforma podeu decidir quines llengües haurien d'estar disponibles per als vostres usuaris.";
+$OriginalName = "Nom original";
+$EnglishName = "Nom anglès";
+$LMSFolder = "Directori Chamilo";
+$Properties = "Propietats";
+$PlatformConfigSettings = "Paràmetres de configuració Chamilo";
+$SettingsStored = "Els paràmetres han estat arxivats";
+$InstitutionTitle = "Nom de la institució";
+$InstitutionComment = " El nom de la institució (apareix en l'encapçalament a la dreta)";
+$InstitutionUrlTitle = "URL de la institució";
+$InstitutionUrlComment = "L'URL de la institució (L'enllaç que apareix a la dret, a la capçalera)";
+$SiteNameTitle = "Títol del campus Chamilo";
+$SiteNameComment = "El nom del teu Campus de DOKEOS (apareix a l'encapçalament)";
+$emailAdministratorTitle = "Administrador de la platafomra:e-mail";
+$emailAdministratorComment = " L'adreça de correu electrònic de l'Administrador de Plataforma (apareix en el títol a peu de pàgina a l'esquerra)";
+$administratorSurnameTitle = "Administrador de la plataforma: cognom";
+$administratorSurnameComment = "Els cognoms de l'administrador de la plataforma (apareixen al costat esquerre del peu)";
+$administratorNameTitle = "Administrador de plataforma: Nom";
+$administratorNameComment = " El Nom de l'Administrador de Plataforma (apareix en el títol apeu de pàgina a l'esquerra)";
+$ShowAdministratorDataTitle = "Informació de l'administardor de la plataforma a peu de pàgina";
+$ShowAdministratorDataComment = "Voleu que es mostri la Informació de l'Administrador de la Plataforma a peu de pàgina?";
+$HomepageViewTitle = "Vista de la pàgina principal";
+$HomepageViewComment = " Com voleu que es presenti la pàgina inicial d'un curs?";
+$HomepageViewDefault = "Esquema de dues columnes. Les eines desactivades queden amagades";
+$HomepageViewFixed = "Presentació en tres columnes. Les eines desactivsdes apareixen en gris (les icones es mantenen al seu lloc).";
+$ShowToolShortcutsTitle = "Barra d'accés ràpid a les eines";
+$ShowToolShortcutsComment = "Voleu que es mostri a la capçalera la barra d'accés ràpid a les eines?";
+$ShowStudentViewTitle = "Vista d'estudiant";
+$ShowStudentViewComment = "Permetre Visualització d'Estudiant?<br>Aquesta opció permet al professor veure el portal en mode estudiant.";
+$AllowGroupCategories = "Categories de grup";
+$AllowGroupCategoriesComment = " Permetre als administradors de curs crear categories en el mòdul de grups?\t";
+$PlatformLanguageComment = "Podeu determinar els idiomes de la plataforma en una part diferent de l'administració de la plataforma, a saber: <a href=\"languages.php\">Idiomes de la plataforma Chamilo</a>";
+$ProductionServer = "Servidor de producció";
+$TestServer = "Serviodor de proves";
+$ShowOnlineTitle = "Usuaris connectats";
+$AsPlatformLanguage = "Com a idioma de la plataforma";
+$ShowOnlineComment = "Mostrar el nombre de persones en línia?";
+$AllowNameChangeTitle = "Permetre el canvi de nom al perfil?";
+$AllowNameChangeComment = "Permetre a l'usuari canviar els seus nom i cognom?";
+$DefaultDocumentQuotumTitle = "Quota d'espai per defecte destinada als documents";
+$DefaultDocumentQuotumComment = "Quina és la quota d'espai per defecte destinada a l'eina de documents? Podeu canviar aquesta quota per a cursos específics a través de: administració de la plataforma -> Cursos -> modificar";
+$ProfileChangesTitle = "Perfil";
+$ProfileChangesComment = "Quina part del perfil voleu modificar?";
+$RegistrationRequiredFormsTitle = "Inscripció: camps obligatoris";
+$RegistrationRequiredFormsComment = "Quins camps s'haurien d'omplir obligatòriament (a part del nom i cognoms, nom d'usuari i contrasenya)";
+$DefaultGroupQuotumTitle = "Quota per defecte dels grups";
+$DefaultGroupQuotumComment = "Quina és la quota per defecte per l'eina documents del grup ?";
+$AllowLostPasswordTitle = "Contrasenya perduda";
+$AllowLostPasswordComment = "Pot l'ususari demanar una contrasenya perduda?";
+$AllowRegistrationTitle = "Inscripció";
+$AllowRegistrationComment = "Es permet el registre de nous usuaris? Els usuaris poden crear nous comptes?";
+$AllowRegistrationAsTeacherTitle = "Inscripció en tant que docent";
+$AllowRegistrationAsTeacherComment = "És possible d'inscriure's com a docent (podent crear cursos)?";
+$PlatformLanguage = "Idioma de la plataforma";
+$Tuning = "Millorar el rendiment";
+$SplitUsersUploadDirectory = "Dividir el directori de transferència dels usuaris";
+$SplitUsersUploadDirectoryComment = "En portals amb ús important o amb un nombre gran d'usuaris que s'enregistren i envien la foto, el directori de descàrrega (main/upload/users/) podria tenir més fitxers que els que pot gestionar el sistema de fitxers del servidor (s'ha documentat el cas d'un directori en un servidor Debian amb més de 36000 fitxers). Activar aquesta opció modificarà la gestió d'aquest repertori per utilitzar un mètode de separació en 9 subdirectoris de \"1\" a \"9\" en el directori de base. Els directoris i fitxers dels usuaris seran guardats llavors en un d'aquests 9 subdirectoris segons la seva primera lletra/xifra. L'activació d'aquesta opció no modifica gens l'estructura dels directores en el vostre servidor, sinó el comportament del codi de Chamilo, cosa que si l'activa haurà de crear nous directoris, haurà de moure els directoris dels usuaris 1 a 9 a subdirectoris amb el mateix nom. Si no esteu segur d'usar aquesta opció, és millor que no l'activeu.";
+$CourseQuota = "Quota del curs";
+$EditNotice = "Editar notícia";
+$InsertLink = "Insertar enllaç";
+$EditNews = "Editar notícies";
+$EditCategories = "Editar categories";
+$EditHomePage = "Editar la pàgina principal";
+$AllowUserHeadingsComment = "L'administrador d'un curs pot definir les capçaleres per obtenir informació suplementària relativa als usuaris?";
+$Languages = "Idiomes";
+$NoticeTitle = "Títol de l'anunci";
+$NoticeText = "Text de l'anunci";
+$LinkURL = "URL de l'enllaç";
+$OpenInNewWindow = "Obrir en una nova finestra";
+$LimitUsersListDefaultMaxComment = "A les pantalles d'inscripció dels usuaris en el curs o en les classes, si el nombre d'usuaris a la llista no filtrada, després de la primera càrrega, depassa aquest nombre, filtreu per defecte a la primera lletra (A)";
+$HideDLTTMarkupComment = "Amagar la marca [= ... =] quan una variable d'idioma no estigui traduïda";
 $UserDeleted = "L'usuari ha estat esborrat";
+$NoClassesForThisCourse = "No hi ha classes en aquest curs";
+$CourseUsage = "Utilització del curs";
+$NoCoursesForThisUser = "Aquest usuari no s'ha inscrit a cap curs";
+$NoClassesForThisUser = "Aquest usuari no està inscrit a cap classe";
+$NoCoursesForThisClass = "Aquesta classe no està inscrita a cap curs";
 $Tool = "Eina";
+$NumberOfItems = "nombre d'elements";
+$DocumentsAndFolders = "Documents i carpetes";
+$Exercises = "Exercicis";
+$AllowPersonalAgendaTitle = "Agenda personal";
+$AllowPersonalAgendaComment = "L'usuari pot afegir els elements de l'agenda personal a la pàgina \"La meva agenda\" ?";
+$CurrentValue = "Valor actual";
+$UserPassword = "Contrasenya";
+$SubscriptionAllowed = "Inscripció autoritzada";
+$UnsubscriptionAllowed = "Anul·lar inscripció";
+$AddDummyContentToCourse = "Afegir continguts de prova al curs";
+$DummyCourseCreator = "Crear continguts de prova";
+$DummyCourseDescription = "Això afegirà alguns continguts a aquest curs que  serveixin d'exemple. Aquesta utilitat només s'ha d'usar  per fer proves.";
+$AvailablePlugins = "En el vostre sistema, han estat trobats aquests connectors";
+$CreateVirtualCourse = "Crear un curs virtual";
+$DisplayListVirtualCourses = "Mostrar una llista de cursos virtuals";
+$LinkedToRealCourseCode = "Vinculat al codi de curs real";
+$AttemptedCreationVirtualCourse = "Creant el curs virtual ...";
+$WantedCourseCode = "Codi del curs";
+$ResetPassword = "Actualitzar la contrasenya";
+$CheckToSendNewPassword = "Enviar la nova contrasenya";
+$AutoGeneratePassword = "Generar automàticament una nova contrasenya";
+$UseDocumentTitleTitle = "Utilitzar un títol pel nom del document";
+$UseDocumentTitleComment = "Això permetrà utilitzar un títol pel nom del document en comptes de nom_del_document.ext";
+$StudentPublications = "Publicacions d'estudiants";
+$PermanentlyRemoveFilesTitle = "Els fitxers esborrats no podran ser restaurats";
+$PermanentlyRemoveFilesComment = " Suprimint un arxiu a l'eina de documents permanentment el suprimeix. L'arxiu no es pot restaurar";
+$DropboxMaxFilesizeTitle = "Compartició de fitxers: mida màxima dels documents";
+$DropboxMaxFilesizeComment = "Quina mida (en bytes) pot tenir un document a la secció de compartició de fitxers ?";
+$DropboxAllowOverwriteTitle = "Compartició de fitxers: els documents d'origen poden ser sobreescrits";
+$DropboxAllowOverwriteComment = "El document original es pot sobreescriure quan un estudiant o professor carrega un document amb el nom d'un document que ja existeix? Si contesteu sí perdreu la possibilitat de conservar successives versions";
+$DropboxAllowJustUploadTitle = "Compartició de fitxers: autoritzar l'enviament de documents a si mateix";
+$DropboxAllowJustUploadComment = "Permetre a professors i a estudiants carregar documents a la seva safata de compartició de fitxers sense enviar-los a ningú més (enviar-se documents a sí mateixos)";
+$DropboxAllowStudentToStudentTitle = "Compartició de fitxers: estudiant <-> estudiant";
+$DropboxAllowStudentToStudentComment = "Permetre als estudiants enviar documents a uns altres estudiants (intercanvi P2P). Els estudiants podrien utilitzar això per a enviar-se documents poc rellevants (mp3, solucions...). Si deshabiliteu aquesta opció llavors l'estudiant només podrà enviar documents als professors";
+$DropboxAllowMailingTitle = "Compartició de fitxers: es permet l'enviament de correu";
+$DropboxAllowMailingComment = " Amb la funcionalitat de publitramesa pot enviar un document personal acada estudiant";
+$PermissionsForNewDirs = "Permisos per a directoris nous";
+$PermissionsForNewDirsComment = "La possibilitat de definir la configuració dels permisos assignats als nous directoris, augmenta la seguretat contra els atacs de crackers que poguessin enviar material perillós a la plataforma. La configuració per defecte (0770) hauria de ser suficient per dotar el vostre servidor d'un nivell de protecció raonable. El format proporcionat utilitza la terminologia UNIX Propietari-Grup-Altres amb els permisos de Lectura-Escriptura-Execució.";
+$UserListHasBeenExported = "La llista d'usuaris ha estat exportada";
+$ClickHereToDownloadTheFile = "Cliqueu aquí per descarregar el fitxer";
+$administratorTelephoneTitle = "Administrador de la plataforma: telèfon";
+$administratorTelephoneComment = "El número de telèfon de l'administrador de la plataforma";
+$SendMailToNewUser = "Enviar correu a un nou usuari";
+$ExtendedProfileTitle = "Perfil extès";
+$ExtendedProfileComment = "Si es configura com a 'Veritable', l'usuari podrà emplenar els següents camps (opcionals): 'Les meves competències', 'Les meves titulacions', 'Què puc ensenyar' i 'La meva àrea personal pública'";
+$Classes = "Classes";
+$UserUnsubscribed = "L'usuari ha estat exclòs";
+$CannotUnsubscribeUserFromCourse = "L'usuari no pot anul·lar la seva inscripció al curs. Aquest usuari és unadministrador del curs.";
+$InvalidStartDate = "La data d'inici no és vàlida";
+$InvalidEndDate = " La data final no és vàlida";
+$DateFormatLabel = "(d/m/a h:m)";
+$HomePageFilesNotWritable = " Els arxius de la pàgina principal no es poden escriure!";
+$PleaseEnterNoticeText = "Si usplau, introduïu el text de la notícia";
+$PleaseEnterNoticeTitle = "Si us plau, introduïu el títol de la notícia";
+$PleaseEnterLinkName = "Si us plau, introduïu el nom de l'enllaç";
+$InsertThisLink = "Inserir aquest enllaç";
+$FirstPlace = "En primer lloc";
+$DropboxAllowGroupTitle = "Compartició de fitxers: permetre al grup";
+$DropboxAllowGroupComment = "Els usuaris poden enviar arxius als grups";
+$ClassDeleted = "La classe ha estat eliminada";
+$ClassesDeleted = "Les classes han estat eliminades";
+$NoUsersInClass = "No hi ha usuaris en aquesta classe";
+$UsersAreSubscibedToCourse = "Els usuaris seleccionats han estat inscrits als seus corresponents cursos";
+$InvalidTitle = "Si us plau, introduïu un títol";
+$CatCodeAlreadyUsed = "Aquesta categoria ja està en ús";
+$PleaseEnterCategoryInfo = "Si us plau, introduïu un codi i un nom per a la categoria";
+$RegisterYourPortal = "Registreu el vostre portal";
+$ShowNavigationMenuTitle = "Mostrar el menú de navegació del curs";
+$ShowNavigationMenuComment = "Mostrar un menú de navegació que facilita l'accés a diferents parts del curs";
+$LoginAs = "Accedir com";
+$ImportClassListCSV = "Importar un llistat de classe des d'un fitxer CSV";
+$ShowOnlineWorld = "Mostrar el nombre d'usuaris connectats a la pàgina inicial (visible per tothom)";
+$ShowOnlineUsers = "Mostrar el nombre d'usuaris en línia a totes les pàgines (visible per les persones que han entrat)";
+$ShowOnlineCourse = "Mostrar el nombre d'usuaris connectats a aquest curs";
+$ShowIconsInNavigationsMenuTitle = "Mostrar les imatges en el menú de navegació";
+$SeeAllRightsAllRolesForSpecificLocation = "Vegi tots els rols i permisos per a una localització específica";
+$ClassesSubscribed = "Les classes seleccionades han estat subscrites als cursos seleccionats";
+$RoleId = "ID de rol";
+$RoleName = "Nom del rol";
+$RoleType = "Tipus";
+$MakeAvailable = "Habilitar";
+$MakeUnavailable = "Deshabilitar";
+$Stylesheets = "Fulls d'estil";
+$ShowIconsInNavigationsMenuComment = "El menu de navegació hauria de mostrar les diferents icones d'eina?";
+$Plugin = "Connector";
+$MainMenu = "Menú principal";
+$MainMenuLogged = "Menú principal després de la connexió (login)";
+$Banner = "Banner";
+$ImageResizeTitle = "Redimensionar les imatges dels usuaris";
+$ImageResizeComment = "Les imatges descarregades pels usuaris poden ser redimensionades si PHP ha estat compilat amb la <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">llibreria GD</a>. Si no és així, la configuració serà ignorada.";
+$MaxImageWidthTitle = "Amplada màxima de les imatges";
+$MaxImageWidthComment = "Amplada màxima en píxels per les imatges descarregades. Aquesta configuració no té efecte si el redimensionament de les imatges no ha estat activat";
+$MaxImageHeightTitle = "Alçada màxima de les imatges";
+$MaxImageHeightComment = "Alçada màxima en píxels de les imatges descarregades. Aquesta configuració no té efecte si el redimensionament de les imatges no ha estat activat.";
+$YourVersionIs = "La seva versió és la";
+$ConnectSocketError = "Error de connexió al lloc";
+$SocketFunctionsDisabled = "Les connexions externes (sockets) no estan autoritzades";
+$ShowEmailAddresses = "Mostrar les adreces de correu-e";
+$ShowEmailAddressesComment = "Mostrar les adreces de correu-e als usuaris";
+$ActiveExtensions = "Activar els serveis";
+$Visioconf = "Videoconferència";
+$VisioconfDescription = "Chamilo Live Conferencing® és una eina normalitzada de videoconferència que ofereix: difusió de diapositives, pissarra per dibuixar i 'escriure, àudio i vídeo dúplex, xat i llista d'usuaris connectats. Funciona sobre el navegador d'internet amb Flash® sobre 3 modes: un a un, un a molts i molts a molts";
+$Ppt2lp = "Oogie-Woogie (importació de PowerPoint)";
+$Ppt2lpDescription = "oogie-Woogie és una eina que permet generar ràpidament itineraris formatius. Pot convertir presentacions PowerPoint i documents Word, així com els seus equivalents d'OpenOffice en cursos de tipus SCORM. després de ser convertit, el document serà administrable per l'eina Itineraris formatius de Chamilo. Podrà afegir diapositives,àudio, exercicis entre les diapositives o activitats com fòrums de discussió i l'enviament de tasques. Com que és un curs SCORM, permet l'informe i el seguiment als estudiants. El sistema combina el poder d'OpenOffice com a eina de conversió de documents MS-Office amb el servidor streamming RED5 per a la grabació d'àudio i amb l'eina d'administració d'itineraris formatius de Chamilo.";
+$BandWidthStatistics = "Estadístiques d'amplada de banda";
+$BandWidthStatisticsDescription = "MRTG us permet consultar les estadístiques detallades sobre l'estat del vostre servidor a les últimes 24 hores.";
+$ServerStatistics = "Estadístiques del sevidor";
+$ServerStatisticsDescription = "AWStats us permet consultar les estadístiques de visites de la plataforma, visitants, pàgines vistes, procedència dels visitants...";
+$SearchEngine = "Cercador a text complet";
+$SearchEngineDescription = "El Cercador a text complet us permet de cercar una paraula dins el conjunt de la plataforma. La indexació diària dels continguts assegura la qualitat dels resultats.";
+$ListSession = "Llista de sessions";
+$AddSession = "Afegir una sessió";
+$ImportSessionListXMLCSV = "Importar sessions en format XML/CSV";
+$ExportSessionListXMLCSV = "Exportar sessions en format XML/CSV";
+$NbCourses = "Nombre de cursos";
+$DateStart = "Data d'inici";
+$DateEnd = "Data de finalització";
+$CoachName = "Nom del tutor";
+$SessionNameIsRequired = "Doneu un nom a aquesta sessió";
+$NextStep = "Etapa següent";
+$Confirm = "Confirmar";
+$UnsubscribeUsersFromCourse = "Anular la inscripció dels usuaris del curs";
+$MissingClassName = "Falta el nom de la classe";
+$ClassNameExists = "Aquest nom de classe ja existeix";
+$ImportCSVFileLocation = "Posició del fitxer d'importació CSV";
+$ClassesCreated = "Classes creades";
+$ErrorsWhenImportingFile = "Errors en importar el fitxer";
+$ServiceActivated = "Servei activat";
+$ActivateExtension = "Serveis activats";
+$InvalidExtension = "Servei no vàlid";
+$VersionCheckExplanation = "Per tal d'activar la verificació automàtica de les versions, heu d'enregistrar el vostre portal a Chamilo.com. Les dades que ens transmeteu, en haver clicat el botó, són reservades per a usos interns; només es faran públiques les dades estadístiques globals (nombre total de plataformes Chamilo, de cursos, d'estudiants ...)Vegeu <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>.Després d'enregistrar la vostra plataforma Chamilo, apareixerà també en la nostra llista internacional (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>).Si no hi voleu aparèixer, marqueu el quadre de sota. Per enregistrar-vos, res més simple: cliqueu només el botó !";
+$AfterApproval = "Després de ser aprovat";
+$StudentViewEnabledTitle = "Activar la vista estudiant";
+$StudentViewEnabledComment = "Activar la vista estudiant, que permet als tutors o als administrador veure el curs tal i com ho veuria un alumne";
+$TimeLimitWhosonlineTitle = "Límit de temps d'Usuaris en Línia";
+$TimeLimitWhosonlineComment = "Aquest límit de temps defineix quan de temps després de l'última acció enregistrada es considera que un usuari està *en línia*";
+$ExampleMaterialCourseCreationTitle = "Materials d'exemple per la creació de cursos";
+$ExampleMaterialCourseCreationComment = "Crear un conjunt de materials d'exemple quan es creï un nou curs";
+$AccountValidDurationTitle = "Validesa dels comptes d'usuari";
+$AccountValidDurationComment = "Un nou compte d'usuari és vàlid durant aquest nombre de dies després d'haver-se creat";
+$UseSessionModeTitle = "Utilitzar el mode sessió";
+$UseSessionModeComment = "Les sessions permeten gestionar els cursos de manera diferent. Cada curs té un creador, tutors i estudiants. Un tutor dóna un curs durant un període determinat, anomenat \"sessió\", a un grup d'usuaris determinat";
+$HomepageViewActivity = "Vista activitat";
+$HomepageView2column = "Vista en dues columnes";
+$HomepageView3column = "Vista en tres columnes";
+$AllowUserHeadings = "Permetre els encapçalaments d'usuaris";
+$IconsOnly = "Només icones";
+$TextOnly = "Només text";
+$IconsText = "Icones i text";
+$EnableToolIntroductionTitle = "Activar les introduccions d'eines";
+$EnableToolIntroductionComment = "Activar les introduccions a la pàgina inicial de cada eina";
+$BreadCrumbsCourseHomepageTitle = "Barra de navegació de la pàgina inicial del curs";
+$BreadCrumbsCourseHomepageComment = "La barra de navegació és un sistema de navegació horitzontal mitjançant enllaços que generalment es situa a la zona superior esquerra de la vostra pàgina. Aquesta opció us permet seleccionar el contingut d'aquesta barra en la pàgina inicial de cada curs";
+$LoginPageMainArea = "Zona principal pàgina d'accés";
+$LoginPageMenu = "Menú de la pàgina d'accés";
+$CampusHomepageMainArea = "Zona principal de la pàgina del portal";
+$CampusHomepageMenu = "Menú de la pàgina inicial del portal";
+$MyCoursesMainArea = "Zona principal dels cursos";
+$MyCoursesMenu = "Menú dels cursos";
+$Header = "Capçalera";
+$Footer = "Peu de pàgina";
+$PublicPagesComplyToWAITitle = "Pàgines públiques conformes a la WAI";
+$PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) és una iniciativa que cerca fer el web més accessible. Triant aquesta opció, fareu que les pàgines públiques del vostre portal siguin més accessibles. Això significa també que alguns continguts de pàgines públiques del lloc podrien aparèixer de manera diferent.";
+$VersionCheck = "Verificació de la versió";
+$SessionOverview = "Resum de la sessió";
+$SubscribeUserIfNotAllreadySubscribed = "Inscriure l'usuari si encara no està inscrit";
+$UnsubscribeUserIfSubscriptionIsNotInFile = "Anular la inscripció de l'usuari si encara no està en el fitxer";
+$DeleteSelectedSessions = "Eliminar les sessions seleccionades";
+$CourseListInSession = "Llista dels cursos d'aquesta sessió";
+$UnsubscribeCoursesFromSession = "Suprimir els cursos seleccionats d'aquesta sessió";
+$NbUsers = "Usuaris";
+$SubscribeUsersToSession = "Inscriure els usuaris en aquesta sessió";
+$UserListInPlatform = "Llista dels usuaris de la plataforma";
+$UserListInSession = "Llista dels usuaris inscrits en aquesta sessió";
+$CourseListInPlatform = "Llista dels cursos de la plataforma";
+$Host = "Servidor";
+$UserOnHost = "Nom d'usuari";
+$FtpPassword = "Contrasenya FTP";
+$PathToLzx = "Camí cap als fitxers LZX";
+$WCAGContent = "Text";
+$SubscribeCoursesToSession = "Afegir cursos a aquesta sessió";
+$DateStartSession = "Data d'inici de la sessió";
+$DateEndSession = "Data de finalització de la sessió";
+$EditSession = "Editar la sessió";
+$VideoConferenceUrl = "Camí cap a la videoconferència";
+$VideoClassroomUrl = "Camí cap a la sala de videoconferència";
+$ReconfigureExtension = "Reconfigurar l'extensió";
+$ServiceReconfigured = "Servei reconfigurat";
+$ChooseNewsLanguage = "Trieu idioma";
+$Ajax_course_tracking_refresh = "Càlcul de temps passat en un curs";
+$Ajax_course_tracking_refresh_comment = "Aquesta opció permet calcular en temps real el temps que un usuari passa en un curs. El valor a omplir en aquest camp és l'interval de refresc en segons. Per desactivar aquesta opció, deixeu el valor 0 en aquests camps";
+$FinishSessionCreation = "Acabar la creació de la sessió";
+$VisioRTMPPort = "Port del protocol RTMPT per la videoconferència";
+$SessionNameAlreadyExists = "Aquest nom de sessió ja existeix";
+$NoClassesHaveBeenCreated = "No s'ha creat cap classe";
+$ThisFieldShouldBeNumeric = "Aquest camp hauria de contenir un nombre";
+$UserLocked = "Usuari bloquejat";
+$UserUnlocked = "Usuari desbloquejat";
+$CannotDeleteUser = "No podeu esborrar aquest usuari";
+$SelectedUsersDeleted = "Els usuaris seleccionats han estat esborrats";
+$SomeUsersNotDeleted = "Alguns usuaris no s'han pogut esborrar";
+$ExternalAuthentication = "Autenticació externa";
+$RegistrationDate = "Data de registre";
+$UserUpdated = "Usuari actualitzat";
+$HomePageFilesNotReadable = "Els fitxers de la pàgina inicial no tenen drets de lectura";
 $Choose = "Trieu";
+$ModifySessionCourse = "Modificar la sessió del curs";
+$CourseSessionList = "Llista dels cursos de la sessió";
+$SelectACoach = "Seleccionar un tutor";
+$UserNameUsedTwice = "El nom d'usuari està duplicat";
+$UserNameNotAvailable = "Nom d'usuari no disponible";
+$UserNameTooLong = "Nom d'usuari massa llarg";
+$WrongStatus = "Aquest estat no existeix";
+$ClassNameNotAvailable = "Nom de classe no disponible";
+$FileImported = "Fitxer importat";
+$WhichSessionToExport = "Trieu la sessió per exportar";
+$AllSessions = "Totes les sessions";
+$CodeDoesNotExists = "Aquest codi no existeix";
+$UnknownUser = "Usuari desconegut";
+$UnknownStatus = "Estat desconegut";
+$SessionDeleted = "La sessió s'ha esborrat correctament";
+$CourseDoesNotExist = "Curs inexistent";
+$UserDoesNotExist = "Usuari inexistent";
+$ButProblemsOccured = "però hi ha hagut problemes";
+$UsernameTooLongWasCut = "Nom d'usuari tallat";
+$NoInputFile = "No s'ha enviat cap fitxer";
+$StudentStatusWasGivenTo = "L'estat d'alumne ha estat atribuït a";
+$WrongDate = "La data no s'ha entrat correctament (aaaa-mm-dd)";
+$YouWillSoonReceiveMailFromCoach = "En breu rebràs un correu del teu professor.";
+$SlideSize = "Mida de les diapositives";
+$EphorusPlagiarismPrevention = "Prevenció de plagi Ephorus";
+$CourseTeachers = "Docents del curs";
+$UnknownTeacher = "Professor desconegut";
+$HideDLTTMarkup = "Amagar les marques DLTT";
+$ListOfCoursesOfSession = "Llistat de cursos de la sessió";
+$UnsubscribeSelectedUsersFromSession = "Eliminar de la sessió els usuaris seleccionats";
+$ShowDifferentCourseLanguageComment = "Mostrar la llengua assignada a cada curs, al costat del títol del curs, en la llista de cursos de la pàgina inicial";
+$ShowEmptyCourseCategoriesComment = "Mostrar les categories del curs a la pàgina inicial, encara que estiguin buides";
+$ShowEmptyCourseCategories = "Mostrar les categories de curs buides";
+$XMLNotValid = "El document XML no és vàlid";
+$ForTheSession = "per a la sessió";
+$AllowEmailEditorTitle = "Activar l'editor de correus-e en línia";
+$AllowEmailEditorComment = "Si aquesta opció està activa, cliqueu sobre una adreça de correu-e i s'obrirà un editor en línia";
+$AddCSVHeader = "Afegir la línia de capçalera del CSV ?";
+$YesAddCSVHeader = "Sí, afegir les capçaleres CSVAquesta línia defineix tots els camps i es necessita quan vulgui importar l'arxiu en una altra plataforma Chamilo";
+$ListOfUsersSubscribedToCourse = "Llistat d'usuaris subscrits al curs";
+$NumberOfCourses = "Nombre de Cursos";
+$ShowDifferentCourseLanguage = "Mostrar els idiomes dels cursos";
+$VisioRTMPTunnelPort = "Port túnel del protocol RTMPT per la videoconferència";
+$Security = "Seguretat";
+$UploadExtensionsListType = "Tipus de filtratge sobre l'enviament de documents";
+$UploadExtensionsListTypeComment = "Utilització de llista negra o blanca. Vegeu la descripció de la llista negra i la llista blanca a sota per més detalls";
+$Blacklist = "Llista negra";
+$Whitelist = "Llista blanca";
+$UploadExtensionsBlacklist = "Llista negra - paràmetres";
+$UploadExtensionsWhitelist = "Llista blanca - paràmetres";
+$UploadExtensionsBlacklistComment = "La llista negra (blacklist) és un mode de filtratge que permet eliminar (o canviar el nom) els fitxers les extensions del qual figuren en la llista següent. Les extensions han d'estar mencionades sense el punt (.) de prefix, i han d'estar separats per punts i coma (;) com per exemple: exe;com;bat;scr;php. Els fitxers sense extensió són acceptats d'entrada. El fet d'escriure en majúscula o en minúscula no té importància.";
+$UploadExtensionsWhitelistComment = "La llista blanca (o whitelist) és un mode de filtratge que permet eliminar (o canviar de nom) els fitxers les extensions del qual *NO* figuren a la llista següent. Aquest mètode és considerat com a més segur però més restrictiu que la llista negra. Les extensions han de mencionar-se sense el punt (.) del prefix, i separats per punts i coma (;) com htm;html;txt;doc;xls;ppt;jpg;gif;sxw. Els fitxers sense extensió s'accepten per defecte. El fet d'escriure en majúscula o en minúscula no té importància.";
+$UploadExtensionsSkip = "Comportament de filtratge (eliminar/reanomenar)";
+$UploadExtensionsSkipComment = "Si escolliu eliminar, els fitxers que tinguin l'extensió filtrada per la llista negra o blanca no seran enviats al vostre campus. Si trieu canviar-los el nom, la seva extensió serà substituïda pel valor indicat en el paràmetre de reemplaçament d'extensió. Noteu que el reemplaçament d'extensió no us protegeix realment, i pot causar conflictes de noms si existeixen molt fitxers amb el mateix nom però amb extensions diferents.";
+$UploadExtensionsReplaceBy = "Extensió de reemplaçament";
+$UploadExtensionsReplaceByComment = "Introduïu l'extensió que reemplaçarà les extensions perilloses que han estat detectats pel filtre. Només us servirà si heu seleccionat un filtratge per reemplaçament.";
+$ShowNumberOfCoursesComment = "Mostrar el nombre de cursos en cada categoria, en les categories de cursos de la pàgina inicial";
+$EphorusDescription = "Comenceu a utilitzar Ephorus servei anti plagi a Chamilo <br /> <STRONG> Amb Ephorus, previndreu el plagi a internet sense cap esforç addicional.</STRONG><br /> Podeu utilitzar el nostre estàndard obert webservice per construir la vostra integració o utilitzar un dels nostres mòduls d'integració Chamilo.";
+$EphorusLeadersInAntiPlagiarism = "<STRONG>Líders en <BR>anti plagi </STRONG>";
+$EphorusClickHereForInformationsAndPrices = "Cliqueu aquí per més informació i preus";
+$NameOfTheSession = "Nom de la sessió";
+$NoSessionsForThisUser = "Aquest usuari no ha estat subscrit a una sessió";
+$DisplayCategoriesOnHomepageTitle = "Mostrar categories a la pàgina principal";
+$DisplayCategoriesOnHomepageComment = "Aquesta opció mostrarà o ocultarà les categories de cursos a la pàgina principal de la plataforma";
+$ShowTabsTitle = "Pestanyes a la capçalera";
+$ShowTabsComment = "seleccioneu quines pestanyes voleu que apareguin a la capçalera. Les pestanyes no seleccionades, si fossin necessàries, apareixerien en el menú dret de la pàgina principal de la plataforma i a la pàgina dels meus cursos";
+$DefaultForumViewTitle = "Vista del fòrum per defecte";
+$DefaultForumViewComment = "Quina és l'opció per defecte quan es crea un nou fòrum. No obstant això, qualsevol administrador d'un curs pot escollir una vista diferent en cada fòrum";
+$TabsMyCourses = "Pestanya Els meus cursos";
+$TabsCampusHomepage = "Pestanya Pàgina principal de la plataforma";
+$TabsReporting = "Pestanya Informes";
+$TabsPlatformAdministration = "Pestanya Administració de la plataforma";
+$NoCoursesForThisSession = "No hi ha cursos per a aquesta sessió";
+$NoUsersForThisSession = "No hi ha usuaris per a aquesta sessió";
+$LastNameMandatory = "Cal que els cognoms es complimentin obligatòriament";
+$FirstNameMandatory = "Cal que complimenteu obligatòriament el nom";
+$EmailMandatory = "L'adreça de correu-e s'ha de complimentar obligatòriament";
+$TabsMyAgenda = "Pestanya La meva agenda";
+$NoticeWillBeNotDisplayed = "La notícia no serà mostrada a la pàgina principal";
+$LetThoseFieldsEmptyToHideTheNotice = "Deixeu aquests camps buits si no voleu mostrar la notícia";
+$Ppt2lpVoiceRecordingNeedsRed5 = "La funcionalitat d'enregistrament de veu a l'Editor d'Itineraris formatius depèn d'un servidor de streamming Red5. Els paràmetres d'aquest servidor poden configurar-se a la secció de videoconferència d'aquesta mateixa pàgina.";
+$PlatformCharsetTitle = "Joc de caràcters";
+$PlatformCharsetComment = "El joc de caràcters és el que controla la manera en què determinats idiomes són mostrats a Chamilo. Si, per exemple, utilitza caràcters russos o japonesos, és possible que vulgui canviar aquest joc. Per a tots els caràcters anglosaxons, llatins i d'Europa Occidental, el joc per defecte UTF-8 hauria de ser el correcte.";
+$ExtendedProfileRegistrationTitle = "Camps del perfil estès del registre";
+$ExtendedProfileRegistrationComment = "Quins camps del perfil estès cal que estiguin disponibles en el procés de registre d'un usuari? Això requereix que el perfil estès estigui activat (vegeu més amunt).";
+$ExtendedProfileRegistrationRequiredTitle = "Camps requerits en el perfil estès del registre";
+$ExtendedProfileRegistrationRequiredComment = "Quins camps del perfil estès són obligatoris en el procés de registre d'un usuari? Això requereix que el perfil estès estigui activat i que el camp també estigui disponible en el formulari de registre (vegeu més amunt).";
+$NoReplyEmailAddress = "No respongueu aquest correu";
+$NoReplyEmailAddressComment = "Aquesta és l'adreça de correu electrònic que s'utilitza quan s'envia un correu per sol·licitar que no es realitzi cap resposta. generalment, aquesta adreça de correu electrònic cal que sigui configurada en el servidor de manera que elimini o ignori qualsevol correu entrant.";
+$SurveyEmailSenderNoReply = "Remitent de l'enquesta (no respongueu)";
+$SurveyEmailSenderNoReplyComment = "¿Els correus electrònics utilitzats per enviar les enquestes, hauran d'utilitzar el correu electrònic del professor/tutor o una adreça especial de correu-e a la qual el destinatari no respongui (definida en els paràmetres de la plataforma)?";
+$CourseCoachEmailSender = "Correu-e del professor/tutor";
+$NoReplyEmailSender = "No respongueu aquest correu";
+$OpenIdAuthenticationComment = "Activar l'autenticació basada en URL OpenID (mostra un formulari addicional d'identificació a la pàgina principal de la plataforma)";
+$VersionCheckEnabled = "Comprovació de la versió activada";
+$InstallDirAccessibleSecurityThreat = "El directori d'instal·lació /main/install encara és accessible als usuaris de la web. Això podria representar un problema de seguretat. Us recomanem que elimineu aquest directori o que canvieu els seus permisos, de manera que els usuaris de la web no puguin utilitzar els scripts que conté.";
+$GradebookActivation = "Activació de l'eina Quadern de qualificacions";
+$GradebookActivationComment = "Quan activeu l'eina Quadern de qualificacions s'afegeix la possibilitat de relacionar els objectius d'aprenentatge amb els seus resultats; no obstant, això pot generar una interfície bastant més complexa. Realment voleu activar aquesta eina?";
+$UserTheme = "Tema (full d'estil)";
+$UserThemeSelection = "Selecció de tema per l'usuari";
+$UserThemeSelectionComment = "Permetre als usuaris escollir un tema visual al seu perfil. Això els canviarà l'aspecte de Chamilo, però deixarà intacte l'estil per defecte de la plataforma. Si a un curs o a una sessió els ha estat assignat un tema específic, aquest darrer tindrà prioritat sobre el tema definit al perfil d'usuari.";
+$VisioHost = "Nom o adreça IP del servidor de streamming per a la videoconferència";
+$VisioPort = "port del servidor de streamming per a la videoconferència";
+$VisioPassword = "Contrasenya del servidor de streamming per a la videoconferència";
+$Port = "Port";
+$EphorusClickHereForADemoAccount = "Feu clic aquí per a obtenir un compte de demostració";
+$ManageUserFields = "Gestionar els camps d'usuari";
+$AddUserField = "Afegir un camp d'usuari";
+$FieldLabel = "Etiqueta del camp";
+$FieldType = "Tipus de camp";
+$FieldTitle = "Títol del camp";
+$FieldDefaultValue = "Valor per defecte del camp";
+$FieldOrder = "Ordre del camp";
+$FieldVisibility = "Visibilitat del camp";
+$FieldChangeability = "Modificable";
+$FieldTypeText = "Text";
+$FieldTypeTextarea = "Àrea de text";
+$FieldTypeRadio = "Botons de radio";
+$FieldTypeSelect = "Desplegable";
+$FieldTypeSelectMultiple = "Desplegable amb elecció múltiple";
+$FieldAdded = "El camp ha estat afegit";
+$GradebookScoreDisplayColoring = "Acolorit de puntuacions";
+$GradebookScoreDisplayColoringComment = "Seleccioneu la casella per habilitar l'acolorit de les puntuacions (per exemple, haureu de definir quines puntuacions seran marcades en vermell)";
+$TabsGradebookEnableColoring = "Habilitar l'acolorit de les puntuacions";
+$GradebookScoreDisplayCustom = "Personalització de la presentació de les puntuacions";
+$GradebookScoreDisplayCustomComment = "Marqueu la casella per activar la personalització de les puntuacions (seleccioneu el nivell que s'associarà a cada puntuació)";
+$TabsGradebookEnableCustom = "activar la configuració de puntuacions";
+$GradebookScoreDisplayColorSplit = "Límit per a l'acolorit de les puntuacions";
+$GradebookScoreDisplayColorSplitComment = "Percentatge mínim, per sota del qual les puntuacions s'acoloriran en vermell";
+$GradebookScoreDisplayUpperLimit = "Mostrar el límit superior de puntuació";
+$GradebookScoreDisplayUpperLimitComment = "Marqueu la casella per mostrar el límit superior de la puntuació";
+$TabsGradebookEnableUpperLimit = "Activar la visualització del límit superior de la puntuació";
+$AddUserFields = "Afegir camps d'usuari";
+$FieldPossibleValues = "Valors possibles";
+$FieldPossibleValuesComment = "Solament en camps repetitius, havent d'estar separats per punt i coma (;)";
+$FieldTypeDate = "Data";
+$FieldTypeDatetime = "Data i hora";
+$UserFieldsAddHelp = "Afegir un camp d'usuari és molt fàcil: <br />- escolliu una paraula com identificador en minúscules, <br /> - seleccioneu un tipus, <br /> - escolliu el text que hauria d'aparèixer a l'usuari (si utilizeu un nom ja traduït por Chamilo, como ara BirthDate o UserSex, automàticament es tradueix a tots els idiomes), <br /> - si heu escollit un camp del tipus selecció múltiple (radio, seleccionar, selecció múltiple), teniu l'oportunitat de triar (també aquí, podeu fer ús de les variables d'idioma definides a Chamilo), separat per punt i coma, <br /> - en els camps tipus text, podeu triar un valor per defecte. <br /> <br /> Un cop acabat, agregueu el camp i decidiu si voleu fer-lo visible i modificable. Fer-lo modificable però ocult no té sentit.";
+$AllowCourseThemeTitle = "Permetre temes gràfics personalitzats als cursos";
+$AllowCourseThemeComment = "Permetre que els cursos puguin tenir un tema gràfic diferent, canviant el full d'estil usat per un dels disponibles a Chamilo. Quan un usuari entra en un curs, el full d'estil del curs té preferència sobre el de l'usuari i sobre el que està definit per defecte a la plataforma.";
+$DisplayMiniMonthCalendarTitle = "Mostrar a l'agenda el calendari mensual reduït";
+$DisplayMiniMonthCalendarComment = "Aquesta configuració activa o desactiva el petit calendari mensual que apareix a l'esquerra a l'eina agenda d'un curs";
+$DisplayUpcomingEventsTitle = "Mostrar els propers esdeveniments a l'agenda";
+$DisplayUpcomingEventsComment = "Aquesta configuració activa o desactiva els propers esdeveniments que apareixen a l'esquerra de l'eina agenda d'un curs";
+$NumberOfUpcomingEventsTitle = "Nombre de propers esdeveniments que cal mostrar";
+$NumberOfUpcomingEventsComment = "Nombre dels propers esdeveniments que seran mostrats a l'agenda. Això requereix que la funcionalitat propers esdeveniments estigui activada (vegeu més amunt la configuració)";
+$ShowClosedCoursesTitle = "Mostrar els cursos tancats a la pàgina de registre y a la pàgina principal de la plataforma?";
+$ShowClosedCoursesComment = "Mostrar els cursos tancats a la pàgina de registre i a la pàgina principal de la plataforma? A la pàgina d'inici de la plataforma apareixerà una icona al costat del curs, per inscriure-s'hi ràpidament. Això tan sols es mostrarà a la pàgina principal de la plataforma després de l'autenticació de l'usuari i sempre que ja no estigui inscrit en aquest curs.";
+$LDAPConnectionError = "Error de connexió LDAP";
+$LDAP = "LDAP";
+$LDAPEnableTitle = "Habilitar LDAP";
+$LDAPEnableComment = "Si teniu un servidor LDAP, haureu de configurar els paràmetres inferiors i modificar el fitxer de configuració descrit a la guia d'instal·lació, i finalment activar-lo. Això permetrà als usuaris autentificar-se utilitzant llur nom d'usuari LDAP. Si no coneixeu LDAP és preferible que deixeu aquesta opció desactivada.";
+$LDAPMainServerAddressTitle = "Adreça del servidor LDAP principal";
+$LDAPMainServerAddressComment = "L'adreça IP o la URL del vostre servidor LDAP principal";
+$LDAPMainServerPortTitle = "Port del servidor LDAP principal";
+$LDAPMainServerPortComment = "El port en el qual respondrà el servidor LDAP principal (generalment 389). Aquest paràmetre és necessari.";
+$LDAPDomainTitle = "Domini LDAP";
+$LDAPDomainComment = "Aquest és el domini (dc)mLDAP que serà utilitzat per trobar els contactes en el servidor LDAP. Per exemple: dc=xx, dc=yy, dc=zz";
+$LDAPReplicateServerAddressTitle = "Adreça del servidor de replicació";
+$LDAPReplicateServerAddressComment = "Quan el servidor principal no estigui disponible, aquest servidor us donarà accés. Deixeu en blanc o utilitzeu el mateix valor que el del servidor principal si no teniu un servidor de replicació.";
+$LDAPReplicateServerPortTitle = "Port del servidor LDAP de replicació";
+$LDAPReplicateServerPortComment = "El port en el qual respondrà el servidor de replicació LDAP";
+$LDAPSearchTermTitle = "Terme de cerca";
+$LDAPSearchTermComment = "Aquest terme serà utilitzat per filtrar la cerca de contactes en el servidor LDAP. Si no esteu segur del que heu d'escriure aquí, consulteu la documentació i configuració del vostre servidor LDAP.";
+$LDAPVersionTitle = "Versió LDAP";
+$LDAPVersionComment = "Si us plau, seleccioneu la versió del servidor LDAP que voleu utilitzar. L'ús de la versió correcta depèn de la configuració del vostre servidor LDAP.";
+$LDAPVersion2 = "LDAP 2";
+$LDAPVersion3 = "LDAP 3";
+$LDAPFilledTutorFieldTitle = "Camp d'identificació del professor";
+$LDAPFilledTutorFieldComment = "Comprovarà el contingut del camp de contacte LDAP on seran inserits els nous usuaris. Si aquest camp no està buit, l'usuari serà considerat professor i serà inserit a Chamilo com a tal. Si voleu que tots els usuaris siguin reconeguts com a simples usuaris, deixeu aquest camp en blanc. Podreu modificar aquest comportament canviant el codi. Per a més informació llegiu la <a href=\"../../documentation/installation_guide.html\">guía d'instal·lació</a>.";
+$LDAPAuthenticationLoginTitle = "Identificador d'autenticació";
+$LDAPAuthenticationLoginComment = "Si esteu usant un servidor LDAP que no accepta l'accés anònim, empleneu el següent camp amb el nom d'usuari que s'haurà d'utilitzar. No inclogueu \"cn=\". En el cas d'acceptar accés anònim i voler usar-lo, deixeu-lo buit.";
+$LDAPAuthenticationPasswordTitle = "Contrasenya d'autenticació";
+$LDAPAuthenticationPasswordComment = "Si esteu usant un servidor LDAP que no accepta l'accés anònim, empleneu el següent camp amb la contrasenya que s'hagi d'utilitzar";
+$LDAPImport = "Importació LDAP";
+$EmailNotifySubscription = "Notificar per correu-e els usuaris registrats";
+$DontUncheck = "No desactivar";
+$AllSlashNone = "Tots/Cap";
+$LDAPImportUsersSteps = "Importació LDAP: Usuaris/Etapes";
+$EnterStepToAddToYourSession = "Introduïu l'etapa que voleu afegir a la vostra sessió";
+$ToDoThisYouMustEnterYearDepartmentAndStep = "Per fer això, cal que introduïu l'any, el departament i l'etapa";
+$FollowEachOfTheseStepsStepByStep = "Seguiu cadascun dels elements, pas a pas";
+$RegistrationYearExample = "Any de registre. Exemple: %s per a l'any acadèmic %s-%s";
+$SelectDepartment = "Seleccioneu departament";
+$RegistrationYear = "Any de registre";
+$SelectStepAcademicYear = "Seleccioneu etapa (any acadèmic)";
+$ErrorExistingStep = "Error: aquesta etapa ja existeix";
+$ErrorStepNotFoundOnLDAP = "Error: etapa no trobada al servidor LDAP";
+$StepDeletedSuccessfully = "L'etapa ha estat suprimida";
+$StepUsersDeletedSuccessfully = "Els usuaris han estat eliminats de l'etapa";
+$NoStepForThisSession = "Ni hi ha etapes per a aquesta sessió";
+$DeleteStepUsers = "Esborrar usuaris de l'etapa";
+$ImportStudentsOfAllSteps = "Importar els alumnes de totes les etapes";
+$ImportLDAPUsersIntoPlatform = "Afegir usuaris LDAP";
+$NoUserInThisSession = "No hi ha usuaris en aquesta sessió";
+$SubscribeSomeUsersToThisSession = "Inscriure usuaris en aquesta sessió";
+$EnterStudentsToSubscribeToCourse = "Introduïu els alumnes que voleu inscriure en el vostre curs";
+$ToDoThisYouMustEnterYearComponentAndComponentStep = "Per fer això, cal que introduïu l'any, el component i l'etapa del component";
+$SelectComponent = "Seleccionar component";
+$Component = "Component";
+$SelectStudents = "Seleccionar estudiants";
+$LDAPUsersAdded = "Usuaris LDAP afegits";
+$NoUserAdded = "Cap usuari afegit";
+$ImportLDAPUsersIntoCourse = "Importar usuaris LDAP en un curs";
+$ImportLDAPUsersAndStepIntoSession = "Importar usuaris LDAP i una etapa en aquesta sessió";
+$LDAPSynchroImportUsersAndStepsInSessions = "Sincronització LDAP: Importar usuaris/etapes a les sessions";
+$TabsMyGradebook = "Pestanya El meu quadern de qualificacions";
+$LDAPUsersAddedOrUpdated = "Usuaris LDAP afegits o actualitzats";
+$SearchLDAPUsers = "Buscar usuaris LDAP";
+$SelectCourseToImportUsersTo = "Seleccioneu el curs en el qual voleu inscriure els usuaris que heu seleccionat";
+$ImportLDAPUsersIntoSession = "Importar usuaris LDAP en una sessió";
+$LDAPSelectFilterOnUsersOU = "Seleccioneu un filtre per trobar usuaris l'atribut OU (Unitat Organitzativa) dels quals acabi amb aquest filtre";
+$LDAPOUAttributeFilter = "Filtre de l'atribut OU";
+$SelectSessionToImportUsersTo = "Seleccioneu la sessió a la qual voleu importar aquests usuaris";
+$VisioUseRtmptTitle = "Usar el protocol rtmpt";
+$VisioUseRtmptComment = "El protocol rtmpt permet accedir a una videoconferència des de darrere d'un firewall, redirigint les comunicacions a través del port 80. Això ralentitzarà el streamming, per la qual cosa es recomana no utilitzar-lo si no és necessari.";
+$UploadNewStylesheet = "Nou fitxer de full d'estil";
+$NameStylesheet = "Nom del full d'estil";
+$StylesheetAdded = "El full d'estil ha estat afegit";
+$LDAPFilledTutorFieldValueTitle = "Valor d'identificació d'un professor";
+$LDAPFilledTutorFieldValueComment = "Quan es realitzi una comprovació en el camp professor que apareix dalt, per tal que l'usuari sigui considerat professor, el valor que se li doni cal que sigui un dels subelements del camp professor. Si deixeu aquest camp en blanc, l'única condició per tal que sigui considerat professor és que en aquest usuari LDAP existeixi el camp. Per exemple, el camp pot ser \"memberof\" i el valor de cerca pot ser \"CN=G_TRAINER,OU=Trainer\"";
+$IsNotWritable = "no es pot escriure";
+$FieldMovedDown = "El camp ha estat mogut cap avall";
+$CannotMoveField = "El camp no s'ha pogut moure";
+$FieldMovedUp = "El camp ha estat mogut cap amunt";
+$FieldDeleted = "El camp ha estat eliminat";
+$CannotDeleteField = "No es pot eliminar el camp";
+$AddUsersByCoachTitle = "Registre d'usuaris pel tutor";
+$AddUsersByCoachComment = "El tutor pot registrar nous usuaris en la plataforma i inscriure'ls en una sessió";
+$UserFieldsSortOptions = "Ordenar les opcions dels camps del perfil";
+$FieldOptionMovedUp = "Aquesta opció ha estat moguda dalt";
+$CannotMoveFieldOption = "No es pot moure l'opció";
+$FieldOptionMovedDown = "L'opció ha estat moguda baix";
+$DefineSessionOptions = "Definir el retard de l'accés del tutor";
+$DaysBefore = "dies abans";
+$DaysAfter = "dies després";
+$SessionAddTypeUnique = "Registre individual";
+$SessionAddTypeMultiple = "Registre múltiple";
+$EnableSearchTitle = "Funcionalitat de recerca de text complet";
+$EnableSearchComment = "Seleccioni \"Sí\" per habilitar aquesta funcionalitat. Aquesta utilitat depèn de l'extensió Xapian per a PHP, pel que no funcionarà si aquesta extensió no està instal·lada en el seu servidor, com a mmínim la versió 1.x";
+$SearchASession = "Buscar una versió";
+$ActiveSession = "Activació de la sessió";
+$AddUrl = "Agregar URL";
+$ShowSessionCoachTitle = "Mostrar el tutor de la sessió";
+$ShowSessionCoachComment = "Mostrar el nom del tutor dins de la caixa de títol de la pàgina del llistat de cursos";
+$ExtendRightsForCoachTitle = "Ampliar els permisos del tutor";
+$ExtendRightsForCoachComment = "L'activació d'aquesta opció donarà al tutor els mateixos permisos que tingui un professor sobre les eines d'autoria";
+$ExtendRightsForCoachOnSurveyComment = "L'activació d'aquesta opció donarà als tutors el dret de crear i editar enquestes";
+$ExtendRightsForCoachOnSurveyTitle = "Ampliar els permisos dels tutors en les enquestes";
+$CannotDeleteUserBecauseOwnsCourse = "Aquest usuari no es pot eliminar perquè segueix com docent d'un curs o més. Pot canviar el seu títol de docent d'aquests cursos abans d'eliminar-lo o bloquejar el seu compte.";
+$AllowUsersToCreateCoursesTitle = "Permetre la creació de cursos";
+$AllowUsersToCreateCoursesComment = "Els professors poden crear cursos en la plataforma";
+$AllowStudentsToBrowseCoursesComment = "Permetre als estudiants consultar el catàleg de cursos en els quals poden matricular-se";
+$YesWillDeletePermanently = "Sí (els arxius s'eliminaran permanentment i no podran ser recuperats)";
+$NoWillDeletePermanently = "No (els arxius s'esborraran de l'aplicació i podran ser recuperats manualment pel seu administrador)";
+$SelectAResponsible = "Seleccioni un responsable";
+$ThereIsNotStillAResponsible = "Encara no hi ha responsables";
+$AllowStudentsToBrowseCoursesTitle = "Els estudiants poden consultar el catàleg de cursos";
+$SharedSettingIconComment = "Aquesta configuració està compartida";
+$GlobalAgenda = "Agenda Global";
+$AdvancedFileManagerTitle = "Gestor avançat de fitxers per a l'editor WYSIWYG";
+$AdvancedFileManagerComment = "Activar el gestor avançat d'arxius per a l'editor WYSWYG? Aixó afegirà un considerable nombre d'opcions al gestor de fitxers que s'obre en una finestra quan s'envien arxius al servidor";
+$ScormAndLPProgressTotalAverage = "Mitjana de progrés en els cursos";
+$MultipleAccessURLs = "Accés mÚltiple a URL";
+$SearchShowUnlinkedResultsTitle = "Recerca de text complet: mostrar resultats no accesibles";
+$SearchShowUnlinkedResultsComment = "Al moment de mostrar els resultats de la recerca de text complet, com hauria de comportar-se el sistema per als enllaços que no son accesibles per a l'usuari actual?";
+$SearchHideUnlinkedResults = "No mostrar-los";
+$SearchShowUnlinkedResults = "Mostrar-los però sense enllaç al recurs";
+$Templates = "Plantilles";
+$EnableVersionCheck = "Activar la verificació de versiones";
+$AllowMessageToolTitle = " Habilitar l'eina missatge";
+$AllowReservationTitle = "Habilitar l'eina de Reserves";
+$AllowReservationComment = "Aquesta opció habilitarà el sistema de reserves";
+$ConfigureResourceType = "Configurar tipus de recurs";
+$ConfigureMultipleAccessURLs = "Configurar accés a multiple URLs";
+$URLAdded = "URL agregada";
+$URLAlreadyAdded = "La URL ja està registrada, ingressi altra URL";
+$AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "Està segur que destitja configurar aquest idioma com l'idioma per defecte de la plataforma";
+$CurrentLanguagesPortal = "Idioma actual de la plataforma";
+$EditUsersToURL = "Editar usuaris i URLs";
+$AddUsersToURL = "Agregar usuaris a una URL";
+$URLList = "Llista de URLs";
+$AddToThatURL = "Agregar usuaris a aquesta URL";
+$SelectUrl = "Seleccioni una URL";
+$UserListInURL = "Usuaris registrats en aquesta URL";
+$UsersWereEdited = "Els usuaris han estat modificats";
+$AtLeastOneUserAndOneURL = "Seleccioni almenys un usuari i una URL";
+$UsersBelongURL = "Els comptes d'usuari ara són conectades a l'URL";
+$LPTestScore = "Puntuació de les proves del curs";
+$ScormAndLPTestTotalAverage = "Mitjana de les proves en els cursos";
+$ImportUsersToACourse = "Importar usuaris a un curs des d'un fitxer";
+$ImportCourses = " \tImportar cursos des d'un fitxer";
+$ManageUsers = "Administrar usuaris";
+$ManageCourses = "Administrar cursos";
+$UserListIn = "Usuaris de";
+$URLInactive = "La URL ha estat desactivada";
+$URLActive = "La URL ha estat activada";
+$EditUsers = "Editar usuaris";
+$EditCourses = "Editar cursos";
+$CourseListIn = "Cursos de";
+$AddCoursesToURL = "Agregar cursos a una URL";
+$EditCoursesToURL = "Editar cursos d'una URL";
+$AddCoursesToThatURL = "Agregar cursos a aquesta URL";
+$EnablePlugins = "Habilitar els plugins seleccionats";
+$AtLeastOneCourseAndOneURL = "Ha d'escollir almenys un curs i una URL";
+$ClickToRegisterAdmin = "Faci click per a registrar a l'usuari Administrador en totes les URLs";
+$AdminShouldBeRegisterInSite = "L'usuari administrador hauria d'estar registrat en:";
+$URLNotConfiguredPleaseChangedTo = "URL encara no configurada, agregui la següent URL";
+$AdminUserRegisteredToThisURL = "Usuari registrat a aquesta URL";
+$CoursesWereEdited = "Els cursos han estat editats";
+$URLEdited = "La URL ha estat modificada";
+$AddSessionToURL = "Agregar una sessió a una URL";
+$FirstLetterSession = "Primera lletra del nom de la sessió";
+$EditSessionToURL = "Editar sessió";
+$AddSessionsToThatURL = "Agregar sessions a aquesta URL";
+$SessionBelongURL = "Les sessions han estat editades";
+$ManageSessions = "Administrar sessions";
+$AllowMessageToolComment = "Aquesta opció habilitarà l'eina de missatges";
+$AllowSocialToolTitle = "Habilita l'eina de xarxa social";
+$AllowSocialToolComment = "L'instrument de xarxa social permet a usuaris definir relacions amb altres usuaris i definir grups d'amics. Combinat amb l'instrument intern de la missatgeria, aquest instrument permet a la comunicació amb amics, dintre de l'ambient portal.";
+$SetLanguageAsDefault = "Utilitzar aquesta llengua per defecte";
+$FieldFilter = "Filtre";
+$FilterOn = "Habilitar filtre";
+$FilterOff = "Deshabilitar filtre";
+$FieldFilterSetOn = "Pot utilitzar aquest camp com filtre";
+$FieldFilterSetOff = "Filtre deshabilitat";
+$buttonAddUserField = "Afegir camp d'usuari";
+$UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "Els usuaris han estat registrats als següents cursos perquè diversos cursos comparteixen el mateix codi visual";
+$TheFollowingCoursesAlreadyUseThisVisualCode = "Els següents cursos ja utilitzen aquest codi";
+$UsersSubscribedToBecauseVisualCode = "Els usuaris han estat subscrits als següents cursos, perquè molts cursos comparteixen el mateix codi visual";
+$UsersUnsubscribedFromBecauseVisualCode = "La subscripció d'aquest usuaris als següents cursos ha estat cancel·lada perquè hi ha altres cursos que comparteixen el mateix codi visual";
+$FilterUsers = "Filtre d'usuaris";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "Diversos cursos es van subscriure a la sessió a causa d'un codi duplicat de curs";
+$CoachIsRequired = "Ha de seleccionar un tutor";
+$EncryptMethodUserPass = "Mètode d'encriptació";
+$AddTemplate = "Afegir una plantilla";
+$TemplateImageComment100x70 = "Aquesta imatge representarà la seva plantilla en la llista de plantilles. No hauria de ser major de 100x70 píxels";
+$TemplateAdded = "Plantilla afegida";
+$TemplateDeleted = "Plantilla esborrada";
+$EditTemplate = "Edició de plantilla";
+$FileImportedJustUsersThatAreNotRegistered = "Es va importar els usuaris que no estaven registrats a la plataforma";
+$YouMustImportAFileAccordingToSelectedOption = "Ha d'importar un arxiu d'acord a l'opció seleccionada";
+$ShowEmailOfTeacherOrTutorTitle = "Mostrar adreça electrònica del professor o del tutor el el peu de pàgina";
+$ShowEmailOfTeacherOrTutorComent = "Mostrar l'adreça electrònica del professor o tutor en el peu de pàgina?";
+$AddSystemAnnouncement = "Afegir anunci del sistema";
+$EditSystemAnnouncement = "Editar anunci del sistema";
+$LPProgressScore = "% d'objects d'aprenentatge visitats";
+$TotalTimeByCourse = "Temps total per curs";
+$LastTimeTheCourseWasUsed = "Últim accès d'usuaris al curs";
+$AnnouncementAvailable = "L'anunci està disponible";
+$AnnouncementNotAvailable = "L'anunci no està disponible";
+$Searching = "Cercant";
+$AddLDAPUsers = "Afegir usuaris LDAP";
+$Academica = "Acadèmica";
+$AddNews = "Afegir notícies";
+$SearchDatabaseOpeningError = "No es va poder obrir la base de dades del motor d'indexació,provi afegir un nou recurs (exercici,enllaç,lliçó,etc) el qual serà indexat al cercador";
+$SearchDatabaseVersionError = "La base de dades està en un format no suportat";
+$SearchDatabaseModifiedError = "La base de dades ha estat modificada (alterada)";
+$SearchDatabaseLockError = "No es va poder bloquejar una base de dades";
+$SearchDatabaseCreateError = "No es va poder crear una base de dades";
+$SearchDatabaseCorruptError = "Es va detectar greus errors en la base de dades";
+$SearchNetworkTimeoutError = "Temps expirat mentre es connectava a una base de dades remota";
+$SearchOtherXapianError = "Error en el motor de recerca";
 $SearchXapianModuleNotInstalled = "El mòdul Xapian de PHP no està configurat en el seu servidor";
+$FieldRemoved = "Camp eliminat";
+$TheNewSubLanguageHasBeenAdded = "El nou sub-llenguatge ha estat afegit amb les següents referències";
+$DeleteSubLanguage = "Eliminar sub-idioma";
+$CreateSubLanguageForLanguage = "Crear sub-llenguatge per a aquesta llengua";
+$DeleteSubLanguageFromLanguage = "Eliminar subllenguatge de llengua";
+$CreateSubLanguage = "Crear sub-llenguatge";
+$RegisterTermsOfSubLanguageForLanguage = "Registrar termes del sub-llenguatge per a la llengua";
+$AddTermsOfThisSubLanguage = "Afegisca nous termes per a aquest sub-llenguatge";
+$LoadLanguageFile = "Carregar fitxer de llengües";
+$AllowUseSubLanguageTitle = "Permet definir sub-llenguatges";
+$AllowUseSubLanguageComment = "A l'activar aquesta opció, vostè podrà definir variacions per a cada terme del llenguatge usat per a la interfície de la plataforma, en la forma d'un nou llenguatge basat en un llenguatge existent. Podrà trobar aquesta opció en el menu d'idiomes de la seva pàgina d'administració.";
+$AddWordForTheSubLanguage = "Afegir paraules al sub-llenguatge";
+$TemplateEdited = "Plantilla modificada";
+$SubLanguage = "Sub-llenguatge";
+$LanguageIsNowVisible = "El llenguatge es ara visible i està disponible en la plataforma";
+$LanguageIsNowHidden = "El llenguatge ara no es visible";
+$LanguageDirectoryNotWriteableContactAdmin = "El directori /main/lang usat en aquest portal,no té permisos d'escriptura. Per favor contacti amb el seu administrador";
+$ShowGlossaryInDocumentsTitle = "Mostrar els termes del glossari en els documents";
+$ShowGlossaryInDocumentsComment = "Des d'ací vostè pot configurar la forma de com s'afegiran els termes del glossari als documents";
+$ShowGlossaryInDocumentsIsAutomatic = "Automàtica. A l'activar està opció s'afegirà un enllaç a tots els termes del glossari que es trobin en el document.";
+$ShowGlossaryInDocumentsIsManual = "Manual. A l'activar està opció, es mostrarà una icona en l'editor en línia que li permetrà marcar les paraules que desitgi que enllacin amb els termes del glossari.";
+$ShowGlossaryInDocumentsIsNone = "Cap. Si activa aquesta opció, les paraules dels seus documents no s'enllaçaran amb els termes que apareguin en el glossari.";
+$LanguageVariable = "Variable d'idioma";
+$ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "Si vol exportar un document que contingui termes del glossari, haurà d'assegurar-se que aquests termes han estat inclosos en l'exportació; per a això haurà d'haver-los seleccionat en la llista del glossari.";
+$ShowTutorDataTitle = "Informació del tutor de la sessió a peu de pàgina";
+$ShowTutorDataComment = "Mostrar l'informació del tutor de la sessió a peu de pàgina?";
+$ShowTeacherDataTitle = "Mostrar informació del professor a peu de pàgina";
+$ShowTeacherDataComment = "Mostrar l'informació a peu de página?";
+$HTMLText = "HTML";
+$PageLink = "Enllaç";
+$DisplayTermsConditions = "Mostrar Termes i condicions en la pàgina de registre, el visitant ha d'acceptar els T&C per a poder registrar-se.";
+$AllowTermsAndConditionsTitle = "Habilitar Termes i Condicions";
+$AllowTermsAndConditionsComment = "Aquesta opció mostrarà els Termes i Condicions en el formulari de registre per als nous usuaris";
+$Load = "Carregar";
+$AllVersions = "Totes les versions";
+$EditTermsAndConditions = "Modificar termes i condicions";
+$ExplainChanges = "Explicar canvis";
+$TermAndConditionNotSaved = "Termes i condicions no guardats";
+$TheSubLanguageHasBeenRemoved = "El sub-llenguatge ha estat eliminat";
+$AddTermsAndConditions = "Afegir termes i condicions";
+$TermAndConditionSaved = "Termes i condicions guardats";
+$ListSessionCategory = "Llista de categories de les sessions";
+$AddSessionCategory = "Afegir categoria";
+$SessionCategoryName = "Nom de la categoria";
+$EditSessionCategory = "Editar categoria de sessió";
+$SessionCategoryAdded = "La categoria ha estat afegida";
+$SessionCategoryUpdate = "Categoria actualitzada";
+$SessionCategoryDelete = "Les categories seleccionades han estat esborrades";
+$SessionCategoryNameIsRequired = "Ha de donar un nom per a la categoria";
+$ThereIsNotStillASession = "Encara no hi ha una sessió";
+$SelectASession = "Seleccione una sessió";
+$OriginCoursesFromSession = "Cursos  de la sessió d'origen";
+$DestinationCoursesFromSession = "Cursos de la sessió de destinació";
+$CopyCourseFromSessionToSessionExplanation = "Si vols copiar un curs d'una sessió a altre curs d'altra sessió has de seleccionar primer un curs de la llesta cursos d'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs";
+$TypeOfCopy = "Tipus de còpia";
+$CopyFromCourseInSessionToAnotherSession = "Copiar cursos d'una a altra sessió";
+$YouMustSelectACourseFromOriginalSession = "Has de seleccionar un curs de la sessió original";
+$MaybeYouWantToDeleteThisUserFromSession = "Tal vegada desitja eliminar a l'usuari de la sessió en lloc d'eliminar-lo de tots els cursos.";
+$EditSessionCoursesByUser = "Editar cursos per usuari";
+$CoursesUpdated = "Cursos actualitzats";
+$CurrentCourses = "Cursos de l'usuari";
+$CoursesToAvoid = "Cursos no accessibles";
+$EditSessionCourses = "Editar cursos";
+$SessionVisibility = "Visibilitat desprès de la data final";
+$BlockCoursesForThisUser = "Bloquejar cursos a aquest usuari";
+$LanguageFile = "Arxiu de traducció";
+$ShowCoursesDescriptionsInCatalogTitle = "Mostrar les descripcions dels cursos en el catàleg";
+$ShowCoursesDescriptionsInCatalogComment = "Mostrar les descripcions dels cursos com finestres emergents al fer clic en una icona d'informació del curs en el catàleg de cursos";
+$StylesheetNotHasBeenAdded = "La fulla d'estils no ha estat afegida,probablement el seu arxiu zip contingui fitxers no permesos,el zip ha de contenir fitxers amb les següents extensions('png', 'jpg', 'gif', 'css')";
+$AddSessionsInCategories = "Afegir múltiples sessions a una categoria";
+$ItIsRecommendedInstallImagickExtension = "Es recomana instal·lar la extensió imagick de php per a obtenir millor qualitat en la resolució de les imatges al generar els thumbnail en cas contrari no es mostrarà molt bé";
+$EditSpecificSearchField = "Editar camp específic";
+$FieldName = "Camp";
+$SpecialExports = "Exportacions especials";
+$SpecialCreateFullBackup = "Crear exportació especial completa";
+$SpecialLetMeSelectItems = "Seleccionar els components";
+$AllowCoachsToEditInsideTrainingSessions = "Permetre als tutors editar dintre dels cursos de les sessions";
+$AllowCoachsToEditInsideTrainingSessionsComment = "Permetre als tutors editar comentaris dins dels cursos de les sessions";
+$ShowSessionDataTitle = "Mostrar dades del període de la sessió";
+$ShowSessionDataComment = "Mostrar comentaris de dades de la sessió";
+$SubscribeSessionsToCategory = "Inscriure sessions a una categoria";
+$SessionListInPlatform = "Llista de sessions de la plataforma";
+$SessionListInCategory = "Llista de sessions en la categoria";
+$ToExportSpecialSelect = "Si vol exportar cursos que contingui sessions, hauria d'assegurar-se que aquests siguin inclosos en l'exportació; per a això hauria d'haver-los seleccionat en la llista.";
+$ErrorMsgSpecialExport = "No es van trobar cursos registrat o és possible que no s'hagi realitzat l'associació amb les sessions";
+$ConfigureInscription = "Configuració de la pàgina de registre";
+$MsgErrorSessionCategory = "Ha de seleccionar una categoria i les sessiones";
+$NumberOfSession = "Nombre de sessions";
+$DeleteSelectedSessionCategory = "Eliminar solament les categories seleccionades sense sessions";
+$DeleteSelectedFullSessionCategory = "Eliminar les categorias seleccionades amb les sessions";
+$EditTopRegister = "Editar avis";
+$InsertTabs = "Insertar Tabs";
+$EditTabs = "Editar Tabs";
 $AnnEmpty = "La llista d'anuncis ha estat netejada";
 $AnnouncementModified = "L'anunci ha estat modificat";
 $AnnouncementAdded = "L'anunci ha estat afegit";
@@ -1103,6 +2148,203 @@ $NoCategoriesDefined = "Cap categoria definida";
 $GroupsFromClasses = "Grups de classes";
 $GroupsFromClassesInfo = "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs.";
 $BackToGroupList = "Tornar a la llista de grups";
+$NewForumCreated = "El nou fòrum ha estat creat";
+$NewThreadCreated = "El nou fil del fòrum ha estat creat";
+$AddHotpotatoes = "Afegir \"hotpotatoes\"";
+$HideAttemptView = "Ocultar la vista d'intent(s)";
+$ExtendAttemptView = "Veure la vista d'intents";
+$LearnPathAddedTitle = "Benvingut a l'eina de creació de cursos de Chamilo";
+$BuildComment = "Afegisca objectes d'aprenentatge i activitats al seu curs";
+$BasicOverviewComment = "Afegisca comentaris d'àudio i ordeni els objectes d'aprenentatge en la taula de contingut";
+$DisplayComment = "Vegi el curs tal com el veuria l'alumne";
+$NewChapterComment = "Capítol 1, Capítol 2 o Setmana 1, Setmana 2..";
+$NewStepComment = "Construeixi la seva lliçó pas a pas amb documents, exercicis i activitats, ajudant-se de plantilles, mascotes i galeries multimèdia.";
+$LearnpathTitle = "títol";
+$LearnpathPrerequisites = "Requisits previs";
+$LearnpathMoveUp = "Pujar";
+$LearnpathMoveDown = "Baixar";
+$ThisItem = "aquest element";
+$LearnpathTitleAndDesc = "Títol i descripció";
+$LearnpathChangeOrder = "Canviar l'ordre";
+$LearnpathAddPrereqi = "Afegir requisits previs";
+$LearnpathAddTitleAndDesc = "Editar títol i descripció";
+$LearnpathMystatus = "El meu estat";
+$LearnpathCompstatus = "completat";
+$LearnpathIncomplete = "sense completar";
+$LearnpathPassed = "superat";
+$LearnpathFailed = "no superat";
+$LearnpathPrevious = "Anterior";
+$LearnpathNext = "Següent";
+$LearnpathRestart = "Reiniciar";
+$LearnpathThisStatus = "Aquest pas està";
+$LearnpathToEnter = "Entrar";
+$LearnpathFirstNeedTo = "abans cal acabar";
+$LearnpathLessonTitle = "Títol";
+$LearnpathStatus = "Estat";
+$LearnpathScore = "Puntuació";
+$LearnpathTime = "Temps";
+$LearnpathVersion = "versió";
+$LearnpathRestarted = "No s'han completat tots els passos";
+$LearnpathNoNext = "Aquest és el darrer pas.";
+$LearnpathNoPrev = "Aquest és el primer pas.";
+$LearnpathAddLearnpath = "Crear un itinerari formatiu";
+$LearnpathEditLearnpath = "Editar l'itinerari formatiu";
+$LearnpathDeleteLearnpath = "Eliminar l'itinerari formatiu";
+$LearnpathDoNotPublish = "No publicar";
+$LearnpathPublish = "Publicar";
+$LearnpathNotPublished = "no publicat";
+$LearnpathPublished = "publicat";
+$LearnpathEditModule = "Editar el títol i la descripció de l'apartat.";
+$LearnpathDeleteModule = "Eliminar un apartat";
+$LearnpathNoChapters = "No hi ha apartats afegits.";
+$LearnpathAddItem = "afegir recursos a aquest apartat";
+$LearnpathItemDeleted = "El recurs ha estat eliminat.";
+$LearnpathItemEdited = "El recurs de l'itinerari formatiu ha estat modificat";
+$LearnpathPrereqNotCompleted = "els requisits previs no han estat completats";
+$NewChapter = "Nou apartat";
+$NewStep = "Nou recurs";
+$EditPrerequisites = "Editar els requisits previs de l'element actual";
+$TitleManipulateChapter = "Modificar l'apartat actual";
+$TitleManipulateModule = "Modificar l'apartat actual";
+$TitleManipulateDocument = "Modificar el document actual";
+$TitleManipulateLink = "Modificar l'enllaç actual";
+$TitleManipulateQuiz = "Modificar l'exercici actual";
+$TitleManipulateStudentPublication = "Modificar l'actual treball";
+$EnterDataNewChapter = "Introduïu les dades del nou apartat";
+$EnterDataNewModule = "Introduïu les dades del nou apartat";
+$CreateNewStep = "Creeu un nou recurs";
+$NewDocument = "Nou document";
+$UseAnExistingResource = "O utilitzeu un recurs existent:";
+$Position = "Posició";
+$NewChapterCreated = "El nou apartat ha estat creat. Ara podeu afegir-hi un recurs o bé crear un altre apartat.";
+$NewLinksCreated = "El nou enllaç ha estat creat";
+$NewStudentPublicationCreated = "La nova publicació d'estudiant ha estat creada";
+$NewModuleCreated = "El nou apartat ha estat creat. Ara podeu afegir-hi un recurs o bé crear un altre apartat.";
+$NewExerciseCreated = "El nou exercici ha estat creat.";
+$ItemRemoved = "L'element ha estat eliminat";
+$Converting = "Convertint...";
+$Ppt2lpError = "S'ha produït un error durant la conversió del PowerPoint. Si us plau, assegureu-vos que el nom del vostre PowerPoint no contingui caràcters especials.";
+$Build = "Construir";
+$ViewModeEmbedded = "Vista: encastat";
+$ViewModeFullScreen = "Vista: pantalla completa";
+$ShowDebug = "Mostrar depuració";
+$HideDebug = "Ocultar depuració";
+$CantEditDocument = "Aquest document no es pot modificar";
+$After = "Després de";
+$LearnpathPrerequisitesLimit = "Requisits previs (límit)";
+$HotPotatoesFinished = "Aquest exercici HotPotatoes s'ha acabat.";
+$CompletionLimit = "Límit de temps (puntuació mínima)";
+$PrereqToEnter = "Per entrar";
+$PrereqFirstNeedTo = "primer cal acabar";
+$PrereqModuleMinimum1 = "Falta completar algun pas";
+$PrereqModuleMinimum2 = "que està considerat requisit previ";
+$PrereqTestLimit1 = "cal assolir un mínim";
+$PrereqTestLimit2 = "punts en";
+$PrereqTestLimitNow = "Ara teniu:";
+$LearnpathExitFullScreen = "tornar a la pantalla normal";
+$LearnpathFullScreen = "pantalla completa";
+$ItemMissing1 = "Hi havia una";
+$ItemMissing2 = "pàgina (recurs) aquí en l'itinerari formatiu original de Chamilo.";
+$NoItemSelected = "Per mostrar alguna cosa aquí, seleccioneu un element del menú lateral";
+$NewDocumentCreated = "El nou document ha estat creat.";
+$EditCurrentChapter = "Editar l'apartat actual";
+$ditCurrentModule = "Editar l'apartat actual";
+$CreateTheDocument = "Crear el document";
+$MoveTheCurrentDocument = "Moure el document actual";
+$EditTheCurrentDocument = "Editar el document actual";
+$Warning = "¡ Compte !";
+$WarningEditingDocument = "Quan editeu un document existent a l'itinerari formatiu, la nova versió no sobreescriurà l'antiga, sinó que serà guardada com un document nou. Si voleu editar un document definitivament podeu fer-ho amb l'eina Documents.";
+$CreateTheExercise = "Crear l'exercici";
+$MoveTheCurrentExercise = "Moure l'exercici actual";
+$EditCurrentExecice = "Editar l'exercici actual";
+$UploadScorm = "Importar SCORM i AICC";
+$PowerPointConvert = "Convertir PowerPoint";
+$LPCreatedToContinue = "Per continuar, podeu afegir un apartat o un recurs al vostre itinerari formatiu a partir del menú de l'esquerra.";
+$LPCreatedAddChapterStep = "Des del menú de l'esquerra podeu afegir un apartat o un recurs al vostre itinerari formatiu.";
+$PrerequisitesAdded = "El requisits previs per aquest recurs han estat afegits satisfactòriament.";
+$AddEditPrerequisites = "Afegir/Editar requisits previs";
+$NoDocuments = "No hi ha documents";
+$NoExercisesAvailable = "No hi ha exercicis disponibles";
+$NoLinksAvailable = "No hi ha enllaços disponibles";
+$NoItemsInLp = "En aquest moment no hi ha elements a l'itinerari formatiu. Cliqueu a \"Construir\" per crear els elements del vostre itinerari formatiu.";
+$FirstPosition = "Primera posició";
+$NewQuiz = "Nou exercici";
+$CreateTheForum = "Crear el fòrum";
+$AddLpIntro = "<strong>Benvingut</strong> a l'eina d'autor de Chamilo: Itineraris formatius.Podreu crear el vostre itinerari formatiu pas a pas. L'estructura del vostre itinerari formatiu apareixerà al menú de l'esquerra.";
+$AddLpToStart = "Per començar, poseu un títol al vostre itinerari formatiu";
+$CreateTheLink = "Importar un enllaç";
+$MoveCurrentLink = "Moure l'enllaç actual";
+$EditCurrentLink = "Editar l'enllaç actual";
+$MoveCurrentStudentPublication = "Moure el treball actual";
+$EditCurrentStudentPublication = "Editar el treball actual";
+$AllowMultipleAttempts = "Permetre múltiples intents";
+$PreventMultipleAttempts = "Impedir múltiples intents";
+$MakeScormRecordingExtra = "Crear paquets SCORM extra";
+$MakeScormRecordingNormal = "Crear paquets SCORM bàsics";
+$DocumentHasBeenDeleted = "No es pot mostrar el document perquè ha estat eliminat";
+$EditCurrentForum = "Editar aquest fòrum";
+$NoPrerequisites = "Sense requisits previs";
+$NewExercise = "Nou exercici";
+$CreateANewLink = "Crear un nou enllaç";
+$CreateANewForum = "Crear un nou fòrum";
+$WoogieConversionPowerPoint = "Woogie: Conversió de Word";
+$WelcomeWoogieSubtitle = "Un conversor de documents Word a itineraris formatius";
+$WelcomeWoogieConverter = "Benvingut al conversor Woogie<ul type=\"1\"><li>Escolliu un fitxer .doc, .sxw, .odt<li>Envieu-lo a Woogie i el convertirà en un itinerari formatiu SCORM <li>Podreu afegir comentaris d'audio a cada pàgina i inserir exercicis i d'altres activitats entre les pàgines.";
+$WoogieError = "Hi ha hagut un error durant la conversió del document Word. Si us plau, assegureu-vos que el nom del document no contingui caràcters especials.";
+$WordConvert = "Conversió Word";
+$InteractionID = "ID d'interacció";
+$TimeFinished = "Temps (finalitzat en...)";
+$CorrectAnswers = "Respostes correctes";
+$StudentResponse = "Respostes de l'alumne";
+$LatencyTimeSpent = "Temps esmerçat";
+$SplitStepsPerPage = "Un recurs per pàgina";
+$SplitStepsPerChapter = "Un recurs per apartat";
+$TakeSlideName = "Usar els noms de les diapositives pels elements de l'itinerari formatiu";
+$CannotConnectToOpenOffice = "La connexió amb el conversor de documents ha fallat. Poseu-vos en contacte amb l'administrador de la vostra plataforma per tal de solucionar el problema.";
+$OogieConversionFailed = "La conversió ha fet fallida.Alguns documents són massa complexos per al seu tractament automàtic mitjançant el conversor de documents.En successives versions s'anirà ampliant aquesta capacitat.";
+$OogieUnknownError = "La conversió ha fallat per alguna raó desconeguda.Contacteu amb el vostre administrador per a més informació.";
+$OogieBadExtension = "El fitxer no té una extensió correcta.";
+$WoogieBadExtension = "Si us plau, envieu només documents de text. L'extensió del fitxer ha de ser .doc, .docx, o bé .odt";
+$ShowAudioRecorder = "Mostrar la gravadora de so";
+$SearchFeatureSearchExplanation = "Per a buscar en la base de dades de lliçons usi la següent sintaxi::<br/>    <i>term tag:tagname -exclude +include \"exact phrase\"i><br/>Per exemple:<br/>    <i>cotxe tag:camió -ferrari +ford \"alt consum\".i><br/> Això mostrarà tots els resultats per a la paraula 'cotxe' etiquetats com 'camió', que no incloguin la paraula '*ferrari', però sí la paraula 'ford' i la frase exacta 'alt consum.";
+$ViewLearningPath = "Veure cursos";
+$SearchFeatureDocumentTagsIfIndexing = "Etiquetes per a afegir al document en cas d'indexació";
+$ReturnToLearningPaths = "Tornar als cursos";
+$UploadMp3audio = "Carregar audio";
+$UpdateAllAudioFragments = "Carregar tots els fragments d'audio";
+$LeaveEmptyToKeepCurrentFile = "Deixar vuit per a mantindre l'arxiu actual";
+$RemoveAudio = "Llevar àudio";
+$SaveAudio = "Guardar";
+$ViewScoreChangeHistory = "Veure puntuacion d'historial de canvi";
+$ImageWillResizeMsg = "La imatge estarà ajustada a una grandària predeterminada";
+$ImagePreview = "Vista prèvia de la imatge";
+$UplAlreadyExists = "Ja existeix!";
+$UplUnableToSaveFile = "El fitxer enviat no es pot guardar (problema de permisos?)";
+$MoveDocument = "Moure el document";
+$EditLPSettings = "Canviar paràmetres de curs";
+$SaveLPSettings = "Guardar paràmetres de curs";
+$ShowAllAttempts = "Mostrar tots els intents";
+$HideAllAttempts = "Ocultar tots els intents";
+$ShowAllAttemptsByExercise = "Mostrar tots els intents per exercici";
+$ShowAttempt = "Mostrar intent";
+$ShowAndQualifyAttempt = "Mostrar i qualificar intent";
+$ModifyPrerequisites = "Modificar prerequisit";
+$CreateLearningPath = "Crear curs";
+$AddExercise = "Agregar l'exercici al curs";
+$LPCreateDocument = "Crear un document";
+$ObjectiveID = "ID de l'objectiu";
+$ObjectiveStatus = "Estatus de l'objectiu";
+$ObjectiveRawScore = "Puntuació bàsica de l'objectiu";
+$ObjectiveMaxScore = "Puntuació màxima";
+$ObjectiveMinScore = "Puntuació mínima";
+$LPName = "Títol del curs";
+$AuthoringOptions = "Autorització d'opcions";
+$SaveSection = "Guardar secció";
+$AddLinkToCourse = "Afegir enllàç al curs";
+$AddAssignmentToCourse = "Afegir la tasca al curs";
+$AddForumToCourse = "Afegir foro al curs";
+$SaveAudioAndOrganization = "Guardar àudio i organització";
+$UploadOnlyMp3Files = "Per favor, enviï només arxius mp3.";
 $TypeMessage = "Escriviu el vostre missatge !";
 $ConfirmReset = "Esteu segur de voler esborrar tots els missatges ?";
 $ClearList = "Esborrar la llista";
@@ -1110,6 +2352,312 @@ $CallSent = "S'ha enviat una demanda de \"xat\". En espera de l'aprovació de la
 $ChatDenied = "La vostra petició ha estat refusada per la persona contactada.";
 $Send = "Enviar";
 $Connected = "Connectat";
+$Exercice = "Exercici";
+$NoEx = "No hi ha exercicis pel moment";
+$NewEx = "Exercici nou";
+$Questions = "Preguntes";
+$Answers = "Respostes";
+$True = "Veritat";
+$Answer = "Resposta";
+$YourResults = "Els teus resultats";
+$StudentResults = "Puntuació dels estudiants";
+$ExerciseType = "Tipus d'exercici";
+$ExerciseName = "Nom del test";
+$ExerciseDescription = "Descripció del test";
+$SimpleExercise = "Una única pàgina";
+$SequentialExercise = "Una pregunta per pàgina (seqüencial)";
+$RandomQuestions = "Preguntes a l'atzar";
+$GiveExerciseName = "Si us plau doneu un nom a l'exercici";
+$Sound = "Arxiu de vídeo o àudio";
+$DeleteSound = "Eliminar el fitxer d'àudio o vídeo";
+$NoAnswer = "Actualment no hi ha respostes";
+$GoBackToQuestionPool = "Tornar al banc de preguntes";
+$GoBackToQuestionList = "Tornar a la llista de preguntes";
+$QuestionAnswers = "Contesta la pregunta";
+$UsedInSeveralExercises = " Advertiment! Aquesta pregunta i les seves respostes s'utilitzen en unes quantes proves. Li agradaria modificar-les?";
+$ModifyInAllExercises = "a tots els exercicis";
+$ModifyInThisExercise = "només en aquest exercici";
+$AnswerType = "Tipus de resposta";
+$MultipleSelect = "Elecció múltiple (respostes múltiples)";
+$FillBlanks = "Completar els espais";
+$Matching = "Relacionar";
+$ReplacePicture = "Substituir la imatge";
+$DeletePicture = "Esborrar la imatge";
+$QuestionDescription = "Comentari opcional";
+$GiveQuestion = "Si us plau, escriu la pregunta";
+$WeightingForEachBlank = "Si us plau, otorgui una puntuació a cada espai en blanc";
+$UseTagForBlank = "utilitzeu claudàtors [...] per definir un o més espais en blanc";
+$QuestionWeighting = "Puntuació";
+$MoreAnswers = "+resp";
+$LessAnswers = "-resp";
+$MoreElements = "+elem";
+$LessElements = "-elem";
+$TypeTextBelow = "Si us plau escriu el text a continuació";
+$DefaultTextInBlanks = "[Els britànics] viuen al [Regne Unit].";
+$DefaultMatchingOptA = "ric";
+$DefaultMatchingOptB = "atractiu";
+$DefaultMakeCorrespond1 = "El teu pare és";
+$DefaultMakeCorrespond2 = "La teva mare és";
+$DefineOptions = "Si us plau defineix les opcions";
+$MakeCorrespond = "Relacionar";
+$FillLists = " Si us plau ompliu les dues llistes següents";
+$GiveText = "si us plau escriu el text";
+$DefineBlanks = " Si us plau defineixi com a mínim un buit|espai amb claudàtors [...]";
+$GiveAnswers = "Si us plau escrigui les respostes de les preguntes";
+$ChooseGoodAnswer = "si us plau marqueu la resposta correcta";
+$ChooseGoodAnswers = "Si us plau marqueu una o més respostes correctes";
+$QuestionList = "Llistat de preguntes del test";
+$GetExistingQuestion = "Obtenir una pregunta de la base";
+$FinishTest = "Test finalitzat";
+$QuestionPool = "Banc de preguntes";
+$OrphanQuestions = "Preguntes orfes";
+$NoQuestion = "No hi ha pregunta de moment";
+$AllExercises = "Tots els exercicis";
+$GoBackToEx = "Tornar a l'exercici";
+$Reuse = "Reutilitzar";
+$ExerciseManagement = "Admnistració d'exercicis";
+$QuestionManagement = "Gestió de preguntes/respostes";
+$QuestionNotFound = "No s'ha trobat la pregunta";
+$ExerciseNotFound = "No s'ha trobat l'exercici";
+$AlreadyAnswered = "Ja ha respost la pregunta";
+$ElementList = "Llista d'elements";
+$CorrespondsTo = "Es correspon amb";
+$ExpectedChoice = "Elecció esperada";
+$YourTotalScore = "La teva puntuació total és";
+$ReachedMaxAttemptsAdmin = "Ha arribat al nombre màxim d'intents permesos en aquest exercici. No obstant això, com vostè és un professor d'aquest curs, pot seguir contestant-lo. Recordi que els seus resultats no apareixeran en la pàgina de resultats.";
+$ExerciseAdded = "Exercici afegit";
+$EvalSet = "Detalls de la puntuació";
+$Active = "Actiu";
+$Inactive = "Inactiu";
+$QuestCreate = "Creació de preguntes";
+$ExRecord = "El teu exercici s'ha guardat";
+$BackModif = "Retorna a l'edició d'aquest exercici";
+$DoEx = "Fes l'exercici";
+$DefScor = "Defineix els detalls de la puntuació";
+$CreateModif = "Creació/modificació de preguntes";
+$Sub = "Subtítol";
+$MyAnswer = "La meva resposta";
+$MorA = "+resp.";
+$LesA = "-resp.";
+$RecEx = "Guarda exercici";
+$RecQu = "Guarda pregunta";
+$RecAns = "Guarda respostes";
+$Introduction = "Introducció";
+$TitleAssistant = "Assitent de creació d'exercicis";
+$QuesList = "Llista de preguntes";
+$SaveEx = "Guarda exercici";
+$QImage = "Pregunta amb una imatge";
+$AddQ = "Afegeix pregunta";
+$DoAnEx = "Fes un exercici";
+$Generator = "Llista d'exercicis";
+$Correct = "Veritat";
+$PossAnsw = "Nombre de possibles respostes per una pregunta";
+$StudAnsw = "Nombre d'errors comesos per l'estudiant";
+$Determine = "Determina tu mateix el pes de la puntuació a través d'editar la taula de sota. Punxa llavors a sobre de D'acord";
+$NonNumber = "Un valor no numèric en";
+$Replaced = "ha estat introduït. Ha estat substituit per 0";
+$Superior = "Un valor més gran de 20 en";
+$Rep20 = "ha estat introduit. Ha estat substituit per 20";
+$DefComment = "* Si punxes sobre \"Valors per defecte\", els teus valors antics seran esborrats permanentment.";
+$ScoreGet = "Números en negre = Puntuació";
+$ShowScor = "Mostra puntuació als estudiants:";
+$Step1 = "Pas 1";
+$Step2 = "Pas 2";
+$ImportHotPotatoesQuiz = "Importar preguntes HotPotatoes";
+$HotPotatoesTests = "Importar exercicis HotPotatoes";
+$DownloadImg = "Enviar una imatge al servidor";
+$NoImg = "Exercici sense imatges";
+$ImgNote_st = "Heu de tornar-ho a enviar";
+$ImgNote_en = "imatge(s):";
+$NameNotEqual = "no és un fitxer vàlid";
+$Indice = "Índex";
+$Indices = "Índex";
+$DateExo = "Data";
+$ShowQuestion = "Mostrar pregunta";
+$UnknownExercise = "Exercici desconegut";
+$ReuseQuestion = "Reutilitzar la pregunta";
+$CreateExercise = "Crear un exercici";
+$CreateQuestion = "Crear una pregunta";
+$CreateAnswers = "Crear una resposta";
+$ModifyExercise = "Modificar l'exercici";
+$ModifyAnswers = "modificar respostes";
+$ForExercise = "per l'exercici";
+$UseExistantQuestion = "Utilitzar una pregunta existent";
+$FreeAnswer = "Resposta oberta";
+$notCorrectedYet = "Aquest resposta encara no s'ha corregit. De moment, la puntuació per aquesta pregunta queda a zero. Això afecta a la puntuació total.";
+$adminHP = "Administració de Hot Potatoes";
+$NewQu = "Pregunta nova";
+$NoImage = "Trieu una imatge";
+$AnswerHotspot = "Descripció i puntuació són obligatoris per cada zona interactiva - el comentari és opcional";
+$MinHotspot = "Heu de crear almenys una zona interactiva";
+$MaxHotspot = "El màxim de zones interactives que podeu crear és de dotze.";
+$HotspotError = "Ompliu la descripció i la puntuació per cada zona interactiva.";
+$MoreHotspots = "+ zona interactiva";
+$LessHotspots = "- zona interactiva";
+$HotspotZones = "Zones interactives";
+$CorrectAnswer = "Resposta correcta";
+$HotspotHit = "La seva resposta ha estat";
+$OnlyJPG = "Per a les zones interactives només podeu utilitzar imatges en format .jpg o .jpeg";
+$FinishThisTest = "Mostrar les respostes correctes per cada pregunta i les puntuacions per la prova";
+$AllQuestions = "Totes les preguntes";
+$ModifyTitleDescription = "Editar títol i comentari";
+$ModifyHotspots = "Editar respostes/zones interactives";
+$HotspotNotDrawn = "Encara no ha dibuixat totes les zones interactives";
+$HotspotWeightingError = "Heu d'atribuir una puntuació (més gran que zero) per cada zona interactiva";
+$HotspotValidateError1 = "Heu de respondre completament a la pregunta (";
+$HotspotValidateError2 = "clic(s) requerit sobre la imatge) abans de veure els resultats";
+$HotspotRequired = "Descripció i puntuació obligatoris per cada zona interactiva. Comentari opcional.";
+$HotspotChoose = "<div style=\"padding:2px 3px;\">• Per crear una zona interactiva: seleccioneu la forma al costat del color, després dibuixeu la zona interactiva.</div><div style=\"padding:2px 3px;\">• Per desplaçar una zona interactiva: seleccioneu el color, cliqueu sobre un altre indret en la imatge i dibuixeu la zona interactiva.</div><div style=\"padding:2px 3px;\">• Per afegir una zona interactiva: cliqueu el botó [+ zona interactiva].</div><div style=\"padding:2px 3px;\">• Per tancar un polígon: clic al botó dret i seleccioneu \"Tancar el polígon\".</div>";
+$Fault = "Incorrecte";
+$HotSpot = "Zones d'imatge";
+$ClickNumber = "Nombre de clics";
+$HotspotGiveAnswers = "Doni un resposta, si us plau";
+$Addlimits = "Afegiu límits";
+$AreYouSure = "N'esteu segur";
+$StudentScore = "Puntuació dels alumnes.";
+$backtoTesthome = "Retorn a la pàgina d'inici d'aquesta prova";
+$MarkIsUpdated = "La puntuació s'ha actualitzat";
+$MarkInserted = "Puntuació inserida";
+$PleaseGiveAMark = "Assigneu una puntuació";
+$EditCommentsAndMarks = "Corregir i puntuar";
+$AddComments = "Afegiu comentaris";
+$Number = "Nº";
+$Weighting = "Puntuació";
+$ChooseQuestionType = "Per crear una nova pregunta, trieu el tipus del damunt";
+$MatchesTo = "Correspon a";
+$CorrectTest = "Corregir la prova";
+$ViewTest = "Veure la prova";
+$NotAttempted = "No intentat";
+$AddElem = "+ element";
+$DelElem = "- element";
+$PlusAnswer = "+ respostes";
+$LessAnswer = "- respostes";
+$YourScore = "La vostra puntuació";
+$Attempted = "Intentat";
+$AssignMarks = "Assignar una puntuació";
+$ExerciseStored = "La prova s'ha afegit correctament";
+$ChooseAtLeastOneCheckbox = "Trieu, almenys, una resposta bona";
+$ExerciseEdited = "La prova s'ha editat be";
+$ExerciseDeleted = "La prova ha estat esborrada";
+$ClickToCommentAndGiveFeedback = "Cliqueu sobre el vincle següent per corregir la resposta i comentar-la";
+$OpenQuestionsAttempted = "Un alumne ha contestat a una pregunta oberta";
+$AttemptDetails = "Detalls de l'assaig";
+$TestAttempted = "Nom de la prova";
+$StudentName = "Nom de l'alumne";
+$StudentEmail = "Correu-e de l'alumne";
+$OpenQuestionsAttemptedAre = "La pregunta oberta intentada és";
+$UploadJpgPicture = "Enviar una imatge en format JPG";
+$HotspotDescription = "Descripció de la zona interactiva";
+$ExamSheetVCC = "Exercici vist-corregit-comentat pel professor";
+$AttemptVCC = "Els següents intents han estat vistos-corregits-comentats pel professor";
+$ClickLinkToViewComment = "Cliqueu l'enllaç inferior per accedir al vostre compte i veure corregit el vostre full d'exercicis";
+$Regards = "Cordialment";
+$AttemptVCCLong = "El vostre intent en l'exercici %s ha estat vist-corregit-comentat pel professor. Cliqueu l'enllaç inferior per accedir al vostre compte i veure el vostre full d'exercicis.";
+$DearStudentEmailIntroduction = "Benvolgut alumne,";
+$ResultsEnabled = "Mode d'autoavaluació activat. Ara, al final de l'exercici, els alumnes podran veure les respostes correctes.";
+$ResultsDisabled = "Mode examen activat. Ara, al final de l'exercici, els alumnes no podran veure les respostes correctes.";
+$ExportWithUserFields = "Incloure els camps d'usuari a l'exportació";
+$ExportWithoutUserFields = "Excloure els camps d'usuari de l'exportació";
+$DisableResults = "No mostrar els resultats als alumnes";
+$EnableResults = "Mostrar els resultats als alumnes";
+$ValidateAnswer = "Acceptar";
+$FillInBlankSwitchable = "Una resposta pot ser correcta per a qualsevol de les opcions en blanc.";
+$ReachedMaxAttempts = "No pot repetir l'exercici %s degut al fet que ja ha realitzat el màxim de %s intents permesos";
+$RandomQuestionsToDisplay = "Nombre de preguntes aleatòries a mostrar";
+$RandomQuestionsHelp = "Nombre de preguntes que seran seleccionades a l'atzar. Triï el nombre de preguntes que desitja remenar.";
+$ExerciseAttempts = "Nombre màxim d'intents";
+$DoNotRandomize = "Sense desordenar";
+$Infinite = "Il·limitat";
+$BackToExercisesList = "Tornar a Exercicis";
+$NoStartDate = "No comença data";
+$ExeStartTime = "Data d'inici";
+$ExeEndTime = "Data de finalització";
+$DeleteAttempt = "Eliminar aquest intent ?";
+$WithoutComment = "Sense comentaris";
+$QuantityQuestions = "Nombre de preguntes";
+$FilterExercices = "Filtrar exercicis";
+$FilterByNotRevised = "Filtrar per No revisat";
+$FilterByRevised = "Filtrar per Revisat";
+$ReachedTimeLimit = "Ha arribat al temps límit";
+$TryAgain = "Intenta altra vegada";
+$SeeTheory = "Revisar la teoria";
+$EndActivity = "Fi de l'activitat";
+$NoFeedback = "Examen (sense retroalimentació)";
+$DirectFeedback = "Autoevaluació";
+$FeedbackType = "Avaluació";
+$Scenario = "Escenari";
+$VisitUrl = "Visitar aquesta adreça";
+$ExitTest = "Sortir de l'examen";
+$DurationFormat = "%1 segons";
+$Difficulty = "Dificultat";
+$NewScore = "Nova puntuació";
+$NewComment = "Nou comentari";
+$ExerciseNoStartedYet = "L'exercici encara no s'ha iniciat";
+$ExerciseNoStartedAdmin = "El professor no ha iniciat l'exercici";
+$SelectTargetLP = "Seleccionar curs de destinació";
+$SelectTargetQuestion = "Seleccionar pregunta de destinació";
+$DirectFeedbackCantModifyTypeQuestion = "El tipus d'avaluació no pot ser modificat ja que va ser seleccionat per a Autoavaluació";
+$CantShowResults = "No disponible";
+$CantViewResults = "No es pot veure els resultats";
+$ShowCorrectedOnly = "Mostrar exercicis corregits";
+$ShowUnCorrectedOnly = "Mostrar exercicis sense corregir";
+$HideResultsToStudents = "Ocultar els resultats als estudiants";
+$ShowResultsToStudents = "Mostrar els resultats als estudiants";
+$ProcedToQuestions = "Preparar preguntes";
+$AddQuestionToExercise = "Afegir qüestió";
+$PresentationQuestions = "Presentació de les qüestions";
+$UniqueAnswer = "Resposta única";
+$MultipleAnswer = "Resposta múltiple";
+$ReachedOneAttempt = "No pot realitzar l'exercici altra vegada perquè ha superat el nombre d'intents permesos per a la seva execució.";
+$QuestionsPerPage = "Preguntes per pàgina";
+$QuestionsPerPageOne = "Una";
+$QuestionsPerPageAll = "Totes";
+$EditIndividualComment = "Editar comentari individual";
+$ThankYouForPassingTheTest = "Gràcies per passar l'examen";
+$ExerciseAtTheEndOfTheTest = "AL final de l'exercici (retroalimentació)";
+$EnrichQuestion = "Perfeccionar pregunta";
+$DefaultUniqueQuestion = "Quin dels següents aliments és un producte lacti?";
+$DefaultUniqueAnswer1 = "llet";
+$DefaultUniqueComment1 = "La llet és la base de nombrosos productes lactis, com la mantega, el formatge, l'iogurt, entre uns altres";
+$DefaultUniqueAnswer2 = "Civada";
+$DefaultUniqueComment2 = "La civada és un dels cereals més complets. Per les seves qualitats energètiques i nutritives ha estat la base de l'alimentació de pobles";
+$DefaultMultipleQuestion = "Quins països no pertanyen al continent europeu?";
+$DefaultMultipleAnswer1 = "Espanya";
+$DefaultMultipleComment1 = "És un país sobirà membre de la Unió Europea, constituït en Estat social i democràtic de Dret, i la forma del qual de govern és la monarquia parlamentària";
+$DefaultMultipleAnswer2 = "Perú";
+$DefaultMultipleComment2 = "És un país situat en el costat occidental de Sudamérica. Està limitat pel nord amb Equador i Colòmbia, per l'aquest amb Brasil, pel sud-est amb Bolívia, pel sud amb Xile, i per l'oest amb l'Oceà Pacífic";
+$DefaultFillBlankQuestion = "Calcular l'index de masa corporal";
+$DefaultMathingQuestion = "Determinar la següent relació";
+$DefaultOpenQuestion = "Quan es celebra el dia del Treball?";
+$MoreHotspotsImage = "Agregar / editar hotspots en la imatge";
+$ReachedTimeLimitAdmin = "Ha arribat a el límit de temps per a realitzar aquest exercici";
+$LastScoreTest = "Última puntuació obtinguda";
+$BackToResultList = "Tornar a la llista de resultats";
+$EditingScoreCauseProblemsToExercisesInLP = "Si edita la puntuació d'aquesta pregunta modificarà el resultat de l'exercici, recordi que aquest exercici està agregat també a una Lliçó";
+$SelectExercice = "Seleccionar exercici";
+$YouHaveToSelectATest = "Has de seleccionar un exercici";
+$HotspotDelineation = "Delineació";
+$CreateQuestions = "Crear preguntes";
+$MoreOAR = "Afegir OAR";
+$LessOAR = "Eliminar OAR";
+$LearnerIsInformed = "Aquest missatge apareixerà si l'estudiant falla un pas";
+$MinOverlap = "Mínima superposició";
+$MaxExcess = "Màxim excés";
+$MaxMissing = "Mancança màxima";
+$IfNoError = "Si no existeix error";
+$LearnerHasNoMistake = "L'estudiant no va cometre errors";
+$YourDelineation = "La seva delineació";
+$ResultIs = "El seu resultat es:";
+$Overlap = "Zona de superposició";
+$Missing = "Zona mancant";
+$Excess = "Zona excessiva";
+$Min = "Mínim";
+$Requirements = "Requisits";
+$OARHit = "Un (o mes) OAR han estat seleccionats";
+$TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Massa iteracions a l'intentar calcular la resposta. Per favor intenti dibuixar la seua delineació altra vegada";
+$Thresholds = "Llindars";
+$Delineation = "Delineació";
+$QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipus de pregunta no pertany al tipus de retroalimentació en exercicis";
 $Title = "Títol";
 $By = "Publicat per";
 $UsersOnline = "Usuaris connectats";
@@ -1809,6 +3357,7 @@ $ConversionFailled = "Conversió fallida";
 $AlreadyExists = "Ja existeix";
 $TheNewWordHasBeenAdded = "La nova paraula ha estat afegida al subconjunt de l'idioma principal";
 $CommentErrorExportDocument = "Alguns documents contenen etiquetes internes no vàlides o són massa complexos per al seu tractament automàtic mitjançant el convertidor de documents";
+$YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "L'avaluació necessita tenir un certificat per poder relacionar-lo a una competència";
 $DataType = "Tipus de dada";
 $Value = "Valor";
 $System = "Sistema";
@@ -1825,6 +3374,170 @@ $Until = "Fins";
 $FirstPage = "Primera pàgina";
 $LastPage = "Última pàgina";
 $Coachs = "Tutors";
+$ModifyEvaluation = "Modificar avaluació";
+$CreateLink = "Afegir aquesta activitat a l'avaluació";
+$AddResultNoStudents = "No hi ha estudiants per afegir resultats";
+$ScoreEdit = "Editar les regles de puntuació";
+$ScoreColor = "Color de la puntuació";
+$ScoringSystem = "Sistema de puntuació";
+$EnableScoreColor = "Activar l'acolorit de les puntuacions";
+$Below = "Per sota de";
+$WillColorRed = "s'acolorirà en vermell";
+$EnableScoringSystem = "Activar el sistema de puntuació";
+$IncludeUpperLimit = "Incloure el límit superior";
+$ScoreInfo = "Informació sobre la puntuació";
+$Between = "Entre";
+$CurrentCategory = "Categoria actual";
+$RootCat = "Categoria principal";
+$NewCategory = "Nova categoria";
+$NewEvaluation = "Nova avaluació";
+$Weight = "Pes";
+$PickACourse = "Seleccionar un curs";
+$CourseIndependent = "Curs independent";
+$CourseIndependentEvaluation = "Curs d'avaluació independent";
+$EvaluationName = "Nom de l'avaluació";
+$DateEval = "Data d'avaluació";
+$AddUserToEval = "Afegir alumnes a l'avaluació";
+$NewSubCategory = "Crear un enllaç";
+$MakeLink = "Crear un enllaç";
+$DeleteSelected = "Eliminar selecció";
+$SetVisible = "Fer visible";
+$SetInvisible = "Ocultar";
+$ChooseLink = "Escollir el tipus d'enllaç";
+$LMSDropbox = "Bústia de compartició de fitxers";
+$ChooseExercise = "Escollir un exercici";
+$AddResult = "Afegir resultats";
+$BackToOverview = "Tornar a la vista general";
+$ExportPDF = "Exportar a PDF";
+$ChooseOrientation = "Escollir orientació";
+$Portrait = "Vertical";
+$Landscape = "Horitzontal";
+$FilterCategory = "Filtrar per categoria";
+$ScoringUpdated = "Puntuació actualitzada";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\n\n %s \n\nha realitzat el curs \n\n '%s' \n\namb la qualificació de\n\n '%s'";
+$CertificateMinScore = "Puntuació mínima de certificació";
+$InViMod = "Aquest apartat ja no és visible";
+$ViewResult = "Veure resultats";
+$NoResultsInEvaluation = "De moment no hi ha resultats a l'avaluació";
+$AddStudent = "Afegir usuaris";
+$ImportResult = "Importar resultats";
+$ImportFileLocation = "Ubicació del fitxer a importar";
+$FileType = "Tipus de fitxer";
+$ExampleCSVFile = "Fitxer CSV d'exemple";
+$ExampleXMLFile = "Fitxer XML d'exemple";
+$OverwriteScores = "Sobreescriure puntuacions";
+$IgnoreErrors = "Ignorar errors";
+$ItemsVisible = "Els elements s'han fet visibles";
+$ItemsInVisible = "Els elements s'han fet invisibles";
+$NoItemsSelected = "No hi ha cap element seleccionat";
+$DeletedCategories = "Categories eliminades";
+$DeletedEvaluations = "Avaluacions eliminades";
+$DeletedLinks = "Enllaços eliminats";
+$TotalItems = "Total d'elements";
+$EditEvaluation = "Editar avaluació";
+$DeleteResult = "Eliminar resultat";
+$Display = "Nivell";
+$ViewStatistics = "Veure estadístiques";
+$ResultAdded = "Resultat afegit";
+$EvaluationStatistics = "Estadístiques d'avaluació";
+$ExportResult = "Exportar resultats";
+$EditResult = "Editar resultats";
+$GradebookWelcomeMessage = "Benvingut a la utilitat Quadern de qualificacions. Aquesta eina us permet establir els objectius que cal assolir en un curs o conjunt de cursos, així com introduir puntuacions externes en el sistema.";
+$CreateAllCat = "Crear totes les categories del curs";
+$AddAllCat = "S'han afegit totes les categories";
+$StatsStudent = "Estadístiques de";
+$Results = "Resultats";
+$Certificates = "Certificats";
+$Certificate = "Certificat";
+$ChooseUser = "Seleccionar usuaris per aquesta avaluació";
+$ResultEdited = "Resultat actualitzat";
+$ChooseFormat = "Escollir format";
+$OutputFileType = "Tipus de fitxer de sortida";
+$OverMax = "El valor que heu intentat guardar és superior al límit màxim establert per aquesta avaluació.";
+$MoreInfo = "Més informació";
+$ResultsPerUser = "Resultats per usuari";
+$TotalUser = "Total per usuari";
+$AverageTotal = "Mitjana total";
+$Evaluation = "Avaluació";
+$EvaluationAverage = "Mitjana de l'avaluació";
+$EditAllWeights = "Editar tots els tamanys de fitxer";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "L'avaluació ha estat eliminada";
+$GradebookQualifyLog = "Historial d'avaluació";
+$GradebookNameLog = "Denominació de l'avaluació";
+$GradebookDescriptionLog = "Descripció de l'avaluació";
+$GradebookVisibilityLog = "Visibilitat de la avaluació";
+$ResourceType = "Tipus de recurs";
+$GradebookWhoChangedItLog = "Qui ho va modificar";
+$EvaluationEdited = "L'avaluació ha estat modificada";
+$CategoryEdited = "Qualificació actualitzada";
+$IncorrectData = "Dada incorrecta";
+$Resource = "Recurs";
+$PleaseEnableScoringSystem = "Per favor, activar sistema de puntuació";
+$AllResultDeleted = "Tots els resultats han estat eliminats";
+$ImportNoFile = "No ha importat cap arxiu";
+$ProblemUploadingFile = "Ha ocorregut un error manant el seu arxiu. No s'ha rebut gens";
+$AllResultsEdited = "Tots els resultats han estat modificats";
+$UserInfoDoesNotMatch = "No coincideix amb l'informació de l'usuari";
+$ScoreDoesNotMatch = "La puntuació no coincideix";
+$FileUploadComplete = "Es va carregat l'arxiu amb èxit";
+$NoResultsAvailable = "No hi ha resultats disponibles";
+$CannotChangeTheMaxNote = "No es pot canviar la nota màxima";
+$GradebookWeightUpdated = "Tamany(s) modificat(s) correctament";
+$ChooseItem = "Seleccioni un element";
+$AverageResultsVsResource = "Terme mitjà de resultats contra recursos";
+$ToViewGraphScoreRuleMustBeEnabled = "La vista de regla de puntuació gràfica ha d'estar habilitada";
+$GradebookPreviousWeight = "Tamany anterior del recurs";
+$AddAssessment = "Afegir avaluació";
+$FolderView = "Tornar a avaluacions";
+$GradebookSkillsRanking = "Classificació d'habilitats";
+$SaveScoringRules = "Guardar regles de puntuació";
+$AttachCertificate = "Adjuntar certificat";
+$GradebookSeeListOfStudentsCertificates = "Veure la llista de certificats d'estudiants";
+$CreateCertificate = "Crear certificat";
+$UploadCertificate = "Enviar un certificat";
+$CertificateName = "Nom del certificat";
+$CertificateOverview = "Vista de certificat";
+$CreateCertificateWithTags = "Crear certificat amb aquestes etiquetes";
+$ViewPresenceSheets = "Vista de fulles d'assistència";
+$ViewEvaluations = "Vista d'avaluacions";
+$NewPresenceSheet = "Nova fulla d'assistència";
+$NewPresenceStep1 = "Nova fulla d'assistència: Pas 1/2 : omplir les dades de la fulla d'assistència";
+$TitlePresenceSheet = "Títol de l'activitat";
+$PresenceSheetCreatedBy = "Fulla d'assistencia creada per";
+$SavePresence = "Guardar fulla d'assistència i continuar amb el pas 2.";
+$NewPresenceStep2 = "Nova fulla d'assistència: Pas 2/2 : verificar els estudiants que estiguin presents";
+$NoCertificateAvailable = "No hi ha certificat disponible";
+$SaveCertificate = "Guardar certificat";
+$CertificateNotRemoved = "El certificat no pot ser eliminat";
+$CertificateRemoved = "Certificat eliminat";
+$NoDefaultCertificate = "No hi ha certificat predeterminat";
+$DefaultCertificate = "Certificado predeterminado";
+$PreviewCertificate = "Vista prèvia de certificat";
+$IsDefaultCertificate = "Certificat predeterminat";
+$ImportPresences = "Importar assistència";
+$AddPresences = "Agregar assistències";
+$DeletePresences = "Eliminar assistència";
+$GradebookListOfStudentsCertificates = "Llista de certificats d'estudiants en avaluacions";
+$NewPresence = "Nova assistència";
+$EditPresence = "Editar assistència";
+$SavedEditPresence = "Guardar assistència modificada";
+$PresenceSheetFormatExplanation = "Vostè ha d'utilitzar la fulla d'assistència que es pot descarregar més amunt. Això fulla d'assistència conté una llista de tots els participants en aquesta capacitació. La primera columna de l'arxiuXLS és el codi oficial del candidat, seguit pel cognom i el nom de pila. Només ha de canviar la columna 4 i la nota 0 = absent, 1 = present";
+$ValidatePresenceSheet = "Validar fulla d'assistència";
+$PresenceSheet = "Fulles d'assistència";
+$PresenceSheets = "Fulles d'assistència";
+$Evaluations = "Avaluacions";
+$SaveEditPresence = "Guardar canvis en fulla d'assistència";
+$Training = "Curs";
+$Present = "Assistència";
+$Numero = "N";
+$PresentAbsent = "0 = absent, 1 = assistència";
+$ExampleXLSFile = "Exemple d'arxiu Excel (XLS)";
+$NoResultsInPresenceSheet = "No hi ha assistència registrada";
+$EditPresences = "Assistències modificades";
+$TotalWeightMustNotBeMoreThan = "Pes total no ha de ser major que";
+$ThereIsNotACertificateAvailableByDefault = "No hi ha un certificat disponible per defecte";
+$CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "La puntuació mínima per a certificat és requerida i no ha de ser major que";
 $CourseProgram = "Descripció del curs";
 $ThisCourseDescriptionIsEmpty = "Aquest curs actualment no es troba descrit";
 $QuestionPlan = "Pregunta al professor";
@@ -2009,7 +3722,391 @@ $Interaction = "Interacció";
 $Authoring = "Creació de continguts";
 $SessionIdentifier = "Identificador de la sesión";
 $SessionCategory = "Categoria de la sessió";
+$WikiSearchResults = "Resultats de la recerca en el Wiki";
+$StartPage = "Pàgina d'inici del Wiki";
+$EditThisPage = "Editar aquesta pàgina";
+$ShowPageHistory = "Historial de la pàgina";
+$RecentChanges = "Canvis recents";
+$AllPages = "Totes les pàgines";
+$AddNew = "Afegir una pàgina";
+$ChangesStored = "Canvis emmagatzemats";
+$NewWikiSaved = "La nova pàgina ha estat guardada";
+$DefaultContent = "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Dokeos\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text";
+$CourseWikiPages = "Pàgines wiki del curs";
+$GroupWikiPages = "Pàgines wiki del grup";
+$NoWikiPageTitle = "Els canvis no s'han guardat. Ha de donar un títol a aquesta pàgina";
+$WikiPageTitleExist = "Aquest títol de pàgina ja ha estat creat anteriorment, editi el contingut de la pàgina existent fent clic en:";
+$WikiDiffAddedLine = "Línia afegida";
+$WikiDiffDeletedLine = "Línia esborrada";
+$WikiDiffMovedLine = "Línia moguda";
+$WikiDiffUnchangedLine = "Línia sense canvis";
+$DifferencesNew = "Canvis en la versió";
+$DifferencesOld = "Respecte a la versio de";
+$Differences = "Diferències";
+$MostRecentVersion = "Vista de la versió més recent de les seleccionades";
+$ShowDifferences = "Comparar versions";
+$SearchPages = "Cercar pàgines";
+$Discuss = "Discutir";
+$History = "Historial";
+$ShowThisPage = "Veure aquesta pàgina";
+$DeleteThisPage = "Eliminar aquesta pàgina";
+$DiscussThisPage = "Discutir aquesta pàgina";
+$HomeWiki = "Portada";
+$DeleteWiki = "Eliminar el Wiki";
+$WikiDeleted = "Wiki eliminat";
+$WikiPageDeleted = "La pàgina ha estat eliminada juntament amb tot el seu historial";
+$NumLine = "Núm. de línia";
+$DeletePageHistory = "Eliminar aquesta pàgina i totes les seues versions";
+$OnlyAdminDeleteWiki = "Només els professors del curs poden esborrar el Wiki";
+$OnlyAdminDeletePageWiki = "Només els professors del curs poden esborrar una pàgina";
+$OnlyAddPagesGroupMembers = "Només els professors del curs poden afegir pàgines al Wiki del grup";
+$OnlyEditPagesGroupMembers = "Només els professors del curs i els membres d'aquest grup poden editar les pàgines del Wiki del grup";
+$ConfirmDeleteWiki = "Està segur de voler eliminar aquest Wiki?";
+$ConfirmDeletePage = "Està segur de voler eliminar aquesta pàgina i totes les seves versions?";
+$AlsoSearchContent = "Buscar també en el contingut";
+$PageLocked = "Pàgina protegida";
+$PageUnlocked = "Pàgina no protegida";
+$PageLockedExtra = "Aquesta pàgina està protegida. Només els professors del curs poden modificar-la";
+$PageUnlockedExtra = "Aquesta pàgina no està protegida pel que tots els membres del curs, o si escau del grup, poden modificar-la";
+$ShowAddOption = "Activar afegir";
+$HideAddOption = "Desactivar afegir";
+$AddOptionProtected = "La possibilitat d'afegir pàgines ha estat desactivada. Ara només els professors del curs poden afegir pàgines en aquest Wiki. No obstant això, la resta dels usuaris podrà seguir editant les pàgines ja existents";
+$AddOptionUnprotected = "La possibilitat d'afegir pàgines està habilitada per a tots els membres del Wiki";
+$NotifyChanges = "Notificar-me canvis";
+$NotNotifyChanges = "No notificar-me canvis";
+$CancelNotifyByEmail = "La notificació per correu electrònic de les modificacions de la pàgina està deshabilitada";
+$MostRecentVersionBy = "L'última versió d'aquesta pàgina va ser realitzada per";
+$RatingMedia = "L'última versió d'aquesta pàgina va ser realitzada per";
+$NumComments = "El nombre de comentaris a aquesta pàgina és";
+$NumCommentsScore = "El nombre de comentaris que l'han avaluat és";
+$AddPagesLocked = "L'opció afegir pàgines ha estat desactivada temporalment pel professor";
+$LinksPages = "Referències";
+$ShowLinksPages = "Mostra les pàgines que tenen enllaços a aquesta pàgina";
+$MoreWikiOptions = "Més opcions del Wiki";
+$DefaultTitle = "Portada";
+$DiscussNotAvailable = "Discussió no disponible";
+$EditPage = "Editar";
+$AddedBy = "Afegida per";
+$EditedBy = "editada per";
+$DeletedBy = "eliminada per";
+$WikiStandardMode = "Modo wiki";
+$GroupTutorAndMember = "Tutor i membre del grup";
+$GroupStandardMember = "Membre del grup";
+$AssignmentMode = "Modo tasca individual";
+$ConfigDefault = "Configuració per defecte";
+$UnlockPage = "Desprotegir";
+$LockPage = "Protegir";
+$NotifyDiscussChanges = "Notificar-me comentaris";
+$NotNotifyDiscussChanges = "No notificar-me comentaris";
+$AssignmentWork = "Pàgina de l'alumne";
+$AssignmentDesc = "Pàgina del professor";
+$WikiDiffAddedTex = "Text afegit";
+$WikiDiffDeletedTex = "Text eliminat";
+$WordsDiff = "paraula a paraula";
+$LinesDiff = "línia a línia";
+$MustSelectPage = "Primer ha de seleccionar una pàgina";
+$Export2ZIP = "Exportar a un fitxer ZIP";
+$HidePage = "Ocultar pàgina";
+$ShowPage = "Mostrar pàgina";
+$GoAndEditMainPage = "Per a iniciar el Wiki vagi a la pàgina principal i editi-la";
+$UnlockDiscuss = "Desbloquejar discussió";
+$LockDiscuss = "Bloquejar discussió";
+$HideDiscuss = "Ocultar discussió";
+$ShowDiscuss = "Mostrar discussió";
+$UnlockRatingDiscuss = "Activar puntuar";
+$LockRatingDiscuss = "Desactivar puntuar";
+$EditAssignmentWarning = "Pot editar aquesta pàgina però les pàgines dels seus alumnes no és modificaran";
+$ExportToDocArea = "Exportar l'última versió de la pàgina a l'àrea de documents del curs";
+$LockByTeacher = "Desactivat per el professor";
+$LinksPagesFrom = "Pàgines que enllacen la pàgina";
+$DefineAssignmentPage = "Definir aquesta pàgina com una tasca individual";
+$AssignmentDescription = "Descripció de la tasca";
+$UnlockRatingDiscussExtra = "Ara tots els membres poden puntuar la pàgina";
+$LockRatingDiscussExtra = "Ara només els professors del curs poden puntuar la pàgina";
+$HidePageExtra = "La pàgina ara només és visible pels professors del curs";
+$ShowPageExtra = "La pàgina ara és visible per tots els usuaris";
+$OnlyEditPagesCourseManager = "La pàgina principal del Wiki del curs només pot ser modificada per un professor";
+$AssignmentLinktoTeacherPage = "Accés a la pàgina del professor";
+$HideDiscussExtra = "La discussió ara només és visible pels professors del curs";
+$ShowDiscussExtra = "La discussió ara és visible per tots els usuaris";
+$LockDiscussExtra = "En aquest moment, solament els professors poden discutir la pàgina";
+$UnlockDiscussExtra = "Ara tots els membres poden afegir comentaris a aquesta discussió";
+$AssignmentDescExtra = "Aquesta pàgina és una tasca proposada per un professor";
+$AssignmentWorkExtra = "Aquesta pàgina és el treball d'un alumne";
+$NoAreSeeingTheLastVersion = "Atenció no aquesta veient l'última versió de la pàgina";
+$AssignmentFirstComToStudent = "Modifica aquesta pàgina per a realitzar la teva tasca sobre la tasca proposada";
+$AssignmentLinkstoStudentsPage = "Accés a les tasques realitzades pels alumnes sobre la tasca proposada en aquesta pàgina";
+$AllowLaterSends = "Permetre enviaments retardats";
+$WikiStandBy = "El Wiki està a l'espera que un professor ho inicialitzi";
+$NotifyDiscussByEmail = "La notificació per correu electrònic de nous comentaris sobre la pàgina està habilitada";
+$CancelNotifyDiscussByEmail = "La notificació per correu electrònic de nous comentaris sobre la pàgina està deshabilitada";
+$EmailWikiChanges = "Notificació de canvis en el Wiki";
+$EmailWikipageModified = "S'ha modificat la pàgina";
+$EmailWikiPageAdded = "La pàgina ha estat afegida.";
+$EmailWikipageDedeleted = "Una pàgina ha estat esborrada del Wiki";
+$EmailWikiPageDiscAdded = "Una nova intervenció s'ha produït en la discussió de la pàgina";
+$FullNotifyByEmail = "Actualment se li està enviant una notificació per correu electrònic cada vegada que es produïx un canvi en el Wiki";
+$FullCancelNotifyByEmail = "Actualment no se li estan enviant notificacions per correu electrònic cada vegada que es produïx un canvi en el Wiki";
+$EmailWikiChangesExt_1 = "Aquesta notificació s'ha realitzat d'acord amb el seu desig de vigilar els canvis del Wiki. Aquesta opció Vè. la va activar mitjançant el botó";
+$EmailWikiChangesExt_2 = "Si desitja deixar de rebre notificacions sobre els canvis que es produeixin en el Wiki, seleccioni les pestanyes <strong>Canvis recents strong>, <strong>Pàgina actual strong>, <strong>Discussió strong> segons el cas i després premi el botó";
+$OrphanedPages = "Pàgines òrfenes";
+$WantedPages = "Pàgines sol·licitades";
+$MostVisitedPages = "Pàgines més visitades";
+$MostChangedPages = "Pàgines amb més canvi";
+$Changes = "Canvis";
+$MostActiveUsers = " Usuaris més actius";
+$Contributions = "contribucions";
+$UserContributions = "Contribucions de l'usuari";
+$WarningDeleteMainPage = "No es recomana l'eliminació de la Pàgina principal del Wiki, ja que és el principal accés a la seva estructura jeràrquica.<br> Si de totes maneres necessita esborrar-la, no oblidi tornar a crear aquesta Pàgina principal doncs fins que no ho faci altres usuaris no podran afegir noves pàgines al Wiki.";
+$ConvertToLastVersion = "Per a convertir aquesta versió en l'última faci clic en";
+$CurrentVersion = "Versió actual";
+$LastVersion = "Última versió";
+$PageRestored = "La pàgina ha estat restaurada. Pot veure-la fent clic en";
+$RestoredFromVersion = "Pàgina restaurada des de la versió";
+$HWiki = "Ajuda: Wiki";
+$FirstSelectOnepage = "Primer seleccioni una pàgina";
+$DefineTask = "Si escriu algun contingut en la descripció, la pàgina es considerarà com una pàgina especial per a realitzar una tasca";
+$ThisPageisBeginEditedBy = "En aquest moment aquesta pàgina està sent editada per";
+$ThisPageisBeginEditedTryLater = "Per favor, intenti'l més tard. Si l'usuari que actualment està editant la pàgina no la guarda, aquesta pàgina quedarà disponible en un màxim de";
+$EditedByAnotherUser = "Els seus canvis no seran guardats degut al fet que altre usuari va modificar la pàgina mentre Vè. l'editava";
+$WarningMaxEditingTime = "Té 20 minuts per a editar aquesta pàgina. Transcorregut aquest temps, si Vè. no ha guardat la pàgina, altre usuari podrà modificar-la i Vè. podrà perdre els seus canvis";
+$TheTaskDoesNotBeginUntil = "Encara no és la data d'inici";
+$TheDeadlineHasBeenCompleted = "Ha sobrepassat la data límit";
+$HasReachedMaxNumWords = "Ha sobrepassat el nombre de paraules permeses";
+$HasReachedMaxiNumVersions = "Ha sobrepassat el nombre de versions permeses";
+$DescriptionOfTheTask = "Descripció de la tasca";
+$OtherSettings = "Altres requeriments";
+$NMaxWords = "Nombre màxim de paraules";
+$NMaxVersion = "Nombre màxim de versions";
+$AddFeedback = "Afegir missatges d'orientació associats al progrés en la pàgina";
+$Feedback1 = "Primer missatge";
+$Feedback2 = "Segon missatge";
+$Feedback3 = "Tercer missatge";
+$FProgress = "Progrés";
+$PutATimeLimit = "Establir una limitació temporal";
+$StandardTask = "Tasca estàndard";
+$ToolName = "Importar cursos de la pissarra";
+$TrackingDisabled = "Seguir ha estat impossibilitat per administrador de sistema";
+$InactivesStudents = "Alumnes inactius";
+$AverageTimeSpentOnThePlatform = "Temps mitjà de connexió a la plataforma";
+$AverageCoursePerStudent = "Mitjana de cursos per usuari";
+$AverageProgressInLearnpath = "Progrès mig en els cursos";
+$AverageResultsToTheExercices = "Puntuació en els exercicis";
+$SeeStudentList = "Veure la llista d'usuaris";
+$NbActiveSessions = "Sessions actives";
+$NbPastSessions = "Sessions passades";
+$NbFutureSessions = "Sessions futures";
+$NbStudentPerSession = "Nombre d'alumnes per sessió";
+$NbCoursesPerSession = "Nombre de cursos per sessió";
+$SeeSessionList = "Veure la llista de sessions";
+$CourseStats = "Estadístiques del curs";
+$ToolsAccess = "Accés a les eines";
+$LinksAccess = "Enllaços";
+$DocumentsAccess = "Documents";
+$ScormAccess = "Itinerari formatiu-Cursos amb format SCORM";
+$LinksDetails = "Enllaços visitats per l'usuari";
+$WorksDetails = "Treballs|Feines|Obres carregats per l'usuari en nom d''Autors'";
+$LoginsDetails = "Clicar damunt del nom del mes per a més detalls";
+$DocumentsDetails = "documents descarregats per l'usuari";
+$ExercicesDetails = "Puntuacions dels exercicis realitzats";
+$BackToList = "Tornar a la llista d'usuaris";
+$StatsOfCourse = "Estadístiques de l'àrea del curs";
+$StatsOfUser = "Estadístiques de l'ususari";
+$StatsOfCampus = "Estadístiques del portal";
+$CountUsers = "Nombre d'usuaris";
+$CountToolAccess = "Nombre total de connexions a aquest curs";
+$LoginsTitleMonthColumn = "Mes";
+$LoginsTitleCountColumn = "Nombre d'accesos";
+$ToolTitleToolnameColumn = "Nom de l'eina";
+$ToolTitleUsersColumn = "Clics dels usuaris";
+$ToolTitleCountColumn = "Clics totals";
+$LinksTitleLinkColumn = "Enllaç";
+$LinksTitleUsersColumn = "Clics dels usuaris";
+$LinksTitleCountColumn = "Clics totals";
+$ExercicesTitleExerciceColumn = "Test";
+$ExercicesTitleScoreColumn = "Puntuació";
+$DocumentsTitleDocumentColumn = "Document";
+$DocumentsTitleUsersColumn = "Descàrregues del usuaris";
+$DocumentsTitleCountColumn = "Descàrregues totals";
+$ScormContentColumn = "Títol";
+$ScormStudentColumn = "Usuaris";
+$ScormTitleColumn = "Lliçó/etapa";
+$ScormStatusColumn = "Estat";
+$ScormScoreColumn = "Puntuació";
+$ScormTimeColumn = "Temps";
+$ScormNeverOpened = "Aquest curs mai ha estat obert per aquest usuari.";
+$WorkTitle = "Títol";
+$WorkAuthors = "Autors";
+$WorkDescription = "Descripció";
+$informationsAbout = "Seguiment de";
+$NoEmail = "Adreça de correu no especificada";
+$NoResult = "Encara no hi ha resultats";
+$Hits = "Accesos";
+$LittleHour = "h.";
+$Last31days = "Als darrers 31 dies";
+$Last7days = "Als darrers 7 dies";
+$ThisDay = "Aquest dia";
+$Logins = "Accesos";
+$LoginsExplaination = "Aquí és la llista de les seves últimes connexions amb les eines que visitava durant aquestes sessions.";
+$ExercicesResults = "Puntuació dels tests realitzats";
+$At = "A";
+$LoginTitleDateColumn = "Data";
+$LoginTitleCountColumn = "Visites";
+$LoginsAndAccessTools = "Conexions i accesos a les eines";
+$WorkUploads = "Treballs enviats";
+$ErrorUserNotInGroup = "Usuari invàlid: aquest usuari no existeix  en el teu grup";
+$ListStudents = "Liista d'usuaris en aquest grup";
+$PeriodHour = "Hora";
+$PeriodDay = "Dia";
+$PeriodWeek = "Setmana";
+$PeriodMonth = "Mes";
+$PeriodYear = "Any";
+$NextDay = "Pròxim dia";
+$PreviousDay = "Dia anterior";
 $NextWeek = "Pròxima setmana";
+$PreviousWeek = "Setmana anterior";
+$NextMonth = "Pròxim mes";
+$PreviousMonth = "Mes anterior";
+$NextYear = "Any següent";
+$PreviousYear = "Any anterior";
+$ViewToolList = "Vista de la llista de totes les eines";
+$ToolList = "Llista de totes les eines";
+$PeriodToDisplay = "Període";
+$DetailView = "Visualitzat per";
+$BredCrumpGroups = "Grups";
+$BredCrumpGroupSpace = "Àrea del grup";
+$BredCrumpUsers = "Usuaris";
+$AdminToolName = "Estadístiques de l'administrador";
+$PlatformStats = "Plataforma d'estadístiques";
+$StatsDatabase = "Estadístiques de la base de dades";
+$PlatformAccess = "Accés al portal";
+$PlatformCoursesAccess = "Accés als cursos";
+$PlatformToolAccess = "Accés a les eines";
+$HardAndSoftUsed = "Països Proveedors Navegadors S.O. Referenciadors";
+$StrangeCases = "Casos problemàtics";
+$StatsDatabaseLink = "Clicar aquí";
+$CountCours = "Nombre de cursos";
+$CountCourseByFaculte = "Nombre de cursos per categoria";
+$CountCourseByLanguage = "Nombre de cursos per llengua";
+$CountCourseByVisibility = "Nombre de cursos per visibilitat";
+$CountUsersByCourse = "Nombre d'usuaris per curs";
+$CountUsersByFaculte = "Nombre d'usuaris per categoria";
+$CountUsersByStatus = "Nombre d'usuaris per estat";
+$Access = "Accés";
+$Countries = "Països";
+$Providers = "Proveïdors";
+$OS = "OS";
+$Browsers = "Navegadors";
+$Referers = "Referenciadors";
+$AccessExplain = "(Quan un usuari ore l'índex del portal)";
+$TotalPlatformAccess = "Total";
+$TotalPlatformLogin = "Total";
+$MultipleLogins = "Comptes amb el mateix nom d'usuari";
+$MultipleUsernameAndPassword = "Comptes amb el mateix nom d'usuari i contrasenya";
+$MultipleEmails = "Comptes amb el mateix correu";
+$CourseWithoutProf = "Cursos sense tutor";
+$CourseWithoutAccess = "Cursos no utilitzats";
+$LoginWithoutAccess = "Logins no utilitzats";
+$AllRight = "No hi ha casos problemàtics";
+$Defcon = "Oh, casos problemàtics detectats!!";
+$NULLValue = "Buit o (nul)";
+$TrafficDetails = "Detalls de trànsit";
+$SeeIndividualTracking = "Per un seguiment individual veure<a href=../usuari/usuari.php>Usuaris</a>eina.";
+$PathNeverOpenedByAnybody = "Aquest itinerari va ser obert per ningú.";
+$SynthesisView = "Vista sintètica";
+$Visited = "Visitada";
+$FirstAccess = "Primer accès";
+$LastAccess = "Darrer accès";
+$Probationers = "Alumnes";
+$MoyenneTest = "Mitjana dels exercicis";
+$MoyCourse = "Mitjana de curs";
+$MoyenneExamen = "Mitjana d'examen";
+$MoySession = "Mitjana de sessió";
+$TakenSessions = "Sessions realitzades";
+$FollowUp = "Seguiment";
+$Trainers = "Professors";
+$Administrators = "Administradors";
+$Tracks = "Seguiment";
+$Success = "Qualificació";
+$ExcelFormat = "Format Excel";
+$MyLearnpath = "El meu itinerari d'aprenentatge";
+$LastConnexion = "Última connexió";
+$ConnectionTime = "Temps de connexió";
+$ConnectionsToThisCourse = "Connexions a aquest curs";
+$StudentTutors = "Tutors de l'alumne";
+$StudentSessions = "Sessions de l'alumne";
+$StudentCourses = "Cursos de l'alumne";
+$NoLearnpath = "Sense itinerari d'aprenentatge";
+$Correction = "Correcció";
+$NoExercise = "Sense exercicis";
+$LimitDate = "Data límit";
+$SentDate = "Data d'enviament";
+$Annotate = "Anotar";
+$DayOfDelay = "Díes de retard";
+$NoProduction = "Sense productes";
+$NoComment = "Sense comentaris";
+$LatestLogin = "Última connexió";
+$TimeSpentOnThePlatform = "Temps de permanència en la plataforma";
+$AveragePostsInForum = "Nombre de missatges en el foro";
+$AverageAssignments = "Nombre de tasques";
+$StudentDetails = "Detalls de l'alumne";
+$StudentDetailsInCourse = "Detalls de l'alumne en el curs";
+$OtherTools = "Altres eines";
+$DetailsStudentInCourse = "Detalls de l'alumne en el curs";
+$CourseTitle = "Títol del curs";
+$NbStudents = "Nombre d'alumnes";
+$TimeSpentInTheCourse = "Temps de permanència en el curs";
+$AvgStudentsProgress = "Progrès";
+$AvgCourseScore = "Puntuació mitjana dels alumnes del curs";
+$AvgMessages = "Missatges per alumne";
+$AvgAssignments = "Tasques per alumne";
+$ToolsMostUsed = "Eines més utilitzades";
+$StudentsTracking = "Seguiment dels alumnes";
+$CourseTracking = "Seguiment del curs";
+$LinksMostClicked = "Enllaços més visitats";
+$DocumentsMostDownloaded = "Documents més descarregats";
+$LearningPathDetails = "Detalls de l'itinerari d'aprenentatge";
+$NoConnexion = "Cap connexió";
+$TeacherInterface = "Interfície de professor";
+$CoachInterface = "Interfície de tutor";
+$AdminInterface = "Interfície d'administrador";
+$NumberOfSessions = "Nombre de sessions";
+$YourCourseList = "Valors mitjos per a la seva formació";
+$YourStatistics = "Les seves estadístiques";
+$CoachList = "Llista de tutors";
+$CoachStudents = "Alumnes del tutor";
+$NoLearningPath = "No hi ha cap curs disponible";
+$SessionCourses = "Sessions de cursos";
+$NoUsersInCourseTracking = "Seguiment dels alumnes inscrits en aquest curs";
+$AvgTimeSpentInTheCourse = "Temps";
+$RemindInactiveUser = "Recordatori per als usuaris sense activitat";
+$FirstLogin = "Primer accés";
+$AccessDetails = "Detalls d'accés";
+$DateAndTimeOfAccess = "Data i hora d'accés";
+$WrongDatasForTimeSpentOnThePlatform = "Dades sobre l'usuari que estava registrat quan el càlcul de temps de permanència en la plataforma no era possible.";
+$DisplayCoaches = "Sumari de tutors";
+$DisplayUserOverview = "Sumari d'usuaris";
+$ExportUserOverviewOptions = "Opció d'exportació del sumari d'usuari";
+$FollowingFieldsWillAlsoBeExported = "Els següents camps també seran exportats";
+$TotalExercisesScoreObtained = "Puntuació total de l'exercici";
+$TotalExercisesScorePossible = "Màxima puntuació total possible";
+$TotalExercisesAnswered = "Nombre d'exercicis contestats";
+$TotalExercisesScorePercentage = "Percentatge total de la puntuació dels exercicis";
+$ForumForumsNumber = "Nombre de foros";
+$ForumThreadsNumber = "Nombre de temes";
+$ForumPostsNumber = "Nombre de missatges";
+$ChatConnectionsDuringLastXDays = "Connexions al xat en els últims %s dies";
+$ChatLastConnection = "Última connexió al xat";
+$CourseInformation = "Informació del curs";
+$NoAdditionalFieldsWillBeExported = "Els camps adicionals no seran exportats";
+$SendNotification = "Enviar les notificacions";
+$TimeOfActiveByTraining = "Temps de formació (suma del temps de permanència de tots els alumnes)";
+$AvgAllUsersInAllCourses = "Terme mitjà de tots els alumnes";
+$AvgExercisesScore = "Puntuació en els exercicis";
+$TrainingTime = "Temps en el curs";
+$CourseProgress = "Progrès en la lliçó";
+$ViewMinus = "Veure reducció";
+$ResourcesTracking = "Informe sobre recursos";
 $MdCallingTool = "Documents";
 $NotInDB = "no existeix aquesta categoria per a l'enllaç";
 $ManifestSyntax = "(error de sintaxi en el fitxer manifest...)";
@@ -2038,6 +4135,161 @@ $MffNotOk = "El reemplaçament de l'arxiu manifest no ha estat possible";
 $MffOk = "El fitxer manifest ha estat reemplaçat";
 $MffFileNotFound = "El nou fitxer manifest no pot ser obert (ex., buit, massa gran)";
 $UploadMff = "Reemplaçar el fitxer manifest";
+$GroupSpaceLink = "Espai del grup";
+$CreationSucces = "S'ha creat la taula de continguts";
+$CanViewOrganisation = "Podeu veure la vostra organització";
+$ViewDocument = "Veure";
+$HtmlTitle = "Taula de continguts";
+$AddToTOC = "Afegir als continguts";
+$AddChapter = "afegir capítol";
+$Ready = "Generar taula de continguts";
+$StoreDocuments = "Enmagatzemar documents";
+$TocDown = "A baix";
+$TocUp = "A dalt";
+$CutPasteLink = "Sense marcs";
+$CreatePath = "Crear un itinerari";
+$SendDocument = "Enviar document";
+$ThisFolderCannotBeDeleted = "Aquesta carpeta no ha pogut ser eliminada";
+$ChangeVisibility = "Canviar visibilitat";
+$VisibilityCannotBeChanged = "No es pot canviar la visibilitat";
+$DocumentCannotBeMoved = "No es pot moure el document";
+$OogieConversionPowerPoint = "Oogie: conversió PowerPoint";
+$WelcomeOogieSubtitle = "Un convertidor de PowerPoint en Itineraris formatius";
+$GoMetadata = "Anar";
+$QuotaForThisCourseIs = "La quota d'espai d'aquest curs en el servidor és de";
+$Del = "Esborrar";
+$ShowCourseQuotaUse = "Mostrar la quota del curs en el servidor";
+$CourseCurrentlyUses = "Aquest curs utilitza actualment";
+$MaximumAllowedQuota = "El seu límit d'espai d'emmagatzematge és de";
+$PercentageQuotaInUse = " Percentatge de quota d'espai en ús";
+$PercentageQuotaFree = " Percentatge del quota d'espai que és encara lliure";
+$CurrentDirectory = "Directori actual";
+$UplUploadDocument = "Enviar un document";
+$UplPartialUpload = "El fitxer s'ha enviat només parcialment.";
+$UplExceedMaxPostSize = " La mida del fitxer excedeix el màxim permès a la configuració:";
+$UplExceedMaxServerUpload = "El fitxer enviat excedeix el màxim permès pel servidor:";
+$UplUploadFailed = "No s'ha pogut enviar l'arxiu!";
+$UplNotEnoughSpace = "No hi ha prou espai per enviar aquest arxiu!";
+$UplNoSCORMContent = "No s'ha trobat cap contingut SCORM";
+$UplZipExtractSuccess = "¡ S'ha extret el fitxer zip !";
+$UplZipCorrupt = "Impossible d'extreure fitxer zip (fitxer corrupte?)";
+$UplFileSavedAs = "arxiu guardat com a";
+$UplFileOverwritten = "ha estat sobreescrit";
+$CannotCreateDir = "No es pot crear el directori";
+$UplUpload = "Enviar";
+$UplWhatIfFileExists = "si l'arxiu ja existeix:";
+$UplDoNothing = "No fer res";
+$UplDoNothingLong = " No enviar si l'arxiu existeix";
+$UplOverwrite = "Sobreescriure";
+$UplOverwriteLong = "Sobreescriure l'arxiu existent";
+$UplRename = "Canviar el nom";
+$UplRenameLong = "Canviar el nom a l'arxiu enviat si ja existeix";
+$DocumentQuota = "Quota de documents";
+$NoDocsInFolder = "No hi ha documents en aquesta carpeta!";
+$UploadTo = "Enviar a";
+$fileModified = "El fitxer ha estat modificat";
+$DocumentsOverview = "llistat de documents";
+$Options = "Opcions";
+$WelcomeOogieConverter = "Benvingut al convertidor de PowerPoint Oogie<br>1. Examineu el vostre disc dur i busqueu qualsevol fitxer amb les extensions *.ppt o *.odp<br>2. Envieu-lo a Oogie, que el transformarà en un Itinerari formatiu SCORM.<br>3. Podreu afegir comentaris d'àudio a cada diapositiva i inserir test d'avaluació entre diapositives.";
+$ConvertToLP = "Convertir en Itinerari formatiu";
+$AdvancedSettings = "Configuracions avançades";
+$File = "Fitxer";
+$DocDeleteError = "Error durant la supressió del document";
+$ViModProb = "Problemes sorgits en el moment del canvi de visibilitat";
+$DirDeleted = "Directori esborrat";
+$TemplateName = "Nom de la plantilla";
+$TemplateDescription = "Descripció de la plantilla";
+$DocumentSetAsTemplate = "Document convertit en una nova plantilla";
+$DocumentUnsetAsTemplate = "El document ha deixat de ser una plantilla";
+$AddAsTemplate = "Afegir com a plantilla";
+$RemoveAsTemplate = "Suprimir plantilla";
+$ReadOnlyFile = "El fitxer només és de lectura";
+$FileNotFound = "No s'ha trobat el fitxer";
+$TemplateTitleFirstPage = "Pàgina inicial";
+$TemplateTitleFirstPageDescription = "És la pàgina inicial del vostre curs";
+$TemplateTitleDedicatory = "Dedicatòria";
+$TemplateTitleDedicatoryDescription = "Feu la vostra pròpia dedicatòria";
+$TemplateTitlePreface = "Pròleg";
+$TemplateTitlePrefaceDescription = "Feu el vostre propi pròleg";
+$TemplateTitleIntroduction = "Introducció";
+$TemplateTitleIntroductionDescription = "Escriviu la introducció";
+$TemplateTitlePlan = "Pla";
+$TemplateTitlePlanDescription = "Taula de continguts";
+$TemplateTitleTeacher = "Professor explicant";
+$TemplateTitleTeacherDescription = "Un diàleg explicatiu amb un professor";
+$TemplateTitleProduction = "Producció";
+$TemplateTitleProductionDescription = "Descripció d'una producció";
+$TemplateTitleAnalyze = "Anàlisi";
+$TemplateTitleAnalyzeDescription = "Descripció d'una anàlisi";
+$TemplateTitleSynthetize = "Síntesi";
+$TemplateTitleSynthetizeDescription = "Descripció d'una síntesi";
+$TemplateTitleText = "Pàgina amb text";
+$TemplateTitleTextDescription = "Pàgina amb text pla";
+$TemplateTitleLeftImage = "Imatge a l'esquerra";
+$TemplateTitleLeftImageDescription = "Imatge a l'esquerra";
+$TemplateTitleTextCentered = "Text i imatge centrats";
+$TemplateTitleTextCenteredDescription = "Text i imatge centrada amb una llegenda";
+$TemplateTitleComparison = "Comparació";
+$TemplateTitleComparisonDescription = "Pàgina amb dues columnes";
+$TemplateTitleDiagram = "Diagrama explicatiu";
+$TemplateTitleDiagramDescription = "Imatge i un comentari a l'esquerra";
+$TemplateTitleImage = "Imatge";
+$TemplateTitleImageDescription = "Pàgina amb una sola imatge";
+$TemplateTitleFlash = "Animació Flash";
+$TemplateTitleFlashDescription = "Animació + text introductori";
+$TemplateTitleAudio = "Àudio amb comentari";
+$TemplateTitleAudioDescription = "Àudio + imatge+ text";
+$TemplateTitleSchema = "Esquema amb àudio";
+$TemplateTitleSchemaDescription = "Esquema explicat per un professor";
+$TemplateTitleVideo = "Pàgina amb vídeo";
+$TemplateTitleVideoDescription = "Vídeo + text explicatiu";
+$TemplateTitleVideoFullscreen = "Pàgina només amb vídeo";
+$TemplateTitleVideoFullscreenDescription = "Vídeo + text explicatiu";
+$TemplateTitleTable = "Taules";
+$TemplateTitleTableDescription = "Pàgina amb taula tipus full de càlcul";
+$TemplateTitleAssigment = "descripció de tasques";
+$TemplateTitleAssigmentDescription = "Explica objectius, rols, agenda";
+$TemplateTitleResources = "Recursos";
+$TemplateTitleResourcesDescription = "Llibres, enllaços, eines";
+$TemplateTitleBibliography = "Bibliografia";
+$TemplateTitleBibliographyDescription = "Llibres, enllaços, eines";
+$TemplateTitleFAQ = "Preguntes freqüents";
+$TemplateTitleFAQDescription = "Llista de preguntes i respostes";
+$TemplateTitleGlossary = "Glossari";
+$TemplateTitleGlossaryDescription = "Llista  de termes";
+$TemplateTitleEvaluation = "Avaluació";
+$TemplateTitleEvaluationDescription = "Avaluació";
+$TemplateTitleCertificate = "Certificat de finalització";
+$TemplateTitleCertificateDescription = "Apareix al final d'un itinerari formatiu";
+$TemplateTitleCheckList = "Llista de revisió";
+$TemplateTitleCourseTitle = "Títol del curs";
+$TemplateTitleLeftList = "Llista a l'esquerra";
+$TemplateTitleLeftListDescription = "Llista a l'esquerra amb un instructor";
+$TemplateTitleCheckListDescription = "Llista d'elements";
+$TemplateTitleCourseTitleDescription = "Títol del curs amb un logo";
+$TemplateTitleRightList = "Llista a la dreta";
+$TemplateTitleRightListDescription = "Llista a la dreta amb un instructor";
+$TemplateTitleLeftRightList = "Llistes a l'esquerra i a la dreta";
+$TemplateTitleLeftRightListDescription = "Llistes a l'esquerra i a la dreta amb un instructor";
+$TemplateTitleDesc = "Descripció";
+$TemplateTitleDescDescription = "Descriure un element";
+$TemplateTitleObjectives = "Objectius del curs";
+$TemplateTitleObjectivesDescription = "Descriu els objectius del curs";
+$TemplateTitleCycle = "Gràfic cíclic";
+$TemplateTitleCycleDescription = "Dues llistes amb fletxes circulars";
+$TemplateTitleLearnerWonder = "Expectatives de l'alumne";
+$TemplateTitleLearnerWonderDescription = "Descripció de les expectatives de l'alumne";
+$TemplateTitleTimeline = "Processos i etapes";
+$TemplateTitleTimelineDescription = "Tres llistes relacionades amb fletxes";
+$TemplateTitleStopAndThink = "Atura't i reflexiona";
+$TemplateTitleListLeftListDescription = "Llista a l'esquerra amb un instructor";
+$TemplateTitleStopAndThinkDescription = "Invitació a aturar-se i a reflexionar";
+$CreateTemplate = "Crear plantilla";
+$SharedFolder = "Carpeta compartida";
+$CreateFolder = "Crear directori";
+$HelpDefaultDirDocuments = "Aquest directori conté els arxius subministrats per defecte. Pot eliminar o afegir altres arxius, però si un arxiu està ocult quan és inserit en un document web els estudiants tampoc podran veure'l aquí. Quan insereixi un arxiu en un document web faci'l visible prèviament. Els directoris poden seguir ocults.";
+$HelpSharedFolder = "Aquest directori conté els arxius que els estudiants (i Vè.) envien a un curs a través de l'editor si no ho fan des de l'eina grups. Per defecte seran visibles per qualsevol professor, però estaran ocults per a altres estudiants tret que accedeixin a ells mitjançant un accés directe. Si fa visible el directori d'un estudiant altres estudiants podran veure tot el que contingui.";
+$TemplateImage = "Imatge de la plantilla";
 $MailingFileRecipDup = "Múltiples ususaris tenen";
 $MailingFileRecipNotFound = "Cap estudiant amb";
 $MailingFileNoRecip = "el nom no conté cap identificador de destinatari";
@@ -2055,6 +4307,7 @@ $MailingInSelect = "---enviament per e-mail---";
 $MailingAsUsername = "Enviar per e-mail";
 $Sender = "remitent";
 $FileSize = "Tamany de l'arxiu";
+$PlatformUnsubscribeTitle = "Permet donar-se de baixa de la plataforma";
 $OverwriteFile = "Sobreescriure els arxius previament enviats?";
 $SentOn = "En";
 $DragAndDropAnElementHere = "Arrossegueu i deixeu anar un element aquí";
@@ -2064,6 +4317,8 @@ $NoFileSpecified = "No heu seleccionat cap arxiu per enviar";
 $NoUserSelected = "Si us plau seleccioneu un usuari per a enviar-li l'arxiu";
 $BadFormData = "L'enviament ha fracassat: dades del formulari errònies. Si us plau contacteu amb l'administrador del sistema.";
 $GeneralError = "S'ha produït un error. Si us plau, contacteu amb l'administrador del sistema";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Per reproduir el contingut multimèdia o bé haureu d'actualitzar el vostre navegador a una versió actual o bé actualitzar el vostre connector de Flash. Comproveu si l'arxiu té una extensió correcta.";
+$UpdateRequire = "Actualització obligatòria";
 $ThereAreNoRegisteredDatetimeYet = "Encara no hi ha registrada cap data/hora";
 $CalendarList = "Dates de la llista d'assistència";
 $AttendanceCalendarDescription = "El calendari d'assistència li permet especificar les dates que apareixeran a la llista d'assistència.";
@@ -2075,7 +4330,11 @@ $AttendanceCalendar = "Calendari d'assistència";
 $QualifyAttendanceGradebook = "Qualifica la llista d'assistència";
 $CreateANewAttendance = "Crea una llista d'assistència";
 $Attendance = "Assistència";
+$XResultsCleaned = "%d resultats eliminats";
+$AreYouSureToDeleteResults = "Esteu segur de voler eliminar els resultats?";
 $CouldNotResetPassword = "No podeu restablir la contrasenya";
+$ExerciseCopied = "Exercici copiat";
+$AreYouSureToCopy = "Esteu segur de voler copiar?";
 $ReceivedFiles = "Fitxers rebuts";
 $SentFiles = "Fitxers enviats";
 $ReceivedTitle = "Títol";
@@ -2114,10 +4373,12 @@ $TheFileIsNotUploaded = "El fitxer no ha estat enviat.";
 $MailingNonMailingError = "L'enviament per correu no pot ser sobreescrit per enviaments que no siguin de correu iviceversa";
 $MailingSelectNoOther = " L'enviament per correu no es pot combinar amb uns altres destinatariss";
 $MailingJustUploadSelectNoOther = "No es pot combinar l'enviament a sí mateix amb altres destinataris";
+$PlatformUnsubscribeComment = "A l'activar aquesta opció, es permetrà que qualsevol usuari elimini definitivament el seu compte i totes les dades relacionades amb el mateix des de la plataforma. Això és una acció radical, però és necessari en els portals oberts al públic on els usuaris puguin registrar-se automàticament. Es publicarà una entrada addicional al perfil de l'usuari per donar-se de baixa després de la confirmació.";
 $NewDropboxFileUploaded = "Un nou fitxer ha estat enviat a la bústia de compartició de fitxers";
 $NewDropboxFileUploadedContent = "Un nou fitxer ha estat enviat a la bústia de compartició de fitxers del vostre curs";
 $AddEdit = "Afegir/Editar";
 $ErrorNoFilesInFolder = "Aquest directori està vuit";
+$EditingExerciseCauseProblemsInLP = "Editar un exercici causarà problemes a Lliçons";
 $SentCatgoryDeleted = "Aquesta carpeta ha estat eliminada";
 $ReceivedCatgoryDeleted = "La carpeta ha estat eliminada";
 $MdTitle = "Títol d'objecte d'aprenentatge";
@@ -2164,6 +4425,212 @@ $TableView = "Veure com taula";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Aquest terme del glossari ja existeix, per favor canvie'l per altre nom";
 $GlossaryManagement = "Administració del glossari";
 $TermMoved = "El terme s'ha mogut";
+$HFor = "Ajuda: Fòrums";
+$ForContent = " Un fòrum és una eina de debat asíncrona. Mentre que un correu electrònic permet un diàleg privat entre dues persones, en els fòrums aquest diàleg serà públic o semipúblic i podran intervenir més persones.Des del punt de vista tècnic, els usuaris només necessiten un navegador d'Internet per a usar els fòrums de la Plataforma.Per a organitzar els fòrums de debat, premi en 'Administració dels fòrums'. Els debats s'organitzen en categories i subcategories tal com segueix:Categoria > Fòrum > Temi > RespostesPer a estructurar els debats dels seus usuaris, és necessari organitzar per endavant les categories i els fòrums, deixant que ells siguin els quals creuen els temes i les possibles respostes. Per defecte, els fòrums de cada curs contenen dues categories: una reservada als grups del curs 'Fòrums de grups' i altra comuna al curs, denominada per defecte'Principal' (encara que aquest nom pot canviar-se); dintre d'aquesta última hi ha creat un 'Fòrum de proves' amb un tema d'exemple.El primer que ha de fer és esborrar el tema d'exemple i canviar el nom del fòrum de proves. Després pot crear, en la categoria públic, altres fòrums, bé sigui per grups o temes, per a ajustar-se als requisits de la seva proposta d'aprenentatge.No confongui les categories amb els fòrums, ni aquests amb els temes, i no oblidi que una categoria buida (sense fòrums) no apareixerà en la vista de l'usuari.Finalment, cada fòrum pot tenir una descripció que pot consistir en la llista dels seus membres, els seus objectius, temàtica...Els fòrums dels grups no han de crear-se a través de l'eina 'Fòrums', sinó mitjançant l'eina 'Grups'; en aquesta última podrà decidir si els fòrums del grup seran privats o públics.Ús pedagògic avançatAlguns professors utilitzen el fòrum per a realitzar correccions. Un estudiant publica un document. El professor ho corregeix usant el botó marcador de l'editor HTML (marca amb un color la correcció o els errors), de manera que altres estudiants i professors podran beneficiar-se d'elles.";
+$HDropbox = "Ajuda: Compartició de fitxers";
+$DropboxContent = "Compartir documents és una eina de gestió de continguts dirigida a l'intercanvi de dades entre iguals (p2p). Qualsevol tipus de fitxer és acceptat: Word, Excel, PDF, etc. Generarà diferents versions en els enviaments, amb el que evitarà la destrucció d'un document quan s'enviï altre amb el mateix nom..Els documents compartits mostren els arxius que li han enviat (carpeta d'arxius rebuts) i els arxius que Vè. ha enviat a altres membres d'aquest curs (carpeta d'arxius enviats)Si la llista d'arxius rebuts o enviats es fa massa llarga, pot suprimir tots o alguns arxius de la mateixa. L'arxiu sí mateix no s'elimina mentre l'altre usuari ho mantingui en la seva.Per a enviar un document a més d'una persona, ha d'utilitzar CTRL+clic per a seleccionar-los en la caixa de selecció múltiple. La caixa de selecció múltiple és el formulari que mostra la llista de membres.";
+$HHome = "Ajuda: Pàgina inicial";
+$HomeContent = "<p>La pàgina inicial del vostre curs presenta una sèrie d'eines: un text d'introducció, una descripció del curs, una eina de publicació de Documents, etc. Aquesta pàgina és modular. Podeu visualitzar o ocultar cadascún dels elements clicant + o - (a vegades l'icona Ull tancat, Ull obert).</p><b>Navegació</b><p>Per moure's pel curs, disposa de dues eines de navegació: una a la part superior esqueera, que mostra el lloc en el qual es troba el curs, l'altra en la part superior dreta que li permet accedir a qualsevol eina mitjançant un clic en la seva icona. Si selecciona 'Curs actual' a l'esquerra o l'icona en forma de casa situat a la dreta, anirà a la pàgina principal del curs.</p><b>Metodologia</b><p>És important que dinamitzeu el vostre espai a fi que els alumnes percebin que hi ha algú darrera la pantalla. D'aquesta manera podeu modificar regularment el text d'introducció (clicant sobre el llapis groc) per indicar els esdeveniments del curs o recordar-ne les etapes.</p><p>Per construir el vostre curs, una manera clàssica de treballar és procedir com segueix: <ol><li>A propietats de curs, marqueu Accés: privat i Inscripció: refusada per tal d'impedir qualsevol visita durant la creació del curs,</li><li>Mostreu totes les eines clicant sobre el vincle gris 'Mostrar' sota el nom de les eines marcades,</li><li>Utilitzeu les eines per omplir el vostre curs de continguts, esdeveniments, grups, etc.,</li><li>Desactiveu totes les eines</li><li>Utilitzeu l'eina Itinerari per construir un itinerari a través de les altres eines</li><li>Poseu l'Itinerari creat visible. Cliqueu sobre 'Vista alumne\" per veure el curs des del punt de vista d'aquell qui el segueix.</li></ol>";
+$HOnline = "Ajuda: Sistema de conferència en directe";
+$OnlineContent = "<b>Dokeos Live Conferencing</b> <p>Dokeos Live Conferencing (DLC) és una eina de videoconferència basada sobre el web i que utilitza la tecnologia Flash. Us permet organitzar facilament reunions virtuals entre 2, 3 o 4 llocs distants així com classes virtuals (interacció entre un formador i fins a 500 alumnes).</p> <p>Per organitzar una reunió virtual, comenceu per importar una presentació PowerPoint sota la pestanya Presentació (zona inferior esquerra), a continuació fixeu una trobada per la reunió utilitzant l'Agenda de Chamilo. En el moment de la reunió, haureu de disposar d'una webcam i uns auriculars amb micròfon. El so, en particular el del micròfon, haurà d'estar ben configurat. La configuració es pot realitzar a través de l'eina de paràmetres d'audio del vostre ordinador, així com per un clic dret sobre la zona dels videos a DLC i Paràmetres de Flash. </p><p>DLC requereix com a mínim Flash 9 i una connexió internet equivalent a l'ADSL. Tingueu en compte que es poden produir problemes d'interrupció a causa del FireWall de la vostra organització. Contacteu amb l'Administrador del Sistema.</p><p>En mode Reunió Virtual (quatre a quatre), cadascú pot esdevenir moderador, difondre la seva presentació PowerPoint, escriure o dibuixar i fer-se escoltar pels altres. En mode Classe Virtual (ú a molts), hi ha un mestre que dirigeix les operacions, difon la informació i és vist i sentit per tothom. Els altres segueixen passivament, pregunten pel xat o demanen la paraula. En mode Classe Virtual, només el formador té necessitat de webcam.</p>";
+$HClar = "Ajuda: Chamilo";
+$HDoc = "Ajuda: Documents";
+$DocContent = "Els professors poden crear pàgines web simples ('Crear un document HTML') o transferir a aquesta secció, arxius de qualsevol tipus (HTML, *Word, *PowerPoint, *Excel, PDF, *Flash, *QuickTime, etc.). Tingui en compte que no tots els arxius que enviï podran ser vists pels altres usuaris, qui haurien de disposar de les eines apropiades per a obrir-los, en cas contrari, al fer clic sobre el nom de l'arxiu tan sols podran descarregar-lo. Aquesta descàrrega sempre serà possible si premen sobre la icona . No oblidi revisar prèviament amb un antivirus els fitxers que s'enviï al servidor.Els documents es presenten en la pantalla per ordre alfabètic. Si desitja que els documents s'ordenin de manera diferent, pot *renombrarlos fent que vagin precedits d'un nombre (01, 02, 03, ...). També pot usar l'eina lliçons per a presentar una sofisticada taula de continguts. Tingui en compte que quan transfereix documents al servidor, pot decidir no mostrar la secció 'Documents' i només mostrar una pàgina d'inici (afegir un enllaç a la pàgina web principal de l'activitat) i/o unes Lliçons que contingui només algun dels arxius de la secció Documents. Transferència de documents1. Situï's en la carpeta del mòdul ' Documents' on vol enviar els arxius (per defecte al directori arrel del curs).2. Premi sobre l'opció 'Enviar un document'; això li durà a una pantalla en la qual seleccionarà el document del seu ordinador amb l'ajuda del botó .3. Transfereixi el document a la web del curs prement el botó .4. Si el nom del document conté accents o altres caràcters especials pot ser que hagi de *renombrarlo perquè s'obri correctament. També és possible enviar diversos documents en un arxiu comprimit en format *zip i ordenar, si així ho desitja, que es descomprimeixi automàticament en el servidor. A més d'arxius *zip convencionals es poden enviar arxius *SCORM comprimits, que també tindran l'extensió *zip. Els continguts *SCORM són tutorials especials que han estat dissenyats d'acord amb una norma internacional: *SCORM. És un format especial perquè els continguts educatius puguin executar-se i intercanviar-se lliurement entre diferents Sistemes de Gestió del Coneixement (*LMS= *Learning *Management *Systems). En altres paraules, els materials *SCORM són independents de la plataforma, sent la seva importació i exportació molt simple. La gestió d'aquests arxius es realitza a través de l'eina Lliçons. Tingui en compte que l'administrador de la plataforma ha definit una grandària màxima per a qualsevol arxiu que transfereixi. Si desitja enviar arxius majors (per ex., vídeos...) posi's en contacte amb ell. Observacions especials per a l'enviament de pàgines web.L'enviament de pàgines web simples no planteja cap problema, encara que si la seva complexitat és major pot ser que no tinguin el funcionament esperat. En aquests casos es recomana empaquetar les seves pàgines web com arxius *SCORM comprimits i usar l'eina Lliçons (veure més amunt).Gestió de directoris i arxius Crear una carpeta.Això li permetrà organitzar el contingut de la secció 'Documents' guardant els documents en diferents carpetes o directoris. Pot crear tantes *subcarpetas com desitgi.1. Fer clic sobre 'Crear un directori', situat en la part superior2. Introdueixi el nom del nou directori.3. Validi fent clic en . Esborrar un directori o un arxiu.1. Faci clic en el botó de la columna 'Modificar'. Canviar el nom d'un directori o d'un arxiu.1. Faci clic en el botó de la columna 'Modificar'.2. Introdueixi el nou nom.3. Validi fent clic en . Moure un directori o un arxiu a altre directori.1. Faci clic sobre el botó de la columna 'Modificar'2. Esculli la carpeta a la qual vol moure el document, fent clic sobre el menú desplegable (la paraula \"arrel\" en aquest menú representa el directori principal de la secció 'Documents').3. Validi fent clic en . Afegir un comentari a un document o a una carpeta1. Faci clic en el botó de la columna 'Modificar'2. Introdueixi, modifiqui o esborri el comentari en la zona prevista.3. Validi fent clic en . Ocultar una carpeta o un document als membres de l'activitat.1. Faci clic en el botó de la columna 'Modificar' El document o el directori continua existint, però ja no serà visible per als membres de l'activitat. Si desitja que aquest element torni a ser visible, faci clic en el botó . Veure una carpeta o un arxiu.Per a veure el contingut d'una carpeta bastarà prémer sobre el seu nom. En el cas d'un arxiu, el procediment és similar, encara que hauríem de tenir instal·lats els programes necessaris per a la seva visualització, en cas contrari intentarà descarregar-los. S'ha de tenir especial cura amb els arxius d'extensions executables, els quals recomanem siguin escanejats amb un antivirus quan es descarreguin.Veure diverses imatges com una presentacióQuan el sistema detecta l'existència d'imatges en una carpeta, s'activa l'opció Mostrar presentació', al costat de l'Ajuda. Aquesta permet veure aquestes imatges de forma seqüencial. Com en qualsevol presentació, convé recordar que les imatges no només poden consistir en fotos, sinó també esquemes, mapes conceptuals, etc.Creació i edició de documents en format HTMLPot crear i editar directament en el servidor un document en format HTML sense sortir del seu navegador. Per a crear un document web, faci clic sobre ' Crear un document', doni-li un nom (eviti que el nom contingui accents o altres caràcters especials), i utilitzi l'editor per a compondre el document. Per a modificar el contingut d'un document web, faci clic en el botó de la columna 'Modificar', i es presentarà un editor web a més de les possibilitats de *renombrar i afegir un comentari al document.Sobre l'editor HTML de la Plataforma.L'editor de documents HTML és del tipus *WYSIWYG (*What *You *See *Is *What *You *Get=Ho que vés és el que obtindrà), el que permet compondre'ls sense haver d'emplenar línies de codi HTML, encara que podrà veure el codi prement sobre el botó ' Un menú amb diversos botons li facilitarà l'elecció del tipus i grandària de lletra, sagnar, fer llistes, acolorir, crear enllaços, taules, inserir imatges, etc. També és possible tallar i pegar. Es tracta d'un editor elemental, però que no precisa de cap altre programa addicional al seu navegador.Crear una LliçóAquesta utilitat li permet construir lliçons amb el contingut de les activitats. El resultat formarà una taula de matèries, però amb més possibilitats. Per a més informació, anar al módul";
+$HUser = "Ajuda: Usuaris";
+$HExercise = "Ajuda: Exercicis";
+$HPath = "Ajuda: Itineraris formatius";
+$HDescription = "Ajuda: Descripció del curs";
+$HLinks = "Ajuda: Enllaços";
+$HMycourses = "Ajuda: Àrea d'usuari";
+$HAgenda = "Ajuda: Agenda";
+$HAnnouncements = "Ajuda: Tauler d'anuncis";
+$HChat = "Ajuda: Xat";
+$HWork = "Ajuda: Treballs dels estudiants";
+$HTracking = "Ajuda: Estadístiques";
+$PublishSurvey = "Publicar enquesta";
+$CompareQuestions = "Comparar qüestió";
+$InformationUpdated = "Informació actualitzada";
+$SurveyTitle = "Títol de la enquesta";
+$SurveyIntroduction = "Introducció de l'enquesta";
+$CreateNewSurvey = "Crear enquesta";
+$SurveyTemplate = "Plantilla d'enquesta";
+$PleaseEnterSurveyTitle = "Per favor, escrigui el títol de l'enquesta";
+$PleaseEnterValidDate = "Per favor, introdueixi una data correcta";
+$NotPublished = "No publicada";
+$AdvancedReportDetails = "L'informe avançat permet triar l'usuari i les preguntes per a veure informacions més detallades";
+$AdvancedReport = "Informe avançat";
+$CompleteReportDetails = "L'informe complet permet veure tots els resultats obtinguts per la gent enquestada, i exportar-los en csv (per a Excel)";
+$CompleteReport = "Informe complet";
+$OnlyThoseAddresses = "Enviar l'enquesta només a aquestes adreces";
+$BackToQuestions = "Tornar a les qüestions";
+$SelectWhichLanguage = "Seleccioni l'idioma que desitja crear l'enquesta";
+$CreateInAnotherLanguage = "Crear aquesta enquesta en altre idioma";
+$ExportInExcel = "Exportar en format Excel";
+$ComparativeResults = "Resultats comparatius";
+$SelectDataYouWantToCompare = "Seleccionar les dades que desitja comparar";
+$OrCopyPasteUrl = "O copiar i pegar l'enllaç en la barra d'adreces del seu navegador:";
+$ClickHereToOpenSurvey = "Feu clic aquí per realitzar una enquesta";
+$SurveyNotShared = "Cap enquesta ha estat compartida encara";
+$ViewSurvey = "Veure enquesta";
+$SelectDisplayType = "Seleccionar tipus de visualització";
+$Thanks = "Missatge de resposta";
+$SurveyReporting = "Informe de l'enquesta";
+$NoSurveyAvailable = "No hi ha enquestes disponibles";
+$YourSurveyHasBeenPublished = "ha estat publicada";
+$CreateFromExistingSurvey = "Crear a partir d'una enquesta ja existent";
+$SearchASurvey = "Cercar una enquesta";
+$SurveysOfAllCourses = "Enquesta (s) de tots els cursos";
+$PleaseSelectAChoice = "Per favor, seleccioni una opció";
+$ThereAreNoQuestionsInTheDatabase = "No hi ha qüestions en la base de dades";
+$UpdateQuestionType = "Actualitzar tipus de qüestió:";
+$AddAnotherQuestion = "Afegir una nova qüestió";
+$IsShareSurvey = "Compartir l'enquesta amb altres";
+$Proceed = "Procedir";
+$PleaseFillNumber = "Per favor, empleni els valors numèrics per a les puntuacions.";
+$PleaseFillAllPoints = "Per favor, empleni les puntuacions de 1-5";
+$PleasFillAllAnswer = "Per favor, empleni tots els camps de les respostes.";
+$PleaseSelectFourTrue = "Per favor, seleccioni almenys quatre respostes veritables.";
+$PleaseSelectFourDefault = "Per favor, seleccioni almenys quatre respostes per defecte.";
+$PleaseFillDefaultText = "Per favor, empleni el text per defecte";
+$ModifySurveyInformation = "Modificar l'informació de l'enquesta";
+$ViewQuestions = "Veure qüestions";
+$CreateSurvey = "Crear enquesta";
+$FinishSurvey = "Finalitza l'enquesta";
+$QuestionsAdded = "Les qüestions han estat afegides";
+$DeleteSurvey = "Eliminar enquesta";
+$SurveyCode = "Codi de l'enquesta";
+$SurveyList = "Enquestes";
+$SurveyAttached = "Enquesta adjuntada";
+$QuestionByType = "Preguntes per tipus";
+$SelectQuestionByType = "Seleccionar una pregunta per tipus";
+$PleaseEnterAQuestion = "Per favor, introdueixi una pregunta";
+$NoOfQuestions = "Nombre de qüestions";
+$ThisCodeAlradyExists = "Aquest codi ja existeix";
+$SaveAndExit = "Desa i surt";
+$ViewAnswers = "Veure respostes";
+$CreateExistingSurvey = "Crear des d'una enquesta ja existent";
+$SurveyName = "Nom de l'enquesta";
+$SurveySubTitle = "Subtítol de l'enquesta";
+$ShareSurvey = "Compartir l'enquesta";
+$SurveyThanks = "Agraïments";
+$EditSurvey = "Editar l'enquesta";
+$OrReturnToSurveyOverview = "O tornar a la vista general de l'enquesta";
+$SurveyParametersMissingUseCopyPaste = "O tornar a la vista general de l'enquesta";
+$WrongInvitationCode = "Codi de convidat erroni";
+$SurveyFinished = "Ha acabat l'enquesta.";
+$SurveyPreview = " Previsualització de l'enquesta";
+$InvallidSurvey = "Enquesta no vàlida";
+$AddQuestion = "Afegir una pregunta";
+$EditQuestion = "Editar qüestió";
+$TypeDoesNotExist = "Aquest tipus no existeix";
+$SurveyCreatedSuccesfully = "L'enquesta ha estat creada";
+$YouCanNowAddQuestionToYourSurvey = "Ara pot afegir les preguntes";
+$SurveyUpdatedSuccesfully = "L'enquesta ha estat actualitzada";
+$QuestionAdded = "La qüestió ha estat afegida.";
+$QuestionUpdated = "La qüestió ha estat actualitzada";
+$RemoveAnswer = "Treu opció";
+$AddAnswer = "Afegir opció";
+$DisplayAnswersHorVert = "Mostrar";
+$AnswerOptions = "Opcions de resposta";
+$MultipleResponse = "Resposta múltiple";
+$Dropdown = "Llista desplegable";
+$Pagebreak = "Fi de pàgina";
+$QuestionNumber = "Qüestió número";
+$NumberOfOptions = "Nombre d'opcions";
+$SurveyInvitations = "Invitacions a l'enquesta";
+$InvitationCode = "Codi d'invitació";
+$InvitationDate = "Data d'invitació";
+$Answered = "Respost";
+$AdditonalUsersComment = "Pot convidar a altres usuaris perquè completin aquesta enquesta. Per a això ha d'escriure els seus correus electrònics separats per , o ;";
+$MailTitle = "Assumpte del correu";
+$InvitationsSend = "invitacions enviades.";
+$SurveyDeleted = "L'enquesta ha estat eliminada.";
+$NoSurveysSelected = "No ha seleccionat cap enquesta";
+$NumberOfQuestions = "Nombre de qüestions";
+$Invited = "Convidat";
+$SubmitQuestionFilter = "Filtrar";
+$ResetQuestionFilter = "Cancel·lar  filtre";
+$ExportCurrentReport = "Exportar l'informe actual";
+$OnlyQuestionsWithPredefinedAnswers = "Només poden usar-se preguntes amb respostes predefinides";
+$SelectXAxis = "Seleccioni la qüestió de l'eix X";
+$SelectYAxis = "Seleccioni la pregunta de l'eix Y";
+$ComparativeReport = "Informe comparatiu";
+$AllQuestionsOnOnePage = "Totes les preguntes seran mostrades en una pàgina";
+$SelectUserWhoFilledSurvey = "Seleccionar l'usuari que va completar l'enquesta";
+$userreport = " Informe de l'usuari";
+$VisualRepresentation = "Gràfic";
+$AbsoluteTotal = "Total global";
+$NextQuestion = "Següent qüestió";
+$PreviousQuestion = "Pregunta anterior";
+$PeopleWhoAnswered = "Persones que han triat aquesta resposta";
+$SurveyPublication = "Publicació de l'enquesta";
+$AdditonalUsers = "Usuaris addicionals";
+$MailText = "Text del correu";
+$UseLinkSyntax = "Els usuaris que hagi seleccionat rebran un correu electrònic amb el text que ha escrit més amunt, així com un enllaç que els usuaris haurien de prémer per a emplenar l'enquesta. Si desitja introduir aquest enllaç en algun lloc del seu text, ha d'inserir el següent: ** enllaç ** (asterisc asterisc enllaci asterisc asterisc). Aquesta etiqueta serà substituïda automàticament per l'enllaç. Si no agrega **l'enllaç **  al seu text, l'enllaç s'afegirà al final del correu";
+$DetailedReportByUser = "Informe detallat per usuari";
+$DetailedReportByQuestion = "Informe detallat per pregunta";
+$ComparativeReportDetail = "En aquest informe pot comparar dues preguntes.";
+$CompleteReportDetail = "En aquest informe s'obté un sumari de les respostes de tots els usuaris a totes les preguntes. També disposa d'una opció per a veure solament una selecció de preguntes. Pot exportar els resultats a un arxiu en format de CSV per a la seva utilització en aplicacions estadístiques.";
+$DetailedReportByUserDetail = "En aquest informe pot veure totes les respostes d'un usuari.";
+$DetailedReportByQuestionDetail = "En aquest informe es veuen els resultats pregunta a pregunta. Proporciona una anàlisi estadística bàsic i gràfics.";
+$ReminderResendToAllUsers = "Enviar a tots els usuaris seleccionats. Si no marca aquesta casella, solament rebran el correu electrònic els usuaris addicionals que hagi afegit.";
+$Multiplechoice = "Elecció múltiple";
+$Score = "Puntuació";
+$Invite = "Convidats";
+$MaximumScore = "Puntuació màxima";
+$ViewInvited = "Veure convidats";
+$ViewAnswered = "Veure les persones que han respost";
+$ViewUnanswered = "Veure les persones que no han respost";
+$DeleteSurveyQuestion = "Està segur que vol eliminar aquesta pregunta ?";
+$YouAlreadyFilledThisSurvey = "Ja ha emplenat aquesta enquesta";
+$ClickHereToAnswerTheSurvey = "Faci clic aquí per a contestar l'enquesta";
+$UnknowUser = "Usuari desconegut";
+$HaveAnswered = "Han contestat";
+$WereInvited = "van ser convidats";
+$PagebreakNotFirst = "El separador de pàgina no pot estar al començament";
+$PagebreakNotLast = "El separador de pàgina no pot estar al final";
+$SurveyNotAvailableAnymore = "Ho sentim però aquesta enquesta ja no està disponible. Li agraïm el seu interès.";
+$DuplicateSurvey = "Duplicar l'enquesta";
+$EmptySurvey = "Netejar l'enquesta";
+$SurveyEmptied = "Les respostes a l'enquesta han estat eliminades";
+$SurveyNotAvailableYet = "Aquesta enquesta encara no està disponible. Intenti'l més tard. Gràcies.";
+$PeopleAnswered = "Persones que han respost";
+$AnonymousSurveyCannotKnowWhoAnswered = "Aquesta enquesta és anònima. Vè. no pot veure qui ha respost.";
+$IllegalSurveyId = "Identificador d'enquesta desconegut";
+$SurveyQuestionMoved = "La pregunta ha estat moguda";
+$IdenticalSurveycodeWarning = "Aquest codi de l'enquesta ja existeix. Probablement això sigui degut al fet que l'enquesta també existeix en altres idiomes. Els usuaris podran triar entre diferents idiomes.";
+$ThisSurveyCodeSoonExistsInThisLanguage = "Aquest codi d'enquesta ja existeix en aquest idioma";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "Les respostes de l'usuari han estat eliminades satisfactòriament";
+$DeleteSurveyByUser = "Eliminar les resposta d'aquest usuari d'aquesta enquesta";
+$SelectType = "Seleccionar el tipus";
+$Conditional = "Condicional";
+$ParentSurvey = "Enquesta mare";
+$OneQuestionPerPage = "Una qüestió per pàgina";
+$ActivateShuffle = "Activar per a remenar";
+$ShowFormProfile = "Mostrar el format del perfil";
+$PersonalityQuestion = "Editar qüestió";
+$YouNeedToCreateGroups = "Tu necessites crear grups";
+$ManageGroups = "Administrar grups";
+$GroupCreatedSuccessfully = "Grup creat amb èxit";
+$GroupNeedName = "Cal anomenar el grup";
+$Personality = "Personalitzar";
+$Primary = "Primer";
+$Secondary = "Segon";
+$PleaseChooseACondition = "Per favor trii una condició";
+$ChooseDifferentCategories = "Trii diferent categoria";
+$Normal = "Normal";
+$NoLogOfDuration = "Cap registre de durada";
+$AutoInviteLink = "Els usuaris que no hagin estat convidats poden utilitzar aquest enllaç per a realitzar l'enquesta:";
+$CompleteTheSurveysQuestions = "Completi les preguntes de l'enquesta";
+$SurveysDeleted = "Enquestes esborrades";
+$RemindUnanswered = "Recordatori només per als usuaris que no hagin respost";
+$ModifySurvey = "Modificar enquesta";
+$CreateQuestionSurvey = "Crear qüestió";
+$ModifyQuestionSurvey = "Modificar qüestió";
+$BackToSurvey = "Tornar a l'enquesta";
+$UpdateInformation = "Actualització de l'informació";
+$PleaseFillSurvey = "Per favor, ompli l'enquesta";
+$ReportingOverview = "Sumari d'informes";
 $GeneralDescription = "Descripció general";
 $GeneralDescriptionQuestions = "Quin és el paper i funció del curs en el programa? Es requereixen activitats prèvies? Quina relació té aquest curs amb uns altres?";
 $GeneralDescriptionInformation = "Descripció del curs (nombre d'hores, codi, lloc on es desenvolupa...). Professor (nom, cognoms, despatx, telèfon, e-mail...).";
@@ -2268,6 +4735,7 @@ $Module = "Mòdul";
 $UserHasPermissionNot = "L'usuari no té permisos";
 $UserHasPermission = "L'usuari té permisos";
 $UserHasPermissionByRoleGroup = "L'usuari té els permisos del seu grup";
+$PromotionUpdated = "Promoció actualitzada satisfactòriament";
 $AddBlog = "Crear un bloc nou";
 $EditBlog = "Editar el títol i el subtítol";
 $DeleteBlog = "Esborrar aquest bloc";
@@ -2393,12 +4861,478 @@ $FolderEdited = "Tasca modificada";
 $UpdateWork = "Actualitzar la tasca";
 $MakeAllPapersInvisible = "Ocultar tots els documents";
 $MakeAllPapersVisible = "Fer tots els documents visibles";
+$UserContent = "<b>Afegeix usuaris</b>
+
+L'opció 'Inscriu usuaris al curs' li permet afegir al seu curs usuaris ja registrats a la plataforma. Per a això comproveu primer si ja està registrat a la plataforma, en aquest cas, marqui la casella que apareix al costat del seu nom i validi, això ho inscriure en el curs. Si encara no està registrat a la plataforma, aquest registre haurà de realitzar l'administrador de la plataforma o el propi usuari en el cas del que aquesta opció estigui habilitada.
+
+Una segona possibilitat és que els estudiants s'inscriguin per si mateixos, per a això l'administrador del curs haurà d'haver activat a l'eina 'Configuració del curs'.
+
+Tant en les operacions de registre com en les d'inscripció els usuaris rebran un correu electrònic recordant-lis el seu nom d'usuari i contrasenya.
+
+
+<b>Descripció</b>
+
+La descripció no atorga ninguns privilegis en el sistema informàtic. Només indica als usuaris, qui és qui. Podeu modificar aquesta descripció, fent clic a la icona en forma de llapis i escrivint la funció que voleu descriure de cada usuari: professor, ajudant, estudiant, visitant, expert, documentalista, moderador, tutor ...
+
+<b>Drets d'administració</b>
+
+Per contra, els permisos o drets d'administració atorguen privilegis al sistema informàtic, podent modificar el contingut i l'organització del lloc del curs. Aquests privilegis presenten dos perfils. El perfil de 'Administrador del curs', en què la persona en qüestió tindrà els mateixos permisos que qui els hi està donant. El perfil de 'Tutor' que l'identificarà per fer-se càrrec dels grups que puguin establir en el curs. Per atorgar o no aquests permisos a un usuari del curs, n'hi haurà prou amb marcar o no la casella corresponent, després d'haver premut en l'opció modifica.
+
+<b>Cotitulars</b>
+
+Per fer que figuri el nom d'un cotitular del curs a la capçalera del mateix, aneu a la pàgina principal del curs i feu ús de l'eina 'Configuració del curs '. En aquesta eina modifiqueu el camp 'Professor'; aquest camp és completament independent de la llista d'usuaris del curs, de manera que pot no estar inscrit en el mateix.
+
+<b>Seguiment i àrees personals dels usuaris</b>
+
+A més d'oferir un llistat d'usuaris i modificar els seus permisos, l'eina 'Usuaris' dóna un seguiment individual i permet al professor definir capçaleres addicionals a la fitxa de cada estudiant, perquè aquests les emplenin. Aquestes dades addicionals només estaran vinculats al curs en qüestió.";
+$GroupContent = "<b>Introducció</b>
+
+Aquesta eina permet crear i gestionar grups dins del seu curs. Quan es crea el curs (Crear grups), els grups estan buits. Hi ha moltes formes d'emplenar:
+
+<ul>
+<li> Automàticament ('Emplenar grups'),</li>
+<li> Manualment ('Editar'),</li>
+<li> Adscripció a un grup per part dels propis estudiants (Modificar característiques: 'Es permet als estudiants ...').</li>
+</ul>
+
+Es poden combinar aquestes tres formes. Pot, per exemple, demanar als estudiants que s'inscriguin en un grupo.Más tarda pot descobrir que algun no ho va fer i decideixi finalment omplir de forma automáticalos grups per completar-los. També podeu editar cada grup per decidir qui forma part de quin grup.
+Omplir grups, tant de forma manual o automàtica només és efectiu si hi ha estudiants inscritosen el curs (no confongui la inscripció en el curs amb la inscripció en els grups). La llista d'estudiants és visible en el mòdul Usuaris.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Crear Grups</b>
+
+Per crear grups nous, cliqueu a 'Crear nous grups' i determinar el nombre de grups que vol crear.El nombre màxim de membres és il·limitat, però és recomanable que indiqui un. Si deixa el camp nombre màxim sense emplenar, la mida serà infinit.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Característiques dels grups</b>
+
+Podeu determinar les característiques dels grups de forma global (per a tots els grups). Es permet als estudiants inscriure's en el grup que vulguin:
+
+Podeu crear grups buits, perquè els estudiants s'inscriguin. Si vostè ha definit un nombre màxim, els grups complets no acceptaran nous membres. Aquest mètode és bo per a professors que encara no coneixen la llista d'estudiants quan creen els grups.
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Eines</b>
+
+Cada grup pot disposar d'un 'Fòrum' (privat o públic) i/o d'una àrea de 'Documents' (privada o pública)
+
+<hr noshade=\"\" size=\"1\">
+
+<b>Edició manual</b>
+
+Quan es creen els grups (Crear grups), veurà a la part inferior de la pàgina una llista dels grups amb un seguit d'informació i funcions:
+
+<ul>
+<li><b>Edita</b> manualment el nom del grup, descripció, tutor, llista de membres</li>
+<li><b>Esborra</b> elimina un grup</li>
+
+<hr noshade=\"\" size=\"1\">";
+$ExerciseContent = "L'eina 'Exercicis' li permet crear exercicis que han de contenir tantes preguntes com vostè vulgui.
+
+Les preguntis que creeu, poden tenir diferents models de respostes disponibles:
+
+<ul>
+<li>Elecció múltiple (resposta única)</li>
+<li>Elecció múltiple (diferents respostes)</li>
+<li>Relacionar</li>
+<li>Emplenar espais en blanc</li>
+<li>Resposta lliure</li>
+</ul>
+
+Un exercici està compost per vàries preguntes que guarden relació entre elles.
+<hr>
+
+<b>Creació d'Exercicis</b>
+
+Per crear un exercici, premeu sobre l'enllaç \"Excercici Nou\".
+
+Escriviu el nom de l'exercici i, si voleu, una descripció del mateix.
+
+També podeu escollir entre dos tipus d'exercicis:
+
+<ul>
+
+<li>Preguntes en una sola pàgina</li>
+<li>Una pregunta per pàgina (seqüencial)</li>
+</ul>
+
+i digueu si voleu que les preguntes siguin ordenades de forma aleatòria en el moment que es faci l'exercici.
+
+Després deseu el seu exercici. Veureu la gestió de les preguntes d'aquest exercici.
+<hr>
+<b>Afegir Preguntes</b>
+
+Podeu afegir una pregunta a un exercici que hagueu creat prèviament. La descripció és opcional, així com la possibilitat d'incloure una imatge a la seva pregunta.
+
+<hr>
+
+<b>Elecció múltiple</b>
+
+Aquest també es coneix com 'pregunta de resposta o elecció múltiple' MAQ/MCQ.
+
+Per crear-ne una:
+<ul>
+<li>Definiu respostes a la seva pregunta. Podeu afegir o esborrar un resposta prement el botó dret</li>
+<li>Marqueu a la casella de l'esquerra la/es resposta/es correcta/es</li>
+<li>Afegiu un comentari opcional. Aquesta comentari no el veurà l'alumne fins que hagi respost a la pregunta</li>
+<li>Atorgueu un 'pes' (valor de la resposta respecte a la totalitat de l'exercici) a cada resposta. El pes pot ser un número positiu, negatiu o zero</li>
+<li>Deseu les seves respostes</li>
+</ul>
+
+<hr>
+
+<b>Emplenar espais en blanc</b>
+
+Això permet crear un text amb espais en blanc. L'objectiu és deixar que l'estudiant empleni en aquests espais paraules que vostè hagi eliminat del text.
+
+Per treure una paraula del text i, per tant crear un espai en blanc, poseu la paraula entre claudàtors [com això].
+
+Un cop que el text s'ha escrit i definit amb els espais, podeu afegir un comentari que veurà l'estudiant quan respongui a cada pregunta.
+
+Deseu el seu text i veuràs el pas següent que li permetrà assignar un pes a cada espai. Per exemple, si la pregunta sencera val 10 punts i té 5 espais, podeu donar-li un pes de 2 punts per a cada espai en blanc.
+
+<hr>
+
+<b>Relacionar</b>
+
+Aquest model de resposta pot escollir-se per crear un pregunta on l'estudiant hagi de relacionat elements des d'una unitat U1 a una altra unitat U2.
+
+També es pot utilitzar per demanar als estudiants que seleccionin els elements en un ordre determinat.
+
+Primer definiu les opcions entre les que els estudiants podran seleccionar la resposta correcta. Després definiu les preguntes que hauran d'anar relaciones amb una de les opcions definides prèviament. Per últim, relacioneu, mitjançant el menú desplegable elements de la primera unitat que es relacionen amb la segona.
+
+Atenció: diferents elements de la primera unitat poden referir-se al mateix element a la segona unitat.
+
+Atorgueu un pes a cada relació concreta i deseu la seva resposta.
+
+<hr>
+
+<b>Modificació d'Exercicis</b>
+
+Per modificar un exercici segui els mateixos passos que vàreu realitzar per crear-lo. Només premi sobre la imatge al costat de l'exercici que desitgeu modificar i seguiu les instruccions d'anteriors.
+
+<hr>
+
+<b>Esborrar Exercicis</b>
+
+Per esborrar un exercici premeu sobre la imatge del costat de l'exercici que voleu esborrar.
+
+<hr>
+
+<b>Activar Exercicis</b>
+
+Per tant que els alumnes puguin fer un exercici, heu d'activar-lo prement sobre la imatge al costat de l'exercici que voleu activar.
+
+<hr>
+
+<b>Provar un Exercici</b>
+
+Podeu provar el seu exercici prement sobre el nom de l'exercici de la llista d'exercicis.
+
+<hr>
+
+<b>Exercicis Aleatoris</b>
+
+En el moment en que es crea/modifica un exercici, podeu especificar si voleu que les preguntes apareguin en ordre aleatori d'entre totes les escollides en aquell exercici.
+
+Això significa que si activeu aquesta opció, les preguntes apareixeran en un ordre diferent cada cop que els estudiants premin sobre l'exercici.
+
+Si teniu un nombre elevat de preguntes, també podeu fer que apareguin només X preguntes d'entre totes les preguntes disponibles per aquell exercici.
+
+<hr>
+
+<b>Banc de preguntes</b>
+
+Quan esborra un exercici, les preguntes no s'eliminen de la base de dades i poden tornar a ser utilitzades en un exercici nou, mitjançant el 'Banc de preguntes'.
+
+El Banc de preguntes permet tornar a utilitzar les mateixes preguntes en diferents exercicis. 
+
+Per defecte, es mostren totes les preguntes del seu curs. Podeu mostrar les preguntes relacionades amb un exercici escollint aquest des del menú desplegable <<Filtre>>.
+
+Les preguntes orfes són preguntes que pertanyen a cap exercici.
+
+<hr>
+
+<b>Exercicis HotPotatoes</b>
+
+L'eina 'Exercicis' també li permet importar exercicis HotPotatoes al seu portal Chamilo. Els resultats d'aquests exercicis s'emmagatzemaran de la mateixa manera que ho fan els exercicis de Chamilo. Podeu explorar els resultats mitjançant el Seguiment d'usuaris. En cas d'un sol exercici, es recomana utilitzar el format HTML o HTM, però si l'exercici conté imatges el més conveninet seria l'enviament d'un arxiu ZIP.
+
+Nota: també podeu afegir els exercicis de HotPotatoes com un pas en una lliçó.
+
+<b>Mètode d'importació</b>
+
+<ul>
+<li>Seleccioneu l'arxiu del seu ordinador utilitzant el botó <<Examinar>> situat a la dreta de la seva pantalla</li>
+<li>Envieu-lo a la plataforma mitjançant el botó <<Envia>></li>
+<li>Si voleu obrir l'exercici serà suficient amb que faci clic sobre el seu nom</li>
+</ul>
+
+<b>Adreces útils:</b>
+
+<ul>
+<li>Pàgina principal de HotPotatoes: 
+<a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li>
+</ul>";
+$PathContent = "L'eina 'Exercicis' li permet crear exercicis que han de contenir tantes preguntes com vostè vulgui.
+
+Les preguntis que creeu, poden tenir diferents models de respostes disponibles:
+
+<ul>
+<li>Elecció múltiple (resposta única)</li>
+<li>Elecció múltiple (diferents respostes)</li>
+<li>Relacionar</li>
+<li>Emplenar espais en blanc</li>
+<li>Resposta lliure</li>
+</ul>
+
+Un exercici està compost per vàries preguntes que guarden relació entre elles.
+<hr>
+
+<b>Creació d'Exercicis</b>
+
+Per crear un exercici, premeu sobre l'enllaç \"Excercici Nou\".
+
+Escriviu el nom de l'exercici i, si voleu, una descripció del mateix.
+
+També podeu escollir entre dos tipus d'exercicis:
+
+<ul>
+
+<li>Preguntes en una sola pàgina</li>
+<li>Una pregunta per pàgina (seqüencial)</li>
+</ul>
+
+i digueu si voleu que les preguntes siguin ordenades de forma aleatòria en el moment que es faci l'exercici.
+
+Després deseu el seu exercici. Veureu la gestió de les preguntes d'aquest exercici.
+<hr>
+<b>Afegir Preguntes</b>
+
+Podeu afegir una pregunta a un exercici que hagueu creat prèviament. La descripció és opcional, així com la possibilitat d'incloure una imatge a la seva pregunta.
+
+<hr>
+
+<b>Elecció múltiple</b>
+
+Aquest també es coneix com 'pregunta de resposta o elecció múltiple' MAQ/MCQ.
+
+Per crear-ne una:
+<ul>
+<li>Definiu respostes a la seva pregunta. Podeu afegir o esborrar un resposta prement el botó dret</li>
+<li>Marqueu a la casella de l'esquerra la/es resposta/es correcta/es</li>
+<li>Afegiu un comentari opcional. Aquesta comentari no el veurà l'alumne fins que hagi respost a la pregunta</li>
+<li>Atorgueu un 'pes' (valor de la resposta respecte a la totalitat de l'exercici) a cada resposta. El pes pot ser un número positiu, negatiu o zero</li>
+<li>Deseu les seves respostes</li>
+</ul>
+
+<hr>
+
+<b>Emplenar espais en blanc</b>
+
+Això permet crear un text amb espais en blanc. L'objectiu és deixar que l'estudiant empleni en aquests espais paraules que vostè hagi eliminat del text.
+
+Per treure una paraula del text i, per tant crear un espai en blanc, poseu la paraula entre claudàtors [com això].
+
+Un cop que el text s'ha escrit i definit amb els espais, podeu afegir un comentari que veurà l'estudiant quan respongui a cada pregunta.
+
+Deseu el seu text i veuràs el pas següent que li permetrà assignar un pes a cada espai. Per exemple, si la pregunta sencera val 10 punts i té 5 espais, podeu donar-li un pes de 2 punts per a cada espai en blanc.
+
+<hr>
+
+<b>Relacionar</b>
+
+Aquest model de resposta pot escollir-se per crear un pregunta on l'estudiant hagi de relacionat elements des d'una unitat U1 a una altra unitat U2.
+
+També es pot utilitzar per demanar als estudiants que seleccionin els elements en un ordre determinat.
+
+Primer definiu les opcions entre les que els estudiants podran seleccionar la resposta correcta. Després definiu les preguntes que hauran d'anar relaciones amb una de les opcions definides prèviament. Per últim, relacioneu, mitjançant el menú desplegable elements de la primera unitat que es relacionen amb la segona.
+
+Atenció: diferents elements de la primera unitat poden referir-se al mateix element a la segona unitat.
+
+Atorgueu un pes a cada relació concreta i deseu la seva resposta.
+
+<hr>
+
+<b>Modificació d'Exercicis</b>
+
+Per modificar un exercici segui els mateixos passos que vàreu realitzar per crear-lo. Només premi sobre la imatge al costat de l'exercici que desitgeu modificar i seguiu les instruccions d'anteriors.
+
+<hr>
+
+<b>Esborrar Exercicis</b>
+
+Per esborrar un exercici premeu sobre la imatge del costat de l'exercici que voleu esborrar.
+
+<hr>
+
+<b>Activar Exercicis</b>
+
+Per tant que els alumnes puguin fer un exercici, heu d'activar-lo prement sobre la imatge al costat de l'exercici que voleu activar.
+
+<hr>
+
+<b>Provar un Exercici</b>
+
+Podeu provar el seu exercici prement sobre el nom de l'exercici de la llista d'exercicis.
+
+<hr>
+
+<b>Exercicis Aleatoris</b>
+
+En el moment en que es crea/modifica un exercici, podeu especificar si voleu que les preguntes apareguin en ordre aleatori d'entre totes les escollides en aquell exercici.
+
+Això significa que si activeu aquesta opció, les preguntes apareixeran en un ordre diferent cada cop que els estudiants premin sobre l'exercici.
+
+Si teniu un nombre elevat de preguntes, també podeu fer que apareguin només X preguntes d'entre totes les preguntes disponibles per aquell exercici.
+
+<hr>
+
+<b>Banc de preguntes</b>
+
+Quan esborra un exercici, les preguntes no s'eliminen de la base de dades i poden tornar a ser utilitzades en un exercici nou, mitjançant el 'Banc de preguntes'.
+
+El Banc de preguntes permet tornar a utilitzar les mateixes preguntes en diferents exercicis. 
+
+Per defecte, es mostren totes les preguntes del seu curs. Podeu mostrar les preguntes relacionades amb un exercici escollint aquest des del menú desplegable <<Filtre>>.
+
+Les preguntes orfes són preguntes que pertanyen a cap exercici.
+
+<hr>
+
+<b>Exercicis HotPotatoes</b>
+
+L'eina 'Exercicis' també li permet importar exercicis HotPotatoes al seu portal Chamilo. Els resultats d'aquests exercicis s'emmagatzemaran de la mateixa manera que ho fan els exercicis de Chamilo. Podeu explorar els resultats mitjançant el Seguiment d'usuaris. En cas d'un sol exercici, es recomana utilitzar el format HTML o HTM, però si l'exercici conté imatges el més conveninet seria l'enviament d'un arxiu ZIP.
+
+Nota: també podeu afegir els exercicis de HotPotatoes com un pas en una lliçó.
+
+<b>Mètode d'importació</b>
+
+<ul>
+<li>Seleccioneu l'arxiu del seu ordinador utilitzant el botó <<Examinar>> situat a la dreta de la seva pantalla</li>
+<li>Envieu-lo a la plataforma mitjançant el botó <<Envia>></li>
+<li>Si voleu obrir l'exercici serà suficient amb que faci clic sobre el seu nom</li>
+</ul>
+
+<b>Adreces útils:</b>
+
+<ul>
+<li>Pàgina principal de HotPotatoes: 
+<a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li>
+</ul>";
+$DescriptionContent = "Aquesta eina l'ajudarà a descriure el seu curs d'una forma sintètica. Aquesta descripció donarà als estudiants una idea del que poden esperar del curs. Així mateix, el pot ajudar a repensar l'escenari educatiu proposat.
+
+Per facilitar la creació de la descripció, aquesta es realitza mitjançant formularis. Com a suggeriment es presenta una llista d'encapçalaments per als diferents apartats de la descripció, però si voleu crear la seva pròpia descripció amb apartats amb diferent nom, escolliu l'opció 'Apartat personalitzat' i posi vostè el títol. Repetint l'operació, podrà afegir tants apartats addicionals com vulgueu.
+
+Per realitzar la descripció del curs, feu clic sobre el botó 'Crear o editar el programa del curs'; després desplegueu el menú, seleccioneu l'apartat que desitgeu i premeu el botó 'afegeix'. Seguidament el títol de l'apartat apareixerà sobre un formulari, que després d'emplenar-lo, podreu desar prement en el botó D'acord. En tot moment serà possible esborrar o modificar un apartat fent clic respectivament sobre les icones en forma de llapis o creu vermella.";
+$LinksContent = "Aquesta eina permet als professors oferir una biblioteca de recursos als seus estudiants.
+
+Si la llista d'enllaços és molt llarga, pot ser útil organitzar-los en categories per facilitar la recerca d'informació. També podeu modificar cada enllaç i tornar-lo a assignar a una nova categoria que hagueu creat. Tingueu en compte que si s'esborra una categoria també esborrarà tots els enllaços que contingui.
+
+El camp descripció pot utilitzar-se per donar informació adicional sobre el contingut de l'enllaç, però també per descriure el que el professor espera què facin o obtinguin els estudiants a través d'aquest enllaç. Si per exemple, si apunteu cap a una pàgina sobre Aristòtil, en el camp descripció podeu demanar a l'estudiant que estudiï la diferència entre síntesi i anàlisi.
+
+Finalment, és una bona pràctica revisar de tant en tant els enllaços per veure si segueixen actius.";
+$MycoursesContent = "Un cop autenticat a la plataforma, se troba dins de la seva <i>àrea d'usuari</i>.
+
+A l'àrea principal (centre) podeu veure <b><<La meva llista de cursos>></b>, un llista dels seus cursos. Depenent dels seus drets d'usuari podeu tenir la possibilitat de crear cursos nous (amb el menú de mà dreta).
+
+Al banner superior podeu veure:
+
+<ul>
+<li><b>El meu perfil:</b> utilitzeu-lo per canviar la contrasenya, l'autenticació, fotografia o d'altres configuracions. També podeu comprovar el seu progrés personal</li>
+<li><b>El meu perfil:</b> conté l'agenda d'esdeveniments dels cursos on esteu registrats. Podeu editar la llista dels meus cursos, al menú de mà dreta, permet que t'inscriguis a cursos nous que els professors de l'organització hagin obert per aquest fi. Aquest vincle també permet que t'esborris d'algun curs</li>
+</ul>
+
+Els vincles <b>Fòrum de suport</b> i <b>Documentació</b> apunten al web de Chamilo, on podeu preguntar qüestions tècniques o pedagògiques, trobar més informació. Per accedir a un curs (àrea principal de la seva pàgina principal), cliqueu sobre el seu nom. El seu perfil pot variar d'un curs a un altre. És possible que sigueu professor en un curs i alumne en un altre.";
+$AgendaContent = "L'agenda és una eina que en cada curs ofereix una visió resumida de les activitats proposades. Aquesta eina també és accessible a la barra superior mitjançant la opció '' Agenda ', encara que aquí ofereix una síntesi de tots els esdeveniments relatius a tots els cursos en què l'usuari està inscrit. Aquesta segona funcionalitat sempre estarà disponible.
+
+Quan en un curs accedim a l'eina 'Agenda' es mostrarà una llista d'esdeveniments. Pot vincular no només un text a una data, sinó també múltiples recursos: esdeveniments de l'agenda, documents, anuncis, missatges d'un fòrum, exercicis, enllaços, ... D'aquesta manera, l'agenda es converteix en el programa cronològic de les activitats d'aprenentatge dels seus estudiants.
+
+Més, el sistema informarà els usuaris de totes les novetats que s'hagin produït des de la seva última visita a la plataforma. En el llistat 'Els meus cursos' de la pàgina d'entrada de cada usuari s'incorporarà al títol de cada curs la icona de l'eina en què es produeix la novetat. Després de visitar l'eina, la icona desapareixerà.
+
+Si vol anar més lluny en la lògica de l'estructura de les activitats d'aprenentatge, li suggerim que utilitzi l'eina 'Lliçons' que ofereix els mateixos principis però amb característiques més avançades. Una lliçó es pot considerar com una síntesi entre una taula de continguts, una agenda, una seqüenciació (ordre imposat) i un seguiment.";
+$AnnouncementsContent = "L'eina Tauler d'anuncis permet als professors col·locar missatges en el tauler d'anuncis del curs. Pot avisar els seus membres de la col·locació d'un nou document, de la proximitat de la data per enviar els treballs, o que algú ha realitzat un treball d'especial qualitat. Cada membre veurà aquesta novetat quan entri en la seva àrea d'usuari.
+
+La llista de distribució. Els anuncis a més de ser publicats al tauler poden ser enviats automàticament per correu electrònic si es marca la casella corresponent. Si només voleu utilitzar la llista, només cal que després enviar-lo, esborri l'anunci del tauler.
+
+A més d'enviar un correu a tots els membres, vostè pot enviar-lo a una o diverses persones, oa un o diversos grups que hagi format en el curs. Un cop premuda l'opció, utilitzeu CTRL + clic per seleccionar diversos elements al menú d'esquerra i després feu clic sobre el botó que apunta a la dreta per enviar-los a l'altra llista. Finalment, escrigui el seu missatge al camp inferior de la pàgina i premeu el botó Enviar. Aquesta utilitat, si és usada amb moderació, permet recuperar membres que hagin abandonat abans de finalitzar.";
+$ChatContent = "L'eina 'Xat' li permet xerrar en viu amb diversos membres del curs.
+
+Aquest xat no és igual que l'utilitzat per programes com MSN® o Yahoo Messenger®, doncs en estar basat en el Web, triga uns segons a restaurar. No obstant això, té l'avantatge d'estar integrat en el curs, de poder arxivar les seves xerrades a la secció documents i de no requerir que els usuaris tinguin instal·lat cap programari especial.
+
+Si els usuaris inclouen les seves fotos al seu dossier electrònic (opció 'El meu perfil' de la barra de menú superior del lloc web), aquesta apareixerà al costat dels seus missatges per ajudar a identificar-los.
+
+El xat és una eina de comunicació sincrònica que permet a diversos usuaris intervenir en temps real. Quan els usuaris són dos o tres no hi ha problema en la interacció, però quan aquests són molts els missatges poden succeir-se vertiginosament i es pot arribar a perdre el fil de la discussió. Igual que en una aula física, en aquests casos és necessari un moderador.Este xat basat en la web no ofereix al professor unes eines especials de moderació, excepte la de suprimir tots els missatges en pantalla mitjançant l'opció \"Esborrar la llista de missatges \". Això es realitza quan el professor vol esborrar tots els missatges de la pantalla i començar de nou una conversa.
+
+També, els usuaris disposen d'una casella per marcar preguntes importants, encara que no s'ha d'abusar d'ella.
+
+<b>Importància pedagògica</b>
+
+No sempre és necessari proporcionar un espai de xerrada en un curs. No obstant això, si la idea és fomentar la participació, aquesta eina pot ajudar. Per exemple, habitualment pot amagar l'eina de xat, fent-la visible en certes èpoques en que vostè tingui una reunió concertada amb la resta dels membres per contestar les seves preguntes en viu. D'aquesta manera, els estudiants tindran la garantia de poder tenir diversos interlocutors en aquest moment.
+
+El xat es pot usar combinat amb altres eines o documents del nostre lloc web, que hàgim obert a part (clic dret del ratolí sobre l'enllaç del document o eina i seleccionar obrir en una nova finestra), d'aquesta manera podem per ex. , anar explicant al xat determinats documents que haguem pujat a la plataforma.
+
+Totes les sessions del xat són guardades automàticament i es podran visualitzar pels usuaris del curs si així ho desitja l'administrador d'aquest. Encara que moltes vegades les sessions al xat poden ser trivials, en altres poden ser realment interessants i dignes de ser incorporades com un document més de treball.";
+$WorkContent = "L'eina 'Publicacions dels estudiants' permet als usuaris publicar documents al lloc web del curs. Pot servir per recollir informes individuals o col · lectius, rebre respostes a qüestions obertes o per rebre qualsevol altra forma de document (si s'envien documents HTML, aquests no poden contenir imatges, ja que la plataforma no trobarà els enllaços i les imatges no es veuran). Si aquest fos el cas, poden enviar en un arxiu comprimit perquè el professor els descarregui i els visualitzi en el seu escriptori, per després si ho estima oportú col · locar a la secció documents. En qualsevol cas, recordeu que quan realitzi un enllaç entre diversos arxius, aquest ha de ser relatiu, no absolut.
+
+Molts formadors oculten l'eina 'Publicacions dels estudiants' fins a la data en què hagin de ser enviats els documents. Una altra possibilitat és apuntar a aquesta eina mitjançant un enllaç col · locat després del text d'introducció de l'activitat o l'agenda. L'eina 'Publicacions dels estudiants' disposa també d'un text d'introducció que li podrà servir per formular una pregunta oberta, per precisar les instruccions per a la remissió de documents o per qualsevol altra informació. L'edició es realitzarà mitjançant l'editor web de la plataforma l'ús pot veure a la Ajuda de la secció 'Documents'. Per inserir imatges en la introducció bastarà que vostè sàpiga la URL on es troba la imatge, això ho pot aconseguir pujant una imatge a la zona de treballs i després de prémer sobre ella, copiant l'URL del navegador. Aquesta URL serà la que peguem quan ja dins de l'editor ens sigui sol·licitada en intentar inserir una imatge.
+
+Depenent del seu escenari pedagògic, vostè pot decidir si tots els usuaris podran veure tots els documents o si només seran visibles per l'usuari que els va enviar i per a vostè que l'ha rebut com a professor. En el primer cas seran també visibles per a qualsevol usuari (anònim o no) des de la pàgina principal de la plataforma i sense necessitat de registrar (sempre que el curs sigui públic).
+
+L'opció de visualitzar o ocultar els documents pot establir per defecte per als documents que es rebin en el futur, encara que per als documents ja rebuts haurà de canviar el seu estat manualment, fent clic sobre l'ull obert (per a tots els ja publicats, o només per a alguns que seleccionem entre ells).
+
+Els treballs seran sempre públics tant per al qual els rep com per al que els envia. Si els treballs es fan públics, disposarà d'una àrea en la qual podrà convidar els participants a comentar mútuament les seves produccions segons l'escenari i els criteris eventualment formulats en el text d'introducció. Si els treballs es cataloguen com privats, ens trobarem davant d'un recipient amb la correspondència entre el formador i l'estudiant.";
+$TrackingContent = "L'eina 'Estadístiques' l'ajuda a fer un seguiment de l'evolució dels usuari del curs. Aquest es pot realitzar a dos nivells:
+
+<ul>
+<li><b>Global:</b> Nombre i percentatge temporal de connexions al curs, eines més usades, documents descarregats, enllaços visitats, participants en les lliçons SCORM?</li>
+<li><b>Nominal:</b> Permet un seguiment individualitzat. Es realitza des de l'eina 'Usuaris'. Quan han entrat en l'activitat?, Quines eines han visitat?, Què puntuacions han obtingut en els exercicis?, Què publicacions han realitzat en el lloc web del curs, i en quina data?, Quins documents s'han descarregat? , ¿quins enllaços han visitat?, quant temps han dedicat a cada capítol d'una lliçó SCORM?</li>
+</ul>";
+$HSettings = "Ajuda: configuració del curs";
+$SettingsContent = "Aquesta eina us permet gestionar els paràmetres del seu curs: Títol, codi, idioma, nom dels professors, etc.
+
+Les opcions situades al centre de la pàgina s'ocupen de parametritzar la confidencialitat: és un curs públic o privat? Poden els propis estudiants realitzar la seva inscripció? Podeu fer servir aquests paràmetres dinàmicament: habilitar durant una setmana la opció de que els propis estudiants es puguin inscriure> demanar als seus estudiants que realitzin aquesta inscripció> deshabilitar l'opció de que els estudiants puguin inscriure per si mateixos> eliminar els possibles intrusos a la llista d'usuaris. D'aquesta manera vostè manté el control de qui finalment serà membre del curs, però no haurà de inscriure'ls un a un.
+
+Al peu de la pàgina té l'opció de suprimir el lloc web del curs. Us recomanem que prèviament feu una còpia de seguretat del mateix a través de l'eina del mateix nom que es troba a la pàgina principal del curs.";
+$HExternal = "Ajuda: afegir un enllaç extern";
+$ExternalContent = "Chamilo té una estructura modular. Ens permet mostrar o ocultar les eines, en funció del disseny inicial del nostre projecte pedagògic o al llarg de les seves diferents fases cronològiques. En aquesta línia, la plataforma també permet afegir directament enllaços a la pàgina principal del lloc web del seu curs. Aquests enllaços poden ser de dos tipus:
+
+<ul>
+<li><b>Enllaços externs:</b> quan apunten a altres llocs d'Internet. Escriviu la URL corresponent. En aquest cas, l'ideal és triar que s'obrin en una nova finestra.</li>
+<li><b>Enllaços interns:</b> apunten a qualsevol pàgina o eina situada a l'interior de la seva activitat. Per a això, aneu a aquesta pàgina o eina i copieu el vostre URL (CTRL + C), torneu a l'eina Afegir un enllaç a la pàgina principal, enganxeu l'URL (control-V), i poseu-li nom. En aquest cas, la destinació preferible per a la seva obertura és la mateixa finestra</li>";
+$ClarContent3 = "<b>Teoria educativa</b>
+
+Per als professors, preparar un curs a Internet és principalment una qüestió de Teoria Educativa.";
+$ClarContent4 = "estan a la seva disposició per ajudar terme durant els passos de l'evolució del seu projecte de formació: des eldiseño de les eines a la seva integració en una estratègia coherentey clara amb una avaluació del seu impacte en l'aprenentatge dels estudiants.";
+$ClarContent1 = "Esborra el contingut";
+$ClarContent2 = "Esborra el contingut";
+$HGroups = "Ajuda: grups";
+$GroupsContent = "Aquesta eina us permet crear àrees per a grups d'estudiants i assignar dues eines de col·laboració: un fòrum de debat i una secció de documentació comuna on poden compartir, pujar i organitzar els seus propis arxius (independent del mòdul Documents, exclusiu per a professors i tutors). L'àrea de documents és privada, i el fòrum pot ser
+públic o privat.
+
+Aquesta pot ser una opció molt útil per tenir seccions privades de documentació i discussió per subgrups de participants en el seu curs. (Fins i tot podria fer que cada estudiant tingués el seu? Àrea de documents? Privada mitjançant aquesta eina, creant tants grups com estudiants i assignant-los un àrea de documents privada a cada grup.)";
+$Guide = "Manual";
 $YouShouldWriteAMessage = "Escriviu un missatge";
 $MessageOfNewCourseToAdmin = "Aquest missatge és per informar-lo que s'ha creat un curs nou a la plataforma";
 $NewCourseCreatedIn = "Curs nou creat en";
 $ExplicationTrainers = "Per ara, està definit com professor. Podreu canviar el professor a la pàgina de configuració del curs";
 $GroupPendingInvitations = "Invitacions pendents de grup";
 $Compose = "Redacta";
+$BabyOrange = "Nens taronja";
+$BlueLagoon = "Llacuna blava";
+$CoolBlue = "Blau fresc";
+$Corporate = "Corporatiu";
+$CosmicCampus = "Campus còsmic";
+$DeliciousBordeaux = "Bordeus deliciós";
+$EmpireGreen = "Verd imperial";
+$FruityOrange = "Taronja afruitat";
+$Medical = "Mèdica";
+$RoyalPurple = "Porpra real";
+$SilverLine = "Línia platejada";
+$SoberBrown = "Marró sobri";
+$SteelGrey = "Gris acer";
+$TastyOlive = "Sabor oliva";
 $NameOfLang['bosnian'] = "Bosnià";
 $NameOfLang['czech'] = "Txec";
 $NameOfLang['dari'] = "Dari";
@@ -2423,16 +5357,99 @@ $NameOfLang['trad_chinese'] = "xinès tradicional";
 $ChamiloInstallation = "Instal·lació de Chamilo";
 $PendingInvitations = "Invitacions pendents";
 $SessionData = "Dades de la sessió";
+$SelectFieldToAdd = "Seleccioneu un camp del perfil d'usuari";
+$MoveElement = "Mou element";
 $ShowGlossaryInExtraToolsTitle = "Mostrar els termes del glossari en eines extra";
 $ShowGlossaryInExtraToolsComment = "Des d'ací pots configurar com afegir els termes del glossari de les eines extra com a eina d'exercicis i rutes d'aprenentatge";
+$HSurvey = "Ajuda: enquestes";
+$SurveyContent = "L'eina Enquestes li permetrà obtenir l'opinió dels usuaris sobre determinats temes, per exemple, sempre serà important saber l'opinió dels estudiants sobre el curs.
+
+<b>Creació d'una Enquesta Nova</b>
+
+Feu clic a \"Crea una enquesta\" i empleneu els camps \"Codi de l'enquesta\" i \"Títol de l'enquesta\". Amb l'ajuda del calendari pot controlar la durada de la seva enquesta. No cal mantenir-la durant tot l'any, pot ser suficient que es vegi tan sols durant alguns dies del curs. Completar els camps \"Introducció de l'enquesta\" i \"Agraïments\" això és una bona pràctica, ja que farà que la seva Enquesta sigui més clara i efectiva.
+
+<b>Afegint preguntes a una enquesta</b>
+
+Un cop creada l'enquesta, de crear les preguntes. L'eina \"Enquestes\" té predefinits diferents tipus de preguntes: Sí / No, Elecció múltiple, Resposta múltiple, Resposta oberta, Percentatge .... Entre aquests tipus podrà seleccionar els que més s'ajustin a les seves necessitats.
+
+<b>Vista prèvia de l'enquesta</b>
+
+Un cop creades les preguntes, vostè té l'opció de previsualitzar l'enquesta i veure-la tal com els estudiants la veuran. Per a això, feu clic a \"Vista preliminar\" (icona d'un document amb una lupa).
+
+<b>Publicant l'enquesta</b>
+
+Si està satisfet amb la seva enquesta i no necessita realitzar cap altre canvi, feu clic a \"Publica enquesta\" (icona d'un sobre amb una fletxa verda) per poder enviar la enquesta a un grup d'usuaris. Es mostraran dues llistes una (la de l'esquerra) amb els usuaris del curs i l'altra amb la llista d'usuaris als quals se'ls enviarà l'enquesta. Seleccioneu els usuaris que voleu que apareguin en la nova llista amb el botó \">>\". Després, completi els camps \"Assumpte del correu\" i \"Text del correu\".
+
+Els usuaris seleccionats rebran un correu electrònic amb l'assumpte i text que ha introduït, així com un enllaç que hauran de prémer per completar l'enquesta. Per introduir aquest enllaç en algun lloc del text del correu, ha d'introduir el següent: ** enllaç ** (asterisc asterisc enllaç asterisc asterisc). Aquesta etiqueta serà substituïda automàticament per l'enllaç. Si no afegeix aquest ** enllaç **, aquest serà incorporat automàticament al final del correu.
+
+Finalment, l'eina d'Enquestes permet enviar un email a tots els usuaris seleccionats si habilita l'opció \"Enviar correu\" si no ho habilita els usuaris podran veure l'enquesta a l'entrar al sistema a l'eina \"Enquestes\" sempre que es trobi accessible .
+
+<b>Informes de l'enquesta</b>
+
+Analitzar les enquestes és un procés tediós. Els \"Informes\" de les enquestes l'ajudaran a veure la informació per pregunta i per usuari, així com comparar dues preguntes o un complet informe de tota l'enquesta. A la \"Llista d'Enquestes\" feu clic a \"Informes\" (icona d'un gràfic circular).
+
+<b>Gestionar les enquestes</b>
+
+Existeixen les opcions de \"Edita\" i \"Suprimeix\" a la columna \"Modifica\" de la \"Llista d'enquestes\".";
+$HBlogs = "Ajuda: blocs";
+$BlogsContent = "Blocs (abreviatura de Web Logs = Bitàcoles Web) s'usen aquí com una eina que permet als estudiants contribuir a la història del curs, fent informes del que va passant i de com això els afecta a ells o al curs.
+
+Recomanem utilitzar els blocs en un entorn semicontrolat on s'assigna a determinats usuaris que presentin un informe diari o setmanal de l'activitat.
+
+També s'ha afegit a l'eina blocs una utilitat de tasques, això permet assignar una tasca a determinats usuaris del bloc (per exemple: Realitzar un informe sobre la visita de dilluns a Museu de llicències Naturals).
+
+Cada nou contingut en aquesta eina es denomina article. Per crear un article només cal prémer l'enllaç que convida a fer-ho al menú. Per editar (si vostè és l'autor) o afegir un comentari a un article, només caldrà fer clic sobre el títol d'aquest.";
 $FirstSlide = "Primera diapositiva";
 $LastSlide = "Última diapositiva";
 $TheDocumentHasBeenDeleted = "El document ha estat esborrat";
 $YouAreNotAllowedToDeleteThisDocument = "No està autoritzat per eliminar aquest document";
 $AdditionalProfileField = "Afegir camp al perfil d'usuari";
+$ExportCourses = "Exporta cursos";
+$IsAdministrator = "És administrador";
+$IsNotAdministrator = "No és administrador";
+$AddTimeLimit = "Afegeix límit de temps";
+$EditTimeLimit = "Edita el límit de temps";
+$TheTimeLimitsAreReferential = "El plaç d'una categoria és referencial, no afectarà als límits d'una sessió de formació";
+$FieldTypeTag = "Etiqueta de l'usuari";
+$SendEmailToAdminTitle = "Avís per correu electrònic de la creació d'un curs nou";
+$SendEmailToAdminComment = "Envia un correu electrònic a l'administrador de la plataforma cada cop que un professor creï un curs nou";
+$UserTag = "Etiqueta de l'usuari";
+$SelectSession = "Selecciona una sessió";
+$SpecialCourse = "Curs especial";
+$MathMimetexTitle = "Editor matemàtic mimeTEX";
+$MathMimetexComment = "Habilita l'editor matemàtic mimeTEX";
+$MathASCIImathMLTitle = "Editor matemàtic ASCIIMathML";
+$MathASCIImathMLComment = "Habilita l'editor matemàtic ASCIIMathML";
+$YoutubeForStudentsTitle = "Permet als estudiants inserir vídeos de YouTube";
+$YoutubeForStudentsComment = "Habilita la possibilitat que els estudiants puguin inserir vídeos de YouTube";
+$BlockCopyPasteForStudentsTitle = "Bloqueja als estudiants copia i enganxa";
+$BlockCopyPasteForStudentsComment = "Bloqueja als estudiants la possibilitat de copiar i enganxar a l'editor WYSIWYG";
+$MoreButtonsForMaximizedModeTitle = "Barres de botons esteses";
+$MoreButtonsForMaximizedModeComment = "Permet les barres de botons esteses quan l'editor WYSIWYG estigui maximitzat";
+$Editor = "Editor HTML";
+$GoToCourseAfterLoginTitle = "Anar directament al curs després d'autenticar-se";
+$GoToCourseAfterLoginComment = "Quan un usuari està inscrit només a un curs, anar directament al curs després d'autenticar-se";
+$AllowStudentsDownloadFoldersTitle = "Permet als estudiants descarregar directoris";
+$AllowStudentsDownloadFoldersComment = "Permet als estudiants empaquetar i descarregar un directori complet a l'eina documents";
+$AllowStudentsToCreateGroupsInSocialTitle = "Permet als usuaris crear grups a la xarxa social";
+$AllowStudentsToCreateGroupsInSocialComment = "Permet als usuaris crear els seus propis grups a la xarxa social";
+$AllowSendMessageToAllPlatformUsersTitle = "Permet enviar missatges a tots els usuaris de la plataforma";
+$AllowSendMessageToAllPlatformUsersComment = "Permet poder enviar missatges a tots els usuaris de la plataforma";
+$TabsSocial = "Pestanya Xarxa social";
+$MessageMaxUploadFilesizeTitle = "Mida màxima de l'arxiu en els missatges";
+$MessageMaxUploadFilesizeComment = "Mida màxima de l'arxiu permesa per adjuntar un missatge (en Bytes)";
+$ChamiloHomepage = "Pàgina principal de Chamilo";
+$ChamiloForum = "Fòrum de Chamilo";
+$ChamiloExtensions = "Serveis de Chamilo";
+$ChamiloGreen = "Chamilo Verd";
+$ChamiloRed = "Chamilo Vermell";
+$MessagesSent = "Nombre de missatges enviats";
+$MessagesReceived = "Nombre de missatges rebuts";
+$CountFriends = "Nombre de contactes";
 $ToChangeYourEmailMustTypeYourPassword = "Per canviar el vostre correu electrònic heu d'escriure la vostra contrasenya";
 $Invitations = "Invitacions";
 $MyGroups = "Els meus grups";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Nota: aquest exercici ha estat configurat per ocultar les respostes esperades.";
 $Social = "Social";
 $MyFriends = "Els meus amics";
 $CreateAgroup = "Crea un grup";
@@ -2508,6 +5525,19 @@ $DenyEntry = "Denega l'entrada";
 $YouNeedToHaveFriendsInYourSocialNetwork = "Necessiteu tenir amics a la seva xarxa social";
 $SeeAllMyGroups = "Veure tots els meus grups";
 $EditGroupCategory = "Edita categoria de grup";
+$ModifyHotPotatoes = "Modifica HotPotatoes";
+$SaveHotpotatoes = "Desa HotPotatoes";
+$SessionIsReadOnly = "La sessió és de només lectura";
+$EnableTimerControl = "Habilita control del temps";
+$ExerciseTotalDurationInMinutes = "Durada de l'exercici (en minuts)";
+$ToContinueUseMenu = "Per continuar aquesta lliçó, utilitzeu el menú lateral.";
+$RandomAnswers = "Remena respostes";
+$NotMarkActivity = "No és possible qualificar aquest element";
+$YouHaveToCreateAtLeastOneAnswer = "Heu de crear com a mínim una resposta";
+$ExerciseAttempted = "Un estudiant ha contestat una pregunta";
+$MultipleSelectCombination = "Combinació exacta";
+$MultipleAnswerCombination = "Combinació exacta";
+$ExerciceExpiredTimeMessage = "El temps d'avaluació ha acabat. De totes maneres les preguntes que ja heu respost, seran considerades a l'avaluació de l'exercici.";
 $NameOfLang['ukrainian'] = "ucraïnès";
 $NameOfLang['yoruba'] = "ioruba";
 $New = "Nou";
@@ -2554,8 +5584,11 @@ Sempre podreu trobar més informació en quant aquest programari al nostre lloc 
 
 Divertiu-vos, no dubteu en unir-vos a la comunitat i doneu-vos la vostra opinió a través del nostre <a href=\"http://www.chamilo.org/forum\">fòrum</a>.";
 $WithTheFollowingSettings = "amb els paràmetres següents:";
+$ThePageHasBeenExportedToDocArea = "La pàgina s'ha exportat a l'eina de documents";
 $TitleColumnGradebook = "Títol de la columna en l'Informe d'Avaluació";
 $QualifyWeight = "Pes de la qualificació";
+$ConfigureExtensions = "Configura els serveis";
+$ThereAreNotQuestionsForthisSurvey = "No hi ha preguntes per aquesta enquesta";
 $StudentAllowedToDeleteOwnPublication = "Permet que els estudiants puguin eliminar les seves tasques";
 $ConfirmYourChoiceDeleteAllfiles = "Confirmi la seva elecció, s'eliminaran tots els arxius i no es podran recuperar";
 $WorkName = "Nom de la tasca";
@@ -2570,8 +5603,14 @@ $ViewUsersWithoutTask = "Mostra estudiants que no han enviat la tasca";
 $ThematicAdvance = "Avança temàtic";
 $EditProfile = "Edita perfil";
 $TabsDashboard = "Tauler de control";
+$DashboardBlocks = "Blocs del tauler de control";
+$DashboardList = "Llista del tauler de control";
+$YouHaveNotEnabledBlocks = "No heu habilitat cap bloc";
+$BlocksHaveBeenUpdatedSuccessfully = "Els blocs han estat actualitzats";
 $Dashboard = "Tauler de control";
 $DashboardPlugins = "Connectors del tauler de control";
+$ThisPluginHasbeenDeletedFromDashboardPluginDirectory = "Aquest connector ha estat eliminat de la llista de connectors del tauler de control";
+$EnableDashboardPlugins = "Habilita els connectors del tauler de control";
 $SelectBlockForDisplayingInsideBlocksDashboardView = "Seleccioneu els blocs que es mostraran en el tauler de control";
 $ColumnPosition = "Posició (columna)";
 $EnableDashboardBlock = "Habiliteu bloc del tauler de control";
@@ -2585,11 +5624,93 @@ $CountDoneAttendance = "Assistències";
 $AssignUsers = "Assigna usuaris";
 $AssignCourses = "Assigna cursos";
 $AssignSessions = "Assigna sessions de formació";
+$CoursesListInPlatform = "Llista de cursos de la plataforma";
+$AssignedCoursesListToHumanResourceManager = "Cursos assignats al Director de Recursos Humans";
+$AssignedCoursesTo = "Cursos assignats a";
+$AssignCoursesToHumanResourcesManager = "Assigna cursos al Director de Recursos Humans";
+$TimezoneValueTitle = "Zona horària";
+$TimezoneValueComment = "Aquesta és la zona horària d'aquest portal. Si la deixa buida, s'utilitzarà la zona horària del servidor. Si la configura, totes les hores del sistema es mostraran en funció d'ella. Aquesta configuració té una prioritat més baixa que la zona horària de l'usuari si està habilitada i selecciona una altra.";
+$UseUsersTimezoneTitle = "Utilitza les zones horàries dels usuaris";
+$UseUsersTimezoneComment = "Activa la selecció pels usuaris de la seva zona horària. El camp de zona horària ha de seleccionar-se com a visible i modificable abans que els usuaris escollin el seu compte. Un cop configurada els usuaris podran veure-la.";
+$FieldTypeTimezone = "Zona horària";
 $Timezone = "Zona horària";
+$AssignedSessionsHaveBeenUpdatedSuccessfully = "Les sessions assignades han estat actualitzades";
+$AssignedCoursesHaveBeenUpdatedSuccessfully = "Els cursos assignats han estat actualitzats";
+$AssignedUsersHaveBeenUpdatedSuccessfully = "Els usuaris assignats han estat actualitzats";
+$AssignUsersToX = "Assigna usuaris a %s";
+$AssignUsersToHumanResourcesManager = "Assigna usuaris al Director de Recursos Humans";
+$AssignedUsersListToHumanResourcesManager = "Llista d'usuaris assignats al Director de Recursos Humans";
+$AssignCoursesToX = "Assigna cursos a %s";
+$SessionsListInPlatform = "Llista de sessions de la plataforma";
+$AssignSessionsToHumanResourcesManager = "Assigna sessions al Director de Recursos Humans";
+$AssignedSessionsListToHumanResourcesManager = "Llista de sessions assignades al Director de Recursos Humans";
+$SessionsInformation = "Informe de sessions";
+$YourSessionsList = "Les seves sessions";
+$TeachersInformationsList = "Informe de professors";
+$YourTeachers = "Els seus professors";
+$StudentsInformationsList = "Informe dels estudiants";
+$YourStudents = "Els seus estudiants";
+$GoToThematicAdvance = "Vés a l'avançament temàtic";
+$TeachersInformationsGraph = "Informe gràfic dels professors";
+$StudentsInformationsGraph = "Informe gràfic dels estudiants";
+$Timezones = "Zones horàries";
+$TimeSpentOnThePlatformLastWeekByDay = "Temps a la plataforma la setmana passada, per dia";
+$AttendancesFaults = "Faltes d'assistència";
+$AttendanceSheetReport = "Informe de fulls d'assistència";
+$YouDoNotHaveDoneAttendances = "No teniu assistències";
+$DashboardPluginsHaveBeenUpdatedSuccessfully = "Els connectors del tauler de control han estat actualitzats correctament";
+$ThereIsNoInformationAboutYourCourses = "No hi ha informació disponible sobre els seus cursos";
+$ThereIsNoInformationAboutYourSessions = "No hi ha informació disponible sobre les seves sessions";
+$ThereIsNoInformationAboutYourTeachers = "No hi ha informació disponible sobre els seus professors";
+$ThereIsNoInformationAboutYourStudents = "No hi ha informació disponible sobre els seus estudiants";
+$TimeSpentLastWeek = "Temps emprat la setmana passada";
+$SystemStatus = "Informació del sistema";
+$IsWritable = "L'escriptura és possible a";
+$DirectoryExists = "El directori existeix";
+$DirectoryMustBeWritable = "El servidor web ha de deixar escriure en aquest directori";
+$DirectoryShouldBeRemoved = "És convenient que elimini aquest directori (no es necessitarà més)";
+$Section = "Secció";
+$Expected = "Esperat";
+$Setting = "Paràmetre";
+$Current = "Actual";
+$SessionGCMaxLifetimeInfo = "El temps màxim de vida del recol·lector de brossa és el temps màxim que es dóna entre dues execucions del recol·lector de brossa.";
+$PHPVersionInfo = "Versió PHP";
+$FileUploadsInfo = "La càrrega d'arxius indica si la pujada d'arxius està autoritzada";
+$UploadMaxFilesizeInfo = "Mida màxima d'un arxiu quan es puja. Aquest ajustament ha d'anar en la majoria dels casos acompanyada de la variables post_max_size";
+$MagicQuotesRuntimeInfo = "Aquesta és una característica en absolut recomanable que converteix els valors tornats per totes les funcions que tornen valors externs en valors amb barres d'escapament. Aquesta funcionalitat *no* hauria d'activar-se.";
+$PostMaxSizeInfo = "Aquesta és la mida màxima dels enviaments realitzats a través de formularis utilitzant el mètode POST (és a dir, la forma típica de càrrega d'arxius mitjançant formularis)";
+$SafeModeInfo = "Mode segur és una característica obsoleta de PHP que limita (malament) l'accés dels scripts PHP a d'altres recursos. És recomanable deixar-ho desactivat.";
+$DisplayErrorsInfo = "Mostra els errors a la pantalla. Activar-ho a servidors de desenvolupament i desactivar-ho en servidors de producció.";
+$MaxInputTimeInfo = "El temps màxim permès per tal que un formulari sigui processat pel servidor. Si se sobrepassa, el procés és abandonat i es retorna una pàgina en blanc.";
+$DefaultCharsetInfo = "Joc de caràcters predeterminat que serà enviat quan es retornin les pàgines";
+$RegisterGlobalsInfo = "Permet seleccionar, o no, l'ús de variables globals. L'ús d'aquesta funcionalitat representa un risc de seguretat.";
+$ShortOpenTagInfo = "Permet utilitzar etiquetes abreujades o no. Aquesta funcionalitat no hauria d'utilitzar-se.";
+$MemoryLimitInfo = "Límit màxim de memòria per a l'execució d'un script. Si la memòria necessària és més gran, el procés s'aturarà per evitar consumir tota la memòria disponible del servidor i, per tant que això no afecti a d'altres usuaris.";
+$MagicQuotesGpcInfo = "Permet escapar automàticament valors de GET, POST i GALETES. Una característica similar és prevista per les dades requerides en aquest programari, així que el seu ús provoca una doble barra d'escapament en els valors.";
+$VariablesOrderInfo = "L'ordre de preferència de les variables de l'Entorn, GET, POST, GALETES i SESSIÓ";
+$MaxExecutionTimeInfo = "Temps màxim que un script pot prendre per a la seva execució. Si s'utilitza més, l'escript s'abandonarà per evitar l'alentiment d'altres usuaris.";
+$ExtensionMustBeLoaded = "Aquesta extensió ha de ser carregada.";
+$MysqlProtoInfo = "Protocol MySQL";
+$MysqlHostInfo = "Servidor MySQL";
+$MysqlServerInfo = "Informació del servidor MySQL";
+$MysqlClientInfo = "Client MySQL";
+$ServerProtocolInfo = "Protocol usat per aquest servidor";
+$ServerRemoteInfo = "Accés remot (com és rebuda la seva adreça pel servidor)";
+$ServerAddessInfo = "Adreça del servidor";
+$ServerNameInfo = "Nom del servidor (com s'utilitza aquesta petició)";
+$ServerPortInfo = "Port del servidor";
+$ServerUserAgentInfo = "El seu agent d'usuari com és rebut pel servidor";
+$ServerSoftwareInfo = "Programari executant-se com un servidor web";
+$UnameInfo = "Informació del sistema sobre el que està funcionant el servidor";
 $EmptyHeaderLine = "Existeixen línies en blanc a l'inici del fitxer seleccionat";
+$AdminsCanChangeUsersPassComment = "Aquesta funcionalitat és útil per escenaris multi-URL, on hi ha una diferència entre l'administrador global i l'administrador normal. En aquest cas, seleccionant \"No\" evitareu als administradors normals configurar contrasenyes d'altres usuaris, i només permetreu preguntar-lis per una generació nova de la contrasenya (s'envia per correu electrònic al l'usuari). L'administrador global podrà fer-ho de totes maneres.";
+$AdminsCanChangeUsersPassTitle = "Els administradors poden canviar les contrasenyes dels usuaris";
+$AdminLoginAsAllowedComment = "Si s'activa, permet als usuaris amb els privilegis corresponents d'usar la funcionalitat \"connectar-se com\" per connectar-se com un altre usuari. Aquesta funcionalitat és particularment útil en cas d'ús de la funcionalitat de multi-url, quan no és desitjable que els administradors de portals individuals puguin utilitzar això. És important saber que hi ha un paràmetre mestre a l'arxiu de configuració que permet bloquejar aquesta opció per complet.";
+$AdminLoginAsAllowedTitle = "Funcionalitat \"Connectar-se com\"";
 $FilterByUser = "Filtra per usuari";
 $FilterByGroup = "Filtra per grup";
 $FilterAll = "Filtre: tothom";
+$AllQuestionsMustHaveACategory = "Totes les preguntes han de tenir com a mínim una categoria associada.";
 $PaginationXofY = "%s de %s";
 $SelectedMessagesUnRead = "Els missatges seleccionats han estat marcats com a no llegits";
 $SelectedMessagesRead = "Els missatges seleccionats han estat marcat com a llegits";
@@ -2601,6 +5722,11 @@ $GradebookGood = "Bé";
 $GradebookFair = "Suficient";
 $GradebookPoor = "Insuficient";
 $GradebookFailed = "Suspès";
+$NoMedia = "Sense vincle a medi";
+$AttachToMedia = "Vincula a medi";
+$ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable = "Mostra només el resultat final, amb categories si estan disponibles";
+$Media = "Medi";
+$ForceEditingExerciseInLPWarning = "Tens permís per editar aquest exercici, encara que ja s'utilitzi en una lliçó. Si l'edita, prova evitar de modificar la puntuació i concentrar-se sobre editar el contingut, però no els valors o la classificació, per evitar afectar els resultats d'estudiants que hagin fet aquesta prova prèviament.";
 $UploadedDate = "Data de pujada";
 $Filename = "Nom de fitxer";
 $Recover = "Recupera";
@@ -2611,9 +5737,21 @@ $YouCanAccessTheExercise = "Vés a la prova";
 $YouHaveBeenRegisteredToCourseX = "Heu estat inscrit al curs %s";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Els connectors del tauler de control han estat actualitzats correctament";
 $LoginEnter = "Accedeix";
+$AssignSessionsToX = "Assigna sessions a %s";
+$CopyExercise = "Copia aquest exercici com un de nou";
+$CleanStudentResults = "Esborra tots els resultats dels estudiants amb aquest exercici";
 $AttendanceSheetDescription = "Les llistes d'assistència permeten registrar les faltes d'assistència dels estudiants. En cas d'absència d'un estudiant, el professor ha d'enregistrar manualment a la casella corresponent. És possible crear més d'una llista d'assistència per cada curs, així per exemple, podrà registrar separadament l'assistència a les classes teòriques i pràctiques.";
 $ThereAreNoRegisteredLearnersInsidetheCourse = "No hi ha estudiants inscrits en aquest curs";
 $GoToAttendanceCalendarList = "Vés al calendari d'assitència";
+$AssignCoursesToSessionsAdministrator = "Assigna cursos al'administrador de sessions";
+$AssignCoursesToPlatformAdministrator = "Assigna cursos a l'administrador de la plataforma";
+$AssignedCoursesListToPlatformAdministrator = "Llista de cursos assignats a l'administrador de la plataforma";
+$AssignedCoursesListToSessionsAdministrator = "Llista de cursos assignats a l'administrador de sessions";
+$AssignSessionsToPlatformAdministrator = "Assigna sessions a l'administrador de la plataforma";
+$AssignSessionsToSessionsAdministrator = "Assigna sessions a l'administrador de sessions";
+$AssignedSessionsListToPlatformAdministrator = "Llista de sessions assignades a l'administrador de la plataforma";
+$AssignedSessionsListToSessionsAdministrator = "Llista de sessions assignades a l'administrador de sessions";
+$EvaluationsGraph = "Gràfics de les avaluacions";
 $Url = "URL";
 $ToolCourseDescription = "Descripció del curs";
 $ToolDocument = "Documents";
@@ -2639,7 +5777,12 @@ $ToolTracking = "Informes";
 $ToolCourseSetting = "Configuració del curs";
 $ToolCourseMaintenance = "Manteniment del curs";
 $AreYouSureToDeleteAllDates = "Voleu esborrar totes les dates?";
+$ImportQtiQuiz = "Importa exercicis de Qti2";
+$ISOCode = "Codi ISO";
+$TheSubLanguageForThisLanguageHasBeenAdded = "El sub-llenguatge d'aquest idioma ha estat afegit";
+$ReturnToLanguagesList = "Torna a la llista d'idiomes";
 $AddADateTime = "Afegeix data";
+$ActivityCoach = "El tutor de la sessió tindrà tots els drets i permisos en tots els cursos que pertanyin a la sessió.";
 $AllowUserViewUserList = "Permet a l'usuari veure la llista de cursos";
 $AllowUserViewUserListActivate = "Activeu per permetre a l'usuari veure la llista d'usuaris";
 $AllowUserViewUserListDeactivate = "Desactiva permetre a l'usuari veure la llista d'usuaris";
@@ -2662,6 +5805,7 @@ $AditionalNotesQuestions = "Quines altres coses es requereixen?";
 $DurationInHours = "Hores";
 $ThereAreNoAttendancesInsideCourse = "No hi ha assistències dins del curs";
 $YouMustSelectAtleastAStartDate = "Seleccioneu com a mínim una data d'inici";
+$ReturnToLPList = "Torna a la llista de lliçons";
 $EditTematicAdvance = "Edita la temporització de la programació";
 $AditionalNotes = "Notes addicionals";
 $StartDateFromAnAttendance = "Data d'inici a partir d'una assistència";
@@ -2683,25 +5827,55 @@ $CreateAThematicSection = "Crea una secció temàtica";
 $EditThematicSection = "Edita secció temàtica";
 $ToolCourseProgress = "Programació didàctica";
 $SelectAnAttendance = "Selecciona la llista d'assitència";
+$ReUseACopyInCurrentTest = "Torna a utilitzar una còpia d'aquesta pregunta a l'exercici actual";
 $YouAlreadyInviteAllYourContacts = "Ja heu convidat a tots els vostres contactes";
+$CategoriesNumber = "Categories";
 $ResultsHiddenByExerciseSetting = "Resultats ocults per la configuració de l'exercici";
 $NotAttended = "No assistència";
 $Attended = "Assistit";
 $IPAddress = "Adreça IP";
+$FileImportedJustSkillsThatAreNotRegistered = "Només les competències que no estaven registrades han estat importades";
+$SkillImportNoName = "El nom de la competència no està definit";
+$SkillImportNoParent = "El pare de la competència no està definit";
+$SkillImportNoID = "L'ID de la competència no està definit";
 $CourseAdvance = "Progrés en el curs";
 $CertificateGenerated = "Certificat generat";
+$CountOfUsers = "Nombre d'usuaris";
+$CountOfSubscriptions = "Nombre d'inscrits a cursos";
 $EnrollToCourseXSuccessful = "La seva inscripció al curs %s s'ha completat";
 $TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "La configuració per el desplegament automàtic d'Exercicis està activada. Els estudiants seran redirigits a l'exercici seleccionat per que tal que es mostri automàticament.";
 $RedirectToTheExerciseList = "Redirigeix a la llista d'exercicis";
 $RedirectToExercise = "Redirigeix a un exercici seleccionat";
 $ConfigExercise = "Configura l'eina Exercicis";
+$QuestionGlobalCategory = "Categoria laboral";
+$CheckThatYouHaveEnoughQuestionsInYourCategories = "Revisa si existeixen suficients preguntes a les seves categories.";
+$PortalCoursesLimitReached = "Ho sentim, aquesta instal·lació de Chamilo té un límit de quantitat de cursos, el qual ha estat assolit. Per augmentar la quantitat de cursos autoritzats, contacteu amb el seu proveïdor o, si és possible, passar a un pla d'allotjament superior.";
+$PortalTeachersLimitReached = "Ho sentim, aquesta instal·lació de Chamilo té un límit de quantitat de professors, el qual ha estat assolit. Per augmentar la quantitat de professors autoritzats, contacteu amb el seu proveïdor o, si és possible, passeu a un pla d'allotjament superior.";
+$PortalUsersLimitReached = "Ho sentim, aquesta instal·lació de Chamilo té un límit de quantitat d'usuaris, el qual ja s'ha assolit. Per augmentar la quantitat d'usuaris autoritzats, contacteu amb el seu proveïdor o, si és possible, passar a un pla d'allotjament superior.";
+$GenerateSurveyAccessLinkExplanation = "Copiant l'enllaç de sota en un correu o en un lloc web, permetrà a persones anònimes participar a l'enquesta. Pot provar aquesta funcionalitat donant-li clic al botó d'amunt i responent l'enquesta. És particularment útil si voleu convidar a persones de les quals no coneix el correu electrònic.";
 $LinkOpenSelf = "La mateixa finestra";
 $LinkOpenBlank = "Una altra finestra";
 $LinkOpenParent = "Finestra pare";
 $LinkOpenTop = "Part superior";
 $ThematicSectionHasBeenCreatedSuccessfull = "La unitat didàctica ha estat creada";
 $NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Ara heu d'afegir la programació de la unitat didàctica %s i la seva temporització %s";
+$LpPrerequisiteDescription = "Si seleccioneu una altra lliçó com a requisit previ, l'actual s'ocultarà fins que la primera hagi estat completada pels estudiants (100%).";
 $QualificationNumeric = "Qualificació numèrica sobre";
+$ScoreAverageFromAllAttempts = "Mitjana de tots els intents en exercicis";
+$ExportAllCoursesList = "Exporta tota la llista de cursos";
+$ExportSelectedCoursesFromCoursesList = "Exporta només cursos de la llista";
+$CoursesListHasBeenExported = "La llista de cursos ha estat exportada";
+$WhichCoursesToExport = "Seleccioneu els cursos que desitja exportar";
+$AssignUsersToPlatformAdministrator = "Assigna usuaris a l'administrador de la plataforma";
+$AssignedUsersListToPlatformAdministrator = "Llista d'usuaris assignats a l'administrador de la plataforma";
+$AssignedCoursesListToHumanResourcesManager = "Llista d'usuaris assignats a l'administrador de recursos humans";
+$ThereAreNotCreatedCourses = "No hi ha cursos creats";
+$HomepageViewVerticalActivity = "Veure l'activitat de forma vertical";
+$GenerateSurveyAccessLink = "Genera enllaç d'accés a enquesta";
+$CoursesInformation = "Informació de cursos";
+$LearnpathVisible = "Lliçó feta visible";
+$LinkInvisible = "Enllaç fet visible";
+$SpecialExportsIntroduction = "La funcionalitat d'exportacions especials existeix per ajudar al revisor instruccional/acadèmic en exportar els documents de tots els cursos amb una sola passa. Una altra opció li permet escollir els cursos que desitja exportar, i també exportarà els documents presents a les sessions d'aquests cursos. Aquesta és una operació molt pesada. Per tant, li recomanem no iniciar-la durant les hores d'ús normal del seu portal. Faci-ho en un període més tranquil. Si no necessita tots els continguts d'un sol cop, provi exportar documents de cursos directament des de l'eina de manteniment del curs, dins del mateix curs.";
 $Literal0 = "zero";
 $Literal1 = "ú";
 $Literal2 = "dos";
@@ -2723,11 +5897,29 @@ $Literal17 = "disset";
 $Literal18 = "divuit";
 $Literal19 = "dinou";
 $Literal20 = "vint";
+$AllowUserCourseSubscriptionByCourseAdminTitle = "Permet als professors registrar usuaris a un curs";
+$AllowUserCourseSubscriptionByCourseAdminComment = "A l'activar aquesta opció permetrà que els professors puguin inscriure usuaris al seu curs";
 $DateTime = "Data i hora";
 $Item = "Element";
+$ConfigureDashboardPlugin = "Configura el connector del Tauler de control";
+$EditBlocks = "Edita blocs";
 $Never = "Mai";
 $YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Benvolgut usuari, s'ha activitat el seu compte a la plataforma. Autentiqueu-vos i gaudiu dels vostres cursos.";
+$SessionFields = "Camps de sessió";
 $CopyLabelSuffix = "Còpia";
+$SessionCoachEndDateComment = "Data en la qual la sessió deixa de ser disponible per als tutors. Aquest període addicional d'accés permet als tutors exportar la informació rellevant sobre l'acompliment dels seus alumnes";
+$SessionCoachStartDateComment = "Data en la qual la sessió comença a ser disponible per als tutors, perquè la preparin abans de l'ingrés dels alumnes";
+$SessionEndDateComment = "Data en la qual la sessió deixa de ser disponible per a tots";
+$SessionStartDateComment = "Data en la qual la sessió comença a ser disponible per a tots";
+$SessionDisplayEndDateComment = "Data que es mostrarà a la fitxa d'informació de la sessió com la data en la qual la sessió finalitza";
+$SessionDisplayStartDateComment = "Data que es mostrarà a la fitxa d'informació de la sessió com la data en la qual la sessió s'inicia";
+$SessionCoachEndDate = "Data de fi d'accés per a tutors";
+$SessionCoachStartDate = "Data d'inici d'accés per a tutors";
+$SessionEndDate = "Data de fi d'accés";
+$SessionStartDate = "Data d'inici d'accés";
+$SessionDisplayEndDate = "Data de fi a mostrar";
+$SessionDisplayStartDate = "Data d'inici a mostrar";
+$UserHasNoCourse = "L'usuari no està inscrit a cap curs";
 $SkillsRanking = "Rang de competències";
 $ImportSkillsListCSV = "Importa competències des d'un arxiu CSV";
 $SkillsImport = "Importa competències";
@@ -2741,8 +5933,17 @@ $SkillXWithCourseX = "%s via %s";
 $ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses = "Per adquirir %s, haureu de fer un dels cursos següents:";
 $YourSkillRankingX = "El teu rang de competències: %s";
 $ManageSkills = "Gestiona les competències";
+$OralQuestionsAttemptedAreX = "Les preguntes orals respostes són: %s";
+$OralQuestionsAttempted = "Un estudiant ha entregat una pregunta oral o més";
+$RelativeScore = "Puntuació relativa";
+$AbsoluteScore = "Puntuació absoluta";
 $Categories = "Categories";
+$PrerequisitesOptions = "Opcions de requisits previs";
+$ClearAllPrerequisites = "Elimina tots els requisits previs";
+$SetPrerequisiteForEachItem = "Configura, per cada element, l'element anterior com a requisit previ";
 $StartDateMustBeBeforeTheEndDate = "La data d'inici ha de ser anterior a la data de fi";
+$SessionPageEnabledComment = "Quan aquesta opció és activada, el títol de la sessió és un enllaç a una pàgina especial de sessió. Quan és desactivada, és només un text, sense enllaç. La pàgina de sessió a la qual apunta pot provocar confusió per a certs usuaris, de manera que podria voler desactivar-la per simplificar.";
+$SessionPageEnabledTitle = "Activa l'enllaç de sessió a la llista de cursos";
 $SkillRoot = "Arrel";
 $SkillInfo = "Info competència";
 $GetNewSkills = "Obtingues competències noves";
@@ -2769,6 +5970,7 @@ $HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, li donem la benvinguda,
 Com pot veure, la seva llista de cursos encara està buida. Això és perquè encara no esteu inscrits a cap curs!";
 $UnsubscribeUsersAlreadyAddedInCourse = "Dóna de baixa els usuaris ja inscrits";
 $ImportUsers = "Importa usuaris";
+$HelpFolderLearningPaths = "INFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté els documents que es creen des de l'eina Lliçons. Aquí podeu editar els HTML que s'hagin creat en realitzar una importació des de l'eina Lliçons, per exemple des Chamilo Rapid. Es recomana mantenir invisible aquesta carpeta als alumnes.";
 $YouWillBeRedirectedInXSeconds = "Sereu re-dirigits en uns segons";
 $NumberOfCoursesPublic = "Nombre de cursos públics";
 $NumberOfCoursesOpen = "Nombre de cursos oberts";
@@ -2776,11 +5978,24 @@ $NumberOfCoursesPrivate = "Nombre de cursos privats";
 $NumberOfCoursesClosed = "Nombre de cursos tancats";
 $NumberOfCoursesTotal = "Nombre total de cursos";
 $NumberOfUsersActive = "Nombre d'usuaris actius";
+$CountCertificates = "Nombre de certificats";
+$AverageHoursPerStudent = "Mitjana hores/estudiant";
+$CountOfSubscribedUsers = "Nombre d'usuaris inscrits";
+$TrainingHoursAccumulated = "Hores de formació acumulades";
 $Approved = "Aprovat";
+$EditQuestions = "Edita preguntes";
 $EditSettings = "Edita paràmetres";
+$ManHours = "Hores home";
+$NotesObtained = "Notes obtingudes";
+$ClickOnTheLearnerViewToSeeYourLearningPath = "Clica al botó [Vista alumne] per veure la seva lliçó";
 $ThisValueCantBeChanged = "Aquest valor no pot ser modificat.";
+$ThisValueIsUsedInTheCourseURL = "Aquest valor és utilitzat a la URL del curs";
 $TotalAvailableUsers = "Total d'usuaris disponibles";
 $LowerCaseUser = "usuari";
+$GenerateCertificates = "Genera certificats";
+$ExportAllCertificatesToPDF = "Exporta tots els certificats a PDF";
+$DeleteAllCertificates = "Elimina tots els certificats";
+$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Hi ha usuaris utilitzant aquest idioma. Voleu desactivar aquest idioma i actualitzar aquests usuaris amb l'idioma per defecte de la plataforma?";
 $dateFormatLongNoDay = "%d %B %Y";
 $dateFormatOnlyDayName = "%A";
 $ReturnToCourseList = "Torna a la llista de cursos";
@@ -2791,11 +6006,16 @@ $StudentInCourse = "Estudiant en un curs";
 $SessionGeneralCoach = "Tutor general de sessió";
 $SessionCourseCoach = "Tutor de curs de sessió";
 $Admin = "Admin";
+$SessionTutorsCanSeeExpiredSessionsResultsComment = "Els tutors de sessió poden veure els informes del curs després que hagi expirat la sessió?";
+$SessionTutorsCanSeeExpiredSessionsResultsTitle = "Visibilitat d'informes per als tutors de sessió";
 $UserNotAttendedSymbol = "F";
 $UserAttendedSymbol = "P";
 $SessionCalendar = "Calendari de sessió";
 $Order = "Ordre";
 $GlobalPlatformInformation = "Informació global de la plataforma";
+$TheXMLImportLetYouAddMoreInfoAndCreateResources = "La importació XML le permetrà afegir més informació i crear recursos (cursos, usuaris), durant la importació CSV només crearà sessions i utilitzarà recursos ja existents.";
+$ShowLinkBugNotificationTitle = "Mostra l'enllaç per informar d'errors";
+$ShowLinkBugNotificationComment = "Mostra un enllaç a la capçalera per informar d'un error a la plataforma de suport (http://support.chamilo.org). Al fer clic a l'enllaç l'usuari serà dirigit al sistema de suport de Chamilo, en el que una pàgina wiki descriu el procediment per informar d'errors.";
 $ReportABug = "Comunica un error";
 $Letters = "Lletres";
 $NewHomeworkEmailAlert = "Avisa als estudiants amb un correu electrònic quan s'hagi creat una tasca nova";
@@ -2807,6 +6027,11 @@ $HomeworkHasBeenCreatedForTheCourse = "S'ha creat una tasca nova al curs";
 $PleaseCheckHomeworkPage = "Si us plau, consulti la pàgina de tasques";
 $ScormNotEnoughSpaceInCourseToInstallPackage = "No hi ha suficient espai en aquest curs per descomprimir el paquet actual.";
 $ScormPackageFormatNotScorm = "El paquet que esteu carregant no sembla estar en format SCORM. Comproveu que el imsmanifest.xml es troba dins de l'arxiu ZIP que esteu intentant carregar.";
+$DataFiller = "Emplena dades";
+$GradebookActivateScoreDisplayCustom = "Habilita l'etiquetatge de nivell de competència amb la finalitat d'establir la informació de resultats personalitzats.";
+$GradebookScoreDisplayCustomValues = "Nivells de competència dels valors personalitzats";
+$GradebookNumberDecimals = "Nombre de decimals";
+$GradebookNumberDecimalsComment = "Estableix el nombre de decimals permesos en una puntuació";
 $ContactInformation = "Informació de contacte";
 $PersonName = "Nom de la persona";
 $CompanyName = "Nom de l'empresa";
@@ -2819,6 +6044,8 @@ $SendInformation = "Envia la informació";
 $YouMustAcceptLicence = "Heu d'acceptar la llicència per poder utilitzar aquest programari";
 $SelectOne = "Seleccioneu un";
 $ContactInformationHasBeenSent = "Informació de contacte enviada";
+$EditExtraFieldOptions = "Edita opcions dels camps addicionals";
+$ExerciseDescriptionLabel = "Descripció";
 $UserInactivedSinceX = "Usuari inactiu des de %s";
 $ContactInformationDescription = "Benvolgut usuari, 
 
@@ -2831,19 +6058,51 @@ Emplenar aquest formulari, implica l'acceptació de que l'associació Chamilo o 
 De totes maneres, tingueu en compte que <b>no té l'obligació</b> d'emplenar aquest formulari. Si voleu romandre en l'anonimat, perdrem l'oportunitat d'oferir tots els privilegis de ser un administrador de portal registrat, però respectarem la seva decisió. Només cal deixar buit aquest formulari i fer clic a \"Següent\" per continuar instal·lant Chamilo.";
 $CompanyActivity = "Sector";
 $PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Doni'ns una mica de temps per subscriure's a un dels nostres cursos. Si considera que l'oblidem, posi's en contacte amb els administradors del portal. Pot trobar les seves dades de contacte al peu de pàgina.";
+$ManageSessionFields = "Gestiona els camps de sessió";
 $DateUnLock = "Desbloqueja data";
 $DateLock = "Bloqueja data";
+$EditSessionsToURL = "Edita sessions d'una URL";
+$AddSessionsToURL = "Afegeix sessions a una URL";
+$SessionListIn = "Llista de sessions a";
 $GoToStudentDetails = "Veure detalls de l'estudiant";
 $DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostra informació sobre l'últim avenç temàtic fet i el següent per fer.";
+$FillUsers = "Genera usuaris";
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "Aquesta secció només és visible en instal·lacions des del codi font, no en versions estables de la plataforma. Li permetrà inserir a la seva plataforma dades de prova. Utilitzi-la amb cura (les dades s'insereixen realment) i només en instal·lacions de desenvolupament o de prova.";
+$UsersFillingReport = "Emplena l'informe d'usuaris";
 $RepeatDate = "Repeteix dia";
 $EndDateMustBeMoreThanStartDate = "La data de finalització ha de ser posterior a la data d'inici";
 $ToAttend = "Pot assistir";
+$AllUsersAreAutomaticallyRegistered = "Tots els usuaris seran afegits automàticament";
+$AssignCoach = "Assigna tutor";
+$chamilo = "Chamilo";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "El seu compte a %s ha estat aprovat per un dels nostres administradors.";
+$php = "PHP";
+$Off = "Desactivat";
+$webserver = "Servidor web";
+$mysql = "MySQL";
+$NotInserted = "No inserit";
+$Multipleresponse = "Resposta múltiple";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Ara podeu autenticar-se a % utilitzant el nom d'usuari i contrasenya que li han estat facilitats";
 $HaveFun = "Divertiu-vos,";
 $AreYouSureToEditTheUserStatus = "Esteu segur de voler editar l'estat d'usuari?";
 $YouShouldCreateAGroup = "Hauríeu de crear un grup";
+$ResetLP = "Torna a establir la seqüència d'aprenentatge";
+$LPWasReset = "La seqüència d'aprenentatge ha estat restablerta per a l'estudiant";
+$AnnouncementVisible = "Anunci visible";
+$AnnouncementInvisible = "Anunci invisible";
+$GlossaryDeleted = "Glossari esborrat";
+$SessionReadOnly = "Només lectura";
+$SessionAccessible = "Accessible";
+$SessionNotAccessible = "No accessible";
+$GroupAdded = "Grup afegit";
+$AddUsersToGroup = "Afegeix usuaris al grup";
+$ErrorReadingZip = "Error llegint l'arxiu ZIP";
+$ErrorStylesheetFilesExtensionsInsideZip = "Les úniques extensions acceptades a l'arxiu ZIP són jpg, jpeg, png, gif i css.";
 $ClearSearchResults = "Neteja els resultats de cerca";
+$DisplayCourseOverview = "Resum dels cursos";
+$DisplaySessionOverview = "Resum de les sessions";
+$TotalNumberOfMessages = "Nombre total de missatges";
+$TotalNumberOfAssignments = "Nombre total de tasques";
 $TestServerMode = "Servidor en mode test";
 $PageExecutionTimeWas = "El temps d'execució de la pàgina ha estat de";
 $MemoryUsage = "Us de memòria";
@@ -2853,14 +6112,28 @@ $QualifyInGradebook = "Qualifica a l'eina avaluació";
 $TheTutorOnlyCanKeepTrackOfStudentsRegisteredInTheCourse = "L'assistent només pot realitzar el seguiment dels estudiants registrats al curs.";
 $TheTeacherCanQualifyEvaluateAndKeepTrackOfAllStudentsEnrolledInTheCourse = "El professor pot qualificar, avaluar i realitzar el seguiment de totes els estudiants registrats al curs.";
 $IncludedInEvaluation = "Inclosa en l'avaluació";
+$ExerciseEditionNotAvailableInSession = "Edició d'exercici de curs no autoritzada des de la sessió";
 $SessionSpecificResource = "Recurs específic a la sessió";
 $EditionNotAvailableFromSession = "No és possible editar aquest recurs de curs des d'una sessió";
+$FieldTypeSocialProfile = "Vincle xarxa social";
 $HandingOverOfTaskX = "Entrega de tasques %s";
+$CopyToMyFiles = "Copia a la meva àrea personal d'arxius";
+$Export2PDF = "Exporta a format PDF";
+$ResourceShared = "Recurs compartit";
+$CopyAlreadyDone = "Hi ha un arxiu amb el mateix nom dins de la teva àrea privada d'arxius d'usuari. Vols reemplaçar-lo?";
+$CopyFailed = "Còpia fallida";
+$CopyMade = "Còpia realitzada";
+$OverwritenFile = "Arxiu substituït";
 $MyFiles = "Els meus arxius";
+$AllowUsersCopyFilesTitle = "Permet als usuaris copiar arxius d'un curs a la seva àrea d'arxius personals";
+$AllowUsersCopyFilesComment = "Permet als usuaris copiar arxius d'un curs a la seva àrea personal, visible a través de l'eina Xarxa Social o mitjançant l'editor HTML quan es troben fora d'un curs";
 $PreviewImage = "Previsualitzar imatge";
 $UpdateImage = "Actualitzar imatge";
 $EnableTimeLimits = "Activar límits de temps";
 $ProtectedDocument = "Document protegit";
+$LastLogins = "Darrera connexió";
+$AllLogins = "Totes les connexions";
+$Draw = "Dibuixa";
 $ThereAreNoCoursesInThisCategory = "No existeixen cursos en la categoria actual";
 $ConnectionsLastMonth = "Connexions durant el mes anterior";
 $TotalStudents = "Estudiants";
@@ -2878,6 +6151,9 @@ $ReadTermsAndConditions = "Llegeix les condicions del servei";
 $IAcceptTermsAndConditions = "He llegit i accepto les condicions del servei";
 $YouHaveToAcceptTermsAndConditions = "Per continuar heu d'acceptar els nostres termes i condicions";
 $CourseRequestCreated = "La seva sol·licitud de curs s'ha rebut correctament. En breu (un o dos dies laborables) rebreu una resposta sobre aquesta.";
+$ReviewCourseRequests = "Valida Cursos";
+$AcceptedCourseRequests = "Cursos Validats";
+$RejectedCourseRequests = "Cursos Refusats";
 $CreateThisCourseRequest = "Sol·licitud d'un curs nou";
 $CourseRequestDate = "Data de sol·licitud";
 $AcceptThisCourseRequest = "Valida aquest curs";
@@ -2885,6 +6161,7 @@ $ANewCourseWillBeCreated = "El curs %s ha estat creat. Desitgeu continuar?";
 $AdditionalInfoWillBeAsked = "Enviar un correu electrònic sol·licitant informació addicional (%s).";
 $AskAdditionalInfo = "Demana més informació";
 $BrowserDontSupportsSVG = "El seu navegador no suporta arxius SVG. Per poder utilitzar aquesta eina heu de tenir instal·lat un navegador avançat del tipus: Firefox o Chrome";
+$BrowscapInfo = "Browscap carrega l'arxiu browscap.ini el qual conté una gran quantitat de dades sobre els navegadors i les seves capacitats, per tal que pugui ser utilitzada per la funció get_browser() de PHP";
 $DeleteThisCourseRequest = "Elimina aquesta sol·licitud de curs";
 $ACourseRequestWillBeDeleted = "La sol·licitud del curs %s ha estat eliminada. Desitgeu prosseguir?";
 $RejectThisCourseRequest = "Rebutja aquesta sol·licitud de curs";
@@ -2905,38 +6182,175 @@ $CourseRequestMailOpening = "S'ha registrat la sol·licitud següent per a un cu
 $CourseRequestPageForApproval = "Podeu validar la sol·licitud a:";
 $PleaseActivateCourseValidationFeature = "La \"Validació de curs\" no està activa. Per utilitzar aquesta eina activeu-la utilitzant el paràmetre %s";
 $CourseRequestLegalNote = "La informació d'aquesta sol·licitud de formació és considerada com a confidencial, per tant només pot ser utilitzada com a procediment d'obertura d'un curs nou dins del nostre portal. No haurà de ser relatada a tercers.";
+$EnableCourseValidation = "Sol·licitud de cursos";
+$EnableCourseValidationComment = "Quan la sol·licitud de cursos està activada, un professor no podrà crear un curs per si mateix sinó que haurà d'emplenar una sol·licitud. L'administrador de la plataforma revisarà la sol·licitud i l'aprovarà o refusarà. Aquesta funcionalitat es basa en missatges de correu electrònic automàtics pel que s'ha d'assegurar que la seva instal·lació de Chamilo utilitza un servidor de correu i una adreça de correu electrònic dedicada a aquest fet.";
 $CourseRequestAskInfoEmailSubject = "%s Sol·licitud d'informació %s";
 $CourseRequestAskInfoEmailText = "Hem rebut la seva sol·licitud per a la creació d'un curs amb el codi %s. Abans de considerar la seva aprovació necessitem alguna informació addicional. \n\ nFeu una breu descripció del contingut del curs, els objectius i els estudiants o un altre tipus d'usuaris que hagin de participar. Si és el cas, esmenti el nom de la institució o òrgan en nom de la qual Vostè ha fet la sol·licitud.";
 $CourseRequestAcceptedEmailSubject = "%s La petició del curs %s ha estat aprovada";
 $CourseRequestAcceptedEmailText = "La vostra sol·licitud del curs %s ha estat aprovada. Un curs nou %s ha estat creat i heu quedat inscrit a ell com a professor.\n\nPodreu accedir al curs creat des de: %s";
 $CourseRequestRejectedEmailSubject = "%s La sol·licitud del curs %s ha estat denegada";
 $CourseRequestRejectedEmailText = "Lamentem informar-lo que la sol·licitud del curs %s ha estat denegada degut a que no s'ajusta als nostres termes i condicions.";
+$CourseValidationTermsAndConditionsLink = "Sol·licitud de cursos - enllaç a termes i condicions";
+$CourseValidationTermsAndConditionsLinkComment = "La URL que enllaça el document \"Termes i Condicions\" que regeix la sol·licitud d'un curs. Si aquesta adreça està configurada, l'usuari haurà de llegir i acceptar els termes i condicions abans d'enviar una sol·licitud de curs. Si activa el mòdul \"Termes i condicions\" de Chamilo i vol utilitzar aquest enlloc de termes i condicions propis, deixi aquest camp buit.";
 $CourseCreationFailed = "El curs no ha estat creat degut a un error intern.";
 $CourseRequestCreationFailed = "La sol·licitud de curs no ha estat creada degut a un error intern.";
 $CourseRequestEdit = "Edita una sol·licitud de curs";
 $CourseRequestHasNotBeenFound = "La sol·licitud de curs a la que voleu accedir no s'ha trobat o no existeix.";
+$FileExistsChangeToSave = "Aquest nom d'arxiu ja existeix, tria un altre per guardar la imatge";
 $CourseRequestUpdateFailed = "La sol·licitud del curs %s no ha estat actualitzada degut a un error intern.";
 $CourseRequestUpdated = "La sol·licitud del curs %s ha estat actualitzada.";
 $FillWithExemplaryContent = "Inclou continguts d'exemple";
+$EnableSSOTitle = "Single Sign On (registre únic)";
+$EnableSSOComment = "L'activació de Single Sign On li permet connectar aquesta plataforma com a client d'un servidor d'autenticació, per exemple un lloc web de Drupal que tingui el mòdul Drupal-Chamilo o qualsevol altre servidor amb una configuració similar.";
+$SSOServerDomainTitle = "Domini del servidor de Single Sign On";
+$SSOServerDomainComment = "Domini del servidor de Single Sign On (adreça web del servidor que permetrà el registre automàtic dins de Chamilo). L'adreça del servidor ha d'escriure's sense el protocol al començament i sense la barra al final, per exemple www.exemple.cat";
+$SSOServerAuthURITitle = "URL del servidor de Single Sign On";
+$SSOServerAuthURIComment = "Adreça de la pàgina encarregada de verificar l'autenticació. Per exemple, en el cas de Drupal /?q=user";
+$SSOServerUnAuthURITitle = "URL de Sortida del servidor de Single Sign Out";
+$SSOServerUnAuthURIComment = "Adreça de la pàgina del servidor que desconnecta a un usuari. Aquesta opció és útil únicament si desitja que els usuaris que es desconnectin de Chamilo també es desconnectin del servidor d'autenticació.";
+$SSOServerProtocolTitle = "Protocol del servidor Single Sign On";
+$SSOServerProtocolComment = "Prefix que indica el protocol del domini del servidor de Single Sign On (si el seu servidor ho permet, recomanem https:// doncs protocols no segurs són un perill per a un sistema d'autenticació).";
+$EnabledWirisTitle = "Editor matemàtic WIRIS";
+$EnabledWirisComment = "Activa l'editor matemàtic WIRIS. Instal·lant aquest connector obtindrà WIRIS editor i WIRIS CAS.
+L'activació no es realitza completament si prèviament no s'ha descarregat el <a href=\"http://www.wiris.com/plugins/editors/download?filter=fckeditor\" target=\"_blank\">PHP plugin for FCKeditor WIRIS</a> i descomprimit el seu contingut al directori de Chamilo main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ 
+Això és necessari degut a que WIRIS és un programari propietari i els serveis de WIRIS són <a href=\"http://www.wiris.com/store/who-pays\" target=\"_blank\"> comercials </a>. Per realitzar ajustaments en el connector editi l'arxiu configuration.ini o substitueixi el seu contingut pel de configuration.ini.default que acompanya a Chamilo.";
+$FileSavedAs = "Arxiu desat com";
+$FileExportAs = "Arxiu exportat com";
+$AllowSpellCheckTitle = "Corrector ortogràfic";
+$AllowSpellCheckComment = "Activa el corrector ortogràfic";
+$EnabledSVGTitle = "Creació i edició d'arxius SVG";
+$EnabledSVGComment = "Aquesta opció li permetrà crear i editar arxius SVG (Gràfics vectorials escalables) multicapa en línia, així com exportar-los a imatges en format PNG.";
+$ForceWikiPasteAsPlainTextTitle = "Obliga a enganxar com a text pla al Wiki";
+$ForceWikiPasteAsPlainTextComment = "Això impedirà que moltes etiquetes ocultes, incorrectes o no estàndard, copiades d'altres texts acabin corrompent el text del Wiki després de moltes edicions; però perdrà algunes possibilitats durant l'edició.";
+$EnabledGooglemapsTitle = "Activa Google Maps";
+$EnabledGooglemapsComment = "Activa el botó per inserir mapes de Google. L'activació no es realitzarà completament si prèviament no heu editat l'arxiu main/inc/lib/fckeditor/myconfig.php i afegit una clau API de Google maps.";
+$EnabledImageMapsTitle = "Activa Mapes d'imatge";
+$EnabledImageMapsComment = "Activa el botó per inserir Mapes d'imatge. Això li permetrà associar adreces URL a zones d'una imatge, generant zones interactives.";
 $RemoveSearchResults = "Netejar els resultats de cerca";
+$ExerciseCantBeEditedAfterAddingToTheLP = "No és possible editar un exercici després que s'afegeixi a una lliçó";
+$CourseTool = "Eina del curs";
+$LPExerciseResultsBySession = "Resultats dels exercicis de les lliçons per sessió";
+$LPQuestionListResults = "Llista de resultats dels exercicis de les lliçons";
+$PleaseSelectACourse = "Seleccioneu un curs";
+$StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts = "La puntuació mitjana de l'estudiant és calculada sobre el conjunt de les lliçons i dels intents";
+$AverageScore = "Puntuació mitjana";
+$LastConnexionDate = "Data de la darrera connexió";
 $ToolVideoconference = "Videoconferència";
+$BigBlueButtonEnableTitle = "Eina de videoconferència BigBlueButton";
+$BigBlueButtonEnableComment = "Seleccioneu si desitgeu habilitar l'eina de videoconferència BigBlueButton. Un cop activada, es mostrarà com una eina a la pàgina principal de tots els cursos. Els professors podran llançar una videoconferència en qualsevol moment, però els estudiants només podran unir-se a una ja llançada. Si no disposeu d'un servidor BigBlueButton, proveu a <a href=\"http://bigbluebutton.org/\" target=\"_blank\">configurar-ne un</a> o demaneu ajut als <a href=\"http://bigbluebutton.org/\" target=\"_blank\">proveïdors oficials de Chamilo</a>. BigBlueButton és lliure, però la seva instal·lació requereix a certes habilitats tècniques que no tot el món posseeix. Pot instal·lar-ho pel seu compte o buscar ajut professional amb el conseqüent cost. En la lògica del programari lliure, nosaltres li oferim les eines per fer més fàcil la seva feina i li recomanem professionals (els proveïdors oficials de Chamilo) que seran capaços d'ajudar-lo.";
+$BigBlueButtonHostTitle = "Servidor BigBlueButton";
+$BigBlueButtonHostComment = "Aquest és el nom del servidor on el seu servidor BigBlueButton està executant-se. Pot ser localhost, una adreça IP (ex.: 192.168.14.54) o un nom de domini (per ex.: my.video.com).";
+$BigBlueButtonSecuritySaltTitle = "Clau de seguretat del servidor BigBlueButton";
+$BigBlueButtonSecuritySaltComment = "Aquesta és la clau de seguretat del seu servidor BigBlueButton, que permetrà al seu servidor autenticar la instal·lació a Chamilo. Consulteu la documentació de BigBlueButton per localitzar-la.";
 $SelectSVGEditImage = "Selecciona una imatge";
 $OnlyAccessFromYourGroup = "Només accessible des del seu grup";
+$CreateAssignmentPage = "Això crearà una pàgina wiki especial en què el professor descriu la tasca, la qual crearà un enllaç a les pàgines wiki on els estudiants la realitzaran. Tant la pàgina del docent com la dels estudiants es creen automàticament. En aquest tipus de tasques els estudiants només podran editar i veure les seves pàgines, encara que això podeu canviar-ho si ho desitgeu.";
 $UserFolders = "Carpetes dels usuaris";
+$UserFolder = "Carpeta de l'usuari";
+$HelpUsersFolder = "AQUESTA INFORMACIÓ NOMÉS ÉS VISIBLE PER AL PROFESSOR:\nLa carpeta d'usuaris conté una carpeta per cada usuari que l'ha accedit mitjançant l'eina de documents, o quan qualsevol arxiu s'envia al curs mitjançant l'editor en línia. Si no es dóna cap de les dues circumstàncies no es crearà cap carpeta d'usuari. En el cas dels grups, els arxius que s'envien mitjançant l'editor seràn afegits a la carpeta de cada grup, que és accesible només pels alumnes del grup.
+
+La carpeta d'usuaris i cadascuna de les carpetes incloses estaran ocultes per defecte per a tots els alumnes, però sí que poden veure els continguts de la seva pròpia carpeta mitjançant l'editor en línia. No obstant això, si un alumne sap l'adreça d'un arxiu o carpeta d'altre, pot ser que pugui accedir.
+
+Si la carpeta d'un alumne és visible, la resta d'alumnes pot veure el que conté. En aquest cas, l'alumne propietari de la carpeta també pot (des de l'eina de documents i només a la seva pròpia carpeta) crear i editar documents web, convertir un document en una plantilla per a ús personal, crear i editar dibuixos en format SVG o PNG, gravar arxius d'àudio en format WAV, crear arxius d'àudio en MP3 a partir d'un text, crear instantànies des de la càmera web, enviar documents, crear carpetes, traslladar carpetes i arxius, eliminar carpetes i arxius i descarregar còpies de seguretat de la seva pròpia carpeta.
+
+A més, l'eina de documents es sincronitza amb el gestor d'arxius de l'editor en línia, així que els canvis fets en qualsevol dels dos afectarà tots dos.
+
+Com a tal, la carpeta d'usuari no es només un espai per dipositar arxius, sinó que es converteix en un gestor complet dels documents dels alumnes durant el curs. A més a més, recorda que qualsevol usuari pot copiar un arxiu que és visible des de qualsevol carpeta de l'eina de documents (siga o no el propietari) al seu portafoli o a l'àrea personal de documents de la xarxa social, que tindrà disponible per usar en altres cursos.";
+$HelpFolderChat = "NFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté totes les sessions que s'han realitzat al xat. Encara que moltes vegades les sessions al xat poden ser trivials, en altres poden ser dignes de ser tractades com un document més de treball. Per aquest motiu, sense canviar la visibilitat d'aquesta carpeta, feu visible l'arxiu i enllaceu-lo a on considereu oportú. No es recomana fer visible aquesta carpeta.";
+$HelpFolderCertificates = "INFORMACIÓ NOMÉS VISIBLE PEL PROFESSORAT: \nAquesta carpeta conté els diferents models de certificats que s'han creat per l'eina Avaluacions. No es recomana fer visible aquesta carpeta.";
+$DestinationDirectory = "Carpeta de destí";
 $CertificatesFiles = "Certificats";
 $ChatFiles = "Historial de converses en el xat";
 $Flash = "Flash";
 $Video = "Vídeo";
 $Images = "Imatges";
+$AsciiSvgTitle = "Editor de gràfics matemàtics ASCIIsvg";
+$AsciiSvgComment = "Activació de l'editor de gràfics matemàtics (ASCIIsvg).";
+$Text2AudioTitle = "Activa els serveis de conversió de text a àudio";
+$Text2AudioComment = "Eina en línia per convertir text a àudio. Utilitza la tecnologia i sistemes de síntesi de la parla per oferir recursos de veu.";
+$ShowUsersFoldersTitle = "Mostra les carpetes dels usuaris a l'eina documents";
+$ShowUsersFoldersComment = "Aquesta opció li permetrà mostrar o ocultar als professors les carpetes que el sistema genera per a cada usuari que visita l'eina documents o envia un arxiu a través de l'editor web. Si mostra aquestes carpetes als professors, aquests podran fer-les visibles o no als estudiants i permetran a cada estudiant disposar d'un lloc específic en el curs on, no només emmagatzemar documents, sinó on també podran crear i modificar pàgines web i poder exportar-les a PDF, crear dibuixos, crear plantilles web personals, enviar arxius, així com crear, moure i eliminar subdirectoris i arxius, i treure còpies de seguretat de les seves carpetes. Cada usuari disposarà d'un complet gestor de documents. A més, recordeu que qualsevol usuari podrà copiar un arxiu, que sigui visible, des de qualsevol carpeta de l'eina documents (sigui o no la seva) al seu portafoli o àrea personal de documents de la xarxa social, on estarà disponible per tal que ho pugui utilitzar en d'altres cursos.";
+$ShowDefaultFoldersTitle = "Mostra a l'eina documents les carpetes que contenen els recursos multimèdia subministrats per defecte.";
+$ShowDefaultFoldersComment = "Les carpetes d'arxius multimèdia subministrades per defecte contenen arxius de distribució lliure organitzats per categories de vídeo, imatge i animacions flash per tal de ser utilitzades en els seus cursos. Encara que les oculti en l'eina documents, podrà seguir utilitzant-les a l'editor web de la plataforma.";
+$ShowChatFolderTitle = "Mostra la carpeta de l'historial de les converses del xat";
+$ShowChatFolderComment = "Això mostrarà al professorat la carpeta que conté totes les sessions que s'han realitzat en el xat, podent aquest fer-les visibles o no als estudiants i utilitzar-les com un recurs més.";
+$EnabledStudentExport2PDFTitle = "Permet als estudiants exportar documents web al format PDF a les eines documents i wiki";
+$EnabledStudentExport2PDFComment = "Aquesta prestació està habilitada per defecte, però en cas de sobrecàrrega del servidor per abús d'ella, o en entorns de formació específics, pot que desitgi desactivar-la en tots els cursos.";
+$EnabledInsertHtmlTitle = "Permet la inserció de Ginys";
+$EnabledInsertHtmlComment = "Això li permetrà incrustar a les seves pàgines web els seus vídeos i aplicacions favorites com Vimeo o Slideshare i tot tipus de ginys";
+$CreateAudio = "Crea àudio";
+$InsertText2Audio = "Introduïu el text que desitgeu convertir a un arxiu d'àudio";
+$HelpText2Audio = "Transformeu el seu text en veu";
+$BuildMP3 = "Genera mp3";
+$Voice = "Veu";
+$Female = "Femenina";
+$Male = "Masculina";
+$IncludeAsciiMathMlTitle = "Carrega el fitxer ASCIIMathML.js per a totes les pàgines de la plataforma";
+$IncludeAsciiMathMlComment = "Activeu aquest paràmetre si desitja mostrar fórmules matemàtiques basades en ASCIIMathML i gràfics matemàtics basats en ASCIIsvg, no tan sols a l'eina \"Documents\", però també en d'altres eines de la plataforma.";
+$CourseHideToolsTitle = "Oculta les eines als docents";
+$CourseHideToolsComment = "Seleccioneu les eines que desitja ocultar al docent. Això prohibirà l'accés a l'eina.";
+$GoogleAudio = "Utilitza els serveis d'àudio de Google";
+$vozMe = "Utilitza els serveis d'àudio de vozMe";
+$HelpGoogleAudio = "Admet un màxim de 100 caràcters, suportant una àmplia varietat d'idiomes. Els arxius es generaran i desaran automàticament en el directori de Chamilo en què actualment es troba.";
+$HelpvozMe = "Admet textos de diversos milers de caràcters, també podreu seleccionar el tipus de veu: masculina o femenina. No obstant això, treballa amb menys idiomes, la qualitat de l'àudio és inferior i haureu de descarregar els arxius manualment des d'un finestra nova.";
+$SaveMP3 = "Desa mp3";
 $OpenInANewWindow = "Obre en una finestra nova";
+$Speed = "Velocitat";
+$GoFaster = "Més ràpid";
+$Fast = "Ràpid";
+$Slow = "Lent";
+$SlowDown = "Més lent";
+$Pediaphon = "Utilitza els serveis d'àudio de Pediaphon";
+$HelpPediaphon = "Admet textos amb diversos milers de caràcters, podent seleccionar diversos tipus de veu masculines i femenines (segons l'idioma). Els arxius d'àudio es generaran i desaran automàticament al directori de Chamilo en què actualment es troba.";
+$FirstSelectALanguage = "Primer seleccioneu un idioma";
+$MoveUserStats = "Mou els resultats dels usuaris des de / fins a una sessió de formació";
+$CompareUserResultsBetweenCoursesAndCoursesInASession = "Aquesta eina avançada li permet millorar manualment el seguiment dels resultats dels usuaris quan canvia d'un model de cursos a un model de sessions de formació. En una majoria de casos, no necessitarà usar-la.
+En aquesta pantalla, pot comparar els resultats que els usuaris tenen en el context d'un curs i en el context del mateix curs d'una sessió de formació.
+Quan decideixi quin és el millor context per al seguiment (resultats d'exercicis i seguiment de lliçons), podrà moure'l d'un curs a una sessió.";
+$PDFExportWatermarkEnableTitle = "Marques d'aigua en les exportacions a PDF";
+$PDFExportWatermarkEnableComment = "Si activeu aquesta opció podrà carregar una imatge o un text que seran automàticament afegits com a marca d'aigua en els documents resultants de totes les exportacions a PDF que realitzi el sistema.";
+$AddWaterMark = "Carrega una imatge per a marca d'aigua";
+$PDFExportWatermarkByCourseTitle = "Activa la definició de marques d'aigua per curs";
+$PDFExportWatermarkByCourseComment = "Quan aquesta opció està activada, els professors podran definir les seves pròpies marques d'aigua en els documents dels seus cursos.";
+$PDFExportWatermarkTextTitle = "Text de marca d'aigua per a PDF";
+$PDFExportWatermarkTextComment = "Aquest text s'afegirà com a marca d'aigua en els documents resultants de les exportacions al format PDF.";
+$ExerciseMinScoreTitle = "Puntuació mínima dels exercicis";
+$ExerciseMinScoreComment = "Estableixi una puntuació mínima (generalment 0) per a tots els exercicis de la plataforma. Això definirà com els resultats finals es mostraran als estudiants i als professors.";
+$ExerciseMaxScoreTitle = "Puntuació màxima dels exercicis";
+$ExerciseMaxScoreComment = "Estableixi una puntuació màxima (generalment 10, 20 o 100) per a tots els exercicis de la plataforma. Això definirà la manera com els resultats finals es mostraran als professors i als estudiants.";
 $AddPicture = "Afegeix imatge del curs";
 $LPAutoLaunch = "Activa el desplegable automàtic de lliçons";
+$UseMaxScore100 = "Utilitza per defecte 100 com a puntuació màxima";
+$EnableLPAutoLaunch = "Activa el desplegament automàtic";
+$DisableLPAutoLaunch = "Desactiva el desplegament automàtic";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuració per al desplegament automàtic de lliçons està activada. Quan els estudiants entrin al curs, seran redirigits a la lliçó seleccionada perquè es desplegui automàticament.";
+$UniqueAnswerNoOption = "Resposta única amb no-sé";
+$MultipleAnswerTrueFalse = "Respostes múltiples vertader/fals/no-sé";
+$MultipleAnswerCombinationTrueFalse = "Combinació vertader/fals/no-sé";
+$DontKnow = "No sé";
 $ExamNotAvailableAtThisTime = "Examen no disponible en aquest moment";
 $LoginOrEmailAddress = "Nom d'usuari o adreça de correu electrònic";
 $Activate = "Activa";
 $Deactivate = "Desactiva";
 $ConfigLearnpath = "Configura l'eina lliçons";
+$CareersAndPromotions = "Carreres i promocions";
+$Careers = "Carreres";
+$Promotions = "Promocions";
+$Updated = "Actualització correcta";
+$Career = "Carrera";
+$SubscribeSessionsToPromotions = "Inscriure's a les sessions de la promoció";
+$SessionsInPlatform = "Sessions no associades";
+$FirstLetterSessions = "Primera lletra del nom de la sessió";
+$SessionsInPromotion = "Sessions en aquesta promoció";
+$SubscribeSessionsToPromotion = "Subscriure's a sessions de la promoció";
+$NoEndTime = "Sense data final";
+$SubscribeUsersToClass = "Inscriure usuaris a l'aula";
+$SubscribeClassToCourses = "Associar un crus a l'aula";
+$SubscribeClassToSessions = "Associar sessions a l'aula";
+$SessionsInGroup = "Sessions de l'aula";
+$CoursesInGroup = "Cursos del grup";
+$UsersInGroup = "Usuaris del grup";
+$UsersInPlatform = "Usuaris de la plataforma";
 $Profile = "Perfil";
 $CreatedAt = "Creat el";
 $UpdatedAt = "Actualitzat el";
@@ -2949,51 +6363,118 @@ $AllLearningPaths = "Totes les lliçons";
 $ByCourse = "Per curs";
 $MyQCM = "Les meves proves";
 $LearnpathUpdated = "La ruta d'aprenentatge s'ha actualitzat";
+$YouNeedToCreateACareerFirst = "Es requereix que existeixi una carrera abans de poder afegir promocions (promocions són sub-elements d'una carrera).";
+$OutputBufferingInfo = "L'output buffering (o memòria cau de sortida) està a \"On\" quan activat i a \"Off\" quan desactivat. Aquest paràmetre també pot ser activat a través d'un valor sencer (4096, per exemple) que sol ser la mida de la memòria cau de sortida.";
+$LoadedExtension = "Extensió carregada";
 $AddACourse = "Afegeix un curs";
 $PerWeek = "Per setmana";
+$SubscribeGroupToSessions = "Associa l'aula a vàries sessions";
+$SubscribeGroupToCourses = "Inscriu grup en cursos";
+$CompareStats = "Compara estadístiques";
+$RenameAndComment = "Canvia de nom i comenta";
 $PhotoRetouching = "Retoc fotogràfic";
+$EnabledPixlrTitle = "Activa els serveis externs de Pixlr";
+$EnabledPixlrComment = "Pixlr li permetrà editar, ajustar i filtrar les seves fotografies amb prestacions similars a les de Photoshop. És el complement ideal per tractar imatges basades en mapes de bits";
+$PromotionXArchived = "La promoció %s ha estat arxivada. Aquesta acció té com a conseqüència fer invisibles totes les sessions registrades a aquesta promoció. Podeu desfer aquest canvi des-arxivant la promoció.";
+$PromotionXUnarchived = "La promoció %s s'ha des-arxivat. Aquesta acció té com a conseqüència fer visibles totes les sessions registrades a aquesta promoció. Podeu desfer aquest canvi arxivant la promoció.";
+$CareerXArchived = "La carrera %s ha estat arxivada. Això té com a conseqüència el fer invisible la carrera, les seves promocions així com les sessions registrades en aquestes promocions. Pot desfer aquesta acció des-arxivant a la carrera.";
+$CareerXUnarchived = "La carrera %s s'ha des-arxivat. En aquest cas és el fer visible la carrera, les seves promocions així com les sessions registrades en aquestes promocions. Podeu desfer aquesta acció arxivant a la carrera.";
 $SeeAll = "Veure tots";
 $SeeOnlyArchived = "Veure només arxivats";
 $SeeOnlyUnarchived = "Veure només no arxivats";
 $LatestAttempt = "Últim intent";
 $PDFWaterMarkHeader = "Marca d'aigua a la capçalera en les exportacions PDF";
+$False = "Fals";
+$DoubtScore = "No sé";
+$RegistrationByUsersGroups = "Inscripció per aules";
 $ContactInformationHasNotBeenSent = "La seva informació de contacte no ha pogut ser enviada. Segurament és degut a un problema de xarxa temporal. Intenteu-ho de nou en uns segons. Si el problema persisteix, ignoreu aquest procediment de registre i faci clic al botó per al pas següent.";
+$FillCourses = "Genera cursos";
+$FillSessions = "Genera sessions";
 $FileDeleted = "Arxiu eliminat";
 $MyClasses = "Les meves classes";
+$Archived = "Arxivada";
+$Unarchived = "Sense arxivar";
 $PublicationDate = "Data de publicació";
 $MySocialGroups = "Els meus grups";
 $SocialGroups = "Grups";
 $CreateASocialGroup = "Crea un grup social";
+$StatsUsersDidNotLoginInLastPeriods = "No connectats per un temps";
+$LastXMonths = "Últims %i mesos";
+$NeverConnected = "Mai connectats";
+$EnableAccessibilityFontResizeTitle = "Funcionalitat de redimensionament de fonts";
+$EnableAccessibilityFontResizeComment = "Activar aquesta opció mostrarà una sèrie d'opcions de redimensionament de fonts a la part superior dreta del seu campus. Això permetrà a les persones amb dificultats visuals llegir més fàcilment els continguts dels seus cursos.";
+$HotSpotDelineation = "Delineació hotspot";
 $CorrectAndRate = "Corregeix i puntua";
 $AtOnce = "A la recepció";
 $Daily = "A diari";
+$QuestionsAreTakenFromLPExercises = "Aquestes preguntes han estat agafades de les lliçons";
+$AllStudentsAttemptsAreConsidered = "Tots els intents dels estudiants són considerats";
+$ViewModeEmbedFrame = "Vista actual: incrustat extern. Només per ús des d'altres llocs.";
 $ItemAdded = "Element afegit";
 $ItemDeleted = "Element esborrat";
 $ItemUpdated = "Element actualitzat";
 $ItemCopied = "Element copiat";
 $MyStatistics = "Les meves estadístiques";
+$PublishedExercises = "Exercicis disponibles";
+$DoneExercises = "Exercicis realitzats";
+$AverageExerciseResult = "Resultat mig de l'exercici";
+$LPProgress = "Progrés de les lliçons";
+$Ranking = "Classificació";
+$BestResultInCourse = "Millor resultat del curs";
+$ExerciseStartDate = "Data de publicació";
 $FromDateXToDateY = "Del %s al %";
 $RedirectToALearningPath = "Redirigeix a un itinerari seleccionat";
 $RedirectToTheLearningPathList = "Redirigeix a la llista d'itineraris";
+$PropagateNegativeResults = "Propaga els resultats negatius entre les preguntes";
+$LPNotVisibleToStudent = "Els estudiants no poden veure aquesta lliçó";
+$InsertALinkToThisQuestionInTheExercise = "Insereix aquesta pregunta a l'exercici com un vincle (no una còpia)";
 $CourseThematicAdvance = "Avenç del curs";
+$OnlyShowScore = "Mode exercici: mostra només la puntuació";
 $Clean = "Neteja";
+$OnlyBestResultsPerStudent = "En cas d'intents múltiples, només mostra el millor resultat per estudiant";
 $EditMembersList = "Edita llista de membres";
+$BestAttempt = "Millor intent";
+$ExercisesInTimeProgressChart = "El progrés dels resultats dels exercicis propis a través del temps, contra la mitjana dels estudiants";
 $MailNotifyInvitation = "Notifica les invitacions per correu electrònic";
 $MailNotifyMessage = "Notifica els missatges per correu electrònic";
 $MailNotifyGroupMessage = "Notifica en els grups els missatges per correu electrònic";
+$SearchEnabledTitle = "Cerca a text complet";
+$SearchEnabledComment = "Aquesta funcionalitat permet la indexació de la majoria dels documents pujats al seu portal, de manera que permet la recerca per als usuaris.
+Aquesta funcionalitat no indexa els documents que ja van ser enviats, pel que és important (si es vol) activar al començament de la seva implementació.
+Un cop activada, una caixa de cerca apareixerà a la llista de cursos de cada usuari. Cercar un terme específic subministra una llista de documents, exercicis o temes de fòrum corresponents, filtrats depenent de la seva disponibilitat per a l'usuari.";
+$SpecificSearchFieldsAvailable = "Camps de cerca personalitzats disponibles";
+$XapianModuleInstalled = "Mòdul Xapian instal·lat";
 $ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField = "Per enviar un o més fitxers, només haureu d'arrossegar-los des del seu escriptori del seu ordinador fins a la caixa inferior i el sistema farà la resta. Alternativament, també podeu fer clic a la caixa inferior i seleccionar els fitxers que desitgeu pujar (podeu usar CTRL + clic per seleccionar diferents arxius a la vegada).";
 $Simple = "Simple";
 $Multiple = "Múltiple";
 $UploadFiles = "Arrossegueu aquí els arxius que desitgeu enviar";
+$ImportExcelQuiz = "Importa exercici via Excel";
+$DownloadExcelTemplate = "Descarrega plantilla Excel";
+$YouAreCurrentlyUsingXOfYourX = "Esteu utilitzant %s MB (%s) del vostre total disponible de %s MB.";
+$AverageIsCalculatedBasedInAllAttempts = "La mitjana es basa en tots els intents realitzats";
+$AverageIsCalculatedBasedInTheLatestAttempts = "La mitjana es basa en els últims intents realitzats";
+$LatestAttemptAverageScore = "Mitjana dels últims resultats";
 $SupportedFormatsForIndex = "Formats disponibles per a la indexació";
 $Installed = "Instal·lat";
 $NotInstalled = "No instal·lat";
 $Settings = "Paràmetres";
+$ProgramsNeededToConvertFiles = "Programes necessaris per indexar arxius de formats aliens";
+$YouAreUsingChamiloInAWindowsPlatformSadlyYouCantConvertDocumentsInOrderToSearchTheContentUsingThisTool = "Està utilitzant Chamilo en una plataforma Windows. Malauradament, no pot convertir els documents per indexar-ho amb aquesta eina.";
 $OnlyLettersAndNumbers = "Només lletres (a-z) i números (0-9)";
+$HideCoursesInSessionsTitle = "Oculta cursos a la llista de sessions";
+$HideCoursesInSessionsComment = "Quan es mostren els blocs de sessions a la pàgina de cursos, oculta la llista de cursos dins de la sessió (només mostra'ls a la pàgina específica de la sessió).";
+$ShowGroupsToUsersTitle = "Mostra les aules als usuaris";
+$ShowGroupsToUsersComment = "Mostra les aules als usuaris. Les aules són una funcionalitat que permet subscriure / donar de baixa grups d'usuaris dins d'una sessió o d'un curs directament, reduint el treball administratiu. Quan s'activa aquesta opció, els estudiants poden veure de quina aula formen part, a través de la seva interfície de xarxa social.";
+$ExerciseWillBeActivatedFromXToY = "L'exercici estarà visible del %s al %s";
+$ExerciseAvailableFromX = "Exercici disponible des de el %s";
+$ExerciseAvailableUntilX = "Exercici disponible fins el %s";
+$HomepageViewActivityBig = "Gran vista d'activitat (estil iPad)";
 $CheckFilePermissions = "Comprova els permisos dels fitxers";
 $AddedToALP = "Afegeix-ho a una lliçó";
 $NotAvailable = "No disponible";
 $ToolSearch = "Cerca";
+$EnableQuizScenarioTitle = "Escenarització d'exercicis";
+$EnableQuizScenarioComment = "A l'activar aquesta funcionalitat, farà disponible els exercicis de tipus escenari, que proposen noves preguntes a l'estudiant en funció de les seves respostes. El docent dissenyarà l'escenari complet de la prova, amb totes les seves possibilitats, a través d'una interfície senzilla però estesa.";
 $NanogongNoApplet = "No es pot trobar la miniaplicació Nanogong";
 $NanogongRecordBeforeSave = "Abans d'intentar enviar l'arxiu heu de realitzar la gravació";
 $NanogongGiveTitle = "No heu donat un nom a l'arxiu";
@@ -3004,13 +6485,77 @@ $PressRecordButton = "Per iniciar la gravació premeu el botó vermell";
 $VoiceRecord = "Gravació de veu";
 $BrowserNotSupportNanogongSend = "El seu navegador no permet enviar la seva gravació a la plataforma, encara que sí podreu desar-la al disc del seu ordinador i enviar-la més endavant. Per disposar de totes les prestacions, li recomanem utilitzar navegadors avançats tals com Firefox o Chrome.";
 $FileExistRename = "Ja existeix un arxiu amb el mateix nom. Doneu un nom nou a l'arxiu.";
+$EnableNanogongTitle = "Activa el gravador - reproductor de veu Nanogong";
+$EnableNanogongComment = "Nanogong és un gravador - reproductor de veu que li permet gravar la seva veu i enviar-la a la plataforma o descarregar-la al seu disc dur. També permet reproduir la gravació. Els estudiants només necessiten un micròfon i uns altaveus, i acceptar la càrrega de la miniaplicació quan es carregui per primera vegada. És molt útil perquè els estudiants d'idiomes puguin sentir la seva veu després de sentir la correcta pronunciació proposada pel professor en un altre arxiu wav.";
 $GradebookAndAttendances = "Avaluacions i assistències";
+$ExerciseAndLPsAreInvisibleInTheNewCourse = "Els exercicis i les lliçons han estat configurats com ocults en els cursos nous que es creïn. El docent haurà d'aprovar la publicació primer.";
 $SelectADateRange = "Escull un rang de dates";
+$AreYouSureToLockedTheEvaluation = "Esteu segur de voler bloquejar la avaluació?";
+$AreYouSureToUnLockedTheEvaluation = "Esteu segur de voler desbloquejar la avaluació?";
+$EvaluationHasBeenUnLocked = "Avaluació desbloquejada";
+$EvaluationHasBeenLocked = "Avaluació bloquejada";
 $AllDone = "Dies comprovats";
 $AllNotDone = "Dies sense comprovar";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Si la seva lliçó té arxius d'àudio inclosos, hauria de seleccionar-los des dels documents.";
+$UplUploadFailedSizeIsZero = "Hi ha hagut un problema en pujar el seu document: l'arxiu rebut presentar una mida de 0 bytes al servidor. Verifiqueu que el seu arxiu local no estigui danyat (tracteu d'obrir-lo amb el programari corresponent) i proveu altre cop.";
+$YouMustChooseARelationType = "Heu de seleccionar un tipus de relació";
+$SelectARelationType = "Selecció del tipus de relació";
+$AddUserToURL = "Afegeix l'usuari a la URL";
+$CourseBelongURL = "Curs registrat a la URL";
+$AtLeastOneSessionAndOneURL = "Heu de seleccionar com a mínim una sessió i una URL";
+$SelectURL = "Selecciona una URL";
+$SessionsWereEdited = "Les sessions han estat actualitzades";
+$URLDeleted = "URL eliminada";
+$CannotDeleteURL = "No és possible eliminar la URL";
+$CoursesInPlatform = "Cursos a la plataforma.";
+$UsersEdited = "Usuaris actualitzats.";
+$CourseHome = "Pàgina principal del curs";
+$ComingSoon = "Properament ...";
+$DummyCourseOnlyOnTestServer = "Contingut del curs de proves - només disponible en les plataformes de proves.";
+$ThereAreNotSelectedCoursesOrCoursesListIsEmpty = "No existeixen cursos seleccionats o la llista de cursos és buida.";
+$CodeTwiceInFile = "El codi ha estat utilitzat dues vegades en l'arxiu. Els codis de cursos han de ser únics.";
+$CodeExists = "El codi ja existeix";
+$UnkownCategoryCourseCode = "No s'ha trobat la categoria";
+$LinkedCourseTitle = "Títol del curs relacionat";
+$LinkedCourseCode = "Codi del curs relacionat";
+$AssignUsersToSessionsAdministrator = "Assigna un usuari a l'administrador de sessions";
+$AssignedUsersListToSessionsAdministrator = "Assigna una llista d'usuaris a l'administrador de sessions";
 $GroupUpdated = "Classe actualitzada";
+$GroupDeleted = "Aula eliminada.";
+$CannotDeleteGroup = "Aquesta aula no ha pogut ser eliminada.";
+$SomeGroupsNotDeleted = "Algunes aules no han pogut ser eliminades.";
+$DontUnchek = "No desactivis";
+$Modified = "Actualitzat";
+$SessionsList = "Llista de sessions";
+$Promotion = "Promoció";
+$UpdateSession = "Actualitza la sessió";
+$Path = "Ruta";
+$Over100 = "Sobre 100";
+$UnderMin = "Per sota del mínim.";
+$SelectOptionExport = "Seleccioneu una opció d'exportació";
+$FieldEdited = "Camp afegit.";
+$LanguageParentNotExist = "L'idioma pare no existeix.";
+$TheSubLanguageHasNotBeenRemoved = "El sub-idioma no ha estat eliminat.";
+$ShowOrHide = "Mostra/Oculta";
+$StatusCanNotBeChangedToHumanResourcesManager = "L'estat d'aquest usuari no pot ser canviat per l'Administrador de Recursos Humans.";
+$FieldTaken = "Camp emprat";
 $AuthSourceNotAvailable = "Font d'autenticació no disponible.";
+$UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses = "Usuaris registrats en diversos cursos a través d'un curs virtual.";
+$NoUrlForThisUser = "Aquest usuari no té una URL relacionada.";
+$ExtraData = "Informació addicional";
+$ExercisesInLp = "Exercicis en lliçons";
+$Id = "Id";
+$ThereWasAnError = "Hi ha hagut un error.";
+$CantMoveToTheSameSession = "No és possible moure a la mateixa sessió.";
+$StatsMoved = "Estadístiques traslladades";
+$UserInformationOfThisCourse = "Informació de l'usuari en aquest curs";
+$OriginCourse = "Curs d'origen";
+$OriginSession = "Sessió d'origen";
+$DestinyCourse = "Curs de destinació";
+$DestinySession = "Sessió de destinació";
+$CourseDoesNotExistInThisSession = "El curs no existeix en aquesta sessió. La còpia només funcionarà des d'un curs en una sessió fins el mateix curs en una altra sessió.";
+$UserNotRegistered = "Usuari no registrat.";
+$ViewStats = "Mostra estadístiques";
 $Responsable = "Responsable";
 $TheAttendanceSheetIsLocked = "La llista d'assistència està bloquejada.";
 $Presence = "Assistència";
@@ -3024,14 +6569,60 @@ $BackToCourseDesriptionList = "Torna a la descripció del curs";
 $Postpone = "Ajorna";
 $NotHavePermission = "L'usuari no té permís per realitzar l'acció sol·licitada.";
 $CourseCodeAlreadyExistExplained = "Quan un codi de curs es duplica, el sistema detecta un codi de curs que ja existeix i que impedeix la creació d'un duplicat. Assegureu-vos que no es duplica un codi de curs.";
+$NewImage = "Imatge nova";
+$Untitled = "Sense títol";
 $CantDeleteReadonlyFiles = "No es pot eliminar els arxius que estan configurats en mode de només lectura";
 $InvalideUserDetected = "S'ha detectat un usuari invàlid.";
 $InvalideGroupDetected = "S'ha detectat un grup invàlid.";
 $OverviewOfFilesInThisZip = "Panoràmica dels arxius d'aquest Zip";
+$TestLimitsAdded = "Límits d'exercicis afegits";
+$AddLimits = "Afegeix límits";
+$Unlimited = "Sense límits";
+$LimitedTime = "Temps limitat";
+$LimitedAttempts = "Intents limitats";
+$Times = "Temps";
+$Random = "Aleatori";
+$ExerciseTimerControlMinutes = "Habilita exercicis amb control de temps.";
+$Numeric = "Numèric";
+$Acceptable = "Acceptable";
+$Hotspot = "Zona interactiva";
+$ChangeTheVisibilityOfTheCurrentImage = "Canvia visibilitat de la imatge";
+$Steps = "Passos";
+$OriginalValue = "Valor original";
+$ChooseAnAnswer = "Seleccioneu una resposta";
+$ImportExercise = "Importa exercici";
+$MultipleChoiceMultipleAnswers = "Eleccions múltiples, respostes múltiples";
+$MultipleChoiceUniqueAnswer = "Elecció múltiples, resposta única";
+$HotPotatoesFiles = "Arxius HotPotatoes";
+$OAR = "Zona a evitar";
+$TotalScoreTooBig = "La qualificació total és massa gran";
+$InvalidQuestionType = "Tipus de pregunta no vàlid";
 $InsertQualificationCorrespondingToMaxScore = "Inserir la qualificació corresponent a la màxima puntuació";
 $ThreadMoved = "El tema ha sigut traslladat";
 $MigrateForum = "Migrar fòrum";
 $YouWillBeNotified = "Seràs notificat";
+$MoveWarning = "Advertència: la informació dins del Quadern de qualificacions pot ser afectada al moure el Quadre de qualificacions.";
+$CategoryMoved = "El quadern de qualificacions ha estat mogut.";
+$EvaluationMoved = "Un avaluació del quadern de qualificacions ha estat moguda.";
+$NoLinkItems = "No hi ha components relacionats.";
+$NoUniqueScoreRanges = "No existeix cap rang possible de puntuacions.";
+$DidNotTakeTheExamAcronym = "L'usuari no ha agafat l'exercici.";
+$DidNotTakeTheExam = "L'usuari no ha agafat l'examen.";
+$DeleteUser = "Elimina usuari";
+$ResultDeleted = "Resultat eliminat";
+$ResultsDeleted = "Resultats eliminats";
+$OverWriteMax = "Sobreescriu el valor màxim.";
+$ImportOverWriteScore = "L'import sobreescriurà la qualificació.";
+$NoDecimals = "Sense decimals";
+$NegativeValue = "Valor negatiu";
+$ToExportMustLockEvaluation = "Per exportar, haureu de bloquejar l'avaluació.";
+$ShowLinks = "Mostra enllaços";
+$TotalForThisCategory = "Total per aquesta categoria";
+$OpenDocument = "Obre document";
+$LockEvaluation = "Bloqueja avaluació";
+$UnLockEvaluation = "Desbloqueja avaluació.";
+$TheEvaluationIsLocked = "L'avaluació està bloquejada.";
+$BackToEvaluation = "Torna a l'avaluació.";
 $Uploaded = "Pujat.";
 $Saved = "Desat.";
 $Reset = "Reinicia";
@@ -3049,6 +6640,7 @@ $DecreaseFontSize = "Disminueix la mida de la font";
 $ResetFontSize = "Restaura la mida de la font";
 $IncreaseFontSize = "Augmenta la mida de la font";
 $LoggedInAsX = "Connectat com %s";
+$Quantity = "Quantitat";
 $AttachmentUpload = "Puja arxiu adjunt";
 $CourseAutoRegister = "Curs de registre automàtic";
 $ThematicAdvanceInformation = "La temporització de la unitat didàctica permet organitzar el seu curs a través del temps.";
@@ -3068,6 +6660,8 @@ $XWroteY = "% va escriure:
 $BackToGroup = "Torna al grup";
 $GoAttendance = "Vés a les assistències";
 $GoAssessments = "Vés a les avaluacions";
+$EditCurrentModule = "Edita el mòdul actual";
+$SearchFeatureTerms = "Termes per a la cerca";
 $UserRoles = "Rols d'usuari";
 $GroupRoles = "Rols de grup";
 $StorePermissions = "Emmagatzema permisos";
@@ -3075,16 +6669,40 @@ $PendingInvitation = "Invitació pendent";
 $MaximunFileSizeXMB = "Mida màxima d'arxiu: %sMB.";
 $MessageHasBeenSent = "El seu missatge ha estat enviat.";
 $Tags = "Etiquetes";
+$ErrorSurveyTypeUnknown = "Tipus d'enquesta desconeguda";
+$SurveyUndetermined = "Enquesta no definida";
+$QuestionComment = "Comentari de la pregunta";
+$UnknowQuestion = "Pregunta desconeguda";
+$DeleteSurveyGroup = "Elimina un grup d'enquestes";
+$ErrorOccurred = "Ha ocorregut un error";
 $ClassesUnSubscribed = "Classes amb cancel·lació de la subscripció.";
 $NotAddedToCourse = "No afegit al curs";
 $UsersNotRegistered = "Usuaris que no s'han registrat.";
 $ClearFilterResults = "Neteja els resultats";
 $SelectFilter = "Selecciona filtre";
+$MostLinkedPages = "Pàgines més vinculades";
+$DeadEndPages = "Pàgines sense sortida";
+$MostNewPages = "Pàgines més noves";
+$MostLongPages = "Pàgines més llargues";
+$HiddenPages = "Pàgines ocultes";
+$MostDiscussPages = "Pàgines més discutides";
+$BestScoredPages = "Pàgines amb millor puntuació";
+$MProgressPages = "Pàgines amb més progrés";
+$MostDiscussUsers = "Usuaris més discutits";
+$RandomPage = "Pàgina aleatòria";
 $DateExpiredNotBeLessDeadLine = "La data de caducitat no pot ser menor que la data límit";
 $NotRevised = "No s'ha revisat";
+$DirExists = "Operació impossible, ja existeix un directori amb el mateix nom.";
+$DocMv = "Document mogut";
 $ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Intenteu una altra data o afegiu una fulla d'assistència avui utilitzant les icones d'acció.";
 $AddToCalendar = "Afegeix-ho al calendari";
+$TotalWeight = "Pes total";
 $RandomPick = "Selecció aleatòria";
+$SumOfActivitiesWeightMustBeEqualToTotalWeight = "La suma de pesos de totes les activitats ha de ser igual al pes total definit en la configuració d'aquesta avaluació, sinó els alumnes no podran aconseguir la puntuació mínima requerida per obtenir el seu certificat.";
+$TotalSumOfWeights = "La suma de pesos de tots els components d'aquesta avaluació ha de ser igual a aquest número.";
+$ShowScoreAndRightAnswer = "Mode autoavaluació: mostra la puntuació i les respostes esperade";
+$DoNotShowScoreNorRightAnswer = "Mode examen: no mostris res (ni puntuació, ni respostes)";
+$YouNeedToAddASessionCategoryFirst = "Necessiteu afegir una categoria de sessió";
 $YouHaveANewInvitationFromX = "Té una sol·licitud nova de %s";
 $YouHaveANewMessageFromGroupX = "Té un missatge nou al grup %s";
 $YouHaveANewMessageFromX = "Té un missatge nou de %s";
@@ -3093,40 +6711,141 @@ $SeeInvitation = "Mostra la sol·licitud";
 $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Heu rebut aquesta notificació perquè esteu subscrit o participeu en ella, per canviar les seves preferències de notificació feu clic aquí: %s";
 $Replies = "Respostes";
 $Reply = "Resposta";
+$InstallationGuide = "Guia d'instal·lació";
+$ChangesInLastVersion = "Canvis en l'última versió";
+$ContributorsList = "Llista de distribuïdors";
+$SecurityGuide = "Guia de seguretat";
+$OptimizationGuide = "Guia d'optimització";
+$FreeBusyCalendar = "Calendari lliure/ocupat";
+$LoadUsersExtraData = "Carrega les dades addicionals dels usuaris";
 $Broken = "Trencat";
 $CheckURL = "Comprova enllaç";
+$PrerequisiteDeletedError = "Error: l'element definit com requisit previ ha estat eliminat.";
 $NoItem = "Encara no hi ha cap element";
+$ProtectedPages = "Pàgines protegides";
 $LoadExtraData = "Carrega les dades de camps addicionals (aquests han de ser marcats com 'Filtre' per tal que apareguin).";
 $CourseAssistant = "Assistent";
+$TotalWeightMustBeX = "La suma de tots els pesos dels components ha de ser de %s";
 $MaxWeightNeedToBeProvided = "S'ha d'indicar un pes màxim en les opcions d'aquesta avaluació";
+$ExtensionCouldBeLoaded = "L'extensió està disponible";
 $SupportedScormContentMakers = "Paquets SCORM suportats";
 $DisableEndDate = "Deshabilita la data final";
 $ForumCategories = "Categories del fòrum";
 $Copy = "Copia";
+$ArchiveDirCleanup = "Neteja del directori archive";
+$ArchiveDirCleanupDescr = "Chamilo guarda una còpia dels arxius temporals que genera (per les còpies de seguretat, les exportacions, les còpies, etc) dins del directori archive/. Passat un temps, tot això pot arribar a ocupar força espai al disc dur. Si fa clic al següent botó executarà una neteja manual d'aquest directori. Aquesta operació hauria de ser realitzada regularment mitjançant la utilitat cron de Linux, però si això no és possible en el seu entorn pot utilitzar aquesta pàgina per eliminar tots els arxius temporals de tant en tant.";
+$ArchiveDirCleanupProceedButton = "Executa la neteja";
+$ArchiveDirCleanupSucceeded = "El contingut del directori archive/ ha estat eliminat.";
+$ArchiveDirCleanupFailed = "Per alguna raó (potser per falta de permisos), no s'ha pogut netejar la carpeta archive/. Pot netejar manualment connectant-se al servidor i eliminant tot el contingut de la carpeta chamilo/archive/, excepte el fitxer .htaccess.";
 $EnableStartTime = "Utilitza temps de publicació";
 $EnableEndTime = "Utilitza temps de final de publicació";
+$LocalTimeUsingPortalTimezoneXIsY = "L'hora local utilitzant la zona horària del portal (%s) és %s";
 $AllEvents = "Tots els esdeveniments";
+$StartTest = "Inicia la prova";
+$ExportAsDOC = "Exporta com .doc";
 $Wrong = "Malament";
 $Certification = "Certificació";
 $CertificateOnlineLink = "Vincle al certificat en línia";
 $NewExercises = "Exercici nou";
 $MyAverage = "La meva mitjana";
 $AllAttempts = "Tots els intents";
+$QuestionsToReview = "Preguntes que desitgeu comprovar";
+$QuestionWithNoAnswer = "Preguntes sense respondre";
+$ValidateAnswers = "Valida respostes";
+$ReviewQuestions = "Comprova les preguntes seleccionades";
+$YouTriedToResolveThisExerciseEarlier = "Ja heu intentat resoldre aquesta pregunta anteriorment";
 $NoCookies = "Les galetes no estan activades al vostre navegador. Chamilo utilitza \"cookies\" per emmagatzemar les seves dades de connexió, de manera que no li serà possible entrar si les galetes no estan habilitades. Canvieu la configuració del seu navegador i recarregueu aquesta pàgina de nou.";
 $NoJavascript = "El seu navegador no té JavaScript activat. Chamilo se serveix de Javascript per proporcionar una interfície més dinàmica. És probable que moltes prestacions segueixin funcionant però altres no ho faran, especialment les relacionades amb la usabilitat. Us recomanem que canvieu la configuració del vostre navegador i recarregueu aquesta pàgina de nou.";
 $NoFlash = "El seu navegador no té activat el suport de Flash. Chamilo només es suporta en Flash per algunes de les seves funcions pel que la seva absència no li impedirà continuar. Però si vol beneficiar-se del conjunt de les eines de Chamilo, us recomanem que instal·leu i activeu el connector de Flash i reinicieu el vostre navegador.";
+$ThereAreNoQuestionsForThisExercise = "En aquest exercici no hi ha preguntes disponibles";
 $Attempt = "Intent";
 $SaveForNow = "Desa i continua més endavant";
+$ContinueTest = "Continua amb l'exercici";
 $NoQuicktime = "No teniu instal·lat el connector de QuickTime al vostre navegador. Podeu seguir utilitzant la plataforma, però per aconseguir reproduir un major nombre de tipus d'arxius multimèdia us recomanem la seva instal·lació.";
 $NoJavaSun = "No teniu instal·lat el connector de Java de Sun al seu navegador. Podeu seguir utilitzant la plataforma, però perdrà algunes de les seves prestacions.";
 $NoJava = "El seu navegador no suporta Java";
 $JavaSun24 = "Teniu instal·lada una versió incompatible de Java al vostre navegador per aquesta eina. Per poder utilitzar-la haureu d'instal·lar una versió de Java de Sun superior a la 24";
 $NoMessageAnywere = "Si no desitgeu veure més aquest missatge durant aquest sessió premeu aquí";
+$IncludeAllVersions = "Cerca també a les versions antigues de cada pàgina";
+$TotalHiddenPages = "Total de pàgines ocultes";
+$TotalPagesEditedAtThisTime = "Total de pàgines que estan editant-se en aquests moments";
+$TotalWikiUsers = "Total d'usuaris que han participat en aquest Wiki";
+$StudentAddNewPages = "Els estudiants poden afegir noves pàgines al Wiki";
+$DateCreateOldestWikiPage = "Data de creació de la pàgina més antiga del Wiki";
+$DateEditLatestWikiVersion = "Data de l'edició més recent del Wiki";
+$AverageScoreAllPages = "Puntuació mitjana de totes les pàgines";
+$AverageMediaUserProgress = "Mitjana del progrés estimat pels usuaris en les seves pàgines";
+$TotalIpAdress = "Total d'adreces IP diferents que han contribuït algun cop al Wiki";
+$Pages = "Pàgines";
+$Versions = "Versions";
+$EmptyPages = "Total de pàgines buides";
+$LockedDiscussPages = "Nombre de pàgines de discussió bloquejades";
+$HiddenDiscussPages = "Nombre de pàgines de discussió ocultes";
+$TotalComments = "Total de comentaris realitzats en les diferents versions de les pàgines";
+$TotalOnlyRatingByTeacher = "Total de pàgines que només poden ser puntuades per un professor";
+$TotalRatingPeers = "Pàgines totals que poden ser puntuades per altres aprenents";
+$TotalTeacherAssignments = "Nombre de pàgines de tasques proposades per un professor";
+$TotalStudentAssignments = "Nombre de pàgines de tasques individuals dels alumnes";
+$TotalTask = "Nombre de tasques";
+$PortfolioMode = "Mode portafoli";
+$StandardMode = "Mode de tasca estàndard";
+$ContentPagesInfo = "Informació sobre el contingut de les pàgines";
+$InTheLastVersion = "En l'última versió";
+$InAllVersions = "En totes les versions";
+$NumContributions = "Nombre de contribucions";
+$NumAccess = "Nombre de visites";
+$NumWords = "Nombre de paraules";
+$NumlinksHtmlImagMedia = "Nombre d'enllaços externs html inserits (text, imatges, etc.).";
+$NumWikilinks = "Nombre d'enllaços wiki";
+$NumImages = "Nombre d'imatges inserides";
+$NumFlash = "Nombre d'arxius flash inserits";
+$NumMp3 = "Nombre d'arxius d'àudio mp3 inserits";
+$NumFlvVideo = "Nombre d'arxius de vídeo FLV inserits";
+$NumYoutubeVideo = "Nombre de vídeos de YouTube embeguts";
+$NumOtherAudioVideo = "Nombre d'arxius d'àudio i vídeo inserits (excepte mp3 i flv)";
+$NumTables = "Nombre de taules inserides";
+$Anchors = "Àncores";
+$NumProtectedPages = "Nombre de pàgines protegides";
 $Attempts = "Intents";
 $SeeResults = "Mostra resultats";
 $Loading = "Carregant";
 $AreYouSureToRestore = "Esteu segur que voleu restaurar aquest element?";
+$XQuestionsWithTotalScoreY = "%d preguntes, amb un resultat màxim (totes les preguntes) de %s.";
 $ThisIsAutomaticEmailNoReply = "Aquest és un missatge automàtic. No li doneu resposta (serà ignorada).";
+$UploadedDocuments = "Documents enviats";
+$QuestionLowerCase = "pregunta";
+$QuestionsLowerCase = "preguntes";
+$BackToTestList = "Torna a la llista d'exercicis";
+$CategoryDescription = "Descripció de la categoria";
+$BackToCategoryList = "Torna a la llista de categories";
+$AddCategoryNameAlreadyExists = "Aquest nom de categoria ja existeix. Indiqueu un altre nom.";
+$CannotDeleteCategory = "No es pot eliminar la categoria";
+$CannotDeleteCategoryError = "Error: no es pot esborrar la categoria";
+$CannotEditCategory = "No es pot editar la categoria";
+$ModifyCategoryError = "No es pot modificar la categoria";
+$AllCategories = "Totes les categories";
+$CreateQuestionOutsideExercice = "Crea pregunta fora de qualsevol exercici";
+$ChoiceQuestionType = "Escull tipus de pregunta";
+$YesWithCategoriesSorted = "Sí, amb categories ordenades";
+$YesWithCategoriesShuffled = "Sí, amb categories remenades";
+$ManageAllQuestions = "Gestiona totes les preguntes";
+$MustBeInATest = "Heu d'estar en un exercici";
+$PleaseSelectSomeRandomQuestion = "Seleccioneu una pregunta aleatòria";
+$RemoveFromTest = "Treu de l'exercici";
+$AddQuestionToTest = "Afegeix pregunta a l'exercici";
+$QuestionByCategory = "Pregunta per categoria";
+$QuestionUpperCaseFirstLetter = "Pregunta amb primera lletra majúscula";
+$QuestionCategory = "Categoria de preguntes";
+$AddACategory = "Afegeix categoria";
+$AddTestCategory = "Afegeix categoria d'exercicis";
+$AddCategoryDone = "Categoria afegida";
+$NbCategory = "Nombre de categories";
+$DeleteCategoryAreYouSure = "Esteu segur de voler eliminar aquesta categoria?";
+$DeleteCategoryDone = "Categoria eliminada";
+$MofidfyCategoryDone = "Categoria modificada";
+$NotInAGroup = "No està a cap grup";
+$DoFilter = "Filtra";
+$ByCategory = "Per categoria";
 $PersonalCalendar = "Calendari personal";
 $SkillsTree = "Arbre de competències";
 $Skills = "Competències";
@@ -3135,33 +6854,103 @@ $WithCertificate = "Amb certificat";
 $AdminCalendar = "Calendari d'admin";
 $CourseCalendar = "Calendari de curs";
 $Reports = "Informes";
+$ResultsNotRevised = "Resultats no revisats";
+$ResultNotRevised = "Resultat no revisat";
 $dateFormatShortNumber = "%d%m%Y";
 $dateTimeFormatLong24H = "%d de %B del %Y a les %Hh%M";
 $ActivateLegal = "Activa termes legals";
 $ShowALegalNoticeWhenEnteringTheCourse = "Mostra un advertiment legal a l'accedir al curs";
 $GradingModelTitle = "Model d'avaluació";
+$AllowTeacherChangeGradebookGradingModelTitle = "Els docents poden escollir el model d'avaluació";
+$AllowTeacherChangeGradebookGradingModelComment = "Activant aquesta opció, permetrà a cada docent escollir el model d'avaluació que s'usa en el seu/s curs/os. Aquest canvi s'operarà dins de l'eina d'avaluacions del curs.";
+$NumberOfSubEvaluations = "Nombre de sub-avaluacions";
+$AddNewModel = "Afegeix un model nou";
+$NumberOfStudentsWhoTryTheExercise = "Nombre d'estudiants que han intentat l'exercici";
+$LowestScore = "Resultat mínim obtingut";
+$HighestScore = "Resultat màxim obtingut";
 $ContainsAfile = "Conté un fitxer";
 $Discussions = "Discussions";
+$ExerciseProgress = "Progrés de l'exercici";
 $GradeModel = "Model d'avaluació";
+$SelectGradebook = "Selecciona avaluació";
 $ViewSkillsTree = "Mostra arbre de competències";
 $MySkills = "Les meves competències";
+$GroupParentship = "Parentesc del grup";
+$NoParentship = "Sense parentesc";
+$NoCertificate = "Sense certificat";
 $AllowTextAssignments = "Permet tasques de text en línia";
 $SeeFile = "Mostra arxiu";
+$ShowDocumentPreviewTitle = "Mostra la vista prèvia del document";
+$ShowDocumentPreviewComment = "Mostra vista prèvia de documents a l'eina de documents. Aquest mode permet evitar la càrrega d'una nova pàgina per mostrar un document, però pot resultar inestable en antics navegadors o poc pràctic en pantalles petites.";
 $YouAlreadySentAPaperYouCantUpload = "Ja heu enviat una tasca, no es pot pujar una altra";
+$CasMainActivateTitle = "Activa l'autenticació CAS";
+$CasMainServerTitle = "Servidor CAS principal";
+$CasMainServerComment = "És el servidor CAS principal que serà utilitzat per a l'autenticació (adreça IP o nom)";
+$CasMainServerURITitle = "URI del servidor CAS principal";
+$CasMainServerURIComment = "La ruta fins el servei CAS al servidor";
+$CasMainPortTitle = "Port del servidor principal CAS";
+$CasMainPortComment = "El port actual en el qual un es pot connectar al servidor principal CAS";
+$CasMainProtocolTitle = "Protocol del servidor principal CAS";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "Protocol amb el que ens connectem al servidor CAS";
+$CasUserAddActivateTitle = "Activa registre d'usuaris mitjançant CAS";
+$CasUserAddActivateComment = "Permet crear comptes d'usuaris amb CAS";
+$CasUserAddLoginAttributeTitle = "Registra el nom d'usuari";
+$CasUserAddLoginAttributeComment = "Registra el nom d'usuari CAS quan es registra un usuari nou per aquesta via";
+$CasUserAddEmailAttributeTitle = "Registra el correu electrònic CAS";
+$CasUserAddEmailAttributeComment = "Registra el correu electrònic CAS quan es registra un usuari nou per aquesta via";
+$CasUserAddFirstnameAttributeTitle = "Registra el nom CAS";
+$CasUserAddFirstnameAttributeComment = "Registra el nom CAS quan es registra un usuari nou per aquesta via";
+$CasUserAddLastnameAttributeTitle = "Registra el cognom CAS";
+$CasUserAddLastnameAttributeComment = "Registra el cognom CAS quan es registra un usuari nou per aquesta via";
 $UserList = "Llista d'usuaris";
 $SearchUsers = "Cerca usuaris";
 $Administration = "Administració";
 $AddAsAnnouncement = "Afegeix-ho com un anunci";
 $SkillsAndGradebooks = "Competències i avaluacions";
 $AddSkill = "Afegeix competència";
+$ShowAdminToolbarTitle = "Mostra la barra d'administració";
 $AcceptLegal = "Accepta termes legals";
 $CourseLegalAgreement = "Termes legals per aquest curs";
+$RandomQuestionByCategory = "Preguntes a l'atzar per categoria";
+$QuestionDisplayCategoryName = "Mostra la categoria de pregunta";
+$ReviewAnswers = "Revisa les meves respostes";
+$TextWhenFinished = "Text que apareix al finalitzar la prova";
+$Validated = "Corregit";
+$NotValidated = "Sense corregir";
+$Revised = "Revisat";
+$SelectAQuestionToReview = "Seleccioneu una pregunta per revisar";
+$ReviewQuestionLater = "Revisa la pregunta més endavant";
+$NumberStudentWhoSelectedIt = "Nombre d'estudiants que l'han seleccionada";
+$QuestionsAlreadyAnswered = "Preguntes ja contestades";
 $SkillDoesNotExist = "No existeix tal competència";
+$CheckYourGradingModelValues = "Comproveu els vostres valors de model d'avaluació";
+$SkillsAchievedWhenAchievingThisGradebook = "Competències obtingudes a l'assolir aquesta avaluació";
+$AddGradebook = "Afegeix avaluació";
 $NoStudents = "No hi ha estudiants";
 $NoData = "No hi ha dades disponibles";
 $IAmAHRM = "Sóc responsable de recursos humans";
 $SkillRootName = "Competència absoluta";
 $Option = "Opció";
+$NoSVGImagesInImagesGalleryPath = "No existeixen imatges SVG a la seva galeria d'imatges";
+$NoSVGImages = "No hi ha imatges SVG";
+$NumberOfStudents = "Nombre d'estudiants";
+$NumberStudentsAccessingCourse = "Nombre d'estudiants que han accedit al curs";
+$PercentageStudentsAccessingCourse = "Percentatge d'estudiants accedint al curs";
+$NumberStudentsCompleteAllActivities = "Nombre d'estudiants que han completat totes les activitats (progrés del 100%)";
+$PercentageStudentsCompleteAllActivities = "Percentatge d'estudiants que han completat totes les activitats (progrés del 100%)";
+$AverageOfActivitiesCompletedPerStudent = "Nombre mig d'activitats completades per estudiant";
+$TotalTimeSpentInTheCourse = "Temps total emprat en el curs";
+$AverageTimePerStudentInCourse = "Temps mig emprat en el curs, per estudiant";
+$NumberOfDocumentsInLearnpath = "Nombre de documents a la lliçó";
+$NumberOfExercisesInLearnpath = "Nombre d'exercicis a la lliçó";
+$NumberOfLinksInLearnpath = "Nombre d'enllaços a la lliçó";
+$NumberOfForumsInLearnpath = "Nombre de fòrums a la lliçó";
+$NumberOfAssignmentsInLearnpath = "Nombre de tasques a la lliçó";
+$NumberOfAnnouncementsInCourse = "Nombre d'anuncis al curs";
+$CurrentCoursesReport = "Informes de cursos actuals";
 $HideTocFrame = "Amaga taula del marc de continguts";
 $Updates = "Actualitzacions";
 $Teaching = "Ensenyament";
@@ -3175,12 +6964,17 @@ $SkillProfiles = "Perfils de competències desats";
 $Matches = "Coincidències";
 $WelcomeUserXToTheSiteX = "%s, benvingut al portal %s";
 $CheckUsersWithId = "Utilitza l'ID de l'usuari de l'arxiu per al registre";
+$WhoAndWhere = "Qui i on";
 $CantUploadDeleteYourPaperFirst = "No podeu pujar aquesta tasca. Si us plau, abans elimineu la tasca anterior";
 $MB = "MB";
+$ShowAdminToolbarComment = "Mostra als usuaris, segons el seu perfil, una barra global a la part superior de la pàgina. Aquesta barra, molt similar a les de WordPress i Google, pot augmentar considerablement la seva eficiència en fer activitats complexes i augmenta l'espai disponible per al contingut d'aprenentatge.";
 $SessionList = "Llista de sessions";
 $StudentList = "Llista d'estudiants";
+$StudentsWhoAreTakingTheExerciseRightNow = "Estudiants que realitzen l'exercici en aquest moment";
 $GroupReply = "Reposta";
 $GroupReplies = "Respostes";
+$ReportByQuestion = "Informe per pregunta";
+$LiveResults = "Resultats en directe";
 $SkillNotFound = "Competència no trobada";
 $IHaveThisSkill = "Tinc aquesta competència";
 $Me = "Jo";
@@ -3195,6 +6989,18 @@ $SentAtX = "Enviat el: %s";
 $dateTimeFormatShort = "%b %d, %Y a les %I:%M %p";
 $dateTimeFormatShortTimeFirst = "%I:%M %p, %b %d %Y";
 $LoginToVote = "Per votar s'ha d'estar autenticat";
+$AddInMenu = "Afegeix al menú";
+$AllowUsersToChangeEmailWithNoPasswordTitle = "Permet que els usuaris puguin canviar el seu correu electrònic sense necessitat de sol·licitar contrasenya";
+$AllowUsersToChangeEmailWithNoPasswordComment = "Quan es modifica el compte de l'usuari";
+$EnableHelpLinkTitle = "Habilita el vincle d'ajuda";
+$EnableHelpLinkComment = "El vincle d'ajuda es troba a la part superior dreta de la pantalla";
+$BackToAdmin = "Torna a l'administració";
+$AllowGlobalChatTitle = "Habilita el xat global";
+$HeaderExtraContentTitle = "Contingut addicional a la capçalera";
+$HeaderExtraContentComment = "Podeu afegir codi HTML com les metaetiquetes";
+$FooterExtraContentTitle = "Contingut addicional al peu";
+$AllowGlobalChatComment = "Els usuaris poden conversar entre si mitjançant un xat global";
+$FooterExtraContentComment = "Podeu incloure contingut HTML com metaetiquetes";
 $DoNotShow = "No mostris";
 $ShowToAdminsOnly = "Mostra només als administradors";
 $ShowToAdminsAndTeachers = "Mostra als administradors i als professors";
@@ -3207,17 +7013,57 @@ $TermsNotImported = "Els termes no s'han importat";
 $ExportGlossaryAsCSV = "Exportar glossari com a arxiu CSV";
 $SelectAnAction = "Selecciona una acció";
 $LoginX = "Nom d'usuari: %s";
+$CopyOnlySessionItems = "Copia només els elements d'una sessió";
+$FirstLetterCourseTitle = "Primera lletra del títol del curs";
+$NumberOfPublishedExercises = "Nombre d'exercicis publicats";
+$NumberOfPublishedLps = "Nombre de lliçons publicades";
 $ChatConnected = "Xat (Connectat)";
 $ChatDisconnected = "Xat (Desconnectat)";
 $AddCourseDescription = "Afegeix una descripció del curs";
 $ThingsToDo = "Activitats per realitzar";
+$RecordAnswer = "Grava resposta";
+$UseTheMessageBelowToAddSomeComments = "Utilitza el camp de text següent per escriure un comentari al professor";
+$SendRecord = "Envia gravació";
+$DownloadLatestRecord = "Descarrega gravació";
+$OralExpression = "Expressió oral";
+$UsersFoundInOtherPortals = "Usuaris trobats en d'altres portals";
+$AddUserToMyURL = "Afegeix l'usuari al meu portal";
+$UsersDeleted = "Usuaris eliminats";
+$UsersAdded = "Usuaris afegits";
+$PluginArea = "Àrea de connectors";
+$NoConfigurationSettingsForThisPlugin = "No hi ha opcions de configuració per aquest connector";
+$CoursesDefaultCreationVisibilityTitle = "Visibilitat del curs per defecte";
+$CoursesDefaultCreationVisibilityComment = "Visibilitat del curs per defecte quan s'està creant un curs";
+$YouHaveEnteredTheCourseXInY = "Heu ingressat al curs %s el %s";
+$LoginIsEmailTitle = "Utilitza el correu electrònic com a nom d'usuari";
+$LoginIsEmailComment = "El correu electrònic s'utilitzarà per ingressar al sistema";
+$CongratulationsYouPassedTheTest = "Felicitats, heu aprovat l'exercici!";
+$YouDidNotReachTheMinimumScore = "No heu arribat a la puntuació mínima";
+$AllowBrowserSnifferTitle = "Activa l'investigador de navegadors";
+$AllowBrowserSnifferComment = "Això activarà un investigador de les capacitats que suporten els navegadors que es connecten a Chamilo. Per tant, millorarà l'experiència de l'usuari, adaptant les respostes de la plataforma al tipus de navegador que es connecta, però reduirà la velocitat de càrrega de la pàgina inicial dels usuaris cada vegada que entrin a la plataforma.";
+$EndTest = "Acaba exercici";
+$EnableWamiRecordTitle = "Activa Wami-recorder";
+$EnableWamiRecordComment = "Wami-recorder és una eina de gravació de veu sobre Flash";
+$EventType = "Tipus d'esdeveniment";
 $WamiFlashDialog = "Es mostrarà un quadre de diàleg en el qual se li demanarà permís per poder accedir al micròfon, respongui afirmativament i tanqueu el quadre de diàleg (si no voleu que torni a aparèixer, abans de tancar marqui l'opció recordar)";
 $WamiStartRecorder = "Inicieu la gravació prement el micròfon i atureu-la prement-lo de nou. Cada cop que faci això es generarà un arxiu.";
+$WamiNeedFilename = "Abans d'activar la gravació és necessari donar un nom a l'arxiu.";
 $InputNameHere = "Escriviu el vostre nom aquí";
 $Reload = "Recarrega";
+$SelectGradeModel = "Selecciona un model de qualificació";
+$AllMustWeight100 = "La suma ha de ser de 100";
+$Components = "Components";
+$ChangeSharedSetting = "Canvia la visibilitat de la configuració per als altres portals";
+$OnlyActiveWhenThereAreAnyComponents = "Aquesta opció està habilitada si teniu avaluacions o categories";
+$AllowHRSkillsManagementTitle = "Permet al perfil RRHH administrar les competències";
+$AllowHRSkillsManagementComment = "L'usuari podrà crear i editar competències";
+$GradebookDefaultWeightTitle = "Pes total per defecte a l'eina Avaluacions";
+$GradebookDefaultWeightComment = "Aquest pes s'utilitzarà en tots els cursos";
 $TimeSpentLastXDays = "Temps dedicat en els últims %s dies";
 $TimeSpentBetweenXAndY = "Temps dedicat entre el %s i el %s";
 $GoToCourse = "Vés al curs";
+$TeachersCanChangeScoreSettingsTitle = "Els professors poden canviar la configuració de puntuació de les avaluacions";
+$TeachersCanChangeScoreSettingsComment = "A l'editar la configuració de les Avaluacions";
 $SubTotal = "Total parcial";
 $Configure = "Configura";
 $Regions = "Regions";
@@ -3228,15 +7074,81 @@ $LastnameAndFirstname = "Cognoms i nom";
 $Plugins = "Connectors";
 $Detailed = "Detallat";
 $ResourceLockedByGradebook = "Aquesta opció no està disponible perquè l'activitat està inclosa en una avaluació que es troba bloquejada. Per desbloquejar aquesta avaluació, pregunteu a l'administrador de la plataforma.";
+$GradebookLockedAlert = "Aquesta avaluació ha estat bloquejada i no pot ser desbloquejada. Si necessita realment desbloquejar-la, contacteu amb l'administrador de la plataforma, explicant-li la seva raó (sinó podria ser considerat com un intent de frau).";
+$GradebookEnableLockingTitle = "Activa el bloqueig d'Avaluacions pels professors";
+$GradebookEnableLockingComment = "Un cop activada, aquesta opció permetrà als professors bloquejar qualsevol avaluació dins del seu curs. Això prohibirà al professor qualsevol modificació posterior dels resultats dels seus alumnes en els recursos usats per a aquesta avaluació: exàmens, lliçons, tasques, etc. L'únic rol autoritzat a desbloquejar una avaluació és l'administrador. El professor estarà informat d'aquesta possibilitat en intentar desbloquejar l'avaluació. El bloqueig com el desbloqueig estaran desats en el registre d'activitats importants del sistema.";
+$LdapDescriptionComment = "<div class='normal-message'> <br /><ul><li>Autenticació LDAP:<br />Veure I. tot seguit per configurar LDAP <br />Veure II. tot seguit per activar l'autenticació LDAP</li><br /><br /><li> Actualitze els atributs d'usuari com a dades LDAP després de l'autenticació CAS (veure <a href='settings.php?category=CAS'>configuració CAS</a>) : <br />Veure I. tot seguit per configurar LDAP <br />CAS administra l'autenticació d'usuari, l'activació de LDAP és doncs innecessària.</li><br /></ul></div><br /><h4>I. Configuració LDAP</h4><h5>Editar l'arxiu main/auth/external_login/ldap.conf.php </h5>-&gt; Editar valors de l'array <code>&#36;extldap_config</code> <br /><br />Els paràmetres són <br /><ul><li>cadena del domini base (ex : 'base_dn' =&gt; 'DC=cblue,DC=be') </li><li>nom distinguit d'administrador (ex : 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be') </li><li>contrasenya d'administrador (ex : 'admin_password' =&gt; '123456') </li><li>anfitrió LDAP (ex : 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6')) </li><li>filtre (ex : 'filter' =&gt; '') </li><li>port (ex : 'port' =&gt; 389) </li><li>versió de protocol (2 o 3) (ex : 'protocol_version' =&gt; 3) </li><li>user_search (ex : 'user_search' =&gt; 'sAMAccountName=%username%') </li><li>codificació (ex : 'encoding' =&gt; 'UTF-8') </li><li>update_userinfo (ex : 'update_userinfo' =&gt; true) </li></ul>-&gt; Per actualitzar les correspondències entre usuari i atributs LDAP, edite l'array <code>&#36;extldap_user_correspondance</code> <br />Els valors de l'array són &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt; <br />L'estructura de l'array està explicada a l'arxiu main/auth/external_login/ldap.conf.php<br /><br /><br /><h4>II. Activar autenticació LDAP </h4><h5>Edite l'arxiu main/inc/conf/configuration.php </h5>-&gt; Descomente les línies <br />&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;<br />&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;<br /><br />A tindre en compte : Els usuaris LDAP usen els mateixos camps per identificar-se que els usuaris de la plataforma.<br />A tindre en compte : L'activació de LDAP afegeix un menú d'autenticació externa [LDAP] en \"afegir o modificar\" pàgines d'usuari.</div>";
+$ShibbolethMainActivateTitle = "Autenticació Shibboleth";
+$ShibbolethMainActivateComment = "En primer lloc, heu de configurar Shibboleth per al seu servidor.<br />
+
+Per configurar-ho a Chamilo
+
+<h5>editeu l'arxiu main/auth/shibboleth/config/aai.class.php</h5>
+
+Modifiqueu els valors de \$result amb el nom dels atributs de Shibboleth
+
+<ul>
+<li>\$result->unique_id = 'mail';
+<li>\$result->firstname = 'cn';
+<li>\$result->lastname = 'uid';
+<li>\$result->email = 'mail';
+<li>\$result->language = '-';
+<li>\$result->gender = '-';
+<li>\$result->address = '-';
+<li>\$result->staff_category = '-';
+<li>\$result->home_organization_type = '-';
+<li>\$result->home_organization = '-';
+<li>\$result->affiliation = '-';
+<li>\$result->persistent_id = '-';
+<li>...
+</ul>
+
+Aneu al connector per afegir el botó d'autenticació Shibboleth per al seu campus Chamilo.";
+$LdapDescriptionTitle = "Autenticació LDAP";
+$FacebookMainActivateTitle = "Autenticació amb Facebook";
+$FacebookMainActivateComment = "En primer lloc, heu de crear una aplicació de Facebook (veure <a href=\"https://developers.facebook.com/apps\">https://developers.facebook.com/apps</a>) amb un compte de Facebook. En els paràmetres d'aplicacions de Facebook, el valor de direcció URL del lloc ha de tenir \"una acció = fbconnect\" un paràmetre GET (http://mychamilo.com/?action=fbconnect, per exemple).<br /> 
+
+Llavors, 
+
+<h5>editeu el fitxer main/auth/external_login/facebook.conf.php</h5> i accediu a \"appId\" i \"secret\" els valors de \$facebook_config.<br /> Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
 $AnnouncementForGroup = "Anuncis per a un grup";
 $AllGroups = "Tots els grups";
+$LanguagePriority1Title = "Prioritat d'idioma 1";
+$LanguagePriority2Title = "Prioritat de l'idioma 2";
+$LanguagePriority3Title = "Prioritat d'idioma 3";
+$LanguagePriority4Title = "Prioritat d'idioma 4";
+$LanguagePriority5Title = "Prioritat d'idioma 5";
+$LanguagePriority1Comment = "L'idioma amb la prioritat més alta";
+$LanguagePriority2Comment = "Prioritat de l'idioma 2";
+$LanguagePriority3Comment = "Prioritat de l'idioma 3";
+$LanguagePriority4Comment = "Prioritat de l'idioma 4";
+$LanguagePriority5Comment = "La prioritat més baixa entre els idiomes";
+$UserLanguage = "Idioma de l'usuari";
+$UserSelectedLanguage = "Idioma de l'usuari seleccionat";
+$TeachersCanChangeGradeModelSettingsTitle = "Els professors poden canviar el model de qualificació dins del quadern d'avaluacions";
+$TeachersCanChangeGradeModelSettingsComment = "Quan s'edita una avaluació";
+$GradebookDefaultGradeModelTitle = "Model de qualificació per defecte";
+$GradebookDefaultGradeModelComment = "Aquest valor es seleccionarà per defecte quan es creï un curs";
+$GradebookEnableGradeModelTitle = "Habilita el model de qualificació al quadern d'avaluacions";
+$GradebookEnableGradeModelComment = "Permet utilitzar un model de qualificació al quadern d'avaluacions";
 $ConfirmToLockElement = "Esteu segur de voler bloquejar aquest element? Després de bloquejar aquest element no podreu editar els resultats dels estudiants. Per desbloquejar-lo haureu de contactar amb l'administrador de la plataforma.";
 $ConfirmToUnLockElement = "Esteu segur de voler desbloquejar aquest element?";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Permet als administradors de sessions veure totes les sessions";
+$AllowSessionAdminsToSeeAllSessionsComment = "Quan aquesta opció està desactivada els administradors de sessions només podran veure les seves sessions.";
+$PassPercentage = "Percentatge d'assoliment";
+$AllowSkillsToolTitle = "Habilita l'eina de competències";
+$AllowSkillsToolComment = "Els usuaris poden veure les seves competències a la xarxa social i en un bloc de la pàgina principal.";
 $UnsubscribeFromPlatform = "Si desitgeu donar-vos de baixa completament al Campus i que tota la vostra informació quedi eliminada de la nostra base de dades premeu el botó inferior.";
 $UnsubscribeFromPlatformConfirm = "Sí, vull suprimir completament aquest compte. Cap dada quedarà al servidor i no podré accedir-hi de nou, a no ser que creï un compte totalment nou.";
+$AllowPublicCertificatesTitle = "Permet certificats públics";
+$AllowPublicCertificatesComment = "Els certificats poden ser visualitzats per persones no registrades al portal.";
 $DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "No oblideu seleccionar els arxius multimèdia si els seu recurs els necessita";
+$NoStudentCertificatesAvailableYet = "Encara no estan disponibles els certificats dels estudiants. Recordeu que per generar el seu certificat un estudiant ha d'anar a l'eina avaluacions i prémer sobre la icona certificat, el qual només apareixerà quan ha ell hagi aconseguit els objectius del curs.";
+$CertificateExistsButNotPublic = "El certificat sol·licitat existeix però no és públic. Autentiqueu-vos per veure'l.";
 $Default = "Defecte";
+$NoCategorySelected = "No hi ha una categoria seleccionada";
 $ReturnToCourseHomepage = "Torna a la pàgina principal del curs";
+$ExerciseAverage = "Mitjana de l'exercici";
 $WebCamClip = "Webcam Clip";
 $Snapshot = "Captura";
 $TakeYourPhotos = "Tregui les seves fotos";
@@ -3244,22 +7156,86 @@ $LocalInputImage = "Imatge local";
 $ClipSent = "Imatge enviada";
 $Auto = "Automàtic";
 $Stop = "Atura";
+$EnableWebCamClipTitle = "Activar Webcam Clip";
+$EnableWebCamClipComment = "Webcam Clip permet als usuaris capturar imatges des de la seva càmera web i enviar-les al servidor en format JPEG";
 $ResizingAuto = "AUTODIMENSIONAR (per defecte)";
 $ResizingAutoComment = "Aquesta presentació de diapositives es dimensionarà automàticament a la teva grandària de pantalla. Aquesta és l'opció per defecte.";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Heu de crear els Termes i Condicions per tots els idiomes disponibles a la plataforma";
+$SelectAnAudioFileFromDocuments = "Selecciona un arxiu d'àudio des dels documents";
+$ActivateEmailTemplateTitle = "Activa plantilles de correu electrònic";
+$ActivateEmailTemplateComment = "És possible enviar correus electrònics per certes accions a certs usuaris.";
+$SystemManagement = "Administració del sistema";
+$RemoveOldDatabaseMessage = "Elimina la base de dades antiga";
+$RemoveOldTables = "Elimina les taules antigues";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Espai tot utilitzat pel portal %s el límit és de %s MB";
+$EventMessageManagement = "Administració d'esdeveniments";
+$ToBeWarnedUserList = "Llista d'usuaris per ser alertats";
 $YouHaveSomeUnsavedChanges = "Teniu alguns canvis no desats. Voleu abandonar-los?";
 $ActivateEvent = "Activar esdeveniment";
 $AvailableEventKeys = "Paraules clau dels esdeveniments. Utilitza'ls entre (( )).";
 $Events = "Esdeveniments";
 $EventTypeName = "Nom del tipus d'esdeveniment";
+$HideCampusFromPublicPlatformsList = "Amaga el campus de llista pública de plataformes";
+$ChamiloOfficialServicesProviders = "Proveïdors oficials de Chamilo";
+$NoNegativeScore = "Sense punts negatius";
+$GlobalMultipleAnswer = "Resposta múltiple global";
+$Zombies = "Zombis";
+$ActiveOnly = "Només actiu";
+$AuthenticationSource = "Font d'autenticació";
+$RegisteredDate = "Data de registre";
+$NbInactiveSessions = "Nombre de sessions inactives";
+$AllQuestionsShort = "Totes";
+$FollowedSessions = "Sessions seguides";
+$FollowedCourses = "Cursos seguits";
+$FollowedUsers = "Usuaris seguits";
+$Timeline = "Línia del temps";
 $ExportToPDFOnlyHTMLAndImages = "Exporta pàgines web i imatges a PDF";
 $CourseCatalog = "Catàleg de cursos";
 $Go = "Vés";
+$ProblemsRecordingUploadYourOwnAudioFile = "Teniu problemes per gravar? Pugeu el vostre propi arxiu d'àudio.";
 $ImportThematic = "Importa avenç temàtic";
 $ExportThematic = "Exporta avenç temàtic";
 $DeleteAllThematic = "Elimina tot l'avenç temàtic";
+$FilterTermsTitle = "Filtre termes";
+$FilterTermsComment = "Proporcioneu una llista de termes, un per línia, que seran filtrats per tal que no apareguin a les seves pàgines web i correus electrònics. Aquests termes seran substituïts per ***";
+$UseCustomPagesTitle = "Utilitza pàgines personalitzades";
+$UseCustomPagesComment = "Activeu aquesta funcionalitat per configurar pàgines específiques d'autenticació segons el perfil de l'usuari";
+$StudentPageAfterLoginTitle = "Pàgina de l'alumne després d'autenticar-se";
+$StudentPageAfterLoginComment = "Aquesta pàgina serà la que veuran tots els alumnes després d'autenticar-se.";
+$TeacherPageAfterLoginTitle = "Pàgina del professor després d'autenticar-se";
+$TeacherPageAfterLoginComment = "Aquesta pàgina serà la que es carregui després que un professor s'hagi autenticat";
+$DRHPageAfterLoginTitle = "Pàgina del Director de Recursos Humans després d'haver-se autenticat";
+$DRHPageAfterLoginComment = "Aquesta pàgina serà la que es carregui després que un Director de Recursos Humans s'hagi autenticat.";
+$StudentAutosubscribeTitle = "Inscripció pel propi alumne";
+$StudentAutosubscribeComment = "Inscripció pel propi alumne - encara no disponible";
+$TeacherAutosubscribeTitle = "Inscripció pel propi professor";
+$TeacherAutosubscribeComment = "Inscripció pel propi professor - encara no disponible";
+$DRHAutosubscribeTitle = "Inscripció pel propi Director de Recursos Humans";
+$DRHAutosubscribeComment = "Inscripció pel propi Director de Recursos Humans - encara no disponible";
+$ScormCumulativeSessionTimeTitle = "Temps acumulat de sessió per SCORM";
+$ScormCumulativeSessionTimeComment = "Quan s'activa el temps d'una sessió per una seqüència d'aprenentatge SCORM serà acumulatiu, en cas contrari, només comptarà des del moment de l'última actualització.";
+$SessionAdminPageAfterLoginTitle = "Pàgina de l'administrador de sessions després d'autenticar-se";
+$SessionAdminPageAfterLoginComment = "Pàgina que es carregarà després que un administrador de sessions s'hagi autenticat";
+$SessionadminAutosubscribeTitle = "Inscripció pel propi administrador de sessions";
+$SessionadminAutosubscribeComment = "Inscripció pel propi administrador de sessions - encara no disponible";
+$ToolVisibleByDefaultAtCreationTitle = "Eina visible al crear un curs";
+$ToolVisibleByDefaultAtCreationComment = "Seleccioneu les eines que seran visibles quan es creïn els cursos";
+$casAddUserActivatePlatform = "Configuració interna CAS";
+$casAddUserActivateLDAP = "Configuració interna CAS";
+$UpdateUserInfoCasWithLdapTitle = "Configuració interna CAS";
+$UpdateUserInfoCasWithLdapComment = "Configuració interna CAS";
 $ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation = "Aquesta plataforma no ha pogut enviar el correu electrònic. Per a més informació, contacteu amb %s";
 $FirstLoginChangePassword = "Aquesta és la seva primera autenticació. Actualitzeu la seva contrasenya, canviant-la per una altra que pugui recordar més fàcilment.";
 $NeedContactAdmin = "Feu clic aquí per contactar amb l'administrador";
+$ShowAllUsers = "Mostra tots els usuaris";
+$ShowUsersNotAddedInTheURL = "Mostra usuaris no afegits a la URL";
+$UserNotAddedInURL = "Usuaris no afegits a la URL";
+$UsersRegisteredInNoSession = "Usuaris no registrats a cap sessió";
+$CommandLineInterpreter = "Intèrpret d'ordres en línia (CLI)";
+$PleaseVisitOurWebsite = "Visiteu el nostre lloc web http://www.chamilo.org";
+$SpaceUsedOnSystemCannotBeMeasuredOnWindows = "L'espai utilitzat en aquest disc no pot ser mesurat en sistemes basats en Windows.";
+$XOldTablesDeleted = "%d taules antigues eliminades";
+$XOldDatabasesDeleted = "%d bases de dades antigues eliminades";
 $List = "Listar";
 $MarkAll = "Selecciona-ho tot";
 $UnmarkAll = "No ho seleccionis tot";
@@ -3296,6 +7272,7 @@ $DeleteAllGlossaryTerms = "Eliminar tots els termes";
 $PortalHomepageEdited = "Pàgina principal del portal actualitzada";
 $UserRegistrationTitle = "Registre d'usuaris";
 $UserRegistrationComment = "Accions que s'executaran quan un usuari es registre a la plataforma";
+$ExtensionShouldBeLoaded = "Aquesta extensió s'hauria de carregar";
 $Disabled = "Desactivat";
 $Required = "Obligatori";
 $CategorySaved = "Categoria desada";

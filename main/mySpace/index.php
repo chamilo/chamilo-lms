@@ -5,9 +5,6 @@
  * Homepage for the MySpace directory
  * @package chamilo.reporting
  */
-
-$language_file = array('tracking', 'admin', 'exercice', 'gradebook');
-
 // resetting the course id
 $cidReset = true;
 

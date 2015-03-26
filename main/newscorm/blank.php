@@ -5,9 +5,6 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
-$language_file = array('learnpath', 'document','exercice');
-
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 require_once '../inc/global.inc.php';

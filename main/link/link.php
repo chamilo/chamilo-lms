@@ -19,10 +19,6 @@
 
  */
 
-
-// Language files that need to be included
-$language_file = array('admin');
-
 // Including libraries
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LINK;
@@ -112,29 +108,28 @@ switch ($action) {
     case 'addlink':
         if (api_is_allowed_to_edit(null, true)) {
             $form = Link::getLinkForm(null, 'addlink');
-            $content = $form->returnForm();
             if ($form->validate()) {
                 // Here we add a link
                 Link::addlinkcategory("link");
                 header('Location: '.$linkListUrl);
                 exit;
             }
+            $content = $form->returnForm();
         }
         break;
     case 'editlink':
         $form = Link::getLinkForm($id, 'editlink');
-        $content = $form->returnForm();
         if ($form->validate()) {
 
             Link::editLink($id, $form->getSubmitValues());
             header('Location: '.$linkListUrl);
             exit;
         }
+        $content = $form->returnForm();
         break;
     case 'addcategory':
         if (api_is_allowed_to_edit(null, true)) {
             $form = Link::getCategoryForm(null, 'addcategory');
-            $content = $form->returnForm();
 
             if ($form->validate()) {
                 // Here we add a category
@@ -142,12 +137,12 @@ switch ($action) {
                 header('Location: '.$linkListUrl);
                 exit;
             }
+            $content = $form->returnForm();
         }
         break;
     case 'editcategory':
         if (api_is_allowed_to_edit(null, true)) {
             $form = Link::getCategoryForm($id, 'editcategory');
-            $content = $form->returnForm();
 
             if ($form->validate()) {
                 // Here we edit a category
@@ -156,6 +151,7 @@ switch ($action) {
                 header('Location: '.$linkListUrl);
                 exit;
             }
+            $content = $form->returnForm();
         }
         break;
     case 'importcsv':

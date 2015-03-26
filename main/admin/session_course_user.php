@@ -4,9 +4,6 @@
  *	@package chamilo.admin
  */
 
-// name of the language file that needs to be included
-$language_file='admin';
-
 // resetting the course id
 $cidReset = true;
 
@@ -84,8 +81,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $enreg_course = Database::escape_string($enreg_course);
             $sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
 							WHERE id_user='".$id_user."' AND course_code='".$enreg_course."' AND id_session=$id_session";
-            Database::query($sql_delete);
-            if (Database::affected_rows()) {
+            $result = Database::query($sql_delete);
+            if (Database::affected_rows($result)) {
                 //update session rel course table
                 $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
                 Database::query($sql_update);
@@ -94,11 +91,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     }
     foreach($existingCourses as $existingCourse) {
         //$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
-        if(!in_array($existingCourse['code'], $CourseList)){
+        if (!in_array($existingCourse['code'], $CourseList)){
             $existingCourse = Database::escape_string($existingCourse['code']);
             $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$existingCourse','$id_user')";
-            Database::query($sql_insert);
-            if(Database::affected_rows()) {
+            $result = Database::query($sql_insert);
+            if (Database::affected_rows($result)) {
                 //update session rel course table
                 $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND course_code='$existingCourse'";
                 Database::query($sql_update);

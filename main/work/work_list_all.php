@@ -3,14 +3,6 @@
 
 use ChamiloSession as Session;
 
-$language_file = array(
-    'exercice',
-    'document',
-    'admin',
-    'gradebook',
-    'tracking'
-);
-
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 

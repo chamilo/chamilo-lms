@@ -6,9 +6,6 @@
  *	@package chamilo.document
  */
 
-// Name of the language file that needs to be included
-$language_file = array('document', 'gradebook');
-
 require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/create';

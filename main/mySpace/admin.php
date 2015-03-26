@@ -8,9 +8,6 @@
  * Code
  */
 ob_start();
-
-// name of the language file that needs to be included
-$language_file = array('trad4all', 'tracking');
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

@@ -9,11 +9,6 @@
  */
 
 exit;
-
-
-// Language files that need to be included
-$language_file = array('document', 'gradebook');
-
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

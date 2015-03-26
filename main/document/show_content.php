@@ -5,8 +5,6 @@
  *
  *	@package chamilo.document
  */
-
-$language_file[] = 'document';
 require_once '../inc/global.inc.php';
 
 // Protection

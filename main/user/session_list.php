@@ -7,7 +7,6 @@
 /**
  * Code
  */
-$language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';

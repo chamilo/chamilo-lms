@@ -3817,32 +3817,30 @@ class learnpathItem
             if ($this->type == 'quiz' && $this->get_prevent_reinit() == 0 &&
                 $this->get_status() == 'completed'
             ) {
-                if (!api_is_invitee()) {
-                    // We force the item to be restarted.
-                    $this->restart();
-                    $params = array(
-                        "c_id" => $course_id,
-                        "total_time" => $this->get_total_time(),
-                        "start_time" => $this->current_start_time,
-                        "score" => $this->get_score(),
-                        "status" => $this->get_status(false),
-                        "max_score" => $this->get_max(),
-                        "lp_item_id" => $this->db_id,
-                        "lp_view_id" => $this->view_id,
-                        "view_count" => $this->get_attempt_id() ,
-                        "suspend_data" => $this->current_data,
-                        //"max_time_allowed" => ,
-                        "lesson_location" => $this->lesson_location
+                // We force the item to be restarted.
+                $this->restart();
+                $params = array(
+                    "c_id" => $course_id,
+                    "total_time" => $this->get_total_time(),
+                    "start_time" => $this->current_start_time,
+                    "score" => $this->get_score(),
+                    "status" => $this->get_status(false),
+                    "max_score" => $this->get_max(),
+                    "lp_item_id" => $this->db_id,
+                    "lp_view_id" => $this->view_id,
+                    "view_count" => $this->get_attempt_id() ,
+                    "suspend_data" => $this->current_data,
+                    //"max_time_allowed" => ,
+                    "lesson_location" => $this->lesson_location
+                );
+                if (self::debug > 2) {
+                    error_log(
+                        'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
+                        0
                     );
-                    if (self::debug > 2) {
-                        error_log(
-                            'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
-                            0
-                        );
-                    }
-                    $this->db_item_view_id = Database::insert($item_view_table, $params);
-                    $inserted = true;
                 }
+                $this->db_item_view_id = Database::insert($item_view_table, $params);
+                $inserted = true;
             }
 
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -3862,49 +3860,45 @@ class learnpathItem
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.
             if (!$inserted && Database::num_rows($check_res) < 1) {
-                if (!api_is_invitee()) {
-                    $params = array(
-                        "c_id" => $course_id,
-                        "total_time" => $this->get_total_time(),
-                        "start_time" => $this->current_start_time,
-                        "score" => $this->get_score(),
-                        "status" => $this->get_status(false),
-                        "max_score" => $this->get_max(),
-                        "lp_item_id" => $this->db_id,
-                        "lp_view_id" => $this->view_id,
-                        "view_count" => $this->get_attempt_id() ,
-                        "suspend_data" => $this->current_data,
-                        //"max_time_allowed" => ,$this->get_max_time_allowed()
-                        "lesson_location" => $this->lesson_location
+                $params = array(
+                    "c_id" => $course_id,
+                    "total_time" => $this->get_total_time(),
+                    "start_time" => $this->current_start_time,
+                    "score" => $this->get_score(),
+                    "status" => $this->get_status(false),
+                    "max_score" => $this->get_max(),
+                    "lp_item_id" => $this->db_id,
+                    "lp_view_id" => $this->view_id,
+                    "view_count" => $this->get_attempt_id() ,
+                    "suspend_data" => $this->current_data,
+                    //"max_time_allowed" => ,$this->get_max_time_allowed()
+                    "lesson_location" => $this->lesson_location
+                );
+
+                if (self::debug > 2) {
+                    error_log(
+                        'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
+                        0
                     );
-
-                    if (self::debug > 2) {
-                        error_log(
-                            'learnpathItem::write_to_db() - Inserting into item_view forced: ' . print_r($params, 1),
-                            0
-                        );
-                    }
-
-                    $this->db_item_view_id = Database::insert($item_view_table, $params);
                 }
+
+                $this->db_item_view_id = Database::insert($item_view_table, $params);
             } else {
                 if ($this->type == 'hotpotatoes') {
-                    if (!api_is_invitee()) {
-                        $params = array(
-                            'total_time' => $this->get_total_time(),
-                            'start_time' => $this->get_current_start_time(),
-                            'score' =>  $this->get_score(),
-                            'status' => $this->get_status(false),
-                            'max_score' => $this->get_max(),
-                            'suspend_data' => $this->current_data,
-                            'lesson_location' => $this->lesson_location
-                        );
-                        $where = array(
-                            'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' =>
+                    $params = array(
+                        'total_time' => $this->get_total_time(),
+                        'start_time' => $this->get_current_start_time(),
+                        'score' =>  $this->get_score(),
+                        'status' => $this->get_status(false),
+                        'max_score' => $this->get_max(),
+                        'suspend_data' => $this->current_data,
+                        'lesson_location' => $this->lesson_location
+                    );
+                    $where = array(
+                        'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' =>
                             array($course_id, $this->db_id, $this->view_id, $this->get_attempt_id())
-                        );
-                        Database::update($item_view_table, $params, $where);
-                    }
+                    );
+                    Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
                     if ($this->type == 'quiz') {
@@ -4028,40 +4022,36 @@ class learnpathItem
                     }
 
                     if ($this->type == 'sco') {
-                        if (!api_is_invitee()) {
-                            //IF scorm scorm_update_time has already updated total_time in db
-                            //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
-                            ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                            $sql = "UPDATE $item_view_table SET
-                                        score = " . $this->get_score() . ",
-                                        $my_status
-                                        max_score = '" . $this->get_max() . "',
-                                        suspend_data = '" . Database::escape_string($this->current_data) . "',
-                                        lesson_location = '" . $this->lesson_location . "'
-                                    WHERE
-                                        c_id = $course_id AND
-                                        lp_item_id = " . $this->db_id . "AND
-                                        lp_view_id = " . $this->view_id . "  AND
-                                        view_count = " . $this->get_attempt_id();
-                        }
+                        //IF scorm scorm_update_time has already updated total_time in db
+                        //" . //start_time = ".$this->get_current_start_time().", " . //scorm_init_time does it
+                        ////" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+                        $sql = "UPDATE $item_view_table SET
+                                    score = " . $this->get_score() . ",
+                                    $my_status
+                                    max_score = '" . $this->get_max() . "',
+                                    suspend_data = '" . Database::escape_string($this->current_data) . "',
+                                    lesson_location = '" . $this->lesson_location . "'
+                                WHERE
+                                    c_id = $course_id AND
+                                    lp_item_id = " . $this->db_id . " AND
+                                    lp_view_id = " . $this->view_id . "  AND
+                                    view_count = " . $this->get_attempt_id();
 
                     } else {
-                        if (!api_is_invitee()) {
-                            //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
-                            $sql = "UPDATE $item_view_table SET
-                                        $total_time
-                                        start_time = " . $this->get_current_start_time() . ",
-                                        score = " . $this->get_score() . ",
-                                        $my_status
-                                        max_score = '" . $this->get_max() . "',
-                                        suspend_data = '" . Database::escape_string($this->current_data) . "',
-                                        lesson_location = '" . $this->lesson_location . "'
-                                    WHERE
-                                        c_id = $course_id AND
-                                        lp_item_id = " . $this->db_id . " AND
-                                        lp_view_id = " . $this->view_id . " AND
-                                        view_count = " . $this->get_attempt_id();
-                        }
+                        //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
+                        $sql = "UPDATE $item_view_table SET
+                                    $total_time
+                                    start_time = " . $this->get_current_start_time() . ",
+                                    score = " . $this->get_score() . ",
+                                    $my_status
+                                    max_score = '" . $this->get_max() . "',
+                                    suspend_data = '" . Database::escape_string($this->current_data) . "',
+                                    lesson_location = '" . $this->lesson_location . "'
+                                WHERE
+                                    c_id = $course_id AND
+                                    lp_item_id = " . $this->db_id . " AND
+                                    lp_view_id = " . $this->view_id . " AND
+                                    view_count = " . $this->get_attempt_id();
                     }
                     $this->current_start_time = time();
                 }
@@ -4071,9 +4061,7 @@ class learnpathItem
                         0
                     );
                 }
-                if (!empty($sql)) {
-                    Database::query($sql);
-                }
+                Database::query($sql);
             }
 
             if (is_array($this->interactions) && count($this->interactions) > 0) {

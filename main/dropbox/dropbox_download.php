@@ -3,9 +3,7 @@
 /**
  * @package chamilo.dropbox
  */
-/**
- * Code
- */
+
 // including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
 
@@ -95,7 +93,7 @@ if (!$allowed_to_download) {
     // the user is allowed to download the file
     $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
 
-    $work = new Dropbox_work($_GET['id']);
+    $work = new Dropbox_Work($_GET['id']);
     $path = dropbox_cnf('sysPath') . '/' . $work -> filename; //path to file as stored on server
 
     if (!Security::check_abs_path($path, dropbox_cnf('sysPath').'/')) {

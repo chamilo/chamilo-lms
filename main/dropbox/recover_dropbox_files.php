@@ -46,7 +46,7 @@ if (Database::num_rows($result)) {
             );
         }
     }
-    $headers = array(get_lang('Filename'), get_lang('UploadedDate'), get_lang('Action'));
+    $headers = array(get_lang('FileName'), get_lang('UploadedDate'), get_lang('Action'));
     echo Display::table($headers, $rows);
 }
 Display::display_footer();

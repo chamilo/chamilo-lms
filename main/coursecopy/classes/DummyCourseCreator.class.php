@@ -154,7 +154,13 @@ class DummyCourseCreator
 			$year = intval(date('Y'));
 			$time = mktime($hour,$minute,$second,$month,$day,$year);
 			$end_date = date('Y-m-d H:m:s', $time);
-			$event = new Event($i, $this->get_dummy_content('title'), $this->get_dummy_content('text'), $start_date, $end_date);
+			$event = new CalendarEvent(
+				$i,
+				$this->get_dummy_content('title'),
+				$this->get_dummy_content('text'),
+				$start_date,
+				$end_date
+			);
 			$event->item_properties[] = $property;
 			$this->course->add_resource($event);
 		}

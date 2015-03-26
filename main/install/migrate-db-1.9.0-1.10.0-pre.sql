@@ -39,16 +39,27 @@ ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL
 RENAME TABLE track_e_exercices TO track_e_exercises;
 
 ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_access SET c_id = (SELECT id FROM course WHERE code = access_cours_code);
 ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_default SET c_id = (SELECT id FROM course WHERE code = default_cours_code);
 ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_lastaccess SET c_id = (SELECT id FROM course WHERE code = access_cours_code);
 ALTER TABLE track_e_exercises ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_exercises SET c_id = (SELECT id FROM course WHERE code = exe_cours_id);
 ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_downloads SET c_id = (SELECT id FROM course WHERE code = down_cours_id);
 ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_hotpotatoes SET c_id = (SELECT id FROM course WHERE code = exe_cours_id);
 ALTER TABLE track_e_links ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_links SET c_id = (SELECT id FROM course WHERE code = links_cours_id);
 ALTER TABLE track_e_course_access ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_course_access SET c_id = (SELECT id FROM course WHERE code = course_code);
 ALTER TABLE track_e_online ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_online SET c_id = (SELECT id FROM course WHERE code = course);
 ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
+UPDATE track_e_attempt SET c_id = (SELECT id FROM course WHERE code = course_code);
 ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL;
+
 
 DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
 DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';
@@ -113,4 +124,4 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.27' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.28' WHERE variable = 'chamilo_database_version';

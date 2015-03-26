@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.glossary
  * @author Christian Fasanando, initial version
  * @author Bas Wijnen import/export to CSV
  */
-// Including the global initialization file.
+
 require_once '../inc/global.inc.php';
 
 $current_course_tool  = TOOL_GLOSSARY;
@@ -59,6 +60,7 @@ switch ($action) {
         $tool_name =  get_lang('ImportGlossary');
         break;
     case 'changeview':
+    default:
         $tool_name =  get_lang('List');
         break;
 }

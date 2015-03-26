@@ -86,11 +86,11 @@ $actions = isset($_GET['action']) ? $_GET['action'] : '';
 if ($actions == 'add') {
     switch ($_GET['content']) {
         case 'forum':
-            $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&search='.$search_forum, 'name' => get_lang('Forum'));
+            $interbreadcrumb[] = array('url' => 'index.php?search='.$search_forum.'&'.api_get_cidreq(), 'name' => get_lang('Forum'));
             $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForum'));
             break;
         case 'forumcategory':
-            $interbreadcrumb[] = array('url' =>'index.php?gradebook='.$gradebook.'&search='.$search_forum, 'name' => get_lang('Forum'));
+            $interbreadcrumb[] = array('url' =>'index.php?search='.$search_forum.'&'.api_get_cidreq(), 'name' => get_lang('Forum'));
             $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForumCategory'));
             break;
         default:

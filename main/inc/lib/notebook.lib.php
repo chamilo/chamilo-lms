@@ -53,13 +53,14 @@ class NotebookManager
         // Database table definition
         $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
         $sql = "INSERT INTO $t_notebook (c_id, user_id, course, session_id, title, description, creation_date,update_date,status)
 				VALUES(
 					 $course_id,
 					'" . api_get_user_id() . "',
 					'" . Database::escape_string(api_get_course_id()) . "',
-					'" . intval($_SESSION['id_session']) . "',
+					'" . $sessionId . "',
 					'" . Database::escape_string($values['note_title']) . "',
 					'" . Database::escape_string($values['note_comment']) . "',
 					'" . Database::escape_string(date('Y-m-d H:i:s')) . "',
@@ -117,11 +118,12 @@ class NotebookManager
         $t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
         $sql = "UPDATE $t_notebook SET
 					user_id = '" . api_get_user_id() . "',
 					course = '" . Database::escape_string(api_get_course_id()) . "',
-					session_id = '" . intval($_SESSION['id_session']) . "',
+					session_id = '" . $sessionId . "',
 					title = '" . Database::escape_string($values['note_title']) . "',
 					description = '" . Database::escape_string($values['note_comment']) . "',
 					update_date = '" . Database::escape_string(date('Y-m-d H:i:s')) . "'
@@ -162,7 +164,7 @@ class NotebookManager
     {
 
         global $_user;
-        if (!$_GET['direction']) {
+        if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
             $link_sort_direction = 'DESC';
         } elseif ($_GET['direction'] == 'ASC') {

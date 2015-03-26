@@ -617,8 +617,8 @@ if (!empty ($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
-$interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
+$interbreadcrumb[] = array ("url" => "exercice.php?".api_get_cidreq(),	"name" => get_lang('Exercices'));
+$interbreadcrumb[] = array ("url" => "#", "name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_header(null,'Exercises');
@@ -1002,7 +1002,7 @@ if (!empty($error)) {
         }
     </script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=" . $exerciseId .'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&&exerciseId='.$exerciseId .'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent"				value="1" />
          <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
          <input type="hidden" name="num" 					value="'.$current_question.'" id="num_current_id" />

@@ -682,15 +682,32 @@ function database_exists($database_name)
  *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
  *                 -1 when there is no connection established.
  */
-function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm)
+function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
-    $dbConnect = -1;
+    /*$dbParams = array(
+        'driver' => 'pdo_mysql',
+        'host' => $dbHostForm,
+        'user' => $dbUsernameForm,
+        'password' => $dbPassForm,
+        ''
+    );
+    $config = Database::getDoctrineConfig();
+    $entityManager = \Doctrine\ORM\EntityManager::create($dbParams, $config);
+    $dbConnect = 1;
+    try {
+        $entityManager->getConnection()->connect();
+    } catch (Exception $e) {
+        echo $e->getMessage();
+        $dbConnect = -1;
+    }*/
+
     //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
         $dbConnect = 1;
     } else {
         $dbConnect = -1;
     }
+
     return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
 }
 
@@ -1834,14 +1851,12 @@ function display_database_settings_form(
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
             $dbHostForm         = get_config_param('dbHost');
-
             $dbUsernameForm     = get_config_param('dbLogin');
             $dbPassForm         = get_config_param('dbPass');
             $dbPrefixForm       = get_config_param('dbNamePrefix');
             $enableTrackingForm = get_config_param('is_trackingEnabled');
             $singleDbForm       = get_config_param('singleDbEnabled');
             $dbHostForm         = get_config_param('mainDbName');
-
             $dbStatsForm        = get_config_param('statsDbName');
             $dbScormForm        = get_config_param('scormDbName');
             $dbUserForm         = get_config_param('user_personal_database');
@@ -1938,7 +1953,7 @@ function display_database_settings_form(
     <tr>
         <td></td>
         <td>
-            <button type="submit" class="btn btn-primary" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" >
+            <button type="submit" class="btn btn-primary" name="step3" value="step3">
                 <i class="fa fa-refresh"> </i>
                 <?php echo get_lang('CheckDatabaseConnection'); ?>
             </button>
@@ -1946,10 +1961,9 @@ function display_database_settings_form(
     </tr>
     <tr>
         <td>
-
         <?php
 
-        $dbConnect = testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm);
+        $dbConnect = testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm);
 
         $database_exists_text = '';
 
@@ -2002,15 +2016,21 @@ function display_database_settings_form(
     </tr>
     <tr>
       <td>
-          <button type="submit" name="step2" class="btn btn-default" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
+          <button type="submit" name="step2" class="btn btn-default" value="&lt; <?php echo get_lang('Previous'); ?>" >
+          <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+          </button>
       </td>
       <td>&nbsp;</td>
       <td align="right">
           <input type="hidden" name="is_executable" id="is_executable" value="-" />
            <?php if ($dbConnect == 1) { ?>
-            <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
+            <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+                <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
+            </button>
           <?php } else { ?>
-            <button disabled="disabled" type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
+            <button disabled="disabled" type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
+                <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
+            </button>
           <?php } ?>
       </td>
     </tr>

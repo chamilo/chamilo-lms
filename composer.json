@@ -63,7 +63,8 @@
         "bower-asset/fullcalendar": "2.3.*",
         "bower-asset/mediaelement": "2.16.*",
         "bower-asset/modernizr": "2.8.*",
-        "bower-asset/jqueryui-timepicker-addon": "1.5.*"
+        "bower-asset/jqueryui-timepicker-addon": "1.5.*",
+        "rackspace/php-opencloud": "~1.12"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

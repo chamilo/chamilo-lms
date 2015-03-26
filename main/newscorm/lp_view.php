@@ -83,30 +83,13 @@ $(document).ready(function() {
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
 	});
-	//jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
 });
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-        $(document).ready(function(){
-            $("#icon-down").click(function(){
-                $("#icon-up").removeClass("hidden");
-                $(this).addClass("hidden");
-            });
-             $("#icon-up").click(function(){
-                $("#icon-down").removeClass("hidden");
-                $(this).addClass("hidden");
-            });
-        });
 
-</script>';
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
-    $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {
-        toggle_minipanel();
-    });
-    </script>';
+    $htmlHeadXtra[] = 'hello';
 }
 
 //Impress js
@@ -378,10 +361,10 @@ if ($is_allowed_to_edit) {
     /* Fin left zone */
     echo '<div class="container-fluid"><div class="row">';
     echo '<div id="learning_path_left_zone" class="sidebar-scorm"> ';
-    echo '<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
-    echo '<div class="panel panel-default">';
-    echo '<div class="panel-heading" role="tab" id="headingOne">
-        <a id="ui-option" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+
+    echo '<div id="scorm-info" class="panel panel-default">';
+    echo '<div class="panel-heading">
+        <a id="ui-option">
         <i id="icon-down"class="fa fa-chevron-down hidden"></i>
         <i id="icon-up" class="fa fa-chevron-up"></i>
         </a></div>';
@@ -389,8 +372,7 @@ if ($is_allowed_to_edit) {
         <!-- end header -->
 
         <!-- Author image preview -->
-    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-            <div class="panel-body">
+            <div id="panel-scorm" class="panel-body">
                 <?php
                 // Return to course home.
                 if ($is_allowed_to_edit) {
@@ -450,9 +432,9 @@ if ($is_allowed_to_edit) {
                     echo '</div>';
                 }
                 ?>
-            </div>
+
         </div>
-        </div>
+
     </div>
 
         <!-- TOC layout -->
@@ -490,23 +472,22 @@ if ($is_allowed_to_edit) {
     function updateContentHeight() {
         document.body.style.overflow = 'hidden';
         var IE = window.navigator.appName.match(/microsoft/i);
-        var heightHeader = ($('#header').height())? $('#header').height() : 0 ;
-        var heightAuthorImg = ($('#author_image').height())? $('#author_image').height() : 0 ;
-        var heightAuthorName = ($('#author_name').height())? $('#author_name').height() : 0 ;
-        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
+
+        /* Identified new height */
         var heightControl = ($('#control').is(':visible'))? $('#control').height() : 0 ;
-        var heightMedia = ($('#lp_media_file').length != 0)? $('#lp_media_file').height() : 0 ;
-        //var heightTitle = ($('#scorm_title').height())? $('#scorm_title').height() : 0 ;
-        var heightAction = ($('#actions_lp').height())? $('#actions_lp').height() : 0 ;
+        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
 
-        //var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
-        var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightAction + 100;
+        var heightScormInfo = $('#scorm-info').height();
 
-        heightTop = (heightTop < 300)? heightTop : 300;
-        var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
-        // -40 is a static adjustement for margin, spaces on the page
+        var heightTop = heightScormInfo + 100;
 
-        $('#inner_lp_toc').css('height', innerHeight - heightTop - heightBreadcrumb - heightControl + "px");
+        //heightTop = (heightTop > 300)? heightTop : 300;
+
+        var innerHeight = $(window).height();
+
+        //var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
+
+        $('#inner_lp_toc').css('height',  innerHeight - heightBreadcrumb - heightTop + "px");
         if ($('#content_id')) {
             $('#content_id').css('height', innerHeight - heightBreadcrumb - heightControl + "px");
         }
@@ -558,6 +539,25 @@ if ($is_allowed_to_edit) {
     });
     window.onload = updateContentHeight();
     window.onresize = updateContentHeight();
+
+    $(document).ready(function(){
+
+        $("#icon-down").click(function(){
+            $("#icon-up").removeClass("hidden");
+            $(this).addClass("hidden");
+            $('#panel-scorm').slideDown("slow",function(){
+                updateContentHeight();
+            });
+        });
+        $("#icon-up").click(function(){
+            $("#icon-down").removeClass("hidden");
+            $(this).addClass("hidden");
+            $('#panel-scorm').slideUp("slow",function(){
+                updateContentHeight();
+            });
+        });
+    });
+
 </script>
 <?php
 // Restore a global setting.

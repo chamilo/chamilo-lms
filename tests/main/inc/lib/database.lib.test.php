@@ -117,34 +117,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetCourseTablePrefix() {
-		global $_configuration;
-		$res=$this->dbase->get_course_table_prefix($_configuration);
-		$this->assertTrue(is_string($res));
-	}
-
-	function testGetCurrentCourseGluedDatabase() {
-	    global $_course;
-	    $res=$this->dbase->get_current_course_glued_database();
-	    if (empty($_course['dbNameGlu'])) {
-	        $this->assertFalse($res);
-	    } else {
-	        $this->assertTrue(is_string($res));
-	    }
-	}
-
-	function testGetDatabaseGlue() {
-		global $_configuration;
-		$res=$this->dbase->get_database_glue($_configuration);
-		$this->assertTrue(is_string($res));
-	}
-
-	function testGetDatabaseNamePrefix() {
-		global $_configuration;
-		$res=$this->dbase->get_database_name_prefix($_configuration);
-		$this->assertTrue(is_string($res));
-	}
-
 	function testGetMainDatabase() {
 		global $_configuration;
 		$res=$this->dbase->get_main_database();

@@ -163,7 +163,8 @@ class Link extends Model
             if (!api_valid_url($urllink, true)) {
                 // A check against an absolute URL
                 Display::addFlash(Display::return_message(get_lang('GiveURL'), 'error'));
-                $ok = false;
+
+                return false;
             } else {
                 // Looking for the largest order number for this category.
                 $result = Database:: query(
@@ -174,7 +175,6 @@ class Link extends Model
                 );
                 list ($orderMax) = Database:: fetch_row($result);
                 $order = $orderMax + 1;
-
 
                 $sql = "INSERT INTO " . $tbl_link . "
                     (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
@@ -1802,13 +1802,11 @@ class Link extends Model
             $form->addHeader(get_lang('LinkMod'));
         }
 
-
         $target_link = "_blank";
         $title = '';
         $category = '';
         $onhomepage = '';
         $description = '';
-        $title = '';
 
         if (!empty($linkInfo)) {
             $urllink = $linkInfo['url'];
@@ -1821,9 +1819,9 @@ class Link extends Model
             $target_link = $linkInfo['target'];
         }
 
-
         $form->addHidden('id', $linkId);
         $form->addText('url', 'URL');
+        $form->addRule('url', get_lang('GiveURL'), 'url');
         $form->addText('title', get_lang('LinkName'));
         $form->addTextarea('description', get_lang('Description'));
         $form->addLabel(
@@ -1862,7 +1860,7 @@ class Link extends Model
         );
 
         $defaults = array(
-            'url' => (empty($urllink) ? 'http://' : Security::remove_XSS($urllink)),
+            'url' => empty($urllink) ? 'http://' : Security::remove_XSS($urllink),
             'title' => Security::remove_XSS($title),
             'category_id' => $category,
             'on_homepage' => $onhomepage,
@@ -1917,6 +1915,7 @@ class Link extends Model
             'post',
             api_get_self().'?action='.$action.'&'.api_get_cidreq()
         );
+
         $defaults = [];
         if ($action == 'addcategory') {
             $form->addHeader(get_lang('CategoryAdd'));

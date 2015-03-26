@@ -773,6 +773,7 @@ EOT;
                 break;
             }
         }
+
         $returnValue = '';
         $js = null;
 

@@ -67,7 +67,7 @@ if ($_POST['formSent'])
                     ClassManager :: unsubscribe_from_course($class_id, $course_code);
                 }
             }
-            Display::display_normal_message(get_lang('ClassesUnsubscribed'));
+            Display::display_normal_message(get_lang('ClassesUnSubscribed'));
         }
     }
 }

@@ -588,7 +588,7 @@ class Statistics
         $form->addElement('hidden', 'report', 'activities');
         $form->addElement('hidden', 'activities_direction', 'DESC');
         $form->addElement('hidden', 'activities_column', '4');
-        $form->addElement('text', 'keyword', get_lang('keyword'));
+        $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
         echo '<div class="actions">';
             $form->display();

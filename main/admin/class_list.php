@@ -101,7 +101,7 @@ if (isset($_GET['action'])) {
 $form = new FormValidator('search_simple', 'get', '', '', null, false);
 $renderer =& $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
-$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('button', 'submit', get_lang('Search'));
 $content .= $form->return_form();
 

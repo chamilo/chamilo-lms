@@ -144,7 +144,7 @@ if (!$course_validation_feature) {
 $form = new FormValidator('search_simple', 'get', '', '', 'width=200px', false);
 $renderer = $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<span>{element}</span> ');
-$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.

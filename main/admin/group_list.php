@@ -376,7 +376,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $form = new FormValidator('search_simple', 'get', '', '', null, false);
     $renderer = & $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<span>{element}</span> ');
-    $form->addElement('text', 'keyword', get_lang('keyword'));
+    $form->addElement('text', 'keyword', get_lang('Keyword'));
     $form->addButtonSearch(get_lang('Search'));
     echo '<div class="actions" style="width:100%;">';
     if (api_is_platform_admin()) {

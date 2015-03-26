@@ -251,7 +251,7 @@ if ($isAdmin) {
     $form = new FormValidator('search_simple', 'get', '', '', null, false);
     $renderer = & $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<span>{element}</span> ');
-    $form->addElement('text', 'keyword', get_lang('keyword'), 'size="25"');
+    $form->addElement('text', 'keyword', get_lang('Keyword'), 'size="25"');
     $form->addElement('style_submit_button', 'submit_simple', get_lang('Search'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null,
             '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'

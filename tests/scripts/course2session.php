@@ -116,19 +116,27 @@ $end = api_strtotime($year.'-'.$month.'-01 00:00:00') - 1;
 $start = $end - (2*365*86400);
 
 // Prepare a list of admin users to avoid removing their relation to the base course
-$sql = 'SELECT user_id FROM admin';
+$sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_ADMIN);
 $resultAdmin = Database::query($sql);
 $admins = array();
 while ($row = Database::fetch_assoc($resultAdmin)) {
     $admins[] = $row['user_id'];
 }
 
-$res = Database::select('id, title, code', TABLE_MAIN_COURSE);
+$eol = PHP_EOL;
+$eof = PHP_EOL;
+if (php_sapi_name() != 'cli') {
+    echo '<pre>';
+    $eol = "<br />".PHP_EOL;
+    $eof = '</pre>';
+}
+
+$res = Database::select('id, title, code', Database::get_main_table(TABLE_MAIN_COURSE));
 foreach ($res as $course) {
     if ($debug) {
-        echo $course['title'] . PHP_EOL;
+        echo $course['title'] . $eol;
     }
-    $sessionTitle = $course['title'] . ' ' . $month . '-' . $year . ' - a';
+    $sessionTitle = $course['title'] . ' (' . $month . '/' . $year . ' - a)';
     $startDate = ($year-2) . '-' . $month . '-01';
     $endDate = $year . '-' . $month . '-01';
     $id = SessionManager::create_session(
@@ -138,13 +146,13 @@ foreach ($res as $course) {
         0,
         0,
         0,
-        $generalCoach,
+        $username,
         0,
         SESSION_VISIBLE_READ_ONLY
     );
     while ($id == 'SessionNameAlreadyExists') {
         if ($debug) {
-            echo "Could not create session $sessionTitle" . PHP_EOL;
+            echo "Could not create session $sessionTitle" . $eol;
         }
         // Increase the last letter
         $sessionTitle = substr($sessionTitle, 0, -1) . chr(ord(substr($sessionTitle, -1, 1))+1);
@@ -155,13 +163,13 @@ foreach ($res as $course) {
             0,
             0,
             0,
-            'info@contidosdixitais.com',
+            $username,
             0,
             SESSION_VISIBLE_READ_ONLY
         );
     }
     if ($debug) {
-        echo "Session $sessionTitle created with ID $id" . PHP_EOL;
+        echo "Session $sessionTitle created with ID $id" . $eol;
     }
     SessionManager::add_courses_to_session($id, array($course['code']));
     $resultUsers = Database::query("SELECT user_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER). " WHERE course_code = '" . $course['code'] . "'");
@@ -170,10 +178,11 @@ foreach ($res as $course) {
         $users[] = $row['user_id'];
     }
     if ($debug) {
-        echo count($users) . " users in course " . $course['title'] . " will be moved to session $id (unless they're admins)" . PHP_EOL;
+        echo count($users) . " users in course " . $course['title'] . " will be moved to session $id (unless they're admins)" . $eol;
     }
     SessionManager::subscribe_users_to_session_course($users, $id, $course['code']);
     foreach ($userTables as $table => $fields) {
+        $table = Database::get_main_database().'.'.$table;
         //c_id + course_id = int, others = char
         if ($fields['c'] == 'c_id' or $fields['c'] == 'course_id') {
             $sql = "UPDATE $table SET " . $fields['s'] . " = $id WHERE " . $fields['c'] . " = " . $course['id'];
@@ -181,7 +190,7 @@ foreach ($res as $course) {
             $sql = "UPDATE $table SET " . $fields['s'] . " = $id WHERE " . $fields['c'] . " = '" . $course['code'] . "'";
         }
         if ($debug) {
-            echo $sql . PHP_EOL;
+            echo $sql . $eol;
         }
         $resultChange = Database::query($sql);
     }
@@ -192,13 +201,15 @@ foreach ($res as $course) {
             // Skip un-subscribing of admin users
             continue;
         }
-        $sql = "DELETE FROM course_rel_user WHERE user_id = $user AND course_code = '" . $course['code'] . "'";
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sql = "DELETE FROM $table WHERE user_id = $user AND course_code = '" . $course['code'] . "'";
         if ($debug) {
-            echo $sql . PHP_EOL;
+            echo $sql . $eol;
         }
         $resultRemove = Database::query($sql);
     }
 }
 if ($debug) {
-    echo "End of moving process" . PH_EOL;
+    echo "End of moving process" . $eol;
 }
+echo $eof;

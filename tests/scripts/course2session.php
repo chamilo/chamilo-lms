@@ -12,6 +12,8 @@ exit;
 require __DIR__ . '/../../main/inc/global.inc.php';
 
 $debug = 1;
+// Who will be the general coach assigned to all sessions created?
+$generalCoach = 'username';
 
 // List of tables that will need an update
 $tables = array(
@@ -136,7 +138,7 @@ foreach ($res as $course) {
         0,
         0,
         0,
-        'info@contidosdixitais.com',
+        $generalCoach,
         0,
         SESSION_VISIBLE_READ_ONLY
     );

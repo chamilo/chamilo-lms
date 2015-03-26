@@ -28,7 +28,6 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
         foreach ($this->observers as $observer) {
             $observer->hookCreateUser($this);
         }
-
         return 1;
     }
 }

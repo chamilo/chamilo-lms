@@ -29,16 +29,16 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $form = new FormValidator('email_editor', 'post');
 $form->addElement('hidden', 'dest');
 $form->addElement('text', 'email_address', get_lang('EmailDestination'));
-$form->addElement('text', 'email_title', get_lang('EmailTitle'), array('class' => 'span5'));
+$form->addElement('text', 'email_title', get_lang('EmailTitle'));
 $form->freeze('email_address');
-$form->addElement('textarea', 'email_text', get_lang('EmailText'), array('class' => 'span5', 'rows' => '6'));
+$form->addElement('textarea', 'email_text', get_lang('EmailText'), array('rows' => '6'));
 
 $form->addRule('email_address', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_address', get_lang('EmailWrong'), 'email');
 
-$form->addElement('button', 'submit', get_lang('SendMail'));
+$form->addButtonSend(get_lang('SendMail'));
 
 switch ($action) {
     case 'subscribe_me_to_session':

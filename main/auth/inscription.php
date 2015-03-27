@@ -482,14 +482,6 @@ if ($form->validate()) {
                 Database::query($sql);
             }
 
-            // if there is a default duration of a valid account then we have to change the expiration_date accordingly
-            if (api_get_setting('account_valid_duration') != '') {
-                $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-                        SET expiration_date='registration_date+1'
-                        WHERE user_id='".$user_id."'";
-                Database::query($sql);
-            }
-
             $course_code_redirect = Session::read('course_redirect');
 
             // Saving user to course if it was set.

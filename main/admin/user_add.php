@@ -233,7 +233,7 @@ $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), 
 $group = array ();
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
 $group[] = $form->createElement(
-    'DatePicker',
+    'DateTimePicker',
     'expiration_date',
     null,
     array(
@@ -263,7 +263,7 @@ $defaults['mail']['send_mail'] = 1;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
 $days = api_get_setting('account_valid_duration');
-$defaults['expiration_date'] = date('Y-m-d', api_strtotime('+'.$days.' day'));
+$defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;

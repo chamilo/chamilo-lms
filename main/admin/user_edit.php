@@ -449,7 +449,11 @@ $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
 $image_size = api_getimagesize($image_file);
 
-$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
+if (!api_get_configuration_value('gravatar_enabled')) {
+    $image_file .= '?rand='.time();
+}
+
+$img_attributes = 'src="'.$image_file.'" '
 	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 

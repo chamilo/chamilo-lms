@@ -22,9 +22,10 @@ $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 
 //jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report&session_id='.$sessionId;
 
 $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 

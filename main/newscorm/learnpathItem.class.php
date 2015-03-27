@@ -2605,7 +2605,7 @@ class learnpathItem
                                         return $returnstatus;
                                     } else {
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(false);
-                                        $returnstatus = $status == $this->possible_status[2] OR $status == $this->possible_status[3];
+                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
                                             if (self::debug > 1) {

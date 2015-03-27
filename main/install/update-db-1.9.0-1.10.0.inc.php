@@ -94,33 +94,8 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
 
         if (INSTALL_TYPE_UPDATE == 'update') {
-            // Updating track tables with c_id
-            $res = iDatabase::query("SELECT id, code FROM $dbNameForm.course");
-            $result = iDatabase::query($sql);
-            $courses = Database::store_result($result);
-            foreach ($courses as $course) {
-                $courseId = $course['id'];
-                $courseCode = $course['code'];
+            // Updating track tables with c_id -> moved to migrate-db
 
-                $fields = array(
-                    'track_e_access' => 'access_cours_code',
-                    'track_e_default' => 'default_cours_code',
-                    'track_e_lastaccess' => 'access_cours_code',
-                    'track_e_downloads' =>  'down_cours_id',
-                    'track_e_hotpotatoes' => 'exe_cours_id',
-                    'track_e_links' => 'links_cours_id',
-                    'track_e_course_access' => 'course_code',
-                    'track_e_online' => 'course',
-                    'track_e_attempt' => 'course_code',
-                    'track_e_exercises' => 'exe_cours_id'
-                );
-
-                foreach ($fields as $table => $key) {
-                    $sql = "UPDATE $dbNameForm.$table SET c_id = $courseId
-                            WHERE $key = '$courseCode'";
-                    iDatabase::query($sql);
-                }
-            }
         }
     }
 

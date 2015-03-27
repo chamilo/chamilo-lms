@@ -2726,7 +2726,7 @@ class UserManager
         }
 
         $sql = "SELECT DISTINCT id, name, date_start, date_end
-                FROM $tbl_session_user, $tbl_session
+                FROM $tbl_session
                 WHERE (
                     id_coach = $user_id
                 )
@@ -2751,7 +2751,8 @@ class UserManager
                 if ($session_visibility == SESSION_INVISIBLE) {
                     continue;
                 }
-
+                // This query is horribly slow when more than a few thousand
+                // users and just a few sessions to which they are subscribed
                 $id_session = $enreg['id'];
                 $personal_course_list_sql = "SELECT DISTINCT
                         course.code code,

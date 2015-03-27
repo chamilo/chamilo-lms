@@ -1229,6 +1229,7 @@ class SocialManager extends UserManager
             $start = '0000-00-00';
         }
         $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tblMessageAttachment = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
         $userId = intval($userId);
         $start = Database::escape_string($start);
         // TODO: set a maximum of 3 months for messages
@@ -1238,8 +1239,8 @@ class SocialManager extends UserManager
         $limit = intval($limit);
         $messages = array();
         $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
-          (SELECT ma.path from message_attachment ma WHERE  ma.message_id = tm.id ) as path,
-          (SELECT ma.filename from message_attachment ma WHERE  ma.message_id = tm.id ) as filename
+          (SELECT ma.path from $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as path,
+          (SELECT ma.filename from $tblMessageAttachment ma WHERE  ma.message_id = tm.id ) as filename
             FROM $tblMessage tm
             WHERE user_receiver_id = $userId
                 AND send_date > '$start' ";

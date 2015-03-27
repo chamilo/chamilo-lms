@@ -222,6 +222,10 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
                 $userPhoto = $userImage['dir'].$userImage['file'];
             }
 
+            if (api_get_configuration_value('gravatar_enabled')) {
+                $userPhoto = $userImage['file'];
+            }
+
             $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 
             if ($isMaster) {

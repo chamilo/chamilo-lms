@@ -1291,12 +1291,19 @@ class Tracking
     		$condition_user = " AND user_id = $user_id ";
     	}
 
-    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
-                FROM $tbl_track_course
-                WHERE
-                    UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND
-                    c_id = '$courseId' AND
-                    session_id = '$session_id' $condition_user";
+    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds "
+            . "FROM $tbl_track_course "
+            . "WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
+
+        if ($courseId != 0) {
+            $sql .= "AND c_id = '$courseId' ";
+        }
+
+        if ($session_id != -1) {
+            $sql .= "AND session_id = '$session_id' ";
+        }
+
+        $sql .= $condition_user;
 
         $rs = Database::query($sql);
     	$row = Database::fetch_array($rs);

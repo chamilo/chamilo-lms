@@ -2541,9 +2541,8 @@ function WSCreateCourseByTitle($params) {
         $orig_course_id_value[] = $course_param['original_course_id_value'];
         $extra_list = $course_param['extra'];
 
-        $dbnamelength = strlen($_configuration['db_prefix']);
         // Ensure the database prefix + database name do not get over 40 characters
-        $maxlength = 40 - $dbnamelength;
+        $maxlength = 40;
 
         if (empty($wanted_code)) {
             $wanted_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));

@@ -313,11 +313,7 @@ function write_system_config_file($path)
     global $dbPassForm;
     global $enableTrackingForm;
     global $singleDbForm;
-    global $dbPrefixForm;
     global $dbNameForm;
-    global $dbStatsForm;
-    global $dbScormForm;
-    global $dbUserForm;
     global $urlForm;
     global $pathForm;
     global $urlAppendPath;
@@ -332,29 +328,21 @@ function write_system_config_file($path)
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
     $content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
 
-    $config['{DATE_GENERATED}']         = date('r');
-    $config['{DATABASE_HOST}']          = $dbHostForm;
-    $config['{DATABASE_USER}']          = $dbUsernameForm;
-    $config['{DATABASE_PASSWORD}']      = $dbPassForm;
-    $config['TRACKING_ENABLED']         = trueFalse($enableTrackingForm);
-    $config['SINGLE_DATABASE']          = trueFalse($singleDbForm);
-    $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');
-    $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');
-    $config['{DATABASE_PREFIX}']        = '';
-    $config['{DATABASE_MAIN}']          = $dbNameForm;
-    $config['{DATABASE_STATS}']         = $dbNameForm;
-    $config['{DATABASE_SCORM}']         = $dbNameForm;
-    $config['{DATABASE_PERSONAL}']      = $dbNameForm;
-    $config['{ROOT_WEB}']               = $urlForm;
-    $config['{ROOT_SYS}']               = $root_sys;
-    $config['{URL_APPEND_PATH}']        = $urlAppendPath;
-    $config['{PLATFORM_LANGUAGE}']      = $languageForm;
-    $config['{SECURITY_KEY}']           = md5(uniqid(rand().time()));
-    $config['{ENCRYPT_PASSWORD}']       = $encryptPassForm;
+    $config['{DATE_GENERATED}'] = date('r');
+    $config['{DATABASE_HOST}'] = $dbHostForm;
+    $config['{DATABASE_USER}'] = $dbUsernameForm;
+    $config['{DATABASE_PASSWORD}'] = $dbPassForm;
+    $config['{DATABASE_MAIN}'] = $dbNameForm;
+    $config['{ROOT_WEB}'] = $urlForm;
+    $config['{ROOT_SYS}'] = $root_sys;
+    $config['{URL_APPEND_PATH}'] = $urlAppendPath;
+    $config['{PLATFORM_LANGUAGE}'] = $languageForm;
+    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
+    $config['{ENCRYPT_PASSWORD}'] = $encryptPassForm;
 
-    $config['SESSION_LIFETIME']         = $session_lifetime;
-    $config['{NEW_VERSION}']            = $new_version;
-    $config['NEW_VERSION_STABLE']       = trueFalse($new_version_stable);
+    $config['SESSION_LIFETIME'] = $session_lifetime;
+    $config['{NEW_VERSION}'] = $new_version;
+    $config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
 
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
@@ -1820,27 +1808,8 @@ function display_database_settings_form(
         $dbHostForm         = $_configuration['db_host'];
         $dbUsernameForm     = $_configuration['db_user'];
         $dbPassForm         = $_configuration['db_password'];
-        $dbPrefixForm       = $_configuration['db_prefix'];
-        $enableTrackingForm = $_configuration['tracking_enabled'];
-        $singleDbForm       = $_configuration['single_database'];
         $dbNameForm         = $_configuration['main_database'];
-        $dbStatsForm        = $_configuration['statistics_database'];
-        $dbScormForm        = $_configuration['scorm_database'];
-        $dbUserForm         = $_configuration['user_personal_database'];
-        $dbScormExists      = true;
 
-        if (empty($dbScormForm)) {
-            if ($singleDbForm) {
-                $dbScormForm = $dbNameForm;
-            } else {
-                $dbScormForm = $dbPrefixForm.'scorm';
-                $dbScormExists = false;
-            }
-        }
-
-        if (empty($dbUserForm)) {
-            $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
-        }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');

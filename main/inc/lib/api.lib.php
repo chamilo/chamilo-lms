@@ -1783,7 +1783,6 @@ function api_format_course_array($course_data) {
     $_course['dbName'] = $course_data['db_name'];
     $_course['db_name'] = $course_data['db_name'];
     // Use in all queries.
-    $_course['dbNameGlu'] = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue'];
 
     $_course['titular'] = $course_data['tutor_name'];
     $_course['language'] = $course_data['course_language'];

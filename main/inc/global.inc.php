@@ -115,13 +115,6 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }
 
-/*  DATABASE CONNECTION  */
-
-// @todo: this shouldn't be done here. It should be stored correctly during installation.
-if (empty($_configuration['statistics_database']) && $already_installed) {
-    $_configuration['statistics_database'] = $_configuration['main_database'];
-}
-global $database_connection;
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
 $dbPersistConnection = api_get_configuration_value('db_persistent_connection');

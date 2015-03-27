@@ -1349,11 +1349,19 @@ class CourseManager
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . '  au ON (au.user_id = user.user_id) ';
         }
 
+        $extraFieldWasAdded = false;
         if ($return_count && $resumed_report) {
             foreach ($extra_field as $extraField) {
                 $extraFieldInfo = UserManager::get_extra_field_information_by_name($extraField);
-                $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES) . ' as ufv
-                          ON (user.user_id = ufv.user_id AND (field_id = ' . $extraFieldInfo['id'] . ' OR field_id IS NULL ) )';
+                if (!empty($extraFieldInfo)) {
+                    $fieldValuesTable = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+                    $sql .= ' LEFT JOIN '.$fieldValuesTable.' as ufv
+                            ON (
+                                user.user_id = ufv.user_id AND
+                                (field_id = '.$extraFieldInfo['id'].' OR field_id IS NULL)
+                            )';
+                    $extraFieldWasAdded = true;
+                }
             }
         }
 
@@ -1364,7 +1372,7 @@ class CourseManager
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
 
-        if ($return_count && $resumed_report) {
+        if ($return_count && $resumed_report && $extraFieldWasAdded) {
             $sql .= ' AND field_id IS NOT NULL GROUP BY field_value ';
         }
 
@@ -1427,29 +1435,38 @@ class CourseManager
                 $course_code = isset($user['code']) ? $user['code'] : null;
 
                 if ($add_reports) {
-
                     if ($resumed_report) {
-                        foreach ($extra_fields as $extra) {
-                            if (in_array($extra['1'], $extra_field)) {
-                                $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
-                                break;
+                        $extra = array();
+
+                        if (!empty($extra_fields)) {
+                            foreach ($extra_fields as $extra) {
+                                if (in_array($extra['1'], $extra_field)) {
+                                    $user_data = UserManager::get_extra_user_data_by_field(
+                                        $user['user_id'],
+                                        $extra['1']
+                                    );
+                                    break;
+                                }
                             }
                         }
 
-                        if (empty($user_data[$extra['1']])) {
-                            $row_key = '-1';
-                            $name = '-';
-                        } else {
-                            $row_key = $user_data[$extra['1']];
-                            $name = $user_data[$extra['1']];
+                        $row_key = '-1';
+                        $name = '-';
+
+                        if (!empty($extra)) {
+                            if (!empty($user_data[$extra['1']])) {
+                                $row_key = $user_data[$extra['1']];
+                                $name = $user_data[$extra['1']];
+                                $users[$row_key]['extra_'.$extra['1']] = $name;
+                            }
                         }
 
-                        $users[$row_key]['extra_' . $extra['1']] = $name;
                         $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course(
                             $user['user_id'],
                             $courseId,
                             $sessionId
                         );
+
                         $users[$row_key]['count_users'] += $counter;
 
                         $registered_users_with_extra_field = 0;
@@ -1518,6 +1535,7 @@ class CourseManager
                             null,
                             $sessionId
                         );
+
                         $report_info['certificate'] = Display::label(get_lang('No'));
                         if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
                             $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');

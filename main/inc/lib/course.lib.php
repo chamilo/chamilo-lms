@@ -1516,7 +1516,7 @@ class CourseManager
                             }
                         }
                     } else {
-                        $sessionName = isset($sessionId) ? ' - '.$user['session_name'] : '';
+                        $sessionName = !empty($sessionId) ? ' - '.$user['session_name'] : '';
                         $report_info['course'] = $user['title'].$sessionName;
                         $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
                         $report_info['time'] = api_time_to_hms(

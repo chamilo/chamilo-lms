@@ -453,7 +453,7 @@ if ($encryptPassForm == '1') {
 <div id="main" class="container well-install">
     <header>
 		<div class="row">
-            <div id="header_left" class="span4">
+            <div id="header_left" class="col-md-4">
                 <div id="logo">
                     <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
                 </div>
@@ -479,7 +479,7 @@ if ($encryptPassForm == '1') {
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     ?>
     <div class="row">
-        <div class="span3">
+        <div class="col-md-3">
             <div class="well">
                 <ol>
                     <li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
@@ -498,7 +498,7 @@ if ($encryptPassForm == '1') {
 			</div>
         </div>
 
-        <div class="span9">
+        <div class="col-md-9">
 
 <form class="form-horizontal" id="install_form" style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php

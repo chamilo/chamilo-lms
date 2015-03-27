@@ -1618,7 +1618,9 @@ function display_license_agreement()
     ?>
     <table>
         <tr><td>
-            <pre style="overflow: auto; height: 150px; margin-top: 5px;" class="span7"><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></pre>
+            <pre style="overflow: auto; height: 150px; margin-top: 5px;" class="col-md-7">
+                <?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
+            </pre>
         </td>
         </tr>
         <tr><td>

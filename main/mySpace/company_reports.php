@@ -112,17 +112,13 @@ $content = '<div class="actions">';
 if (!empty($actions)) {
     $content .= $actions;
 }
-
-$content .= '<div class="pull-right">';
 $content .= Display::url(
     get_lang("CompanyReportResumed"),
     api_get_path(WEB_CODE_PATH) . "mySpace/company_reports_resumed.php",
     array(
-        'class' => 'btn btn-info'
+        'class' => 'btn btn-success'
     )
 );
-
-$content .= '</div>';
 $content .= '</div>';
 $content .= '<h1 class="page-header">' . get_lang('CompanyReport') . '</h1>';
 $content .= Display::grid_html('user_course_report');

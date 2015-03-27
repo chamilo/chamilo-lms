@@ -96,7 +96,7 @@
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn">{{ 'Filter' | get_lang }}</button>
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i> {{ 'Filter' | get_lang }}</button>
                 </div>
             </div>
         </form>

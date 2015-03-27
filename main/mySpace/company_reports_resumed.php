@@ -108,15 +108,13 @@ if (!empty($actions)) {
 }
 
 if (!api_is_student_boss()) {
-    $content .= '<div class="pull-right">';
     $content .= Display::url(
         get_lang("CompanyReport"),
         api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php",
         array(
-            'class' => 'btn btn-info'
+            'class' => 'btn btn-success'
         )
     );
-    $content .= '</div>';
 }
 
 $content .= '</div>';

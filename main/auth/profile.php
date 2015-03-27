@@ -692,6 +692,8 @@ if (!empty($msg_is_not_password)){
     Display::addFlash(Display :: return_message($warning_msg, 'warning', false));
 }
 
+$gravatarEnabled = api_get_configuration_value('gravatar_enabled');
+
 // User picture size is calculated from SYSTEM path
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
@@ -701,7 +703,10 @@ $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web',
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = $image_dir.$image;
-$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
+if (!$gravatarEnabled) {
+    $image_file .= '?rand='.time();
+}
+$img_attributes = 'src="'.$image_file.'" '
     .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
     .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
 
@@ -711,8 +716,10 @@ $big_image = $image_dir.'big_'.$image;
 $big_image_size     = api_getimagesize($big_image);
 $big_image_width    = $big_image_size['width'];
 $big_image_height   = $big_image_size['height'];
-$url_big_image      = $big_image.'?rnd='.time();
-
+$url_big_image = $image_file;
+if (!$gravatarEnabled) {
+    $url_big_image = $big_image.'?rnd='.time();
+}
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
 $tpl = new Template(get_lang('ModifyProfile'));

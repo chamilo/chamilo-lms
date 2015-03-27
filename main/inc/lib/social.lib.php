@@ -1410,8 +1410,12 @@ class SocialManager extends UserManager
         if (!empty($message['path'])) {
             $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
             $pathImg = $pathUserInfo['dir'] . 'message_attachments';
-            $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
-            $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
+            $imageBig = $pathUserInfo['file'];
+            $imageSmall = $pathUserInfo['file'];
+            if (!api_get_configuration_value('gravatar_enabled')) {
+                $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
+                $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
+            }
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 

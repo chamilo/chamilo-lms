@@ -17,16 +17,73 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = array(
-        'oembed',
-        'video',
+        'asciimath',
+        'asciisvg',
+        'a11yhelp',
+        'about',
+        'adobeair',
+        'ajax',
         'audio',
-        'wordcount',
-        'templates',
-        'justify',
+        'bidi',
+        'clipboard',
+        'codesnippet',
+        'codesnippetgeshi',
         'colorbutton',
+        'colordialog',
+        'dialog',
+        'dialogui',
+        'dialogadvtab',
+        'div',
+        'divarea',
+        'docprops',
+        'find',
         'flash',
+        'font',
+        'forms',
+        'glossary',
+        'iframe',
+        'iframedialog',
+        'image',
+        'image2',
+        'indentblock',
+        'justify',
+        'language',
+        'leaflet',
+        'lineutils',
         'link',
-        'table'
+        'liststyle',
+        'magicline',
+        'mathjax',
+        'newpage',
+        'oembed',
+        'pagebreak',
+        'panelbutton',
+        'pastefromword',
+        'placeholder',
+        'preview',
+        'print',
+        'save',
+        'scayt',
+        'selectall',
+        'sharedspace',
+        'showblocks',
+        'smiley',
+        'sourcedialog',
+        'specialchar',
+        'stylesheetparser',
+        'table',
+        'tableresize',
+        'toolbarswitch',
+        'tabletools',
+        'templates',
+        'uicolor',
+        'video',
+        'widget',
+        'wikilink',
+        'wordcount',
+        'wsc',
+        'xml',
+        'youtube'
     );
 
     /**
@@ -92,25 +149,44 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
-        // Original from ckeditor
-        $config['toolbarGroups'] = array(
-            array('name' => 'document',   'groups' =>array('mode', 'document', 'doctools')),
-            array('name' => 'clipboard',  'groups' =>array('clipboard', 'undo', )),
-            array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
+        $config['toolbar_minToolbar'] = [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'YouTube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
+
+        $config['toolbar_maxToolbar'] = [
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Flash',
+                'YouTube',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Asciimath',
+                'Asciisvg'
+            ],
             '/',
-            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',   'groups' =>array('list', 'indent', 'blocks', 'align')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'allMedias'),
-            array('name' => 'mode')
-        );
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['Toolbarswitch'],
+        ];
 
         // file manager (elfinder)
 
@@ -143,6 +219,10 @@ class Basic extends Toolbar
             // Option to limit the words in the Editor
             'wordLimit' => 'unlimited'
         );*/
+
+        $config['toolbar'] = 'minToolbar';
+        $config['smallToolbar'] = 'minToolbar';
+        $config['maximizedToolbar'] = 'maxToolbar';
 
         //$config['skins'] = 'moono';
 

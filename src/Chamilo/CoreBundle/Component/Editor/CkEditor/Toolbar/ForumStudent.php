@@ -4,29 +4,27 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
- * 
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
+ * ForumStudent toolbar configuration
+ *
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
-class LearningPathDocuments extends Basic
+class ForumStudent extends Basic
 {
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'YouTube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
+
         $config['toolbar_maxToolbar'] = [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -34,9 +32,9 @@ class LearningPathDocuments extends Basic
                 'Image',
                 'Mapping',
                 'Video',
-                'Oembed',
-                'YouTube',
                 'Flash',
+                'YouTube',
+                'Oembed',
                 'Audio',
                 'leaflet',
                 'Smiley',
@@ -50,11 +48,9 @@ class LearningPathDocuments extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
             ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['PageBreak', 'ShowBlocks'],
+            ['Toolbarswitch'],
         ];
-
-        $config['fullPage'] = true;
 
         return $config;
     }

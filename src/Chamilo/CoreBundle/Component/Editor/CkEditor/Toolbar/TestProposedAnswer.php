@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class TestProposedAnswer
+ * TestProposedAnswer toolbar configuration
+ * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestProposedAnswer extends Basic
@@ -14,23 +15,48 @@ class TestProposedAnswer extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            //array('name' => 'document'),
-            array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
-            array('name' => 'links'),
-            array('name' => 'insert'),
+        $config['toolbar_minToolbar'] = [
+            ['Templates'],
+            ['PasteFromWord'],
+            ['Link'],
+            ['Image', 'Video', 'Flash', 'Audio', 'Asciimath', 'Asciisvg'],
+            ['Table'],
+            ['Bold'],
+            ['Source', 'Toolbarswitch']
+        ];
+
+        $config['toolbar_maxToolbar'] = [
+            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Flash',
+                'YouTube',
+                'Oembed',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Asciimath',
+                'Asciisvg'
+            ],
             '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'mode')
-        );
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['Toolbarswitch'],
+        ];
 
         $config['toolbarCanCollapse'] = true;
         $config['toolbarStartupExpanded'] = false;
-        //$config['width'] = '100';
-        //$config['height'] = '200';
+
         return $config;
     }
 }

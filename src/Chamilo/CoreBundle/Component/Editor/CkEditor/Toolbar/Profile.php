@@ -4,13 +4,12 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
+ * Profile toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class LearningPathDocuments extends Basic
+class Profile extends Basic
 {
-
     /**
      * @return mixed
      */
@@ -19,10 +18,10 @@ class LearningPathDocuments extends Basic
         $config['toolbar_minToolbar'] = [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
         $config['toolbar_maxToolbar'] = [
@@ -40,23 +39,19 @@ class LearningPathDocuments extends Basic
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar',
-                'Asciimath',
-                'Asciisvg'
+                'SpecialChar'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            // spell check
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch']
         ];
 
-        $config['fullPage'] = true;
-
         return $config;
     }
-
 }

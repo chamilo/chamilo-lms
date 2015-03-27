@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
+ * FAQ toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class LearningPathDocuments extends Basic
+class FAQ extends Basic
 {
 
     /**
@@ -17,14 +17,15 @@ class LearningPathDocuments extends Basic
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['NewPage', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
+
         $config['toolbar_maxToolbar'] = [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
@@ -40,9 +41,7 @@ class LearningPathDocuments extends Basic
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar',
-                'Asciimath',
-                'Asciisvg'
+                'SpecialChar'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -53,8 +52,6 @@ class LearningPathDocuments extends Basic
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch']
         ];
-
-        $config['fullPage'] = true;
 
         return $config;
     }

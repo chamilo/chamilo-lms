@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class UniqueAnswerImage
+ * UniqueAnswerImage toolbar configuration
+ * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class UniqueAnswerImage extends Basic

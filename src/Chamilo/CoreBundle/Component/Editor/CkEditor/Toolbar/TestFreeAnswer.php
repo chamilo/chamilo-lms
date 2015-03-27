@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class TestFreeAnswer
+ * TestFreeAnswer toolbar configuration
+ * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestFreeAnswer extends Basic
@@ -14,19 +15,30 @@ class TestFreeAnswer extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
+        $config['toolbar_minToolbar'] = [
+            ['NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Toolbarswitch']
+        ];
+        $config['toolbar_maxToolbar'] = [
+            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            ['Image', 'Mapping', 'Video', 'Oembed', 'YouTube', 'Flash', 'Audio', 'leaflet', 'Smiley', 'SpecialChar',  'Asciimath', ],
             '/',
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks'],
+            ['Toolbarswitch']
+        ];
 
         $config['fullPage'] = false;
 

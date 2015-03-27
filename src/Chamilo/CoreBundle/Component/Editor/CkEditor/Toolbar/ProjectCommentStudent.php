@@ -4,29 +4,25 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
+ * ProjectCommentStudent toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class LearningPathDocuments extends Basic
+class ProjectCommentStudent extends Basic
 {
-
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor'],
             ['Toolbarswitch']
         ];
         $config['toolbar_maxToolbar'] = [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -41,8 +37,7 @@ class LearningPathDocuments extends Basic
                 'leaflet',
                 'Smiley',
                 'SpecialChar',
-                'Asciimath',
-                'Asciisvg'
+                'Asciimath'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -50,11 +45,9 @@ class LearningPathDocuments extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
             ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch']
         ];
-
-        $config['fullPage'] = true;
 
         return $config;
     }

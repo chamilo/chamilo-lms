@@ -4,25 +4,24 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathDocuments toolbar configuration
+ * Messages toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class LearningPathDocuments extends Basic
+class Messages extends Basic
 {
-
     /**
      * @return mixed
      */
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['NewPage', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
         $config['toolbar_maxToolbar'] = [
@@ -41,6 +40,7 @@ class LearningPathDocuments extends Basic
                 'leaflet',
                 'Smiley',
                 'SpecialChar',
+                'Inserthtml',
                 'Asciimath',
                 'Asciisvg'
             ],
@@ -55,8 +55,8 @@ class LearningPathDocuments extends Basic
         ];
 
         $config['fullPage'] = true;
+        //$config['height'] = '200';
 
         return $config;
     }
-
 }

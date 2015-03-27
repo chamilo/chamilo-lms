@@ -4,27 +4,30 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Announcements toolbar configuration
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
+ * Wiki toolbar configuration
+ * 
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class Announcements extends Basic
+class Wiki extends Basic
 {
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             ['Toolbarswitch']
         ];
+
+        $config['forcePasteAsPlainText'] = false;
+
+        if (api_get_setting('force_wiki_paste_as_plain_text') == 'true') {
+            $config['forcePasteAsPlainText'] = true;
+        }
 
         return $config;
     }

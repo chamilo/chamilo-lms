@@ -4,37 +4,27 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class Documents
+ * Documents toolbar configuration
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class Documents extends Basic
 {
-    public $plugins = array(
-    );
 
     /**
      * @return mixed
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' => array('document', 'doctools')),
-            array('name' => 'clipboard', 'groups' => array('clipboard', 'undo')),
-            array('name' => 'editing',   'groups' => array( 'find', 'selection', 'spellchecker')),
-            //array('name' => 'forms'),
-            '/',
-            array('name' => 'basicstyles', 'groups' => array('basicstyles', 'cleanup')),
-            array('name' => 'paragraph',   'groups' => array('list', 'indent', 'blocks', 'align', 'bidi')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            //array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
+        $config['toolbar_minToolbar'] = [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'YouTube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch', 'ShowBlocks']
+        ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
         //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
@@ -56,4 +46,5 @@ class Documents extends Basic
         }
         return $plugins;
     }
+
 }

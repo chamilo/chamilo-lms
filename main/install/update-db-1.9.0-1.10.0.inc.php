@@ -39,14 +39,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         exit ();
     }
 
-    $_configuration['db_glue'] = get_config_param('dbGlu');
-
-    if ($singleDbForm) {
-        $_configuration['table_prefix'] 	= get_config_param('courseTablePrefix');
-        $_configuration['main_database'] 	= get_config_param('mainDbName');
-        $_configuration['db_prefix'] 		= get_config_param('dbNamePrefix');
-    }
-
     /*   Normal upgrade procedure: start by updating the main database */
 
     // If this script has been included by index.php, not update_courses.php, so
@@ -98,13 +90,6 @@ if (defined('SYSTEM_INSTALLATION')) {
 
         }
     }
-
-    $prefix = '';
-    if ($singleDbForm) {
-        $prefix =  get_config_param('table_prefix');
-    }
-
-    Log::notice("Database prefix: '$prefix'");
 
     // Get the courses databases queries list (c_q_list)
 

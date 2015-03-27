@@ -17,8 +17,6 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = array(
-        'asciimath',
-        'asciisvg',
         'a11yhelp',
         'about',
         'adobeair',
@@ -40,7 +38,6 @@ class Basic extends Toolbar
         'flash',
         'font',
         'forms',
-        'glossary',
         'iframe',
         'iframedialog',
         'image',
@@ -48,12 +45,10 @@ class Basic extends Toolbar
         'indentblock',
         'justify',
         'language',
-        'leaflet',
         'lineutils',
         'link',
         'liststyle',
         'magicline',
-        'mathjax',
         'newpage',
         'oembed',
         'pagebreak',
@@ -73,7 +68,6 @@ class Basic extends Toolbar
         'stylesheetparser',
         'table',
         'tableresize',
-        'toolbarswitch',
         'tabletools',
         'templates',
         'uicolor',
@@ -82,8 +76,7 @@ class Basic extends Toolbar
         'wikilink',
         'wordcount',
         'wsc',
-        'xml',
-        'youtube'
+        'xml'
     );
 
     /**
@@ -102,6 +95,10 @@ class Basic extends Toolbar
     ) {
         // Adding plugins depending of platform conditions
         $plugins = array();
+
+        if (api_get_setting('show_glossary_in_documents') != 'none') {
+            $plugins[] = 'glossary';
+        }
 
         if (api_get_setting('youtube_for_students') == 'true') {
             $plugins[] = 'youtube';
@@ -138,6 +135,10 @@ class Basic extends Toolbar
 
         if (api_get_setting('block_copy_paste_for_students') == 'true') {
             // Missing
+        }
+
+        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+            $plugins[] = 'toolbarswitch';
         }
 
         $this->defaultPlugins = array_merge($this->defaultPlugins, $plugins);
@@ -203,6 +204,8 @@ class Basic extends Toolbar
         filebrowserUploadUrl*/
 
         $config['extraPlugins'] = $this->getPluginsToString();
+
+        $config['format_tags'] = 'p;h1;h2;h3;h4;h5;h6';
 
         //$config['oembed_maxWidth'] = '560';
         //$config['oembed_maxHeight'] = '315';

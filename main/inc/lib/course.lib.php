@@ -1131,7 +1131,7 @@ class CourseManager
      *
      * @param int the id of the user
      * @param array info about the course (comes from course table, see database lib)
-     *
+     * @deprecated linked_courses definition doesn't exists
      * @return true if the user is registered in the real course or linked courses, false otherwise
      */
     public static function is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id = '')
@@ -2481,19 +2481,24 @@ class CourseManager
         }
 
         // get course list auto-register
-        $sql = "SELECT DISTINCT(tcfv.course_code) FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf
+        $sql = "SELECT DISTINCT(tcfv.course_code)
+                FROM $tbl_course_field_value tcfv
+                INNER JOIN $tbl_course_field tcf
                 ON tcfv.field_id =  tcf.id $join_access_url
-                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1  $where_access_url";
-        $special_course_result = Database::query($sql);
-        $special_course_list = array();
+                WHERE
+                    tcf.field_variable = 'special_course' AND
+                    tcfv.field_value = 1  $where_access_url";
 
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = $result_row['course_code'];
+        $result = Database::query($sql);
+        $courseList = array();
+
+        if (Database::num_rows($result) > 0) {
+            while ($result_row = Database::fetch_array($result)) {
+                $courseList[] = $result_row['course_code'];
             }
         }
-        return $special_course_list;
+
+        return $courseList;
     }
 
     /**
@@ -3515,10 +3520,17 @@ class CourseManager
             $with_special_courses = ' course.code IN ("' . implode('","', $special_course_list) . '")';
         }
         $html = null;
-
+        $courseCount = 0;
         if (!empty($with_special_courses)) {
-            $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                           course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id
+            $sql = "SELECT
+                        course.id,
+                        course.code,
+                        course.subscribe subscr,
+                        course.unsubscribe unsubscr,
+                        course_rel_user.status status,
+                        course_rel_user.sort sort,
+                        course_rel_user.user_course_cat user_course_cat,
+                        course_rel_user.user_id
                     FROM $tbl_course course
                     LEFT JOIN $tbl_course_user course_rel_user
                     ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
@@ -3526,6 +3538,7 @@ class CourseManager
 
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
+
             $key = 0;
 
             if ($number_of_courses > 0) {
@@ -3534,9 +3547,9 @@ class CourseManager
                     if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
                         continue;
                     }
+                    $courseCount++;
                     $params = array();
                     // Get notifications.
-
                     $course_info['id_session'] = null;
                     $course_info['status'] = $course['status'];
                     $show_notification = Display::show_notification($course_info);
@@ -3609,7 +3622,10 @@ class CourseManager
             }
         }
 
-        return $html;
+        return [
+            'html' => $html,
+            'course_count' => $courseCount
+        ];
     }
 
     /**
@@ -3632,6 +3648,7 @@ class CourseManager
         $sql = "SELECT id, title FROM $tucc WHERE user_id='" . $user_id . "' ORDER BY sort ASC";
         $result = Database::query($sql);
         $html = null;
+        $courseCount = 0;
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $params = array(
@@ -3640,16 +3657,24 @@ class CourseManager
                 'title' => $row['title'],
                 'class' => 'table_user_course_category'
             );
+
+            $courseInCategory = self:: display_courses_in_category($row['id'], $load_dirs);
             $html .= self::course_item_parent(
                 self::course_item_html($params, true),
-                self:: display_courses_in_category($row['id'], $load_dirs)
+                $courseInCategory['html']
             );
+            $courseCount += $courseInCategory['course_count'];
         }
 
         // Step 2: We display the course without a user category.
-        $html .= self:: display_courses_in_category(0, $load_dirs);
+        $courseInCategory = self:: display_courses_in_category(0, $load_dirs);
+        $html .= $courseInCategory['html'];
+        $courseCount += $courseInCategory['course_count'];
 
-        return $html;
+        return [
+            'html' => $html,
+            'course_count' => $courseCount
+        ];
     }
 
     /**
@@ -3710,7 +3735,7 @@ class CourseManager
 
         $course_list = array();
         $showCustomIcon = api_get_configuration_value('course_images_in_courses_list');
-
+        $courseCount = 0;
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
@@ -3728,6 +3753,8 @@ class CourseManager
             } else {
                 $course_list[] = $course_info['real_id'];
             }
+
+            $courseCount++;
 
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
@@ -3828,7 +3855,10 @@ class CourseManager
             $html .= self::course_item_html($params, $isSubcontent);
         }
 
-        return $html;
+        return [
+            'html' => $html,
+            'course_count' => $courseCount
+        ];
     }
 
     /**

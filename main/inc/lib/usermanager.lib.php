@@ -2734,7 +2734,6 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
                 $session_visibility = api_get_session_visibility($session_id);
@@ -2742,6 +2741,7 @@ class UserManager
                 if ($session_visibility == SESSION_INVISIBLE) {
                     continue;
                 }
+
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
                 $id_session = $enreg['id'];

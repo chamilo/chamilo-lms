@@ -148,17 +148,22 @@ class Certificate extends Model
     **/
     public function generate($params = array())
     {
-        //The user directory should be set
-        if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
+        // The user directory should be set
+        if (empty($this->certification_user_path) &&
+            $this->force_certificate_generation == false
+        ) {
             return false;
         }
+
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
 
         $my_category = Category :: load($this->certificate_data['cat_id']);
+
         if (isset($my_category[0]) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $user = api_get_user_info($this->user_id);
+
             $scoredisplay = ScoreDisplay :: instance();
             $scorecourse = $my_category[0]->calc_score($this->user_id);
             $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable');

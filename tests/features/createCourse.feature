@@ -10,11 +10,6 @@ Feature: Courses management as admin
     Then I should see "Course list"
     And I should not see "not authorized"
 
-  Scenario: See the course creation link on the courses list page
-    Given I am a platform administrator
-    And I am on "/main/admin/course_list.php"
-    Then I should see "Create a course"
-
   Scenario: See the course creation link on the admin page
     Given I am a platform administrator
     And I am on "/main/admin/index.php"

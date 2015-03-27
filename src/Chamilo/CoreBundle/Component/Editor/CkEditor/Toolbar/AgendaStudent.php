@@ -19,7 +19,7 @@ class AgendaStudent extends Basic
         $config['toolbar_minToolbar'] = [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'YouTube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter'],
             ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
@@ -36,7 +36,7 @@ class AgendaStudent extends Basic
                 'Mapping',
                 'Video',
                 'Flash',
-                'YouTube',
+                'Youtube',
                 'Oembed',
                 'Audio',
                 'leaflet',

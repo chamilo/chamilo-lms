@@ -19,7 +19,7 @@ class Carrers extends Basic
         $config['toolbar_minToolbar'] = [
             ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'YouTube', 'Audio', 'Table'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
@@ -35,7 +35,7 @@ class Carrers extends Basic
                 'Mapping',
                 'Video',
                 'Oembed',
-                'YouTube',
+                'Youtube',
                 'Flash',
                 'Audio',
                 'leaflet',

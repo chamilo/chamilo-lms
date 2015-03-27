@@ -34,7 +34,7 @@ class TestQuestionDescription extends Basic
                 'Mapping',
                 'Video',
                 'Flash',
-                'YouTube',
+                'Youtube',
                 'Oembed',
                 'Audio',
                 'leaflet',

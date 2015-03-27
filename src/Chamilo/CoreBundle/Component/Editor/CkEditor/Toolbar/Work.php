@@ -22,7 +22,7 @@ class Work extends Basic
         $config['toolbar_minToolbar'] = [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'YouTube', 'Audio', 'Table', 'Asciimath'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
@@ -38,7 +38,7 @@ class Work extends Basic
                 'Mapping',
                 'Video',
                 'Oembed',
-                'YouTube',
+                'Youtube',
                 'Flash',
                 'Audio',
                 'leaflet',

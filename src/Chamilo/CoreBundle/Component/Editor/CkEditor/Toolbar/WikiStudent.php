@@ -32,7 +32,7 @@ class WikiStudent extends Basic
                 'Mapping',
                 'Video',
                 'Oembed',
-                'YouTube',
+                'Youtube',
                 'Flash',
                 'Audio',
                 'leaflet',

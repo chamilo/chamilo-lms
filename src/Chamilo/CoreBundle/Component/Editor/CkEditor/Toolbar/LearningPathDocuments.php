@@ -19,7 +19,7 @@ class LearningPathDocuments extends Basic
         $config['toolbar_minToolbar'] = [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'YouTube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Youtube', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
@@ -35,7 +35,7 @@ class LearningPathDocuments extends Basic
                 'Mapping',
                 'Video',
                 'Oembed',
-                'YouTube',
+                'Youtube',
                 'Flash',
                 'Audio',
                 'leaflet',

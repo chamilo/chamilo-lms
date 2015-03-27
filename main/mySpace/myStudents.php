@@ -471,9 +471,9 @@ if (!empty($student_id)) {
     $big_image_size = api_getimagesize($big_image);
     $big_image_width = $big_image_size['width'];
     $big_image_height = $big_image_size['height'];
-    $url_big_image = $big_image;
+    $url_big_image = $image_file;
     if (!$gravatarEnabled) {
-        $url_big_image .= '?rnd=' . time();
+        $url_big_image = $big_image.'?rnd=' . time();
         $image_file .= '?rnd=' . time();
     }
 

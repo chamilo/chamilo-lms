@@ -10,7 +10,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') != 'true') {
+if (api_get_setting('allow_social_tool') != 'true' && !api_is_platform_admin()) {
     api_not_allowed();
 }
 

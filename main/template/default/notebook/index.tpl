@@ -13,7 +13,7 @@
             <a href="{{root}}&amp;action=export_csv" class="btn" title="{{'ExportAsCSV'|get_lang}}">
                 <i class="size-32 icon-export-csv"></i>
             </a>
-            <a href="javascript:void(0)" onclick="ui.remove_by_course('entries', this);return false;" class="btn delete_all" title="{{'DeleteAll'|get_lang}}">
+            <a href="javascript:void(0)" onclick="ui.remove_by_course('entries', this);return false;" class="btn btn-default" title="{{'DeleteAll'|get_lang}}">
                 <i class="size-32 icon-delete-all"></i>
             </a>
         </div>

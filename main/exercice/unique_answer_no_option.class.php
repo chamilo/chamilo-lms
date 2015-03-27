@@ -263,8 +263,8 @@ class UniqueAnswerNoOption extends Question
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $buttonGroup[] = $form->createElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn plus"');
-                $buttonGroup[] = $form->createElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn minus"');
+                $buttonGroup[] = $form->createElement('submit', 'moreAnswers','<i class="fa fa-plus"></i> '. get_lang('PlusAnswer'), 'class="btn btn-default"');
+                $buttonGroup[] = $form->createElement('submit', 'lessAnswers', '<i class="fa fa-minus"></i> '.get_lang('LessAnswer'), 'class="btn btn-default"');
                 $buttonGroup[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
             } else {
                 //setting the save button here and not in the question class.php

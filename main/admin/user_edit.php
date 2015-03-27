@@ -466,7 +466,10 @@ $big_image = $image_dir.'big_'.$image;
 $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
-$url_big_image = $big_image.'?rnd='.time();
+$url_big_image = $image_file;
+if (!api_get_configuration_value('gravatar_enabled')) {
+    $url_big_image = $big_image.'?rnd='.time();
+}
 
 $content = null;
 if ($image == '') {

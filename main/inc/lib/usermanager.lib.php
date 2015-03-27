@@ -1268,10 +1268,6 @@ class UserManager
         if (empty($picture_filename) ||
             (!empty($picture_filename) && !file_exists($systemImagePath.$picture_filename))
         ) {
-            if ($anonymous) {
-                return $noPicturePath;
-            }
-
             if (api_get_configuration_value('gravatar_enabled')) {
                 $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
                 $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
@@ -1285,6 +1281,9 @@ class UserManager
                         api_get_configuration_value('gravatar_type')
                     )
                 );
+            }
+            if ($anonymous) {
+                return $noPicturePath;
             }
         }
 

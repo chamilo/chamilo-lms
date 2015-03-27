@@ -911,10 +911,10 @@ class GroupPortalManager
             default: // Base: empty, the result path below will be relative.
                 $base = '';
         }
-        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
+
         $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 
-        if ((empty($id) || empty($type)) && !$gravatarEnabled) {
+        if (empty($id) || empty($type)) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -924,7 +924,7 @@ class GroupPortalManager
         $sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
         $res = Database::query($sql);
 
-        if (!Database::num_rows($res) && !$gravatarEnabled) {
+        if (!Database::num_rows($res)) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -941,21 +941,6 @@ class GroupPortalManager
             }
         } else {
             $dir = $base.'upload/users/groups/'.$id.'/';
-        }
-
-        if ($gravatarEnabled) {
-            $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
-            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                $avatarSize['width'] :
-                $avatarSize['height'];
-            return array(
-                'dir' => '',
-                'file' => self::getGravatar(
-                    $user['email'],
-                    $avatarSize,
-                    api_get_configuration_value('gravatar_type')
-                )
-            );
         }
 
         if (empty($picture_filename) && $anonymous) {
@@ -1000,15 +985,12 @@ class GroupPortalManager
      */
     public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM, $style = '')
     {
-        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
         $patch_profile = 'upload/users/groups/';
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
             $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
-            if (!$gravatarEnabled) {
-                return $picture;
-            }
+            return $picture;
         }
 
         switch ($size_picture) {
@@ -1047,9 +1029,6 @@ class GroupPortalManager
             } else {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_group.png';
             }
-        }
-        if ($gravatarEnabled) {
-            $picture['file'] = $image_array['file'];
         }
         return $picture;
     }

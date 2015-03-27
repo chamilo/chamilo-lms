@@ -2724,9 +2724,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
     PRIMARY KEY  (id)
 );
 
-
-
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (1, 'special_course', 'Special course', '', 1 , 1);
 
 --
 -- Table structure for table block
@@ -4729,5 +4727,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.30' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.31' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

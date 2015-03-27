@@ -928,13 +928,14 @@ class SocialManager extends UserManager
             $status_icon = Display::span('', array('class' => 'online_user_in_text'));
             $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
 
-            if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
+            $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+            if (($image_array['file'] == 'unknown.jpg'
+                || !file_exists($image_array['dir'].$image_array['file'])) &&
+                !api_get_configuration_value('gravatar_enabled')) {
                 $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-            } else {
-                $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
-                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+
             }
+            $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
             $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
             $html .= '<li class="col-md-'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
         }
@@ -972,12 +973,16 @@ class SocialManager extends UserManager
             $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
 
             $html .= '<div class ="thumbnail">';
+
+            $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
+            $sysdir = $sysdir_array['dir'];
+            $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
             if (strlen(trim($user_object->picture_uri)) > 0) {
-                $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
-                $sysdir = $sysdir_array['dir'];
-                $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
                 $webdir = $webdir_array['dir'];
-                $fullurl = $webdir.$user_object->picture_uri;
+                $fullurl = $webdir;
+                $fullurl .= api_get_configuration_value('gravatar_enabled') ?
+                    $webdir_array['file'] :
+                    $user_object->picture_uri;
                 $system_image_path = $sysdir.$user_object->picture_uri;
                 list($width, $height, $type, $attr) = @getimagesize($system_image_path);
                 $height += 30;
@@ -991,7 +996,9 @@ class SocialManager extends UserManager
                 //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
                 $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
             } else {
-                $html .= Display::return_icon('unknown.jpg', get_lang('Unknown'));
+                $html .= api_get_configuration_value('gravatar_enabled') ?
+                    '<img src="'.$webdir_array['file'].'" alt="'.$alt.'" />' :
+                    Display::return_icon('unknown.jpg', get_lang('Unknown'));
             }
             if (!empty($status)) {
                 $html .= '<div class="caption">'.$status.'</div>';

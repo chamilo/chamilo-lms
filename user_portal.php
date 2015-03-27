@@ -30,52 +30,48 @@ require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
-$user_id = api_get_user_id();
+$userId = api_get_user_id();
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
 
+$controller = new IndexManager(get_lang('MyCourses'));
+
+// Main courses and session list
+$courseAndSessions = $controller->return_courses_and_sessions($userId);
+
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
 
-	// Get the courses list
-	$personal_course_list = UserManager::get_personal_session_course_list($user_id);
-
-	$my_session_list = array();
-	$count_of_courses_no_sessions = 0;
-	$count_of_courses_with_sessions = 0;
-
-	foreach ($personal_course_list as $course) {
-		if (!empty($course['id_session'])) {
-			$my_session_list[$course['id_session']] = true;
-			$count_of_courses_with_sessions++;
-		} else {
-			$count_of_courses_no_sessions++;
-		}
-	}
-	$count_of_sessions = count($my_session_list);
+	$count_of_sessions = $courseAndSessions['session_count'];
+	$count_of_courses_no_sessions = $courseAndSessions['course_count'];
 
 	if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
-		$key = array_keys($personal_course_list);
-		$course_info = $personal_course_list[$key[0]];
-		$course_directory = $course_info['course_info']['path'];
-		$id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-		$url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$id_session;
+		$sessions = SessionManager::get_sessions_by_user($userId);
+		if (isset($sessions[0])) {
+			$sessionInfo = $sessions[0];
+			if (isset($sessionInfo['session_id'])) {
+				$url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$sessionInfo['session_id'];
 
-		header('location:'.$url);
-		exit;
+				header('Location:'.$url);
+				exit;
+			}
+		}
 	}
 
 	if (!isset($_SESSION['coursesAlreadyVisited']) &&
 		$count_of_sessions == 0 && $count_of_courses_no_sessions == 1
 	) {
-		$key = array_keys($personal_course_list);
-		$course_info = $personal_course_list[$key[0]];
-		$course_directory = $course_info['course_info']['path'];
-		$id_session = isset($course_info['id_session']) ? $course_info['id_session'] : 0;
-		$url = api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session;
-		header('location:'.$url);
-		exit;
+		$courses = CourseManager::get_courses_list_by_user_id($userId);
+
+		if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
+			$courseInfo = api_get_course_info($courses[0]['code']);
+			if (!empty($courseInfo)) {
+				$courseUrl = $courseInfo['course_public_url'];
+				header('Location:'.$courseUrl);
+				exit;
+			}
+		}
 	}
 }
 
@@ -123,38 +119,14 @@ if ($load_dirs) {
 	</script>';
 }
 
-/* Sniffing system */
 
-//store posts to sessions
-/*
-if (isset($_SESSION['sniff_navigator']) && $_SESSION['sniff_navigator']!="checked") {
-	$_SESSION['sniff_navigator']=Security::remove_XSS($_POST['sniff_navigator']);
-	$_SESSION['sniff_screen_size_w']=Security::remove_XSS($_POST['sniff_navigator_screen_size_w']);
-	$_SESSION['sniff__screen_size_h']=Security::remove_XSS($_POST['sniff_navigator_screen_size_h']);
-	$_SESSION['sniff_type_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_type_mimetypes']);
-	$_SESSION['sniff_suffixes_mimetypes']=Security::remove_XSS($_POST['sniff_navigator_suffixes_mimetypes']);
-	$_SESSION['sniff_list_plugins']=Security::remove_XSS($_POST['sniff_navigator_list_plugins']);
-	$_SESSION['sniff_check_some_activex']=Security::remove_XSS($_POST['sniff_navigator_check_some_activex']);
-	$_SESSION['sniff_check_some_plugins']=Security::remove_XSS($_POST['sniff_navigator_check_some_plugins']);
-	$_SESSION['sniff_java']=Security::remove_XSS($_POST['sniff_navigator_java']);
-	$_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_java_sun_ver']);
-}
-*/
-/* MAIN CODE */
-
-$controller = new IndexManager(get_lang('MyCourses'));
-
-
-
-// Main courses and session list
-$courses_and_sessions = $controller->return_courses_and_sessions($user_id);
 
 //Show the chamilo mascot
-if (empty($courses_and_sessions) && !isset($_GET['history'])) {
+if (empty($courseAndSessions['html']) && !isset($_GET['history'])) {
 	$controller->tpl->assign('welcome_to_course_block', $controller->return_welcome_to_course_block());
 }
 
-$controller->tpl->assign('content', $courses_and_sessions);
+$controller->tpl->assign('content', $courseAndSessions['html']);
 
 if (api_get_setting('allow_browser_sniffer') == 'true') {
 	if ($_SESSION['sniff_navigator']!="checked") {

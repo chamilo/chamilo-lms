@@ -224,13 +224,13 @@ $url_list = UrlManager::get_url_data();
 					<?php
 					if($ajax_search) {
 						?>
-						<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
+						<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
 					<?php
 					} else {
 						?>
-						<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
+						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ><i class="fa fa-plus"></i></button>
 						<br /><br />
-						<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
+						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ><i class="fa fa-minus"></i></button>
 					<?php
 					}
 					?>

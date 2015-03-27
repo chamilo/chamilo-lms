@@ -159,14 +159,14 @@ class MultipleAnswerCombination extends Question
                 $buttonGroup[] = $form->createElement(
                     'submit',
                     'lessAnswers',
-                    get_lang('LessAnswer'),
-                    'class="btn minus"'
+                    '<i class="fa fa-minus"></i> '.get_lang('LessAnswer'),
+                    'class="btn btn-default"'
                 );
                 $buttonGroup[] = $form->createElement(
                     'submit',
                     'moreAnswers',
-                    get_lang('PlusAnswer'),
-                    'class="btn plus"'
+                    '<i class="fa fa-plus"></i> '.get_lang('PlusAnswer'),
+                    'class="btn btn-default"'
                 );
                 $buttonGroup[] = $form->createElement(
                     'submit',

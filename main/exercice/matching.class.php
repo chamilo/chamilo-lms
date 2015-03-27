@@ -130,8 +130,8 @@ class Matching extends Question
         $group = array();
 
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $group[] = $form->createElement('submit', 'lessMatches', get_lang('DelElem'), 'class="btn minus"');
-            $group[] = $form->createElement('submit', 'moreMatches', get_lang('AddElem'), 'class="btn plus"');
+            $group[] = $form->createElement('submit', 'lessMatches', get_lang('DelElem'), 'class="btn btn-default"');
+            $group[] = $form->createElement('submit', 'moreMatches', get_lang('AddElem'), 'class="btn btn-default"');
         } else {
             $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessMatches');
             $renderer->setElementTemplate('{element}</div></div>', 'moreMatches');

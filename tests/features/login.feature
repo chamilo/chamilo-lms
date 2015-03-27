@@ -1,14 +1,30 @@
-# features/createUser.feature
+# features/login.feature
 @common
 Feature: User login
   In order to log in
-  As a registered user
+  As any registered user
   I need to be able to enter my details in the form and get in
 
   Scenario: Login as admin user successfully
-    Given I am on "/index.php"
-    When I fill in "login" with "admin"
-    And I fill in "password" with "admin"
-    And I press "submitAuth"
-    Then I should see "John Doe"
-    And I should see "Administration"
+    Given I am a platform administrator
+    Then |I should not see an "<div class=\"alert alert-danger\">" element
+
+  Scenario: Login as student user successfully
+    Given I am a student
+    Then |I should not see an "<div class=\"alert alert-danger\">" element
+
+  Scenario: Login as teacher successfully
+    Given I am a teacher
+    Then |I should not see an "<div class=\"alert alert-danger\">" element
+
+  Scenario: Login as HRD successfully
+    Given I am an HR manager
+    Then |I should not see an "<div class=\"alert alert-danger\">" element
+
+  Scenario: Login as student bott successfully
+    Given I am a student boss
+    Then |I should not see an "<div class=\"alert alert-danger\">" element
+
+  Scenario: Login as invitee successfully
+    Given I am an invitee
+    Then |I should not see an "<div class=\"alert alert-danger\">" element

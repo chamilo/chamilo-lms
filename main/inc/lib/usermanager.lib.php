@@ -55,7 +55,7 @@ class UserManager
      * @param    string Phone number    (optional)
      * @param    string Picture URI        (optional)
      * @param    string Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param    string Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+     * @param    string Account expiration date (optional, defaults to null)
      * @param    int     Whether the account is enabled or disabled by default
      * @param    int     The department of HR in which the user is registered (optional, defaults to 0)
      * @param     array Extra fields
@@ -79,7 +79,7 @@ class UserManager
         $phone = '',
         $picture_uri = '',
         $auth_source = PLATFORM_AUTH_SOURCE,
-        $expiration_date = null,
+        $expirationDate = null,
         $active = 1,
         $hr_dept_id = 0,
         $extra = null,
@@ -163,10 +163,19 @@ class UserManager
 
         $currentDate = api_get_utc_datetime();
         $now = new DateTime($currentDate);
-        $manager = Database::getManager();
 
-        if (!empty($expiration_date)) {
-            $expiration_date = new \DateTime($expiration_date);
+        if (empty($expirationDate)) {
+            // Default expiration date
+            // if there is a default duration of a valid account then
+            // we have to change the expiration_date accordingly
+            $expirationDate = new DateTime($currentDate);
+            if (api_get_setting('account_valid_duration') != '') {
+                $days = intval(api_get_setting('account_valid_duration'));
+                $expirationDate->modify('+'.$days.' day');
+            }
+        } else {
+            $expirationDate = api_get_utc_datetime($expirationDate);
+            $expirationDate = new \DateTime($expirationDate);
         }
 
         $user = new User();
@@ -183,32 +192,13 @@ class UserManager
             ->setPhone($phone)
             ->setLanguage($language)
             ->setRegistrationDate($now)
-            ->setExpirationDate($expiration_date)
+            ->setExpirationDate($expirationDate)
             ->setHrDeptId($hr_dept_id)
             ->setActive($active);
 
+        $manager = Database::getManager();
         $manager->persist($user);
         $manager->flush();
-
-        /*$sql = "INSERT INTO $table_user
-                SET lastname =         '".Database::escape_string(trim($lastName))."',
-                firstname =         '".Database::escape_string(trim($firstName))."',
-                username =            '".Database::escape_string(trim($loginName))."',
-                status =             '".Database::escape_string($status)."',
-                password =             '".Database::escape_string($password)."',
-                email =             '".Database::escape_string($email)."',
-                official_code    =     '".Database::escape_string($official_code)."',
-                picture_uri     =     '".Database::escape_string($picture_uri)."',
-                creator_id      =     '".Database::escape_string($creator_id)."',
-                auth_source =         '".Database::escape_string($auth_source)."',
-                phone =             '".Database::escape_string($phone)."',
-                language =             '".Database::escape_string($language)."',
-                registration_date = '".$current_date."',
-                expiration_date =     '".Database::escape_string($expiration_date)."',
-                hr_dept_id =         '".Database::escape_string($hr_dept_id)."',
-                active =             '".Database::escape_string($active)."'";
-
-        $result = Database::query($sql);*/
         $userId = $user->getId();
 
         if (!empty($userId)) {
@@ -251,7 +241,7 @@ class UserManager
                     $plugin = new AppPlugin();
 
                     $additionalParameters = array(
-                        'smsType' => constant($plugin->getSMSPluginName().'::WELCOME_LOGIN_PASSWORD'),
+                        'smsType' => constant($plugin->getSMSPluginName().'::   WELCOME_LOGIN_PASSWORD'),
                         'userId' => $return,
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
@@ -677,6 +667,7 @@ class UserManager
         }
 
         if (!empty($expiration_date)) {
+            $expiration_date = api_get_utc_datetime($expiration_date);
             $expiration_date = new \DateTime($expiration_date);
         }
 
@@ -2743,7 +2734,6 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
                 $session_visibility = api_get_session_visibility($session_id);
@@ -2752,6 +2742,8 @@ class UserManager
                     continue;
                 }
 
+                // This query is horribly slow when more than a few thousand
+                // users and just a few sessions to which they are subscribed
                 $id_session = $enreg['id'];
                 $personal_course_list_sql = "SELECT DISTINCT
                         course.code code,

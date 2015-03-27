@@ -408,7 +408,7 @@ if ($form->validate()) {
             }
         }
 
-        $status = isset($values['status']) ? $values['status'] : null;
+        $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
 
         // Creates a new user
@@ -479,14 +479,6 @@ if ($form->validate()) {
             if ($store_extended) {
                 $sql .= implode(',', $sql_set);
                 $sql .= " WHERE user_id = ".intval($user_id)."";
-                Database::query($sql);
-            }
-
-            // if there is a default duration of a valid account then we have to change the expiration_date accordingly
-            if (api_get_setting('account_valid_duration') != '') {
-                $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
-                        SET expiration_date='registration_date+1'
-                        WHERE user_id='".$user_id."'";
                 Database::query($sql);
             }
 

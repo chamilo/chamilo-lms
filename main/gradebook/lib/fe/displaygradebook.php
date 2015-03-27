@@ -341,8 +341,10 @@ class DisplayGradebook
                     $my_course_id = api_get_course_id();
                     $my_file = substr($_SESSION['gradebook_dest'], 0, 5);
 
-                    $header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' . Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . '</a>';
-                    $header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?' . $my_api_cidreq . '&amp;cat_id=' . (int) $_GET['selectcat'] . '">' . Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'), '', ICON_SIZE_MEDIUM) . '</a>';
+                    $header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' .
+                        Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . '</a>';
+                    $header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?' . $my_api_cidreq . '&amp;cat_id=' . (int) $_GET['selectcat'] . '">' .
+                        Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'), '', ICON_SIZE_MEDIUM) . '</a>';
 
                     $visibility_icon = ($catobj->is_visible() == 0) ? 'invisible' : 'visible';
                     $visibility_command = ($catobj->is_visible() == 0) ? 'set_visible' : 'set_invisible';
@@ -380,7 +382,7 @@ class DisplayGradebook
      * where we have only one calification per course or session)
      * @return void Everything is printed on screen upon closing
      */
-    static function display_header_gradebook(
+    static function header(
         $catobj,
         $showtree,
         $selectcat,
@@ -391,8 +393,22 @@ class DisplayGradebook
         $show_add_link = true,
         $certificateLinkInfo = null
     ) {
+
+        $userId = api_get_user_id();
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
+
         // Student.
-        $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+        $status = CourseManager::get_user_in_course_status($userId, $courseCode);
+
+        if (!empty($sessionId)) {
+            $sessionStatus = SessionManager::get_user_status_in_course_session(
+                $userId,
+                $courseCode,
+                $sessionId
+            );
+        }
+
         $objcat = new Category();
         $course_id = CourseManager::get_course_by_category($selectcat);
         $message_resource = $objcat->show_message_resource_delete($course_id);
@@ -403,7 +419,15 @@ class DisplayGradebook
         $sum_categories_weight_array = array();
 
         if (isset($catobj) && !empty($catobj)) {
-            $categories = Category::load(null, null, null, $catobj->get_id());
+            $categories = Category::load(
+                null,
+                null,
+                null,
+                $catobj->get_id(),
+                null,
+                $sessionId
+            );
+
             if (!empty($categories)) {
                 foreach ($categories as $category) {
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
@@ -413,23 +437,15 @@ class DisplayGradebook
             }
         }
 
-        if (!$is_course_admin && $status <> 1 && $selectcat <> 0) {
-            $user_id = api_get_user_id();
+        if (!$is_course_admin && ($status <> 1 || $sessionStatus == 0) && $selectcat <> 0) {
 
             $catcourse = Category::load($catobj->get_id());
-            $main_weight = $catcourse[0]->get_weight();
+            /** @var Category $category */
+            $category = $catcourse[0];
+            $main_weight = $category->get_weight();
             $scoredisplay = ScoreDisplay :: instance();
-            //$categories = Category::getCategories($catcourse[0]->get_id());
-            // generating the total score for a course
-            /*if (count($categories) > 0) {
-                foreach ($categories as $category) {
-                    $allevals = $category->get_evaluations($user_id, true);
-                    $alllinks = $category->get_links($user_id, true);
-                    $catEvalsLinks = array_merge($allevals, $alllinks);
-                }
-            }*/
-            $allevals = $catcourse[0]->get_evaluations($user_id, true);
-            $alllinks = $catcourse[0]->get_links($user_id, true);
+            $allevals = $category->get_evaluations($userId, true);
+            $alllinks = $category->get_links($userId, true);
 
             $allEvalsLinks = array_merge($allevals, $alllinks);
 
@@ -438,13 +454,10 @@ class DisplayGradebook
 
             for ($count = 0; $count < count($allEvalsLinks); $count++) {
                 $item = $allEvalsLinks[$count];
-                $score = $item->calc_score($user_id);
+                $score = $item->calc_score($userId);
                 if (!empty($score)) {
                     $divide = $score[1] == 0 ? 1 : $score[1];
-                    //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                    //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
                     $item_value = $score[0] / $divide * $item->get_weight();
-                    //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
                     $item_value_total += $item_value;
                 }
             }
@@ -600,8 +613,6 @@ class DisplayGradebook
         if ($isDrhOfCourse) {
             $header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?' . $my_api_cidreq . '&selectcat=' . $catobj->get_id() . '">' .
                 Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM) . '</a>';
-            /*$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?' . $my_api_cidreq . '&amp;cat_id=' . (int) $_GET['selectcat'] . '">' .
-                Display::return_icon('certificate_list.png', get_lang('GradebookSeeListOfStudentsCertificates'), '', ICON_SIZE_MEDIUM) . '</a>';*/
         }
 
         $header .= '</div>';
@@ -609,7 +620,7 @@ class DisplayGradebook
         echo $header;
 
         if (api_is_allowed_to_edit(null, true)) {
-            $weight = ((intval($catobj->get_weight()) > 0) ? $catobj->get_weight() : 0);
+            $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = get_lang('TotalWeight') . ' : ' . $weight;
 
             $min_certification = (intval($catobj->get_certificate_min_score() > 0) ? $catobj->get_certificate_min_score() : 0);

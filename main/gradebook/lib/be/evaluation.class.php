@@ -218,34 +218,40 @@ class Evaluation implements GradebookItem
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'SELECT * FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
+
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.intval($id);
 			$paramcount ++;
 		}
+
 		if (isset ($user_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
+
 		if (isset ($course_code) && $course_code <> '-1') {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= " course_code = '".Database::escape_string($course_code)."'";
 			$paramcount ++;
 		}
+
 		if (isset ($category_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' category_id = '.intval($category_id);
 			$paramcount ++;
 		}
+
 		if (isset ($visible)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
+
 		if (isset ($locked)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';

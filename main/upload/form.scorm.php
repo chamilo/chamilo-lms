@@ -47,11 +47,16 @@ echo '<div class="actions">';
 echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-$form = new FormValidator('', 'POST', 'upload.php', '', 'id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"');
+$form = new FormValidator(
+    '',
+    'POST',
+    'upload.php',
+    '',
+    'id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"'
+);
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);
-
 $form->addElement('file', 'user_file', get_lang('FileToUpload'));
 $form->add_real_progress_bar('uploadScorm', 'user_file');
 $form->addRule('user_file', get_lang('ThisFieldIsRequired'), 'required');
@@ -71,11 +76,10 @@ if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
-$form->addElement('html', '<br /><br /><br />');
+$form->addButtonUpload(get_lang('Upload'));
 
 if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
-    require_once(api_get_path(PLUGIN_PATH)."/pens/chamilo_pens.php");
+    require_once api_get_path(PLUGIN_PATH)."/pens/chamilo_pens.php";
     $list = ChamiloPens::findAll();
     if (count($list) > 0) {
         $select_pens = $form->addElement('select', 'pens_package', get_lang('Or').' '.get_lang('select a PENS package'));

@@ -958,56 +958,57 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
     return $pageDiv;
 }
 
+/**
+ * Return URL to course catalog
+ * @param int $pageCurrent
+ * @param int $pageLength
+ * @param string $categoryCode
+ * @param int $hiddenLinks
+ * @param string $action
+ * @return string
+ */
+function getCourseCategoryUrl(
+    $pageCurrent,
+    $pageLength,
+    $categoryCode = null,
+    $hiddenLinks = null,
+    $action = null
+) {
+    $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
+    $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
+    $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
 
-    /**
-     * Return URL to course catalog
-     * @param int $pageCurrent
-     * @param int $pageLength
-     * @param string $categoryCode
-     * @param int $hiddenLinks
-     * @param string $action
-     * @return string
-     */
-    function getCourseCategoryUrl(
-        $pageCurrent,
-        $pageLength,
-        $categoryCode = null,
-        $hiddenLinks = null,
-        $action = null
-    ) {
-        $action = isset($action) ? Security::remove_XSS($action) : Security::remove_XSS($_REQUEST['action']);
-        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
+    $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
+    $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
+
+    $hiddenLinksRequest = isset($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
+    $hiddenLinks = isset($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 
         // Start URL with params
-        $pageUrl = api_get_self() .
-            '?action=' . $action .
-            '&category_code=' . (
-            isset($categoryCode) ? $categoryCode :
-                Security::remove_XSS($_REQUEST['category_code'])
-            ) .
-            '&hidden_links=' . (
-            isset($hiddenLinks) ? $hiddenLinks :
-                Security::remove_XSS($_REQUEST['hidden_links'])
-            ).
-            '&pageCurrent=' . $pageCurrent .
-            '&pageLength=' . $pageLength
-        ;
-        switch ($action) {
-            case 'subscribe' :
-                // for search
-                $pageUrl .=
-                    '&search_term=' . $searchTerm .
-                    '&search_course=1' .
-                    '&sec_token=' . $_SESSION['sec_token'];
-                break;
-            case 'display_courses' :
-                // No break
-            default :
-                break;
+    $pageUrl = api_get_self() .
+        '?action=' . $action .
+        '&category_code=' .$categoryCode.
+        '&hidden_links=' .$hiddenLinks.
+        '&pageCurrent=' . $pageCurrent .
+        '&pageLength=' . $pageLength
+    ;
 
-        }
+    switch ($action) {
+        case 'subscribe' :
+            // for search
+            $pageUrl .=
+                '&search_term=' . $searchTerm .
+                '&search_course=1' .
+                '&sec_token=' . $_SESSION['sec_token'];
+            break;
+        case 'display_courses' :
+            // No break
+        default :
+            break;
 
-        return $pageUrl;
+    }
+
+    return $pageUrl;
 }
 
 /**
@@ -1027,7 +1028,7 @@ function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $c
     );
 
     // If is current page ('active' class) clear URL
-    if (isset($liAttributes) && is_array($liAttributes)) {
+    if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {
         if (strpos('active', $liAttributes['class']) !== false) {
             $url = '';
         }

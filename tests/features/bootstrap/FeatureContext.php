@@ -3,6 +3,7 @@
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,
+    Behat\Behat\Context\Step\Given,
     Behat\Behat\Exception\PendingException;
 
 use Behat\Gherkin\Node\PyStringNode,
@@ -38,11 +39,99 @@ class FeatureContext extends MinkContext
     public function iAmAPlatformAdministrator()
     {
         return array(
-            new \Behat\Behat\Context\Step\Given('I am on homepage'),
-            new \Behat\Behat\Context\Step\Given('I fill in "login" with "admin"'),
-            new  \Behat\Behat\Context\Step\Given('I fill in "password" with "admin"'),
-            new  \Behat\Behat\Context\Step\Given('I press "submitAuth"')
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "admin"'),
+            new Given('I fill in "password" with "admin"'),
+            new Given('I press "submitAuth"')
         );
     }
-
+    /**
+     * @Given /^Test users exist$/
+     */
+    public function testUsersExist()
+    {
+        return array(
+            new Given('I am a platform administrator'),
+            new Given('I am on "/main/admin/filler.php?fill=users"')
+        );
+    }
+    /**
+     * @Given /^I am a session administrator$/
+     */
+    public function iAmASessionAdministrator()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "amaurichard"'),
+            new Given('I fill in "password" with "amaurichard"'),
+            new Given('I press "submitAuth"')
+        );
+    }
+    /**
+     * @Given /^I am a teacher$/
+     */
+    public function iAmATeacher()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "mmosquera"'),
+            new Given('I fill in "password" with "mmosquera"'),
+            new Given('I press "submitAuth"')
+        );
+    }
+    /**
+     * @Given /^I am a student$/
+     */
+    public function iAmAStudent()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "mbrandybuck"'),
+            new Given('I fill in "password" with "mbrandybuck"'),
+            new Given('I press "submitAuth"')
+        );
+    }
+    /**
+     * @Given /^I am an HR manager$/
+     */
+    public function iAmAnHR()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "ptook"'),
+            new Given('I fill in "password" with "ptook"'),
+            new Given('I press "submitAuth"')
+        );
+    }
+    /**
+     * @Given /^I am a student boss$/
+     */
+    public function iAmAStudentBoss()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "abaggins"'),
+            new Given('I fill in "password" with "abaggins"'),
+            new Given('I press "submitAuth"')
+        );
+    }
+    /**
+     * @Given /^I am an invitee$/
+     */
+    public function iAmAnInvitee()
+    {
+        return array(
+            new Given('I am on "/index.php?logout=logout"'),
+            new Given('I am on homepage'),
+            new Given('I fill in "login" with "bproudfoot"'),
+            new Given('I fill in "password" with "bproudfoot"'),
+            new Given('I press "submitAuth"')
+        );
+    }
 }

@@ -4,9 +4,7 @@
  * Special report for corporate users
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -22,9 +20,10 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : -1;
 
 // jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report_resumed';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report_resumed&session_id='.$sessionId;
 
 $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
@@ -109,15 +108,13 @@ if (!empty($actions)) {
 }
 
 if (!api_is_student_boss()) {
-    $content .= '<div class="pull-right">';
     $content .= Display::url(
         get_lang("CompanyReport"),
         api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php",
         array(
-            'class' => 'btn btn-info'
+            'class' => 'btn btn-success'
         )
     );
-    $content .= '</div>';   
 }
 
 $content .= '</div>';

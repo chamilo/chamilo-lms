@@ -1040,17 +1040,23 @@ class IndexManager
 
         $courses_html = '';
         $special_courses = '';
+        $sessionCount = 0;
+        $courseCount = 0;
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
-            $special_courses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
+            $specialCourses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
+            $special_courses = $specialCourses['html'];
             // Display courses.
-            $courses_html .= CourseManager::display_courses($user_id, $this->load_directories_preview);
+            $courses = CourseManager::display_courses($user_id, $this->load_directories_preview);
+            $courses_html .= $courses['html'];
+            $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
+
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1185,10 +1191,11 @@ class IndexManager
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
 
-
                             $sessions_with_no_category .= CourseManager::course_item_parent(
                                 $parentInfo,null
                             );
+
+                            $sessionCount++;
                         }
                     }
                 } else {
@@ -1203,6 +1210,7 @@ class IndexManager
                             if (count($session['courses']) < 1) {
                                 continue;
                             }
+
                             $date_session_start = $session['date_start'];
                             $date_session_end = $session['date_end'];
                             $days_access_before_beginning = $session['nb_days_access_before_beginning'];
@@ -1313,6 +1321,8 @@ class IndexManager
                                 }
 
                                 $html_sessions .= $parentInfo . $html_courses_session;
+
+                                $sessionCount++;
                             }
                         }
                     }
@@ -1354,9 +1364,11 @@ class IndexManager
             }
         }
 
-        return $sessions_with_category.
-               $sessions_with_no_category.
-               $courses_html.$special_courses;
+        return [
+            'html' => $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses,
+            'session_count' => $sessionCount,
+            'course_count' => $courseCount
+        ];
     }
 
     /**

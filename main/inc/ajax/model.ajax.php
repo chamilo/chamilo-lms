@@ -146,6 +146,9 @@ switch ($action) {
         if (!(api_is_platform_admin(false, true))) {
             //exit;
         }
+
+        $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+
         $courseCodeList = array();
         $userIdList  = array();
         if (api_is_drh()) {
@@ -186,12 +189,27 @@ switch ($action) {
             }
         } elseif (api_is_student_boss()) {
             $users = UserManager::getUsersFollowedByStudentBoss($userId);
-
             $userIdList = array_keys($users);
         }
 
-        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+        $sessionIdList = [];
+        if ($sessionId == -1) {
+            $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'admin',
+                null
+            );
+            $userIdList = api_array_column($userIdList, 'user_id');
+            $sessionList = SessionManager::get_sessions_list();
+            $sessionIdList = api_array_column($sessionList, 'id');
 
+            $courseCodeList = array();
+            foreach ($sessionList as $session) {
+                $courses = SessionManager::get_course_list_by_session_id($session['id']);
+                $courseCodeList = array_merge($courseCodeList, api_array_column($courses, 'code'));
+            }
+        }
+
+        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
         $groupsId = array_keys($groups);
 
         if (is_array($groupsId)) {
@@ -217,13 +235,20 @@ switch ($action) {
         }
 
         if ($action == 'get_user_course_report') {
-            $count = CourseManager::get_count_user_list_from_course_code(false, null, $courseCodeList, $userIdList);
+            $count = CourseManager::get_count_user_list_from_course_code(
+                false,
+                null,
+                $courseCodeList,
+                $userIdList,
+                $sessionIdList
+            );
         } else {
             $count = CourseManager::get_count_user_list_from_course_code(
                 true,
                 array('ruc'),
                 $courseCodeList,
-                $userIdList
+                $userIdList,
+                $sessionIdList
             );
         }
         break;
@@ -460,7 +485,14 @@ $columns = array();
 switch ($action) {
     case 'get_course_exercise_medias':
         $columns = array('question');
-        $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $whereCondition);
+        $result = Question::get_course_medias(
+            $course_id,
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $whereCondition
+        );
         break;
     case 'get_user_course_report_resumed':
         $columns = array(
@@ -508,7 +540,9 @@ switch ($action) {
             true,
             array('ruc'),
             $courseCodeList,
-            $userIdList
+            $userIdList,
+            null,
+            $sessionIdList
         );
 
         $new_result = array();
@@ -542,6 +576,7 @@ switch ($action) {
         if (!in_array($sidx, array('title'))) {
             $sidx = 'title';
         }
+
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
@@ -553,7 +588,9 @@ switch ($action) {
             false,
             null,
             $courseCodeList,
-            $userIdList
+            $userIdList,
+            null,
+            $sessionIdList
         );
 
         break;

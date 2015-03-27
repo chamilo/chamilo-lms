@@ -3405,7 +3405,7 @@ class SurveyUtil
 
         foreach ($groupList as $groupId) {
             $userGroupList = GroupManager::getStudents($groupId);
-            $userGroupIdList = array_column($userGroupList, 'user_id');
+            $userGroupIdList = api_array_column($userGroupList, 'user_id');
             $users_array = array_merge($users_array, $userGroupIdList);
 
             $params = array(

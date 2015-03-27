@@ -218,10 +218,16 @@ if (!empty($specialCourseFieldInfo)) {
         $specialCourseAttributes['checked'] = '';
     }
 
-    $form->addElement('hidden', '_extra_special_course', 0);
-    $form->addElement('checkbox', 'extra_special_course', array(
-        null, get_lang('AllUsersAreAutomaticallyRegistered')
-    ), get_lang('SpecialCourse'), $specialCourseAttributes);
+    $form->addElement(
+        'checkbox',
+        'extra_special_course',
+        array(
+            null,
+            get_lang('AllUsersAreAutomaticallyRegistered')
+        ),
+        get_lang('SpecialCourse'),
+        $specialCourseAttributes
+    );
 }
 
 //Extra fields

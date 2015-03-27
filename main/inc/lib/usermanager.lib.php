@@ -1237,7 +1237,7 @@ class UserManager
 
         $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 
-        if (empty($id) || empty($type)) {
+        if ((empty($id) || empty($type)) && !api_get_configuration_value('gravatar_enabled')) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1247,7 +1247,7 @@ class UserManager
         $sql = "SELECT email, picture_uri FROM $user_table WHERE user_id=".$user_id;
         $res = Database::query($sql);
 
-        if (!Database::num_rows($res)) {
+        if (!Database::num_rows($res) && !api_get_configuration_value('gravatar_enabled')) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1265,26 +1265,23 @@ class UserManager
             $dir = $base.$userPath;
         }
 
-        if (empty($picture_filename) ||
-            (!empty($picture_filename) && !file_exists($systemImagePath.$picture_filename))
-        ) {
-            if (api_get_configuration_value('gravatar_enabled')) {
-                $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
-                $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                    $avatarSize['width'] :
-                    $avatarSize['height'];
-                return array(
-                    'dir' => '',
-                    'file' => self::getGravatar(
-                        $user['email'],
-                        $avatarSize,
-                        api_get_configuration_value('gravatar_type')
-                    )
-                );
-            }
-            if ($anonymous) {
-                return $noPicturePath;
-            }
+        if (api_get_configuration_value('gravatar_enabled')) {
+            $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
+            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
+                $avatarSize['width'] :
+                $avatarSize['height'];
+            return array(
+                'dir' => '',
+                'file' => self::getGravatar(
+                    $user['email'],
+                    $avatarSize,
+                    api_get_configuration_value('gravatar_type')
+                )
+            );
+        }
+
+        if (empty($picture_filename) && $anonymous) {
+            return $noPicturePath;
         }
 
         return array('dir' => $dir, 'file' => $picture_filename);
@@ -3260,7 +3257,9 @@ class UserManager
                     break;
             }
             $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
-            return $picture;
+            if (!api_get_configuration_value('gravatar_enabled')) {
+                return $picture;
+            }
         }
 
         switch ($size_picture) {
@@ -3317,6 +3316,9 @@ class UserManager
                         break;
                 }
             }
+        }
+        if (api_get_configuration_value('gravatar_enabled')) {
+            $picture['file'] = $image_array['file'];
         }
         return $picture;
     }

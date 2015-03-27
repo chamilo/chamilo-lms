@@ -80,6 +80,7 @@ if (!defined('CLI_INSTALLATION')) {
         $create_database = false;
     }
 
+
     // Create database
     if ($create_database) {
         $manager->getConnection()->getSchemaManager()->createDatabase($mysqlMainDb);

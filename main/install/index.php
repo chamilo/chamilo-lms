@@ -833,6 +833,7 @@ if (@$_POST['step2']) {
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
+
 	}
     display_after_install_message($installType);
     //Hide the "please wait" message sent previously

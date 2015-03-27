@@ -714,11 +714,15 @@ function load_main_database($installation_settings, $dbScript = '')
         }
     }
 
+
     //replace symbolic parameters with user-specified values
     foreach ($installation_settings as $key => $value) {
         $sql_text = str_replace($key, Database::escape_string($value), $sql_text);
     }
-    parse_sql_queries($sql_text);
+
+    global $manager;
+    $manager->getConnection()->prepare($sql_text);
+    //parse_sql_queries($sql_text);
 }
 
 /**
@@ -740,7 +744,6 @@ function load_database_script($dbScript)
  */
 function parse_sql_queries($sql_text)
 {
-
     //split in array of sql strings
     $sql_instructions = array();
     split_sql_file($sql_instructions, $sql_text);
@@ -749,6 +752,7 @@ function parse_sql_queries($sql_text)
     $count = count($sql_instructions);
     for ($i = 0; $i < $count; $i++) {
         $this_sql_query = $sql_instructions[$i]['query'];
+
         Database::query($this_sql_query);
         //UTF8 fix see #5678
         /*

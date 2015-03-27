@@ -461,6 +461,7 @@ if (!empty($student_id)) {
     echo '<table width="100%" border="0">';
     echo '<tr>';
 
+    $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
     $image_array = UserManager :: get_user_picture_path_by_id($user_info['user_id'], 'web', false, true);
     echo '<td class="borderRight" width="10%" valign="top">';
 
@@ -470,8 +471,13 @@ if (!empty($student_id)) {
     $big_image_size = api_getimagesize($big_image);
     $big_image_width = $big_image_size['width'];
     $big_image_height = $big_image_size['height'];
-    $url_big_image = $big_image . '?rnd=' . time();
-    $img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' .
+    $url_big_image = $big_image;
+    if (!$gravatarEnabled) {
+        $url_big_image .= '?rnd=' . time();
+        $image_file .= '?rnd=' . time();
+    }
+
+    $img_attributes = 'src="' . $image_file . '" ' .
         'alt="' . $user_info['complete_name']. '" ' .
         'style="float:' . ($text_dir == 'rtl' ? 'right' : 'left') . '; padding:5px;" ';
 

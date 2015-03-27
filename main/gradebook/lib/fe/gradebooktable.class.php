@@ -221,7 +221,7 @@ class GradebookTable extends SortableTable
             $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
 
             // Weight.
-            $average = $scoredisplay->display_score(
+            $weight = $scoredisplay->display_score(
                 array(
                     $data['3'],
                     $this->currentcat->get_weight()
@@ -231,11 +231,10 @@ class GradebookTable extends SortableTable
                 true
             );
 
-            // Weight
             if (api_is_allowed_to_edit(null, true)) {
-                $row[] = $invisibility_span_open .Display::tag('h4', $average).$invisibility_span_close;
+                $row[] = $invisibility_span_open .Display::tag('h4', $weight).$invisibility_span_close;
             } else {
-                $row[] = $invisibility_span_open .$average.$invisibility_span_close;
+                $row[] = $invisibility_span_open .$weight.$invisibility_span_close;
             }
 
             $category_weight = $item->get_weight();
@@ -270,7 +269,8 @@ class GradebookTable extends SortableTable
                 }
 
                 // Students get the results and certificates columns
-                if (count($this->evals_links) > 0 && $status_user != 1) {
+                //if (count($this->evals_links) > 0 && $status_user != 1) {
+                if ($status_user != 1) {
                     $value_data = isset($data[4]) ? $data[4] : null;
                     $best = isset($data['best']) ? $data['best'] : null;
                     $average = isset($data['average']) ? $data['average'] : null;

@@ -576,7 +576,7 @@ if (((empty ($allcat)) && (empty ($alleval)) && (empty ($alllink)) && (!$is_plat
 }
 // Here we are in a sub category
 if ($category != '0') {
-    DisplayGradebook:: display_header_gradebook(
+    DisplayGradebook:: header(
         $cats[0],
         1,
         $_GET['selectcat'],
@@ -586,7 +586,7 @@ if ($category != '0') {
     );
 } else {
     // This is the root category
-    DisplayGradebook:: display_header_gradebook(
+    DisplayGradebook:: header(
         $cats[0],
         (((count($allcat) == '0') && (!isset ($_GET['search']))) ? 0 : 1),
         0,

@@ -604,7 +604,6 @@ function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
 {
     Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
     Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-    Database::select_db($dbName);
 
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
@@ -1932,9 +1931,8 @@ function display_database_settings_form(
             <?php echo $database_exists_text ?>
             <div id="db_status" class="confirmation-message">
                 Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br />
-                Database server version: <strong><?php //echo Database::get_server_info(); ?></strong><br />
-                Database client version: <strong><?php //echo Database::get_client_info(); ?></strong><br />
-                Database protocol version: <strong><?php //echo Database::get_proto_info(); ?></strong>
+                Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br />
+                Database platform: <strong><?php echo $manager->getConnection()->getDatabasePlatform()->getName(); ?></strong><br />
                 <div style="clear:both;"></div>
             </div>
         </td>
@@ -1944,8 +1942,6 @@ function display_database_settings_form(
             <div id="db_status" style="float:left;" class="error-message">
                 <div style="float:left;">
                     <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br />
-                    <strong>Database error: <?php echo Database::errno(); ?></strong><br />
-                    <?php echo Database::error().'<br />'; ?>
                 </div>
             </div>
         </td>

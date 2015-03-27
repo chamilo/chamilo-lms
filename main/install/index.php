@@ -768,8 +768,6 @@ if (@$_POST['step2']) {
 		// Initialization of the database connection encoding intentionaly is not done.
 		// This is the old style for connecting to the database server, that is implemented here.
 
-		// Inializing global variables that are to be used by the included scripts.
-		$dblist = Database::get_databases();
 		$perm = api_get_permissions_for_new_directories();
 		$perm_file = api_get_permissions_for_new_files();
 

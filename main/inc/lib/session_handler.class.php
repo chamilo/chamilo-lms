@@ -31,6 +31,10 @@ class SessionHandlerDatabase {
 		$this->connection_handler = false;
 	}
 
+	/**
+	 * @deprecated don't use
+	 * @return bool
+	 */
 	public function sqlConnect() {
 
 		if (!$this->connection_handler) {

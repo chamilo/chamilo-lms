@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Install database. Provides access to the Database class and allows to add 
- * hooks for logging, testing, etc during installation. 
+ * Install database. Provides access to the Database class and allows to add
+ * hooks for logging, testing, etc during installation.
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -22,13 +22,6 @@ class iDatabase extends Database
         self::$is_logging = $value;
     }
 
-    static function select_db($database_name, $connection = null)
-    {
-        if (self::is_logging()) {
-            Log::notice(__FUNCTION__ . ' ' . $database_name, Log::frame(1));
-        }
-        return parent::select_db($database_name, $connection);
-    }
 
     static function query($query, $connection = null, $file = null, $line = null)
     {
@@ -54,7 +47,7 @@ class iDatabase extends Database
      * Returns true if the table exists in the database, false otherwise.
      * @param string $database
      * @param string table
-     * @return boolean 
+     * @return boolean
      */
     static
 

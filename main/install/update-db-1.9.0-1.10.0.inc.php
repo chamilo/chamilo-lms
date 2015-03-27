@@ -71,7 +71,6 @@ if (defined('SYSTEM_INSTALLATION')) {
             } elseif (!in_array($dbNameForm, $dblist)) {
                 Log::error('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
-                iDatabase::select_db($dbNameForm);
                 foreach ($mainQueriesList as $query) {
                     if ($onlyTest) {
                         Log::notice("iDatabase::query($dbNameForm,$query)");
@@ -104,7 +103,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif (!in_array($dbNameForm, $dblist)) {
             Log::error('Database '.$dbNameForm.' was not found, skipping');
         } else {
-            iDatabase::select_db($dbNameForm);
             $res = iDatabase::query(
                 "SELECT id, code, db_name, directory, course_language, id as real_id "
                 ." FROM course WHERE target_course_code IS NULL ORDER BY code"
@@ -124,9 +122,6 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
 
                 foreach ($list as $rowCourse) {
-                    if (!$singleDbForm) { // otherwise just use the main one
-                        iDatabase::select_db($rowCourse['db_name']);
-                    }
                     Log::notice('Course db ' . $rowCourse['db_name']);
 
                     // Now use the $c_q_list
@@ -165,7 +160,6 @@ if (defined('SYSTEM_INSTALLATION')) {
         } elseif (!in_array($dbNameForm, $dblist)) {
             Log::error('Database ' . $dbNameForm . ' was not found, skipping');
         } else {
-            iDatabase::select_db($dbNameForm);
             foreach ($mainQueriesList as $query) {
                 if ($onlyTest) {
                     Log::notice("iDatabase::query($dbNameForm,$query)");

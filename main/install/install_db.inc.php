@@ -101,8 +101,6 @@ if (!defined('CLI_INSTALLATION')) {
     }
 }
 
-//Database::select_db($mysqlMainDb) or die(Database::error());
-
 $installation_settings = array();
 $installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
 $installation_settings['{ORGANISATIONURL}'] = $institutionUrlForm;

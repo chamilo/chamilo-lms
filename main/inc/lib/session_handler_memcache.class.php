@@ -45,6 +45,9 @@ class SessionHandlerMemcache
         $this->connection_handler = false;
     }
 
+    /**
+     *@deprecated
+     * */
     public function sqlConnect()
     {
         if (!$this->connection_handler) {

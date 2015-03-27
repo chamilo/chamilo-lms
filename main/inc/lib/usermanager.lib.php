@@ -1234,10 +1234,10 @@ class UserManager
             default: // Base: empty, the result path below will be relative.
                 $base = '';
         }
-
+        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
         $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 
-        if ((empty($id) || empty($type)) && !api_get_configuration_value('gravatar_enabled')) {
+        if ((empty($id) || empty($type)) && !$gravatarEnabled) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1247,7 +1247,7 @@ class UserManager
         $sql = "SELECT email, picture_uri FROM $user_table WHERE user_id=".$user_id;
         $res = Database::query($sql);
 
-        if (!Database::num_rows($res) && !api_get_configuration_value('gravatar_enabled')) {
+        if (!Database::num_rows($res) && !$gravatarEnabled) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1265,7 +1265,7 @@ class UserManager
             $dir = $base.$userPath;
         }
 
-        if (api_get_configuration_value('gravatar_enabled')) {
+        if ($gravatarEnabled) {
             $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
             $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
                 $avatarSize['width'] :
@@ -3243,6 +3243,7 @@ class UserManager
      */
     public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM, $style = '')
     {
+        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
@@ -3257,7 +3258,7 @@ class UserManager
                     break;
             }
             $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
-            if (!api_get_configuration_value('gravatar_enabled')) {
+            if (!$gravatarEnabled) {
                 return $picture;
             }
         }
@@ -3317,7 +3318,7 @@ class UserManager
                 }
             }
         }
-        if (api_get_configuration_value('gravatar_enabled')) {
+        if ($gravatarEnabled) {
             $picture['file'] = $image_array['file'];
         }
         return $picture;

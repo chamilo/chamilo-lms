@@ -442,6 +442,8 @@ if ($error_drh) {
 	$message = Display::return_message($err_msg, 'error');
 }
 
+$gravatarEnabled = api_get_configuration_value('gravatar_enabled');
+
 // USER PICTURE
 $image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
 $image_dir = $image_path['dir'];
@@ -449,7 +451,7 @@ $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
 $image_size = api_getimagesize($image_file);
 
-if (!api_get_configuration_value('gravatar_enabled')) {
+if (!$gravatarEnabled) {
     $image_file .= '?rand='.time();
 }
 
@@ -467,7 +469,7 @@ $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $image_file;
-if (!api_get_configuration_value('gravatar_enabled')) {
+if (!$gravatarEnabled) {
     $url_big_image = $big_image.'?rnd='.time();
 }
 

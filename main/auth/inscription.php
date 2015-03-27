@@ -408,7 +408,7 @@ if ($form->validate()) {
             }
         }
 
-        $status = isset($values['status']) ? $values['status'] : null;
+        $status = isset($values['status']) ? $values['status'] : STUDENT;
         $phone = isset($values['phone']) ? $values['phone'] : null;
 
         // Creates a new user

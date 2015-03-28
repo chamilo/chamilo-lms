@@ -52,7 +52,7 @@ class FeatureContext extends MinkContext
      * all the possible roles
      * @BeforeSuite
      */
-    public function testUsersExist(SuiteEvent $event)
+    public static function testUsersExist()
     {
         return array(
             new Given('I am a platform administrator'),

@@ -7,24 +7,24 @@ Feature: User login
 
   Scenario: Login as admin user successfully
     Given I am a platform administrator
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element
 
   Scenario: Login as student user successfully
     Given I am a student
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element
 
   Scenario: Login as teacher successfully
     Given I am a teacher
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element
 
   Scenario: Login as HRD successfully
     Given I am an HR manager
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element
 
   Scenario: Login as student bott successfully
     Given I am a student boss
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element
 
   Scenario: Login as invitee successfully
     Given I am an invitee
-    Then I should not see an "<div class=\"alert alert-danger\">" element
+    Then I should not see an ".alert-danger" element

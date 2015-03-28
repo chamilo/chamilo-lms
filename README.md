@@ -1,6 +1,6 @@
 # Chamilo 1.10.x
 
-[![Build Status](https://api.travis-ci.org/chamilo/chamilo-lms.png)](https://travis-ci.org/chamilo/chamilo-lms)
+[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.10.x)](https://travis-ci.org/chamilo/chamilo-lms)
 
 ## Installation
 

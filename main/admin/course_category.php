@@ -77,7 +77,7 @@ if ($action == 'add' || $action == 'edit') {
         if (!empty($category)) {
             $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
         }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($category);
+        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
         $form = new FormValidator('course_category', 'post', $url);
         $form->addElement('header', '', $form_title);
         $form->addElement('hidden', 'formSent', 1);

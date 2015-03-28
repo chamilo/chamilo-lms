@@ -306,9 +306,9 @@ echo Display::actions($action_array);
 <form method="POST" onSubmit="return submitForm(); ">
     <div class="row">
 
-    <div class="span12" id="event_list_group">
+    <div class="col-md-12" id="event_list_group">
         <h4><?php echo get_lang('Events'); ?></h4>
-        <select class="span6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
+        <select class="col-md-6" multiple="1" id="eventList" onchange="confirmMessage(this.name); return false;" name="eventList">
         <?php
         foreach ($event_config as $key => $config) {
             echo '<option value="' . $key . '">' . $config['name_lang_var'] . '</option>';
@@ -317,21 +317,21 @@ echo Display::actions($action_array);
         </select>
     </div>
 
-    <div class="span4">
+    <div class="col-md-4">
         <h4><?php echo get_lang('Users'); ?></h4>
         <select multiple="1" id="usersList" class="span3 registration_case"></select>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <div class="registration_case">
-            <button class="arrowr" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'></button>
+            <button class="btn btn-default" onclick='moveUsers($("#usersList"),$("#usersSubList")); return false;'><i class="fa fa-arrow-left"></i></button>
             <br />
             <br />
-            <button class="arrowl" onclick='moveUsers($("#usersSubList"),$("#usersList")); return false;'></button>
+            <button class="btn btn-default" onclick='moveUsers($("#usersSubList"),$("#usersList")); return false;'><i class="fa fa-arrow-right"></i></button>
         </div>
     </div>
-    <div class="span4">
+    <div class="col-md-4">
         <h4><?php echo get_lang('ToBeWarnedUserList'); ?></h4>
-        <select class="span3" multiple="1" id="usersSubList" class="registration_case"></select>
+        <select class="col-md-3" multiple="1" id="usersSubList" class="registration_case"></select>
     </div>
     </div>
 
@@ -362,7 +362,7 @@ echo Display::actions($action_array);
     <label for="eventSubject">
         <h4><?php echo get_lang('Subject'); ?></h4>
     </label>
-    <input class="span6" type="text" id="eventSubject" name="eventSubject" onchange="contentChanged(); return false;" />
+    <input class="col-md-6" type="text" id="eventSubject" name="eventSubject" onchange="contentChanged(); return false;" />
     <br /><br />
     <table>
         <tr>
@@ -375,7 +375,7 @@ echo Display::actions($action_array);
         </tr>
         <tr>
             <td>
-                <textarea class="span6" rows="10" name="eventMessage" id="eventMessage" onchange="contentChanged(); return false;">
+                <textarea class="col-md-6" rows="10" name="eventMessage" id="eventMessage" onchange="contentChanged(); return false;">
                 </textarea>
             </td>
             <td class="available_keys">
@@ -384,7 +384,7 @@ echo Display::actions($action_array);
         </tr>
     </table>
     <br /><br />
-    <input type="submit" value="<?php echo get_lang('Save'); ?>" />
+    <input class="btn btn-primary" type="submit" value="<?php echo get_lang('Save'); ?>" />
 
 </form>
 <?php

@@ -224,13 +224,19 @@ $url_list = UrlManager::get_url_data();
 					<?php
 					if($ajax_search) {
 						?>
-						<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
+						<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" >
+                            <i class="fa fa-arrow-left"></i>
+						</button>
 					<?php
 					} else {
 						?>
-						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ><i class="fa fa-plus"></i></button>
+						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
+                            <i class="fa fa-arrow-right"></i>
+						</button>
 						<br /><br />
-						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ><i class="fa fa-minus"></i></button>
+						<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
+                            <i class="fa fa-arrow-left"></i>
+						</button>
 					<?php
 					}
 					?>
@@ -254,9 +260,9 @@ $url_list = UrlManager::get_url_data();
 					<br />
 					<?php
 					if(isset($_GET['add']))
-						echo '<button class="save" onclick="valide()" >'.get_lang('AddCoursesToURL').'</button>';
+						echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('AddCoursesToURL').'</button>';
 					else
-						echo '<button class="save" onclick="valide()" >'.get_lang('EditCoursesToURL').'</button>';
+						echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('EditCoursesToURL').'</button>';
 					?>
 				</td>
 			</tr>

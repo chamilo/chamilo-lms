@@ -180,12 +180,16 @@ unset($Courses);
 
                 </select></td>
             <td width="10%" valign="middle" align="center">
-                <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
+                <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                    <i class="fa fa-arrow-right"></i>
+                </button>
                 <br /><br />
-                <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
+                <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
                 <br /><br /><br /><br /><br /><br />
                 <?php
-                echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('EditSessionCourses').'</button>';
+                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('EditSessionCourses').'</button>';
                 ?>
             </td>
             <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">

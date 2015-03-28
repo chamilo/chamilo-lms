@@ -47,9 +47,12 @@ class FeatureContext extends MinkContext
         );
     }
     /**
-     * @Given /^Test users exist$/
+     * This action, launched before the suite is run, connects as an admin
+     * and moves to the users filler page to create about 30 new users with
+     * all the possible roles
+     * @BeforeSuite
      */
-    public function testUsersExist()
+    public function testUsersExist(SuiteEvent $event)
     {
         return array(
             new Given('I am a platform administrator'),

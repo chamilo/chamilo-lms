@@ -431,7 +431,7 @@ if (!empty($errorMsg)) {
 </div>
 
 <?php
-    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><i class="fa fa-plus"></i>'.
+    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><i class="fa fa-check"></i>'.
         get_lang('SubscribeUsersToClass').'</button>';
 ?>
 </form>

@@ -446,11 +446,11 @@ $form .= '</div>';
 $form .= '</td><td width="10%" valign="middle" align="center">';
 
 if ($ajax_search) {
-    $form .= '<button class="arrowl" type="button" onclick="remove_item(document.getElementById(\'destination_users\'))" ></button>';
+    $form .= '<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById(\'destination_users\'))" ><i class="fa fa-arrow-right"></i></button>';
 } else {
-    $form .= '<button class="arrowr" type="button" onclick="moveItem(document.getElementById(\'origin_users\'), document.getElementById(\'destination_users\'))" ></button>
+    $form .= '<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById(\'origin_users\'), document.getElementById(\'destination_users\'))" ><i class="fa fa-arrow-left"></i></button>
     <br /><br />
-    <button class="arrowl" type="button" onclick="moveItem(document.getElementById(\'destination_users\'), document.getElementById(\'origin_users\'))" ></button>
+    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById(\'destination_users\'), document.getElementById(\'origin_users\'))" ><i class="fa fa-arrow-right"></i></button>
     <br /><br />';
 }
 
@@ -470,7 +470,7 @@ $form .= '</select></td>
 <tr>
 	<td colspan="3" align="center">
 		<br />
-		<button class="save" type="button" value="" onclick="valide()" >' . get_lang(
+		<button class="btn btn-primary" type="button" value="" onclick="valide()" >' . get_lang(
         'InviteUsersToGroup'
     ) . '</button>
 	</td>

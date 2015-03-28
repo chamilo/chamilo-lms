@@ -2975,23 +2975,32 @@ class SessionManager
     }
 
     /**
-     * Gets the list of courses by session filtered by access_url
-     * @param int $session_id
-     * @param string $course_name
-     * @return array list of courses
+     * Gets the list (or the count) of courses by session filtered by access_url
+     * @param int $session_id The session id
+     * @param string $course_name The course code
+     * @param string $orderBy Field to order the data
+     * @param boolean $getCount Optional. Count the session courses
+     * @return array|int List of courses. Whether $getCount is true, return the count
      */
     public static function get_course_list_by_session_id(
         $session_id,
         $course_name = '',
-        $orderBy = null
+        $orderBy = null,
+        $getCount = false
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $session_id = intval($session_id);
 
+        $sqlSelect = "SELECT *";
+
+        if ($getCount) {
+            $sqlSelect = "SELECT COUNT(1)";
+        }
+
         // select the courses
-        $sql = "SELECT * FROM $tbl_course c
+        $sql = "$sqlSelect FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.code = src.course_code
 		        WHERE src.id_session = '$session_id' ";
@@ -3017,6 +3026,12 @@ class SessionManager
         $num_rows = Database::num_rows($result);
         $courses = array();
         if ($num_rows > 0) {
+            if ($getCount) {
+                $count = Database::fetch_array($result);
+
+                return intval($count[0]);
+            }
+
             while ($row = Database::fetch_array($result,'ASSOC'))	{
                 $courses[$row['id']] = $row;
             }
@@ -5491,4 +5506,29 @@ class SessionManager
             )
         ));
     }
+
+    /**
+     * Get the count of user courses in session
+     * @param int $sessionId The session id
+     * @return array
+     */
+    public static function getTotalUserCoursesInSession($sessionId)
+    {
+        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status "
+            . "FROM session_rel_course_rel_user scu "
+            . "INNER JOIN user u ON scu.id_user = u.user_id "
+            . "WHERE scu.id_session = " . intval($sessionId) . " "
+            . "GROUP BY u.user_id";
+
+        $result = Database::query($sql);
+
+        $list = array();
+
+        while ($data = Database::fetch_assoc($result)) {
+            $list[] = $data;
+        }
+
+        return $list;
+    }
+
 }

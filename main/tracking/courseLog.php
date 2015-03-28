@@ -50,21 +50,28 @@ if (api_is_drh()) {
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
         $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
+
+        $coursesFromSessionCodeList = array();
         if (!empty($coursesFromSession)) {
-            $coursesFromSession = array_keys($coursesFromSession);
+            foreach ($coursesFromSession as $course) {
+                $coursesFromSessionCodeList[$course['code']] = $course['code'];
+            }
         }
 
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+
         if (!empty($coursesFollowedList)) {
             $coursesFollowedList = array_keys($coursesFollowedList);
         }
+
         if (!in_array($courseCode, $coursesFollowedList)) {
-            if (!in_array($courseCode, $coursesFromSession)) {
+            if (!in_array($courseCode, $coursesFromSessionCodeList)) {
                 api_not_allowed();
             }
         }
     } else {
-        // If the drh has *not* been configured to be allowed to see all session content, then check if he has also been given access to the corresponding courses
+        // If the drh has *not* been configured to be allowed to see all session content,
+        // then check if he has also been given access to the corresponding courses
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         $coursesFollowedList = array_keys($coursesFollowedList);
         if (!in_array(api_get_course_id(), $coursesFollowedList)) {
@@ -93,6 +100,9 @@ if ($export_csv) {
     }
     ob_start();
 }
+$columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns');
+$columnsToHide = empty($columnsToHideFromSetting) ? array(1, 9, 10, 11, 12) : $columnsToHideFromSetting;
+$columnsToHide = json_encode($columnsToHide);
 
 $csv_content = array();
 // Scripts for reporting array hide/show columns
@@ -123,14 +133,14 @@ $js = "<script>
 
         // hide some column at startup
         // be sure that these columns always exists
-        // see tab_table_header = array();    // tab of header texts
+        // see headers = array();
+        // tab of header texts
         $(document).ready( function() {
             init_hide();
-            foldup(1);
-            foldup(9);
-            foldup(10);
-            foldup(11);
-            foldup(12);
+            var columnsToHide = ".$columnsToHide.";
+            columnsToHide.forEach(function(id) {
+                foldup(id);
+            });
         })
     </script>";
 
@@ -177,9 +187,6 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
-// Display the header.
-Display::display_header($nameTools, 'Tracking');
-
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
@@ -216,6 +223,9 @@ if (isset($_GET['additional_profile_field']) &&
         $_GET['additional_profile_field']
     );
 }
+
+// Display the header.
+Display::display_header($nameTools, 'Tracking');
 
 /* MAIN CODE */
 
@@ -359,7 +369,8 @@ if (count($a_students) > 0) {
     $el = $form->addElement(
         'select',
         'since',
-        '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'),
+        '<img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.
+        get_lang('RemindInactivesLearnersSince'),
         $options
     );
     $el->setSelected(7);
@@ -397,78 +408,84 @@ if (count($a_students) > 0) {
     $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
-    $tab_table_header = array();
+    $headers = array();
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
-    $tab_table_header[] = get_lang('OfficialCode');
+    $headers['official_code'] = get_lang('OfficialCode');
     if ($is_western_name_order) {
         $table->set_header(1, get_lang('FirstName'), true);
-        $tab_table_header[] = get_lang('FirstName');
+        $headers['firstname'] = get_lang('FirstName');
         $table->set_header(2, get_lang('LastName'), true);
-        $tab_table_header[] = get_lang('LastName');
+        $headers['lastname'] = get_lang('LastName');
     } else {
         $table->set_header(1, get_lang('LastName'), true);
-        $tab_table_header[] = get_lang('LastName');
+        $headers['lastname'] = get_lang('LastName');
         $table->set_header(2, get_lang('FirstName'), true);
-        $tab_table_header[] = get_lang('FirstName');
+        $headers['firstname'] = get_lang('FirstName');
     }
     $table->set_header(3, get_lang('Login'), false);
-    $tab_table_header[] = get_lang('Login');
+    $headers['login'] = get_lang('Login');
 
     $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.Display::return_icon('info3.gif', get_lang('TrainingTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-    $tab_table_header[] = get_lang('TrainingTime');
+    $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-    $tab_table_header[] = get_lang('CourseProgress');
+    $headers['course_progress'] = get_lang('CourseProgress');
 
     $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-    $tab_table_header[] = get_lang('ExerciseProgress');
+    $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-    $tab_table_header[] = get_lang('ExerciseAverage');
+    $headers['exercise_average'] = get_lang('ExerciseAverage');
     $table->set_header(8, get_lang('Score').'&nbsp;'.Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
-    $tab_table_header[] = get_lang('Score');
+    $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
-    $tab_table_header[] = get_lang('Student_publication');
+    $headers['student_publication'] = get_lang('Student_publication');
     $table->set_header(10, get_lang('Messages'), false);
-    $tab_table_header[] = get_lang('Messages');
+    $headers['messages'] = get_lang('Messages');
 
     if (empty($session_id)) {
         $table->set_header(11, get_lang('Survey'), false);
-        $tab_table_header[] = get_lang('Survey');
+        $headers['survey'] = get_lang('Survey');
         $table->set_header(12, get_lang('FirstLogin'), false);
-        $tab_table_header[] = get_lang('FirstLogin');
+        $headers['first_login'] = get_lang('FirstLogin');
         $table->set_header(13, get_lang('LatestLogin'), false);
-        $tab_table_header[] = get_lang('LatestLogin');
+        $headers['latest_login'] = get_lang('LatestLogin');
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(14, $extra_info['field_display_text'], false);
-            $tab_table_header[] = $extra_info['field_display_text'];
+            $headers['field_display_text'] = $extra_info['field_display_text'];
             $table->set_header(15, get_lang('Details'), false);
-            $tab_table_header[] = get_lang('Details');
+            $headers['details'] = get_lang('Details');
         } else {
             $table->set_header(14, get_lang('Details'), false);
-            $tab_table_header[] = get_lang('Details');
+            $headers['details'] = get_lang('Details');
         }
-
     } else {
         $table->set_header(11, get_lang('FirstLogin'), false);
-        $tab_table_header[] = get_lang('FirstLogin');
+        $headers['first_login'] = get_lang('FirstLogin');
         $table->set_header(12, get_lang('LatestLogin'), false);
-        $tab_table_header[] = get_lang('LatestLogin');
+        $headers['latest_login'] = get_lang('LatestLogin');
 
         if (isset($_GET['additional_profile_field']) and is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(13, $extra_info['field_display_text'], false);
-            $tab_table_header[] = $extra_info['field_display_text'];
+            $headers['field_display_text'] = $extra_info['field_display_text'];
             $table->set_header(14, get_lang('Details'), false);
-            $tab_table_header[] = get_lang('Details');
+            $headers['Details'] = get_lang('Details');
         } else {
             $table->set_header(13, get_lang('Details'), false);
-            $tab_table_header[] = get_lang('Details');
+            $headers['Details'] = get_lang('Details');
         }
     }
     // display buttons to un hide hidden columns
     echo "<br/><br/><div id='unhideButtons'>";
-    for ($i=0; $i < count($tab_table_header); $i++) {
-        $index = $i + 1;
-        echo "<span title='".get_lang('DisplayColumn')." ".$tab_table_header[$i]."' class='unhide_button hide' onclick='foldup($index)'>".Display :: return_icon('move.png', get_lang('DisplayColumn'), array('align'=>'absmiddle', 'hspace'=>'3px'), 16)." ".$tab_table_header[$i]."</span>";
+    $index = 0;
+    foreach ($headers as $header) {
+        echo "<span title='".get_lang('DisplayColumn')." ".$header."' class='unhide_button hide' onclick='foldup($index)'>".
+            Display :: return_icon(
+                'move.png',
+                get_lang('DisplayColumn'),
+                array('align'=>'absmiddle', 'hspace'=>'3px'),
+                16
+            )." ".$header."</span>";
+        $index++;
     }
     echo "</div>";
     // Display the table

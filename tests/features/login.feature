@@ -9,6 +9,11 @@ Feature: User login
     Given I am a platform administrator
     Then I should not see an ".alert-danger" element
 
+  Scenario: Create tests users successfully
+    Given I am a platform administrator
+    And I am on "/main/admin/filler.php?fill=users"
+    Then I should not see an ".alert-danger" element
+
   Scenario: Login as student user successfully
     Given I am a student
     Then I should not see an ".alert-danger" element

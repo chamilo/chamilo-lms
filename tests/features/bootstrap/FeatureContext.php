@@ -48,19 +48,6 @@ class FeatureContext extends MinkContext
         );
     }
     /**
-     * @BeforeSuite
-     */
-    public static function prepare(SuiteEvent $event)
-    {
-        // This action, launched before the suite is run, connects as an admin
-        // and moves to the users filler page to create about 30 new users with
-        // all the possible roles
-        return array(
-            new Given('I am a platform administrator'),
-            new Given('I am on "/main/admin/filler.php?fill=users"')
-        );
-    }
-    /**
      * @Given /^I am a session administrator$/
      */
     public function iAmASessionAdministrator()

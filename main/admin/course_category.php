@@ -96,12 +96,13 @@ if ($action == 'add' || $action == 'edit') {
             $class = "save";
             $text = get_lang('CategoryMod');
             $form->setDefaults($categoryInfo);
+            $form->addButtonSave($text);
         } else {
             $class = "add";
             $text = get_lang('AddCategory');
             $form->setDefaults(array('auth_course_child' => 'TRUE'));
+            $form->addButtonCreate($text);
         }
-        $form->addElement('button', 'submit', $text);
         $form->display();
     } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
         // If multiple URLs and not main URL, prevent edition and inform user

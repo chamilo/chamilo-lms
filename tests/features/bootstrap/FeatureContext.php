@@ -4,7 +4,8 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,
     Behat\Behat\Context\Step\Given,
-    Behat\Behat\Exception\PendingException;
+    Behat\Behat\Exception\PendingException,
+    Behat\Behat\Event\SuiteEvent;
 
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
@@ -19,7 +20,7 @@ use Behat\MinkExtension\Context\MinkContext;
 //
 
 /**
- * Features context.
+ * Features context. (MinkContext extends BehatContext)
  */
 class FeatureContext extends MinkContext
 {
@@ -47,13 +48,13 @@ class FeatureContext extends MinkContext
         );
     }
     /**
-     * This action, launched before the suite is run, connects as an admin
-     * and moves to the users filler page to create about 30 new users with
-     * all the possible roles
      * @BeforeSuite
      */
-    public static function testUsersExist()
+    public static function prepare(SuiteEvent $event)
     {
+        // This action, launched before the suite is run, connects as an admin
+        // and moves to the users filler page to create about 30 new users with
+        // all the possible roles
         return array(
             new Given('I am a platform administrator'),
             new Given('I am on "/main/admin/filler.php?fill=users"')

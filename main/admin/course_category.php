@@ -94,7 +94,7 @@ if ($action == 'add' || $action == 'edit') {
 
         if (!empty($categoryInfo)) {
             $class = "save";
-            $text = get_lang('CategoryMod');
+            $text = get_lang('Save');
             $form->setDefaults($categoryInfo);
             $form->addButtonSave($text);
         } else {

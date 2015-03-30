@@ -411,47 +411,6 @@ switch ($action) {
 if (!empty($_GET['remind_inactive'])) {
     $to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
-/*
-if (api_is_allowed_to_edit(false,true) OR
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
-) {
-
-    //
-    if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-            api_not_allowed();
-        }
-
-        // RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
-        $id = intval($_GET['id']);
-
-        if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
-            $sql = "SELECT * FROM  $tbl_announcement WHERE c_id = $course_id AND id = '$id'";
-            $rs 	= Database::query($sql);
-            $myrow  = Database::fetch_array($rs);
-            $last_id = $id;
-            $userUpload = isset($_FILES['user_upload']) ? $_FILES['user_upload'] : null;
-            $edit_attachment = AnnouncementManager::edit_announcement_attachment_file(
-                $last_id,
-                $userUpload,
-                $file_comment
-            );
-
-            if ($myrow) {
-                $announcement_to_modify 	= $myrow['id'];
-                $content_to_modify 			= $myrow['content'];
-                $title_to_modify 			= $myrow['title'];
-
-                if ($originalresource!=="no")  {
-                    $to = AnnouncementManager::load_edit_users("announcement", $announcement_to_modify);
-                }
-                $display_announcement_list = false;
-            }
-        }
-    }
-}*/
-
-$htmlHeadXtra[] = AnnouncementManager::to_javascript();
 
 if (!empty($group_id)) {
     $group_properties  = GroupManager :: get_group_properties($group_id);

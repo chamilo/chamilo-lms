@@ -22,14 +22,6 @@ $user_id = api_get_user_id();
 $course_id = api_get_course_id();
 $courseId = api_get_course_int_id();
 
-/*
-$role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
-$location_id = RolesRights::get_course_tool_location_id($course_id, TOOL_TRACKING);
-$is_allowed = RolesRights::is_allowed_which_rights($role_id, $location_id);
-
-//block users without view right
-RolesRights::protect_location($role_id, $location_id);
-*/
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 

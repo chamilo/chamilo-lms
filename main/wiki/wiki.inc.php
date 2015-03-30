@@ -1864,13 +1864,14 @@ class Wiki
         $userinfo = api_get_user_info(api_get_user_id());
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
         $name = $userinfo['complete_name']." - ".$username;
-        if (api_get_user_id()<>0) {
-            $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
+
+        $photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
+
+        if (api_get_user_id() || api_get_configuration_value('gravatar_enabled')) {
+            $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
             $image_repository = $image_path['dir'];
             $existing_image = $image_path['file'];
-            $photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="top" title="'.$name.'"  />';
-        } else {
-            $photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
+            $photo = '<img src="' . $image_repository . $existing_image . '" alt="' . $name . '"  width="40" height="50" align="top" title="' . $name . '"  />';
         }
 
         //teacher assignment title

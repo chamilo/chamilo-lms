@@ -43,13 +43,13 @@ a:focus {
   -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 }
-.navbar:after{
+/*.navbar:after{
   background: url("images/nav-border.png") repeat-x;
   height: 5px;
   width: 100%;
   display: block;
   content: "";
-}
+}*/
 .nav > li > a{
    padding: 10px 15px;
 }
@@ -57,8 +57,8 @@ a:focus {
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
-  padding-top: 19.5px;
-  padding-bottom: 19.5px;
+  padding-top: 12.5px;
+  padding-bottom: 12.5px;
   background: url("images/border-line.png") no-repeat 100% 50%;
 }
 

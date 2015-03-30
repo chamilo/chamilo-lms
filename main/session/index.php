@@ -5,16 +5,12 @@
 *   @package chamilo.session
 *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
 */
-/**
- * Code
- */
 
 use \ChamiloSession as Session;
 
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
 
 $sessionField = new ExtraFieldValue('session');
@@ -43,23 +39,37 @@ if (isset($_SESSION['objExercise'])) {
     Session::erase('objExercise');
 }
 
+$userId = api_get_user_id();
 $session_info = SessionManager::fetch($session_id);
 $session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 // Getting all sessions where I'm subscribed
-$new_session_list = array();
+/*$new_session_list = array();
 if (!api_is_anonymous()) {
     $new_session_list = UserManager::get_personal_session_course_list(api_get_user_id());
 }
 $user_course_list = array();
 foreach ($new_session_list as $session_item) {
     $user_course_list[] = $session_item['code'];
+}*/
+
+
+$user_course_list = array();
+foreach ($course_list as $course) {
+    $status = SessionManager::get_user_status_in_course_session($userId, $course['code'], $session_id);
+    if ($status || api_is_platform_admin()) {
+        $user_course_list[] = $course['code'];
+    }
+}
+
+if (empty($user_course_list)) {
+    api_not_allowed(true);
 }
 
 $my_session_list = array();
 $final_array     = array();
-
+/*
 if (!empty($new_session_list)) {
     foreach ($new_session_list as $item) {
         $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;
@@ -110,7 +120,8 @@ if (!empty($new_session_list)) {
         }
         $my_session_list[] =  $my_session_id;
     }
-}
+}*/
+
 $new_course_list = array();
 
 if (!empty($course_list)) {
@@ -202,11 +213,11 @@ if (!empty($course_list)) {
 }
 
 // If the requested session does not exist in my list we stop the script
-if (!api_is_platform_admin()) {
+/*if (!api_is_platform_admin()) {
     if (!api_is_anonymous() && !in_array($session_id, $my_session_list)) {
         api_not_allowed(true);
     }
-}
+}*/
 
 //If session is not active we stop de script
 if (!api_is_allowed_to_session_edit()) {

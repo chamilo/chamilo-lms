@@ -231,13 +231,19 @@ if (!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
   ?>
-    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" ></button>
+    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
+        <i class="fa fa-arrow-left"></i>
+    </button>
   <?php
   } else {
   ?>
-    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))"></button>
+    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
+        <i class="fa fa-arrow-right"></i>
+    </button>
     <br /><br />
-    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))"></button>
+    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))" onclick="moveItem(document.getElementById('session_in_promotion'), document.getElementById('session_not_in_promotion'))">
+        <i class="fa fa-arrow-left"></i>
+    </button>
     <?php
   }
   ?>
@@ -260,7 +266,7 @@ if (!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToPromotion').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToPromotion').'</button>';
         ?>
     </td>
 </tr>

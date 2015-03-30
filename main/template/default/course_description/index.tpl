@@ -53,19 +53,19 @@
     <div class="btn-toolbar actions-bar" >
         <div class="btn-group edit new">
             {% for type in types %}        
-                <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}" class="btn "> 
+                <a href="{{root}}&amp;action=add&amp;description_type={{type.id}}" class="btn btn-default">
                     <img title="{{type.title}}" alt="{{type.title}}" src="{{type.icon|icon(32)}} ">
                 </a>    
             {% endfor %}
         </div>
         <div class="btn-group edit">
-            <a href="{{root}}&amp;action=import_csv" class="btn import_csv" title="{{'ImportCSV'|get_lang}}">
+            <a href="{{root}}&amp;action=import_csv" class="btn btn-default" title="{{'ImportCSV'|get_lang}}">
                 <i class="size-32 icon-import-csv"></i>
             </a>
-            <a href="{{root}}&amp;action=export_csv" class="btn export_csv" title="{{'ExportAsCSV'|get_lang}}">
+            <a href="{{root}}&amp;action=export_csv" class="btn btn-default" title="{{'ExportAsCSV'|get_lang}}">
                 <i class="size-32 icon-export-csv"></i>
             </a>
-            <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn delete_all" title="{{'DeleteAll'|get_lang}}">
+            <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn btn-default" title="{{'DeleteAll'|get_lang}}">
                 <i class="size-32 icon-delete-all"></i>
             </a>
         </div>

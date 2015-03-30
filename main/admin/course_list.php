@@ -338,7 +338,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     }
     // Create a search-box
     $form = new FormValidator('search_simple', 'get', '', '', array(), FormValidator::LAYOUT_INLINE);
-    $form->addElement('text', 'keyword', null);
+    $form->addElement('text', 'keyword', null, array('id' => 'course-search-keyword'));
     $form->addButtonSearch(get_lang('SearchCourse'));
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 

@@ -160,7 +160,7 @@ if (is_array($extra_field_list)) {
 if ($use_extra_fields) {
     $final_result = array();
     if (count($extra_field_result)>1) {
-        for ($i=0;$i<count($extra_field_result)-1;$i++) {
+        for ($i=0; $i<count($extra_field_result)-1; $i++) {
             if (is_array($extra_field_result[$i+1])) {
                 $final_result  = array_intersect($extra_field_result[$i], $extra_field_result[$i+1]);
             }
@@ -238,7 +238,7 @@ if (!empty($complete_user_list)) {
             }
         }
         // Avoid anonymous users
-        if ($item['status'] == 6 ) {
+        if ($item['status'] == 6) {
             continue;
         }
 
@@ -254,9 +254,9 @@ if (!empty($complete_user_list)) {
             ) {
                 $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
                 $person_name = $officialCode.api_get_person_name(
-                        $item['firstname'],
-                        $item['lastname']
-                    ).' ('.$item['username'].') ';
+                    $item['firstname'],
+                    $item['lastname']
+                ).' ('.$item['username'].') ';
             }
 
             $elements_in[$item['user_id']] = $person_name;
@@ -302,9 +302,9 @@ if (!empty($user_list)) {
         ) {
             $officialCode = !empty($item['official_code']) ? $item['official_code'].' - ' : '? - ';
             $person_name = $officialCode.api_get_person_name(
-                    $item['firstname'],
-                    $item['lastname']
-                ).' ('.$item['username'].') ';
+                $item['firstname'],
+                $item['lastname']
+            ).' ('.$item['username'].') ';
         }
 
         if (in_array($item['user_id'], $list_in)) {
@@ -342,7 +342,7 @@ echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0 ) {
+        if (is_array($new_field_list) && count($new_field_list)>0) {
             echo '<h3>'.get_lang('FilterByUser').'</h3>';
             foreach ($new_field_list as $new_field) {
                 echo $new_field['name'];
@@ -376,7 +376,7 @@ if (!empty($errorMsg)) {
 ?>
 
 <div class="row">
-    <div class="span5">
+    <div class="col-md-5">
         <div class="multiple_select_header">
         <b><?php echo get_lang('UsersInPlatform') ?> :</b>
         <?php echo get_lang('FirstLetterUser'); ?> :
@@ -392,7 +392,7 @@ if (!empty($errorMsg)) {
         'elements_not_in_name',
         $elements_not_in,
         '',
-        array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),
+        array('class'=>'col-md-7', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),
         false
     );
     ?>
@@ -402,16 +402,18 @@ if (!empty($errorMsg)) {
           <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
       </label>
     </div>
-    <div class="span2">
+    <div class="col-md-2">
         <div style="padding-top:54px;width:auto;text-align: center;">
-        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
+        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
+            <i class="fa fa-arrow-right"></i>
         </button>
         <br /><br />
-        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
+        <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
+            <i class="fa fa-arrow-left"></i>
         </button>
         </div>
     </div>
-    <div class="span5">
+    <div class="col-md-5">
         <div class="multiple_select_header">
             <b><?php echo get_lang('UsersInGroup') ?> :</b>
         </div>
@@ -420,7 +422,7 @@ if (!empty($errorMsg)) {
             'elements_in_name[]',
             $elements_in,
             '',
-            array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),
+            array('class'=>'col-md-7', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),
             false
         );
         unset($sessionUsersList);
@@ -429,7 +431,7 @@ if (!empty($errorMsg)) {
 </div>
 
 <?php
-    echo '<button class="save" type="button" value="" onclick="valide()" >'.
+    echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><i class="fa fa-check"></i>'.
         get_lang('SubscribeUsersToClass').'</button>';
 ?>
 </form>

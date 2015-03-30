@@ -22,7 +22,7 @@ $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : -1;
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_course_report&session_id='.$sessionId;
@@ -112,17 +112,13 @@ $content = '<div class="actions">';
 if (!empty($actions)) {
     $content .= $actions;
 }
-
-$content .= '<div class="pull-right">';
 $content .= Display::url(
     get_lang("CompanyReportResumed"),
     api_get_path(WEB_CODE_PATH) . "mySpace/company_reports_resumed.php",
     array(
-        'class' => 'btn btn-info'
+        'class' => 'btn btn-success'
     )
 );
-
-$content .= '</div>';
 $content .= '</div>';
 $content .= '<h1 class="page-header">' . get_lang('CompanyReport') . '</h1>';
 $content .= Display::grid_html('user_course_report');

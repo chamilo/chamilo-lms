@@ -7,10 +7,14 @@
  * Copyright: CBlue SPRL, 20XX (GNU/GPLv3)
  * @package chamilo.custompages
  **/
-
+/**
+ * Initialization
+ */
 require_once('language.php');
 require_once('../inc/global.inc.php');
-
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 /**
  * Removes some unwanted elementend of the form object
  */
@@ -24,6 +28,7 @@ if (isset($content['form']->_elementIndex['status'])) {
     $content['form']->removeElement('status');
     $content['form']->removeElement('status');
 }
+// Deprecated since 2015-03-26
 /**
  * Code to change the way QuickForm render html
  */
@@ -79,41 +84,54 @@ EOT;
 ?>
 <html>
 <head>
-	<title>Registration</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<!--[if !IE 6]><!-->
-	<link rel="stylesheet" type="text/css" href="../../custompages/style.css" />
-	<!--<![endif]-->
-	<!--[if IE 6]>
-	<link rel="stylesheet" type="text/css" href="../../custompages/style-ie6.css" />
-	<![endif]-->
-	<script type="text/javascript" src="../../main/inc/lib/javascript/jquery.min.js"></script>
+    <title><?php echo custompages_get_lang('Registration');?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/custompages/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!--[if !IE 6]><!-->
+    <link rel="stylesheet" type="text/css" href="/custompages/style.css" />
+    <!--<![endif]-->
+    <!--[if IE 6]>
+    <link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
+    <![endif]-->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="js/vendor/html5shiv.js"></script>
+    <script src="js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
 </head>
 <body>
-	<div id="backgroundimage">
-		<img src="/custompages/images/page-background.png" class="backgroundimage" />
-	</div>
-	<div id="wrapper">
-		<div id="header">
-			<img src="../../custompages/images/header.png" alt="Ambassador logo" />
-		</div> <!-- #header -->
-		<div id="registration-form-box" class="form-box">
-		<?php if (isset($form_error) && !empty($form_error)) {
-			echo '<div id="registration-form-error" class="form-error"><ul>'.$form_error.'</ul></div>';
-		}?>
-      <?php
-      $content['form']->display();
-      ?>
-			<div id="registration-form-submit" class="form-submit" onclick="document.forms['registration'].submit();">
-				<span><?php echo custompages_get_lang('Subscribe');?></span>
-			</div> <!-- #form-submit -->
-			<div id="links">
-      <!--<a href="mailto: support@cblue.be"><?php echo custompages_get_lang('NeedContactAdmin')?></a><br />-->
-			</div>
-		</div> <!-- #form -->
-		<div id="footer">
-			<img src="../../custompages/images/footer.png" />
-		</div> <!-- #footer -->
-	</div> <!-- #wrapper -->
+<img id="backgroundimage" src="/custompages/images/page-background.png"">
+<section id="registration">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-wrap">
+                    <div class="logo">
+                        <img src="/custompages/images/header.png">
+                    </div>
+                    <?php if (isset($content['error']) && !empty($content['error'])) {
+                        echo '<div id="registration-form-error" class="alert alert-danger">'.$content['error'].'</div>';
+                    }?>
+                    <div id="registration-form-box" class="form-box">
+                        <div class="block-form-login">
+                            <?php
+                            $content['form']->display();
+                            ?>
+                        </div>
+                        <div id="links">
+                            <!--<a href="mailto: support@cblue.be"><?php echo custompages_get_lang('NeedContactAdmin')?></a><br />-->
+                        </div>
+                    </div>
+                    <div id="footer">
+                        <img src="/custompages/images/footer.png" />
+                    </div> <!-- #footer -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

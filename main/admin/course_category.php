@@ -77,7 +77,7 @@ if ($action == 'add' || $action == 'edit') {
         if (!empty($category)) {
             $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
         }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($category);
+        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($categoryId);
         $form = new FormValidator('course_category', 'post', $url);
         $form->addElement('header', '', $form_title);
         $form->addElement('hidden', 'formSent', 1);
@@ -94,14 +94,15 @@ if ($action == 'add' || $action == 'edit') {
 
         if (!empty($categoryInfo)) {
             $class = "save";
-            $text = get_lang('CategoryMod');
+            $text = get_lang('Save');
             $form->setDefaults($categoryInfo);
+            $form->addButtonSave($text);
         } else {
             $class = "add";
             $text = get_lang('AddCategory');
             $form->setDefaults(array('auth_course_child' => 'TRUE'));
+            $form->addButtonCreate($text);
         }
-        $form->addElement('button', 'submit', $text);
         $form->display();
     } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
         // If multiple URLs and not main URL, prevent edition and inform user

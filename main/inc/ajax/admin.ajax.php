@@ -37,7 +37,7 @@ switch ($action) {
         break;
 
     case 'save_block_extra':
-        $content = isset($_POST['content']) ? Security::remove_XSS($_POST['content']) : null;
+        $content = isset($_POST['extra_content']) ? Security::remove_XSS($_POST['extra_content']) : null;
         $blockName = isset($_POST['block']) ? Security::remove_XSS($_POST['block']) : null;
 
         if (empty($blockName)) {

@@ -42,8 +42,6 @@ class Database
     public static function get_main_database()
     {
         return self::getManager()->getConnection()->getDatabase();
-        /*global $_configuration;
-        return $_configuration['main_database'];*/
     }
 
     /**
@@ -87,9 +85,6 @@ class Database
         return $obj->n;
     }
 
-    /*
-        An intermediate API-layer between the system and the database server.
-    */
 
     /**
      * Returns the number of affected rows in the last database operation.
@@ -103,6 +98,7 @@ class Database
     }
 
     /**
+     * Connect to the database sets the entity manager.
      * @param array $params
      *
      * @throws \Doctrine\ORM\ORMException
@@ -169,15 +165,6 @@ class Database
         return $persistent
             ? mysql_pconnect($server, $username, $password, $client_flags)
             : mysql_connect($server, $username, $password, $new_link, $client_flags);*/
-    }
-
-    /**
-     * Returns error text from the last operation done on the database server.
-     * @param resource $connection (optional)   The database server connection, for detailed description see the method query().
-     * @return string Returns the error text from the last database operation, or '' (empty string) if no error occurred.
-     */
-    public static function error($connection = null) {
-        return self::use_default_connection($connection) ? mysql_error() : mysql_error($connection);
     }
 
     /**

@@ -48,7 +48,6 @@ api_block_anonymous_users();
 // Database table definitions
 $table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
-$database 		= Database::get_main_database();
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">

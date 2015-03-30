@@ -88,6 +88,11 @@ ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
 UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00';
 UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00';
 
+UPDATE track_e_default SET default_date = NULL WHERE default_date = '0000-00-00 00:00:00';
+UPDATE track_e_lastaccess SET access_date = NULL WHERE access_date = '0000-00-00 00:00:00';
+UPDATE track_e_downloads SET down_date = NULL WHERE down_date = '0000-00-00 00:00:00';
+UPDATE track_e_access SET access_date = NULL WHERE access_date = '0000-00-00 00:00:00';
+
 ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
 
 DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools';
@@ -106,6 +111,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_ma
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No');
 
 ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT '';
+ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL;
 
 -- xxCOURSExx
 
@@ -127,4 +133,4 @@ CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto
 UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.31' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.32' WHERE variable = 'chamilo_database_version';

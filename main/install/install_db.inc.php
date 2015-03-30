@@ -9,6 +9,7 @@
 
 /* This page is called only during a NEW chamilo installation */
 /* This page can only be access through including from the install script.  */
+
 /**
  * Init checks
  */
@@ -53,16 +54,6 @@ if (empty($mysqlMainDb) || $mysqlMainDb == 'mysql' || $mysqlMainDb == $dbPrefixF
     $mysqlMainDb = $dbPrefixForm . 'main';
 }
 
-$mysqlStatsDb = $dbStatsForm;
-if (empty($mysqlStatsDb) || $mysqlStatsDb == 'mysql' || $mysqlStatsDb == $dbPrefixForm) {
-    $mysqlStatsDb = $dbPrefixForm . 'stats';
-}
-
-$mysqlUserDb = $dbUserForm;
-if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixForm) {
-    $mysqlUserDb = $dbPrefixForm . 'user';
-}
-
 //This parameter is needed to run a command line to install Chamilo using BNPanel + ISPConfig see #1799
 if (!defined('CLI_INSTALLATION')) {
 
@@ -80,7 +71,6 @@ if (!defined('CLI_INSTALLATION')) {
         $create_database = false;
     }
 
-
     // Create database
     if ($create_database) {
         $manager->getConnection()->getSchemaManager()->createDatabase($mysqlMainDb);
@@ -88,9 +78,6 @@ if (!defined('CLI_INSTALLATION')) {
         Database::query($sql) or die(Database::error());*/
     }
 }
-
-$mysqlStatsDb = $mysqlMainDb;
-$mysqlUserDb = $mysqlMainDb;
 
 // This parameter is needed to run a command line install of Chamilo (needed for Phing)
 if (!defined('CLI_INSTALLATION')) {
@@ -121,9 +108,6 @@ $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 AddCourse::drop_course_tables();
 
 load_main_database($installation_settings);
-
-$track_countries_table = "track_c_countries";
-fill_track_countries_table($track_countries_table);
 
 locking_settings();
 

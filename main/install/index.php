@@ -103,7 +103,6 @@ error_reporting(E_ALL);
 // Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
 
-$update_from_version_6 = array();
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
 
@@ -167,25 +166,6 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 				}
 			} else {
 				$badUpdatePath = true;
-			}
-		} else { //step2_update_6, presumably
-			if (empty($_POST['updatePath'])) {
-				$_POST['step1'] = 1;
-			} else {
-				$emptyUpdatePath = false;
-				$_POST['updatePath'] = api_add_trailing_slash($_POST['updatePath']);
-				if (file_exists($_POST['updatePath'])) {
-					//1.6.x
-					$my_old_version = get_config_param('clarolineVersion', $_POST['updatePath']);
-					if (in_array($my_old_version, $update_from_version_6)) {
-						$_POST['step2'] = 1;
-						$proposedUpdatePath = $_POST['updatePath'];
-					} else {
-						$badUpdatePath = true;
-					}
-				} else {
-					$badUpdatePath = true;
-				}
 			}
 		}
 	}
@@ -606,40 +586,23 @@ if (@$_POST['step2']) {
 		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'InstitutionUrl');
 		if (!empty($tmp)) $institutionUrlForm = $tmp;
 
-		if (in_array($my_old_version, $update_from_version_6)) {   //for version 1.6
-			$urlForm = get_config_param('rootWeb');
-			$encryptPassForm = get_config_param('userPasswordCrypted');
-			if (empty($encryptPassForm)) {
-				$encryptPassForm = get_config_param('password_encryption');
-			}
-			// Managing the $encryptPassForm
-			if ($encryptPassForm == '1') {
-				$encryptPassForm = 'sha1';
-			} elseif ($encryptPassForm == '0') {
-				$encryptPassForm = 'none';
-			}
-
-			$allowSelfReg = get_config_param('allowSelfReg');
-			$allowSelfRegProf = get_config_param('allowSelfRegProf');
-
-		} else {   //for version 1.8
-			$urlForm = $_configuration['root_web'];
-			$encryptPassForm = get_config_param('userPasswordCrypted');
-			// Managing the $encryptPassForm
-			if ($encryptPassForm == '1') {
-				$encryptPassForm = 'sha1';
-			} elseif ($encryptPassForm == '0') {
-				$encryptPassForm = 'none';
-			}
-
-			$allowSelfReg = false;
-			$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration');
-			if (!empty($tmp)) $allowSelfReg = $tmp;
-
-			$allowSelfRegProf = false;
-			$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration_as_teacher');
-			if (!empty($tmp)) $allowSelfRegProf = $tmp;
+		// For version 1.9
+		$urlForm = $_configuration['root_web'];
+		$encryptPassForm = get_config_param('userPasswordCrypted');
+		// Managing the $encryptPassForm
+		if ($encryptPassForm == '1') {
+			$encryptPassForm = 'sha1';
+		} elseif ($encryptPassForm == '0') {
+			$encryptPassForm = 'none';
 		}
+
+		$allowSelfReg = false;
+		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration');
+		if (!empty($tmp)) $allowSelfReg = $tmp;
+
+		$allowSelfRegProf = false;
+		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration_as_teacher');
+		if (!empty($tmp)) $allowSelfRegProf = $tmp;
 	}
 
 	display_configuration_settings_form(
@@ -774,7 +737,6 @@ if (@$_POST['step2']) {
 		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
 
 		$_configuration['main_database'] = $dbNameForm;
-		//$urlAppendPath = get_config_param('urlAppend');
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
     	if ($userPasswordCrypted == '1') {
@@ -813,7 +775,6 @@ if (@$_POST['step2']) {
     } else {
 		set_file_folder_permissions();
 
-		//database_server_connect();
 		$manager = testDbConnect(
 			$dbHostForm,
 			$dbUsernameForm,
@@ -822,11 +783,11 @@ if (@$_POST['step2']) {
 		);
 
 		// Initialization of the database encoding to be used.
-		Database::query("SET storage_engine = MYISAM;");
-		Database::query("SET SESSION character_set_server='utf8';");
-		Database::query("SET SESSION collation_server='utf8_general_ci';");
+		Database::query("SET storage_engine = INNODB;");
+		//Database::query("SET SESSION character_set_server='utf8';");
+		//Database::query("SET SESSION collation_server='utf8_general_ci';");
 		//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
-		Database::query("SET NAMES 'utf8';");
+		//Database::query("SET NAMES 'utf8';");
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
@@ -839,8 +800,10 @@ if (@$_POST['step2']) {
 } elseif (@$_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
-    if (empty($proposedUpdatePath)) { $proposedUpdatePath = $_POST['updatePath']; }
-    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
+	if (empty($proposedUpdatePath)) {
+		$proposedUpdatePath = $_POST['updatePath'];
+	}
+    display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
 } else {
 	// This is the start screen.
     display_language_selection();

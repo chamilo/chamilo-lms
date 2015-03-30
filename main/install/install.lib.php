@@ -690,6 +690,7 @@ function fill_track_countries_table($trackCountriesTable)
  */
 function load_main_database($installation_settings, $dbScript = '')
 {
+    $sql_text = null;
     if (!empty($dbScript)) {
         if (file_exists($dbScript)) {
             $sql_text = file_get_contents($dbScript);
@@ -708,167 +709,9 @@ function load_main_database($installation_settings, $dbScript = '')
     }
 
     global $manager;
-    $manager->getConnection()->prepare($sql_text);
-    //parse_sql_queries($sql_text);
+    $result = $manager->getConnection()->prepare($sql_text);
+    $result->execute();
 }
-
-/**
- * Creates the structure of the stats database
- * @param   string  $dbScript Name of the file containing the SQL script inside the install directory
- */
-function load_database_script($dbScript)
-{
-    $dbScript = api_get_path(SYS_CODE_PATH).'install/'.$dbScript;
-    if (file_exists($dbScript)) {
-        $sql_text = file_get_contents($dbScript);
-    }
-    parse_sql_queries($sql_text);
-}
-
-/**
- * Parse SQL queries
- * @param string $sql_text SQL code
- */
-function parse_sql_queries($sql_text)
-{
-    //split in array of sql strings
-    $sql_instructions = array();
-    split_sql_file($sql_instructions, $sql_text);
-
-    //execute the sql instructions
-    $count = count($sql_instructions);
-    for ($i = 0; $i < $count; $i++) {
-        $this_sql_query = $sql_instructions[$i]['query'];
-
-        Database::query($this_sql_query);
-        //UTF8 fix see #5678
-        /*
-        if (strpos(strtolower($this_sql_query), 'create table') === false) {
-            Database::query($this_sql_query);
-        } else {
-            //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1);
-            $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';
-            Database::query($this_sql_query);
-        }*/
-    }
-}
-
-
-/**
- * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
- * Removes comment lines and splits up large sql files into individual queries
- * Last revision: September 23, 2001 - gandon
- * @param   array    $ret the split sql commands
- * @param   string   $sql the sql commands
- * @return  boolean  always true
- */
-function split_sql_file(&$ret, $sql)
-{
-    // do not trim, see bug #1030644
-    //$sql          = trim($sql);
-    $sql          = rtrim($sql, "\n\r");
-    $sql_len      = strlen($sql);
-    $char         = '';
-    $string_start = '';
-    $in_string    = false;
-    $nothing      = true;
-    $time0        = time();
-
-    for ($i = 0; $i < $sql_len; ++$i) {
-        $char = $sql[$i];
-
-        // We are in a string, check for not escaped end of strings except for
-        // back-quotes that can't be escaped
-        if ($in_string) {
-            for (;;) {
-                $i = strpos($sql, $string_start, $i);
-                // No end of string found -> add the current substring to the
-                // returned array
-                if (!$i) {
-                    $ret[] = $sql;
-                    return true;
-                } elseif ($string_start == '`' || $sql[$i - 1] != '\\') {
-                    // Back-quotes or no backslashes before quotes: it's indeed the
-                    // end of the string -> exit the loop
-                    $string_start = '';
-                    $in_string = false;
-                    break;
-                } else { // one or more Backslashes before the presumed end of string...
-                    // ... first checks for escaped backslashes
-                    $j = 2;
-                    $escaped_backslash = false;
-                    while ($i - $j > 0 && $sql[$i - $j] == '\\') {
-                        $escaped_backslash = !$escaped_backslash;
-                        $j++;
-                    }
-                    // ... if escaped backslashes: it's really the end of the
-                    // string -> exit the loop
-                    if ($escaped_backslash) {
-                        $string_start = '';
-                        $in_string = false;
-                        break;
-                    } else { // ... else loop
-                        $i++;
-                    }
-                } // end if...elseif...else
-            } // end for
-            // end if (in string)
-
-            // lets skip comments (/*, -- and #)
-        } elseif (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') ||
-            $char == '#' ||
-            ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')
-        ) {
-            $i = strpos($sql, $char == '/' ? '*/' : "\n", $i);
-            // didn't we hit end of string?
-            if ($i === false) {
-                break;
-            }
-            if ($char == '/') {
-                $i++;
-            }
-
-            // We are not in a string, first check for delimiter...
-        } elseif ($char == ';') {
-            // if delimiter found, add the parsed part to the returned array
-            $ret[] = array('query' => substr($sql, 0, $i), 'empty' => $nothing);
-            $nothing = true;
-            $sql = ltrim(substr($sql, min($i + 1, $sql_len)));
-            $sql_len = strlen($sql);
-            if ($sql_len) {
-                $i = -1;
-            } else {
-                // The submitted statement(s) end(s) here
-                return true;
-            }
-            // end elseif (is delimiter)
-
-            // ... then check for start of a string,...
-        } elseif (($char == '"') || ($char == '\'') || ($char == '`')) {
-            $in_string = true;
-            $nothing = false;
-            $string_start = $char;
-        // end elseif (is start of string)
-
-        } elseif ($nothing) {
-            $nothing = false;
-        }
-
-        // Send a fake header each 30 sec. to bypass browser timeout
-        $time1     = time();
-        if ($time1 >= $time0 + 30) {
-            $time0 = $time1;
-            header('X-pmaPing: Pong');
-        } // end if
-    } // end for
-
-    // add any rest to the returned array
-    if (!empty($sql) && preg_match('@[^[:space:]]+@', $sql)) {
-        $ret[] = array('query' => $sql, 'empty' => $nothing);
-    }
-
-    return true;
-} // end of the 'split_sql_file()' function
 
 /**
  * Get an SQL file's contents
@@ -1085,8 +928,7 @@ function display_language_selection()
  * @param string $installType
  * @param boolean $badUpdatePath
  * @param string The updatePath given (if given)
- * @param array $update_from_version_8 The different subversions from version 1.8
- * @param array $update_from_version_6 The different subversions from version 1.6
+ * @param array $update_from_version_8 The different subversions from version 1.9
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1095,8 +937,7 @@ function display_requirements(
     $installType,
     $badUpdatePath,
     $updatePath = '',
-    $update_from_version_8 = array(),
-    $update_from_version_6 = array()
+    $update_from_version_8 = array()
 ) {
     global $_setting;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
@@ -1418,7 +1259,7 @@ function display_requirements(
         if ($badUpdatePath) { ?>
             <div class="error-message">
                 <?php echo get_lang('Error'); ?>!<br />
-                Chamilo <?php echo (isset($_POST['step2_update_6']) ? implode('|', $update_from_version_6) : implode('|', $update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
+                Chamilo <?php echo implode('|', $update_from_version_8).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
             </div>
         <?php }
         else {
@@ -1544,16 +1385,10 @@ function display_requirements(
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <?php
         // Real code
-        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.8.x"';
+        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.9.x"';
         if ($error) echo ' disabled="disabled"';
-        // Temporary code for alpha version, disabling upgrade
-        //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
-        //echo ' disabled="disabled"';
-        //end temp code
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS18x').'</button>';
-        echo ' <button type="submit" class="btn btn-default" name="step2_update_6" value="Upgrade from Chamilo 1.6.x"';
-        if ($error) echo ' disabled="disabled"';
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS16x').'</button>';
+        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS19x').'</button>';
+
         echo '</p>';
     }
 }
@@ -1814,9 +1649,6 @@ function display_database_settings_form(
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
-        if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
-            $dbPrefixForm = '';
-        }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
@@ -1848,13 +1680,6 @@ function display_database_settings_form(
     $example_password = get_lang('EG').' '.api_generate_password();
     displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
-    echo '<input type="hidden" name="enableTrackingForm" value="1" />';
-
-    $style = '';
-    if ($installType == INSTALL_TYPE_UPDATE) {
-        $style = '';
-    }
-
     //Database Name fix replace weird chars
     if ($installType != INSTALL_TYPE_UPDATE) {
         $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
@@ -1868,7 +1693,7 @@ function display_database_settings_form(
         $dbNameForm,
         '&nbsp;',
         null,
-        'id="optional_param1" '.$style
+        'id="optional_param1"'
     );
 
     ?>
@@ -1886,53 +1711,34 @@ function display_database_settings_form(
         <?php
 
         $database_exists_text = '';
-
+        $manager = null;
         try {
+
             $manager = testDbConnect(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
-                $dbNameForm
+                null
             );
+            $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
+
+            if (in_array($dbNameForm, $databases)) {
+                $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+            } else {
+                $manager->getConnection()->getSchemaManager()->createDatabase(
+                    $dbNameForm
+                );
+            }
         } catch (Exception $e) {
             $database_exists_text = $e->getMessage();
         }
 
-        $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
-
-        if (in_array($dbNameForm, $databases)) {
-            $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-        } else {
-
-            if ($dbConnect == -1) {
-                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';
-            } else {
-                $manager->getConnection()->getSchemaManager()->createDatabase($dbNameForm);
-                /*
-                //Try to create the database
-                $user_can_create_databases = false;
-                $multipleDbCheck = @Database::query("CREATE DATABASE ".mysql_real_escape_string($dbNameForm));
-                if ($multipleDbCheck !== false) {
-                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".mysql_real_escape_string($dbNameForm));
-                    $user_can_create_databases = true;
-                }
-
-                if ($user_can_create_databases) {
-                    $database_exists_text = '<div class="normal-message">'.sprintf(get_lang('DatabaseXWillBeCreated'), $dbNameForm, $dbUsernameForm).'</div>';
-                } else {
-                    $dbConnect = 0;
-                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';
-                }*/
-            }
-        }
-
-        if ($manager): ?>
+        if ($manager->getConnection()->isConnected()): ?>
         <td colspan="2">
             <?php echo $database_exists_text ?>
             <div id="db_status" class="confirmation-message">
                 Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br />
-                Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br />
-                Database platform: <strong><?php echo $manager->getConnection()->getDatabasePlatform()->getName(); ?></strong><br />
+                Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br />
                 <div style="clear:both;"></div>
             </div>
         </td>
@@ -2235,7 +2041,7 @@ function get_countries_list_from_array($combo = false)
 }
 
 /**
- * Lockis settings that can't be changed in other portals
+ * Lock settings that can't be changed in other portals
  */
 function locking_settings()
 {

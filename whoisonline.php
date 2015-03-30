@@ -89,8 +89,9 @@ $(document).ready(function() {
 });
 </script>';
 
+$social_right_content = null;
 
-if ($_GET['chatid'] != '') {
+if (isset($_GET['chatid'])) {
     //send out call request
     $time = time();
     $time = date("Y-m-d H:i:s", $time);
@@ -105,7 +106,9 @@ if ($_GET['chatid'] != '') {
 }
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
+if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
+    ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])
+) {
 
     if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
         $user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
@@ -149,8 +152,8 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 $tpl = new Template(get_lang('UsersOnLineList'));
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
-    $tpl->assign('social_left_content', $social_left_content);
-    $tpl->assign('social_right_content', $social_right_content);
+    $tpl->assign('social_avatar_block', $social_left_content);
+    $tpl->assign('social_search_block', $social_right_content);
     $social_layout = $tpl->get_template('social/home.tpl');
     $tpl->display($social_layout);
 } else {

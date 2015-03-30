@@ -64,6 +64,11 @@ if (!empty($extra_fields)) {
     }
 }
 
+if (api_is_student_boss()) {
+    $column_model[] = array('name'=>'group', 'index'=>'group', 'width'=>'50', 'align'=>'left','sortable'=>'false');
+    $columns[] = get_lang('Group');
+}
+
 // Autowidth
 $extra_params['autowidth'] = 'true';
 // height auto

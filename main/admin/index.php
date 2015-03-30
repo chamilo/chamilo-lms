@@ -259,15 +259,39 @@ if (
     !api_is_session_admin() ||
     !api_get_configuration_value('limit_session_admin_role')
 ) {
-$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
-$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
-$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
-$items[] = array('url'=>'session_import_drh.php', 	'label' => get_lang('ImportSessionDrhList'));
-if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-    $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
-}
-$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
-$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
+    $items[] = array(
+        'url' => 'session_add.php',
+        'label' => get_lang('AddSession')
+    );
+    $items[] = array(
+        'url' => 'session_category_list.php',
+        'label' => get_lang('ListSessionCategory'));
+    $items[] = array(
+        'url' => 'session_import.php',
+        'label' => get_lang('ImportSessionListXMLCSV')
+    );
+    $items[] = array(
+        'url' => 'session_import_drh.php',
+        'label' => get_lang('ImportSessionDrhList')
+    );
+    if (
+        isset($extAuthSource) &&
+        isset($extAuthSource['ldap']) &&
+        count($extAuthSource['ldap']) > 0
+    ) {
+        $items[] = array(
+            'url' => 'ldap_import_students_to_session.php',
+            'label' => get_lang('ImportLDAPUsersIntoSession')
+        );
+    }
+    $items[] = array(
+        'url' => 'session_export.php',
+        'label' => get_lang('ExportSessionListXMLCSV')
+    );
+    $items[] = array(
+        'url' => '../coursecopy/copy_course_session.php',
+        'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
+    );
 }
 
 if (api_is_platform_admin()) {

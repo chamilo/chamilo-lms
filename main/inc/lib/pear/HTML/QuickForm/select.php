@@ -73,7 +73,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    public function HTML_QuickForm_select(
+    public function __construct(
         $elementName = null,
         $elementLabel = null,
         $options = null,

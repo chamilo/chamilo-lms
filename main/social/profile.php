@@ -236,7 +236,7 @@ foreach ($sessionList as $session) {
 }
 
 // My friends
-$friend_html = listMyFriends($user_id, $link_shared ,$show_full_profile);
+$friend_html = SocialManager::listMyFriends($user_id, $link_shared ,$show_full_profile);
 $social_left_content = '<div class="well sidebar-nav">' .$friend_html . '</div>';
 
 /*
@@ -281,11 +281,11 @@ if ($show_full_profile) {
 */
 //Social Block Wall
 
-$wallSocialAddPost = wallSocialAddPost();
+$wallSocialAddPost = SocialManager::getWallForm();
 $social_wall_block = $wallSocialAddPost;
 
 //Social Post Wall
-$post_wall = wallSocialPost($my_user_id,$friendId) ;
+$post_wall = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
 $social_post_wall_block  = '<div class="panel panel-default social-post">';
 $social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
 $social_post_wall_block .='<div class="panel-body">';
@@ -749,99 +749,3 @@ $tpl->assign('formModals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
 
-/*
-* function list my friends
-*/
-function listMyFriends($user_id, $link_shared, $show_full_profile)
-{
-    //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-    $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
-
-    $friendHtml = '';
-    $number_of_images = 30;
-    $number_friends = 0;
-    $number_friends = count($friends);
-
-    $friendHtml = '<div class="nav-list"><h3>'.get_lang('SocialFriend').'<span>(' . $number_friends . ')</span></h3></div>';
-
-    if ($number_friends != 0) {
-        if ($number_friends > $number_of_images) {
-            if (api_get_user_id() == $user_id) {
-                $friendHtml.= ' : <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
-            } else {
-                $friendHtml.= ' : <span>'
-                    .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
-                    .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                    .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
-            }
-        }
-
-        $friendHtml.= '<ul class="nav nav-list">';
-        $j = 1;
-        for ($k=0; $k < $number_friends; $k++) {
-            if ($j > $number_of_images) break;
-
-            if (isset($friends[$k])) {
-                $friend = $friends[$k];
-                $name_user    = api_get_person_name($friend['firstName'], $friend['lastName']);
-                $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
-
-                if ($user_info_friend['user_is_online']) {
-                    $statusIcon = Display::span('', array('class' => 'online_user_in_text'));
-                } else {
-                    $statusIcon = Display::span('', array('class' => 'offline_user_in_text'));
-                }
-
-                $friendHtml.= '<li class="">';
-                // the height = 92 must be the sqme in the image_friend_network span style in default.css
-                $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 20, USER_IMAGE_SIZE_SMALL);
-                $friendHtml.= '<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
-                $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
-                $friendHtml.= $statusIcon .'<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">' . $name_user .'</a>';
-                $friendHtml.= '</li>';
-            }
-            $j++;
-        }
-        $friendHtml.='</ul>';
-    } else {
-        $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
-            .'<a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'. get_lang('TryAndFindSomeFriends').'</a></div>';
-    }
-
-    return $friendHtml;
-}
-
-
-function wallSocialAddPost()
-{
-    $html  = '<div class="panel panel-default social-wall">';
-    $html .= '<div class="panel-heading">' . get_lang('SocialWall') . '</div>';
-    $html .= '<div class="panel-body">';
-    $html .=
-        '<form name="social_wall_main" method="POST" enctype="multipart/form-data">
-            <label for="social_wall_new_msg_main" class="hide">' . get_lang('SocialWallWhatAreYouThinkingAbout') . '</label>
-        <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
-        <br />
-        <input class="" name="picture" type="file" accept="image/*" style="width:80%;">
-        <button type="submit" name="social_wall_new_msg_main_submit"  class="pull-right btn btn-success" />
-        <i class="fa fa-pencil"></i> '.get_lang('Post').'</button>
-    </form>';
-    $html.= '</div></div>';
-
-    return $html;
-}
-
-function wallSocialPost($userId, $friendId)
-{
-    $array = SocialManager::getWallMessagesPostHTML($userId, $friendId);
-    $html = '';
-
-    for($i = 0; $i < count($array); $i++) {
-        $post = $array[$i]['html'];
-        $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $array[$i]['id']);
-
-        $html .= $post.$comment;
-    }
-
-    return $html;
-}

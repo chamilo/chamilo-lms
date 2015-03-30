@@ -576,7 +576,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $options
+     * @param array  $options
      * @param array  $attributes
      *
      * @return HTML_QuickForm_select

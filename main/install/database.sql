@@ -1380,6 +1380,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     generate_certificates TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     id int unsigned NOT NULL auto_increment,
@@ -1396,6 +1397,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     locked int NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE IF NOT EXISTS gradebook_link (
   id int NOT NULL auto_increment,
@@ -2354,116 +2356,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             </center>
             </body>
 ');
-
-
---
--- --------------------------------------------------------
---
--- Tables for reservation
---
-
-
---
--- Table structure for table reservation category
---
-
-DROP TABLE IF EXISTS reservation_category;
-CREATE TABLE IF NOT EXISTS reservation_category (
-   id  int unsigned NOT NULL auto_increment,
-   parent_id  int NOT NULL default 0,
-   name  varchar(128) NOT NULL default '',
-  PRIMARY KEY  ( id )
-);
-
---
--- Table structure for table reservation category_rights
---
-
-DROP TABLE IF EXISTS reservation_category_rights;
-CREATE TABLE IF NOT EXISTS reservation_category_rights  (
-    id  int unsigned NOT NULL auto_increment,
-    category_id  int NOT NULL default 0,
-    class_id  int NOT NULL default 0,
-    m_items  tinyint NOT NULL default 0,
-    PRIMARY KEY  ( id )
-);
-
---
--- Table structure for table  item reservation
---
-DROP TABLE IF EXISTS reservation_item;
-CREATE TABLE IF NOT EXISTS  reservation_item  (
-   id  int unsigned NOT NULL auto_increment,
-   category_id  int unsigned NOT NULL default 0,
-   course_code  varchar(40) NOT NULL default '',
-   name  varchar(128) NOT NULL default '',
-   description  text NOT NULL,
-   blackout  tinyint NOT NULL default 0,
-   creator  int unsigned NOT NULL default 0,
-   always_available TINYINT NOT NULL default 0,
-  PRIMARY KEY  ( id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table reservation item_rights
---
-
-DROP TABLE IF EXISTS reservation_item_rights;
-CREATE TABLE IF NOT EXISTS  reservation_item_rights  (
-   item_id  int unsigned NOT NULL default 0,
-   class_id  int unsigned NOT NULL default 0,
-   edit_right  tinyint unsigned NOT NULL default 0,
-   delete_right  tinyint unsigned NOT NULL default 0,
-   m_reservation  tinyint unsigned NOT NULL default 0,
-   view_right  tinyint NOT NULL default 0,
-  PRIMARY KEY  ( item_id , class_id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for main reservation table
---
-
-DROP TABLE IF EXISTS reservation_main;
-CREATE TABLE IF NOT EXISTS  reservation_main  (
-   id  int unsigned NOT NULL auto_increment,
-   subid  int unsigned NOT NULL default 0,
-   item_id  int unsigned NOT NULL default 0,
-   auto_accept  tinyint unsigned NOT NULL default 0,
-   max_users  int unsigned NOT NULL default 1,
-   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribe_from  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribe_until  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribers  int unsigned NOT NULL default 0,
-   notes  text NOT NULL,
-   timepicker  tinyint NOT NULL default 0,
-   timepicker_min  int NOT NULL default 0,
-   timepicker_max  int NOT NULL default 0,
-  PRIMARY KEY  ( id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for reservation subscription table
---
-
-DROP TABLE IF EXISTS reservation_subscription;
-CREATE TABLE IF NOT EXISTS  reservation_subscription  (
-   dummy  int unsigned NOT NULL auto_increment,
-   user_id  int unsigned NOT NULL default 0,
-   reservation_id  int unsigned NOT NULL default 0,
-   accepted  tinyint unsigned NOT NULL default 0,
-   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  ( dummy )
-);
-
--- ---------------------------------------------------------
 
 --
 -- Table structure for table user_rel_user
@@ -4727,5 +4619,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.32' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.33' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

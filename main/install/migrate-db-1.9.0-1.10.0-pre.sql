@@ -1,18 +1,8 @@
 -- This script updates the databases structure before migrating the data from
 -- version 1.9.0 (or version 1.9.*) to version 1.10.0
--- it is intended as a standalone script, however, because of the multiple
--- databases related difficulties, it should be parsed by a PHP script in
--- order to connect to and update the right databases.
--- There is one line per query, allowing the PHP function file() to read
--- all lines separately into an array. The xxMAINxx-type markers are there
--- to tell the PHP script which database we're talking about.
--- By always using the keyword "TABLE" in the queries, we should be able
--- to retrieve and modify the table name from the PHP script if needed, which
--- will allow us to deal with the unique-database-type installations
---
--- This first part is for the main database
 
--- xxMAINxx
+-- Main DB changes
+
 ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id;
 ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id;
 ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
@@ -88,6 +78,11 @@ ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL;
 UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00';
 UPDATE user SET expiration_date = NULL WHERE expiration_date = '0000-00-00 00:00:00';
 
+UPDATE track_e_default SET default_date = NULL WHERE default_date = '0000-00-00 00:00:00';
+UPDATE track_e_lastaccess SET access_date = NULL WHERE access_date = '0000-00-00 00:00:00';
+UPDATE track_e_downloads SET down_date = NULL WHERE down_date = '0000-00-00 00:00:00';
+UPDATE track_e_access SET access_date = NULL WHERE access_date = '0000-00-00 00:00:00';
+
 ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
 
 DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools';
@@ -106,8 +101,10 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_ma
 INSERT INTO settings_options (variable, value, display_text) VALUES ('enabled_mathjax', 'false', 'No');
 
 ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT '';
+ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL;
+UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course';
 
--- xxCOURSExx
+-- Course DB changes (c_*)
 
 ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0;
 ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL;
@@ -124,7 +121,6 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY N
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
-UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course';
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.31' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.33' WHERE variable = 'chamilo_database_version';

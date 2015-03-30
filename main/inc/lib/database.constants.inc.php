@@ -116,9 +116,6 @@ define('TABLE_MAIN_SESSION_FIELD',          'session_field');
 define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 
-// Message
-define('TABLE_MAIN_MESSAGE', 'message');
-
 // Term and conditions
 define('TABLE_MAIN_LEGAL', 'legal');
 

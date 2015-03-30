@@ -1597,6 +1597,7 @@ class Agenda
      * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4])
      * @param array $attributes
      * @param bool $addOnlyItemsInSendTo
+     * @param bool $required
      */
     public function setSendToSelect(
         $form,
@@ -1604,7 +1605,8 @@ class Agenda
         $userList = null,
         $sendTo = array(),
         $attributes = array(),
-        $addOnlyItemsInSendTo = false
+        $addOnlyItemsInSendTo = false,
+        $required = false
     ) {
         $params = array(
             'id' => 'users_to_send_id',
@@ -1625,7 +1627,11 @@ class Agenda
         $sendToUsers = isset($sendTo['users']) ? $sendTo['users'] : array();
 
         /** @var HTML_QuickForm_select $select */
-        $select = $form->addElement('select', 'users_to_send', get_lang('To'), null, $params);
+        $select = $form->addSelect('users_to_send', get_lang('To'), null, $params);
+
+        if ($required) {
+            $form->setRequired($select);
+        }
 
         $selectedEveryoneOptions = array();
         if (isset($sendTo['everyone']) && $sendTo['everyone']) {
@@ -1799,7 +1805,7 @@ class Agenda
         } else {
             $sendTo = isset($params['send_to']) ? $params['send_to'] : null;
             if ($this->type == 'course') {
-                $this->showToForm($form, $sendTo);
+                $this->showToForm($form, $sendTo, array(), false, true);
             }
         }
 
@@ -1902,13 +1908,15 @@ class Agenda
      * @param array $sendTo array('everyone' => false, 'users' => [1, 2], 'groups' => [3, 4])
      * @param array $attributes
      * @param bool $addOnlyItemsInSendTo
+     * @param bool $required
      * @return bool
      */
     public function showToForm(
         $form,
         $sendTo = array(),
         $attributes = array(),
-        $addOnlyItemsInSendTo = false
+        $addOnlyItemsInSendTo = false,
+        $required = false
     ) {
         if ($this->type != 'course') {
             return false;
@@ -1936,8 +1944,10 @@ class Agenda
             $userList,
             $sendTo,
             $attributes,
-            $addOnlyItemsInSendTo
+            $addOnlyItemsInSendTo,
+            $required
         );
+
         return true;
 
     }
@@ -2246,8 +2256,7 @@ class Agenda
                     );
                     $selectedValues = $this->parseAgendaFilter($filter);
                     $this->showToForm($form, $selectedValues, $attributes);
-                    $form = $form->return_form();
-
+                    $form = $form->returnForm();
                 }
                 $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
                     Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";

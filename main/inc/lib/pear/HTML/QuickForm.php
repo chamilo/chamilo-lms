@@ -77,6 +77,7 @@ define('QUICKFORM_INVALID_DATASOURCE',     -9);
 // }}}
 
 /**
+ * Class HTML_QuickForm
  * Create, validate and process HTML forms
  *
  * @category    HTML
@@ -98,7 +99,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_elements = array();
+    public $_elements = array();
 
     /**
      * Array containing element name to index map
@@ -106,7 +107,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_elementIndex = array();
+    public $_elementIndex = array();
 
     /**
      * Array containing indexes of duplicate elements
@@ -114,7 +115,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_duplicateIndex = array();
+    public $_duplicateIndex = array();
 
     /**
      * Array containing required field IDs
@@ -122,7 +123,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_required = array();
+    public $_required = array();
 
     /**
      * Prefix message in javascript alert if error
@@ -130,7 +131,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  string
      * @access   public
      */
-    var $_jsPrefix = 'Invalid information entered.';
+    public $_jsPrefix = 'Invalid information entered.';
 
     /**
      * Postfix message in javascript alert if error
@@ -138,7 +139,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  string
      * @access   public
      */
-    var $_jsPostfix = 'Please correct these fields.';
+    public $_jsPostfix = 'Please correct these fields.';
 
     /**
      * Datasource object implementing the informal
@@ -147,7 +148,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  object
      * @access   private
      */
-    var $_datasource;
+    public $_datasource;
 
     /**
      * Array of default form values
@@ -155,7 +156,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_defaultValues = array();
+    public $_defaultValues = array();
 
     /**
      * Array of constant form values
@@ -163,7 +164,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_constantValues = array();
+    public $_constantValues = array();
 
     /**
      * Array of submitted form values
@@ -171,7 +172,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_submitValues = array();
+    public $_submitValues = array();
 
     /**
      * Array of submitted form files
@@ -179,7 +180,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  integer
      * @access   public
      */
-    var $_submitFiles = array();
+    public $_submitFiles = array();
 
     /**
      * Value for maxfilesize hidden element if form contains file input
@@ -187,7 +188,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  integer
      * @access   public
      */
-    var $_maxFileSize = 1048576; // 1 Mb = 1048576
+    public $_maxFileSize = 1048576; // 1 Mb = 1048576
 
     /**
      * Flag to know if all fields are frozen
@@ -195,7 +196,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  boolean
      * @access   private
      */
-    var $_freezeAll = false;
+    public $_freezeAll = false;
 
     /**
      * Array containing the form rules
@@ -203,14 +204,14 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_rules = array();
+    public $_rules = array();
 
     /**
      * Form rules, global variety
      * @var     array
      * @access  private
      */
-    var $_formRules = array();
+    public $_formRules = array();
 
     /**
      * Array containing the validation errors
@@ -218,7 +219,7 @@ class HTML_QuickForm extends HTML_Common
      * @var  array
      * @access   private
      */
-    var $_errors = array();
+    public $_errors = array();
 
     /**
      * Note for required fields in the form
@@ -226,14 +227,14 @@ class HTML_QuickForm extends HTML_Common
      * @since     1.0
      * @access    private
      */
-    var $_requiredNote = '<span style="font-size:80%; color:#ff0000;">*</span><span style="font-size:80%;"> denotes required field</span>';
+    public $_requiredNote = '<span style="font-size:80%; color:#ff0000;">*</span><span style="font-size:80%;"> denotes required field</span>';
 
     /**
      * Whether the form was submitted
      * @var       boolean
      * @access    private
      */
-    var $_flagSubmitted = false;
+    public $_flagSubmitted = false;
 
     // }}}
     // {{{ constructor
@@ -258,7 +259,12 @@ class HTML_QuickForm extends HTML_Common
         if (isset($attributes['id']) && !empty($attributes['id'])) {
             $form_id = Security::remove_XSS($attributes['id']);
         }
-        $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$form_id) + $target;
+        $attributes = array(
+            'action' => $action,
+            'method' => $method,
+            'name' => $formName,
+            'id' => $form_id
+        ) + $target;
         $this->updateAttributes($attributes);
         if (!$trackSubmit || isset($_REQUEST['_qf__' . $formName])) {
             if (1 == get_magic_quotes_gpc()) {
@@ -2059,8 +2065,14 @@ class HTML_QuickForm extends HTML_Common
         return isset($errorMessages[$value]) ? $errorMessages[$value] : $errorMessages[QUICKFORM_ERROR];
     } // end func errorMessage
 
-    // }}}
-} // end class HTML_QuickForm
+    /**
+     * @param HTML_QuickForm_element $element
+     */
+    public function setRequired(HTML_QuickForm_element $element)
+    {
+        $this->addRule($element->getName(), get_lang('ThisFieldIsRequired'), 'required');
+    }
+}
 
 /**
  * Class for errors thrown by HTML_QuickForm package
@@ -2101,6 +2113,4 @@ class HTML_QuickForm_Error extends PEAR_Error {
             $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
-    // }}}
-} // end class HTML_QuickForm_Error
-?>
+}

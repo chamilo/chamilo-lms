@@ -4062,7 +4062,7 @@ class UserManager
     public static function remove_user_rel_user($friend_id, $real_removed = false, $with_status_condition = '')
     {
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_my_message = Database :: get_main_table(TABLE_MESSAGE);
         $friend_id = intval($friend_id);
 
         if ($real_removed) {

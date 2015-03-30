@@ -198,14 +198,14 @@ switch ($action) {
                 'admin',
                 null
             );
-            $userIdList = api_array_column($userIdList, 'user_id');
+            $userIdList = array_column($userIdList, 'user_id');
             $sessionList = SessionManager::get_sessions_list();
-            $sessionIdList = api_array_column($sessionList, 'id');
+            $sessionIdList = array_column($sessionList, 'id');
 
             $courseCodeList = array();
             foreach ($sessionList as $session) {
                 $courses = SessionManager::get_course_list_by_session_id($session['id']);
-                $courseCodeList = array_merge($courseCodeList, api_array_column($courses, 'code'));
+                $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
             }
         }
 

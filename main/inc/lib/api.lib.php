@@ -8078,29 +8078,3 @@ function apiIsSystemInstalled()
     $version = $settingsRow['selected_value'];
     return array('installed' => 1, 'message' => $version);
 }
-
-/**
- * Fallback for PHP 5.5 array_colum function.
- * Return the values from a single column in the $input array
- * @param array $input Array from which to pull a column of values
- * @param string $columnName The column of values to return
- * @return array
- */
-function api_array_column($input, $columnName)
-{
-    if (function_exists('array_column')) {
-        return array_column($input, $columnName);
-    }
-
-    $result = array();
-
-    foreach ($input as $value) {
-        if (!array_key_exists($columnName, $value)) {
-            continue;
-        }
-
-        $result[] = $value[$columnName];
-    }
-
-    return $result;
-}

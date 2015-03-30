@@ -911,10 +911,9 @@ class SocialManager extends UserManager
         if (isset($_GET['id']) or count($user_list) < 1) {
             return false;
         }
-        $column_size = '9';
+        $column_size = '12';
         $add_row = false;
         if (api_is_anonymous()) {
-            $column_size = '12';
             $add_row = true;
         }
 

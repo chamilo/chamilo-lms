@@ -4179,6 +4179,8 @@ a.forum_group_link {
 
 #online_grid_container {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 #hide_bar_template {

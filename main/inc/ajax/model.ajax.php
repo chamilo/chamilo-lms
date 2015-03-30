@@ -151,6 +151,8 @@ switch ($action) {
 
         $courseCodeList = array();
         $userIdList  = array();
+        $sessionIdList = [];
+        $searchByGroups = false;
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -188,50 +190,77 @@ switch ($action) {
                 exit;
             }
         } elseif (api_is_student_boss()) {
-            $users = UserManager::getUsersFollowedByStudentBoss($userId);
-            $userIdList = array_keys($users);
-        }
+            $searchByGroups = true;
+        } elseif (api_is_platform_admin()) {
+            if ($sessionId == -1) {
+                $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'admin',
+                    null
+                );
+                $userIdList = array_column($userIdList, 'user_id');
+                $sessionList = SessionManager::get_sessions_list();
+                $sessionIdList = array_column($sessionList, 'id');
 
-        $sessionIdList = [];
-        if ($sessionId == -1) {
-            $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                null
-            );
-            $userIdList = array_column($userIdList, 'user_id');
-            $sessionList = SessionManager::get_sessions_list();
-            $sessionIdList = array_column($sessionList, 'id');
-
-            $courseCodeList = array();
-            foreach ($sessionList as $session) {
-                $courses = SessionManager::get_course_list_by_session_id($session['id']);
-                $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
-            }
-        }
-
-        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
-        $groupsId = array_keys($groups);
-
-        if (is_array($groupsId)) {
-            foreach ($groupsId as $groupId) {
-                $groupUsers = GroupPortalManager::get_users_by_group($groupId);
-
-                if (!is_array($groupUsers)) {
-                    continue;
+                $courseCodeList = array();
+                foreach ($sessionList as $session) {
+                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
+                    $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
                 }
+            }
+            $searchByGroups = true;
+        }
 
-                foreach ($groupUsers as $memberId => $member) {
-                    if ($member['user_id'] == $userId ) {
+        if ($searchByGroups) {
+            $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+            $groupsId = array_keys($groups);
+
+            if (is_array($groupsId)) {
+                foreach ($groupsId as $groupId) {
+                    $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+                    if (!is_array($groupUsers)) {
                         continue;
                     }
 
-                    $userIdList[] = intval($member['user_id']);
+                    foreach ($groupUsers as $memberId => $member) {
+                        if ($member['user_id'] == $userId ) {
+                            continue;
+                        }
+
+                        $userIdList[] = intval($member['user_id']);
+                    }
                 }
             }
         }
 
         if (is_array($userIdList)) {
             $userIdList = array_unique($userIdList);
+        }
+
+        if (api_is_student_boss()) {
+            $userCourses = [];
+            foreach ($userIdList as $userId) {
+                $userCourses = array_merge(
+                    $userCourses,
+                    CourseManager::get_courses_list_by_user_id($userId, true)
+                );
+
+                $userSessions = SessionManager::getSessionsFollowedByUser($userId);
+
+                $sessionIdList = array_merge(
+                    $sessionIdList,
+                    array_column($userSessions, 'id')
+                );
+            }
+            $courseCodeList = array_column($userCourses, 'code');
+        }
+
+        if (!empty($courseCodeList)) {
+            $courseCodeList = array_unique($courseCodeList);
+        }
+
+        if (!empty($sessionIdList)) {
+            $sessionIdList = array_unique($sessionIdList);
         }
 
         if ($action == 'get_user_course_report') {

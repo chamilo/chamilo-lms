@@ -1556,6 +1556,7 @@ class CourseManager
                             $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
                             $report_info[$extra['1']] = $user_data[$extra['1']];
                         }
+                        $report_info['user_id'] = $user['user_id'];
                         $users[] = $report_info;
                     }
                 } else {

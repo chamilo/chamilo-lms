@@ -602,6 +602,12 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
+
+        if (api_is_student_boss()) {
+            $columns[] = 'group';
+            $column_names[] = get_lang('Group');
+        }
+
         if (!in_array($sidx, array('title'))) {
             $sidx = 'title';
         }
@@ -621,6 +627,13 @@ switch ($action) {
             null,
             $sessionIdList
         );
+        if (api_is_student_boss()) {
+            foreach ($result as &$item) {
+                $userGroups = GroupPortalManager::get_groups_by_user($item['user_id']);
+                $item['group'] = implode(", ", array_column($userGroups, 'name'));
+                unset($item['user_id']);
+            }
+        }
 
         break;
 	case 'get_user_skill_ranking':

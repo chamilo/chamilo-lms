@@ -18,11 +18,11 @@
             {{ social_right_content}}
         </div>
         <div id="display_response_id" class="span5"></div>
-        {{ socialAutoExtendLink }}
+        {{ social_auto_extend_link }}
     </div>
     <div class="col-md-4">
         <div class="row">
-            {{ socialRightInformation}}
+            {{ social_right_information }}
         </div>
     </div>
 </div>

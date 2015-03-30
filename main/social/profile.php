@@ -113,7 +113,6 @@ if ($user_info['user_id'] == api_get_user_id()) {
 $userIsOnline = user_is_online($user_id);
 
 $libpath = api_get_path(LIBRARY_PATH);
-require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
 
 require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
@@ -737,8 +736,8 @@ $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
 $tpl->assign('social_skill_block', $social_skill_block);
 $tpl->assign('social_session_block', $social_session_block);
-$tpl->assign('socialRightInformation', $socialRightInformation);
-$tpl->assign('socialAutoExtendLink', $socialAutoExtendLink);
+$tpl->assign('social_right_information', $socialRightInformation);
+$tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl =  new Template();
 $formModalTpl->assign('messageForm', MessageManager::generate_message_form('send_message'));

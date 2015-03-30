@@ -12,25 +12,15 @@
     <div id="wallMessages" class="col-md-6">
         {{ social_wall_block }}
         {{ social_post_wall_block }}
-        {{ socialAutoExtendLink }}
-       <!-- <div class="row">
-            <div class="span5">
-                <div id="message_ajax_reponse" class=""></div>
-            </div>
-        </div> -->
-
-       <!--- <div id="display_response_id" class="span5"></div> -->
-
+        {{ social_auto_extend_link }}
     </div>
     <div class="col-md-3">
-
-            {{ social_skill_block }}
-            {{ social_group_info_block }}
-            {{ social_course_block }}
-            {{ social_session_block }}
-            {{ social_rss_block }}
-            {{ socialRightInformation}}
-
+        {{ social_skill_block }}
+        {{ social_group_info_block }}
+        {{ social_course_block }}
+        {{ social_session_block }}
+        {{ social_rss_block }}
+        {{ social_right_information }}
     </div>
 </div>
     {% if formModals is defined %}

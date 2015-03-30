@@ -207,7 +207,7 @@ class SocialManager extends UserManager
      */
     public static function send_invitation_friend($user_id, $friend_id, $message_title, $message_content)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $user_id = intval($user_id);
         $friend_id = intval($friend_id);
 
@@ -271,7 +271,7 @@ class SocialManager extends UserManager
      */
     public static function get_message_number_invitation_by_user_id($user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.'
                 WHERE
                     user_receiver_id='.intval($user_receiver_id).' AND
@@ -289,7 +289,7 @@ class SocialManager extends UserManager
      */
     public static function get_list_invitation_of_friends_by_user_id($user_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_sender_id,send_date,title,content
                 FROM '.$tbl_message.'
                 WHERE
@@ -312,7 +312,7 @@ class SocialManager extends UserManager
     public static function get_list_invitation_sent_by_user_id($user_id)
     {
         $list_friend_invitation = array();
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_receiver_id, send_date,title,content
                 FROM '.$tbl_message.'
                 WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
@@ -332,7 +332,7 @@ class SocialManager extends UserManager
      */
     public static function invitation_accepted($user_send_id, $user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = "UPDATE $tbl_message
                 SET msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED."
                 WHERE
@@ -351,7 +351,7 @@ class SocialManager extends UserManager
      */
     public static function invitation_denied($user_send_id, $user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'DELETE FROM '.$tbl_message.'
                 WHERE
                     user_sender_id =  '.((int) $user_send_id).' AND
@@ -1148,7 +1148,7 @@ class SocialManager extends UserManager
      */
     public static function sendWallMessage($userId, $friendId, $messageContent, $messageId = 0 ,$messageStatus)
     {
-        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $userId = intval($userId);
         $friendId = intval($friendId);
         $messageId = intval($messageId);
@@ -1247,7 +1247,7 @@ class SocialManager extends UserManager
         if (empty($start)) {
             $start = '0000-00-00';
         }
-        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachement = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         $userId = intval($userId);
@@ -1656,22 +1656,6 @@ class SocialManager extends UserManager
         $form->addTextarea('social_wall_new_msg_main', null, array('placeholder' => get_lang('SocialWallWhatAreYouThinkingAbout')));
         $form->addButtonSend(get_lang('Post'));
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
-
-        return $html;
-
-        $html  = '<div class="panel panel-default social-wall">';
-        $html .= '<div class="panel-heading">' . get_lang('SocialWall') . '</div>';
-        $html .= '<div class="panel-body">';
-        $html .=
-            '<form name="social_wall_main" method="POST" enctype="multipart/form-data">
-            <label for="social_wall_new_msg_main" class="hide">' . get_lang('SocialWallWhatAreYouThinkingAbout') . '</label>
-        <textarea name="social_wall_new_msg_main" rows="2" cols="80" style="width: 98%" placeholder="'.get_lang('SocialWallWhatAreYouThinkingAbout').'"></textarea>
-        <br />
-        <input class="" name="picture" type="file" accept="image/*" style="width:80%;">
-        <button type="submit" name="social_wall_new_msg_main_submit"  class="pull-right btn btn-success" />
-        <i class="fa fa-pencil"></i> '.get_lang('Post').'</button>
-    </form>';
-        $html.= '</div></div>';
 
         return $html;
     }

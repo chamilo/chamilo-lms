@@ -703,7 +703,7 @@ class Statistics
      */
     public static function getMessages($messageType)
     {
-        $message_table = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $message_table = Database::get_main_table(TABLE_MESSAGE);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 

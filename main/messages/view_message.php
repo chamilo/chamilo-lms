@@ -75,7 +75,6 @@ $tpl = new Template(get_lang('View'));
 SocialManager::setSocialUserBlock($tpl, $user_id, $show_menu);
 
 if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_avatar_block', $social_avatar_block);
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

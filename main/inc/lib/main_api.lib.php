@@ -7517,3 +7517,17 @@ function api_site_use_cookie_warning_cookie_exist()
 {
     return isset($_COOKIE['ChamiloUsesCookies']);
 }
+
+/**
+ * Limit the access to Session Admins wheen the limit_session_admin_role
+ * configuration variable is set to true
+ */
+function api_protect_limit_for_session_admin()
+{
+    if (
+        api_is_session_admin() &&
+        api_get_configuration_value('limit_session_admin_role')
+    ) {
+        api_not_allowed(true);
+    }
+}

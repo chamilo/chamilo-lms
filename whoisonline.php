@@ -65,7 +65,7 @@ function hide_icon_edit(element_html)  {
 
 $(document).ready(function() {
 
-    $("#link_load_more_items").live("click", function() {
+    $("#link_load_more_items").click(function() {
         page = $("#link_load_more_items").attr("data_link");
         $.ajax({
                 beforeSend: function(objeto) {

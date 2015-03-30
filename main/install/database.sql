@@ -3184,7 +3184,7 @@ DROP TABLE IF EXISTS track_e_access;
 CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
-  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_date datetime NOT NULL,
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
@@ -3198,7 +3198,7 @@ DROP TABLE IF EXISTS track_e_lastaccess;
 CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
-  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_date datetime NOT NULL,
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
@@ -3212,8 +3212,8 @@ DROP TABLE IF EXISTS track_e_default;
 CREATE TABLE track_e_default (
   default_id int NOT NULL auto_increment,
   default_user_id int unsigned NOT NULL default 0,
-  c_id int not null,
-  default_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int default NULL,
+  default_date datetime NOT NULL,
   default_event_type varchar(20) NOT NULL default '',
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
@@ -3225,7 +3225,7 @@ DROP TABLE IF EXISTS track_e_downloads;
 CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
-  down_date datetime NOT NULL default '0000-00-00 00:00:00',
+  down_date datetime NOT NULL,
   c_id int NOT NULL,
   down_doc_path varchar(255) NOT NULL default '',
   down_session_id INT NOT NULL DEFAULT 0,
@@ -4727,5 +4727,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.31' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.32' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

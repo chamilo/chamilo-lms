@@ -3273,7 +3273,6 @@ function api_not_allowed($print_headers = false, $message = null)
             $osso->logout();
         }
     }
-    Header::response_code(403);
     $home_url   = api_get_path(WEB_PATH);
     $user_id    = api_get_user_id();
     $course     = api_get_course_id();

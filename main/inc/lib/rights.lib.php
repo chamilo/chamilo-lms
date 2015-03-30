@@ -1,9 +1,13 @@
 <?php
 
+/**
+ * Class Rights
+ * @deprecated Don't use this class
+ */
 class Rights {
 	private static $rights_cache = array();
 	private static $rights = array (
-		'show_tabs:reports' => 
+		'show_tabs:reports' =>
 			array (
 				'type' => 'const',
 				'const' => 'true' )
@@ -12,7 +16,7 @@ class Rights {
 	// warning the goal of this function is to enforce rights managment in Chamilo
 	// thus default return value is always true
 	public static function hasRight($handler) {
-		if (array_key_exists($handler, self::$rights_cache)) 
+		if (array_key_exists($handler, self::$rights_cache))
 			return self::$rights_cache[$handler];
 
 		if (!array_key_exists($handler, self::$rights))
@@ -20,7 +24,7 @@ class Rights {
 
 		if (self::$rights[$handler]['type'] == 'sql') {
 			$result = Database::query(self::$rights[$handler]['sql']);
-			if (Database::num_rows($result) > 0) 
+			if (Database::num_rows($result) > 0)
 				$result = true;
 			else
 				$result = false;
@@ -33,7 +37,7 @@ class Rights {
 		self::$rights_cache[$handler] = $result;
 		return $result;
 	}
-			 
+
 	public static function hasRightClosePageWithError($handler) {
 		if (hasRight($handler) == false)
 			die("You are not allowed here"); //FIXME

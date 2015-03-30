@@ -1014,30 +1014,6 @@ class AnnouncementManager
     }
 
     /**
-     * returns all the javascript that is required for easily
-     * setting the target people/groups
-     * this goes into the $htmlHeadXtra[] array
-     */
-    public static function to_javascript()
-    {
-        $www = api_get_path(WEB_PATH);
-        /*
-         * Do not allow this kind of behaviour. js minifieds should be manage by the template class or assetic or whatever see #4757 for more info
-        if (api_get_setting('server_type') == 'test') {
-            $src = $www . 'main/announcements/resources/js/main.js';
-        } else {
-            $src = $www . 'main/announcements/resources/js/main.min.js';
-        }*/
-        $src = $www . 'main/announcements/resources/js/main.js';
-        $result = Javascript::tag($src);
-        $root = Chamilo::url();
-        $code = "var www = '$root';\n";
-        $code .= Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment', 'Everybody');
-        $result .= Javascript::tag_code($code);
-        return $result;
-    }
-
-    /**
      * constructs the form to display all the groups and users the message has been sent to
      * input: 	$sent_to_array is a 2 dimensional array containing the groups and the users
      * 			the first level is a distinction between groups and users:

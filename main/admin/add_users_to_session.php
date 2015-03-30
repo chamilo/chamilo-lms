@@ -411,7 +411,9 @@ if ($ajax_search) {
             }
         }
     }
-
+    if (api_is_session_admin() && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true') {
+        $order_clause = " AND u.creator_id = " . api_get_user_id() . $order_clause;
+    }
     if ($use_extra_fields) {
         $sql = "SELECT  user_id, lastname, firstname, username, id_session, official_code
                FROM $tbl_user u

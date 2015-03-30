@@ -3379,7 +3379,7 @@ class CourseManager
 
         $html .= '</div>';
         $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $html .= '<div class="span1 pull-right course-box-actions">' . $params['right_actions'] . '</div>';
+        $html .= '<div class="pull-right course-box-actions">' . $params['right_actions'] . '</div>';
         $html .= '</div>';
         $html .= '</div>';
         return $html;
@@ -3388,21 +3388,8 @@ class CourseManager
     public static function session_items_html($params, $is_sub_content = false)
     {
         $html = '';
-        $html.= '<li>';
-        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
-        $html.= $params['title']. $notifications;
-        $html.='</li>';
-
-        return $html;
-    }
-
-    public static function session_list_html($params,$items_session, $is_sub_content = false)
-    {
-        $html = '';
-        $class = "panel-body";
-        $html .= '<div class="sessions ' . $class . '">';
-        $html .= '<div class="row">';
-        $html .= '<div class="col-sx-6 col-md-2">';
+        $html.= '<div class="row">';
+        $html.= '<div class="col-md-2">';
         if (!empty($params['link'])){
             $html.= '<a class="thumbnail" href="'.$params['link'].'">';
             $html.= $params['icon'];
@@ -3410,17 +3397,40 @@ class CourseManager
         }else{
             $html.= $params['icon'];
         }
-        $html .= '</div>';
-        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
+        $html.= '</div>';
+        $html.= '<div class="col-md-10">';
+        $html.= $params['title'];
+        $html .= $params['coaches'];
+        $html.='</div>';
+        $html.='</div>';
+
+        return $html;
+    }
+
+    public static function session_list_html($params,$items_session, $is_sub_content = false)
+    {
+        $html = '';
         $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $html .= '<div class="col-sx-6 col-md-10">';
+        $class = "panel-body";
+        $html .= '<div class="panel-heading">';
+        if (!empty($params['link'])){
+            $html.= '<a href="'.$params['link'].'">';
+            $html.= $params['icon'];
+            $html.= '</a>';
+        }else{
+            $html.= $params['icon'];
+        }
+        $html .= $params['title'];
         $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
-        $html .= '<h4>'.$params['title'].$notifications.'</h4>';
+        $html .= '</div>';
+        $html .= '<div class="sessions ' . $class . '">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-md-12">';
+        if (!empty($params['subtitle'])) {
+            $html .= '<p class="subtitle-session"><i class="fa fa-clock-o"></i> ' . $params['subtitle'] . '</p>';
+        }
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
             $html .= '<p class="description-session">' . $params['description'] . '</p>';
-        }
-        if (!empty($params['subtitle'])) {
-            $html .= '<p class="alert alert-info subtitle-session"><i class="fa fa-clock-o"></i> ' . $params['subtitle'] . '</p>';
         }
         $html .= $items_session;
         $html .= '</div>';
@@ -3987,9 +3997,13 @@ class CourseManager
             'blackboard_blue.png',
             api_htmlentities($course_info['name']),
             array(),
-            ICON_SIZE_MEDIUM
+            ICON_SIZE_LARGE
         );
-
+        // Display the "what's new" icons
+        $notifications = '';
+        if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
+            $notifications .= Display:: show_notification($course_info);
+        }
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED ||
                 $user_in_course_status == COURSEMANAGER
@@ -4008,13 +4022,13 @@ class CourseManager
 
                     if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                         $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'];
-                        $session_title = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $params['icon'] .''. $course_info['name'] . '</a>';
+                        $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/?id_session=' . $course_info['id_session'] . '">'. $course_info['name'] . '</a>'.$notifications.'</h4>';
                     } else {
                         $session_title = $course_info['name'];
                     }
                 } else {
                     $session_url = api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/';
-                    $session_title = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/">' . $course_info['name'] . '</a>';
+                    $session_title = '<h4><a href="' . api_get_path(WEB_COURSE_PATH) . $course_info['path'] . '/">' . $course_info['name'] . '</a>'.$notifications.'</h4>';
                 }
             } else {
                 $session_title = $course_info['name'] . ' ' . Display::tag('span', get_lang('CourseClosed'),
@@ -4058,6 +4072,7 @@ class CourseManager
         if (api_get_setting('display_teacher_in_courselist') == 'true') {
             $teacher_list = null;
             if (!$nosession) {
+
                 $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string(
                     $course_info['code'],
                     self::USER_SEPARATOR,
@@ -4069,12 +4084,12 @@ class CourseManager
                     self::USER_SEPARATOR,
                     true
                 );
-
+                $icon_coachs = Display::return_icon('teacher.png','',null,ICON_SIZE_TINY);
                 if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
                     $params['teachers'] = $teacher_list;
                 }
                 if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
-                    $params['coaches'] = $course_coachs;
+                    $params['coaches'] = $icon_coachs.$course_coachs;
                 }
             } else {
                 $params['teachers'] = $teacher_list;
@@ -4083,11 +4098,6 @@ class CourseManager
 
         $session_title .= isset($course['special_course']) ? ' ' . Display::return_icon('klipper.png',
                 get_lang('CourseAutoRegister')) : '';
-
-        // Display the "what's new" icons
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED && $course_visibility != COURSE_VISIBILITY_HIDDEN) {
-            $session_title .= Display:: show_notification($course_info);
-        }
 
         $params['title'] = $session_title;
         $params['extra'] = '';

@@ -5457,6 +5457,8 @@ i.size-32.icon-new-work{
   margin-right: 5px;
 }
 .sessions .subtitle-session{
+  font-size: 12px;
+  font-style: italic;
 }
 /**
  * Modal for user avatar preview

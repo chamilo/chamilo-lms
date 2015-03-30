@@ -3305,7 +3305,7 @@ class CourseManager
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        // Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // Resize image to 100x85 (should be 85x85 but 100x85 visually gives
         // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
@@ -3389,21 +3389,21 @@ class CourseManager
     public static function session_items_html($params, $is_sub_content = false)
     {
         $html = '';
-        $html.= '<div class="row">';
-        $html.= '<div class="col-md-2">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-md-2">';
         if (!empty($params['link'])){
-            $html.= '<a class="thumbnail" href="'.$params['link'].'">';
-            $html.= $params['icon'];
-            $html.= '</a>';
+            $html .= '<a class="thumbnail" href="'.$params['link'].'">';
+            $html .= $params['icon'];
+            $html .= '</a>';
         }else{
-            $html.= $params['icon'];
+            $html .= $params['icon'];
         }
-        $html.= '</div>';
-        $html.= '<div class="col-md-10">';
-        $html.= $params['title'];
+        $html .= '</div>';
+        $html .= '<div class="col-md-10">';
+        $html .= $params['title'];
         $html .= $params['coaches'];
-        $html.='</div>';
-        $html.='</div>';
+        $html .= '</div>';
+        $html .= '</div>';
 
         return $html;
     }

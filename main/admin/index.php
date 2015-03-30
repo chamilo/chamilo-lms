@@ -112,15 +112,22 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
     $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+} elseif (
+    api_is_session_admin() &&
+    api_get_configuration_value('limit_session_admin_role')
+) {
+    $items = array(
+        array('url'=>'user_list.php', 	'label' => get_lang('UserList'))
+    );
 } else {
     $items = array(
         array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
         array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
         array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
+        array('url'=>'usergroups.php', 	'label' => get_lang('Classes'))
     );
 }
-
-$items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
 
 $blocks['users']['items'] = $items;
 $blocks['users']['extra'] = null;
@@ -245,7 +252,13 @@ $search_form = ' <form method="GET" class="form-search" action="session_list.php
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
+
 $items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
+
+if (
+    !api_is_session_admin() ||
+    !api_get_configuration_value('limit_session_admin_role')
+) {
 $items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
 $items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
 $items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
@@ -255,6 +268,7 @@ if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSour
 }
 $items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
 $items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
+}
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required

@@ -17,8 +17,6 @@ session_cache_limiter('public');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-require_once 'agenda.inc.php';
-
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');

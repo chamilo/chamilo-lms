@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 	@author Bart Mollet
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
@@ -123,25 +124,6 @@ $(document).ready(function() {
             document.getElementById(\'extra_data_text\').style.display="none";
         }
     }
-
-    $(".agenda_opener").live("click", function() {
-        var url = this.href;
-        var dialog = $("#dialog");
-
-        if ($("#dialog").length == 0) {
-            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
-        }
-        // load remote content
-        dialog.load(
-            url,
-            {},
-            function(responseText, textStatus, XMLHttpRequest) {
-                dialog.dialog({width:720, height:550, modal:true});
-            }
-        );
-        //prevent the browser to follow the link
-        return false;
-    });
 });
 
 //Load user calendar
@@ -627,7 +609,8 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
     if (api_is_platform_admin()) {
-        $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
+        $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.
+            Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
         if ($delete_user_available) {
             if ($user_id != api_get_user_id() &&
                 !$user_is_anonymous &&

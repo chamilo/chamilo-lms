@@ -19,7 +19,7 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     $htmlHeadXtra[] = '
     <script>
     $(document).ready(function() {
-        $(\'.ajax\').live(\'click\', function() {
+        $(\'.ajax\').click(function() {
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {

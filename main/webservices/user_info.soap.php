@@ -171,10 +171,9 @@ function WSEventsList($username, $signature, $datestart = 0, $dateend = 0) {
 
     $user_id = UserManager::get_user_id_from_username($username);
     if ($user_id === false) { return $events_list; } // Error in user id recovery.
-    require_once '../calendar/myagenda.inc.php';
     $ds = substr($datestart,0,4).'-'.substr($datestart,4,2).'-'.substr($datestart,6,2).' 00:00:00';
     $de = substr($dateend,0,4).'-'.substr($dateend,4,2).'-'.substr($dateend,6,2).' 00:00:00';
-    $events_list = get_personal_agenda_items_between_dates($user_id, $ds, $de);
+    $events_list = Agenda::get_personal_agenda_items_between_dates($user_id, $ds, $de);
     return $events_list;
 }
 

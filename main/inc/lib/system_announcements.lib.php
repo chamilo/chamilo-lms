@@ -378,11 +378,20 @@ class SystemAnnouncementManager
 			Debug::log_s(mysql_error());
 			return false;
 		}
+		$id = null;
 		if ($add_to_calendar) {
-		    require_once 'calendar.lib.php';
-		    $agenda_id = agenda_add_item($title, $original_content, $date_start, $date_end);
+			$agenda = new Agenda();
+			$agenda->setType('admin');
+			$id = $agenda->add_event(
+				$date_start,
+				$date_end,
+				false,
+				$title,
+				$original_content
+			);
 		}
-		return Database::insert_id();
+
+		return $id;
 	}
 
     /**

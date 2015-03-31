@@ -53,6 +53,7 @@
         "gedmo/doctrine-extensions": "~2.3",
         "sonata-project/user-bundle": "~2.2",
         "fxp/composer-asset-plugin": "~1.0",
+        "webit/eval-math": "dev-master",
         "bower-asset/bootstrap": "3.3.*",
         "bower-asset/fontawesome": "4.3.*",
         "bower-asset/moment": "2.9",

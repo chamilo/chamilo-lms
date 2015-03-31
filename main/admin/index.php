@@ -299,9 +299,6 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
     }
     $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-    if (api_get_setting('server_type') === 'test') {
-        $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
-    }
 
     if (isset($_configuration['db_manager_enabled']) &&
         $_configuration['db_manager_enabled'] == true &&

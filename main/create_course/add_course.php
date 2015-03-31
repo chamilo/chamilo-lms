@@ -37,16 +37,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     $(window).load(function () {
         setFocus();
     });
-
-    function advanced_parameters() {
-        if(document.getElementById(\'options\').style.display == \'none\') {
-            document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-        } else {
-            document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-        }
-    }
 </script>';
 
 $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'name' => get_lang('MyCourses'));
@@ -77,9 +67,8 @@ $form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex'))
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
-$form -> addElement('advanced_settings',$advanced);
-$form -> addElement('html','<div id="options" style="display:none">');
+$form->addButtonAdvancedSettings('advanced_params');
+$form->addElement('html','<div id="advanced_params_options" style="display:none">');
 
 // Category category.
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -95,7 +84,7 @@ $form->addElement(
 );
 
 // Course code
-$form->addText('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->addText('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
@@ -104,13 +93,13 @@ $titular = & $form->addElement('hidden', 'tutor_name', ''); //array(get_lang('Pr
 if ($course_validation_feature) {
 
     // Description of the requested course.
-    $form->addElement('textarea', 'description', get_lang('Description'), array('class' => 'span6', 'rows' => '3'));
+    $form->addElement('textarea', 'description', get_lang('Description'), array('rows' => '3'));
 
     // Objectives of the requested course.
-    $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('class' => 'span6', 'rows' => '3'));
+    $form->addElement('textarea', 'objetives', get_lang('Objectives'), array('rows' => '3'));
 
     // Target audience of the requested course.
-    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('class' => 'span6', 'rows' => '3'));
+    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('rows' => '3'));
 }
 
 // Course language.

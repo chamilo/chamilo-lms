@@ -20,27 +20,6 @@ if (!api_is_allowed_to_edit(null,true)) {
 }
 
 $htmlHeadXtra[] = '<script>
-    function advanced_parameters() {
-        if(document.getElementById(\'options\').style.display == \'none\') {
-            document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-        } else {
-            document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-        }
-    }
-
-    function show_media() {
-        var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
-        if(my_display== \'none\' || my_display == \'\') {
-            document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-            document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeelna.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
-        } else {
-            document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-            document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
-        }
-    }
-
     function activate_start_date() {
         if(document.getElementById(\'start_date_div\').style.display == \'none\') {
             document.getElementById(\'start_date_div\').style.display = \'block\';
@@ -111,7 +90,6 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-window.onload=advanced_parameters;
 </script>';
 
 // INIT EXERCISE

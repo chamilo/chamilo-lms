@@ -154,20 +154,10 @@ function confirmation(name) {
 }
 
 $(document).ready(function() {
-    $("#hide_bar_template").toggle(
-        function() {
-            $("#lp_sidebar").hide();
-            $(this).css({'background-image' : 'url("../img/hide2.png")'})
-            $("#doc_form").removeClass("span8");
-            $("#doc_form").addClass("span11");
-        },
-        function() {
-            $("#lp_sidebar").show();
-            $("#doc_form").removeClass("span11");
-            $("#doc_form").addClass("span8");
-            $(this).css('background-image', 'url("../img/hide0.png")');
-        }
-    );
+    $("#hide_bar_template").click(function() {
+        $("#lp_sidebar").toggleClass("hide");
+        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
+    });
 });
 </script>
 <?php
@@ -177,7 +167,7 @@ $(document).ready(function() {
 echo $learnPath->build_action_menu();
 
 echo '<div class="row" style="overflow:hidden">';
-echo '<div id="lp_sidebar" class="col-md-4">';
+echo '<div id="lp_sidebar" class="col-md-3">';
 
 echo $learnPath->return_new_tree(null, true);
 
@@ -193,7 +183,7 @@ echo '</div>';
 
 // hide bar div
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
-    echo '<div id="hide_bar_template"></div>';
+    echo '<div class="col-md-1"><div id="hide_bar_template" style="width:10px"></div></div> ';
 }
 
 echo '<div id="doc_form" class="col-md-8">';

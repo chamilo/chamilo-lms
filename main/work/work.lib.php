@@ -1449,16 +1449,6 @@ function to_javascript_work()
     $origin = isset($_REQUEST['origin']) && !empty($_REQUEST['origin']) ? api_get_tools_lists($_REQUEST['origin']) : '';
 
     $js = '<script>
-            function plus() {
-                if(document.getElementById(\'options\').style.display == \'none\') {
-                    document.getElementById(\'options\').style.display = \'block\';
-                    document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-                } else {
-                    document.getElementById(\'options\').style.display = \'none\';
-                    document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-                }
-            }
-
             function updateDocumentTitle(value) {
                 var temp = value.indexOf("/");
                 //linux path
@@ -4367,27 +4357,17 @@ function getFormWork($form, $defaults = array())
             unset($defaults['submit']);
         }
     }
+
     // Create the form that asks for the directory name
     $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
     $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
     $form->addHtmlEditor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
-    $form->addElement(
-        'advanced_settings',
-        '<a href="javascript: void(0);" onclick="javascript: return plus();">
-        <span id="plus">'.
-        Display::return_icon(
-            'div_show.gif',
-            get_lang('AdvancedParameters'),
-            array('style' => 'vertical-align:center')
-        ).
-        ' '.get_lang('AdvancedParameters').
-        '</span></a>'
-    );
+    $form->addButtonAdvancedSettings('advanced_params', get_lang('AdvancedParameters'));
 
     if (!empty($defaults) && (isset($defaults['enableEndDate']) || isset($defaults['enableExpiryDate']))) {
-        $form->addElement('html', '<div id="options" style="display: block;">');
+        $form->addElement('html', '<div id="advanced_params_options" style="display:block">');
     } else {
-        $form->addElement('html', '<div id="options" style="display: none;">');
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
     }
 
     // QualificationOfAssignment

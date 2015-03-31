@@ -54,16 +54,6 @@ function check_unzip() {
     }
 }
 
-function advanced_parameters() {
-    if (document.getElementById(\'options\').style.display == \'none\') {
-        document.getElementById(\'options\').style.display = \'block\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-    } else {
-        document.getElementById(\'options\').style.display = \'none\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-    }
-}
-
 function setFocus(){
     $("#title_file").focus();
 }
@@ -243,7 +233,13 @@ if (!$is_certificate_mode) {
 
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
-$form = new FormValidator('upload', 'POST', $action.'#tabs-2', '', 'enctype="multipart/form-data"');
+$form = new FormValidator(
+    'upload',
+    'POST',
+    $action.'#tabs-2',
+    '',
+    array('enctype' => 'multipart/form-data')
+);
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
@@ -251,13 +247,12 @@ $course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentM
 $label = get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.get_lang('DocumentQuota').': '.$course_quota;
 
 $form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
-$form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
-$form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
+$form->addElement('text', 'title', get_lang('Title'), array('id' => 'title_file'));
+$form->addElement('textarea', 'comment', get_lang('Comment'));
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 // Advanced parameters
-$form->addElement('advanced_settings', $advanced);
-$form->addElement('html', '<div id="options" style="display:none">');
+$form->addButtonAdvancedSettings('advanced_params');
+$form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
 // Check box options
 $form->addElement('checkbox', 'unzip', get_lang('Options'), get_lang('Uncompress'), 'onclick="javascript: check_unzip();" value="1"');

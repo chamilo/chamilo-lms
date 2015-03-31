@@ -209,15 +209,18 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 	}
 
 	if (empty($group_id)) {
-        $form->addElement('advanced_settings','<div  id="filepaths" class="form-group">
+
+        $form->addElement('label', '', '<div  id="filepaths" class="form-group">
                     <div id="filepath_1">
                     <label>'.get_lang('FilesAttachment').'</label>
                     <input type="file" name="attach_1"/>
                     <label>'.get_lang('Description').'</label>
                     <input id="file-descrtiption" type="text" name="legend[]" class="form-control"/>
                     </div>
-                </div>');
-		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+                </div>'
+		);
+
+		$form->addElement('label', '', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 
 	$form->addButtonSend(get_lang('SendMessage'), 'compose');

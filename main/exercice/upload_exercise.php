@@ -80,7 +80,7 @@ function lp_upload_quiz_main() {
 
     $link = '<a href="../exercice/quiz_template.xls">'.
              Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
-    $form->addElement('advanced_settings', $link);
+    $form->addElement('label', '', $link);
     $form->addElement('checkbox', 'user_custom_score', null, get_lang('UseCustomScoreForAllQuestions'), array('id'=> 'user_custom_score'));
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));

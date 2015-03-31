@@ -357,6 +357,25 @@ if ($ajax_search) {
     foreach ($users as $user) {
         $sessionUsersList[$user['user_id']] = $user ;
     }
+
+    $sessionUserInfo = SessionManager::getTotalUserCoursesInSession($id_session);
+
+    // Filter the user list in all courses in the session
+    foreach ($sessionUserInfo as $sessionUser) {
+        // filter students in session
+        if ($sessionUser['status_in_session'] != 0) {
+            continue;
+        }
+        
+        if (!array_key_exists($sessionUser['user_id'], $sessionUsersList)) {
+            continue;
+        }
+
+        if ($sessionUser['count'] != $countSessionCoursesList) {
+            unset($sessionUsersList[$sessionUser['user_id']]);
+        }
+    }
+
     unset($users); //clean to free memory
 } else {
     //Filter by Extra Fields

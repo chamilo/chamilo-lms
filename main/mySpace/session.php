@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
+
+/**
  * Sessions reporting
  * @package chamilo.reporting
  */
+
 ob_start();
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -89,7 +91,7 @@ $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'m
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->addElement('hidden', 'session_id', $sessionId);
-$keyword = null;
+$keyword = '';
 if ($form->validate()) {
     $keyword = $form->getSubmitValue('keyword');
 }

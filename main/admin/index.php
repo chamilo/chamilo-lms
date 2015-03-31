@@ -400,6 +400,51 @@ if ($useCookieValidation) {
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
+
+if (api_is_platform_admin()) {
+    $extraDataForm = new FormValidator(
+        'block_extra_data',
+        'post',
+        '#',
+        null,
+        array(
+            'id' => 'block-extra-data',
+            'class' => 'form-inline'
+        )
+    );
+
+    $extraDataForm->add_html_editor(
+        'extra_content',
+        null,
+        false,
+        false,
+        array(
+            'name' => 'extra-content',
+            'ToolbarSet' => 'AdminPanels',
+            'Width' => 530,
+            'Height' => 300
+        )
+    );
+    $extraDataForm->addElement(
+        'hidden',
+        'block',
+        null,
+        array(
+            'id' => 'extra-block'
+        )
+    );
+    $extraDataForm->add_button(
+        'submit',
+        get_lang('Save'),
+        array(
+            'id' => 'btn-block-editor-save',
+            'class' => 'btn btn-primary'
+        )
+    );
+
+    $tpl->assign('extraDataForm', $extraDataForm->toHtml());
+}
+
 // The template contains the call to the AJAX version checker
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);

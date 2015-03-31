@@ -111,7 +111,7 @@ if (api_is_platform_admin()) {
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
-    $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
 } else {
     $items = array(
         array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
@@ -172,7 +172,7 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
 
-    $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
+    $items[] = array('url'=>'extra_fields.php?type=course', 'label' => get_lang('ManageCourseFields'));
 
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;

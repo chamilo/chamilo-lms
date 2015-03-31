@@ -13,27 +13,27 @@ $(document).ready(function() {
 
         var extraContentEditor = CKEDITOR.instances.extra_content;
 
-    $('a.edit-block').on('click', function(e) {
-        e.preventDefault();
+        $('a.edit-block').on('click', function(e) {
+            e.preventDefault();
 
-        var $self = $(this);
+            var $self = $(this);
 
-        var extraContent = $.ajax('{{ _p.web_ajax }}admin.ajax.php', {
-            type: 'post',
-            data: {
-                a: 'get_extra_content',
-                block: $self.data('id')
-            }
+            var extraContent = $.ajax('{{ _p.web_ajax }}admin.ajax.php', {
+                type: 'post',
+                data: {
+                    a: 'get_extra_content',
+                    block: $self.data('id')
+                }
+            });
+
+            $.when(extraContent).done(function(content) {
+                extraContentEditor.setData(content);
+                $('#extra-block').val($self.data('id'));
+                $('#modal-extra-title').text($self.data('label'));
+
+                $('#modal-extra').modal('show');
+            });
         });
-
-        $.when(extraContent).done(function(content) {
-            extraContentEditor.setData(content);
-            $('#extra-block').val($self.data('id'));
-            $('#modal-extra-title').text($self.data('label'));
-
-            $('#modal-extra').modal('show');
-        });
-    });
     })(window.CKEDITOR);
 {% endif %}
 });

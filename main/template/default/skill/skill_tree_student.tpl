@@ -41,7 +41,7 @@ jsPlumb.bind("ready", function() {
     });
     
     //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
-    $(".open_block").live('click', function() {     
+    $(".open_block").click(function() {
         var id = $(this).attr('id');
         
         console.log('click.open_block id: ' + id);
@@ -119,7 +119,7 @@ jsPlumb.bind("ready", function() {
     });
     
     
-    $(".edit_block").live('click',function() {        
+    $(".edit_block").click(function() {
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
                 

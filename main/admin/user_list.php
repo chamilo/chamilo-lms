@@ -124,6 +124,25 @@ $(document).ready(function() {
             document.getElementById(\'extra_data_text\').style.display="none";
         }
     }
+
+    $(".agenda_opener").click(function() {
+        var url = this.href;
+        var dialog = $("#dialog");
+
+        if ($("#dialog").length == 0) {
+            dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
+        }
+        // load remote content
+        dialog.load(
+            url,
+            {},
+            function(responseText, textStatus, XMLHttpRequest) {
+                dialog.dialog({width:720, height:550, modal:true});
+            }
+        );
+        //prevent the browser to follow the link
+        return false;
+    });
 });
 
 //Load user calendar

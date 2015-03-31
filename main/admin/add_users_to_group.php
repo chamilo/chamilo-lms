@@ -448,9 +448,9 @@ if (!empty($errorMsg)) {
   <?php
   } else {
   ?>
-  	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"><i class="fa fa-arrow-left"></i></button>
+  	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"><i class="fa fa-arrow-right"></i></button>
 	<br /><br />
-	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"><i class="fa fa-arrow-right"></i></button>
+	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"><i class="fa fa-arrow-left"></i></button>
 	<?php
   }
   ?>

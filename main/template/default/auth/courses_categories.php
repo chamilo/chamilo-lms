@@ -56,7 +56,7 @@ $code = isset($code) ? $code : null;
             });
         });
 
-        $('.courses-list-btn').toggle(function (e) {
+        /*$('.courses-list-btn').toggle(function (e) {
             e.preventDefault();
 
             var $el = $(this);
@@ -90,7 +90,7 @@ $code = isset($code) ? $code : null;
             $container.hide(250).empty();
             $el.children('img').remove();
             $el.prepend('<?php echo Display::display_icon('nolines_plus.gif'); ?>');
-        });
+        });*/
 
         var getSessionId = function (el) {
             var parts = el.id.split('_');
@@ -439,7 +439,7 @@ function display_title($course)
 function display_description_button($course, $icon_title)
 {
     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
+        echo '<a class="ajax btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'">'.get_lang('Description').'</a>';
     }
 }
 

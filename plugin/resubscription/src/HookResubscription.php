@@ -28,8 +28,17 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
     {
         $data = $hook->getEventData();
         if ($data['type'] === HOOK_EVENT_TYPE_PRE) {
+
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
-            $limitDate = gmdate('Y-m-d', strtotime(gmdate('Y-m-d')." -$resubscriptionLimit year"));
+
+            $limitDate = gmdate('Y-m-d');
+
+            switch ($resubscriptionLimit) {
+                case 'calendar_year':
+                    $resubscriptionLimit = "1 year";
+                    $limitDate = gmdate('Y-m-d', strtotime(gmdate('Y-m-d')." -$resubscriptionLimit"));
+                    break;
+            }
 
             $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = id_session";
 
@@ -85,7 +94,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
             foreach ($currentSessionCourseResult as $currentSessionCourse) {
                 if (isset($userSessionCourses[$currentSessionCourse['course_code']])) {
                     $endDate = $userSessionCourses[$currentSessionCourse['course_code']];
-                    $resubscriptionDate = gmdate('Y-m-d', strtotime($endDate." +$resubscriptionLimit year"));
+                    $resubscriptionDate = gmdate('Y-m-d', strtotime($endDate." +$resubscriptionLimit"));
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);
                     throw new Exception(Display::label($icon . ' ' . $canResubscribeFrom, "info"));
@@ -93,5 +102,4 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
             }
         }
     }
-
 }

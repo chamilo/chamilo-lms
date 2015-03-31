@@ -15,8 +15,14 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     protected function __construct()
     {
+        $options = array(
+            'calendar_year' => get_lang('CalendarYear')
+        );
         $parameters = array(
-            'resubscription_limit' => 'text'
+            'resubscription_limit' => array(
+                'type' => 'select',
+                'options' => $options
+            )
         );
 
         parent::__construct('0.1', 'Imanol Losada Oriol', $parameters);

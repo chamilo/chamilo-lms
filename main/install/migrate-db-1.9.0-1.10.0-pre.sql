@@ -1,15 +1,11 @@
 -- This script updates the databases structure before migrating the data from
 -- version 1.9.0 (or version 1.9.*) to version 1.10.0
 
--- Main DB changes
+-- Main table changes
 
 ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id;
 ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id;
 ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id);
-
-CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id));
-CREATE TABLE IF NOT EXISTS hook_event( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, description varchar(255), PRIMARY KEY PK_hook_management_hook_event(id));
-CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id));
 
 ALTER TABLE session ADD COLUMN description TEXT DEFAULT NULL;
 ALTER TABLE session ADD COLUMN show_description TINYINT UNSIGNED DEFAULT 0 AFTER description;
@@ -21,6 +17,9 @@ ALTER TABLE session_rel_user ADD COLUMN duration int;
 
 CREATE TABLE course_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
 CREATE TABLE session_field_options (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, field_id INT NOT NULL, option_value TEXT, option_display_text VARCHAR(64), option_order INT, tms DATETIME);
+CREATE TABLE IF NOT EXISTS hook_observer( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, path varchar(255) NOT NULL, plugin_name varchar(255) NULL, PRIMARY KEY PK_hook_management_hook_observer(id));
+CREATE TABLE IF NOT EXISTS hook_event( id int UNSIGNED NOT NULL AUTO_INCREMENT, class_name varchar(255) UNIQUE, description varchar(255), PRIMARY KEY PK_hook_management_hook_event(id));
+CREATE TABLE IF NOT EXISTS hook_call( id int UNSIGNED NOT NULL AUTO_INCREMENT, hook_event_id int UNSIGNED NOT NULL, hook_observer_id int UNSIGNED NOT NULL, type tinyint NOT NULL, hook_order int UNSIGNED NOT NULL, enabled tinyint NOT NULL, PRIMARY KEY PK_hook_management_hook_call(id));
 
 ALTER TABLE skill ADD COLUMN criteria text DEFAULT '';
 
@@ -104,15 +103,23 @@ ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT '';
 ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL;
 UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course';
 
--- Course DB changes (c_*)
+-- Course table changes (c_*)
 
 ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0;
 ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL;
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float;
 ALTER TABLE c_lp_item ADD COLUMN prerequisite_max_score float;
-ALTER TABLE c_lp_item MODIFY COLUMN description VARCHAR(511) DEFAULT '';
-ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
 ALTER TABLE c_group_info ADD COLUMN status tinyint DEFAULT 1;
+ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
+ALTER TABLE c_lp_item MODIFY COLUMN description VARCHAR(511) DEFAULT '';
+
+ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE';
+ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE';
+ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL;
+ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self';
+ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0';
+ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post';
+ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0';
 
 ALTER TABLE c_course_setting MODIFY COLUMN value varchar(255) default '';
 
@@ -121,6 +128,5 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY N
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
-
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.33' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.34' WHERE variable = 'chamilo_database_version';

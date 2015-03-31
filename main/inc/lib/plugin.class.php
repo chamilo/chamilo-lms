@@ -180,6 +180,11 @@ class Plugin
         }
 
         foreach ($this->fields as $name => $type) {
+            $options = null;
+            if (is_array($type) && isset($type['type']) && $type['type'] === "select") {
+                $options = $type['options'];
+                $type = $type['type'];
+            }
 
             $value = $this->get($name);
 
@@ -229,6 +234,14 @@ class Plugin
                     );
                     $element->_attributes['value'] = 'true';
                     $checkboxGroup[] = $element;
+                    break;
+                case 'select':
+                    $result->addElement(
+                        $type,
+                        $name,
+                        array($this->get_lang($name), $help),
+                        $options
+                    );
                     break;
             }
         }

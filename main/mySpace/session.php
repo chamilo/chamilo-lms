@@ -91,22 +91,15 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/session.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
-$setting = api_get_configuration_value('show_session_description');
-if ($setting) {
-    $form->addElement('text', 'description', get_lang('Description'));
-}
-
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->addElement('hidden', 'session_id', $sessionId);
 $keyword = '';
-$description = '';
 if ($form->validate()) {
     $keyword = $form->getSubmitValue('keyword');
-    $description = $form->getSubmitValue('description');
 }
 $form->setDefaults(array('keyword' => $keyword));
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&keyword='.Security::remove_XSS($keyword).'&description='.$description;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&keyword='.Security::remove_XSS($keyword);
 
 $columns = array(
     get_lang('Title'),

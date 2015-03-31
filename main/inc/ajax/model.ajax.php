@@ -290,7 +290,12 @@ switch ($action) {
         break;
     case 'get_sessions_tracking':
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
-        $description = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
+
+        $description = '';
+        $setting = api_get_configuration_value('show_session_description');
+        if ($setting) {
+            $description = $keyword;
+        }
 
         if (api_is_drh()) {
             $count = SessionManager::get_sessions_followed_by_drh(

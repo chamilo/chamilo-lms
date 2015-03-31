@@ -107,7 +107,6 @@ error_reporting(E_ALL);
 $update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
 
 $my_old_version = '';
-$tmp_version = get_config_param('dokeos_version');
 if (empty($tmp_version)) {
 	$tmp_version = get_config_param('system_version');
 }
@@ -115,8 +114,6 @@ if (!empty($_POST['old_version'])) {
 	$my_old_version = $_POST['old_version'];
 } elseif (!empty($tmp_version)) {
     $my_old_version = $tmp_version;
-} elseif (!empty($dokeos_version)) { //variable coming from installedVersion, normally
-	$my_old_version = $dokeos_version;
 }
 
 require_once __DIR__.'/version.php';
@@ -720,7 +717,6 @@ if (@$_POST['step2']) {
 	if ($installType == 'update') {
 		remove_memory_and_time_limits();
 
-		//database_server_connect();
 		$manager = testDbConnect(
 			$dbHostForm,
 			$dbUsernameForm,
@@ -728,31 +724,10 @@ if (@$_POST['step2']) {
 			$dbNameForm
 		);
 
-		// Initialization of the database connection encoding intentionaly is not done.
-		// This is the old style for connecting to the database server, that is implemented here.
-
 		$perm = api_get_permissions_for_new_directories();
 		$perm_file = api_get_permissions_for_new_files();
 
-		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
-
-		$_configuration['main_database'] = $dbNameForm;
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
-
-    	if ($userPasswordCrypted == '1') {
-			$userPasswordCrypted = 'md5';
-		} elseif ($userPasswordCrypted == '0') {
-			$userPasswordCrypted = 'none';
-		}
-
-		Database::query("SET storage_engine = MYISAM;");
-
-		if (version_compare($my_old_version, '1.8.7', '>=')) {
-			Database::query("SET SESSION character_set_server='utf8';");
-			Database::query("SET SESSION collation_server='utf8_general_ci';");
-			//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
-			Database::query("SET NAMES 'utf8';");
-		}
 
 		switch ($my_old_version) {
             case '1.9.0':
@@ -764,6 +739,7 @@ if (@$_POST['step2']) {
             case '1.9.8.1':
             case '1.9.8.2':
             case '1.9.10':
+			case '1.9.10.2':
                 include 'update-db-1.9.0-1.10.0.inc.php';
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 //Only updates the configuration.inc.php with the new version
@@ -775,23 +751,8 @@ if (@$_POST['step2']) {
     } else {
 		set_file_folder_permissions();
 
-		$manager = testDbConnect(
-			$dbHostForm,
-			$dbUsernameForm,
-			$dbPassForm,
-			$dbNameForm
-		);
-
-		// Initialization of the database encoding to be used.
-		Database::query("SET storage_engine = INNODB;");
-		//Database::query("SET SESSION character_set_server='utf8';");
-		//Database::query("SET SESSION collation_server='utf8_general_ci';");
-		//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
-		//Database::query("SET NAMES 'utf8';");
-
-		include 'install_db.inc.php';
+		$manager = require 'install_db.inc.php';
 		include 'install_files.inc.php';
-
 	}
     display_after_install_message($installType);
     //Hide the "please wait" message sent previously

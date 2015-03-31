@@ -615,29 +615,6 @@ function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
 }
 
 /**
- * Connects to the database server.
- */
-function database_server_connect()
-{
-    global $dbHostForm, $dbUsernameForm, $dbPassForm;
-    if (($res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm))) === false) {
-        $no = Database::errno();
-        $msg = Database::error();
-        echo '<hr />#'.$no.': '.$msg.'<hr />';
-        echo get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
-            get_lang('PleaseCheckTheseValues').' :<br /><br />'.
-            '<strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />'.
-            '<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
-            '<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
-            get_lang('PleaseGoBackToStep').' '. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
-            '<p><button type="submit" class="btn btn-default" name="step'. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'" value="&lt; '.get_lang('Back').'"><i class="fa fa-backward"> </i>'.get_lang('Back').'</button></p>'.
-            '</td></tr></table></form></body></html>';
-        exit ();
-    }
-    @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-}
-
-/**
  * In step 3. Tests establishing connection to the database server.
  * If it's a single database environment the function checks if the database exist.
  * If the database does not exist we check the creation permissions.
@@ -663,23 +640,6 @@ function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 }
 
 /**
- * Fills the countries table with a list of countries.
- * @param   string  $trackCountriesTable    Table name
- */
-function fill_track_countries_table($trackCountriesTable)
-{
-    $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-    $countries = file($file_path);
-    $addCountrySql = "INSERT INTO $trackCountriesTable (id, code, country, counter) VALUES ";
-    foreach ($countries as $line) {
-        $elems = explode(',', $line);
-        $addCountrySql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
-    }
-    $addCountrySql = substr($addCountrySql, 0, -1);
-    @Database::query($addCountrySql);
-}
-
-/**
  * Creates the structure of the main database and fills it
  * with data. Placeholder symbols in the main database file
  * have to be replaced by the settings entered by the user during installation.
@@ -688,7 +648,7 @@ function fill_track_countries_table($trackCountriesTable)
  * @param string  $dbScript optional path about the script for database
  * @return void
  */
-function load_main_database($installation_settings, $dbScript = '')
+function createSchema($manager, $installation_settings, $dbScript = '')
 {
     $sql_text = null;
     if (!empty($dbScript)) {
@@ -702,120 +662,13 @@ function load_main_database($installation_settings, $dbScript = '')
         }
     }
 
-
     //replace symbolic parameters with user-specified values
     foreach ($installation_settings as $key => $value) {
         $sql_text = str_replace($key, Database::escape_string($value), $sql_text);
     }
 
-    global $manager;
     $result = $manager->getConnection()->prepare($sql_text);
     $result->execute();
-}
-
-/**
- * Get an SQL file's contents
- *
- * This function bases its parsing on the pre-set format of the specific SQL files in
- * the install/upgrade procedure:
- * Lines starting with "--" are comments (but need to be taken into account as they also hold sections names)
- * Other lines are considered to be one-line-per-query lines (this is checked quickly by this function)
- * @param   string  File to parse (in the current directory)
- * @param   string  Section to return
- * @param   boolean Print (true) or hide (false) error texts when they occur
- * @return  array Array of SQL statements
- */
-function get_sql_file_contents($file, $section, $print_errors = true)
-{
-    //check given parameters
-    if (empty($file)) {
-        $error = "Missing name of file to parse in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
-        $error = "Section '$section' is not authorized in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    $filePath = getcwd().'/'.$file;
-    if (!is_file($filePath) or !is_readable($filePath)) {
-        $error = "File $filePath not found or not readable in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    //read the file in an array
-    // Empty lines should not be executed as SQL statements, because errors occur, see Task #2167.
-    $fileContents = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!is_array($fileContents) or count($fileContents) < 1) {
-        $error = "File $filePath looks empty in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-
-    //prepare the resulting array
-    $section_contents = array();
-    $record = false;
-    foreach ($fileContents as $index => $line) {
-        if (substr($line, 0, 2) == '--') {
-            //This is a comment. Check if section name, otherwise ignore
-            $result = array();
-            if (preg_match('/^-- xx([A-Z]*)xx/', $line, $result)) { //we got a section name here
-                if ($result[1] == strtoupper($section)) {
-                    //we have the section we are looking for, start recording
-                    $record = true;
-                } else {
-                    //we have another section's header. If we were recording, stop now and exit loop
-                    if ($record) {
-                        break;
-                    }
-                    $record = false;
-                }
-            }
-        } else {
-            if ($record) {
-                if (!empty($line)) {
-                    $section_contents[] = $line;
-                }
-            }
-        }
-    }
-    //now we have our section's SQL statements group ready, return
-    return $section_contents;
-}
-
-/**
- * Adds a new document to the database - specific to version 1.8.0
- *
- * @param array $_course
- * @param string $path
- * @param string $fileType
- * @param int $fileSize
- * @param string $title
- * @return id if inserted document
- */
-function add_document_180($_course, $path, $fileType, $fileSize, $title, $comment = null)
-{
-    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-    $sql = "INSERT INTO $table_document
-    (`path`,`filetype`,`size`,`title`, `comment`)
-    VALUES ('$path','$fileType','$fileSize','".
-    Database::escape_string($title)."', '$comment')";
-    if (Database::query($sql)) {
-        //display_message("Added to database (id ".Database::insert_id().")!");
-        return Database::insert_id();
-    } else {
-        //display_error("The uploaded file could not be added to the database (".Database::error().")!");
-        return false;
-    }
 }
 
 /*      DISPLAY FUNCTIONS */
@@ -1368,10 +1221,8 @@ function display_requirements(
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
-        }
-
-        // Check wether a Chamilo configuration file already exists.
-        elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+        } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+            // Check wether a Chamilo configuration file already exists.
             echo '<div class="warning-message"><h4><center>';
             echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
@@ -1713,7 +1564,6 @@ function display_database_settings_form(
         $database_exists_text = '';
         $manager = null;
         try {
-
             $manager = testDbConnect(
                 $dbHostForm,
                 $dbUsernameForm,
@@ -1721,13 +1571,8 @@ function display_database_settings_form(
                 null
             );
             $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
-
             if (in_array($dbNameForm, $databases)) {
                 $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-            } else {
-                $manager->getConnection()->getSchemaManager()->createDatabase(
-                    $dbNameForm
-                );
             }
         } catch (Exception $e) {
             $database_exists_text = $e->getMessage();
@@ -1988,7 +1833,9 @@ function display_after_install_message($installType)
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large btn-install" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    <a class="btn btn-success btn-large btn-install" href="../../index.php">
+        <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
+    </a>
     <?php
 }
 
@@ -2043,7 +1890,7 @@ function get_countries_list_from_array($combo = false)
 /**
  * Lock settings that can't be changed in other portals
  */
-function locking_settings()
+function lockSettings()
 {
     $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);

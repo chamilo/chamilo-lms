@@ -32,51 +32,35 @@ switch ($encryptPassForm) {
         break;
 }
 
-$dbPrefixForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbPrefixForm);
+$manager = testDbConnect(
+    $dbHostForm,
+    $dbUsernameForm,
+    $dbPassForm,
+    null
+);
 
 $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
-if (!empty($dbPrefixForm) && strpos($dbNameForm, $dbPrefixForm) !== 0) {
-    $dbNameForm = $dbPrefixForm . $dbNameForm;
-}
-
-$dbStatsForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbStatsForm);
-if (!empty($dbPrefixForm) && strpos($dbStatsForm, $dbPrefixForm) !== 0) {
-    $dbStatsForm = $dbPrefixForm . $dbStatsForm;
-}
-
-$dbUserForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbUserForm);
-if (!empty($dbPrefixForm) && strpos($dbUserForm, $dbPrefixForm) !== 0) {
-    $dbUserForm = $dbPrefixForm . $dbUserForm;
-}
-
-$mysqlMainDb = $dbNameForm;
-if (empty($mysqlMainDb) || $mysqlMainDb == 'mysql' || $mysqlMainDb == $dbPrefixForm) {
-    $mysqlMainDb = $dbPrefixForm . 'main';
-}
 
 //This parameter is needed to run a command line to install Chamilo using BNPanel + ISPConfig see #1799
 if (!defined('CLI_INSTALLATION')) {
-
-    $result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
-
-    $mysqlRepositorySys = Database::fetch_array($result);
-    $mysqlRepositorySys = $mysqlRepositorySys['Value'];
-
-    $create_database = true;
-    /** @var \Doctrine\ORM\EntityManager $manager */
-    global $manager;
+    $createDatabase = true;
     $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
 
-    if (in_array($mysqlMainDb, $databases)) {
-        $create_database = false;
+    if (in_array($dbNameForm, $databases)) {
+        $createDatabase = false;
     }
 
     // Create database
-    if ($create_database) {
-        $manager->getConnection()->getSchemaManager()->createDatabase($mysqlMainDb);
-        /*$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
-        Database::query($sql) or die(Database::error());*/
+    if ($createDatabase) {
+        $manager->getConnection()->getSchemaManager()->createDatabase($dbNameForm);
     }
+
+    $manager = testDbConnect(
+        $dbHostForm,
+        $dbUsernameForm,
+        $dbPassForm,
+        $dbNameForm
+    );
 }
 
 // This parameter is needed to run a command line install of Chamilo (needed for Phing)
@@ -107,8 +91,17 @@ $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 
 AddCourse::drop_course_tables();
 
-load_main_database($installation_settings);
+// Initialization of the database encoding to be used.
+Database::query("SET storage_engine = INNODB;");
+Database::query("SET SESSION character_set_server='utf8';");
+Database::query("SET SESSION collation_server='utf8_general_ci';");
+Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
+//Database::query("SET NAMES 'utf8';");
 
-locking_settings();
+createSchema($manager, $installation_settings);
+
+lockSettings();
 
 update_dir_and_files_permissions();
+
+return $manager;

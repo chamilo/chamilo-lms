@@ -45,10 +45,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     // that we want to change the main databases as well...
     $onlyTest = false;
     if (defined('SYSTEM_INSTALLATION')) {
-
-        /**
-         * Update the databases "pre" migration
-         */
         include_once '../lang/english/trad4all.inc.php';
 
         if ($languageForm != 'english') {
@@ -56,123 +52,21 @@ if (defined('SYSTEM_INSTALLATION')) {
             include_once '../lang/' . $languageForm . '/trad4all.inc.php';
         }
 
-        // Get the main queries list (m_q_list)
+        // PRE
         $sqlFile = 'migrate-db-' . $oldFileVersion . '-' . $newFileVersion . '-pre.sql';
-        $mainQueriesList = get_sql_file_contents($sqlFile, 'main');
+        Log::notice('Starting migration: '.$oldFileVersion.' - '.$newFileVersion);
+        $sql = file_get_contents($sqlFile);
+        $result = $manager->getConnection()->prepare($sql);
+        $result->execute();
 
-        if (count($mainQueriesList) > 0) {
-            // Now use the $mainQueriesList
-            /**
-             * We connect to the right DB first to make sure we can use the queries
-             * without a database name
-             */
-            if (strlen($dbNameForm) > 40) {
-                Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
-            } elseif (!in_array($dbNameForm, $dblist)) {
-                Log::error('Database ' . $dbNameForm . ' was not found, skipping');
-            } else {
-                foreach ($mainQueriesList as $query) {
-                    if ($onlyTest) {
-                        Log::notice("iDatabase::query($dbNameForm,$query)");
-                    } else {
-                        $res = iDatabase::query($query);
-                        if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
-                        }
-                    }
-                }
-            }
-        }
+        // Do something in between
 
-        if (INSTALL_TYPE_UPDATE == 'update') {
-            // Updating track tables with c_id -> moved to migrate-db
-
-        }
+        // POST
+        $sqlFile = 'migrate-db-' . $oldFileVersion . '-' . $newFileVersion . '-post.sql';
+        $sql = file_get_contents($sqlFile);
+        $result = $manager->getConnection()->prepare($sql);
+        $result->execute();
     }
-
-    // Get the courses databases queries list (c_q_list)
-
-    $sqlFile = 'migrate-db-'.$oldFileVersion.'-'.$newFileVersion.'-pre.sql';
-    $courseQueriesList = get_sql_file_contents($sqlFile, 'course');
-    Log::notice('Starting migration: '.$oldFileVersion.' - '.$newFileVersion);
-
-    if (count($courseQueriesList) > 0) {
-        // Get the courses list
-        if (strlen($dbNameForm) > 40) {
-            Log::error('Database name '.$dbNameForm.' is too long, skipping');
-        } elseif (!in_array($dbNameForm, $dblist)) {
-            Log::error('Database '.$dbNameForm.' was not found, skipping');
-        } else {
-            $res = iDatabase::query(
-                "SELECT id, code, db_name, directory, course_language, id as real_id "
-                ." FROM course WHERE target_course_code IS NULL ORDER BY code"
-            );
-
-            if ($res === false) {
-                die('Error while querying the courses list in update_db-1.9.0-1.10.0.inc.php');
-            }
-            $errors = array();
-
-            if (iDatabase::num_rows($res) > 0) {
-                $i = 0;
-                $list = array();
-                while ($row = iDatabase::fetch_array($res)) {
-                    $list[] = $row;
-                    $i++;
-                }
-
-                foreach ($list as $rowCourse) {
-                    Log::notice('Course db ' . $rowCourse['db_name']);
-
-                    // Now use the $c_q_list
-                    foreach ($courseQueriesList as $query) {
-                        if ($singleDbForm) {
-                            $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$rowCourse['db_name']}_$2$3", $query);
-                        }
-                        if ($onlyTest) {
-                            Log::notice("iDatabase::query(".$rowCourse['db_name'].",$query)");
-                        } else {
-                            $res = iDatabase::query($query);
-                            if ($res === false) {
-                                Log::error('Error in '.$query.': '.iDatabase::error());
-                            }
-                        }
-                    }
-
-                    Log::notice('<<<------- end  -------->>');
-                }
-            }
-        }
-    }
-
-    // Get the main queries *POST* list (m_q_list)
-    $sqlFile = 'migrate-db-' . $oldFileVersion . '-' . $newFileVersion . '-post.sql';
-    $mainQueriesList = get_sql_file_contents($sqlFile, 'main');
-
-    if (count($mainQueriesList) > 0) {
-        // Now use the $mainQueriesList
-        /**
-         * We connect to the right DB first to make sure we can use the queries
-         * without a database name
-         */
-        if (strlen($dbNameForm) > 40) {
-            Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
-        } elseif (!in_array($dbNameForm, $dblist)) {
-            Log::error('Database ' . $dbNameForm . ' was not found, skipping');
-        } else {
-            foreach ($mainQueriesList as $query) {
-                if ($onlyTest) {
-                    Log::notice("iDatabase::query($dbNameForm,$query)");
-                } else {
-                    $res = iDatabase::query($query);
-                    if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
-                    }
-                }
-            }
-        }
-    }
-
 } else {
     echo 'You are not allowed here !' . __FILE__;
 }

@@ -7,6 +7,12 @@ $(document).ready(function() {
         }
     });
 
+{% if _u.is_admin %}
+    (function(CKEDITOR) {
+        CKEDITOR.replace('extra_content');
+
+        var extraContentEditor = CKEDITOR.instances.extra_content;
+
     $('a.edit-block').on('click', function(e) {
         e.preventDefault();
 
@@ -21,26 +27,15 @@ $(document).ready(function() {
         });
 
         $.when(extraContent).done(function(content) {
-            $('#extra-content').val(content);
+            extraContentEditor.setData(content);
             $('#extra-block').val($self.data('id'));
             $('#modal-extra-title').text($self.data('label'));
 
             $('#modal-extra').modal('show');
         });
     });
-
-    $('#btn-block-editor-save').on('click', function(e) {
-        e.preventDefault();
-
-        var save = $.ajax('{{ _p.web_ajax }}admin.ajax.php', {
-            type: 'post',
-            data: $('#block-extra-data').serialize() + '&a=save_block_extra'
-        });
-
-        $.when(save).done(function() {
-            window.location.reload();
-        });
-    });
+    })(window.CKEDITOR);
+{% endif %}
 });
 </script>
 
@@ -108,17 +103,7 @@ $(document).ready(function() {
                     <h4 class="modal-title" id="modal-extra-title">{{ 'Blocks' | get_lang }}</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="post" id="block-extra-data">
-                        <div class="form-group">
-                            <textarea rows="15" name="content" class="form-control" id="extra-content"></textarea>
-                            <input type="hidden" name="block" id="extra-block" value="">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="btn-block-editor-save" class="btn btn-primary">
-                        <i class="fa fa-floppy-o"></i> {{ 'Save' | get_lang }}
-                    </button>
+                     {{ extraDataForm }}
                 </div>
             </div>
         </div>

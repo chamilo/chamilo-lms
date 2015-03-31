@@ -2938,15 +2938,15 @@ class Tracking
         }
 
         $keywordCondition = null;
+
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
-        }
 
-        $descriptionCondition = '';
-        if (!empty($description)) {
-            $description = Database::escape_string($description);
-            $descriptionCondition = " AND (description LIKE '%$description%' ) ";
+            if (!empty($description)) {
+                $description = Database::escape_string($description);
+                $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
+            }
         }
 
         $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -2962,7 +2962,6 @@ class Tracking
                     id_coach = $coach_id AND
                     access_url_id = $access_url_id
                     $keywordCondition
-                    $descriptionCondition
             UNION
                 SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
                 FROM $tbl_session as session
@@ -2975,7 +2974,6 @@ class Tracking
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
-                    $descriptionCondition
             ) as sessions $limitCondition
             ";
 

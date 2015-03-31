@@ -2944,15 +2944,14 @@ class SessionManager
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
+
+            if (!empty($description)) {
+                $description = Database::escape_string($description);
+                $keywordCondition = " AND (s.name LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
+            }
         }
 
-        $descriptionCondition = '';
-        if (!empty($description)) {
-            $description = Database::escape_string($description);
-            $descriptionCondition = " AND (s.description LIKE '%$description%' ) ";
-        }
-
-        $whereConditions .= $descriptionCondition.$keywordCondition;
+        $whereConditions .= $keywordCondition;
 
         $subQuery = $sessionQuery.$courseSessionQuery;
 

@@ -183,7 +183,7 @@ echo '</div>';
 
 // hide bar div
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
-    echo '<div class="col-md-1"><div id="hide_bar_template" style="width:10px"></div></div> ';
+    echo '<div class="col-md-1"><div id="hide_bar_template"></div></div> ';
 }
 
 echo '<div id="doc_form" class="col-md-8">';

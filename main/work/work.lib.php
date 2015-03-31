@@ -1533,9 +1533,9 @@ function to_javascript_work()
                 $("#end_date").click(function() {
                     $("#option3").toggle();
                 });
-
             });
-            </script>';
+    </script>';
+
     return $js;
 }
 

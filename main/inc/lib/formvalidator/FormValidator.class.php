@@ -654,6 +654,17 @@ EOT;
     }
 
     /**
+     * @param string $name
+     * @param string $label
+     * @return mixed
+     */
+    public function addButtonAdvancedSettings($name, $label = '')
+    {
+        $label = !empty($label) ? $label : get_lang('AdvancedParameters');
+        return $this->addElement('advanced_settings', $name, $label);
+    }
+
+    /**
      * Adds a progress bar to the form.
      *
      * Once the user submits the form, a progress bar (animated gif) is
@@ -743,7 +754,7 @@ EOT;
      * @param array $element					The array of elements
      * @param string $message					The message displayed
      */
-    function add_multiple_required_rule($elements, $message)
+    public function add_multiple_required_rule($elements, $message)
     {
         $this->_required[] = $elements[0];
         $this->addRule($elements, $message, 'multiple_required');

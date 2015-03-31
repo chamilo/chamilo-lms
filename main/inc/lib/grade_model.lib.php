@@ -157,15 +157,14 @@ class GradeModel extends Model
         //New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
         $form->addRule($component_array, get_lang('AllMustWeight100'), 'compare_fields', '==@100');
 
-        $form->addElement('advanced_settings', get_lang('AllMustWeight100'));
+        $form->addElement('label', '', get_lang('AllMustWeight100'));
 
         if ($action == 'edit') {
-            //$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
-            $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addButtonUpdate(get_lang('Modify'));
         } else {
-            //$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
-            $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addButtonCreate(get_lang('Add'));
         }
+
         if (!empty($components)) {
             $counter = 0;
             foreach ($components as $component) {

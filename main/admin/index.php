@@ -111,7 +111,7 @@ if (api_is_platform_admin()) {
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
-    $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
 } else {
     $items = array(
         array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
@@ -172,7 +172,7 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
 
-    $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
+    $items[] = array('url'=>'extra_fields.php?type=course', 'label' => get_lang('ManageCourseFields'));
 
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
@@ -299,9 +299,6 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
     }
     $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-    if (api_get_setting('server_type') === 'test') {
-        $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
-    }
 
     if (isset($_configuration['db_manager_enabled']) &&
         $_configuration['db_manager_enabled'] == true &&
@@ -403,6 +400,51 @@ if ($useCookieValidation) {
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
+
+if (api_is_platform_admin()) {
+    $extraDataForm = new FormValidator(
+        'block_extra_data',
+        'post',
+        '#',
+        null,
+        array(
+            'id' => 'block-extra-data',
+            'class' => 'form-inline'
+        )
+    );
+
+    $extraDataForm->addHtmlEditor(
+        'extra_content',
+        null,
+        false,
+        false,
+        array(
+            'name' => 'extra-content',
+            'ToolbarSet' => 'AdminPanels',
+            'Width' => 530,
+            'Height' => 300
+        )
+    );
+    $extraDataForm->addElement(
+        'hidden',
+        'block',
+        null,
+        array(
+            'id' => 'extra-block'
+        )
+    );
+    $extraDataForm->addButtonExport(
+        'submit',
+        get_lang('Save'),
+        array(
+            'id' => 'btn-block-editor-save',
+            'class' => 'btn btn-primary'
+        )
+    );
+
+    $tpl->assign('extraDataForm', $extraDataForm->toHtml());
+}
+
 // The template contains the call to the AJAX version checker
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);

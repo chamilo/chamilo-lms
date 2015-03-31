@@ -1198,16 +1198,6 @@ abstract class Question
 			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
 			      }
 			}
-
-			function show_media(){
-				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\') {
-				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
-			} else {
-				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
-			}
 		}
 
 		// hub 13-12-2010
@@ -1250,13 +1240,10 @@ abstract class Question
             $editor_config['UserStatus'] = 'student';
         }
 
-        $form->addElement('advanced_settings','
-			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
-		');
+        $form->addButtonAdvancedSettings('advanced_params');
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" style="display: none;" >');
         $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
-        $form->addElement ('html','</div>');
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
@@ -1265,9 +1252,6 @@ abstract class Question
         if ($this->type != MEDIA_QUESTION) {
 
             // Advanced parameters
-            $form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
-
-            $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
 
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
@@ -1288,9 +1272,9 @@ abstract class Question
             //Medias
             //$course_medias = Question::prepare_course_media_select(api_get_course_int_id());
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
-
-            $form->addElement('html', '</div>');
         }
+
+        $form->addElement ('html','</div>');
 
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {

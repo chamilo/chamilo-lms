@@ -35,7 +35,6 @@ $libdir  = dirname(__FILE__).'/../main/inc/lib/';
 
 /**Files inside '/../main' */
 require_once $maindir.'permissions/permissions_functions.inc.php';
-require_once $maindir.'admin/calendar.lib.php';
 require_once $maindir.'dropbox/dropbox_class.inc.php';
 require_once $maindir.'dropbox/dropbox_functions.inc.php';
 require_once $maindir.'survey/survey.lib.php';

@@ -15,10 +15,10 @@
             </div>
         </div>
         <div class="row">
-            {{ social_right_content}}
+            {{ social_right_content }}
         </div>
         <div id="display_response_id" class="col-md-12"></div>
-        {{ socialAutoExtendLink }}
+        {{ social_auto_extend_link }}
     </div>
 </div>
 {% endblock %}

@@ -25,17 +25,11 @@ $(document).ready(function() {
     if ($(window).width() <= 785 ) {
         hide_bar();
     }
-    $("#hide_bar_template").toggle(
-        function() {
-          hide_bar();
-        },
-        function() {
-            $("#template_col").show();
-            $("#doc_form").removeClass("col-md-11");
-            $("#doc_form").addClass("col-md-9");
-            $(this).css("background-image", \'url("../img/hide0.png")\');
-        }
-    );
+
+    $("#hide_bar_template").click(function() {
+        $("#template_col").toggleClass("hide");
+        $("#hide_bar_template").toggleClass("hide_bar_template_not_hide");
+    });
 
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates();
@@ -586,12 +580,14 @@ if ($form->validate()) {
 	}
     // HTML-editor
     echo '<div class="row" style="overflow:hidden">
-            <div id="template_col" class="col-md-3" style="width:200px">
+            <div id="template_col" class="col-md-2">
                 <div id="frmModel" ></div>
             </div>
-            <div id="hide_bar_template"></div>
+            <div class="col-md-1">
+                <div id="hide_bar_template"></div>
+            </div>
             <div id="doc_form" class="col-md-9">
-                    '.$form->return_form().'
+                '.$form->return_form().'
             </div>
           </div>';
 	Display :: display_footer();

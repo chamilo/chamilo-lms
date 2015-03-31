@@ -4,7 +4,6 @@
  * Index page of the admin tools
  * @package chamilo.admin
  */
-
 // Resetting the course id.
 $cidReset = true;
 
@@ -19,6 +18,9 @@ api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
 
+$accessUrlId = 0;
+$adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
+
 if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
 
@@ -28,8 +30,6 @@ if (api_is_multiple_url_enabled()) {
         $cleanUrl = str_replace('/', '-', $url);
         $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
     }
-} else {
-    $adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
 }
 
 // Displaying the header
@@ -402,30 +402,55 @@ $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
 
 if (api_is_platform_admin()) {
-    $extraDataForm = new FormValidator(
+    $extraContentForm = new FormValidator(
         'block_extra_data',
         'post',
         '#',
         null,
         array(
             'id' => 'block-extra-data',
-            'class' => 'form-inline'
-        )
+            'class' => ''
+        ),
+        FormValidator::LAYOUT_BOX_NO_LABEL
     );
+    $extraContentFormRenderer = $extraContentForm->getDefaultRenderer();
 
-    $extraDataForm->add_html_editor(
+    if ($extraContentForm->validate()) {
+        $extraData = $extraContentForm->getSubmitValues();
+        $extraData = array_map(['Security', 'remove_XSS'], $extraData);
+
+        if (!empty($extraData['block'])) {
+            if (!is_dir($adminExtraContentDir)) {
+                mkdir(
+                    $adminExtraContentDir,
+                    api_get_permissions_for_new_directories(),
+                    true
+                );
+            }
+
+            if (!is_writable($adminExtraContentDir)) {
+                die;
+            }
+
+            $fullFilePath = $adminExtraContentDir . $extraData['block'];
+            $fullFilePath .= "_extra.html";
+
+            file_put_contents($fullFilePath, $extraData['extra_content']);
+
+            Header::location(api_get_self());
+        }
+    }
+
+    $extraContentForm->addTextarea(
         'extra_content',
         null,
-        false,
-        false,
-        array(
-            'name' => 'extra-content',
-            'ToolbarSet' => 'AdminPanels',
-            'Width' => 530,
-            'Height' => 300
-        )
+        ['id' => 'extra_content']
     );
-    $extraDataForm->addElement(
+    $extraContentFormRenderer->setElementTemplate(
+        '<div class="form-group">{element}</div>',
+        'extra_content'
+    );
+    $extraContentForm->addElement(
         'hidden',
         'block',
         null,
@@ -433,16 +458,12 @@ if (api_is_platform_admin()) {
             'id' => 'extra-block'
         )
     );
-    $extraDataForm->add_button(
-        'submit',
+    $extraContentForm->addButtonExport(
         get_lang('Save'),
-        array(
-            'id' => 'btn-block-editor-save',
-            'class' => 'btn btn-primary'
-        )
+        'submit_extra_content'
     );
 
-    $tpl->assign('extraDataForm', $extraDataForm->toHtml());
+    $tpl->assign('extraDataForm', $extraContentForm->returnForm());
 }
 
 // The template contains the call to the AJAX version checker

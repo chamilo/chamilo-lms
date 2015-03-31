@@ -502,10 +502,13 @@ class CoursesController
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData(array(
-                'session_id' => intval($sessionData),
-                'result' => &$result
+                'session_id' => intval($sessionData)
             ));
-            $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
+            try {
+                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
+            } catch (Exception $exception) {
+                $result = $exception->getMessage();
+            }
         }
 
         return $result;

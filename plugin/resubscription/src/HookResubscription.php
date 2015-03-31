@@ -86,10 +86,9 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 if (isset($userSessionCourses[$currentSessionCourse['course_code']])) {
                     $endDate = $userSessionCourses[$currentSessionCourse['course_code']];
                     $resubscriptionDate = gmdate('Y-m-d', strtotime($endDate." +$resubscriptionLimit year"));
-
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);
-                    $data['result'] = Display::label($icon . ' ' . $canResubscribeFrom, "info");
+                    throw new Exception(Display::label($icon . ' ' . $canResubscribeFrom, "info"));
                 }
             }
         }

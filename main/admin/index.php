@@ -413,7 +413,7 @@ if (api_is_platform_admin()) {
         )
     );
 
-    $extraDataForm->add_html_editor(
+    $extraDataForm->addHtmlEditor(
         'extra_content',
         null,
         false,
@@ -433,7 +433,7 @@ if (api_is_platform_admin()) {
             'id' => 'extra-block'
         )
     );
-    $extraDataForm->add_button(
+    $extraDataForm->addButtonExport(
         'submit',
         get_lang('Save'),
         array(

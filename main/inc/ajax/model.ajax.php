@@ -276,6 +276,11 @@ switch ($action) {
             $sessionIdList = array_unique($sessionIdList);
         }
 
+        if (api_is_student_boss() && empty($userIdList)) {
+            $count = 0;
+            break;
+        }
+
         if ($action == 'get_user_course_report') {
             $count = CourseManager::get_count_user_list_from_course_code(
                 false,
@@ -580,6 +585,11 @@ switch ($action) {
             //$sidx = 'training_hours';
         }
 
+        if (api_is_student_boss() && empty($userIdList)) {
+            $result = [];
+            break;
+        }
+
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
@@ -632,6 +642,11 @@ switch ($action) {
 
         if (!in_array($sidx, array('title'))) {
             $sidx = 'title';
+        }
+
+        if (api_is_student_boss() && empty($userIdList)) {
+            $result = [];
+            break;
         }
 
         $result = CourseManager::get_user_list_from_course_code(

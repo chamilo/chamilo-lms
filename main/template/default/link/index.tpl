@@ -196,7 +196,7 @@ function validate_link(name, btn){
             <a href="{{root}}&amp;action=add_link" class="btn new_link" title="{{'AddLink'|get_lang}}">
                 <i class="size-32 icon-new-link"></i>
             </a>
-            <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn delete_all" title="{{'DeleteAll'|get_lang}}">
+            <a href="javascript:void(0)" onclick="delete_all();return false;" class="btn btn-default" title="{{'DeleteAll'|get_lang}}">
                 <i class="size-32 icon-delete-all"></i>
             </a>
             <a href="{{root}}&amp;action=import_csv" class="btn import_csv" title="{{'ImportCSV'|get_lang}}">
@@ -208,10 +208,10 @@ function validate_link(name, btn){
         </div>
     {% endif %}
     <div class="btn-group">
-        <a href="javascript:void(0)" onclick="expand_all();return false;" class="btn" title="{{'ShowAll'|get_lang}}">
+        <a href="javascript:void(0)" onclick="expand_all();return false;" class="btn btn-default" title="{{'ShowAll'|get_lang}}">
             <i class="size-32 icon-expand"></i>
         </a>
-        <a href="javascript:void(0)" onclick="collapse_all();return false;" class="btn" title="{{'ShowNone'|get_lang}}">
+        <a href="javascript:void(0)" onclick="collapse_all();return false;" class="btn btn-default" title="{{'ShowNone'|get_lang}}">
             <i class="size-32 icon-collapse"></i>
         </a>
     </div>

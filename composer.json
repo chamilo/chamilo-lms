@@ -53,6 +53,7 @@
         "gedmo/doctrine-extensions": "~2.3",
         "sonata-project/user-bundle": "~2.2",
         "fxp/composer-asset-plugin": "~1.0",
+        "webit/eval-math": "dev-master",
         "bower-asset/bootstrap": "3.3.*",
         "bower-asset/fontawesome": "4.3.*",
         "bower-asset/moment": "2.9",
@@ -63,7 +64,8 @@
         "bower-asset/fullcalendar": "2.3.*",
         "bower-asset/mediaelement": "2.16.*",
         "bower-asset/modernizr": "2.8.*",
-        "bower-asset/jqueryui-timepicker-addon": "1.5.*"
+        "bower-asset/jqueryui-timepicker-addon": "1.5.*",
+        "ramsey/array_column": "~1.1"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Form element to select a date and hour (with popup datepicker)
+ * Form element to select a range of dates (with popup datepicker)
  */
 class DateRangePicker extends HTML_QuickForm_text
 {
@@ -21,7 +21,7 @@ class DateRangePicker extends HTML_QuickForm_text
     }
 
     /**
-     * HTML code to display this datepicker
+     * @return string
      */
     public function toHtml()
     {
@@ -100,10 +100,12 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $dates = explode('/', $dateRange);
         $dates = array_map('trim', $dates);
+        $start = isset($dates[0]) ? $dates[0] : '';
+        $end = isset($dates[1]) ? $dates[1] : '';
 
         return array(
-            'start' => $dates[0],
-            'end' => $dates[1]
+            'start' => $start,
+            'end' => $end
         );
     }
 
@@ -117,6 +119,7 @@ class DateRangePicker extends HTML_QuickForm_text
         if (empty($dates['start']) || empty($dates['end'])) {
             return false;
         }
+
         $format = 'Y-m-d H:i';
         $d = DateTime::createFromFormat($format, $dates['start']);
         $resultStart = $d && $d->format($format) == $dates['start'];

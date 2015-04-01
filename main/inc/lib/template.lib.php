@@ -454,7 +454,8 @@ class Template
             'software_name'  => $_configuration['software_name'],
             'system_version' => $_configuration['system_version'],
             'site_name'      => api_get_setting('siteName'),
-            'institution'    => api_get_setting('Institution')
+            'institution'    => api_get_setting('Institution'),
+            'date'       => api_format_date('now', DATE_FORMAT_LONG),
         );
         $this->assign('_s', $_s);
     }

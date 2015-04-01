@@ -240,10 +240,10 @@ if (api_is_allowed_to_edit(false, true) OR
                 exit;
             } else {
                 $content = $form->return_form();
-
             }
             break;
         case 'importical':
+            $actionName = get_lang('Import');
             $form = $agenda->getImportCalendarForm();
             $content = $form->return_form();
 

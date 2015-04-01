@@ -11,6 +11,9 @@
  */
 class SocialManager extends UserManager
 {
+    /**
+     * Constructor
+     */
     public function __construct()
     {
 
@@ -25,7 +28,8 @@ class SocialManager extends UserManager
     {
         $friend_relation_list = array();
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $sql = 'SELECT id,title FROM '.$tbl_my_friend_relation_type.' WHERE id<>6 ORDER BY id ASC';
+        $sql = 'SELECT id,title FROM '.$tbl_my_friend_relation_type.'
+                WHERE id<>6 ORDER BY id ASC';
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $friend_relation_list[] = $row;
@@ -100,14 +104,23 @@ class SocialManager extends UserManager
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
-                WHERE relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id<>'.((int) $user_id).' AND user_id='.((int) $user_id);
+                WHERE
+                    relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
+                    friend_user_id<>'.((int) $user_id).' AND
+                    user_id='.((int) $user_id);
         if (isset($id_group) && $id_group > 0) {
             $sql.=' AND relation_type='.$id_group;
         }
         if (isset($search_name)) {
             $search_name = trim($search_name);
             $search_name = str_replace(' ', '', $search_name);
-            $sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE firstName LIKE "%'.Database::escape_string($search_name).'%" OR lastName LIKE "%'.Database::escape_string($search_name).'%"   OR    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%")    ) ';
+            $sql.=' AND friend_user_id IN (
+                SELECT user_id FROM '.$tbl_my_user.'
+                WHERE
+                    firstName LIKE "%'.Database::escape_string($search_name).'%" OR
+                    lastName LIKE "%'.Database::escape_string($search_name).'%" OR
+                    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' LIKE concat("%","'.Database::escape_string($search_name).'","%")
+                ) ';
         }
 
         $res = Database::query($sql);
@@ -144,7 +157,12 @@ class SocialManager extends UserManager
         $list_ids = self::get_friends($user_id, $id_group, $search_name);
         if (is_array($list_ids)) {
             foreach ($list_ids as $values_ids) {
-                $list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'], 'web', false, true);
+                $list_path_image_friend[] = UserManager::get_user_picture_path_by_id(
+                    $values_ids['friend_user_id'],
+                    'web',
+                    false,
+                    true
+                );
                 $combine_friend = array(
                     'id_friend' => $list_ids,
                     'path_friend' => $list_path_image_friend
@@ -189,7 +207,7 @@ class SocialManager extends UserManager
      */
     public static function send_invitation_friend($user_id, $friend_id, $message_title, $message_content)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $user_id = intval($user_id);
         $friend_id = intval($friend_id);
 
@@ -202,7 +220,11 @@ class SocialManager extends UserManager
         $now = api_get_utc_datetime();
 
         $sql_exist = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
-                      WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status IN(5,6,7);';
+                      WHERE
+                        user_sender_id='.$user_id.' AND
+                        user_receiver_id='.$friend_id.' AND
+                        msg_status IN(5,6,7);
+                    ';
 
         $res_exist = Database::query($sql_exist);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
@@ -249,9 +271,11 @@ class SocialManager extends UserManager
      */
     public static function get_message_number_invitation_by_user_id($user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.'
-                WHERE user_receiver_id='.intval($user_receiver_id).' AND msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
+                WHERE
+                    user_receiver_id='.intval($user_receiver_id).' AND
+                    msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['count_message_in_box'];
@@ -265,10 +289,12 @@ class SocialManager extends UserManager
      */
     public static function get_list_invitation_of_friends_by_user_id($user_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_sender_id,send_date,title,content
                 FROM '.$tbl_message.'
-                WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+                WHERE
+                    user_receiver_id='.intval($user_id).' AND
+                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $list_friend_invitation = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -286,7 +312,7 @@ class SocialManager extends UserManager
     public static function get_list_invitation_sent_by_user_id($user_id)
     {
         $list_friend_invitation = array();
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_receiver_id, send_date,title,content
                 FROM '.$tbl_message.'
                 WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
@@ -306,7 +332,7 @@ class SocialManager extends UserManager
      */
     public static function invitation_accepted($user_send_id, $user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = "UPDATE $tbl_message
                 SET msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED."
                 WHERE
@@ -325,7 +351,7 @@ class SocialManager extends UserManager
      */
     public static function invitation_denied($user_send_id, $user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'DELETE FROM '.$tbl_message.'
                 WHERE
                     user_sender_id =  '.((int) $user_send_id).' AND
@@ -420,7 +446,11 @@ class SocialManager extends UserManager
             if (!empty($rss->items)) {
                 $icon_rss = '';
                 if (!empty($feed)) {
-                    $icon_rss = Display::url(Display::return_icon('social_rss.png', '', array(), 22), Security::remove_XSS($feed['rssfeeds']), array('target' => '_blank'));
+                    $icon_rss = Display::url(
+                        Display::return_icon('social_rss.png', '', array(), 22),
+                        Security::remove_XSS($feed['rssfeeds']),
+                        array('target' => '_blank')
+                    );
                 }
 
                 $res .= '<h3 class="title-rss">'.$icon_rss.' '.$rss->channel['title'].'</h3>';
@@ -881,10 +911,9 @@ class SocialManager extends UserManager
         if (isset($_GET['id']) or count($user_list) < 1) {
             return false;
         }
-        $column_size = '9';
+        $column_size = '12';
         $add_row = false;
         if (api_is_anonymous()) {
-            $column_size = '12';
             $add_row = true;
         }
 
@@ -932,7 +961,7 @@ class SocialManager extends UserManager
                 $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
             }
             $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
-            $html .= '<li class="col-md-'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
+            $html .= '<li class="col-md-'.($column_size / 3).' thumbnail">'.$img.'<div class="caption">'.$name.'</div></li>';
         }
         $counter = $_SESSION['who_is_online_counter'];
 
@@ -1118,7 +1147,7 @@ class SocialManager extends UserManager
      */
     public static function sendWallMessage($userId, $friendId, $messageContent, $messageId = 0 ,$messageStatus)
     {
-        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $userId = intval($userId);
         $friendId = intval($friendId);
         $messageId = intval($messageId);
@@ -1217,24 +1246,23 @@ class SocialManager extends UserManager
         if (empty($start)) {
             $start = '0000-00-00';
         }
-        $tblMessage = Database::get_main_table(TABLE_MAIN_MESSAGE);
+        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
+        $tblMessageAttachement = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
         $userId = intval($userId);
         $start = Database::escape_string($start);
-        // TODO: set a maximum of 3 months for messages
-        //if ($start == '0000-00-00') {
-        //
-        //}
         $limit = intval($limit);
-        $messages = array();
+
         $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
-          (SELECT ma.path from message_attachment ma WHERE  ma.message_id = tm.id ) as path,
-          (SELECT ma.filename from message_attachment ma WHERE  ma.message_id = tm.id ) as filename
-            FROM $tblMessage tm
-            WHERE user_receiver_id = $userId
+                  (SELECT ma.path FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as path,
+                  (SELECT ma.filename FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as filename
+                FROM $tblMessage tm
+                WHERE user_receiver_id = $userId
                 AND send_date > '$start' ";
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
         $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
+        $messages = array();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
@@ -1284,7 +1312,7 @@ class SocialManager extends UserManager
             if ($isOwnWall) {
                 $media .= '<div class="pull-right deleted-mgs">';
                 $media .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-                    $message['id'].'">'.get_lang('x').'</a>';
+                    $message['id'].'">x</a>';
                 $media .= '</div>';
             }
             $media .= '<div class="user-image">';
@@ -1404,11 +1432,10 @@ class SocialManager extends UserManager
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
-
         $htmlDelete = '';
         if ($isOwnWall) {
             $htmlDelete .= '<a title="'.get_lang("SocialMessageDelete").'" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?messageId='.
-            $message['id'].'">'.get_lang('x').'</a>';
+            $message['id'].'">x</a>';
         }
 
         $html = '';
@@ -1523,6 +1550,7 @@ class SocialManager extends UserManager
 
     /**
      * Generate the social block for a user
+     * @param Template $template
      * @param int $userId The user id
      * @param string $groupBlock Optional. Highlight link possible values:
      * group_add, home, messages, messages_inbox, messages_compose,
@@ -1530,7 +1558,7 @@ class SocialManager extends UserManager
      * @param int $groupId Optional. Group ID
      * @return string The HTML code with the social block
      */
-    public static function setSocialUserBlock($template, $userId, $groupBlock = '', $groupId = 0)
+    public static function setSocialUserBlock(Template $template, $userId, $groupBlock = '', $groupId = 0)
     {
         if (api_get_setting('allow_social_tool') != 'true') {
             return '';
@@ -1547,5 +1575,107 @@ class SocialManager extends UserManager
         $template->assign('socialAvatarBlock', $socialAvatarBlock);
         $template->assign('profileEditionLink', $profileEditionLink);
         $template->assign('social_avatar_block', $template->fetch('default/social/user_block.tpl'));
+    }
+
+    /**
+     * @param $user_id
+     * @param $link_shared
+     * @param $show_full_profile
+     * @return string
+     */
+    public static function listMyFriends($user_id, $link_shared, $show_full_profile)
+    {
+        //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+        $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
+        $number_of_images = 30;
+        $number_friends = count($friends);
+
+        $friendHtml = '<div class="nav-list"><h3>'.get_lang('SocialFriend').'<span>(' . $number_friends . ')</span></h3></div>';
+
+        if ($number_friends != 0) {
+            if ($number_friends > $number_of_images) {
+                if (api_get_user_id() == $user_id) {
+                    $friendHtml.= ' : <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
+                } else {
+                    $friendHtml.= ' : <span>'
+                        .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
+                        .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
+                        .'class="ajax" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
+                }
+            }
+
+            $friendHtml.= '<ul class="nav nav-list">';
+            $j = 1;
+            for ($k=0; $k < $number_friends; $k++) {
+                if ($j > $number_of_images) break;
+
+                if (isset($friends[$k])) {
+                    $friend = $friends[$k];
+                    $name_user    = api_get_person_name($friend['firstName'], $friend['lastName']);
+                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
+
+                    if ($user_info_friend['user_is_online']) {
+                        $statusIcon = Display::span('', array('class' => 'online_user_in_text'));
+                    } else {
+                        $statusIcon = Display::span('', array('class' => 'offline_user_in_text'));
+                    }
+
+                    $friendHtml.= '<li class="">';
+                    // the height = 92 must be the same in the image_friend_network span style in default.css
+                    $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 20, USER_IMAGE_SIZE_SMALL);
+                    $friendHtml.= '<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
+                    $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
+                    $friendHtml.= $statusIcon .'<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">' . $name_user .'</a>';
+                    $friendHtml.= '</li>';
+                }
+                $j++;
+            }
+            $friendHtml.='</ul>';
+        } else {
+            $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
+                .'<a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'. get_lang('TryAndFindSomeFriends').'</a></div>';
+        }
+
+        return $friendHtml;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getWallForm()
+    {
+        $form = new FormValidator(
+            'social_wall_main',
+            'post',
+            api_get_path(WEB_CODE_PATH).'social/profile.php',
+            null,
+            array('enctype' => 'multipart/form-data')
+        );
+
+        $form->addTextarea('social_wall_new_msg_main', null, array('placeholder' => get_lang('SocialWallWhatAreYouThinkingAbout')));
+        $form->addButtonSend(get_lang('Post'));
+        $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
+
+        return $html;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $friendId
+     * @return string
+     */
+    public static function getWallMessagesByUser($userId, $friendId)
+    {
+        $messages = SocialManager::getWallMessagesPostHTML($userId, $friendId);
+        $html = '';
+
+        foreach ($messages as $message) {
+            $post = $message['html'];
+            $comment = SocialManager::getWallMessagesHTML($userId, $friendId, $message['id']);
+
+            $html .= $post.$comment;
+        }
+
+        return $html;
     }
 }

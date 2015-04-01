@@ -1291,12 +1291,19 @@ class Tracking
     		$condition_user = " AND user_id = $user_id ";
     	}
 
-    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
-                FROM $tbl_track_course
-                WHERE
-                    UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND
-                    c_id = '$courseId' AND
-                    session_id = '$session_id' $condition_user";
+    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds "
+            . "FROM $tbl_track_course "
+            . "WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
+
+        if ($courseId != 0) {
+            $sql .= "AND c_id = '$courseId' ";
+        }
+
+        if ($session_id != -1) {
+            $sql .= "AND session_id = '$session_id' ";
+        }
+
+        $sql .= $condition_user;
 
         $rs = Database::query($sql);
     	$row = Database::fetch_array($rs);
@@ -2914,7 +2921,8 @@ class Tracking
      * @param int $start
      * @param int $limit
      * @param bool $getCount
-     * @param null $keyword
+     * @param string $keyword
+     * @param string $description
      * @return mixed
      */
     public static function get_sessions_coached_by_user(
@@ -2922,7 +2930,8 @@ class Tracking
         $start = 0,
         $limit = 0,
         $getCount = false,
-        $keyword = null
+        $keyword = '',
+        $description = ''
     ) {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2940,9 +2949,15 @@ class Tracking
         }
 
         $keywordCondition = null;
+
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
+
+            if (!empty($description)) {
+                $description = Database::escape_string($description);
+                $keywordCondition = " AND (name LIKE '%$keyword%' OR description LIKE '%$description%' ) ";
+            }
         }
 
         $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -2954,7 +2969,10 @@ class Tracking
                 SELECT DISTINCT id, name, date_start, date_end
                 FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
-                WHERE id_coach = $coach_id AND access_url_id = $access_url_id $keywordCondition
+                WHERE
+                    id_coach = $coach_id AND
+                    access_url_id = $access_url_id
+                    $keywordCondition
             UNION
                 SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
                 FROM $tbl_session as session
@@ -2964,7 +2982,9 @@ class Tracking
                     session_course_user.status=2
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
-                WHERE access_url_id = $access_url_id $keywordCondition
+                WHERE
+                    access_url_id = $access_url_id
+                    $keywordCondition
             ) as sessions $limitCondition
             ";
 

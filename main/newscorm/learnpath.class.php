@@ -5627,26 +5627,24 @@ class learnpath
             }
         }
 
-        $return .= '<div class="panel panel-default">';
-        $return .= '<div class="panel-heading">'.$this->name.'</div>';
-        $return .= '<div class="panel-body">';
-        $return .= '<ul id="lp_item_list">';
-
+        $list = '<ul id="lp_item_list">';
         $tree = self::print_recursive($elements, $default_data, $default_content);
 
         if (!empty($tree)) {
-            $return .= $tree;
+            $list .= $tree;
         } else {
             if ($drop_element_here) {
-                $return .= Display::return_message(get_lang("DragAndDropAnElementHere"));
+                $list .= Display::return_message(get_lang("DragAndDropAnElementHere"));
             }
         }
-        $return .= '</ul>';
+        $list .= '</ul>';
+
+        $return .= Display::panel($list, $this->name);
+
         if ($update_audio == 'true') {
             $return = $return_audio;
-        } else {
-            $return .= '</div></div>';
         }
+
         return $return;
     }
 
@@ -5656,7 +5654,7 @@ class learnpath
      * @param array $default_content
      * @return string
      */
-    function print_recursive($elements, $default_data, $default_content)
+    public function print_recursive($elements, $default_data, $default_content)
     {
         $return = '';
         foreach ($elements as $key => $item) {

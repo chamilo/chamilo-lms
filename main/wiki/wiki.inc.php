@@ -607,17 +607,9 @@ class Wiki
 
         if ((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && isset($row['reflink']) && $row['reflink'] != 'index') {
 
-            $advanced = '<a href="javascript://" onclick="advanced_parameters()" >
-                         <div id="plus_minus">&nbsp;'.
-                Display::return_icon(
-                    'div_show.gif',
-                    get_lang('Show'),
-                    array('style'=>'vertical-align:middle')
-                ).'&nbsp;'.get_lang('AdvancedParameters').'</div></a>';
+            $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+            $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-            $form->addElement('advanced_settings', $advanced);
-
-            $form->addElement('html', '<div id="options" style="display:none">');
             $form->addHtmlEditor('task', get_lang('DescriptionOfTheTask'), false, false, array('ToolbarSet' => 'wiki_task', 'Width' => '100%', 'Height' => '200'));
 
             $form->addElement('label', null, get_lang('AddFeedback'));
@@ -3654,14 +3646,13 @@ class Wiki
 
             // Setting the form elements
 
-            $form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
+            $form->addText('search_term', get_lang('SearchTerm'), true, array('autofocus' => 'autofocus'));
             $form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
             $form->addElement('checkbox', 'all_vers', null, get_lang('IncludeAllVersions'));
-            $form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
+            $form->addButtonSearch(get_lang('Search'), 'SubmitWikiSearch');
 
             // setting the rules
-            $form->addRule('search_term', get_lang('ThisFieldIsRequired'), 'required');
-            $form->addRule('search_term', get_lang('TooShort'),'minlength',3); //TODO: before fixing the pagination rules worked, not now
+            $form->addRule('search_term', get_lang('TooShort'), 'minlength', 3); //TODO: before fixing the pagination rules worked, not now
 
             if ($form->validate()) {
                 $form->display();

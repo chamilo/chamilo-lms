@@ -1,5 +1,7 @@
 # Chamilo 1.10.x
 
+[![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.10.x)](https://travis-ci.org/chamilo/chamilo-lms)
+
 ## Installation
 
 This installation guide is for development environments only.

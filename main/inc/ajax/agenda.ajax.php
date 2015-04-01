@@ -12,9 +12,6 @@ if ($type == 'personal') {
 
 require_once '../global.inc.php';
 
-require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
-
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $group_id = api_get_group_id();
 
@@ -142,14 +139,15 @@ switch ($action) {
                 $day = $today['mday'];
             }
             $monthName = $MonthsLong[$month - 1];
+            $week = null;
 
-            $agendaitems = get_myagendaitems(
+            $agendaitems = Agenda::get_myagendaitems(
                 $user_id,
                 $my_course_list,
                 $month,
                 $year
             );
-            $agendaitems = get_global_agenda_items(
+            $agendaitems = Agenda::get_global_agenda_items(
                 $agendaitems,
                 $day,
                 $month,
@@ -159,7 +157,7 @@ switch ($action) {
             );
 
             if (api_get_setting('allow_personal_agenda') == 'true') {
-                $agendaitems = get_personal_agenda_items(
+                $agendaitems = Agenda::get_personal_agenda_items(
                     $user_id,
                     $agendaitems,
                     $day,
@@ -169,7 +167,7 @@ switch ($action) {
                     "month_view"
                 );
             }
-            display_mymonthcalendar(
+            Agenda::display_mymonthcalendar(
                 $user_id,
                 $agendaitems,
                 $month,

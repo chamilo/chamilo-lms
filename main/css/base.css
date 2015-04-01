@@ -2910,6 +2910,10 @@ form .formw .freeze {
     display: none;
 }
 
+.show_element {
+    display: block !important;
+}
+
 /* agenda js  */
 #add_event_form fieldset {
     width:400px;
@@ -3778,11 +3782,11 @@ a:active{
     height: 20px;
     width: 20px;
     position:absolute;
-    background: url("online.png") no-repeat scroll right center transparent;
+    background: url("../img/online.png") no-repeat scroll right center transparent;
 }
 
 .online_user_in_text {
-    background: url("online.png") no-repeat scroll right center transparent;
+    background: url("../img/online.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -4177,15 +4181,14 @@ a.forum_group_link {
     display: none;
 }
 
-#online_grid_container li img {
-    height: 100px;
-}
-
-#online_grid_container .thumbnail .caption {
-    height: 30px;
+#online_grid_container {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 #hide_bar_template {
+    vertical-align: middle;
     width: 10px;
     display: inline;
     float:left;
@@ -4198,6 +4201,10 @@ a.forum_group_link {
     background-image: url("../img/hide0.png");
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.hide_bar_template_not_hide {
+    background-image: url("../img/hide2.png") !important;
 }
 
 #hide_bar_template:hover {
@@ -5457,6 +5464,8 @@ i.size-32.icon-new-work{
   margin-right: 5px;
 }
 .sessions .subtitle-session{
+  font-size: 12px;
+  font-style: italic;
 }
 /**
  * Modal for user avatar preview

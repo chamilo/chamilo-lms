@@ -276,13 +276,19 @@ if(!empty($errorMsg)) {
   <?php
   if ($ajax_search) {
   ?>
-    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('elements_in'))" ></button>
+    <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('elements_in'))" >
+        <i class="fa fa-arrow-left"></i>
+    </button>
   <?php
   } else {
   ?>
-    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"></button>
+    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
+        <i class="fa fa-arrow-right"></i>
+    </button>
     <br /><br />
-    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"></button>
+    <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))">
+        <i class="fa fa-arrow-left"></i>
+    </button>
     <?php
   }
   ?>
@@ -299,7 +305,7 @@ if(!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeClassToSessions').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeClassToSessions').'</button>';
         ?>
     </td>
 </tr>

@@ -2054,6 +2054,7 @@ class Display
      * @param string $title
      * @param string $footer
      * @param string $style
+     *
      * @return string
      */
     public static function panel($content, $title = '', $footer = '', $style = '')

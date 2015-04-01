@@ -69,7 +69,7 @@ jsPlumb.ready(function() {
     });
         
     //Return to root button
-    $('#return_to_root').live('click', function(){
+    $('#return_to_root').click(function(){
         clean_values();
         console.log('Clean values');        
         console.log('Reopen the root ');
@@ -193,7 +193,7 @@ jsPlumb.ready(function() {
     });
     
     //Clicking in a box skill (we use live instead of bind because we're creating divs on the fly )
-    $(".open_block").live('click', function() {     
+    $(".open_block").click(function() {
         var id = $(this).attr('id');
         
         console.log('click.open_block id: ' + id);
@@ -271,7 +271,7 @@ jsPlumb.ready(function() {
     });
     
     //Skill title click  
-    $(".edit_block").live('click',function() {      
+    $(".edit_block").click(function() {
         var my_id = $(this).attr('id');
         my_id = my_id.split('_')[2];
         

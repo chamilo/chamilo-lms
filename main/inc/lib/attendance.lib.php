@@ -1636,7 +1636,7 @@ class Attendance
 		$users = $this->get_users_rel_course();
 		$user_ids = array_keys($users);
 		$course_id = api_get_course_int_id();
-
+		$affected_rows = 0;
 		if ($all_delete) {
 			$attendance_calendar = $this->get_attendance_calendar($attendance_id);
 			// get all dates from calendar by current attendance

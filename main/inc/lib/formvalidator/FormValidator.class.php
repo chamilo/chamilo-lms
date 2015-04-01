@@ -576,7 +576,7 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array $options
+     * @param array  $options
      * @param array  $attributes
      *
      * @return HTML_QuickForm_select
@@ -651,6 +651,17 @@ EOT;
         if ($element->editor) {
             $element->editor->processConfig($config);
         }
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @return mixed
+     */
+    public function addButtonAdvancedSettings($name, $label = '')
+    {
+        $label = !empty($label) ? $label : get_lang('AdvancedParameters');
+        return $this->addElement('advanced_settings', $name, $label);
     }
 
     /**
@@ -743,7 +754,7 @@ EOT;
      * @param array $element					The array of elements
      * @param string $message					The message displayed
      */
-    function add_multiple_required_rule($elements, $message)
+    public function add_multiple_required_rule($elements, $message)
     {
         $this->_required[] = $elements[0];
         $this->addRule($elements, $message, 'multiple_required');

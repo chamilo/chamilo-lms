@@ -292,8 +292,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), ' ');
     }
 
-    $form->addElement('advanced_settings', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>', '');
-    $form->addElement('html', '<div id="options" style="display:none">');
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
@@ -2383,10 +2383,8 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     if (!empty($iframe)) {
         $form->addElement('label', get_lang('Thread'), $iframe);
     }
-    $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()">
-                              <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>');
-
-    $form->addElement('html', '<div id="id_qualify" style="display:none">');
+    $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
     if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($myThread)) {
 
@@ -2837,9 +2835,9 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         )
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>');
 
-    $form->addElement('html', '<div id="id_qualify" style="display:none">');
+    $form->addButtonAdvancedSettings('advanced_params');
+    $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
     if (!isset($_GET['edit'])) {
         if (Gradebook::is_active()) {

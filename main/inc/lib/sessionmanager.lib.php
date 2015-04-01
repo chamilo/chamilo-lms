@@ -2671,8 +2671,9 @@ class SessionManager
                     }
                 }
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -2810,6 +2811,8 @@ class SessionManager
      * @param bool $getOnlySessionId
      * @param bool $getSql
      * @param string $orderCondition
+     * @param string $description
+     *
      * @return array sessions
      */
     public static function get_sessions_followed_by_drh(
@@ -2820,7 +2823,8 @@ class SessionManager
         $getOnlySessionId = false,
         $getSql = false,
         $orderCondition = null,
-        $keyword = null
+        $keyword = '',
+        $description = ''
     ) {
         return self::getSessionsFollowedByUser(
             $userId,
@@ -2831,7 +2835,8 @@ class SessionManager
             $getOnlySessionId,
             $getSql,
             $orderCondition,
-            $keyword
+            $keyword,
+            $description
         );
     }
 
@@ -2845,6 +2850,7 @@ class SessionManager
      * @param bool $getSql
      * @param string $orderCondition
      * @param string $keyword
+     * @param string $description
      * @return array sessions
      */
     public static function getSessionsFollowedByUser(
@@ -2856,11 +2862,12 @@ class SessionManager
         $getOnlySessionId = false,
         $getSql = false,
         $orderCondition = null,
-        $keyword = null
+        $keyword = '',
+        $description = ''
     ) {
         // Database Table Definitions
-        $tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
@@ -2917,11 +2924,17 @@ class SessionManager
                 break;
         }
 
-        $keywordCondition = null;
+        $keywordCondition = '';
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
+
+            if (!empty($description)) {
+                $description = Database::escape_string($description);
+                $keywordCondition = " AND (s.name LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
+            }
         }
+
         $whereConditions .= $keywordCondition;
 
         $subQuery = $sessionQuery.$courseSessionQuery;
@@ -2958,20 +2971,29 @@ class SessionManager
     }
 
     /**
-     * Gets the list of courses by session filtered by access_url
-     * @param int $session_id
-     * @param string $course_name
-     * @return array list of courses
+     * Gets the list (or the count) of courses by session filtered by access_url
+     * @param int $session_id The session id
+     * @param string $course_name The course code
+     * @param string $orderBy Field to order the data
+     * @param boolean $getCount Optional. Count the session courses
+     * @return array|int List of courses. Whether $getCount is true, return the count
      */
     public static function get_course_list_by_session_id(
         $session_id,
         $course_name = '',
-        $orderBy = null
+        $orderBy = null,
+        $getCount = false
     ) {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $session_id = intval($session_id);
+
+        $sqlSelect = "SELECT *";
+
+        if ($getCount) {
+            $sqlSelect = "SELECT COUNT(1)";
+        }
 
         // select the courses
         $sql = "SELECT * FROM $tbl_course c
@@ -2988,7 +3010,11 @@ class SessionManager
             $orderBy = Database::escape_string($orderBy);
             $orderBy = " ORDER BY $orderBy";
         } else {
-            $orderBy .= " ORDER BY position ";
+            if (SessionManager::orderCourseIsEnabled()) {
+                $orderBy .= " ORDER BY position ";
+            } else {
+                $orderBy .= " ORDER BY title ";
+            }
         }
 
         $sql .= Database::escape_string($orderBy);
@@ -2996,6 +3022,12 @@ class SessionManager
         $num_rows = Database::num_rows($result);
         $courses = array();
         if ($num_rows > 0) {
+            if ($getCount) {
+                $count = Database::fetch_array($result);
+
+                return intval($count[0]);
+            }
+
             while ($row = Database::fetch_array($result,'ASSOC'))	{
                 $courses[$row['id']] = $row;
             }
@@ -3260,6 +3292,7 @@ class SessionManager
     /**
      * @param int $user_id
      * @return array
+     * @deprecated use get_sessions_by_general_coach()
      */
     public static function get_sessions_by_coach($user_id)
     {
@@ -5052,6 +5085,21 @@ class SessionManager
     }
 
     /**
+     * Courses re-ordering in resume_session.php flag see BT#8316
+     */
+    public static function orderCourseIsEnabled()
+    {
+        global $_configuration;
+        if (isset($_configuration['session_course_ordering']) &&
+            $_configuration['session_course_ordering']
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $direction (up/down)
      * @param int $sessionId
      * @param string $courseCode
@@ -5059,6 +5107,10 @@ class SessionManager
      */
     public static function move($direction, $sessionId, $courseCode)
     {
+        if (!self::orderCourseIsEnabled()) {
+            return false;
+        }
+
         $sessionId = intval($sessionId);
         $courseCode = Database::escape_string($courseCode);
 
@@ -5136,6 +5188,24 @@ class SessionManager
     public static function moveDown($sessionId, $courseCode)
     {
         return self::move('down', $sessionId, $courseCode);
+    }
+
+    /**
+     * Use the session duration to allow/block user access see BT#8317
+     * Needs these DB changes
+     * ALTER TABLE session ADD COLUMN duration int;
+     * ALTER TABLE session_rel_user ADD COLUMN duration int;
+     */
+    public static function durationPerUserIsEnabled()
+    {
+        global $_configuration;
+        if (isset($_configuration['session_duration_feature']) &&
+            $_configuration['session_duration_feature']
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -5315,6 +5385,7 @@ class SessionManager
                 $sessions = $newSessions;
             }
         }
+
         return $sessions;
     }
 
@@ -5322,6 +5393,7 @@ class SessionManager
      * Check if the course belongs to the session
      * @param int $sessionId The session id
      * @param string $courseCode The course code
+     *
      * @return bool
      */
     public static function sessionHasCourse($sessionId, $courseCode)
@@ -5443,6 +5515,31 @@ class SessionManager
             )
         ));
     }
+
+	/**
+     * Get the count of user courses in session
+     * @param int $sessionId The session id
+     * @return array
+     */
+    public static function getTotalUserCoursesInSession($sessionId)
+    {
+        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status "
+            . "FROM session_rel_course_rel_user scu "
+            . "INNER JOIN user u ON scu.id_user = u.user_id "
+            . "WHERE scu.id_session = " . intval($sessionId) . " "
+            . "GROUP BY u.user_id";
+
+        $result = Database::query($sql);
+
+        $list = array();
+
+        while ($data = Database::fetch_assoc($result)) {
+            $list[] = $data;
+        }
+
+        return $list;
+    }
+
 
     /**
      * Returns list of a few data from session (name, short description, start

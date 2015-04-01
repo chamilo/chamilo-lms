@@ -11,7 +11,7 @@
 api_protect_course_script(true);
 
 // error messages
-if ($error) {
+if (isset($error)) {
     Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
@@ -20,7 +20,7 @@ if (isset($_SESSION['gradebook'])) {
     $param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 
-if (!$error) {
+if (!isset($error)) {
     $token = Security::get_token();
 }
 // display form
@@ -39,11 +39,10 @@ $form->addHtmlEditor(
 );
 
 // Adavanced Parameters
-$advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
 if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id() == 0) {
-    $form -> addElement('advanced_settings',$advanced);
+    $form->addButtonAdvancedSettings('id_qualify');
 
-    $form->addElement('html','<div id="id_qualify" style="display:none">');
+    $form->addElement('html','<div id="id_qualify_options" style="display:none">');
 
     // Qualify Attendance for gradebook option
     $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');

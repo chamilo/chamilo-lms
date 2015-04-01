@@ -283,13 +283,13 @@ class aicc extends learnpath
                     "$parent, $previous, 0, " .
                     "'$prereq', 0" .
                     ")";
-            $res_item = Database::query($sql_item);
-            if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.Database::error(), 0); }
+            Database::query($sql_item);
+            if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0); }
             $item_id = Database::insert_id();
             // Now update previous item to change next_item_id.
             if ($previous != 0) {
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
-                $upd_res = Database::query($upd);
+                Database::query($upd);
                 // Update the previous item id.
             }
             $previous = $item_id;

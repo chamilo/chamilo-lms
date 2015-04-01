@@ -1085,10 +1085,9 @@ function WSCreateUserPasswordCrypted($params) {
             }
         }
     } else {
-        $error = Database::error();
-        if ($debug) error_log($error);
         return 0;
     }
+
     return $return;
 }
 

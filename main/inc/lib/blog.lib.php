@@ -2129,16 +2129,14 @@ class Blog
 			$row[] = Display::icon_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task
-			FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " btu
-			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " bt ON btu.task_id = bt.task_id
-			WHERE 	btu.c_id 	= $course_id  AND
-					bt.c_id 	= $course_id  AND
-					btu.blog_id = $blog_id AND
-					btu.user_id = " . $myrow['user_id'];
-
-			if (!($sql_res = Database::query($sql))) {
-				die(Database::error());
-			}
+					FROM " . Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER) . " btu
+					INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " bt
+					ON btu.task_id = bt.task_id
+					WHERE 	btu.c_id 	= $course_id  AND
+							bt.c_id 	= $course_id  AND
+							btu.blog_id = $blog_id AND
+							btu.user_id = " . $myrow['user_id'];
+			$sql_res = Database::query($sql);
 
 			$task = '';
 

@@ -3173,7 +3173,7 @@ class Wiki
                         $message_author = api_get_user_id();
                         $sql="INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime) VALUES
                     	($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
-                        $result=Database::query($sql) or die(Database::error());
+                        $result = Database::query($sql);
                         self::check_emailcue($id, 'D', $dtime, $message_author);
                     }
                 }//end discuss lock
@@ -3184,7 +3184,7 @@ class Wiki
                 $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user
                   WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."'
                   ORDER BY id DESC";
-                $result=Database::query($sql) or die(Database::error());
+                $result=Database::query($sql);
 
                 $countWPost = Database::num_rows($result);
                 echo get_lang('NumComments').": ".$countWPost; //comment's numbers
@@ -3193,12 +3193,12 @@ class Wiki
                         FROM $tbl_wiki_discuss
                         WHERE c_id = $course_id AND publication_id = '".$id."' AND NOT p_score='-'
                         ORDER BY id DESC";
-                $result2=Database::query($sql) or die(Database::error());
+                $result2=Database::query($sql);
                 $row2=Database::fetch_array($result2);
 
                 $sql = "SELECT * FROM $tbl_wiki_discuss
                         WHERE c_id = $course_id AND publication_id='".$id."' AND NOT p_score='-'";
-                $result3=Database::query($sql) or die(Database::error());
+                $result3=Database::query($sql);
                 $countWPost_score= Database::num_rows($result3);
 
                 echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//

@@ -387,7 +387,7 @@ if ($_REQUEST['tab'] == 'save_paypal') {
 
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToSaveThePaypalParameters') . Database::error();
+        $content = $plugin->get_lang('ProblemToSaveThePaypalParameters');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -404,7 +404,7 @@ if ($_REQUEST['tab'] == 'add_account') {
 
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToInsertANewAccount') . Database::error();
+        $content = $plugin->get_lang('ProblemToInsertANewAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -418,7 +418,7 @@ if ($_REQUEST['tab'] == 'delete_account') {
     $sql = "DELETE FROM $tableBuyCourseTransfer WHERE id='" . $id . "';";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteTheAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -452,7 +452,7 @@ if ($_REQUEST['tab'] == 'save_mod') {
 
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
+        $content = $plugin->get_lang('ProblemToSaveTheMessage');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         echo json_encode(array("status" => "true", "course_id" => $id));
@@ -480,7 +480,7 @@ if ($_REQUEST['tab'] == 'clear_order') {
 
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
+        $content = $plugin->get_lang('ProblemToDeleteTheAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');

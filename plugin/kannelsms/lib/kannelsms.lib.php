@@ -10,8 +10,7 @@
  *
  * Kannelsms-Chamilo connector class
  */
-
-class Kannelsms
+class Kannelsms implements SmsPluginLibraryInterface
 {
     public $api;
     public $hostAddress;
@@ -45,7 +44,7 @@ class Kannelsms
      * @param   int $userId User id
      * @return  int User's mobile phone number
      */
-    private function getMobilePhoneNumberById($userId)
+    public function getMobilePhoneNumberById($userId)
     {
         $mobilePhoneNumberExtraField = new ExtraField('user');
         $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
@@ -153,7 +152,7 @@ class Kannelsms
         $tpl = new Template($tool_name);
 
         switch ($additionalParameters['smsType']) {
-            case KannelsmsPlugin::WELCOME_LOGIN_PASSWORD:
+            case SmsPlugin::WELCOME_LOGIN_PASSWORD:
                 $userInfo = api_get_user_info($additionalParameters['userId']);
                 return $this->buildSms(
                     $plugin,
@@ -167,7 +166,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::NEW_FILE_SHARED_COURSE_BY:
+            case SmsPlugin::NEW_FILE_SHARED_COURSE_BY:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -180,7 +179,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::ACCOUNT_APPROVED_CONNECT:
+            case SmsPlugin::ACCOUNT_APPROVED_CONNECT:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -192,7 +191,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::NEW_COURSE_BEEN_CREATED:
+            case SmsPlugin::NEW_COURSE_BEEN_CREATED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -205,7 +204,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
+            case SmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -218,7 +217,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
+            case SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -230,7 +229,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -242,7 +241,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -254,7 +253,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -266,7 +265,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::COURSE_OPENING_REQUEST_CODE:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -278,7 +277,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::BEEN_SUBSCRIBED_COURSE:
+            case SmsPlugin::BEEN_SUBSCRIBED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -290,7 +289,7 @@ class Kannelsms
                     )
                 );
                 break;
-            case KannelsmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
+            case SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -303,7 +302,7 @@ class Kannelsms
                 );
                 break;
             // Message types to be implemented. Fill the array parameter with arguments.
-            /*case KannelsmsPlugin::ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD:
+            /*case SmsPlugin::ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -314,7 +313,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::PASSWORD_UPDATED_LOGIN_PASSWORD:
+            /*case SmsPlugin::PASSWORD_UPDATED_LOGIN_PASSWORD:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -325,7 +324,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::REQUESTED_PASSWORD_CHANGE:
+            /*case SmsPlugin::REQUESTED_PASSWORD_CHANGE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -336,7 +335,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::RECEIVED_NEW_PERSONAL_MESSAGES:
+            /*case SmsPlugin::RECEIVED_NEW_PERSONAL_MESSAGES:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -347,7 +346,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::NEW_USER_PENDING_APPROVAL:
+            /*case SmsPlugin::NEW_USER_PENDING_APPROVAL:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -358,7 +357,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::POSTED_FORUM_COURSE:
+            /*case SmsPlugin::POSTED_FORUM_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -369,7 +368,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::CHECK_EMAIL_CONNECT_MORE_INFO:
+            /*case SmsPlugin::CHECK_EMAIL_CONNECT_MORE_INFO:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -380,7 +379,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::STUDENT_ANSWERED_TEST:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -391,7 +390,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::STUDENT_ANSWERED_TEST_OPEN_QUESTION:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST_OPEN_QUESTION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -402,7 +401,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::STUDENT_ANSWERED_TEST_VOICE_QUESTION:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST_VOICE_QUESTION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -413,7 +412,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::ANSWER_OPEN_QUESTION_TEST_REVIEWED:
+            /*case SmsPlugin::ANSWER_OPEN_QUESTION_TEST_REVIEWED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -424,7 +423,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::NEW_THREAD_STARTED_FORUM:
+            /*case SmsPlugin::NEW_THREAD_STARTED_FORUM:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -435,7 +434,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::NEW_ANSWER_POSTED_FORUM:
+            /*case SmsPlugin::NEW_ANSWER_POSTED_FORUM:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -446,7 +445,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::NEW_SYSTEM_ANNOUNCEMENT_ADDED:
+            /*case SmsPlugin::NEW_SYSTEM_ANNOUNCEMENT_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -457,7 +456,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::TEST_NEW_SYSTEM_ANNOUNCEMENT_ADDED:
+            /*case SmsPlugin::TEST_NEW_SYSTEM_ANNOUNCEMENT_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -468,7 +467,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::SYSTEM_ANNOUNCEMENT_UPDATE:
+            /*case SmsPlugin::SYSTEM_ANNOUNCEMENT_UPDATE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -479,7 +478,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::TEST_SYSTEM_ANNOUNCEMENT_UPDATE:
+            /*case SmsPlugin::TEST_SYSTEM_ANNOUNCEMENT_UPDATE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -490,7 +489,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE_STUDENT_SUBMITS_PAPER:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE_STUDENT_SUBMITS_PAPER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -501,7 +500,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK_STUDENT_SUBMITS_PAPER:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK_STUDENT_SUBMITS_PAPER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -512,7 +511,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -523,7 +522,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -534,7 +533,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::SUBSCRIBED_SESSION:
+            /*case SmsPlugin::SUBSCRIBED_SESSION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -545,7 +544,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::SUBSCRIBED_SESSION_CSV:
+            /*case SmsPlugin::SUBSCRIBED_SESSION_CSV:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -556,7 +555,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_SUGGESTED_BE_FRIENDS:
+            /*case SmsPlugin::USER_SUGGESTED_BE_FRIENDS:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -567,7 +566,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_ANSWERED_INBOX_MESSAGE:
+            /*case SmsPlugin::USER_ANSWERED_INBOX_MESSAGE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -578,7 +577,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::BEEN_INVITED_JOIN_GROUP:
+            /*case SmsPlugin::BEEN_INVITED_JOIN_GROUP:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -589,7 +588,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::MESSAGES_SENT_EDITED_GROUP_EDITED:
+            /*case SmsPlugin::MESSAGES_SENT_EDITED_GROUP_EDITED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -600,7 +599,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::MESSAGES_SENT_EDITED_GROUP_ADDED:
+            /*case SmsPlugin::MESSAGES_SENT_EDITED_GROUP_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -611,7 +610,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::BEEN_INVITED_COMPLETE_SURVEY_COURSE:
+            /*case SmsPlugin::BEEN_INVITED_COMPLETE_SURVEY_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -622,7 +621,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::REMINDER_ASSIGNMENT_COURSE_DUE:
+            /*case SmsPlugin::REMINDER_ASSIGNMENT_COURSE_DUE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -633,7 +632,7 @@ class Kannelsms
                     )
                 );
                 break;*/
-            /*case KannelsmsPlugin::USER_DETAILS_MODIFIED:
+            /*case SmsPlugin::USER_DETAILS_MODIFIED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,

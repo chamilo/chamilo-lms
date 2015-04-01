@@ -8017,13 +8017,11 @@ function api_mail_html(
         return 0;
     }
 
-    $plugin = new AppPlugin();
-    $installedPluginsList = $plugin->getInstalledPluginListObject();
-    foreach ($installedPluginsList as $installedPlugin) {
-        if ($installedPlugin->isMailPlugin and array_key_exists("smsType", $additionalParameters)) {
-            $className = str_replace("Plugin", "", get_class($installedPlugin));
-            $smsObject = new $className;
-            $smsObject->send($additionalParameters);
+    if (!empty($additionalParameters)) {
+        $plugin = new AppPlugin();
+        $smsPlugin = $plugin->getSMSPluginLibrary();
+        if ($smsPlugin) {
+            $smsPlugin->send($additionalParameters);
         }
     }
 

@@ -186,21 +186,17 @@ if($register) {
             }
         }
 
-        if ($courseRegSucceed)
-        {
+        if ($courseRegSucceed) {
             $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('SignatureFormula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
             $message = get_lang('TheU')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
-        }
-        else
-        {
+        } else {
             $emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('SignatureFormula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
 
             $message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
         }
 
-        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => constant($plugin->getSMSPluginName().'::BEEN_SUBSCRIBED_COURSE'),
+            'smsType' => SmsPlugin::BEEN_SUBSCRIBED_COURSE,
             'userId' => $user_id,
             'courseTitle' => $currentCourseName
         );

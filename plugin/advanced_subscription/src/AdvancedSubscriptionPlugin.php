@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
+ * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to
  * create user queues requesting a subscribe to a session
  * @package chamilo.plugin.advanced_subscription
  */
-
-
 class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 {
     protected $strings;
@@ -64,9 +64,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function uninstall()
     {
-        $this->uninstallHook();
-        // Note: Keeping area field data is intended so it will not be removed
-        $this->uninstallDatabase();
+        $setting = api_get_setting('advanced_subscription');
+        if (!empty($setting)) {
+            $this->uninstallHook();
+            // Note: Keeping area field data is intended so it will not be removed
+            $this->uninstallDatabase();
+        }
     }
 
     /**
@@ -830,6 +833,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $count = Database::select('COUNT(*)', $advancedSubscriptionQueueTable, $where);
             $count = $count[0]['COUNT(*)'];
         }
+
         return $count;
     }
 
@@ -863,6 +867,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * Return the status from user in queue to session subscription
      * @param int $userId
      * @param int $sessionId
+     *
      * @return bool|int
      */
     public function getQueueStatus($userId, $sessionId)
@@ -969,6 +974,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             if (isset($sessionArray['banner'])) {
                 $sessionArray['banner'] = api_get_path(WEB_CODE_PATH) . $sessionArray['banner'];
             }
+
             return $sessionArray;
         }
 
@@ -979,13 +985,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * Get status message
      * @param int $status
      * @param bool $isAble
+     *
      * @return string
      */
     public function getStatusMessage($status, $isAble = true)
     {
-        $message = '';
-        switch ($status)
-        {
+        switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {
                     $message = $this->get_lang('AdvancedSubscriptionNoQueueIsAble');
@@ -1010,7 +1015,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 break;
             default:
                 $message = sprintf($this->get_lang('AdvancedSubscriptionQueueDefault'), $status);
-
         }
 
         return $message;
@@ -1019,11 +1023,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     /**
      * Return the url to go to session
      * @param $sessionId
+     *
      * @return string
      */
     public function getSessionUrl($sessionId)
     {
         $url = api_get_path(WEB_CODE_PATH) . 'session/?session_id=' . intval($sessionId);
+
         return $url;
     }
 
@@ -1044,12 +1050,14 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             'is_connected=' . 1 . '&' .
             'profile_completed=' . intval($params['profile_completed']) . '&' .
             'v=' . $this->generateHash($params);
+
         return $url;
     }
 
     /**
      * Return the list of student, in queue used by admin view
      * @param int $sessionId
+     *
      * @return array
      */
     public function listAllStudentsInQueueBySession($sessionId)

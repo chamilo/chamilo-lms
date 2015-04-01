@@ -23,6 +23,7 @@ abstract class HookEvent implements HookEventInterface
     /**
      * Construct Method
      * @param string $eventName
+     *
      * @throws Exception
      */
     protected function __construct($eventName)

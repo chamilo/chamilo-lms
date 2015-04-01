@@ -225,7 +225,7 @@ class Diagnoser
 
         // A note: Maybe it would be better if all "MySQL"-like variable names and words on the page to be replaced with "Database"-like ones.
 
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'host', 'http://www.php.net/manual/en/function.mysql-get-host-info.php', Database::get_host_info(), null, null, get_lang('MysqlHostInfo'));
+        //$array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'host', 'http://www.php.net/manual/en/function.mysql-get-host-info.php', Database::get_host_info(), null, null, get_lang('MysqlHostInfo'));
         /*
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'mysql_get_server_info()', 'http://www.php.net/manual/en/function.mysql-get-server-info.php', Database::get_server_info(), null, null, get_lang('MysqlServerInfo'));
 

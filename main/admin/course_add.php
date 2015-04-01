@@ -140,13 +140,11 @@ $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course          = $form->exportValues();
-    $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];
-
+    $course = $form->exportValues();
+    $teacher_id = isset($course['tutor_id']) ? $course['tutor_id'] : '';
+    $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : null;
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-
-    $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
+    $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
     $course['teachers']             = $course_teachers;
     $course['user_id']              = $teacher_id;
     $course['wanted_code']          = $course['visual_code'];

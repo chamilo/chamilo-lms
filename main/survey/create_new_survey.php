@@ -17,28 +17,6 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-// Including additional libraries
-
-$htmlHeadXtra[] = '<script>
-    function advanced_parameters() {
-        if (document.getElementById(\'options\').style.display == \'none\') {
-            document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-        } else {
-            document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-        }
-    }
-
-    function setFocus(){
-        $("#surveycode_title").focus();
-    }
-
-    $(document).ready(function () {
-        setFocus();
-    });
-</script>';
-
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -122,7 +100,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
+$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus'));
 
 if ($_GET['action'] == 'edit') {
     //$survey_code->freeze();
@@ -149,14 +127,8 @@ $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduc
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
 // Additional Parameters
-$form->addElement(
-    'advanced_settings',
-    '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">
-        <span id="plus_minus">&nbsp;'.
-        Display::return_icon('div_show.gif', null, array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'
-);
-
-$form->addElement('html', '<div id="options" style="display: none;">');
+$form->addButtonAdvancedSettings('advanced_params');
+$form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook

@@ -2910,6 +2910,10 @@ form .formw .freeze {
     display: none;
 }
 
+.show_element {
+    display: block !important;
+}
+
 /* agenda js  */
 #add_event_form fieldset {
     width:400px;
@@ -4184,6 +4188,7 @@ a.forum_group_link {
 }
 
 #hide_bar_template {
+    vertical-align: middle;
     width: 10px;
     display: inline;
     float:left;
@@ -4196,6 +4201,10 @@ a.forum_group_link {
     background-image: url("../img/hide0.png");
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.hide_bar_template_not_hide {
+    background-image: url("../img/hide2.png") !important;
 }
 
 #hide_bar_template:hover {

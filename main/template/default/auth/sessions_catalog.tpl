@@ -2,19 +2,21 @@
 
 {% block body %}
     <script type="text/javascript">
-        $(document).on('ready', function() {
+        $().ready(function() {
             $('#date').datepicker({
                 dateFormat: 'yy-mm-dd'
             });
 
-            $('.accordion').on('show', function(e) {
+            $('.accordion').click(function(e) {
                 e.preventDefault();
+                var tempTarget = e.target.toString().split('#');
+                tempTarget = '#' + tempTarget[1];
+                // use the target of the link as the ID of the element to find
+                var target = $(tempTarget);
+                var targetContent = target.find('.accordion-inner');
 
-                var $target = $(e.target);
-                var $targetContent = $target.find('.accordion-inner');
-
-                if ($targetContent.is(':empty')) {
-                    var idParts = $target.attr('id').split('-');
+                if (targetContent.is(':empty')) {
+                    var idParts = tempTarget.split('-');
 
                     var sessionId = parseInt(idParts[1], 10);
 
@@ -37,14 +39,14 @@
                                 coursesUL += '</li>';
                             });
 
-                            $targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
-                            $target.css({
-                                height: $targetContent.outerHeight()
+                            targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
+                            target.css({
+                                height: targetContent.outerHeight()
                             }).addClass('in');
                         }
                     });
                 } else {
-                    $target.addClass('in');
+                    target.addClass('in');
                 }
             });
         });
@@ -62,7 +64,7 @@
                                 <div class="controls">
                                     <div class="input-append">
                                         <input class="span2" type="text" name="search_term" />
-                                        <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
+                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +96,7 @@
                         <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
                             <div class="input-append">
                                 <input type="date" name="date" id="date" class="span2 search-session" value="{{ searchDate }}" readonly>
-                                <button class="btn" type="submit">{{ 'Search' | get_lang }}</button>
+                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
                             </div>
                         </form>
                     </li>

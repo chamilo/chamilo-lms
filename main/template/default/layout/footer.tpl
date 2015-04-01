@@ -75,11 +75,13 @@
 
 <script>
     $("form").on("click", ' .advanced_parameters', function() {
-        var id = $(this).attr('id') + '_options';
+        /*var id = $(this).attr('id') + '_options';
+        console.log(id);
+        $("#"+id).toggleClass('active');
         var button = $(this);
         $("#"+id).toggle(function() {
-            button.toggleClass('active');
-        });
+            $("#"+id).toggleClass('active');
+        });*/
     });
 
     /* Makes row highlighting possible */
@@ -100,9 +102,8 @@
             event.preventDefault();
             var id = $(this).attr('id') + '_options';
             var button = $(this);
-            $("#"+id).toggle(function() {
-                button.toggleClass('active');
-            });
+            button.toggleClass('active');
+            $("#"+id).toggle();
         });
 
         /**

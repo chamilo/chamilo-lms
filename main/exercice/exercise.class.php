@@ -1007,32 +1007,17 @@ class Exercise
         // Title.
         $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
 
-        $form->addElement('advanced_settings',
-            '<a href="javascript://" onclick=" return show_media()">
-				<span id="media_icon">
-					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />'.
-                    addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
-                </span>
-			</a>
-		');
+        $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
         if (is_array($type)){
             $editor_config = array_merge($editor_config, $type);
         }
 
-        $form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" style="display:none" >');
         $form->addHtmlEditor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
-        $form->addElement ('html','</div>');
 
-        $form->addElement('advanced_settings','<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >
-                            <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'</div></span></a>');
-
-        // Random questions
-        // style="" and not "display:none" to avoid #4029 Random and number of attempt menu empty
-        $form->addElement('html','<div id="options" style="">');
-
-        if ($type=='full') {
+        if ($type == 'full') {
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT ) {
                 // feedback type

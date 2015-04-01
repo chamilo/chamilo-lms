@@ -19,6 +19,8 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
+api_protect_limit_for_session_admin();
+
 $formSent=0;
 $errorMsg='';
 
@@ -53,17 +55,17 @@ function search_coachs($needle) {
 		if (api_is_multiple_url_enabled()) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){
-
-				$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
-				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%")
-				AND status=1'.
-				$order_clause.
-				' LIMIT 10';
-
+			if ($access_url_id != -1) {
+				$sql = 'SELECT username, lastname, firstname
+				    FROM '.$tbl_user.' user
+				    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+				    WHERE
+				        access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
+				        OR firstname LIKE "'.$needle.'%"
+				        OR lastname LIKE "'.$needle.'%")
+				        AND status=1'.
+				        $order_clause.
+				    ' LIMIT 10';
 			}
 		}
 
@@ -85,21 +87,6 @@ function fill_coach_field (username) {
 	document.getElementById('coach_username').value = username;
 	document.getElementById('ajax_list_coachs').innerHTML = '';
 }
-
-$(document).on('ready', function () {
-    var value = 1;
-    $('#advanced_parameters').on('click', function() {
-        $('#options').toggle(function() {
-            if (value == 1) {
-                $('#advanced_parameters').addClass('btn-hide');
-                value = 0;
-            } else {
-                $('#advanced_parameters').removeClass('btn-hide');
-                value = 1;
-            }
-        });
-    });
-});
 
 function setDisable(select){
 	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
@@ -256,7 +243,6 @@ if (intval($countUsers) < 50) {
         'class' => 'chzn-select',
         'style' => 'width:370px;'
     ));
-    $form->addElement('advanced_settings', Display::return_icon('synthese_view.gif') . ' ' . get_lang('ActivityCoach'));
 } else {
     $form->addElement('text', 'coach_username', get_lang('CoachName'), array(
         'maxlength' => 50,
@@ -268,27 +254,36 @@ if (intval($countUsers) < 50) {
 $form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
 $form->addHtml('<div id="ajax_list_coachs"></div>');
 
+$form->addButtonAdvancedSettings('advanced_params');
+$form->addElement('html','<div id="advanced_params_options" style="display:none">');
+
 $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOptions, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'
 ));
 
-$form->addElement('advanced_settings','<a class="btn-show" id="advanced_parameters" href="javascript://">'.get_lang('DefineSessionOptions').'</a>');
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    array(
+        'ToolbarSet' => 'Minimal'
+    )
+);
 
-$form->addElement('html','<div id="options" style="display:none">');
+$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 
 $form->addElement('text', 'nb_days_acess_before', array('', '', get_lang('DaysBefore')), array(
-    'style' => 'width: 30px;',
+    'input-size' => '2',
     'value' => $nb_days_acess_before
 ));
 
 $form->addElement('text', 'nb_days_acess_after', array('', '', get_lang('DaysAfter')), array(
-    'style' => 'width: 30px;',
+    'input-size' => '2',
     'value' => $nb_days_acess_after
 ));
-
-$form->addElement('html','</div>');
 
 $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
     'onchange' => 'disable_starttime(this)',
@@ -306,33 +301,19 @@ $form->addElement('checkbox', 'end_limit', '', get_lang('DateEndSession'), array
     'id' => 'end_limit'
 ));
 
-$form->addElement('html','<div id="end_date" style="display:none">');
+$form->addElement('html', '<div id="end_date" style="display:none">');
 
 $form->addElement('date_picker', 'date_end');
 
 $visibilityGroup = array();
-$visibilityGroup[] = $form->createElement('advanced_settings', get_lang('SessionVisibility'));
 $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
     SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
     SESSION_VISIBLE => get_lang('SessionAccessible'),
     SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible'))
 ));
-
-$form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
+$form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
 
 $form->addElement('html','</div>');
-
-$form->addHtmlEditor(
-    'description',
-    get_lang('Description'),
-    false,
-    false,
-    array(
-        'ToolbarSet' => 'Minimal'
-    )
-);
-
-$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 
 $form->addElement(
     'text',
@@ -346,9 +327,11 @@ $form->addElement(
     )
 );
 
-//Extra fields
+// Extra fields
 $extra_field = new ExtraField('session');
 $extra = $extra_field->addElements($form, null);
+
+$form->addElement('html','</div>');
 
 $htmlHeadXtra[] ='
 <script>

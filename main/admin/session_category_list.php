@@ -12,6 +12,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_protect_admin_script(true);
+api_protect_limit_for_session_admin();
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

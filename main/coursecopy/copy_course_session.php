@@ -14,6 +14,7 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 
 api_protect_global_admin_script();
+api_protect_limit_for_session_admin();
 
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';

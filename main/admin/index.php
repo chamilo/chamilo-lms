@@ -4,7 +4,6 @@
  * Index page of the admin tools
  * @package chamilo.admin
  */
-
 // Resetting the course id.
 $cidReset = true;
 
@@ -19,6 +18,9 @@ api_protect_admin_script(true);
 
 $nameTools = get_lang('PlatformAdmin');
 
+$accessUrlId = 0;
+$adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
+
 if (api_is_multiple_url_enabled()) {
     $accessUrlId = api_get_current_access_url_id();
 
@@ -28,8 +30,6 @@ if (api_is_multiple_url_enabled()) {
         $cleanUrl = str_replace('/', '-', $url);
         $adminExtraContentDir = api_get_path(SYS_PATH) . "home/$cleanUrl/admin/";
     }
-} else {
-    $adminExtraContentDir = api_get_path(SYS_PATH) . "home/admin/";
 }
 
 // Displaying the header
@@ -111,7 +111,7 @@ if (api_is_platform_admin()) {
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
-    $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
 } else {
     $items = array(
         array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
@@ -172,7 +172,7 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse'));
     }
 
-    $items[] = array('url'=>'extra_fields.php?type=course', 	'label' => get_lang('ManageCourseFields'));
+    $items[] = array('url'=>'extra_fields.php?type=course', 'label' => get_lang('ManageCourseFields'));
 
     $blocks['courses']['items'] = $items;
     $blocks['courses']['extra'] = null;
@@ -400,6 +400,72 @@ if ($useCookieValidation) {
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
+
+if (api_is_platform_admin()) {
+    $extraContentForm = new FormValidator(
+        'block_extra_data',
+        'post',
+        '#',
+        null,
+        array(
+            'id' => 'block-extra-data',
+            'class' => ''
+        ),
+        FormValidator::LAYOUT_BOX_NO_LABEL
+    );
+    $extraContentFormRenderer = $extraContentForm->getDefaultRenderer();
+
+    if ($extraContentForm->validate()) {
+        $extraData = $extraContentForm->getSubmitValues();
+        $extraData = array_map(['Security', 'remove_XSS'], $extraData);
+
+        if (!empty($extraData['block'])) {
+            if (!is_dir($adminExtraContentDir)) {
+                mkdir(
+                    $adminExtraContentDir,
+                    api_get_permissions_for_new_directories(),
+                    true
+                );
+            }
+
+            if (!is_writable($adminExtraContentDir)) {
+                die;
+            }
+
+            $fullFilePath = $adminExtraContentDir . $extraData['block'];
+            $fullFilePath .= "_extra.html";
+
+            file_put_contents($fullFilePath, $extraData['extra_content']);
+
+            Header::location(api_get_self());
+        }
+    }
+
+    $extraContentForm->addTextarea(
+        'extra_content',
+        null,
+        ['id' => 'extra_content']
+    );
+    $extraContentFormRenderer->setElementTemplate(
+        '<div class="form-group">{element}</div>',
+        'extra_content'
+    );
+    $extraContentForm->addElement(
+        'hidden',
+        'block',
+        null,
+        array(
+            'id' => 'extra-block'
+        )
+    );
+    $extraContentForm->addButtonExport(
+        get_lang('Save'),
+        'submit_extra_content'
+    );
+
+    $tpl->assign('extraDataForm', $extraContentForm->returnForm());
+}
+
 // The template contains the call to the AJAX version checker
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);

@@ -364,7 +364,7 @@ if ($_REQUEST['tab'] == 'save_currency') {
     $res = Database::query($sql);
     $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE country_id='" . $id . "';";
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToSaveTheCurrencyType') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {

@@ -165,7 +165,7 @@ class Certificate extends Model
             $user = api_get_user_info($this->user_id);
             $scoredisplay = ScoreDisplay :: instance();
             $scorecourse = $my_category[0]->calc_score($this->user_id);
-            $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse,SCORE_AVERAGE) : get_lang('NoResultsAvailable');
+            $scorecourse_display = isset($scorecourse) ? $scoredisplay->display_score($scorecourse, SCORE_AVERAGE) : get_lang('NoResultsAvailable');
 
             // Prepare all necessary variables:
             $organization_name = api_get_setting('Institution');
@@ -176,10 +176,12 @@ class Certificate extends Model
             //@todo this code is not needed
             $certif_text = sprintf(
                 get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),
-                $organization_name, $stud_fn.' '.$stud_ln, $my_category[0]->get_name(),
+                $organization_name,
+                $stud_fn.' '.$stud_ln,
+                $my_category[0]->get_name(),
                 $scorecourse_display
             );
-            $certif_text = str_replace("\\n","\n", $certif_text);
+            $certif_text = str_replace("\\n", "\n", $certif_text);
 
             //If the gradebook is related to skills we added the skills to the user
 
@@ -223,7 +225,7 @@ class Certificate extends Model
                                 Display::img($this->certification_web_user_path.$file_info['filename'].'_qr.png', 'QR'),
                                 $new_content_html['content']
                             );
-                            $my_new_content_html = mb_convert_encoding($my_new_content_html,'UTF-8', api_get_system_encoding());
+                            $my_new_content_html = mb_convert_encoding($my_new_content_html, 'UTF-8', api_get_system_encoding());
 
                             $result = @file_put_contents($my_path_certificate, $my_new_content_html);
                             if ($result) {
@@ -266,7 +268,7 @@ class Certificate extends Model
         $path_certificate
     ) {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        if (!UserManager::is_user_certified($cat_id,$user_id)) {
+        if (!UserManager::is_user_certified($cat_id, $user_id)) {
             $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
                  WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
@@ -296,6 +298,7 @@ class Certificate extends Model
      * Generates a QR code for the certificate. The QR code embeds the text given
      * @param    string    $text Text to be added in the QR code
      * @param    string    $path file path of the image
+     * @return   mixed
      * */
     public function generate_qr($text, $path)
     {
@@ -323,8 +326,8 @@ class Certificate extends Model
         $final_content = array();
 
         if (!empty($content)) {
-            foreach($content as $key => $value) {
-                $my_header = str_replace(array('((', '))') , '', $headers[$key]);
+            foreach ($content as $key => $value) {
+                $my_header = str_replace(array('((', '))'), '', $headers[$key]);
                 $final_content[$my_header] = $value;
             }
         }

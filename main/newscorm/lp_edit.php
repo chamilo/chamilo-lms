@@ -188,8 +188,7 @@ if ($enableLpExtraFields) {
     $extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
 }
 
-//Submit button
-//$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+// Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
 
 // Hidden fields

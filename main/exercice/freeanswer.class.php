@@ -32,7 +32,6 @@ class FreeAnswer extends Question
         $form->addElement('text', 'weighting', get_lang('Weighting'), array('class' => 'span1'));
         global $text, $class;
         // setting the save button here and not in the question class.php
-        //$form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
             $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));

@@ -7572,7 +7572,6 @@ class learnpath
                             }
                         }
 
-                        //$form->addElement('style_submit_button', 'submit_button', $text, 'class="' . $class . '"');
                         $form->addButtonSave($text, 'submit_button');
                         $renderer = $form->defaultRenderer();
                         $renderer->setElementTemplate('<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{label}<br />{element}', 'content_lp');

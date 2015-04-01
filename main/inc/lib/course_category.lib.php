@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Returns whether we are in a mode where multiple URLs are configured to work
+ * with course categories
+ * @return bool
+ */
 function isMultipleUrlSupport()
 {
     global $_configuration;
@@ -11,15 +16,15 @@ function isMultipleUrlSupport()
 }
 
 /**
- * @param int $categoryId
- *
+ * Returns the category fields from the database from an int ID
+ * @param int $categoryId The category ID
  * @return array
  */
 function getCategoryById($categoryId)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $categoryId = intval($categoryId);
-    $sql = "SELECT * FROM $tbl_category WHERE id = '$categoryId'";
+    $sql = "SELECT * FROM $tbl_category WHERE id = $categoryId";
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         return Database::fetch_array($result, 'ASSOC');
@@ -28,8 +33,8 @@ function getCategoryById($categoryId)
 }
 
 /**
- * @param string $category
- *
+ * Get category details from a simple category code
+ * @param string $category The literal category code
  * @return array
  */
 function getCategory($category)
@@ -69,19 +74,19 @@ function getCategories($category)
                 t1.tree_pos,
                 t1.children_count,
                 COUNT(DISTINCT t3.code) AS nbr_courses
-			 	FROM $tbl_category t1
-			 	$conditions
-			 	LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id
-			 	LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
-				WHERE
-				    t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
-				    $whereCondition
-				GROUP BY t1.name,
+                FROM $tbl_category t1
+                $conditions
+                LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id
+                LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
+                WHERE
+                    t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
+                    $whereCondition
+                GROUP BY t1.name,
                          t1.code,
                          t1.parent_id,
                          t1.tree_pos,
                          t1.children_count
-				ORDER BY t1.tree_pos";
+                ORDER BY t1.tree_pos";
     $result = Database::query($sql);
 
     return Database::store_result($result);
@@ -114,11 +119,11 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
     $tree_pos = $row['maxTreePos'] + 1;
 
     $sql = "INSERT INTO $tbl_category(name, code, parent_id, tree_pos, children_count, auth_course_child)
-            VALUES('$name','$code'," .(empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')";
+            VALUES('$name', '$code', " .(empty($parent_id) ? "NULL" : "'$parent_id'") . ", '$tree_pos', '0', '$canHaveCourses')";
     Database::query($sql);
     $categoryId = Database::insert_id();
 
-    updateCategoryChildren($parent_id);
+    updateParentCategoryChildrenCount($parent_id, 1);
 
     if (isMultipleUrlSupport()) {
         addToUrl($categoryId);
@@ -128,21 +133,30 @@ function addNode($code, $name, $canHaveCourses, $parent_id)
 }
 
 /**
- * @param string $category
+ * Recursive function that updates the count of children in the parent
+ * @param string $categoryId Category ID
+ * @param    int $delta      The number to add or delete (1 to add one, -1 to remove one)
  */
-function updateCategoryChildren($category)
+function updateParentCategoryChildrenCount($categoryId, $delta = 1)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $category = Database::escape_string($category);
-    $result = Database::query("SELECT parent_id FROM $tbl_category WHERE code='$category'");
-
-    if ($row = Database::fetch_array($result)) {
-        updateCategoryChildren($row['parent_id']);
+    $categoryId = Database::escape_string($categoryId);
+    $delta = intval($delta);
+    // First get to the highest level possible in the tree
+    $result = Database::query("SELECT parent_id FROM $tbl_category WHERE code = '$categoryId'");
+    $row = Database::fetch_array($result);
+    if ($row !== false and $row['parent_id'] != 0) {
+        // if a parent was found, enter there to see if he's got one more parent
+        updateParentCategoryChildrenCount($row['parent_id'], $delta);
     }
-
-    $children_count = compterFils($category, 0) - 1;
-    $sql = "UPDATE $tbl_category SET children_count='$children_count' WHERE code='$category'";
-    Database::query($sql);
+    // Now we're at the top, get back down to update each child
+    //$children_count = courseCategoryChildrenCount($categoryId);
+    if ($delta >= 0) {
+        $sql = "UPDATE $tbl_category SET children_count = (children_count + $delta) WHERE code = '$categoryId'";
+    } else {
+        $sql = "UPDATE $tbl_category SET children_count = (children_count - ".abs($delta).") WHERE code = '$categoryId'";
+    }
+    $result = Database::query($sql);
 }
 
 /**
@@ -170,7 +184,7 @@ function deleteNode($node)
         Database::query("DELETE FROM $tbl_category WHERE code='$node'");
 
         if (!empty($row['parent_id'])) {
-            updateCategoryChildren($row['parent_id']);
+            updateParentCategoryChildrenCount($row['parent_id'], -1);
         }
     }
 }
@@ -210,6 +224,7 @@ function editNode($code, $name, $canHaveCourses, $old_code)
 }
 
 /**
+ * Move a node up on display
  * @param string $code
  * @param string $tree_pos
  * @param int $parent_id
@@ -219,18 +234,18 @@ function moveNodeUp($code, $tree_pos, $parent_id)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $code = Database::escape_string($code);
-    $tree_pos = Database::escape_string($tree_pos);
+    $tree_pos = intval($tree_pos);
     $parent_id = intval($parent_id);
     $sql = "SELECT code,tree_pos
-            FROM $tbl_category
-            WHERE parent_id " . (empty($parent_id) ? "IS NULL" : "='$parent_id'") . " AND tree_pos<'$tree_pos'
-            ORDER BY tree_pos DESC LIMIT 0,1";
+        FROM $tbl_category
+        WHERE parent_id " . (empty($parent_id) ? "IS NULL" : " = $parent_id") . " AND tree_pos < $tree_pos
+        ORDER BY tree_pos DESC LIMIT 0,1";
     $result = Database::query($sql);
     if (!$row = Database::fetch_array($result)) {
 
         $sql = "SELECT code,tree_pos FROM $tbl_category
-                WHERE parent_id " . (empty($parent_id) ? "IS NULL" : "='$parent_id'") . " AND tree_pos>'$tree_pos'
-                ORDER BY tree_pos DESC LIMIT 0,1";
+            WHERE parent_id " . (empty($parent_id) ? "IS NULL" : " = $parent_id") . " AND tree_pos > $tree_pos
+            ORDER BY tree_pos DESC LIMIT 0,1";
         $result2 = Database::query($sql);
         if (!$row2 = Database::fetch_array($result2)) {
             return false;
@@ -238,24 +253,34 @@ function moveNodeUp($code, $tree_pos, $parent_id)
     }
 
     Database::query("UPDATE $tbl_category SET tree_pos='" . $row['tree_pos'] . "' WHERE code='$code'");
-    Database::query("UPDATE $tbl_category SET tree_pos='$tree_pos' WHERE code='$row[code]'");
+    Database::query("UPDATE $tbl_category SET tree_pos='$tree_pos' WHERE code='" . $code . "'");
+
+    return true;
+
 }
 
 /**
- * @param $pere
- * @param $cpt
- * @return mixed
+ * Counts the number of children categories a category has
+ * @param int   $categoryId The ID of the category of which we want to count the children
+ * @param int   $count  The number of subcategories we counted this far
+ * @return mixed The number of subcategories this category has
  */
-function compterFils($parent, $cpt)
+function courseCategoryChildrenCount($categoryId)
 {
     $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $parent = intval($parent);
-    $result = Database::query("SELECT code FROM $tbl_category WHERE parent_id='$parent'");
-
-    while ($row = Database::fetch_array($result)) {
-        $cpt = compterFils($row['code'], $cpt);
+    $categoryId = intval($categoryId);
+    $count = 0;
+    if (empty($categoryId)) {
+        return 0;
     }
-    return ($cpt + 1);
+    $sql = "SELECT id, code FROM $tbl_category WHERE parent_id = $categoryId";
+    $result = Database::query($sql);
+    while ($row = Database::fetch_array($result)) {
+        $count += courseCategoryChildrenCount($row['id']);
+    }
+    $sql = "UPDATE $tbl_category SET children_count = $count WHERE id = $categoryId";
+    Database::query($sql);
+    return $count + 1;
 }
 
 /**
@@ -958,56 +983,57 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
     return $pageDiv;
 }
 
+/**
+ * Return URL to course catalog
+ * @param int $pageCurrent
+ * @param int $pageLength
+ * @param string $categoryCode
+ * @param int $hiddenLinks
+ * @param string $action
+ * @return string
+ */
+function getCourseCategoryUrl(
+    $pageCurrent,
+    $pageLength,
+    $categoryCode = null,
+    $hiddenLinks = null,
+    $action = null
+) {
+    $requestAction = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
+    $action = isset($action) ? Security::remove_XSS($action) : $requestAction;
+    $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
 
-    /**
-     * Return URL to course catalog
-     * @param int $pageCurrent
-     * @param int $pageLength
-     * @param string $categoryCode
-     * @param int $hiddenLinks
-     * @param string $action
-     * @return string
-     */
-    function getCourseCategoryUrl(
-        $pageCurrent,
-        $pageLength,
-        $categoryCode = null,
-        $hiddenLinks = null,
-        $action = null
-    ) {
-        $action = isset($action) ? Security::remove_XSS($action) : Security::remove_XSS($_REQUEST['action']);
-        $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['search_term']) : null;
+    $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
+    $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
+
+    $hiddenLinksRequest = isset($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
+    $hiddenLinks = isset($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 
         // Start URL with params
-        $pageUrl = api_get_self() .
-            '?action=' . $action .
-            '&category_code=' . (
-            isset($categoryCode) ? $categoryCode :
-                Security::remove_XSS($_REQUEST['category_code'])
-            ) .
-            '&hidden_links=' . (
-            isset($hiddenLinks) ? $hiddenLinks :
-                Security::remove_XSS($_REQUEST['hidden_links'])
-            ).
-            '&pageCurrent=' . $pageCurrent .
-            '&pageLength=' . $pageLength
-        ;
-        switch ($action) {
-            case 'subscribe' :
-                // for search
-                $pageUrl .=
-                    '&search_term=' . $searchTerm .
-                    '&search_course=1' .
-                    '&sec_token=' . $_SESSION['sec_token'];
-                break;
-            case 'display_courses' :
-                // No break
-            default :
-                break;
+    $pageUrl = api_get_self() .
+        '?action=' . $action .
+        '&category_code=' .$categoryCode.
+        '&hidden_links=' .$hiddenLinks.
+        '&pageCurrent=' . $pageCurrent .
+        '&pageLength=' . $pageLength
+    ;
 
-        }
+    switch ($action) {
+        case 'subscribe' :
+            // for search
+            $pageUrl .=
+                '&search_term=' . $searchTerm .
+                '&search_course=1' .
+                '&sec_token=' . $_SESSION['sec_token'];
+            break;
+        case 'display_courses' :
+            // No break
+        default :
+            break;
 
-        return $pageUrl;
+    }
+
+    return $pageUrl;
 }
 
 /**
@@ -1027,7 +1053,7 @@ function getPageNumberItem($pageNumber, $pageLength, $liAttributes = array(), $c
     );
 
     // If is current page ('active' class) clear URL
-    if (isset($liAttributes) && is_array($liAttributes)) {
+    if (isset($liAttributes) && is_array($liAttributes) && isset($liAttributes['class'])) {
         if (strpos('active', $liAttributes['class']) !== false) {
             $url = '';
         }

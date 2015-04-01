@@ -1380,6 +1380,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     generate_certificates TINYINT NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     id int unsigned NOT NULL auto_increment,
@@ -1396,6 +1397,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     locked int NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE IF NOT EXISTS gradebook_link (
   id int NOT NULL auto_increment,
@@ -2355,116 +2357,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             </body>
 ');
 
-
---
--- --------------------------------------------------------
---
--- Tables for reservation
---
-
-
---
--- Table structure for table reservation category
---
-
-DROP TABLE IF EXISTS reservation_category;
-CREATE TABLE IF NOT EXISTS reservation_category (
-   id  int unsigned NOT NULL auto_increment,
-   parent_id  int NOT NULL default 0,
-   name  varchar(128) NOT NULL default '',
-  PRIMARY KEY  ( id )
-);
-
---
--- Table structure for table reservation category_rights
---
-
-DROP TABLE IF EXISTS reservation_category_rights;
-CREATE TABLE IF NOT EXISTS reservation_category_rights  (
-    id  int unsigned NOT NULL auto_increment,
-    category_id  int NOT NULL default 0,
-    class_id  int NOT NULL default 0,
-    m_items  tinyint NOT NULL default 0,
-    PRIMARY KEY  ( id )
-);
-
---
--- Table structure for table  item reservation
---
-DROP TABLE IF EXISTS reservation_item;
-CREATE TABLE IF NOT EXISTS  reservation_item  (
-   id  int unsigned NOT NULL auto_increment,
-   category_id  int unsigned NOT NULL default 0,
-   course_code  varchar(40) NOT NULL default '',
-   name  varchar(128) NOT NULL default '',
-   description  text NOT NULL,
-   blackout  tinyint NOT NULL default 0,
-   creator  int unsigned NOT NULL default 0,
-   always_available TINYINT NOT NULL default 0,
-  PRIMARY KEY  ( id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for table reservation item_rights
---
-
-DROP TABLE IF EXISTS reservation_item_rights;
-CREATE TABLE IF NOT EXISTS  reservation_item_rights  (
-   item_id  int unsigned NOT NULL default 0,
-   class_id  int unsigned NOT NULL default 0,
-   edit_right  tinyint unsigned NOT NULL default 0,
-   delete_right  tinyint unsigned NOT NULL default 0,
-   m_reservation  tinyint unsigned NOT NULL default 0,
-   view_right  tinyint NOT NULL default 0,
-  PRIMARY KEY  ( item_id , class_id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for main reservation table
---
-
-DROP TABLE IF EXISTS reservation_main;
-CREATE TABLE IF NOT EXISTS  reservation_main  (
-   id  int unsigned NOT NULL auto_increment,
-   subid  int unsigned NOT NULL default 0,
-   item_id  int unsigned NOT NULL default 0,
-   auto_accept  tinyint unsigned NOT NULL default 0,
-   max_users  int unsigned NOT NULL default 1,
-   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribe_from  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribe_until  datetime NOT NULL default '0000-00-00 00:00:00',
-   subscribers  int unsigned NOT NULL default 0,
-   notes  text NOT NULL,
-   timepicker  tinyint NOT NULL default 0,
-   timepicker_min  int NOT NULL default 0,
-   timepicker_max  int NOT NULL default 0,
-  PRIMARY KEY  ( id )
-);
-
--- --------------------------------------------------------
-
---
--- Table structure for reservation subscription table
---
-
-DROP TABLE IF EXISTS reservation_subscription;
-CREATE TABLE IF NOT EXISTS  reservation_subscription  (
-   dummy  int unsigned NOT NULL auto_increment,
-   user_id  int unsigned NOT NULL default 0,
-   reservation_id  int unsigned NOT NULL default 0,
-   accepted  tinyint unsigned NOT NULL default 0,
-   start_at  datetime NOT NULL default '0000-00-00 00:00:00',
-   end_at  datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  ( dummy )
-);
-
--- ---------------------------------------------------------
-
 --
 -- Table structure for table user_rel_user
 --
@@ -2724,9 +2616,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
     PRIMARY KEY  (id)
 );
 
-
-
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','Special course', '', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (1, 'special_course', 'Special course', '', 1 , 1);
 
 --
 -- Table structure for table block
@@ -3186,7 +3076,7 @@ DROP TABLE IF EXISTS track_e_access;
 CREATE TABLE track_e_access (
   access_id int NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
-  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_date datetime NOT NULL,
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int NOT NULL default 0,
@@ -3200,7 +3090,7 @@ DROP TABLE IF EXISTS track_e_lastaccess;
 CREATE TABLE track_e_lastaccess (
   access_id bigint NOT NULL auto_increment,
   access_user_id int unsigned default NULL,
-  access_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_date datetime NOT NULL,
   c_id int not null,
   access_tool varchar(30) default NULL,
   access_session_id int unsigned default NULL,
@@ -3214,8 +3104,8 @@ DROP TABLE IF EXISTS track_e_default;
 CREATE TABLE track_e_default (
   default_id int NOT NULL auto_increment,
   default_user_id int unsigned NOT NULL default 0,
-  c_id int not null,
-  default_date datetime NOT NULL default '0000-00-00 00:00:00',
+  c_id int default NULL,
+  default_date datetime NOT NULL,
   default_event_type varchar(20) NOT NULL default '',
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
@@ -3227,7 +3117,7 @@ DROP TABLE IF EXISTS track_e_downloads;
 CREATE TABLE track_e_downloads (
   down_id int NOT NULL auto_increment,
   down_user_id int unsigned default NULL,
-  down_date datetime NOT NULL default '0000-00-00 00:00:00',
+  down_date datetime NOT NULL,
   c_id int NOT NULL,
   down_doc_path varchar(255) NOT NULL default '',
   down_session_id INT NOT NULL DEFAULT 0,
@@ -4729,5 +4619,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.30' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.33' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

@@ -110,7 +110,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     }
 
     // selecting the last login of the user
-    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$user_id' ORDER BY login_date DESC LIMIT 0,1";
+    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id=$user_id ORDER BY login_date DESC LIMIT 0,1";
     $q_last_connection=Database::query($sql_last_connection);
     if (Database::num_rows($q_last_connection)>0) {
         $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
@@ -183,11 +183,11 @@ function user_is_online($user_id)
 
 	$query = " SELECT login_user_id,login_date
                FROM $track_online_table track
-               INNER JOIN $table_user u ON (u.user_id=track.login_user_id)
+               INNER JOIN $table_user u ON (u.id=track.login_user_id)
                WHERE
                     track.access_url_id =  $access_url_id AND
                     login_date >= '".$limit_date."'  AND
-                    u.user_id =  $user_id
+                    u.id =  $user_id
                LIMIT 1 ";
 
 	$result = Database::query($query);
@@ -250,7 +250,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	} else {
 		$query = "SELECT DISTINCT login_user_id, login_date
                     FROM ".$track_online_table ." e
-		            INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)
+		            INNER JOIN ".$table_user ." u ON (u.id = e.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
                   ORDER BY $column $direction
                   LIMIT $from, $number_of_items";
@@ -261,7 +261,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 		if ($access_url_id != -1) {
 			if ($friends) {
 				// 	friends from social network is online
-				$query = "SELECT distinct login_user_id,login_date
+				$query = "SELECT distinct login_user_id, login_date
 							FROM $track_online_table track INNER JOIN $friend_user_table
 							ON (friend_user_id = login_user_id)
 							WHERE   track.access_url_id =  $access_url_id AND
@@ -275,7 +275,7 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 				$query = "SELECT login_user_id, login_date
 						  FROM ".$track_online_table ." track
                           INNER JOIN ".$table_user ." u
-                          ON (u.user_id=track.login_user_id)
+                          ON (u.id=track.login_user_id)
 						  WHERE u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
                                 login_date >= '".$current_date."'
                           ORDER BY $column $direction
@@ -285,8 +285,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	}
 
 	//This query will show all registered users. Only for dev purposes.
-	/*$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u
-            GROUP by u.user_id
+	/*$query = "SELECT DISTINCT u.id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u
+            GROUP by u.id
             ORDER BY $column $direction
             LIMIT $from, $number_of_items";*/
 
@@ -332,7 +332,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 		// All users online
 		$query = "SELECT count(login_id) as count
                   FROM $track_online_table track INNER JOIN $table_user u
-                  ON (u.user_id=track.login_user_id)
+                  ON (u.id=track.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
 	}
 
@@ -352,7 +352,7 @@ function who_is_online_count($time_limit = null, $friends = false)
 			} else {
 				// all users online
 				$query = "SELECT count(login_id) as count FROM $track_online_table  track
-                          INNER JOIN $table_user u ON (u.user_id=track.login_user_id)
+                          INNER JOIN $table_user u ON (u.id=track.login_user_id)
 						  WHERE
 						    u.status != ".ANONYMOUS." AND
 						    track.access_url_id =  $access_url_id AND
@@ -464,7 +464,7 @@ function GetFullUserName($uid) {
 	$uid = (int) $uid;
 	$uid = intval($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$query = "SELECT firstname, lastname FROM ".$user_table." WHERE user_id='$uid'";
+	$query = "SELECT firstname, lastname FROM ".$user_table." WHERE id=$uid";
 	$result = @Database::query($query);
 	if (count($result)>0) {
 		$str = '';
@@ -486,22 +486,23 @@ function chatcall() {
 	if (!$_user['user_id']) {
 		return (false);
 	}
+    $userId = intval($_user['user_id']);
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="SELECT chatcall_user_id, chatcall_date FROM $track_user_table
-	      WHERE ( user_id = '".$_user['user_id']."' )";
+	      WHERE ( id = $userId )";
 	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
 
 	$login_date=$row['chatcall_date'];
 	$hour = substr($login_date,11,2);
 	$minute = substr($login_date,14,2);
-	$secund = substr($login_date,17,2);
+	$second = substr($login_date,17,2);
 	$month = substr($login_date,5,2);
 	$day = substr($login_date,8,2);
 	$year = substr($login_date,0,4);
-	$calltime = mktime($hour,$minute,$secund,$month,$day,$year);
+	$calltime = mktime($hour,$minute,$second,$month,$day,$year);
 
-	$time = api_get_utc_datetime($time);
+	$time = api_get_utc_datetime();
 	$minute_passed=5;  //within this limit, the chat call request is valid
 	$limittime = mktime(date("H"),date("i")-$minute_passed,date("s"),date("m"),date("d"),date("Y"));
 

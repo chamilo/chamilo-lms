@@ -118,7 +118,7 @@ $nameTools = get_lang('ComposeMessage');
 /**
 * Shows the compose area + a list of users to select from.
 */
-function show_compose_to_any ($user_id) {
+function show_compose_to_any($user_id) {
 	$online_user_list = MessageManager::get_online_user_list($user_id);
 	$default['user_list'] = 0;
 	$online_user_list=null;
@@ -129,26 +129,23 @@ function show_compose_to_any ($user_id) {
 function show_compose_reply_to_message($message_id, $receiver_id)
 {
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
-	$query = "SELECT user_sender_id FROM $table_message WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
+	$query = "SELECT user_sender_id FROM $table_message
+			  WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result,'ASSOC');
 	if (!isset($row['user_sender_id'])) {
 		$html = get_lang('InvalidMessageId');
+
 		return $html;
 	}
-	$pre_html = '<div class="control-group">
-				<label class="control-label">'.get_lang('SendMessageTo').': </label>
-				<div class="controls">';
-	$post = '</div></div>';
-    $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
+	$userInfo = api_get_user_info($row['user_sender_id']);
 	$default['users'] = array($row['user_sender_id']);
-	$html .= manage_form($default, null, $sent_to);
+	$html = manage_form($default, null, $userInfo['complete_name']);
 
     return $html;
 }
 
 function show_compose_to_user ($receiver_id) {
-	global $charset;
 	$html = get_lang('To').':&nbsp;<strong>'.GetFullUserName($receiver_id).'</strong>';
 	$default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
 	$default['users'] = array($receiver_id);
@@ -156,7 +153,8 @@ function show_compose_to_user ($receiver_id) {
     return $html;
 }
 
-function manage_form($default, $select_from_user_list = null, $sent_to = null) {
+function manage_form($default, $select_from_user_list = null, $sent_to = null)
+{
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
 	$param_f 		= isset($_GET['f']) && $_GET['f'] == 'social' ? 'social' : null;
@@ -169,7 +167,6 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
                 get_lang('SendMessageTo'),
                 true,
                 array(
-                    'class' => 'span4',
                     'id'=>'id_text_name',
                     'onkeyup'=>'send_request_and_search()',
                     'autocomplete'=>'off'
@@ -180,7 +177,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			$form->addElement('hidden','user_list', 0, array('id'=>'user_list'));
 		} else {
             if (!empty($sent_to)) {
-                $form->addElement('html',$sent_to);
+                $form->addLabel(get_lang('SendMessageTo'), $sent_to);
             }
 			if (empty($default['users'])) {
                 //fb select
@@ -197,7 +194,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$form->addElement('hidden','parent_id',$message_id);
 	}
 
-	$form->addText('title', get_lang('Subject'), true, array('class' => 'col-md-4'));
+	$form->addText('title', get_lang('Subject'), true);
 	$form->addHtmlEditor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250'));
 
 	if (isset($_GET['re_id'])) {
@@ -212,18 +209,21 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	}
 
 	if (empty($group_id)) {
-        $form->addElement('advanced_settings','<div  id="filepaths" class="form-group">
+
+        $form->addElement('label', '', '<div  id="filepaths" class="form-group">
                     <div id="filepath_1">
                     <label>'.get_lang('FilesAttachment').'</label>
                     <input type="file" name="attach_1"/>
                     <label>'.get_lang('Description').'</label>
                     <input id="file-descrtiption" type="text" name="legend[]" class="form-control"/>
                     </div>
-                </div>');
-		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+                </div>'
+		);
+
+		$form->addElement('label', '', '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 
-	$form->addElement('style_submit_button','compose',api_xml_http_response_encode('<i class="fa fa-paper-plane"></i> '.get_lang('SendMessage')),'class="btn-success"');
+	$form->addButtonSend(get_lang('SendMessage'), 'compose');
 	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
 
 	if (!empty($group_id) && !empty($message_id)) {
@@ -270,13 +270,15 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
 		$form->setConstants(array('sec_token' => $token));
-		$html .= $form->return_form();
+		$html .= $form->returnForm();
 	}
     return $html;
 }
 
+$socialToolIsActive = isset($_GET['f']) && $_GET['f'] == 'social';
+
 /* MAIN SECTION */
-if ($_GET['f']=='social') {
+if ($socialToolIsActive) {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));
 } else {
@@ -288,11 +290,13 @@ $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
 $social_right_content = null;
 if ($group_id != 0) {
 	$social_right_content .= '<div class=actions>';
-	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
-	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
+	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.
+		Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
+	$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+		Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
 	$social_right_content .= '</div>';
 } else {
-	if ($_GET['f']=='social') {
+	if ($socialToolIsActive) {
 	} else {
 		$social_right_content .= '<div class=actions>';
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
@@ -329,7 +333,7 @@ if (!isset($_POST['compose'])) {
     } elseif(isset($_GET['send_to_user'])) {
         $social_right_content .= show_compose_to_user($_GET['send_to_user']);
     } else {
-        $social_right_content .= show_compose_to_any($_user['user_id']);
+        $social_right_content .= show_compose_to_any(api_get_user_id());
     }
 } else {
     $restrict = false;

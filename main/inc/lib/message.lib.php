@@ -884,16 +884,20 @@ class MessageManager
             $message_content .= $user_image.' ';
         }
 
+        $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+
         $message_content .='<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
+                $message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
+                    api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name'].'</b>';
             } else {
-                $message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
+                $message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
+                    api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
             }
         } else {
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row['user_receiver_id']).'</b>';
+                $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.$receiverUserInfo['complete_name'].'</b>';
             } else {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
             }

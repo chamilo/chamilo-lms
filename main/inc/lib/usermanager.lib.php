@@ -2730,7 +2730,6 @@ class UserManager
         }
 
         if (api_is_allowed_to_create_course()) {
-
             foreach ($sessions as $enreg) {
                 $session_id = $enreg['id'];
                 $session_visibility = api_get_session_visibility($session_id);
@@ -2738,6 +2737,7 @@ class UserManager
                 if ($session_visibility == SESSION_INVISIBLE) {
                     continue;
                 }
+
                 // This query is horribly slow when more than a few thousand
                 // users and just a few sessions to which they are subscribed
                 $id_session = $enreg['id'];
@@ -4064,7 +4064,7 @@ class UserManager
     public static function remove_user_rel_user($friend_id, $real_removed = false, $with_status_condition = '')
     {
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
+        $tbl_my_message = Database :: get_main_table(TABLE_MESSAGE);
         $friend_id = intval($friend_id);
 
         if ($real_removed) {

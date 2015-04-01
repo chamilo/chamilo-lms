@@ -46,8 +46,10 @@ if (api_is_multiple_url_enabled()) {
 	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
-		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user ON (url_rel_user.user_id = u.user_id)
-			  WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
+		$sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
+		        FROM $tbl_user u
+                INNER JOIN $table_access_url_rel_user url_rel_user ON (url_rel_user.user_id = u.user_id)
+			    WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
 	}
 }
 
@@ -124,29 +126,42 @@ $form->addElement('select', 'id_coach', get_lang('CoachName'), $coachesOption, a
 ));
 $form->addRule('id_coach', get_lang('ThisFieldIsRequired'), 'required');
 
+$form->addButtonAdvancedSettings('advanced_params');
+$form->addElement('html','<div id="advanced_params_options" style="display:none">');
+
+
 $form->addSelect('session_category', get_lang('SessionCategory'), $categoriesOption, array(
     'id' => 'session_category',
     'class' => 'chzn-select',
     'style' => 'width:370px;'
 ));
 
-$form->addElement('advanced_settings','<a class="btn-show" id="show-options" href="#">'.get_lang('DefineSessionOptions').'</a>');
+$form->addHtmlEditor(
+    'description',
+    get_lang('Description'),
+    false,
+    false,
+    array(
+        'ToolbarSet' => 'Minimal'
+    )
+);
 
-if ($infos['nb_days_access_before_beginning'] != 0 || $infos['nb_days_access_after_end'] != 0) {
-    $form->addElement('html','<div id="options" style="display:block;">');
-} else {
-    $form->addElement('html','<div id="options" style="display:none;">');
+$chkDescriptionAttributes = array();
+
+if (!empty($infos['show_description'])) {
+    $chkDescriptionAttributes['checked'] = '';
 }
 
+$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
+
+
 $form->addElement('text', 'nb_days_access_before', array('', '', get_lang('DaysBefore')), array(
-    'style' => 'width: 30px;'
+    'input-size' => '2',
 ));
 
 $form->addElement('text', 'nb_days_access_after', array('', '', get_lang('DaysAfter')), array(
-    'style' => 'width: 30px;'
+    'input-size' => '2',
 ));
-
-$form->addElement('html','</div>');
 
 if ($year_start!="0000") {
     $form->addElement('checkbox', 'start_limit', '', get_lang('DateStartSession'), array(
@@ -189,7 +204,6 @@ if ($year_end != "0000") {
 $form->addElement('date_picker', 'date_end');
 
 $visibilityGroup = array();
-$visibilityGroup[] = $form->createElement('advanced_settings', get_lang('SessionVisibility'));
 $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
     SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
     SESSION_VISIBLE => get_lang('SessionAccessible'),
@@ -198,27 +212,9 @@ $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, 
     'style' => 'width:250px;'
 ));
 
-$form->addGroup($visibilityGroup, 'visibility_group', null, null, false);
+$form->addGroup($visibilityGroup, 'visibility_group', get_lang('SessionVisibility'), null, false);
 
 $form->addElement('html','</div>');
-
-$form->addHtmlEditor(
-    'description',
-    get_lang('Description'),
-    false,
-    false,
-    array(
-        'ToolbarSet' => 'Minimal'
-    )
-);
-
-$chkDescriptionAttributes = array();
-
-if (!empty($infos['show_description'])) {
-    $chkDescriptionAttributes['checked'] = '';
-}
-
-$form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'), $chkDescriptionAttributes);
 
 $duration = empty($infos['duration']) ? null : $infos['duration'];
 
@@ -237,6 +233,8 @@ $form->addElement(
 //Extra fields
 $extra_field = new ExtraField('session');
 $extra = $extra_field->addElements($form, $id);
+
+$form->addElement('html','</div>');
 
 $htmlHeadXtra[] ='
 <script>
@@ -339,11 +337,6 @@ $form->display();
 ?>
 
 <script type="text/javascript">
-
-<?php
-//if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n";
-?>
-
 function setDisable(select) {
 	document.forms['edit_session'].elements['session_visibility'].disabled = (select.checked) ? true : false;
 	document.forms['edit_session'].elements['session_visibility'].selectedIndex = 0;
@@ -387,9 +380,7 @@ function emptyDuration() {
 $(document).on('ready', function (){
     $('#show-options').on('click', function (e) {
         e.preventDefault();
-
         var display = $('#options').css('display');
-
         display === 'block' ? $('#options').slideUp() : $('#options').slideDown() ;
     });
 });

@@ -176,7 +176,7 @@ $(document).ready(function() {
 		})
 	}
 
-	$(\'.group_message_popup\').live(\'click\', function() {
+	$(\'.group_message_popup\').click(function() {
 		var url     = this.href;
 	    var dialog  = $("#dialog");
 	    if ($("#dialog").length == 0) {
@@ -191,13 +191,13 @@ $(document).ready(function() {
                     dialog.dialog({
                         modal	: true,
                         width	: 520,
-                        height	: 400,
+                        height	: 400
                     });
 				});
 	            //prevent the browser to follow the link
 	            return false;
-	        });
         });
+    });
 
 </script>';
 

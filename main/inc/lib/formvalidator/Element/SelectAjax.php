@@ -11,7 +11,7 @@ class SelectAjax extends HTML_QuickForm_select
      */
     function SelectAjax($elementName = null, $elementLabel = null, $options = null, $attributes = null)
     {
-        parent::HTML_QuickForm_Select($elementName, $elementLabel, $options, $attributes);
+        parent::__construct($elementName, $elementLabel, $options, $attributes);
     }
 
     /**

@@ -1040,17 +1040,23 @@ class IndexManager
 
         $courses_html = '';
         $special_courses = '';
+        $sessionCount = 0;
+        $courseCount = 0;
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             // Display special courses.
-            $special_courses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
+            $specialCourses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
+            $special_courses = $specialCourses['html'];
             // Display courses.
-            $courses_html .= CourseManager::display_courses($user_id, $this->load_directories_preview);
+            $courses = CourseManager::display_courses($user_id, $this->load_directories_preview);
+            $courses_html .= $courses['html'];
+            $courseCount = $specialCourses['course_count'] + $courses['course_count'];
         }
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
+
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {
                 $session_category_id = $session_category['session_category']['id'];
@@ -1136,7 +1142,7 @@ class IndexManager
                                 'window_list.png',
                                 $session_box['title'],
                                 array('id' => 'session_img_' . $session_id),
-                                ICON_SIZE_BIG
+                                ICON_SIZE_MEDIUM
                             );
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
@@ -1174,7 +1180,7 @@ class IndexManager
                             $params['description'] = $session_box['description'];
                             $params['show_description'] = $session_box['show_description'];
 
-                            $items_courses_session = '<ul class="sessions-items">'.$html_courses_session.'</ul>';
+                            $items_courses_session = '<div class="sessions-items">'.$html_courses_session.'</div>';
                             /* Icon session no category */
                             $parentInfo = CourseManager::session_list_html($params,$items_courses_session,true);
 
@@ -1185,10 +1191,11 @@ class IndexManager
                                 $parentInfo = CourseManager::course_item_html_no_icon($params);
                             }
 
-
                             $sessions_with_no_category .= CourseManager::course_item_parent(
                                 $parentInfo,null
                             );
+
+                            $sessionCount++;
                         }
                     }
                 } else {
@@ -1203,6 +1210,7 @@ class IndexManager
                             if (count($session['courses']) < 1) {
                                 continue;
                             }
+
                             $date_session_start = $session['date_start'];
                             $date_session_end = $session['date_end'];
                             $days_access_before_beginning = $session['nb_days_access_before_beginning'];
@@ -1261,7 +1269,7 @@ class IndexManager
                             }
 
                             $params = array();
-
+                            //Category
                             if ($count > 0) {
                                 $session_box = Display:: get_session_title_box(
                                     $session_id
@@ -1270,7 +1278,7 @@ class IndexManager
                                         'window_list.png',
                                         $session_box['title'],
                                         array('id' => 'session_img_' . $session_id),
-                                        ICON_SIZE_BIG
+                                        ICON_SIZE_MEDIUM
                                     );
 
                                 if (api_is_drh()) {
@@ -1291,19 +1299,21 @@ class IndexManager
                                 $params['subtitle'] = (!empty($session_box['coach']) ? $session_box['coach'] . ' | ' : '') . $session_box['dates'];
 
                                 if (api_is_platform_admin()) {
-                                    $params['right_actions'] = '<a href="' . api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=' . $session_id . '">' .
+                                    $params['right_actions'] = '<div class="pull-right"><a href="' . api_get_path(WEB_CODE_PATH) . 'admin/resume_session.php?id_session=' . $session_id . '">' .
                                         Display::return_icon(
                                             'edit.png',
                                             get_lang('Edit'),
                                             array('align' => 'absmiddle'),
                                             ICON_SIZE_SMALL
-                                        ) . '</a>';
+                                        ) . '</a></div>';
                                 }
                                 /* Icon Session in category */
-                                $parentInfo = CourseManager::course_item_html(
-                                    $params,
-                                    true
-                                );
+                                $parentInfo = '<div class="panel panel-default">';
+                                $parentInfo .= '<div class="panel-heading">'.$params['title'].$params['right_actions'].'</div>';
+                                $parentInfo .= '<div class="panel-body">';
+                                $parentInfo .= $html_courses_session;
+                                $parentInfo .= '</div>';
+                                $parentInfo .= '</div>';
 
                                 if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
                                     $params['title'] = $session_box['title'];
@@ -1312,14 +1322,16 @@ class IndexManager
                                     );
                                 }
 
-                                $html_sessions .= $parentInfo . $html_courses_session;
+                                $html_sessions .= $parentInfo;
+
+                                $sessionCount++;
                             }
                         }
                     }
 
                     if ($count_courses_session > 0) {
                         $params = array();
-                        $params['icon'] = Display::return_icon('folder_blue.png', $session_category['session_category']['name'], array(), ICON_SIZE_LARGE);
+                        $params['icon'] = Display::return_icon('sessions_category.png', $session_category['session_category']['name'], array(), ICON_SIZE_LARGE);
 
                         if (api_is_platform_admin()) {
                             $params['right_actions'] = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
@@ -1344,7 +1356,7 @@ class IndexManager
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
-                         $sessions_with_category .= CourseManager::course_item_parent(
+                         $sessions_with_category .= CourseManager::session_item_parent(
                             CourseManager::course_item_html($params, true),
                             $html_sessions
                         );
@@ -1354,9 +1366,11 @@ class IndexManager
             }
         }
 
-        return $sessions_with_category.
-               $sessions_with_no_category.
-               $courses_html.$special_courses;
+        return [
+            'html' => $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses,
+            'session_count' => $sessionCount,
+            'course_count' => $courseCount
+        ];
     }
 
     /**

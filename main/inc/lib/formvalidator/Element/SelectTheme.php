@@ -11,10 +11,10 @@ class SelectTheme extends HTML_QuickForm_select
 	 */
 	function SelectTheme($elementName=null, $elementLabel=null, $options=null, $attributes=null) {
 	    if (!isset($attributes['class'])) {
-	        //todo this was comment due a bug in infocours.php with jquery-ui 
+	        //todo this was comment due a bug in infocours.php with jquery-ui
             //$attributes['class'] = 'chzn-select';
-        }        
-		parent::HTML_QuickForm_Select($elementName, $elementLabel, $options, $attributes);
+        }
+		parent::__construct($elementName, $elementLabel, $options, $attributes);
 		// Get all languages
 		$themes = api_get_themes();
 		$this->_options = array();
@@ -22,6 +22,6 @@ class SelectTheme extends HTML_QuickForm_select
 		$this->addOption('--',''); // no theme select
 		for ($i=0; $i< count($themes[0]);$i++) {
 			$this->addOption($themes[1][$i],$themes[0][$i]);
-		}		
+		}
 	}
 }

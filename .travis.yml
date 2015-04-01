@@ -49,3 +49,8 @@ script:
   # - phpunit -c tests/phpunit
   # pwd shows /home/travis/build/chamilo/chamilo-lms
   - cd tests && ../vendor/behat/behat/bin/behat -v
+
+# configure notifications (email, IRC, campfire etc)
+notifications:
+  # IRC notifications - disabled for creating a lot of noise on the channel
+  # irc: "irc.freenode.org#chamilo"

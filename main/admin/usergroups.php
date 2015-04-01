@@ -10,6 +10,7 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
+api_protect_limit_for_session_admin();
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -105,7 +106,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70', 'id' => 'name'));
     //$form->applyFilter('note_title', 'html_filter');
     $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+    //$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+    $form->addButtonCreate(get_lang('Add'));
 
     // Setting the rules
     $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
@@ -145,7 +147,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $form->addElement('hidden', 'id', intval($_GET['id']));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
     $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    $form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+    $form->addButtonSave(get_lang('Save'));
 
     // Setting the defaults
     $defaults = $usergroup->get($_GET['id']);
@@ -173,7 +175,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
         $usergroup->display();
     } else {
         echo '<div class="actions">';
-        echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_self().'">'.Display::return_icon(
+            'back.png',
+            get_lang('Back'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

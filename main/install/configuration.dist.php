@@ -320,4 +320,10 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['gravatar_type'] = 'mm';
 // Course log - Default columns to hide
 //$_configuration['course_log_hide_columns'] = array(1, 9);
+// Limit for the Session Admin role. The administration page show only
+// User block -> Add user
+// Course Sessions block -> Training session list
+$_configuration['limit_session_admin_role'] = false;
+// Show session description
+//$_configuration['show_session_description'] = false;
 

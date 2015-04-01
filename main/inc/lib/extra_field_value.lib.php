@@ -115,8 +115,10 @@ class ExtraFieldValue extends Model
         // Parse params.
         foreach ($params as $key => $value) {
             if (substr($key, 0, 6) == 'extra_' || substr($key, 0, 7) == '_extra_') {
+
                 // An extra field.
                 $field_variable = substr($key, 6);
+
                 $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);
 
                 if ($extra_field_info) {
@@ -124,8 +126,7 @@ class ExtraFieldValue extends Model
                     $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
 
                     switch ($extra_field_info['field_type']) {
-                        case ExtraField::FIELD_TYPE_TAG :
-
+                        case ExtraField::FIELD_TYPE_TAG:
                             $old = self::getAllValuesByItemAndField(
                                 $params[$this->handler_id],
                                 $extra_field_info['id']
@@ -240,12 +241,14 @@ class ExtraFieldValue extends Model
                             break;
                         default;
                             $new_params = array(
-                                $this->handler_id   => $params[$this->handler_id],
-                                'field_id'          => $extra_field_info['id'],
-                                'field_value'       => $value
+                                $this->handler_id => $params[$this->handler_id],
+                                'field_id' => $extra_field_info['id'],
+                                'field_value' => $value
                             );
 
-                            if ($this->handler_id !== 'session_id' && $this->handler_id !== 'course_code') {
+                            if ($this->handler_id !== 'session_id' &&
+                                $this->handler_id !== 'course_code'
+                            ) {
                                 $new_params['comment'] = $comment;
                             }
 
@@ -458,6 +461,7 @@ class ExtraFieldValue extends Model
                     }
                 } else {
                     $params['id'] = $field_values['id'];
+
                     return parent::update($params, $show_query);
                 }
             }

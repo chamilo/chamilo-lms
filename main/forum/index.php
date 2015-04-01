@@ -37,15 +37,6 @@ function hidecontent(content){
     $(content).slideToggle(\'normal\');
 }
 
-function advanced_parameters() {
-    if (document.getElementById(\'options\').style.display == \'none\') {
-        document.getElementById(\'options\').style.display = \'block\';
-        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-    } else {
-        document.getElementById(\'options\').style.display = \'none\';
-        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-    }
-}
 </script>';
 
 // The section (tabs).

@@ -109,7 +109,7 @@
                     </td>
                     <td>
                         {% for certificate in student.certificates %}
-                            <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn">{{ 'Certificate' | get_lang }}</a>
+                            <a href="{{ _p.web }}certificates/index.php?id={{ certificate.id }}" class="btn btn-default"><i class="fa fa-floppy-o"></i> {{ 'Certificate' | get_lang }}</a>
                         {% endfor %}
                     </td>
                 </tr>

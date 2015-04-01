@@ -42,7 +42,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    var $_value = null;
+    public $_value = null;
 
     // }}}
     // {{{ constructor
@@ -185,7 +185,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function toHtml()
+    public function toHtml()
     {
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
@@ -199,10 +199,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                    //
                    '</textarea>';
         }
-    } //end func toHtml
-
-    // }}}
-    // {{{ getFrozenHtml()
+    }
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
@@ -211,7 +208,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function getFrozenHtml()
+    public function getFrozenHtml()
     {
         // Modified by Ivan Tcholakov, 16-MAR-2010.
         //$value = htmlspecialchars($this->getValue());
@@ -223,9 +220,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             $html = nl2br($value)."\n";
         }
         return $html . $this->_getPersistantData();
-    } //end func getFrozenHtml
+    }
 
-    // }}}
-
-} //end class HTML_QuickForm_textarea
-?>
+}

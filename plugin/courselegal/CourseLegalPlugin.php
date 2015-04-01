@@ -112,7 +112,7 @@ class CourseLegalPlugin extends Plugin
     * @param int $courseCode
     * @param int $sessionId
     * @param boolean $sendEmail Optional. Indicate whether the mail must be sent. Default is true
-    * @return bool
+    * @return mixed
     */
     public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
     {

@@ -19,7 +19,7 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     $htmlHeadXtra[] = '
     <script>
     $(document).ready(function() {
-        $(\'.ajax\').live(\'click\', function() {
+        $(\'.ajax\').click(function() {
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {
@@ -148,7 +148,6 @@ if (isset($_POST['create_course_category']) && isset($_POST['title_course_catego
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
-    //echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
     if ($ctok == $_REQUEST['sec_token']) {
         $courses_controller->search_courses($_REQUEST['search_term'], null, null, null, $limit);
     }

@@ -9,10 +9,10 @@ $libpath = api_get_path(LIBRARY_PATH);
 // 1. Setting variables needed by jqgrid
 
 $action = $_GET['a'];
-$page   = intval($_REQUEST['page']); //page
-$limit  = intval($_REQUEST['rows']); //quantity of rows
-$sidx   = $_REQUEST['sidx'];         //index (field) to filter
-$sord   = $_REQUEST['sord'];         //asc or desc
+$page = intval($_REQUEST['page']); //page
+$limit = intval($_REQUEST['rows']); //quantity of rows
+$sidx = $_REQUEST['sidx'];         //index (field) to filter
+$sord = $_REQUEST['sord'];         //asc or desc
 
 if (strpos(strtolower($sidx), 'asc') !== false) {
     $sidx = str_replace(array('asc', ','), '', $sidx);
@@ -151,6 +151,8 @@ switch ($action) {
 
         $courseCodeList = array();
         $userIdList  = array();
+        $sessionIdList = [];
+        $searchByGroups = false;
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -188,50 +190,77 @@ switch ($action) {
                 exit;
             }
         } elseif (api_is_student_boss()) {
-            $users = UserManager::getUsersFollowedByStudentBoss($userId);
-            $userIdList = array_keys($users);
-        }
+            $searchByGroups = true;
+        } elseif (api_is_platform_admin()) {
+            if ($sessionId == -1) {
+                $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'admin',
+                    null
+                );
+                $userIdList = array_column($userIdList, 'user_id');
+                $sessionList = SessionManager::get_sessions_list();
+                $sessionIdList = array_column($sessionList, 'id');
 
-        $sessionIdList = [];
-        if ($sessionId == -1) {
-            $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                null
-            );
-            $userIdList = array_column($userIdList, 'user_id');
-            $sessionList = SessionManager::get_sessions_list();
-            $sessionIdList = array_column($sessionList, 'id');
-
-            $courseCodeList = array();
-            foreach ($sessionList as $session) {
-                $courses = SessionManager::get_course_list_by_session_id($session['id']);
-                $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
-            }
-        }
-
-        $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
-        $groupsId = array_keys($groups);
-
-        if (is_array($groupsId)) {
-            foreach ($groupsId as $groupId) {
-                $groupUsers = GroupPortalManager::get_users_by_group($groupId);
-
-                if (!is_array($groupUsers)) {
-                    continue;
+                $courseCodeList = array();
+                foreach ($sessionList as $session) {
+                    $courses = SessionManager::get_course_list_by_session_id($session['id']);
+                    $courseCodeList = array_merge($courseCodeList, array_column($courses, 'code'));
                 }
+            }
+            $searchByGroups = true;
+        }
 
-                foreach ($groupUsers as $memberId => $member) {
-                    if ($member['user_id'] == $userId ) {
+        if ($searchByGroups) {
+            $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
+            $groupsId = array_keys($groups);
+
+            if (is_array($groupsId)) {
+                foreach ($groupsId as $groupId) {
+                    $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+                    if (!is_array($groupUsers)) {
                         continue;
                     }
 
-                    $userIdList[] = intval($member['user_id']);
+                    foreach ($groupUsers as $memberId => $member) {
+                        if ($member['user_id'] == $userId ) {
+                            continue;
+                        }
+
+                        $userIdList[] = intval($member['user_id']);
+                    }
                 }
             }
         }
 
         if (is_array($userIdList)) {
             $userIdList = array_unique($userIdList);
+        }
+
+        if (api_is_student_boss()) {
+            $userCourses = [];
+            foreach ($userIdList as $userId) {
+                $userCourses = array_merge(
+                    $userCourses,
+                    CourseManager::get_courses_list_by_user_id($userId, true)
+                );
+
+                $userSessions = SessionManager::getSessionsFollowedByUser($userId);
+
+                $sessionIdList = array_merge(
+                    $sessionIdList,
+                    array_column($userSessions, 'id')
+                );
+            }
+            $courseCodeList = array_column($userCourses, 'code');
+        }
+
+        if (!empty($courseCodeList)) {
+            $courseCodeList = array_unique($courseCodeList);
+        }
+
+        if (!empty($sessionIdList)) {
+            $sessionIdList = array_unique($sessionIdList);
         }
 
         if ($action == 'get_user_course_report') {
@@ -341,7 +370,14 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+
+        $description = '';
+        $setting = api_get_configuration_value('show_session_description');
+        if ($setting) {
+            $description = $keyword;
+        }
+
         if (api_is_drh()) {
             $count = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
@@ -351,7 +387,8 @@ switch ($action) {
                 false,
                 false,
                 null,
-                $keyword
+                $keyword,
+                $description
             );
         } else {
             // Sessions for the coach
@@ -360,7 +397,8 @@ switch ($action) {
                 null,
                 null,
                 true,
-                $keyword
+                $keyword,
+                $description
             );
         }
         break;
@@ -573,6 +611,12 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
+
+        if (api_is_student_boss()) {
+            $columns[] = 'group';
+            $column_names[] = get_lang('Group');
+        }
+
         if (!in_array($sidx, array('title'))) {
             $sidx = 'title';
         }
@@ -592,6 +636,13 @@ switch ($action) {
             null,
             $sessionIdList
         );
+        if (api_is_student_boss()) {
+            foreach ($result as &$item) {
+                $userGroups = GroupPortalManager::get_groups_by_user($item['user_id']);
+                $item['group'] = implode(", ", array_column($userGroups, 'name'));
+                unset($item['user_id']);
+            }
+        }
 
         break;
 	case 'get_user_skill_ranking':
@@ -784,7 +835,8 @@ switch ($action) {
                 false,
                 false,
                 null,
-                $keyword
+                $keyword,
+                $description
             );
         } else {
             // Sessions for the coach
@@ -793,7 +845,8 @@ switch ($action) {
                 $start,
                 $limit,
                 false,
-                $keyword
+                $keyword,
+                $description
             );
         }
 

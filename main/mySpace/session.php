@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
+
+/**
  * Sessions reporting
  * @package chamilo.reporting
  */
+
 ob_start();
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'trad4all', 'tracking', 'admin');
@@ -91,7 +93,7 @@ $form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'m
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->addElement('hidden', 'session_id', $sessionId);
-$keyword = null;
+$keyword = '';
 if ($form->validate()) {
     $keyword = $form->getSubmitValue('keyword');
 }

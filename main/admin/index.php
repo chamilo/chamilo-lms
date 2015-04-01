@@ -112,15 +112,22 @@ if (api_is_platform_admin()) {
         $items[] = array('url'=>'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
     }
     $items[] = array('url'=>'user_fields.php', 	'label' => get_lang('ManageUserFields'));
+    $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+} elseif (
+    api_is_session_admin() &&
+    api_get_configuration_value('limit_session_admin_role')
+) {
+    $items = array(
+        array('url'=>'user_list.php', 	'label' => get_lang('UserList'))
+    );
 } else {
     $items = array(
         array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
         array('url'=>'user_add.php', 	'label' => get_lang('AddUsers')),
         array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
+        array('url'=>'usergroups.php', 	'label' => get_lang('Classes'))
     );
 }
-
-$items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
 
 $blocks['users']['items'] = $items;
 $blocks['users']['extra'] = null;
@@ -245,16 +252,47 @@ $search_form = ' <form method="GET" class="form-search" action="session_list.php
                 </form>';
 $blocks['sessions']['search_form'] = $search_form;
 $items = array();
+
 $items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'));
-$items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
-$items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
-$items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
-$items[] = array('url'=>'session_import_drh.php', 	'label' => get_lang('ImportSessionDrhList'));
-if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-    $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
+
+if (
+    !api_is_session_admin() ||
+    !api_get_configuration_value('limit_session_admin_role')
+) {
+    $items[] = array(
+        'url' => 'session_add.php',
+        'label' => get_lang('AddSession')
+    );
+    $items[] = array(
+        'url' => 'session_category_list.php',
+        'label' => get_lang('ListSessionCategory'));
+    $items[] = array(
+        'url' => 'session_import.php',
+        'label' => get_lang('ImportSessionListXMLCSV')
+    );
+    $items[] = array(
+        'url' => 'session_import_drh.php',
+        'label' => get_lang('ImportSessionDrhList')
+    );
+    if (
+        isset($extAuthSource) &&
+        isset($extAuthSource['ldap']) &&
+        count($extAuthSource['ldap']) > 0
+    ) {
+        $items[] = array(
+            'url' => 'ldap_import_students_to_session.php',
+            'label' => get_lang('ImportLDAPUsersIntoSession')
+        );
+    }
+    $items[] = array(
+        'url' => 'session_export.php',
+        'label' => get_lang('ExportSessionListXMLCSV')
+    );
+    $items[] = array(
+        'url' => '../coursecopy/copy_course_session.php',
+        'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
+    );
 }
-$items[] = array('url'=>'session_export.php', 	'label' => get_lang('ExportSessionListXMLCSV'));
-$items[] = array('url'=>'../coursecopy/copy_course_session.php', 	'label' => get_lang('CopyFromCourseInSessionToAnotherSession'));
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) { // option only visible in development mode. Enable through code if required
@@ -399,6 +437,51 @@ if ($useCookieValidation) {
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
 $tpl->assign('blocks', $blocks);
+
+if (api_is_platform_admin()) {
+    $extraDataForm = new FormValidator(
+        'block_extra_data',
+        'post',
+        '#',
+        null,
+        array(
+            'id' => 'block-extra-data',
+            'class' => 'form-inline'
+        )
+    );
+
+    $extraDataForm->add_html_editor(
+        'extra_content',
+        null,
+        false,
+        false,
+        array(
+            'name' => 'extra-content',
+            'ToolbarSet' => 'AdminPanels',
+            'Width' => 530,
+            'Height' => 300
+        )
+    );
+    $extraDataForm->addElement(
+        'hidden',
+        'block',
+        null,
+        array(
+            'id' => 'extra-block'
+        )
+    );
+    $extraDataForm->add_button(
+        'submit',
+        get_lang('Save'),
+        array(
+            'id' => 'btn-block-editor-save',
+            'class' => 'btn btn-primary'
+        )
+    );
+
+    $tpl->assign('extraDataForm', $extraDataForm->toHtml());
+}
+
 // The template contains the call to the AJAX version checker
 $admin_template = $tpl->get_template('admin/settings_index.tpl');
 $content = $tpl->fetch($admin_template);

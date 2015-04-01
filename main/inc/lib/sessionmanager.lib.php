@@ -2827,6 +2827,8 @@ class SessionManager
      * @param bool $getOnlySessionId
      * @param bool $getSql
      * @param string $orderCondition
+     * @param string $description
+     *
      * @return array sessions
      */
     public static function get_sessions_followed_by_drh(
@@ -2837,7 +2839,8 @@ class SessionManager
         $getOnlySessionId = false,
         $getSql = false,
         $orderCondition = null,
-        $keyword = null
+        $keyword = '',
+        $description = ''
     ) {
         return self::getSessionsFollowedByUser(
             $userId,
@@ -2848,7 +2851,8 @@ class SessionManager
             $getOnlySessionId,
             $getSql,
             $orderCondition,
-            $keyword
+            $keyword,
+            $description
         );
     }
 
@@ -2862,6 +2866,7 @@ class SessionManager
      * @param bool $getSql
      * @param string $orderCondition
      * @param string $keyword
+     * @param string $description
      * @return array sessions
      */
     public static function getSessionsFollowedByUser(
@@ -2873,11 +2878,12 @@ class SessionManager
         $getOnlySessionId = false,
         $getSql = false,
         $orderCondition = null,
-        $keyword = null
+        $keyword = '',
+        $description = ''
     ) {
         // Database Table Definitions
-        $tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
@@ -2934,11 +2940,17 @@ class SessionManager
                 break;
         }
 
-        $keywordCondition = null;
+        $keywordCondition = '';
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
+
+            if (!empty($description)) {
+                $description = Database::escape_string($description);
+                $keywordCondition = " AND (s.name LIKE '%$keyword%' OR s.description LIKE '%$description%' ) ";
+            }
         }
+
         $whereConditions .= $keywordCondition;
 
         $subQuery = $sessionQuery.$courseSessionQuery;

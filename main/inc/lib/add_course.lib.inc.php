@@ -2915,8 +2915,9 @@ function register_course($params)
                 $message .= get_lang('Language').' '.$course_language;
 
                 $userInfo = api_get_user_info($user_id);
+                $plugin = new AppPlugin();
                 $additionalParameters = array(
-                    'smsType' => ClockworksmsPlugin::NEW_COURSE_BEEN_CREATED,
+                    'smsType' => constant($plugin->getSMSPluginName().'::NEW_COURSE_BEEN_CREATED'),
                     'userId' => $user_id,
                     'courseName' => $title,
                     'creatorUsername' => $userInfo['username']

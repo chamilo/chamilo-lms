@@ -12,10 +12,10 @@ $libpath = api_get_path(LIBRARY_PATH);
 // 1. Setting variables needed by jqgrid
 
 $action = $_GET['a'];
-$page   = intval($_REQUEST['page']); //page
-$limit  = intval($_REQUEST['rows']); //quantity of rows
-$sidx   = $_REQUEST['sidx'];         //index (field) to filter
-$sord   = $_REQUEST['sord'];         //asc or desc
+$page = intval($_REQUEST['page']); //page
+$limit = intval($_REQUEST['rows']); //quantity of rows
+$sidx = $_REQUEST['sidx'];         //index (field) to filter
+$sord = $_REQUEST['sord'];         //asc or desc
 
 if (strpos(strtolower($sidx), 'asc') !== false) {
     $sidx = str_replace(array('asc', ','), '', $sidx);
@@ -289,7 +289,14 @@ switch ($action) {
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
-        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+
+        $description = '';
+        $setting = api_get_configuration_value('show_session_description');
+        if ($setting) {
+            $description = $keyword;
+        }
+
         if (api_is_drh()) {
             $count = SessionManager::get_sessions_followed_by_drh(
                 api_get_user_id(),
@@ -299,7 +306,8 @@ switch ($action) {
                 false,
                 false,
                 null,
-                $keyword
+                $keyword,
+                $description
             );
         } else {
             // Sessions for the coach
@@ -308,7 +316,8 @@ switch ($action) {
                 null,
                 null,
                 true,
-                $keyword
+                $keyword,
+                $description
             );
         }
         break;
@@ -720,7 +729,8 @@ switch ($action) {
                 false,
                 false,
                 null,
-                $keyword
+                $keyword,
+                $description
             );
         } else {
             // Sessions for the coach
@@ -729,7 +739,8 @@ switch ($action) {
                 $start,
                 $limit,
                 false,
-                $keyword
+                $keyword,
+                $description
             );
         }
 

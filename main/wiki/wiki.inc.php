@@ -3193,7 +3193,7 @@ class Wiki
 
                 $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user
                   WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."'
-                  ORDER BY id DESC";
+                  ORDER BY reviews.id DESC";
                 $result=Database::query($sql) or die(Database::error());
 
                 $countWPost = Database::num_rows($result);

@@ -323,8 +323,7 @@ function is_profile_editable() {
  * @return    The filename of the new production or FALSE if the upload has failed
  */
 function upload_user_production($user_id) {
-    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'system');
-    $production_repository = $image_path['dir'];
+    $production_repository = UserManager::getUserPathById($user_id, 'system');
 
     if (!file_exists($production_repository)) {
         @mkdir($production_repository, api_get_permissions_for_new_directories(), true);

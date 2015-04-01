@@ -18,9 +18,9 @@ class PersonalDriver extends Driver implements DriverInterface
     public function setup()
     {
         $userId = api_get_user_id();
-        $path = \UserManager::get_user_picture_path_by_id($userId, 'none');
-        if (!empty($path['dir'])) {
-            $dir = api_get_path(SYS_CODE_PATH) . $path['dir'];
+        $path = \UserManager::getUserPathById($userId);
+        if (!empty($path)) {
+            $dir = api_get_path(SYS_CODE_PATH) . $path;
 
             if (!is_dir($dir)) {
                 mkdir($dir);
@@ -44,21 +44,15 @@ class PersonalDriver extends Driver implements DriverInterface
             if (!empty($userId)) {
 
                 // Adding user personal files
-                $dir = \UserManager::get_user_picture_path_by_id(
-                    $userId,
-                    'system'
-                );
+                $dir = \UserManager::getUserPathById($userId, 'system');
 
-                $dirWeb = \UserManager::get_user_picture_path_by_id(
-                    $userId,
-                    'web'
-                );
+                $dirWeb = \UserManager::getUserPathById($userId, 'web');
 
                 $driver = array(
                     'driver' => 'PersonalDriver',
                     'alias' => get_lang('MyFiles'),
-                    'path' => $dir['dir'] . 'my_files',
-                    'URL' => $dirWeb['dir'] . 'my_files',
+                    'path' => $dir.'my_files',
+                    'URL' => $dirWeb.'my_files',
                     'accessControl' => array($this, 'access')
                 );
 

@@ -502,7 +502,7 @@ class MessageManager
             if (!empty($group_id)) {
                 $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
             } else {
-                $path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);
+                $path_user_info['dir'] = UserManager::getUserPathById($message_user_id, 'system');
             }
 
             $path_message_attach = $path_user_info['dir'].'message_attachments/';
@@ -548,7 +548,7 @@ class MessageManager
             if (!empty($group_id)) {
                 $path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
             } else {
-                $path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
+                $path_user_info['dir'] = UserManager::getUserPathById($message_uid, 'system');
             }
 
             $path_message_attach = $path_user_info['dir'].'message_attachments/';

@@ -1172,9 +1172,8 @@ class SocialManager extends UserManager
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // create directory
-        $pathUserInfo = UserManager::get_user_picture_path_by_id($userId, 'system', true);
         $social = '/social/';
-        $pathMessageAttach = $pathUserInfo['dir'] . 'message_attachments'. $social;
+        $pathMessageAttach = UserManager::getUserPathById($userId, 'system').'message_attachments'.$social;
         $safeFileComment = Database::escape_string($fileComment);
         $safeFileName = Database::escape_string($fileAttach['name']);
 
@@ -1410,10 +1409,10 @@ class SocialManager extends UserManager
         $wallImage = '';
         if (!empty($message['path'])) {
             $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
-            $pathImg = $pathUserInfo['dir'] . 'message_attachments';
             $imageBig = $pathUserInfo['file'];
             $imageSmall = $pathUserInfo['file'];
             if (!api_get_configuration_value('gravatar_enabled')) {
+                $pathImg = UserManager::getUserPathById($authorId, 'web').'message_attachments';
                 $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
                 $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
             }

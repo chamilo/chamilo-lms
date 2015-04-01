@@ -126,8 +126,10 @@ function get_request_data($from, $number_of_items, $column, $direction)
 function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
-    $result = '<a href="course_request_edit.php?id='.$id.'&caller=1">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
-        '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.gif', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
+    $result = '<a href="course_request_edit.php?id='.$id.'&caller=1">'.
+        Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+        '&nbsp;<a href="?delete_course_request='.$id.'">'.
+        Display::return_icon('delete.png', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
 
     return $result;
 }

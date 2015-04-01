@@ -58,7 +58,6 @@ class Basic extends Toolbar
         'preview',
         'print',
         'save',
-        'scayt',
         'selectall',
         'sharedspace',
         'showblocks',
@@ -141,6 +140,10 @@ class Basic extends Toolbar
             $plugins[] = 'toolbarswitch';
         }
 
+        if (api_get_setting('allow_spellcheck') == 'true') {
+            $plugins[] = 'scayt';
+        }
+
         $this->defaultPlugins = array_merge($this->defaultPlugins, $plugins);
         parent::__construct($toolbar, $config, $prefix);
     }
@@ -184,6 +187,7 @@ class Basic extends Toolbar
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],

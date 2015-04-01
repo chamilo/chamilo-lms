@@ -138,7 +138,8 @@ class Clockworksms implements SmsPluginLibraryInterface
             )
         );
 
-        if (empty($result)) {
+        //if (empty($result)) {
+        if (0) {
             $tpl->assign('message', '');
         } else {
             $templatePath = 'clockworksms/sms_templates/';

@@ -213,8 +213,21 @@ switch ($action) {
         if ($searchByGroups) {
             $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
             $groupsId = array_keys($groups);
+            $subgroupsId = [];
 
             if (is_array($groupsId)) {
+                foreach ($groupsId as $groupId) {
+                    $subgroupsId = array_merge(
+                        $subgroupsId,
+                        GroupPortalManager::getGroupsByDepthLevel($groupId)
+                    );
+                }
+
+                $groupsId = array_merge(
+                    $groupsId,
+                    $subgroupsId
+                );
+
                 foreach ($groupsId as $groupId) {
                     $groupUsers = GroupPortalManager::get_users_by_group($groupId);
 

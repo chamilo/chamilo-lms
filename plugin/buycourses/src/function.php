@@ -365,7 +365,7 @@ if ($_REQUEST['tab'] == 'save_currency') {
     $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE country_id='" . $id . "';";
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToSaveTheCurrencyType') . Database::error();
+        $content = $plugin->get_lang('ProblemToSaveTheCurrencyType');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -386,7 +386,7 @@ if ($_REQUEST['tab'] == 'save_paypal') {
         WHERE id = '1';";
 
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToSaveThePaypalParameters') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
@@ -403,7 +403,7 @@ if ($_REQUEST['tab'] == 'add_account') {
         VALUES ('" . $name . "','" . $account . "', '" . $swift . "');";
 
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToInsertANewAccount') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
@@ -417,7 +417,7 @@ if ($_REQUEST['tab'] == 'delete_account') {
 
     $sql = "DELETE FROM $tableBuyCourseTransfer WHERE id='" . $id . "';";
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
@@ -479,7 +479,7 @@ if ($_REQUEST['tab'] == 'clear_order') {
     $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
 
     $res = Database::query($sql);
-    if (!res) {
+    if (!$res) {
         $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {

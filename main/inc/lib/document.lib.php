@@ -4581,6 +4581,9 @@ class DocumentManager
         $codePath = api_get_path(REL_CODE_PATH);
         $dir = '/certificates';
 
+        // Create certificates directory if it doesn't exist
+        DocumentManager::create_directory_certificate_in_course($courseData['code']);
+
         $title = get_lang('DefaultCertificate');
         $comment = null;
 

@@ -18,6 +18,13 @@ $certificate = new Certificate($_GET['id']);
 
 switch ($action) {
     case 'export':
+        if (
+            api_is_student() &&
+            api_get_configuration_value('hide_certificate_export_link_students')
+        ) {
+            api_not_allowed(true);
+        }
+
         $certificate->generate(array('hide_print_button' => true));
 
         if ($certificate->html_file_is_generated()) {

@@ -1859,6 +1859,13 @@ class Category implements GradebookItem
                     "$url&action=export"
                 );
 
+                if (
+                    api_is_student() &&
+                    api_get_configuration_value('hide_certificate_export_link_students')
+                ) {
+                    $exportToPDF = null;
+                }
+
                 $html = array(
                     'certificate_link' => $certificates,
                     'pdf_link' => $exportToPDF

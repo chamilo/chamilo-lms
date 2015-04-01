@@ -5287,4 +5287,37 @@ EOF;
         }
         return $url;
     }
+
+    /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path, enabling recovery of the directory
+     * with dirname(). This also works for the functions dealing with the
+     * user's productions, as they are located in the same directory.
+     * @param   integer User ID
+     * @param   string  Optional. Type of path to return (can be 'system', 'rel', 'web')
+     * @return  string  User path
+     */
+    public static function getUserPathById($id, $type = null)
+    {
+        $user_id = intval($id);
+        if (!$user_id) {
+            return null;
+        }
+        $userPath = "upload/users/$user_id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
+        }
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_CODE_PATH).$userPath;
+                break;
+            case 'rel': // Base: semi-absolute web path (no server base).
+                $userPath = api_get_path(REL_CODE_PATH).$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_CODE_PATH).$userPath;
+                break;
+        }
+        return $userPath;
+    }
 }

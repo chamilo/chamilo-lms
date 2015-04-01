@@ -303,7 +303,7 @@ class GroupPortalManager
                     $string_key = $temp[0];
                     $previous_key = $string_key.'_'.$index_key - 1;
                     if ($string_key == 'id' && isset($item[$key])) {
-                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_id];
+                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_key];
                     }
                 }
             }

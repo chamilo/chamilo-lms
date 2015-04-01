@@ -1861,14 +1861,15 @@ class Wiki
         $all_students_pages = array();
 
         //data about teacher
-        $userinfo = api_get_user_info(api_get_user_id());
+        $userId = api_get_user_id();
+        $userinfo = api_get_user_info($userId);
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
         $name = $userinfo['complete_name']." - ".$username;
 
         $photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
 
-        if (api_get_user_id() || api_get_configuration_value('gravatar_enabled')) {
-            $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
+        if ($userId) {
+            $image_path = UserManager::get_user_picture_path_by_id($userId, 'web', false, true);
             $image_repository = $image_path['dir'];
             $existing_image = $image_path['file'];
             $photo = '<img src="' . $image_repository . $existing_image . '" alt="' . $name . '"  width="40" height="50" align="top" title="' . $name . '"  />';
@@ -1878,7 +1879,7 @@ class Wiki
         $title_orig = $values['title'];
 
         //teacher assignment reflink
-        $link2teacher = $values['title'] = $title_orig."_uass".api_get_user_id();
+        $link2teacher = $values['title'] = $title_orig."_uass".$userId;
 
         //first: teacher name, photo, and assignment description (original content)
         // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
@@ -1892,7 +1893,7 @@ class Wiki
         //Second: student list (names, photo and links to their works).
         //Third: Create Students work pages.
         foreach ($a_users_to_add as $o_user_to_add) {
-            if ($o_user_to_add['user_id'] != api_get_user_id()) {
+            if ($o_user_to_add['user_id'] != $userId) {
                 //except that puts the task
                 $assig_user_id = $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher
                 $image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
@@ -1942,7 +1943,7 @@ class Wiki
         }
 
         foreach ($a_users_to_add as $o_user_to_add) {
-            if ($o_user_to_add['user_id'] == api_get_user_id()) {
+            if ($o_user_to_add['user_id'] == $userId) {
                 $assig_user_id=$o_user_to_add['user_id'];
                 if ($assignment_type == 1) {
                     $values['title']= $title_orig;
@@ -3238,13 +3239,14 @@ class Wiki
 
                     $user_id = $row['userc_id'];
                     $name = $userinfo['complete_name'];
-                    if ($user_id<>0) {
+
+                    $author_photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
+
+                    if ($user_id) {
                         $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
                         $image_repository = $image_path['dir'];
                         $existing_image = $image_path['file'];
                         $author_photo= '<img src="'.$image_repository.$existing_image.'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top" title="'.api_htmlentities($name).'"  />';
-                    } else {
-                        $author_photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
                     }
 
                     //stars

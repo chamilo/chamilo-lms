@@ -13,7 +13,6 @@ define('CHAMILO_HOMEPAGE', true);
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
 
 // The section (for the tabs).

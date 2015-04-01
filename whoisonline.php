@@ -15,8 +15,6 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 $_SESSION['who_is_online_counter'] = 2;
 
 $htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');

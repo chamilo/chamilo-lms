@@ -1350,7 +1350,8 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	public static function display_new_task_form ($blog_id) {
+	public static function display_new_task_form ($blog_id)
+	{
 		// Init
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
 
@@ -1526,37 +1527,30 @@ class Blog
 	}
 
 	/**
-	 * Displays assign task form
-	 * @author Toon Keppens
-	 *
+	 * @param $blog_id
+	 * @return FormValidator
 	 */
-	public static function display_assign_task_form($blog_id)
+	public static function getTaskForm($blog_id)
 	{
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
-		$day	= date("d");
-		$month	= date("m");
-		$year	= date("Y");
-		global $MonthsLong;
-
 		$course_id = api_get_course_int_id();
 
 		// Get users in this blog / make select list of it
-		$sql = "SELECT user.user_id, user.firstname, user.lastname, user.username FROM $tbl_users user
+		$sql = "SELECT user.user_id, user.firstname, user.lastname, user.username
+				FROM $tbl_users user
 				INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 				ON user.user_id = blogs_rel_user.user_id
 				WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = '".(int)$blog_id."'";
 		$result = Database::query($sql);
-		$select_user_list = '<select name="task_user_id">';
 
-		while($user = Database::fetch_array($result)) {
-            $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
-			$select_user_list .= '<option title="'.$username.'" value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']).'</option>';
+		$options = array();
+		while ($user = Database::fetch_array($result)) {
+			$username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
+			$options[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 		}
-		$select_user_list .= '</select>';
-
 
 		// Get tasks in this blog / make select list of it
 		$sql = "
@@ -1572,118 +1566,56 @@ class Blog
 			WHERE c_id = $course_id AND blog_id = " . (int)$blog_id . "
 			ORDER BY system_task, title";
 		$result = Database::query($sql);
-		$select_task_list = '<select name="task_task_id">';
 
-		while($task = Database::fetch_array($result))
-		{
-			$select_task_list .= '<option value="' . $task['task_id'] . '">'.stripslashes($task['title']) . '</option>';
+		$taskOptions = array();
+		while ($task = Database::fetch_array($result)) {
+			$taskOptions[$task['task_id']] = stripslashes($task['title']);
 		}
-		$select_task_list .= '</select>';
 
-		// form
-		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
+		$form = new FormValidator(
+			'assign_task',
+			'post',
+			api_get_path(
+				WEB_CODE_PATH
+			).'blog/blog.php?action=manage_tasks&blog_id='.$blog_id
+		);
 
-		// form title
-		echo '<legend>'.get_lang('AssignTask').'</legend>';
+		$form->addHeader(get_lang('AssignTask'));
+		$form->addSelect('task_user_id', get_lang('SelectUser'), $options);
+		$form->addSelect('task_task_id', get_lang('SelectTask'), $taskOptions);
+		$form->addDatePicker('task_day', get_lang('SelectTargetDate'));
 
-		// user
-		echo '	<div class="control-group">
-					<label class="control-label">
-						<span class="form_required">*</span>' . get_lang('SelectUser') . '
-					</label>
-					<div class="controls">
-						'.$select_user_list.'
-					</div>
-				</div>';
-
-		// task
-		echo '	<div class="control-group">
-					<label class="control-label">
-						<span class="form_required">*</span>' . get_lang('SelectTask') . '
-					</label>
-					<div class="controls">
-						'.$select_task_list.'
-					</div>
-				</div>';
-
-		// date
-		echo '	<div class="control-group">
-					<label class="control-label">
-						<span class="form_required">*</span>' . get_lang('SelectTargetDate') . '
-					</label>
-					<div class="controls">';
-		echo '			    <select name="task_day">';
-								for($i=1; $i<=31; $i++)
-								{
-									// values need to have double digits
-									$value = ($i <= 9 ? "0" . $i : $i);
-
-									// the current day is indicated with [] around the date
-									if($value==$day)
-									{ echo "\t\t\t\t <option value=\"" . $value."\" selected> " . $i." </option>\n";}
-									else
-									{ echo "\t\t\t\t <option value=\"" . $value."\">" . $i."</option>\n"; }
-								}
-							echo '</select>
-
-							<select name="task_month">';
-								for($i=1; $i<=12; $i++)
-								{
-									// values need to have double digits
-									$value = ($i <= 9 ? "0" . $i : $i);
-
-									if($value==$month)
-									{ echo "\t\t\t\t <option value=\"" . $value."\" selected>" . $MonthsLong[$i-1]."</option>\n"; }
-									else
-									{ echo "\t\t\t\t <option value=\"" . $value."\">" . $MonthsLong[$i-1]."</option>\n"; }
-								}
-							echo '</select>
-
-							<select name="task_year">
-								<option value="'.($year-1) . '">'.($year-1) . '</option>
-								<option value="' . $year . '" selected> ' . $year . ' </option>';
-								for($i=1; $i<=5; $i++)
-								{
-									$value=$year+$i;
-									echo "\t\t\t\t<option value=\"" . $value."\">" . $value."</option>\n";
-								}
-							echo '</select>
-							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>';
-		echo '		</div>
-				</div>';
-
-		// submit
-		echo '	<div class="control-group">
-					<label class="control-label">
-					</div>
-					<div class="controls">
-							<input type="hidden" name="action" value="" />
-							<input type="hidden" name="assign_task_submit" value="true" />
-						<button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button>
-					</div>
-				</div>';
-
-
-
-		echo '</form>';
-		echo '<div style="clear: both; margin-bottom:10px;"></div>';
+		$form->addHidden('action', '');
+		$form->addButtonSave(get_lang('Ok'));
+		return $form;
 	}
 
-		/**
+	/**
 	 * Displays assign task form
 	 * @author Toon Keppens
 	 *
 	 */
-	public static function display_edit_assigned_task_form ($blog_id, $task_id, $user_id) {
+	public static function display_assign_task_form($blog_id)
+	{
+		$form = self::getTaskForm($blog_id);
+		$form->addHidden('assign_task_submit', 'true');
+		$form->display();
+		echo '<div style="clear: both; margin-bottom:10px;"></div>';
+	}
+
+	/**
+	 * Displays assign task form
+	 * @author Toon Keppens
+	 *
+	 */
+	public static function display_edit_assigned_task_form($blog_id, $task_id, $user_id)
+	{
 		$tbl_users 					= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user 		= Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$tbl_blogs_tasks 			= Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_blogs_tasks_rel_user 	= Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
 		$course_id = api_get_course_int_id();
-
-		$year	= date("Y");
-		global $MonthsLong;
 
 		// Get assignd date;
 		$sql = "
@@ -1696,116 +1628,20 @@ class Blog
 		$result = Database::query($sql);
 		$row = Database::fetch_assoc($result);
 
-		$old_date = $row['target_date'];
-		$date = explode('-', $row['target_date']);
+		$date = $row['target_date'];
 
-		// Get users in this blog / make select list of it
-		$sql = "
-			SELECT user.user_id, user.firstname, user.lastname, user.username
-			FROM $tbl_users user
-			INNER JOIN $tbl_blogs_rel_user blogs_rel_user ON user.user_id = blogs_rel_user.user_id
-			WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = '".(int)$blog_id."'";
-		$result = Database::query($sql);
-
-		$select_user_list = '<select name="task_user_id">';
-		while($user = Database::fetch_array($result)) {
-            $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
-			$select_user_list .= '<option title="'.$username.'"' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
-		}
-
-		$select_user_list .= '</select>';
-
-		// Get tasks in this blog / make select list of it
-		$sql = "
-			SELECT
-				blog_id,
-				task_id,
-				title,
-				description,
-				color,
-				system_task
-			FROM " . $tbl_blogs_tasks . "
-			WHERE c_id = $course_id AND blog_id = " . (int)$blog_id . "
-			ORDER BY system_task, title";
-		$result = Database::query($sql);
-
-		$select_task_list = '<select name="task_task_id">';
-
-		while($task = Database::fetch_array($result)) {
-			//if(!in_array($task['task_id'], $arrUserTasks) || $task_id == $task['task_id'])
-				$select_task_list .= '<option ' . (($task_id == $task['task_id']) ? 'selected="selected "' : ' ') . 'value="' . $task['task_id'] . '">'.stripslashes($task['title']) . '</option>';
-		}
-
-		$select_task_list .= '</select>';
-
-		// Display
-		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">
-				<table width="100%" border="0" cellspacing="2" cellpadding="0" style="background-color: #f6f6f6; border: 1px solid #dddddd">
-				  <tr>
-				  	<td width="200"></td>
-				  	<td><b>' . get_lang('AssignTask') . '</b><br /><br /></td>
-				  </tr>
-					<tr>
-				   <td align="right">' . get_lang('SelectUser') . ':&nbsp;&nbsp;</td>
-				   <td>' . $select_user_list . '</td>
-					</tr>
-					<tr>
-				   <td align="right">' . get_lang('SelectTask') . ':&nbsp;&nbsp;</td>
-				   <td>' . $select_task_list . '</td>
-					</tr>
-					<tr>
-				   <td align="right">' . get_lang('SelectTargetDate') . ':&nbsp;&nbsp;</td>
-				   <td>
-				    <select name="task_day">';
-
-							for($i=1; $i<=31; $i++)
-							{
-								// values need to have double digits
-								$value = ($i <= 9 ? "0" . $i : $i);
-
-								echo "\t\t\t\t<option " . (($date[2] == $value) ? 'selected="selected "' : ' ') . "value=\"" . $value . "\">" . $i . "</option>\n";
-							}
-
-						echo '</select>
-
-						<select name="task_month">';
-
-							for($i=1; $i<=12; $i++)
-							{
-								// values need to have double digits
-								$value = ($i <= 9 ? "0" . $i : $i);
-
-								echo "\t\t\t\t<option " . (($date[1] == $value) ? 'selected="selected "' : ' ') . "value=\"" . $value . "\">" . $MonthsLong[$i-1]."</option>\n";
-							}
-
-						echo '</select>
-
-						<select name="task_year">
-							<option value="' . ($year - 1) . '">' . ($year - 1) . '</option>
-							<option value="' . $year . '" selected> ' . $year . ' </option>';
-
-							for($i=1; $i<=5; $i++)
-							{
-								$value = $year + $i;
-
-								echo "\t\t\t\t<option " . (($date[0] == $value) ? 'selected="selected "' : ' ') . "value=\"" . $value . "\">" . $value . "</option>\n";
-							}
-
-						echo '</select>
-						<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>
-					 </td>
-					</tr>
-					<tr>
-						<td align="right">&nbsp;</td>
-						<input type="hidden" name="action" value="" />
-						<input type="hidden" name="old_task_id" value="' . $task_id . '" />
-						<input type="hidden" name="old_user_id" value="' . $user_id . '" />
-						<input type="hidden" name="old_target_date" value="' . $old_date . '" />
-						<input type="hidden" name="assign_task_edit_submit" value="true" />
-						<td><br /><button class="save type="submit" name="Submit">' . get_lang('Ok') . '</button></td>
-					</tr>
-				</table>
-			</form>';
+		$defaults = [
+			'task_user_id' => $user_id,
+			'task_task_id' => $task_id,
+			'task_day' => $date
+		];
+		$form = self::getTaskForm($blog_id);
+		$form->addHidden('old_task_id', $task_id);
+		$form->addHidden('old_user_id', $user_id);
+		$form->addHidden('old_target_date', $date);
+		$form->addHidden('assign_task_edit_submit', 'true');
+		$form->setDefaults($defaults);
+		$form->display();
 	}
 
 	/**
@@ -1816,9 +1652,8 @@ class Blog
 	 * @param Integer $task_id
 	 * @param Date $target_date
 	 */
-	public static function assign_task ($blog_id, $user_id, $task_id, $target_date)
+	public static function assign_task($blog_id, $user_id, $task_id, $target_date)
 	{
-
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		$course_id = api_get_course_int_id();
 
@@ -1831,10 +1666,10 @@ class Blog
 			AND	task_id = " . (int)$task_id . "
 		";
 
-		$result = @Database::query($sql);
+		$result = Database::query($sql);
 		$row = Database::fetch_assoc($result);
 
-		if($row['number'] == 0) {
+		if ($row['number'] == 0) {
 			$sql = "
 				INSERT INTO " . $tbl_blogs_tasks_rel_user . " (
 					c_id,
@@ -1850,7 +1685,7 @@ class Blog
 					'" . Database::escape_string($target_date) . "'
 				)";
 
-			$result = @Database::query($sql);
+			$result = Database::query($sql);
 		}
 	}
 
@@ -2039,7 +1874,7 @@ class Blog
 			if(!in_array($user['user_id'],$blog_member_ids)) {
 				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();
-				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
+				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.((isset($_GET['selectall']) && $_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
 				$username = api_htmlentities(sprintf(get_lang('LoginX'), $a_infosUser["username"]), ENT_QUOTES);
 				if ($is_western_name_order) {
 					$row[] = $a_infosUser["firstname"];
@@ -2129,7 +1964,7 @@ class Blog
 
 		while($myrow = Database::fetch_array($sql_result)) {
 			$row = array ();
-			$row[] = '<input type="checkbox" name="user[]" value="' . $myrow['user_id'] . '" '.(($_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '') . '/>';
+			$row[] = '<input type="checkbox" name="user[]" value="' . $myrow['user_id'] . '" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '') . '/>';
 			$username = api_htmlentities(sprintf(get_lang('LoginX'), $myrow["username"]), ENT_QUOTES);
 			if ($is_western_name_order) {
 				$row[] = $myrow["firstname"];
@@ -2161,7 +1996,7 @@ class Blog
 			//Link to register users
 
 			if($myrow["user_id"] != $_user['user_id']) {
-				$row[] = "<a class=\"btn btn-primary\" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow[user_id]."\">" . get_lang('UnRegister')."</a>";
+				$row[] = "<a class=\"btn btn-primary\" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;unregister=yes&amp;user_id=" . $myrow['user_id']."\">" . get_lang('UnRegister')."</a>";
 			} else {
 				$row[] = '';
 			}
@@ -2318,38 +2153,34 @@ class Blog
 		if( Database::num_rows($result) > 0) {
 			while($blog_post = Database::fetch_array($result)) {
 				// If the day of this post is not yet in the array, add it.
-				if(!in_array($blog_post['post_day'], $posts))
+				if (!in_array($blog_post['post_day'], $posts))
 					$posts[] = $blog_post['post_day'];
 			}
 		}
 
 		// Get tasks for this month
-		if($_user['user_id']) {
+		if ($_user['user_id']) {
 			$sql = " SELECT task_rel_user.*,  DAYOFMONTH(target_date) as task_day, task.title, blog.blog_name
 				FROM $tbl_blogs_tasks_rel_user task_rel_user
 				INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 				INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 				WHERE
-				task_rel_user.c_id = $course_id AND
-				task.c_id = $course_id AND
-				blog.c_id = $course_id AND
-				task_rel_user.user_id = '".(int)$_user['user_id']."'
-				AND	MONTH(target_date) = '".(int)$month."'
-				AND	YEAR(target_date) = '".(int)$year."'
+					task_rel_user.c_id = $course_id AND
+					task.c_id = $course_id AND
+					blog.c_id = $course_id AND
+					task_rel_user.user_id = '".(int)$_user['user_id']."' AND
+					MONTH(target_date) = '".(int)$month."' AND
+					YEAR(target_date) = '".(int)$year."'
 				ORDER BY target_date ASC";
 			$result = Database::query($sql);
 
-			if (Database::num_rows($result) > 0)
-			{
-				while($mytask = Database::fetch_array($result))
-				{
-
+			if (Database::num_rows($result) > 0) {
+				while ($mytask = Database::fetch_array($result)) {
 					$tasks[$mytask['task_day']][$mytask['task_id']]['task_id'] = $mytask['task_id'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['title'] = $mytask['title'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['blog_id'] = $mytask['blog_id'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['blog_name'] = $mytask['blog_name'];
 					$tasks[$mytask['task_day']][$mytask['task_id']]['day'] = $mytask['task_day'];
-					//echo '<li><a href="blog.php?action=execute_task&amp;blog_id=' . $mytask['blog_id'] . '&amp;task_id='.stripslashes($mytask['task_id']) . '" title="[Blog: ' . $mytask['blog_name'] . '] ' . get_lang('ExecuteThisTask') . '">'.stripslashes($mytask['title']) . '</a></li>';
 				}
 			}
 		}
@@ -2358,38 +2189,34 @@ class Blog
 				"<tr id=\"title\">\n",
 				"<th width=\"10%\"><a href=\"", $backwardsURL, "\">&laquo;</a></th>\n",
 				"<th align=\"center\" width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n",
-				"<th width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></th>\n", "</tr>\n";
+				"<th width=\"10%\" align=\"right\"><a href=\"", $forewardsURL, "\">&raquo;</a></th>\n", "</tr>";
 
 		echo "<tr>\n";
 
 		for($ii = 1; $ii < 8; $ii ++)
-			echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>\n";
+			echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
 
-		echo "</tr>\n";
+		echo "</tr>";
 
 		$curday = -1;
 		$today = getdate();
 
-		while($curday <= $numberofdays[$month])
-		{
-			echo "<tr>\n";
-
-			for($ii = 0; $ii < 7; $ii ++)
-			{
-				if(($curday == -1) && ($ii == $startdayofweek))
+		while ($curday <= $numberofdays[$month]) {
+			echo "<tr>";
+			for ($ii = 0; $ii < 7; $ii ++) {
+				if (($curday == -1) && ($ii == $startdayofweek))
 					$curday = 1;
 
-				if(($curday > 0) && ($curday <= $numberofdays[$month])) {
+			 	if (($curday > 0) && ($curday <= $numberofdays[$month])) {
 					$bgcolor = $ii < 5 ? $class="class=\"days_week\"" : $class="class=\"days_weekend\"";
 					$dayheader = "$curday";
 
-					if(($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon']))
-					{
+					if(($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
 						$dayheader = "$curday";
 						$class = "class=\"days_today\"";
 					}
 
-					echo "\t<td " . $class.">";
+					echo "<td " . $class.">";
 
 					// If there are posts on this day, create a filter link.
 					if(in_array($curday, $posts))
@@ -2397,30 +2224,24 @@ class Blog
 					else
 						echo $dayheader;
 
-					if (count($tasks) > 0)
-					{
-						if (is_array($tasks[$curday]))
-						{
+					if (count($tasks) > 0) {
+						if (isset($tasks[$curday]) && is_array($tasks[$curday])) {
 							// Add tasks to calendar
-							foreach ($tasks[$curday] as $task)
-							{
-								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '"><img src="../img/blog_task.gif" alt="Task" title="' . get_lang('ExecuteThisTask') . '" /></a>';
+							foreach ($tasks[$curday] as $task) {
+								echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $task['blog_id'] . '&amp;task_id='.stripslashes($task['task_id']) . '" title="' . $task['title'] . ' : ' . get_lang('InBlog') . ' : ' . $task['blog_name'] . ' - ' . get_lang('ExecuteThisTask') . '">
+								<img src="../img/blog_task.gif" alt="Task" title="' . get_lang('ExecuteThisTask') . '" /></a>';
 							}
 						}
 					}
 
-					echo "</td>\n";
-
+					echo "</td>";
 					$curday ++;
-				}
-				else
-					echo "<td>&nbsp;</td>\n";
+				} else
+					echo "<td>&nbsp;</td>";
 			}
-
-			echo "</tr>\n";
+			echo "</tr>";
 		}
-
-		echo "</table>\n";
+		echo "</table>";
 	}
 
 	/**

@@ -23,12 +23,12 @@ api_protect_admin_script();
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Filltering passed to this page parameters.
-$accept_course_request = intval($_GET['accept_course_request']);
-$delete_course_request = intval($_GET['delete_course_request']);
-$request_info = intval($_GET['request_info']);
-$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
+$accept_course_request = isset($_GET['accept_course_request']) ? intval($_GET['accept_course_request']) : '';
+$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$request_info = isset($_GET['request_info']) ? intval($_GET['request_info']) : '';
+$message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
 $is_error_message = !empty($_GET['is_error_message']);
-$keyword = Database::escape_string(trim($_GET['keyword']));
+$keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
 
@@ -109,17 +109,23 @@ function get_number_of_requests() {
  */
 function get_request_data($from, $number_of_items, $column, $direction) {
     global $keyword;
-
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
-    $sql = "SELECT id AS col0,
-                   code AS col1,
-                   title AS col2,
-                   category_code AS col3,
-                   tutor_name AS col4,
-                   request_date AS col5,
-                   id  AS col6
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_REJECTED;
+    $from = intval($from);
+    $number_of_items = intval($number_of_items);
+    $column = intval($column);
+    $direction = !in_array(strtolower(trim($direction)), ['asc','desc']) ? 'asc' : $direction;
+
+    $sql = "SELECT
+                id AS col0,
+               code AS col1,
+               title AS col2,
+               category_code AS col3,
+               tutor_name AS col4,
+               request_date AS col5,
+               id  AS col6
+           FROM $course_request_table
+           WHERE status = ".COURSE_REQUEST_REJECTED;
 
     if ($keyword != '') {
         $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
@@ -182,7 +188,6 @@ $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-//echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
 echo ' <a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
 echo ' <a href="course_request_accepted.php">'.Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').'</a>';
 echo '</div>';
@@ -192,7 +197,6 @@ echo '</div>';
 
 // Create a sortable table with the course data.
 $table = new SortableTable('course_requests_rejected', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
-//$table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));
 $table->set_header(2, get_lang('Title'));

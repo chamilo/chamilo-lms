@@ -23,8 +23,8 @@ api_protect_admin_script();
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Filltering passed to this page parameters.
-$delete_course_request = intval($_GET['delete_course_request']);
-$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
+$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
 $is_error_message = !empty($_GET['is_error_message']);
 
 if ($course_validation_feature) {
@@ -84,17 +84,28 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
     $course_request_table = Database :: get_main_table(TABLE_MAIN_COURSE_REQUEST);
 
-    $sql = "SELECT id AS col0,
-                   code AS col1,
-                   title AS col2,
-                   category_code AS col3,
-                   tutor_name AS col4,
-                   request_date AS col5,
-                   id  AS col6
-                   FROM $course_request_table WHERE status = ".COURSE_REQUEST_ACCEPTED;
+    $from = intval($from);
+    $number_of_items = intval($number_of_items);
+    $column = intval($column);
+    $direction = !in_array(strtolower(trim($direction)), ['asc','desc']) ? 'asc' : $direction;
+
+    $sql = "SELECT
+                id AS col0,
+               code AS col1,
+               title AS col2,
+               category_code AS col3,
+               tutor_name AS col4,
+               request_date AS col5,
+               id  AS col6
+           FROM $course_request_table
+           WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
     if ($keyword != '') {
-        $sql .= " AND (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
+        $sql .= " AND (
+                title LIKE '%".$keyword."%' OR
+                code LIKE '%".$keyword."%' OR
+                visual_code LIKE '%".$keyword."%'
+            )";
     }
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
@@ -149,7 +160,6 @@ $form->addButtonSearch(get_lang('Search'));
 
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
-//echo '<a href="course_list.php">'.Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
 echo ' <a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
 echo ' <a href="course_request_rejected.php">'.Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
 echo '</div>';
@@ -159,7 +169,6 @@ echo '</div>';
 
 // Create a sortable table with the course data.
 $table = new SortableTable('course_requests_accepted', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
-//$table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Code'));
 $table->set_header(2, get_lang('Title'));

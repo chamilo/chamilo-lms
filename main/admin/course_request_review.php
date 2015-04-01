@@ -24,13 +24,13 @@ api_protect_admin_script();
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Filltering passed to this page parameters.
-$accept_course_request = intval($_GET['accept_course_request']);
-$reject_course_request = intval($_GET['reject_course_request']);
-$request_info = intval($_GET['request_info']);
-$delete_course_request = intval($_GET['delete_course_request']);
-$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
-$is_error_message = !empty($_GET['is_error_message']);
-$keyword = Database::escape_string(trim($_GET['keyword']));
+$accept_course_request = isset($_GET['accept_course_request']) ? intval($_GET['accept_course_request']) : '';
+$reject_course_request = isset($_GET['reject_course_request']) ? intval($_GET['reject_course_request']) : '';
+$request_info = isset($_GET['request_info']) ? intval($_GET['request_info']) : '';
+$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
+$is_error_message = isset($_GET['is_error_message']) ? !empty($_GET['is_error_message']) : '';
+$keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
 

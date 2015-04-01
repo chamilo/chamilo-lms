@@ -1,19 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Blog class
+ * Class Blog
+ *
  * Contains several functions dealing with displaying,
  * editing,... of a blog
- *
- * @version 1.0
+
  * @package chamilo.blogs
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
- *
- */
-/**
- * Class
- * @package chamilo.blogs
  */
 class Blog
 {
@@ -21,11 +17,12 @@ class Blog
 	 * Get the title of a blog
 	 * @author Toon Keppens
 	 *
-	 * @param Integer $blog_id
+	 * @param int $blog_id
 	 *
 	 * @return String Blog Title
 	 */
-	public static function get_blog_title ($blog_id) {
+	public static function get_blog_title ($blog_id)
+	{
 	    $course_id = api_get_course_int_id();
 
 		if(is_numeric($blog_id)) {
@@ -51,11 +48,12 @@ class Blog
 	 *
 	 * @return String Blog description
 	 */
-	public static function get_blog_subtitle ($blog_id) {
-		// init
+	public static function get_blog_subtitle ($blog_id)
+	{
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-          $course_id = api_get_course_int_id();
-		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE c_id = $course_id AND blog_id ='".intval($blog_id)."'";
+	  	$course_id = api_get_course_int_id();
+		$sql = "SELECT blog_subtitle FROM $tbl_blogs
+				WHERE c_id = $course_id AND blog_id ='".intval($blog_id)."'";
 		$result = Database::query($sql);
 		$blog = Database::fetch_array($result);
 		return stripslashes($blog['blog_subtitle']);
@@ -79,7 +77,8 @@ class Blog
 
 		// Get blog members
 		$sql = "SELECT user.user_id, user.firstname, user.lastname
-				FROM " . $tbl_blogs_rel_user . " blogs_rel_user INNER JOIN " . $tbl_users . " user ON blogs_rel_user.user_id = user.user_id
+				FROM " . $tbl_blogs_rel_user . " blogs_rel_user
+				INNER JOIN " . $tbl_users . " user ON blogs_rel_user.user_id = user.user_id
 				WHERE	blogs_rel_user.c_id = $course_id AND
 						blogs_rel_user.blog_id = '" . (int)$blog_id."'";
 		$result = Database::query($sql);
@@ -112,7 +111,8 @@ class Blog
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 
 		//verified if exist blog
-		$sql='SELECT COUNT(*) as count FROM '.$tbl_blogs.'  WHERE c_id = '.$course_id.' AND blog_name="'.Database::escape_string($title).'" AND blog_subtitle="'.Database::escape_string($subtitle).'";';
+		$sql = 'SELECT COUNT(*) as count FROM '.$tbl_blogs.'
+			  	WHERE c_id = '.$course_id.' AND blog_name="'.Database::escape_string($title).'" AND blog_subtitle="'.Database::escape_string($subtitle).'";';
 		$res=Database::query($sql);
 		$info_count=Database::result($res,0,0);
 
@@ -130,12 +130,12 @@ class Blog
 
 			// Make first post. :)
 			$sql = "INSERT INTO $tbl_blogs_posts (c_id, title, full_text, date_creation, blog_id, author_id )
-						VALUES ($course_id, '".get_lang("Welcome")."', '" . get_lang('FirstPostText')."','".$current_date."', '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
+					VALUES ($course_id, '".get_lang("Welcome")."', '" . get_lang('FirstPostText')."','".$current_date."', '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
 			Database::query($sql);
 
 			// Put it on course homepage
 			$sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id)
-						VALUES ($course_id, '".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id')";
+					VALUES ($course_id, '".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id')";
 			Database::query($sql);
 
 			// Subscribe the teacher to this blog
@@ -150,8 +150,9 @@ class Blog
 	 * @param String $title
 	 * @param Text $description
 	 */
-	public static function edit_blog ($blog_id, $title, $subtitle) {
-		global $_user;
+	public static function edit_blog($blog_id, $title, $subtitle)
+	{
+		$_user = api_get_user_info();
 
 		// Table definitions
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
@@ -178,7 +179,8 @@ class Blog
 	 * @author Toon Keppens
 	 * @param Integer $blog_id
 	 */
-	public static function delete_blog ($blog_id) {
+	public static function delete_blog ($blog_id)
+	{
 		// Init
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_blogs_posts 	= Database::get_course_table(TABLE_BLOGS_POSTS);
@@ -279,7 +281,6 @@ class Blog
 						$sql = 'INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size, blog_id,comment_id) '.
 							   "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
 						Database::query($sql);
-						//Display::display_confirmation_message(get_lang('AttachmentUpload'));
 					}
 				}
 			}
@@ -296,7 +297,8 @@ class Blog
 	 * @param String $full_text
 	 * @param Integer $blog_id
 	 */
-	public static function edit_post ($post_id, $title, $full_text, $blog_id) {
+	public static function edit_post ($post_id, $title, $full_text, $blog_id)
+	{
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
         $course_id = api_get_course_int_id();
@@ -310,11 +312,11 @@ class Blog
 	/**
 	 * Deletes an article and it's comments
 	 * @author Toon Keppens
-	 * @param Integer $blog_id
-	 * @param Integer $post_id
+	 * @param int $blog_id
+	 * @param int $post_id
 	 */
-	public static function delete_post($blog_id, $post_id) {
-		// Init
+	public static function delete_post($blog_id, $post_id)
+	{
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
@@ -322,15 +324,18 @@ class Blog
         $course_id = api_get_course_int_id();
 
 		// Delete ratings on this comment
-		$sql = "DELETE FROM $tbl_blogs_rating WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND item_id = '".(int)$post_id."' AND rating_type = 'post'";
+		$sql = "DELETE FROM $tbl_blogs_rating
+				WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND item_id = '".(int)$post_id."' AND rating_type = 'post'";
 		Database::query($sql);
 
 		// Delete the post
-		$sql = "DELETE FROM $tbl_blogs_posts WHERE c_id = $course_id AND post_id = '".(int)$post_id."'";
+		$sql = "DELETE FROM $tbl_blogs_posts
+				WHERE c_id = $course_id AND post_id = '".(int)$post_id."'";
 		Database::query($sql);
 
 		// Delete the comments
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE c_id = $course_id AND post_id = '".(int)$post_id."' AND blog_id = '".(int)$blog_id."'";
+		$sql = "DELETE FROM $tbl_blogs_comments
+				WHERE c_id = $course_id AND post_id = '".(int)$post_id."' AND blog_id = '".(int)$blog_id."'";
 		Database::query($sql);
 
 		// Delete posts and attachments
@@ -401,7 +406,6 @@ class Blog
 						$sql='INSERT INTO '.$blog_table_attachment.'(c_id, filename,comment, path, post_id,size,blog_id,comment_id) '.
 							 "VALUES ($course_id, '".Database::escape_string($file_name)."', '".$comment."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
 						Database::query($sql);
-						//$message.=' / '.get_lang('AttachmentUpload');
 					}
 				}
 			}
@@ -570,7 +574,8 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $task_id
 	 */
-	public static function delete_task ($blog_id, $task_id) {
+	public static function delete_task($blog_id, $task_id)
+	{
 		$tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
 		$course_id = api_get_course_int_id();
 
@@ -585,7 +590,7 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
 	 */
-	public static function delete_assigned_task ($blog_id, $task_id, $user_id)
+	public static function delete_assigned_task($blog_id, $task_id, $user_id)
 	{
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
         $course_id = api_get_course_int_id();
@@ -601,8 +606,9 @@ class Blog
 	 * @author Toon Keppens
 	 * @return Returns an unsorted list (<ul></ul>) with the users' tasks
 	 */
-	public static function get_personal_task_list () {
-		global $_user;
+	public static function get_personal_task_list()
+	{
+		$_user = api_get_user_info();
 
 		// Init
 		$tbl_blogs 					= Database::get_course_table(TABLE_BLOGS);
@@ -611,8 +617,9 @@ class Blog
 
 		$course_id = api_get_course_int_id();
 
-		if($_user['user_id']) {
-			$sql = "SELECT task_rel_user.*, task.title, blog.blog_name FROM $tbl_blogs_tasks_rel_user task_rel_user
+		if ($_user['user_id']) {
+			$sql = "SELECT task_rel_user.*, task.title, blog.blog_name
+			FROM $tbl_blogs_tasks_rel_user task_rel_user
 			INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 			INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 			AND blog.blog_id = ".intval($_GET['blog_id'])."
@@ -646,7 +653,6 @@ class Blog
 	 */
 	public static function change_blog_visibility($blog_id)
 	{
-		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 		$course_id = api_get_course_int_id();
@@ -662,16 +668,19 @@ class Blog
 		if($visibility == 1)
 		{
 			// Change visibility state, remove from course home.
-			$sql = "UPDATE $tbl_blogs SET visibility = '0' WHERE c_id = $course_id AND blog_id ='".(int)$blog_id."' LIMIT 1";
+			$sql = "UPDATE $tbl_blogs SET visibility = '0'
+					WHERE c_id = $course_id AND blog_id ='".(int)$blog_id."' LIMIT 1";
 			$result = Database::query($sql);
 
-			$sql = "DELETE FROM $tbl_tool WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' LIMIT 1";
+			$sql = "DELETE FROM $tbl_tool
+					WHERE c_id = $course_id AND name = '".Database::escape_string($title)."' LIMIT 1";
 			$result = Database::query($sql);
 		}
 		else
 		{
 			// Change visibility state, add to course home.
-			$sql = "UPDATE $tbl_blogs SET visibility = '1' WHERE c_id = $course_id AND blog_id ='".(int)$blog_id."' LIMIT 1";
+			$sql = "UPDATE $tbl_blogs SET visibility = '1'
+					WHERE c_id = $course_id AND blog_id ='".(int)$blog_id."' LIMIT 1";
 			Database::query($sql);
 
 			$sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, target )
@@ -680,14 +689,13 @@ class Blog
 		}
 	}
 
-
 	/**
 	 * Shows the posts of a blog
 	 * @author Toon Keppens
 	 *
 	 * @param Integer $blog_id
 	 */
-	public static function display_blog_posts ($blog_id, $filter = '1=1', $max_number_of_posts = 20) {
+	public static function display_blog_posts($blog_id, $filter = '1=1', $max_number_of_posts = 20) {
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
@@ -710,7 +718,9 @@ class Blog
 		    $limit = 200;
 			while($blog_post = Database::fetch_array($result)) {
 				// Get number of comments
-				$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '" . (int)$blog_post['post_id']."'";
+				$sql = "SELECT COUNT(1) as number_of_comments
+						FROM $tbl_blogs_comments
+						WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '" . (int)$blog_post['post_id']."'";
 				$tmp = Database::query($sql);
 				$blog_post_comments = Database::fetch_array($tmp);
 
@@ -769,7 +779,8 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param String $query_string
 	 */
-	public static function display_search_results ($blog_id, $query_string) {
+	public static function display_search_results ($blog_id, $query_string)
+	{
 		// Init
 		$query_string = Database::escape_string($query_string);
 		$query_string_parts = explode(' ',$query_string);
@@ -790,7 +801,8 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param String $query_string
 	 */
-	public static function display_day_results ($blog_id, $query_string) {
+	public static function display_day_results($blog_id, $query_string)
+	{
 		// Init
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
@@ -810,13 +822,14 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
 	 */
-	public static function display_post ($blog_id, $post_id) {
+	public static function display_post($blog_id, $post_id)
+	{
 		// Init
 		$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 		$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 
-		global $charset,$dateFormatLong;
+		global $charset, $dateFormatLong;
 
 		$course_id = api_get_course_int_id();
 
@@ -833,7 +846,8 @@ class Blog
 		$blog_post = Database::fetch_array($result);
 
 		// Get number of comments
-		$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '".(int)$post_id."'";
+		$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments
+				WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND post_id = '".(int)$post_id."'";
 		$result = Database::query($sql);
 		$blog_post_comments = Database::fetch_array($result);
 
@@ -882,8 +896,7 @@ class Blog
 		echo '</div>';
 
 		// Display comments if there are any
-		if($blog_post_comments['number_of_comments'] > 0)
-		{
+		if($blog_post_comments['number_of_comments'] > 0) {
 			echo '<div class="comments">';
 				echo '<span class="blogpost_title">' . get_lang('Comments') . '</span><br />';
 				Blog::get_threaded_comments(0, 0, $blog_id, $post_id, $task_id);
@@ -908,8 +921,9 @@ class Blog
 	 *
 	 * @return Boolean success
 	 */
-	public static function add_rating ($type, $blog_id, $item_id, $rating) {
-		global $_user;
+	public static function add_rating($type, $blog_id, $item_id, $rating)
+	{
+		$_user = api_get_user_info();
 
 		// Init
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
@@ -946,12 +960,14 @@ class Blog
 	 *
 	 * @return array()
 	 */
-	public static function display_rating ($type, $blog_id, $item_id) {
+	public static function display_rating ($type, $blog_id, $item_id)
+	{
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
 		$course_id = api_get_course_int_id();
 
 		// Calculate rating
-		$sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND item_id = '".(int)$item_id."' AND rating_type = '".Database::escape_string($type)."' ";
+		$sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating
+				WHERE c_id = $course_id AND blog_id = '".(int)$blog_id."' AND item_id = '".(int)$item_id."' AND rating_type = '".Database::escape_string($type)."' ";
 		$result = Database::query($sql);
 		$result = Database::fetch_array($result);
 		return round($result['rating'], 2);
@@ -967,8 +983,9 @@ class Blog
 	 *
 	 *@return String
 	 */
-	public static function display_rating_form ($type, $blog_id, $post_id, $comment_id = NULL) {
-		global $_user;
+	public static function display_rating_form ($type, $blog_id, $post_id, $comment_id = NULL)
+	{
+		$_user = api_get_user_info();
 		$tbl_blogs_rating = Database::get_course_table(TABLE_BLOGS_RATING);
         $course_id = api_get_course_int_id();
 
@@ -1021,7 +1038,8 @@ class Blog
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
 	 */
-	public static function get_threaded_comments ($current = 0, $current_level = 0, $blog_id, $post_id, $task_id = 0) {
+	public static function get_threaded_comments ($current = 0, $current_level = 0, $blog_id, $post_id, $task_id = 0)
+	{
 		// Init
 		$tbl_blogs_comments 	= Database::get_course_table(TABLE_BLOGS_COMMENTS);
 		$tbl_users 				= Database::get_main_table(TABLE_MAIN_USER);
@@ -1512,7 +1530,8 @@ class Blog
 	 * @author Toon Keppens
 	 *
 	 */
-	public static function display_assign_task_form ($blog_id) {
+	public static function display_assign_task_form($blog_id)
+	{
 		// Init
 		$tbl_users = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
@@ -1532,8 +1551,7 @@ class Blog
 		$result = Database::query($sql);
 		$select_user_list = '<select name="task_user_id">';
 
-		while($user = Database::fetch_array($result))
-		{
+		while($user = Database::fetch_array($result)) {
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $user['username']), ENT_QUOTES);
 			$select_user_list .= '<option title="'.$username.'" value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 		}
@@ -1798,8 +1816,9 @@ class Blog
 	 * @param Integer $task_id
 	 * @param Date $target_date
 	 */
-	public static function assign_task ($blog_id, $user_id, $task_id, $target_date) {
-		// Init
+	public static function assign_task ($blog_id, $user_id, $task_id, $target_date)
+	{
+
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		$course_id = api_get_course_int_id();
 
@@ -1835,8 +1854,9 @@ class Blog
 		}
 	}
 
-	public static function edit_assigned_task ($blog_id, $user_id, $task_id, $target_date, $old_user_id, $old_task_id, $old_target_date) {
-		// Init
+	public static function edit_assigned_task ($blog_id, $user_id, $task_id, $target_date, $old_user_id, $old_task_id, $old_target_date)
+	{
+
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
 		$course_id = api_get_course_int_id();
@@ -1968,17 +1988,20 @@ class Blog
 	 *
 	 * @return Html Form with sortable table with users to subcribe in a blog, in a course.
 	 */
-	public static function display_form_user_subscribe ($blog_id) {
-		// Init
-		global $_course;
+	public static function display_form_user_subscribe($blog_id)
+	{
+		$_course = api_get_course_info();
 		$is_western_name_order = api_is_western_name_order();
-		$currentCourse = $_course['sysCode'];
+		$session_id = api_get_session_id();
+		$course_id = api_get_course_int_id();
+
+		$currentCourse = $_course['code'];
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 		echo '<legend>'.get_lang('SubscribeMembers').'</legend>';
-		$course_id = api_get_course_int_id();
+
 		$properties["width"] = "100%";
 
 		// Get blog members' id.
@@ -1989,8 +2012,7 @@ class Blog
 		$result = Database::query($sql);
 
 		$blog_member_ids = array();
-		while($user = Database::fetch_array($result))
-		{
+		while($user = Database::fetch_array($result)) {
 			$blog_member_ids[] = $user['user_id'];
 		}
 
@@ -2006,18 +2028,11 @@ class Blog
 		$column_header[] = array (get_lang('Email'), false, '');
 		$column_header[] = array (get_lang('Register'), false, '');
 
-		if(isset($_SESSION['session_id'])){
-			$session_id = intval($_SESSION['session_id']);
-		}
-		else{
-			$session_id = 0;
-		}
-
 		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, false, $session_id);
-		$user_data = array ();
+		$user_data = array();
 
 		// Add users that are not in this blog to the list.
-		foreach($student_list as $key=>$user) {
+		foreach ($student_list as $key=>$user) {
 			if(isset($user['id_user'])) {
 				$user['user_id'] = $user['id_user'];
 			}
@@ -2036,12 +2051,9 @@ class Blog
 				$row[] = Display::icon_mailto_link($a_infosUser["email"]);
 
 				//Link to register users
-				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
-				{
+				if ($a_infosUser["user_id"] != $_SESSION['_user']['user_id']){
 					$row[] = "<a class=\"btn btn-primary \" href=\"" .api_get_self()."?action=manage_members&amp;blog_id=$blog_id&amp;register=yes&amp;user_id=" . $a_infosUser["user_id"]."\">" . get_lang('Register')."</a>";
-				}
-				else
-				{
+				} else {
 					$row[] = '';
 				}
 				$user_data[] = $row;
@@ -2068,7 +2080,6 @@ class Blog
 		echo '</form>';
 	}
 
-
 	/**
 	 * Displays the form to register users in a blog (in a course)
 	 * The listed users are users subcribed in the course.
@@ -2078,8 +2089,9 @@ class Blog
 	 *
 	 * @return Html Form with sortable table with users to unsubcribe from a blog.
 	 */
-	public static function display_form_user_unsubscribe ($blog_id) {
-		global $_user;
+	public static function display_form_user_unsubscribe ($blog_id)
+	{
+		$_user = api_get_user_info();
 		$is_western_name_order = api_is_western_name_order();
 
 		// Init
@@ -2254,10 +2266,10 @@ class Blog
 	 *
 	 * @return html code
 	*/
-	public static function display_minimonthcalendar ($month, $year, $blog_id)
+	public static function display_minimonthcalendar($month, $year, $blog_id)
 	{
 		// Init
-		global $_user;
+		$_user = api_get_user_info();
 		global $DaysShort;
 		global $MonthsLong;
 
@@ -2473,7 +2485,8 @@ class Blog
 	 * Blog admin | Returns table with blogs in this course
 	 */
 	public static function display_blog_list () {
-		global $charset, $_user;
+		global $charset;
+		$_user = api_get_user_info();
         $course_id = api_get_course_int_id();
 		// Init
 		$counter = 0;
@@ -2541,7 +2554,6 @@ class Blog
 			$table->display();
 		}
 	}
-
 }
 
 /**
@@ -2601,14 +2613,14 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 
 function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 {
-
-	global $_course;
+	$_course = api_get_course_info();
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 	$blog_id = intval($blog_id);
 	$comment_id = intval($comment_id);
 	$post_id = intval($post_id);
 
     $course_id = api_get_course_int_id();
+	$where = null;
 
 	// delete files in DB
 	if (!empty ($post_id) && is_numeric($post_id) )
@@ -2644,38 +2656,40 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE c_id = '.$course_id.' AND  blog_id ="'.intval($blog_id).'"  '.$where;
 	Database::query($sql);
 }
+
 /**
  * Gets all the post from a given user id
  * @param string db course name
  * @param int user id
  */
-function get_blog_post_from_user($course_code, $user_id) {
-		$tbl_blogs 		= Database::get_course_table(TABLE_BLOGS);
-		$tbl_blog_post 	= Database::get_course_table(TABLE_BLOGS_POSTS);
-		$course_info 	= api_get_course_info($course_code);
-		$course_id 		= $course_info['real_id'];
+function get_blog_post_from_user($course_code, $user_id)
+{
+	$tbl_blogs 		= Database::get_course_table(TABLE_BLOGS);
+	$tbl_blog_post 	= Database::get_course_table(TABLE_BLOGS_POSTS);
+	$course_info 	= api_get_course_info($course_code);
+	$course_id 		= $course_info['real_id'];
 
-		$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
-				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_post post
-				ON (blog.blog_id = post.blog_id)
-				WHERE
-					blog.c_id = $course_id AND
-					post.c_id = $course_id AND
-					author_id =  $user_id AND visibility = 1
-				ORDER BY post.date_creation DESC ";
-		$result = Database::query($sql);
-		$return_data = '';
+	$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
+			FROM $tbl_blogs blog INNER JOIN  $tbl_blog_post post
+			ON (blog.blog_id = post.blog_id)
+			WHERE
+				blog.c_id = $course_id AND
+				post.c_id = $course_id AND
+				author_id =  $user_id AND visibility = 1
+			ORDER BY post.date_creation DESC ";
+	$result = Database::query($sql);
+	$return_data = '';
 
-		if (Database::num_rows($result)!=0) {
-			while ($row=Database::fetch_array($result)) {
-				$return_data.=  '<div class="clear"></div><br />';
-	 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('blog_article.png',get_lang('BlogPosts')).' '.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_id.' " >'.get_lang('SeeBlog').'</a></div></div>';
-	 			$return_data.=  '<br / >';
-				$return_data.= $row['full_text'];
-				$return_data.= '<br /><br />';
-			}
+	if (Database::num_rows($result)!=0) {
+		while ($row=Database::fetch_array($result)) {
+			$return_data.=  '<div class="clear"></div><br />';
+			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('blog_article.png',get_lang('BlogPosts')).' '.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_id.' " >'.get_lang('SeeBlog').'</a></div></div>';
+			$return_data.=  '<br / >';
+			$return_data.= $row['full_text'];
+			$return_data.= '<br /><br />';
 		}
-		return $return_data;
+	}
+	return $return_data;
 }
 
 /**
@@ -2684,34 +2698,33 @@ function get_blog_post_from_user($course_code, $user_id) {
  * @param int user id
  */
 function get_blog_comment_from_user($course_code, $user_id) {
-		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
-		$tbl_blog_comment 	= Database::get_course_table(TABLE_BLOGS_COMMENTS);
-		$user_id 			= intval($user_id);
+	$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
+	$tbl_blog_comment 	= Database::get_course_table(TABLE_BLOGS_COMMENTS);
+	$user_id 			= intval($user_id);
 
-		$course_info 		= api_get_course_info($course_code);
-		$course_id 			= $course_info['real_id'];
+	$course_info 		= api_get_course_info($course_code);
+	$course_id 			= $course_info['real_id'];
 
-		$sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment
-				ON (blog.blog_id = comment.blog_id)
-				WHERE 	blog.c_id = $course_id AND
-						comment.c_id = $course_id AND
-						author_id =  $user_id AND
-						visibility = 1
-				ORDER BY blog_name";
-		$result = Database::query($sql);
-		$return_data = '';
-		if (Database::num_rows($result)!=0) {
-			while ($row=Database::fetch_array($result)) {
-				$return_data.=  '<div class="clear"></div><br />';
-	 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($course_code).' " >'.get_lang('SeeBlog').'</a></div></div>';
-	 			$return_data.=  '<br / >';
-				//$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';*/
-				$return_data.=  $row['comment'];
-				$return_data.=  '<br />';
-			}
+	$sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
+			FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment
+			ON (blog.blog_id = comment.blog_id)
+			WHERE 	blog.c_id = $course_id AND
+					comment.c_id = $course_id AND
+					author_id =  $user_id AND
+					visibility = 1
+			ORDER BY blog_name";
+	$result = Database::query($sql);
+	$return_data = '';
+	if (Database::num_rows($result)!=0) {
+		while ($row=Database::fetch_array($result)) {
+			$return_data.=  '<div class="clear"></div><br />';
+			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.Security::remove_XSS($course_code).' " >'.get_lang('SeeBlog').'</a></div></div>';
+			$return_data.=  '<br / >';
+			//$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';*/
+			$return_data.=  $row['comment'];
+			$return_data.=  '<br />';
 		}
-		return $return_data;
+	}
+	return $return_data;
 }
 
-?>

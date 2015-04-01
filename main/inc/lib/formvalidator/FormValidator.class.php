@@ -227,6 +227,28 @@ EOT;
 
     /**
      * @param string $name
+     * @param string $label
+     * @param array $attributes
+     * @return mixed
+     */
+    public function addDatePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DatePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     * @return mixed
+     */
+    public function addDateTimePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DateTimePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      */
     public function addHidden($name, $value)

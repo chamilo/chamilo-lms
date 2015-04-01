@@ -4590,17 +4590,6 @@ CREATE TABLE c_thematic_advance(
 
 ALTER TABLE c_thematic_advance ADD INDEX (thematic_id);
 
-CREATE TABLE IF NOT EXISTS c_metadata (
-  c_id INT NOT NULL,
-  eid VARCHAR(250) NOT NULL,
-  mdxmltext TEXT default '',
-  md5 CHAR(32) default '',
-  htmlcache1 TEXT default '',
-  htmlcache2 TEXT default '',
-  indexabletext TEXT default '',
-  PRIMARY KEY (c_id, eid)
-);
-
 DROP TABLE IF EXISTS c_student_publication_rel_document;
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
 DROP TABLE IF EXISTS c_student_publication_rel_user;
@@ -4618,5 +4607,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.34' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

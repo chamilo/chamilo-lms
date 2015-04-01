@@ -284,7 +284,6 @@ class AddCourse
         $tables[] = 'thematic';
         $tables[] = 'thematic_plan';
         $tables[] = 'thematic_advance';
-        $tables[] = 'metadata';
 
         return $tables;
     }

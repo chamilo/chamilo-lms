@@ -128,5 +128,7 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY N
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
 
+DROP TABLE c_metadata;
+
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.34' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';

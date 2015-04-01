@@ -1045,23 +1045,7 @@ class DocumentManager
             $sql = "DELETE FROM $TABLE_DOCUMENT
                     WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
             Database::query($sql);
-            self::delete_document_metadata($document_id);
         }
-    }
-
-    /**
-     * @param int $document_id
-     */
-    public static function delete_document_metadata($document_id)
-    {
-        // needed to deleted medadata
-        require_once api_get_path(SYS_CODE_PATH) . 'metadata/md_funcs.php';
-        $mdStore = new mdstore(true);
-
-        //delete metadata
-        $eid = 'Document' . '.' . $document_id;
-        $mdStore->mds_delete($eid);
-        $mdStore->mds_delete_offspring($eid);
     }
 
     /**

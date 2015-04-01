@@ -86,9 +86,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 )
             )
         );
+
         if (empty($result)) {
-            require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
-            $extraField = new Extrafield('user');
+            $extraField = new ExtraField('user');
             $extraField->save(array(
                 'field_type' => 1,
                 'field_variable' => 'area',

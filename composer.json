@@ -48,6 +48,7 @@
         "jbroadway/urlify": "1.0.3-stable",
         "monolog/monolog": "~1.0",
         "doctrine/orm": "~2.2,>=2.2.3,<2.5",
+        "doctrine/migrations": "1.0.*@dev",
         "symfony/doctrine-bridge": "2.6.4",
         "symfony/validator": "2.6.4",
         "gedmo/doctrine-extensions": "~2.3",

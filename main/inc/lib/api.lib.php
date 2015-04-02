@@ -1417,26 +1417,24 @@ function _api_format_user($user, $add_password = false)
     }
     $image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
 
-    if ($picture_filename) {
-        if (file_exists($image_sys_path)) {
-            $result['avatar'] = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
-            $result['avatar_small'] = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
-            $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
-        } else if (api_get_configuration_value('gravatar_enabled')) {
-            $userEmail = isset($user['email']) ? $user['email'] : '';
-            $gravatarType = api_get_configuration_value('gravatar_type');
-            $avatarPaths = array(
-                'avatar' => $result['avatar'],
-                'avatar_small' => $result['avatar_small'],
-                'avatar_sys_path' => $result['avatar_sys_path']
-            );
-            foreach ($avatarPaths as $key => $value) {
-                $avatarSize = api_getimagesize($value);
-                $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                    $avatarSize['width'] :
-                    $avatarSize['height'];
-                $result[$key] = UserManager::getGravatar($userEmail, $avatarSize, $gravatarType);
-            }
+    if ($picture_filename && file_exists($image_sys_path)) {
+        $result['avatar'] = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
+        $result['avatar_small'] = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
+        $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
+    } else if (api_get_configuration_value('gravatar_enabled')) {
+        $userEmail = isset($user['email']) ? $user['email'] : '';
+        $gravatarType = api_get_configuration_value('gravatar_type');
+        $avatarPaths = array(
+            'avatar' => $result['avatar'],
+            'avatar_small' => $result['avatar_small'],
+            'avatar_sys_path' => $result['avatar_sys_path']
+        );
+        foreach ($avatarPaths as $key => $value) {
+            $avatarSize = api_getimagesize($value);
+            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
+                $avatarSize['width'] :
+                $avatarSize['height'];
+            $result[$key] = UserManager::getGravatar($userEmail, $avatarSize, $gravatarType);
         }
     }
 

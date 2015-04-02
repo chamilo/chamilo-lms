@@ -912,8 +912,10 @@ class GroupPortalManager
                 $base = '';
         }
 
+        $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+
         if (empty($id) || empty($type)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
         $id = intval($id);
@@ -923,7 +925,7 @@ class GroupPortalManager
         $res = Database::query($sql);
 
         if (!Database::num_rows($res)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
         $user = Database::fetch_array($res);
@@ -940,9 +942,11 @@ class GroupPortalManager
         } else {
             $dir = $base.'upload/users/groups/'.$id.'/';
         }
+
         if (empty($picture_filename) && $anonymous) {
-            return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+            return $noPicturePath;
         }
+
         return array('dir' => $dir, 'file' => $picture_filename);
     }
 

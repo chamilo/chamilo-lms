@@ -89,15 +89,15 @@ class Certificate extends Model
         $this->certification_user_path = null;
 
         //Setting certification path
-        $path_info = UserManager::get_user_picture_path_by_id($this->user_id, 'system');
-        $web_path_info = UserManager::get_user_picture_path_by_id($this->user_id, 'web');
+        $path_info = UserManager::getUserPathById($this->user_id, 'system');
+        $web_path_info = UserManager::getUserPathById($this->user_id, 'web');
 
-        if (!empty($path_info) && isset($path_info['dir'])) {
-            $this->certification_user_path = $path_info['dir'].'certificate/';
-            $this->certification_web_user_path = $web_path_info['dir'].'certificate/';
+        if (!empty($path_info) && isset($path_info)) {
+            $this->certification_user_path = $path_info.'certificate/';
+            $this->certification_web_user_path = $web_path_info.'certificate/';
 
-            if (!is_dir($path_info['dir'])) {
-                mkdir($path_info['dir'], 0777, true);
+            if (!is_dir($path_info)) {
+                mkdir($path_info, 0777, true);
             }
             if (!is_dir($this->certification_user_path)) {
                 mkdir($this->certification_user_path, 0777);

@@ -218,6 +218,52 @@ class GroupPortalManager
     }
 
     /**
+     * Get the subgroups ID from a group.
+     * The default $levels value is 10 considering it as a extensive level of depth
+     * @param int $groupId The parent group ID
+     * @param int $levels The depth levels
+     * @return array The list of ID
+     */
+    public static function getGroupsByDepthLevel($groupId, $levels = 10)
+    {
+        $groups = array();
+
+        $groupTable = Database::get_main_table(TABLE_MAIN_GROUP);
+        $groupRelGroupTable = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
+
+        $select = "SELECT ";
+        $from = "FROM $groupTable g1 ";
+
+        for ($i = 1; $i <= $levels; $i++) {
+            $gNumber = $i;
+            $ggNumber = $i - 1;
+
+            $select .= "g$i.id as id_$i ";
+
+            $select .= ($i != $levels ? ", " : null);
+
+            if ($i == 1) {
+                $from .= "INNER JOIN $groupRelGroupTable gg0 ON g1.id = gg0.subgroup_id and gg0.group_id = $groupId ";
+            } else {
+                $from .= "LEFT JOIN $groupRelGroupTable gg$ggNumber ON g$ggNumber.id = gg$ggNumber.group_id ";
+                $from .= "LEFT JOIN $groupTable g$gNumber ON gg$ggNumber.subgroup_id = g$gNumber.id ";
+            }
+        }
+
+        $result = Database::query("$select $from");
+
+        while ($item = Database::fetch_assoc($result)) {
+            foreach ($item as $groupId) {
+                if (!empty($groupId)) {
+                    $groups[] = $groupId;
+                }
+            }
+        }
+
+        return array_map('intval', $groups);
+    }
+
+    /**
      * @param int $root
      * @param int $level
      * @return array
@@ -234,7 +280,7 @@ class GroupPortalManager
             if ($i == $level) {
                 $select_part .= "g$i.id as id_$i, g$i.name as name_$i ";
             } else {
-                $select_part .="g$i.id as id_$i, g$i.name name_$i, ";
+                $select_part .= "g$i.id as id_$i, g$i.name name_$i, ";
             }
             if ($i == 1) {
                 $cond_part .= "FROM $t_group g1 JOIN $t_rel_group rg0 on g1.id = rg0.subgroup_id and rg0.group_id = $root ";
@@ -257,7 +303,7 @@ class GroupPortalManager
                     $string_key = $temp[0];
                     $previous_key = $string_key.'_'.$index_key - 1;
                     if ($string_key == 'id' && isset($item[$key])) {
-                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_id];
+                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_key];
                     }
                 }
             }

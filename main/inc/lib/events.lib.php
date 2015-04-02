@@ -655,12 +655,12 @@ class Event
         }
         $event_type = Database::escape_string($event_type);
         $event_value_type = Database::escape_string($event_value_type);
-        if (empty($course_id)) {
+        if (!empty($course_id)) {
             $course_id = intval($course_id);
         } else {
             $course_id = api_get_course_int_id();
         }
-        if (empty($sessionId)) {
+        if (!empty($sessionId)) {
             $sessionId = intval($sessionId);
         } else {
             $sessionId = api_get_session_id();

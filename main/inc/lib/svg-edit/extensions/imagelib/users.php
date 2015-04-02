@@ -10,11 +10,9 @@ require_once '../../../../../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
-$user_disk_path = $my_path['dir'].'my_files/';
-
-$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web');
-$user_web_path = $my_path['dir'].'my_files/';
+$userId = api_get_user_id();
+$user_disk_path = UserManager::getUserPathById($userId, 'system').'my_files/';
+$user_web_path = UserManager::getUserPathById($userId, 'web').'my_files/';
 
 //get all files and folders
 $scan_files = scandir($user_disk_path);

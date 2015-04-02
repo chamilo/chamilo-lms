@@ -338,7 +338,10 @@ elseif ($displayMode == "viewContentEdit") {
         $big_image_size = api_getimagesize($big_image);
         $big_image_width= $big_image_size['width'];
         $big_image_height= $big_image_size['height'];
-        $url_big_image = $big_image.'?rnd='.time();
+        $url_big_image = $image_array['file'];
+        if (!api_get_configuration_value('gravatar_enabled')) {
+            $url_big_image = $big_image.'?rnd='.time();
+        }
 
         if ($image_array['file']=='unknown.jpg') {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
@@ -428,8 +431,10 @@ elseif ($displayMode == "viewContentEdit") {
         $big_image_size = api_getimagesize($big_image);
         $big_image_width= $big_image_size['width'];
         $big_image_height= $big_image_size['height'];
-        $url_big_image = $big_image.'?rnd='.time();
-
+        $url_big_image = $image_array['file'];
+        if (!api_get_configuration_value('gravatar_enabled')) {
+            $url_big_image = $big_image.'?rnd='.time();
+        }
         if ($image_array['file']=='unknown.jpg') {
             echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
         } else {

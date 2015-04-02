@@ -1234,10 +1234,10 @@ class UserManager
             default: // Base: empty, the result path below will be relative.
                 $base = '';
         }
-
+        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
         $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 
-        if (empty($id) || empty($type)) {
+        if ((empty($id) || empty($type)) && !$gravatarEnabled) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1247,7 +1247,7 @@ class UserManager
         $sql = "SELECT email, picture_uri FROM $user_table WHERE user_id=".$user_id;
         $res = Database::query($sql);
 
-        if (!Database::num_rows($res)) {
+        if (!Database::num_rows($res) && !$gravatarEnabled) {
             return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
@@ -1265,27 +1265,23 @@ class UserManager
             $dir = $base.$userPath;
         }
 
-        if (empty($picture_filename) ||
-            (!empty($picture_filename) && !file_exists($systemImagePath.$picture_filename))
-        ) {
-            if ($anonymous) {
-                return $noPicturePath;
-            }
+        if ($gravatarEnabled) {
+            $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
+            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
+                $avatarSize['width'] :
+                $avatarSize['height'];
+            return array(
+                'dir' => '',
+                'file' => self::getGravatar(
+                    $user['email'],
+                    $avatarSize,
+                    api_get_configuration_value('gravatar_type')
+                )
+            );
+        }
 
-            if (api_get_configuration_value('gravatar_enabled')) {
-                $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
-                $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                    $avatarSize['width'] :
-                    $avatarSize['height'];
-                return array(
-                    'dir' => '',
-                    'file' => self::getGravatar(
-                        $user['email'],
-                        $avatarSize,
-                        api_get_configuration_value('gravatar_type')
-                    )
-                );
-            }
+        if (empty($picture_filename) && $anonymous) {
+            return $noPicturePath;
         }
 
         return array('dir' => $dir, 'file' => $picture_filename);
@@ -3247,6 +3243,7 @@ class UserManager
      */
     public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM, $style = '')
     {
+        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
@@ -3261,7 +3258,9 @@ class UserManager
                     break;
             }
             $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
-            return $picture;
+            if (!$gravatarEnabled) {
+                return $picture;
+            }
         }
 
         switch ($size_picture) {
@@ -3318,6 +3317,9 @@ class UserManager
                         break;
                 }
             }
+        }
+        if ($gravatarEnabled) {
+            $picture['file'] = $image_array['file'];
         }
         return $picture;
     }
@@ -5284,5 +5286,36 @@ EOF;
             $url .= ' />';
         }
         return $url;
+    }
+
+    /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path to a folder ending with "/"
+     * @param   integer User ID
+     * @param   string  Optional. Type of path to return (can be 'system', 'rel', 'web')
+     * @return  string  User folder path (i.e. /var/www/chamilo/main/upload/users/1/1/)
+     */
+    public static function getUserPathById($id, $type = null)
+    {
+        $user_id = intval($id);
+        if (!$user_id) {
+            return null;
+        }
+        $userPath = "upload/users/$user_id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
+        }
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_CODE_PATH).$userPath;
+                break;
+            case 'rel': // Base: semi-absolute web path (no server base).
+                $userPath = api_get_path(REL_CODE_PATH).$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_CODE_PATH).$userPath;
+                break;
+        }
+        return $userPath;
     }
 }

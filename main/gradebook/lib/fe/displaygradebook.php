@@ -720,7 +720,12 @@ class DisplayGradebook
         //Web path
         $image_path = UserManager::get_user_picture_path_by_id($userid, 'web', false, true);
         $image_file = $image_path['dir'] . $image_path['file'];
-        $img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' . 'alt="' . $user['complete_name'] . '" ';
+
+        if (!api_get_configuration_value('gravatar_enabled')) {
+            $image_file .= '?rand='.time();
+        }
+
+        $img_attributes = 'src="' . $image_file . '" ' . 'alt="' . $user['complete_name'] . '" ';
         if ($image_size[0] > 200) {
             //limit display width to 200px
             $img_attributes .= 'width="200" ';

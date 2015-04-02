@@ -173,8 +173,7 @@ class ExtraFieldValue extends Model
                                     $fileDir = "upload/sessions/";
                                     break;
                                 case 'user':
-                                    $userPath = UserManager::get_user_picture_path_by_id($this->handler_id);
-                                    $fileDir = $userPath['dir'];
+                                    $fileDir = UserManager::getUserPathById($this->handler_id);
                                     break;
                             }
 
@@ -213,8 +212,7 @@ class ExtraFieldValue extends Model
                                     $fileDir = "upload/sessions/";
                                     break;
                                 case 'user':
-                                    $userPath = UserManager::get_user_picture_path_by_id($this->handler_id);
-                                    $fileDir = $userPath['dir'];
+                                    $fileDir = UserManager::getUserPathById($this->handler_id);
                                     break;
                             }
 

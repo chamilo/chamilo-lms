@@ -48,7 +48,11 @@ $image_size = getimagesize($image_syspath['dir'].$image_syspath['file']);
 $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false,true);
 $image_file = $image_path['dir'].$image_path['file'];
 
-$img_attributes = 'src="'.$image_file.'?rand='.time().'" '
+if (!api_get_configuration_value('gravatar_enabled')) {
+    $image_file .= '?rand='.time();
+}
+
+$img_attributes = 'src="'.$image_file.'" '
     .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
     .'style="float:left; padding:5px;" ';
 

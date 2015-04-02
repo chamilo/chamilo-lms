@@ -17,6 +17,9 @@
 /*		CONSTANTS */
 
 use \ChamiloSession as Session;
+use Chamilo\UserBundle\Entity\User;
+
+require_once __DIR__.'/../../vendor/autoload.php';
 
 define('SYSTEM_INSTALLATION', 1);
 define('INSTALL_TYPE_UPDATE', 'update');
@@ -31,17 +34,12 @@ require_once '../inc/lib/api.lib.php';
 
 api_check_php_version('../inc/');
 
-/*		INITIALIZATION SECTION */
+/* INITIALIZATION SECTION */
 
 ob_implicit_flush(true);
 session_start();
-
-require_once api_get_path(SYS_PATH).'vendor/autoload.php';
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
-require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once 'install.lib.php';
-require_once 'install.class.php';
-require_once 'i_database.class.php';
 
 // This value is use in database::query in order to prompt errors in the error log (course databases)
 Database::$log_queries = true;
@@ -104,7 +102,7 @@ error_reporting(E_ALL);
 @set_time_limit(0);
 
 // Upgrading from any subversion of 1.9
-$update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10');
+$update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10', '1.9.10.2');
 
 $my_old_version = '';
 if (empty($tmp_version)) {
@@ -182,15 +180,10 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 }
 
 if (!isset($_GET['running'])) {
-
-	$dbHostForm		= 'localhost';
+	$dbHostForm = 'localhost';
 	$dbUsernameForm = 'root';
-	$dbPassForm		= '';
- 	$dbPrefixForm   = '';
-	$dbNameForm		= 'chamilo';
-	$dbStatsForm    = 'chamilo';
-	$dbScormForm    = 'chamilo';
-	$dbUserForm		= 'chamilo';
+	$dbPassForm = '';
+	$dbNameForm = 'chamilo';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath  = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -216,15 +209,13 @@ if (!isset($_GET['running'])) {
 	$institutionUrlForm = 'http://www.chamilo.org';
 	$languageForm	    = api_get_interface_language();
 
-	$checkEmailByHashSent	= 0;
+	$checkEmailByHashSent = 0;
 	$ShowEmailnotcheckedToStudent = 1;
-	$userMailCanBeEmpty		= 1;
-	$allowSelfReg			= 1;
-	$allowSelfRegProf		= 1;
-	$enableTrackingForm		= 1;
-	$singleDbForm			= 0;
-	$encryptPassForm		= 'sha1';
-	$session_lifetime		= 360000;
+	$userMailCanBeEmpty = 1;
+	$allowSelfReg = 1;
+	$allowSelfRegProf = 1;
+	$encryptPassForm = 'sha1';
+	$session_lifetime = 360000;
 } else {
 	foreach ($_POST as $key => $val) {
 		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
@@ -286,25 +277,10 @@ if ($encryptPassForm == '1') {
 	<script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready( function() {
-
             $("#button_please_wait").hide();
-
-			 //checked
-			if ($('#singleDb1').attr('checked')==false) {
-				//$('#dbStatsForm').removeAttr('disabled');
-				//$('#dbUserForm').removeAttr('disabled');
-				$('#dbStatsForm').attr('value','chamilo_main');
-				$('#dbUserForm').attr('value','chamilo_main');
-			} else if($('#singleDb1').attr('checked')==true){
-				//$('#dbStatsForm').attr('disabled','disabled');
-				//$('#dbUserForm').attr('disabled','disabled');
-				$('#dbStatsForm').attr('value','chamilo_main');
-				$('#dbUserForm').attr('value','chamilo_main');
-			}
-
 			$("button").addClass('btn btn-default');
 
-    		//Allow Chamilo install in IE
+    		// Allow Chamilo install in IE
     		$("button").click(function() {
     			$("#is_executable").attr("value",$(this).attr("name"));
     		});
@@ -319,62 +295,7 @@ if ($encryptPassForm == '1') {
         	});
 	 	});
 
-		function show_hide_tracking_and_user_db (my_option) {
-			if (my_option=='singleDb1') {
-				$('#optional_param2').hide();
-				$('#optional_param4').hide();
-
-				$('#dbStatsForm').attr('value','chamilo_main');
-				$('#dbUserForm').attr('value','chamilo_main');
-			} else if (my_option=='singleDb0') {
-				$('#optional_param2').show();
-				$('#optional_param4').show();
-
-				$('#dbStatsForm').attr('value','chamilo_main');
-				$('#dbUserForm').attr('value','chamilo_main');
-			}
-		}
-
 		init_visibility=0;
-		function show_hide_option() {
-			if (init_visibility == 0) {
-				$('#optional_param1').show();
-
-				if ($('#singleDb1').attr("checked") == true) {
-					//$('#optional_param2').hide();
-					//$('#optional_param4').hide();
-					$('#optional_param5').hide();
-				} else {
-					//$('#optional_param2').show();
-					//$('#optional_param4').show();
-					$('#optional_param5').show();
-                }
-
-				//document.getElementById('optional_param2').style.display = '';
-				if (document.getElementById('optional_param3')) {
-					document.getElementById('optional_param3').style.display = '';
-				}
-
-				//document.getElementById('optional_param5').style.display = '';
-				//document.getElementById('optional_param6').style.display = '';
-				init_visibility = 1;
-				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
-			} else {
-				document.getElementById('optional_param1').style.display = 'none';
-				/*document.getElementById('optional_param2').style.display = 'none';
-				if (document.getElementById('optional_param3')) {
-					document.getElementById('optional_param3').style.display = 'none';
-				}
-				document.getElementById('optional_param4').style.display = 'none';
-				*/
-				document.getElementById('optional_param5').style.display = 'none';
-				//document.getElementById('optional_param6').style.display = 'none';
-				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
-				init_visibility = 0;
-			}
-			return false;
-		}
-
         $(document).ready( function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
@@ -446,8 +367,6 @@ if ($encryptPassForm == '1') {
             </div>
         </div>
 	</header>
-    <br />
-
     <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     ?>
@@ -494,24 +413,7 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="dbHostForm"           value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
 	<input type="hidden" name="dbUsernameForm"       value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
 	<input type="hidden" name="dbPassForm"           value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="singleDbForm"         value="<?php echo api_htmlentities($singleDbForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbPrefixForm"         value="<?php echo api_htmlentities($dbPrefixForm, ENT_QUOTES); ?>" />
 	<input type="hidden" name="dbNameForm"           value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
-<?php
-	if ($installType == 'update' OR $singleDbForm == 0) {
-?>
-	<input type="hidden" name="dbStatsForm"          value="<?php echo api_htmlentities($dbStatsForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbScormForm"          value="<?php echo api_htmlentities($dbScormForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbUserForm"           value="<?php echo api_htmlentities($dbUserForm, ENT_QUOTES); ?>" />
-<?php
-	} else {
-?>
-	<input type="hidden" name="dbStatsForm"          value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbUserForm"           value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
-<?php
-	}
-?>
-	<input type="hidden" name="enableTrackingForm"   value="<?php echo api_htmlentities($enableTrackingForm, ENT_QUOTES); ?>" />
 	<input type="hidden" name="allowSelfReg"         value="<?php echo api_htmlentities($allowSelfReg, ENT_QUOTES); ?>" />
 	<input type="hidden" name="allowSelfRegProf"     value="<?php echo api_htmlentities($allowSelfRegProf, ENT_QUOTES); ?>" />
 	<input type="hidden" name="emailForm"            value="<?php echo api_htmlentities($emailForm, ENT_QUOTES); ?>" />
@@ -544,13 +446,7 @@ if (@$_POST['step2']) {
 		$dbHostForm,
 		$dbUsernameForm,
 		$dbPassForm,
-		$dbPrefixForm,
-		$enableTrackingForm,
-		$singleDbForm,
-		$dbNameForm,
-		$dbStatsForm,
-		$dbScormForm,
-		$dbUserForm
+		$dbNameForm
 	);
 } elseif (@$_POST['step4']) {
 	//STEP 5 : CONFIGURATION SETTINGS
@@ -630,7 +526,6 @@ if (@$_POST['step2']) {
 		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
 	</div><br />
 
-	<blockquote>
     <?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
@@ -649,7 +544,7 @@ if (@$_POST['step2']) {
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong>
+	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
@@ -660,19 +555,16 @@ if (@$_POST['step2']) {
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
 	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
 	<?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
-
-	</blockquote>
-
-	<?php if ($installType == 'new'): ?>
-	<div style="background-color:#FFFFFF">
-		<div class="warning-message">
-            <center>
-                <h3><?php echo get_lang('Warning'); ?> !</h3>
-                <?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
-            </center>
-		</div>
-	</div>
-	<?php endif; ?>
+	<?php
+	if ($installType == 'new') {
+		echo Display::display_warning_message(
+			'<h3 style="text-align: center">'.get_lang(
+				'Warning'
+			).'</h3><br />'.get_lang('TheInstallScriptWillEraseAllTables'),
+			false
+		);
+	}
+	?>
 
 	<table width="100%">
         <tr>
@@ -751,7 +643,138 @@ if (@$_POST['step2']) {
     } else {
 		set_file_folder_permissions();
 
-		$manager = require 'install_db.inc.php';
+		$manager = testDbConnect(
+			$dbHostForm,
+			$dbUsernameForm,
+			$dbPassForm,
+			null
+		);
+
+		$dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
+
+		// Create database
+		$createDatabase = true;
+		$databases = $manager->getConnection()->getSchemaManager()->listDatabases();
+
+		if (in_array($dbNameForm, $databases)) {
+			$createDatabase = false;
+		}
+
+		// Create database
+		if ($createDatabase) {
+			//$manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+			//$manager->getConnection()->getSchemaManager()->createDatabase($dbNameForm);
+		}
+		// Drop the database anyways
+		$manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+
+		$manager = testDbConnect(
+			$dbHostForm,
+			$dbUsernameForm,
+			$dbPassForm,
+			$dbNameForm
+		);
+
+		$metadatas = $manager->getMetadataFactory()->getAllMetadata();
+		$schema = $manager->getConnection()->getSchemaManager()->createSchema();
+
+		$tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
+		$tool->createSchema($metadatas);
+
+		// Inserting data
+		$data = file_get_contents('data.sql');
+		$result = $manager->getConnection()->prepare($data);
+		$result->execute();
+		$result->closeCursor();
+
+		// Create users
+		switch ($encryptPassForm) {
+			case 'md5' :
+				$passToStore = md5($passForm);
+				break;
+			case 'sha1' :
+				$passToStore = sha1($passForm);
+				break;
+			case 'none' :
+			default:
+				$passToStore = $passForm;
+				break;
+		}
+
+		$sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
+		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
+		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
+		Database::query($sql);
+
+		// The chosen during the installation platform language should be enabled.
+		$sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
+		Database::query($sql);
+
+		// Install settings
+
+		installSettings(
+			$institutionForm,
+			$institutionUrlForm,
+			$campusForm,
+			$emailForm,
+			$adminLastName,
+			$adminFirstName,
+			$languageForm,
+			$allowSelfReg,
+    		$allowSelfRegProf
+		);
+
+		// Config doctrine migrations
+
+		/*$db = DriverManager::getConnection(array(
+			'dbname' => $dbNameForm,
+			'user' => $dbUsernameForm,
+			'password' => $dbPassForm,
+			'host' => $dbHostForm,
+			'driver' => 'pdo_mysql',
+			'charset' => 'utf8',
+			'driverOptions' => array(
+				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+			)
+		));
+
+		$config = new Configuration($db);
+
+		// Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
+		$config->setMigrationsTableName('version');
+		// Namespace of your migration classes, do not forget escape slashes, do not add last slash
+		$config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\v1');
+		// Directory where your migrations are located
+
+		$config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v1');
+		// Load your migrations
+		$config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
+		$migration = new Migration($config);
+		$to = null;
+		// Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
+		$versions = $migration->getSql($to);
+		$nl = '<br>';
+		foreach ($versions as $version => $queries) {
+			echo 'VERSION: ' . $version . $nl;
+			echo '----------------------------------------------' . $nl . $nl;
+
+			foreach ($queries as $query) {
+				echo $query . $nl . $nl;
+			}
+
+			echo $nl . $nl;
+		}
+
+		try {
+			$migration->migrate($to); // Execute migration!
+			echo 'DONE' . $nl;
+		} catch (Exception $ex) {
+			echo 'ERROR: ' . $ex->getMessage() . $nl;
+		}
+		exit;*/
+
+		//$manager = require 'install_db.inc.php';
+
 		include 'install_files.inc.php';
 	}
     display_after_install_message($installType);

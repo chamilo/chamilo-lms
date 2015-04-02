@@ -98,7 +98,7 @@ class CourseRelUser
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="course", cascade={"persist"})
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
      */
-    protected $group;
+    //protected $group;
 
     /**
      * Constructor

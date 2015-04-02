@@ -19,6 +19,7 @@ class Database
      * @var EntityManager
      */
     private static $em;
+    private static $connection;
 
     /**
      * @param EntityManager $em
@@ -26,6 +27,22 @@ class Database
     public function setManager($em)
     {
         self::$em = $em;
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function setConnection(Connection $connection)
+    {
+        self::$connection = $connection;
+    }
+
+    /**
+     * @return Connection
+     */
+    public function getConnection()
+    {
+        return self::$connection;
     }
 
     /**
@@ -133,6 +150,7 @@ class Database
             api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
         );
 
+        $this->setConnection($entityManager->getConnection());
         $this->setManager($entityManager);
 
         // A MySQL-specific implementation.

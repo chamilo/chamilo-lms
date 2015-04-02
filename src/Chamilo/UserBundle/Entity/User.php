@@ -136,13 +136,13 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
      * @var string
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
-    //private $pictureUri;
+    private $pictureUri;
 
     /**
      * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
      * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
      */
-    protected $pictureUri;
+    //protected $pictureUri;
 
     /**
      * @var integer

@@ -3,12 +3,11 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * CGroupInfo
  *
- * @ORM\Table(name="c_group_info")
+ * @ORM\Table(name="c_group_info", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
  */
 class CGroupInfo
@@ -17,226 +16,140 @@ class CGroupInfo
      * @var integer
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, unique=false)
-     */
-    private $id;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status;
+
+    /**
      * @var integer
      *
-     * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
     private $categoryId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="max_student", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="max_student", type="integer", nullable=false)
      */
     private $maxStudent;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="doc_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="doc_state", type="boolean", nullable=false)
      */
     private $docState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="calendar_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="calendar_state", type="boolean", nullable=false)
      */
     private $calendarState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="work_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="work_state", type="boolean", nullable=false)
      */
     private $workState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="announcements_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="announcements_state", type="boolean", nullable=false)
      */
     private $announcementsState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="forum_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="forum_state", type="boolean", nullable=false)
      */
     private $forumState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="wiki_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="wiki_state", type="boolean", nullable=false)
      */
     private $wikiState;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="chat_state", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="chat_state", type="boolean", nullable=false)
      */
     private $chatState;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="secret_directory", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="secret_directory", type="string", length=255, nullable=true)
      */
     private $secretDirectory;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="self_registration_allowed", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="self_registration_allowed", type="boolean", nullable=false)
      */
     private $selfRegistrationAllowed;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="self_unregistration_allowed", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="self_unregistration_allowed", type="boolean", nullable=false)
      */
     private $selfUnregistrationAllowed;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     *  @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="group")
-     **/
-    //private $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="group")
-     **/
-    protected $course;
-
-    /**
+     * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
      */
-    public function __construct()
-    {
-        $this->items = new ArrayCollection();
-    }
+    private $id;
 
     /**
+     * @var integer
      *
-     * @return ArrayCollection
+     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
      */
-    public function getItems()
-    {
-        return $this->items;
-    }
+    private $cId;
 
-    /**
-     * Set cId
-     *
-     * @param integer $cId
-     *
-     * @return CGroupInfo
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
 
-        return $this;
-    }
-
-    /**
-     * Get cId
-     *
-     * @return integer
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set iid
-     *
-     * @param integer $id
-     * @return CGroupInfo
-     */
-    public function setIid($iid)
-    {
-        $this->iid = $iid;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getIid()
-    {
-        return $this->iid;
-    }
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return CGroupInfo
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set name
@@ -259,6 +172,29 @@ class CGroupInfo
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return CGroupInfo
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -581,5 +517,51 @@ class CGroupInfo
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return CGroupInfo
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return CGroupInfo
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer
+     */
+    public function getCId()
+    {
+        return $this->cId;
     }
 }

@@ -72,22 +72,24 @@ if (!defined('CLI_INSTALLATION')) {
     }
 }
 
-$installation_settings = array();
-$installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
-$installation_settings['{ORGANISATIONURL}'] = $institutionUrlForm;
-$installation_settings['{CAMPUSNAME}'] = $campusForm;
-$installation_settings['{PLATFORMLANGUAGE}'] = $languageForm;
-$installation_settings['{ALLOWSELFREGISTRATION}'] = trueFalse($allowSelfReg);
-$installation_settings['{ALLOWTEACHERSELFREGISTRATION}'] = trueFalse($allowSelfRegProf);
-$installation_settings['{ADMINLASTNAME}'] = $adminLastName;
-$installation_settings['{ADMINFIRSTNAME}'] = $adminFirstName;
-$installation_settings['{ADMINLOGIN}'] = $loginForm;
-$installation_settings['{ADMINPASSWORD}'] = $passToStore;
-$installation_settings['{ADMINEMAIL}'] = $emailForm;
-$installation_settings['{ADMINPHONE}'] = $adminPhoneForm;
-$installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
-$installation_settings['{ADMINLANGUAGE}'] = $languageForm;
-$installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
+$installationSettings = array();
+$installationSettings['{ORGANISATIONNAME}'] = $institutionForm;
+$installationSettings['{ORGANISATIONURL}'] = $institutionUrlForm;
+$installationSettings['{CAMPUSNAME}'] = $campusForm;
+$installationSettings['{PLATFORMLANGUAGE}'] = $languageForm;
+$installationSettings['{ALLOWSELFREGISTRATION}'] = trueFalse($allowSelfReg);
+$installationSettings['{ALLOWTEACHERSELFREGISTRATION}'] = trueFalse($allowSelfRegProf);
+
+$installationSettings['{ADMINLASTNAME}'] = $adminLastName;
+$installationSettings['{ADMINFIRSTNAME}'] = $adminFirstName;
+$installationSettings['{ADMINLOGIN}'] = $loginForm;
+$installationSettings['{ADMINPASSWORD}'] = $passToStore;
+$installationSettings['{ADMINEMAIL}'] = $emailForm;
+$installationSettings['{ADMINPHONE}'] = $adminPhoneForm;
+
+$installationSettings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
+$installationSettings['{ADMINLANGUAGE}'] = $languageForm;
+$installationSettings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 
 AddCourse::drop_course_tables();
 
@@ -98,7 +100,7 @@ Database::query("SET SESSION collation_server='utf8_general_ci';");
 Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
 //Database::query("SET NAMES 'utf8';");
 
-createSchema($manager, $installation_settings);
+createSchema($manager, $installationSettings);
 
 lockSettings();
 

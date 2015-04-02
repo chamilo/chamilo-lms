@@ -495,9 +495,23 @@ class CoursesController
             api_get_path(WEB_CODE_PATH)."inc/email_editor.php?action=subscribe_me_to_session&session=".
             Security::remove_XSS($sessionData);
 
-        return Display::url(get_lang('Subscribe'), $url, array(
+        $result = Display::url(get_lang('Subscribe'), $url, array(
             'class' => 'btn btn-large btn-primary',
         ));
+
+        $hook = HookResubscribe::create();
+        if (!empty($hook)) {
+            $hook->setEventData(array(
+                'session_id' => intval($sessionData)
+            ));
+            try {
+                $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
+            } catch (Exception $exception) {
+                $result = $exception->getMessage();
+            }
+        }
+
+        return $result;
     }
 
     /**

@@ -3766,9 +3766,6 @@ class Tracking
                 'user'      => 'upload_user_id',
                 'start_date'=> 'upload_date',
             ),
-            #TABLE_STATISTIC_TRACK_E_HOTSPOT,
-            #TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY,
-            #TABLE_STATISTIC_TRACK_E_OPEN,
         );
 
         $error_sql = '';

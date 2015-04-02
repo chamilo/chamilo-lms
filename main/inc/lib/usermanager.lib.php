@@ -5290,12 +5290,10 @@ EOF;
 
     /**
      * Get user path from user ID (returns an array).
-     * The return format is a complete path, enabling recovery of the directory
-     * with dirname(). This also works for the functions dealing with the
-     * user's productions, as they are located in the same directory.
+     * The return format is a complete path to a folder ending with "/"
      * @param   integer User ID
      * @param   string  Optional. Type of path to return (can be 'system', 'rel', 'web')
-     * @return  string  User path
+     * @return  string  User folder path (i.e. /var/www/chamilo/main/upload/users/1/1/)
      */
     public static function getUserPathById($id, $type = null)
     {

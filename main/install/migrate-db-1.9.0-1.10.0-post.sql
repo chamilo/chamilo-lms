@@ -14,11 +14,13 @@ ALTER TABLE track_e_course_access DROP COLUMN course_code;
 ALTER TABLE track_e_online DROP COLUMN course;
 ALTER TABLE track_e_attempt DROP COLUMN course_code;
 
+DROP TABLE track_c_countries;
+DROP TABLE track_c_browsers;
+DROP TABLE track_c_os;
+DROP TABLE track_c_providers;
+DROP TABLE track_c_referers;
+
 -- not yet ready, uncomment when all user_id have been replaced by id
 -- ALTER TABLE user DROP COLUMN user_id;
 
 -- Course table changes (c_*)
-
-
-
-hjus

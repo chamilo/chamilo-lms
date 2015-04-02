@@ -49,7 +49,6 @@ ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL;
 UPDATE track_e_attempt SET c_id = (SELECT id FROM course WHERE code = course_code);
 ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL;
 
-
 DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages';
 DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages';
 DELETE FROM settings_current WHERE variable = 'advanced_filemanager';
@@ -127,8 +126,6 @@ CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id  INT PRIMARY K
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_user (id  INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, user_id INT NOT NULL, c_id INT NOT NULL);
 CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL);
 CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL);
-
-DROP TABLE c_metadata;
 
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';

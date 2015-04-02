@@ -4,31 +4,46 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestAnswerFeedback toolbar configuration
+ * Messages toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class TestAnswerFeedback extends Basic
+class Messages extends Basic
 {
-
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['NewPage', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
-
         $config['toolbar_maxToolbar'] = [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            ['Image', 'Mapping', 'Video', 'Oembed', 'Youtube', 'Flash', 'Audio', 'leaflet', 'Smiley', 'SpecialChar'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Youtube',
+                'Flash',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Inserthtml',
+                'Asciimath',
+                'Asciisvg'
+            ],
             '/',
             ['Table', '-', 'CreateDiv'],
             ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
@@ -40,7 +55,9 @@ class TestAnswerFeedback extends Basic
             ['Toolbarswitch']
         ];
 
+        $config['fullPage'] = true;
+        //$config['height'] = '200';
+
         return $config;
     }
-
 }

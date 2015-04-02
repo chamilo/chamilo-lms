@@ -44,22 +44,25 @@ class UserManager
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
      * @author Roan Embrechts <roan_embrechts@yahoo.com>
-     * @param    string Firstname
-     * @param    string Lastname
-     * @param    int    Status (1 for course tutor, 5 for student, 6 for anonymous)
-     * @param    string e-mail address
-     * @param    string Login
-     * @param    string Password
-     * @param    string Any official code (optional)
-     * @param    string User language    (optional)
-     * @param    string Phone number    (optional)
-     * @param    string Picture URI        (optional)
-     * @param    string Authentication source    (optional, defaults to 'platform', dependind on constant)
-     * @param    string Account expiration date (optional, defaults to null)
-     * @param    int     Whether the account is enabled or disabled by default
-     * @param    int     The department of HR in which the user is registered (optional, defaults to 0)
-     * @param     array Extra fields
-     * @param    string Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param  string Firstname
+     * @param  string Lastname
+     * @param  int    Status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param  string e-mail address
+     * @param  string Login
+     * @param  string Password
+     * @param  string Any official code (optional)
+     * @param  string User language    (optional)
+     * @param  string Phone number    (optional)
+     * @param  string Picture URI        (optional)
+     * @param  string Authentication source    (optional, defaults to 'platform', dependind on constant)
+     * @param  string Account expiration date (optional, defaults to null)
+     * @param  int     Whether the account is enabled or disabled by default
+     * @param  int     The department of HR in which the user is registered (optional, defaults to 0)
+     * @param  array Extra fields
+     * @param  string Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @param  bool $send_mail
+     * @param  bool $isAdmin
+     *
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
      * If it exists, the current user id is the creator id. If a problem arises,
@@ -84,7 +87,8 @@ class UserManager
         $hr_dept_id = 0,
         $extra = null,
         $encrypt_method = '',
-        $send_mail = false
+        $send_mail = false,
+        $isAdmin = false
     ) {
         $currentUserId = api_get_user_id();
         $hook = HookCreateUser::create();
@@ -205,6 +209,10 @@ class UserManager
             $return = $userId;
             $sql = "UPDATE $table_user SET user_id = $return WHERE id = $return";
             Database::query($sql);
+
+            if ($isAdmin) {
+                UserManager::add_user_as_admin($userId);
+            }
 
             if (api_get_multiple_access_url()) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());

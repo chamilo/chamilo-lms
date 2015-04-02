@@ -1350,24 +1350,12 @@ class AddCourse
 
             // Here we must add 2 fields.
             $sql = "INSERT INTO " . $TABLECOURSE . " SET
-                        code            = '" . Database:: escape_string(
-                    $code
-                ) . "',
-                        directory       = '" . Database:: escape_string(
-                    $directory
-                ) . "',
-                        course_language = '" . Database:: escape_string(
-                    $course_language
-                ) . "',
-                        title           = '" . Database:: escape_string(
-                    $title
-                ) . "',
-                        description     = '" . self::lang2db(
-                    get_lang('CourseDescription')
-                ) . "',
-                        category_code   = '" . Database:: escape_string(
-                    $category_code
-                ) . "',
+                        code = '".Database:: escape_string($code)."',
+                        directory = '".Database:: escape_string($directory)."',
+                        course_language = '".Database:: escape_string($course_language)."',
+                        title = '".Database:: escape_string($title)."',
+                        description = '".self::lang2db(get_lang('CourseDescription'))."',
+                        category_code = '".Database:: escape_string($category_code)."',
                         visibility      = '" . $visibility . "',
                         show_score      = '1',
                         disk_quota      = '" . intval($disk_quota) . "',
@@ -1375,20 +1363,12 @@ class AddCourse
                         expiration_date = '" . $expiration_date . "',
                         last_edit       = '$time',
                         last_visit      = NULL,
-                        tutor_name      = '" . Database:: escape_string(
-                    $tutor_name
-                ) . "',
-                        department_name = '" . Database:: escape_string(
-                    $department_name
-                ) . "',
-                        department_url  = '" . Database:: escape_string(
-                    $department_url
-                ) . "',
-                        subscribe       = '" . intval($subscribe) . "',
-                        unsubscribe     = '" . intval($unsubscribe) . "',
-                        visual_code     = '" . Database:: escape_string(
-                    $visual_code
-                ) . "'";
+                        tutor_name = '" . Database:: escape_string($tutor_name) . "',
+                        department_name = '" . Database:: escape_string($department_name) . "',
+                        department_url = '" . Database:: escape_string($department_url) . "',
+                        subscribe = '" . intval($subscribe) . "',
+                        unsubscribe = '" . intval($unsubscribe) . "',
+                        visual_code = '" . Database:: escape_string($visual_code) . "'";
             Database::query($sql);
             $course_id = Database::insert_id();
 
@@ -1405,17 +1385,13 @@ class AddCourse
 
                     if (!empty($user_id)) {
                         $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
-                                    course_code     = '" . Database:: escape_string(
-                                $code
-                            ) . "',
-                                    user_id         = '" . intval($user_id) . "',
-                                    status          = '1',
-                                    role            = '" . self::lang2db(
-                                get_lang('Professor')
-                            ) . "',
-                                    tutor_id        = '0',
-                                    sort            = '" . ($i_course_sort) . "',
-                                    user_course_cat = '0'";
+                                c_id     = '" . $course_id . "',
+                                user_id         = '" . intval($user_id) . "',
+                                status          = '1',
+                                role            = '" . self::lang2db(get_lang('Professor')) . "',
+                                tutor_id        = '0',
+                                sort            = '" . ($i_course_sort) . "',
+                                user_course_cat = '0'";
                         Database::query($sql);
                     }
                 }
@@ -1433,12 +1409,8 @@ class AddCourse
                             continue;
                         }
                         $sql = "INSERT INTO " . $TABLECOURSUSER . " SET
-                            course_code     = '" . Database::escape_string(
-                                $code
-                            ) . "',
-                            user_id         = '" . Database::escape_string(
-                                $key
-                            ) . "',
+                            c_id     = '" . Database::escape_string($course_id) . "',
+                            user_id         = '" . Database::escape_string($key) . "',
                             status          = '1',
                             role            = '',
                             tutor_id        = '0',

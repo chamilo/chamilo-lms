@@ -311,16 +311,18 @@ class UserManager
             return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        if ($user_id != strval(intval($user_id)))
+        if ($user_id != strval(intval($user_id))) {
             return false;
-        if ($user_id === false)
+        }
+        if ($user_id === false) {
             return false;
+        }
         $sql = "SELECT * FROM $table_course_user
                 WHERE status = '1' AND user_id = '".$user_id."'";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "SELECT user_id FROM $table_course_user
-                    WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
+                    WHERE status='1' AND c_id ='".Database::escape_string($course->c_id)."'";
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
                 return false;
@@ -369,7 +371,7 @@ class UserManager
                 WHERE
                     cu.user_id = '".$user_id."' AND
                     relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                    c.code = cu.course_code";
+                    c.id = cu.c_id";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
             $sql = "DELETE FROM $table_group
@@ -1187,30 +1189,6 @@ class UserManager
             return $user;
         }
         return false;
-    }
-
-    /**
-     * Get the teacher list
-     * @param int the course ID
-     * @param array Content the list ID of user_id selected
-     */
-    //for survey
-    // TODO: Ivan, 14-SEP-2009: It seems that this method is not used at all (it can be located in a test unit only. To be deprecated?
-    public static function get_teacher_list($course_id, $sel_teacher = '')
-    {
-        $user_course_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $course_id = Database::escape_string($course_id);
-        $sql = "SELECT * FROM $user_table a, $user_course_table b
-                WHERE a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
-        $sql_result = Database::query($sql);
-        echo "<select name=\"author\">";
-        while ($result = Database::fetch_array($sql_result)) {
-            if ($sel_teacher == $result['user_id'])
-                $selected = "selected";
-            echo "\n<option value=\"".$result['user_id']."\" $selected>".$result['firstname']."</option>";
-        }
-        echo "</select>";
     }
 
     /**
@@ -2660,7 +2638,7 @@ class UserManager
                     course_rel_user.user_course_cat user_course_cat
                  FROM ".$tbl_course_user." course_rel_user
                  LEFT JOIN ".$tbl_course." course
-                 ON course.code = course_rel_user.course_code
+                 ON course.id = course_rel_user.c_id
                  LEFT JOIN ".$tbl_user_course_category." user_course_category
                  ON course_rel_user.user_course_cat = user_course_category.id
                  $join_access_url
@@ -4000,9 +3978,9 @@ class UserManager
         $course_list = array();
         if (!empty($code_special_courses)) {
             $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                FROM    ".$tbl_course_user." course_rel_user
+                                FROM ".$tbl_course_user." course_rel_user
                                 LEFT JOIN ".$tbl_course." course
-                                ON course.code = course_rel_user.course_code
+                                ON course.id = course_rel_user.c_id
                                 LEFT JOIN ".$tbl_user_course_category." user_course_category
                                 ON course_rel_user.user_course_cat = user_course_category.id
                                 $join_access_url
@@ -4338,8 +4316,8 @@ class UserManager
                         $select
                         FROM $tbl_user u
                         INNER JOIN $tbl_course_user cu ON (cu.user_id = u.user_id)
-                        WHERE cu.course_code IN (
-                            SELECT DISTINCT(course_code) FROM $tbl_course_user
+                        WHERE cu.c_id IN (
+                            SELECT DISTINCT(c_id) FROM $tbl_course_user
                             WHERE user_id = $userId AND status = ".COURSEMANAGER."
                         )
                         $userConditions
@@ -4505,21 +4483,26 @@ class UserManager
 
     /**
      * get user id of teacher or session administrator
-     * @param string The course id
+     * @param array $courseInfo
+     *
      * @return int The user id
      */
-    public static function get_user_id_of_course_admin_or_session_admin($course_id)
+    public static function get_user_id_of_course_admin_or_session_admin($courseInfo)
     {
         $session = api_get_session_id();
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $courseId = $courseInfo['id'];
+        $courseCode = $courseInfo['code'];
+
         if ($session == 0 || is_null($session)) {
             $sql = 'SELECT u.user_id FROM '.$table_user.' u
-                    INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
+                    INNER JOIN '.$table_course_user.' ru
+                    ON ru.user_id=u.user_id
                     WHERE
                         ru.status = 1 AND
-                        ru.course_code = "'.Database::escape_string($course_id).'" ';
+                        ru.c_id = "'.$courseId.'" ';
             $rs = Database::query($sql);
             $num_rows = Database::num_rows($rs);
             if ($num_rows == 1) {
@@ -4535,7 +4518,7 @@ class UserManager
                     INNER JOIN '.$table_session_course_user.' sru
                     ON sru.id_user=u.user_id
                     WHERE
-                        sru.course_code="'.Database::escape_string($course_id).'" AND
+                        sru.course_code="'.Database::escape_string($courseCode).'" AND
                         sru.status=2';
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs);

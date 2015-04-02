@@ -35,11 +35,6 @@ td {border-bottom: thin dashed gray;}
 /*]]>*/
 </style>";
 
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
 //Remove all characters different than 0 and 1 from $view parameter
 $view = preg_replace('/[^01]/','',$_REQUEST['view']);
 

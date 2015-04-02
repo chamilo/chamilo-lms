@@ -92,7 +92,7 @@ foreach ($rows as $post) {
     }
 
     $userinf = api_get_user_info($post['user_id']);
-    $user_status = api_get_status_of_user_in_course($post['user_id'],api_get_course_id());
+    $user_status = api_get_status_of_user_in_course($post['user_id'], api_get_course_int_id());
     if (api_is_allowed_to_edit(null,true)) {
         //if ($count>0 && $user_status!=1) {
         if ($count>0) {

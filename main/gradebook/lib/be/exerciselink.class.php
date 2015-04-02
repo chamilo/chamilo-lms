@@ -198,7 +198,7 @@ class ExerciseLink extends AbstractLink
         $exercise->read($this->get_ref_id());
 
         if (!$this->is_hp) {
-            
+
 		if ($exercise->exercise_was_added_in_lp == false) {
 			$sql = "SELECT * FROM $tblStats
 			        WHERE
@@ -304,7 +304,10 @@ class ExerciseLink extends AbstractLink
         //status student
         $user_id = api_get_user_id();
         $course_code = $this->get_course_code();
-        $status_user=api_get_status_of_user_in_course ($user_id, $course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
+        $status_user=api_get_status_of_user_in_course($user_id, $courseId);
         $session_id =api_get_session_id();
 
         $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id().'&type='.$this->get_type();

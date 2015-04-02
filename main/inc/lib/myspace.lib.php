@@ -1215,6 +1215,7 @@ class MySpace
     {
         $course_code = $row[0];
         $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
 
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
@@ -1228,7 +1229,7 @@ class MySpace
                 FROM $tbl_user AS u
                 INNER JOIN $tbl_course_rel_user AS cu
                 ON cu.user_id = u.user_id
-                WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+                WHERE cu.c_id = '".$courseId."' AND ISNULL(cu.role);";
         $result = Database::query($sql);
         $time_spent = 0;
         $progress = 0;
@@ -2070,15 +2071,22 @@ class MySpace
         while ($row_course = Database::fetch_row($res)) {
             $course_code = $row_course[0];
             $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['id'];
             $avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course
             if (empty($session_id)) {
-                $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                        WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+                $sql = "SELECT user_id
+                        FROM $tbl_course_user as course_rel_user
+                        WHERE
+                            course_rel_user.status='5' AND
+                            course_rel_user.c_id='$courseId'";
             } else {
                 $sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu
-                        WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+                        WHERE
+                            srcu.course_code='$course_code' AND
+                            id_session = '$session_id' AND
+                            srcu.status<>2";
             }
             $rs = Database::query($sql);
             $users = array();

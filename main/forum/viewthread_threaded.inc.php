@@ -313,7 +313,7 @@ if (
 $userinf = api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status = api_get_status_of_user_in_course(
     $rows[$display_post_id]['user_id'],
-    api_get_course_id()
+    api_get_course_int_id()
 );
 if (api_is_allowed_to_edit(null, true)) {
     if ($post_id > $post_minor) {

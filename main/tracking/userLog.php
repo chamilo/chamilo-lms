@@ -125,7 +125,7 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
 
             $sql = "SELECT count(user_id)
                     FROM $TABLECOURSUSER
-                    WHERE course_code = '".Database::escape_string($_cid)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
+                    WHERE c_id = '".$courseId."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
 
         } else {
             // if user can only track one group : list users of this group
@@ -173,15 +173,18 @@ if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
             // list of users in this course
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
-                    WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                        AND cu.course_code = '".Database::escape_string($_cid)."'
+                    WHERE
+                        cu.user_id = u.user_id AND
+                        cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                        cu.c_id = '".$courseId."'
                     LIMIT $offset,$step";
         } else {
             // list of users of this group
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                     FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
-                    WHERE gu.user_id = u.user_id
-                        AND gu.group_id = '".intval($_gid)."'
+                    WHERE
+                        gu.user_id = u.user_id AND
+                        gu.group_id = '".intval($_gid)."'
                     LIMIT $offset,$step";
         }
         $list_users = getManyResults3Col($sql);

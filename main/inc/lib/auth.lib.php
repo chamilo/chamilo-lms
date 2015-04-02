@@ -58,7 +58,7 @@ class Auth
                       course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
                       course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
-                WHERE course.code = course_rel_user.course_code
+                WHERE course.id = course_rel_user.c_id
                 AND   course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
                 AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
@@ -144,7 +144,7 @@ class Auth
                 FROM $TABLECOURS course,
                 $TABLECOURSUSER  course_rel_user
                 WHERE
-                    course.code = course_rel_user.course_code AND
+                    course.id = course_rel_user.c_id AND
                     course_rel_user.user_id = '" . $user_id . "' AND
                     course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
                     $without_special_courses
@@ -161,20 +161,27 @@ class Auth
 
     /**
      * stores  the changes in a course category (moving a course to a different course category)
-     * @param  string    Course code
+     * @param  string    $courseId
      * @param  int       Category id
      * @return bool      True if it success
      */
-    public function store_changecoursecategory($course_code, $newcategory)
+    public function store_changecoursecategory($courseId, $newcategory)
     {
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
 
 
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
-        $resultQuery = Database::query("UPDATE $TABLECOURSUSER SET user_course_cat='" . $newcategory . "', sort='" . ($max_sort_value + 1) . "' WHERE course_code='" . $course_code . "' AND user_id='" . $current_user . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ");
+        $sql = "UPDATE $TABLECOURSUSER SET
+                    user_course_cat='" . $newcategory . "',
+                    sort='" . ($max_sort_value + 1) . "'
+                WHERE
+                    c_id ='" . $courseId . "' AND
+                    user_id='" . $current_user . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+        $resultQuery = Database::query($sql);
 
         $result = false;
         if (Database::affected_rows($resultQuery)) {
@@ -224,16 +231,29 @@ class Auth
         }
 
         if (count($target_course) > 0 && count($source_course) > 0) {
-            $sql_update1 = "UPDATE $TABLECOURSUSER SET sort='" . $target_course['sort'] . "'
-                            WHERE course_code='" . $source_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+
+
+            $courseInfo = api_get_course_info($source_course['code']);
+            $courseId = $courseInfo['id'];
+
+            $sql_update1 = "UPDATE $TABLECOURSUSER
+                            SET sort='" . $target_course['sort'] . "'
+                            WHERE
+                                c_id = '" . $courseId . "' AND
+                                user_id = '" . $current_user_id . "' AND
+                                relation_type<>" . COURSE_RELATION_TYPE_RRHH;
             $sql_update2 = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
-                            WHERE course_code='" . $target_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+                            WHERE
+                                c_id ='" . $courseId . "' AND
+                                user_id='" . $current_user_id . "' AND
+                                relation_type<>" . COURSE_RELATION_TYPE_RRHH;
             $result1 = Database::query($sql_update2);
             $result2 = Database::query($sql_update1);
             if (Database::affected_rows($result1) && Database::affected_rows($result2)) {
                 $result = true;
             }
         }
+
         return $result;
     }
 
@@ -343,7 +363,10 @@ class Auth
         }
         $sql = "UPDATE $TABLECOURSUSER
                 SET user_course_cat='0'
-                WHERE user_course_cat='" . $category_id . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+                WHERE
+                    user_course_cat='" . $category_id . "' AND
+                    user_id='" . $current_user_id . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
         Database::query($sql);
 
         return $result;
@@ -363,11 +386,14 @@ class Auth
         $course_code = Database::escape_string($course_code);
         $result = true;
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         // we check (once again) if the user is not course administrator
         // because the course administrator cannot unsubscribe himself
         // (s)he can only delete the course
         $sql = "SELECT * FROM $tbl_course_user
-                WHERE user_id='" . $current_user_id . "' AND course_code='" . $course_code . "' AND status='1' ";
+                WHERE user_id='" . $current_user_id . "' AND c_id ='" . $courseId . "' AND status='1' ";
         $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
         if ($number_of_rows > 0) {

@@ -76,9 +76,9 @@ $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
  */
 
 $courseCode = api_get_course_id();
+$courseId = api_get_course_int_id();
 $tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $userIdViewer = api_get_user_id(); // id fo the user currently online
-//$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
 $allowedToEditDef = api_is_allowed_to_edit(null, true);
@@ -126,50 +126,12 @@ if ($allowedToEditDef) {
         $userIdViewed = strval(intval($_GET['editMainUserInfo']));
         $displayMode = "viewMainInfoEdit";
     } elseif (!empty($_REQUEST['submitMainUserInfo'])) {
-        /*
-        if (isset ($_REQUEST['submitMainUserInfo']))
-        {
-        */
         $userIdViewed = strval(intval($_REQUEST['submitMainUserInfo']));
 
-        /*
-        //is teacher
-        $promoteCourseAdmin=$_REQUEST['promoteCourseAdmin'];
-        $userProperties['status'] = 5;
-        if ($promoteCourseAdmin)
-        {
-            $userProperties['status'] = 1;
-        }
-
-        // deprecated feature
-
-        // is coach
-        if (isset ($_REQUEST['promoteTutor']))
-        {
-            $promoteTutor=$_REQUEST['promoteTutor'];
-            $userProperties['tutor'] = 0;
-            if ($promoteTutor)
-            {
-                $userProperties['tutor'] = 1;
-            }
-        }
-
-        // role is a string
-        if (isset ($_REQUEST['role']))
-        {
-            $role=$_REQUEST['role'];
-            $userProperties['role'] = $role;
-        }
-        */
-
         //get information about one user - task #3009
-
-
         if ($current_session_id) {
-
-            $nocoach = isset($_POST['promoteTutor'])?false:true;
+            $nocoach = isset($_POST['promoteTutor']) ? false : true;
             $res = SessionManager::set_coach_to_course_session($userIdViewed, $current_session_id, $courseCode, $nocoach);
-
         } else {
             if (!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
                 $userProperties['status'] = 1;
@@ -183,7 +145,7 @@ if ($allowedToEditDef) {
             }
 
             $userProperties['role'] = $_POST['role'];
-            update_user_course_properties($userIdViewed, $courseCode, $userProperties);
+            update_user_course_properties($userIdViewed, $courseId, $userProperties);
         }
 
         $displayMode = "viewContentList";
@@ -321,7 +283,7 @@ elseif ($displayMode == "viewContentEdit") {
 
     /* CATEGORIES MAIN INFO : EDIT */
 
-    $mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
+    $mainUserInfo = get_main_user_info($userIdViewed, $courseId);
 
     if ($mainUserInfo) {
         ($mainUserInfo['status'] == COURSEMANAGER) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
@@ -384,10 +346,7 @@ elseif ($displayMode == "viewContentEdit") {
             }
         } else {
             echo "<td>", get_lang('CourseManager'), "</td>\n";
-
-
         }
-
 
         echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
 
@@ -419,7 +378,7 @@ elseif ($displayMode == "viewContentEdit") {
         $allowedToEditDef = false;
     }
 
-    $mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
+    $mainUserInfo = get_main_user_info($userIdViewed, $courseId);
 
     if ($mainUserInfo) {
         $image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);
@@ -579,7 +538,4 @@ elseif ($displayMode == "viewContentEdit") {
     }
 }
 
-// Back button for each display mode (bottom)
-//echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
-/*		FOOTER	*/
 Display :: display_footer();

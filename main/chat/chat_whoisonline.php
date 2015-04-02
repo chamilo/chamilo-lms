@@ -12,6 +12,7 @@ define('FRAME', 'online');
 require_once '../inc/global.inc.php';
 
 $course = api_get_course_id();
+$courseInfo = api_get_course_info();
 $group_id = api_get_group_id();
 $session_id = api_get_session_id();
 $user_id = api_get_user_id();
@@ -54,7 +55,7 @@ if (!empty($course)) {
 				  		t1.user_id=t2.user_id AND
 				  		t3.user_id=t2.user_id AND
 						t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-						t3.course_code = '".$_course['sysCode']."' AND
+						t3.c_id = '".$courseInfo['id']."' AND
 						t2.last_connection>'".$date_inter."' $extra_condition
 						ORDER BY username";
         $result = Database::query($query);

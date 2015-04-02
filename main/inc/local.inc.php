@@ -1025,13 +1025,15 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     }
 
-    if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
+    if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
 
         //Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
-                   WHERE user_id  = '".$user_id."' AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                   AND course_code = '$cidReq'";
+                WHERE
+                    user_id  = '".$user_id."' AND
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                    c_id = '$_real_cid'";
         $result = Database::query($sql);
 
         $cuData = null;

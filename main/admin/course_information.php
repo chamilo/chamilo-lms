@@ -78,6 +78,7 @@ $code = Database::escape_string($_GET['code']);
 $sql = "SELECT * FROM $table_course WHERE code = '".$code."'";
 $res = Database::query($sql);
 $course = Database::fetch_object($res);
+$courseId = $course->id;
 $tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
 ?>
@@ -111,8 +112,10 @@ if (api_is_multiple_url_enabled()) {
         ON u.user_id = url_rel_user.user_id
         AND url_rel_user.access_url_id = ".intval(api_get_current_access_url_id());
 }
-$sql .= " WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."'
-        AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+$sql .= " WHERE
+            cu.user_id = u.user_id AND
+            cu.c_id = '".$courseId."' AND
+            cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {

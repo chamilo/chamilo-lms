@@ -2733,7 +2733,6 @@ function WSEditCourse($params){
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -2891,7 +2890,6 @@ function WSCourseDescription($params) {
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -3056,7 +3054,6 @@ function WSEditCourseDescription($params) {
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -4242,7 +4239,7 @@ function WSUnsubscribeUserFromCourse($params) {
     $results = array();
     $orig_user_id_value = array();
     $orig_course_id_value = array();
-    foreach($userscourses_params as $usercourse_param) {
+    foreach ($userscourses_params as $usercourse_param) {
 
         $original_user_id_values     = $usercourse_param['original_user_id_values'];
         $original_user_id_name         = $usercourse_param['original_user_id_name'];
@@ -4271,11 +4268,15 @@ function WSUnsubscribeUserFromCourse($params) {
 
         // Get course code from original course id
 
-        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res_course     = Database::query($sql_course);
-        $row_course     = Database::fetch_row($res_course);
+        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv
+                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $res_course = Database::query($sql_course);
+        $row_course = Database::fetch_row($res_course);
 
         $course_code = $row_course[0];
+
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
 
         if (empty($course_code)) {
             $results[] = 0;
@@ -4295,9 +4296,8 @@ function WSUnsubscribeUserFromCourse($params) {
             continue;
         }
 
-        foreach($usersList as $user_id) {
-            $course_code = Database::escape_string($course_code);
-            $sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND course_code = '".$course_code."'";
+        foreach ($usersList as $user_id) {
+            $sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND c_id = '".$courseId."'";
             $result = Database::query($sql);
             $return = Database::affected_rows($result);
         }
@@ -4308,7 +4308,11 @@ function WSUnsubscribeUserFromCourse($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_values' => $orig_user_id_value[$i],'original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_values' => $orig_user_id_value[$i],
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i]
+        );
     }
 
     return $output;

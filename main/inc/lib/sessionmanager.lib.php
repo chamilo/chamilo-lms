@@ -816,7 +816,6 @@ class SessionManager
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user = Database::get_main_table(TABLE_MAIN_USER);
-        $course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $forum = Database::get_course_table(TABLE_FORUM);
@@ -4543,7 +4542,7 @@ class SessionManager
                 UNION (
                     $select
                     FROM $tbl_course c
-                    INNER JOIN $tbl_course_user cu ON (cu.course_code = c.code)
+                    INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
                     INNER JOIN $tbl_user u ON (u.user_id = cu.user_id)
                     INNER JOIN $tbl_course_rel_access_url url ON (url.course_code = c.code)
                     $where
@@ -4821,7 +4820,7 @@ class SessionManager
                 // Select the teachers.
                 $sql = "SELECT DISTINCT(cu.user_id) FROM $course c
                         INNER JOIN $sessionCourse src ON c.code = src.course_code
-                        INNER JOIN $courseUser cu ON (cu.course_code = c.code)
+                        INNER JOIN $courseUser cu ON (cu.c_id = c.id)
 		                WHERE src.id_session IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
                 $teacherListId = array();

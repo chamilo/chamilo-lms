@@ -233,7 +233,7 @@ if (api_is_multiple_url_enabled()) {
         $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
             FROM $tbl_course_user as course_rel_user
             INNER JOIN $tbl_course as course
-            ON course.code = course_rel_user.course_code
+            ON course.id = course_rel_user.c_id
             INNER JOIN $tbl_course_rel_access_url course_rel_url
             ON (course_rel_url.course_code= course.code)
             WHERE

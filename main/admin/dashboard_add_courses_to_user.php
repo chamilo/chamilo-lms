@@ -156,7 +156,7 @@ $UserList = array();
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $courses_list = $_POST['CoursesList'];
-    $affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
+    $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows)	{
         $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
     }

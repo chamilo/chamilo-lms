@@ -1290,27 +1290,32 @@ function api_get_user_id() {
  */
 function api_get_user_courses($userid, $fetch_session = true)
 {
+    // Get out if not integer
     if ($userid != strval(intval($userid))) {
         return array();
-    } //get out if not integer
+    }
+
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $sql = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
+    $sql = "SELECT cc.code code, cc.directory dir, cu.status status
             FROM    $t_course       cc,
                     $t_course_user   cu
             WHERE
-                cc.code = cu.course_code AND
+                cc.id = cu.c_id AND
                 cu.user_id = '".$userid."' AND
                 cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
     $result = Database::query($sql);
     if ($result === false) {
         return array();
     }
+
+    $courses = array();
     while ($row = Database::fetch_array($result)) {
         // we only need the database name of the course
         $courses[] = $row;
     }
+
     return $courses;
 }
 
@@ -5356,6 +5361,10 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         }
     }
     $cid = Database::escape_string($cid);
+
+    $courseInfo = api_get_course_info($cid);
+    $courseId = $courseInfo['id'];
+
     global $is_platformAdmin;
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -5396,7 +5405,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             AND
                 relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
             AND
-                course_code = '$cid'
+                c_id = $courseId
             LIMIT 1";
 
     $result = Database::query($sql);
@@ -5695,17 +5704,18 @@ function api_get_access_url_from_user($user_id) {
 /**
  * Gets the status of a user in a course
  * @param int       $user_id
- * @param string    $course_code
+ * @param int    $courseId
  * @return int      user status
  */
-function api_get_status_of_user_in_course ($user_id, $course_code) {
+function api_get_status_of_user_in_course($user_id, $courseId)
+{
     $tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    if (!empty($user_id) && !empty($course_code)) {
+    if (!empty($user_id) && !empty($courseId)) {
         $user_id        = intval($user_id);
-        $course_code    = Database::escape_string($course_code);
+        $courseId    = intval($courseId);
         $sql = 'SELECT status
                 FROM '.$tbl_rel_course_user.'
-                WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+                WHERE user_id='.$user_id.' AND c_id = '.$courseId;
         $result = Database::query($sql);
         $row_status = Database::fetch_array($result, 'ASSOC');
         return $row_status['status'];
@@ -5791,16 +5801,16 @@ function api_is_valid_secret_key($original_key_secret, $security_key) {
 
 /**
  * Checks whether a user is into course
- * @param string $course_id - the course id
+ * @param int $course_id - the course id
  * @param int $user_id - the user id
  */
 function api_is_user_of_course($course_id, $user_id) {
     $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $sql = 'SELECT user_id FROM '.$tbl_course_rel_user.'
             WHERE
-                course_code="'.Database::escape_string($course_id).'" AND
-                user_id="'.intval($user_id).'" AND
-                relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
+                c_id ="'.intval($course_id).'" AND
+                user_id = "'.intval($user_id).'" AND
+                relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
     $result = Database::query($sql);
     return Database::num_rows($result) == 1;
 }

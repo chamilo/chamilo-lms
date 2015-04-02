@@ -115,8 +115,8 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
         if ($is_allowedToTrackEverybodyInCourse) {
             // if user can track everybody : list user of course
             $sql = "SELECT count(user_id)
-                        FROM $TABLECOURSUSER
-                        WHERE course_code = '$_cid' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                    FROM $TABLECOURSUSER
+                    WHERE c_id = '$courseId' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
 
         } else {
             // if user can only track one group : list users of this group
@@ -155,7 +155,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                 FROM $TABLECOURSUSER cu , $TABLEUSER u
                 WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                AND cu.course_code = '$_cid'
+                AND cu.c_id = '$courseId'
                 LIMIT $offset,$step";
         } else {
             // list of users of this group

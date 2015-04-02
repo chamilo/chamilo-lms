@@ -237,7 +237,7 @@ if (!empty($sessions_coached_by_user)) {
     }
 }
 
-$sql = "SELECT course_code
+$sql = "SELECT c_id
         FROM $tbl_course_user
         WHERE
             relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
@@ -246,10 +246,10 @@ $rs = Database::query($sql);
 
 while ($row = Database :: fetch_array($rs)) {
     if ($drh_can_access_all_courses) {
-        $courses_in_session[0][] = $row['course_code'];
+        $courses_in_session[0][] = $row['c_id'];
     } else {
-        if (isset($courses[$row['course_code']])) {
-            $courses_in_session[0][] = $row['course_code'];
+        if (isset($courses[$row['c_id']])) {
+            $courses_in_session[0][] = $row['c_id'];
         }
     }
 }

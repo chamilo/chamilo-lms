@@ -1811,7 +1811,7 @@ class DocumentManager
         $official_code = $user_info['official_code'];
 
         //Teacher information
-        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
         $teacher_last_name = $teacher_info['lastname'];

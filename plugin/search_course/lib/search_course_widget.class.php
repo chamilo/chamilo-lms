@@ -3,9 +3,9 @@
 require_once dirname(__FILE__) . '/register_course_widget.class.php';
 
 /**
- * Search course widget. 
+ * Search course widget.
  * Display a search form and a list of courses that matches the search.
- * 
+ *
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht
@@ -18,10 +18,10 @@ class SearchCourseWidget
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.
-     * 
+     *
      * @param string $key
      * @param object $default
-     * @return string 
+     * @return string
      */
     public static function post($key, $default = '')
     {
@@ -30,10 +30,10 @@ class SearchCourseWidget
 
     /**
      * Returns $_GET data for $key is it exists or $default otherwise.
-     * 
+     *
      * @param string $key
      * @param object $default
-     * @return string 
+     * @return string
      */
     public static function get($key, $default = '')
     {
@@ -91,7 +91,7 @@ class SearchCourseWidget
     }
 
     /**
-     * 
+     *
      */
     function accept()
     {
@@ -100,10 +100,10 @@ class SearchCourseWidget
 
     /**
      * Display the search course widget:
-     * 
+     *
      * Title
      * Search form
-     * 
+     *
      * Search results
      */
     function run()
@@ -216,7 +216,7 @@ EOT;
     /**
      *
      * @param array $courses
-     * @return bool 
+     * @return bool
      */
     function display_list($courses)
     {
@@ -262,13 +262,13 @@ EOT;
     }
 
     /**
-     * Displays the subscribe icon if subscribing is allowed and 
+     * Displays the subscribe icon if subscribing is allowed and
      * if the user is not yet subscribed to this course
-     * 
+     *
      * @global type $stok
      * @param array $current_course
      * @param array $user_courses
-     * @return bool 
+     * @return bool
      */
     function display_subscribe_icon($current_course, $user_courses)
     {
@@ -289,7 +289,7 @@ EOT;
             return false;
         }
 
-        //Subscribe form     
+        //Subscribe form
         $self = $_SERVER['PHP_SELF'];
         echo <<<EOT
                 <form action="$self?action=subscribe" method="post">
@@ -323,9 +323,9 @@ EOT;
     /**
      * Search courses that match the search term.
      * Search is done on the code, title and tutor fields.
-     * 
-     * @param string $search_term 
-     * @return array 
+     *
+     * @param string $search_term
+     * @return array
      */
     function retrieve_courses($search_term)
     {
@@ -348,9 +348,9 @@ EOT;
         }
 
         $sql = <<<EOT
-                SELECT * FROM $course_table 
-                WHERE ($course_fiter) AND (code LIKE '%$search_term%' OR visual_code LIKE '%$search_term%' OR title LIKE '%$search_term%' OR tutor_name LIKE '%$search_term%') 
-                ORDER BY title, visual_code ASC      
+                SELECT * FROM $course_table
+                WHERE ($course_fiter) AND (code LIKE '%$search_term%' OR visual_code LIKE '%$search_term%' OR title LIKE '%$search_term%' OR tutor_name LIKE '%$search_term%')
+                ORDER BY title, visual_code ASC
 EOT;
 
         $result = array();
@@ -374,9 +374,9 @@ EOT;
 
     /**
      * Retrieves courses that the user is subscribed to
-     * 
+     *
      * @param int $user_id
-     * @return array 
+     * @return array
      */
     function retrieve_user_courses($user_id = null)
     {
@@ -393,7 +393,7 @@ EOT;
                                       course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
 				      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
 		               FROM $course_table course, $user_course_table course_rel_user
-		               WHERE course.code = course_rel_user.course_code
+		               WHERE course.id = course_rel_user.c_id
 		                     AND course_rel_user.user_id = $user_id
 		               ORDER BY course_rel_user.sort ASC";
         $result = array();
@@ -418,15 +418,15 @@ EOT;
     }
 
     /*
-     * Utility functions - Utility functions - Utility functions 
+     * Utility functions - Utility functions - Utility functions
      */
 
     /**
      * Removes from $courses all courses the user is subscribed to.
-     * 
+     *
      * @global array $_user
      * @param array $courses
-     * @return array 
+     * @return array
      */
     function filter_out_user_courses($courses)
     {

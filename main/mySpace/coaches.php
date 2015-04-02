@@ -59,9 +59,19 @@ if (isset($_GET["id_student"])) {
 			WHERE srcru.id_user=user_id AND srcru.status=2 ".$order_clause;
 	} else {
 		$sql_coachs = "SELECT DISTINCT id_user as id_coach, $tbl_user.user_id, lastname, firstname
-			FROM $tbl_user as user, $tbl_session_rel_course_user as srcu, $tbl_course_user as course_rel_user
-			WHERE course_rel_user.course_code=srcu.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".intval($_SESSION["_uid"])."'
-			AND srcu.id_user=user.user_id AND srcu.status=2 ".$order_clause;
+			FROM
+			$tbl_user as user,
+			$tbl_session_rel_course_user as srcu,
+			$tbl_course_user as course_rel_user,
+			$tbl_course as c
+			WHERE
+			 	c.id = course_rel_userc_id AND
+				c.code = srcu.course_code AND
+				course_rel_user.status='1' AND
+				course_rel_user.user_id='".intval($_SESSION["_uid"])."' AND
+				srcu.id_user=user.user_id AND
+				srcu.status = 2
+				".$order_clause;
 	}
 }
 

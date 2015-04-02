@@ -252,7 +252,10 @@ function get_number_of_users()
 				}
 			}
 		} else {
-			$sql = "SELECT COUNT(u.user_id) FROM $user_table u LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".api_get_course_id()."'
+			$sql = "SELECT COUNT(u.user_id)
+					FROM $user_table u
+					LEFT JOIN $course_user_table cu
+					ON u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
 				    WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
 			if (api_is_multiple_url_enabled()) {
@@ -260,8 +263,10 @@ function get_number_of_users()
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-					$sql = "SELECT COUNT(u.user_id) FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id AND course_code='".api_get_course_id()."'
+					$sql = "SELECT COUNT(u.user_id)
+						FROM $user_table u
+						LEFT JOIN $course_user_table cu
+						ON u.user_id = cu.user_id AND c_id='".api_get_course_int_id()."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
 						ON (url_rel_user.user_id = u.user_id)
 						WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
@@ -291,7 +296,7 @@ function get_number_of_users()
 		} else {
 			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
-					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'";
 
 			// we change the SQL when we have a filter
 			if (isset($_GET['subscribe_user_filter_value']) AND
@@ -318,7 +323,7 @@ function get_number_of_users()
 
 					$sql = "SELECT COUNT(u.user_id)
 							FROM $user_table u
-							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".api_get_course_int_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
 							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
@@ -367,6 +372,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $url_access_id = api_get_current_access_url_id();
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
+	$courseId = api_get_course_int_id();
 
 	// Database table definitions
 	$user_table                    = Database::get_main_table(TABLE_MAIN_USER);
@@ -430,7 +436,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code = '".$course_code."'";
+                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id AND c_id = '".$courseId."'";
 
 				// applying the filter of the additional user profile fields
 				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
@@ -450,7 +456,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					if ($url_access_id !=-1) {
 						$sql = "SELECT $select_fields
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".$courseId."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 					// applying the filter of the additional user profile fields
@@ -522,10 +528,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 					$sql = "SELECT $select_fields
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'
+						LEFT JOIN $course_user_table cu
+						ON u.user_id = cu.user_id AND c_id='".$courseId."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
 						ON (url_rel_user.user_id = u.user_id) ";
-
 
 					// applying the filter of the additional user profile fields
 					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){

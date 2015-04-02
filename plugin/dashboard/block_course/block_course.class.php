@@ -163,7 +163,7 @@ class BlockCourse extends Block
 
             // students directly subscribed to the course
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.course_code='$course_code'";
+                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.c_id='$courseId'";
             $rs = Database::query($sql);
             $users = array();
             while ($row = Database::fetch_array($rs)) {

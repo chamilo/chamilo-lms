@@ -2777,6 +2777,7 @@ class ExerciseLib
             TABLE_STATISTIC_TRACK_E_ATTEMPT
         );
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
         );
@@ -2789,12 +2790,12 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.id_user = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2806,6 +2807,8 @@ class ExerciseLib
     		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
+            INNER JOIN $courseTable c
+            ON (c.code = a.course_code)
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
@@ -2847,6 +2850,8 @@ class ExerciseLib
             TABLE_STATISTIC_TRACK_E_HOTSPOT
         );
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
         );
@@ -2860,12 +2865,12 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.hotspot_course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.id_user = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2873,6 +2878,8 @@ class ExerciseLib
     		FROM $track_exercises e
     		INNER JOIN $track_hotspot a
     		ON (a.hotspot_exe_id = e.exe_id)
+    		INNER JOIN $courseTable c
+    		ON (hotspot_course_code = c.code)
     		$courseCondition
     		WHERE
     		    exe_exo_id              = $exercise_id AND
@@ -2920,6 +2927,7 @@ class ExerciseLib
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
         );
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
@@ -2946,7 +2954,7 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
@@ -2963,6 +2971,8 @@ class ExerciseLib
     		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
+            INNER JOIN $courseTable c
+            ON c.code = a.course_code
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND

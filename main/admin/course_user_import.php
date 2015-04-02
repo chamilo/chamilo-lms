@@ -86,14 +86,17 @@ function save_data($users_courses)
         $res = Database::query($sql);
         $db_subscriptions = array();
         while ($obj = Database::fetch_object($res)) {
-            $db_subscriptions[$obj->course_code] = $obj->status;
+            $db_subscriptions[$obj->c_id] = $obj->status;
         }
 
         $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
 
         if ($_POST['subscribe']) {
-            foreach ($to_subscribe as $course_code) {
+            foreach ($to_subscribe as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $course_code = $courseInfo['code'];
+
                 if (CourseManager :: course_exists($course_code)) {
                     CourseManager::subscribe_user(
                         $user_id,
@@ -108,7 +111,10 @@ function save_data($users_courses)
         }
 
         if ($_POST['unsubscribe']) {
-            foreach ($to_unsubscribe as $course_code) {
+            foreach ($to_unsubscribe as $courseId) {
+                $courseInfo = api_get_course_info_by_id($courseId);
+                $course_code = $courseInfo['code'];
+
                 if (CourseManager :: course_exists($course_code)) {
                     CourseManager::unsubscribe_user($user_id, $course_code);
                     $course_info = CourseManager::get_course_information($course_code);

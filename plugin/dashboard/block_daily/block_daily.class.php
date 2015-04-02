@@ -198,10 +198,8 @@ class BlockDaily extends Block
                 }
             }
 
-            // quantidade de alunos
-
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.course_code='$course_code'";
+                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.c_id='".$course_info['real_id']."'";
             $rs = Database::query($sql);
             $users = array();
             while ($row = Database::fetch_array($rs)) {
@@ -212,11 +210,8 @@ class BlockDaily extends Block
             }
 
             if (!empty($tematic_advance)) {
-                $tematic_advance_progress = '<a title="' . get_lang(
-                        'GoToThematicAdvance'
-                    ) . '" href="' . api_get_path(
-                        WEB_CODE_PATH
-                    ) . 'attendance/index.php?cidReq=' . $course_code . '&action=attendance_sheet_print&attendance_id=">' . $tematic_advance . '%</a>';
+                $tematic_advance_progress = '<a title="' . get_lang('GoToThematicAdvance') . '" href="' . api_get_path(WEB_CODE_PATH) . 'attendance/index.php?cidReq=' . $course_code . '&action=attendance_sheet_print&attendance_id=">' .
+                    $tematic_advance . '%</a>';
             } else {
                 $tematic_advance_progress = '0%';
             }

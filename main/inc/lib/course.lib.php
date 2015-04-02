@@ -322,10 +322,15 @@ class CourseManager
      */
     public static function get_user_in_course_status($user_id, $course_code)
     {
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         $result = Database::fetch_array(
             Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                WHERE course_code = '" . Database::escape_string($course_code) . "' AND user_id = " . intval($user_id)
+                WHERE
+                    c_id  = '" . $courseId. "' AND
+                    user_id = " . intval($user_id)
             )
         );
 
@@ -489,7 +494,7 @@ class CourseManager
                     WHERE
                         user_id IN (" . $user_ids . ") AND
                         relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                        course_code = '" . $course_code . "'";
+                        c_id = '" . $course_id . "'";
             Database::query($sql);
 
             // add event to system log
@@ -537,6 +542,9 @@ class CourseManager
         }
 
         $course_code = Database::escape_string($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         $userCourseCategoryId = intval($userCourseCategoryId);
 
         if (empty($user_id) || empty ($course_code)) {
@@ -561,12 +569,14 @@ class CourseManager
         }
 
         // Check whether the user has not been already subscribed to the course.
+
         if (empty($session_id)) {
-            if (Database::num_rows(@Database::query("
+            if (Database::num_rows(Database::query("
                     SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                    WHERE user_id = '$user_id' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND course_code = '$course_code'")) > 0
+                    WHERE user_id = '$user_id' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND c_id = '$courseId'")) > 0
             ) {
-                return false; // The user has been already subscribed to the course.
+                // The user has been already subscribed to the course.
+                return false;
             }
         }
 
@@ -615,20 +625,20 @@ class CourseManager
             // Update the table session
             $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . " WHERE id_session = '" . $session_id . "' AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . ""));
             $count = $row[0]; // number of users by session
-            $result = @Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION) . " SET nbr_users = '$count' WHERE id = '" . $session_id . "'");
+            Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION) . " SET nbr_users = '$count' WHERE id = '" . $session_id . "'");
 
             // Update the table session_rel_course
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " WHERE id_session = '" . $session_id . "' AND course_code = '$course_code' AND status<>2"));
+            $row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " WHERE id_session = '" . $session_id . "' AND course_code = '$course_code' AND status<>2"));
             $count = $row[0]; // number of users by session
-            $result = @Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE) . " SET nbr_users = '$count' WHERE id_session = '" . $session_id . "' AND course_code = '$course_code' ");
+            $result = Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE) . " SET nbr_users = '$count' WHERE id_session = '" . $session_id . "' AND course_code = '$course_code' ");
 
         } else {
             $course_sort = self::userCourseSort($user_id, $course_code);
             $sql = "INSERT INTO " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                    SET course_code = '$course_code',
+                    SET c_id = '$courseId',
                         user_id     = '$user_id',
                         status      = '" . $status . "',
-                        sort        = '" . ($course_sort) . "',
+                        sort        = '" . $course_sort . "',
                         user_course_cat = $userCourseCategoryId
                     ";
             $result = @Database::query($sql);
@@ -724,7 +734,10 @@ class CourseManager
         if (empty($user_id) || empty($course_code) || ($user_id != strval(intval($user_id)))) {
             return false;
         }
+
         $course_code = Database::escape_string($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
 
         // Check in advance whether the user has already been registered on the platform.
         $sql = "SELECT status FROM " . $user_table . " WHERE user_id = '$user_id' ";
@@ -740,7 +753,7 @@ class CourseManager
                 WHERE
                     user_id = '$user_id' AND
                     relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                    course_code = '$course_code'";
+                    c_id = '$courseId'";
         if (Database::num_rows(Database::query($sql)) > 0) {
             if ($debug) {
                 error_log('The user has been already subscribed to the course');
@@ -762,7 +775,7 @@ class CourseManager
         $max_sort = api_max_sort_value('0', $user_id);
         return (bool)Database::query(
             "INSERT INTO " . $course_user_table . "
-                SET course_code = '$course_code',
+                SET c_id = '$courseId',
                 user_id = '$user_id',
                 status = '" . $status . "',
                 sort = '" . ($max_sort + 1) . "'"
@@ -840,7 +853,7 @@ class CourseManager
             "SELECT *
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course
                 LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " course_user
-                ON course.code = course_user.course_code
+                ON course.id = course_user.c_id
                 WHERE course.target_course_code IS NULL
                     AND course_user.user_id = '$user_id'
                     AND course_user.status = '1'"
@@ -871,7 +884,7 @@ class CourseManager
 
         if (!empty($courses_temp)) {
             foreach ($courses_temp as $course_item) {
-                $courseList[0][$course_item['course_code']] = $course_item['course_code'];
+                $courseList[0][$course_item['code']] = $course_item['code'];
             }
         }
 
@@ -966,14 +979,13 @@ class CourseManager
         $data = array();
 
         $sql = "SELECT
-                    course_rel_user.course_code,
+                    course.code,
                     course.title,
                     course.id,
-                    course.db_name,
                     course.id as real_id
                 FROM $tbl_course_user as course_rel_user
                 INNER JOIN $tbl_course as course
-                ON course.code = course_rel_user.course_code
+                ON course.id = course_rel_user.c_id
                 WHERE
                     course_rel_user.user_id='$user_id' AND
                     course_rel_user.status='1'
@@ -985,14 +997,13 @@ class CourseManager
             if ($access_url_id != -1) {
                 $sql = "
                     SELECT
-                        course_rel_user.course_code,
+                        course.code,
                         course.title,
                         course.id,
-                        course.db_name,
                         course.id as real_id
                     FROM $tbl_course_user as course_rel_user
                     INNER JOIN $tbl_course as course
-                    ON course.code = course_rel_user.course_code
+                    ON course.id = course_rel_user.c_id
                     INNER JOIN $tbl_course_rel_access_url course_rel_url
                     ON (course_rel_url.course_code= course.code)
                     WHERE
@@ -1006,7 +1017,7 @@ class CourseManager
         $result_nb_cours = Database::query($sql);
         if (Database::num_rows($result_nb_cours) > 0) {
             while ($row = Database::fetch_array($result_nb_cours, 'ASSOC')) {
-                $data[$row['course_code']] = $row;
+                $data[$row['id']] = $row;
             }
         }
 
@@ -1050,14 +1061,15 @@ class CourseManager
         if (empty($courseInfo) || empty($userId)) {
             return false;
         }
-        $courseCode = Database::escape_string($courseInfo['code']);
+
+        $courseId = intval($courseInfo['id']);
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $sql = "SELECT * FROM $table
                 WHERE
                     user_id = $userId AND
                     relation_type = " . COURSE_RELATION_TYPE_RRHH . " AND
-                    course_code = '$courseCode'";
+                    c_id = $courseId";
 
         $result = Database::fetch_array(Database::query($sql));
 
@@ -1090,12 +1102,16 @@ class CourseManager
 
         $condition_course = '';
         if (isset($course_code)) {
-            $course_code = Database::escape_string($course_code);
-            $condition_course = ' AND course_code = "' . $course_code . '" ';
+            $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['id'];
+            $condition_course = ' AND c_id = ' . $courseId;
         }
 
         $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                WHERE user_id = $user_id AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " $condition_course ";
+                WHERE
+                    user_id = $user_id AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                    $condition_course ";
 
         $result = Database::fetch_array(Database::query($sql));
 
@@ -1145,12 +1161,16 @@ class CourseManager
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
-        $sql_result = Database::query(
+
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
+        $result = Database::query(
             'SELECT status FROM ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) .
-            ' WHERE course_code="' . Database::escape_string($course_code) . '" and user_id="' . $user_id . '"'
+            ' WHERE c_id="' . $courseId . '" and user_id="' . $user_id . '"'
         );
-        if (Database::num_rows($sql_result) > 0) {
-            return Database::result($sql_result, 0, 'status') == 1;
+        if (Database::num_rows($result) > 0) {
+            return Database::result($result, 0, 'status') == 1;
         }
         return false;
     }
@@ -1177,7 +1197,7 @@ class CourseManager
                     "SELECT *
                     FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course
                     LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " course_user
-                    ON course.code = course_user.course_code
+                    ON course.id = course_user.c_id
                     WHERE
                         course_user.user_id = '$user_id' AND
                         course_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
@@ -1364,11 +1384,13 @@ class CourseManager
                         ON user.user_id = course_rel_user.user_id AND
                         course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  ';
             if (!empty($course_code)) {
-                $sql .= ' AND course_rel_user.course_code="' . $course_code . '"';
+                $courseInfo = api_get_course_info($course_code);
+                $courseId = $courseInfo['id'];
+                $sql .= ' AND course_rel_user.c_id="' . $courseId . '"';
             } else {
-                $sql .= " INNER JOIN $course_table course ON course_rel_user.course_code = course.code ";
+                $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
             }
-            $where[] = ' course_rel_user.course_code IS NOT NULL ';
+            $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
             if (isset($filter_by_status) && is_numeric($filter_by_status)) {
                 $filter_by_status = intval($filter_by_status);
@@ -1378,7 +1400,7 @@ class CourseManager
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . '  au ON (au.user_id = user.user_id) ';
+            $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER) . ' au ON (au.user_id = user.user_id) ';
         }
 
         $extraFieldWasAdded = false;
@@ -1648,6 +1670,9 @@ class CourseManager
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         $sql = 'SELECT DISTINCT count(*) as count  FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
         $where = array();
         if (!empty($session_id)) {
@@ -1659,9 +1684,11 @@ class CourseManager
             $where[] = ' session_course_user.course_code IS NOT NULL ';
         } else {
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) . ' as course_rel_user
-                        ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>' . COURSE_RELATION_TYPE_RRHH . '
-                        AND course_rel_user.course_code="' . $course_code . '"';
-            $where[] = ' course_rel_user.course_code IS NOT NULL ';
+                        ON
+                            user.user_id = course_rel_user.user_id AND
+                            course_rel_user.relation_type<>' . COURSE_RELATION_TYPE_RRHH . ' AND
+                            course_rel_user.c_id= ' . $courseId ;
+            $where[] = ' course_rel_user.c_id IS NOT NULL ';
         }
 
         $multiple_access_url = api_get_multiple_access_url();
@@ -1748,8 +1775,12 @@ class CourseManager
         $date_to = null,
         $includeInvitedUsers = true
     ) {
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
 
         $students = array();
 
@@ -1757,7 +1788,7 @@ class CourseManager
             // students directly subscribed to the course
             $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
                     INNER JOIN user u ON cu.user_id = u.user_id
-                   WHERE course_code = '$course_code' AND cu.status = " . STUDENT;
+                    WHERE c_id = '$courseId' AND cu.status = " . STUDENT;
 
             if (!$includeInvitedUsers) {
                 $sql .= " AND u.status != " . INVITEE;
@@ -1795,7 +1826,7 @@ class CourseManager
             }
 
             if (!$includeInvitedUsers) {
-                $sql .= " AND u.status != " . INVITEE;
+                $sql_query .= " AND u.status != " . INVITEE;
             }
 
             $rs = Database::query($sql_query);
@@ -1816,18 +1847,22 @@ class CourseManager
      */
     public static function get_teacher_list_from_course_code($course_code)
     {
-        $course_code = Database::escape_string($course_code);
-        $teachers = array();
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
                 INNER JOIN " . Database::get_main_table(TABLE_MAIN_USER) . " u
                 ON (cu.user_id = u.user_id)
-                WHERE   cu.course_code = '$course_code' AND
-                        cu.status = 1 ";
+                WHERE
+                    cu.c_id = $courseId AND
+                    cu.status = 1 ";
         $rs = Database::query($sql);
+        $teachers = array();
         while ($teacher = Database::fetch_array($rs)) {
             $teachers[$teacher['user_id']] = $teacher;
         }
+
         return $teachers;
     }
 
@@ -2017,7 +2052,7 @@ class CourseManager
         $sql = "SELECT *
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course
                 LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " course_user
-                ON course.code = course_user.course_code
+                ON course.id = course_user.c_id
                 WHERE
                     course.target_course_code = '$course_code' AND
                     course_user.user_id = '$user_id' AND
@@ -2161,7 +2196,7 @@ class CourseManager
             /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
             Database::query($sql);*/
             // Unsubscribe all users from the course
-            $sql = "DELETE FROM $table_course_user WHERE course_code='" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_course_user WHERE c_id='" . $courseId . "'";
             Database::query($sql);
             // Delete the course from the sessions tables
             $sql = "DELETE FROM $table_session_course WHERE course_code='" . $codeFiltered . "'";
@@ -2317,7 +2352,6 @@ class CourseManager
      */
     public static function userCourseSort($user_id, $course_code)
     {
-
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
@@ -2329,8 +2363,9 @@ class CourseManager
         $course_title = Database::result(Database::query('SELECT title FROM ' . $TABLECOURSE . ' WHERE code="' . $course_code . '"'),
             0, 0);
 
-        $sql = 'SELECT course.code as code, course.title as title, cu.sort as sort FROM ' . $TABLECOURSUSER . ' as cu, ' . $TABLECOURSE . ' as course
-                WHERE   course.code = cu.course_code AND user_id = "' . $user_id . '" AND
+        $sql = 'SELECT course.code as code, course.title as title, cu.sort as sort
+                FROM ' . $TABLECOURSUSER . ' as cu, ' . $TABLECOURSE . ' as course
+                WHERE   course.id = cu.c_id AND user_id = "' . $user_id . '" AND
                         cu.relation_type<>' . COURSE_RELATION_TYPE_RRHH . ' AND
                         user_course_cat = 0
                 ORDER BY cu.sort';
@@ -2350,12 +2385,21 @@ class CourseManager
                     $course_found = true;
                     $course_sort = $courses['sort'];
                     if ($counter == 0) {
-                        $sql = 'UPDATE ' . $TABLECOURSUSER . ' SET sort = sort+1
-                                WHERE user_id= "' . $user_id . '" AND relation_type<>' . COURSE_RELATION_TYPE_RRHH . ' AND user_course_cat="0" AND sort > "' . $course_sort . '"';
+                        $sql = 'UPDATE ' . $TABLECOURSUSER . '
+                                SET sort = sort+1
+                                WHERE
+                                    user_id= "' . $user_id . '" AND
+                                    relation_type<>' . COURSE_RELATION_TYPE_RRHH . '
+                                    AND user_course_cat="0"
+                                    AND sort > "' . $course_sort . '"';
                         $course_sort++;
                     } else {
                         $sql = 'UPDATE ' . $TABLECOURSUSER . ' SET sort = sort+1
-                                WHERE user_id= "' . $user_id . '" AND relation_type<>' . COURSE_RELATION_TYPE_RRHH . ' AND user_course_cat="0" AND sort >= "' . $course_sort . '"';
+                                WHERE
+                                    user_id= "' . $user_id . '" AND
+                                    relation_type<>' . COURSE_RELATION_TYPE_RRHH . ' AND
+                                    user_course_cat="0" AND
+                                    sort >= "' . $course_sort . '"';
                     }
                     Database::query($sql);
                     break;
@@ -2418,20 +2462,21 @@ class CourseManager
      * @param  bool $send_to_tutor_also
      * @return string we return the message that is displayed when the action is successful
      */
-    public static function email_to_tutor($user_id, $course_code, $send_to_tutor_also = false)
+    public static function email_to_tutor($user_id, $courseId, $send_to_tutor_also = false)
     {
-
         if ($user_id != strval(intval($user_id))) {
             return false;
         }
 
         $course_code = Database::escape_string($course_code);
+        $information = self::get_course_information($course_code);
+        $courseId = $information['id'];
 
         $student = Database::fetch_array(Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
                 WHERE user_id='" . $user_id . "'"));
-        $information = self::get_course_information($course_code);
+
         $name_course = $information['title'];
-        $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " WHERE course_code='" . $course_code . "'";
+        $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " WHERE c_id ='" . $courseId . "'";
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
         //if ($send_to_tutor_also = true)
@@ -2555,7 +2600,7 @@ class CourseManager
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
                         FROM    " . $tbl_course_user . " course_rel_user
                         LEFT JOIN " . $tbl_course . " course
-                        ON course.code = course_rel_user.course_code
+                        ON course.id = course_rel_user.c_id
                         LEFT JOIN " . $tbl_user_course_category . " user_course_category
                         ON course_rel_user.user_course_cat = user_course_category.id
                         WHERE  $with_special_courses
@@ -2575,7 +2620,7 @@ class CourseManager
         // entries when a course is assigned to a HRD (DRH) as watcher
         $sql = "SELECT DISTINCT(course.code), course.id as real_id
                 FROM $tbl_course course
-                INNER JOIN $tbl_course_user cru ON course.code=cru.course_code
+                INNER JOIN $tbl_course_user cru ON course.id = cru.c_id
                 WHERE cru.user_id='$user_id' $without_special_courses";
 
         $result = Database::query($sql);
@@ -2645,11 +2690,11 @@ class CourseManager
      * @return array List of emails of tutors to course
      * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
      * */
-    public static function get_emails_of_tutors_to_course($code)
+    public static function get_emails_of_tutors_to_course($courseId)
     {
         $list = array();
         $res = Database::query("SELECT user_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                WHERE course_code='" . Database::escape_string($code) . "' AND status=1");
+                WHERE c_id ='" . intval($courseId) . "' AND status=1");
         while ($list_users = Database::fetch_array($res)) {
             $result = Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
                     WHERE user_id=" . $list_users['user_id']);
@@ -3103,12 +3148,8 @@ class CourseManager
      * @param    array $courses_list       Courses code
      * @return int
      **/
-    public static function suscribe_courses_to_hr_manager($hr_manager_id, $courses_list)
+    public static function subscribeCoursesToDrhManager($hr_manager_id, $courses_list)
     {
-        global $_configuration;
-
-        // Database Table Definitions
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
@@ -3116,10 +3157,13 @@ class CourseManager
         $affected_rows = 0;
 
         //Deleting assigned courses to hrm_id
-        if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT s.course_code FROM $tbl_course_rel_user s
-                    INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = s.course_code)
-                    WHERE user_id = $hr_manager_id AND relation_type=" . COURSE_RELATION_TYPE_RRHH . " AND access_url_id = " . api_get_current_access_url_id() . "";
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT s.c_id FROM $tbl_course_rel_user s
+                    INNER JOIN $tbl_course_rel_access_url a ON (a.c_id = s.c_id)
+                    WHERE
+                        user_id = $hr_manager_id AND
+                        relation_type=" . COURSE_RELATION_TYPE_RRHH . " AND
+                        access_url_id = " . api_get_current_access_url_id() . "";
         } else {
             $sql = "SELECT course_code FROM $tbl_course_rel_user
                     WHERE user_id = $hr_manager_id AND relation_type=" . COURSE_RELATION_TYPE_RRHH . " ";
@@ -3128,7 +3172,10 @@ class CourseManager
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $sql = "DELETE FROM $tbl_course_rel_user
-                        WHERE course_code = '{$row['course_code']}' AND user_id = $hr_manager_id AND relation_type=" . COURSE_RELATION_TYPE_RRHH . " ";
+                        WHERE
+                            c_id = '{$row['c_id']}' AND
+                            user_id = $hr_manager_id AND
+                            relation_type=" . COURSE_RELATION_TYPE_RRHH . " ";
                 Database::query($sql);
             }
         }
@@ -3136,9 +3183,10 @@ class CourseManager
         // inserting new courses list
         if (is_array($courses_list)) {
             foreach ($courses_list as $course_code) {
-                $course_code = Database::escape_string($course_code);
-                $sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, status, relation_type)
-                        VALUES('$course_code', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
+                $courseInfo = api_get_course_info($course_code);
+                $courseId = $courseInfo['id'];
+                $sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type)
+                        VALUES('$courseId', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $affected_rows++;
@@ -3263,7 +3311,7 @@ class CourseManager
         $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
+                    INNER JOIN $tbl_course_rel_user cru ON (cru.c_id = c.id)
                     INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
                     $extraInnerJoin
                 WHERE
@@ -3591,7 +3639,7 @@ class CourseManager
                         course_rel_user.user_id
                     FROM $tbl_course course
                     LEFT JOIN $tbl_course_user course_rel_user
-                    ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
+                    ON course.id = course_rel_user.c_id AND course_rel_user.user_id = '$user_id'
                     WHERE $with_special_courses group by course.code";
 
             $rs_special_course = Database::query($sql);
@@ -3773,7 +3821,7 @@ class CourseManager
                      $TABLECOURSUSER  course_rel_user,
                      $TABLE_ACCESS_URL_REL_COURSE url
                 WHERE
-                    course.code = course_rel_user.course_code AND
+                    course.id = course_rel_user.c_id AND
                     url.course_code = course.code AND
                     course_rel_user.user_id = '" . $user_id . "' AND
                     course_rel_user.user_course_cat='" . $user_category_id . "'
@@ -4322,6 +4370,9 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         // Course legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
 
@@ -4334,7 +4385,7 @@ class CourseManager
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id = $user_id AND course_code ='$course_code' ";
+                    WHERE user_id = $user_id AND c_id = '$courseId' ";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
@@ -4380,10 +4431,13 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "UPDATE $table SET legal_agreement = '1'
-                    WHERE user_id =  $user_id AND course_code  ='$course_code' ";
+                    WHERE user_id =  $user_id AND c_id  ='$courseId' ";
             Database::query($sql);
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -5007,7 +5061,7 @@ class CourseManager
         if (!is_array($teachers)) {
             $teachers = array($teachers);
         }
-
+        $courseId = intval($courseId);
         $courseInfo = api_get_course_info_by_id($courseId);
         $course_code = $courseInfo['code'];
 
@@ -5026,7 +5080,7 @@ class CourseManager
             }
 
             $sql = 'DELETE FROM ' . $course_user_table . '
-                    WHERE course_code="' . Database::escape_string($course_code) . '" AND status="1"' . $cond;
+                    WHERE c_id ="' . $courseId . '" AND status="1"' . $cond;
             Database::query($sql);
         }
 
@@ -5035,14 +5089,14 @@ class CourseManager
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
                 $sql = 'SELECT 1 FROM ' . $course_user_table . '
-                        WHERE user_id = "' . $userId . '" AND course_code = "' . $course_code . '" ';
+                        WHERE user_id = "' . $userId . '" AND c_id = "' . $courseId . '" ';
                 $result = Database::query($sql);
                 if (Database::num_rows($result)) {
                     $sql = 'UPDATE ' . $course_user_table . ' SET status = "1"
-                            WHERE course_code = "' . $course_code . '" AND user_id = "' . $userId . '"  ';
+                            WHERE c_id = "' . $courseId . '" AND user_id = "' . $userId . '"  ';
                 } else {
                     $sql = "INSERT INTO " . $course_user_table . " SET
-                        course_code = '" . Database::escape_string($course_code) . "',
+                        c_id = '" . $courseId . "',
                         user_id = '" . $userId . "',
                         status = '1',
                         role = '',

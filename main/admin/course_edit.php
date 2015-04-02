@@ -34,6 +34,7 @@ $interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('Cours
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $course_code = $courseInfo['code'];
+$courseId = $courseInfo['real_id'];
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -43,7 +44,7 @@ $sql = "SELECT user.user_id,lastname,firstname
         WHERE
             course_user.status='1' AND
             course_user.user_id=user.user_id AND
-            course_user.course_code='" . $course_code . "'" .
+            course_user.c_id ='" . $courseId . "'" .
         $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
@@ -370,17 +371,18 @@ if ($form->validate()) {
     }
 
     $sql = "INSERT IGNORE INTO " . $course_user_table . " SET
-                course_code = '" . Database::escape_string($course_code) . "',
-                user_id = '" . $tutor_id . "',
-                status = '1',
-                role = '',
-                tutor_id='0',
-                sort='0',
-                user_course_cat='0'";
+            c_id = " . $courseInfo['real_id'] . ",
+            user_id = '" . $tutor_id . "',
+            status = '1',
+            role = '',
+            tutor_id='0',
+            sort='0',
+            user_course_cat='0'";
     Database::query($sql);
 
     if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-        $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
+        $sql = "UPDATE $course_table SET
+                add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
                 WHERE id = " . $courseInfo['real_id'];
         Database::query($sql);
     }

@@ -52,6 +52,7 @@ $sort_by_first_name = api_sort_by_first_name();
 $course_info = api_get_course_info();
 $user_id = api_get_user_id();
 $courseCode = api_get_course_id();
+$courseId = api_get_course_int_id();
 
 //Can't auto unregister from a session
 if (!empty($session_id)) {
@@ -281,7 +282,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
                     $sql_query .= " WHERE
-                            course_code = '$course_code' AND
+                            c_id = '$courseId' AND
                             course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
                             course_user.user_id = user.user_id ";
 

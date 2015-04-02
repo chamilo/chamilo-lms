@@ -943,10 +943,10 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $id_course = api_get_course_id();
-            if (isset($id_course) && $id_course != -1) {
+            $courseId = api_get_course_int_id();
+            if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail         = CourseManager::get_emails_of_tutors_to_course($id_course);
+                $mail= CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {

@@ -115,7 +115,7 @@ class GradebookDataGenerator
         $userId = api_get_user_id();
         $course_code = api_get_course_id();
         $sessionId = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course($userId, $course_code);
+        $status_user = api_get_status_of_user_in_course($userId, api_get_course_int_id());
 
         if (empty($sessionId)) {
             $statusToFilter = STUDENT;

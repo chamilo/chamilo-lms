@@ -519,8 +519,10 @@ class Login
                 //Check if user is subscribed in a course
                 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql = "SELECT * FROM $course_user_table
-                   WHERE user_id  = '" . $user_id . "' AND relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
-                   AND course_code = '$course_id'";
+                       WHERE
+                        user_id  = '" . $user_id . "' AND
+                        relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND
+                        course_code = '$course_id'";
                 $result = Database::query($sql);
 
                 $cuData = null;

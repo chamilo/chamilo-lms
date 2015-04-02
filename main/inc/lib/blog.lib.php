@@ -1833,7 +1833,6 @@ class Blog
 		$currentCourse = $_course['code'];
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
-		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 		echo '<legend>'.get_lang('SubscribeMembers').'</legend>';
 

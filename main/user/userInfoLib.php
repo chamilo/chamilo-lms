@@ -220,33 +220,34 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
 	return true;
 }
 
-
 /**
  * @author Hugues Peeters - peeters@ipm.ucl.ac.be
  * @param  int     $user_id
  * @param  string  $course_code
  * @param  array   $properties - should contain 'role', 'status', 'tutor_id'
+ * @depracated
  * @return boolean true if succeed false otherwise
  */
 
-function update_user_course_properties($user_id, $course_code, $properties)
+function update_user_course_properties($user_id, $courseId, $properties)
 {
-	global $tbl_coursUser,$_user;
+	global $tbl_coursUser;
+	$_user = api_get_user_info();
     $sqlChangeStatus = "";
-    $user_id = strval(intval($user_id));//filter integer
-    $course_code = Database::escape_string($course_code);
-    if ($user_id != $_user['user_id'])
-    {
+    $user_id = strval(intval($user_id));
+    if ($user_id != $_user['user_id']) {
     	$sqlChangeStatus = "status     = '".Database::escape_string($properties['status'])."',";
     }
+	$courseId = intval($courseId);
 
-    	//feature deprecated   tutor_id      	= '".Database::escape_string($properties['tutor'])."'
-    	$sql = "UPDATE $tbl_coursUser
-    					SET 	".$sqlChangeStatus."
-	                    role      		= '".Database::escape_string($properties['role'])."',
-	                    tutor_id      	= '".Database::escape_string($properties['tutor'])."'
-	                    WHERE   user_id	    	= '".$user_id."'
-	                    AND     course_code		= '".$course_code."'";
+	//feature deprecated   tutor_id      	= '".Database::escape_string($properties['tutor'])."'
+	$sql = "UPDATE $tbl_coursUser
+			SET 	".$sqlChangeStatus."
+			role      		= '".Database::escape_string($properties['role'])."',
+			tutor_id      	= '".Database::escape_string($properties['tutor'])."'
+			WHERE
+				user_id	    	= '".$user_id."' AND
+				c_id = '".$courseId."'";
 
 	$result = Database::query($sql);
 
@@ -440,30 +441,28 @@ function get_course_user_info($user_id)
  *           'email', 'role'
  */
 
-function get_main_user_info($user_id, $courseCode)
+function get_main_user_info($user_id, $courseId)
 {
 	$user_id 	= strval(intval($user_id));
-	$courseCode = Database::escape_string($courseCode);
-	if (0 == $user_id)
-	{
+	$courseId = intval($courseId);
+	if (0 == $user_id) {
 		return false;
 	}
-
 
 	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT	u.*, u.lastname lastName, u.firstname firstName,
 	                u.email, u.picture_uri picture, cu.role,
 	                cu.status status, cu.tutor_id
-	        FROM    $table_user u, $table_course_user cu
-	        WHERE   u.user_id = cu.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-	        AND     u.user_id = '$user_id'
-	        AND     cu.course_code = '$courseCode'";
+	        FROM $table_user u, $table_course_user cu
+	        WHERE
+	        	u.user_id = cu.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+	        	u.user_id = '$user_id' AND
+	        	cu.c_id = '$courseId'";
 
 	$result = Database::query($sql);
 
-	if (Database::num_rows($result) > 0)
-	{
+	if (Database::num_rows($result) > 0) {
 		$userInfo = Database::fetch_array($result, 'ASSOC');
 		$userInfo['password']='';
 		return $userInfo;

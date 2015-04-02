@@ -747,9 +747,9 @@ class TestMainApi extends UnitTestCase {
 
 	function testApiGetStatusOfUserInCourse(){
 		$id = array(
-					'course_code'=>'TEST',
+					'c_id'=>'1',
 					'user_id'=>'1');
-		$res=api_get_status_of_user_in_course($id['course_code'],$id['user_id']);
+		$res=api_get_status_of_user_in_course($id['user_id'], $id['c_id']);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}

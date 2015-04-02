@@ -1565,7 +1565,7 @@ class Tracking
     	$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     	$tbl_session_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    	$sql = 'SELECT DISTINCT course_code
+    	$sql = 'SELECT DISTINCT c_id
                 FROM ' . $tbl_course_rel_user . '
                 WHERE user_id = ' . $user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
     	$rs = Database::query($sql);
@@ -3457,7 +3457,11 @@ class Tracking
         $tableCourse   = Database :: get_main_table(TABLE_MAIN_COURSE);
         $inner = '';
         $now = api_get_utc_datetime();
-        if ($session_id!=0) {
+
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['id'];
+
+        if ($session_id != 0) {
             $inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user
                     ON c.code = session_course_user.course_code
                     AND session_course_user.id_session = '.intval($session_id).'
@@ -3479,7 +3483,7 @@ class Tracking
                     INNER JOIN '.$tableCourse.' c
                     ON (c.id = stats_login.c_id)
                     '.$inner.'
-                    WHERE course_user.course_code = \''.Database::escape_string($course_code).'\'
+                    WHERE course_user.c_id = \''.$courseId.'\'
                     AND stats_login.login_course_date IS NULL
                     GROUP BY course_user.user_id';
         }
@@ -3916,10 +3920,12 @@ class Tracking
 
         $user_id = intval($user_id);
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT cu.course_code as code, title
-                    FROM $tbl_course_user cu INNER JOIN $tbl_access_rel_course a
-                    ON (a.course_code = cu.course_code)
-                    INNER JOIN $tbl_course c ON (cu.course_code = c.code)
+            $sql = "SELECT c.code, title
+                    FROM $tbl_course_user cu
+                    INNER JOIN $tbl_course c
+                    ON (cu.c_id = c.id)
+                    INNER JOIN $tbl_access_rel_course a
+                    ON (a.course_code = c.code)
                     WHERE
                         user_id = $user_id AND
                         relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
@@ -3928,7 +3934,7 @@ class Tracking
         } else {
             $sql = "SELECT course_code as code, title
                     FROM $tbl_course_user u
-                    INNER JOIN $tbl_course c ON (course_code = c.code)
+                    INNER JOIN $tbl_course c ON (c_id = c.id)
                     WHERE
                         u.user_id= $user_id AND
                         relation_type<>".COURSE_RELATION_TYPE_RRHH."

@@ -269,8 +269,7 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
     if (api_is_platform_admin()) {
         $courseInfo = api_get_course_info();
         if (!empty($course_list)) {
-            $courseIdList = array_keys($course_list);
-            if (!in_array($courseInfo['real_id'], $courseIdList)) {
+            if (!in_array($courseInfo['real_id'], $course_list)) {
                 $course_list = array_merge($course_list, array($courseInfo));
             }
         } else {

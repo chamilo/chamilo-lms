@@ -112,7 +112,7 @@ class Statistics
             if (isset ($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                 FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
-                WHERE c.code = cu.course_code
+                WHERE c.id = cu.c_id
                 AND c.category_code = '".Database::escape_string($categoryCode)."'
                 AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."'
                 $status_filter $active_filter";

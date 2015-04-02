@@ -465,8 +465,20 @@ class UserManager
 
         // Add event to system log
         $user_id_manager = api_get_user_id();
-        Event::addEvent(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-        Event::addEvent(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        Event::addEvent(
+            LOG_USER_DELETE,
+            LOG_USER_ID,
+            $user_id,
+            api_get_utc_datetime(),
+            $user_id_manager
+        );
+        Event::addEvent(
+            LOG_USER_DELETE,
+            LOG_USER_OBJECT,
+            $user_info,
+            api_get_utc_datetime(),
+            $user_id_manager
+        );
         return true;
     }
 
@@ -521,7 +533,7 @@ class UserManager
         $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
         $r = Database::query($sql);
         if ($r !== false) {
-            Event::addEvent(LOG_USER_DISABLE,LOG_USER_ID,$ids);
+            Event::addEvent(LOG_USER_DISABLE, LOG_USER_ID, $ids);
         }
         return $r;
     }
@@ -781,7 +793,7 @@ class UserManager
             $ev = LOG_USER_ENABLE;
         }
         if ($r !== false) {
-            Event::addEvent($ev,LOG_USER_ID,$user_id);
+            Event::addEvent($ev, LOG_USER_ID, $user_id);
         }
         return $r;
     }
@@ -789,6 +801,7 @@ class UserManager
     /**
      * Disables a user
      * @param int User id
+     * @return bool
      * @uses UserManager::change_active_state() to actually disable the user
      * @assert (0) === false
      */
@@ -798,11 +811,13 @@ class UserManager
             return false;
         }
         self::change_active_state($user_id, 0);
+        return true;
     }
 
     /**
      * Enable a user
      * @param int User id
+     * @return bool
      * @uses UserManager::change_active_state() to actually disable the user
      * @assert (0) === false
      */
@@ -812,6 +827,7 @@ class UserManager
             return false;
         }
         self::change_active_state($user_id, 1);
+        return true;
     }
 
     /**
@@ -2000,7 +2016,11 @@ class UserManager
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            Event::addEvent(LOG_USER_FIELD_CREATE, LOG_USER_FIELD_VARIABLE, Database::escape_string($fieldvarname));
+            Event::addEvent(
+                LOG_USER_FIELD_CREATE,
+                LOG_USER_FIELD_VARIABLE,
+                $fieldvarname
+            );
         } else {
             //echo "false - failed" ;
             return false;

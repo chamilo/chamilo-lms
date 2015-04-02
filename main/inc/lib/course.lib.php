@@ -2261,7 +2261,7 @@ class CourseManager
                 $code,
                 api_get_utc_datetime(),
                 $user_id,
-                $code
+                $courseId
             );
         }
     }

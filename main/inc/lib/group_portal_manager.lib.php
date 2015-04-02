@@ -227,6 +227,7 @@ class GroupPortalManager
     public static function getGroupsByDepthLevel($groupId, $levels = 10)
     {
         $groups = array();
+        $groupId = intval($groupId);
 
         $groupTable = Database::get_main_table(TABLE_MAIN_GROUP);
         $groupRelGroupTable = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
@@ -235,8 +236,8 @@ class GroupPortalManager
         $from = "FROM $groupTable g1 ";
 
         for ($i = 1; $i <= $levels; $i++) {
-            $gNumber = $i;
-            $ggNumber = $i - 1;
+            $tableIndexNumber = $i;
+            $tableIndexJoinNumber = $i - 1;
 
             $select .= "g$i.id as id_$i ";
 
@@ -245,8 +246,10 @@ class GroupPortalManager
             if ($i == 1) {
                 $from .= "INNER JOIN $groupRelGroupTable gg0 ON g1.id = gg0.subgroup_id and gg0.group_id = $groupId ";
             } else {
-                $from .= "LEFT JOIN $groupRelGroupTable gg$ggNumber ON g$ggNumber.id = gg$ggNumber.group_id ";
-                $from .= "LEFT JOIN $groupTable g$gNumber ON gg$ggNumber.subgroup_id = g$gNumber.id ";
+                $from .= "LEFT JOIN $groupRelGroupTable gg$tableIndexJoinNumber ";
+                $from .= " ON g$tableIndexJoinNumber.id = gg$tableIndexJoinNumber.group_id ";
+                $from .= "LEFT JOIN $groupTable g$tableIndexNumber ";
+                $from .= " ON gg$tableIndexJoinNumber.subgroup_id = g$tableIndexNumber.id ";
             }
         }
 
@@ -291,24 +294,24 @@ class GroupPortalManager
         }
         $sql = $select_part.' '.$cond_part;
         $res = Database::query($sql);
-        $toreturn = array();
+        $toReturn = array();
 
         while ($item = Database::fetch_assoc($res)) {
             foreach ($item as $key => $value) {
                 if ($key == 'id_1') {
-                    $toreturn[$value]['name'] = $item['name_1'];
+                    $toReturn[$value]['name'] = $item['name_1'];
                 } else {
                     $temp = explode('_', $key);
-                    $index_key = $temp[1];
-                    $string_key = $temp[0];
-                    $previous_key = $string_key.'_'.$index_key - 1;
-                    if ($string_key == 'id' && isset($item[$key])) {
-                        $toreturn[$item[$previous_key]]['hrms'][$index_key]['name'] = $item['name_'.$index_key];
+                    $indexKey = $temp[1];
+                    $stringKey = $temp[0];
+                    $previousKey = $stringKey.'_'.$indexKey - 1;
+                    if ($stringKey == 'id' && isset($item[$key])) {
+                        $toReturn[$item[$previousKey]]['hrms'][$indexKey]['name'] = $item['name_'.$indexKey];
                     }
                 }
             }
         }
-        return $toreturn;
+        return $toReturn;
     }
 
     /**
@@ -338,16 +341,16 @@ class GroupPortalManager
         $sql = $select_part.' '.$cond_part."WHERE rg0.subgroup_id='$group_id'";
         $res = Database::query($sql);
         $temp_arr = Database::fetch_array($res, 'NUM');
-        $toreturn = array();
+        $toReturn = array();
         if (is_array($temp_arr)) {
             foreach ($temp_arr as $elt) {
                 if (isset($elt)) {
-                    $toreturn[] = $elt;
+                    $toReturn[] = $elt;
                 }
             }
         }
 
-        return $toreturn;
+        return $toReturn;
     }
 
     /**

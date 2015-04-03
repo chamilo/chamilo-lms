@@ -75,7 +75,7 @@ if (api_get_setting('allow_lostpassword') == 'false') {
 
 if (isset($_GET['reset']) && isset($_GET['id'])) {
     $message = Display::return_message(Login::reset_password($_GET["reset"], $_GET["id"], true), 'normal', false);
-	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';
+	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn btn-back" >'.get_lang('Back').'</a>';
 	echo $message;
 } else {
 	$form = new FormValidator('lost_password');

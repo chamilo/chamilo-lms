@@ -91,10 +91,10 @@ class TestEvents extends UnitTestCase {
 		global $_configuration;
 		global $_user;
 		global $TABLETRACK_DEFAULT;
-		$event_type = Database::escape_string($event_type);
-		$event_value_type = Database::escape_string($event_value_type);
-		$event_value = Database::escape_string($event_value);
-		$res=Event::addEvent($event_type, $event_value_type,$event_value);
+		$event_type = 'bla';
+		$event_value_type = 'blo';
+		$event_value = 'bli';
+		$res=Event::addEvent($event_type, $event_value_type, $event_value);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

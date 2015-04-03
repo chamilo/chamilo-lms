@@ -30,7 +30,7 @@
                         <img src="resources/img/128/buycourses.png">
                     </a>
                     <div class="caption">
-                        <a class="btn" href="src/list.php">{{ BuyCourses }}</a>
+                        <a class="btn btn-default" href="src/list.php">{{ BuyCourses }}</a>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                         <img src="resources/img/128/settings.png">
                     </a>
                     <div class="caption">
-                        <a class="btn" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
+                        <a class="btn btn-default" href="src/configuration.php">{{ ConfigurationOfCoursesAndPrices }}</a>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         <img src="resources/img/128/paymentsettings.png">
                     </a>
                     <div class="caption">
-                        <a class="btn" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
+                        <a class="btn btn-default" href="src/paymentsetup.php">{{ ConfigurationOfPayments }} </a>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                         <img src="resources/img/128/backlogs.png">
                     </a>
                     <div class="caption">
-                        <a class="btn" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
+                        <a class="btn btn-default" href="src/pending_orders.php"> {{ OrdersPendingOfPayment }} </a>
                     </div>
                 </div>
             </div>

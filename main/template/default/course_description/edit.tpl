@@ -7,7 +7,7 @@
 {% if is_allowed_to_edit %}
     <div class="btn-toolbar actions-bar" >
         <div class="btn-group">
-            <a href="{{root}}&amp;action=listing" class="btn" title="{{'ImportCSV'|get_lang}}">
+            <a href="{{root}}&amp;action=listing" class="btn btn-default" title="{{'ImportCSV'|get_lang}}">
                 <i class="size-32 icon-back"></i>
             </a>
         </div>

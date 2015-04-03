@@ -446,7 +446,7 @@ class Security
      */
     public static function filter_img_path($image_path)
     {
-        static $allowed_extensions = array('png', 'gif', 'jpg', 'jpeg');
+        static $allowed_extensions = array('png', 'gif', 'jpg', 'jpeg', 'svg', 'webp');
         $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
         // We allow static images only, query strings are forbidden.
         if (strpos($image_path, '?') !== false) {

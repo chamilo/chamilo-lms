@@ -49,7 +49,13 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     $i = api_get_anonymous_id();
-    Event::addEvent(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
+    Event::addEvent(
+        LOG_ATTEMPTED_FORCED_LOGIN,
+        'tried_hacking_get',
+        $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),
+        null,
+        $i
+    );
     echo 'Attempted breakin - sysadmins notified.';
     session_destroy();
     die();

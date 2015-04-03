@@ -415,8 +415,8 @@ $(document).ready(function() {
     <h3>{{'Skills'|get_lang}}</h3>
     <div class="btn-group">
         <a style="z-index: 1000" class="btn" id="add_item_link" href="#">{{'AddSkill'|get_lang}}</a>
-        <a style="z-index: 1000" class="btn" id="return_to_root" href="#">{{'Root'|get_lang}}</a>
-        <a style="z-index: 1000" class="btn" id="return_to_admin" href="{{_p.web_main}}admin">{{'BackToAdmin'|get_lang}}</a>
+        <a style="z-index: 1000" class="btn btn-default" id="return_to_root" href="#">{{'Root'|get_lang}}</a>
+        <a style="z-index: 1000" class="btn btn-default" id="return_to_admin" href="{{_p.web_main}}admin">{{'BackToAdmin'|get_lang}}</a>
         
     </div>
 </div>

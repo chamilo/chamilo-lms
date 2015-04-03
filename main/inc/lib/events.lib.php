@@ -629,12 +629,14 @@ class Event
     /**
      * Records information for common (or admin) events (in the track_e_default table)
      * @author Yannick Warnier <yannick.warnier@beeznest.com>
-     * @param	string	Type of event
-     * @param	string	Type of value
-     * @param	string	Value
-     * @param	string	Timestamp (defaults to null)
-     * @param	integer	User ID (defaults to null)
-     * @param	string	Course code (defaults to null)
+     * @param   string  $event_type Type of event
+     * @param   string  $event_value_type Type of value
+     * @param   string  $event_value Value
+     * @param   string  $datetime Datetime (UTC) (defaults to null)
+     * @param   int     $user_id User ID (defaults to null)
+     * @param   int $course_id Course ID (defaults to null)
+     * @param   int $sessionId Session ID
+     * @return  bool
      * @assert ('','','') === false
      */
     public static function addEvent(
@@ -643,7 +645,7 @@ class Event
         $event_value,
         $datetime = null,
         $user_id = null,
-        $course_code = null,
+        $course_id = null,
         $sessionId = 0
     ) {
         $TABLETRACK_DEFAULT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
@@ -653,6 +655,16 @@ class Event
         }
         $event_type = Database::escape_string($event_type);
         $event_value_type = Database::escape_string($event_value_type);
+        if (!empty($course_id)) {
+            $course_id = intval($course_id);
+        } else {
+            $course_id = api_get_course_int_id();
+        }
+        if (!empty($sessionId)) {
+            $sessionId = intval($sessionId);
+        } else {
+            $sessionId = api_get_session_id();
+        }
 
         //Clean the user_info
         if ($event_value_type == LOG_USER_OBJECT) {
@@ -673,15 +685,7 @@ class Event
         }
 
         $event_value = Database::escape_string($event_value);
-        $course_info = api_get_course_info($course_code);
         $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
-
-        if (!empty($course_info)) {
-            $course_id = $course_info['real_id'];
-        } else {
-            $course_id = null;
-            $course_code = null;
-        }
 
         if (!isset($datetime)) {
             $datetime = api_get_utc_datetime();
@@ -1060,22 +1064,16 @@ class Event
         }
 
         if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
-            $sql = "DELETE FROM $track_e_exercises WHERE exe_id IN (" . implode(
-                    ',',
-                    $exe_list
-                ) . ")";
+            $sql = "DELETE FROM $track_e_exercises
+                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
             Database::query($sql);
 
-            $sql = "DELETE FROM $track_attempts WHERE exe_id IN (" . implode(
-                    ',',
-                    $exe_list
-                ) . ")";
+            $sql = "DELETE FROM $track_attempts
+                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
             Database::query($sql);
 
-            $sql = "DELETE FROM $recording_table WHERE exe_id IN (" . implode(
-                    ',',
-                    $exe_list
-                ) . ")";
+            $sql = "DELETE FROM $recording_table
+                WHERE exe_id IN (" . implode(',', $exe_list) . ")";
             Database::query($sql);
         }
 
@@ -1085,7 +1083,7 @@ class Event
             $lp_id,
             null,
             null,
-            $course['code'],
+            $course_id,
             $session_id
         );
     }
@@ -1120,7 +1118,7 @@ class Event
                 $exercise_id . '-' . $user_id,
                 null,
                 null,
-                $course_code,
+                $course_id,
                 $session_id
             );
         }
@@ -1684,7 +1682,7 @@ class Event
             $exe_id . '-' . $question_id,
             null,
             null,
-            $courseInfo['code'],
+            $courseId,
             $session_id
         );
     }
@@ -1694,8 +1692,9 @@ class Event
      * @param $user_id
      * @param int $courseId
      * @param $question_id
+     * @param int $sessionId
      */
-    public static function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id)
+    public static function delete_attempt_hotspot($exe_id, $user_id, $courseId, $question_id, $sessionId = null)
     {
         $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
@@ -1703,6 +1702,9 @@ class Event
         $user_id = intval($user_id);
         $courseId = intval($courseId);
         $question_id = intval($question_id);
+        if (!isset($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
 
         $sql = "DELETE FROM $table_track_attempt
                 WHERE   hotspot_exe_id = $exe_id AND
@@ -1716,8 +1718,8 @@ class Event
             $exe_id . '-' . $question_id,
             null,
             null,
-            $course_code,
-            $session_id
+            $courseId,
+            $sessionId
         );
     }
 

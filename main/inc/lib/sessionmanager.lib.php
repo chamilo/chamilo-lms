@@ -228,7 +228,13 @@ class SessionManager
 
                     // add event to system log
                     $user_id = api_get_user_id();
-                    Event::addEvent(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
+                    Event::addEvent(
+                        LOG_SESSION_CREATE,
+                        LOG_SESSION_ID,
+                        $session_id,
+                        api_get_utc_datetime(),
+                        $user_id
+                    );
                 }
                 return $session_id;
             }
@@ -1498,7 +1504,13 @@ class SessionManager
         Database::query($sql_delete_sfv);
 
         // Add event to system log
-        Event::addEvent(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $userId);
+        Event::addEvent(
+            LOG_SESSION_DELETE,
+            LOG_SESSION_ID,
+            $id_checked,
+            api_get_utc_datetime(),
+            $userId
+        );
     }
 
     /**
@@ -2335,7 +2347,13 @@ class SessionManager
         $id_session = Database::insert_id();
         // Add event to system log
         $user_id = api_get_user_id();
-        Event::addEvent(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
+        Event::addEvent(
+            LOG_SESSION_CATEGORY_CREATE,
+            LOG_SESSION_CATEGORY_ID,
+            $id_session,
+            api_get_utc_datetime(),
+            $user_id
+        );
         return $id_session;
     }
 

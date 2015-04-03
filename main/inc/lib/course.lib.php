@@ -2236,8 +2236,11 @@ class CourseManager
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_online WHERE c_id = $courseId";
             Database::query($sql);
-            $sql = "DELETE FROM $table_stats_default WHERE c_id = $courseId";
-            Database::query($sql);
+            // Do not delete rows from track_e_default as these include course
+            // creation and other important things that do not take much space
+            // but give information on the course history
+            //$sql = "DELETE FROM $table_stats_default WHERE c_id = $courseId";
+            //Database::query($sql);
             $sql = "DELETE FROM $table_stats_downloads WHERE c_id = $courseId";
             Database::query($sql);
             $sql = "DELETE FROM $table_stats_links WHERE c_id = $courseId";
@@ -2293,7 +2296,7 @@ class CourseManager
                 $code,
                 api_get_utc_datetime(),
                 $user_id,
-                $code
+                $courseId
             );
         }
     }

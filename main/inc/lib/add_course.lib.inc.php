@@ -1439,7 +1439,7 @@ class AddCourse
                     $code,
                     api_get_utc_datetime(),
                     $user_id,
-                    $code
+                    $course_id
                 );
 
                 $send_mail_to_admin = api_get_setting(

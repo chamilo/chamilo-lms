@@ -8,7 +8,7 @@
     <span id="progress-info"></span>
     <br />
     <a id="record" class="btn btn-danger" >{{ 'RecordAudio' | get_lang }}</a>
-    <button id="stop" class="btn" disabled="">{{ 'StopRecordingAudio' | get_lang }}</button>
+    <button id="stop" class="btn btn-default" disabled="">{{ 'StopRecordingAudio' | get_lang }}</button>
 </div>
 
 <div id="wami" style="float:left; z-index:6000">

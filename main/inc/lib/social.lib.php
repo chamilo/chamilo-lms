@@ -643,8 +643,12 @@ class SocialManager extends UserManager
             $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
             $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
 
-            $big_image = $big_image['file'].'?'.uniqid();
-            $normal_image = $img_array['dir'].$img_array['file'].'?'.uniqid();
+            $big_image = $big_image['file'];
+            $normal_image = $img_array['dir'].$img_array['file'];
+            if (!api_get_configuration_value('gravatar_enabled')) {
+                $big_image .= '?'.uniqid();
+                $normal_image .= '?'.uniqid();
+            }
 
             //--- User image
             if ($img_array['file'] != 'unknown.jpg') {
@@ -953,13 +957,14 @@ class SocialManager extends UserManager
             $status_icon = Display::span('', array('class' => 'online_user_in_text'));
             $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
 
-            if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
+            $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+            if (($image_array['file'] == 'unknown.jpg'
+                || !file_exists($image_array['dir'].$image_array['file'])) &&
+                !api_get_configuration_value('gravatar_enabled')) {
                 $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-            } else {
-                $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
-                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+
             }
+            $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
             $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
             $html .= '<li class="col-md-'.($column_size / 3).' thumbnail">'.$img.'<div class="caption">'.$name.'</div></li>';
         }
@@ -997,12 +1002,16 @@ class SocialManager extends UserManager
             $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
 
             $html .= '<div class ="thumbnail">';
+
+            $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
+            $sysdir = $sysdir_array['dir'];
+            $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
             if (strlen(trim($user_object->picture_uri)) > 0) {
-                $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
-                $sysdir = $sysdir_array['dir'];
-                $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
                 $webdir = $webdir_array['dir'];
-                $fullurl = $webdir.$user_object->picture_uri;
+                $fullurl = $webdir;
+                $fullurl .= api_get_configuration_value('gravatar_enabled') ?
+                    $webdir_array['file'] :
+                    $user_object->picture_uri;
                 $system_image_path = $sysdir.$user_object->picture_uri;
                 list($width, $height, $type, $attr) = @getimagesize($system_image_path);
                 $height += 30;
@@ -1016,7 +1025,9 @@ class SocialManager extends UserManager
                 //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
                 $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
             } else {
-                $html .= Display::return_icon('unknown.jpg', get_lang('Unknown'));
+                $html .= api_get_configuration_value('gravatar_enabled') ?
+                    '<img src="'.$webdir_array['file'].'" alt="'.$alt.'" />' :
+                    Display::return_icon('unknown.jpg', get_lang('Unknown'));
             }
             if (!empty($status)) {
                 $html .= '<div class="caption">'.$status.'</div>';
@@ -1059,10 +1070,9 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
-        $sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-        $sysdir = $sysdir_array['dir'];
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
-        $webdir = $webdir_array['dir'];
+        $sysdir = UserManager::getUserPathById($user_id, 'system');
+        $webdir = UserManager::getUserPathById($user_id, 'web');
 
         if (!is_dir($sysdir)) {
             mkdir($sysdir, api_get_permissions_for_new_directories(), true);
@@ -1190,9 +1200,8 @@ class SocialManager extends UserManager
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // create directory
-        $pathUserInfo = UserManager::get_user_picture_path_by_id($userId, 'system', true);
         $social = '/social/';
-        $pathMessageAttach = $pathUserInfo['dir'] . 'message_attachments'. $social;
+        $pathMessageAttach = UserManager::getUserPathById($userId, 'system').'message_attachments'.$social;
         $safeFileComment = Database::escape_string($fileComment);
         $safeFileName = Database::escape_string($fileAttach['name']);
 
@@ -1246,6 +1255,7 @@ class SocialManager extends UserManager
         if (empty($start)) {
             $start = '0000-00-00';
         }
+
         $tblMessage = Database::get_main_table(TABLE_MESSAGE);
         $tblMessageAttachement = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
@@ -1254,10 +1264,10 @@ class SocialManager extends UserManager
         $limit = intval($limit);
 
         $sql = "SELECT id, user_sender_id,user_receiver_id, send_date, content, parent_id,
-                  (SELECT ma.path FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as path,
-                  (SELECT ma.filename FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as filename
-                FROM $tblMessage tm
-                WHERE user_receiver_id = $userId
+          (SELECT ma.path FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as path,
+          (SELECT ma.filename FROM $tblMessageAttachement ma WHERE  ma.message_id = tm.id ) as filename
+            FROM $tblMessage tm
+            WHERE user_receiver_id = $userId
                 AND send_date > '$start' ";
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
@@ -1426,9 +1436,13 @@ class SocialManager extends UserManager
         $wallImage = '';
         if (!empty($message['path'])) {
             $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
-            $pathImg = $pathUserInfo['dir'] . 'message_attachments';
-            $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
-            $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
+            $imageBig = $pathUserInfo['file'];
+            $imageSmall = $pathUserInfo['file'];
+            if (!api_get_configuration_value('gravatar_enabled')) {
+                $pathImg = UserManager::getUserPathById($authorId, 'web').'message_attachments';
+                $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
+                $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
+            }
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
@@ -1633,7 +1647,7 @@ class SocialManager extends UserManager
             $friendHtml.='</ul>';
         } else {
             $friendHtml.= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />'
-                .'<a class="btn" href="'.api_get_path(WEB_PATH).'whoisonline.php">'. get_lang('TryAndFindSomeFriends').'</a></div>';
+                .'<a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php"><i class="fa fa-search"></i> '. get_lang('TryAndFindSomeFriends').'</a></div>';
         }
 
         return $friendHtml;

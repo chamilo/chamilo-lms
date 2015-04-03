@@ -57,7 +57,7 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE skill ADD COLUMN criteria text DEFAULT ''");
         $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
-        $this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL");
+        //$this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL"); //already added in 1.9.x
         $this->addSql("ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_exercises ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL");
@@ -82,7 +82,6 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
         $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
-        $this->addSql("ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 

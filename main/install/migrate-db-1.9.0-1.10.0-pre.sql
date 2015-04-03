@@ -111,6 +111,8 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_description', NULL, 'textfield', 'Tracking', '', 'MetaDescriptionTitle', 'MetaDescriptionComment', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1);
 
+-- v1.10.0.35
+INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0);
 
 -- Course DB changes (c_*)
 
@@ -131,4 +133,4 @@ CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.34' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';

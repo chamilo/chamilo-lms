@@ -621,8 +621,9 @@ class Plugin
      */
     public function deleteTab($key)
     {
+        $t = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $sql = "SELECT *
-                FROM settings_current
+                FROM $t
                 WHERE variable = 'show_tabs'
                 AND subkey <> '$key'
                 AND subkey like 'custom_tab_%'

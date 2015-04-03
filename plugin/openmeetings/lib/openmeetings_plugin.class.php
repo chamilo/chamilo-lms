@@ -83,7 +83,8 @@ class OpenMeetingsPlugin extends Plugin
         $sql = "DELETE FROM $t_tool WHERE name = 'openmeetings' AND c_id = c_id";
         Database::query($sql);
 
-        $sql = "DROP TABLE IF EXISTS plugin_openmeetings";
+        $t = Database::get_main_table('plugin_openmeetings');
+        $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);
 
         //Deleting course settings

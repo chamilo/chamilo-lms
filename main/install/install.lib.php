@@ -1865,9 +1865,7 @@ function installSettings(
     $allowTeacherSelfRegistration
 ) {
     $sql = "
-        INSERT INTO settings_current
-        (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
-        VALUES
+        INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
         ('Institution',NULL,'textfield','Platform','$organizationName','InstitutionTitle','InstitutionComment','platform',NULL, 1),
         ('InstitutionUrl',NULL,'textfield','Platform','$organizationUrl','InstitutionUrlTitle','InstitutionUrlComment',NULL,NULL, 1),
         ('siteName',NULL,'textfield','Platform','$campusName','SiteNameTitle','SiteNameComment',NULL,NULL, 1),
@@ -2167,8 +2165,7 @@ function installSettings(
         ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
         ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
         ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0),
-        ('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);
-    ";
+        ('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);";
     Database::query($sql);
 
     $sql = "INSERT INTO settings_options (variable, value, display_text) VALUES

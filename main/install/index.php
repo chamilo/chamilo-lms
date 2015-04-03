@@ -122,6 +122,7 @@ require_once __DIR__.'/version.php';
 if (isAlreadyInstalledSystem()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
+	// @todo uncomment this.
 	/*require '../inc/global_error_message.inc.php';
 	die();*/
 }
@@ -652,9 +653,9 @@ if (@$_POST['step2']) {
 
 				// Migrate using the file Version110.php
 				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm);
-                //include 'update-files-1.9.0-1.10.0.inc.php';
+                include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
-                //include 'update-configuration.inc.php';
+                include 'update-configuration.inc.php';
                 break;
             default:
                 break;
@@ -727,12 +728,14 @@ if (@$_POST['step2']) {
 		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
 		Database::query($sql);
 
+		$sql = "INSERT INTO admin VALUES(1, 1)";
+		Database::query($sql);
+
 		// The chosen during the installation platform language should be enabled.
 		$sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
 		Database::query($sql);
 
 		// Install settings
-
 		installSettings(
 			$institutionForm,
 			$institutionUrlForm,
@@ -746,13 +749,13 @@ if (@$_POST['step2']) {
 		);
 
 		lockSettings();
-
 		update_dir_and_files_permissions();
 
-
+		include 'install_files.inc.php';
 	}
     display_after_install_message($installType);
-    //Hide the "please wait" message sent previously
+
+    // Hide the "please wait" message sent previously
     echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
 
 } elseif (@$_POST['step1'] || $badUpdatePath) {

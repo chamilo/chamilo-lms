@@ -34,15 +34,6 @@ $_configuration['db_user'] = '{DATABASE_USER}';
 $_configuration['db_password'] = '{DATABASE_PASSWORD}';
 // main Chamilo database
 $_configuration['main_database'] = '{DATABASE_MAIN}';
-
-// Persistent connections may have profound effects (not always positive) on
-// your database server. Use with care.
-//$_configuration['db_persistent_connection'] = false;
-// For separate web and DB servers, reduce the bandwidth used by compressing
-// data returning from the DB server. By default, it is ignored. Uncomment
-// the following to enable compression.
-//$_configuration['db_client_flags'] = MYSQL_CLIENT_COMPRESS;
-
 // Enable access to database management for platform admins.
 $_configuration['db_manager_enabled'] = false;
 
@@ -303,7 +294,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Limit for the Session Admin role. The administration page show only
 // User block -> Add user
 // Course Sessions block -> Training session list
-$_configuration['limit_session_admin_role'] = false;
+//$_configuration['limit_session_admin_role'] = false;
 // Show session description
 //$_configuration['show_session_description'] = false;
 

@@ -455,28 +455,35 @@ if (@$_POST['step2']) {
 	if ($installType == 'update') {
 		$db_name = $dbNameForm;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'platformLanguage');
+		$manager = testDbConnect(
+			$dbHostForm,
+			$dbUsernameForm,
+			$dbPassForm,
+			$dbNameForm
+		);
+
+		$tmp = get_config_param_from_db('platformLanguage');
 		if (!empty($tmp)) $languageForm = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'emailAdministrator');
+		$tmp = get_config_param_from_db('emailAdministrator');
 		if (!empty($tmp)) $emailForm = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'administratorName');
+		$tmp = get_config_param_from_db('administratorName');
 		if (!empty($tmp)) $adminFirstName = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'administratorSurname');
+		$tmp = get_config_param_from_db('administratorSurname');
 		if (!empty($tmp)) $adminLastName = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'administratorTelephone');
+		$tmp = get_config_param_from_db('administratorTelephone');
 		if (!empty($tmp)) $adminPhoneForm = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'siteName');
+		$tmp = get_config_param_from_db('siteName');
 		if (!empty($tmp)) $campusForm = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'Institution');
+		$tmp = get_config_param_from_db('Institution');
 		if (!empty($tmp)) $institutionForm = $tmp;
 
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'InstitutionUrl');
+		$tmp = get_config_param_from_db('InstitutionUrl');
 		if (!empty($tmp)) $institutionUrlForm = $tmp;
 
 		// For version 1.9
@@ -490,11 +497,11 @@ if (@$_POST['step2']) {
 		}
 
 		$allowSelfReg = false;
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration');
+		$tmp = get_config_param_from_db('allow_registration');
 		if (!empty($tmp)) $allowSelfReg = $tmp;
 
 		$allowSelfRegProf = false;
-		$tmp = get_config_param_from_db($dbHostForm, $dbUsernameForm, $dbPassForm, $db_name, 'allow_registration_as_teacher');
+		$tmp = get_config_param_from_db('allow_registration_as_teacher');
 		if (!empty($tmp)) $allowSelfRegProf = $tmp;
 	}
 
@@ -621,6 +628,7 @@ if (@$_POST['step2']) {
 
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
+
 		switch ($my_old_version) {
             case '1.9.0':
             case '1.9.2':
@@ -632,14 +640,25 @@ if (@$_POST['step2']) {
             case '1.9.8.2':
             case '1.9.10':
 			case '1.9.10.2':
-                include 'update-db-1.9.0-1.10.0.inc.php';
+
+				// Fix type "enum" before running the migration with Doctrine
+				Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+				Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
+				Database::query("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+				Database::query("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
+				Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
+				Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
+				Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+
+				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm);
                 include 'update-files-1.9.0-1.10.0.inc.php';
-                //Only updates the configuration.inc.php with the new version
+                // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
                 break;
             default:
                 break;
         }
+		exit;
     } else {
 		set_file_folder_permissions();
 
@@ -724,58 +743,7 @@ if (@$_POST['step2']) {
     		$allowSelfRegProf
 		);
 
-		// Config doctrine migrations
 
-		/*$db = DriverManager::getConnection(array(
-			'dbname' => $dbNameForm,
-			'user' => $dbUsernameForm,
-			'password' => $dbPassForm,
-			'host' => $dbHostForm,
-			'driver' => 'pdo_mysql',
-			'charset' => 'utf8',
-			'driverOptions' => array(
-				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
-			)
-		));
-
-		$config = new Configuration($db);
-
-		// Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
-		$config->setMigrationsTableName('version');
-		// Namespace of your migration classes, do not forget escape slashes, do not add last slash
-		$config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\v1');
-		// Directory where your migrations are located
-
-		$config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v1');
-		// Load your migrations
-		$config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
-		$migration = new Migration($config);
-		$to = null;
-		// Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
-		$versions = $migration->getSql($to);
-		$nl = '<br>';
-		foreach ($versions as $version => $queries) {
-			echo 'VERSION: ' . $version . $nl;
-			echo '----------------------------------------------' . $nl . $nl;
-
-			foreach ($queries as $query) {
-				echo $query . $nl . $nl;
-			}
-
-			echo $nl . $nl;
-		}
-
-		try {
-			$migration->migrate($to); // Execute migration!
-			echo 'DONE' . $nl;
-		} catch (Exception $ex) {
-			echo 'ERROR: ' . $ex->getMessage() . $nl;
-		}
-		exit;*/
-
-		//$manager = require 'install_db.inc.php';
-
-		include 'install_files.inc.php';
 	}
     display_after_install_message($installType);
     //Hide the "please wait" message sent previously

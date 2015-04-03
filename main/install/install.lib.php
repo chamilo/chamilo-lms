@@ -570,11 +570,8 @@ function get_config_param($param, $updatePath = '')
  * @param   string  $param Name of param we want
  * @return  mixed   The parameter value or null if not found
  */
-function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
+function get_config_param_from_db($param = '')
 {
-    Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
-    Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -1479,6 +1476,7 @@ function display_database_settings_form(
         'id="optional_param1"'
     );
 
+    if ($installType != INSTALL_TYPE_UPDATE) {
     ?>
     <tr>
         <td></td>
@@ -1489,6 +1487,8 @@ function display_database_settings_form(
             </button>
         </td>
     </tr>
+    <?php } ?>
+
     <tr>
         <td>
         <?php
@@ -2576,11 +2576,61 @@ function installSettings(
     Database::query($sql);
 }
 
-function installTemplates()
+function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm)
 {
-    $sql = "
+    $debug = true;
+    // Config doctrine migrations
 
+    $db = \Doctrine\DBAL\DriverManager::getConnection(array(
+        'dbname' => $dbNameForm,
+        'user' => $dbUsernameForm,
+        'password' => $dbPassForm,
+        'host' => $dbHostForm,
+        'driver' => 'pdo_mysql',
+        'charset' => 'utf8',
+        'driverOptions' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        )
+    ));
 
-    ";
-    Database::query($sql);
+    $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($db);
+
+    // Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
+    $config->setMigrationsTableName('version');
+    // Namespace of your migration classes, do not forget escape slashes, do not add last slash
+    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\v'.$chamiloVersion);
+    // Directory where your migrations are located
+
+    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v'.$chamiloVersion);
+    // Load your migrations
+    $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
+    $migration = new \Doctrine\DBAL\Migrations\Migration($config);
+    //$to = 'Version110';
+    // Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
+    $versions = $migration->getSql($to);
+    if ($debug) {
+        $nl = '<br>';
+        foreach ($versions as $version => $queries) {
+            echo 'VERSION: '.$version.$nl;
+            echo '----------------------------------------------'.$nl.$nl;
+
+            foreach ($queries as $query) {
+                echo $query.$nl.$nl;
+            }
+            echo $nl.$nl;
+        }
+    }
+
+    try {
+        $migration->migrate($to); // Execute migration!
+        if ($debug) {
+            echo 'DONE'.$nl;
+        }
+    } catch (Exception $ex) {
+        if ($debug) {
+            echo 'ERROR: '.$ex->getMessage().$nl;
+        }
+    }
 }
+
+

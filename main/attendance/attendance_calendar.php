@@ -131,16 +131,16 @@ if (isset($action) && $action == 'calendar_add') {
 
                 $form->addElement('date_time_picker', 'date_time', '', array('form_name'=>'attendance_calendar_edit'), 5);
                 $defaults['date_time'] = $calendar['date_time'];
-                $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
-                $form->addElement('style_submit_button', 'cancel', get_lang('Cancel'), 'class="cancel"');
+                $form->addButtonSave(get_lang('Save'));
+                $form->addButtonCancel(get_lang('Cancel'), 'cancel');
                 $form->setDefaults($defaults);
                 $form->display();
                 echo '</div>';
             } else {
                 echo Display::return_icon(
-                        'lp_calendar_event.png',
-                        get_lang('DateTime')
-                    ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
+                    'lp_calendar_event.png',
+                    get_lang('DateTime')
+                ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time'])- 3) .'&nbsp;';
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {

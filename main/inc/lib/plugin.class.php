@@ -250,7 +250,7 @@ class Plugin
             $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
         }
         $result->setDefaults($defaults);
-        $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
+        $result->addButtonSave($this->get_lang('Save'), 'submit_button');
         return $result;
     }
 

@@ -89,16 +89,16 @@ class Timeline extends Model
 
         $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
         //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'careers','Width' => '100%', 'Height' => '250'));
-	    $status_list = $this->get_status_list();
+       $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
             //$form->addElement('text', 'created_at', get_lang('CreatedAt'));
             //$form->freeze('created_at');
         }
         if ($action == 'edit') {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addButtonSave(get_lang('Modify'), 'submit');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addButtonCreate(get_lang('Add'), 'submit');
         }
 
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
@@ -116,7 +116,7 @@ class Timeline extends Model
 
         // Setting the rules
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
-		return $form;
+        return $form;
     }
 
     /**
@@ -158,9 +158,9 @@ class Timeline extends Model
         if ($action == 'edit') {
             // Setting the defaults
             $defaults = $this->get($id);
-        	$form->addElement('style_submit_button', 'submit', get_lang('Modify'), 'class="save"');
+            $form->addButtonSave(get_lang('Modify'), 'submit');
         } else {
-        	$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+            $form->addButtonCreate(get_lang('Add'), 'submit');
         }
 
         /*if (!empty($defaults['created_at'])) {

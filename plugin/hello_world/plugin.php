@@ -33,6 +33,6 @@ $form = new FormValidator('hello_world_form');
 //A simple select
 $options = array('hello_world' => 'Hello World', 'hello' =>'Hello', 'hi' =>'Hi!');
 $form->addElement('select', 'show_type', 'Hello world types', $options);
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
+$form->addButtonSave(get_lang('Save'), 'submit_button');
 
 $plugin_info['settings_form'] = $form;

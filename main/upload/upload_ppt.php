@@ -89,7 +89,7 @@ if (api_get_setting('search_enabled') == 'true') {
     }
 }
 
-$form->addElement('style_submit_button', 'convert', get_lang('ConvertToLP'));
+$form->addButtonUpload(get_lang('ConvertToLP'), 'convert');
 $form->addElement('hidden', 'ppt2lp', 'true');
 
 $form->add_real_progress_bar(md5(rand(0, 10000)), 'user_file', 1, true);

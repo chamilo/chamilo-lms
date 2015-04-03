@@ -252,7 +252,7 @@ if ($isAdmin) {
     $renderer = & $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<span>{element}</span> ');
     $form->addElement('text', 'keyword', get_lang('Keyword'), 'size="25"');
-    $form->addElement('style_submit_button', 'submit_simple', get_lang('Search'), 'class="search"');
+    $form->addButtonSearch(get_lang('Search'), 'submit_simple');
     $form->addElement('static', 'search_advanced_link', null,
             '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
             . '<span id="img_plus_and_minus">&nbsp;'

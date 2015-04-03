@@ -955,7 +955,7 @@ function add_edit_template() {
         $form->setDefaults($defaults);
     }
     // Setting the form elements: the submit button.
-    $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
+    $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');

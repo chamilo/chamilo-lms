@@ -176,18 +176,18 @@ if ($action_todo) {
         $form->addElement('hidden', 'action', 'edit');
     }
     $form->addElement('checkbox', 'send_email_test', null, get_lang('SendOnlyAnEmailToMySelfToTest'));
-    $form->addElement('style_submit_button', 'submit', $text, 'class="'.$class.'"');
+    $form->addButtonSend($text, 'submit');
     $form->setDefaults($values);
 
     if ($form->validate()) {
         $values = $form->exportValues();
-        if ( !isset($values['visible_teacher'])) {
+        if (!isset($values['visible_teacher'])) {
             $values['visible_teacher'] = false;
         }
-        if ( !isset($values['visible_student'])) {
+        if (!isset($values['visible_student'])) {
             $values['visible_student'] = false;
         }
-        if ( !isset($values['visible_guest'])) {
+        if (!isset($values['visible_guest'])) {
             $values['visible_guest'] = false;
         }
         if ($values['lang'] == 'all') {

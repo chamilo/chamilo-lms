@@ -40,6 +40,11 @@ $allowToEdit = (
 
 $sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+
+if (!empty($sessionId)) {
+    $allowToEdit = $allowToEdit && api_is_allowed_to_session_edit(false, true);
+}
+
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
@@ -87,9 +92,7 @@ $safe_newContent = isset($_POST['newContent']) ? $_POST['newContent'] : null;
 $content_to_modify = $title_to_modify 	= '';
 
 if (!empty($_POST['To'])) {
-    if (api_get_session_id() != 0 &&
-        api_is_allowed_to_session_edit(false, true) == false
-    ) {
+    if (!$allowToEdit) {
         api_not_allowed(true);
     }
     $display_form = true;
@@ -132,7 +135,7 @@ $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
 if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") ||
     (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To'])
 ) {
-    if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true) == false) {
+    if (api_get_session_id() != 0 && !$allowToEdit) {
         api_not_allowed(true);
     }
     $display_form = true;
@@ -206,9 +209,6 @@ if ($allowToEdit) {
     // change visibility -> studentview -> course manager view
     if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false') {
         if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide") {
-            if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-                api_not_allowed();
-            }
             if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
                 if ($ctok == $_GET['sec_token']) {
                     AnnouncementManager::change_visibility_announcement($_course, $_GET['id']);
@@ -221,9 +221,6 @@ if ($allowToEdit) {
     /* Delete announcement */
     if (!empty($_GET['action']) && $_GET['action']=='delete' && isset($_GET['id'])) {
         $id = intval($_GET['id']);
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false, true) == false) {
-            api_not_allowed();
-        }
 
         if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             // tooledit : visibility = 2 : only visible for platform administrator
@@ -262,10 +259,6 @@ if ($allowToEdit) {
 
     /* Modify announcement */
     if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-            api_not_allowed();
-        }
-
         $display_form = true;
 
         // RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
@@ -981,7 +974,6 @@ if ($display_announcement_list) {
             } else {
                 Display::display_warning_message(get_lang('NoAnnouncements'));
             }
-
         } else {
             $iterator = 1;
             $bottomAnnouncement = $announcement_number;
@@ -1087,7 +1079,7 @@ if ($display_announcement_list) {
 }	// end: if ($displayAnnoucementList)
 
 if (isset($_GET['action']) && $_GET['action'] == 'view') {
-    AnnouncementManager::display_announcement($announcement_id);
+    AnnouncementManager::display_announcement($announcement_id, $allowToEdit);
 }
 
 /*		FOOTER		*/

@@ -152,7 +152,7 @@ class AnnouncementManager
      * Displays one specific announcement
      * @param int $announcement_id, the id of the announcement you want to display
      */
-    public static function display_announcement($announcement_id)
+    public static function display_announcement($announcement_id, $allowToEdit)
     {
         if ($announcement_id != strval(intval($announcement_id))) {
             return false;
@@ -164,7 +164,7 @@ class AnnouncementManager
 
         $course_id = api_get_course_int_id();
 
-        if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+        if ($allowToEdit) {
             $sql_query = "  SELECT announcement.*, toolitemproperties.*
                             FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
                             WHERE announcement.id = toolitemproperties.ref
@@ -174,7 +174,6 @@ class AnnouncementManager
 							toolitemproperties.c_id = $course_id
                             ORDER BY display_order DESC";
         } else {
-
             $group_list = GroupManager::get_group_ids($course_id, api_get_user_id());
             if (empty($group_list)) {
                 $group_list[] = 0;
@@ -212,7 +211,7 @@ class AnnouncementManager
             echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
             echo "<tr><td><h2>" . $title . "</h2></td></tr>";
 
-            if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if ($allowToEdit) {
                 $modify_icons = "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=modify&id=" . $announcement_id . "\">" . Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL) . "</a>";
                 if ($result['visibility'] == 1) {
                     $image_visibility = "visible";

@@ -20,7 +20,8 @@ use \ChamiloSession as Session;
 /**
  * The SSO class allows for management of remote Single Sign On resources
  */
-class ssoDrupal {
+class ssoDrupal
+{
     public $protocol;   // 'http://',
     public $domain;     // 'localhost/project/drupal',
     public $auth_uri;   // '/?q=user',
@@ -30,16 +31,17 @@ class ssoDrupal {
     /**
      * Instanciates the object, initializing all relevant URL strings
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->protocol   = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
-        $domains          = split(',',api_get_setting('sso_authentication_domain'));
+        $domains          = preg_split('/,/', api_get_setting('sso_authentication_domain'));
         $this->domain     = trim($domains[0]);
         $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure
-        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'],0,strpos($_SERVER['REQUEST_URI'],'sso'));
+        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
@@ -48,7 +50,8 @@ class ssoDrupal {
     /**
      * Unlogs the user from the remote server
      */
-    public function logout() {
+    public function logout()
+    {
         header('Location: '.$this->deauth_url);
         exit;
     }
@@ -56,7 +59,8 @@ class ssoDrupal {
     /**
      * Sends the user to the master URL for a check of active connection
      */
-    public function ask_master() {
+    public function ask_master()
+    {
         // Generate a single usage token that must be encoded by the master
         $_SESSION['sso_challenge'] = api_generate_password(48);
         // Redirect browser to the master URL
@@ -74,7 +78,8 @@ class ssoDrupal {
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
      */
-    public function check_user() {
+    public function check_user()
+    {
         global $_user;
         $loginFailed = false;
 
@@ -85,8 +90,8 @@ class ssoDrupal {
         //from session since it can only be used once
         $sso_challenge = '';
         if (isset($_SESSION['sso_challenge'])) {
-          $sso_challenge = $_SESSION['sso_challenge'];
-          unset($_SESSION['sso_challenge']);
+            $sso_challenge = $_SESSION['sso_challenge'];
+            unset($_SESSION['sso_challenge']);
         }
 
         //lookup the user in the main database
@@ -124,7 +129,7 @@ class ssoDrupal {
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);
 
                             if ($my_user_is_admin === false) {
-                                if (is_array($my_url_list) && count($my_url_list) > 0 ) {
+                                if (is_array($my_url_list) && count($my_url_list) > 0) {
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         // the user has permission to enter at this site
                                         $_user['user_id'] = $uData['user_id'];
@@ -168,7 +173,7 @@ class ssoDrupal {
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
-                                        Session::write('_user',$_user);
+                                        Session::write('_user', $_user);
                                         Event::event_login();
                                     } else {
                                         $loginFailed = true;
@@ -222,7 +227,8 @@ class ssoDrupal {
      * @param	string	Encoded cookie
      * @return  array   Parsed and unencoded cookie
      */
-    private function decode_cookie($cookie) {
+    private function decode_cookie($cookie)
+    {
         return unserialize(base64_decode($cookie));
     }
 

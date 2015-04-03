@@ -209,11 +209,11 @@ if ($action_todo) {
                     $values['visible_guest'],
                     $values['lang'],
                     $sendMail,
-                    $values['add_to_calendar'],
-                    $values['send_email_test']
+                    empty($values['add_to_calendar'])?false:true,
+                    empty($values['send_email_test'])?false:true
                 );
 
-                if ($announcement_id !== false)  {
+                if ($announcement_id !== false) {
                     SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {

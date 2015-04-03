@@ -19,7 +19,7 @@
                     <option value="{{ course.id }}" {{ (course.id == selectedCourse) ? 'selected' : '' }}>{{ course.title }}</option>
                 {% endfor %}
             </select>
-            <button type="submit" class="btn">{{ 'Filter' | get_lang }}</button>
+            <button type="submit" class="btn btn-default">{{ 'Filter' | get_lang }}</button>
         </form>
     </div>
     <div class="span6">
@@ -31,7 +31,7 @@
                     <option value="{{ skill.id }}" {{ (skill.id == selectedSkill) ? 'selected' : '' }}>{{ skill.name }}</option>
                 {% endfor %}
             </select>
-            <button type="submit" class="btn">{{ 'Filter' | get_lang }}</button>
+            <button type="submit" class="btn btn-default"><i class="fa fa-filter"></i>{{ 'Filter' | get_lang }}</button>
         </form>
     </div>
 </div>

@@ -228,7 +228,7 @@ if ($allowed_to_edit) {
         }
         echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
         if ($_GET['type'] == 'false') {
-            $buttons = '<a class="btn" href="forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=true&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.
+            $buttons = '<a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=true&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.
                     get_lang('MoreRecent').'</a> <a class="btn disabled" >'.get_lang('Older').'</a>';
         } else {
             $buttons =  '<a class="btn disabled">'.get_lang('MoreRecent').'</a>

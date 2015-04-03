@@ -9,7 +9,7 @@
                 </li>        
             {% endfor %}
         </ul>
-        <a id="add_profile" class="btn" href="#"> {{"SaveThisSearch"|get_lang}}</a>
+        <a id="add_profile" class="btn btn-default" href="#"><i class="fa fa-floppy-o"></i> {{"SaveThisSearch"|get_lang}}</a>
     </div>
 {% endif %}
 

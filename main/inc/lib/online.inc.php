@@ -310,13 +310,13 @@ function who_is_online_count($time_limit = null, $friends = false)
         $time_limit = intval($time_limit);
     }
 	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $table_user			= Database::get_main_table(TABLE_MAIN_USER);
+	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 	$query = '';
 
-    $online_time 		= time() - $time_limit*60;
-	$current_date		= api_get_utc_datetime($online_time);
+	$online_time = time() - $time_limit * 60;
+	$current_date = api_get_utc_datetime($online_time);
 
 	if ($friends) {
 		// 	who friends from social network is online

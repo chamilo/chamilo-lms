@@ -26,9 +26,9 @@ class Version110 extends AbstractMigration
         $this->addSql("CREATE TABLE IF NOT EXISTS c_student_publication_comment (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, c_id INT NOT NULL, comment text, file VARCHAR(255), user_id int NOT NULL, sent_at datetime NOT NULL)");
         $this->addSql("CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto_increment PRIMARY KEY, c_id INT NOT NULL, group_id INT NOT NULL, calendar_id INT NOT NULL)");
 
-        $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
-        $this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
-        $this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
+        //$this->addSql("ALTER TABLE skill_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT 0 AFTER id");
+        //$this->addSql("ALTER TABLE skill_rel_user ADD COLUMN session_id INT NOT NULL DEFAULT 0 AFTER course_id");
+        //$this->addSql("ALTER TABLE skill_rel_user ADD INDEX idx_select_cs (course_id, session_id)");
 
         $table = $schema->getTable('session');
         if (!$table->hasColumn('description')) {
@@ -38,8 +38,14 @@ class Version110 extends AbstractMigration
                 array('default' => 'NULL')
             );
         }
-        //$this->addSql("ALTER TABLE session ADD COLUMN description TEXT DEFAULT NULL");
-        $this->addSql("ALTER TABLE session ADD COLUMN show_description TINYINT UNSIGNED DEFAULT 0 AFTER description");
+
+        if (!$table->hasColumn('show_description')) {
+            $table->addColumn(
+                'show_description',
+                'smallint',
+                array('default' => 0, 'unsigned' => true)
+            );
+        }
 
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
@@ -71,12 +77,16 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_text varchar(50) default NULL");
-        $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default '0");
+        $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0");
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
         $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL");
+        $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
+        $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
+
+        // Course
         $this->addSql("ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0");
         $this->addSql("ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL");
         $this->addSql("ALTER TABLE c_lp_item ADD COLUMN prerequisite_min_score float");
@@ -92,6 +102,7 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post' ");
         $this->addSql("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
         $this->addSql("ALTER TABLE c_course_setting MODIFY COLUMN value varchar(255) default ''");
+
         $this->addSql("UPDATE user SET id = user_id");
         $this->addSql("UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course'");
         $this->addSql("UPDATE user SET registration_date = NULL WHERE registration_date = '0000-00-00 00:00:00'");

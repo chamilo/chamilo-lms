@@ -108,6 +108,7 @@ $my_old_version = '';
 if (empty($tmp_version)) {
 	$tmp_version = get_config_param('system_version');
 }
+
 if (!empty($_POST['old_version'])) {
 	$my_old_version = $_POST['old_version'];
 } elseif (!empty($tmp_version)) {
@@ -121,8 +122,8 @@ require_once __DIR__.'/version.php';
 if (isAlreadyInstalledSystem()) {
 	// The system has already been installed, so block re-installation.
 	$global_error_code = 6;
-	require '../inc/global_error_message.inc.php';
-	die();
+	/*require '../inc/global_error_message.inc.php';
+	die();*/
 }
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
@@ -628,7 +629,6 @@ if (@$_POST['step2']) {
 
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
-
 		switch ($my_old_version) {
             case '1.9.0':
             case '1.9.2':
@@ -650,10 +650,11 @@ if (@$_POST['step2']) {
 				Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
 				Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
 
+				// Migrate using the file Version110.php
 				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm);
-                include 'update-files-1.9.0-1.10.0.inc.php';
+                //include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
-                include 'update-configuration.inc.php';
+                //include 'update-configuration.inc.php';
                 break;
             default:
                 break;

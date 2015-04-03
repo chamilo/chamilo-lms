@@ -104,6 +104,14 @@ ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT '';
 ALTER TABLE track_e_default MODIFY COLUMN c_id int default NULL;
 UPDATE course_field SET field_type = 1 WHERE field_variable = 'special_course';
 
+-- v1.10.0.34
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_twitter_site', NULL, 'textfield', 'Tracking', '', 'MetaTwitterSiteTitle', 'MetaTwitterSiteComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_twitter_creator', NULL, 'textfield', 'Tracking', '', 'MetaTwitterCreatorTitle', 'MetaTwitterCreatorComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_title', NULL, 'textfield', 'Tracking', '', 'MetaTitleTitle', 'MetaTitleComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_description', NULL, 'textfield', 'Tracking', '', 'MetaDescriptionTitle', 'MetaDescriptionComment', NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1);
+
+
 -- Course DB changes (c_*)
 
 ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0;
@@ -123,4 +131,4 @@ CREATE TABLE IF NOT EXISTS c_attendance_calendar_rel_group (id int NOT NULL auto
 
 
 -- Do not move this query
-UPDATE settings_current SET selected_value = '1.10.0.33' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.34' WHERE variable = 'chamilo_database_version';

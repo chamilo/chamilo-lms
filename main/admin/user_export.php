@@ -33,7 +33,7 @@ if (api_is_multiple_url_enabled()) {
 	if ($access_url_id != -1){
 	$sql = "SELECT code,visual_code,title FROM $course_table as c
 		INNER JOIN $tbl_course_rel_access_url as course_rel_url
-		ON (c.code = course_rel_url.course_code)
+		ON (c.id = course_rel_url.c_id)
 		WHERE access_url_id = $access_url_id
 		ORDER BY visual_code";
 	}

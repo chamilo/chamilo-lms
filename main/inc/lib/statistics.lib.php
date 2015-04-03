@@ -36,10 +36,11 @@ class Statistics
     public static function countCourses($categoryCode = null)
     {
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
+            $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u
+                    WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'";
             if (isset ($categoryCode)) {
                 $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
             }
@@ -69,7 +70,7 @@ class Statistics
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u
-                    WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
+                    WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'";
             if (isset ($visibility)) {
                 $sql .= " AND visibility = ".intval($visibility);
             }
@@ -525,11 +526,13 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses ".
                 "FROM $table as c, $access_url_rel_course_table as u
-                WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'
-                GROUP BY course_language ORDER BY number_of_courses DESC";
+                WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'
+                GROUP BY course_language
+                ORDER BY number_of_courses DESC";
         } else {
             $sql = "SELECT course_language, count( code ) AS number_of_courses ".
-                   "FROM $table GROUP BY course_language ORDER BY number_of_courses DESC";
+                   "FROM $table GROUP BY course_language
+                   ORDER BY number_of_courses DESC";
         }
         $res = Database::query($sql);
         $result = array();
@@ -624,7 +627,7 @@ class Statistics
      */
     public static function printCourseLastVisit()
     {
-        $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
         $columns[0] = 'c_id';

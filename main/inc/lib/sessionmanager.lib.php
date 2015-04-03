@@ -4562,7 +4562,7 @@ class SessionManager
                     FROM $tbl_course c
                     INNER JOIN $tbl_course_user cu ON (cu.c_id = c.id)
                     INNER JOIN $tbl_user u ON (u.user_id = cu.user_id)
-                    INNER JOIN $tbl_course_rel_access_url url ON (url.course_code = c.code)
+                    INNER JOIN $tbl_course_rel_access_url url ON (url.c_id = c.id)
                     $where
                     $courseConditions
                 )

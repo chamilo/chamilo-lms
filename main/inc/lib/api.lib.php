@@ -5158,15 +5158,17 @@ function api_add_access_url($u, $d = '', $a = 1) {
  * @param int       Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return array    Array of database results for the current settings of the current access URL
  */
-function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
-    $t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
+{
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
     $where_condition = '';
     if ($url_changeable == 1) {
         $where_condition = " AND access_url_changeable= '1' ";
     }
     if (empty($access_url) or $access_url == -1) { $access_url = 1; }
-    $sql = "SELECT * FROM $t_cs WHERE access_url = $access_url  $where_condition ";
+    $sql = "SELECT * FROM $table
+            WHERE access_url = $access_url  $where_condition ";
 
     if (!empty($cat)) {
         $cat = Database::escape_string($cat);

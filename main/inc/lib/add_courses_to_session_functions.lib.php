@@ -62,8 +62,8 @@ class AddCourseToSession
 			}
 
 			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			if (api_is_multiple_url_enabled()) {
+				$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1){
 
@@ -73,7 +73,8 @@ class AddCourseToSession
 								LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
 									ON course.code = session_rel_course.course_code
 									AND session_rel_course.id_session = '.intval($id_session).'
-								INNER JOIN '.$tbl_course_rel_access_url.' url_course ON (url_course.course_code=course.code)
+								INNER JOIN '.$tbl_course_rel_access_url.' url_course
+								ON (url_course.c_id = course.id)
 								WHERE
 									access_url_id = '.$access_url_id.' AND
 									(course.visual_code LIKE "'.$needle.'%" OR

@@ -83,8 +83,8 @@ $UserList = $SessionList = array();
 $users = $sessions = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-	$form_sent=$_POST['form_sent'];
-	$course_list=$_POST['course_list'];
+	$form_sent = $_POST['form_sent'];
+	$course_list = $_POST['course_list'];
 
 	if (!is_array($course_list)) {
 		$course_list=array();
@@ -115,16 +115,16 @@ $no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if($ajax_search) {
-	$courses=UrlManager::get_url_rel_course_data($access_url_id);
-	foreach($courses as $course) {
-		$course_list[$course['course_code']] = $course ;
+	$courses = UrlManager::get_url_rel_course_data($access_url_id);
+	foreach ($courses as $course) {
+		$course_list[$course['c_id']] = $course ;
 	}
 } else {
-	$courses=UrlManager::get_url_rel_course_data();
+	$courses = UrlManager::get_url_rel_course_data();
 
-	foreach($courses as $course) {
-		if($course['access_url_id'] == $access_url_id) {
-			$course_list[$course['course_code']] = $course ;
+	foreach ($courses as $course) {
+		if ($course['access_url_id'] == $access_url_id) {
+			$course_list[$course['c_id']] = $course ;
 		}
 	}
 
@@ -132,12 +132,13 @@ if($ajax_search) {
 	$sql="SELECT code, title
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
-	$result=Database::query($sql);
-	$courses=Database::store_result($result);
+	$result = Database::query($sql);
+	$courses = Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
-	foreach($courses as $course) {
-		if (!in_array($course['code'],$course_list_leys))
-			$no_course_list[$course['code']] = $course ;
+	foreach ($courses as $course) {
+		if (!in_array($course['id'], $course_list_leys)) {
+			$no_course_list[$course['id']] = $course;
+		}
 	}
 }
 

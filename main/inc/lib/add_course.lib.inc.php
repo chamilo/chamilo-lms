@@ -1426,9 +1426,9 @@ class AddCourse
                     if (api_get_current_access_url_id() != -1) {
                         $url_id = api_get_current_access_url_id();
                     }
-                    UrlManager::add_course_to_url($code, $url_id);
+                    UrlManager::add_course_to_url($course_id, $url_id);
                 } else {
-                    UrlManager::add_course_to_url($code, 1);
+                    UrlManager::add_course_to_url($course_id, 1);
                 }
 
                 // Add event to the system log.

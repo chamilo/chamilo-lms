@@ -207,13 +207,13 @@ $sql = "SELECT code,visual_code,title
         ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sql = "SELECT code, visual_code, title
                 FROM $tbl_course as course
                 INNER JOIN $tbl_course_rel_access_url course_rel_url
-                ON (course_rel_url.course_code= course.code)
+                ON (course_rel_url.c_id = course.id)
                 WHERE
                     access_url_id =  $access_url_id  AND
                     (visual_code LIKE '".$first_letter_course."%' )
@@ -235,7 +235,7 @@ if (api_is_multiple_url_enabled()) {
             INNER JOIN $tbl_course as course
             ON course.id = course_rel_user.c_id
             INNER JOIN $tbl_course_rel_access_url course_rel_url
-            ON (course_rel_url.course_code= course.code)
+            ON (course_rel_url.c_id = course.id)
             WHERE
                 access_url_id =  $access_url_id  AND
                 course_rel_user.user_id='".$_user['user_id']."' AND

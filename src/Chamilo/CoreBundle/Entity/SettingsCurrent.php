@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsCurrent
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="variable", type="string", length=255, nullable=true)
@@ -78,7 +87,7 @@ class SettingsCurrent
     /**
      * @var integer
      *
-     * @ORM\Column(name="access_url", type="integer", nullable=false)
+     * @ORM\Column(name="access_url", type="integer", nullable=false, options={"default": 1 } )
      */
     private $accessUrl;
 
@@ -95,16 +104,6 @@ class SettingsCurrent
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false)
      */
     private $accessUrlLocked;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
 
 
     /**

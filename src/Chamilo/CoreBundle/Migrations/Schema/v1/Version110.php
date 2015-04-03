@@ -80,6 +80,8 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
+        $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
+
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         // Course
@@ -110,13 +112,16 @@ class Version110 extends AbstractMigration
         $this->addSql("UPDATE track_e_access SET c_id = (SELECT id FROM course WHERE code = access_cours_code)");
         $this->addSql("UPDATE track_e_default SET c_id = (SELECT id FROM course WHERE code = default_cours_code)");
         $this->addSql("UPDATE track_e_lastaccess SET c_id = (SELECT id FROM course WHERE code = access_cours_code)");
-        $this->addSql("UPDATE track_e_exercises SET c_id = (SELECT id FROM course WHERE code = exe_cours_id)");
+        $this->addSql("UPDATE track_e_exercices SET c_id = (SELECT id FROM course WHERE code = exe_cours_id)");
         $this->addSql("UPDATE track_e_downloads SET c_id = (SELECT id FROM course WHERE code = down_cours_id)");
         $this->addSql("UPDATE track_e_hotpotatoes SET c_id = (SELECT id FROM course WHERE code = exe_cours_id)");
         $this->addSql("UPDATE track_e_links SET c_id = (SELECT id FROM course WHERE code = links_cours_id)");
         $this->addSql("UPDATE track_e_course_access SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE track_e_online SET c_id = (SELECT id FROM course WHERE code = course)");
         $this->addSql("UPDATE track_e_attempt SET c_id = (SELECT id FROM course WHERE code = course_code)");
+        $this->addSql("UPDATE course_field_values SET c_id = (SELECT id FROM course WHERE code = course_code)");
+
+
         //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
 
         $this->addSql("DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages'");

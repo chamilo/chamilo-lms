@@ -518,14 +518,14 @@ class Auth
                     ";
 
         global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_find = "SELECT *
                             FROM $TABLECOURS as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.course_code=course.code)
+                            ON (url_rel_course.c_id = course.id)
                             WHERE
                                 access_url_id = $url_access_id AND (
                                     code LIKE '%" . $search_term_safe . "%' OR

@@ -77,11 +77,17 @@ function search_courses($needle, $type)
         }
 
         if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-                WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
-        } else {
             $sql = "SELECT c.code, c.title FROM $tbl_course c
-                WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
+					LEFT JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
+                	WHERE
+                		c.code LIKE '$needle%' $without_assigned_courses AND
+                		access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT c.code, c.title
+            		FROM $tbl_course c
+                	WHERE
+                		c.code LIKE '$needle%'
+                		$without_assigned_courses ";
         }
 
 		$rs	= Database::query($sql);

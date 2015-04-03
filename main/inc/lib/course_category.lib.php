@@ -597,7 +597,7 @@ function countCoursesInCategory($category_code="", $searchTerm = '')
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $sql = "SELECT * FROM $tbl_course as course
                     INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.course_code=course.code)
+                    ON (url_rel_course.c_id = course.id)
                     WHERE
                         access_url_id = $url_access_id AND
                         course.visibility != '0' AND
@@ -666,21 +666,26 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
             $sql = "SELECT COUNT(*) FROM $tbl_course course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course ON (url_rel_course.course_code=course.code)
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
+                    ON (url_rel_course.c_id = course.id)
                     WHERE access_url_id = $url_access_id ";
             $result = Database::query($sql);
             list($num_records) = Database::fetch_row($result);
 
-            $sql = "SELECT course.id FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=course.code)
-                        WHERE   access_url_id = $url_access_id AND
-                                RAND()*$num_records< $random_value
-                                $without_special_courses $visibilityCondition
-                     ORDER BY RAND() LIMIT 0, $random_value";
+            $sql = "SELECT course.id FROM $tbl_course course
+                    INNER JOIN $tbl_url_rel_course as url_rel_course
+                    ON (url_rel_course.c_id = course.id)
+                    WHERE
+                        access_url_id = $url_access_id AND
+                        RAND()*$num_records< $random_value
+                        $without_special_courses $visibilityCondition
+                    ORDER BY RAND()
+                    LIMIT 0, $random_value";
         } else {
             $sql = "SELECT id FROM $tbl_course course
                     WHERE RAND()*$num_records< $random_value $without_special_courses $visibilityCondition
-                    ORDER BY RAND() LIMIT 0, $random_value";
+                    ORDER BY RAND()
+                    LIMIT 0, $random_value";
         }
 
         $result = Database::query($sql);
@@ -716,15 +721,15 @@ function browseCoursesInCategory($category_code, $random_value = null, $limit = 
             if ($category_code != "ALL") {
                 $sql = "SELECT * FROM $tbl_course as course
                     INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.course_code=course.code)
+                    ON (url_rel_course.c_id = course.id)
                     WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses $visibilityCondition
                     ORDER BY title $limitFilter";
             } else {
                 $sql = "SELECT * FROM $tbl_course as course
-                    INNER JOIN $tbl_url_rel_course as url_rel_course
-                    ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
-                    ORDER BY title $limitFilter";
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE access_url_id = $url_access_id $without_special_courses $visibilityCondition
+                        ORDER BY title $limitFilter";
             }
 
         }

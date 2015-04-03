@@ -213,7 +213,7 @@ class CourseManager
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-            $sql .= " INNER JOIN $table url ON (url.course_code = course.code) ";
+            $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
 
         if (!empty($startwith)) {
@@ -1005,9 +1005,9 @@ class CourseManager
                     INNER JOIN $tbl_course as course
                     ON course.id = course_rel_user.c_id
                     INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.course_code= course.code)
+                    ON (course_rel_url.c_id = course.id)
                     WHERE
-                        access_url_id =  $access_url_id  AND
+                        access_url_id = $access_url_id  AND
                         course_rel_user.user_id='$user_id' AND
                         course_rel_user.status='1'
                     ORDER BY course.title";
@@ -2156,26 +2156,32 @@ class CourseManager
         $codeFiltered = Database::escape_string($code);
         $sql = "SELECT * FROM $table_course WHERE code='" . $codeFiltered . "'";
         $res = Database::query($sql);
+
         if (Database::num_rows($res) == 0) {
             return;
         }
+
+
+        $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
+        $res = Database::query($sql);
+        $course = Database::fetch_array($res);
+        $courseId = $course['id'];
+
         $count = 0;
         if (api_is_multiple_url_enabled()) {
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();
             }
-            UrlManager::delete_url_rel_course($code, $url_id);
-            $count = UrlManager::getcountUrlRelCourse($code);
+            UrlManager::delete_url_rel_course($courseId, $url_id);
+            $count = UrlManager::getcountUrlRelCourse($courseId);
         }
+
         if ($count == 0) {
             self::create_database_dump($code);
 
-            $sql = "SELECT * FROM $table_course WHERE code = '" . $codeFiltered . "'";
-            $res = Database::query($sql);
-            $course = Database::fetch_array($res);
             $course_tables = AddCourse::get_course_tables();
-            $courseId = $course['id'];
+
 
             // Cleaning c_x tables
             if (!empty($courseId)) {
@@ -2205,7 +2211,7 @@ class CourseManager
             Database::query($sql);
 
             // Delete from Course - URL
-            $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '" . $codeFiltered . "'";
+            $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '" . $courseId. "'";
             Database::query($sql);
 
             $sql = 'SELECT survey_id FROM ' . $table_course_survey . ' WHERE course_code="' . $codeFiltered . '"';
@@ -2540,6 +2546,7 @@ class CourseManager
      */
     public static function get_special_course_list()
     {
+        $courseTable = Database:: get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_field = Database:: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value = Database:: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
@@ -2549,16 +2556,18 @@ class CourseManager
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $tbl_url_course = Database:: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= tcfv.course_code ";
+                $join_access_url = "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.c_id = tcfv.c_id ";
                 $where_access_url = " AND access_url_id = $access_url_id ";
             }
         }
 
         // get course list auto-register
-        $sql = "SELECT DISTINCT(tcfv.course_code)
+        $sql = "SELECT DISTINCT(c.code)
                 FROM $tbl_course_field_value tcfv
                 INNER JOIN $tbl_course_field tcf
                 ON tcfv.field_id =  tcf.id $join_access_url
+                INNER JOIN $courseTable c
+                ON (c.id = tcfv.c_id)
                 WHERE
                     tcf.field_variable = 'special_course' AND
                     tcfv.field_value = 1  $where_access_url";
@@ -3315,7 +3324,7 @@ class CourseManager
         $sql = "$select
                 FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.c_id = c.id)
-                    INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                    INNER JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
                     $extraInnerJoin
                 WHERE
                     access_url_id = " . api_get_current_access_url_id() . "
@@ -3825,7 +3834,7 @@ class CourseManager
                      $TABLE_ACCESS_URL_REL_COURSE url
                 WHERE
                     course.id = course_rel_user.c_id AND
-                    url.course_code = course.code AND
+                    url.c_id = course.id AND
                     course_rel_user.user_id = '" . $user_id . "' AND
                     course_rel_user.user_course_cat='" . $user_category_id . "'
                     $without_special_courses ";
@@ -3833,7 +3842,7 @@ class CourseManager
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {
-            $sql .= " AND url.course_code = course.code AND access_url_id='" . $current_url_id . "'";
+            $sql .= " AND url.c_id = course.id AND access_url_id='" . $current_url_id . "'";
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
@@ -4769,8 +4778,11 @@ class CourseManager
         //$table_course_access table uses the now() and interval ...
         $now = api_get_utc_datetime(time());
         $sql = "SELECT COUNT(course_access_id) course_count, a.c_id, visibility
-                FROM $table_course c INNER JOIN $table_course_access a
-                ON (c.id = a.c_id) INNER JOIN $table_course_url u ON u.course_code = c.code
+                FROM $table_course c
+                INNER JOIN $table_course_access a
+                ON (c.id = a.c_id)
+                INNER JOIN $table_course_url u
+                ON u.c_id = c.id
                 WHERE
                     u.access_url_id = " . api_get_current_access_url_id() . " AND
                     login_course_date <= '$now' AND
@@ -4887,7 +4899,7 @@ class CourseManager
         $sql = "SELECT count(id) FROM $table_course c";
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
             $sql .= ", $table_course_rel_access_url u
-                    WHERE c.code = u.course_code AND u.access_url_id = $access_url_id";
+                    WHERE c.id = u.c_id AND u.access_url_id = $access_url_id";
             if (!empty($visibility)) {
                 $visibility = intval($visibility);
                 $sql .= " AND visibility = $visibility ";
@@ -4919,7 +4931,7 @@ class CourseManager
         if (!empty($urlId) && $urlId == intval($urlId)) {
             $sql .= ", $table_course_rel_access_url u
                     WHERE
-                        c.code = u.course_code AND
+                        c.id = u.c_id AND
                         u.access_url_id = $urlId AND
                         visibility <> " . COURSE_VISIBILITY_HIDDEN;
         } else {
@@ -4959,7 +4971,7 @@ class CourseManager
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u
                     WHERE
-                        c.code = u.course_code AND
+                        c.id = u.c_id AND
                         u.access_url_id = $accessUrlId AND
                         c.visibility != 0 AND
                         c.visibility != 4

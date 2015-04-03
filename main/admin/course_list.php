@@ -26,7 +26,7 @@ function get_number_of_courses()
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {
@@ -100,7 +100,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {

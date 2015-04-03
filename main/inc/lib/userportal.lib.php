@@ -421,9 +421,13 @@ class IndexManager
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_get_course_list = "SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=course.code)
-                        WHERE access_url_id = $url_access_id AND category_code = '".Database::escape_string($_GET['category'])."' ORDER BY title, UPPER(visual_code)";
+                $sql_get_course_list = "SELECT * FROM $main_course_table as course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $url_access_id AND
+                            category_code = '".Database::escape_string($_GET['category'])."'
+                        ORDER BY title, UPPER(visual_code)";
             }
         }
 

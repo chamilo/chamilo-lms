@@ -72,6 +72,34 @@ class Session
     private $nbrClasses;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_start", type="date", nullable=false)
+     */
+    private $dateStart;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_end", type="date", nullable=false)
+     */
+    private $dateEnd;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="nb_days_access_before_beginning", type="boolean", nullable=true)
+     */
+    private $nbDaysAccessBeforeBeginning;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="nb_days_access_after_end", type="boolean", nullable=true)
+     */
+    private $nbDaysAccessAfterEnd;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="session_admin_id", type="integer", nullable=true, unique=false)
@@ -507,6 +535,75 @@ class Session
     public function getNbrClasses()
     {
         return $this->nbrClasses;
+    }
+
+    /**
+     * Set dateStart
+     *
+     * @param \DateTime $dateStart
+     * @return Session
+     */
+    public function setDateStart($dateStart)
+    {
+        $this->dateStart = $dateStart;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     * @return Session
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
+    }
+
+    /**
+     * Set nbDaysAccessBeforeBeginning
+     *
+     * @param boolean $nbDaysAccessBeforeBeginning
+     * @return Session
+     */
+    public function setNbDaysAccessBeforeBeginning($nbDaysAccessBeforeBeginning)
+    {
+        $this->nbDaysAccessBeforeBeginning = $nbDaysAccessBeforeBeginning;
+
+        return $this;
+    }
+
+    /**
+     * Get nbDaysAccessBeforeBeginning
+     *
+     * @return boolean
+     */
+    public function getNbDaysAccessBeforeBeginning()
+    {
+        return $this->nbDaysAccessBeforeBeginning;
     }
 
     /**

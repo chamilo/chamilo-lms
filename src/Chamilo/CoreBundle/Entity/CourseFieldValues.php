@@ -43,13 +43,19 @@ class CourseFieldValues
     /**
      * @var integer
      *
+     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     */
+    private $cId;
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
-
-
 
     /**
      * Set courseCode
@@ -152,4 +158,28 @@ class CourseFieldValues
     {
         return $this->id;
     }
+
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return CAnnouncement
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
 }

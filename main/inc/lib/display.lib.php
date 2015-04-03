@@ -782,10 +782,8 @@ class Display
         if (Chamilo::is_test_server()) {
             $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
-                error_log(__LINE__);
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
             } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
-                error_log(__LINE__);
                 $icon = $w_code_path . 'img/icons/svg/' . $svgImage;
             }
 
@@ -801,7 +799,6 @@ class Display
         if ($return_only_path) {
             return $icon;
         }
-        error_log($icon);
 
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {

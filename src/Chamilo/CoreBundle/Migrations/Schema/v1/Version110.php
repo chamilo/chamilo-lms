@@ -51,15 +51,12 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
         $this->addSql("ALTER TABLE session ADD COLUMN duration int");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN duration int");
-
-        $schema->renameTable('track_e_exercices', 'track_e_exercises');
-
         $this->addSql("ALTER TABLE skill ADD COLUMN criteria text DEFAULT ''");
         $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
         //$this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL"); //already added in 1.9.x
         $this->addSql("ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL");
-        $this->addSql("ALTER TABLE track_e_exercises ADD COLUMN c_id int NOT NULL");
+        $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_hotpotatoes ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_links ADD COLUMN c_id int NOT NULL");
@@ -68,7 +65,7 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE track_e_attempt ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_default ADD COLUMN session_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
-        $this->addSql("ALTER TABLE track_e_exercises ADD COLUMN user_ip varchar(39) NOT NULL default ''");
+        $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
@@ -142,6 +139,8 @@ class Version110 extends AbstractMigration
 
         $this->addSql("INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0)");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
+
+        $schema->renameTable('track_e_exercices', 'track_e_exercises');
     }
 
     public function postUp(Schema $schema)

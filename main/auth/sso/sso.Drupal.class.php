@@ -132,7 +132,7 @@ class ssoDrupal {
                                         Session::write('_user', $_user);
                                         Event::event_login();
                                         // Redirect to homepage
-                                        $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                        $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) . 'index.php';
                                         header('Location: '. $sso_target);
                                         exit;
                                     } else {

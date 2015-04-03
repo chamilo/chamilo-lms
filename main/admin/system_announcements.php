@@ -19,6 +19,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$action_todo = false;
 
 // Access restrictions
 api_protect_admin_script(true);

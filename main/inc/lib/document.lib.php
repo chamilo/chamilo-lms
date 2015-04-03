@@ -5627,7 +5627,7 @@ class DocumentManager
      */
     public static function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')
     {
-        $form = new FormValidator('move_to', 'post', api_get_self());
+        $form = new FormValidator('move_to', 'post', api_get_self().'?'.api_get_cidreq());
 
         // Form title
         $form->addElement('hidden', 'move_file', $move_file);
@@ -5711,8 +5711,8 @@ class DocumentManager
             }
         }
         $form->addElement('select', 'move_to', get_lang('MoveTo'), $options);
-        $form->addElement('button', 'move_file_submit', get_lang('MoveElement'));
-        return $form->return_form();
+        $form->addButtonNext(get_lang('MoveElement'), 'move_file_submit');
+        return $form->returnForm();
     }
 
     /**

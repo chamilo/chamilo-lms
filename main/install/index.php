@@ -697,6 +697,7 @@ if (@$_POST['step2']) {
 		$metadatas = $manager->getMetadataFactory()->getAllMetadata();
 		$schema = $manager->getConnection()->getSchemaManager()->createSchema();
 
+		// Create database
 		$tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
 		$tool->createSchema($metadatas);
 
@@ -742,6 +743,10 @@ if (@$_POST['step2']) {
 			$allowSelfReg,
     		$allowSelfRegProf
 		);
+
+		lockSettings();
+
+		update_dir_and_files_permissions();
 
 
 	}

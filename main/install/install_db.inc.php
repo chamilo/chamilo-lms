@@ -93,17 +93,4 @@ $installationSettings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 
 AddCourse::drop_course_tables();
 
-// Initialization of the database encoding to be used.
-Database::query("SET storage_engine = INNODB;");
-Database::query("SET SESSION character_set_server='utf8';");
-Database::query("SET SESSION collation_server='utf8_general_ci';");
-Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
-//Database::query("SET NAMES 'utf8';");
-
-createSchema($manager, $installationSettings);
-
-lockSettings();
-
-update_dir_and_files_permissions();
-
 return $manager;

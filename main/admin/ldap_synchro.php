@@ -124,27 +124,27 @@ foreach($Sessions as $session){
 			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('And').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
 		}
 
-		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
-		$result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
-				"WHERE id_session='$id_session'");
+		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter la session
+		$result=Database::query("SELECT id, course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'");
 		$CourseList=array();
-		while($row=Database::fetch_array($result))
-		{
-			$CourseList[]=$row['course_code'];
+		while($row=Database::fetch_array($result)) {
+			$CourseList[]= $row['id'];
 		}
-		foreach($CourseList as $enreg_course)
-		{
+
+		foreach ($CourseList as $enreg_course) {
 			// On ajoute la relation entre l'utilisateur et le cours
-			foreach($UserList as $enreg_user)
-			{
-				Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')");
+			foreach ($UserList as $enreg_user) {
+				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,c_id,id_user)
+						VALUES('$id_session','$enreg_course','$enreg_user')";
+				Database::query($sql);
 			}
 			$sql = "SELECT COUNT(id_user) as nbUsers " .
 					"FROM $tbl_session_rel_course_rel_user " .
-					"WHERE id_session='$id_session' AND course_code='$enreg_course'";
+					"WHERE id_session='$id_session' AND c_id='$enreg_course'";
 			$rs = Database::query($sql);
 			list($nbr_users) = Database::fetch_array($rs);
-			$sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			$sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
+					WHERE id_session='$id_session' AND c_id = '$enreg_course'";
 			Database::query($sql);
 		}
 		// On ajoute la relation entre l'utilisateur et la session

@@ -59,10 +59,14 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     }
 
     $sql="SELECT distinct code
-			FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course
-			ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru
-			ON (srcru.id_session =  session_rel_course.id_session)
-			WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
+			FROM $tbl_course course
+			LEFT JOIN $tbl_session_rel_course session_rel_course
+			ON course.id = session_rel_course.c_id
+			INNER JOIN $tbl_session_rel_course_rel_user as srcru
+			ON (srcru.id_session = session_rel_course.id_session)
+			WHERE
+			    id_user = $id_user AND
+			    session_rel_course.id_session = $id_session";
 
     $rs = Database::query($sql);
     $existingCourses = Database::store_result($rs);
@@ -70,7 +74,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
         exit;
     }
-    foreach($CourseList as $enreg_course) {
+
+    foreach ($CourseList as $enreg_course) {
         $exists = false;
         foreach($existingCourses as $existingCourse) {
             if($enreg_course == $existingCourse['course_code']) {

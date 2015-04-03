@@ -154,23 +154,26 @@ if ($_POST['formSent']) {
 			$add .= $users;
 
 			//courses
-			$sql = "SELECT DISTINCT $tbl_course.code
-					FROM $tbl_course
-					INNER JOIN $tbl_session_course_user
-						ON $tbl_course.code = $tbl_session_course_user.course_code
-						AND $tbl_session_course_user.id_session = '".$row['id']."'";
+			$sql = "SELECT DISTINCT c.code, sc.id, c_id
+					FROM $tbl_course c
+					INNER JOIN $tbl_session_course_user sc
+						ON c.id = sc.c_id
+						AND sc.id_session = '".$row['id']."'";
 
 			$rsCourses = Database::query($sql);
 
 			$courses = '';
-			while($rowCourses = Database::fetch_array($rsCourses)){
+			while ($rowCourses = Database::fetch_array($rsCourses)){
 
 				// get coachs from a course
 				$sql = "SELECT u.username
 					FROM $tbl_session_course_user scu
-					INNER JOIN $tbl_user u ON u.user_id = scu.id_user
-					WHERE scu.course_code = '{$rowCourses['code']}'
-						AND scu.id_session = '".$row['id']."' AND scu.status = 2 ";
+					INNER JOIN $tbl_user u
+					ON u.user_id = scu.id_user
+					WHERE
+						scu.c_id = '{$rowCourses['c_id']}' AND
+						scu.id_session = '".$row['id']."' AND
+						scu.status = 2 ";
 
 				$rs_coachs = Database::query($sql);
 				$coachs = array();
@@ -180,11 +183,10 @@ if ($_POST['formSent']) {
 
 				$coachs = implode(",",$coachs);
 
-				if($cvs){
+				if ($cvs) {
 					$courses .= str_replace(';',',',$rowCourses['code']);
 					$courses .= '['.str_replace(';',',',$coachs).'][';
-				}
-				else {
+				} else {
 					$courses .= "\t\t<Course>\n";
 					$courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
 					$courses .= "\t\t\t<Coach>$coachs</Coach>\n";
@@ -193,26 +195,34 @@ if ($_POST['formSent']) {
 				// rel user courses
 				$sql = "SELECT DISTINCT u.username
 						FROM $tbl_session_course_user scu
-						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+						INNER JOIN $tbl_session_user su
+						ON
+							scu.id_user = su.id_user AND
+							scu.id_session = su.id_session AND
+							su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 						INNER JOIN $tbl_user u
 						ON scu.id_user = u.user_id
-						AND scu.course_code='".$rowCourses['code']."'
+						AND scu.c_id='".$rowCourses['c_id']."'
 						AND scu.id_session='".$row['id']."'";
 
 				$rsUsersCourse = Database::query($sql);
 				$userscourse = '';
-				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
-
-					if($cvs){
+				while ($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
+					if ($cvs) {
 						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
-					}
-					else {
+					} else {
 						$courses .= "\t\t\t<User>$rowUsersCourse[username]</User>\n";
 					}
 				}
-				if($cvs){
-					if(!empty($userscourse))
-						$userscourse = api_substr($userscourse , 0, api_strlen($userscourse)-1);
+
+				if ($cvs) {
+					if (!empty($userscourse)) {
+						$userscourse = api_substr(
+							$userscourse,
+							0,
+							api_strlen($userscourse) - 1
+						);
+					}
 
 					$courses .= $userscourse.']|';
 				}

@@ -368,7 +368,7 @@ class UrlManager
     public static function relation_url_course_exist($courseId, $urlId)
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql= "SELECT course_code FROM $table_url_rel_course
+        $sql= "SELECT c_id FROM $table_url_rel_course
                WHERE access_url_id = ".intval($urlId)." AND
                      c_id = '".intval($courseId)."'";
         $result = Database::query($sql);

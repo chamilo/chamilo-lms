@@ -81,6 +81,7 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
+        $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int default NULL");
 
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
@@ -120,7 +121,8 @@ class Version110 extends AbstractMigration
         $this->addSql("UPDATE track_e_online SET c_id = (SELECT id FROM course WHERE code = course)");
         $this->addSql("UPDATE track_e_attempt SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE course_field_values SET c_id = (SELECT id FROM course WHERE code = course_code)");
-
+        $this->addSql("UPDATE session_rel_course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
+        $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
 

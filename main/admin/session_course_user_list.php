@@ -22,7 +22,10 @@ if (empty($id_session )) {
     api_not_allowed();
 }
 
-$course_code    = Database::escape_string(trim($_GET['course_code']));
+$course_code = Database::escape_string(trim($_GET['course_code']));
+$courseInfo = api_get_course_info($course_code);
+$courseId = $courseInfo['id'];
+
 $page           = isset($_GET['page']) ? intval($_GET['page']) : null;
 $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort   = api_sort_by_first_name() ? 'firstname':'lastname';
@@ -42,8 +45,8 @@ if (is_array($idChecked)) {
 $sql = "SELECT s.name, c.title
         FROM $tbl_session_rel_course src
 		INNER JOIN $tbl_session s ON s.id = src.id_session
-		INNER JOIN $tbl_course c ON c.code = src.course_code
-		WHERE src.id_session='$id_session' AND src.course_code='$course_code' ";
+		INNER JOIN $tbl_course c ON c.id = src.c_id
+		WHERE src.id_session='$id_session' AND src.c_id='$courseId' ";
 
 $result = Database::query($sql);
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
@@ -58,9 +61,13 @@ switch ($action) {
             $idChecked = implode(',',$idChecked);
         }
         if (!empty($idChecked)) {
-            $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".$course_code."' AND id_user IN($idChecked)");
+            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                    WHERE id_session='$id_session' AND c_id='".$courseId."' AND id_user IN($idChecked)";
+            $result = Database::query($sql);
             $nbr_affected_rows = Database::affected_rows($result);
-            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".$course_code."'");
+            $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
+                    WHERE id_session='$id_session' AND c_id='".$courseId."'";
+            Database::query($sql);
         }
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit();

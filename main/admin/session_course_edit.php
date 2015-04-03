@@ -23,13 +23,18 @@ $tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $course_info = api_get_course_info($_REQUEST['course_code']);
+$courseId = $course_info['id'];
 $tool_name = $course_info['name'];
+$sql = "SELECT s.name, c.title
+        FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
+        WHERE
+            sc.id_session=s.id AND
+            sc.course_code = c.code AND
+            sc.id_session='$id_session' AND
+            sc.c_id ='".intval($courseId)."'";
+$result = Database::query($sql);
 
-$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
-WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc
-.id_session='$id_session' AND sc.course_code='".Database::escape_string($course_code)."'");
-
-if (!list($session_name,$course_title)=Database::fetch_row($result)) {
+if (!list($session_name,$course_title) = Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
@@ -45,7 +50,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 	// get all tutor by course_code in the session
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2";
+	        WHERE id_session = '$id_session' AND c_id = '".intval($courseId)."' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();

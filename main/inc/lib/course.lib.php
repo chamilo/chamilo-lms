@@ -3270,10 +3270,10 @@ class CourseManager
         $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sessionId = intval($sessionId);
         $user_id = intval($user_id);
-        $select = "SELECT DISTINCT *, id as real_id ";
+        $select = "SELECT DISTINCT *, c.id as real_id ";
 
         if ($getCount) {
-            $select = "SELECT COUNT(DISTINCT id) as count";
+            $select = "SELECT COUNT(DISTINCT c.id) as count";
         }
 
         $whereConditions = null;

@@ -315,15 +315,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             if (CourseManager::course_exists($course_code)) {
                                 // If the course exists we continue.
                                 $course_info = CourseManager::get_course_information($course_code);
+                                $courseId = $course_info['c_id'];
 
                                 $session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
-                                            course_code = '$course_code',
+                                            c_id = '$courseId',
                                             id_session='$session_id'";
                                     $rs_course = Database::query($sql_course);
-                                    $course_info = api_get_course_info($course['code']);
-                                    SessionManager::installCourse($id_session, $course_info['real_id']);
+                                    SessionManager::installCourse($id_session, $courseId);
                                 }
 
                                 $course_coaches = explode(',', $node_course->Coach);
@@ -335,7 +335,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     if ($coach_id !== false) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 id_user='$coach_id',
-                                                course_code='$course_code',
+                                                c_id = '$courseId',
                                                 id_session = '$session_id',
                                                 status = 2 ";
                                         $rs_coachs = Database::query($sql);
@@ -360,7 +360,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         // Adding to session_rel_user_rel_course table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 id_user='$user_id',
-                                                course_code='$course_code',
+                                                c_id='$courseId',
                                                 id_session = '$session_id'";
                                         $rs_users = Database::query($sql);
                                         $users_in_course_counter++;
@@ -368,8 +368,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
                                     }
                                 }
-                                $update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
-                                Database::query($update_session_course);
+                                $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE c_id='$courseId'";
+                                Database::query($sql);
                                 $inserted_in_course[$course_code] = $course_info['title'];
 
                             }
@@ -382,13 +382,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     if ($vcourse['code'] == $course_code) {
                                         // Ignore, this has already been inserted.
                                     } else {
+                                        $course_info = api_get_course_info($course['code']);
+                                        $courseId = $course_info['real_id'];
 
                                         $sql_course = "INSERT INTO $tbl_session_course SET
-                                                course_code = '".$vcourse['code']."',
+                                                c_id = '".$courseId."',
                                                 id_session='$session_id'";
                                         $rs_course = Database::query($sql_course);
-                                        $course_info = api_get_course_info($course['code']);
-                                        SessionManager::installCourse($id_session, $course_info['real_id']);
+
+                                        SessionManager::installCourse($id_session, $courseId);
 
                                         $course_coaches = explode(",",$node_course->Coach);
 
@@ -399,7 +401,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                             if ($coach_id !== false) {
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                         id_user='$coach_id',
-                                                        course_code='{$vcourse['code']}',
+                                                        c_id = $courseId,
                                                         id_session = '$session_id',
                                                         status = 2 ";
                                                 $rs_coachs = Database::query($sql);
@@ -424,7 +426,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                                 // Adding to session_rel_user_rel_course table.
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                         id_user='$user_id',
-                                                        course_code='{$vcourse['code']}',
+                                                        c_id ='$courseId',
                                                         id_session = '$session_id'";
                                                 $rs_users = Database::query($sql);
                                                 $users_in_course_counter++;
@@ -432,10 +434,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                                 $error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
                                             }
                                         }
-                                        $update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
-                                        Database::query($update_session_course);
+                                        $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE c_id='$courseId'";
+                                        Database::query($sql);
                                         $inserted_in_course[$course_code] = $course_info['title'];
-
                                     }
                                     $inserted_in_course[$vcourse['code']] = $vcourse['title'];
                                 }

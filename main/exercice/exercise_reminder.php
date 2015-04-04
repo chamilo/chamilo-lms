@@ -20,24 +20,48 @@ if ($debug>0) {
 
 // general parameters passed via POST/GET
 if (empty ($origin)) {
-    $origin = Security::remove_XSS($_REQUEST['origin']);
+    if (!empty($_REQUEST['origin'])) {
+        $origin = Security::remove_XSS($_REQUEST['origin']);
+    } else {
+        $origin = '';
+    }
 }
 if (empty($learnpath_id)) {
-    $learnpath_id = intval($_REQUEST['learnpath_id']);
+    if (!empty($_REQUEST['learnpath_id'])) {
+        $learnpath_id = intval($_REQUEST['learnpath_id']);
+    } else {
+        $learnpath_id = 0;
+    }
 }
 if (empty($learnpath_item_id)) {
-    $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+    if (!empty($_REQUEST['learnpath_item_id'])) {
+        $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+    } else {
+        $learnpath_item_id = 0;
+    }
 }
 if (empty($learnpath_item_view_id)) {
-    $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);
+    if (!empty($_REQUEST['learnpath_item_view_id'])) {
+        $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);
+    } else {
+        $learnpath_item_view_id = 0;
+    }
 }
 
 if (empty($exerciseId)) {
-    $exerciseId = intval($_REQUEST['exerciseId']);
+    if (!empty($_REQUEST['exerciseId'])) {
+        $exerciseId = intval($_REQUEST['exerciseId']);
+    } else {
+        $exerciseId = 0;
+    }
 }
 
 if (empty($objExercise)) {
-    $objExercise = $_SESSION['objExercise'];
+    if (!empty($_SESSION['objExercise'])) {
+        $objExercise = $_SESSION['objExercise'];
+    } else {
+        $objExercise = null;
+    }
 }
 
 if (!$objExercise) {

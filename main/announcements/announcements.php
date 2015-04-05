@@ -29,8 +29,24 @@ $this_section=SECTION_COURSES;
 $nameTools = get_lang('ToolAnnouncement');
 
 //session
-if(isset($_GET['id_session'])) {
+if (isset($_GET['id_session'])) {
     $_SESSION['id_session'] = intval($_GET['id_session']);
+}
+
+$allowToEdit = (
+    api_is_allowed_to_edit(false, true) ||
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+);
+
+$sessionId = api_get_session_id();
+$drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+
+if (!empty($sessionId)) {
+    $allowToEdit = $allowToEdit && api_is_allowed_to_session_edit(false, true);
+}
+
+if (!empty($sessionId) && $drhHasAccessToSessionContent) {
+    $allowToEdit = $allowToEdit || api_is_drh();
 }
 
 /* ACCESS RIGHTS */
@@ -48,10 +64,10 @@ $maximum 	= '12';
 $length 	= '36';
 
 // Database Table Definitions
-$tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
-$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
+$tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 /*	Libraries	*/
 
@@ -76,9 +92,7 @@ $safe_newContent = isset($_POST['newContent']) ? $_POST['newContent'] : null;
 $content_to_modify = $title_to_modify 	= '';
 
 if (!empty($_POST['To'])) {
-    if (api_get_session_id()!=0 &&
-        api_is_allowed_to_session_edit(false, true) == false
-    ) {
+    if (!$allowToEdit) {
         api_not_allowed(true);
     }
     $display_form = true;
@@ -121,7 +135,7 @@ $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
 if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") ||
     (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To'])
 ) {
-    if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true) == false) {
+    if (api_get_session_id() != 0 && !$allowToEdit) {
         api_not_allowed(true);
     }
     $display_form = true;
@@ -181,14 +195,12 @@ if (!empty($group_id)) {
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $message = null;
 
-if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
+if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
     //we are not in the learning path
-    Display::display_header($nameTools,get_lang('Announcements'));
+    Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-if (api_is_allowed_to_edit(false,true) OR
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
-) {
+if ($allowToEdit) {
     /*
         Change visibility of announcement
     */
@@ -197,9 +209,6 @@ if (api_is_allowed_to_edit(false,true) OR
     // change visibility -> studentview -> course manager view
     if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false') {
         if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide") {
-            if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-                api_not_allowed();
-            }
             if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
                 if ($ctok == $_GET['sec_token']) {
                     AnnouncementManager::change_visibility_announcement($_course, $_GET['id']);
@@ -212,9 +221,6 @@ if (api_is_allowed_to_edit(false,true) OR
     /* Delete announcement */
     if (!empty($_GET['action']) && $_GET['action']=='delete' && isset($_GET['id'])) {
         $id = intval($_GET['id']);
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false, true) == false) {
-            api_not_allowed();
-        }
 
         if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             // tooledit : visibility = 2 : only visible for platform administrator
@@ -230,7 +236,7 @@ if (api_is_allowed_to_edit(false,true) OR
         }
     }
 
-    //delete attachment file
+    // Delete attachment file
     if (isset($_GET['action']) && $_GET['action'] == 'delete_attachment') {
         $id = $_GET['id_attach'];
         if ($ctok == $_GET['sec_token']) {
@@ -253,10 +259,6 @@ if (api_is_allowed_to_edit(false,true) OR
 
     /* Modify announcement */
     if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
-        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-            api_not_allowed();
-        }
-
         $display_form = true;
 
         // RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
@@ -415,7 +417,6 @@ if (api_is_allowed_to_edit(false,true) OR
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
                     AnnouncementManager::send_email($insert_id, $sendToUsersInSession);
                 }
-
             } // end condition token
         }	// isset
 
@@ -446,10 +447,9 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, true, true);
 
-if (api_is_allowed_to_edit(false,true))  {
+if ($allowToEdit)  {
     // check teacher status
     if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-
         if (api_get_group_id() == 0) {
             $group_condition = "";
         } else {
@@ -471,7 +471,7 @@ if (api_is_allowed_to_edit(false,true))  {
 } else {
     // students only get to see the visible announcements
     if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-        $group_memberships=GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
+        $group_memberships = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
 
         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
@@ -565,7 +565,7 @@ $announcement_number = Database::num_rows($result);
 */
 
 $show_actions = false;
-if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
     echo '<div class="actions">';
     if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify','view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
@@ -576,7 +576,8 @@ if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_e
 } else {
     if (in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".
+            Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
         echo '</div>';
     }
 }
@@ -595,18 +596,18 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
 if ($show_actions)
     echo '</div>';
 
-
 //	ANNOUNCEMENTS LIST
 
 if ($message) {
     Display::display_confirmation_message($message);
     $display_announcement_list = true;
-    $display_form             = false;
+    $display_form = false;
 }
+
 if (!empty($error_message)) {
     Display::display_error_message($error_message);
     $display_announcement_list = false;
-    $display_form             = true;
+    $display_form = true;
 }
 
 /*
@@ -614,12 +615,10 @@ if (!empty($error_message)) {
 */
 
 if ($display_form) {
-
     $content_to_modify 	= stripslashes($content_to_modify);
     $title_to_modify 	= stripslashes($title_to_modify);
 
     // DISPLAY ADD ANNOUNCEMENT COMMAND
-    //echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">';
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
     echo '<form class="form-horizontal" method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
     if (empty($_GET['id'])) {
@@ -635,7 +634,12 @@ if ($display_form) {
     if (empty($group_id)) {
         echo '	<div class="control-group">
 					<label class="control-label">'.
-            Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).' '.get_lang('SentTo').'
+                    Display::return_icon(
+                        'group.png',
+                        get_lang('ModifyRecipientList'),
+                        array('align' => 'absmiddle'),
+                        ICON_SIZE_SMALL
+                    ).' '.get_lang('SentTo').'
 					</label>
 					<div class="controls">';
 
@@ -668,8 +672,6 @@ if ($display_form) {
                 $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
                 $content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
             }
-        } else {
-            //echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
         }
         AnnouncementManager::show_to_form($to);
         echo '		</div>
@@ -690,8 +692,6 @@ if ($display_form) {
                             <input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked> '.get_lang('EmailOption').'</label>
                     </div>
                 </div>';
-
-
     } else {
         if (!isset($announcement_to_modify) ) {
             $announcement_to_modify ="";
@@ -738,11 +738,8 @@ if ($display_form) {
     }
 
     $oFCKeditor->Value		= $content_to_modify;
-
     echo '<div class="row"><div class="formw">';
-
     echo Display::display_normal_message(get_lang('Tags').' <br /><br />'.implode('<br />', AnnouncementManager::get_tags()), false);
-
     echo $oFCKeditor->CreateHtml();
     echo '</div></div>';
 
@@ -795,8 +792,11 @@ if ($display_form) {
 $course_id = api_get_course_int_id();
 
 //if ($display_announcement_list && !$surveyid) {
+
 if ($display_announcement_list) {
-    // by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
+    // by default we use the id of the current user.
+    // The course administrator can see the announcement of other
+    // users by using the user / group filter
     //$user_id=$_user['user_id'];
     if (isset($_SESSION['user'])) {
         //$user_id=$_SESSION['user'];
@@ -807,16 +807,12 @@ if ($display_announcement_list) {
         //$group_id=$_SESSION['group'];
     }
     $group_id = api_get_group_id();
-
     $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
 
-    //$is_group_member = GroupManager :: is_tutor(api_get_user_id());
-
-    if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+    if ($allowToEdit) {
         // A.1. you are a course admin with a USER filter
         // => see only the messages of this specific user + the messages of the group (s)he is member of.
         if (!empty($_SESSION['user'])) {
-
             if (is_array($group_memberships) && count($group_memberships) > 0 ) {
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
@@ -857,7 +853,6 @@ if ($display_announcement_list) {
 				GROUP BY ip.ref
 				ORDER BY display_order DESC";
         } else {
-
             // A.3 you are a course admin without any group or user filter
             // A.3.a you are a course admin without user or group filter but WITH studentview
             // => see all the messages of all the users and groups without editing possibilities
@@ -890,8 +885,7 @@ if ($display_announcement_list) {
             }
         }
     } else {
-        //STUDENT
-
+        // STUDENT
         if (is_array($group_memberships) && count($group_memberships)>0) {
             if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
                 if (api_get_group_id() == 0) {
@@ -902,8 +896,6 @@ if ($display_announcement_list) {
                     $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
 					OR ip.to_group_id IN (0, ".api_get_group_id()."))";
                 }
-                //$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
-
             } else {
                 if (api_get_group_id() == 0) {
                     $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
@@ -924,7 +916,7 @@ if ($display_announcement_list) {
     				ORDER BY display_order DESC";
         } else {
             if ($_user['user_id']) {
-                if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                if ($allowToEdit) {
                     $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
                 } else {
                     $cond_user_id = " AND (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
@@ -943,8 +935,7 @@ if ($display_announcement_list) {
     						AND announcement.session_id IN(0,".api_get_session_id().")
 						ORDER BY display_order DESC";
             } else {
-
-                if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                if ($allowToEdit) {
                     $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ip.to_group_id='0' ) ";
                 } else {
                     $cond_user_id = " AND ip.to_group_id='0' ";
@@ -965,14 +956,14 @@ if ($display_announcement_list) {
         }
     }
 
-    $result		= Database::query($sql);
-    $num_rows 	= Database::num_rows($result);
+    $result = Database::query($sql);
+    $num_rows = Database::num_rows($result);
 
     // DISPLAY: NO ITEMS
 
     if (!isset($_GET['action']) || !in_array($_GET['action'], array('add', 'modify','view')))
         if ($num_rows == 0) {
-            if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+            if ($allowToEdit && (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
                 echo '<div id="no-data-view">';
                 echo '<h2>'.get_lang('Announcements').'</h2>';
                 echo Display::return_icon('valves.png', '', array(), 64);
@@ -981,10 +972,8 @@ if ($display_announcement_list) {
                 echo '</div>';
                 echo '</div>';
             } else {
-                //echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
                 Display::display_warning_message(get_lang('NoAnnouncements'));
             }
-
         } else {
             $iterator = 1;
             $bottomAnnouncement = $announcement_number;
@@ -993,8 +982,10 @@ if ($display_announcement_list) {
             $ths = Display::tag('th', get_lang('Title'));
             $ths .= Display::tag('th', get_lang('By') );
             $ths .= Display::tag('th', get_lang('LastUpdateDate') );
-            if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id']))
-                OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if ($allowToEdit ||
+                (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT,$myrow['id'])) ||
+                (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            ) {
                 $ths .= Display::tag('th', get_lang('Modify'));
             }
 
@@ -1047,8 +1038,7 @@ if ($display_announcement_list) {
 
                     // we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
                     $modify_icons = '';
-                    if (api_is_allowed_to_edit(false,true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))
-                        OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                    if ($allowToEdit || (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))) {
 
                         $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL)."</a>";
                         if ($myrow['visibility']==1) {
@@ -1072,7 +1062,7 @@ if ($display_announcement_list) {
                         } else {
                             $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
                         }
-                        if (api_is_allowed_to_edit(false,true)) {
+                        if ($allowToEdit) {
                             $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
                                 Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).
                                 "</a>";
@@ -1088,9 +1078,8 @@ if ($display_announcement_list) {
         }
 }	// end: if ($displayAnnoucementList)
 
-
 if (isset($_GET['action']) && $_GET['action'] == 'view') {
-    AnnouncementManager::display_announcement($announcement_id);
+    AnnouncementManager::display_announcement($announcement_id, $allowToEdit);
 }
 
 /*		FOOTER		*/

@@ -80,6 +80,22 @@ if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 }
 
+/* This is a special section that has to be enabled in specific cases
+ * PLEASE DO NOT REMOVE
+$list = get_zip_files_in_garbage();
+if(count($list)>0){
+    $select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+    foreach($list as $file){
+        $select_file_name->addOption($file,$file);
+    }
+    $form->addElement('submit', 'submit', get_lang('Download'));
+}
+else{
+    $text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+    $defaults["empty"] = get_lang('Empty');
+    $text_empty->freeze();
+}*/
+
 $form->addButtonUpload(get_lang('Upload'));
 
 if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {

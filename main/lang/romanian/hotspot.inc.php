@@ -15,4 +15,7 @@ $labelPolyMenu = "Inchide poligonul";
 $triesleft = "Incercari ramase";
 $exeFinished = "Toate intrebarile sunt definite. Acum puteti rearanja spatiile.";
 $nextAnswer = "Apasa pe:&done=done";
+$delineation = "Delimitare";
+$labelDelineationMenu = "Inchide delimitarea";
+$oar = "Zona de risc";
 ?>

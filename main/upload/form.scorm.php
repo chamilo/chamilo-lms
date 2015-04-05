@@ -83,15 +83,22 @@ if (api_is_platform_admin()) {
 /* This is a special section that has to be enabled in specific cases
  * PLEASE DO NOT REMOVE
 $list = get_zip_files_in_garbage();
-if(count($list)>0){
-    $select_file_name = &$form->addElement('select','file_name',get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+if (count($list)>0) {
+    $select_file_name = &$form->addElement(
+        'select',
+        'file_name',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
     foreach($list as $file){
-        $select_file_name->addOption($file,$file);
+        $select_file_name->addOption($file, $file);
     }
     $form->addElement('submit', 'submit', get_lang('Download'));
-}
-else{
-    $text_empty = &$form->addElement('text', 'empty', get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir')));
+} else {
+    $text_empty = &$form->addElement(
+        'text',
+        'empty',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
     $defaults["empty"] = get_lang('Empty');
     $text_empty->freeze();
 }*/

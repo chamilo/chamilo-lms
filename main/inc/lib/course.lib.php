@@ -1750,13 +1750,14 @@ class CourseManager
     ) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
         $students = array();
 
         if ($session_id == 0) {
             // students directly subscribed to the course
             $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
-                    INNER JOIN user u ON cu.user_id = u.user_id
+                    INNER JOIN $userTable u ON cu.user_id = u.user_id
                    WHERE course_code = '$course_code' AND cu.status = " . STUDENT;
 
             if (!$includeInvitedUsers) {

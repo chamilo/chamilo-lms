@@ -109,7 +109,7 @@ if (Request::is_post() && $is_error) {
     // Directory creation.
     $stopping_error = false;
 
-    // Escape path with basename so it can only be directly into the claroline/upload directory.
+    // Escape path with basename so it can only be directly into the archive/ directory.
     $s = api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
     // Get name of the zip file without the extension
     $info = pathinfo($s);

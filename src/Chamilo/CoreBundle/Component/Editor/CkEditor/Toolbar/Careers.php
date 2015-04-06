@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Carrers toolbar configuration
+ * Careers toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class Carrers extends Basic
+class Careers extends Basic
 {
 
     /**

@@ -1308,7 +1308,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             . "INNER JOIN session_field_values AS sfv ON s.id = sfv.session_id "
             . "INNER JOIN session_field AS sf ON sfv.field_id = sf.id "
             . "INNER JOIN session_rel_user AS su ON s.id = su.id_session "
-            . "WHERE sf.field_variable = 'is_induccion_session' "
+            . "WHERE sf.field_variable = 'is_induction_session' "
             . "AND su.relation_type = 0 "
             . "AND su.id_user = " . intval($userId);
 

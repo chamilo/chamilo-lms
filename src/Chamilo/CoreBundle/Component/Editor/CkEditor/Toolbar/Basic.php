@@ -19,6 +19,7 @@ class Basic extends Toolbar
     public $defaultPlugins = array(
         'adobeair',
         'ajax',
+        'audio',
         'bidi',
         'colorbutton',
         'colordialog',
@@ -52,6 +53,7 @@ class Basic extends Toolbar
         'tableresize',
         'templates',
         'uicolor',
+        'video',
         'widget',
         'wikilink',
         'wordcount',

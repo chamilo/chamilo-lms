@@ -173,11 +173,6 @@ class Basic extends Toolbar
             ['Toolbarswitch'],
         ];
 
-        // file manager (elfinder)
-
-        // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
-        $config['filebrowserBrowseUrl'] = api_get_path(WEB_LIBRARY_PATH).'elfinder/filemanager.php';
-
         $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
 
         /*filebrowserFlashBrowseUrl
@@ -188,8 +183,6 @@ class Basic extends Toolbar
         filebrowserUploadUrl*/
 
         $config['extraPlugins'] = $this->getPluginsToString();
-
-        $config['format_tags'] = 'p;h1;h2;h3;h4;h5;h6';
 
         //$config['oembed_maxWidth'] = '560';
         //$config['oembed_maxHeight'] = '315';
@@ -206,10 +199,6 @@ class Basic extends Toolbar
             // Option to limit the words in the Editor
             'wordLimit' => 'unlimited'
         );*/
-
-        $config['toolbar'] = 'minToolbar';
-        $config['smallToolbar'] = 'minToolbar';
-        $config['maximizedToolbar'] = 'maxToolbar';
 
         //$config['skins'] = 'moono';
 

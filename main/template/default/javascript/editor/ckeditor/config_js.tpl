@@ -10,7 +10,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.removeButtons = 'Underline,Subscript,Superscript';
 
     // Set the most common block elements.
-    config.format_tags = 'p;h1;h2;h3;pre';
+    config.format_tags = 'p;h1;h2;h3;h4;h5;h6;pre';
 
     // Simplify the dialog windows.
     config.removeDialogTabs = 'image:advanced;link:advanced';
@@ -18,6 +18,13 @@ CKEDITOR.editorConfig = function( config ) {
     config.templates_files  = [
         '{{ _p.web_main ~ 'inc/lib/elfinder/templates.php'}}'
     ];
+
+    config.toolbar = 'minToolbar';
+    config.smallToolbar = 'minToolbar';
+    config.maximizedToolbar = 'maxToolbar';
+
+    // File manager (elFinder)
+    config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php' }}';
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;

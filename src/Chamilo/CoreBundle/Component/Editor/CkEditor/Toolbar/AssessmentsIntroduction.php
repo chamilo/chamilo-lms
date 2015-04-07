@@ -15,7 +15,34 @@ class AssessmentsIntroduction extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Save', 'Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Table', 'SpecialChar'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor'],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
@@ -24,7 +51,6 @@ class AssessmentsIntroduction extends Basic
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
-
-        return $config;
     }
+
 }

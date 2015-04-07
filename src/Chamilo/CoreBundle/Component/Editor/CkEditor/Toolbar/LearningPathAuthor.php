@@ -16,18 +16,39 @@ class LearningPathAuthor extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
-        ];
-        $config['toolbar_maxToolbar'] = [
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
 
         $config['fullPage'] = true;
 
         return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
+            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['Toolbarswitch']
+        ];
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

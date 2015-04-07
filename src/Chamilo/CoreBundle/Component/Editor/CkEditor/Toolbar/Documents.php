@@ -16,15 +16,11 @@ class Documents extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch', 'ShowBlocks']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+        }
 
         $config['extraPlugins'] = $this->getPluginsToString();
         //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
@@ -45,6 +41,46 @@ class Documents extends Basic
             $plugins[] = 'glossary';
         }
         return $plugins;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath', 'Asciisvg'],
+            ['Table', 'SpecialChar'],
+            [
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor',
+                '-',
+                'NumberedList',
+                'BulletedList',
+                '-',
+                api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
+                'Source'
+            ],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch', 'ShowBlocks']
+        ];
     }
 
 }

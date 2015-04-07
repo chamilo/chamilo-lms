@@ -16,16 +16,34 @@ class Register extends Basic
 
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_maxToolbar'] = $this->getSmallToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
             ['Toolbarswitch', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor']
         ];
-
-        $config['toolbar_maxToolbar'] = $config['toolbar_minToolbar'];
-
-        return $config;
     }
 
 }

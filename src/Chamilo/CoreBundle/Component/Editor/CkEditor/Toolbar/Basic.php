@@ -135,45 +135,11 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
 
-        $config['toolbar_maxToolbar'] = [
-            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
-            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
-            ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            [
-                'Image',
-                'Mapping',
-                'Video',
-                'Oembed',
-                'Flash',
-                'Youtube',
-                'Audio',
-                'leaflet',
-                'Smiley',
-                'SpecialChar',
-                'Asciimath',
-                'Asciisvg'
-            ],
-            '/',
-            ['Table', '-', 'CreateDiv'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
-            ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch'],
-        ];
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
 
         $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
 
@@ -214,4 +180,68 @@ class Basic extends Toolbar
         //$config['height'] = '200';
         return $this->config;
     }
+
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
+    protected function getNormalToolbar()
+    {
+        return null;
+    }
+
+    /**
+     * Get the small toolbar configuration
+     * @return array
+     */
+    protected function getSmallToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
+    }
+
+    /**
+     * Get the toolbar configuration when CKEditor is maximized
+     * @return array
+     */
+    protected function getMaximizedToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Asciimath',
+                'Asciisvg'
+            ],
+            '/',
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['Toolbarswitch'],
+        ];
+    }
+
 }

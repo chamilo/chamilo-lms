@@ -15,16 +15,19 @@ class Profile extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
-        ];
-        $config['toolbar_maxToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -51,7 +54,34 @@ class Profile extends Basic
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch']
         ];
-
-        return $config;
     }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Table', 'Smiley'],
+            '/',
+            ['Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Toolbarswitch']
+        ];
+    }
+
 }

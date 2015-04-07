@@ -14,17 +14,20 @@ class TestQuestionDescription extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Source', 'Toolbarswitch']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
 
-        $config['toolbar_maxToolbar'] = [
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -53,7 +56,34 @@ class TestQuestionDescription extends Basic
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],
         ];
-
-        return $config;
     }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Table', 'SpecialChar'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Unlink', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Source', 'Toolbarswitch']
+        ];
+    }
+
 }

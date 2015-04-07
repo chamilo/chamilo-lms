@@ -19,16 +19,20 @@ class Work extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
 
-        $config['toolbar_maxToolbar'] = [
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -56,8 +60,33 @@ class Work extends Basic
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],
         ];
+    }
 
-        return $config;
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Maxmize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Table', 'Smiley'],
+            '/',
+            ['Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor', 'BGColor'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

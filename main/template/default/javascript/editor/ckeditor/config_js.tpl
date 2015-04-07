@@ -19,9 +19,11 @@ CKEDITOR.editorConfig = function( config ) {
         '{{ _p.web_main ~ 'inc/lib/elfinder/templates.php'}}'
     ];
 
-    config.toolbar = 'minToolbar';
-    config.smallToolbar = 'minToolbar';
-    config.maximizedToolbar = 'maxToolbar';
+    {% if moreButtonsInMaximizedMode %}
+        config.toolbar = 'minToolbar';
+        config.smallToolbar = 'minToolbar';
+        config.maximizedToolbar = 'maxToolbar';
+    {% endif %}
 
     // File manager (elFinder)
     config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php' }}';

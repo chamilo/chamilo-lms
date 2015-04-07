@@ -1561,8 +1561,10 @@ class DocumentManager
         $sql = "SELECT visibility
                 FROM $docTable d
                 INNER JOIN $propTable ip
-                ON (d.id = ip.ref AND d.c_id  = $course_id AND ip.c_id = $course_id)
+                ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
+        		    ip.visibility <> 2 AND
+        		    d.c_id  = $course_id AND
         		    ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
         			filetype = '$file_type' AND
         			locate(concat(path,'/'), '" . Database::escape_string($doc_path.'/'). "')=1

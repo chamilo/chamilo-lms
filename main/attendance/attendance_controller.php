@@ -289,7 +289,7 @@ class AttendanceController
             }
 
             if (api_is_allowed_to_edit(null, true) ||
-                api_is_coach(api_get_session_id(), api_get_course_id()) ||
+                api_is_coach(api_get_session_id(), api_get_course_int_id()) ||
                 $isDrhOfCourse
             ) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);

@@ -57,7 +57,11 @@ foreach ($new_session_list as $session_item) {
 
 $user_course_list = array();
 foreach ($course_list as $course) {
-    $status = SessionManager::get_user_status_in_course_session($userId, $course['code'], $session_id);
+    $status = SessionManager::get_user_status_in_course_session(
+        $userId,
+        $course['real_id'],
+        $session_id
+    );
     if ($status || api_is_platform_admin()) {
         $user_course_list[] = $course['code'];
     }

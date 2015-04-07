@@ -82,6 +82,7 @@ function search_users($needle, $type)
         $needle = Database::escape_string($needle);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
         $showOfficialCode = false;
+
         global $_configuration;
         if (isset($_configuration['order_user_list_by_official_code']) &&
             $_configuration['order_user_list_by_official_code']
@@ -114,6 +115,7 @@ function search_users($needle, $type)
                 $cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
             }
         }
+
         switch ($type) {
             case 'single':
                 // search users where username or firstname or lastname begins likes $needle
@@ -292,13 +294,13 @@ $sessions = array();
 $noPHP_SELF = true;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent             = $_POST['form_sent'];
-    $firstLetterUser       = $_POST['firstLetterUser'];
-    $firstLetterSession    = $_POST['firstLetterSession'];
-    $UserList              = $_POST['sessionUsersList'];
+    $form_sent = $_POST['form_sent'];
+    $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : '';
+    $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : '';
+    $UserList = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
-        $UserList=array();
+        $UserList = array();
     }
 
     if ($form_sent == 1) {
@@ -366,14 +368,14 @@ if ($ajax_search) {
         if ($sessionUser['status_in_session'] != 0) {
             continue;
         }
-        
+
         if (!array_key_exists($sessionUser['user_id'], $sessionUsersList)) {
             continue;
         }
 
-        if ($sessionUser['count'] != $countSessionCoursesList) {
+        /*if ($sessionUser['count'] != $countSessionCoursesList) {
             unset($sessionUsersList[$sessionUser['user_id']]);
-        }
+        }*/
     }
 
     unset($users); //clean to free memory

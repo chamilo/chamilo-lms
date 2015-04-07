@@ -171,7 +171,7 @@ foreach ($res as $course) {
     if ($debug) {
         echo "Session $sessionTitle created with ID $id" . $eol;
     }
-    SessionManager::add_courses_to_session($id, array($course['code']));
+    SessionManager::add_courses_to_session($id, array($course['id']));
     $resultUsers = Database::query("SELECT user_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER). " WHERE c_id = '" . $course['id'] . "'");
     $users = array();
     while ($row = Database::fetch_assoc($resultUsers)) {

@@ -4966,7 +4966,7 @@ function exportAllStudentWorkFromPublication(
             $header .= '<br />' . $sessionInfo['description'];
             $teachers = SessionManager::getCoachesByCourseSessionToString(
                 $sessionId,
-                $courseCode
+                $courseInfo['real_id']
             );
         }
     }

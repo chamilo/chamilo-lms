@@ -159,7 +159,7 @@ if (count($sessions) > 0) {
             $courseInfo = api_get_course_info($my_course['code']);
             $sessionStatus = SessionManager::get_user_status_in_session(
                 $user['user_id'],
-                $my_course['code'],
+                $courseInfo['real_id'],
                 $id_session
             );
             $status = null;

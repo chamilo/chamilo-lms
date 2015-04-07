@@ -592,7 +592,7 @@ class AnnouncementManager
         $courseCode = api_get_course_id();
         $_course = api_get_course_info();
 
-        $sessionList = SessionManager::get_session_by_course(api_get_course_id());
+        $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $sessionInfo) {

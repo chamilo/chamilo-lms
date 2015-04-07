@@ -1626,7 +1626,7 @@ class DocumentManager
         } else {
             $user_status = SessionManager::get_user_status_in_course_session(
                 $user_id,
-                $course_info['code'],
+                $course_info['real_id'],
                 $session_id
             );
 
@@ -3214,7 +3214,11 @@ class DocumentManager
                     $user_in_course = true;
                 }
             } else {
-                $user_status = SessionManager::get_user_status_in_course_session($user_id, $course_info['code'], $session_id);
+                $user_status = SessionManager::get_user_status_in_course_session(
+                    $user_id,
+                    $course_info['real_id'],
+                    $session_id
+                );
                 //is true if is an student, course session teacher or coach
                 if (in_array($user_status, array('0', '2', '6'))) {
                     $user_in_course = true;
@@ -4234,7 +4238,7 @@ class DocumentManager
      */
     public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
     {
-        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+        $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $session) {

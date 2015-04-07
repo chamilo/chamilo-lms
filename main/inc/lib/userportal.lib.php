@@ -1117,7 +1117,7 @@ class IndexManager
                         $atLeastOneCourseIsVisible = false;
 
                         foreach ($session['courses'] as $course) {
-                            $is_coach_course = api_is_coach($session_id, $course['code']);
+                            $is_coach_course = api_is_coach($session_id, $course['real_id']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
                             if ($date_session_start != '0000-00-00') {

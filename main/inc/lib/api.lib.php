@@ -1783,8 +1783,8 @@ function api_format_course_array($course_data) {
 
     //@todo should be deprecated
     // Use as key in db list.
-    $_course['dbName'] = $course_data['db_name'];
-    $_course['db_name'] = $course_data['db_name'];
+    //$_course['dbName'] = $course_data['db_name'];
+    //$_course['db_name'] = $course_data['db_name'];
     // Use in all queries.
 
     $_course['titular'] = $course_data['tutor_name'];
@@ -2147,7 +2147,7 @@ function api_get_session_info($session_id) {
 /**
  * Gets the session visibility by session id
  * @param int $session_id
- * @param string $course_code
+ * @param int $courseId
  * @param bool $ignore_visibility_for_admins
  * @return int
  *  0 = session still available,
@@ -2157,7 +2157,7 @@ function api_get_session_info($session_id) {
  */
 function api_get_session_visibility(
     $session_id,
-    $course_code = null,
+    $courseId = null,
     $ignore_visibility_for_admins = true
 ) {
     // Means that the session is still available.
@@ -2259,7 +2259,7 @@ function api_get_session_visibility(
 
             /* If I'm a coach the visibility can change in my favor depending in
              the nb_days_access_after_end and nb_days_access_before_beginning */
-            $is_coach = api_is_coach($session_id, $course_code);
+            $is_coach = api_is_coach($session_id, $courseId);
 
             if ($is_coach) {
                 // Test end date.
@@ -2358,12 +2358,12 @@ function api_get_session_condition(
 
 /**
  * This function returns information about coaches from a course in session
- * @param int       - optional, session id
- * @param string    - optional, course code
- * @return array    - array containing user_id, lastname, firstname, username
+ * @param int       optional, session id
+ * @param int $courseId
+ * @return array     array containing user_id, lastname, firstname, username
  * @deprecated use CourseManager::get_coaches_from_course
  */
-function api_get_coachs_from_course($session_id=0,$course_code='')
+function api_get_coachs_from_course($session_id = 0, $courseId = '')
 {
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -2371,22 +2371,26 @@ function api_get_coachs_from_course($session_id=0,$course_code='')
         $session_id = api_get_session_id();
     }
 
-    if (!empty($course_code)) {
-        $course_code = Database::escape_string($course_code);
+    if (!empty($courseId)) {
+        $courseId = intval($courseId);
     } else {
-        $course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
     }
 
     $tbl_user = Database:: get_main_table(TABLE_MAIN_USER);
     $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $coaches = array();
 
-    $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username
-            FROM $tbl_user u,$tbl_session_course_user scu
+    $sql = "SELECT
+                u.user_id,
+                u.lastname,
+                u.firstname,
+                u.username
+            FROM $tbl_user u, $tbl_session_course_user scu
             WHERE
               u.user_id = scu.id_user AND
               scu.id_session = '$session_id' AND
-              scu.course_code = '$course_code' AND
+              scu.c_id = '$courseId' AND
               scu.status = 2";
     $rs = Database::query($sql);
 
@@ -2394,8 +2398,10 @@ function api_get_coachs_from_course($session_id=0,$course_code='')
         while ($row = Database::fetch_array($rs)) {
             $coaches[] = $row;
         }
+
         return $coaches;
     } else {
+
         return false;
     }
 }
@@ -2639,9 +2645,10 @@ function api_get_user_platform_status($user_id = null) {
         $session_status = array('id' => $session_id, 'course_id' => $course_id);
         $session_user_status = SessionManager::get_user_status_in_course_session(
             $user_id,
-            $course_code,
+            $course_id,
             $session_id
         );
+
         switch ($session_user_status) {
             case 0:
                 $session_status['status'] = 'student';
@@ -2716,11 +2723,13 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
 /**
  * Checks whether the current user is a course or session coach
  * @param int - optional, session id
- * @param string - optional, course code
+ * @param int $courseId
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null, $check_student_view = true)
+function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true)
 {
+    $userId = api_get_user_id();
+
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2734,22 +2743,22 @@ function api_is_coach($session_id = 0, $course_code = null, $check_student_view 
         return false;
     }
 
-    if (!empty($course_code)) {
-        $course_code = Database::escape_string($course_code);
+    if (!empty($courseId)) {
+        $courseId = intval($courseId);
     } else {
-        $course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
     }
     $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 
     if (!empty($course_code)) {
-        $sql = "SELECT DISTINCT id, name, date_start, date_end
-                FROM $session_table
+        $sql = "SELECT DISTINCT s.id, name, date_start, date_end
+                FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session_rc_ru.id_session = id AND session_rc_ru.id_user = '".api_get_user_id()."'
+                ON session_rc_ru.id_session = s.id AND session_rc_ru.id_user = '".$userId."'
                 WHERE
-                    session_rc_ru.course_code = '$course_code' AND
+                    session_rc_ru.c_id = '$courseId' AND
                     session_rc_ru.status = 2 AND
                     session_rc_ru.id_session = '$session_id'";
         $result = Database::query($sql);
@@ -2759,7 +2768,7 @@ function api_is_coach($session_id = 0, $course_code = null, $check_student_view 
     if (!empty($session_id)) {
         $sql = "SELECT DISTINCT id, name, date_start, date_end
                 FROM $session_table
-                WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
+                WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
                 ORDER BY date_start, date_end, name";
         $result = Database::query($sql);
         if (!empty($sessionIsCoach)) {
@@ -6966,10 +6975,19 @@ function api_get_security_key() {
     return $_configuration['security_key'];
 }
 
-function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
+/**
+ * @param int $user_id
+ * @param int $courseId
+ * @param int $session_id
+ * @return array
+ */
+function api_detect_user_roles($user_id, $courseId, $session_id = 0)
+{
     $user_roles = array();
     /*$user_info = api_get_user_info($user_id);
     $user_roles[] = $user_info['status'];*/
+    $courseInfo = api_get_course_info_by_id($courseId);
+    $course_code = $courseInfo['code'];
 
     $url_id = api_get_current_access_url_id();
     if (api_is_platform_admin_by_id($user_id, $url_id)) {
@@ -6999,7 +7017,11 @@ function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
                 $user_roles[] = COURSE_STUDENT;
             }
         } else {
-            $user_status_in_session = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+            $user_status_in_session = SessionManager::get_user_status_in_course_session(
+                $user_id,
+                $courseId,
+                $session_id
+            );
 
             if (!empty($user_status_in_session)) {
                 if ($user_status_in_session == 0) {
@@ -7048,11 +7070,17 @@ function role_actions() {
     );
 }
 
-function api_coach_can_edit_view_results($course_code = null, $session_id = null) {
+/**
+ * @param int $courseId
+ * @param int $session_id
+ * @return bool
+ */
+function api_coach_can_edit_view_results($courseId = null, $session_id = null)
+{
     $user_id = api_get_user_id();
 
-    if (empty($course_code)) {
-        $course_code = api_get_course_id();
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
     }
 
     if (empty($session_id)) {
@@ -7063,7 +7091,7 @@ function api_coach_can_edit_view_results($course_code = null, $session_id = null
         return true;
     }
 
-    $roles = api_detect_user_roles($user_id, $course_code, $session_id);
+    $roles = api_detect_user_roles($user_id, $courseId, $session_id);
 
     if (in_array(SESSION_COURSE_COACH, $roles)) {
         //return api_get_setting('session_tutor_reports_visibility') == 'true';

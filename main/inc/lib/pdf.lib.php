@@ -112,7 +112,7 @@ class PDF
             ) {
                 $teacher_list = SessionManager::getCoachesByCourseSessionToString(
                     $this->params['session_info']['id'],
-                    $this->params['course_code']
+                    $this->params['course_info']['real_id']
 
                 );
             } else {

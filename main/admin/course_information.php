@@ -105,7 +105,7 @@ $table->display();
 echo Display::page_header(get_lang('Users'));
 $table_course_user     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user            = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT *,cu.status as course_status
+$sql = "SELECT *, cu.status as course_status
         FROM $table_course_user cu, $table_user u";
 if (api_is_multiple_url_enabled()) {
     $sql .= " INNER JOIN ".Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER)." url_rel_user
@@ -153,8 +153,9 @@ if (Database::num_rows($res) > 0) {
 } else {
     echo get_lang('NoUsersInCourse');
 }
+$courseInfo = api_get_course_info($course->code);
 
-$session_list = SessionManager::get_session_by_course($course->code);
+$session_list = SessionManager::get_session_by_course($courseInfo['real_id']);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {

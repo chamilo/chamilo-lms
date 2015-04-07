@@ -2573,7 +2573,7 @@ class UserManager
                     // Checking session visibility
                     $visibility = api_get_session_visibility(
                         $session_id,
-                        $course['code'],
+                        $course['real_id'],
                         $ignore_visibility_for_admins
                     );
 
@@ -2859,12 +2859,12 @@ class UserManager
         to our user or not */
 
         $sql = "SELECT DISTINCT
-                    scu.course_code as code, c.visibility, c.id as real_id
+                    c.visibility, c.id as real_id
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
-                ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                ON (scu.id_session = sc.id_session AND scu.c_id = sc.c_id)
                 INNER JOIN $tableCourse as c
-                ON (scu.course_code = c.code)
+                ON (scu.c_id = c.id)
                 $join_access_url
                 WHERE
                     scu.id_user = $user_id AND
@@ -2875,25 +2875,25 @@ class UserManager
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
-            while ($result_row = Database::fetch_array($result)) {
+            while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                 $result_row['status'] = 5;
-                if (!in_array($result_row['code'], $courses)) {
+                if (!in_array($result_row['real_id'], $courses)) {
                     $personal_course_list[] = $result_row;
-                    $courses[] = $result_row['code'];
+                    $courses[] = $result_row['real_id'];
                 }
             }
         }
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT
-                        scu.course_code as code, c.visibility, c.id as real_id
+                        c.visibility, c.id as real_id
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
                     ON (scu.id_session = s.id)
                     INNER JOIN $tbl_session_course sc
-                    ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                    ON (scu.id_session = sc.id_session AND scu.c_id = sc.c_id)
                     INNER JOIN $tableCourse as c
-                    ON (scu.course_code = c.code)
+                    ON (scu.c_id = c.id)
                     $join_access_url
                     WHERE
                       s.id = $session_id AND
@@ -2906,11 +2906,11 @@ class UserManager
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {
-                while ($result_row = Database::fetch_array($result)) {
+                while ($result_row = Database::fetch_array($result, 'ASSOC')) {
                     $result_row['status'] = 2;
-                    if (!in_array($result_row['code'], $courses)) {
+                    if (!in_array($result_row['real_id'], $courses)) {
                         $personal_course_list[] = $result_row;
-                        $courses[] = $result_row['code'];
+                        $courses[] = $result_row['real_id'];
                     }
                 }
             }
@@ -2932,9 +2932,10 @@ class UserManager
             $s = api_get_session_info($session_id);
             if ($s['id_coach'] == $user_id) {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
                 if (!empty($course_list)) {
                     foreach ($course_list as $course) {
-                        if (!in_array($course['code'], $courses)) {
+                        if (!in_array($course['id'], $courses)) {
                             $personal_course_list[] = $course;
                         }
                     }

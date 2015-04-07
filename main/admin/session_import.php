@@ -317,7 +317,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $course_info = CourseManager::get_course_information($course_code);
                                 $courseId = $course_info['c_id'];
 
-                                $session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
+                                $session_course_relation = SessionManager::relation_session_course_exist($session_id, $courseId);
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
                                             c_id = '$courseId',

@@ -485,7 +485,7 @@ class AddCourse
 
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','" . self::string2binary(
+            VALUES ($course_id, 1, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','" . self::string2binary(
                 api_get_setting(
                     'course_create_active_tools',
                     'course_description'
@@ -494,73 +494,73 @@ class AddCourse
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','" . self::string2binary(
+            VALUES ($course_id, 2, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'agenda')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage  (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','" . self::string2binary(
+            VALUES ($course_id, 3, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'documents')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','" . self::string2binary(
+            VALUES ($course_id, 4, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorms.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'learning_path')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-             VALUES ($course_id, NULL, '" . TOOL_LINK . "','link/link.php','links.gif','" . self::string2binary(
+             VALUES ($course_id, 5, '" . TOOL_LINK . "','link/link.php','links.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'links')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage  (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES  ($course_id, NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','" . self::string2binary(
+            VALUES  ($course_id, 6, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'quiz')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','" . self::string2binary(
+            VALUES ($course_id, 7, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'announcements')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','" . self::string2binary(
+            VALUES ($course_id, 8, '" . TOOL_FORUM . "','forum/index.php','forum.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'forums')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','" . self::string2binary(
+            VALUES ($course_id, 9, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'dropbox')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_USER . "','user/user.php','members.gif','" . self::string2binary(
+            VALUES ($course_id, 10, '" . TOOL_USER . "','user/user.php','members.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'users')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','" . self::string2binary(
+            VALUES ($course_id, 11, '" . TOOL_GROUP . "','group/group.php','group.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'groups')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','" . self::string2binary(
+            VALUES ($course_id, 12, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'chat')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','" . self::string2binary(
+            VALUES ($course_id, 13, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','" . self::string2binary(
                 api_get_setting(
                     'course_create_active_tools',
                     'student_publications'
@@ -569,43 +569,43 @@ class AddCourse
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_SURVEY . "','survey/survey_list.php','survey.gif','" . self::string2binary(
+            VALUES ($course_id, 14, '" . TOOL_SURVEY . "','survey/survey_list.php','survey.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'survey')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_WIKI . "','wiki/index.php','wiki.gif','" . self::string2binary(
+            VALUES ($course_id, 15, '" . TOOL_WIKI . "','wiki/index.php','wiki.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'wiki')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_GRADEBOOK . "','gradebook/index.php','gradebook.gif','" . self::string2binary(
+            VALUES ($course_id, 16, '" . TOOL_GRADEBOOK . "','gradebook/index.php','gradebook.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'gradebook')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_GLOSSARY . "','glossary/index.php','glossary.gif','" . self::string2binary(
+            VALUES ($course_id, 17, '" . TOOL_GLOSSARY . "','glossary/index.php','glossary.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'glossary')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_NOTEBOOK . "','notebook/index.php','notebook.gif','" . self::string2binary(
+            VALUES ($course_id, 18, '" . TOOL_NOTEBOOK . "','notebook/index.php','notebook.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'notebook')
             ) . "','0','squaregrey.gif','NO','_self','interaction','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_ATTENDANCE . "','attendance/index.php','attendance.gif','" . self::string2binary(
+            VALUES ($course_id, 19, '" . TOOL_ATTENDANCE . "','attendance/index.php','attendance.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'attendances')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_COURSE_PROGRESS . "','course_progress/index.php','course_progress.gif','" . self::string2binary(
+            VALUES ($course_id, 20, '" . TOOL_COURSE_PROGRESS . "','course_progress/index.php','course_progress.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'course_progress')
             ) . "','0','squaregrey.gif','NO','_self','authoring','0')"
         );
@@ -615,11 +615,11 @@ class AddCourse
             if (!empty($mycheck)) {
                 Database::query(
                     "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                     VALUES ($course_id, NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0')"
+                     VALUES ($course_id, 21, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction','0')"
                 );
                 Database::query(
                     "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                     VALUES ($course_id, NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0')"
+                     VALUES ($course_id, 22, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring','0')"
                 );
             }
         }
@@ -627,7 +627,7 @@ class AddCourse
         if (api_get_setting('search_enabled') == 'true') {
             Database::query(
                 "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                VALUES ($course_id, NULL, '" . TOOL_SEARCH . "','search/','info.gif','" . self::string2binary(
+                VALUES ($course_id, 23, '" . TOOL_SEARCH . "','search/','info.gif','" . self::string2binary(
                     api_get_setting(
                         'course_create_active_tools',
                         'enable_search'
@@ -638,7 +638,7 @@ class AddCourse
 
         // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
         $sql = "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                VALUES ($course_id, NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . self::string2binary(
+                VALUES ($course_id, 24,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'blogs')
             ) . "','1','squaregrey.gif','NO','_self','admin','0')";
         Database::query($sql);
@@ -648,15 +648,15 @@ class AddCourse
 
         Database::query(
             "INSERT INTO $tbl_course_homepage  (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')"
+            VALUES ($course_id, 25, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')"
+            VALUES ($course_id, 26, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')"
         );
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, NULL, '" . TOOL_COURSE_MAINTENANCE . "','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')"
+            VALUES ($course_id, 27, '" . TOOL_COURSE_MAINTENANCE . "','course_info/maintenance.php','backup.gif','$visible_for_course_admin','1','','NO','_self', 'admin','0')"
         );
 
         $defaultEmailExerciseAlert = 1;
@@ -667,69 +667,42 @@ class AddCourse
         }
 
         /* course_setting table (courseinfo tool)   */
+        $settings = [
+            'email_alert_manager_on_new_doc' => ['default' => 0, 'category' => 'work'],
+            'email_alert_on_new_doc_dropbox' => ['default' => 0, 'category' => 'dropbox'],
+            'allow_user_edit_agenda' => ['default' => 0, 'category' => 'agenda'],
+            'allow_user_edit_announcement' => ['default' => 0, 'category' => 'announcement'],
+            'email_alert_manager_on_new_quiz' => ['default' => $defaultEmailExerciseAlert, 'category' => 'quiz'],
+            'allow_user_image_forum' => ['default' => 1, 'category' => 'forum'],
+            'course_theme' => ['default' => '', 'category' => 'theme'],
+            'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
+            'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
+            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' =>'registration'],
+            'allow_user_view_user_list' => ['default' =>1, 'category' =>'user'],
+            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' =>'thematic_advance'],
+            'email_alert_students_on_new_homework' => ['default' => 0, 'category' =>'work'],
+            'enable_lp_auto_launch' => ['default' => 0, 'category' =>'learning_path'],
+            'pdf_export_watermark_text' => ['default' =>'', 'category' =>'learning_path'],
+            'allow_public_certificates' => ['default' => '', 'category' =>'certificates'],
+            'documents_default_visibility' => ['default' =>'visible', 'category' =>'document']
+        ];
 
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_doc',0,'work')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_on_new_doc_dropbox',0,'dropbox')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_agenda',0,'agenda')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_edit_announcement',0,'announcement')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_manager_on_new_quiz', $defaultEmailExerciseAlert,'quiz')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_image_forum',1,'forum')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'course_theme','','theme')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_learning_path_theme','1','theme')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_open_chat_window',1,'chat')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_to_teacher_on_new_user_in_course',0,'registration')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_user_view_user_list',1,'user')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'display_info_advance_inside_homecourse',1,'thematic_advance')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'email_alert_students_on_new_homework',0,'work')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')"
-        );
-        Database::query(
-            "INSERT INTO $TABLESETTING (c_id, variable, value) VALUES ($course_id, 'documents_default_visibility', 'visible')"
-        );
-
+        $counter = 1;
+        foreach ($settings as $setting) {
+            Database::query(
+                "INSERT INTO $TABLESETTING (id, c_id, variable,value,category)
+                 VALUES ($counter, $course_id, '".$setting."', '".$setting['default']."', '".$setting['category']."')"
+            );
+            $counter++;
+        }
 
         /* Course homepage tools for platform admin only */
 
         /* Group tool */
 
         Database::query(
-            "INSERT INTO $TABLEGROUPCATEGORIES  (c_id,  id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order )
-                VALUES ($course_id, '2', '" . self::lang2db(
-                get_lang('DefaultGroupCategory')
-            ) . "', '', '8', '0', '0', '0', '0');"
+            "INSERT INTO $TABLEGROUPCATEGORIES  (c_id, id, title , description, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
+             VALUES ($course_id, '2', '" . self::lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');"
         );
 
         /*    Example Material  */
@@ -744,27 +717,16 @@ class AddCourse
         $language_interface = $language;
         $now = api_get_utc_datetime();
 
-        //Share folder
-        Database::query(
-            "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/shared_folder','" . get_lang(
-                'UserFolders'
-            ) . "','folder','0')"
-        );
-        $example_doc_id = Database:: insert_id();
-        Database::query(
-            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-        );
+        $files = [
+            ['path' => '/shared_folder', 'title' => get_lang('UserFolders'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/chat_files', 'title' => get_lang('ChatFiles'), 'filetype' => 'folder', 'size' => 0],
+        ];
 
-        //Chat folder
-        Database::query(
-            "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/chat_files','" . get_lang(
-                'ChatFiles'
-            ) . "','folder','0')"
-        );
-        $example_doc_id = Database:: insert_id();
-        Database::query(
-            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-        );
+        $counter = 1;
+        foreach ($files as $file) {
+            self::insertDocument($course_id, $counter, $file);
+            $counter++;
+        }
 
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
         $perm = api_get_permissions_for_new_directories();
@@ -779,68 +741,21 @@ class AddCourse
         /*    Documents   */
         if ($fill_with_exemplary_content) {
 
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id,path,title,filetype,size) VALUES ($course_id,'/images','" . get_lang(
-                    'Images'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
+            $files = [
+                ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/images/gallery', 'title' => get_lang('DefaultCourseImages'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0]
+            ];
 
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/images/gallery','" . get_lang(
-                    'DefaultCourseImages'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
-
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/audio','" . get_lang(
-                    'Audio'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
-
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/flash','" . get_lang(
-                    'Flash'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
-
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/video','" . get_lang(
-                    'Video'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
-
-            Database::query(
-                "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/certificates','" . get_lang(
-                    'Certificates'
-                ) . "','folder','0')"
-            );
-            $example_doc_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$example_doc_id,'DocumentAdded',1,0,NULL,0)"
-            );
+            foreach ($files as $file) {
+                self::insertDocument($course_id, $counter, $file);
+                $counter++;
+            }
 
             // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-
             $folders_to_copy_from_default_course = array(
                 'images',
                 'audio',
@@ -920,11 +835,7 @@ class AddCourse
                     if (is_array($array_media) && count($array_media) > 0) {
                         foreach ($array_media as $key => $value) {
                             if (isset($value['dir']) && !empty($value['dir'])) {
-
-                                if (!is_dir(
-                                    $course_documents_folder . $value['dir']
-                                )
-                                ) {
+                                if (!is_dir($course_documents_folder . $value['dir'])) {
                                     //Creating folder
                                     mkdir(
                                         $course_documents_folder . $value['dir'],
@@ -1215,6 +1126,28 @@ class AddCourse
         $language_interface = $language_interface_original;
         return true;
     }
+
+    /**
+     * @param int $course_id
+     * @param int $counter
+     * @param array $file
+     */
+    function insertDocument($course_id, $counter, $file)
+    {
+        $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+
+        $sql = "INSERT INTO $TABLETOOLDOCUMENT (id, c_id, path,title,filetype,size)
+                VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."')";
+        Database::query($sql);
+        $docId = Database:: insert_id();
+
+        Database::query(
+            "INSERT INTO $TABLEITEMPROPERTY (id, c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+            VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, 0, NULL, 0)"
+        );
+    }
+
     /**
      * string2binary converts the string "true" or "false" to the boolean true false (0 or 1)
      * This is used for the Chamilo Config Settings as these store true or false as string

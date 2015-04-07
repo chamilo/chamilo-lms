@@ -32,8 +32,8 @@ $user_info      = api_get_user_info($user_id);
 $session = array();
 $user_name = $user_info['complete_name'];
 
-$course_list =  SessionManager::get_course_list_by_session_id ($session_id);
-$session_list = SessionManager::get_session_by_course($course_code);
+$course_list = SessionManager::get_course_list_by_session_id ($session_id);
+$session_list = SessionManager::get_session_by_course($course_id);
 $total_quota_bytes = DocumentManager::get_course_quota();
 $quota_bytes = DocumentManager::documents_total_space($course_id, 0 , 0);
 $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;

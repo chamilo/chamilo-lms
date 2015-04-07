@@ -59,7 +59,7 @@ if (api_is_course_session_coach(
     api_get_course_id(),
     api_get_session_id()
 )) {
-    if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
+    if (!api_coach_can_edit_view_results(api_get_course_int_id(), api_get_session_id())) {
         api_not_allowed(true);
     }
 }

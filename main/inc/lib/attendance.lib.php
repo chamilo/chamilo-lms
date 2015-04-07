@@ -569,6 +569,7 @@ class Attendance
 	{
 		$current_session_id = api_get_session_id();
 		$current_course_id  = api_get_course_id();
+		$currentCourseIntId = api_get_course_int_id();
 
 		$studentInGroup = array();
 
@@ -616,7 +617,7 @@ class Attendance
 			if (api_get_session_id()) {
 				$user_status_in_session = SessionManager::get_user_status_in_course_session(
 					$uid,
-					$current_course_id,
+					$currentCourseIntId,
 					$current_session_id
 				);
 			} else {

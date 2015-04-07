@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
 */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -76,12 +78,12 @@ $url_id = api_get_current_access_url_id();
 
 switch ($action) {
     case 'move_up':
-        SessionManager::moveUp($sessionId, $_GET['course_code']);
+        SessionManager::moveUp($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
         exit;
         break;
     case 'move_down':
-        SessionManager::moveDown($sessionId, $_GET['course_code']);
+        SessionManager::moveDown($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
         exit;
         break;
@@ -288,12 +290,14 @@ if ($session['nbr_courses'] == 0) {
 } else {
 	// select the courses
 
-    $orderBy = "ORDER BY position";
+    //$orderBy = "ORDER BY position";
+    $orderBy = '';
 
-	$sql = "SELECT c.id, code,title, visual_code, nbr_users
-			FROM $tbl_course c , $tbl_session_rel_course
+	$sql = "SELECT c.id, code, title, visual_code, nbr_users
+			FROM $tbl_course c INNER JOIN $tbl_session_rel_course sc
+			ON (c.id = sc.c_id)
 			WHERE
-			    c_id = c.id AND
+			    sc.c_id = c.id AND
 			    id_session='$sessionId'
 			$orderBy";
 
@@ -346,7 +350,7 @@ if ($session['nbr_courses'] == 0) {
         $orderButtons = null;
 
         $upIcon = 'up.png';
-        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_up';
+        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_up';
 
         if ($count == 0) {
             $upIcon = 'up_na.png';
@@ -359,7 +363,7 @@ if ($session['nbr_courses'] == 0) {
         );
 
         $downIcon = 'down.png';
-        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_down';
+        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_down';
 
         if ($count +1 == count($courses)) {
             $downIcon = 'down_na.png';

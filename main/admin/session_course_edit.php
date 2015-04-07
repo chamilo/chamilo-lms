@@ -29,9 +29,9 @@ $sql = "SELECT s.name, c.title
         FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
         WHERE
             sc.id_session=s.id AND
-            sc.course_code = c.code AND
+            sc.c_id = c.id AND
             sc.id_session='$id_session' AND
-            sc.c_id ='".intval($courseId)."'";
+            sc.c_id ='".$courseId."'";
 $result = Database::query($sql);
 
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
@@ -46,11 +46,12 @@ $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_sessio
 
 $arr_infos = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent=1;
+	$formSent = 1;
 
 	// get all tutor by course_code in the session
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND c_id = '".intval($courseId)."' AND status = 2";
+	$sql = "SELECT id_user
+	        FROM $tbl_session_rel_course_rel_user
+	        WHERE id_session = '$id_session' AND c_id = '".$courseId."' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
@@ -66,7 +67,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 		foreach ($id_coachs as $id_coach) {
 			$id_coach = intval($id_coach);
-			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);
+			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $courseId);
 		}
 
 		// set status to 0 other tutors from multiple list
@@ -76,7 +77,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			$rs2 = SessionManager::set_coach_to_course_session(
 				$nocoach_user_id,
 				$id_session,
-				$course_code,
+                $courseId,
 				true
 			);
 		}
@@ -87,7 +88,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	}
 } else {
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2 ";
+	        WHERE id_session = '$id_session' AND c_id = '".$courseId."' AND status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {

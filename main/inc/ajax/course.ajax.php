@@ -232,7 +232,7 @@ switch ($action) {
         $courses = array();
 
         foreach ($coursesData as $courseId => $course) {
-            $coachData = SessionManager::getCoachesByCourseSession($sessionId, $course['code']);
+            $coachData = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
 
             $coachName = '';
 

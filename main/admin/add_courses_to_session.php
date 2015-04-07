@@ -115,7 +115,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();
 if ($ajax_search) {
 
-    $sql="SELECT code, title, visual_code, id_session
+    $sql="SELECT course.id, code, title, visual_code, id_session
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.id = session_rel_course.c_id
@@ -126,7 +126,7 @@ if ($ajax_search) {
         $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT code, title, visual_code, id_session
+            $sql="SELECT course.id, code, title, visual_code, id_session
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.id = session_rel_course.c_id
@@ -141,25 +141,27 @@ if ($ajax_search) {
     $Courses = Database::store_result($result);
 
     foreach ($Courses as $course) {
-        $sessionCourses[$course['code']] = $course ;
+        $sessionCourses[$course['id']] = $course ;
     }
 } else {
-    $sql = "SELECT code, title, visual_code, id_session
+    $sql = "SELECT course.id, code, title, visual_code, id_session
 			FROM $tbl_course course
 			LEFT JOIN $tbl_session_rel_course session_rel_course
-				ON course.code = session_rel_course.course_code
-				AND session_rel_course.id_session = ".intval($sessionId)."
+            ON
+                course.id = session_rel_course.c_id AND
+                session_rel_course.id_session = ".intval($sessionId)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT code, title, visual_code, id_session
+            $sql="SELECT course.id, code, title, visual_code, id_session
 				FROM $tbl_course course
 				LEFT JOIN $tbl_session_rel_course session_rel_course
-					ON course.code = session_rel_course.course_code
-					AND session_rel_course.id_session = ".intval($sessionId)."
+                ON
+                    course.id = session_rel_course.c_id AND
+                    session_rel_course.id_session = ".intval($sessionId)."
 				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
 				WHERE access_url_id = $access_url_id
 				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
@@ -169,9 +171,9 @@ if ($ajax_search) {
     $Courses = Database::store_result($result);
     foreach ($Courses as $course) {
         if ($course['id_session'] == $sessionId) {
-            $sessionCourses[$course['code']] = $course ;
+            $sessionCourses[$course['id']] = $course ;
         } else {
-            $nosessionCourses[$course['code']] = $course ;
+            $nosessionCourses[$course['id']] = $course ;
         }
     }
 }
@@ -199,9 +201,10 @@ unset($Courses);
                     ?>
                     <div id="ajax_list_courses_multiple">
                         <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control"> <?php
-                            foreach($nosessionCourses as $enreg) {
+                            foreach ($nosessionCourses as $enreg) {
+
                                 ?>
-                                <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>>
+                                <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>>
                                     <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                                 </option>
                             <?php
@@ -266,7 +269,7 @@ unset($Courses);
                     <?php
                     foreach($sessionCourses as $enreg) {
                         ?>
-                        <option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>">
+                        <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>">
                             <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                         </option>
                     <?php

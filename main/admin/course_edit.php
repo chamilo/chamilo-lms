@@ -123,11 +123,11 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
 }
 
-$coursesInSession = SessionManager::get_session_by_course($courseInfo['code']);
+$coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($coursesInSession)) {
     foreach ($coursesInSession as $session) {
         $sessionId = $session['id'];
-        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['code']);
+        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['real_id']);
         $teachers = $allTeachers;
 
         $sessionTeachers = array();
@@ -344,7 +344,7 @@ if ($form->validate()) {
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $teacherInfo) {
                 $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches($sessionId, $course['code'], $coachesToSubscribe, true);
+                SessionManager::updateCoaches($sessionId, $courseId, $coachesToSubscribe, true);
             }
         }
 
@@ -361,7 +361,7 @@ if ($form->validate()) {
                 if (!empty($coachesToSubscribe)) {
                     SessionManager::updateCoaches(
                         $sessionId,
-                        $course['code'],
+                        $courseId,
                         $coachesToSubscribe,
                         true
                     );

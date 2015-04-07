@@ -946,13 +946,13 @@ class Template
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $id_course  = api_get_course_id();
+            $courseId  = api_get_course_int_id();
             $id_session = api_get_session_id();
-            if (isset($id_course) && $id_course != -1) {
+            if (!empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
-                    $email_link   = array();
+                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $courseId);
+                    $email_link = array();
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }

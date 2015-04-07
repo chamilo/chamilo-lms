@@ -399,6 +399,7 @@ class DisplayGradebook
 
         $userId = api_get_user_id();
         $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
         // Student.
@@ -407,7 +408,7 @@ class DisplayGradebook
         if (!empty($sessionId)) {
             $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
-                $courseCode,
+                $courseId,
                 $sessionId
             );
         }

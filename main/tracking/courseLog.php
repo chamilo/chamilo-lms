@@ -302,7 +302,7 @@ $coaches = null;
 if (!empty($session_id)) {
     $coaches = CourseManager::get_coachs_from_course_to_string(
         $session_id,
-        $courseInfo['code'],
+        $courseInfo['real_id'],
         ',',
         false
     );
@@ -318,7 +318,7 @@ if (!empty($coaches)) {
     echo $coaches;
 }
 
-$sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+$sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($sessionList)) {
     echo Display::page_subheader2(get_lang('SessionList'));
     $sessionToShow = array();

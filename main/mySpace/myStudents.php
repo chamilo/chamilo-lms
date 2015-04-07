@@ -436,7 +436,7 @@ if (!empty($student_id)) {
     if ($session_id > 0) {
 
         $session_info  = api_get_session_info($session_id);
-        $course_coachs = api_get_coachs_from_course($session_id, $course_code);
+        $course_coachs = api_get_coachs_from_course($session_id, $info_course['real_id']);
         $nb_login = '';
         if (!empty($course_coachs)) {
             $info_tutor_name = array();

@@ -18,7 +18,7 @@ class SessionCategory
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     private $id;
 
@@ -54,6 +54,9 @@ class SessionCategory
      **/
     protected $session;
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return (string) $this->name;

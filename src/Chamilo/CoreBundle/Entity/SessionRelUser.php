@@ -25,6 +25,15 @@ class SessionRelUser
     );
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $relationType;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
      */
@@ -40,8 +49,6 @@ class SessionRelUser
      * @var integer
      *
      * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $relationType;
 

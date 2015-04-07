@@ -42,6 +42,13 @@ class SessionRelCourse
     protected $course;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -123,4 +130,21 @@ class SessionRelCourse
     {
         return $this->nbrUsers;
     }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
 }

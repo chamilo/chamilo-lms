@@ -51,6 +51,43 @@ class Session
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true, unique=false)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="show_description", type="boolean", nullable=true)
+     */
+    private $showDescription;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="duration", type="integer", nullable=true)
+     */
+    private $duration;
+
+    /**
+     * @return int
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param int $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="nbr_courses", type="smallint", nullable=true, unique=false)
@@ -224,6 +261,24 @@ class Session
         $this->courses = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->userCourseSubscriptions = new ArrayCollection();
+        $this->showDescription = 0;
+        $this->category = null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShowDescription()
+    {
+        return $this->showDescription;
+    }
+
+    /**
+     * @param string $showDescription
+     */
+    public function setShowDescription($showDescription)
+    {
+        $this->showDescription = $showDescription;
     }
 
     /**
@@ -466,6 +521,29 @@ class Session
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Groups
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

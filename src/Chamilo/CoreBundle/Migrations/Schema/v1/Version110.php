@@ -12,6 +12,10 @@ use Doctrine\DBAL\Migrations\AbstractMigration,
  */
 class Version110 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     * @throws \Doctrine\DBAL\Schema\SchemaException
+     */
     public function up(Schema $schema)
     {
         // Use $schema->createTable
@@ -54,7 +58,7 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE skill ADD COLUMN criteria text DEFAULT ''");
         $this->addSql("ALTER TABLE gradebook_category ADD COLUMN generate_certificates TINYINT NOT NULL DEFAULT 0");
         $this->addSql("ALTER TABLE track_e_access ADD COLUMN c_id int NOT NULL");
-        //$this->addSql("ALTER TABLE track_e_default ADD COLUMN c_id int NOT NULL"); //already added in 1.9.x
+
         $this->addSql("ALTER TABLE track_e_lastaccess ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_exercices ADD COLUMN c_id int NOT NULL");
         $this->addSql("ALTER TABLE track_e_downloads ADD COLUMN c_id int NOT NULL");
@@ -84,6 +88,28 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int default NULL");
 
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
+
+        // Add iid
+        $tables = [
+            'c_group_info',
+            'c_course_setting',
+            'c_tool',
+            'c_group_info',
+            'c_document',
+            'c_item_property'
+        ];
+
+        foreach ($tables as $table) {
+            $this->addSql("ALTER TABLE $table MODIFY COLUMN id int unsigned DEFAULT NULL");
+            $this->addSql("ALTER TABLE $table MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+            $this->addSql("ALTER TABLE $table DROP PRIMARY KEY");
+            $this->addSql("ALTER TABLE $table ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        }
+
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN relation_type int unsigned DEFAULT 0");
+        $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
 
         // Course
         $this->addSql("ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0");
@@ -123,8 +149,6 @@ class Version110 extends AbstractMigration
         $this->addSql("UPDATE course_field_values SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE session_rel_course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
-
-        //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
 
         $this->addSql("DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages'");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages'");
@@ -170,6 +194,8 @@ class Version110 extends AbstractMigration
         $this->addSql("DROP TABLE track_c_referers");
 
         //$this->addSql('ALTER TABLE user DROP COLUMN user_id');
+
+        //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
     }
 
     public function down(Schema $schema)

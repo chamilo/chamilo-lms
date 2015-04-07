@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -15,9 +16,25 @@ class CGroupInfo
     /**
      * @var integer
      *
-     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
      */
     private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
 
     /**
      * @var string
@@ -130,26 +147,6 @@ class CGroupInfo
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set name

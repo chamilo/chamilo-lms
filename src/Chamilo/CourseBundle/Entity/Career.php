@@ -57,7 +57,6 @@ class Career
     private $id;
 
 
-
     /**
      * Set name
      *

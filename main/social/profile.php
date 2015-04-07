@@ -662,7 +662,7 @@ if ($show_full_profile) {
                             );
                             $invitations .=  '<br />';
                             $invitations .=  '<a id="btn_accepted_'.$user_invitation_id.'"'
-                                .' class="btn" onclick="register_friend(this)" href="javascript:void(0)">'
+                                .' class="btn btn-default" onclick="register_friend(this)" href="javascript:void(0)">'
                                 .get_lang('SocialAddToFriends')
                                 .'</a>';
                             $invitations .=  '<div id="id_response"></div>';

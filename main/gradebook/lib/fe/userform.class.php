@@ -48,7 +48,7 @@ class UserForm extends FormValidator
 		$renderer =& $this->defaultRenderer();
 		$renderer->setCustomElementTemplate('<span>{element}</span> ');
 		$this->addElement('text','keyword','');
-		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
+		$this->addButtonSearch(get_lang('Search'), 'submit');
 	}
 
 	protected function build_user_info_form()
@@ -64,7 +64,7 @@ class UserForm extends FormValidator
 		$this->addElement('static', 'email', get_lang('Email'), '<a href="mailto:' . $this->user_info['email'] . '">' . $this->user_info['email'] . '</a>');
 		$this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);
 		$this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
-		$this->addElement('style_submit_button', 'submit', get_lang('Back'),'class="save"');
+		$this->addButtonSave(get_lang('Back'), 'submit');
 	}
 
 	function display()

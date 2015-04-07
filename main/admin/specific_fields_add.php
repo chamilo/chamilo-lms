@@ -53,14 +53,14 @@ if (is_numeric($_REQUEST['field_id'])) {
 }
 $form->setDefaults($defaults);
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('Add'),'class="add"');
+$form->addButtonCreate(get_lang('Add'), 'submit');
 
 // Validate form
 if ($form->validate()) {
     $field = $form->exportValues();
     $field_name = $field['field_name'];
     if (is_numeric($field['field_id']) && $field['field_id']<>0 && !empty($field['field_id'])) {
-        edit_specific_field($field['field_id'],$field['field_name']);
+        edit_specific_field($field['field_id'], $field['field_name']);
         $message = get_lang('FieldEdited');
     } else {
         $field_id = add_specific_field($field_name);

@@ -41,7 +41,7 @@ $form_template = <<<EOT
   <div class="clear">
     &nbsp;
   </div>
-  <p><a href="#" class="btn" onclick="$('#registration-form').submit()"><span>S'inscrire</span></a></p>
+  <p><a href="#" class="btn btn-primary" onclick="$('#registration-form').submit()"><span>S'inscrire</span></a></p>
 </form>
 
 EOT;

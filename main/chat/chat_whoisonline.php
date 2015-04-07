@@ -122,6 +122,11 @@ if (!empty($course)) {
                     } else {
 				        $fileUrl = $userImage['dir'].$userImage['file'];
                     }
+
+                    if (api_get_configuration_value('gravatar_enabled')) {
+                        $fileUrl = $userImage['file'];
+                    }
+
 				    $email = $user['email'];
 				    $url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
 			?>

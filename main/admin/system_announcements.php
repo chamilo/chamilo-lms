@@ -19,6 +19,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$action_todo = false;
 
 // Access restrictions
 api_protect_admin_script(true);
@@ -176,18 +177,18 @@ if ($action_todo) {
         $form->addElement('hidden', 'action', 'edit');
     }
     $form->addElement('checkbox', 'send_email_test', null, get_lang('SendOnlyAnEmailToMySelfToTest'));
-    $form->addElement('style_submit_button', 'submit', $text, 'class="'.$class.'"');
+    $form->addButtonSend($text, 'submit');
     $form->setDefaults($values);
 
     if ($form->validate()) {
         $values = $form->exportValues();
-        if ( !isset($values['visible_teacher'])) {
+        if (!isset($values['visible_teacher'])) {
             $values['visible_teacher'] = false;
         }
-        if ( !isset($values['visible_student'])) {
+        if (!isset($values['visible_student'])) {
             $values['visible_student'] = false;
         }
-        if ( !isset($values['visible_guest'])) {
+        if (!isset($values['visible_guest'])) {
             $values['visible_guest'] = false;
         }
         if ($values['lang'] == 'all') {
@@ -208,11 +209,11 @@ if ($action_todo) {
                     $values['visible_guest'],
                     $values['lang'],
                     $sendMail,
-                    $values['add_to_calendar'],
-                    $values['send_email_test']
+                    empty($values['add_to_calendar'])?false:true,
+                    empty($values['send_email_test'])?false:true
                 );
 
-                if ($announcement_id !== false)  {
+                if ($announcement_id !== false) {
                     SystemAnnouncementManager::announcement_for_groups($announcement_id, array($values['group']));
                     Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
                 } else {

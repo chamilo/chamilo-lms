@@ -66,18 +66,28 @@ $session_list = SessionManager::get_sessions_list(array(), array('name'));
 
 $my_session_list = array();
 $my_session_list[0] = get_lang('None');
-foreach($session_list as $sesion_item) {
-	$my_session_list[$sesion_item['id']] = $sesion_item['name'];
+foreach ($session_list as $sesion_item) {
+    $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 
-$form = new FormValidator('search_simple','POST','','',null,false);
-$form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list, array('id'=>'session_id', 'onchange'=>'load_courses();'));
-$form->addElement('select', 'course_code',get_lang('Courses'), $course_select_list);
-$form->addElement('style_submit_button','submit_form', get_lang('Filter'));
+$form = new FormValidator('search_simple', 'POST', '', '', null, false);
+$form->addElement(
+    'select',
+    'session_id',
+    get_lang('Sessions'),
+    $my_session_list,
+    array('id'=>'session_id', 'onchange'=>'load_courses();')
+);
+$form->addElement('select', 'course_code', get_lang('Courses'), $course_select_list);
+$form->addButtonFilter(get_lang('Filter'), 'submit_form');
 
-if (!empty($_REQUEST['course_code']))	$course_code = $_REQUEST['course_code']; else $course_code = '';
+if (!empty($_REQUEST['course_code'])) {
+    $course_code = $_REQUEST['course_code'];
+} else {
+    $course_code = '';
+}
 if (empty($course_code)) {
-	$course_code = 0;
+    $course_code = 0;
 }
 
 $form->setDefaults(array('course_code'=>(string)$course_code));

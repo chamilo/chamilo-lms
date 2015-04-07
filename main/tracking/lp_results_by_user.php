@@ -70,7 +70,7 @@ if ($global) {
 }
 
 //$form->addElement('submit','submit',get_lang('Filter'));
-$form->addElement('style_submit_button','submit', get_lang('Filter'),'class="search"' );
+$form->addButtonFilter(get_lang('Filter'));
 
 if (!empty($_REQUEST['course_code']))
     $selected_course = $_REQUEST['course_code'];

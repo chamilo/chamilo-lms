@@ -141,11 +141,11 @@ if (!$inATest) {
     echo "<div class='table-responsive'>";
     echo "<table class='table table-condensed'>";
     echo "<tr>";
-    echo "<th>" .get_lang('Questions'). "</th>";
-    echo "<th>" .get_lang('Type'). "</th>";
-    echo "<th>" .get_lang('Category'). "</th>";
-    echo "<th>" .get_lang('Difficulty'). "</th>";
-    echo "<th>" .get_lang('Score'). "</th>";
+    echo "<th style=\"width: 50%;\">" .get_lang('Questions'). "</th>";
+    echo "<th style=\"width: 6%;\">" .get_lang('Type'). "</th>";
+    echo "<th style=\"width: 22%; text-align:center;\">" .get_lang('Category'). "</th>";
+    echo "<th style=\"width: 6%;\">" .get_lang('Difficulty'). "</th>";
+    echo "<th style=\"width: 16%; float:left;\">" .get_lang('Score'). "</th>";
     echo "</tr>";
     echo "</table>";
     echo "</div>";
@@ -156,7 +156,7 @@ if (!$inATest) {
         $questionList = $objExercise->selectQuestionList(true);
 
         // Style for columns
-        $styleQuestion = "width:50%; float:left;";
+        $styleQuestion = "width:50%; float:left; margin-left: 25px;";
         $styleType = "width:4%; float:left; text-align:center;";
         $styleCat = "width:22%; float:left; text-align:center;";
         $styleLevel = "width:6%; float:left; text-align:center;";

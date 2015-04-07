@@ -53,6 +53,7 @@ class BuyCoursesPlugin extends Plugin
      */
     function uninstall()
     {
+        require_once __DIR__.'/../config.php';
         $tablesToBeDeleted = array(
             TABLE_BUY_SESSION,
             TABLE_BUY_SESSION_COURSE,
@@ -67,7 +68,7 @@ class BuyCoursesPlugin extends Plugin
         );
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
-            $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";
+            $sql = "DROP TABLE IF EXISTS $table";
             Database::query($sql);
         }
         $this->manageTab(false);

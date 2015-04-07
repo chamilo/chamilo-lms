@@ -74,7 +74,7 @@ if ($global) {
     $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('Filter'), 'class="search"');
+$form->addButtonFilter(get_lang('Filter'));
 
 $filter_score = isset($_REQUEST['score']) ? intval($_REQUEST['score']) : 70;
 $exerciseId = isset($_REQUEST['exercise_id']) ? intval($_REQUEST['exercise_id']) : 0;

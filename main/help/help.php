@@ -16,7 +16,7 @@ if (empty($help_name)) {
 }
 
 ?>
-<a class="btn" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php">
+<a class="btn btn-default" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php">
     <?php echo get_lang('AccessToFaq'); ?>
 </a>
 <div class="page-header">
@@ -24,6 +24,6 @@ if (empty($help_name)) {
 </div>
 <?php echo get_lang($help_name.'Content'); ?>
 <hr>
-<a class="btn" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php">
+<a class="btn btn-default" href="<?php echo api_get_path(WEB_CODE_PATH); ?>help/faq.php">
     <?php echo get_lang('AccessToFaq'); ?>
 </a>

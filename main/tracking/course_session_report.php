@@ -45,7 +45,7 @@ if (count($session_list) == 0) {
 	$my_session_list[0] = get_lang('None');
 }
 $form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list);
-$form->addElement('style_submit_button','submit',get_lang('Filter'));
+$form->addButtonFilter(get_lang('Filter'));
 
 
 if (!empty($_REQUEST['score']))	$filter_score = intval($_REQUEST['score']); else $filter_score = 70;

@@ -36,7 +36,7 @@ $form->addElement('header', get_lang('CourseRequiresPassword'));
 $form->addElement('hidden', 'course_id', $course_id);
 $form->addElement('hidden', 'session_id', $session_id);
 $form->addElement('password', 'course_password', null, get_lang('Password'));
-$form->addElement('style_submit_button', null, get_lang('Accept'), 'class="save"');
+$form->addButtonSave(get_lang('Accept'));
 
 if ($form->validate()) {
     $form_values = $form->exportValues();

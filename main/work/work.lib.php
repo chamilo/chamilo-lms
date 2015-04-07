@@ -3748,7 +3748,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
     }
 
-    $form->addElement('style_submit_button', 'submitWork', get_lang('Send'), array('class'=> 'upload', 'value' => "submitWork"));
+    $form->addButtonUpload(get_lang('Send'), 'submitWork');
 }
 
 /**

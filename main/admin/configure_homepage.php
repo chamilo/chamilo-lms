@@ -323,7 +323,13 @@ if (!empty($action)) {
 					fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
 					fclose($fp);
 				}
-				Event::addEvent(LOG_HOMEPAGE_CHANGED, 'edit_notice', cut(strip_tags($notice_title), 254), api_get_utc_datetime(), api_get_user_id());
+				Event::addEvent(
+                    LOG_HOMEPAGE_CHANGED,
+                    'edit_notice',
+                    cut(strip_tags($notice_title), 254),
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
 				break;
 			case 'edit_news':
 				//Filter
@@ -365,7 +371,13 @@ if (!empty($action)) {
 						}
 					}
 				}
-				Event::addEvent(LOG_HOMEPAGE_CHANGED, 'edit_news', strip_tags(cut($home_news, 254)), api_get_utc_datetime(), api_get_user_id());
+				Event::addEvent(
+                    LOG_HOMEPAGE_CHANGED,
+                    'edit_news',
+                    strip_tags(cut($home_news, 254)),
+                    api_get_utc_datetime(),
+                    api_get_user_id()
+                );
 				break;
 			case 'insert_tabs':
 			case 'edit_tabs':

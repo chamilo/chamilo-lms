@@ -38,7 +38,7 @@ $form->addElement(
     'shibboleth_image_url',
     'Logo URL if any (image, 50px height)'
 );
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
+$form->addButtonSave(get_lang('Save'), 'submit_button');
 //get default value for form
 $tab_default_add_shibboleth_login_button_shibboleth_button_label = api_get_setting(
     'add_shibboleth_login_button_shibboleth_button_label'

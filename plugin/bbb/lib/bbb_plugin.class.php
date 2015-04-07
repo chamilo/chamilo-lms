@@ -86,10 +86,11 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         //hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'bbb'";//" AND c_id = c_id";
+        $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id != 0";
         Database::query($sql);
 
-        $sql = "DROP TABLE IF EXISTS plugin_bbb_meeting";
+        $t = Database::get_main_table('plugin_bbb_meeting');
+        $sql = "DROP TABLE IF EXISTS $t";
         Database::query($sql);
 
         //Deleting course settings

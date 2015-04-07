@@ -78,7 +78,7 @@ if ($not_allowed_to_edit) {
 if (!empty($row_users['group_id'])) {
 	$path_user_info = GroupPortalManager::get_group_picture_path_by_id($row_users['group_id'], 'system', true);
 } else {
-	$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
+	$path_user_info['dir'] = UserManager::getUserPathById($message_uid, 'system');
 }
 
 $full_file_name = $path_user_info['dir'].'message_attachments/'.$file_url;

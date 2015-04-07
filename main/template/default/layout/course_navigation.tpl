@@ -55,7 +55,7 @@
                     createCookie('menu_state',0,10);
                 }
             }
-            document.write('<div class="col-md-12 pull-right"> <a class="btn" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{{'Hide'|get_lang}}<\/a></div>');
+            document.write('<div class="col-md-12 pull-right"> <a class="btn btn-default" href="javascript: void(0);" id="swap_menu_link" onclick="javascript: swap_menu();">{{'Hide'|get_lang}}<\/a></div>');
             </script>                    
     {{ show_course_navigation_menu }}
     {% endif %}

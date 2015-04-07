@@ -141,13 +141,14 @@ class GlobalMultipleAnswer extends Question
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
             if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form = new FormValidator();
+                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+                $form->addButtonSave($text, 'submitQuestion');
             } else {
-                $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');
-                $form->addElement('style_submit_button', 'submitQuestion', $text, 'class="' . $class . '"');
+                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+                $form->addButtonSave($text, 'submitQuestion');
                 // setting the save button here and not in the question class.php
             }
         }

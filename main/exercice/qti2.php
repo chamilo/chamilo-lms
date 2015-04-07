@@ -35,7 +35,7 @@ function ch_qti2_display_form()
     $name_tools = get_lang('ImportQtiQuiz');
     $form  = '<div class="actions">';
     $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?show=test&'.api_get_cidreq().'">'.
-        Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(
         'qti_upload',
@@ -46,8 +46,8 @@ function ch_qti2_display_form()
     );
     $formValidator->addElement('header', $name_tools);
     $formValidator->addElement('file', 'userFile', get_lang('DownloadFile'));
-    $formValidator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
-    $form .= $formValidator->return_form();
+    $formValidator->addButtonImport(get_lang('Upload'));
+    $form .= $formValidator->returnForm();
     echo $form;
 }
 

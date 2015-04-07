@@ -45,7 +45,7 @@ function aiken_display_form($msg = '') {
     $form_validator->addElement('header', $name_tools);
     $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
-    $form_validator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
+    $form_validator->addButtonUpload(get_lang('Send'), 'submit');
     $form .= $form_validator->return_form();
     $form .= '<blockquote>'.get_lang('ImportAikenQuizExplanation').'<br /><pre>'.get_lang('ImportAikenQuizExplanationExample').'</pre></blockquote>';
     echo $form;

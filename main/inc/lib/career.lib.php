@@ -213,7 +213,13 @@ class Career extends Model
     {
         $id = parent::save($params);
         if (!empty($id)) {
-            Event::addEvent(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(
+                LOG_CAREER_CREATE,
+                LOG_CAREER_ID,
+                $id,
+                api_get_utc_datetime(),
+                api_get_user_id()
+            );
         }
 
         return $id;
@@ -226,6 +232,12 @@ class Career extends Model
     public function delete($id)
     {
         parent::delete($id);
-        Event::addEvent(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        Event::addEvent(
+            LOG_CAREER_DELETE,
+            LOG_CAREER_ID,
+            $id,
+            api_get_utc_datetime(),
+            api_get_user_id()
+        );
     }
 }

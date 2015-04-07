@@ -52,7 +52,7 @@ $form = new FormValidator('group_edit', 'post', '', '');
 $form->addElement('hidden', 'id', $group_id);
 $form = GroupPortalManager::setGroupForm($form, $group_data);
 // Submit button
-$form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
+$form->addButtonSave(get_lang('ModifyInformation'), 'submit');
 
 // Validate form
 if ($form->validate()) {

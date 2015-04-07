@@ -53,13 +53,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
         'filetype',
         $allowed_picture_types
     );
-    $form->addElement(
-        'style_submit_button',
-        'apply_change',
-        get_lang('SaveSettings'),
-        'floppy-o',
-        'btn btn-success'
-    );
+    $form->addButtonSave(get_lang('SaveSettings'), 'apply_change');
 
     if ($form->validate()) {
         $user_data = $form->getSubmitValues();

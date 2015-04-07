@@ -2672,6 +2672,7 @@ div.admin_section h4 {
     float:left;
     line-height: 16px;
     padding-top: 5px;
+    margin: 0;
 }
 
 .ribbon .rib-total {
@@ -3774,7 +3775,7 @@ a:active{
     height: 20px;
     width: 20px;
     position:absolute;
-    background: url("offline.png") no-repeat scroll right center transparent;
+    background: url("../img/offline.png") no-repeat scroll right center transparent;
 }
 
 .online_user {
@@ -3793,21 +3794,21 @@ a:active{
     margin-right: 4px;
 }
 .send_msg_in_text {
-    background: url("send_msg.png") no-repeat scroll right center transparent;
+    background: url("../img/mail_send.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .send_inv_in_text {
-    background: url("send_inv.png") no-repeat scroll right center transparent;
+    background: url("../img/invitation.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .teacher_online {
-    background: url("teacher.png") no-repeat scroll right center transparent;
+    background: url("../img/icons/16/teacher.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3815,7 +3816,7 @@ a:active{
 }
 
 .student_online {
-    background: url("student.png") no-repeat scroll right center transparent;
+    background: url("../img/icons/16/user.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3827,7 +3828,7 @@ a:active{
 }
 
 .offline_user_in_text {
-    background: url("offline.png") no-repeat scroll right center transparent;
+    background: url("../img/offline.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;

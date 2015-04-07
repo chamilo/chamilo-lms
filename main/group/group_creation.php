@@ -202,7 +202,7 @@ EOT;
 		$defaults['action'] = 'create_groups';
 		$defaults['number_of_groups'] = intval($_POST['number_of_groups']);
 		$form->setDefaults($defaults);
-		$form->addElement('style_submit_button', 'submit', get_lang('CreateGroup'), 'class="save"');
+		$form->addButtonCreate(get_lang('CreateGroup'), 'submit');
         $form->display();
 	}
 } else {
@@ -215,7 +215,7 @@ EOT;
 		$create_groups_form->addElement('header', $nameTools);
 		$group_el = array ();
 		$group_el[] = $create_groups_form->createElement('text', 'number_of_groups', array(get_lang('Create'), '1'));
-		$group_el[] = $create_groups_form->createElement('style_submit_button', 'submit', get_lang('ProceedToCreateGroup'), 'class="save"');
+		$group_el[] = $create_groups_form->addButtonCreate(get_lang('ProceedToCreateGroup'), 'submit', true);
 		$create_groups_form->addGroup($group_el, 'create_groups', get_lang('NumberOfGroupsToCreate'), ' ', false);
 		$defaults = array();
 		$defaults['number_of_groups'] = 1;

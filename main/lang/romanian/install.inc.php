@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DateTimezoneSettingNotSet = "Am detectat ca instalarea za de PHP nu are parametri date.timezone configurat.Este obligatoriu pentru a instala Chamilo.Asigurativa ca este configurat archivul sau de configurarea php.ini,daca nu va avea probleme de a uza Chamilo.Acuma stie!";
 $StatDB = "Urmarire baza de date";
 $EnableTracking = "Activeaza Urmarire";
 $InstituteShortName = "Numele scurt al institutiei dvs.";
@@ -44,7 +45,6 @@ $Recommended = "(recomandat)";
 $ScormDB = "Baza de date Scorm";
 $AdminLastName = "Prenumele administratorului";
 $AdminPhone = "Telefonul administratorului";
-$OK = "OK";
 $AdminFirstName = "Numele administratorului";
 $InstituteURL = "URL acestei institutii";
 $UserDB = "Baza de date Utilizator";
@@ -59,7 +59,6 @@ $CheckDatabaseConnection = "Verifica conexiunea bazei de date";
 $PrintOverview = "Arata privirea de ansamblu";
 $Installing = "Instaleaza";
 $of = "de";
-$Step = "Pas";
 $MoreDetails = "Pentru mai multe detalii";
 $ServerRequirements = "Cerintele serverului";
 $ServerRequirementsInfo = "Librarii si optiuni pe care serverul trebuie sa le ofere pentru a utiliza Chamilo la capacitatea sa maxima";
@@ -93,8 +92,6 @@ $ReadWarningBelow = "Citeste urmatorul avertisment";
 $SecurityAdvice = "Sfaturi de securitate";
 $YouHaveMoreThanXCourses = "Aveti % cursuri pe platforma Chamilo. Sunt % cursuri actualizate. Pentru a actualiza cursurile, apasati aici.";
 $ToProtectYourSiteMakeXAndYReadOnly = "Pentru a va proteja site-ul, faceti%s si %s vizibile. (CHMOD 444)";
-$Error = "Greseala";
-$Back = "Inapoi";
 $HasNotBeenFound = "nu este gasit";
 $PleaseGoBackToStep1 = "Intoarceti-va la pasul 1";
 $HasNotBeenFoundInThatDir = "nu este gasit in fisier";
@@ -107,4 +104,23 @@ $ExtensionMBStringNotAvailable = "Extensia MBString nu este disponibila";
 $ExtensionMySQLNotAvailable = "Extensia MySQL nu este disponibila";
 $LMSMediaLicense = "Imaginea si galeriile mass-media Chamilo utilizeaza imaginii de la Nuvalo, Crystal Clear si Tango. Alte fotografii si mass-media, cum ar fi diagrame si animatii Flash  sunt provenite de la Wikimedia sau de la Cursul Ali Pakdel şi Denis Hoa, care pun la dispozitie material sub licenta Creative Commons BY-SA licenta. Puteti  gasi mai multe informatii despre aceasta licenta <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.nl\">pe site-ul de la Creative Commons</a> Textul integral al acestei licente il puteti citi, prin link-ul din partea de jos a paginii.";
 $OptionalParameters = "Parametrii optionali";
+$FailedConectionDatabase = "Conexiunea cu baza de date a esuat.Poate numele de uzuar,pinul sau prefixul de la baza de date nu sunt corecte.Va rugam,revizati aceste date si incercati din nou";
+$EncryptMethodUserPass = "Metoda de inscriptare";
+$Step7 = "Pasul 7";
+$SuggestionOnlyToEnableCSSUploadFeature = "Este necesar doar daca doreste habilitarea funcctiunii de incarcare a archivelor CSS";
+$SuggestionOnlyToEnableSubLanguageFeature = "Este necesar doar daca doreste habilitarea funcctiunii de sub-limbi";
+$ToProtectYourSiteMakeXReadOnlyAndDeleteY = "Pentru protejarea instalatie sale,puneti foldul %s doar in citire (chmod -r 0555 bajo Linux) si stergeti complet foldul %s.";
+$IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog = "Daca incercati sa actualizati dintro versiune anterioara a lui Chamilo,probabil doreste <a href=\"http://translate.chamilo.org/documentation/changelog.html\" target=\"_blank\"> uitativa la registru de schimbari</a>pentru a cunoaste noutatile si ce sa schimbat";
+$PHPVersionError = "Versiunea sa de PHP nu coincide cu rechizitele pentru acest software.Va rugam,comprobati ca aveti versiunea cea mai recenta si incercati din nou";
+$ExtensionSessionsNotAvailable = "Extensiunea Sessions nu disponibila";
+$ExtensionZlibNotAvailable = "Extesiunea Zlib nu disponibila";
+$ExtensionPCRENotAvailable = "Extensiunea PCRE nu disponibila";
+$DatabaseXWillBeCreated = "Baza de date <b> %s </b> se va crea";
+$ADatabaseWithTheSameNameAlreadyExists = "O baza de date cu acelasi nume <b>deja exista</b>.Continutul bazei de date se vor pierde";
+$UserXCantHaveAccessInTheDatabaseX = "Uzuarul <b>%s</b> nu are acces la baza de date <b>%s</b>";
+$DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions = "Baza de date <b>%s</b>nu poate fi creata,uzuarul <b>%s</b> nu are permisul necesar";
+$CourseTestWasCreated = "Cursul test a fost creat";
+$InstallExecution = "Instalatie in procesul de executie";
+$UpdateExecution = "Actualizati procesul de executie";
+$PleaseWaitThisCouldTakeAWhile = "Va rugam asteptati.Acesta va putea dura";
 ?>

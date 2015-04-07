@@ -203,7 +203,7 @@ class EvalForm extends FormValidator
             $renderer->setElementTemplate($template, 'score[' . $result->get_id() . ']');
         }
         $this->setDefaults($defaults);
-        $this->addElement('style_submit_button', 'submit', get_lang('EditResult'), 'class="save"');
+        $this->addButtonSave(get_lang('EditResult'), 'submit');
         $renderer->setElementTemplate($template_submit, 'submit');
     }
 
@@ -218,6 +218,7 @@ class EvalForm extends FormValidator
         $this->addElement('static', null, null, '"' . $this->evaluation_object->get_name() . '" ');
         $this->addElement('static', null, null, get_lang('MoveTo') . ' : ');
         $select = $this->addElement('select', 'move_cat', null, null);
+        $line = '';
         foreach ($this->evaluation_object->get_target_categories() as $cat) {
             for ($i = 0; $i < $cat[2]; $i++) {
                 $line .= '&mdash;';
@@ -225,7 +226,7 @@ class EvalForm extends FormValidator
             $select->addoption($line . ' ' . $cat[1], $cat[0]);
             $line = '';
         }
-        $this->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="save"');
+        $this->addButtonSave(get_lang('Ok'), 'submit');
     }
 
     /**
@@ -309,7 +310,7 @@ class EvalForm extends FormValidator
         }
         $this->addElement('hidden', 'nr_users', $nr_users);
         $this->addElement('hidden', 'evaluation_id', $this->result_object->get_evaluation_id());
-        $this->addElement('style_submit_button', 'submit', get_lang('AddResult'), 'class="save"');
+        $this->addButtonSave(get_lang('AddResult'), 'submit');
 
         $template_submit = '<tr>
                 <td colspan="4" ></td>
@@ -347,7 +348,7 @@ class EvalForm extends FormValidator
           'disabled' => 'disabled'
           )); */
 
-        $this->addElement('style_submit_button', 'submit', get_lang('Edit'), 'class="save"');
+        $this->addButtonSave(get_lang('Edit'), 'submit');
         $this->addElement('hidden', 'minvalue', 0);
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
@@ -376,7 +377,7 @@ class EvalForm extends FormValidator
         } else {
             $this->addElement('checkbox', 'addresult', null, get_lang('AddResult'));
         }
-        $this->addElement('style_submit_button', 'submit', get_lang('AddAssessment'), 'class="add"');
+        $this->addButtonCreate(get_lang('AddAssessment'), 'submit');
     }
 
     /**
@@ -409,7 +410,7 @@ class EvalForm extends FormValidator
         $id_current = isset($this->id) ? $this->id : null;
         $this->addElement('hidden', 'hid_id', $id_current);
         $this->build_basic_form(1);
-        $this->addElement('style_submit_button', 'submit', get_lang('ModifyEvaluation'), 'class="save"');
+        $this->addButtonSave(get_lang('ModifyEvaluation'), 'submit');
     }
 
     /**

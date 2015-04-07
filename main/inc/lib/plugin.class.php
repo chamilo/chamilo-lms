@@ -180,6 +180,11 @@ class Plugin
         }
 
         foreach ($this->fields as $name => $type) {
+            $options = null;
+            if (is_array($type) && isset($type['type']) && $type['type'] === "select") {
+                $options = $type['options'];
+                $type = $type['type'];
+            }
 
             $value = $this->get($name);
 
@@ -230,6 +235,14 @@ class Plugin
                     $element->_attributes['value'] = 'true';
                     $checkboxGroup[] = $element;
                     break;
+                case 'select':
+                    $result->addElement(
+                        $type,
+                        $name,
+                        array($this->get_lang($name), $help),
+                        $options
+                    );
+                    break;
             }
         }
 
@@ -237,7 +250,7 @@ class Plugin
             $result->addGroup($checkboxGroup, null, array($this->get_lang('sms_types'), $help));
         }
         $result->setDefaults($defaults);
-        $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
+        $result->addButtonSave($this->get_lang('Save'), 'submit_button');
         return $result;
     }
 
@@ -311,6 +324,7 @@ class Plugin
             //1. Loading english if exists
             $english_path = $root.$plugin_name."/lang/english.php";
             if (is_readable($english_path)) {
+                $strings = array();
                 include $english_path;
                 $this->strings = $strings;
             }
@@ -607,8 +621,9 @@ class Plugin
      */
     public function deleteTab($key)
     {
+        $t = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $sql = "SELECT *
-                FROM settings_current
+                FROM $t
                 WHERE variable = 'show_tabs'
                 AND subkey <> '$key'
                 AND subkey like 'custom_tab_%'

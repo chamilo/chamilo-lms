@@ -5,23 +5,13 @@
  *	This script displays a list of the users of the current course.
  *	Course admins can change user permissions, subscribe and unsubscribe users...
  *
- *	EXPERIMENTAL: support for virtual courses
- *	- show users registered in virtual and real courses;
- *	- only show the users of a virtual course if the current user;
- *	is registered in that virtual course.
+ *	- show users registered in courses;
  *
- *	Exceptions: platform admin and the course admin will see all virtual courses.
- *	This is a new feature, there may be bugs.
- *
- *	@todo possibility to edit user-course rights and view statistics for users in virtual courses
- *	@todo convert normal table display to display function (refactor virtual course display function)
+
  *	@todo display table functions need support for align and valign (e.g. to center text in cells) (this is now possible)
- *	@author Roan Embrechts, refactoring + virtual courses support
+ *	@author Roan Embrechts
  *	@author Julio Montoya Armas, Several fixes
  *	@package chamilo.user
- */
-/**
- * Code
  */
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
@@ -200,7 +190,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (api_is_multiple_url_enabled()) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql_query .=" WHERE course_code = '$course_code' AND session_course_user.id_user = user.user_id ";
+                    $sql_query .=" WHERE c_id = '$courseId' AND session_course_user.id_user = user.user_id ";
                     $sql_query .= ' AND id_session = '.$session_id;
 
                     if (api_is_multiple_url_enabled()) {
@@ -401,12 +391,12 @@ if (api_is_allowed_to_edit(null, true)) {
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
 					ON rel_course.id_session = reluser.id_session
 					WHERE user.user_id = "'.$user_id.'"
-					AND rel_course.course_code = "'.$course_code.'"';
+					AND rel_course.c_id = "'.$courseId.'"';
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
             if ($row['user_id'] == $user_id || $row['user_id'] == "") {
-                CourseManager::unsubscribe_user($_GET['user_id'], $_SESSION['_course']['sysCode']);
+                CourseManager::unsubscribe_user($_GET['user_id'], $courseCode);
                 $message = get_lang('UserUnsubscribed');
             } else {
                 $message = get_lang('ThisStudentIsSubscribeThroughASession');
@@ -593,10 +583,11 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
 function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $origin;
-    global $course_info;
     global $is_western_name_order;
     global $session_id;
     global $extraFields;
+
+    $course_info = api_get_course_info();
 
     $a_users = array();
 
@@ -642,6 +633,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $session_id = api_get_session_id();
     $course_code = api_get_course_id();
     $active = isset($_GET['active']) ? $_GET['active'] : null;
+
     $a_course_users = CourseManager :: get_user_list_from_course_code(
         $course_code,
         $session_id,

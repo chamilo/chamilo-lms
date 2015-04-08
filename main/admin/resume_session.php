@@ -312,8 +312,8 @@ if ($session['nbr_courses'] == 0) {
                 FROM $tbl_session_rel_user sru,
                 $tbl_session_rel_course_rel_user srcru
 				WHERE
-				    srcru.id_user = sru.id_user AND
-				    srcru.id_session = sru.id_session AND
+				    srcru.user_id = sru.user_id AND
+				    srcru.user_id = sru.session_id AND
 				    srcru.c_id = '".intval($course['id'])."' AND
 				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
 				    srcru.id_session = '".intval($sessionId)."'";

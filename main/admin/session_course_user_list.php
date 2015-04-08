@@ -86,10 +86,10 @@ $is_western_name_order = api_is_western_name_order();
 $sql = "SELECT DISTINCT
          u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
          FROM $tbl_session_rel_user s
-         INNER JOIN $tbl_user u ON (u.user_id=s.id_user)
+         INNER JOIN $tbl_user u ON (u.user_id=s.user_id)
          LEFT JOIN $tbl_session_rel_course_rel_user scru
-         ON (s.id_session = scru.id_session AND s.id_user = scru.id_user AND scru.course_code = '".$course_code."' )
-         WHERE s.id_session='$id_session'
+         ON (s.session_id = scru.id_session AND s.user_id = scru.user_id AND scru.c_id = '".$courseId."' )
+         WHERE s.session_id='$id_session'
          ORDER BY $sort $direction
          LIMIT $from,".($limit+1);
 

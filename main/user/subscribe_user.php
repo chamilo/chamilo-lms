@@ -398,7 +398,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.active               AS col5,
                 u.user_id              AS col6";
     } else {
-        $select_fields = "u.user_id              AS col0,
+        $select_fields = "u.user_id    AS col0,
                 u.official_code        AS col1,
                 ".($is_western_name_order
                 ? "u.firstname         AS col2,
@@ -414,18 +414,25 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		if (!empty($session_id)) {
 			$sql = "SELECT $select_fields
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."'
+					LEFT JOIN $tbl_session_rel_course_user cu
+					ON u.user_id = cu.id_user AND c_id ='".$courseId."' AND id_session ='".$session_id."'
                     INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+			if (isset($_GET['subscribe_user_filter_value']) &&
+				!empty($_GET['subscribe_user_filter_value']) &&
+				api_get_setting('ProfilingFilterAddingUsers') == 'true'
+			) {
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.user_id = u.user_id
-					WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-						AND field_values.field_id = '".intval($field_identification[0])."'
-						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+					WHERE
+						cu.id_user IS NULL AND
+						u.status=1 AND
+						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
+						field_values.field_id = '".intval($field_identification[0])."' AND
+						field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 			} else {
 				$sql .=	"WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 			}
@@ -436,17 +443,22 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id AND c_id = '".$courseId."'";
+                    LEFT JOIN $course_user_table cu
+                    ON u.user_id = cu.user_id AND c_id = '".$courseId."'";
 
 				// applying the filter of the additional user profile fields
-				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+				if (isset($_GET['subscribe_user_filter_value']) &&
+					!empty($_GET['subscribe_user_filter_value']) &&
+					api_get_setting('ProfilingFilterAddingUsers') == 'true'
+				) {
 					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 					$sql .=	"
 						LEFT JOIN $table_user_field_values field_values
 							ON field_values.user_id = u.user_id
-						WHERE cu.user_id IS NULL AND u.status<>".DRH."
-							AND field_values.field_id = '".intval($field_identification[0])."'
-							AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+						WHERE
+							cu.user_id IS NULL AND u.status<>".DRH." AND
+							field_values.field_id = '".intval($field_identification[0])."' AND
+							field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 				} else	{
 					$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 				}
@@ -456,18 +468,25 @@ function get_user_data($from, $number_of_items, $column, $direction)
 					if ($url_access_id !=-1) {
 						$sql = "SELECT $select_fields
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and c_id='".$courseId."'
-						INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
+						LEFT JOIN $course_user_table cu
+						ON u.user_id = cu.user_id and c_id='".$courseId."'
+						INNER JOIN  $tbl_url_rel_user as url_rel_user
+						ON (url_rel_user.user_id = u.user_id) ";
 
 					// applying the filter of the additional user profile fields
-					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
-						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+					if (isset($_GET['subscribe_user_filter_value']) &&
+						!empty($_GET['subscribe_user_filter_value']) &&
+						api_get_setting('ProfilingFilterAddingUsers') == 'true'
+					){
+						$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.user_id = u.user_id
-							WHERE cu.user_id IS NULL AND u.status<>".DRH."
-								AND field_values.field_id = '".intval($field_identification[0])."'
-								AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+							WHERE
+							 	cu.user_id IS NULL AND
+							 	u.status<>".DRH." AND
+							 	field_values.field_id = '".intval($field_identification[0])."' AND
+							 	field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 					} else	{
 						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
@@ -479,10 +498,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		if (!empty($session_id)) {
 			$sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $tbl_session_rel_course_user cu ON u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."' ";
+                    LEFT JOIN $tbl_session_rel_course_user cu
+                    ON
+                    	u.user_id = cu.id_user AND
+                    	c_id ='".$courseId."' AND
+                    	id_session ='".$session_id."' ";
 
             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-                $sql .= " INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
+                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
             }
 
             // applying the filter of the additional user profile fields
@@ -491,11 +514,17 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $sql .=	"
                     LEFT JOIN $table_user_field_values field_values
                         ON field_values.user_id = u.user_id
-                    WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-                        AND field_values.field_id = '".intval($field_identification[0])."'
-                        AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+                    WHERE
+                    	cu.id_user IS NULL AND
+                    	u.status<>".DRH." AND
+                    	(u.official_code <> 'ADMIN' OR u.official_code IS NULL) AND
+                    	field_values.field_id = '".intval($field_identification[0])."' AND
+                    	field_values.field_value = '".Database::escape_string($field_identification[1])."'";
             } else	{
-                $sql .=	"WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+                $sql .=	"WHERE
+                			cu.id_user IS NULL AND
+                			u.status<>".DRH." AND
+                			(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
 
             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
@@ -505,7 +534,10 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		} else {
             $sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'";
+                    LEFT JOIN $course_user_table cu
+                    ON
+                    	u.user_id = cu.user_id AND
+                    	c_id ='".$courseId."'";
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
@@ -513,9 +545,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
 						ON field_values.user_id = u.user_id
-					WHERE cu.user_id IS NULL AND u.status<>".DRH."
-						AND field_values.field_id = '".intval($field_identification[0])."'
-						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+					WHERE
+						cu.user_id IS NULL AND
+						u.status<>".DRH." AND
+						field_values.field_id = '".intval($field_identification[0])."' AND
+						field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 			} else	{
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
@@ -534,16 +568,21 @@ function get_user_data($from, $number_of_items, $column, $direction)
 						ON (url_rel_user.user_id = u.user_id) ";
 
 					// applying the filter of the additional user profile fields
-					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
-						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+					if (isset($_GET['subscribe_user_filter_value']) &&
+						!empty($_GET['subscribe_user_filter_value']) &&
+						api_get_setting('ProfilingFilterAddingUsers') == 'true'
+					){
+						$field_identification = explode('*', $_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values
 								ON field_values.user_id = u.user_id
-							WHERE cu.user_id IS NULL AND u.status<>".DRH."
-								AND field_values.field_id = '".intval($field_identification[0])."'
-								AND field_values.field_value = '".Database::escape_string($field_identification[1])."' AND access_url_id= $url_access_id  ";
+							WHERE
+								cu.user_id IS NULL AND u.status<>".DRH." AND
+								field_values.field_id = '".intval($field_identification[0])."' AND
+								field_values.field_value = '".Database::escape_string($field_identification[1])."' AND
+								access_url_id= $url_access_id  ";
 					} else	{
-						$sql .=	"WHERE  cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
 				}
 			}
@@ -554,7 +593,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $additional_users = null;
 	if (isset($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
-		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		$sql .= " AND (
+					firstname LIKE '%".$keyword."%' OR
+					lastname LIKE '%".$keyword."%' OR
+					email LIKE '%".$keyword."%' OR
+					username LIKE '%".$keyword."%' OR
+					official_code LIKE '%".$keyword."%'
+					)
+				";
 
 		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 			// we also want to search for users who have something in their profile fields that matches the keyword

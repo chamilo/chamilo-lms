@@ -278,9 +278,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $rs_session = Database::query($sql_session);
                                 $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
                                 list($session_id) = Database::fetch_array($session_id);
-                                Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
-                                Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");
-                                Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'");
+                                Database::query("DELETE FROM $tbl_session_user WHERE session_id ='$session_id'");
+                                Database::query("DELETE FROM $tbl_session_course WHERE session_id='$session_id'");
+                                Database::query("DELETE FROM $tbl_session_course_user WHERE session_id='$session_id'");
                             }
                         }
 
@@ -301,8 +301,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             $user_id = UserManager::get_user_id_from_username($username);
                             if ($user_id !== false) {
                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                        id_user='$user_id',
-                                        id_session = '$session_id'";
+                                        user_id ='$user_id',
+                                        session_id = '$session_id'";
                                 $rs_user = Database::query($sql);
                                 $user_counter++;
                             }
@@ -353,15 +353,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     if ($user_id !== false) {
                                         // Adding to session_rel_user table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                                id_user='$user_id',
-                                                id_session = '$session_id'";
+                                                user_id ='$user_id',
+                                                session_id = '$session_id'";
                                         $rs_user = Database::query($sql);
                                         $user_counter++;
                                         // Adding to session_rel_user_rel_course table.
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                id_user='$user_id',
-                                                c_id='$courseId',
-                                                id_session = '$session_id'";
+                                                user_id = '$user_id',
+                                                c_id = '$courseId',
+                                                session_id = '$session_id'";
                                         $rs_users = Database::query($sql);
                                         $users_in_course_counter++;
                                     } else {
@@ -419,15 +419,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                             if ($user_id !== false) {
                                                 // Adding to session_rel_user table.
                                                 $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                                        id_user='$user_id',
-                                                        id_session = '$session_id'";
+                                                        user_id ='$user_id',
+                                                        session_id = '$session_id'";
                                                 $rs_user = Database::query($sql);
                                                 $user_counter++;
                                                 // Adding to session_rel_user_rel_course table.
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                        id_user='$user_id',
+                                                        user_id ='$user_id',
                                                         c_id ='$courseId',
-                                                        id_session = '$session_id'";
+                                                        session_id = '$session_id'";
                                                 $rs_users = Database::query($sql);
                                                 $users_in_course_counter++;
                                             } else {

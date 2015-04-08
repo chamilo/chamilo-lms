@@ -21,9 +21,7 @@ $interbreadcrumb[]=array('url' => 'session_list.php','name' => get_lang('Session
 // Database Table Definitions
 $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
 $url_id                             = api_get_current_access_url_id();
 
 $action = $_GET['action'];
@@ -72,8 +70,9 @@ foreach($session_list  as $session_item) {
     $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user su
-            ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-            LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
+            ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+            LEFT OUTER JOIN $table_access_url_user uu
+            ON (uu.user_id = u.user_id)
             WHERE su.id_session = $session_id AND $access_where
             $order_clause";
 

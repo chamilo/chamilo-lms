@@ -53,8 +53,8 @@ class MySpace
      * @param string $file_name     The name of the file which contains exported data.
      * @return string mixed             Returns a message (string) if an error occurred.
      */
-    function export_csv($header, $data, $file_name = 'export.csv') {
-
+    function export_csv($header, $data, $file_name = 'export.csv')
+    {
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
         $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
@@ -485,8 +485,8 @@ class MySpace
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    public static function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to) {
-
+    public static function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to)
+    {
         $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
@@ -552,6 +552,7 @@ class MySpace
         $return .= Display::grid_html($tableId);
         return $return;
     }
+
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @param   int $sessionId  The session ID
@@ -2439,13 +2440,15 @@ class MySpace
         if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
             $user['Password'] = api_generate_password();
         }
+
         return $user;
     }
 
     /**
      * Saves imported data.
      */
-    function save_data($users, $course_list, $id_session) {
+    public function save_data($users, $course_list, $id_session)
+    {
         $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course             = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2480,7 +2483,7 @@ class MySpace
             $enreg_course = Database::escape_string($enreg_course);
             foreach ($users as $index => $user) {
                 $userid = intval($user['id']);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id) VALUES('$id_session','$enreg_course','$userid')";
                 $course_session = array('course' => $enreg_course, 'added' => 1);
                 //$user['added_at_session'] = $course_session;
                 $result = Database::query($sql);
@@ -2492,10 +2495,10 @@ class MySpace
             $super_list[] = $new_users;
 
             //update the nbr_users field
-            $sql_select = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $sql_select = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql_select);
             list($nbr_users) = Database::fetch_array($rs);
-            $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE session_id='$id_session' AND c_id='$enreg_course'";
             Database::query($sql_update);
 
             $sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
@@ -2508,7 +2511,7 @@ class MySpace
         $new_users = array();
         foreach ($users as $index => $user) {
             $userid = $user['id'];
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$userid')";
+            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) VALUES('$id_session','$userid')";
             Database::query($sql_insert);
             $user['added_at_session'] = 1;
             $new_users[] = $user;

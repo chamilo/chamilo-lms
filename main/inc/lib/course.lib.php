@@ -460,8 +460,8 @@ class CourseManager
                     // Delete in table session_rel_user
                     $sql = "DELETE FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . "
                             WHERE
-                                id_session ='" . $session_id . "' AND
-                                id_user='$uid' AND
+                                session_id ='" . $session_id . "' AND
+                                user_id ='$uid' AND
                                 relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
                     Database::query($sql);
                 }
@@ -469,7 +469,7 @@ class CourseManager
 
             // Update the table session
             $sql = "SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . "
-                    WHERE id_session = '" . $session_id . "' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
+                    WHERE session_id = '" . $session_id . "' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
             $row = Database::fetch_array(Database::query($sql));
             $count = $row[0];
             // number of users by session
@@ -479,7 +479,7 @@ class CourseManager
 
             // Update the table session_rel_course
             $sql = "SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE id_session = '$session_id' AND c_id = '$course_id' AND status<>2";
+                    WHERE session_id = '$session_id' AND c_id = '$course_id' AND status<>2";
             $row = Database::fetch_array(@Database::query($sql));
             $count = $row[0];
 
@@ -545,6 +545,7 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['id'];
+        $courseCode = $courseInfo['code'];
 
         $userCourseCategoryId = intval($userCourseCategoryId);
 
@@ -562,7 +563,7 @@ class CourseManager
         //$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 
         // A preliminary check whether the user has bben already registered on the platform.
-        if (Database::num_rows(@Database::query(
+        if (Database::num_rows(Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
                 WHERE user_id = '$user_id' ")) == 0
         ) {
@@ -582,67 +583,9 @@ class CourseManager
         }
 
         if (!empty($session_id)) {
-
-            // Check whether the user has not already been stored in the session_rel_course_user table
-            if (Database::num_rows(@Database::query("
-                    SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE
-                        c_id = '" . $courseId . "' AND
-                        id_session ='" . $session_id . "' AND
-                        id_user = '" . $user_id . "'")) > 0
-            ) {
-                return false;
-            }
-
-            // check if the user is registered in the session with other course
-            $sql = "SELECT id_user FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE id_session='" . $session_id . "' AND id_user='$user_id'";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) == 0) {
-                // Check whether the user has not already been stored in the session_rel_user table
-                if (Database::num_rows(@Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . "
-                        WHERE id_session ='" . $session_id . "'
-                        AND id_user = '" . $user_id . "' AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . " ")) > 0
-                ) {
-                    return false;
-                }
-            }
-
-            // Add him/her in the table session_rel_course_rel_user
-            @Database::query(
-                "INSERT INTO " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    SET id_session ='" . $session_id . "',
-                    c_id = '" . $courseId . "',
-                    id_user = '" . $user_id . "'"
-            );
-
-            // Add him/her in the table session_rel_user
-            @Database::query(
-                "INSERT INTO " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . "
-                    SET id_session ='" . $session_id . "',
-                    id_user = '" . $user_id . "'"
-            );
-
-            // Update the table session
-            $row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_USER) . " WHERE id_session = '" . $session_id . "' AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . ""));
-            $count = $row[0]; // number of users by session
-            Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION) . " SET nbr_users = '$count' WHERE id = '" . $session_id . "'");
-
-            // Update the table session_rel_course
-            $row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " WHERE id_session = '" . $session_id . "' AND c_id = '$courseId' AND status<>2"));
-            $count = $row[0]; // number of users by session
-            $result = Database::query("UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE) . " SET nbr_users = '$count' WHERE id_session = '" . $session_id . "' AND c_id = '$courseId' ");
-
+            SessionManager::subscribe_users_to_session_course(array($user_id), $session_id, $courseCode);
         } else {
-            $course_sort = self::userCourseSort($user_id, $course_code);
-            $sql = "INSERT INTO " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
-                    SET c_id = '$courseId',
-                        user_id     = '$user_id',
-                        status      = '" . $status . "',
-                        sort        = '" . $course_sort . "',
-                        user_course_cat = $userCourseCategoryId
-                    ";
-            $result = @Database::query($sql);
+            CourseManager::add_user_to_course($user_id, $courseCode, $status);
 
             // Add event to the system log
             Event::addEvent(
@@ -662,7 +605,8 @@ class CourseManager
                 api_get_user_id()
             );
         }
-        return (bool)$result;
+
+        return true;
     }
 
     /**
@@ -738,7 +682,7 @@ class CourseManager
 
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         // Check in advance whether the user has already been registered on the platform.
         $sql = "SELECT status FROM " . $user_table . " WHERE user_id = '$user_id' ";
@@ -774,13 +718,15 @@ class CourseManager
 
         // Ok, subscribe the user.
         $max_sort = api_max_sort_value('0', $user_id);
-        return (bool)Database::query(
-            "INSERT INTO " . $course_user_table . "
-                SET c_id = '$courseId',
-                user_id = '$user_id',
-                status = '" . $status . "',
-                sort = '" . ($max_sort + 1) . "'"
-        );
+        $params = [
+            'c_id' => $courseId,
+            'user_id' => $user_id,
+            'status' => $status,
+            'sort' => $max_sort + 1
+        ];
+        $insertId = Database::insert($course_user_table, $params);
+
+        return $insertId;
     }
 
     /**
@@ -1353,7 +1299,6 @@ class CourseManager
                 $filter_by_status = intval($filter_by_status);
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
-
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
@@ -1385,8 +1330,6 @@ class CourseManager
                         ON user.user_id = course_rel_user.user_id AND
                         course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  ';
             if (!empty($course_code)) {
-                $courseInfo = api_get_course_info($course_code);
-                $courseId = $courseInfo['id'];
                 $sql .= ' AND course_rel_user.c_id="' . $courseId . '"';
             } else {
                 $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";

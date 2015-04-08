@@ -123,7 +123,7 @@ class CItemProperty
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_session", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $idSession;
 

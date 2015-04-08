@@ -48,18 +48,18 @@ $usersToBeReminded = array();
 foreach ($sessions as $sessionId => $userIds) {
     $userId = 0;
     $userIds = $userIds ? " AND id_user NOT IN (".implode(",", $userIds).")" : null;
-    $query = "SELECT sessionUser.id_session, sessionUser.id_user, session.name, session.date_end FROM ".
+    $query = "SELECT sessionUser.session_id, sessionUser.user_id, session.name, session.date_end FROM ".
         Database::get_main_table(TABLE_MAIN_SESSION_USER)." AS sessionUser
         INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION).
-        " AS session ON sessionUser.id_session = session.id
-        WHERE id_session = $sessionId$userIds";
+        " AS session ON sessionUser.session_id = session.id
+        WHERE session_id = $sessionId$userIds";
     $result = Database::query($query);
     while ($row = Database::fetch_array($result)) {
-        $usersToBeReminded[$row['id_user']][$row['id_session']] =
-            array(
-                'name' => $row['name'],
-                'date_end' => $row['date_end']
-            );
+        $usersToBeReminded[$row['user_id']][$row['session_id']] =
+        array(
+            'name' => $row['name'],
+            'date_end' => $row['date_end']
+        );
     }
 }
 

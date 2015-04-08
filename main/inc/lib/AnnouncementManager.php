@@ -320,6 +320,8 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $_course = api_get_course_info();
+        $course_id = api_get_course_int_id();
+
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         // filter data
@@ -331,8 +333,6 @@ class AnnouncementManager
         } else {
             $end_date = Database::escape_string($end_date);
         }
-
-        $course_id = api_get_course_int_id();
 
         $order = self::get_last_announcement_order();
 

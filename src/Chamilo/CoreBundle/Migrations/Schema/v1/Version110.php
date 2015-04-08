@@ -309,11 +309,24 @@ class Version110 extends AbstractMigration
 
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned DEFAULT NULL");
+
+        $table = $schema->getTable('session_rel_user');
+        $table->renameColumn('id_session', 'session_id');
+        $table->renameColumn('id_user', 'user_id');
+
+        $table = $schema->getTable('session_rel_course_rel_user');
+        $table->renameColumn('id_session', 'session_id');
+        $table->renameColumn('id_user', 'user_id');
+
+        $table = $schema->getTable('session_rel_course');
+        $table->renameColumn('id_session', 'session_id');
+
+        $table = $schema->getTable('c_item_property');
+        $table->renameColumn('id_session', 'session_id');
+
+
         $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
-
-
-
 
         $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN question_id int unsigned DEFAULT NULL");

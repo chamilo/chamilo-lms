@@ -413,7 +413,7 @@ if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
 
     $visibility = $updateValues['visibility'];
-    $deletePicture = $updateValues['delete_picture'];
+    $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 
     if ($deletePicture) {
         CourseManager::deleteCoursePicture($course_code);
@@ -475,6 +475,8 @@ if ($form->validate() && is_settings_editable()) {
         $updateValues[$index] = Database::escape_string($value);
     }
 
+    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
+
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "UPDATE $table_course SET
         title 				    = '".$updateValues['title']."',
@@ -486,7 +488,7 @@ if ($form->validate() && is_settings_editable()) {
         subscribe  			    = '".$updateValues['subscribe']."',
         unsubscribe  		    = '".$updateValues['unsubscribe']."',
         legal                   = '".$updateValues['legal']."',
-        activate_legal          = '".$updateValues['activate_legal']."',
+        activate_legal          = '".$activeLegal."',
         registration_code 	    = '".$updateValues['course_registration_password']."'
         WHERE code = '".$course_code."'";
     Database::query($sql);

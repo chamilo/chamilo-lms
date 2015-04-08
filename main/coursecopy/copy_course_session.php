@@ -193,10 +193,10 @@ function search_courses($id_session, $type)
             $session_origin = $_SESSION['session_origin'];
 
             // Search courses by id_session where course codes is include en courses list destination
-            $sql = "SELECT c.code, c.visual_code, c.title, src.id_session
+            $sql = "SELECT c.code, c.visual_code, c.title, src.session_id
                     FROM $tbl_course c, $tbl_session_rel_course src
-                    WHERE src.course_code = c.code
-                    AND src.id_session = '".intval($id_session)."'";
+                    WHERE src.c_id = c.id
+                    AND src.session_id = '".intval($id_session)."'";
                     //AND c.code IN ($list_courses_origin)";
             $rs = Database::query($sql);
 

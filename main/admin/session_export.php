@@ -25,7 +25,6 @@ $tbl_session_user      		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course      	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL  = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
@@ -130,10 +129,13 @@ if ($_POST['formSent']) {
 			}
 
 			//users
-			$sql = "SELECT DISTINCT $tbl_user.username FROM $tbl_user
+			$sql = "SELECT DISTINCT $tbl_user.username
+					FROM $tbl_user
 					INNER JOIN $tbl_session_user
-						ON $tbl_user.user_id = $tbl_session_user.id_user AND $tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-						AND $tbl_session_user.id_session = '".$row['id']."'";
+					ON
+						$tbl_user.user_id = $tbl_session_user.user_id AND
+						$tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND
+						$tbl_session_user.session_id = '".$row['id']."'";
 
 			$rsUsers = Database::query($sql);
 			$users = '';
@@ -197,13 +199,14 @@ if ($_POST['formSent']) {
 						FROM $tbl_session_course_user scu
 						INNER JOIN $tbl_session_user su
 						ON
-							scu.id_user = su.id_user AND
-							scu.id_session = su.id_session AND
+							scu.user_id = su.id_user AND
+							scu.session_id = su.session_id AND
 							su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 						INNER JOIN $tbl_user u
-						ON scu.id_user = u.user_id
-						AND scu.c_id='".$rowCourses['c_id']."'
-						AND scu.id_session='".$row['id']."'";
+						ON
+							scu.user_id = u.user_id AND
+							scu.c_id='".$rowCourses['c_id']."' AND
+							scu.session_id='".$row['id']."'";
 
 				$rsUsersCourse = Database::query($sql);
 				$userscourse = '';

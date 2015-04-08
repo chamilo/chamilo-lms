@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\CourseBundle\Entity;
+namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -190,7 +190,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 
 	if (is_array($skills)) {
 		foreach ($skills as $my_skill) {
-			if (!in_array($my_skill['SkillName'], $skill_id_error)) {
+			if (isset($my_skill['SkillName']) && !in_array($my_skill['SkillName'], $skill_id_error)) {
 				$skills_to_insert[] = $my_skill;
 			}
 		}

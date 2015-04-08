@@ -613,7 +613,7 @@ class Skill extends Model
                     $attributes = array(
                         'skill_id'      => $skill_id,
                         'parent_id'     => $parent_id,
-                        'relation_type' => $params['relation_type'],
+                        'relation_type' => (isset($params['relation_type'])?$params['relation_type']:0),
                         //'level'         => $params['level'],
                     );
                     $skill_rel_skill->save($attributes);
@@ -1030,7 +1030,7 @@ class Skill extends Model
      * @param int $skillId The skill id
      * @param int $courseId Optional. The course id
      * @param int $sessionId Optional. The session id
-     * @return boolean Wheter the user has the skill return true. Otherwise return false
+     * @return boolean Whether the user has the skill return true. Otherwise return false
      */
     public function user_has_skill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {

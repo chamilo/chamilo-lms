@@ -665,38 +665,42 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         });
 
         /** Managing text - maximum two words */
-        var insert_two_words = false;
-
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
-            if (d.depth && d.name.length > max_size_text_length) {
-                if (d.depth) {
-                    first_part = d.name.split(" ")[0];
-                    second_part = d.name.split(" ")[1];
-                    if (first_part.length >= max_size_text_length) {
-                        insert_two_words = false;
-                        return first_part.substring(0, max_size_text_length -3)  + ' ... ';
-                    } else {
-                        return first_part;
-                    }
-                } else {
-                    return "";
+            if (d.depth && d.name) {
+                var nameParts = d.name.split(' ');
+
+                if (nameParts[0].length > max_size_text_length) {
+                    return nameParts[0].substring(0, max_size_text_length - 3)  + '...';
                 }
-            } else {
-                insert_two_words = false;
-                return d.depth ? d.name : "";
+
+                return nameParts[0];
             }
+
+            return d.depth ? d.name : '';
         });
 
-        if (insert_two_words) {
-            textEnter.append("tspan")
-            .attr("x", 0)
-            .attr("dy", "1em")
-            .text(function(d) {
-                return d.depth && d.name.length > max_size_text_length ? d.name.split(" ")[1] || "" : "";
-            });
-        }
+        textEnter.append("tspan")
+        .attr("x", 0)
+        .attr("dy", "1em")
+        .text(function(d) {
+            if (d.depth && d.name) {
+                var nameParts = d.name.split(' ');
+
+                if (nameParts.length >= 2) {
+                    if (nameParts[1].length > max_size_text_length) {
+                        return nameParts[1].substring(0, max_size_text_length - 3)  + '...';
+                    }
+
+                    return nameParts[1];
+                }
+
+                return '';
+            }
+
+            return d.depth ? d.name : '';
+        });
 
         /* Icon settings */
         /*

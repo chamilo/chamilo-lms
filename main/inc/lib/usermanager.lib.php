@@ -682,7 +682,6 @@ class UserManager
             $expiration_date = api_get_utc_datetime($expiration_date);
             $expiration_date = new \DateTime($expiration_date);
         }
-
         $user
             ->setLastname($lastname)
             ->setFirstname($firstname)

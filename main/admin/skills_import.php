@@ -3,16 +3,21 @@
 /**
  * This tool allows platform admins to add skills by uploading a CSV or XML file
  * @package chamilo.admin
- * @documentation Some interesting basic skills can be found in the "Skills" section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
+ * @documentation Some interesting basic skills can be found in the "Skills"
+ * section here: http://en.wikipedia.org/wiki/Personal_knowledge_management
  */
-/**
- * Validate the imported data.
- */
+
 
 $cidReset = true;
 require '../inc/global.inc.php';
 
-function validate_data($skills) {
+/**
+ * Validate the imported data.
+ * @param $skills
+ * @return array
+ */
+function validate_data($skills)
+{
     $errors = array();
     $skills = array();
     // 1. Check if mandatory fields are set.
@@ -40,6 +45,7 @@ function validate_data($skills) {
             $errors[] = $skill;
         }
     }
+
     return $errors;
 }
 
@@ -47,9 +53,11 @@ function validate_data($skills) {
  * Save the imported data
  * @param   array   List of users
  * @return  void
- * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
+ * @uses global variable $inserted_in_course,
+ * which returns the list of courses the user was inserted in
  */
-function save_data($skills) {
+function save_data($skills)
+{
     if (is_array($skills)) {
         $parents = array();
         foreach ($skills as $index => $skill) {
@@ -64,7 +72,7 @@ function save_data($skills) {
             $oskill = new Skill();
             $skill_id = $oskill->add($skill);
             $parents[$saved_id] = $skill_id;
-	}
+		}
     }
 }
 
@@ -73,17 +81,20 @@ function save_data($skills) {
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
-function parse_csv_data($file) {
+function parse_csv_data($file)
+{
 	$skills = Import :: csv_to_array($file);
 	foreach ($skills as $index => $skill) {
 		$skills[$index] = $skill;
 	}
 	return $skills;
 }
+
 /**
  * XML-parser: handle start of element
  */
-function element_start($parser, $data) {
+function element_start($parser, $data)
+{
 	$data = api_utf8_decode($data);
 	global $skill;
 	global $current_tag;
@@ -99,7 +110,8 @@ function element_start($parser, $data) {
 /**
  * XML-parser: handle end of element
  */
-function element_end($parser, $data) {
+function element_end($parser, $data)
+{
 	$data = api_utf8_decode($data);
 	global $skill;
 	global $skills;
@@ -117,7 +129,8 @@ function element_end($parser, $data) {
 /**
  * XML-parser: handle character data
  */
-function character_data($parser, $data) {
+function character_data($parser, $data)
+{
 	$data = trim(api_utf8_decode($data));
 	global $current_value;
 	$current_value = $data;
@@ -128,7 +141,8 @@ function character_data($parser, $data) {
  * @param string $file Path to the XML-file
  * @return array All userinformation read from the file
  */
-function parse_xml_data($file) {
+function parse_xml_data($file)
+{
 	global $current_tag;
 	global $current_value;
 	global $skill;
@@ -140,12 +154,12 @@ function parse_xml_data($file) {
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 	xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
 	xml_parser_free($parser);
+
 	return $skills;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
-
 
 $tool_name = get_lang('ImportSkillsListCSV');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -155,14 +169,15 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
 	$allowed_file_mimetype = array('csv','xml');
 	$error_kind_file = false;
+    $error_message = '';
 
-	$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
+	$ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'],'.')+1));
 
 	if (in_array($ext_import_file,$allowed_file_mimetype)) {
 		if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
@@ -187,10 +202,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 			$skill_id_error[] = $my_errors['SkillName'];
 		}
 	}
-
 	if (is_array($skills)) {
 		foreach ($skills as $my_skill) {
-			if (!in_array($my_skill['SkillName'], $skill_id_error)) {
+			if (isset($my_skill['name']) && !in_array($my_skill['name'], $skill_id_error)) {
 				$skills_to_insert[] = $my_skill;
 			}
 		}
@@ -221,7 +235,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// if the warning message is too long then we display the warning message trough a session
-	if (api_strlen($warning_message) > 150) {
+	if (!empty($warning_message) && api_strlen($warning_message) > 150) {
 		$_SESSION['session_message_import_skills'] = $warning_message;
 		$warning_message = 'session_message';
 	}
@@ -249,7 +263,6 @@ $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = array();
 $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="skill_example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-//$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="skill_example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
@@ -282,21 +295,5 @@ if ($count_fields > 0) {
     <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>
     <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
 </pre>
-
-<!--p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
-<blockquote>
-<pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
-&lt;Skills&gt;
-    &lt;Skill&gt;
-        <b>&lt;id&gt;n&lt;/id&gt;</b>
-        <b>&lt;parent_id&gt;n&lt;/parent_id&gt;</b>
-        <b>&lt;name&gt;xxx&lt;/name&gt;</b>
-        &lt;description&gt;xxx&lt;/description&gt;
-        &lt;/Skill&gt;
-&lt;/Skills&gt;
-</pre>
-</blockquote-->
 <?php
 Display :: display_footer();

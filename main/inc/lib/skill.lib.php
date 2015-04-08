@@ -911,7 +911,11 @@ class Skill extends Model
             if ($add_root) {
                 if (!empty($skill_id)) {
                     // Default root node
-                    $skills[1] = array('id' => '1', 'name' => get_lang('Root'), 'parent_id' => '0');
+                    $skills[1] = array(
+                        'id' => '1',
+                        'name' => get_lang('Root'),
+                        'parent_id' => '0'
+                    );
                     $skill_info = $this->get_skill_info($skill_id);
 
                     // 2nd node
@@ -945,11 +949,10 @@ class Skill extends Model
                     $skill['data']['name'] = $skill['short_code'];
                 }
 
-                //In order to paint all members of a family with the same color
+                // In order to paint all members of a family with the same color
                 if (empty($skill_id)) {
                     if ($skill['parent_id'] == 1) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);
-
                     }
                 } else {
                     if ($skill['parent_id'] == $skill_id) {
@@ -1189,7 +1192,7 @@ class Skill extends Model
      * @param int $skill_id
      * @return array
      */
-    function get_courses_by_skill($skill_id)
+    public function get_courses_by_skill($skill_id)
     {
         $skill_id = intval($skill_id);
         $sql = "SELECT c.title, c.code
@@ -1227,15 +1230,20 @@ class Skill extends Model
             $whereConditions['AND session_id = ? '] = $sessionId;
         }
 
-        $result = Database::select('COUNT(1) AS qty', $this->table_skill_rel_user, array(
-            'where' => $whereConditions
-        ), 'first');
+        $result = Database::select(
+            'COUNT(1) AS qty',
+            $this->table_skill_rel_user, array(
+                'where' => $whereConditions
+            ),
+            'first'
+        );
 
         if ($result != false) {
             if ($result['qty'] > 0) {
                 return true;
             }
         }
+
         return false;
     }
 

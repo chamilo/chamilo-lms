@@ -446,7 +446,7 @@ class Skill extends Model
         $this->table_gradebook           = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     }
 
-    function get_skill_info($id)
+    public function get_skill_info($id)
     {
         $skill_rel_skill = new SkillRelSkill();
         $skill_info = $this->get($id);
@@ -457,7 +457,7 @@ class Skill extends Model
         return $skill_info;
     }
 
-    function get_skills_info($skill_list)
+    public function get_skills_info($skill_list)
     {
         $skill_list = array_map('intval', $skill_list);
         $skill_list = implode("', '", $skill_list);
@@ -469,18 +469,18 @@ class Skill extends Model
         return $users;
     }
 
-    function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null)
+    public function get_all($load_user_data = false, $user_id = false, $id = null, $parent_id = null)
     {
         $id_condition = '';
-        if (isset($id) && !empty($id)) {
+        if (!empty($id)) {
             $id = intval($id);
             $id_condition = " WHERE s.id = $id";
         }
 
-        if (isset($parent_id) && !empty($parent_id)) {
+        if (!empty($parent_id)) {
             $parent_id = intval($parent_id);
             if (empty($id_condition)) {
-                $id_condition = "WHERE ss.parent_id = $parent_id";
+                $id_condition = " WHERE ss.parent_id = $parent_id";
             } else {
                 $id_condition = " AND ss.parent_id = $parent_id";
             }
@@ -518,19 +518,19 @@ class Skill extends Model
         return $skills;
     }
 
-    function get_gradebooks_by_skill($skill_id)
+    public function get_gradebooks_by_skill($skill_id)
     {
         $skill_id = intval($skill_id);
         $sql = "SELECT g.* FROM {$this->table_gradebook} g INNER JOIN {$this->table_skill_rel_gradebook} sg
                     ON g.id = sg.gradebook_id
                  WHERE sg.skill_id = $skill_id";
         $result = Database::query($sql);
-        $result = Database::store_result($result,'ASSOC');
+        $result = Database::store_result($result, 'ASSOC');
         return $result;
     }
 
     /* Get one level childrens */
-    function get_children($skill_id, $load_user_data = false)
+    public function get_children($skill_id, $load_user_data = false)
     {
         $skill_rel_skill = new SkillRelSkill();
         if ($load_user_data) {
@@ -543,16 +543,16 @@ class Skill extends Model
     }
 
     /* Get all children of the current node (recursive)*/
-    function get_all_children($skill_id)
+    public function get_all_children($skillId)
     {
         $skill_rel_skill = new SkillRelSkill();
         $children = $skill_rel_skill->get_children($skill_id);
-        foreach ($children as $child) {
+                    foreach ($children as $child) {
             $sub_children = $this->get_all_children($child['skill_id']);
-        }
+                    }
         if (!empty($sub_children)) {
             $children = array_merge($children, $sub_children);
-        }
+                }
         return $children;
     }
 
@@ -560,7 +560,7 @@ class Skill extends Model
     /**
      * Gets all parents from from the wanted skill
      */
-    function get_parents($skill_id)
+    public function get_parents($skill_id)
     {
         $skill_rel_skill = new SkillRelSkill();
         $skills          = $skill_rel_skill->get_skill_parents($skill_id, true);
@@ -573,7 +573,7 @@ class Skill extends Model
     /**
      * All direct parents
      */
-    function get_direct_parents($skill_id)
+    public function get_direct_parents($skill_id)
     {
         $skill_rel_skill = new SkillRelSkill();
         $skills = $skill_rel_skill->get_direct_parents($skill_id, true);
@@ -768,7 +768,7 @@ class Skill extends Model
             $skills = $this->get_all(false, false, null, $skill_id);
         }
 
-        $original_skill = $skills;
+        $original_skill = $this->list = $skills;
 
         //Show 1 item
         if (!empty($skill_id)) {
@@ -794,7 +794,6 @@ class Skill extends Model
         // Create references for all nodes
         $flat_array = array();
         $family = array();
-
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
                 if ($skill['parent_id'] == 0) {
@@ -815,6 +814,7 @@ class Skill extends Model
                 if (empty($skill_id)) {
                     if ($skill['parent_id'] == 1) {
                         $family[$skill['id']] = $this->get_all_children($skill['id']);
+
                     }
                 } else {
                     if ($skill['parent_id'] == $skill_id) {

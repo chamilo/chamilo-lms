@@ -155,12 +155,13 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if (!empty($_POST['formSent']) AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
 	$allowed_file_mimetype = array('csv','xml');
 	$error_kind_file = false;
+    $error_message = '';
 
 	$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
 
@@ -221,7 +222,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// if the warning message is too long then we display the warning message trough a session
-	if (api_strlen($warning_message) > 150) {
+	if (!empty($warning_message) && api_strlen($warning_message) > 150) {
 		$_SESSION['session_message_import_skills'] = $warning_message;
 		$warning_message = 'session_message';
 	}

@@ -78,7 +78,6 @@ function is_multiline(word) {
     return false;
 }
 
-
 /* Interpolate the scales! */
 function arcTween(d, arc, x, y, r) {
     var my = maxY(d),
@@ -150,6 +149,7 @@ bright green for skills looked for by a HR director ("Profile search" view)
 dark green for skills most searched for, summed up from the different saved searches from HR directors ("Most wanted skills")
 bright red for missing skills, in the "Required skills" view for a student when looking at the "Most wanted skills" (or later, when we will have developed that, for the "Matching position" view)
 */
+var userSkills;
 
 /**
     Manage the partition background colors
@@ -177,9 +177,20 @@ function set_skill_style(d, attribute, searched_skill_id) {
         return_fill = '#B94A48';
     }
 
+    if (!userSkills) {
+        $.ajax({
+            url: url + '&a=get_all_user_skills',
+            async: false,
+            success: function (skills) {
+                userSkills = jQuery.parseJSON(skills);
+            }
+        });
+    }
+
+    // Old way (it makes a lot of ajax calls)
     //4. Blue - if user achieved that skill
     //var skill = false;
-    $.ajax({
+    /*$.ajax({
         url: url+'&a=get_user_skill&profile_id='+d.id,
         async: false,
         success: function(skill) {
@@ -187,7 +198,13 @@ function set_skill_style(d, attribute, searched_skill_id) {
                 return_fill = '#3A87AD';
             }
         }
-    });
+    });*/
+
+    // New way (Only 1 ajax call)
+    // 4. Blue - if user achieved that skill
+    if (userSkills[d.id]) {
+        return_fill = '#3A87AD';
+    }
 
     switch (attribute) {
         case 'fill':
@@ -225,7 +242,6 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
     if (d.id) {
         console.log('Getting skill info');
         skill_info = get_skill_info(d.parent_id);
-        console.log(skill_info);
         main_parent_id  = skill_info.extra.parent_id;
         main_parent_id  = d.parent_id;
         console.log('Setting main_parent_id: ' + main_parent_id);
@@ -433,7 +449,6 @@ function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis)
     }
 }
 
-
 /*
     Loads the skills partitions thanks to a json call
  */
@@ -444,7 +459,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         console.log('main_parent_id before: ' + main_parent_id);
     }
 
-    //"Root partition" on click switch
+    // "Root partition" on click switch
     if (main_parent_id && load_skill_id) {
         skill_info = get_skill_info(load_skill_id);
         if (skill_info && skill_info.extra) {
@@ -458,7 +473,6 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     if (load_skill_id && load_skill_id == 1)  {
         main_parent_id = 0;
     }
-
 
     /** Define constants and size of the wheel */
     /** Total width of the wheel (also counts for the height) */
@@ -670,10 +684,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             });
         }
 
-
         /* Icon settings */
-
-
         /*
         var icon_click = icon.enter().append("text")
         .style("fill-opacity", 1)
@@ -710,9 +721,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
     }
 }
 
-
 /* Skill AJAX calls */
-
 function get_skill_info(my_id) {
     var skill = false;
     $.ajax({
@@ -739,7 +748,4 @@ function get_gradebook_info(id) {
     return item;
 }
 
-$(document).ready(function() {
-
-});
 </script>

@@ -592,7 +592,7 @@ class Statistics
         $form->addElement('hidden', 'activities_direction', 'DESC');
         $form->addElement('hidden', 'activities_column', '4');
         $form->addElement('text', 'keyword', get_lang('Keyword'));
-        $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+        $form->addButtonSearch(get_lang('Search'), 'submit');
         echo '<div class="actions">';
             $form->display();
         echo '</div>';
@@ -648,7 +648,7 @@ class Statistics
         $form->addElement('hidden', 'report', 'courselastvisit');
         $form->addText('date_diff', get_lang('Days'), true);
         $form->addRule('date_diff', 'InvalidNumber', 'numeric');
-        $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
+        $form->addButtonSearch(get_lang('Search'), 'submit');
         if (!isset($_GET['date_diff'])) {
             $defaults['date_diff'] = 60;
         } else {

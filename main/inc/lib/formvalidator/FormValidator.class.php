@@ -315,10 +315,10 @@ EOT;
     }
 
     /**
-     * @param string $label
-     * @param string $name
-     * @param bool $createElement
-     *
+     * Returns a button with the primary color and a check mark
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      * @return HTML_QuickForm_button
      */
     public function addButtonSave($label, $name = 'submit', $createElement = false)
@@ -336,10 +336,10 @@ EOT;
     }
 
     /**
-     * @param string $label
-     * @param string $name
-     * @param bool $createElement
-     *
+     * Returns a button with the primary color and a "plus" icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      * @return HTML_QuickForm_button
      */
     public function addButtonCreate($label, $name = 'submit', $createElement = false)
@@ -357,10 +357,10 @@ EOT;
     }
 
     /**
-     * @param string $label
-     * @param string $name
-     * @param bool $createElement
-     *
+     * Returns a button with the primary color and a pencil icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      * @return HTML_QuickForm_button
      */
     public function addButtonUpdate($label, $name = 'submit', $createElement = false)
@@ -378,8 +378,11 @@ EOT;
     }
 
     /**
-     * Shortcut to delete button
-     * @param string $label
+     * Returns a button with the danger color and a trash icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonDelete($label, $name = 'submit', $createElement = false)
     {
@@ -396,10 +399,10 @@ EOT;
     }
 
     /**
-     * @param string $label
-     * @param string $name
-     * @param bool $createElement
-     *
+     * Returns a button with the primary color and a paper-plane icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      * @return HTML_QuickForm_button
      */
     public function addButtonSend($label, $name = 'submit', $createElement = false)
@@ -417,20 +420,22 @@ EOT;
     }
 
     /**
-     * Shortcut to search button
-     * @param string $label
+     * Returns a button with the default (grey?) color and a magnifier icon
+     * @param string $label Text appearing on the button
+     * @return HTML_QuickForm_button
      */
     public function addButtonSearch($label = null)
     {
-        if (empty($label))  {
+        if (empty($label)) {
             $label = get_lang('Search');
         }
         return $this->addButton('submit', $label, 'search', 'default');
     }
 
     /**
-     * Shortcut to update button
-     * @param string $label
+     * Returns a button with the primary color and a right-pointing arrow icon
+     * @param string $label Text appearing on the button
+     * @return HTML_QuickForm_button
      */
     public function addButtonNext($label)
     {
@@ -438,8 +443,11 @@ EOT;
     }
 
     /**
-     * Shortcut to import button
-     * @param string $label
+     * Returns a button with the primary color and a check mark icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonImport($label, $name = 'submit', $createElement = false)
     {
@@ -456,8 +464,11 @@ EOT;
     }
 
     /**
-     * Shortcut to export button
-     * @param string $label
+     * Returns a button with the primary color and a check-mark icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonExport($label, $name = 'submit', $createElement = false)
     {
@@ -475,7 +486,10 @@ EOT;
 
     /**
      * Shortcut to filter button
-     * @param string $label
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonFilter($label, $name = 'submit', $createElement = false)
     {
@@ -492,8 +506,11 @@ EOT;
     }
 
     /**
-     * Shortcut to upload button
-     * @param string $label
+     * Returns a button with the primary color and an upload icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonUpload($label, $name = 'submit', $createElement = false)
     {
@@ -510,8 +527,11 @@ EOT;
     }
 
     /**
-     * Shortcut to upload button
-     * @param string $label
+     * Returns a button with the primary color and a download icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonDownload($label, $name = 'submit', $createElement = false)
     {
@@ -528,8 +548,11 @@ EOT;
     }
 
     /**
-     * Shortcut to preview button
-     * @param string $label
+     * Returns a button with the primary color and a magnifier icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
      */
     public function addButtonPreview($label, $name = 'submit', $createElement = false)
     {
@@ -537,6 +560,27 @@ EOT;
             $name,
             $label,
             'search',
+            'primary',
+            null,
+            null,
+            array(),
+            $createElement
+        );
+    }
+
+    /**
+     * Returns a button with the primary color and a copy (double sheet) icon
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
+     * @return HTML_QuickForm_button
+     */
+    public function addButtonCopy($label, $name = 'submit', $createElement = false)
+    {
+        return $this->addButton(
+            $name,
+            $label,
+            'copy',
             'primary',
             null,
             null,

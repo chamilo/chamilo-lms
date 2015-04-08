@@ -1069,7 +1069,7 @@ class MySpace
                 foreach ($extrafields as $key => $extra) {
                     $form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
                 }
-                $form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
+                $form->addButtonSave(get_lang('Ok'), 'submit');
 
                 // setting the default values for the form that contains all the extra fields
                 if (is_array($_SESSION['additional_export_fields'])) {

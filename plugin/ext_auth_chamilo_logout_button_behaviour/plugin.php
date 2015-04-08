@@ -27,7 +27,7 @@ $form->addElement('checkbox', 'eaclbb_form_link_image', "Display the logout butt
 $form->addElement('checkbox', 'eaclbb_form_alert_onoff', "Display an alert when clicking on the logout button", "",  array('checked' => true));
 $form->addElement('text', 'eaclbb_form_alert_text', "Text displayed in the alert box when clickng on the logout button (if checkbox above has been checked).");
 
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
+$form->addButtonSave(get_lang('Save'), 'submit_button');
 //get default value for form
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url');
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_infobulle = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_infobulle');

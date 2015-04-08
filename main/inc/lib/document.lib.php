@@ -260,9 +260,8 @@ class DocumentManager
         //$filename will be an array if a . was found
         if (is_array($extension)) {
             $extension = strtolower($extension[sizeof($extension) - 1]);
-        }
-        //file without extension
-        else {
+        } else {
+            //file without extension
             $extension = 'empty';
         }
 
@@ -1065,7 +1064,7 @@ class DocumentManager
     public static function delete_document(
         $_course,
         $path = null,
-        $base_work_dir,
+        $base_work_dir = null,
         $sessionId = null,
         $documentId = null,
         $groupId = null
@@ -1438,6 +1437,7 @@ class DocumentManager
      * @param int $document_id_for_template the document id
      * @param string $course_code
      * @param int $user_id
+     * @return bool
      */
     public static function set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $image)
     {
@@ -1500,6 +1500,7 @@ class DocumentManager
      * @param array  $course the _course array info of the document's course
      * @param int
      * @param string
+     * @return bool
      */
     public static function is_visible($doc_path, $course, $session_id = 0, $file_type = 'file')
     {
@@ -1606,11 +1607,7 @@ class DocumentManager
         //3. Checking if user exist in course/session
 
         if ($session_id == 0) {
-            if (CourseManager::is_user_subscribed_in_course(
-                    $user_id,
-                    $course_info['code']
-                ) ||
-                api_is_platform_admin()
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()
             ) {
                 $user_in_course = true;
             }
@@ -1675,8 +1672,9 @@ class DocumentManager
 
                 // True for admins if document exists
                 if (isset($item_info['visibility'])) {
-                    if ($admins_can_see_everything && api_is_platform_admin())
+                    if ($admins_can_see_everything && api_is_platform_admin()) {
                         return true;
+                    }
                 }
 
                 if (isset($item_info_in_session['visibility'])) {
@@ -2028,15 +2026,15 @@ class DocumentManager
                 $info = pathinfo($abs_path);
                 $ext = $info['extension'];
                 switch (strtolower($ext)) {
-                    case 'html' :
-                    case 'htm' :
+                    case 'html':
+                    case 'htm':
                     case 'shtml':
-                    case 'css' :
+                    case 'css':
                         $file_content = file_get_contents($abs_path);
                         //get an array of attributes from the HTML source
                         $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes, $explode_attributes);
                         break;
-                    default :
+                    default:
                         break;
                 }
             } else {
@@ -2047,7 +2045,7 @@ class DocumentManager
         $files_list = array();
 
         switch ($type) {
-            case TOOL_DOCUMENT :
+            case TOOL_DOCUMENT:
             case TOOL_QUIZ:
             case 'sco':
                 foreach ($wanted_attributes as $attr) {
@@ -2056,14 +2054,18 @@ class DocumentManager
                         $sources = $attributes[$attr];
                         foreach ($sources as $source) {
                             //skip what is obviously not a resource
-                            if (strpos($source, '+this.'))
+                            if (strpos($source, '+this.')) {
                                 continue; //javascript code - will still work unaltered
-                            if (strpos($source, '.') === false)
+                            }
+                            if (strpos($source, '.') === false) {
                                 continue; //no dot, should not be an external file anyway
-                            if (strpos($source, 'mailto:'))
+                            }
+                            if (strpos($source, 'mailto:')) {
                                 continue; //mailto link
-                            if (strpos($source, ';') && !strpos($source, '&amp;'))
+                            }
+                            if (strpos($source, ';') && !strpos($source, '&amp;')) {
                                 continue; //avoid code - that should help
+                            }
 
                             if ($attr == 'value') {
                                 if (strpos($source, 'mp3file')) {
@@ -2929,7 +2931,7 @@ class DocumentManager
                 FROM $TABLE_ITEMPROPERTY AS props
                 INNER JOIN $TABLE_DOCUMENT AS docs
                 ON (docs.id = props.ref AND props.c_id = docs.c_id)
-		        WHERE
+                WHERE
                     props.c_id 	= $course_id AND
                     docs.c_id 	= $course_id AND
                     props.tool 	= '" . TOOL_DOCUMENT . "' AND
@@ -3075,7 +3077,7 @@ class DocumentManager
         if ($type == 'advanced') {
             $extra_controls = ' <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
                                 <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
-								<li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>';
+                                <li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>';
             $progress = '<div class="jp-progress">
                                 <div class="jp-seek-bar">
                                     <div class="jp-play-bar"></div>
@@ -3109,51 +3111,51 @@ class DocumentManager
     {
         $html = '
         <div id="jp_container_1" class="jp-video">
-			<div class="jp-type-single">
-				<div id="jquery_jplayer_1" class="jp-jplayer"></div>
-				<div class="jp-gui">
-					<div class="jp-video-play">
-						<a href="javascript:;" class="jp-video-play-icon" tabindex="1">play</a>
-					</div>
-					<div class="jp-interface">
-						<div class="jp-progress">
-							<div class="jp-seek-bar">
-								<div class="jp-play-bar"></div>
-							</div>
-						</div>
-						<div class="jp-current-time"></div>
-						<div class="jp-controls-holder">
-							<ul class="jp-controls">
-								<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-								<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-								<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-								<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-								<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-								<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-							</ul>
-							<div class="jp-volume-bar">
-								<div class="jp-volume-bar-value"></div>
-							</div>
-							<ul class="jp-toggles">
-								<li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen">full screen</a></li>
-								<li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen">restore screen</a></li>
-								<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
-								<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
-							</ul>
-						</div>
-						<div class="jp-title">
-							<ul>
-								<li>' . $document_data['title'] . '</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="jp-no-solution">
-                     <span>' . get_lang('UpdateRequire') . '</span>
+            <div class="jp-type-single">
+                <div id="jquery_jplayer_1" class="jp-jplayer"></div>
+                <div class="jp-gui">
+                    <div class="jp-video-play">
+                        <a href="javascript:;" class="jp-video-play-icon" tabindex="1">play</a>
+                    </div>
+                    <div class="jp-interface">
+                        <div class="jp-progress">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar"></div>
+                            </div>
+                        </div>
+                        <div class="jp-current-time"></div>
+                        <div class="jp-controls-holder">
+                            <ul class="jp-controls">
+                                <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+                                <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+                                <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+                                <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+                                <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+                                <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+                            </ul>
+                            <div class="jp-volume-bar">
+                                <div class="jp-volume-bar-value"></div>
+                            </div>
+                            <ul class="jp-toggles">
+                                <li><a href="javascript:;" class="jp-full-screen" tabindex="1" title="full screen">full screen</a></li>
+                                <li><a href="javascript:;" class="jp-restore-screen" tabindex="1" title="restore screen">restore screen</a></li>
+                                <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+                                <li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+                            </ul>
+                        </div>
+                        <div class="jp-title">
+                            <ul>
+                                <li>' . $document_data['title'] . '</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="jp-no-solution">
+                    <span>' . get_lang('UpdateRequire') . '</span>
                     ' . get_lang("ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile") . '
-				</div>
-			</div>
-		</div>';
+                </div>
+            </div>
+        </div>';
         return $html;
     }
 
@@ -3168,7 +3170,6 @@ class DocumentManager
      * @param bool $showInvisibleFiles
      * @param bool $showOnlyFolders
      * @param int $folderId
-     *
      * @return string
      */
     public static function get_document_preview(
@@ -3181,7 +3182,7 @@ class DocumentManager
         $overwrite_url = null,
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
-        $folderId = false
+        $folderId = 0
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3258,7 +3259,7 @@ class DocumentManager
             }
         }
 
-        if ($folderId !== false) {
+        if ($folderId !== 0) {
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
@@ -3410,22 +3411,22 @@ class DocumentManager
             $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
             $return .= "<script>
 
-    		function testResources(id, img) {
-    		    var numericId = id.split('_')[1];
-    		    var parentId = 'doc_id_'+numericId;
-    		    var tempId = 'temp_'+numericId;
-    		    var image = $('#'+img);
+            function testResources(id, img) {
+                var numericId = id.split('_')[1];
+                var parentId = 'doc_id_'+numericId;
+                var tempId = 'temp_'+numericId;
+                var image = $('#'+img);
 
-    		    if (image.hasClass('open')) {
-    		        image.removeClass('open');
-    		        image.attr('src', '" . $img_path . "nolines_plus.gif');
+                if (image.hasClass('open')) {
+                    image.removeClass('open');
+                    image.attr('src', '" . $img_path . "nolines_plus.gif');
                     $('#'+id).show();
-	    			$('#'+tempId).hide();
-    		    } else {
+                    $('#'+tempId).hide();
+                } else {
                     image.addClass('open');
                     image.attr('src', '" . $img_path . "nolines_minus.gif');
                     $('#'+id).hide();
-	    		    $('#'+tempId).show();
+                    $('#'+tempId).show();
 
                     var tempDiv = $('#'+parentId).find('#'+tempId);
                     if (tempDiv.length == 0) {
@@ -3439,9 +3440,9 @@ class DocumentManager
                             }
                         });
                     }
-    		    }
+                }
             }
-    		</script>";
+            </script>";
         }
 
         if (!$user_in_course) {
@@ -5615,7 +5616,7 @@ class DocumentManager
      */
     public static function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')
     {
-        $form = new FormValidator('move_to', 'post', api_get_self());
+        $form = new FormValidator('move_to', 'post', api_get_self().'?'.api_get_cidreq());
 
         // Form title
         $form->addElement('hidden', 'move_file', $move_file);
@@ -5699,8 +5700,8 @@ class DocumentManager
             }
         }
         $form->addElement('select', 'move_to', get_lang('MoveTo'), $options);
-        $form->addElement('button', 'move_file_submit', get_lang('MoveElement'));
-        return $form->return_form();
+        $form->addButtonNext(get_lang('MoveElement'), 'move_file_submit');
+        return $form->returnForm();
     }
 
     /**
@@ -5771,8 +5772,8 @@ class DocumentManager
         $form->addElement('hidden', 'id', intval($dirId));
         $form->addElement('header', '', get_lang('CreateDir'));
         $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
-        $form->addElement('style_submit_button', 'submit','<i class="fa fa-folder-open"></i> '. get_lang('CreateFolder'), 'class="btn-primary"');
-        $new_folder_text = $form->return_form();
+        $form->addButtonCreate(get_lang('CreateFolder'), 'submit');
+        $new_folder_text = $form->returnForm();
         return $new_folder_text;
     }
 

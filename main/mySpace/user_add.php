@@ -216,8 +216,8 @@ $defaults['session_id'] = api_get_session_id();
 $form->setDefaults($defaults);
 // Submit button
 $select_level = array ();
-$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$html_results_enabled[] = FormValidator :: addButtonCreate(get_lang('Add') . '+', 'submit_plus', true);
+$html_results_enabled[] = FormValidator :: addButtonCreate(get_lang('Add'), 'submit', true);
 $form->addGroup($html_results_enabled);
 // Validate form
 if ($form->validate()) {

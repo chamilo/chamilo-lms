@@ -191,7 +191,7 @@ class Gradebook extends Model
             }
         }
 
-        $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
+        $form->addButtonCreate(get_lang('Add'), 'submit');
 
         $form->setDefaults(array('skill'=>$clean_selected_skills));
 

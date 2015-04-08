@@ -271,7 +271,7 @@ if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 	$form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
 	$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
-	$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');
+	$form->addButtonCreate(get_lang('CreateSubLanguage'), 'SubmitAddNewLanguage');
         //$values['original_name'] = $language_details['original_name'].'...'; -> cannot be used because of quickform filtering (freeze)
         $values['english_name'] = $language_details['english_name'].'2';
         $values['isocode'] = $language_details['isocode'];
@@ -286,7 +286,7 @@ if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
 		$form->addElement('static', '', get_lang('OriginalName'),$original_name);
 		$form->addElement('static', '', get_lang('EnglishName'),$english_name);
 		$form->addElement('static', '', get_lang('PlatformCharsetTitle'),$isocode);
-		$form->addElement('style_submit_button', 'SubmitAddDeleteLanguage', get_lang('DeleteSubLanguage'), 'class="'.$class.'"');
+		$form->addButtonCreate(get_lang('DeleteSubLanguage'), 'SubmitAddDeleteLanguage');
 		$form->display();
 	}
 	if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {

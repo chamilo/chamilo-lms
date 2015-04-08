@@ -50,7 +50,7 @@ $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 $form->addElement('checkbox', 'is_content', null, get_lang('DefaultContent'), array('checked' => true));
 
 // the submit button
-$form->addElement('style_submit_button', 'SubmitCreateQuestion', get_lang('CreateQuestion'), 'class="add"');
+$form->addButtonCreate(get_lang('CreateQuestion'), 'SubmitCreateQuestion');
 
 // setting the rules
 $form->addRule('exercice', get_lang('ThisFieldIsRequired'), 'required');

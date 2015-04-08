@@ -66,7 +66,7 @@ if ($surveys && count($courses) > 1) {
         }
     }
     $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
-    $form->addElement('style_submit_button', 'submit', get_lang('CopySurvey'), 'class="save"');
+    $form->addButtonCopy(get_lang('CopySurvey'));
 }
 
 // Add Security token

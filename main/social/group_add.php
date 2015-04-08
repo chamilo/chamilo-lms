@@ -34,7 +34,7 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $form = new FormValidator('add_group');
 $form = GroupPortalManager::setGroupForm($form);
-$form->addElement('style_submit_button', 'add_group', get_lang('AddGroup'), 'class="save"');
+$form->addButtonCreate(get_lang('AddGroup'), 'add_group');
 
 $form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
 

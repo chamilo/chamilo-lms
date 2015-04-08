@@ -2255,7 +2255,7 @@ class Blog
         $form->addElement('textarea', 'blog_subtitle', get_lang('SubTitle'));
 
         $form->addElement('hidden', 'new_blog_submit', 'true');
-        $form->addElement('style_submit_button', null, get_lang('SaveProject'));
+        $form->addButtonSave(get_lang('SaveProject'));
 
         $defaults = array(
 			'blog_name' => isset($_POST['blog_name']) ? Security::remove_XSS($_POST['blog_name']) : null,
@@ -2292,7 +2292,7 @@ class Blog
 
         $form->addElement('hidden', 'edit_blog_submit', 'true');
         $form->addElement('hidden', 'blog_id', $blog['blog_id']);
-        $form->addElement('style_submit_button', null, get_lang('Save'));
+        $form->addButtonSave(get_lang('Save'));
 
         $defaults = array();
         $defaults['blog_name'] = $blog['blog_name'];

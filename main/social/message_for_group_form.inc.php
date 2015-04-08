@@ -124,7 +124,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
         )
     );
 
-    $form->addElement('style_submit_button', 'submit', get_lang('SendMessage'));
+    $form->addButtonSend(get_lang('SendMessage'), 'submit');
     Display::display_no_header();
     //Display::display_reduced_header();
     $form->display();

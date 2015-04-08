@@ -14,8 +14,8 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 
 api_block_anonymous_users();
 
-$skill           = new Skill();
-$gradebook       = new Gradebook();
+$skill = new Skill();
+$gradebook = new Gradebook();
 $skill_gradebook = new SkillRelGradebook();
 
 switch ($action) {
@@ -155,6 +155,11 @@ switch ($action) {
             echo 0;
         }
         break;
+    case 'get_all_user_skills':
+        $userId = api_get_user_id();
+        $skills = $skill->get_user_skills($user_id, true);
+        echo json_encode($skills);
+        break;
     case 'get_user_skills':
         $skills = $skill->get_user_skills($user_id, true);
         Display::display_no_header();
@@ -210,11 +215,8 @@ switch ($action) {
         $skills = $_REQUEST['skill_id'];
 
         $total_skills_to_search = $skills;
-
         $users  = $skill_rel_user->get_user_by_skills($skills);
-
         $user_list = array();
-
         $count_skills = count($skills);
 
         if (!empty($users)) {

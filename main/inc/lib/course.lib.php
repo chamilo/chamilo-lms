@@ -1792,7 +1792,7 @@ class CourseManager
         if ($session_id == 0) {
             // students directly subscribed to the course
             $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
-                    INNER JOIN user u
+                    INNER JOIN $userTable u
                     ON cu.user_id = u.user_id
                     WHERE c_id = '$courseId' AND cu.status = " . STUDENT;
 

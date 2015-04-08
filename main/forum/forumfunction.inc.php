@@ -3535,7 +3535,7 @@ function move_thread_form()
     $form->addElement('html', $htmlcontent);
 
     // The OK button
-    $form->addElement('style_submit_button', 'SubmitForum', get_lang('MoveThread'), 'class="save"');
+    $form->addButtonSave(get_lang('MoveThread'), 'SubmitForum');
 
     // Validation or display
     if ($form->validate()) {
@@ -3577,7 +3577,7 @@ function move_post_form()
     $form->applyFilter('thread', 'html_filter');
 
     // The OK button
-    $form->addElement('style_submit_button', 'submit', get_lang('MovePost'), 'class="save"');
+    $form->addButtonSave(get_lang('MovePost'), 'submit');
 
     // Setting the rules
     $form->addRule('thread', get_lang('ThisFieldIsRequired'), 'required');

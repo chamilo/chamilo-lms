@@ -216,7 +216,7 @@ $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="span12">');
 
 // Submit
-$form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
+$form->addButtonSave(get_lang('PropModify'), 'submit');
 
 // If form validates -> save data
 if ($form->validate()) {

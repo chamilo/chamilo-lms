@@ -1205,8 +1205,10 @@ switch ($action) {
                 $item['certificates'] = Display::return_icon('warning.png', get_lang('NoCertificate'), array(), ICON_SIZE_SMALL);
                 $item['has_certificates'] = '0';
             }
+
             if (!empty($skills)) {
-                foreach($skills as $skill) {
+                $item['skills'] = '';
+                foreach ($skills as $skill) {
                     $item['skills'] .= Display::span($skill['name'], array('class' => 'label_tag skill'));
                 }
             }

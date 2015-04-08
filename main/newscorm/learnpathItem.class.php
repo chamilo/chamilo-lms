@@ -234,7 +234,7 @@ class learnpathItem
      * @param    array $params Array of parameters:
      * id(0), type(1), time(2), weighting(3), correct_responses(4),
      * student_response(5), result(6), latency(7)
-     * @result   void
+     * @return   void
      */
     public function add_interaction($index, $params)
     {
@@ -263,7 +263,7 @@ class learnpathItem
      * Adds an objective to the current item
      * @param    array    Array of parameters:
      * id(0), status(1), score_raw(2), score_max(3), score_min(4)
-     * @result    void
+     * @return    void
      */
     public function add_objective($index, $params)
     {

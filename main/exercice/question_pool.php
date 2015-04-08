@@ -19,7 +19,7 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 $delete = isset($_GET['delete']) ? intval($_GET['delete']) : null;
 $recup = isset($_GET['recup']) ? intval($_GET['recup']) : null;
@@ -29,7 +29,7 @@ $courseCategoryId = isset($_REQUEST['courseCategoryId']) ? intval($_REQUEST['cou
 $exerciseLevel = isset($_REQUEST['exerciseLevel']) ? intval($_REQUEST['exerciseLevel']) : -1;
 $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
-$copy_question = isset($_REQUEST['copy_question']) ? intval($_REQUEST['copy_question']) : 0;
+$question_copy = isset($_REQUEST['question_copy']) ? intval($_REQUEST['question_copy']) : 0;
 $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
 $selected_course = isset($_GET['selected_course']) ? intval($_GET['selected_course']) : null;
 // save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
@@ -39,7 +39,7 @@ $exercice_id_changed = isset($_GET['exercice_id_changed']) ? intval($_GET['exerc
 
 // by default when we go to the page for the first time, we select the current course
 if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
-	$selected_course = api_get_course_int_id();
+    $selected_course = api_get_course_int_id();
 }
 
 $_course = api_get_course_info();
@@ -60,11 +60,11 @@ if (!empty($objExercise)) {
 $displayMessage = "";
 if ($is_allowedToEdit) {
     // Duplicating a Question
-    if (!isset($_POST['recup']) && $copy_question != 0 && isset($fromExercise)) {
+    if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
         $origin_course_id   = intval($_GET['course_id']);
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
         $current_course     = api_get_course_info();
-        $old_question_id    = $copy_question;
+        $old_question_id    = $question_copy;
         // Reading the source question
         $old_question_obj = Question::read($old_question_id, $origin_course_id);
 
@@ -909,7 +909,7 @@ function get_action_icon_for_question(
 			unset($myObjEx);
 			break;
 		case "clone":
-            $url = api_get_self()."?".api_get_cidreq().$getParams."&amp;copy_question=$in_questionid&amp;course_id=$in_selected_course&amp;fromExercise=$from_exercice";
+            $url = api_get_self()."?".api_get_cidreq().$getParams."&amp;question_copy=$in_questionid&amp;course_id=$in_selected_course&amp;fromExercise=$from_exercice";
             $res = Display::url(
                 Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest')),
                 $url

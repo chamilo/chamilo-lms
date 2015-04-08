@@ -52,7 +52,11 @@ $form = new FormValidator(
     'POST',
     'upload.php',
     '',
-    'id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"'
+    array(
+        'id' => "upload_form",
+        'enctype' => "multipart/form-data",
+        'style' => "background-image:url(\'../img/scorm.jpg\');background-repeat:no-repeat;background-position:620px;"
+    )
 );
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);
@@ -75,6 +79,29 @@ if (api_get_setting('search_enabled') == 'true') {
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 }
+
+/* This is a special section that has to be enabled in specific cases
+ * PLEASE DO NOT REMOVE
+$list = get_zip_files_in_garbage();
+if (count($list)>0) {
+    $select_file_name = &$form->addElement(
+        'select',
+        'file_name',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
+    foreach($list as $file){
+        $select_file_name->addOption($file, $file);
+    }
+    $form->addElement('submit', 'submit', get_lang('Download'));
+} else {
+    $text_empty = &$form->addElement(
+        'text',
+        'empty',
+        get_lang('Or').' '.api_strtolower(get_lang('UploadLocalFileFromGarbageDir'))
+    );
+    $defaults["empty"] = get_lang('Empty');
+    $text_empty->freeze();
+}*/
 
 $form->addButtonUpload(get_lang('Upload'));
 

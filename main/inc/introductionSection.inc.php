@@ -59,7 +59,7 @@ $height = '300';
 $editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
 
 $form->addHtmlEditor('intro_content', null, null, false, $editor_config);
-$form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
+$form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 $course_id = api_get_course_int_id();

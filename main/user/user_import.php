@@ -25,7 +25,7 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 
 $form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
 
-$form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
+$form->addButtonImport(get_lang('Import'));
 
 $course_code = api_get_course_id();
 

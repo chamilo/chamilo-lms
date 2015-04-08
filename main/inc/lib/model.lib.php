@@ -14,9 +14,9 @@ class Model
     public $required;
     public $is_course_model =false;
 
-	public function __construct()
+    public function __construct()
     {
-	}
+    }
 
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function
@@ -125,18 +125,18 @@ class Model
     /**
      * a little bit of javascript to display
      */
-	public function javascript()
+    public function javascript()
     {
-	}
+    }
 
-	/**
-	 * Saves an element into the DB
-	 *
-	 * @param array $values
-	 * @return bool
-	 *
-	 */
-	public function save($params, $show_query = false)
+    /**
+     * Saves an element into the DB
+     * @param array $params
+     * @param bool  $show_query Whether to show the query in logs or not (passed to Database::insert())
+     * @return bool
+     *
+     */
+    public function save($params, $show_query = false)
     {
         $params = $this->clean_parameters($params);
 
@@ -148,9 +148,9 @@ class Model
 
         if (!empty($this->required)) {
             $require_ok = true;
-            $kay_params = array_keys($params);
+            $key_params = array_keys($params);
             foreach ($this->required as $field) {
-                if (!in_array($field, $kay_params)) {
+                if (!in_array($field, $key_params)) {
                     $require_ok = false;
                 }
             }
@@ -165,18 +165,17 @@ class Model
 
         if (!empty($params)) {
             $id = Database::insert($this->table, $params, $show_query);
-    		if (is_numeric($id)) {
-    			return $id;
-    		}
+            if (is_numeric($id)) {
+                return $id;
+            }
         }
 
         return false;
-	}
+    }
 
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
-     * @param array $values
-     *
+     * @param array $params
      * @return bool
      *
      */

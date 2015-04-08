@@ -13,6 +13,31 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyInvitation
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="survey_invitation_id", type="integer")
+     */
+    private $surveyInvitationId;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="survey_code", type="string", length=20, nullable=false)
@@ -67,26 +92,6 @@ class CSurveyInvitation
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="survey_invitation_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $surveyInvitationId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set surveyCode

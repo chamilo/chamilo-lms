@@ -13,6 +13,30 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyGroup
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
@@ -32,26 +56,6 @@ class CSurveyGroup
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
     private $surveyId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set name

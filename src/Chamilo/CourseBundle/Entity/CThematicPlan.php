@@ -15,6 +15,30 @@ class CThematicPlan
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="thematic_id", type="integer", nullable=false)
      */
     private $thematicId;
@@ -39,26 +63,6 @@ class CThematicPlan
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
     private $descriptionType;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set thematicId

@@ -15,27 +15,30 @@ class CForumMailcue
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue
      */
-    private $id;
+    private $iid;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $cId;
 
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="thread_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $threadId;
 
@@ -43,8 +46,6 @@ class CForumMailcue
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
 
@@ -52,11 +53,8 @@ class CForumMailcue
      * @var integer
      *
      * @ORM\Column(name="post_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $postId;
-
 
 
     /**

@@ -15,6 +15,29 @@ class CBlogRating
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rating_id", type="integer")
+     */
+    private $ratingId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
@@ -46,26 +69,6 @@ class CBlogRating
      * @ORM\Column(name="rating", type="integer", nullable=false)
      */
     private $rating;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="rating_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $ratingId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set blogId

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -13,20 +14,27 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceSheet
 {
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="presence", type="boolean", nullable=false)
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
      */
-    private $presence;
+    private $iid;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $cId;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="presence", type="boolean", nullable=false)
+     */
+    private $presence;
 
     /**
      * @var integer
@@ -45,8 +53,6 @@ class CAttendanceSheet
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $attendanceCalendarId;
-
-
 
     /**
      * Set presence

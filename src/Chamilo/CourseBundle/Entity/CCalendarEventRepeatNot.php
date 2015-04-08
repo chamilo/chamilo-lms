@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -15,9 +16,16 @@ class CCalendarEventRepeatNot
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
@@ -25,8 +33,6 @@ class CCalendarEventRepeatNot
      * @var integer
      *
      * @ORM\Column(name="cal_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $calId;
 

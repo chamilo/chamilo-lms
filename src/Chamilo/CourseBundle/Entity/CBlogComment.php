@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogComment
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="comment_id", type="integer")
+     */
+    private $commentId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
@@ -67,26 +90,6 @@ class CBlogComment
      * @ORM\Column(name="parent_comment_id", type="integer", nullable=false)
      */
     private $parentCommentId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="comment_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $commentId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set title

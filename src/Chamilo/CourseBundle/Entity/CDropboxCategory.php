@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxCategory
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cat_id", type="integer")
+     */
+    private $catId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="cat_name", type="text", nullable=false)
@@ -46,25 +69,6 @@ class CDropboxCategory
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cat_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $catId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
 
 
     /**

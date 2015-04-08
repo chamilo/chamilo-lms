@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumPost
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="post_id", type="integer")
+     */
+    private $postId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="post_title", type="string", length=250, nullable=true)
@@ -81,26 +104,6 @@ class CForumPost
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
     private $visible;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="post_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $postId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set postTitle

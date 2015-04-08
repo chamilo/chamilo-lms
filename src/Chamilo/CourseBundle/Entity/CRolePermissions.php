@@ -13,6 +13,30 @@ use Doctrine\ORM\Mapping as ORM;
 class CRolePermissions
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)
@@ -22,27 +46,7 @@ class CRolePermissions
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="role_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $roleId;
 
@@ -50,8 +54,6 @@ class CRolePermissions
      * @var string
      *
      * @ORM\Column(name="tool", type="string", length=250)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $tool;
 
@@ -59,12 +61,8 @@ class CRolePermissions
      * @var string
      *
      * @ORM\Column(name="action", type="string", length=50)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $action;
-
-
 
     /**
      * Set defaultPerm

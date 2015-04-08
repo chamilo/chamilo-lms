@@ -13,6 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
 class COnlineConnected
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_connection", type="datetime", nullable=false)
@@ -22,22 +38,9 @@ class COnlineConnected
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
-
-
 
     /**
      * Set lastConnection

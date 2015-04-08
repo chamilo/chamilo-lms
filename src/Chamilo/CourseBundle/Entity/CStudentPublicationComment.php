@@ -15,16 +15,33 @@ class CStudentPublicationComment
     /**
      * @var integer
      *
-     * @ORM\Column(name="work_id", type="integer", nullable=false)
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
      */
-    private $workId;
+    private $iid;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="work_id", type="integer", nullable=false)
+     */
+    private $workId;
 
     /**
      * @var string
@@ -53,17 +70,6 @@ class CStudentPublicationComment
      * @ORM\Column(name="sent_at", type="datetime", nullable=false)
      */
     private $sentAt;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set workId

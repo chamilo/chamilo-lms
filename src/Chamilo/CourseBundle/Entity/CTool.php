@@ -26,7 +26,6 @@ class CTool
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
      */
     private $id;
 
@@ -34,7 +33,6 @@ class CTool
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
      */
     private $cId;
 
@@ -107,9 +105,6 @@ class CTool
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
-
-
-
 
     /**
      * Set name

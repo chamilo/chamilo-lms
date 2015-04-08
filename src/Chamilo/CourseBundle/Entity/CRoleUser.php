@@ -13,6 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
 class CRoleUser
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="scope", type="string", length=20, nullable=false)
@@ -22,18 +38,7 @@ class CRoleUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="role_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $roleId;
 
@@ -41,12 +46,8 @@ class CRoleUser
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
-
-
 
     /**
      * Set scope

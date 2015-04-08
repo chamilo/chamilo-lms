@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumForum
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="forum_id", type="integer")
+     */
+    private $forumId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="forum_title", type="string", length=255, nullable=false)
@@ -151,26 +174,6 @@ class CForumForum
      * @ORM\Column(name="end_time", type="datetime", nullable=false)
      */
     private $endTime;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="forum_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $forumId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set forumTitle

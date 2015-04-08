@@ -15,6 +15,29 @@ class CBlogTask
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="task_id", type="integer")
+     */
+    private $taskId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
@@ -46,25 +69,6 @@ class CBlogTask
      * @ORM\Column(name="system_task", type="boolean", nullable=false)
      */
     private $systemTask;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="task_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $taskId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
 
 
     /**

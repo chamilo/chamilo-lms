@@ -15,6 +15,29 @@ class CDropboxFeedback
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="feedback_id", type="integer")
+     */
+    private $feedbackId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="file_id", type="integer", nullable=false)
      */
     private $fileId;
@@ -39,25 +62,6 @@ class CDropboxFeedback
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
      */
     private $feedbackDate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="feedback_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $feedbackId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
 
 
     /**

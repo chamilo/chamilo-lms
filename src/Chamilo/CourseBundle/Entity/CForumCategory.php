@@ -13,6 +13,22 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumCategory
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="cat_title", type="string", length=255, nullable=false)
@@ -51,21 +67,8 @@ class CForumCategory
      * @var integer
      *
      * @ORM\Column(name="cat_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $catId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set catTitle

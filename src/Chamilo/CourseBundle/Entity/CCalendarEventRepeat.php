@@ -13,6 +13,30 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEventRepeat
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cal_id", type="integer")
+     */
+    private $calId;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="cal_type", type="string", length=20, nullable=true)
@@ -39,26 +63,6 @@ class CCalendarEventRepeat
      * @ORM\Column(name="cal_days", type="string", length=7, nullable=true)
      */
     private $calDays;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cal_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $calId;
-
-
 
     /**
      * Set calType

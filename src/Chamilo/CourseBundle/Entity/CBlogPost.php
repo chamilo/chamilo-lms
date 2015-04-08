@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogPost
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="blog_id", type="integer", nullable=false)
+     */
+    private $blogId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=250, nullable=false)
@@ -36,13 +59,6 @@ class CBlogPost
     /**
      * @var integer
      *
-     * @ORM\Column(name="blog_id", type="integer", nullable=false)
-     */
-    private $blogId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
     private $authorId;
@@ -51,21 +67,8 @@ class CBlogPost
      * @var integer
      *
      * @ORM\Column(name="post_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $postId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set title

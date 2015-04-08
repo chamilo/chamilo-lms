@@ -15,6 +15,29 @@ class CSurveyQuestion
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="question_id", type="integer")
+     */
+    private $questionId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
     private $surveyId;
@@ -88,26 +111,6 @@ class CSurveyQuestion
      * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
      */
     private $surveyGroupSec2;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="question_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $questionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
 
     /**
      * Set surveyId

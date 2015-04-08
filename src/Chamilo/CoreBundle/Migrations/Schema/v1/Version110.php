@@ -91,12 +91,98 @@ class Version110 extends AbstractMigration
 
         // Add iid
         $tables = [
-            'c_group_info',
+            'c_announcement',
+            'c_announcement_attachment',
+            'c_attendance',
+            'c_attendance_calendar',
+            'c_attendance_calendar_rel_group',
+            'c_attendance_result',
+            //'c_attendance_sheet',
+            'c_attendance_sheet_log',
+            //'c_blog',
+            'c_blog_attachment',
+            //'c_blog_comment',
+            //'c_blog_post',
+            //'c_blog_rating',
+            //'c_blog_rel_user',
+            'c_blog_task',
+            'c_blog_task_rel_user',
+            'c_calendar_event',
+            'c_calendar_event_attachment',
+            'c_calendar_event_repeat',
+            'c_calendar_event_repeat_not',
+            'c_chat_connected',
+            'c_course_description',
             'c_course_setting',
-            'c_tool',
-            'c_group_info',
             'c_document',
-            'c_item_property'
+            //'c_dropbox_category',
+            //'c_dropbox_feedback',
+            'c_dropbox_file',
+            //'c_dropbox_person',
+            //'c_dropbox_post',
+            'c_forum_attachment',
+            //'c_forum_category',
+            //'c_forum_forum',
+            'c_forum_mailcue',
+            'c_forum_notification',
+            'c_forum_post',
+            //'c_forum_thread',
+            'c_forum_thread_qualify',
+            'c_forum_thread_qualify_log',
+            //'c_glossary',
+            'c_group_category',
+            //'c_group_info',
+            'c_group_rel_tutor',
+            'c_group_rel_user',
+            'c_item_property',
+            'c_link',
+            'c_link_category',
+            'c_lp',
+            'c_lp_item',
+            'c_lp_item_view',
+            'c_lp_iv_interaction',
+            'c_lp_iv_objective',
+            'c_lp_view',
+            //'c_notebook',
+            //'c_online_connected',
+            'c_online_link',
+            'c_permission_group',
+            'c_permission_task',
+            'c_permission_user',
+            'c_quiz',
+            //'c_quiz_answer',
+            'c_quiz_question',
+            'c_quiz_question_category',
+            'c_quiz_question_option',
+            //'c_quiz_question_rel_category',
+            //'c_quiz_rel_question',
+            'c_resource',
+            //'c_role',
+            'c_role_group',
+            'c_role_permissions',
+            //'c_role_user',
+            'c_student_publication',
+            'c_student_publication_assignment',
+            'c_student_publication_comment',
+            'c_student_publication_rel_document',
+            'c_student_publication_rel_user',
+            //'c_survey',
+            //'c_survey_answer',
+            'c_survey_group',
+            //'c_survey_invitation',
+            //'c_survey_question',
+            //'c_survey_question_option',
+            'c_thematic',
+            'c_thematic_advance',
+            'c_thematic_plan',
+            'c_tool',
+            'c_tool_intro',
+            'c_userinfo_content',
+            'c_userinfo_def',
+            'c_wiki',
+            //'c_wiki_conf',
+            'c_wiki_discuss',
+            'c_wiki_mailcue'
         ];
 
         foreach ($tables as $table) {
@@ -105,6 +191,176 @@ class Version110 extends AbstractMigration
             $this->addSql("ALTER TABLE $table DROP PRIMARY KEY");
             $this->addSql("ALTER TABLE $table ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
         }
+
+        $this->addSql("ALTER TABLE c_attendance_sheet MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_attendance_sheet DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_attendance_sheet ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog MODIFY COLUMN blog_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_comment MODIFY COLUMN comment_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_comment MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_comment DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_comment ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_post MODIFY COLUMN post_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_post MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_post DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_post ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_rating MODIFY COLUMN rating_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_rating MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_rating DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_rating ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN blog_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_rating DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_rating ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_task MODIFY COLUMN task_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_task MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_task DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_task ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_blog_task_rel_user MODIFY COLUMN blog_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_task_rel_user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_task_rel_user MODIFY COLUMN task_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_blog_task_rel_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_task_rel_user ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_calendar_event_repeat MODIFY COLUMN cal_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_calendar_event_repeat_not MODIFY COLUMN cal_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat_not MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat_not DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_calendar_event_repeat_not ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_dropbox_category MODIFY COLUMN cat_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_category MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_category DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_dropbox_category ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_dropbox_feedback MODIFY COLUMN feedback_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_feedback MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_feedback DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_dropbox_feedback ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_dropbox_person MODIFY COLUMN file_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_person MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_person DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_dropbox_person ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_dropbox_post MODIFY COLUMN file_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_post MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_dropbox_post DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_dropbox_post ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_forum_category MODIFY COLUMN cat_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_category MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_category DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_forum_category ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_forum_forum MODIFY COLUMN forum_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_forum MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_forum DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_forum_forum ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_forum_post MODIFY COLUMN post_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_post MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_post DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_forum_post ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_forum_thread MODIFY COLUMN forum_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_thread MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_thread DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_forum_thread ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_glossary MODIFY COLUMN glossary_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_glossary MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_glossary DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_glossary ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_notebook MODIFY COLUMN notebook_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_notebook MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_notebook DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_notebook ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_online_connected MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_online_connected DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_online_connected ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN question_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+
+
+
+        $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN question_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN exercice_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_rel_question DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_quiz_rel_question ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_role MODIFY COLUMN role_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_role MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_role DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_role ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_role_user MODIFY COLUMN role_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_role_user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_role_user MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_role_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_role_user ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_survey MODIFY COLUMN survey_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_survey ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_survey_answer MODIFY COLUMN answer_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_answer MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_answer DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_survey_answer ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_survey_invitation MODIFY COLUMN survey_invitation_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_invitation MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_invitation DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_survey_invitation ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_survey_question MODIFY COLUMN question_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_question MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_question DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_survey_question ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_survey_question_option MODIFY COLUMN question_option_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_question_option MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_survey_question_option DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_survey_question_option ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+
+        $this->addSql("ALTER TABLE c_wiki_conf MODIFY COLUMN page_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_wiki_conf MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_wiki_conf DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_wiki_conf ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN relation_type int unsigned DEFAULT 0");
         $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");

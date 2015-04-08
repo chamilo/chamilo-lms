@@ -15,9 +15,16 @@ class CBlogRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer")
+     * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
@@ -25,8 +32,6 @@ class CBlogRelUser
      * @var integer
      *
      * @ORM\Column(name="blog_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $blogId;
 
@@ -34,11 +39,8 @@ class CBlogRelUser
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $userId;
-
 
 
     /**

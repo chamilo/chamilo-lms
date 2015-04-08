@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxPost
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="feedback_date", type="datetime", nullable=false)
@@ -44,8 +53,6 @@ class CDropboxPost
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $cId;
 
@@ -53,8 +60,6 @@ class CDropboxPost
      * @var integer
      *
      * @ORM\Column(name="file_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $fileId;
 
@@ -62,11 +67,8 @@ class CDropboxPost
      * @var integer
      *
      * @ORM\Column(name="dest_user_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $destUserId;
-
 
 
     /**

@@ -15,6 +15,30 @@ class CStudentPublicationRelDocument
     /**
      * @var integer
      *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
     private $workId;
@@ -25,24 +49,6 @@ class CStudentPublicationRelDocument
      * @ORM\Column(name="document_id", type="integer", nullable=false)
      */
     private $documentId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set workId

@@ -15,7 +15,23 @@ class CQuizAnswer
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id_auto", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $idAuto;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
      */
     private $id;
 
@@ -88,25 +104,6 @@ class CQuizAnswer
      * @ORM\Column(name="answer_code", type="string", length=10, nullable=true)
      */
     private $answerCode;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id_auto", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $idAuto;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
 
 
     /**

@@ -15,7 +15,23 @@ class CAttendanceCalendarRelGroup
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
@@ -32,17 +48,6 @@ class CAttendanceCalendarRelGroup
      * @ORM\Column(name="calendar_id", type="integer", nullable=false)
      */
     private $calendarId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-
 
     /**
      * Set cId

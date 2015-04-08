@@ -13,6 +13,29 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumThread
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer")
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="thread_id", type="integer")
+     */
+    private $threadId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="thread_title", type="string", length=255, nullable=true)
@@ -116,27 +139,6 @@ class CForumThread
      * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
      */
     private $threadWeight;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="thread_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $threadId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $cId;
-
-
-
     /**
      * Set threadTitle
      *

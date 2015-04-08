@@ -197,8 +197,11 @@ class BlockDaily extends Block
                     $attendances[] = get_lang("NotAvailable");
                 }
             }
+            if (count($attendances) == 0) {
+                $attendances[] = get_lang("NotAvailable");
+            }
 
-            // quantidade de alunos
+            // Number of students
 
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
                     WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.course_code='$course_code'";

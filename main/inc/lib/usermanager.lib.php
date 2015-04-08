@@ -842,7 +842,7 @@ class UserManager
     {
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "SELECT user_id
+        $sql = "SELECT id
                 FROM $t_uf uf
                 INNER JOIN $t_ufv ufv
                 ON ufv.field_id=uf.id
@@ -852,7 +852,7 @@ class UserManager
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
-            return $row->user_id;
+            return $row->id;
         } else {
             return 0;
         }

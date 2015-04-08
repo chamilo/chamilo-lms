@@ -4,7 +4,7 @@
 /**
  * Class Model
  * This class provides basic methods to implement a CRUD for a new table in the database see examples in: career.lib.php and promotion.lib.php
- *	Include/require it in your code to use its features.
+ * Include/require it in your code to use its features.
  * @package chamilo.library
  */
 class Model
@@ -27,8 +27,10 @@ class Model
             case 'all':
                 return self::get_all($options);
                 break;
-            case (is_numeric($type)) :
-                return self::get($type);
+            default:
+                if (is_numeric($type)) {
+                    return self::get($type);
+                }
                 break;
         }
     }

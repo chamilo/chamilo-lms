@@ -210,11 +210,8 @@ switch ($action) {
         $skills = $_REQUEST['skill_id'];
 
         $total_skills_to_search = $skills;
-
         $users  = $skill_rel_user->get_user_by_skills($skills);
-
         $user_list = array();
-
         $count_skills = count($skills);
 
         if (!empty($users)) {

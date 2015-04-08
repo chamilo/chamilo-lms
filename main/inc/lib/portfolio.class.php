@@ -43,7 +43,7 @@ class Portfolio
      */
     public static function all()
     {
-        $conf = Chamilo::path('/main/inc/conf/portfolio.conf.php');
+        $conf = api_get_path(SYS_CODE_PATH).'inc/conf/portfolio.conf.php';
         if (!is_readable($conf)) {
             return array();
         }
@@ -503,7 +503,7 @@ class PortfolioShare
             $parameters[PortfolioController::PARAM_TOOL] = $this->get_tool();
             $parameters[PortfolioController::PARAM_ID] = $id;
             $parameters[PortfolioController::PARAM_TOOL] = $tool;
-            $url = api_get_path(WEB_CODE_PATH).'portfolio/share.php', $parameters);
+            $url = api_get_path(WEB_CODE_PATH).'portfolio/share.php?';
             $result[] = '<li>';
             $result[] = '<a href="' . $url . '">' . $portfolio->get_title() . '</a>';
             $result[] = '</li>';

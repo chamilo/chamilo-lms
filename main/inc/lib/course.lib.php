@@ -1819,15 +1819,15 @@ class CourseManager
     {
         $course_code = Database::escape_string($course_code);
         $teachers = array();
-        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
+        $sql = "SELECT DISTINCT u.id, u.lastname, u.firstname, u.email, u.username, u.status
                 FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " cu
                 INNER JOIN " . Database::get_main_table(TABLE_MAIN_USER) . " u
-                ON (cu.user_id = u.user_id)
+                ON (cu.user_id = u.id)
                 WHERE   cu.course_code = '$course_code' AND
                         cu.status = 1 ";
         $rs = Database::query($sql);
         while ($teacher = Database::fetch_array($rs)) {
-            $teachers[$teacher['user_id']] = $teacher;
+            $teachers[$teacher['id']] = $teacher;
         }
         return $teachers;
     }
@@ -4755,7 +4755,7 @@ class CourseManager
         $stok = Security::get_existing_token();
 
         foreach ($courses as $courseId) {
-            $course_info = api_get_course_info_by_id($courseId);
+            $course_info = api_get_course_info_by_id($courseId['c_id']);
             $courseCode = $course_info['code'];
             $categoryCode = !empty($course_info['categoryCode']) ? $course_info['categoryCode'] : "";
             $my_course['extra_info'] = $course_info;

@@ -471,19 +471,20 @@ $(document).ready(function() {
     }*/
 });
 </script>
-<div id="page-back">
+<div id="page-back" class="page-skill">
 <div class="container-fluid">
     <div class="row">
 
         <div class="col-md-3 skill-options">
             <div class="skill-home">
-                <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
+                <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php"><i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}</a>
             </div>
+
 
             <!-- ACCORDION -->
 
             <div class="panel-group" id="accordion2">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
                         {{ 'SkillsSearch' | get_lang }}
@@ -493,11 +494,11 @@ $(document).ready(function() {
                     <div class="panel-body">
                         <!-- SEARCH -->
                         <div class="search-skill">
-                            <p>{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
+                            <p class="text">{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
                             <form id="skill_search" class="form-search">
                                 <select id="skill_id" name="skill_id" /></select>
                                 <div class="button-skill">
-                                    <a class="btn btn-default btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                    <a class="btn btn-block btn-default load_root" rel="0" href="#"><i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}</a>
                                     <!-- <a id="clear_selection" class="btn btn-danger">{{ "Clear"|get_lang }}</a> -->
                                 </div>
                                 <ul id="skill_holder" class="holder_simple border"></ul>
@@ -507,7 +508,7 @@ $(document).ready(function() {
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
                         {{ 'ProfileSearch'|get_lang }}
@@ -518,14 +519,16 @@ $(document).ready(function() {
                         <!-- SEARCH PROFILE -->
                         <div class="search-profile-skill">
 
-                            <p class="description">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</p>
+                            <p class="text">{{ 'WhatSkillsAreYouLookingFor'|get_lang }}</p>
                             <ul id="profile_search" class="holder holder_simple"></ul>
                             <form id="search_profile_form" class="form-search">
-                                <input class="btn btn-default btn-block" type="submit" value="{{ "SearchProfileMatches"|get_lang }}">
+
+                                <button class="btn btn-default btn-block" type="submit"><i class="fa fa-search"></i> {{ "SearchProfileMatches"|get_lang }}</button>
                             </form>
-                            <p class="description">{{ 'IsThisWhatYouWereLookingFor'|get_lang }}</p>
+                            <p class="text">{{ 'IsThisWhatYouWereLookingFor'|get_lang }}</p>
                             <form id="save_profile_form_button" class="form-search">
-                                <input class="btn btn-default btn-block" type="submit" value="{{ "SaveThisSearch"|get_lang }}">
+                                <button class="btn btn-default btn-block" type="submit"><i class="fa fa-floppy-o"></i> {{ "SaveThisSearch"|get_lang }}</button>
+
                             </form>
                         </div>
                         <!-- END SEARCH PROFILE-->
@@ -533,7 +536,7 @@ $(document).ready(function() {
                     </div>
                 </div>
             </div>
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
                             {{ 'DisplayOptions' | get_lang }}
@@ -541,7 +544,7 @@ $(document).ready(function() {
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
+                            <p class="text">{{ 'ChooseABackgroundColor' | get_lang }}</p>
                             <ul>
                                 <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
                                 <li><a href="#" id="black">{{ 'Black' | get_lang }}</a></li>
@@ -552,7 +555,7 @@ $(document).ready(function() {
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
                         <a data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
                             {{ "Legend"|get_lang }}
@@ -560,8 +563,8 @@ $(document).ready(function() {
                     </div>
                     <div id="collapseFour" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
-                            <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
+                            <p class="text"><span class="skill-legend-add">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
+                            <p class="text"><span class="skill-legend-search">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
                         </div>
                     </div>
                 </div>

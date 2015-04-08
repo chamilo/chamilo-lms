@@ -2502,7 +2502,7 @@ class UserManager
                   LEFT JOIN $tbl_session_category session_category
                   ON (session_category_id = session_category.id)
                   LEFT JOIN $tbl_session_course_user as session_rel_course_user
-                  ON (session_rel_course_user.id_session = session.id)
+                  ON (session_rel_course_user.session_id = session.id)
               WHERE (
                     session_rel_course_user.id_user = $user_id OR
                     session.id_coach = $user_id
@@ -2754,18 +2754,18 @@ class UserManager
                         category_code user_course_cat,
                         date_start,
                         date_end,
-                        session.id as id_session,
+                        session.id as session_id,
                         session.name as session_name
                     FROM $tbl_session_course_user as session_course_user
                         INNER JOIN $tbl_course AS course
-                            ON course.code = session_course_user.course_code
+                            ON course.id = session_course_user.c_id
                         INNER JOIN $tbl_session as session
-                            ON session.id = session_course_user.id_session
+                            ON session.id = session_course_user.session_id
                         LEFT JOIN $tbl_user as user
                             ON user.user_id = session_course_user.id_user OR session.id_coach = user.user_id
                     WHERE
-                        session_course_user.id_session = $id_session AND (
-                            (session_course_user.id_user = $user_id AND session_course_user.status = 2)
+                        session_course_user.session_id = $id_session AND (
+                            (session_course_user.user_id = $user_id AND session_course_user.status = 2)
                             OR session.id_coach = $user_id
                         )
                     ORDER BY i";
@@ -2773,7 +2773,7 @@ class UserManager
 
                 while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                     $result_row['course_info'] = api_get_course_info($result_row['code']);
-                    $key = $result_row['id_session'].' - '.$result_row['code'];
+                    $key = $result_row['session_id'].' - '.$result_row['code'];
                     $personal_course_list[$key] = $result_row;
                 }
             }
@@ -2797,13 +2797,13 @@ class UserManager
                 category_code user_course_cat,
                 date_start,
                 date_end,
-                session.id as id_session,
+                session.id as session_id,
                 session.name as session_name,
                 IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
             FROM $tbl_session_course_user as session_course_user
                 INNER JOIN $tbl_course AS course
-                ON course.code = session_course_user.course_code AND session_course_user.id_session = $session_id
-                INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
+                ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
+                INNER JOIN $tbl_session as session ON session_course_user.session_id = session.id
                 LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
             WHERE session_course_user.id_user = $user_id
             ORDER BY i";
@@ -2812,7 +2812,7 @@ class UserManager
 
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                 $result_row['course_info'] = api_get_course_info($result_row['code']);
-                $key = $result_row['id_session'].' - '.$result_row['code'];
+                $key = $result_row['session_id'].' - '.$result_row['code'];
                 if (!isset($personal_course_list[$key])) {
                     $personal_course_list[$key] = $result_row;
                 }
@@ -2861,13 +2861,13 @@ class UserManager
                     c.visibility, c.id as real_id
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
-                ON (scu.id_session = sc.id_session AND scu.c_id = sc.c_id)
+                ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
                 INNER JOIN $tableCourse as c
                 ON (scu.c_id = c.id)
                 $join_access_url
                 WHERE
-                    scu.id_user = $user_id AND
-                    scu.id_session = $session_id
+                    scu.user_id = $user_id AND
+                    scu.session_id = $session_id
                     $where_access_url
                 ORDER BY sc.position ASC";
 
@@ -2888,9 +2888,9 @@ class UserManager
                         c.visibility, c.id as real_id
                     FROM $tbl_session_course_user as scu
                     INNER JOIN $tbl_session as s
-                    ON (scu.id_session = s.id)
+                    ON (scu.session_id = s.id)
                     INNER JOIN $tbl_session_course sc
-                    ON (scu.id_session = sc.id_session AND scu.c_id = sc.c_id)
+                    ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)
                     INNER JOIN $tableCourse as c
                     ON (scu.c_id = c.id)
                     $join_access_url
@@ -4317,7 +4317,7 @@ class UserManager
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user sru ON (sru.id_user = u.user_id)
                         WHERE
-                            sru.id_session IN (
+                            sru.session_id IN (
                                 SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
                                 $tbl_session_rel_access_url
                                 WHERE access_url_id = ".api_get_current_access_url_id()."
@@ -4327,7 +4327,7 @@ class UserManager
                                     INNER JOIN $tbl_session_rel_access_url url
                                     ON (url.session_id = s.id)
                                     INNER JOIN $tbl_session_rel_course_rel_user scu
-                                    ON (scu.id_session = s.id)
+                                    ON (scu.session_id = s.id)
                                     WHERE access_url_id = ".api_get_current_access_url_id()."
                                     $sessionConditionsTeacher
                                 )

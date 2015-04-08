@@ -115,24 +115,25 @@ $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();
 if ($ajax_search) {
 
-    $sql="SELECT course.id, code, title, visual_code, id_session
+    $sql="SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
-				ON course.id = session_rel_course.c_id
-				AND session_rel_course.id_session = ".intval($sessionId)."
+				ON
+				    course.id = session_rel_course.c_id AND
+				    session_rel_course.session_id = ".intval($sessionId)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT course.id, code, title, visual_code, id_session
+            $sql="SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
 			INNER JOIN $tbl_session_rel_course session_rel_course
 				ON course.id = session_rel_course.c_id
-				AND session_rel_course.id_session = ".intval($sessionId)."
+				AND session_rel_course.session_id = ".intval($sessionId)."
 				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
-				WHERE access_url_id = $access_url_id
+            WHERE access_url_id = $access_url_id
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
         }
     }
@@ -144,25 +145,26 @@ if ($ajax_search) {
         $sessionCourses[$course['id']] = $course ;
     }
 } else {
-    $sql = "SELECT course.id, code, title, visual_code, id_session
+    $sql = "SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
 			LEFT JOIN $tbl_session_rel_course session_rel_course
             ON
                 course.id = session_rel_course.c_id AND
-                session_rel_course.id_session = ".intval($sessionId)."
+                session_rel_course.session_id = ".intval($sessionId)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1){
-            $sql="SELECT course.id, code, title, visual_code, id_session
+            $sql="SELECT course.id, code, title, visual_code, session_id
 				FROM $tbl_course course
 				LEFT JOIN $tbl_session_rel_course session_rel_course
                 ON
                     course.id = session_rel_course.c_id AND
-                    session_rel_course.id_session = ".intval($sessionId)."
-				INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.c_id = course.id)
+                    session_rel_course.session_id = ".intval($sessionId)."
+				INNER JOIN $tbl_course_rel_access_url url_course
+				ON (url_course.c_id = course.id)
 				WHERE access_url_id = $access_url_id
 				ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
         }

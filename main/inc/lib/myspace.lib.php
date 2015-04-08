@@ -1591,7 +1591,7 @@ class MySpace
         $sql = "SELECT * FROM $tbl_course AS c
                 INNER JOIN $tbl_session_rel_course AS sc
                 ON sc.course_code = c.code
-                WHERE sc.id_session = '".$session_id."';";
+                WHERE sc.session_id = '".$session_id."';";
         $result = Database::query($sql);
         while ($row = Database::fetch_object($result)) {
             $courseCode = $row->code;
@@ -1605,7 +1605,7 @@ class MySpace
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_session_rel_course_rel_user AS scu
                     ON u.user_id = scu.id_user
-                    WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$courseCode."';";
+                    WHERE scu.session_id = '".$session_id."' AND scu.course_code = '".$courseCode."';";
             $result_users = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1751,7 +1751,7 @@ class MySpace
             $sql = "SELECT * FROM $tbl_course AS c
                     INNER JOIN $tbl_session_rel_course AS sc
                     ON sc.course_code = c.code
-                    WHERE sc.id_session = '".$session_id."';";
+                    WHERE sc.session_id = '".$session_id."';";
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
                 $courseInfo = api_get_course_info($row->code);
@@ -1763,7 +1763,7 @@ class MySpace
                 $sql = "SELECT user_id FROM $tbl_user AS u
                         INNER JOIN $tbl_session_rel_course_rel_user AS scu
                         ON u.user_id = scu.id_user
-                        WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$row->code."';";
+                        WHERE scu.session_id = '".$session_id."' AND scu.course_code = '".$row->code."';";
                 $result_users = Database::query($sql);
                 $time_spent = 0;
                 $progress = 0;
@@ -2305,7 +2305,7 @@ class MySpace
             $sql_select = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
                             ON (rel.id_user=u.user_id)
                             WHERE
-                                rel.id_session='$id_session' AND
+                                rel.session_id='$id_session' AND
                                 u.status='5' AND
                                 u.username ='$username' AND
                                 rel.course_code='$enreg_course'";

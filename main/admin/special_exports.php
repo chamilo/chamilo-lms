@@ -232,15 +232,16 @@ function fullexportspecial(){
             while ($rows_course_file = Database::fetch_assoc($query)) {
                 $rows_course_file['path'];
                 $zip_folder->add($FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
-                                 PCLZIP_OPT_ADD_PATH, $_course['directory'],
-                                 PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory']."/document".$FileZip['PATH_REMOVE']
-                                );
+                    PCLZIP_OPT_ADD_PATH, $_course['directory'],
+                    PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory']."/document".$FileZip['PATH_REMOVE']
+                );
             }
             //Add tem to the zip file session course
             $code_course = $_course['code'];
-            $sql_session = "SELECT id, name, course_code FROM $tbl_session_course
-                INNER JOIN  $tbl_session ON id_session = id
-                WHERE course_code = '$code_course' ";
+            $sql_session = "SELECT id, name, c_id
+                            FROM $tbl_session_course
+                            INNER JOIN $tbl_session ON session_id = id
+                            WHERE course_code = '$code_course' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];
@@ -255,21 +256,22 @@ function fullexportspecial(){
                 $query_session_doc = Database::query($sql_session_doc);
                 while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
                     $zip_folder->add($FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],
-                                     PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$rows_session['name'],
-                                     PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$FileZip['PATH_REMOVE']
-                                    );
+                         PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$rows_session['name'],
+                         PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$FileZip['PATH_REMOVE']
+                     );
                 }
             }
         }
+
         $name = rename_zip($FileZip);
-        if($name === false){
+        if ($name === false){
             $export = false;
             return false;
-        }else{
+        } else {
             $export = true;
             return $name;
         }
-    }else{
+    } else {
         Display::display_error_message(get_lang('ErrorMsgSpecialExport')); //main API
         $export = false;
         return false;

@@ -2389,7 +2389,7 @@ function api_get_coachs_from_course($session_id = 0, $courseId = '')
             FROM $tbl_user u, $tbl_session_course_user scu
             WHERE
               u.user_id = scu.id_user AND
-              scu.id_session = '$session_id' AND
+              scu.session_id = '$session_id' AND
               scu.c_id = '$courseId' AND
               scu.status = 2";
     $rs = Database::query($sql);
@@ -2710,12 +2710,12 @@ function api_is_course_session_coach($user_id, $course_code, $session_id)
     $sql = "SELECT DISTINCT id
             FROM $session_table
             INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-            ON session.id = session_rc_ru.id_session
+            ON session.id = session_rc_ru.session_id
             WHERE
                 session_rc_ru.id_user = '".$user_id."'  AND
                 session_rc_ru.course_code = '$course_code' AND
                 session_rc_ru.status = 2 AND
-                session_rc_ru.id_session = '$session_id'";
+                session_rc_ru.session_id = '$session_id'";
     $result = Database::query($sql);
     return Database::num_rows($result) > 0;
 }
@@ -2756,11 +2756,11 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
         $sql = "SELECT DISTINCT s.id, name, date_start, date_end
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session_rc_ru.id_session = s.id AND session_rc_ru.id_user = '".$userId."'
+                ON session_rc_ru.session_id = s.id AND session_rc_ru.id_user = '".$userId."'
                 WHERE
                     session_rc_ru.c_id = '$courseId' AND
                     session_rc_ru.status = 2 AND
-                    session_rc_ru.id_session = '$session_id'";
+                    session_rc_ru.session_id = '$session_id'";
         $result = Database::query($sql);
         $sessionIsCoach = Database::store_result($result);
     }
@@ -3490,8 +3490,8 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0)
                 c_id = $course_id AND
                 tool = '$tool' AND
                 ref = $id AND
-                (id_session = $session OR id_session = 0)
-            ORDER BY id_session DESC, lastedit_date DESC
+                (session_id = $session OR session_id = 0)
+            ORDER BY session_id DESC, lastedit_date DESC
             LIMIT 1";
 
     $res = Database::query($sql);
@@ -3552,7 +3552,7 @@ function api_item_property_delete(
                 c_id = $courseId AND
                 tool  = '$tool' AND
                 ref = $itemId AND
-                id_session = $sessionId
+                session_id = $sessionId
                 $userCondition
                 $groupCondition
             ";
@@ -3644,7 +3644,7 @@ function api_item_property_update(
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
     $condition_session = '';
     if (!empty($session_id)) {
-        $condition_session = " AND id_session = '$session_id' ";
+        $condition_session = " AND session_id = '$session_id' ";
     }
 
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
@@ -3680,12 +3680,12 @@ function api_item_property_update(
             $visibility = '2';
             if (!empty($session_id)) {
                 // Check whether session id already exist into itemp_properties for updating visibility or add it.
-                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
+                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
                             ref='$item_id' AND
-                            id_session = '$session_id'";
+                            session_id = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3693,10 +3693,10 @@ function api_item_property_update(
                                 lastedit_date       = '$time',
                                 lastedit_user_id    = '$user_id',
                                 visibility          = '$visibility',
-                                id_session          = '$session_id' $set_type
+                                session_id          = '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";
                 }
             } else {
@@ -3713,12 +3713,12 @@ function api_item_property_update(
             $visibility = '1';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it.
-                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
+                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
                             ref = '$item_id' AND
-                            id_session = '$session_id'";
+                            session_id = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3727,10 +3727,10 @@ function api_item_property_update(
                                 lastedit_date='$time',
                                 lastedit_user_id = '$user_id',
                                 visibility='$visibility',
-                                id_session = '$session_id' $set_type
+                                session_id = '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
                 }
             } else {
@@ -3747,12 +3747,12 @@ function api_item_property_update(
             $visibility = '0';
             if (!empty($session_id)) {
                 // Check whether session id already exist into item_properties for updating visibility or add it
-                $sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY
+                $sql = "SELECT session_id FROM $TABLE_ITEMPROPERTY
                         WHERE
                             c_id = $course_id AND
                             tool = '$tool' AND
                             ref='$item_id' AND
-                            id_session = '$session_id'";
+                            session_id = '$session_id'";
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3761,10 +3761,10 @@ function api_item_property_update(
                                 lastedit_date = '$time',
                                 lastedit_user_id='$user_id',
                                 visibility = '$visibility',
-                                id_session = '$session_id' $set_type
+                                session_id = '$session_id' $set_type
                             WHERE $filter";
                 } else {
-                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+                    $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
                 }
             } else {
@@ -3790,7 +3790,7 @@ function api_item_property_update(
     $result = Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows($result) == 0) {
-        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, id_session)
+        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
         $res = Database::query($sql);
         if (!$res) {
@@ -3814,7 +3814,7 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $session_id = intval($session_id);
-    $session_condition = ' AND id_session = '.$session_id;
+    $session_condition = ' AND session_id = '.$session_id;
     $course_id = $course_info['real_id'];
 
     $sql = "SELECT * FROM $item_property_table
@@ -3853,7 +3853,7 @@ function api_get_item_property_list_by_tool_by_user(
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_condition = ' AND id_session = '.$session_id;
+    $session_condition = ' AND session_id = '.$session_id;
     $sql = "SELECT * FROM $item_property_table
             WHERE
                 insert_user_id = $userId AND
@@ -3978,7 +3978,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
                 c_id = $course_id AND
                 tool = '$tool' AND
                 ref = $ref AND
-                id_session = $session_id ";
+                session_id = $session_id ";
 
     $rs  = Database::query($sql);
     $row = array();
@@ -5440,7 +5440,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                 FROM
                     $tbl_session as session
                 INNER JOIN $tbl_session_course
-                    ON session_rel_course.id_session = session.id
+                    ON session_rel_course.session_id = session.id
                     AND session_rel_course.course_code = '$cid'
                 LIMIT 1";
 

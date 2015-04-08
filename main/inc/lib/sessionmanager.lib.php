@@ -285,7 +285,7 @@ class SessionManager
                       ";
 
             $extraJoin = " INNER JOIN $tbl_session_rel_user sru
-                            ON sru.id_session = s.id ";
+                            ON sru.session_id = s.id ";
         }
 
         $today = api_get_utc_datetime();
@@ -314,7 +314,7 @@ class SessionManager
         if (strpos($where_condition, 'c.id')) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.session_id)
                                  INNER JOIN $tableCourse c ON (course_rel_session.c_id = c.id)
                                 ";
         }
@@ -401,7 +401,7 @@ class SessionManager
                       ";
 
             $extraJoin = " INNER JOIN $tbl_session_rel_user sru
-                            ON sru.id_session = s.id ";
+                            ON sru.session_id = s.id ";
         }
 
         if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
@@ -436,7 +436,7 @@ class SessionManager
         if (strpos($options['where'], 'c.id')) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.id_session)
+            $courseCondition = " INNER JOIN $table course_rel_session ON (s.id = course_rel_session.session_id)
                                  INNER JOIN $tableCourse c ON (course_rel_session.c_id = c.id)
                                 ";
         }
@@ -871,7 +871,7 @@ class SessionManager
             $queryVariables[] = $sessionId;
             $sql = "SELECT
                       u.user_id, u.lastname, u.firstname, u.username,
-                      u.email, s.c_id, s.id_session
+                      u.email, s.c_id, s.session_id
                     FROM $session_course_user s
                     INNER JOIN $user u
                     ON u.user_id = s.id_user
@@ -879,7 +879,7 @@ class SessionManager
         } else {
             $sql = "SELECT
                         u.user_id, u.lastname, u.firstname, u.username,
-                        u.email, s.c_id, s.id_session
+                        u.email, s.c_id, s.session_id
                     FROM $session_course_user s
                     INNER JOIN $user u ON u.user_id = s.id_user
                     $where $order $limit";
@@ -2520,7 +2520,7 @@ class SessionManager
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
-				LEFT JOIN $session_course_table sco ON (sco.id_session = s.id)
+				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
 				INNER JOIN $course_table c ON sco.c_id = c.id
 				WHERE ar.access_url_id = $access_url_id ";
 
@@ -2753,7 +2753,7 @@ class SessionManager
             if (api_is_multiple_url_enabled()) {
                 $sql = "SELECT id_session
                         FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session)
+                        INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.session_id)
                         WHERE
                             id_user = $userId AND
                             relation_type=" . SESSION_RELATION_TYPE_RRHH . " AND
@@ -2816,11 +2816,11 @@ class SessionManager
         $select = " SELECT * ";
         if (api_is_multiple_url_enabled()) {
             $sql = " $select FROM $tbl_session s
-                    INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
+                    INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
                     WHERE
                         sru.id_user = '$userId' AND
-                        sru.id_session = '$sessionId' AND
+                        sru.session_id = '$sessionId' AND
                         sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "' AND
                         access_url_id = " . api_get_current_access_url_id() . "
                         ";
@@ -2828,9 +2828,9 @@ class SessionManager
             $sql = "$select FROM $tbl_session s
                      INNER JOIN $tbl_session_rel_user sru
                      ON
-                        sru.id_session = s.id AND
+                        sru.session_id = s.id AND
                         sru.id_user = '$userId' AND
-                        sru.id_session = '$sessionId' AND
+                        sru.session_id = '$sessionId' AND
                         sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'
                         ";
         }
@@ -2941,7 +2941,7 @@ class SessionManager
 
         switch ($status) {
             case DRH:
-                $sessionQuery = "SELECT sru.id_session
+                $sessionQuery = "SELECT sru.session_id
                                  FROM
                                  $tbl_session_rel_user sru
                                  WHERE
@@ -2950,14 +2950,14 @@ class SessionManager
                 break;
             case COURSEMANAGER:
                 $courseSessionQuery = "
-                    SELECT scu.id_session as id
+                    SELECT scu.session_id as id
                     FROM $tbl_session_rel_course_rel_user scu
                     WHERE (scu.status = 2 AND scu.id_user = $userId)";
 
                 $whereConditions = " OR (s.id_coach = $userId) ";
                 break;
             default:
-                $sessionQuery = "SELECT sru.id_session
+                $sessionQuery = "SELECT sru.session_id
                                  FROM
                                  $tbl_session_rel_user sru
                                  WHERE
@@ -3040,7 +3040,7 @@ class SessionManager
         $sql = "SELECT *, c.id as real_id FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
-		        WHERE src.id_session = '$session_id' ";
+		        WHERE src.session_id = '$session_id' ";
 
         if (!empty($course_name)) {
             $course_name = Database::escape_string($course_name);
@@ -3132,7 +3132,7 @@ class SessionManager
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
 		        WHERE
-		            src.id_session IN ($sessionsSQL)
+		            src.session_id IN ($sessionsSQL)
 		            $keywordCondition
 		        ";
         if ($getCount) {
@@ -3178,7 +3178,7 @@ class SessionManager
         $sql = "SELECT * FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
-		        WHERE src.id_session LIKE '$session_id'";
+		        WHERE src.session_id LIKE '$session_id'";
         if (!empty($course_name)) {
             $sql .= " AND UPPER(c.title) LIKE UPPER('%$course_name%') ";
         }
@@ -3213,7 +3213,7 @@ class SessionManager
                 FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.id = src.c_id
-		        WHERE src.id_session = '$session_id' ";
+		        WHERE src.session_id = '$session_id' ";
 
         $keywordCondition = null;
         if (!empty($keyword)) {
@@ -3287,7 +3287,7 @@ class SessionManager
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
                 ON u.user_id = $tbl_session_rel_user.id_user AND
-                $tbl_session_rel_user.id_session = $id
+                $tbl_session_rel_user.session_id = $id
                 LEFT OUTER JOIN $table_access_url_user uu
                 ON (uu.user_id = u.user_id)
                 ";
@@ -3368,7 +3368,7 @@ class SessionManager
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE
                     session_rcru.id_user = user.user_id AND
-                    session_rcru.id_session = '" . intval($session_id) . "' AND
+                    session_rcru.session_id = '" . intval($session_id) . "' AND
                     session_rcru.c_id ='" . intval($courseId) . "' AND
                     user.user_id = " . intval($user_id);
 
@@ -3400,7 +3400,7 @@ class SessionManager
         $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE session_rcru.id_user = user.user_id AND
-                    session_rcru.id_session = '" . intval($session_id) . "' AND
+                    session_rcru.session_id = '" . intval($session_id) . "' AND
                     session_rcru.c_id ='" . intval($courseId) . "' AND
                     user.user_id = " . intval($user_id);
         $result = Database::query($sql);
@@ -3673,7 +3673,7 @@ class SessionManager
         $courseId = intval($courseId);
         $sql = "SELECT name, s.id
                 FROM $table_session_course sc
-                INNER JOIN $table_session s ON (sc.id_session = s.id)
+                INNER JOIN $table_session s ON (sc.session_id = s.id)
                 WHERE sc.c_id = '$courseId' ";
         $result = Database::query($sql);
 
@@ -4599,8 +4599,8 @@ class SessionManager
         $sql = "$masterSelect (
                 ($select
                 FROM $tbl_session s
-                    INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.id_session)
-                    INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
+                    INNER JOIN $tbl_session_rel_course_rel_user su ON (s.id = su.session_id)
+                    INNER JOIN $tbl_user u ON (u.user_id = su.user_id)
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)
                     $where
                     $sessionConditions
@@ -4887,7 +4887,7 @@ class SessionManager
                 $sql = "SELECT DISTINCT(cu.user_id) FROM $course c
                         INNER JOIN $sessionCourse src ON c.id = src.c_id
                         INNER JOIN $courseUser cu ON (cu.c_id = c.id)
-		                WHERE src.id_session IN ('$sessionToString') AND cu.status = 1";
+		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
                 $result = Database::query($sql);
                 $teacherListId = array();
                 while($row = Database::fetch_array($result, 'ASSOC')) {
@@ -5473,7 +5473,7 @@ class SessionManager
                 FROM $courseTable c
                 INNER JOIN $sessionRelCourseTable src
                 ON c.id = src.c_id
-                WHERE src.id_session = $sessionId
+                WHERE src.session_id = $sessionId
                 AND c.code = '$courseCode'  ";
 
         $result = Database::query($sql);
@@ -5592,7 +5592,7 @@ class SessionManager
         $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status "
             . "FROM session_rel_course_rel_user scu "
             . "INNER JOIN user u ON scu.id_user = u.user_id "
-            . "WHERE scu.id_session = " . intval($sessionId) . " "
+            . "WHERE scu.session_id = " . intval($sessionId) . " "
             . "GROUP BY u.user_id";
 
         $result = Database::query($sql);
@@ -5796,7 +5796,7 @@ class SessionManager
                 }
                 // Query used to find course-coaches from sessions
                 $sql = "SELECT
-                        scu.id_session AS session_id,
+                        scu.session_id,
                         c.id AS course_id,
                         c.code AS course_code,
                         c.title AS course_title,
@@ -5806,8 +5806,8 @@ class SessionManager
                     FROM $courseTable c
                     INNER JOIN $sessionCourseUserTable scu ON c.id = scu.c_id
                     INNER JOIN $userTable u ON scu.id_user = u.user_id
-                    WHERE scu.status = 2 AND scu.id_session IN $sessionIdsString
-                    ORDER BY scu.id_session ASC ";
+                    WHERE scu.status = 2 AND scu.session_id IN $sessionIdsString
+                    ORDER BY scu.session_id ASC ";
                 $res = Database::query($sql);
                 $sessionCourseList = Database::store_result($res, 'ASSOC');
                 // Check if course list had result

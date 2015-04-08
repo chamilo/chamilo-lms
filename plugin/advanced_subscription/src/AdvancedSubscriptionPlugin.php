@@ -222,8 +222,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $now;
         $extra = new ExtraFieldValue('session');
         $joinSessionTable = Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su INNER JOIN ' .
-            Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.id_session';
-        $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.id_user = ?';
+            Database::get_main_table(TABLE_MAIN_SESSION) . ' s ON s.id = su.session_id';
+        $whereSessionParams = 'su.relation_type = ? AND s.date_start >= ? AND su.user_id = ?';
         $whereSessionParamsValues = array(
             0,
             $newYearDate->format('Y-m-d'),
@@ -1315,7 +1315,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $sql = "SELECT s.id FROM session AS s "
             . "INNER JOIN session_field_values AS sfv ON s.id = sfv.session_id "
             . "INNER JOIN session_field AS sf ON sfv.field_id = sf.id "
-            . "INNER JOIN session_rel_user AS su ON s.id = su.id_session "
+            . "INNER JOIN session_rel_user AS su ON s.id = su.session_id "
             . "WHERE sf.field_variable = 'is_induccion_session' "
             . "AND su.relation_type = 0 "
             . "AND su.id_user = " . intval($userId);

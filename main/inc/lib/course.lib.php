@@ -445,7 +445,7 @@ class CourseManager
 
             // Delete in table session_rel_course_rel_user
             $sql = "DELETE FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE   id_session ='" . $session_id . "' AND
+                    WHERE   session_id ='" . $session_id . "' AND
                             c_id = '" . $course_id . "' AND
                             id_user IN ($user_ids)";
             Database::query($sql);
@@ -453,7 +453,7 @@ class CourseManager
             foreach ($user_list as $uid) {
                 // check if a user is register in the session with other course
                 $sql = "SELECT id_user FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                        WHERE id_session='$session_id' AND id_user='$uid'";
+                        WHERE session_id='$session_id' AND id_user='$uid'";
                 $rs = Database::query($sql);
 
                 if (Database::num_rows($rs) == 0) {
@@ -486,7 +486,7 @@ class CourseManager
             // number of users by session and course
             $sql = "UPDATE " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE) . "
                     SET nbr_users = '$count'
-                    WHERE id_session = '$session_id' AND c_id = '$course_id'";
+                    WHERE session_id = '$session_id' AND c_id = '$course_id'";
             Database::query($sql);
 
         } else {
@@ -1162,7 +1162,7 @@ class CourseManager
         // A user?
         if (Database::num_rows(Database::query("SELECT id_user
                     FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE id_session='" . $session_id . "'
+                    WHERE session_id='" . $session_id . "'
                     AND id_user='$user_id'"))
         ) {
             return true;
@@ -1171,7 +1171,7 @@ class CourseManager
         // A course coach?
         if (Database::num_rows(Database::query("SELECT id_user
                     FROM " . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . "
-                    WHERE id_session='" . $session_id . "'
+                    WHERE session_id='" . $session_id . "'
                     AND id_user = '$user_id' AND status = 2
                     AND course_code='$course_code'"))
         ) {
@@ -1260,7 +1260,7 @@ class CourseManager
             $sql = 'SELECT DISTINCT
                         user.user_id,
                         session_course_user.status as status_session,
-                        id_session,
+                        session_id,
                         user.*,
                         course.*,
                         session.name as session_name
@@ -1269,10 +1269,10 @@ class CourseManager
                 $sql = " SELECT COUNT(user.user_id) as count";
             }
 
-            $sessionCondition = " session_course_user.id_session = $session_id";
+            $sessionCondition = " session_course_user.session_id = $session_id";
             if (!empty($sessionIdList)) {
                 $sessionIdListTostring = implode("','", array_map('intval', $sessionIdList));
-                $sessionCondition = " session_course_user.id_session IN ('$sessionIdListTostring') ";
+                $sessionCondition = " session_course_user.session_id IN ('$sessionIdListTostring') ";
             }
 
             $courseCondition = " course.code = '".$course_code."' AND ";
@@ -1289,7 +1289,7 @@ class CourseManager
                         $courseCondition
                         $sessionCondition
                         INNER JOIN $course_table course ON session_course_user.c_id = course.id
-                        INNER JOIN $sessionTable session ON session_course_user.id_session = session.id
+                        INNER JOIN $sessionTable session ON session_course_user.session_id = session.id
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
 
@@ -1429,7 +1429,7 @@ class CourseManager
                     $user_info['status_session'] = $user['status_session'];
                 }
 
-                $sessionId = isset($user['id_session']) ? $user['id_session'] : 0;
+                $sessionId = isset($user['session_id']) ? $user['session_id'] : 0;
                 $course_code = isset($user['code']) ? $user['code'] : null;
 
                 if ($add_reports) {
@@ -1623,7 +1623,7 @@ class CourseManager
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . ' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.c_id = "' . $courseId . '"
-                      AND session_course_user.id_session  = ' . $session_id;
+                      AND session_course_user.session_id  = ' . $session_id;
 
             $where[] = ' session_course_user.c_id IS NOT NULL ';
         } else {
@@ -1677,7 +1677,7 @@ class CourseManager
 
         // We get the coach for the given course in a given session.
         $sql = 'SELECT id_user FROM ' . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) .
-               ' WHERE id_session="' . $session_id . '" AND c_id="' . $courseId . '" AND status = 2';
+               ' WHERE session_id ="' . $session_id . '" AND c_id="' . $courseId . '" AND status = 2';
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $user_info = api_get_user_info($user['id_user']);
@@ -1771,7 +1771,7 @@ class CourseManager
             }
 
             if ($session_id != 0) {
-                $sql_query .= ' AND scu.id_session = ' . $session_id;
+                $sql_query .= ' AND scu.session_id = ' . $session_id;
             }
 
             if (!$includeInvitedUsers) {
@@ -1888,7 +1888,7 @@ class CourseManager
                 FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE
                     u.user_id = scu.id_user AND
-                    scu.id_session = '$session_id' AND
+                    scu.session_id = '$session_id' AND
                     scu.c_id = '$courseId' AND
                     scu.status = 2";
         $rs = Database::query($sql);
@@ -2573,14 +2573,14 @@ class CourseManager
 
         if (!empty($with_special_courses)) {
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
-                        FROM    " . $tbl_course_user . " course_rel_user
-                        LEFT JOIN " . $tbl_course . " course
-                        ON course.id = course_rel_user.c_id
-                        LEFT JOIN " . $tbl_user_course_category . " user_course_category
-                        ON course_rel_user.user_course_cat = user_course_category.id
-                        WHERE  $with_special_courses
-                        GROUP BY course.code
-                        ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+                    FROM    " . $tbl_course_user . " course_rel_user
+                    LEFT JOIN " . $tbl_course . " course
+                    ON course.id = course_rel_user.c_id
+                    LEFT JOIN " . $tbl_user_course_category . " user_course_category
+                    ON course_rel_user.user_course_cat = user_course_category.id
+                    WHERE  $with_special_courses
+                    GROUP BY course.code
+                    ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
             $rs_special_course = Database::query($sql);
             if (Database::num_rows($rs_special_course) > 0) {
                 while ($result_row = Database::fetch_array($rs_special_course)) {
@@ -2700,7 +2700,7 @@ class CourseManager
         $sql = "SELECT id_user
                 FROM $tbl_session_course_user
                 WHERE
-                    id_session = '$session_id' AND
+                    session_id = '$session_id' AND
                     c_id = '$courseId' AND
                     status = 2
                 ";
@@ -3284,7 +3284,7 @@ class CourseManager
                 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $orderBy = ' ORDER BY position';
                 $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                    ON (c.code = src.course_code AND id_session = $sessionId) ";
+                                    ON (c.code = src.course_code AND session_id = $sessionId) ";
             }
         }
 

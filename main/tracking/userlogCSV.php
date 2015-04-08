@@ -67,7 +67,7 @@ $now = api_get_utc_datetime();
 $sql = "SELECT 1
         FROM $tbl_session_course_user AS session_course_user
         INNER JOIN $tbl_session AS session
-            ON session_course_user.id_session = session.id
+            ON session_course_user.session_id = session.id
             AND ((date_start <= '$now'
             AND date_end >= '$now')
             OR (date_start='0000-00-00' AND date_end='0000-00-00'))

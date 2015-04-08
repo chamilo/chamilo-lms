@@ -126,7 +126,7 @@ class AnnouncementEmail
                     c_id = $course_id AND
                     tool = '$tool' AND
                     ref = $id AND
-                    id_session = {$this->session_id} ";
+                    session_id = {$this->session_id} ";
         $rs = Database::query($sql);
 
         while ($row = Database::fetch_array($rs, 'ASSOC')) {

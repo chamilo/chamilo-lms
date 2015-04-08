@@ -43,9 +43,9 @@ if ($action == 'delete') {
 		}
 		$idChecked = $my_temp;
 		$idChecked="'".implode("','", $idChecked)."'";
-		$result = Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND c_id IN($idChecked)");
+		$result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
 		$nbr_affected_rows=Database::affected_rows($result);
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND c_id IN($idChecked)");
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id IN($idChecked)");
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
@@ -56,7 +56,7 @@ $limit  = 20;
 $from   = $page * $limit;
 
 $sql = "SELECT code, title, nbr_users FROM $tbl_session_rel_course, $tbl_course
-		WHERE c_id = id AND id_session='$id_session'
+		WHERE c_id = id AND session_id='$id_session'
 		ORDER BY $sort LIMIT $from,".($limit+1);
 $result=Database::query($sql);
 $Courses=Database::store_result($result);

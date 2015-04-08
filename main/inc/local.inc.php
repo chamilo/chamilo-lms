@@ -1062,10 +1062,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 // Session coach, session admin or course coach admin
                 $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                         FROM $tbl_session session, $tbl_session_course_user session_rcru
-                        WHERE  session_rcru.id_session  = session.id AND
-                               session_rcru.course_code = '$_cid' AND
+                        WHERE  session_rcru.session_id  = session.id AND
+                               session_rcru.c_id = '$_cid' AND
                                session_rcru.id_user     = '$user_id' AND
-                               session_rcru.id_session  = $session_id AND
+                               session_rcru.session_id  = $session_id AND
                                session_rcru.status      = 2
                         ";
 
@@ -1084,7 +1084,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     // Am I a session coach for this session?
                     $sql = "SELECT id, id_coach FROM $tbl_session session ".
                            "INNER JOIN $tbl_session_course sc ".
-                           "ON sc.id_session = session.id ".
+                           "ON sc.session_id = session.id ".
                            "WHERE session.id = $session_id ".
                            "AND session.id_coach = $user_id ".
                            "AND sc.course_code = '$_cid'";
@@ -1102,7 +1102,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                "FROM $tbl_session_course_user cu ".
                                "WHERE   course_code = '$_cid' AND ".
                                " cu.id_user     = '".$user_id."' AND ".
-                               " cu.id_session  = '".$session_id."' ".
+                               " cu.session_id  = '".$session_id."' ".
                                "LIMIT 1";
                         $result = Database::query($sql);
 

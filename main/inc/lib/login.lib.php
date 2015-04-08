@@ -560,10 +560,10 @@ class Login
                         //Session coach, session admin, course coach admin
                         $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                 		FROM $tbl_session session, $tbl_session_course_user session_rcru
-					    WHERE  session_rcru.id_session  = session.id AND
+					    WHERE  session_rcru.session_id  = session.id AND
 					           session_rcru.course_code = '$_cid' AND
 					           session_rcru.id_user     = '$user_id' AND
-                               session_rcru.id_session  = $session_id AND
+                               session_rcru.session_id  = $session_id AND
 					           session_rcru.status      = 2";
 
                         $result = Database::query($sql);

@@ -44,9 +44,9 @@ if (is_array($idChecked)) {
 
 $sql = "SELECT s.name, c.title
         FROM $tbl_session_rel_course src
-		INNER JOIN $tbl_session s ON s.id = src.id_session
+		INNER JOIN $tbl_session s ON s.id = src.session_id
 		INNER JOIN $tbl_course c ON c.id = src.c_id
-		WHERE src.id_session='$id_session' AND src.c_id='$courseId' ";
+		WHERE src.session_id='$id_session' AND src.c_id='$courseId' ";
 
 $result = Database::query($sql);
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
@@ -62,11 +62,11 @@ switch ($action) {
         }
         if (!empty($idChecked)) {
             $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                    WHERE id_session='$id_session' AND c_id='".$courseId."' AND id_user IN($idChecked)";
+                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND id_user IN($idChecked)";
             $result = Database::query($sql);
             $nbr_affected_rows = Database::affected_rows($result);
             $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
-                    WHERE id_session='$id_session' AND c_id='".$courseId."'";
+                    WHERE session_id='$id_session' AND c_id='".$courseId."'";
             Database::query($sql);
         }
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
@@ -88,7 +88,7 @@ $sql = "SELECT DISTINCT
          FROM $tbl_session_rel_user s
          INNER JOIN $tbl_user u ON (u.user_id=s.user_id)
          LEFT JOIN $tbl_session_rel_course_rel_user scru
-         ON (s.session_id = scru.id_session AND s.user_id = scru.user_id AND scru.c_id = '".$courseId."' )
+         ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = '".$courseId."' )
          WHERE s.session_id='$id_session'
          ORDER BY $sort $direction
          LIMIT $from,".($limit+1);

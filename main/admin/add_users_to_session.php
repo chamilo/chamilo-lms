@@ -333,7 +333,7 @@ if (isset($_configuration['order_user_list_by_official_code']) &&
 }
 
 if ($ajax_search) {
-    $sql = "SELECT user_id, lastname, firstname, username, id_session, official_code
+    $sql = "SELECT user_id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.user_id = u.user_id AND
@@ -346,7 +346,7 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql="SELECT u.user_id, lastname, firstname, username, id_session, official_code
+            $sql="SELECT u.user_id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.user_id = u.user_id AND
@@ -432,7 +432,7 @@ if ($ajax_search) {
         $order_clause = " AND u.creator_id = " . api_get_user_id() . $order_clause;
     }
     if ($use_extra_fields) {
-        $sql = "SELECT  user_id, lastname, firstname, username, id_session, official_code
+        $sql = "SELECT  user_id, lastname, firstname, username, session_id, official_code
                FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.user_id = u.user_id AND
@@ -440,9 +440,8 @@ if ($ajax_search) {
                     $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 $where_filter AND u.status<>".DRH." AND u.status<>6
                 $order_clause";
-
     } else {
-        $sql = "SELECT  user_id, lastname, firstname, username, id_session, official_code
+        $sql = "SELECT  user_id, lastname, firstname, username, session_id, official_code
                 FROM $tbl_user u
                 LEFT JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.user_id = u.user_id AND
@@ -455,13 +454,14 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql = "SELECT  u.user_id, lastname, firstname, username, id_session, official_code
+            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id, official_code
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
                         ON $tbl_session_rel_user.user_id = u.user_id AND
                         $tbl_session_rel_user.session_id = '$id_session' AND
                         $tbl_session_rel_user.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                    INNER JOIN $tbl_user_rel_access_url url_user
+                    ON (url_user.user_id = u.user_id)
                     WHERE access_url_id = $access_url_id $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         }
@@ -483,7 +483,7 @@ if ($ajax_search) {
     unset($users); //clean to free memory
 
     //filling the correct users in list
-    $sql="SELECT  user_id, lastname, firstname, username, id_session, official_code
+    $sql="SELECT  user_id, lastname, firstname, username, session_id, official_code
           FROM $tbl_user u
           LEFT JOIN $tbl_session_rel_user
           ON $tbl_session_rel_user.user_id = u.user_id AND
@@ -495,17 +495,18 @@ if ($ajax_search) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql="SELECT  u.user_id, lastname, firstname, username, id_session, official_code
-                FROM $tbl_user u
-                LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.user_id = u.user_id AND
-                    $tbl_session_rel_user.session_id = '$id_session' AND
-                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
-                $order_clause";
+            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id, official_code
+                    FROM $tbl_user u
+                    LEFT JOIN $tbl_session_rel_user
+                        ON $tbl_session_rel_user.user_id = u.user_id AND
+                        $tbl_session_rel_user.session_id = '$id_session' AND
+                        $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                    WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                    $order_clause";
         }
     }
+
     $result = Database::query($sql);
     $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {

@@ -28,9 +28,9 @@ $tool_name = $course_info['name'];
 $sql = "SELECT s.name, c.title
         FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
         WHERE
-            sc.id_session=s.id AND
+            sc.session_id=s.id AND
             sc.c_id = c.id AND
-            sc.id_session='$id_session' AND
+            sc.session_id='$id_session' AND
             sc.c_id ='".$courseId."'";
 $result = Database::query($sql);
 
@@ -49,9 +49,9 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = 1;
 
 	// get all tutor by course_code in the session
-	$sql = "SELECT id_user
+	$sql = "SELECT user_id
 	        FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND c_id = '".$courseId."' AND status = 2";
+	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
@@ -84,16 +84,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
 		exit();
-
 	}
 } else {
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND c_id = '".$courseId."' AND status = 2 ";
+	$sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
+	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {
 		while ($infos = Database::fetch_array($rs)) {
-			$arr_infos[] = $infos['id_user'];
+			$arr_infos[] = $infos['user_id'];
 		}
 	}
 }

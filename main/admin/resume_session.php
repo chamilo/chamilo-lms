@@ -298,7 +298,7 @@ if ($session['nbr_courses'] == 0) {
 			ON (c.id = sc.c_id)
 			WHERE
 			    sc.c_id = c.id AND
-			    id_session='$sessionId'
+			    session_id='$sessionId'
 			$orderBy";
 
     $result = Database::query($sql);
@@ -316,7 +316,7 @@ if ($session['nbr_courses'] == 0) {
 				    srcru.user_id = sru.session_id AND
 				    srcru.c_id = '".intval($course['id'])."' AND
 				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
-				    srcru.id_session = '".intval($sessionId)."'";
+				    srcru.session_id = '".intval($sessionId)."'";
 
 		$rs = Database::query($sql);
 		$course['nbr_users'] = Database::result($rs, 0, 0);
@@ -327,7 +327,7 @@ if ($session['nbr_courses'] == 0) {
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE
 				    session_rcru.id_user = user.user_id AND
-				    session_rcru.id_session = '".intval($sessionId)."' AND
+				    session_rcru.session_id = '".intval($sessionId)."' AND
 				    session_rcru.c_id ='".intval($course['id'])."' AND
 				    session_rcru.status=2";
 		$rs = Database::query($sql);

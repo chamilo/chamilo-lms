@@ -1297,9 +1297,11 @@ class CourseBuilder
             $this->course->encoding = api_get_system_encoding(
             ); //current platform encoding
             $code_course = $_course['code'];
-            $sql_session = "SELECT id, name, course_code  FROM $tbl_session_course
-                INNER JOIN  $tbl_session ON id_session = id
-                WHERE course_code = '$code_course' ";
+            $courseId = $_course['real_id'];
+            $sql_session = "SELECT id, name, c_id
+                FROM $tbl_session_course
+                INNER JOIN  $tbl_session ON session_id = id
+                WHERE c_id = '$courseId' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session = new CourseSession(

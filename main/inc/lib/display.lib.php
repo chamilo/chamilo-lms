@@ -1358,7 +1358,7 @@ class Display
                     // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
                     " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
                     " AND ctt.visibility = '1' ".
-                    " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."'
+                    " AND tet.lastedit_user_id != $user_id AND tet.session_id = '".$course_info['id_session']."'
                  ORDER BY tet.lastedit_date";
 
         $res = Database::query($sql);

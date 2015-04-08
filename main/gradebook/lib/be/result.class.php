@@ -98,12 +98,12 @@ class Result
 
                 $sql_course_rel_user = '';
                 if ($sessionId) {
-                    $sql = 'SELECT course_code, id_user as user_id, status
+                    $sql = 'SELECT c_id, id_user as user_id, status
                             FROM ' . $tbl_session_rel_course_user . '
 							WHERE
 							    status=0 AND
-							    course_code="' . api_get_course_id() . '" AND
-							    id_session=' . $sessionId;
+							    c_id="' . api_get_course_int_id() . '" AND
+							    session_id=' . $sessionId;
                 } else {
                     $sql = 'SELECT c_id, user_id, status
                             FROM ' . $tbl_course_rel_course . '

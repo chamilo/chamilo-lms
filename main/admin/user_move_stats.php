@@ -583,9 +583,9 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
     $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $user_id = intval($user_id);
-    //$sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id GROUP BY exe_user_id, c_id ORDER by exe_user_id, c_id ASC";
-    $sql = "SELECT DISTINCT exe_user_id, c_id, session_id as id_session
-            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id ORDER by exe_user_id, c_id ASC";
+    $sql = "SELECT DISTINCT exe_user_id, c_id, session_id
+            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id
+            ORDER by exe_user_id, c_id ASC";
 
     $res = Database::query($sql);
     $course_list = array();
@@ -652,22 +652,22 @@ if (!empty($user_list)) {
 
         $new_course_list = array();
         foreach ($course_list_registered as $course_reg) {
-            if (empty($course_reg['id_session'])) {
-                $course_reg['id_session'] = 0;
+            if (empty($course_reg['session_id'])) {
+                $course_reg['session_id'] = 0;
             }
             // Recover the code for historical reasons. If it can be proven
             // that the code can be safely replaced by c_id in the following
             // PHP code, feel free to do so
             $courseInfo = api_get_course_info_by_id($course_reg['c_id']);
             $course_reg['code'] = $courseInfo['code'];
-            $new_course_list[] = $course_reg['code'].'_'.$course_reg['id_session'];
+            $new_course_list[] = $course_reg['code'].'_'.$course_reg['session_id'];
         }
 
         $course_list = get_courses_list_by_user_id_based_in_exercises($user_id);
 
         if (is_array($course_list) && !empty($course_list)) {
             foreach ($course_list as $my_course) {
-                $key = $my_course['code'].'_'.$my_course['id_session'];
+                $key = $my_course['code'].'_'.$my_course['session_id'];
 
                 if (!in_array($key, $new_course_list)) {
                     $my_course['not_registered'] = 1;

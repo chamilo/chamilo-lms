@@ -321,7 +321,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
                                             c_id = '$courseId',
-                                            id_session='$session_id'";
+                                            session_id='$session_id'";
                                     $rs_course = Database::query($sql_course);
                                     SessionManager::installCourse($id_session, $courseId);
                                 }
@@ -336,7 +336,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                 id_user='$coach_id',
                                                 c_id = '$courseId',
-                                                id_session = '$session_id',
+                                                session_id = '$session_id',
                                                 status = 2 ";
                                         $rs_coachs = Database::query($sql);
                                     } else {
@@ -387,7 +387,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
                                         $sql_course = "INSERT INTO $tbl_session_course SET
                                                 c_id = '".$courseId."',
-                                                id_session='$session_id'";
+                                                session_id='$session_id'";
                                         $rs_course = Database::query($sql_course);
 
                                         SessionManager::installCourse($id_session, $courseId);
@@ -402,7 +402,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
                                                         id_user='$coach_id',
                                                         c_id = $courseId,
-                                                        id_session = '$session_id',
+                                                        session_id = '$session_id',
                                                         status = 2 ";
                                                 $rs_coachs = Database::query($sql);
                                             } else {

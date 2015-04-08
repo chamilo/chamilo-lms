@@ -565,7 +565,7 @@ class DocumentManager
                     docs.size,
                     docs.readonly,
                     docs.session_id,
-                    last.id_session item_property_session_id,
+                    last.session_id item_property_session_id,
                     last.lastedit_date,
                     last.visibility,
                     last.insert_user_id
@@ -2924,7 +2924,7 @@ class DocumentManager
 
         if (isset($session_id)) {
             $session_id = intval($session_id);
-            $session_condition = " AND props.id_session='" . $session_id . "' ";
+            $session_condition = " AND props.session_id='" . $session_id . "' ";
         }
 
         $sql = "SELECT SUM(size)

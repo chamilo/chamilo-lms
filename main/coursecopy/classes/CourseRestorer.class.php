@@ -198,7 +198,7 @@ class CourseRestorer
 		$condition_session = "";
 
 		if (!empty($session_id)) {
-			$condition_session = " , id_session='".intval($session_id)."'";
+			$condition_session = " , session_id ='".intval($session_id)."'";
 		}
 
 		foreach ($this->course->resources as $type => $resources) {

@@ -1402,7 +1402,7 @@ function get_forums(
                 ON (
                     threads.thread_id=item_properties.ref AND
                     threads.c_id = item_properties.c_id AND
-                    threads.session_id = item_properties.id_session
+                    threads.session_id = item_properties.session_id
                 )
                 WHERE
                     item_properties.visibility=1 AND
@@ -1418,7 +1418,7 @@ function get_forums(
                     posts.visible=1 AND
                     posts.thread_id=threads.thread_id AND
                     threads.thread_id=item_properties.ref AND
-                    threads.session_id = item_properties.id_session AND
+                    threads.session_id = item_properties.session_id AND
                     item_properties.visibility=1 AND
                     item_properties.tool='".TOOL_FORUM_THREAD."' AND
                     threads.c_id = $course_id AND
@@ -1451,7 +1451,7 @@ function get_forums(
                     ON (
                         threads.thread_id=item_properties.ref AND
                         threads.c_id = item_properties.c_id AND
-                        threads.session_id = item_properties.id_session
+                        threads.session_id = item_properties.session_id
                     )
                     WHERE
                         item_properties.visibility<>2 AND
@@ -1465,7 +1465,7 @@ function get_forums(
                     WHERE
                         posts.thread_id=threads.thread_id AND
                         threads.thread_id=item_properties.ref AND
-                        threads.session_id = item_properties.id_session AND
+                        threads.session_id = item_properties.session_id AND
                         item_properties.visibility=1 AND
                         item_properties.tool='".TOOL_FORUM_THREAD."' AND
                         posts.c_id = $course_id AND
@@ -1794,7 +1794,7 @@ function get_posts($thread_id)
     /*
      * INNER JOIN $tableItemProperty i
                 ON i.ref = posts.post_id AND i.c_id = posts.c_id*
-     i.id_session = $sessionId
+     i.session_id = $sessionId
      */
     if (api_is_allowed_to_edit(null, true)) {
         $sql = "SELECT * FROM $table_posts posts
@@ -1915,13 +1915,13 @@ function get_thread_users_details($thread_id)
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
                   FROM $t_posts , $t_users user, $t_session_rel_user session_rel_user_rel_course
                   WHERE poster_id = user.user_id AND
-                  user.user_id = session_rel_user_rel_course.id_user AND
+                  user.user_id = session_rel_user_rel_course.user_id AND
                   session_rel_user_rel_course.status<>'2' AND
-                  session_rel_user_rel_course.id_user NOT IN ($user_to_avoid) AND
+                  session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
                   thread_id = ".intval($thread_id)." AND
-                  id_session = ".api_get_session_id()." AND
+                  session_id = ".api_get_session_id()." AND
                   c_id = $course_id AND
-                  course_code = '".$course_code."' $orderby ";
+                  session_rel_user_rel_course.c_id = '".$course_id."' $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, thread_id
                   FROM $t_posts , $t_users user, $t_course_user course_user
@@ -1931,7 +1931,7 @@ function get_thread_users_details($thread_id)
                   AND thread_id = ".intval($thread_id)."
                   AND course_user.status NOT IN('1') AND
                   c_id = $course_id AND
-                  course_code = '".$course_code."' $orderby";
+                  session_rel_user_rel_course.c_id = '".$course_id."' $orderby";
     }
     $result = Database::query($sql);
 
@@ -1979,7 +1979,7 @@ function get_thread_users_qualify($thread_id)
                     AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
                     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
                     AND post.thread_id = '".Database::escape_string($thread_id)."'
-                    AND id_session = '".api_get_session_id()."'
+                    AND session_id = '".api_get_session_id()."'
                     AND course_code = '".$course_code."' AND
                     qualify.c_id = $course_id AND
                     post.c_id = $course_id
@@ -2058,7 +2058,7 @@ function get_thread_users_not_qualify($thread_id)
                     AND session_rel_user_rel_course.status<>'2'
                     AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
                     AND post.thread_id = '".Database::escape_string($thread_id)."'
-                    AND id_session = '".api_get_session_id()."'
+                    AND session_id = '".api_get_session_id()."'
                     AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
@@ -3839,7 +3839,7 @@ function display_forum_search_results($search_term)
                 AND posts.thread_id = threads.thread_id
                 AND item_property.ref = threads.thread_id
                 AND item_property.visibility = 1
-                AND item_property.id_session = $session_id
+                AND item_property.session_id = $session_id
                 AND posts.visible = 1
                 AND item_property.tool = '".TOOL_FORUM_THREAD."'
                 AND ".implode(' AND ', $search_restriction)."

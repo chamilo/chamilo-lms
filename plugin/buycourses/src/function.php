@@ -83,9 +83,9 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
     // loop through all sessions
     while ($rowSession = Database::fetch_assoc($resSessions)) {
         // get courses of current session
-        $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
+        $sqlSessionCourse = "SELECT DISTINCT a.session_id, a.course_code, a.nbr_users
         FROM $tableBuySessionRelCourse a, $tableSessionRelCourse b
-        WHERE a.id_session = b.id_session AND a.id_session = " . $rowSession['session_id'] . ";";
+        WHERE a.session_id = b.session_id AND a.session_id = " . $rowSession['session_id'] . ";";
         $resSessionCourse = Database::query($sqlSessionCourse);
         $aux = array();
         // loop through courses of current session

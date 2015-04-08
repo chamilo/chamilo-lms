@@ -196,7 +196,7 @@ function get_total_folder_size($path, $can_see_invisible = false)
         $session_id,
         true,
         true,
-        'props.id_session'
+        'props.session_id'
     );
 
     $visibility_rule = ' props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');

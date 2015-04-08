@@ -63,10 +63,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			LEFT JOIN $tbl_session_rel_course session_rel_course
 			ON course.id = session_rel_course.c_id
 			INNER JOIN $tbl_session_rel_course_rel_user as srcru
-			ON (srcru.id_session = session_rel_course.id_session)
+			ON (srcru.session_id = session_rel_course.session_id)
 			WHERE
 			    id_user = $id_user AND
-			    session_rel_course.id_session = $id_session";
+			    session_rel_course.session_id = $id_session";
 
     $rs = Database::query($sql);
     $existingCourses = Database::store_result($rs);
@@ -85,11 +85,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         if(!$exists) {
             $enreg_course = Database::escape_string($enreg_course);
             $sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
-							WHERE id_user='".$id_user."' AND course_code='".$enreg_course."' AND id_session=$id_session";
+							WHERE id_user='".$id_user."' AND course_code='".$enreg_course."' AND session_id=$id_session";
             $result = Database::query($sql_delete);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
+                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE session_id='$id_session' AND course_code='$enreg_course'";
                 Database::query($sql_update);
             }
         }
@@ -98,11 +98,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         //$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
         if (!in_array($existingCourse['code'], $CourseList)){
             $existingCourse = Database::escape_string($existingCourse['code']);
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$existingCourse','$id_user')";
+            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id,course_code,id_user)
+                           VALUES ('$id_session','$existingCourse','$id_user')";
             $result = Database::query($sql_insert);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND course_code='$existingCourse'";
+                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1
+                                WHERE session_id='$id_session' AND course_code='$existingCourse'";
                 Database::query($sql_update);
             }
 
@@ -126,14 +128,16 @@ echo '<legend>'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete
 
 $nosessionCourses = $sessionCourses = array();
 // actual user
-$sql = "SELECT code, title, visual_code, srcru.id_session
+$sql = "SELECT code, title, visual_code, srcru.session_id
         FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru
-        ON course.code = srcru.course_code  WHERE srcru.id_user = $id_user AND id_session = $id_session";
+        ON course.id = srcru.c_id
+        WHERE srcru.user_id = $id_user AND session_id = $id_session";
 
 //all
-$sql_all="SELECT code, title, visual_code, src.id_session " .
-    "FROM $tbl_course course inner JOIN $tbl_session_rel_course  as src  " .
-    "ON course.code = src.course_code AND id_session = $id_session";
+$sql_all="SELECT code, title, visual_code, src.session_id
+    FROM $tbl_course course
+     INNER JOIN $tbl_session_rel_course  as src
+     ON course.id = src.c_id AND session_id = $id_session";
 $result=Database::query($sql);
 $Courses=Database::store_result($result);
 

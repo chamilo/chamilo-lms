@@ -270,8 +270,9 @@ if ($ajax_search) {
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.id_user = u.user_id
-                AND $tbl_session_rel_user.id_session = " . intval($id_session) . "
-                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                AND $tbl_session_rel_user.session_id = " . intval($id_session) . "
+                INNER JOIN $tbl_user_rel_access_url url_user
+                ON (url_user.user_id=u.user_id)
                 WHERE access_url_id = $access_url_id
                 $order_clause";
         }

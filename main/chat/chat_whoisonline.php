@@ -67,7 +67,7 @@ if (!empty($course)) {
 		          WHERE
 		          t2.c_id = $course_id AND
 		          t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND
-		          t3.id_session = '".$session_id."' AND
+		          t3.session_id = '".$session_id."' AND
 		          t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result = Database::query($query);
 		while ($learner = Database::fetch_array($result)) {
@@ -88,12 +88,13 @@ if (!empty($course)) {
 		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email
 				FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3
 				WHERE
-				t2.c_id = $course_id AND
-				t1.user_id=t2.user_id
-				AND t3.id_user=t2.user_id AND t3.status=2
-				AND t3.id_session = '".$session_id."'
-				AND t3.course_code = '".$_course['sysCode']."'
-				AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+					t2.c_id = $course_id AND
+					t1.user_id=t2.user_id
+					AND t3.id_user=t2.user_id AND t3.status=2
+					AND t3.session_id = '".$session_id."'
+					AND t3.c_id = '".$course_id."'
+					AND t2.last_connection>'".$date_inter."' $extra_condition
+				ORDER BY username";
 
 		$result = Database::query($query);
 		$course_coaches = array();

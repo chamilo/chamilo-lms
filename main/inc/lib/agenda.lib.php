@@ -1196,7 +1196,7 @@ class Agenda
                     ref             = $eventId AND
                     ip.visibility   = '1' AND
                     ip.c_id         = $courseId AND
-                    ip.id_session = $sessionId
+                    ip.session_id = $sessionId
                 ";
 
         $result = Database::query($sql);
@@ -1333,7 +1333,7 @@ class Agenda
                         agenda.c_id = $course_id AND
                         ip.c_id = $course_id AND
                         agenda.session_id = $session_id AND
-                        ip.id_session = $session_id
+                        ip.session_id = $session_id
                     ";
         }
 

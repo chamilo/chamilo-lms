@@ -962,8 +962,8 @@ class GradebookUtils
                     WHERE
                         scru.id_user=user.user_id AND
                         scru.status=0  AND
-                        scru.course_code='$courseCode' AND
-                        id_session ='$current_session'
+                        scru.c_id='$courseId' AND
+                        session_id ='$current_session'
                     $order_clause
                     ";
         } else {

@@ -160,7 +160,7 @@ if ($_POST['formSent']) {
 					FROM $tbl_course c
 					INNER JOIN $tbl_session_course_user sc
 						ON c.id = sc.c_id
-						AND sc.id_session = '".$row['id']."'";
+						AND sc.session_id = '".$row['id']."'";
 
 			$rsCourses = Database::query($sql);
 
@@ -174,7 +174,7 @@ if ($_POST['formSent']) {
 					ON u.user_id = scu.id_user
 					WHERE
 						scu.c_id = '{$rowCourses['c_id']}' AND
-						scu.id_session = '".$row['id']."' AND
+						scu.session_id = '".$row['id']."' AND
 						scu.status = 2 ";
 
 				$rs_coachs = Database::query($sql);

@@ -182,7 +182,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
                     c.visual_code
             FROM $course_table c
             INNER JOIN $session_rel_course r ON c.code = r.course_code
-            INNER JOIN $session s ON r.id_session = s.id
+            INNER JOIN $session s ON r.session_id = s.id
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {

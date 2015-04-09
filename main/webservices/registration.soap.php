@@ -438,7 +438,8 @@ function WSCreateUser($params) {
     $phone = '';
     $picture_uri = '';
     $auth_source = PLATFORM_AUTH_SOURCE;
-    $expiration_date = '0000-00-00 00:00:00';
+    $expiration_date = null;
+    $expirationDateStatement = '';
     $active = !isset($params['active']) || !intval($params['active']) ? 0 : 1;
     $hr_dept_id = 0;
     $extra = null;
@@ -447,13 +448,16 @@ function WSCreateUser($params) {
     $extra_list = $params['extra'];
     if (!empty($params['language'])) { $language = $params['language'];}
     if (!empty($params['phone'])) { $phone = $params['phone'];}
-    if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
+    if (!empty($params['expiration_date'])) {
+        $expiration_date = $params['expiration_date'];
+        $expirationDateStatement = " expiration_date = '" . Database::escape_string($expiration_date) . "', ";
+    }
 
     // check if exits x_user_id into user_field_values table
     $user_id = UserManager::get_user_id_from_original_id($original_user_id_value, $original_user_id_name);
     if ($user_id > 0) {
         // Check whether user is not active.
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='".$user_id."' AND active= '0'";
+        $sql = "SELECT user_id FROM $table_user WHERE id ='".$user_id."' AND active= '0'";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         $count_user_id = Database::num_rows($resu);
@@ -474,10 +478,10 @@ function WSCreateUser($params) {
                     status='".Database::escape_string($status)."',
                     official_code='".Database::escape_string($official_code)."',
                     phone='".Database::escape_string($phone)."',
-                    expiration_date='".Database::escape_string($expiration_date)."',
-                    active='1',
+                    $expirationDateStatement
+                    active=1,
                     hr_dept_id=".intval($hr_dept_id);
-            $sql .=    " WHERE user_id='".$r_check_user[0]."'";
+            $sql .=    " WHERE id=".$r_check_user[0];
             Database::query($sql);
 
             return  $r_check_user[0];
@@ -1595,17 +1599,23 @@ function WSEditUserWithPicture($params) {
     $password = null;
     $auth_source = null;
     $email = $params['email'];
+    $expiration_date = null;
+    $expirationDateStatement = '';
     $status = $params['status'];
     $official_code = '';
     $phone = $params['phone'];
     $picture_url = $params['picture_url'];
     $picture_uri = '';
-    $expiration_date = $params['expiration_date'];
+
     $active = 1;
     $creator_id = null;
     $hr_dept_id = 0;
     $extra = null;
     $extra_list = $params['extra'];
+    if (!empty($params['expiration_date'])) {
+        $expiration_date = $params['expiration_date'];
+        $expirationDateStatement = " expiration_date = '" . Database::escape_string($expiration_date) . "', ";
+    }
 
     if (!empty($params['password'])) { $password = $params['password']; }
 
@@ -1627,7 +1637,7 @@ function WSEditUserWithPicture($params) {
     if ($user_id == 0) {
         return 0;
     } else {
-        $sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
+        $sql = "SELECT id FROM $table_user WHERE id =$user_id AND active= 0";
         $resu = Database::query($sql);
         $r_check_user = Database::fetch_row($resu);
         if (!empty($r_check_user[0])) {
@@ -1636,7 +1646,7 @@ function WSEditUserWithPicture($params) {
     }
 
     // Check whether username already exits.
-    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
+    $sql = "SELECT username FROM $table_user WHERE username = '$username' AND id <> $user_id";
     $res_un = Database::query($sql);
     $r_username = Database::fetch_row($res_un);
 
@@ -1662,7 +1672,7 @@ function WSEditUserWithPicture($params) {
 
     // Exception for admins in case no status is provided in WS call...
     $t_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $sqladmin = "SELECT id FROM $t_admin WHERE id = ".intval($user_id);
     $resadmin = Database::query($sqladmin);
     $is_admin = Database::num_rows($resadmin);
 
@@ -1680,14 +1690,14 @@ function WSEditUserWithPicture($params) {
             official_code='".Database::escape_string($official_code)."',
             phone='".Database::escape_string($phone)."',
             picture_uri='".Database::escape_string($picture_uri)."',
-            expiration_date='".Database::escape_string($expiration_date)."',
-            active='".Database::escape_string($active)."',
+            $expirationDateStatement
+            active= ".intval($active).",
             hr_dept_id=".intval($hr_dept_id);
 
     if (!is_null($creator_id)) {
         $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=    " WHERE user_id='$user_id'";
+    $sql .=    " WHERE id=$user_id";
     $return = @Database::query($sql);
 
     if (is_array($extra_list) && count($extra_list) > 0) {

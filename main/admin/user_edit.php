@@ -77,8 +77,8 @@ $interbreadcrumb[] = array('url' => "user_list.php","name" => get_lang('UserList
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 $sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u
-        LEFT JOIN $table_admin a ON a.user_id = u.user_id
-        WHERE u.user_id = '".$user_id."'";
+        LEFT JOIN $table_admin a ON a.user_id = u.id
+        WHERE u.id = '".$user_id."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
     header('Location: user_list.php');

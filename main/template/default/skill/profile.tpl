@@ -54,8 +54,8 @@
                                     <img width="96px" src="{{user.user.avatar}}" />
                                 </div>
                                 <div class="info-profile">
-                                    <h4><a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}">{{ user['user'].complete_name }} </a></h4>
-                                    <p>{{ 'User' | get_lang }}: {{user['user'].username}} </p>
+                                    <h5><a href="{{ _p.web_main }}social/profile.php?u={{ user['user'].user_id }}">{{ user['user'].complete_name }} </a></h5>
+                                    <p class="text">{{ 'User' | get_lang }}: {{user['user'].username}} </p>
                                 </div>
                                 <div class="number-skill">{{ "Skills"|get_lang }} {{ user.total_found_skills }} / {{ total_search_skills }}</div>
                                 <div class="skill-user-items">
@@ -64,9 +64,9 @@
                                             <li>
                                                 {% if skill_list[skill_data.skill_id].name is not null %}
                                                     {% if skill_data.found %}
-                                                        <img src="{{ _p.web }}main/img/icons/22/award_red_start.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
+                                                        <img src="{{ _p.web }}main/img/icons/22/badges.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
                                                     {% else %}
-                                                        <img src="{{ _p.web }}main/img/icons/22/award_green.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
+                                                        <img src="{{ _p.web }}main/img/icons/22/badges-default.png" alt="{{ skill_list[skill_data.skill_id].name }}" title="{{ skill_list[skill_data.skill_id].name }}" />{{ skill_list[skill_data.skill_id].name }}
                                                     {% endif %}
 
                                                 {% else %}

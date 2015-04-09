@@ -2076,12 +2076,13 @@ class Display
      * @param string $title
      * @param string $footer
      * @param string $style
+     * @param string $extra
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '')
+    public static function panel($content, $title = '', $footer = '', $style = '', $extra='')
     {
-        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>' : '';
+        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
         $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
 
         return '

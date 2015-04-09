@@ -990,6 +990,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function getStatusMessage($status, $isAble = true)
     {
+	$message = '';
         switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
                 if ($isAble) {
@@ -1312,11 +1313,15 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     private function getApprovedInductionSessions($userId)
     {
-        $sql = "SELECT s.id FROM session AS s "
-            . "INNER JOIN session_field_values AS sfv ON s.id = sfv.session_id "
-            . "INNER JOIN session_field AS sf ON sfv.field_id = sf.id "
-            . "INNER JOIN session_rel_user AS su ON s.id = su.session_id "
-            . "WHERE sf.field_variable = 'is_induccion_session' "
+        $tSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tSessionField = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+        $tSessionFieldValues = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $tSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $sql = "SELECT s.id FROM $tSession AS s "
+            . "INNER JOIN $tSessionFieldValues AS sfv ON s.id = sfv.session_id "
+            . "INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id "
+            . "INNER JOIN $tSessionUser AS su ON s.id = su.id_session "
+            . "WHERE sf.field_variable = 'is_induction_session' "
             . "AND su.relation_type = 0 "
             . "AND su.id_user = " . intval($userId);
 

@@ -100,30 +100,30 @@ if (api_get_setting('allow_skills_tool') == 'true') {
 
     //$social_skill_block = '<div class="panel panel-default social-skill">';
     //$social_skill_block .= '<div class="panel-heading">' . get_lang('Skills');
-    $content = '<div class="btn-group pull-right">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    $extra = '<div class="btn-group pull-right">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="caret"></span></a>
                  <ul class="dropdown-menu">';
     if (api_is_student() || api_is_student_boss() || api_is_drh()) {
-        $content .= '<li>' . Display::url(
+        $extra .= '<li>' . Display::url(
             get_lang('SkillsReport'),
             api_get_path(WEB_CODE_PATH) . 'social/my_skills_report.php'
             ) . '</li>';
     }
 
-    $content .= '<li>' . Display::url(
+    $extra.= '<li>' . Display::url(
         get_lang('SkillsWheel'),
         api_get_path(WEB_CODE_PATH) . 'social/skills_wheel.php'
         ) . '</li>';
 
-    $content .= '<li>' . Display::url(
+    $extra .= '<li>' . Display::url(
         sprintf(get_lang('YourSkillRankingX'), $ranking),
         api_get_path(WEB_CODE_PATH) . 'social/skills_ranking.php'
     ) . '</li>';
 
-    $content .= '</ul></div>';
+    $extra .= '</ul></div>';
 
-    $social_skill_block = Display::panel($content, get_lang('Skills'));
+    $social_skill_block = Display::panel($content, get_lang('Skills'),null,null,$extra);
 
     $lis = '';
     if (!empty($skills)) {
@@ -152,7 +152,9 @@ if (api_get_setting('allow_skills_tool') == 'true') {
         /*$social_skill_block .= '<div class="panel-body">';
         $social_skill_block .= Display::tag('ul', $lis, array('class' => 'list-badges'));
         $social_skill_block .= '</div>';*/
-        $social_skill_block .= Display::panel(Display::tag('ul', $lis, array('class' => 'list-badges')));
+        $content .= Display::tag('ul', $lis, array('class' => 'list-badges'));
+        $social_skill_block = Display::panel($content, get_lang('Skills'),null,null,$extra);
+
     } else {
 
         $social_skill_block .= Display::panel(

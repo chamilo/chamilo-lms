@@ -179,9 +179,9 @@ function prepare_user_sql_query($is_count) {
     $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
 
     if ($is_count) {
-        $sql .= "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
+        $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
-        $sql .= "SELECT u.user_id AS col0, u.official_code AS col2, ";
+        $sql .= "SELECT u.id AS col0, u.official_code AS col2, ";
 
         if (api_is_western_name_order()) {
             $sql .= "u.firstname AS col3, u.lastname AS col4, ";
@@ -193,7 +193,7 @@ function prepare_user_sql_query($is_count) {
                     u.email AS col6,
                     u.status AS col7,
                     u.active AS col8,
-                    u.user_id AS col9,
+                    u.id AS col9,
                     u.registration_date AS col10,
                     u.expiration_date AS exp,
                     u.password
@@ -203,7 +203,7 @@ function prepare_user_sql_query($is_count) {
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+        $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.id=url_rel_user.user_id)";
     }
 
     $keywordList = array(
@@ -234,7 +234,7 @@ function prepare_user_sql_query($is_count) {
     if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
         $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
         $field_id = $extra_info['id'];
-        $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
+        $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
     }
 
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
@@ -257,7 +257,7 @@ function prepare_user_sql_query($is_count) {
             $keywordListValues['keyword_status'] == PLATFORM_ADMIN
         ) {
            $query_admin_table = " , $admin_table a ";
-           $keyword_admin = ' AND a.user_id = u.user_id ';
+           $keyword_admin = ' AND a.user_id = u.id ';
             $keywordListValues['keyword_status'] = '%';
         }
 
@@ -329,7 +329,7 @@ function login_user($user_id) {
 
 	$firstname  = $user_info['firstname'];
 	$lastname   = $user_info['lastname'];
-	$user_id    = $user_info['user_id'];
+	$user_id    = $user_info['id'];
 
 	//$message = "Attempting to login as ".api_get_person_name($firstname, $lastname)." (id ".$user_id.")";
 	if (api_is_western_name_order()) {
@@ -347,10 +347,10 @@ function login_user($user_id) {
 			UNIX_TIMESTAMP(login.login_date) login_date
 			FROM $main_user_table
 			LEFT JOIN $main_admin_table a
-			ON user.user_id = a.user_id
+			ON user.id = a.user_id
 			LEFT JOIN $track_e_login_table login
-			ON user.user_id = login.login_user_id
-			WHERE user.user_id = '".$user_id."'
+			ON user.id = login.login_user_id
+			WHERE user.id = '".$user_id."'
 			ORDER BY login.login_date DESC LIMIT 1";
 
 		$sql_result = Database::query($sql_query);
@@ -378,7 +378,8 @@ function login_user($user_id) {
 			$_user['lastLogin'] 	= $user_data['login_date'];
 			$_user['official_code'] = $user_data['official_code'];
 			$_user['picture_uri'] 	= $user_data['picture_uri'];
-			$_user['user_id']		= $user_data['user_id'];
+			$_user['user_id']		= $user_data['id'];
+            $_user['id']		= $user_data['id'];
             $_user['status']        = $user_data['status'];
 
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
@@ -967,7 +968,7 @@ if ($table->get_total_number_of_items() == 0) {
 
             foreach ($user_list as $user) {
                 $column = 0;
-                $access_info = UrlManager::get_access_url_from_user($user['user_id']);
+                $access_info = UrlManager::get_access_url_from_user($user['id']);
                 $access_info_to_string = '';
                 $add_user = true;
                 if (!empty($access_info)) {
@@ -982,7 +983,7 @@ if ($table->get_total_number_of_items() == 0) {
                     $row_table = array();
                     $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] =  $access_info_to_string;
-                    $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];
+                    $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.$_SESSION['sec_token'];
                     $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
 
                     foreach ($row_table as $cell) {

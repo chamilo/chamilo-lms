@@ -1239,7 +1239,7 @@ function get_forum_categories($id = '')
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
 
-    $condition_session = api_get_session_condition($session_id, true, true);
+    $condition_session = api_get_session_condition($session_id, true, true, 'forum_categories.session_id');
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
@@ -1368,7 +1368,7 @@ function get_forums(
         $session_id = $sessionId;
     }
 
-    $condition_session = api_get_session_condition($session_id, true, false, 'id_session');
+    $condition_session = api_get_session_condition($session_id, true, false, 'item_properties.session_id');
     $course_id = $course_info['real_id'];
 
     $forum_list = array();
@@ -1512,7 +1512,13 @@ function get_forums(
 
         // Select the last post and the poster (note: this is probably no longer needed).
         $sql4 = "SELECT
-                    post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname
+                    post.post_id,
+                    post.forum_id,
+                    post.poster_id,
+                    post.poster_name,
+                    post.post_date,
+                    users.lastname,
+                    users.firstname
                 FROM $table_posts post, $table_users users
                 WHERE
                     forum_id = ".intval($id)." AND

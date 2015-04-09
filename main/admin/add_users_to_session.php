@@ -333,7 +333,7 @@ if (isset($_configuration['order_user_list_by_official_code']) &&
 }
 
 if ($ajax_search) {
-    $sql = "SELECT user_id, lastname, firstname, username, session_id, official_code
+    $sql = "SELECT u.user_id, lastname, firstname, username, session_id, official_code
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.user_id = u.user_id AND

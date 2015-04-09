@@ -12,21 +12,21 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 $course_code = $_GET['course_code'];
 
-$formSent=0;
-$errorMsg='';
+$formSent = 0;
+$errorMsg = '';
 
 // Database Table Definitions
-$tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course			= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session		= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $course_info = api_get_course_info($_REQUEST['course_code']);
-$courseId = $course_info['id'];
+$courseId = $course_info['real_id'];
 $tool_name = $course_info['name'];
 $sql = "SELECT s.name, c.title
-        FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
+        FROM $tbl_session_course sc, $tbl_session s,$tbl_course c
         WHERE
             sc.session_id=s.id AND
             sc.c_id = c.id AND

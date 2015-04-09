@@ -1445,7 +1445,9 @@ class SessionManager
                 $values['id_coach'] = $id_coach;
                 $values['nb_days_access_before_beginning'] = $nb_days_acess_before;
                 $values['nb_days_access_after_end'] = $nb_days_acess_after;
-                $values['session_category_id'] = $id_session_category;
+                if (!empty($id_session_category)) {
+                    $values['session_category_id'] = $id_session_category;
+                }
                 $values['description'] = $description;
                 $values['show_description'] = intval($showDescription);
                 $values['visibility'] = $id_visibility;
@@ -2048,11 +2050,11 @@ class SessionManager
                     $courseInfo = api_get_course_info($existingCourse['c_id']);
 
                     $sql = "DELETE FROM $tbl_session_rel_course
-                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id=$sessionId";
+                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id = $sessionId";
                     Database::query($sql);
 
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id=$sessionId";
+                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id = $sessionId";
                     Database::query($sql);
 
                     CourseManager::remove_course_ranking(
@@ -2108,6 +2110,7 @@ class SessionManager
                 SET nbr_courses = $nbr_courses
                 WHERE id = '$sessionId'";
         Database::query($sql);
+        exit;
     }
 
     /**

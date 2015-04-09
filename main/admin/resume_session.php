@@ -313,7 +313,7 @@ if ($session['nbr_courses'] == 0) {
                 $tbl_session_rel_course_rel_user srcru
 				WHERE
 				    srcru.user_id = sru.user_id AND
-				    srcru.user_id = sru.session_id AND
+				    srcru.session_id = sru.session_id AND
 				    srcru.c_id = '".intval($course['id'])."' AND
 				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
 				    srcru.session_id = '".intval($sessionId)."'";
@@ -323,7 +323,7 @@ if ($session['nbr_courses'] == 0) {
 
 		// Get coachs of the courses in session
 
-		$sql = "SELECT user.lastname,user.firstname, user.username
+		$sql = "SELECT user.lastname, user.firstname, user.username
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE
 				    session_rcru.user_id = user.user_id AND

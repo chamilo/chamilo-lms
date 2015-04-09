@@ -1284,7 +1284,7 @@ class AnnouncementManager
         $user_id = api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
 
@@ -1606,7 +1606,7 @@ class AnnouncementManager
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
         $userId = api_get_user_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
 
         if (api_is_allowed_to_edit(false,true))  {
             // check teacher status
@@ -1619,13 +1619,14 @@ class AnnouncementManager
                 }
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
-				WHERE   announcement.c_id   = $course_id AND
-                        ip.c_id             = $course_id AND
-                        announcement.id     = ip.ref AND
-                        ip.tool             = 'announcement' AND
-                        ip.visibility       <> '2'
-                        $group_condition
-                        $condition_session
+				WHERE
+				    announcement.c_id   = $course_id AND
+                    ip.c_id             = $course_id AND
+                    announcement.id     = ip.ref AND
+                    ip.tool             = 'announcement' AND
+                    ip.visibility       <> '2'
+                    $group_condition
+                    $condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC
 				LIMIT 0,$maximum";
@@ -1642,7 +1643,7 @@ class AnnouncementManager
                             "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
                     } else {
                         $cond_user_id = " AND (ip.lastedit_user_id = '".$userId."'
-                OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+                            OR ip.to_group_id IN (0, ".api_get_group_id()."))";
                     }
                 } else {
                     if (api_get_group_id() == 0) {
@@ -1701,24 +1702,25 @@ class AnnouncementManager
 
                         // the user is not identiefied => show only the general announcements
                         $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                    FROM $tbl_announcement announcement, $tbl_item_property ip
-                    WHERE
-                        announcement.c_id = $course_id AND
-                        ip.c_id = $course_id AND
-                        announcement.id = ip.ref
-                        AND ip.tool='announcement'
-                        AND ip.visibility='1'
-                        AND ip.to_group_id='0'
-                        $condition_session
-                    GROUP BY ip.ref
-                    ORDER BY display_order DESC
-                    LIMIT 0,$maximum";
+                                FROM $tbl_announcement announcement, $tbl_item_property ip
+                                WHERE
+                                    announcement.c_id = $course_id AND
+                                    ip.c_id = $course_id AND
+                                    announcement.id = ip.ref
+                                    AND ip.tool='announcement'
+                                    AND ip.visibility='1'
+                                    AND ip.to_group_id='0'
+                                    $condition_session
+                                GROUP BY ip.ref
+                                ORDER BY display_order DESC
+                                LIMIT 0,$maximum";
                     }
                 }
             }
         }
 
         $result = Database::query($sql);
+
         return Database::num_rows($result);
     }
 }

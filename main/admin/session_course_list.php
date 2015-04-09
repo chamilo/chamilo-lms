@@ -55,9 +55,11 @@ if ($action == 'delete') {
 $limit  = 20;
 $from   = $page * $limit;
 
-$sql = "SELECT code, title, nbr_users FROM $tbl_session_rel_course, $tbl_course
-		WHERE c_id = id AND session_id='$id_session'
-		ORDER BY $sort LIMIT $from,".($limit+1);
+$sql = "SELECT c.id, c.code, c.title, nbr_users
+		FROM $tbl_session_rel_course, $tbl_course c
+		WHERE c_id = c.id AND session_id='$id_session'
+		ORDER BY $sort
+		LIMIT $from,".($limit+1);
 $result=Database::query($sql);
 $Courses=Database::store_result($result);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
@@ -78,14 +80,18 @@ $tableHeader[] = array(get_lang('NbUsers'));
 $tableHeader[] = array(get_lang('Actions'));
 
 $tableCourses = array();
-foreach($Courses as $key=>$enreg) {
+
+foreach ($Courses as $key=>$enreg) {
 	$course = array();
 	$course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
 	$course[] = api_htmlentities($enreg['title'],ENT_QUOTES,$charset);
 	$course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
-	$course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>
-                <a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$enreg['code'].'/?id_session='.$id_session.'">'.
+		Display::return_icon('course_home.gif', get_lang('Course')).'</a>
+			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
+		Display::return_icon('edit.png', get_lang('Edit')).'</a>
+			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.
+		Display::return_icon('delete.png', get_lang('Delete')).'</a>';
 	$tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';

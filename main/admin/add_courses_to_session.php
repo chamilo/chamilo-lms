@@ -172,13 +172,14 @@ if ($ajax_search) {
     $result = Database::query($sql);
     $Courses = Database::store_result($result);
     foreach ($Courses as $course) {
-        if ($course['id_session'] == $sessionId) {
+        if ($course['session_id'] == $sessionId) {
             $sessionCourses[$course['id']] = $course ;
         } else {
             $nosessionCourses[$course['id']] = $course ;
         }
     }
 }
+
 unset($Courses);
 ?>
     <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -202,16 +203,13 @@ unset($Courses);
                 } else {
                     ?>
                     <div id="ajax_list_courses_multiple">
-                        <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control"> <?php
-                            foreach ($nosessionCourses as $enreg) {
-
-                                ?>
+                        <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control">
+                            <?php foreach ($nosessionCourses as $enreg) { ?>
                                 <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>>
                                     <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                                 </option>
-                            <?php
-                            }
-                            ?></select>
+                            <?php } ?>
+                        </select>
                     </div>
                 <?php
                 }

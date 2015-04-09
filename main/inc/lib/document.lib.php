@@ -541,7 +541,7 @@ class DocumentManager
 
         // Condition for the session
         $sessionId = api_get_session_id();
-        $condition_session = " AND (id_session = '$sessionId' OR (id_session = '0') )";
+        $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0') )";
         $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 
         $sharedCondition = null;
@@ -739,7 +739,7 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             $show_users_condition = "";
             if (api_get_setting('show_users_folders') == 'false') {
                 $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
@@ -760,7 +760,8 @@ class DocumentManager
                             last.to_group_id	= " . $to_group_id . " AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility 	<> 2 $condition_session ";
+                            last.visibility 	<> 2
+                            $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY  AS last

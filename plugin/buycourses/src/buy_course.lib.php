@@ -197,7 +197,7 @@ function userSessionList()
         if ($currentUserId > 0) {
             $sql = "SELECT 1 FROM $tableSessionRelUser
                 WHERE id_session ='".$rowSession['session_id']."' AND
-                id_user = $currentUserId";
+                user_id = $currentUserId";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
@@ -314,8 +314,8 @@ function checkUserBuy($parameter, $user, $type = 'COURSE')
 {
     $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND %s ='" . intval($user) . "';";
     $sql = $type === 'SESSION' ?
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session', 'id_user') :
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code', 'user_id');
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'session_id', 'user_id') :
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'c_id', 'user_id');
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
@@ -524,13 +524,13 @@ function sessionInfo($code)
     //check if the user is enrolled in the current session
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableSessionRelUser
-            WHERE id_user = $currentUserId";
+                WHERE user_id = $currentUserId";
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
             $rowSession['enrolled'] = "YES";
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE user_id='".$currentUserId."';";
+                    WHERE user_id='".$currentUserId."';";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";

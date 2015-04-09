@@ -119,15 +119,15 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         //check if the user is enrolled in the current session
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE id_session='".$rowSession['session_id']."' AND
-                id_user ='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE session_id ='".$rowSession['session_id']."' AND
+                user_id ='" . api_get_user_id() . "'";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
                     WHERE session_id ='".$rowSession['session_id']."' AND
-                    user_id='" . $_SESSION['_user']['user_id'] . "';";
+                    user_id='" . api_get_user_id() . "'";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result) > 0) {
                     $rowSession['enrolled'] = "TMP";
@@ -138,7 +138,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                 WHERE session_id ='".$rowSession['session_id']."' AND
-                user_id='" . $_SESSION['_user']['user_id'] . "';";
+                user_id='" . api_get_user_id() . "'";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";

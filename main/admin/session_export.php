@@ -171,7 +171,7 @@ if ($_POST['formSent']) {
 				$sql = "SELECT u.username
 					FROM $tbl_session_course_user scu
 					INNER JOIN $tbl_user u
-					ON u.user_id = scu.id_user
+					ON u.user_id = scu.user_id
 					WHERE
 						scu.c_id = '{$rowCourses['c_id']}' AND
 						scu.session_id = '".$row['id']."' AND
@@ -199,7 +199,7 @@ if ($_POST['formSent']) {
 						FROM $tbl_session_course_user scu
 						INNER JOIN $tbl_session_user su
 						ON
-							scu.user_id = su.id_user AND
+							scu.user_id = su.user_id AND
 							scu.session_id = su.session_id AND
 							su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 						INNER JOIN $tbl_user u

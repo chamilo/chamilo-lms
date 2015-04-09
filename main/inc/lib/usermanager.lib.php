@@ -393,7 +393,7 @@ class UserManager
         Database::query($sql);
 
         // Unsubscribe user from all courses in sessions
-        $sql = "DELETE FROM $table_session_course_user WHERE id_user = '".$user_id."'";
+        $sql = "DELETE FROM $table_session_course_user WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
         // If the user was added as a id_coach then set the current admin as coach see BT#
@@ -405,7 +405,7 @@ class UserManager
         Database::query($sql);
 
         // Unsubscribe user from all sessions
-        $sql = "DELETE FROM $table_session_user WHERE id_user = '".$user_id."'";
+        $sql = "DELETE FROM $table_session_user WHERE user_id = '".$user_id."'";
         Database::query($sql);
 
         // Delete user picture
@@ -2504,7 +2504,7 @@ class UserManager
                   LEFT JOIN $tbl_session_course_user as session_rel_course_user
                   ON (session_rel_course_user.session_id = session.id)
               WHERE (
-                    session_rel_course_user.id_user = $user_id OR
+                    session_rel_course_user.user_id = $user_id OR
                     session.id_coach = $user_id
               )
               ORDER BY session_category_name, name";
@@ -2680,14 +2680,14 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sessionListFromCourseCoach = array();
-            $sql =" SELECT DISTINCT id_session FROM $tbl_session_course_user
-                    WHERE id_user = $user_id AND status = 2 ";
+            $sql =" SELECT DISTINCT session_id FROM $tbl_session_course_user
+                    WHERE user_id = $user_id AND status = 2 ";
 
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $result = Database::store_result($result);
                 foreach ($result as $session) {
-                    $sessionListFromCourseCoach[]= $session['id_session'];
+                    $sessionListFromCourseCoach[]= $session['session_id'];
                 }
             }
             if (!empty($sessionListFromCourseCoach)) {
@@ -2702,8 +2702,8 @@ class UserManager
         $sql = "SELECT DISTINCT id, name, date_start, date_end
                 FROM $tbl_session_user, $tbl_session
                 WHERE (
-                    id_session = id AND
-                    id_user = $user_id AND
+                    session_id = id AND
+                    user_id = $user_id AND
                     relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )
                 $coachCourseConditions
@@ -2762,7 +2762,7 @@ class UserManager
                         INNER JOIN $tbl_session as session
                             ON session.id = session_course_user.session_id
                         LEFT JOIN $tbl_user as user
-                            ON user.user_id = session_course_user.id_user OR session.id_coach = user.user_id
+                            ON user.user_id = session_course_user.user_id OR session.id_coach = user.user_id
                     WHERE
                         session_course_user.session_id = $id_session AND (
                             (session_course_user.user_id = $user_id AND session_course_user.status = 2)
@@ -2799,13 +2799,13 @@ class UserManager
                 date_end,
                 session.id as session_id,
                 session.name as session_name,
-                IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
+                IF((session_course_user.user_id = 3 AND session_course_user.status=2),'2', '5')
             FROM $tbl_session_course_user as session_course_user
                 INNER JOIN $tbl_course AS course
                 ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
                 INNER JOIN $tbl_session as session ON session_course_user.session_id = session.id
-                LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
-            WHERE session_course_user.id_user = $user_id
+                LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.user_id
+            WHERE session_course_user.user_id = $user_id
             ORDER BY i";
 
             $course_list_sql_result = Database::query($personal_course_list_sql);
@@ -2897,7 +2897,7 @@ class UserManager
                     WHERE
                       s.id = $session_id AND
                       (
-                        (scu.id_user=$user_id AND scu.status=2) OR
+                        (scu.user_id=$user_id AND scu.status=2) OR
                         s.id_coach = $user_id
                       )
                     $where_access_url
@@ -4308,14 +4308,14 @@ class UserManager
                 ";
 
                 $sessionConditionsTeacher .= " AND
-                    (scu.status = 2 AND scu.id_user = '$userId')
+                    (scu.status = 2 AND scu.user_id = '$userId')
                 ";
 
                 $teacherSelect =
                 "UNION ALL (
                         $select
                         FROM $tbl_user u
-                        INNER JOIN $tbl_session_rel_user sru ON (sru.id_user = u.user_id)
+                        INNER JOIN $tbl_session_rel_user sru ON (sru.user_id = u.user_id)
                         WHERE
                             sru.session_id IN (
                                 SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
@@ -4538,7 +4538,7 @@ class UserManager
         } elseif ($session > 0) {
             $sql = 'SELECT u.user_id FROM '.$table_user.' u
                     INNER JOIN '.$table_session_course_user.' sru
-                    ON sru.id_user=u.user_id
+                    ON sru.user_id=u.user_id
                     WHERE
                         sru.course_code="'.Database::escape_string($courseCode).'" AND
                         sru.status=2';
@@ -4647,25 +4647,25 @@ class UserManager
     /**
      * This function check if the user is a coach inside session course
      * @param  int     User id
-     * @param  string  Course code
+     * @param  int  $courseId
      * @param  int     Session id
      * @return bool    True if the user is a coach
      *
      */
-    public static function is_session_course_coach($user_id, $course_code, $session_id)
+    public static function is_session_course_coach($user_id, $courseId, $session_id)
     {
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         // Protect data
         $user_id = intval($user_id);
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $session_id = intval($session_id);
         $result = false;
 
-        $sql = "SELECT id_session FROM $tbl_session_course_rel_user
+        $sql = "SELECT session_id FROM $tbl_session_course_rel_user
                 WHERE
-                  id_session=$session_id AND
-                  course_code='$course_code' AND
-                  id_user = $user_id AND
+                  session_id=$session_id AND
+                  c_id='$courseId' AND
+                  user_id = $user_id AND
                   status = 2 ";
         $res = Database::query($sql);
 

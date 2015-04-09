@@ -35,7 +35,7 @@ if (!empty($docs)) {
                 SET visibility = 2
                 WHERE
                     c_id = $courseId AND
-                    id_session = $sessionId AND
+                    session_id = $sessionId AND
                     ref = $ref AND
                     tool =  'document'
                 ";

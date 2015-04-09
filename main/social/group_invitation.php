@@ -79,7 +79,8 @@ function search_users($needle, $type)
         if (!empty($id_session)) {
             $group_id = intval($group_id);
             // check id_user from session_rel_user table
-            $sql = 'SELECT id_user FROM ' . $tbl_group_rel_user . ' WHERE group_id ="' . (int)$group_id . '"';
+            $sql = 'SELECT user_id FROM ' . $tbl_group_rel_user . '
+                    WHERE group_id ="' . (int)$group_id . '"';
             $res = Database::query($sql);
             $user_ids = array();
             if (Database::num_rows($res) > 0) {
@@ -88,25 +89,27 @@ function search_users($needle, $type)
                 }
             }
             if (count($user_ids) > 0) {
-                $cond_user_id = ' AND user_id NOT IN(' . implode(
-                        ",",
-                        $user_ids
-                    ) . ')';
+                $cond_user_id = ' AND user_id NOT IN(' . implode(",", $user_ids ) . ')';
             }
         }
 
         if ($type == 'single') {
             // search users where username or firstname or lastname begins likes $needle
-            $sql = 'SELECT user_id, username, lastname, firstname FROM ' . $tbl_user . ' user
-                    WHERE (username LIKE "' . $needle . '%"
-                    OR firstname LIKE "' . $needle . '%"
-                OR lastname LIKE "' . $needle . '%") AND user_id<>"' . $user_anonymous . '"' .
-                $order_clause .
-                ' LIMIT 11';
+            $sql = 'SELECT user_id, username, lastname, firstname
+                    FROM ' . $tbl_user . ' user
+                    WHERE
+                        (
+                            username LIKE "' . $needle . '%" OR
+                            firstname LIKE "' . $needle . '%" OR
+                            lastname LIKE "' . $needle . '%"
+                        ) AND user_id <>"' . $user_anonymous . '"' .
+                    $order_clause .
+                    ' LIMIT 11';
         } else {
             $sql = 'SELECT user_id, username, lastname, firstname FROM ' . $tbl_user . ' user
-                    WHERE ' . (api_sort_by_first_name(
-                ) ? 'firstname' : 'lastname') . ' LIKE "' . $needle . '%" AND user_id<>"' . $user_anonymous . '"' . $cond_user_id .
+                    WHERE
+                        ' . (api_sort_by_first_name() ? 'firstname' : 'lastname') . ' LIKE "' . $needle . '%" AND
+                        user_id<>"' . $user_anonymous . '"' . $cond_user_id .
                 $order_clause;
         }
 
@@ -117,20 +120,27 @@ function search_users($needle, $type)
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 if ($type == 'single') {
-                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM ' . $tbl_user . ' user
-                    INNER JOIN ' . $tbl_user_rel_access_url . ' url_user ON (url_user.user_id=user.user_id)
-                    WHERE access_url_id = ' . $access_url_id . '  AND (username LIKE "' . $needle . '%"
-                    OR firstname LIKE "' . $needle . '%"
-                    OR lastname LIKE "' . $needle . '%") AND user.user_id<>"' . $user_anonymous . '"' .
+                    $sql = 'SELECT user.user_id, username, lastname, firstname
+                            FROM ' . $tbl_user . ' user
+                            INNER JOIN ' . $tbl_user_rel_access_url . ' url_user ON (url_user.user_id=user.user_id)
+                            WHERE
+                                access_url_id = ' . $access_url_id . '  AND
+                                (
+                                    username LIKE "' . $needle . '%" OR
+                                    firstname LIKE "' . $needle . '%" OR
+                                    lastname LIKE "' . $needle . '%"
+                                ) AND user.user_id<>"' . $user_anonymous . '"' .
                         $order_clause .
                         ' LIMIT 11';
                 } else {
-                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM ' . $tbl_user . ' user
-                    INNER JOIN ' . $tbl_user_rel_access_url . ' url_user ON (url_user.user_id=user.user_id)
-                    WHERE access_url_id = ' . $access_url_id . '
-                    AND ' . (api_sort_by_first_name(
-                        ) ? 'firstname' : 'lastname') . ' LIKE "' . $needle . '%" AND user.user_id<>"' . $user_anonymous . '"' . $cond_user_id .
-                        $order_clause;
+                    $sql = 'SELECT user.user_id, username, lastname, firstname
+                            FROM ' . $tbl_user . ' user
+                            INNER JOIN ' . $tbl_user_rel_access_url . ' url_user ON (url_user.user_id=user.user_id)
+                            WHERE
+                                access_url_id = ' . $access_url_id . ' AND
+                                ' . (api_sort_by_first_name() ? 'firstname' : 'lastname') . ' LIKE "' . $needle . '%" AND
+                                user.user_id<>"' . $user_anonymous . '"' . $cond_user_id .
+                                $order_clause;
                 }
             }
         }
@@ -266,10 +276,10 @@ if ($ajax_search) {
         );
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
-            $sql = "SELECT u.user_id, lastname, firstname, username, id_session
+            $sql = "SELECT u.user_id, lastname, firstname, username, session_id
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.id_user = u.user_id
+                ON $tbl_session_rel_user.user_id = u.user_id
                 AND $tbl_session_rel_user.session_id = " . intval($id_session) . "
                 INNER JOIN $tbl_user_rel_access_url url_user
                 ON (url_user.user_id=u.user_id)

@@ -58,11 +58,11 @@ switch ($action) {
     case 'delete':
         if (is_array($idChecked) && count($idChecked)>0) {
             array_map('intval', $idChecked);
-            $idChecked = implode(',',$idChecked);
+            $idChecked = implode(',', $idChecked);
         }
         if (!empty($idChecked)) {
             $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND id_user IN($idChecked)";
+                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND user_id IN($idChecked)";
             $result = Database::query($sql);
             $nbr_affected_rows = Database::affected_rows($result);
             $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
@@ -84,7 +84,7 @@ $limit  = 20;
 $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
 $sql = "SELECT DISTINCT
-         u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
+         u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.user_id as is_subscribed
          FROM $tbl_session_rel_user s
          INNER JOIN $tbl_user u ON (u.user_id=s.user_id)
          LEFT JOIN $tbl_session_rel_course_rel_user scru

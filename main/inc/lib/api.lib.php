@@ -2388,7 +2388,7 @@ function api_get_coachs_from_course($session_id = 0, $courseId = '')
                 u.username
             FROM $tbl_user u, $tbl_session_course_user scu
             WHERE
-              u.user_id = scu.id_user AND
+              u.user_id = scu.user_id AND
               scu.session_id = '$session_id' AND
               scu.c_id = '$courseId' AND
               scu.status = 2";
@@ -2694,29 +2694,30 @@ function api_get_user_platform_status($user_id = null) {
 
 /**
  * @param int $user_id
- * @param string $course_code
+ * @param int $courseId
  * @param int $session_id
  * @return bool
  */
-function api_is_course_session_coach($user_id, $course_code, $session_id)
+function api_is_course_session_coach($user_id, $courseId, $session_id)
 {
-    $session_table                      = Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $user_id = intval($user_id);
     $session_id = intval($session_id);
-    $course_code = Database::escape_string($course_code);
+    $courseId = intval($courseId);
 
     $sql = "SELECT DISTINCT id
             FROM $session_table
             INNER JOIN $session_rel_course_rel_user_table session_rc_ru
             ON session.id = session_rc_ru.session_id
             WHERE
-                session_rc_ru.id_user = '".$user_id."'  AND
-                session_rc_ru.course_code = '$course_code' AND
+                session_rc_ru.user_id = '".$user_id."'  AND
+                session_rc_ru.c_id = '$courseId' AND
                 session_rc_ru.status = 2 AND
                 session_rc_ru.session_id = '$session_id'";
     $result = Database::query($sql);
+
     return Database::num_rows($result) > 0;
 }
 
@@ -2756,7 +2757,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
         $sql = "SELECT DISTINCT s.id, name, date_start, date_end
                 FROM $session_table s
                 INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session_rc_ru.session_id = s.id AND session_rc_ru.id_user = '".$userId."'
+                ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
                 WHERE
                     session_rc_ru.c_id = '$courseId' AND
                     session_rc_ru.status = 2 AND
@@ -5410,10 +5411,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                 tutor_id, status, role
             FROM $tbl_course_user
             WHERE
-                user_id  = '$userid'
-            AND
-                relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
-            AND
+                user_id  = '$userid' AND
+                relation_type <> '".COURSE_RELATION_TYPE_RRHH."' AND
                 c_id = $courseId
             LIMIT 1";
 
@@ -5424,10 +5423,11 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         $cuData = Database::fetch_array($result);
 
         $_courseUser['role'] = $cuData['role'];
-        $is_courseMember     = true;
-        $is_courseTutor      = ($cuData['tutor_id' ] == 1);
-        $is_courseAdmin      = ($cuData['status'] == 1);
+        $is_courseMember = true;
+        $is_courseTutor = ($cuData['tutor_id'] == 1);
+        $is_courseAdmin = ($cuData['status'] == 1);
     }
+
     if (!$is_courseAdmin) {
         // This user has no status related to this course.
         // Is it the session coach or the session admin?
@@ -5441,7 +5441,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                     $tbl_session as session
                 INNER JOIN $tbl_session_course
                     ON session_rel_course.session_id = session.id
-                    AND session_rel_course.course_code = '$cid'
+                    AND session_rel_course.c_id = '$courseId'
                 LIMIT 1";
 
         $result = Database::query($sql);
@@ -5467,7 +5467,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             // Check if the current user is the course coach.
             $sql = "SELECT 1
                     FROM $tbl_session_course
-                    WHERE session_rel_course.course_code = '$cid'
+                    WHERE session_rel_course.c_id = '$courseId'
                     AND session_rel_course.id_coach = '$userid'
                     LIMIT 1";
 
@@ -5484,7 +5484,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
                 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
                 $sql = "SELECT status FROM $tbl_user
-                        WHERE  user_id = $userid  LIMIT 1";
+                        WHERE user_id = $userid
+                        LIMIT 1";
 
                 $result = Database::query($sql);
 
@@ -5496,18 +5497,19 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
             } else {
                 // Check if the user is a student is this session.
                 $sql = "SELECT  id
-                        FROM    $tbl_session_course_user
-                        WHERE   id_user  = '$userid'
-                        AND     course_code = '$cid'
+                        FROM $tbl_session_course_user
+                        WHERE
+                            user_id  = '$userid' AND
+                            c_id = '$courseId'
                         LIMIT 1";
 
                 if (Database::num_rows($result) > 0) {
                     // This user haa got a recorded state for this course.
                     while ($row = Database::fetch_array($result)) {
-                        $is_courseMember     = true;
-                        $is_courseTutor      = false;
-                        $is_courseAdmin      = false;
-                        $is_sessionAdmin     = false;
+                        $is_courseMember = true;
+                        $is_courseTutor = false;
+                        $is_courseAdmin = false;
+                        $is_sessionAdmin = false;
                     }
                 }
             }
@@ -5525,6 +5527,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         case COURSE_VISIBILITY_HIDDEN:
             return $is_platformAdmin;
     }
+
     return false;
 }
 

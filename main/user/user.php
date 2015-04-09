@@ -190,8 +190,8 @@ if (api_is_allowed_to_edit(null, true)) {
                     if (api_is_multiple_url_enabled()) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
-                    $sql_query .=" WHERE c_id = '$courseId' AND session_course_user.id_user = user.user_id ";
-                    $sql_query .= ' AND id_session = '.$session_id;
+                    $sql_query .=" WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
+                    $sql_query .= ' AND session_id = '.$session_id;
 
                     if (api_is_multiple_url_enabled()) {
                         $sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
@@ -387,7 +387,7 @@ if (api_is_allowed_to_edit(null, true)) {
             $sql = 'SELECT '.$tbl_user.'.user_id
 					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_session_rel_user.' reluser
-					ON user.user_id = reluser.id_user AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
+					ON user.user_id = reluser.user_id AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
 					ON rel_course.session_id = reluser.id_session
 					WHERE user.user_id = "'.$user_id.'"

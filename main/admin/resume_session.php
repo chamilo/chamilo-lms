@@ -326,7 +326,7 @@ if ($session['nbr_courses'] == 0) {
 		$sql = "SELECT user.lastname,user.firstname, user.username
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE
-				    session_rcru.id_user = user.user_id AND
+				    session_rcru.user_id = user.user_id AND
 				    session_rcru.session_id = '".intval($sessionId)."' AND
 				    session_rcru.c_id ='".intval($course['id'])."' AND
 				    session_rcru.status=2";

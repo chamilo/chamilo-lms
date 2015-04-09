@@ -1511,7 +1511,7 @@ class DocumentManager
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
 
         $session_id = intval($session_id);
-        $condition = "AND id_session IN  ('$session_id', '0') ";
+        $condition = "AND session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*
@@ -3229,7 +3229,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
+        $condition_session = " AND (session_id = '$session_id' OR  id_session = '0' )";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {

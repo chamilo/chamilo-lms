@@ -2745,8 +2745,13 @@ function get_list_users_without_publication($task_id, $studentId = null)
                       FROM $table_course_user AS cu, $table_user AS u
                       WHERE u.status != 1 and cu.c_id='".api_get_course_int_id()."' AND u.user_id = cu.user_id";
     } else {
-        $sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u
-                      WHERE u.status != 1 and cu.c_id='".api_get_course_int_id()."' AND u.user_id = cu.user_id and cu.session_id = '".$session_id."'";
+        $sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email
+                      FROM $session_course_rel_user AS cu, $table_user AS u
+                      WHERE
+                        u.status != 1 AND
+                        cu.c_id='".api_get_course_int_id()."' AND
+                        u.user_id = cu.user_id AND
+                        cu.session_id = '".$session_id."'";
     }
 
     if (!empty($studentId)) {

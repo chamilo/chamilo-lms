@@ -273,32 +273,35 @@ if ($form->validate()) {
 
 			$id_session = $user['session_id'];
 			if ($id_session != 0) {
-				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'");
+				$result = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'");
 
 				$CourseList=array();
 				while ($row = Database::fetch_array($result)) {
-					$CourseList[] = $row['course_code'];
+					$CourseList[] = $row['c_id'];
 				}
 
 				foreach ($CourseList as $enreg_course) {
-					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')");
+					$sql = "INSERT INTO $tbl_session_rel_course_rel_user(id_session,c_id,user_id)
+							VALUES('$id_session','$enreg_course','$user_id')";
+					Database::query($sql);
 					// updating the total
-					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+					$sql = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
+							WHERE session_id ='$id_session' AND c_id='$enreg_course'";
 					$rs = Database::query($sql);
 					list($nbr_users) = Database::fetch_array($rs);
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE session_id='$id_session' AND c_id='$enreg_course'");
 				}
 
-				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')");
+				Database::query("INSERT INTO $tbl_session_rel_user(session_id, user_id) VALUES('$id_session','$user_id')");
 
-				$sql = "SELECT COUNT(nbr_users) as nbUsers FROM $tbl_session WHERE id='$id_session' ";
+				$sql = "SELECT COUNT(nbr_users) as nbUsers
+						FROM $tbl_session WHERE id='$id_session' ";
 				$rs = Database::query($sql);
 				list($nbr_users) = Database::fetch_array($rs);
 
 				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ");
 			}
 		}
-
 
 		$extras = array();
 		foreach ($user as $key => $value) {

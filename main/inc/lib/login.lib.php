@@ -558,13 +558,14 @@ class Login
                         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
                         //Session coach, session admin, course coach admin
-                        $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
-                		FROM $tbl_session session, $tbl_session_course_user session_rcru
-					    WHERE  session_rcru.session_id  = session.id AND
-					           session_rcru.course_code = '$_cid' AND
-					           session_rcru.id_user     = '$user_id' AND
-                               session_rcru.session_id  = $session_id AND
-					           session_rcru.status      = 2";
+                        $sql = "SELECT session.id_coach, session_admin_id, session_rcru.user_id
+                                FROM $tbl_session session, $tbl_session_course_user session_rcru
+                                WHERE
+                                   session_rcru.session_id = session.id AND
+                                   session_rcru.course_code = '$_cid' AND
+                                   session_rcru.user_id = '$user_id' AND
+                                   session_rcru.session_id  = $session_id AND
+                                   session_rcru.status = 2";
 
                         $result = Database::query($sql);
                         $row = Database::store_result($result);
@@ -579,16 +580,17 @@ class Login
                             $is_sessionAdmin = true;
                         } else {
                             //Im a coach or a student?
-                            $sql = "SELECT id_user, status FROM " . $tbl_session_course_user . "
-                            WHERE   course_code = '$_cid' AND
-                                    id_user     = '" . $user_id . "' AND
-                                    id_session  = '" . $session_id . "'
-                            LIMIT 1";
+                            $sql = "SELECT user_id, status
+                                    FROM " . $tbl_session_course_user . "
+                                    WHERE
+                                        c_id = '$_cid' AND
+                                        user_id = '" . $user_id . "' AND
+                                        session_id = '" . $session_id . "'
+                                    LIMIT 1";
                             $result = Database::query($sql);
 
                             if (Database::num_rows($result)) {
                                 $row = Database::fetch_array($result, 'ASSOC');
-
                                 $session_course_status = $row['status'];
 
                                 switch ($session_course_status) {

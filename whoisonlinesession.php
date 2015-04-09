@@ -53,7 +53,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 					date_end
 				FROM $tbl_session as session
 				INNER JOIN $tbl_session_course_user as srcru
-					ON srcru.id_user = ".$_user['user_id']." AND srcru.status=2
+					ON srcru.user_id = ".$_user['user_id']." AND srcru.status=2
 					AND session.id = srcru.session_id
 				ORDER BY date_start, date_end, name";
 		$result = Database::query($sql);

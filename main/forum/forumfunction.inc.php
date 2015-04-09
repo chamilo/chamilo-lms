@@ -1974,13 +1974,13 @@ function get_thread_users_qualify($thread_id)
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course, $t_qualify qualify
                 WHERE poster_id = user.user_id
                     AND post.poster_id = qualify.user_id
-                    AND user.user_id = session_rel_user_rel_course.id_user
+                    AND user.user_id = session_rel_user_rel_course.user_id
                     AND session_rel_user_rel_course.status<>'2'
-                    AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
+                    AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
                     AND post.thread_id = '".Database::escape_string($thread_id)."'
                     AND session_id = '".api_get_session_id()."'
-                    AND course_code = '".$course_code."' AND
+                    AND session_rel_user_rel_course.c_id = '".$course_id."' AND
                     qualify.c_id = $course_id AND
                     post.c_id = $course_id
                 $orderby ";
@@ -2054,12 +2054,12 @@ function get_thread_users_not_qualify($thread_id)
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
                 WHERE poster_id = user.user_id
                     AND user.user_id NOT IN (".$cad.")
-                    AND user.user_id = session_rel_user_rel_course.id_user
+                    AND user.user_id = session_rel_user_rel_course.user_id
                     AND session_rel_user_rel_course.status<>'2'
-                    AND session_rel_user_rel_course.id_user NOT IN ($user_to_avoid)
+                    AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND post.thread_id = '".Database::escape_string($thread_id)."'
                     AND session_id = '".api_get_session_id()."'
-                    AND course_code = '".$course_code."' AND post.c_id = $course_id $orderby ";
+                    AND session_rel_user_rel_course.c_id = '".$course_id."' AND post.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.user_id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post, $t_users user,$t_course_user course_user

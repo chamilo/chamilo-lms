@@ -1037,13 +1037,22 @@ class Thematic
 
             // get all thematic advance done
             $rs_thematic_done = Database::query("SELECT ref FROM $tbl_item_property
-                                WHERE c_id = $course_id AND tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone' AND id_session = $sessionId ");
+                                WHERE c_id = $course_id AND tool='thematic_advance' AND lastedit_type='ThematicAdvanceDone' AND session_id = $sessionId ");
             if (Database::num_rows($rs_thematic_done) > 0) {
                 while ($row_thematic_done = Database::fetch_array($rs_thematic_done)) {
                     $ref = $row_thematic_done['ref'];
                     if (in_array($ref, $a_thematic_advance_ids)) { continue; }
                     // update items
-                    Database::query("UPDATE $tbl_item_property SET lastedit_date='".api_get_utc_datetime()."', lastedit_type='ThematicAdvanceUpdated', lastedit_user_id = $user_id WHERE c_id = $course_id AND tool='thematic_advance' AND ref=$ref AND id_session = $sessionId  ");
+                    $sql = "UPDATE $tbl_item_property SET
+                                lastedit_date='".api_get_utc_datetime()."',
+                                lastedit_type='ThematicAdvanceUpdated',
+                                lastedit_user_id = $user_id
+                            WHERE
+                                c_id = $course_id AND
+                                tool='thematic_advance' AND
+                                ref=$ref AND
+                                session_id = $sessionId  ";
+                    Database::query($sql);
                 }
             }
         }

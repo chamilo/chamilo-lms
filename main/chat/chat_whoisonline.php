@@ -51,13 +51,14 @@ if (!empty($course)) {
     if (empty($session_id)) {
 		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email,t3.status
 				  FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3
-				  WHERE t2.c_id = $course_id AND
-				  		t1.user_id=t2.user_id AND
-				  		t3.user_id=t2.user_id AND
-						t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-						t3.c_id = '".$courseInfo['id']."' AND
-						t2.last_connection>'".$date_inter."' $extra_condition
-						ORDER BY username";
+				  WHERE
+				  	t2.c_id = $course_id AND
+					t1.user_id=t2.user_id AND
+					t3.user_id=t2.user_id AND
+					t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+					t3.c_id = '".$courseInfo['id']."' AND
+					t2.last_connection>'".$date_inter."' $extra_condition
+				  ORDER BY username";
         $result = Database::query($query);
         $users = Database::store_result($result);
 	} else {
@@ -66,9 +67,11 @@ if (!empty($course)) {
                   FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_session_course_user t3
 		          WHERE
 		          t2.c_id = $course_id AND
-		          t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND
+		          t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND
 		          t3.session_id = '".$session_id."' AND
-		          t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+		          t3.c_id = '".$_course['real_id']."' AND
+		          t2.last_connection>'".$date_inter."' $extra_condition
+		          ORDER BY username";
 		$result = Database::query($query);
 		while ($learner = Database::fetch_array($result)) {
             $users[$learner['user_id']] = $learner;
@@ -77,8 +80,14 @@ if (!empty($course)) {
 		// select session coach
 		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email
 		          FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3
-		          WHERE t2.c_id = $course_id AND
-		             t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$session_id."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+		          WHERE
+					t2.c_id = $course_id AND
+					t1.user_id=t2.user_id AND
+					t3.id_coach=t2.user_id AND
+					t3.id = '".$session_id."' AND
+					t2.last_connection > '".$date_inter."'
+					$extra_condition
+				  ORDER BY username";
 		$result = Database::query($query);
 		if ($coach = Database::fetch_array($result)) {
 			$users[$coach['user_id']] = $coach;
@@ -90,7 +99,7 @@ if (!empty($course)) {
 				WHERE
 					t2.c_id = $course_id AND
 					t1.user_id=t2.user_id
-					AND t3.id_user=t2.user_id AND t3.status=2
+					AND t3.user_id =t2.user_id AND t3.status=2
 					AND t3.session_id = '".$session_id."'
 					AND t3.c_id = '".$course_id."'
 					AND t2.last_connection>'".$date_inter."' $extra_condition

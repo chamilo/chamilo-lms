@@ -84,7 +84,8 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
         		if (!empty($id_session)) {
         		    $id_session = intval($id_session);
         			// check id_user from session_rel_user table
-        			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+        			$sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
+        			        WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
         			$res = Database::query($sql);
         			$user_ids = array();
         			if (Database::num_rows($res) > 0) {
@@ -109,13 +110,20 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
                     break;
                 case 'multiple':
                     $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                            WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.status<>6 '.$cond_user_id.
+                            WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').'
+                            LIKE "'.$needle.'%" AND
+                            user.status<>'.DRH.' AND
+                            user.status<>6 '.$cond_user_id.
                             $order_clause;
                     break;
                 case 'any_session':
-                    $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
-                            WHERE   s.id_user IS null AND user.status<>'.DRH.' AND
-                                    user.status<>6 '.$cond_user_id.
+                    $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname
+                            FROM '.$tbl_user.' user
+                            LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.user_id = user.user_id)
+                            WHERE
+                                s.user_id IS NULL AND
+                                user.status <>'.DRH.' AND
+                                user.status <> 6 '.$cond_user_id.
                             $order_clause;
                     break;
     		}
@@ -141,12 +149,15 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
                             $order_clause;
                             break;
                         case 'any_session' :
-                            $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s ON (s.id_user = user.user_id)
-                            INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                            WHERE   access_url_id = '.$access_url_id.' AND
-                                    s.id_user IS null AND
-                                    user.status<>'.DRH.' AND
-                                    user.status<>6 '.$cond_user_id.
+                            $sql = 'SELECT DISTINCT user.user_id, username, lastname, firstname
+                                    FROM '.$tbl_user.' user LEFT OUTER JOIN '.$tbl_session_rel_user.' s
+                                    ON (s.user_id = user.user_id)
+                                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                                    WHERE
+                                        access_url_id = '.$access_url_id.' AND
+                                        s.user_id IS null AND
+                                        user.status<>'.DRH.' AND
+                                        user.status<>6 '.$cond_user_id.
                             $order_clause;
                             break;
     				}
@@ -265,12 +276,12 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
 
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
     if ($ajax_search) {
-        $sql = "SELECT user_id, lastname, firstname, username, session_id
+        $sql = "SELECT u.user_id, lastname, firstname, username, session_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON $tbl_session_rel_user.user_id = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     AND $tbl_session_rel_user.session_id = ".intval($id_session)."
-                    WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+                WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -341,18 +352,22 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
         }
 
         if ($use_extra_fields) {
-            $sql = "SELECT  user_id, lastname, firstname, username, session_id
+            $sql = "SELECT  u.user_id, lastname, firstname, username, session_id
                    FROM $tbl_user u
-                        LEFT JOIN $tbl_session_rel_user
-                        ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.session_id = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                        $where_filter AND u.status<>".DRH." AND u.status<>6
-                        $order_clause";
+                    LEFT JOIN $tbl_session_rel_user
+                    ON $tbl_session_rel_user.user_id = u.user_id AND
+                    $tbl_session_rel_user.session_id = '$id_session' AND
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $where_filter AND u.status<>".DRH." AND u.status<>6
+                    $order_clause";
 
         } else {
             $sql = "SELECT  user_id, lastname, firstname, username, session_id
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.session_id = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON $tbl_session_rel_user.user_id = u.user_id AND
+                    $tbl_session_rel_user.session_id = '$id_session' AND
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     WHERE u.status<>".DRH." AND u.status<>6
                     $order_clause";
         }
@@ -393,7 +408,7 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
               FROM $tbl_user u
               LEFT JOIN $tbl_session_rel_user
               ON
-                $tbl_session_rel_user.id_user = u.user_id AND
+                $tbl_session_rel_user.user_id = u.id AND
                 $tbl_session_rel_user.session_id = '$id_session' AND
                 $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
               WHERE u.status<>".DRH." AND u.status<>6 $order_clause";

@@ -279,7 +279,7 @@ class SessionManager
         ) {
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
-                            sru.id_user = '$user_id' AND
+                            sru.user_id = '$user_id' AND
                             sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'
                             )
                       ";
@@ -395,7 +395,7 @@ class SessionManager
         ) {
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
-                            sru.id_user = '$user_id' AND
+                            sru.user_id = '$user_id' AND
                             sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'
                             )
                       ";
@@ -600,7 +600,7 @@ class SessionManager
           $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
           } */
 
-        $sessionCond = 'and id_session = %s';
+        $sessionCond = 'and session_id = %s';
         if ($sessionId == 'T') {
             $sessionCond = "";
         }
@@ -623,7 +623,7 @@ class SessionManager
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
                 FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.id_user
+                INNER JOIN $user u ON u.user_id = s.user_id
                 $where
                 $order
                 $limit";
@@ -720,7 +720,7 @@ class SessionManager
 
         $course = api_get_course_info_by_id($courseId);
 
-        $where = " WHERE c_id = '%s' AND s.status <> 2 AND id_session = %s";
+        $where = " WHERE c_id = '%s' AND s.status <> 2 AND session_id = %s";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -744,7 +744,7 @@ class SessionManager
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.c_id
                 FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.id_user
+                INNER JOIN $user u ON u.user_id = s.user_id
                 $where $order $limit";
 
         $sql_query = sprintf($sql, intval($course['real_id']), $sessionId);
@@ -867,21 +867,21 @@ class SessionManager
         //TODO, fix create report without session
         $queryVariables = array($course['real_id']);
         if (!empty($sessionId)) {
-            $where .= ' AND id_session = %s';
+            $where .= ' AND session_id = %s';
             $queryVariables[] = $sessionId;
             $sql = "SELECT
                       u.user_id, u.lastname, u.firstname, u.username,
                       u.email, s.c_id, s.session_id
                     FROM $session_course_user s
                     INNER JOIN $user u
-                    ON u.user_id = s.id_user
+                    ON u.user_id = s.user_id
                     $where $order $limit";
         } else {
             $sql = "SELECT
                         u.user_id, u.lastname, u.firstname, u.username,
                         u.email, s.c_id, s.session_id
                     FROM $session_course_user s
-                    INNER JOIN $user u ON u.user_id = s.id_user
+                    INNER JOIN $user u ON u.user_id = s.user_id
                     $where $order $limit";
         }
 
@@ -1497,9 +1497,9 @@ class SessionManager
         }
 
         Database::query("DELETE FROM $tbl_session WHERE id IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)");
-        Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)");
+        Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
+        Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
+        Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
 
         $sql_delete_sfv = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
@@ -1581,16 +1581,16 @@ class SessionManager
             }
         }
 
-        $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-                WHERE id_session = '$id_session' AND status = 0";
+        $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
+                WHERE session_id = '$id_session' AND status = 0";
         $result = Database::query($sql);
         $existingUsers = array();
         while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['id_user'];
+            $existingUsers[] = $row['user_id'];
         }
 
         $sql = "SELECT c_id FROM $tbl_session_rel_course
-                WHERE id_session = '$id_session'";
+                WHERE session_id = '$id_session'";
         $result = Database::query($sql);
         $course_list = array();
         while ($row = Database::fetch_array($result)) {
@@ -1627,17 +1627,17 @@ class SessionManager
             $nbr_users = 0;
             $courseId = intval($courseId);
 
-            $sql = "SELECT DISTINCT id_user
+            $sql = "SELECT DISTINCT user_id
                     FROM $tbl_session_rel_course_rel_user
                     WHERE
-                        id_session = '$id_session' AND
+                        session_id = '$id_session' AND
                         c_id = '$courseId' AND
                         status = 0
                     ";
             $result = Database::query($sql);
             $existingUsers = array();
             while ($row = Database::fetch_array($result)) {
-                $existingUsers[] = $row['id_user'];
+                $existingUsers[] = $row['user_id'];
             }
 
             // Delete existing users
@@ -1646,9 +1646,9 @@ class SessionManager
                     if (!in_array($existing_user, $user_list)) {
                         $sql = "DELETE FROM $tbl_session_rel_course_rel_user
                                 WHERE
-                                    id_session =' $id_session' AND
+                                    session_id =' $id_session' AND
                                     c_id = '$courseId' AND
-                                    id_user = '$existing_user' AND
+                                    user_id = '$existing_user' AND
                                     status = 0 ";
                         $result = Database::query($sql);
                         if (Database::affected_rows($result)) {
@@ -1663,7 +1663,7 @@ class SessionManager
             foreach ($user_list as $enreg_user) {
                 if (!in_array($enreg_user, $existingUsers)) {
                     $enreg_user = Database::escape_string($enreg_user);
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, c_id, id_user, visibility, status)
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility, status)
                             VALUES('$id_session', '$courseId', '$enreg_user', '$session_visibility', '0')";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
@@ -1673,21 +1673,21 @@ class SessionManager
             }
 
             // Count users in this session-course relation
-            $sql = "SELECT COUNT(id_user) as nbUsers
+            $sql = "SELECT COUNT(user_id) as nbUsers
                     FROM $tbl_session_rel_course_rel_user
-                    WHERE id_session = '$id_session' AND c_id = '$courseId' AND status<>2";
+                    WHERE session_id = '$id_session' AND c_id = '$courseId' AND status<>2";
             $rs = Database::query($sql);
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users
-                    WHERE id_session='$id_session' AND c_id = '$courseId'";
+                    WHERE session_id ='$id_session' AND c_id = '$courseId'";
             Database::query($sql);
         }
 
         // Delete users from the session
         if ($empty_users === true) {
             $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE id_session = $id_session AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
+                    WHERE session_id = $id_session AND relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
             Database::query($sql);
         }
 
@@ -1697,7 +1697,7 @@ class SessionManager
         foreach ($user_list as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, id_session, id_user)
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id)
                     VALUES (0, '$id_session', '$enreg_user')";
             Database::query($sql);
         }
@@ -1745,17 +1745,17 @@ class SessionManager
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT DISTINCT id_user
+        $sql = "SELECT DISTINCT user_id
                 FROM $table
                 WHERE
-                    id_session = '$sessionId' AND
-                    c_id='$courseId'
+                    session_id = '$sessionId' AND
+                    c_id = '$courseId'
                     $statusCondition
                 ";
         $result = Database::query($sql);
         $existingUsers = array();
         while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['id_user'];
+            $existingUsers[] = $row['user_id'];
         }
 
         return $existingUsers;
@@ -1798,9 +1798,9 @@ class SessionManager
             $userId = intval($userId);
             $sql = "DELETE FROM $table
                     WHERE
-                        id_session='$sessionId' AND
+                        session_id='$sessionId' AND
                         c_id = '$courseId' AND
-                        id_user = '$userId'
+                        user_id = '$userId'
                         $statusCondition
                     ";
             Database::query($sql);
@@ -1808,20 +1808,20 @@ class SessionManager
 
         if ($updateTotal) {
             // Count users in this session-course relation
-            $sql = "SELECT COUNT(id_user) as nbUsers
+            $sql = "SELECT COUNT(user_id) as nbUsers
                     FROM $table
                     WHERE
-                        id_session='$sessionId' AND
+                        session_id ='$sessionId' AND
                         c_id = '$courseId' AND
                         status <>2";
             $result = Database::query($sql);
             list($userCount) = Database::fetch_array($result);
 
             // update the session-course relation to add the users total
-            $sql = "UPDATE $tableSessionCourse SET
-                    nbr_users = $userCount
+            $sql = "UPDATE $tableSessionCourse
+                    SET nbr_users = $userCount
                     WHERE
-                        id_session='$sessionId' AND
+                        session_id ='$sessionId' AND
                         c_id = '$courseId'";
             Database::query($sql);
         }
@@ -1885,12 +1885,12 @@ class SessionManager
         foreach ($user_list as $enreg_user) {
             $enreg_user = intval($enreg_user);
             // Checking if user exists in session - course - user table.
-            $sql = "SELECT count(id_user) as count
+            $sql = "SELECT count(user_id) as count
                     FROM $tbl_session_rel_course_rel_user
                     WHERE
-                        id_session = $session_id AND
+                        session_id = $session_id AND
                         c_id = '$courseId' and
-                        id_user = $enreg_user ";
+                        user_id = $enreg_user ";
             $result = Database::query($sql);
             $count = 0;
 
@@ -1900,7 +1900,7 @@ class SessionManager
             }
 
             if ($count == 0) {
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, c_id, id_user, visibility)
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id, visibility)
                         VALUES ('$session_id', '$courseId', '$enreg_user', '$session_visibility')";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
@@ -1909,9 +1909,9 @@ class SessionManager
             }
 
             // Checking if user exists in session - user table.
-            $sql = "SELECT count(id_user) as count
+            $sql = "SELECT count(user_id) as count
                     FROM $tbl_session_rel_user
-                    WHERE id_session = $session_id AND id_user = $enreg_user ";
+                    WHERE session_id = $session_id AND user_id = $enreg_user ";
             $result = Database::query($sql);
             $count = 0;
 
@@ -1922,7 +1922,7 @@ class SessionManager
 
             if (empty($count)) {
                 // If user is not registered to a session then add it.
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user)
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id)
                         VALUES ('$session_id', '$enreg_user')";
                 Database::query($sql);
 
@@ -1933,14 +1933,15 @@ class SessionManager
         }
 
         // count users in this session-course relation
-        $sql = "SELECT COUNT(id_user) as nbUsers
+        $sql = "SELECT COUNT(user_id) as nbUsers
                 FROM $tbl_session_rel_course_rel_user
-                WHERE id_session='$session_id' AND c_id='$courseId' AND status<>2";
+                WHERE session_id ='$session_id' AND c_id='$courseId' AND status<>2";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         // update the session-course relation to add the users total
-        $sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                WHERE id_session='$session_id' AND c_id = '$courseId'";
+        $sql = "UPDATE $tbl_session_rel_course
+                SET nbr_users=$nbr_users
+                WHERE session_id='$session_id' AND c_id = '$courseId'";
         Database::query($sql);
     }
 
@@ -1963,8 +1964,8 @@ class SessionManager
 
         $delete_sql = "DELETE FROM $tbl_session_rel_user
 		               WHERE
-                            id_session = '$session_id' AND
-		                    id_user ='$user_id' AND
+                            session_id = '$session_id' AND
+		                    user_id ='$user_id' AND
 		                    relation_type <> " . SESSION_RELATION_TYPE_RRHH . "";
         $result = Database::query($delete_sql);
         $return = Database::affected_rows($result);
@@ -1983,12 +1984,12 @@ class SessionManager
                 $courseId = $course['id'];
                 // Delete user from course
                 $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                        WHERE id_session='$session_id' AND c_id='$courseId' AND id_user='$user_id'";
+                        WHERE session_id ='$session_id' AND c_id = '$courseId' AND user_id = '$user_id'";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     // Update number of users in this relation
                     $sql = "UPDATE $tbl_session_rel_course SET nbr_users = nbr_users - 1
-                            WHERE id_session='$session_id' AND c_id = '$courseId'";
+                            WHERE session_id ='$session_id' AND c_id = '$courseId'";
                     Database::query($sql);
                 }
             }
@@ -2025,16 +2026,16 @@ class SessionManager
         // Get list of courses subscribed to this session
         $sql = "SELECT c_id
                 FROM $tbl_session_rel_course
-                WHERE id_session = $sessionId";
+                WHERE session_id = $sessionId";
         $rs = Database::query($sql );
         $existingCourses = Database::store_result($rs);
         $nbr_courses = count($existingCourses);
 
         // get list of users subscribed to this session
-        $sql = "SELECT id_user
+        $sql = "SELECT user_id
                 FROM $tbl_session_rel_user
                 WHERE
-                    id_session = $sessionId AND
+                    session_id = $sessionId AND
                     relation_type<>" . SESSION_RELATION_TYPE_RRHH . "";
         $result = Database::query($sql);
         $user_list = Database::store_result($result);
@@ -2047,11 +2048,11 @@ class SessionManager
                     $courseInfo = api_get_course_info($existingCourse['c_id']);
 
                     $sql = "DELETE FROM $tbl_session_rel_course
-                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND id_session=$sessionId";
+                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id=$sessionId";
                     Database::query($sql);
 
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND id_session=$sessionId";
+                            WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id=$sessionId";
                     Database::query($sql);
 
                     CourseManager::remove_course_ranking(
@@ -2077,7 +2078,7 @@ class SessionManager
 
             if (!$exists) {
                 //if the course isn't subscribed yet
-                $sql = "INSERT INTO $tbl_session_rel_course (id_session, c_id)
+                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id)
                         VALUES ('$sessionId', '$courseId')";
                 Database::query($sql);
 
@@ -2088,8 +2089,8 @@ class SessionManager
                 // subscribe all the users from the session to this course inside the session
                 $nbr_users = 0;
                 foreach ($user_list as $enreg_user) {
-                    $enreg_user_id = intval($enreg_user['id_user']);
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session, c_id, id_user)
+                    $enreg_user_id = intval($enreg_user['user_id']);
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
                             VALUES ($sessionId, '$courseId', $enreg_user_id)";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
@@ -2098,7 +2099,7 @@ class SessionManager
                 }
                 $sql = "UPDATE $tbl_session_rel_course
                         SET nbr_users=$nbr_users
-                        WHERE id_session='$sessionId' AND c_id='$courseId'";
+                        WHERE session_id ='$sessionId' AND c_id='$courseId'";
                 Database::query($sql);
             }
         }
@@ -2135,12 +2136,12 @@ class SessionManager
 
         // Unsubscribe course
         $sql = "DELETE FROM $tbl_session_rel_course
-                WHERE c_id = '$course_id' AND id_session='$session_id'";
+                WHERE c_id = '$course_id' AND session_id='$session_id'";
         $result = Database::query($sql);
         $nb_affected = Database::affected_rows($result);
 
         $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                WHERE c_id = '$course_id' AND id_session='$session_id'";
+                WHERE c_id = '$course_id' AND session_id='$session_id'";
         Database::query($sql);
 
         if ($nb_affected > 0) {
@@ -2287,7 +2288,7 @@ class SessionManager
         $return_value = false;
         $sql = "SELECT c_id FROM $tbl_session_course
                 WHERE
-                  id_session = " . intval($session_id) . " AND
+                  session_id = " . intval($session_id) . " AND
                   c_id = '" . intval($courseId) . "'";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
@@ -2648,7 +2649,8 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // check if user is a teacher
-        $sql = "SELECT * FROM $tbl_user WHERE status='1' AND user_id = '$user_id'";
+        $sql = "SELECT * FROM $tbl_user
+                WHERE status='1' AND user_id = '$user_id'";
 
         $rs_check_user = Database::query($sql);
 
@@ -2656,8 +2658,10 @@ class SessionManager
             if ($nocoach) {
                 // check if user_id exists in session_rel_user (if the user is
                 // subscribed to the session in any manner)
-                $sql = "SELECT id_user FROM $tbl_session_rel_user
-                        WHERE id_session = '$session_id' AND id_user = '$user_id'";
+                $sql = "SELECT user_id FROM $tbl_session_rel_user
+                        WHERE
+                            session_id = '$session_id' AND
+                            user_id = '$user_id' ";
                 $res = Database::query($sql);
 
                 if (Database::num_rows($res) > 0) {
@@ -2666,7 +2670,10 @@ class SessionManager
                     // and then exit
                     $sql = "UPDATE $tbl_session_rel_course_rel_user
                             SET status = 0
-                            WHERE id_session = '$session_id' AND c_id = '$courseId' AND id_user = '$user_id' ";
+                            WHERE
+                                session_id = '$session_id' AND
+                                c_id = '$courseId' AND
+                                user_id = '$user_id' ";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0)
                         return true;
@@ -2677,7 +2684,10 @@ class SessionManager
                     // he isn't subscribed to a course in this session either
                     // and then exit
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE id_session = '$session_id' AND c_id = '$courseId' AND id_user = '$user_id' ";
+                            WHERE
+                                session_id = '$session_id' AND
+                                c_id = '$courseId' AND
+                                user_id = '$user_id' ";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0)
                         return true;
@@ -2687,14 +2697,20 @@ class SessionManager
             } else {
                 // Assign user as a coach to course
                 // First check if the user is registered to the course
-                $sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-                        WHERE id_session = '$session_id' AND c_id = '$courseId' AND id_user = '$user_id'";
+                $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
+                        WHERE
+                            session_id = '$session_id' AND
+                            c_id = '$courseId' AND
+                            user_id = '$user_id'";
                 $rs_check = Database::query($sql);
 
                 // Then update or insert.
                 if (Database::num_rows($rs_check) > 0) {
                     $sql = "UPDATE $tbl_session_rel_course_rel_user SET status = 2
-					        WHERE id_session = '$session_id' AND c_id = '$courseId' AND id_user = '$user_id' ";
+					        WHERE
+					            session_id = '$session_id' AND
+					            c_id = '$courseId' AND
+					            user_id = '$user_id' ";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0) {
                         return true;
@@ -2702,7 +2718,7 @@ class SessionManager
                         return false;
                     }
                 } else {
-                    $sql = "INSERT INTO $tbl_session_rel_course_rel_user(id_session, c_id, id_user, status)
+                    $sql = "INSERT INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id, status)
                             VALUES('$session_id', '$courseId', '$user_id', 2)";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result) > 0) {
@@ -2751,16 +2767,16 @@ class SessionManager
         // Deleting assigned sessions to hrm_id.
         if ($removeOldConnections) {
             if (api_is_multiple_url_enabled()) {
-                $sql = "SELECT id_session
+                $sql = "SELECT session_id
                         FROM $tbl_session_rel_user s
                         INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.session_id)
                         WHERE
-                            id_user = $userId AND
+                            s.user_id = $userId AND
                             relation_type=" . SESSION_RELATION_TYPE_RRHH . " AND
                             access_url_id = " . api_get_current_access_url_id() . "";
             } else {
-                $sql = "SELECT id_session FROM $tbl_session_rel_user s
-                        WHERE id_user = $userId AND relation_type=" . SESSION_RELATION_TYPE_RRHH . "";
+                $sql = "SELECT session_id FROM $tbl_session_rel_user s
+                        WHERE user_id = $userId AND relation_type=" . SESSION_RELATION_TYPE_RRHH . "";
             }
             $result = Database::query($sql);
 
@@ -2768,8 +2784,8 @@ class SessionManager
                 while ($row = Database::fetch_array($result)) {
                     $sql = "DELETE FROM $tbl_session_rel_user
                             WHERE
-                                id_session = {$row['id_session']} AND
-                                id_user = $userId AND
+                                session_id = {$row['session_id']} AND
+                                user_id = $userId AND
                                 relation_type=" . SESSION_RELATION_TYPE_RRHH . " ";
                     Database::query($sql);
                 }
@@ -2780,7 +2796,7 @@ class SessionManager
 
             foreach ($sessions_list as $session_id) {
                 $session_id = intval($session_id);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user, relation_type)
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_user (session_id, user_id, relation_type)
 				        VALUES ($session_id, $userId, '" . SESSION_RELATION_TYPE_RRHH . "')";
                 Database::query($sql);
                 $affected_rows++;
@@ -2819,7 +2835,7 @@ class SessionManager
                     INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
                     WHERE
-                        sru.id_user = '$userId' AND
+                        sru.user_id = '$userId' AND
                         sru.session_id = '$sessionId' AND
                         sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "' AND
                         access_url_id = " . api_get_current_access_url_id() . "
@@ -2829,17 +2845,20 @@ class SessionManager
                      INNER JOIN $tbl_session_rel_user sru
                      ON
                         sru.session_id = s.id AND
-                        sru.id_user = '$userId' AND
+                        sru.user_id = '$userId' AND
                         sru.session_id = '$sessionId' AND
                         sru.relation_type = '" . SESSION_RELATION_TYPE_RRHH . "'
-                        ";
+                    ";
         }
+
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result, 'ASSOC');
             $row['course_list'] = self::get_course_list_by_session_id($sessionId);
+
             return $row;
         }
+
         return array();
     }
 
@@ -2946,13 +2965,13 @@ class SessionManager
                                  $tbl_session_rel_user sru
                                  WHERE
                                     sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
-                                    sru.id_user = $userId";
+                                    sru.user_id = $userId";
                 break;
             case COURSEMANAGER:
                 $courseSessionQuery = "
                     SELECT scu.session_id as id
                     FROM $tbl_session_rel_course_rel_user scu
-                    WHERE (scu.status = 2 AND scu.id_user = $userId)";
+                    WHERE (scu.status = 2 AND scu.user_id = $userId)";
 
                 $whereConditions = " OR (s.id_coach = $userId) ";
                 break;
@@ -2961,7 +2980,7 @@ class SessionManager
                                  FROM
                                  $tbl_session_rel_user sru
                                  WHERE
-                                    sru.id_user = $userId";
+                                    sru.user_id = $userId";
                 break;
         }
 
@@ -3008,6 +3027,7 @@ class SessionManager
                 $sessions[$row['id']] = $row;
             }
         }
+
         return $sessions;
     }
 
@@ -3073,6 +3093,7 @@ class SessionManager
                 $courses[$row['id']] = $row;
             }
         }
+
         return $courses;
     }
 
@@ -3286,7 +3307,7 @@ class SessionManager
                     access_url_id
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user
-                ON u.user_id = $tbl_session_rel_user.id_user AND
+                ON u.user_id = $tbl_session_rel_user.user_id AND
                 $tbl_session_rel_user.session_id = $id
                 LEFT OUTER JOIN $table_access_url_user uu
                 ON (uu.user_id = u.user_id)
@@ -3340,6 +3361,7 @@ class SessionManager
         }
         $sql .= ' ORDER by name';
         $result = Database::query($sql);
+
         return Database::store_result($result, 'ASSOC');
     }
 
@@ -3367,7 +3389,7 @@ class SessionManager
         $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE
-                    session_rcru.id_user = user.user_id AND
+                    session_rcru.user_id = user.user_id AND
                     session_rcru.session_id = '" . intval($session_id) . "' AND
                     session_rcru.c_id ='" . intval($courseId) . "' AND
                     user.user_id = " . intval($user_id);
@@ -3399,7 +3421,7 @@ class SessionManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-                WHERE session_rcru.id_user = user.user_id AND
+                WHERE session_rcru.user_id = user.user_id AND
                     session_rcru.session_id = '" . intval($session_id) . "' AND
                     session_rcru.c_id ='" . intval($courseId) . "' AND
                     user.user_id = " . intval($user_id);
@@ -3950,19 +3972,19 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE id_session = '$session_id' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
+                                    WHERE session_id = '$session_id' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
                             Database::query($sql);
 
-                            $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
+                            $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
                             Database::query($sql);
 
                             // Delete session-course-user relationships students and coaches.
                             if ($updateCourseCoaches) {
-                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status in ('0', '2')";
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE session_id = '$session_id' AND status in ('0', '2')";
                                 Database::query($sql);
                             } else {
                                 // Delete session-course-user relation ships *only* for students.
-                                $sql = "DELETE FROM $tbl_session_course_user WHERE id_session = '$session_id' AND status <> 2";
+                                $sql = "DELETE FROM $tbl_session_course_user WHERE session_id = '$session_id' AND status <> 2";
                                 Database::query($sql);
                             }
                         }
@@ -4036,21 +4058,21 @@ class SessionManager
 
                             // Delete session-user relation only for students
                             $sql = "DELETE FROM $tbl_session_user
-                                    WHERE id_session = '$session_id' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
+                                    WHERE session_id = '$session_id' AND relation_type <> " . SESSION_RELATION_TYPE_RRHH;
                             Database::query($sql);
 
-                            $sql = "DELETE FROM $tbl_session_course WHERE id_session = '$session_id'";
+                            $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
                             Database::query($sql);
 
                             // Delete session-course-user relationships students and coaches.
                             if ($updateCourseCoaches) {
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE id_session = '$session_id' AND status in ('0', '2')";
+                                        WHERE session_id = '$session_id' AND status in ('0', '2')";
                                 Database::query($sql);
                             } else {
                                 // Delete session-course-user relation ships *only* for students.
                                 $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE id_session = '$session_id' AND status <> 2";
+                                        WHERE session_id = '$session_id' AND status <> 2";
                                 Database::query($sql);
                             }
                         } else {
@@ -4077,8 +4099,8 @@ class SessionManager
                             $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
-                                    id_user = '$user_id',
-                                    id_session = '$session_id'";
+                                    user_id = '$user_id',
+                                    session_id = '$session_id'";
                             Database::query($sql);
                             if ($debug) {
                                 $logger->addInfo("Sessions - Adding User #$user_id ($user) to session #$session_id");
@@ -4133,7 +4155,7 @@ class SessionManager
 
                         // Adding the course to a session.
                         $sql = "INSERT IGNORE INTO $tbl_session_course
-                                SET c_id = '$courseId', id_session='$session_id'";
+                                SET c_id = '$courseId', session_id='$session_id'";
                         Database::query($sql);
 
                         SessionManager::installCourse($session_id, $courseInfo['real_id']);
@@ -4365,9 +4387,9 @@ class SessionManager
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
 
-        $sql = "SELECT id_user FROM $table
+        $sql = "SELECT user_id FROM $table
                 WHERE
-                    id_session = '$sessionId' AND
+                    session_id = '$sessionId' AND
                     c_id = '$courseId' AND
                     status = 2";
         $result = Database::query($sql);
@@ -4416,15 +4438,15 @@ class SessionManager
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = intval($sessionId);
 
-        $sql = "SELECT DISTINCT id_user
+        $sql = "SELECT DISTINCT user_id
                 FROM $table
-                WHERE id_session = '$sessionId' AND status = 2";
+                WHERE session_id = '$sessionId' AND status = 2";
         $result = Database::query($sql);
 
         $coaches = array();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $coaches[] = $row['id_user'];
+                $coaches[] = $row['user_id'];
             }
         }
 
@@ -5192,7 +5214,7 @@ class SessionManager
             $position[$course['code']] = $course['position'];
             // Saving current order.
             $sql = "UPDATE $table SET position = $count
-                    WHERE id_session = $sessionId AND c_id = '".$course['real_id']."'";
+                    WHERE session_id = $sessionId AND c_id = '".$course['real_id']."'";
             Database::query($sql);
             $count++;
         }
@@ -5225,11 +5247,11 @@ class SessionManager
         }
 
         $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
-                 WHERE id_session = $sessionId AND c_id =  '".$thisCourseCode."'";
+                 WHERE session_id = $sessionId AND c_id =  '".$thisCourseCode."'";
         Database::query($sql1);
 
         $sql2 = "UPDATE $table SET position = '".intval($thisOrder)."'
-                 WHERE id_session = $sessionId AND c_id =  '".$nextId."'";
+                 WHERE session_id = $sessionId AND c_id =  '".$nextId."'";
         Database::query($sql2);
 
         return true;
@@ -5322,7 +5344,7 @@ class SessionManager
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $parameters = array('duration' => $duration);
-        $where = array('id_session = ? AND id_user = ? ' => array($sessionId, $userId));
+        $where = array('session_id = ? AND user_id = ? ' => array($sessionId, $userId));
         Database::update($table, $parameters, $where);
     }
 
@@ -5342,7 +5364,8 @@ class SessionManager
         }
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "SELECT * FROM $table WHERE id_session =$sessionId AND id_user = $userId";
+        $sql = "SELECT * FROM $table
+                WHERE session_id =$sessionId AND user_id = $userId";
         $result = Database::query($sql);
         $values = array();
         if (Database::num_rows($result)) {
@@ -5367,8 +5390,11 @@ class SessionManager
 
         // COUNT(1) actually returns the number of rows from the table (as if
         // counting the results from the first column)
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable "
-            . "WHERE id_session = $sessionId AND id_user = $userId AND relation_type = 0";
+        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
+                WHERE
+                    session_id = $sessionId AND
+                    user_id = $userId AND
+                    relation_type = 0";
 
         $result = Database::fetch_assoc(Database::query($sql));
 
@@ -5500,7 +5526,7 @@ class SessionManager
         $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
-        $idResult = Database::select('DISTINCT id_user', $scuTable, array(
+        $idResult = Database::select('DISTINCT user_id', $scuTable, array(
             'where' => array(
                 'status = ?' => 2
             )
@@ -5510,7 +5536,7 @@ class SessionManager
             foreach ($idResult as $idData) {
                 $userResult = Database::select('user_id, lastname, firstname, username', $userTable, array(
                     'where' => array(
-                        'user_id = ?' => $idData['id_user']
+                        'user_id = ?' => $idData['user_id']
                     )
                 ), 'first');
 
@@ -5576,7 +5602,7 @@ class SessionManager
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         return  Database::select('*', $table, array(
             'where' => array(
-                'id_user = ? AND ' => $coachId,
+                'user_id = ? AND ' => $coachId,
                 'status = ?' => 2
             )
         ));
@@ -5589,11 +5615,13 @@ class SessionManager
      */
     public static function getTotalUserCoursesInSession($sessionId)
     {
-        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status "
-            . "FROM session_rel_course_rel_user scu "
-            . "INNER JOIN user u ON scu.id_user = u.user_id "
-            . "WHERE scu.session_id = " . intval($sessionId) . " "
-            . "GROUP BY u.user_id";
+        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $sql = "SELECT COUNT(1) as count, u.user_id, scu.status status_in_session, u.status user_status
+              FROM $tableSessionRelCourseRelUser scu
+              INNER JOIN $tableUser u ON scu.user_id = u.user_id
+              WHERE scu.session_id = " . intval($sessionId) ."
+              GROUP BY u.user_id";
 
         $result = Database::query($sql);
 
@@ -5805,7 +5833,7 @@ class SessionManager
                         u.lastname AS coach_lastname
                     FROM $courseTable c
                     INNER JOIN $sessionCourseUserTable scu ON c.id = scu.c_id
-                    INNER JOIN $userTable u ON scu.id_user = u.user_id
+                    INNER JOIN $userTable u ON scu.user_id = u.user_id
                     WHERE scu.status = 2 AND scu.session_id IN $sessionIdsString
                     ORDER BY scu.session_id ASC ";
                 $res = Database::query($sql);

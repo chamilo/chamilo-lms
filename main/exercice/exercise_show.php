@@ -4,7 +4,7 @@
 /**
  *  Shows the exercise results
  *
- * @author Julio Montoya Armas Added switchable fill in blank option added
+ * @author Julio Montoya - Added switchable fill in blank option added
  * @version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
  * @package chamilo.exercise
  * @todo remove the debug code and use the general debug library
@@ -56,7 +56,7 @@ if (empty($id)) {
 
 if (api_is_course_session_coach(
     api_get_user_id(),
-    api_get_course_id(),
+    api_get_course_int_id(),
     api_get_session_id()
 )) {
     if (!api_coach_can_edit_view_results(api_get_course_int_id(), api_get_session_id())) {

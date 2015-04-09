@@ -210,7 +210,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 // get information about user id viewed
 $user_info_viewed = api_get_user_info($userIdViewed);
-$is_session_course_coach = UserManager::is_session_course_coach($userIdViewed, $_course['sysCode'], $current_session_id);
+$is_session_course_coach = UserManager::is_session_course_coach($userIdViewed, $_course['real_id'], $current_session_id);
 
 if ($displayMode == "viewDefEdit") {
     /* CATEGORIES DEFINITIONS : EDIT */

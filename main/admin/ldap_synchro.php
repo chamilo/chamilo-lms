@@ -125,16 +125,16 @@ foreach($Sessions as $session){
 		}
 
 		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter la session
-		$result=Database::query("SELECT id, course_code FROM $tbl_session_rel_course WHERE session_id='$id_session'");
+		$result=Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'");
 		$CourseList=array();
 		while($row=Database::fetch_array($result)) {
-			$CourseList[]= $row['id'];
+			$CourseList[]= $row['c_id'];
 		}
 
 		foreach ($CourseList as $enreg_course) {
 			// On ajoute la relation entre l'utilisateur et le cours
 			foreach ($UserList as $enreg_user) {
-				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,c_id,id_user)
+				$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id,c_id,user_id)
 						VALUES('$id_session','$enreg_course','$enreg_user')";
 				Database::query($sql);
 			}
@@ -149,7 +149,7 @@ foreach($Sessions as $session){
 		}
 		// On ajoute la relation entre l'utilisateur et la session
 		foreach($UserList as $enreg_user){
-			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
+			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) " .
 					"VALUES('$id_session','$enreg_user')";
 			Database::query($sql);
 		}
@@ -162,4 +162,3 @@ foreach($Sessions as $session){
 		Database::query($sql);
 	}
 }
-?>

@@ -255,21 +255,21 @@ while ($row = Database :: fetch_array($rs)) {
 }
 
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT id_session, course_code
+$sql = 'SELECT session_id, c_id
         FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-        WHERE id_user=' . intval($user_info['user_id']);
+        WHERE user_id=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
 while ($row = Database :: fetch_array($rs)) {
-    $tmp_sessions[] = $row['id_session'];
+    $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
-        if (in_array($row['id_session'], $tmp_sessions)) {
-            $courses_in_session[$row['id_session']][] = $row['course_code'];
+        if (in_array($row['session_id'], $tmp_sessions)) {
+            $courses_in_session[$row['session_id']][] = $row['c_id'];
         }
     } else {
-        if (isset($courses_in_session_by_coach[$row['id_session']])) {
-            if (in_array($row['id_session'], $tmp_sessions)) {
-                $courses_in_session[$row['id_session']][] = $row['course_code'];
+        if (isset($courses_in_session_by_coach[$row['session_id']])) {
+            if (in_array($row['session_id'], $tmp_sessions)) {
+                $courses_in_session[$row['session_id']][] = $row['c_id'];
             }
         }
     }
@@ -659,9 +659,10 @@ if (!empty($student_id)) {
 			</tr>';
 
             if (!empty($courses)) {
-                foreach ($courses as $course_code) {
-                    $courseInfo = api_get_course_info($course_code);
+                foreach ($courses as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
                     $courseId = $courseInfo['real_id'];
+                    $course_code = $courseInfo['code'];
 
                     if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
                         $course_info = CourseManager :: get_course_information($course_code);

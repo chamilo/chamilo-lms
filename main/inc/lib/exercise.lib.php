@@ -2795,7 +2795,7 @@ class ExerciseLib
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2870,7 +2870,7 @@ class ExerciseLib
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.c_id = c.id AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2959,7 +2959,7 @@ class ExerciseLib
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 

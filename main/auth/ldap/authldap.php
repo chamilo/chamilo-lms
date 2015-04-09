@@ -567,7 +567,7 @@ function ldap_add_user_to_session($UserList, $id_session) {
               "(session_id,c_id,user_id) VALUES ".
               "('$id_session','$enreg_course','$enreg_user')");
         }
-        $sql = "SELECT COUNT(id_user) as nbUsers ".
+        $sql = "SELECT COUNT(user_id) as nbUsers ".
                " FROM $tbl_session_rel_course_rel_user " .
                " WHERE session_id='$id_session' ".
                " AND c_id='$enreg_course'";
@@ -585,7 +585,7 @@ function ldap_add_user_to_session($UserList, $id_session) {
                " VALUES('$id_session','$enreg_user')");
     }
     // We update the number of users in the session
-    $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_user ".
+    $sql = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_user ".
            " WHERE session_id='$id_session' ".
            " AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ";
     $rs = Database::query($sql);

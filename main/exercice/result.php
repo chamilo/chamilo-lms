@@ -3,7 +3,7 @@
 /**
  *  Shows the exercise results
  *
- * @author Julio Montoya Armas  - Simple exercise result page
+ * @author Julio Montoya - Simple exercise result page
  *
  */
 require_once '../inc/global.inc.php';

@@ -334,7 +334,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
                                     if ($coach_id !== false) {
                                         $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                id_user='$coach_id',
+                                                user_id='$coach_id',
                                                 c_id = '$courseId',
                                                 session_id = '$session_id',
                                                 status = 2 ";
@@ -400,7 +400,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                             $coach_id = UserManager::get_user_id_from_username($course_coach);
                                             if ($coach_id !== false) {
                                                 $sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-                                                        id_user='$coach_id',
+                                                        user_id='$coach_id',
                                                         c_id = $courseId,
                                                         session_id = '$session_id',
                                                         status = 2 ";

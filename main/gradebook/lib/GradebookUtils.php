@@ -960,7 +960,7 @@ class GradebookUtils
             $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
                     FROM $tbl_session_course_user as scru, $tbl_user as user
                     WHERE
-                        scru.id_user=user.user_id AND
+                        scru.user_id = user.user_id AND
                         scru.status=0  AND
                         scru.c_id='$courseId' AND
                         session_id ='$current_session'

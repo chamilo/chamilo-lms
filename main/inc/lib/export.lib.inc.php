@@ -4,6 +4,7 @@
 use Ddeboer\DataImport\Writer\ExcelWriter;
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Workflow;
+
 use Ddeboer\DataImport\Reader\CsvReader;
 use Ddeboer\DataImport\Reader\ArrayReader;
 use Ddeboer\DataImport\Writer\ArrayWriter;
@@ -32,21 +33,18 @@ class Export
             return false;
         }
 
-        $reader = new ArrayReader($data);
-
-        // Create the workflow from the reader
-        $workflow = new Workflow($reader);
-
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
 
-        $file = new \SplFileObject($filePath, 'w');
-        $writer = new CsvWriter($file);
-        $workflow->addWriter($writer);
-        $workflow->process();
-exit;
+        $writer = new CsvWriter();
+        $writer->setStream(fopen($filePath, 'w'));
+
+        foreach($data as $item) {
+            $writer->writeItem($item);
+        }
+        $writer->finish();
+
         DocumentManager::file_send_for_download($filePath, false, $filename.'.csv');
         exit;
-
 	}
 
     /**

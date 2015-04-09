@@ -303,3 +303,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['show_session_description'] = false;
 // Hide only for students the link to export certificates to PDF 
 //$_configuration['hide_certificate_export_link_students'] = false;
+// Hide for all user roles the link to export certificates to PDF 
+//$_configuration['hide_certificate_export_link'] = false;

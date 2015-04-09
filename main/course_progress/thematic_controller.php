@@ -178,7 +178,7 @@ class ThematicController
                             }
                         }
                     }
-                    Export::export_table_csv($csv);
+                    Export::arrayToCsv($csv);
                     exit;
                     // Don't continue building a normal page.
                     return;

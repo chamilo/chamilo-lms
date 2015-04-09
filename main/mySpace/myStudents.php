@@ -1158,7 +1158,7 @@ if (!empty($student_id)) {
 }
 if ($export_csv) {
     ob_end_clean();
-    Export :: export_table_csv($csv_content, 'reporting_student');
+    Export :: arrayToCsv($csv_content, 'reporting_student');
     exit;
 }
 

@@ -1,6 +1,13 @@
 <?php
 /* See license terms in /license.txt */
 
+use Ddeboer\DataImport\Writer\ExcelWriter;
+use Ddeboer\DataImport\Writer\CsvWriter;
+use Ddeboer\DataImport\Workflow;
+use Ddeboer\DataImport\Reader\CsvReader;
+use Ddeboer\DataImport\Reader\ArrayReader;
+use Ddeboer\DataImport\Writer\ArrayWriter;
+
 /**
  *  This is the export library for Chamilo.
  *	Include/require it in your code to use its functionality.
@@ -14,53 +21,32 @@ class Export
     {
 	}
 
-    /**
-    *
-    * @deprecated use export_table_csv_utf8 instead
-    */
-    public static function export_table_csv ($data, $filename = 'export')
-    {
-        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-        $handle = @fopen($file, 'a+');
-
-        if (is_array($data)) {
-            foreach ($data as $index => $row) {
-                $line = '';
-                if (is_array($row)) {
-                    foreach ($row as $value) {
-                        $line .= '"'.str_replace('"', '""', $value).'";';
-                    }
-                }
-                @fwrite($handle, $line."\n");
-            }
-        }
-        @fclose($handle);
-        DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
-
-        return false;
-    }
-
 	/**
 	 * Export tabular data to CSV-file
 	 * @param array $data
 	 * @param string $filename
 	 */
-	public static function export_table_csv_utf8($data, $filename = 'export')
+	public static function arrayToCsv($data, $filename = 'export')
     {
-        if(empty($data)) {
+        if (empty($data)) {
             return false;
         }
-        $path = Chamilo::temp_file();
-        $converter = new Utf8Encoder(null, true);
-        $file = FileWriter::create($path, $converter);
-        $file = CsvWriter::create($file);
-        foreach ($data as $row) {
-            $file->put($row);
-        }
-		$file->close();
-		DocumentManager::file_send_for_download($path, false, $filename.'.csv');
-        unlink($path);
+
+        $reader = new ArrayReader($data);
+
+        // Create the workflow from the reader
+        $workflow = new Workflow($reader);
+
+        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
+
+        $file = new \SplFileObject($filePath, 'w');
+        $writer = new CsvWriter($file);
+        $workflow->addWriter($writer);
+        $workflow->process();
+exit;
+        DocumentManager::file_send_for_download($filePath, false, $filename.'.csv');
         exit;
+
 	}
 
     /**
@@ -68,20 +54,22 @@ class Export
      * @param array $data
      * @param string $filename
      */
-    public static function export_table_xls($data, $filename = 'export', $encoding = 'utf-8')
+    public static function arrayToXls($data, $filename = 'export', $encoding = 'utf-8')
     {
-        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
-        $handle = fopen($file, 'a+');
-        $systemEncoding = api_get_system_encoding();
-        foreach ($data as $row) {
-            $string = implode("\t", $row);
-            if ($encoding != 'utf-8') {
-                $string = api_convert_encoding($string, $encoding, $systemEncoding);
-            }
-            fwrite($handle, $string."\n");
+        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
+
+        $file = new \SplFileObject($filePath, 'w');
+        $writer = new ExcelWriter($file);
+        $writer->prepare();
+
+        foreach ($data as $index => $row) {
+            $writer->writeItem($row);
         }
-        fclose($handle);
-        DocumentManager::file_send_for_download($file, false, $filename.'.xls');
+
+        $writer->finish();
+
+        DocumentManager::file_send_for_download($filePath, false, $filename.'.xls');
+        exit;
 	}
 
     /**
@@ -112,6 +100,7 @@ class Export
         fclose($handle);
         DocumentManager::file_send_for_download($file, false, $filename.'.xls');
     }
+
     /**
     * Export tabular data to XML-file
     * @param array  Simple array of data to put in XML
@@ -120,7 +109,7 @@ class Export
     * @param string Name of the root element. A root element should always be given.
     * @param string Encoding in which the data is provided
     */
-	public static function export_table_xml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding = null)
+	public static function arrayToXml($data, $filename = 'export', $item_tagname = 'item', $wrapper_tagname = null, $encoding = null)
     {
 		if (empty($encoding)) {
 			$encoding = api_get_system_encoding();

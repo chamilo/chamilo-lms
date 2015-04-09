@@ -68,7 +68,8 @@
         "bower-asset/jqueryui-timepicker-addon": "1.5.*",
         "ramsey/array_column": "~1.1",
         "patchwork/utf8": "~1.2",
-        "ddeboer/data-import": "@stable"
+        "ddeboer/data-import": "@stable",
+        "phpoffice/phpexcel": "~1.8"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

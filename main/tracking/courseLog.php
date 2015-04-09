@@ -517,7 +517,7 @@ if ($export_csv) {
     ob_end_clean();
     array_unshift($csv_content, $csv_headers); // Adding headers before the content.
 
-    Export::export_table_csv($csv_content, 'reporting_student_list');
+    Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 }
 Display::display_footer();

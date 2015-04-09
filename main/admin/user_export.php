@@ -126,11 +126,11 @@ if ($form->validate()) {
 
 	switch($file_type) {
 		case 'xml':
-			Export::export_table_xml($data,$filename,'Contact','Contacts');
+			Export::arrayToXml($data, $filename, 'Contact', 'Contacts');
 			exit;
 			break;
 		case 'csv':
-			Export::export_table_csv($data,$filename);
+			Export::arrayToCsv($data,$filename);
 			exit;
 			break;
 	}

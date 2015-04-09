@@ -347,10 +347,10 @@ if (api_is_allowed_to_edit(null, true)) {
 
                 switch ($_GET['type']) {
                     case 'csv' :
-                        Export::export_table_csv($a_users);
+                        Export::arrayToCsv($a_users);
                         exit;
                     case 'xls' :
-                        Export::export_table_xls($a_users);
+                        Export::arrayToXls($a_users);
                         exit;
                     case 'pdf' :
                         $header_attributes = array(

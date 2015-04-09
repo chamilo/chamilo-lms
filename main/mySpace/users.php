@@ -271,7 +271,7 @@ if ($export_csv) {
     }
     $csv_content = array_merge($csv_header, $content);
     ob_end_clean();
-    Export :: export_table_csv($csv_content, 'reporting_student_list');
+    Export :: arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {
     Display::display_header($nameTools);

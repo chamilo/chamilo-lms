@@ -22,7 +22,7 @@ class TestExport extends UnitTestCase {
         $data = array();
         // can only be tested if headers were not sent
         ob_start();
-       	$res = Export::export_table_csv($data, $filename = 'export');
+       	$res = Export::arrayToCsv($data, $filename = 'export');
 		$this->assertFalse($res);
 		ob_end_clean();
     }
@@ -32,7 +32,7 @@ class TestExport extends UnitTestCase {
 		$data = array();
 		$filename = 'export';
         ob_start();
-		$res=Export::export_table_xls($data,$filename);
+		$res=Export::arrayToXls($data,$filename);
 		$this->assertFalse($res);
         ob_end_clean();
  	}
@@ -44,7 +44,7 @@ class TestExport extends UnitTestCase {
 		$wrapper_tagname = null;
 		$encoding=null;
         ob_start();
-		$res=Export::export_table_xml($data,$filename,$item_tagname,
+		$res=Export::arrayToXml($data,$filename,$item_tagname,
 									  $wrapper_tagname,$encoding);
         $this->assertFalse($res);
         ob_end_clean();

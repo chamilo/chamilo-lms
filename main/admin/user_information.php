@@ -394,7 +394,7 @@ if (isset($_GET['action'])) {
             }
             break;
         case 'export':
-            Export :: export_table_csv_utf8($csvContent, 'user_information_'.$user);
+            Export :: arrayToCsv($csvContent, 'user_information_'.$user);
             exit;
             break;
     }

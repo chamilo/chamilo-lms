@@ -328,11 +328,11 @@ if (isset($_GET['export'])) {
 
         switch ($file_type) {
             case 'xml' :
-                Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
+                Export :: arrayToXml($alldata, $filename, 'Result', 'XMLResults');
                 exit;
                 break;
             case 'csv' :
-                Export :: export_table_csv($alldata, $filename);
+                Export :: arrayToCsv($alldata, $filename);
                 exit;
                 break;
         }

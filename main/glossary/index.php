@@ -75,7 +75,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
         $list[] = array ($line[0], $line[1]);
     }
     $filename = 'glossary_course_'.api_get_course_id();
-	Export::export_table_csv_utf8($list, $filename);
+	Export::arrayToCsv($list, $filename);
 }
 if (isset($_GET['action']) && $_GET['action'] == 'export_to_pdf') {
     GlossaryManager::export_to_pdf();

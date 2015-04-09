@@ -1470,7 +1470,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
         return false;
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
-            WHERE user_id='".intval($user_id)."'";
+            WHERE id='".intval($user_id)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);

@@ -668,7 +668,6 @@ class IndexManager
             course.unsubscribe unsubscr,
             course.title i,
             course.tutor_name t,
-            course.db_name db,
             course.directory dir,
             course_rel_user.status status,
             course_rel_user.sort sort,
@@ -686,7 +685,6 @@ class IndexManager
         while ($row = Database::fetch_array($result)) {
             // We only need the database name of the course.
             $courses[$row['k']] = array(
-                'db' => $row['db'],
                 'code' => $row['k'],
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],

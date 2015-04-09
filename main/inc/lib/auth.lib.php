@@ -54,20 +54,28 @@ class Auth
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
         $user_id = intval($user_id);
-        $sql = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-                      course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+        $sql = "SELECT
+                    course.code k,
+                    course.visual_code vc,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course.title i,
+                    course.tutor_name t,
+                    course.directory dir,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
-                WHERE course.id = course_rel_user.c_id
-                AND   course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
+                    course_rel_user.user_id = '" . $user_id . "' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
         $courses = array();
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
             $courses[] = array(
-                'db' => $row['db'],
                 'code' => $row['k'],
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -139,7 +147,7 @@ class Auth
 
         $sql = "SELECT
                     course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-                    course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+                    course.title title, course.tutor_name tutor, course.directory, course_rel_user.status status,
                     course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course,
                 $TABLECOURSUSER  course_rel_user

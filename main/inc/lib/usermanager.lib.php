@@ -3999,17 +3999,17 @@ class UserManager
 
         $course_list = array();
         if (!empty($code_special_courses)) {
-            $course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                FROM ".$tbl_course_user." course_rel_user
-                                LEFT JOIN ".$tbl_course." course
-                                ON course.id = course_rel_user.c_id
-                                LEFT JOIN ".$tbl_user_course_category." user_course_category
-                                ON course_rel_user.user_course_cat = user_course_category.id
-                                $join_access_url
-                                WHERE  $code_special_courses $where_access_url
-                                GROUP BY course.code
-                                ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-            $course_list_sql_result = Database::query($course_list_sql);
+            $sql = "SELECT course.code k, course.directory d, course.visual_code c, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+                    FROM ".$tbl_course_user." course_rel_user
+                    LEFT JOIN ".$tbl_course." course
+                    ON course.id = course_rel_user.c_id
+                    LEFT JOIN ".$tbl_user_course_category." user_course_category
+                    ON course_rel_user.user_course_cat = user_course_category.id
+                    $join_access_url
+                    WHERE  $code_special_courses $where_access_url
+                    GROUP BY course.code
+                    ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+            $course_list_sql_result = Database::query($sql);
             while ($result_row = Database::fetch_array($course_list_sql_result)) {
                 $course_list[] = $result_row;
             }

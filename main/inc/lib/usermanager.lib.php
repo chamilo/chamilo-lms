@@ -2699,10 +2699,10 @@ class UserManager
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
         $sessions = array();
-        $sql = "SELECT DISTINCT id, name, date_start, date_end
-                FROM $tbl_session_user, $tbl_session
+        $sql = "SELECT DISTINCT s.id, name, date_start, date_end
+                FROM $tbl_session_user, $tbl_session s
                 WHERE (
-                    session_id = id AND
+                    session_id = s.id AND
                     user_id = $user_id AND
                     relation_type <> ".SESSION_RELATION_TYPE_RRHH."
                 )

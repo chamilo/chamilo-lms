@@ -17,21 +17,20 @@ $formSent = 0;
 $errorMsg = '';
 
 // Database Table Definitions
-$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course      			= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user 			= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_session      			= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_user      		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_course      	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
-$archiveURL  = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
-$tool_name   = get_lang('ExportSessionListXMLCSV');
+$tool_name = get_lang('ExportSessionListXMLCSV');
 
 global $_configuration;
-
 
 $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
@@ -42,72 +41,72 @@ if ($_POST['formSent']) {
 	$file_type = ($_POST['file_type'] == 'csv')?'csv':'xml';
 	$session_id = $_POST['session_id'];
 	if (empty($session_id)) {
-		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
-					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
+		$sql = "SELECT
+					s.id,
+					name,
+					id_coach,
+					username,
+					date_start,
+					date_end,
+					visibility,
+					session_category_id
+				FROM $tbl_session s
+				INNER JOIN $tbl_user
+				ON $tbl_user.user_id = s.id_coach
+				ORDER BY id";
 
-
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-			$sql = "SELECT id, name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
-				ON (s.id= session_rel_url.session_id) INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
-				WHERE access_url_id = $access_url_id
-				ORDER BY id";
-
+			$sql = "SELECT s.id, name,id_coach,username,date_start,date_end,visibility,session_category_id
+					FROM $tbl_session s
+					INNER JOIN $tbl_session_rel_access_url as session_rel_url
+					ON (s.id= session_rel_url.session_id)
+					INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
+					WHERE access_url_id = $access_url_id
+					ORDER BY id";
 			}
 		}
-		$result=Database::query($sql);
-	}
-	else
-	{
-		$sql = "SELECT id,name,username,date_start,date_end,visibility,session_category_id
-				FROM $tbl_session
-				INNER JOIN $tbl_user
-					ON $tbl_user.user_id = $tbl_session.id_coach
-				WHERE id='$session_id'";
 
 		$result = Database::query($sql);
-
+	} else {
+		$sql = "SELECT s.id,name,username,date_start,date_end,visibility,session_category_id
+				FROM $tbl_session s
+				INNER JOIN $tbl_user
+					ON $tbl_user.user_id = s.id_coach
+				WHERE id='$session_id'";
+		$result = Database::query($sql);
 	}
 
-	if(Database::num_rows($result))
-	{
-		if(!file_exists($archivePath))
-		{
+	if (Database::num_rows($result)) {
+		if (!file_exists($archivePath)) {
 			mkdir($archivePath, api_get_permissions_for_new_directories(), true);
 		}
 
-		if(!file_exists($archivePath.'index.html'))
-		{
-			$fp=fopen($archivePath.'index.html','w');
-
+		if (!file_exists($archivePath.'index.html')) {
+			$fp = fopen($archivePath.'index.html','w');
 			fputs($fp,'<html><head></head><body></body></html>');
-
 			fclose($fp);
 		}
 
 		$archiveFile='export_sessions_'.$session_id.'_'.date('Y-m-d_H-i-s').'.'.$file_type;
 
-		while( file_exists($archivePath.$archiveFile))
-		{
+		while( file_exists($archivePath.$archiveFile)) {
 			$archiveFile='export_users_'.$session_id.'_'.date('Y-m-d_H-i-s').'_'.uniqid('').'.'.$file_type;
 		}
-		$fp=fopen($archivePath.$archiveFile,'w');
 
-		if($file_type == 'csv')
-		{
+		$fp = fopen($archivePath.$archiveFile, 'w');
+
+		if ($file_type == 'csv') {
 			$cvs = true;
 			fputs($fp,"SessionName;Coach;DateStart;DateEnd;Visibility;SessionCategory;Users;Courses;\n");
-		}
-		else
-		{
+		} else {
 			$cvs = false;
 			fputs($fp, "<?xml version=\"1.0\" encoding=\"".api_get_system_encoding()."\"?>\n<Sessions>\n");
 		}
 
-		while($row=Database::fetch_array($result))
-		{
+		while($row=Database::fetch_array($result)) {
 			$add = '';
 			$row['name'] = str_replace(';',',',$row['name']);
 			$row['username'] = str_replace(';',',',$row['username']);
@@ -115,10 +114,9 @@ if ($_POST['formSent']) {
 			$row['date_end'] = str_replace(';',',',$row['date_end']);
 			$row['visibility'] = str_replace(';',',',$row['visibility']);
 			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
-			if($cvs){
+			if ($cvs) {
 				$add.= $row['name'].';'.$row['username'].';'.$row['date_start'].';'.$row['date_end'].';'.$row['visibility'].';'.$row['session_category'].';';
-			}
-			else {
+			} else {
 				$add = "\t<Session>\n"
 						 ."\t\t<SessionName>$row[name]</SessionName>\n"
 						 ."\t\t<Coach>$row[username]</Coach>\n"
@@ -139,7 +137,7 @@ if ($_POST['formSent']) {
 
 			$rsUsers = Database::query($sql);
 			$users = '';
-			while($rowUsers = Database::fetch_array($rsUsers)){
+			while ($rowUsers = Database::fetch_array($rsUsers)){
 				if($cvs){
 					$users .= str_replace(';',',',$rowUsers['username']).'|';
 				}
@@ -147,7 +145,8 @@ if ($_POST['formSent']) {
 					$users .= "\t\t<User>$rowUsers[username]</User>\n";
 				}
 			}
-			if(!empty($users) && $cvs)
+
+			if (!empty($users) && $cvs)
 				$users = api_substr($users , 0, api_strlen($users)-1);
 
 			if($cvs)
@@ -165,8 +164,7 @@ if ($_POST['formSent']) {
 			$rsCourses = Database::query($sql);
 
 			$courses = '';
-			while ($rowCourses = Database::fetch_array($rsCourses)){
-
+			while ($rowCourses = Database::fetch_array($rsCourses)) {
 				// get coachs from a course
 				$sql = "SELECT u.username
 					FROM $tbl_session_course_user scu
@@ -238,7 +236,7 @@ if ($_POST['formSent']) {
 				$courses = api_substr($courses , 0, api_strlen($courses)-1);
 			$add .= $courses;
 
-			if($cvs) {
+		 	if ($cvs) {
 				$breakline = api_is_windows_os()?"\r\n":"\n";
 				$add .= ";$breakline";
 			} else {
@@ -263,13 +261,14 @@ Display::display_header($tool_name);
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
 
 if ($_configuration['multiple_access_urls']) {
-	$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+	$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
-	$sql = "SELECT id, name FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
-		ON (s.id= session_rel_url.session_id)
-		WHERE access_url_id = $access_url_id
-		ORDER BY name";
+	$sql = "SELECT s.id, name FROM $tbl_session s
+			INNER JOIN $tbl_session_rel_access_url as session_rel_url
+			ON (s.id = session_rel_url.session_id)
+			WHERE access_url_id = $access_url_id
+			ORDER BY name";
 	}
 }
 $result = Database::query($sql);

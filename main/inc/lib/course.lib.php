@@ -1801,7 +1801,7 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         $sql = "SELECT DISTINCT
-                    u.id,
+                    u.id as user_id,
                     u.lastname,
                     u.firstname,
                     u.email,
@@ -1816,7 +1816,7 @@ class CourseManager
         $rs = Database::query($sql);
         $teachers = array();
         while ($teacher = Database::fetch_array($rs)) {
-            $teachers[$teacher['id']] = $teacher;
+            $teachers[$teacher['user_id']] = $teacher;
         }
 
         return $teachers;
@@ -1835,6 +1835,7 @@ class CourseManager
         $add_link_to_profile = false
     ) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
+
         $teacher_string = '';
         $list = array();
         if (!empty($teacher_list)) {

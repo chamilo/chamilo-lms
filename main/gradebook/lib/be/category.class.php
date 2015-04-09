@@ -1845,7 +1845,7 @@ class Category implements GradebookItem
                     $url,
                     array(
                         'target' => '_blank',
-                        'class' => 'btn'
+                        'class' => 'btn btn-default'
                     )
                 );
 

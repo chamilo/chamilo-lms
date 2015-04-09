@@ -3240,16 +3240,13 @@ form .formw .freeze {
   width: 100%;
 }
 .page-items-profile{
-  padding-top: 2em;
-  padding-bottom: 2em;
-  padding-left: 1em;
-  padding-right: 1em;
+  padding: .5em;
 }
 .page-items-profile .title-skill{
-  margin-bottom: 1em;
+  margin-bottom: .5em;
   font-size: 18px;
   color: #333333;
-  margin-top: 1em;
+  margin-top: .5em;
 }
 .page-items-profile .block-items{
   display: block;
@@ -3261,6 +3258,7 @@ form .formw .freeze {
   list-style: none;
   margin: 0;
   padding: 0;
+  font-size: 12px;
 }
 .page-items-profile .number-skill{
   background-color: #FFFFFF;
@@ -3268,17 +3266,51 @@ form .formw .freeze {
   padding-bottom: .5em;
   padding-left: .5em;
   margin-bottom: 1em;
+  font-size: 12px;
   border: 1px solid #cccccc;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .page-items-profile .block-items .border-items{
-  background-color: #EFEFEF;
+  background-color: #ffffff;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   border: 1px solid #cccccc;
+}
+.skill-legend-add{
+  background-color: #F89406;
+}
+.skill-legend-search{
+  background-color: #B94A48;
+}
+.skill-legend-badges{
+  background-color: #3A87AD;
+}
+.page-skill .panel-heading a{
+  color: #ffffff;
+}
+.page-skill .btn-default{
+  background-color: #F6F6F6;
+}
+.page-skill .text, .page-skill #saved_profiles h4{
+  font-size: 12px;
+}
+.page-skill .btn-default:hover {
+  background-color: #E6E6E6;
+}
+.page-skill #skill_info{
+  font-size: 12px;
+}
+.page-skill .items_save .holder_simple{
+  padding: 0;
+}
+.page-skill #skill_wheel tspan{
+  font-size: 12px;
+}
+.page-skill .holder_simple li.bit-box a{
+  color: #8A6D3B;
 }
 .page-items-profile .items-info{
   padding:1em;
@@ -5520,10 +5552,7 @@ ul.holder li.bit-box{
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
 }
-ul.holder li.bit-box a.closebutton{
-  right: 10px;
-  top: 10px;
-}
+
 #file-descrtiption.form-control{
   width: 80%;
 }
@@ -5584,6 +5613,13 @@ ul.holder li.bit-box a.closebutton{
 .total{
   width: 100%;
 }
+.panel-default .panel-heading .btn{
+  top: -25px;
+}
+.panel-default .panel-heading .dropdown-menu{
+  top: 30%;
+}
+
 #touch-button{
   text-decoration: none;
   position: fixed;
@@ -5596,6 +5632,9 @@ ul.holder li.bit-box a.closebutton{
   text-indent: 100%;
   opacity: 50;
   z-index: 2;
+}
+.search-skill ul.holder_simple{
+  padding: 0;
 }
 .hidden-touch{
   background: url("../img/icons/48/hidden-touch-left.png")center center no-repeat;
@@ -5627,6 +5666,10 @@ ul.holder li.bit-box a.closebutton{
 }
 #multiple-add-session .control-course{
   text-align: center;
+}
+.data_table tr td .form-control{
+  width: 20%;
+  display: inline-block;
 }
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {

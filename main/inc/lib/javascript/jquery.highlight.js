@@ -19,7 +19,7 @@ jQuery.fn.highlight = function(pat,real_code) {
 			//var pos = node.data.toUpperCase().indexOf(pat);
 			
 			//Highlight strict, exact words
-			var SearchRegExp = new RegExp("(\\b)"+pat+"(\\b)","gi");
+            var SearchRegExp = new RegExp("(\\b|\\B)"+pat+"(\\b|\\B)","gi");
 			var pos = node.nodeValue.search(SearchRegExp);
 			
 			if (pos >= 0 ) {

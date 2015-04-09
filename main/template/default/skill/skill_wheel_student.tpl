@@ -262,12 +262,12 @@ $(document).ready(function() {
 });
 
 </script>
-<div id="page-back">
+<div id="page-back" class="page-skill">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
-                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a>
+                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php"><i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}</a>
                 </div>
                 <div class="skill-profile">
                     <div class="avatar">
@@ -281,45 +281,21 @@ $(document).ready(function() {
                         {% if mySkills is not empty %}
                             {%for skill in mySkills %}
                                 {% if skill.iconThumb is empty %}
-                                    <img src="{{ 'award_red.png' | icon(22) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    <img src="{{ 'badges.png' | icon(32) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
                                     <img src="{{ _p.web_data }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
                         {% for i in 1..(9 - ranking) %}
-                            <img src="{{ 'award_red_na.png' | icon(22) }}">
+                            <img src="{{ 'badges-default.png' | icon(32) }}">
                         {% endfor %}
                     </div>
                 </div>
 
                 <!-- ACCORDION -->
                 <div class="accordion" id="accordion2">
-                    {% if mySkills is not empty %}
-                        <div class="panel panel-default">
-                            <div class="accordion-heading">
-                                <a   data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                    {{ 'MySkills'|get_lang }}
-                                </a>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <!-- MY SKILLS -->
-                                    <div id="my_skills" class="skill-items">
-                                        <ul class="skill-winner">
-                                            {%for skill in mySkills %}
-                                                <li>
-                                                    <a class="" rel="{{ skill.id}}" href="#">{{ skill.name }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                    <!-- MY SKILLS -->
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    <div class="panel panel-default">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
                                 {{ 'GetNewSkills' | get_lang }}
@@ -329,11 +305,11 @@ $(document).ready(function() {
                             <div class="panel-body">
                                 <!-- SEARCH -->
                                 <div class="search-skill">
-                                    <p>{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
+                                    <p class="text">{{ 'EnterTheSkillNameToSearch' | get_lang }}</p>
                                     <form id="skill_search" class="form-search">
                                         <select id="skill_id" name="skill_id" /></select>
                                         <div class="button-skill">
-                                            <a class="btn btn-default btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
+                                            <a class="btn btn-default btn-block load_root" rel="0" href="#"><i class="fa fa-eye"></i> {{ "ViewSkillsWheel"|get_lang }}</a>
                                             <!-- <a id="clear_selection" class="btn btn-danger">{{ "Clear"|get_lang }}</a> -->
                                         </div>
                                         <ul id="skill_holder" class="holder_simple"></ul>
@@ -342,14 +318,14 @@ $(document).ready(function() {
                                 <!-- END SEARCH -->
                                 <!-- INFO SKILL -->
                                 <div class="section-info-skill">
-                                    <h4 class="title-skill">{{ 'SkillInfo'|get_lang }}</h4>
+                                    <p class="text">{{ 'SkillInfo'|get_lang }}</p>
                                     <div id="skill_info"></div>
                                 </div>
                                 <!-- END INFO SKILL -->
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
                                 {{ 'DisplayOptions' | get_lang }}
@@ -357,7 +333,7 @@ $(document).ready(function() {
                         </div>
                         <div id="collapseThree" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <p>{{ 'ChooseABackgroundColor' | get_lang }}</p>
+                                <p class="text">{{ 'ChooseABackgroundColor' | get_lang }}</p>
                                 <ul>
                                     <li><a href="#" id="white">{{ 'White' | get_lang }}</a></li>
                                     <li><a href="#" id="black">{{ 'Black' | get_lang }}</a></li>
@@ -368,7 +344,7 @@ $(document).ready(function() {
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
                             <a   data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
                                 {{ "Legend"|get_lang }}
@@ -376,9 +352,9 @@ $(document).ready(function() {
                         </div>
                         <div id="collapseFour" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <p><span class="label-info">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouAcquired"|get_lang }}</p>
-                                <p><span class="label-warning">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
-                                <p><span class="label-important">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
+                                <p class="text"><span class="skill-legend-badges">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouAcquired"|get_lang }}</p>
+                                <p class="text"><span class="skill-legend-add">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsYouCanLearn"|get_lang }}</p>
+                                <p class="text"><span class="skill-legend-search">&nbsp;&nbsp;&nbsp;&nbsp;</span> {{ "SkillsSearchedFor"|get_lang }}</p>
                             </div>
                         </div>
                     </div>

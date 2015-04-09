@@ -1276,20 +1276,20 @@ class CourseManager
                 $sessionCondition = " session_course_user.session_id IN ('$sessionIdListTostring') ";
             }
 
-            $courseCondition = " course.code = '".$course_code."' AND ";
+            $courseCondition = " course.code = '".$course_code."' ";
             if (!empty($courseCodeList)) {
                 $courseCodeListForSession = array_map(array('Database', 'escape_string'), $courseCodeList);
                 $courseCodeListForSession = implode('","', $courseCodeListForSession);
-                $courseCondition = ' course.code IN ("' . $courseCodeListForSession . '") AND ';
+                $courseCondition = ' course.code IN ("' . $courseCodeListForSession . '")  ';
             }
 
             $sql .= ' FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
             $sql .= " LEFT JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . " as session_course_user
                       ON
                         user.user_id = session_course_user.user_id AND
-                        $courseCondition
                         $sessionCondition
-                        INNER JOIN $course_table course ON session_course_user.c_id = course.id
+                        INNER JOIN $course_table course ON session_course_user.c_id = course.id AND
+                        $courseCondition
                         INNER JOIN $sessionTable session ON session_course_user.session_id = session.id
                    ";
             $where[] = ' session_course_user.c_id IS NOT NULL ';
@@ -1330,10 +1330,10 @@ class CourseManager
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) . ' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND
                         course_rel_user.relation_type <> ' . COURSE_RELATION_TYPE_RRHH . '  ';
+            $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
+
             if (!empty($course_code)) {
                 $sql .= ' AND course_rel_user.c_id="' . $courseId . '"';
-            } else {
-                $sql .= " INNER JOIN $course_table course ON course_rel_user.c_id = course.id ";
             }
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
 
@@ -4939,7 +4939,7 @@ class CourseManager
             }
         }
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u
+            $sql = "SELECT count(c.id) FROM $tableCourse c, $tableCourseRelAccessUrl u
                     WHERE
                         c.id = u.c_id AND
                         u.access_url_id = $accessUrlId AND

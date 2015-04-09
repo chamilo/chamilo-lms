@@ -807,7 +807,7 @@ class DocumentManager
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
@@ -817,7 +817,8 @@ class DocumentManager
                         docs.filetype = 'folder' AND
                         last.tool = '" . TOOL_DOCUMENT . "' AND
                         last.to_group_id = " . $to_group_id . " AND
-                        last.visibility = 1 $condition_session AND
+                        last.visibility = 1
+                        $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
                         docs.c_id = {$_course['real_id']} ";
             $result = Database::query($sql);
@@ -828,7 +829,7 @@ class DocumentManager
 
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
@@ -845,7 +846,7 @@ class DocumentManager
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //condition for the session
                 $session_id = api_get_session_id();
-                $condition_session = api_get_session_condition($session_id);
+                $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs

@@ -331,6 +331,9 @@ class Wiki
         $id = Database::insert_id();
 
         if ($id > 0) {
+            $sql = "UPDATE $tbl_wiki SET id = $insertId WHERE iid = $insertId";
+            Database::query($sql);
+
             //insert into item_property
             api_item_property_update(
                 api_get_course_info(),
@@ -343,14 +346,18 @@ class Wiki
         }
 
         if ($_clean['page_id']	== 0) {
-            $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$id.'" WHERE c_id = '.$course_id.' AND id="'.$id.'"';
+            $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'" WHERE c_id = '.$course_id.' AND id="'.$id.'"';
             Database::query($sql);
         }
 
         //update wiki config
         if ($values['reflink'] == 'index' && $_clean['version'] == 1 ) {
             $sql = "INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
-                  VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+                   VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
+            Database::query($sql);
+
+            $sql = "UPDATE $tbl_wiki_conf SET page_id = $survey_id WHERE iid = $survey_id";
+            Database::query($sql);
         } else {
             $sql = 'UPDATE '.$tbl_wiki_conf.' SET
                         task="'.$_clean['task'].'",
@@ -368,9 +375,10 @@ class Wiki
                     WHERE
                         page_id = "'.$_clean['page_id'].'" AND
                         c_id = '.$course_id;
+            Database::query($sql);
         }
 
-        Database::query($sql);
+
         api_item_property_update($_course, 'wiki', $id, 'WikiAdded', api_get_user_id(), $groupId);
         self::check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
         $this->setWikiData($id);
@@ -419,8 +427,21 @@ class Wiki
 
         Database::query($sql);
         $id = Database::insert_id();
-        api_item_property_update($_course, 'wiki', $id, 'WikiAdded', api_get_user_id(), $r_group_id);
-        self::check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
+
+        if ($id) {
+            $sql = "UPDATE $tbl_wiki SET id = $id WHERE iid = $id";
+            Database::query($sql);
+
+            api_item_property_update(
+                $_course,
+                'wiki',
+                $id,
+                'WikiAdded',
+                api_get_user_id(),
+                $r_group_id
+            );
+            self::check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
+        }
 
         return get_lang('PageRestored');
     }

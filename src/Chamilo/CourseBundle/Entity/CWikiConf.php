@@ -38,7 +38,6 @@ class CWikiConf
     private $pageId;
 
 
-
     /**
      * @var string
      *

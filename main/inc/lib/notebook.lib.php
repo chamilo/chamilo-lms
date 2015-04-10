@@ -71,8 +71,17 @@ class NotebookManager
 
         $id = Database::insert_id();
         if ($id > 0) {
+            $sql = "UPDATE $t_notebook SET notebook_id = $id WHERE iid = $id";
+            Database::query($sql);
+
             //insert into item_property
-            api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $id, 'NotebookAdded', api_get_user_id());
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_NOTEBOOK,
+                $id,
+                'NotebookAdded',
+                api_get_user_id()
+            );
         }
 
         if (!empty($affected_rows)) {

@@ -37,7 +37,6 @@ class CSurveyInvitation
      */
     private $surveyInvitationId;
 
-
     /**
      * @var string
      *

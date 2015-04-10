@@ -181,6 +181,9 @@ class Agenda
                 $id = Database::insert($this->tbl_course_agenda, $attributes);
 
                 if ($id) {
+                    $sql = "UPDATE ".$this->tbl_course_agenda." SET id = $id WHERE iid = $id";
+                    Database::query($sql);
+
                     $groupId = api_get_group_id();
 
                     if (!empty($usersToSend)) {
@@ -2066,13 +2069,18 @@ class Agenda
                             "VALUES ($course_id, '".$file_name."', '".$comment."', '".$new_file_name."' , '".$eventId."', '".$size."' )";
                     Database::query($sql);
                     $id = Database::insert_id();
-                    api_item_property_update(
-                        $courseInfo,
-                        'calendar_event_attachment',
-                        $id,
-                        'AgendaAttachmentAdded',
-                        api_get_user_id()
-                    );
+                    if ($id) {
+                        $sql = "UPDATE $agenda_table_attachment SET id = $id WHERE iid = $id";
+                        Database::query($sql);
+
+                        api_item_property_update(
+                            $courseInfo,
+                            'calendar_event_attachment',
+                            $id,
+                            'AgendaAttachmentAdded',
+                            api_get_user_id()
+                        );
+                    }
                 }
             }
         }

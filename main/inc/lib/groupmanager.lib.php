@@ -196,6 +196,9 @@ class GroupManager
         $lastId = Database::insert_id();
 
         if ($lastId) {
+            $sql = "UPDATE $table_group SET id = $lastId WHERE iid = $lastId";
+            Database::query($sql);
+
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
 
@@ -315,41 +318,6 @@ class GroupManager
     }
 
     /**
-     * Create groups from all virtual courses in the given course.
-     * @deprecated
-     */
-    public static function create_groups_from_virtual_courses()
-    {
-        self :: delete_category(self::VIRTUAL_COURSE_CATEGORY);
-        $id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', self::TOOL_NOT_AVAILABLE, self::TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
-        $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-        $course_id = api_get_course_int_id();
-
-        $sql = "UPDATE ".$table_group_cat." SET id=".self::VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
-        Database::query($sql);
-        $course = api_get_course_info();
-        $course['code'] = $course['sysCode'];
-        $course['title'] = $course['name'];
-        $virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($course['sysCode']);
-        $group_courses = $virtual_courses;
-        $group_courses[] = $course;
-        $ids = array ();
-        foreach ($group_courses as $index => $group_course) {
-            $users = CourseManager :: get_user_list_from_course_code($group_course['code']);
-            $members = array ();
-            foreach ($users as $index => $user) {
-                if ($user['status'] == 5 && $user['tutor_id'] == 0) {
-                    $members[] = $user['user_id'];
-                }
-            }
-            $id = self :: create_group($group_course['code'], self::VIRTUAL_COURSE_CATEGORY, 0, count($members));
-            self :: subscribe_users($members, $id);
-            $ids[] = $id;
-        }
-        return $ids;
-    }
-
-    /**
      * Create a group for every class subscribed to the current course
      * @param int $category_id The category in which the groups should be created
      * @return array
@@ -446,9 +414,9 @@ class GroupManager
 
         $sql = "DELETE FROM ".$forum_table."
                 WHERE c_id = $course_id AND forum_of_group IN ('".implode("' , '", $group_ids)."')";
-        Database::query($sql);
+        $result = Database::query($sql);
 
-        return Database::affected_rows();
+        return Database::affected_rows($result);
     }
 
     /**
@@ -835,12 +803,18 @@ class GroupManager
                     max_student = '".Database::escape_string($maximum_number_of_students)."' ";
         Database::query($sql);
         $categoryId = Database::insert_id();
+
+        // @todo check if this code do something ... virtual course category?
         if ($categoryId == self::VIRTUAL_COURSE_CATEGORY) {
             $sql = "UPDATE  ".$table_group_category." SET id = ". ($categoryId +1)."
                     WHERE c_id = $course_id AND id = $categoryId";
             Database::query($sql);
-            return $categoryId +1;
+            $categoryId = $categoryId +1;
         }
+
+        $sql = "UPDATE $table_group_category SET id = $categoryId WHERE iid = $categoryId";
+        Database::query($sql);
+
         return $categoryId;
     }
 
@@ -1545,11 +1519,12 @@ class GroupManager
                     $group_id = intval($group_id);
                     $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
-                    $result &= Database::query($sql);
+                    Database::query($sql);
                 }
             }
         }
-        return $result;
+
+        return true;
     }
 
     /**
@@ -1572,7 +1547,7 @@ class GroupManager
             $group_id = intval($group_id);
             if (self::can_user_subscribe($user_id, $group_id)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
-                    VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
+                        VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
                 $result &= Database::query($sql);
             }
         }

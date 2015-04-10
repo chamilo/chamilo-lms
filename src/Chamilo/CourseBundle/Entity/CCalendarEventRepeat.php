@@ -29,7 +29,6 @@ class CCalendarEventRepeat
      */
     private $calId;
 
-
     /**
      * @var integer
      *

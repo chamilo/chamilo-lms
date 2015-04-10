@@ -10,7 +10,7 @@ require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(false, true);
 
 if (api_get_setting('allow_skills_tool') != 'true') {
     api_not_allowed();

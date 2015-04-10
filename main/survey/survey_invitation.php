@@ -40,7 +40,7 @@ if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id'])) {
 }
 
 $survey_id = Security::remove_XSS($_GET['survey_id']);
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
 	Display :: display_header($tool_name);
@@ -70,7 +70,7 @@ if (!is_numeric($survey_id)) {
 }
 
 // Getting all the people who have filled this survey
-$answered_data = survey_manager::get_people_who_filled_survey($survey_id);
+$answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
 	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
 	$answered_data = array();

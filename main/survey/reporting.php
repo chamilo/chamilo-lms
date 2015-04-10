@@ -15,7 +15,7 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $cidReq = api_get_cidreq();
 $survey_id = intval($_GET['survey_id']);
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 // Export
 /**
@@ -66,7 +66,7 @@ if ($survey_data['anonymous'] == 0) {
 } else {
     $people_filled_full_data = false;
 }
-$people_filled = survey_manager::get_people_who_filled_survey(
+$people_filled = SurveyManager::get_people_who_filled_survey(
     $_GET['survey_id'],
     $people_filled_full_data
 );
@@ -74,7 +74,7 @@ $people_filled = survey_manager::get_people_who_filled_survey(
 // Checking the parameters
 SurveyUtil::check_parameters($people_filled);
 
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -99,7 +99,7 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 // Getting the survey information
 
-//$survey_data = survey_manager::get_survey($survey_id);
+//$survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     Display :: display_header(get_lang('ToolSurvey'));
     Display :: display_error_message(get_lang('InvallidSurvey'), false);

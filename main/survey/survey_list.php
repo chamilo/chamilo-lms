@@ -70,7 +70,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 
 if ($action == 'copy_survey') {
     if (api_is_allowed_to_edit()) {
-        survey_manager::copy_survey($_GET['survey_id']);
+        SurveyManager::copy_survey($_GET['survey_id']);
         $message = get_lang('Copied');
         header('Location: ' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?' . api_get_cidreq());
         exit;
@@ -90,7 +90,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
 // Action handling: deleting a survey
 if ($action == 'delete' && isset($_GET['survey_id'])) {
     // Getting the information of the survey (used for when the survey is shared)
-    $survey_data = survey_manager::get_survey($_GET['survey_id']);
+    $survey_data = SurveyManager::get_survey($_GET['survey_id']);
     if (api_is_course_coach() && intval($_SESSION['id_session']) != $survey_data['session_id']) {
         // The coach can't delete a survey not belonging to his session
         api_not_allowed();
@@ -98,10 +98,10 @@ if ($action == 'delete' && isset($_GET['survey_id'])) {
     }
     // If the survey is shared => also delete the shared content
     if (is_numeric($survey_data['survey_share'])) {
-        survey_manager::delete_survey($survey_data['survey_share'], true);
+        SurveyManager::delete_survey($survey_data['survey_share'], true);
     }
 
-    $return = survey_manager::delete_survey($_GET['survey_id']);
+    $return = SurveyManager::delete_survey($_GET['survey_id']);
 
     if ($return) {
         Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
@@ -125,7 +125,7 @@ if ($action == 'empty') {
             exit;
         }
     }
-    $return = survey_manager::empty_survey(intval($_GET['survey_id']));
+    $return = SurveyManager::empty_survey(intval($_GET['survey_id']));
     if ($return) {
         Display :: display_confirmation_message(get_lang('SurveyEmptied'), false);
     } else {
@@ -138,13 +138,13 @@ if (isset($_POST['action']) && $_POST['action']) {
     if (is_array($_POST['id'])) {
         foreach ($_POST['id'] as $key => & $value) {
             // getting the information of the survey (used for when the survey is shared)
-            $survey_data = survey_manager::get_survey($value);
+            $survey_data = SurveyManager::get_survey($value);
             // if the survey is shared => also delete the shared content
             if (is_numeric($survey_data['survey_share'])) {
-                survey_manager::delete_survey($survey_data['survey_share'], true);
+                SurveyManager::delete_survey($survey_data['survey_share'], true);
             }
             // delete the actual survey
-            survey_manager::delete_survey($value);
+            SurveyManager::delete_survey($value);
         }
         Display :: display_confirmation_message(get_lang('SurveysDeleted'), false);
     } else {

@@ -52,7 +52,7 @@ if (!isset($_GET['survey_id']) || !is_numeric($_GET['survey_id'])){
 
 // Getting the survey information
 $survey_id = intval($_GET['survey_id']);
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
 	Display::display_header(get_lang('SurveyPreview'));
@@ -68,7 +68,7 @@ if (api_is_allowed_to_edit()) {
 	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 }
 $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
-$surveyAnonymous = survey_manager::get_survey($survey_id, 0, $courseCode);
+$surveyAnonymous = SurveyManager::get_survey($survey_id, 0, $courseCode);
 $surveyAnonymous = $surveyAnonymous['anonymous'];
 if ($surveyAnonymous == 0 && api_is_anonymous()) {
     api_not_allowed(true);

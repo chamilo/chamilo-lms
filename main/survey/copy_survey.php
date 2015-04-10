@@ -34,14 +34,14 @@ if (Security::check_token('post')) {
     Security::clear_token();
     $surveyId = intval($_POST['surveys']);
     $courseId = Security::remove_XSS($_POST['destination_course']);
-    $surveyCopyId = survey_manager::copy_survey($surveyId, null, $courseId);
+    $surveyCopyId = SurveyManager::copy_survey($surveyId, null, $courseId);
     // Copy the survey to the target course
-    survey_manager::empty_survey($surveyCopyId, $courseId);
+    SurveyManager::empty_survey($surveyCopyId, $courseId);
     // Empty the copied survey
     Display::display_confirmation_message(get_lang('SurveyCopied'));
 }
 
-$surveys = survey_manager::get_surveys(api_get_course_id(), api_get_session_id());
+$surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
 $courses = CourseManager::get_courses_list();
 $form = new FormValidator('copy_survey', 'post', 'copy_survey.php?'.api_get_cidreq());
 if (!$surveys) {

@@ -1877,9 +1877,9 @@ class CourseRestorer
 
 							// if the survey is shared => also delete the shared content
 							if (isset($survey_data['survey_share']) && is_numeric($survey_data['survey_share'])) {
-								survey_manager::delete_survey($survey_data['survey_share'], true,$this->destination_course_id);
+                                SurveyManager::delete_survey($survey_data['survey_share'], true,$this->destination_course_id);
 							}
-							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
+							$return = SurveyManager :: delete_survey($survey_data['survey_id'],false,$this->destination_course_id);
 
 							//Insert the new source survey
 							Database::query($sql);

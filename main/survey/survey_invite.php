@@ -35,7 +35,7 @@ $course_id = api_get_course_int_id();
 
 // Getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
 	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);

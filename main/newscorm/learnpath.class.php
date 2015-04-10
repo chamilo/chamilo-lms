@@ -1028,12 +1028,10 @@ class learnpath
         Database::query($sql);
 
         $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-        //if ($this->debug > 2) { error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view, 0); }
         Database::query($sql);
-        exit;
+
         self::toggle_publish($this->lp_id, 'i');
 
-        //if ($this->debug > 2) { error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type, 0); }
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
             $sql = "SELECT path FROM $lp WHERE c_id = ".$course_id." AND id = " . $this->lp_id;

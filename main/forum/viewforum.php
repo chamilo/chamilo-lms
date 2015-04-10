@@ -381,7 +381,7 @@ if (is_array($threads)) {
                 echo '<td>'.Display::tag('span', api_get_person_name($row['firstname'], $row['lastname']), array("title"=>api_htmlentities($poster_username, ENT_QUOTES))).'</td>';
             }
 
-            $last_post_info = get_last_post_by_thread($row['c_id'], $row['thread_id'], $row['forum_id'], is_allowed_to_edit());
+            $last_post_info = get_last_post_by_thread($row['c_id'], $row['thread_id'], $row['forum_id'], api_is_allowed_to_edit());
             $last_post = null;
 
             if ($last_post_info) {

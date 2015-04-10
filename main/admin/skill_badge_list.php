@@ -39,7 +39,7 @@ $interbreadcrumb = array(
 
 $tpl = new Template(get_lang('Skills'));
 $tpl->assign('errorMessage', $errorMessage);
-$tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
+$tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skills', $skills);
 
 $contentTemplate = $tpl->get_template('skill/badge_list.tpl');

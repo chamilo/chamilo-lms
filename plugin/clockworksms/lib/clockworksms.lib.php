@@ -49,7 +49,7 @@ class Clockworksms implements SmsPluginLibraryInterface
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
-                $email_form = get_setting('emailAdministrator');
+                $email_form = api_get_setting('emailAdministrator');
                 $emailsubject = 'Clockworksms error';
                 $emailbody = 'Key cannot be blank';
                 $sender_name = $recipient_name;

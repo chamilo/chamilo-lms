@@ -4255,7 +4255,7 @@ function get_forums_of_group($group_id)
     // Finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
     if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
-            $last_post_info_of_forum = get_last_post_information($key, is_allowed_to_edit());
+            $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit());
             $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
             $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
             $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];

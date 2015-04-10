@@ -354,9 +354,8 @@ EOT;
 EOT;
 
         $result = array();
-        $resultset = api_sql_query($sql, __FILE__, __LINE__);
-        while ($row = Database::fetch_array($resultset))
-        {
+        $resultset = Database::query($sql);
+        while ($row = Database::fetch_array($resultset)) {
             $code = $row['code'];
             $result[$code] = array(
                 'code' => $code,
@@ -397,7 +396,7 @@ EOT;
 		                     AND course_rel_user.user_id = $user_id
 		               ORDER BY course_rel_user.sort ASC";
         $result = array();
-        $resultset = api_sql_query($sql_select_courses);
+        $resultset = Database::query($sql_select_courses);
         while ($row = Database::fetch_array($resultset)) {
             $code = $row['k'];
             $result[$code] = array(

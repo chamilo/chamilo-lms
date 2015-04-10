@@ -3150,7 +3150,7 @@ class Exercise
                                 // Save into db
                                 /*	$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
                                 VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
-                                $result = api_sql_query($sql,__FILE__,__LINE__);*/
+                                $result = Database::query($sql,__FILE__,__LINE__);*/
                                 $user_answer = $user_array;
 
                                 // we compare only the delineation not the other points

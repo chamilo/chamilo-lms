@@ -160,7 +160,7 @@ class CourseRequestManager
         $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $sender_email_teacher = $user_info['mail'];
         $recipient_name_admin = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $recipient_email_admin = get_setting('emailAdministrator');
+        $recipient_email_admin = api_get_setting('emailAdministrator');
 
         $userInfo = api_get_user_info($user_id);
 
@@ -477,7 +477,7 @@ class CourseRequestManager
             $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $sender_email = get_setting('emailAdministrator');
+            $sender_email = api_get_setting('emailAdministrator');
             $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
             $recipient_email = $user_info['mail'];
             $extra_headers = 'Bcc: '.$sender_email;
@@ -555,7 +555,7 @@ class CourseRequestManager
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = get_setting('emailAdministrator');
+        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
@@ -632,7 +632,7 @@ class CourseRequestManager
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = get_setting('emailAdministrator');
+        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;

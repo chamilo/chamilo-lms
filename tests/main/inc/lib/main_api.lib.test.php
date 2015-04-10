@@ -494,16 +494,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($cssdir);
 	}
 
-	function testApiSendMail(){
-		$to= 'chamilotest@beeznest.com';
-		$subject='Hello';
-		$message='test message';
-		$res=api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null);
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-		//var_dump($send_mail);
-	}
-
 	function testApiMaxSortValue(){
 	    $user_course_category=1;
 	    $user_id =1;
@@ -524,15 +514,6 @@ class TestMainApi extends UnitTestCase {
 		$_plugins[$location]=1;
 		$res=api_number_of_plugins($location);
 		$this->assertFalse($res);
-		$this->assertTrue($_plugins[$location]);
-	}
-
-	function testApiPlugin(){
-		global $_plugins;
-		$location=2;
-		$_plugins[$location]=1;
-		$res1 = api_plugin($location);
-		$this->assertFalse($res1);
 		$this->assertTrue($_plugins[$location]);
 	}
 

@@ -1599,12 +1599,12 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $session_id = api_get_session_id();
-    $condition_session  = api_get_session_condition($session_id);
+    $condition_session = api_get_session_condition($session_id, true, false, 'work.session_id');
 
-    $course_id      = api_get_course_int_id();
-    $group_id       = api_get_group_id();
-    $course_info    = api_get_course_info(api_get_course_id());
-    $work_id       = intval($work_id);
+    $course_id = api_get_course_int_id();
+    $group_id = api_get_group_id();
+    $course_info = api_get_course_info(api_get_course_id());
+    $work_id = intval($work_id);
 
     if (!empty($group_id)) {
         // set to select only messages posted by the user's group
@@ -2188,7 +2188,7 @@ function get_work_user_list(
 
     $work_data = get_work_data_by_id($work_id);
     $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
-    $condition_session  = api_get_session_condition($session_id);
+    $condition_session  = api_get_session_condition($session_id, true, false, 'work.session_id');
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
     $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -2325,10 +2325,17 @@ function get_work_user_list(
             $work['qualification_score'] = $work['qualification'];
 
             $add_string = '';
-            $time_expires = api_strtotime($work_assignment['expires_on'], 'UTC');
+
+            $time_expires = '';
+            if (!empty($work_assignment['expires_on'])) {
+                $time_expires = api_strtotime(
+                    $work_assignment['expires_on'],
+                    'UTC'
+                );
+            }
 
             if (!empty($work_assignment['expires_on']) &&
-                $time_expires && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
+                !empty($time_expires) && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
                 $add_string = Display::label(get_lang('Expired'), 'important');
             }
 
@@ -3929,12 +3936,15 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         Database::query($sql);
         $workId = Database::insert_id();
 
+        $sql = "UPDATE $work_table SET id = $workId WHERE iid = $workId ";
+        Database::query($sql);
+
         if ($workId) {
             if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
                 $sql = "UPDATE $work_table SET
                             filename = '$filename'
-                        WHERE c_id = $courseId AND id = $workId";
+                        WHERE iid = $workId";
                 Database::query($sql);
             }
 
@@ -3942,7 +3952,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $documentId = isset($values['document_id']) ? intval($values['document_id']) : 0;
                 $sql = "UPDATE $work_table SET
                             document_id = '$documentId'
-                        WHERE c_id = $courseId AND id = $workId";
+                        WHERE iid = $workId";
                 Database::query($sql);
             }
             api_item_property_update(
@@ -4019,7 +4029,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 allow_text_assignment = '".Database::escape_string($params['allow_text_assignment'])."',
                 contains_file       = 0,
                 user_id             = '".$user_id."'";
-        Database::query($sql);date_of_qualification
+        Database::query($sql);
 
         // Add the directory
         $id = Database::insert_id();
@@ -4111,7 +4121,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workId = intval($workId);
-    $time = time();
+    $time = api_get_utc_datetime();
     $course_id = $courseInfo['real_id'];
 
     // Insert into agenda
@@ -4123,7 +4133,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         // Setting today date
         $date = $end_date = $time;
 
-        if (!empty($params['enableExpiryDate'])) {
+        if (isset($params['enableExpiryDate'])) {
             $end_date = $params['expires_on'];
             $date = $end_date;
         }
@@ -4168,14 +4178,28 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $data = get_work_assignment_by_id($workId, $course_id);
 
     if (empty($data)) {
+        $expiryDateCondition = '';
+        if (!empty($expiryDate)) {
+            $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
+        } else {
+            $expiryDateCondition = "expires_on = null, ";
+        }
+
+        $endOnCondition = '';
+        if (!empty($endDate)) {
+            $endOnCondition = "ends_on = '".Database::escape_string($endDate)."', ";
+        } else {
+            $endOnCondition = "ends_on = null, ";
+        }
 
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
-                expires_on = '".Database::escape_string($expiryDate)."',
-                ends_on = '".Database::escape_string($endDate)."',
+                $expiryDateCondition
+                $endOnCondition
                 add_to_calendar = $agendaId,
                 enable_qualification = '$qualification',
                 publication_id = '$workId'";
+
         Database::query($sql);
 
         $my_last_id = Database::insert_id();
@@ -4185,6 +4209,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                     view_properties = 1
                 WHERE c_id = $course_id AND id = $workId";
         Database::query($sql);
+        exit;
     } else {
         $sql = "UPDATE $table SET
                     expires_on = '".$expiryDate."',

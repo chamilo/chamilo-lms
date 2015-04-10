@@ -39,14 +39,14 @@ class CStudentPublicationAssignment
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expires_on", type="datetime", nullable=false)
+     * @ORM\Column(name="expires_on", type="datetime", nullable=true)
      */
     private $expiresOn;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="ends_on", type="datetime", nullable=false)
+     * @ORM\Column(name="ends_on", type="datetime", nullable=true)
      */
     private $endsOn;
 

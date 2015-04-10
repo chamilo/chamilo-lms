@@ -88,7 +88,7 @@ class CStudentPublication
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sent_date", type="datetime", nullable=false)
+     * @ORM\Column(name="sent_date", type="datetime", nullable=true)
      */
     private $sentDate;
 
@@ -123,7 +123,7 @@ class CStudentPublication
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_of_qualification", type="datetime", nullable=false)
+     * @ORM\Column(name="date_of_qualification", type="datetime", nullable=true)
      */
     private $dateOfQualification;
 

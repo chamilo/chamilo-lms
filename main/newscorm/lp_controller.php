@@ -497,16 +497,15 @@ switch ($action) {
                 $_SESSION['post_time'] = $_REQUEST['post_time'];
 
                 if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
-                	$publicated_on  = $_REQUEST['publicated_on'];
+                	$publicated_on = $_REQUEST['publicated_on'];
                 } else {
                 	$publicated_on = null;
                 }
 
                 if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
-                	$expired_on   = $_REQUEST['expired_on'];
-                	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+                	$expired_on = $_REQUEST['expired_on'];
                 } else {
-                	$expired_on   = null;
+                	$expired_on = null;
                 }
 
                 $new_lp_id = learnpath::add_lp(

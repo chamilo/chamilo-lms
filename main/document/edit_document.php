@@ -170,7 +170,7 @@ if (!api_is_allowed_to_edit()) {
 Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
-if (!is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit()) {
 	if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
 		api_not_allowed();
 	}
@@ -184,13 +184,16 @@ if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
 	$comment = Database::escape_string(trim($_POST['comment']));
 	$title = Database::escape_string(trim($_POST['title']));
-    //Just in case see BT#3525
+
+    // Just in case see BT#3525
     if (empty($title)) {
 		$title = $documen_data['title'];
 	}
+
 	if (empty($title)) {
 		$title = get_document_title($_POST['filename']);
 	}
+
     if (!empty($document_id)) {
         $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
         Database::query($query);

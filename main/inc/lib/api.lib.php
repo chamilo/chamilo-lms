@@ -4300,7 +4300,7 @@ function api_max_sort_value($user_course_category, $user_id)
             WHERE
                 user_id='".intval($user_id)."' AND
                 relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                user_course_cat='".Database::escape_string($user_course_category)."'";
+                user_course_cat='".intval($user_course_category)."'";
     $result_max = Database::query($sql);
     if (Database::num_rows($result_max) == 1) {
         $row_max = Database::fetch_array($result_max);
@@ -6723,7 +6723,8 @@ function api_is_global_chat_enabled()
  * @todo Fix tool_visible_by_default_at_creation labels
  * @todo Add sessionId parameter to avoid using context
  */
-function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
+function api_set_default_visibility($item_id, $tool_id, $group_id = null)
+{
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {

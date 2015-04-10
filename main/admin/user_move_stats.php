@@ -359,8 +359,8 @@ if (isset($_REQUEST['load_ajax'])) {
                                     $created_dir = '/'.$created_dir;
                                     $now = api_get_utc_datetime();
                                     //Creating directory
-                                    $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET " .
-                                        "url         = '".$created_dir."',
+                                    $sql_add_publication = "INSERT INTO " . $TBL_STUDENT_PUBLICATION . " SET
+                                           url         = '".$created_dir."',
 	                                       c_id        = $course_id,
 	                                       title        = '".$parent_data['title']."',
 	                                       description  = '".$parent_data['description']." folder_moved_from_session_id_$origin_session_id ',

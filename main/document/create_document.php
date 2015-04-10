@@ -182,9 +182,7 @@ if (!is_dir($filepath)) {
 $to_group_id = 0;
 
 if (!$is_certificate_mode) {
-    $req_gid = null;
 	if (api_is_in_group()) {
-		$req_gid = '&amp;gidReq='.api_get_group_id();
 		$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
 		$noPHP_SELF = true;
 		$to_group_id = api_get_group_id();
@@ -193,7 +191,7 @@ if (!$is_certificate_mode) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
+	$interbreadcrumb[] = array("url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(), "name" => get_lang('Documents'));
 } else {
 	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
@@ -291,7 +289,9 @@ $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is
 // If we are not in the certificates creation, display a folder chooser for the
 // new document created
 
-if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)) {
+if (!$is_certificate_mode &&
+	!DocumentManager::is_my_shared_folder($userId, $dir, $current_session_id)
+) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
@@ -323,7 +323,8 @@ if (!$is_certificate_mode && !DocumentManager::is_my_shared_folder($userId, $dir
         }
         $folder_sql = implode("','", $escaped_folders);
 
-        $sql = "SELECT * FROM $doc_table WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
+        $sql = "SELECT * FROM $doc_table
+				WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
         $res = Database::query($sql);
         $folder_titles = array();
         while ($obj = Database::fetch_object($res)) {

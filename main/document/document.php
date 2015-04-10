@@ -1216,7 +1216,6 @@ if ($is_allowed_to_edit ||
 
 $dirForm = null;
 
-
 /* 	CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
 if ($is_allowed_to_edit ||

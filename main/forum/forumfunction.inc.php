@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * These files are a complete rework of the forum. The database structure is
  * based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -1311,7 +1312,7 @@ function get_forums_in_category($cat_id)
                 item_properties.tool='".TOOL_FORUM."' AND
                 forum.c_id = $course_id
             ORDER BY forum.forum_order ASC";
-    if (is_allowed_to_edit()) {
+    if (api_is_allowed_to_edit()) {
         $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
                 WHERE
                     forum.forum_category = '".Database::escape_string($cat_id)."' AND
@@ -1427,7 +1428,7 @@ function get_forums(
                 GROUP BY threads.forum_id";
 
         // Course Admin
-        if (is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
             $sql = "SELECT * FROM ".$table_forums." forum
                     INNER JOIN ".$table_item_property." item_properties
@@ -1744,7 +1745,7 @@ function get_threads($forum_id, $course_code = null)
                 thread.forum_id = ".intval($forum_id)."
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
 
-    if (is_allowed_to_edit()) {
+    if (api_is_allowed_to_edit()) {
         // important note:  it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
         // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
         // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
@@ -4193,7 +4194,7 @@ function get_forums_of_group($group_id)
             GROUP BY threads.forum_id";
 
     // Course Admin
-    if (is_allowed_to_edit()) {
+    if (api_is_allowed_to_edit()) {
         // Select all the forum information of all forums (that are not deleted).
         $sql = "SELECT *
                 FROM ".$table_forums." forum , ".$table_item_property." item_properties

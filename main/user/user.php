@@ -384,14 +384,15 @@ if (api_is_allowed_to_edit(null, true)) {
             $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-            $sql = 'SELECT '.$tbl_user.'.user_id
+            $sql = 'SELECT user.user_id
 					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_session_rel_user.' reluser
 					ON user.user_id = reluser.user_id AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
-					ON rel_course.session_id = reluser.id_session
-					WHERE user.user_id = "'.$user_id.'"
-					AND rel_course.c_id = "'.$courseId.'"';
+					ON rel_course.session_id = reluser.session_id
+					WHERE
+					    user.user_id = "'.$user_id.'" AND
+					    rel_course.c_id = "'.$courseId.'"';
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');

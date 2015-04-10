@@ -669,7 +669,7 @@ class CourseManager
      * @return boolean true if subscription succeeds, boolean false otherwise.
      * @assert ('', '') === false
      */
-    public static function add_user_to_course($user_id, $course_code, $status = STUDENT)
+    public static function add_user_to_course($user_id, $course_code, $status = STUDENT, $userCourseCategoryId = 0)
     {
         $debug = false;
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -723,7 +723,8 @@ class CourseManager
             'c_id' => $courseId,
             'user_id' => $user_id,
             'status' => $status,
-            'sort' => $max_sort + 1
+            'sort' => $max_sort + 1,
+            'user_course_cat' => $userCourseCategoryId
         ];
         $insertId = Database::insert($course_user_table, $params);
 
@@ -3743,8 +3744,10 @@ class CourseManager
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $params = array(
-                'icon' => Display::return_icon('folder_yellow.png', api_htmlentities($row['title']), array(),
-                    ICON_SIZE_LARGE),
+                'icon' => Display::return_icon(
+                    'folder_yellow.png',
+                    api_htmlentities($row['title']), array(), ICON_SIZE_LARGE
+                ),
                 'title' => $row['title'],
                 'class' => 'table_user_course_category'
             );
@@ -3759,6 +3762,7 @@ class CourseManager
 
         // Step 2: We display the course without a user category.
         $courseInCategory = self:: display_courses_in_category(0, $load_dirs);
+
         $html .= $courseInCategory['html'];
         $courseCount += $courseInCategory['course_count'];
 
@@ -3809,7 +3813,7 @@ class CourseManager
                     course.id = course_rel_user.c_id AND
                     url.c_id = course.id AND
                     course_rel_user.user_id = '" . $user_id . "' AND
-                    course_rel_user.user_course_cat='" . $user_category_id . "'
+                    course_rel_user.user_course_cat = '" . $user_category_id . "'
                     $without_special_courses ";
 
         // If multiple URL access mode is enabled, only fetch courses

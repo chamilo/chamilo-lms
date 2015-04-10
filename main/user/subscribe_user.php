@@ -77,12 +77,20 @@ $list_not_register_user='';
 if (isset($_REQUEST['register'])) {
 	if ($type =='teacher') {
 		if (!empty($current_session_id)) {
-			$result_simple_sub = SessionManager::set_coach_to_course_session($_REQUEST['user_id'], $current_session_id, $_course['sysCode']);
+			$result_simple_sub = SessionManager::set_coach_to_course_session(
+				$_REQUEST['user_id'],
+				$current_session_id,
+				$_course['code']
+			);
 		} else {
-			$result_simple_sub = CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode'], COURSEMANAGER);
+			$result_simple_sub = CourseManager:: subscribe_user(
+				$_REQUEST['user_id'],
+				$_course['code'],
+				COURSEMANAGER
+			);
 		}
 	} else {
-		$result_simple_sub=CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['sysCode']);
+		$result_simple_sub = CourseManager :: subscribe_user($_REQUEST['user_id'], $_course['code']);
 	}
 
 	$user_id_temp = $_SESSION['session_user_id'];
@@ -106,7 +114,7 @@ if (isset($_REQUEST['register'])) {
 
 if (isset ($_POST['action'])) {
 	switch ($_POST['action']) {
-		case 'subscribe' :
+		case 'subscribe':
 			if (is_array($_POST['user'])) {
 				foreach ($_POST['user'] as $index => $user_id) {
 					$user_id=intval($user_id);
@@ -118,12 +126,12 @@ if (isset ($_POST['action'])) {
                                 $_course['sysCode']
                             );
 						} else {
-							$is_suscribe[] = CourseManager::subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);
+							$is_suscribe[] = CourseManager::subscribe_user($user_id, $_course['code'],COURSEMANAGER);
 						}
 					} else {
-						$is_suscribe[]=CourseManager::subscribe_user($user_id, $_course['sysCode']);
+						$is_suscribe[] = CourseManager::subscribe_user($user_id, $_course['code']);
 					}
-                    $is_suscribe_user_id[]=$user_id;
+                    $is_suscribe_user_id[] = $user_id;
 				}
 			}
 
@@ -132,8 +140,8 @@ if (isset ($_POST['action'])) {
 
 			unset($_SESSION['session_user_id']);
  			unset($_SESSION['session_user_name']);
-			$counter=0;
-			$is_suscribe_counter=count($is_suscribe_user_id);
+			$counter = 0;
+			$is_suscribe_counter = count($is_suscribe_user_id);
 
 			$list_register_user='';
 
@@ -181,7 +189,12 @@ $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 
 // Build table
-$table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
+$table = new SortableTable(
+	'subscribe_users',
+	'get_number_of_users',
+	'get_user_data',
+	($is_western_name_order xor $sort_by_first_name) ? 3 : 2
+);
 $parameters['keyword'] = $keyword;
 $parameters['type'] = $type;
 $table->set_additional_parameters($parameters);
@@ -247,7 +260,7 @@ function get_number_of_users()
 						u.status = 1 AND
 						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
-			if ($_configuration['multiple_access_urls']) {
+			if (api_is_multiple_url_enabled()) {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -257,7 +270,12 @@ function get_number_of_users()
 							ON u.user_id = cu.user_id and cu.c_id = '".api_get_course_int_id()."' AND session_id ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+							WHERE
+								cu.user_id IS NULL AND
+								access_url_id= $url_access_id AND
+								u.status = 1 AND
+								(u.official_code <> 'ADMIN' OR u.official_code IS NULL)
+							";
 				}
 			}
 		} else {
@@ -298,7 +316,7 @@ function get_number_of_users()
 						u.status<>".DRH." AND
 						(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
-			if ($_configuration['multiple_access_urls']) {
+			if (api_is_multiple_url_enabled()) {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -340,7 +358,7 @@ function get_number_of_users()
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
 
-			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+			if (api_is_multiple_url_enabled()) {
 				$url_access_id = api_get_current_access_url_id();
 
 				if ($url_access_id !=-1) {
@@ -534,7 +552,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     	c_id ='".$courseId."' AND
                     	session_id ='".$session_id."' ";
 
-            if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
             }
 
@@ -557,7 +575,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 			(u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
 
-            if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 $sql .=  "AND access_url_id = $url_access_id";
             }
 
@@ -586,10 +604,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 			//showing only the courses of the current Chamilo access_url_id
 
-			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-
+			if (api_is_multiple_url_enabled()) {
 				if ($url_access_id !=-1) {
-
 					$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu

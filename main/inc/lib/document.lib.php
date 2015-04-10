@@ -3184,7 +3184,7 @@ class DocumentManager
         $overwrite_url = null,
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
-        $folderId = 0
+        $folderId = false
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3231,7 +3231,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (session_id = '$session_id' OR session_id = '0' )";
+        $condition_session = " AND (last.session_id = '$session_id' OR last.session_id = '0' )";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {
@@ -3261,7 +3261,8 @@ class DocumentManager
             }
         }
 
-        if ($folderId !== 0) {
+        $parentData = [];
+        if ($folderId !== false) {
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
@@ -3285,7 +3286,6 @@ class DocumentManager
         }
 
         $levelCondition = null;
-
         if ($folderId === false) {
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
@@ -3334,6 +3334,7 @@ class DocumentManager
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
         $newResources = array();
+
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
@@ -3351,16 +3352,20 @@ class DocumentManager
         }
 
         $label = get_lang('Documents');
+
+        $documents = [];
         if ($folderId === false) {
             $documents[$label] = array(
                 'id' => 0,
                 'files' => $newResources
             );
         } else {
-            $documents[$parentData['title']] = array(
-                'id' => intval($folderId),
-                'files' => $newResources
-            );
+            if (!empty($parentData)) {
+                $documents[$parentData['title']] = array(
+                    'id' => intval($folderId),
+                    'files' => $newResources
+                );
+            }
         }
 
         $write_result = self::write_resources_tree(
@@ -3617,7 +3622,6 @@ class DocumentManager
             $image = $img_path.'nolines_minus.gif';
         }
         $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
-
 
         $return .= '<img alt="" src="' . $img_path . 'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
@@ -5768,15 +5772,16 @@ class DocumentManager
     public static function create_dir_form($dirId)
     {
         global $document_id;
-        $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq(), '', null, false);
+        $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('hidden', 'create_dir', 1);
         $form->addElement('hidden', 'dir_id', intval($document_id));
         $form->addElement('hidden', 'id', intval($dirId));
-        $form->addElement('header', '', get_lang('CreateDir'));
-        $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
-        $form->addButtonCreate(get_lang('CreateFolder'), 'submit');
-        $new_folder_text = $form->returnForm();
-        return $new_folder_text;
+        $form->addElement('header', get_lang('CreateDir'));
+        $form->addText('dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
+        $form->addButtonCreate(get_lang('CreateFolder'));
+
+        return $form->returnForm();
+
     }
 
     /**

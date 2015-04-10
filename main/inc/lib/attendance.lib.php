@@ -311,6 +311,10 @@ class Attendance
 		if (!empty($affected_rows)) {
 			// save inside item property table
 			$last_id = Database::insert_id();
+
+			$sql = "UPDATE $tbl_attendance SET cat_id = $last_id WHERE iid = $last_id";
+			Database::query($sql);
+
 			api_item_property_update($_course, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", $user_id);
 		}
 		// add link to gradebook
@@ -710,6 +714,11 @@ class Attendance
 						attendance_calendar_id 	= '$calendar_id',
 						presence 				= 1";
 				$result = Database::query($sql);
+
+				$insertId = Database::insert_id();
+				$sql = "UPDATE $tbl_attendance_sheet SET id = $insertId WHERE iid = $insertId";
+				Database::query($sql);
+
 				$affected_rows += Database::affected_rows($result);
 			} else {
 				$sql = "UPDATE $tbl_attendance_sheet SET presence = 1
@@ -737,6 +746,11 @@ class Attendance
 						attendance_calendar_id = '$calendar_id',
 						presence = 0";
 				$result = Database::query($sql);
+
+				$insertId = Database::insert_id();
+				$sql = "UPDATE $tbl_attendance_sheet SET id = $insertId WHERE iid = $insertId";
+				Database::query($sql);
+
 				$affected_rows += Database::affected_rows($result);
 			} else {
 				$sql = "UPDATE $tbl_attendance_sheet SET presence = 0
@@ -840,6 +854,10 @@ class Attendance
 							attendance_id 	= '$attendance_id',
 							score			= '$count_presences'";
 					Database::query($sql);
+
+					$insertId = Database::insert_id();
+					$sql = "UPDATE $tbl_attendance_result SET id = $insertId WHERE iid = $insertId";
+					Database::query($sql);
 				}
 			}
 		}
@@ -886,6 +904,11 @@ class Attendance
                 VALUES ($course_id, $attendance_id, '$lastedit_date', '$lastedit_type', $lastedit_user_id, '$calendar_date_value')";
 
 		$result = Database::query($ins);
+
+		$insertId = Database::insert_id();
+
+		$sql = "UPDATE $tbl_attendance_sheet_log SET id = $insertId WHERE iid = $insertId";
+		Database::query($sql);
 
 		return Database::affected_rows($result);
 	}
@@ -1397,6 +1420,8 @@ class Attendance
 			$id = Database::insert($tbl_attendance_calendar, $params);
 
 			if ($id) {
+				$sql = "UPDATE $tbl_attendance_calendar SET id = $id WHERE iid = $id";
+				Database::query($sql);
 				$affected_rows++;
 			}
 			$this->addAttendanceCalendarToGroup($id, $course_id, $groupList);
@@ -1438,7 +1463,10 @@ class Attendance
 					'c_id' => $courseId,
 					'group_id' => $groupId,
 				);
-				Database::insert($table, $params);
+                $insertId = Database::insert($table, $params);
+
+                $sql = "UPDATE $table SET id = $insertId WHERE iid = $insertId";
+                Database::query($sql);
 			}
 		}
 	}

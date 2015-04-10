@@ -348,6 +348,9 @@ class AnnouncementManager
 
         $last_id = Database::insert($tbl_announcement, $params);
 
+        $sql = "UPDATE $tbl_announcement SET id = $last_id WHERE iid = $last_id";
+        Database::query($sql);
+
         if (empty($last_id)) {
             return false;
         } else {
@@ -460,50 +463,58 @@ class AnnouncementManager
 
         //store the attach file
         $last_id = Database::insert_id();
-        if (!empty($file)) {
-            self::add_announcement_attachment_file($last_id, $file_comment, $file);
-        }
+        if ($last_id) {
+            $sql = "UPDATE $lp_item_view_table SET id = $last_id WHERE iid = $last_id";
+            Database::query($sql);
 
-        // Store in item_property (first the groups, then the users
+            if (!empty($file)) {
+                self::add_announcement_attachment_file(
+                    $last_id,
+                    $file_comment,
+                    $file
+                );
+            }
 
-        if (!isset($to_users)) {
-            // when no user is selected we send it to everyone
-            $send_to = CourseManager::separateUsersGroups($to);
-            // storing the selected groups
-            if (is_array($send_to['groups'])) {
-                foreach ($send_to['groups'] as $group) {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ANNOUNCEMENT,
-                        $last_id,
-                        "AnnouncementAdded",
-                        api_get_user_id(),
-                        $group
-                    );
+            // Store in item_property (first the groups, then the users
+
+            if (!isset($to_users)) {
+                // when no user is selected we send it to everyone
+                $send_to = CourseManager::separateUsersGroups($to);
+                // storing the selected groups
+                if (is_array($send_to['groups'])) {
+                    foreach ($send_to['groups'] as $group) {
+                        api_item_property_update(
+                            $_course,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            "AnnouncementAdded",
+                            api_get_user_id(),
+                            $group
+                        );
+                    }
+                }
+            } else {
+                // the message is sent to everyone, so we set the group to 0
+                // storing the selected users
+                if (is_array($to_users)) {
+                    foreach ($to_users as $user) {
+                        api_item_property_update(
+                            $_course,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            "AnnouncementAdded",
+                            api_get_user_id(),
+                            '',
+                            $user
+                        );
+                    }
                 }
             }
-        } else {
-            // the message is sent to everyone, so we set the group to 0
-            // storing the selected users
-            if (is_array($to_users)) {
-                foreach ($to_users as $user) {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ANNOUNCEMENT,
-                        $last_id,
-                        "AnnouncementAdded",
-                        api_get_user_id(),
-                        '',
-                        $user
-                    );
-                }
+
+            if ($sendToUsersInSession) {
+                self::addAnnouncementToAllUsersInSessions($last_id);
             }
         }
-
-        if ($sendToUsersInSession) {
-            self::addAnnouncementToAllUsersInSessions($last_id);
-        }
-
         return $last_id;
     }
 
@@ -1191,11 +1202,17 @@ class AnnouncementManager
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 // Storing the attachments if any
                 $sql = 'INSERT INTO ' . $tbl_announcement_attachment . ' (c_id, filename, comment, path, announcement_id, size) ' .
-                    "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
+                        "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
                 $result = Database::query($sql);
+
+                $insertId = Database::insert_id();
+                $sql = "UPDATE $tbl_announcement_attachment SET id = $insertId WHERE iid = $insertId";
+                Database::query($sql);
+
                 $return = 1;
             }
         }
+
         return $return;
     }
 

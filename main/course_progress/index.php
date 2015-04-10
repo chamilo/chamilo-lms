@@ -78,7 +78,7 @@ $thematic = new Thematic();
 
 // thematic controller object
 $thematic_controller = new ThematicController();
-
+$thematic_data = [];
 if (!empty($thematic_id)) {
     // thematic data by id
     $thematic_data = $thematic->get_thematic_list($thematic_id);
@@ -197,7 +197,12 @@ if ($action == 'thematic_details') {
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
     $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');
+    if (!empty($thematic_data)) {
+        $interbreadcrumb[] = array(
+            'url' => '#',
+            'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') '
+        );
+    }
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));

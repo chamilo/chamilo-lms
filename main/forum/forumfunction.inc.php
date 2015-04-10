@@ -529,7 +529,7 @@ function store_forumcategory($values)
                 cat_comment='".Database::escape_string($values['forum_category_comment'])."'
                 WHERE c_id = $course_id AND cat_id= ".intval($values['forum_category_id'])."";
         Database::query($sql);
-        Database::insert_id();
+
         api_item_property_update(
             api_get_course_info(),
             TOOL_FORUM_CATEGORY,
@@ -543,6 +543,10 @@ function store_forumcategory($values)
                 VALUES (".$course_id.", '".$clean_cat_title."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
         Database::query($sql);
         $last_id = Database::insert_id();
+
+        $sql = "UPDATE $table_categories SET cat_id = $last_id WHERE iid = $last_id";
+        Database::query($sql);
+
         if ($last_id > 0) {
             api_item_property_update(
                 api_get_course_info(),
@@ -702,6 +706,10 @@ function store_forum($values)
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {
+
+            $sql = "UPDATE $table_forums SET forum_id = $last_id WHERE iid = $last_id";
+            Database::query($sql);
+
             api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id(), $group_id);
             api_set_default_visibility($last_id, TOOL_FORUM, $group_id);
         }
@@ -1847,7 +1855,7 @@ function get_post_information($post_id)
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT * FROM ".$table_posts."posts, ".$table_users." users
+    $sql = "SELECT * FROM ".$table_posts." posts, ".$table_users." users
             WHERE
                 c_id = $course_id AND
                 posts.poster_id=users.user_id AND
@@ -2219,10 +2227,10 @@ function store_thread($current_forum, $values)
                     '".Database::escape_string(stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null))."',
                     '".Database::escape_string($post_date)."',
                     '".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
-            "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
-            "'".Database::escape_string($values['numeric_calification'])."',".
-            "'".Database::escape_string($values['weight_calification'])."',".
-            "'".api_get_session_id()."')";
+                    "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
+                    "'".Database::escape_string($values['numeric_calification'])."',".
+                    "'".Database::escape_string($values['weight_calification'])."',".
+                    "'".api_get_session_id()."')";
         Database::query($sql);
         $last_thread_id = Database::insert_id();
 
@@ -2252,6 +2260,10 @@ function store_thread($current_forum, $values)
         }
 
         if ($last_thread_id) {
+
+            $sql = "UPDATE $table_threads SET thread_id = $last_thread_id WHERE iid = $last_thread_id";
+            Database::query($sql);
+
             api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'ForumThreadAdded', api_get_user_id());
             // If the forum properties tell that the posts have to be approved we have to put the whole thread invisible,
             // because otherwise the students will see the thread and not the post in the thread.
@@ -2281,6 +2293,11 @@ function store_thread($current_forum, $values)
                 '".Database::escape_string($visible)."')";
         Database::query($sql);
         $last_post_id = Database::insert_id();
+
+        if ($last_post_id) {
+            $sql = "UPDATE $table_posts SET post_id = $last_post_id WHERE iid = $last_post_id";
+            Database::query($sql);
+        }
 
         // Update attached files
         if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
@@ -2533,14 +2550,19 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
 
     $course_id = api_get_course_int_id();
 
-    if ($user_id == strval(intval($user_id)) && $thread_id == strval(intval($thread_id)) && $thread_qualify == strval(floatval($thread_qualify))) {
+    if ($user_id == strval(intval($user_id)) &&
+        $thread_id == strval(intval($thread_id)) &&
+        $thread_qualify == strval(floatval($thread_qualify))
+    ) {
         // Testing
-        $sql_string = "SELECT thread_qualify_max FROM ".$table_threads." WHERE c_id = $course_id AND thread_id=".$thread_id.";";
+        $sql_string = "SELECT thread_qualify_max FROM ".$table_threads."
+                        WHERE c_id = $course_id AND thread_id=".$thread_id.";";
         $res_string = Database::query($sql_string);
         $row_string = Database::fetch_array($res_string);
         if ($thread_qualify <= $row_string[0]) {
 
-            $sql1 = "SELECT COUNT(*) FROM ".$table_threads_qualify." WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
+            $sql1 = "SELECT COUNT(*) FROM ".$table_threads_qualify."
+                     WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
             $res1 = Database::query($sql1);
             $row = Database::fetch_array($res1);
 
@@ -2548,6 +2570,10 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
                 $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
                 VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$qualify_user_id."','".$qualify_time."','".$session_id."')";
                 $res = Database::query($sql);
+
+                $insertId = Database::insert_id();
+                $sql = "UPDATE $table_threads_qualify SET id = $insertId WHERE iid = $insertId";
+                Database::query($sql);
 
                 return $res;
             } else {
@@ -2679,6 +2705,10 @@ function store_qualify_historical(
         $sql1 = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
                  VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."','".$row[1]."','')";
         Database::query($sql1);
+
+        $insertId = Database::insert_id();
+        $sql = "UPDATE $table_threads_qualify_log SET id = $insertId WHERE iid = $insertId";
+        Database::query($sql);
 
         // Update
         $sql2 = "UPDATE ".$table_threads_qualify."

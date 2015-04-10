@@ -120,14 +120,23 @@ class GlossaryManager
 						'".Database::escape_string($session_id)."'
 						)";
             $result = Database::query($sql);
-            if ($result === false) { return false; }
+
+            if ($result === false) {
+                return false;
+            }
+
             $id = Database::insert_id();
+
+            $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
+            Database::query($sql);
+
             //insert into item_property
             api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, $id, 'GlossaryAdded', api_get_user_id());
             $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
             // display the feedback message
-            if ($message)
+            if ($message) {
                 Display::display_confirmation_message(get_lang('TermAdded'));
+            }
 
             return $id;
         }

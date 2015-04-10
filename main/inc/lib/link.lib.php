@@ -348,8 +348,11 @@ class Link extends Model
                         '$session_id'
                         )";
                 Database:: query($sql);
-
                 $linkId = Database:: insert_id();
+                // iid
+                $sql = "UPDATE $tbl_categories SET id = $linkId WHERE iid = $linkId";
+                Database:: query($sql);
+
                 if ($linkId) {
                     // add link_category visibility
                     // course ID is taken from context in api_set_default_visibility

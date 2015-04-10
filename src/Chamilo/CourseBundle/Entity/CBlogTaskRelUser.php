@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Entity;
 
@@ -29,18 +30,18 @@ class CBlogTaskRelUser
     private $cId;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="target_date", type="date", nullable=false)
-     */
-    private $targetDate;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="blog_id", type="integer")
      */
     private $blogId;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="target_date", type="date", nullable=false)
+     */
+    private $targetDate;
 
     /**
      * @var integer

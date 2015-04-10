@@ -25,7 +25,7 @@ class CBlogAttachment
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 

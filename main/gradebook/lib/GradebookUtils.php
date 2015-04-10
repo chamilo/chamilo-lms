@@ -954,7 +954,7 @@ class GradebookUtils
         $current_session = api_get_session_id();
         $courseCode = Database::escape_string($courseCode);
         $courseInfo = api_get_course_info($courseCode);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         if (!empty($current_session)) {
             $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code

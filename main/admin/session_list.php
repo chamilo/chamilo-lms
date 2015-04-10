@@ -49,8 +49,9 @@ $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
 if (!empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     $parents = getParentsToString($courseInfo['categoryCode']);
-    $courseList[] = array('id' => $courseInfo['id'], 'text' => $parents.$courseInfo['title']);
+    $courseList[] = array('id' => $courseInfo['code'], 'text' => $parents.$courseInfo['title']);
 }
+
 $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
 $url = api_get_self();
 $actions = '

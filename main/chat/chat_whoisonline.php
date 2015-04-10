@@ -56,7 +56,7 @@ if (!empty($course)) {
 					t1.user_id=t2.user_id AND
 					t3.user_id=t2.user_id AND
 					t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-					t3.c_id = '".$courseInfo['id']."' AND
+					t3.c_id = '".$courseInfo['real_id']."' AND
 					t2.last_connection>'".$date_inter."' $extra_condition
 				  ORDER BY username";
         $result = Database::query($query);

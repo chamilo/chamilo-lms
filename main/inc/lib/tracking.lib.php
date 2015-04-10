@@ -3494,7 +3494,7 @@ class Tracking
         $now = api_get_utc_datetime();
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         if ($session_id != 0) {
             $inner = ' INNER JOIN '.$tbl_session_course_user.' session_course_user

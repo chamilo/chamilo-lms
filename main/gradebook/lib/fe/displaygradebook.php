@@ -304,7 +304,7 @@ class DisplayGradebook
         $user_id = api_get_user_id();
         $course_code = $my_category['course_code'];
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         $status_user = api_get_status_of_user_in_course($user_id, $courseId);
 

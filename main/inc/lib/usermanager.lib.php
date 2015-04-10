@@ -4515,7 +4515,7 @@ class UserManager
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
 
         if ($session == 0 || is_null($session)) {

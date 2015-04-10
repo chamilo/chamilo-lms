@@ -776,7 +776,7 @@ class Category implements GradebookItem
             $parent = Category::load($parent);
             $code = $parent[0]->get_course_code();
             $courseInfo = api_get_course_info($code);
-            $courseId = $courseInfo['id'];
+            $courseId = $courseInfo['real_id'];
             if (isset($code) && $code != '0') {
                 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql .= ' AND user_id IN (

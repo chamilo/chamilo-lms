@@ -4286,13 +4286,14 @@ function WSUnsubscribeUserFromCourse($params) {
         $course_code = $row_course[0];
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         if (empty($course_code)) {
             $results[] = 0;
             continue;
         } else {
-            $sql = "SELECT code FROM $table_course WHERE code ='$course_code' AND visibility = '0'";
+            $sql = "SELECT code FROM $table_course
+                    WHERE code ='$course_code' AND visibility = '0'";
             $resul = Database::query($sql);
             $r_check_code = Database::fetch_row($resul);
             if (!empty($r_check_code[0])) {

@@ -246,9 +246,9 @@ class CoursesController
     public function change_course_category($course_code, $category_id)
     {
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
-        $result = $this->model->store_changecoursecategory($courseId, $category_id);
+        $result = $this->model->updateCourseCategory($courseId, $category_id);
         $message = '';
         if ($result) {
             $message = get_lang('EditCourseCategorySucces');

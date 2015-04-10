@@ -5350,7 +5350,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
     $cid = Database::escape_string($cid);
 
     $courseInfo = api_get_course_info($cid);
-    $courseId = $courseInfo['id'];
+    $courseId = $courseInfo['real_id'];
 
     global $is_platformAdmin;
 

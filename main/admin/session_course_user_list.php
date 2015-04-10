@@ -24,7 +24,7 @@ if (empty($id_session )) {
 
 $course_code = Database::escape_string(trim($_GET['course_code']));
 $courseInfo = api_get_course_info($course_code);
-$courseId = $courseInfo['id'];
+$courseId = $courseInfo['real_id'];
 
 $page           = isset($_GET['page']) ? intval($_GET['page']) : null;
 $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;

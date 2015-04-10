@@ -305,10 +305,10 @@ class ExerciseLink extends AbstractLink
         $user_id = api_get_user_id();
         $course_code = $this->get_course_code();
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
-        $status_user=api_get_status_of_user_in_course($user_id, $courseId);
-        $session_id =api_get_session_id();
+        $status_user = api_get_status_of_user_in_course($user_id, $courseId);
+        $session_id = api_get_session_id();
 
         $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id().'&type='.$this->get_type();
         if ((!api_is_allowed_to_edit() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {

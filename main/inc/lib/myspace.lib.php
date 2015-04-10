@@ -1239,7 +1239,7 @@ class MySpace
     {
         $course_code = $row[0];
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
@@ -2110,7 +2110,7 @@ class MySpace
         while ($row_course = Database::fetch_row($res)) {
             $course_code = $row_course[0];
             $courseInfo = api_get_course_info($course_code);
-            $courseId = $courseInfo['id'];
+            $courseId = $courseInfo['real_id'];
             $avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course

@@ -323,7 +323,7 @@ class CourseManager
     public static function get_user_in_course_status($user_id, $course_code)
     {
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         $result = Database::fetch_array(
             Database::query(
@@ -545,7 +545,7 @@ class CourseManager
 
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
         $courseCode = $courseInfo['code'];
 
         $userCourseCategoryId = intval($userCourseCategoryId);
@@ -1010,7 +1010,7 @@ class CourseManager
             return false;
         }
 
-        $courseId = intval($courseInfo['id']);
+        $courseId = intval($courseInfo['real_id']);
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $sql = "SELECT * FROM $table
@@ -1051,7 +1051,7 @@ class CourseManager
         $condition_course = '';
         if (isset($course_code)) {
             $courseInfo = api_get_course_info($course_code);
-            $courseId = $courseInfo['id'];
+            $courseId = $courseInfo['real_id'];
             $condition_course = ' AND c_id = ' . $courseId;
         }
 
@@ -1111,15 +1111,17 @@ class CourseManager
         }
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         $result = Database::query(
             'SELECT status FROM ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) .
             ' WHERE c_id="' . $courseId . '" and user_id="' . $user_id . '"'
         );
+
         if (Database::num_rows($result) > 0) {
             return Database::result($result, 0, 'status') == 1;
         }
+
         return false;
     }
 
@@ -1616,15 +1618,16 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         $sql = 'SELECT DISTINCT count(*) as count  FROM ' . Database::get_main_table(TABLE_MAIN_USER) . ' as user ';
         $where = array();
         if (!empty($session_id)) {
             $sql .= ' LEFT JOIN ' . Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . ' as session_course_user
-                      ON user.user_id = session_course_user.user_id
-                      AND session_course_user.c_id = "' . $courseId . '"
-                      AND session_course_user.session_id  = ' . $session_id;
+                      ON
+                        user.user_id = session_course_user.user_id AND
+                        session_course_user.c_id = "' . $courseId . '" AND
+                        session_course_user.session_id  = ' . $session_id;
 
             $where[] = ' session_course_user.c_id IS NOT NULL ';
         } else {
@@ -1729,7 +1732,7 @@ class CourseManager
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         $students = array();
 
@@ -3166,7 +3169,7 @@ class CourseManager
         if (is_array($courses_list)) {
             foreach ($courses_list as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
-                $courseId = $courseInfo['id'];
+                $courseId = $courseInfo['real_id'];
                 $sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type)
                         VALUES('$courseId', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
                 $result = Database::query($sql);
@@ -4354,7 +4357,7 @@ class CourseManager
         $session_id = intval($session_id);
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         // Course legal
         $enabled = api_get_plugin_setting('courselegal', 'tool_enable');
@@ -4415,7 +4418,7 @@ class CourseManager
         $session_id = intval($session_id);
 
         $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['id'];
+        $courseId = $courseInfo['real_id'];
 
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);

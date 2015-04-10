@@ -84,9 +84,9 @@ switch ($action) {
                     }
 
                     $results[] = array(
-                        'id' => $courseInfo['id'],
+                        'id' => $courseInfo['code'],
                         'text' => $title
-                        );
+                    );
                 }
                 echo json_encode($results);
             } else {

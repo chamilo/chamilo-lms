@@ -3231,7 +3231,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (session_id = '$session_id' OR  id_session = '0' )";
+        $condition_session = " AND (session_id = '$session_id' OR session_id = '0' )";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {

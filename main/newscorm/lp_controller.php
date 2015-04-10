@@ -298,6 +298,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
             $sel = "SELECT lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) error_log('New LP - querying '.$sel, 0);
             $res = Database::query($sel);
+
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $type = $row['lp_type'];

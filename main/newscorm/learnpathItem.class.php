@@ -290,7 +290,7 @@ class learnpathItem
         $this->current_stop_time = time();
         $type = $this->get_type();
         if ($type != 'sco') {
-            if ($type == TOOL_QUIZ or $type == TOOL_HOTPOTATOES) {
+            if ($type == TOOL_QUIZ || $type == TOOL_HOTPOTATOES) {
                 $this->get_status(
                     true,
                     true
@@ -348,6 +348,7 @@ class learnpathItem
                 $di->remove_document($this->search_did);
             }
         }
+
         return true;
     }
 
@@ -591,8 +592,8 @@ class learnpathItem
             $row = Database::fetch_array($res);
             $lp_iv_id = $row[0];
             $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-            $iva_sql = "SELECT * FROM $iva_table " .
-                "WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
+            $iva_sql = "SELECT * FROM $iva_table
+                        WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
             $res_sql = Database::query($iva_sql);
             while ($row = Database::fetch_array($res_sql)) {
                 $this->interactions[$row['interaction_id']] = array(
@@ -1923,7 +1924,7 @@ class learnpathItem
             $this->current_start_time = time();
         }
         //$this->current_stop_time=time();
-        if (time() < $this->current_stop_time or $this->current_stop_time == 0
+        if (time() < $this->current_stop_time || $this->current_stop_time == 0
         ) {
             if (self::debug > 2) {
                 error_log(
@@ -2227,7 +2228,7 @@ class learnpathItem
                 } else {
                     if (isset($items[$refs_list[$list[0]]])) {
                         $status = $items[$refs_list[$list[0]]]->get_status(true);
-                        $returnstatus = ($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]);
+                        $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
                         if (empty($this->prereq_alert) && !$returnstatus) {
                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                         }
@@ -2491,7 +2492,7 @@ class learnpathItem
 
                                         // 1. Checking the status in current items.
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(true);
-                                        $returnstatus = $status == $this->possible_status[2] OR $status == $this->possible_status[3];
+                                        $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
 
                                         if (!$returnstatus) {
                                             if (self::debug > 1) {
@@ -2656,7 +2657,7 @@ class learnpathItem
                                             );
                                             $status = $status_array[0];
 
-                                            $returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
+                                            $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
                                             if (!$returnstatus && empty($this->prereq_alert)) {
                                                 $this->prereq_alert = get_lang(
                                                     'LearnpathPrereqNotCompleted'
@@ -2742,7 +2743,7 @@ class learnpathItem
                 }
                 if (isset($items[$refs_list[$list[0]]])) {
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
-                    $returnstatus = (($status == 'completed') OR ($status == 'passed'));
+                    $returnstatus = (($status == 'completed') || ($status == 'passed'));
                     if (!$returnstatus && empty($this->prereq_alert)) {
                         $this->prereq_alert = get_lang(
                             'LearnpathPrereqNotCompleted'
@@ -3305,7 +3306,7 @@ class learnpathItem
         if (self::debug > 0) {
             error_log('learnpathItem::set_max_score(' . $score . ')', 0);
         }
-        if (is_int($score) or $score == '') {
+        if (is_int($score) || $score == '') {
             $this->view_max_score = $score;
             if (self::debug > 1) {
                 error_log(
@@ -3669,7 +3670,7 @@ class learnpathItem
      * @return    boolean        True or false on error
      */
     public function write_objectives_to_db()
-    {
+    {error_log('ddd');
         if (self::debug > 0) {
             error_log('learnpathItem::write_objectives_to_db()', 0);
         }
@@ -3740,9 +3741,13 @@ class learnpathItem
                             'status' => $objective[1],
                             'score_raw' => $objective[2],
                             'score_min' => $objective[4],
-                            'score_max' =>$objective[3]
+                            'score_max' => $objective[3]
                         );
-                        Database::insert($iva_table, $params);
+
+                        $insertId = Database::insert($iva_table, $params);
+
+                        $sql = "UPDATE $iva_table SET id = $insertId WHERE iid = $insertId";
+                        Database::query($sql);
                     }
                 }
             }
@@ -3796,7 +3801,7 @@ class learnpathItem
         }
 
         if ((($save === false && $this->type == 'sco') ||
-           ($this->type == 'sco' && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse'))) &&
+           ($this->type == 'sco' && ($credit == 'no-credit' || $mode == 'review' || $mode == 'browse'))) &&
             ($this->seriousgame_mode != 1 && $this->type == 'sco')
         ) {
             if (self::debug > 1) {
@@ -3840,6 +3845,10 @@ class learnpathItem
                     );
                 }
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
+
+                $sql = "UPDATE $item_view_table SET id = ".$this->db_item_view_id." WHERE iid = ".$this->db_item_view_id;
+                Database::query($sql);
+
                 $inserted = true;
             }
 
@@ -3883,6 +3892,10 @@ class learnpathItem
                 }
 
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
+
+                $sql = "UPDATE $item_view_table SET id = ".$this->db_item_view_id." WHERE iid = ".$this->db_item_view_id;
+                Database::query($sql);
+
             } else {
                 if ($this->type == 'hotpotatoes') {
                     $params = array(
@@ -4156,12 +4169,17 @@ class learnpathItem
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
                             );
-                            Database::insert($iva_table, $params);
+
+                            $insertId = Database::insert($iva_table, $params);
+
+                            $sql = "UPDATE $iva_table SET id = $insertId WHERE iid = $insertId";
+                            Database::query($sql);
                         }
                     }
                 }
             }
         }
+
         if (self::debug > 2) {
             error_log('End of learnpathItem::write_to_db()', 0);
         }

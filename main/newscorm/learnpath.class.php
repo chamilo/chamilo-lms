@@ -120,6 +120,7 @@ class learnpath
                 error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
             }
             $res = Database::query($sql);
+
             if (Database::num_rows($res) > 0) {
                 $this->lp_id = $lp_id;
                 $row = Database::fetch_array($res);
@@ -144,11 +145,11 @@ class learnpath
                 $this->ref = $row['ref'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
-                    $this->publicated_on   = $row['publicated_on'];
+                    $this->publicated_on = $row['publicated_on'];
                 }
 
                 if ($row['expired_on'] != '0000-00-00 00:00:00') {
-                    $this->expired_on     = $row['expired_on'];
+                    $this->expired_on  = $row['expired_on'];
                 }
                 if ($this->type == 2) {
                     if ($row['force_commit'] == 1) {
@@ -169,7 +170,7 @@ class learnpath
 
             return false;
         } else {
-            $user_info  = api_get_user_info($user_id);
+            $user_info = api_get_user_info($user_id);
             if (!empty($user_info)) {
                 $this->user_id = $user_info['user_id'];
             } else {
@@ -214,6 +215,11 @@ class learnpath
                     VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
             Database::query($sql);
             $this->lp_view_id = Database::insert_id();
+
+            $sql = "UPDATE $lp_table SET id = ".$this->lp_view_id." WHERE iid = ".$this->lp_view_id;
+
+            Database::query($sql);
+
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
             }
@@ -318,50 +324,73 @@ class learnpath
 
         if (!empty($lp_item_id_list)) {
             $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
+            if (!empty($lp_item_id_list_to_string)) {
+                // Get last viewing vars.
+                $lp_item_view_table = Database:: get_course_table(
+                    TABLE_LP_ITEM_VIEW
+                );
+                // This query should only return one or zero result.
+                $sql = "SELECT lp_item_id, status
+                        FROM $lp_item_view_table
+                        WHERE
+                            c_id = $course_id AND
+                            lp_view_id = ".$this->lp_view_id." AND
+                            lp_item_id IN ('".$lp_item_id_list_to_string."')
+                        ORDER BY view_count DESC ";
 
-            // Get last viewing vars.
-            $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-            // This query should only return one or zero result.
-            $sql = "SELECT lp_item_id, status
-                    FROM $lp_item_view_table
-                    WHERE
-                        c_id = $course_id AND
-                        lp_view_id = ".$this->lp_view_id." AND
-                        lp_item_id IN ('".$lp_item_id_list_to_string."')
-                    ORDER BY view_count DESC ";
+                if ($this->debug > 2) {
+                    error_log(
+                        'New LP - learnpath::__construct() - Selecting item_views: '.$sql,
+                        0
+                    );
+                }
 
-            if ($this->debug > 2) {
-                error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
-            }
+                $status_list = array();
+                $res = Database::query($sql);
+                while ($row = Database:: fetch_array($res)) {
+                    $status_list[$row['lp_item_id']] = $row['status'];
+                }
 
-            $status_list = array();
-            $res = Database::query($sql);
-            while ($row = Database :: fetch_array($res) ) {
-                $status_list[$row['lp_item_id']] = $row['status'];
-            }
-
-            foreach ($lp_item_id_list as $item_id) {
-                if (isset($status_list[$item_id])) {
-                    $status = $status_list[$item_id];
-                    if (is_object($this->items[$item_id])) {
-                        $this->items[$item_id]->set_status($status);
-                        if (empty($status)) {
-                            $this->items[$item_id]->set_status($this->default_status);
-                        }
-                    }
-                } else {
-                    if (!api_is_invitee()) {
+                foreach ($lp_item_id_list as $item_id) {
+                    if (isset($status_list[$item_id])) {
+                        $status = $status_list[$item_id];
                         if (is_object($this->items[$item_id])) {
-                            $this->items[$item_id]->set_status($this->default_status);
+                            $this->items[$item_id]->set_status($status);
+                            if (empty($status)) {
+                                $this->items[$item_id]->set_status(
+                                    $this->default_status
+                                );
+                            }
                         }
-                        // Add that row to the lp_item_view table so that we have something to show in the stats page.
-                        $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                    VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
-                        if ($this->debug > 2) {
-                            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
+                    } else {
+                        if (!api_is_invitee()) {
+                            if (is_object($this->items[$item_id])) {
+                                $this->items[$item_id]->set_status(
+                                    $this->default_status
+                                );
+                            }
+
+                            // Add that row to the lp_item_view table so that we have something to show in the stats page.
+                            $sql = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
+                                    VALUES ($course_id, ".$item_id.",".$this->lp_view_id.", 1, 'not attempted')";
+
+                            if ($this->debug > 2) {
+                                error_log(
+                                    'New LP - learnpath::__construct() '.__LINE__.' - Inserting blank item_view : '.$sql_ins,
+                                    0
+                                );
+                            }
+                            $this->items[$item_id]->set_lp_view(
+                                $this->lp_view_id,
+                                $course_id
+                            );
+
+                            Database::query($sql);
+                            $insertId = Database::insert_id();
+
+                            $sql = "UPDATE $lp_item_view_table SET id = $insertId WHERE iid = $insertId";
+                            Database::query($sql);
                         }
-                        $this->items[$item_id]->set_lp_view($this->lp_view_id, $course_id);
-                        Database::query($sql);
                     }
                 }
             }
@@ -558,46 +587,39 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
 
+        $sql = "UPDATE $tbl_lp_item SET id = $new_item_id WHERE iid = $new_item_id";
+        Database::query($sql);
+
         if ($this->debug > 2) {
-            error_log('New LP - Inserting dokeos_chapter: ' . $new_item_id, 0);
+            error_log('New LP - Inserting chapter: ' . $new_item_id, 0);
         }
 
         if ($new_item_id) {
 
             // Update the item that should come after the new item.
-            $sql_update_next = "
-                            UPDATE " . $tbl_lp_item . "
-                            SET previous_item_id = " . $new_item_id . "
-                            WHERE c_id = $course_id AND id = " . $next;
-
-            Database::query($sql_update_next);
-
-            // Update the item that should be before the new item.
-            $sql_update_previous = "
-                            UPDATE " . $tbl_lp_item . "
-                            SET next_item_id = " . $new_item_id . "
-                            WHERE c_id = $course_id AND id = " . $tmp_previous;
-
-            Database::query($sql_update_previous);
+            $sql = " UPDATE $tbl_lp_item SET
+                        previous_item_id =  $new_item_id,
+                        next_item_id = $new_item_id,
+                        id = $new_item_id
+                     WHERE iid = $new_item_id";
+            Database::query($sql);
 
             // Update all the items after the new item.
-            $sql_update_order = "
-                            UPDATE " . $tbl_lp_item . "
-                                SET display_order = display_order + 1
-                            WHERE
-                                c_id = $course_id AND
-                                lp_id = " . $this->get_id() . " AND
-                                id <> " . $new_item_id . " AND
-                                parent_item_id = " . $parent . " AND
-                                display_order > " . $display_order;
-
-            Database::query($sql_update_order);
+            $sql = "UPDATE " . $tbl_lp_item . "
+                        SET display_order = display_order + 1
+                    WHERE
+                        c_id = $course_id AND
+                        lp_id = " . $this->get_id() . " AND
+                        id <> " . $new_item_id . " AND
+                        parent_item_id = " . $parent . " AND
+                        display_order > " . $display_order;
+            Database::query($sql);
 
             // Update the item that should come after the new item.
-            $sql_update_ref = "UPDATE " . $tbl_lp_item . "
-                               SET ref = " . $new_item_id . "
-                               WHERE c_id = $course_id AND id = " . $new_item_id;
-            Database::query($sql_update_ref);
+            $sql = "UPDATE " . $tbl_lp_item . "
+                    SET ref = " . $new_item_id . "
+                    WHERE c_id = $course_id AND id = " . $new_item_id;
+            Database::query($sql);
 
             // Upload audio.
             if (!empty($_FILES['mp3']['name'])) {
@@ -638,6 +660,7 @@ class learnpath
                         api_get_session_id()
                     );
                 }
+
                 $file_path = handle_uploaded_document(
                     $_course,
                     $_FILES['mp3'],
@@ -657,8 +680,8 @@ class learnpath
 
                 // Store the mp3 file in the lp_item table.
                 $sql = "UPDATE $tbl_lp_item SET
-                        audio = '" . Database::escape_string($file) . "'
-                    WHERE id = '" . intval($new_item_id) . "'";
+                            audio = '" . Database::escape_string($file) . "'
+                        WHERE id = '" . intval($new_item_id) . "'";
                 Database::query($sql);
             }
         }
@@ -759,8 +782,8 @@ class learnpath
                     $dsp = $row[0] + 1;
                 }
 
-                $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
-                        "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+                $sql = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on)
+                        VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
                 Database::query($sql);
                 $id = Database :: insert_id();
                 if ($id > 0) {
@@ -989,10 +1012,10 @@ class learnpath
             return false;
         }
 
-        $lp             = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_item        = Database :: get_course_table(TABLE_LP_ITEM);
-        $lp_view        = Database :: get_course_table(TABLE_LP_VIEW);
-        $lp_item_view   = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp = Database:: get_course_table(TABLE_LP_MAIN);
+        $lp_item = Database:: get_course_table(TABLE_LP_ITEM);
+        $lp_view = Database:: get_course_table(TABLE_LP_VIEW);
+        $lp_item_view = Database:: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
@@ -1007,7 +1030,7 @@ class learnpath
         $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
         //if ($this->debug > 2) { error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view, 0); }
         Database::query($sql);
-
+        exit;
         self::toggle_publish($this->lp_id, 'i');
 
         //if ($this->debug > 2) { error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type, 0); }
@@ -2881,12 +2904,19 @@ class learnpath
      * @return	array
      * @todo 	Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
      */
-    public static function get_iv_interactions_array($lp_iv_id = 0)
+    public static function get_iv_interactions_array($lp_iv_id)
     {
         $course_id = api_get_course_int_id();
-        $list = array ();
+        $list = array();
         $table = Database :: get_course_table(TABLE_LP_IV_INTERACTION);
-        $sql = "SELECT * FROM $table WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
+
+        if (empty($lp_iv_id)) {
+            return array();
+        }
+
+        $sql = "SELECT * FROM $table
+                WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id
+                ORDER BY order_id ASC";
         $res = Database::query($sql);
         $num = Database :: num_rows($res);
         if ($num > 0) {
@@ -3332,12 +3362,17 @@ class learnpath
         }
 
         $file = '';
-        $lp_table 			= Database::get_course_table(TABLE_LP_MAIN);
-        $lp_item_table 		= Database::get_course_table(TABLE_LP_ITEM);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
         $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $item_id = intval($item_id);
 
-        $sql = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams
+        $sql = "SELECT
+                    l.lp_type as ltype,
+                    l.path as lpath,
+                    li.item_type as litype,
+                    li.path as lipath,
+                    li.parameters as liparams
         		FROM $lp_table l
                 INNER JOIN $lp_item_table li
                     ON (li.lp_id = l.id AND l.c_id = $course_id AND li.c_id = $course_id )
@@ -3636,6 +3671,9 @@ class learnpath
             Database::query($sql);
             $id = Database :: insert_id();
             $this->lp_view_id = $id;
+
+            $sql = "UPDATE $lp_view_table SET id = $id WHERE iid = $id";
+            Database::query($sql);
         }
 
         return $this->lp_view_id;
@@ -4171,9 +4209,17 @@ class learnpath
         //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            Database::query($sql);
+
         } elseif (($set_visibility == 'v') && ($num == 0)) {
             $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
             	    ($course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
+            Database::query($sql);
+
+            $insertId = Database::insert_id();
+            $sql = "UPDATE $tbl_tool SET id = $insertId WHERE iid = $insertId";
+            Database::query($sql);
+
         } elseif (($set_visibility == 'v') && ($num > 0)) {
             $sql = "UPDATE $tbl_tool SET
                         c_id = $course_id,
@@ -4186,11 +4232,12 @@ class learnpath
                         added_tool = 0,
                         session_id = $session_id
             	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            Database::query($sql);
         } else {
             // Parameter and database incompatible, do nothing, exit.
             return false;
         }
-        Database::query($sql);
+
     }
 
     /**
@@ -4214,13 +4261,18 @@ class learnpath
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
-        $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id) " .
-            "VALUES ($course_id, " . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
+        $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id)
+                VALUES ($course_id, " . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
         if ($this->debug > 2) {
             error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
         }
         $res = Database::query($sql);
-        if ($view_id = Database :: insert_id($res)) {
+        $view_id = Database::insert_id();
+
+        $sql = "UPDATE $lp_view_table SET id = $view_id WHERE iid = $view_id";
+        Database::query($sql);
+
+        if ($view_id) {
             $this->lp_view_id = $view_id;
             $this->attempt = $this->attempt + 1;
         } else {
@@ -4233,6 +4285,7 @@ class learnpath
             $this->items[$index]->set_lp_view($this->lp_view_id);
         }
         $this->first();
+
         return true;
     }
 
@@ -7466,7 +7519,8 @@ class learnpath
             reset($arrLP);
         }
 
-        $arrHide = array ();
+        $arrHide = array();
+        $s_selected_position = null;
 
         //POSITION
         for ($i = 0; $i < count($arrLP); $i++) {

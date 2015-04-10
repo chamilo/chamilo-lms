@@ -1513,7 +1513,7 @@ class DocumentManager
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
 
         $session_id = intval($session_id);
-        $condition = "AND session_id IN  ('$session_id', '0') ";
+        $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*

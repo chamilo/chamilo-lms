@@ -52,7 +52,11 @@ class ssoDrupal
      */
     public function logout()
     {
-        header('Location: '.$this->deauth_url);
+        if (empty($_GET['no_redirect'])) {
+            header('Location: '.$this->deauth_url);
+        } else {
+            header('Location: '.$this->protocol.$this->domain);
+        }
         exit;
     }
 
@@ -64,11 +68,14 @@ class ssoDrupal
         // Generate a single usage token that must be encoded by the master
         $_SESSION['sso_challenge'] = api_generate_password(48);
         // Redirect browser to the master URL
-        $params = 'sso_referer='.urlencode($this->referer).'&sso_target='.urlencode($this->target).'&sso_challenge='.urlencode($_SESSION['sso_challenge']);
-        if (strpos($this->master_url, "?") === false) {
-            $params = "?{$params}";
-        } else {
-            $params = "&{$params}";
+        $params = '';
+        if (empty($_GET['no_redirect'])) {
+            $params = 'sso_referer='.urlencode($this->referer).'&sso_target='.urlencode($this->target).'&sso_challenge='.urlencode($_SESSION['sso_challenge']);
+            if (strpos($this->master_url, "?") === false) {
+                $params = "?{$params}";
+            } else {
+                $params = "&{$params}";
+            }
         }
         header('Location: '.$this->master_url.$params);
         exit;

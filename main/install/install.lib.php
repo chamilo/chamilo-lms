@@ -2492,7 +2492,7 @@ function installSettings(
     Database::query($sql);
 }
 
-function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm)
+function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
 {
     $debug = true;
     // Config doctrine migrations
@@ -2520,7 +2520,14 @@ function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm
     $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v'.$chamiloVersion);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
+
     $migration = new \Doctrine\DBAL\Migrations\Migration($config);
+    $migrations = $config->getMigrations();
+
+    foreach ($migrations as $migration) {
+        $migration->setEntityManager($manager);
+    }
+
     //$to = 'Version110';
     // Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
     $versions = $migration->getSql($to);

@@ -3,14 +3,14 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\v1;
 
-use Doctrine\DBAL\Migrations\AbstractMigration,
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo,
     Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Core
  * @package Chamilo\CoreBundle\Migrations\Schema\v1
  */
-class Version110 extends AbstractMigration
+class Version110 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
@@ -306,7 +306,6 @@ class Version110 extends AbstractMigration
         $this->addSql("ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
-
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned DEFAULT NULL");
 
@@ -323,7 +322,6 @@ class Version110 extends AbstractMigration
 
         $table = $schema->getTable('c_item_property');
         $table->renameColumn('id_session', 'session_id');
-
 
         $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
@@ -441,6 +439,12 @@ class Version110 extends AbstractMigration
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
 
         $schema->renameTable('track_e_exercices', 'track_e_exercises');
+
+        $this->addSql("UPDATE c_student_publication SET date_of_qualification = NULL WHERE date_of_qualification = '0000-00-00 00:00:00'");
+        $this->addSql("UPDATE c_student_publication SET sent_date = NULL WHERE sent_date = '0000-00-00 00:00:00'");
+
+        $this->addSql("UPDATE c_student_publication_assignment SET expires_on = NULL WHERE expires_on = '0000-00-00 00:00:00'");
+        $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
     }
 
     public function postUp(Schema $schema)
@@ -461,6 +465,158 @@ class Version110 extends AbstractMigration
         $this->addSql("DROP TABLE track_c_os");
         $this->addSql("DROP TABLE track_c_providers");
         $this->addSql("DROP TABLE track_c_referers");
+
+        // Fix ids
+        /*
+        // Fix c_lp_item
+        $connection = $this->connection;
+
+        $sql = "SELECT * FROM c_lp_item";
+        $result = $connection->fetchAll($sql);
+        foreach ($result as $item) {
+            $courseId = $item['c_id'];
+            $iid = $item['iid'];
+            $ref = $item['ref'];
+            $sql = null;
+
+            switch ($item['item_type']) {
+                case TOOL_LINK:
+                    $sql = "SELECT * c_link WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_STUDENTPUBLICATION:
+                    $sql = "SELECT * c_student_publication WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_QUIZ:
+                    $sql = "SELECT * c_quiz WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_DOCUMENT:
+                    $sql = "SELECT * c_document WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_FORUM:
+                    $sql = "SELECT * c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case 'thread':
+                    $sql = "SELECT * c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+            }
+
+            if (!empty($sql)) {
+                $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+
+        // Fix c_item_property
+
+        $sql = "SELECT * FROM c_item_property";
+        $result = $connection->fetchAll($sql);
+        foreach ($result as $item) {
+            $courseId = $item['c_id'];
+            $sessionId = intval($item['session_id']);
+            $iid = $item['iid'];
+            $ref = $item['ref'];
+            $sql = null;
+
+            switch ($item['tool']) {
+                case TOOL_LINK:
+                    $sql = "SELECT * c_link WHERE c_id = $courseId AND id = $ref ";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_STUDENTPUBLICATION:
+                    $sql = "SELECT * c_student_publication WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_QUIZ:
+                    $sql = "SELECT * c_quiz WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_DOCUMENT:
+                    $sql = "SELECT * c_document WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_FORUM:
+                    $sql = "SELECT * c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case 'thread':
+                    $sql = "SELECT * c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+            }
+
+            if (!empty($sql)) {
+                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+
+        // Fix gradebook_link
+        $sql = "SELECT * FROM gradebook_link";
+        $result = $connection->fetchAll($sql);
+        foreach ($result as $item) {
+            $courseId = $item['c_id'];
+            $ref = $item['ref_id'];
+            $sql = null;
+
+            switch ($item['tool']) {
+                case TOOL_LINK:
+                    $sql = "SELECT * c_link WHERE c_id = $courseId AND id = $ref ";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_STUDENTPUBLICATION:
+                    $sql = "SELECT * c_student_publication WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_QUIZ:
+                    $sql = "SELECT * c_quiz WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_DOCUMENT:
+                    $sql = "SELECT * c_document WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case TOOL_FORUM:
+                    $sql = "SELECT * c_forum_forum WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+                case 'thread':
+                    $sql = "SELECT * c_forum_thread WHERE c_id = $courseId AND id = $ref";
+                    $data = $connection->fetchArray($sql);
+                    $newId = $data['iid'];
+                    break;
+            }
+
+            if (!empty($sql)) {
+                $sql = "UPDATE c_item_property SET ref_id = $newId WHERE iid = $iid";
+                $connection->executeQuery($sql);
+            }
+        }
+
+
+        */
 
         //$this->addSql('ALTER TABLE user DROP COLUMN user_id');
 

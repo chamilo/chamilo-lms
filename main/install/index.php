@@ -652,7 +652,7 @@ if (@$_POST['step2']) {
 				Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
 
 				// Migrate using the file Version110.php
-				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm);
+				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager);
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';

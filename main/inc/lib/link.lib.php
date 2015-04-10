@@ -192,6 +192,9 @@ class Link extends Model
                 $catlinkstatus = get_lang('LinkAdded');
                 Database:: query($sql);
                 $link_id = Database:: insert_id();
+                // iid
+                $sql = "UPDATE $tbl_link SET id = $link_id WHERE iid = $link_id";
+                Database:: query($sql);
 
                 if ($link_id) {
                     api_set_default_visibility($link_id, TOOL_LINK);

@@ -1228,6 +1228,9 @@ function add_document(
 
     if (Database::query($sql)) {
         $documentId = Database::insert_id();
+        $sql = "UPDATE $table_document SET id = $documentId WHERE iid = $documentId";
+        Database::query($sql);
+
         if ($documentId) {
             if ($save_visibility) {
                 api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);

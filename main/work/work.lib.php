@@ -724,7 +724,7 @@ function display_student_publications_list(
 
             if (!empty($homework)) {
                 // use original utc value saved previously to avoid doubling the utc-to-local conversion ($homework['expires_on'] might have been tainted)
-                $row[] = !empty($utc_expiry_time) && $utc_expiry_time != '0000-00-00 00:00:00' ? api_get_local_time($utc_expiry_time): '-';
+                $row[] = !empty($utc_expiry_time) ? api_get_local_time($utc_expiry_time): '-';
             } else {
                 $row[] = '-';
             }
@@ -1399,8 +1399,7 @@ function insert_all_directory_in_course_table($base_work_dir)
                active       = '1',
                accepted     = '1',
                filetype     = 'folder',
-               post_group_id = '".$group_id."',
-               sent_date    = '0000-00-00 00:00:00' ";
+               post_group_id = '".$group_id."'";
         Database::query($sql);
     }
 }
@@ -1755,7 +1754,7 @@ function getWorkListStudent(
             continue;
         }
         $work['type'] = Display::return_icon('work.png');
-        $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
+        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
@@ -1869,7 +1868,7 @@ function getWorkListTeacher(
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
-            $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
+            $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
 
             $totalUsers = getStudentSubscribedToWork(
                 $workId,
@@ -2329,7 +2328,6 @@ function get_work_user_list(
             $time_expires = api_strtotime($work_assignment['expires_on'], 'UTC');
 
             if (!empty($work_assignment['expires_on']) &&
-                $work_assignment['expires_on'] != '0000-00-00 00:00:00' &&
                 $time_expires && ($time_expires < api_strtotime($work['sent_date'], 'UTC'))) {
                 $add_string = Display::label(get_lang('Expired'), 'important');
             }
@@ -3667,14 +3665,10 @@ function getWorkDateValidationStatus($homework) {
 
     if (!empty($homework)) {
 
-        if ($homework['expires_on'] != '0000-00-00 00:00:00' ||
-            $homework['ends_on'] != '0000-00-00 00:00:00'
-        ) {
+        if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
             $time_now = time();
 
-            if (!empty($homework['expires_on']) &&
-                $homework['expires_on'] != '0000-00-00 00:00:00'
-            ) {
+            if (!empty($homework['expires_on'])) {
                 $time_expires   = api_strtotime($homework['expires_on'], 'UTC');
                 $difference     = $time_expires - $time_now;
                 if ($difference < 0) {
@@ -3682,17 +3676,13 @@ function getWorkDateValidationStatus($homework) {
                 }
             }
 
-            if (empty($homework['expires_on']) ||
-                $homework['expires_on'] == '0000-00-00 00:00:00'
-            ) {
+            if (empty($homework['expires_on'])) {
                 $has_expired = false;
             }
 
-            if (!empty($homework['ends_on']) &&
-                $homework['ends_on'] != '0000-00-00 00:00:00'
-            ) {
-                $time_ends      = api_strtotime($homework['ends_on'], 'UTC');
-                $difference2    = $time_ends - $time_now;
+            if (!empty($homework['ends_on'])) {
+                $time_ends = api_strtotime($homework['ends_on'], 'UTC');
+                $difference2 = $time_ends - $time_now;
                 if ($difference2 < 0) {
                     $has_ended = true;
                 }
@@ -4024,17 +4014,18 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
                 qualification       = '".($params['qualification'] != '' ? Database::escape_string($params['qualification']) : '') ."',
                 parent_id           = '',
                 qualificator_id     = '',
-                date_of_qualification   = '0000-00-00 00:00:00',
                 weight              = '".Database::escape_string($params['weight'])."',
                 session_id          = '".$session_id."',
                 allow_text_assignment = '".Database::escape_string($params['allow_text_assignment'])."',
                 contains_file       = 0,
                 user_id             = '".$user_id."'";
-
-        Database::query($sql);
+        Database::query($sql);date_of_qualification
 
         // Add the directory
         $id = Database::insert_id();
+
+        $sql = "UPDATE $work_table SET id = $id WHERE iid = $id";
+        Database::query($sql);
 
         if ($id) {
             // Folder created
@@ -4171,8 +4162,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     }
 
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-    $expiryDate = isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '0000-00-00 00:00:00';
-    $endDate = isset($params['enableEndDate']) && $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '0000-00-00 00:00:00';
+    $expiryDate = isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1 ? api_get_utc_datetime($params['expires_on']) : '';
+    $endDate = isset($params['enableEndDate']) && $params['enableEndDate'] == 1 ? api_get_utc_datetime($params['ends_on']) : '';
 
     $data = get_work_assignment_by_id($workId, $course_id);
 

@@ -180,7 +180,7 @@ echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn 
 $url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
 echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn btn-default'));
 
-if (count($certificate_list) > 0) {
+if (count($certificate_list) > 0 && !api_get_configuration_value('hide_certificate_export_link')) {
     $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidReq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
     echo Display::url(get_lang('ExportAllCertificatesToPDF'), $url, array('class' => 'btn btn-default'));
 }

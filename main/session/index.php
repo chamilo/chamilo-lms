@@ -566,9 +566,6 @@ $(function() {
         echo Display::grid_js('exercises', '', $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
     }
 ?>
-    // Generate tabs with jquery-ui
-    $('#tabs').tabs();
-    $( "#sub_tab" ).tabs();
 });
 </script>
 

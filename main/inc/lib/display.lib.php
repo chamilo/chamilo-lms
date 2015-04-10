@@ -1018,21 +1018,36 @@ class Display
         $lis = '';
         $i = 1;
         foreach ($header_list as $item) {
-            $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i));
-            $lis .=self::tag('li', $item, $ul_attributes);
+            $active = '';
+            if ($i == 1) {
+                $active = ' active';
+            }
+            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab'));
+            $ul_attributes['data-toggle'] = 'tab';
+            $ul_attributes['role'] = 'presentation';
+            $ul_attributes['class'] = $active;
+            $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul',$lis);
+        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist']);
 
         $i = 1;
         $divs = '';
         foreach ($content_list as $content) {
-            $content = self::tag('p',$content);
-            $divs .=self::tag('div', $content, array('id'=>$id.'-'.$i));
+            $active = '';
+            if ($i == 1) {
+                $active = ' active';
+            }
+            $divs .= self::tag('div', $content, array('id'=> $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel'));
             $i++;
         }
+
         $attributes['id'] = $id;
-        $main_div = self::tag('div',$ul.$divs, $attributes);
+        $attributes['role'] = 'tabpanel';
+        $attributes['class'] = 'tab-wrapper';
+
+        $main_div = self::tag('div', $ul.self::tag('div', $divs, ['class' => 'tab-content']), $attributes);
+
         return $main_div ;
     }
 

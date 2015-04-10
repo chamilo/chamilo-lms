@@ -1418,7 +1418,7 @@ class Display
                 }
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
-                    $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
+                    $survey_info = SurveyManager::get_survey($item_property['ref'], 0, $course_code);
                     if (!empty($survey_info)) {
                         $invited_users = SurveyUtil::get_invited_users(
                             $survey_info['code'],

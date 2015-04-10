@@ -1041,11 +1041,11 @@ if (!empty($student_id)) {
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
-            $survey_list = survey_manager::get_surveys($course_code, $session_id);
+            $survey_list = SurveyManager::get_surveys($course_code, $session_id);
 
             $survey_data = array();
             foreach($survey_list as $survey) {
-                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
+                $user_list = SurveyManager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
                 $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);
                 if (in_array($student_id, $user_list)) {
                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), ICON_SIZE_SMALL);

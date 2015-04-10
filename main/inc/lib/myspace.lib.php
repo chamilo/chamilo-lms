@@ -788,7 +788,7 @@ class MySpace
             get_lang('LastName'),
         );
         //add lessons of course
-        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $questions = SurveyManager::get_questions($surveyId, $courseId);
 
         foreach ($questions as $question) {
             $columns[] = $question['question'];

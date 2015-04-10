@@ -1033,7 +1033,7 @@ switch ($action) {
             'lastname',
         );
 
-        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $questions = SurveyManager::get_questions($surveyId, $courseId);
 
         foreach ($questions as $question_id => $question)
         {

@@ -466,7 +466,7 @@ class UserManager
         }
 
         // Removing survey invitation
-        survey_manager::delete_all_survey_invitations_by_user($user_id);
+        SurveyManager::delete_all_survey_invitations_by_user($user_id);
 
         // Delete students works
         $sql = "DELETE FROM $table_work WHERE user_id = $user_id AND c_id <> 0";

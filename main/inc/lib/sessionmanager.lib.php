@@ -754,7 +754,7 @@ class SessionManager
         }
 
         //Get survey questions
-        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $questions = SurveyManager::get_questions($surveyId, $courseId);
 
         //Survey is anonymous?
         $result = Database::query(sprintf("SELECT anonymous FROM $c_survey WHERE survey_id = %d", $surveyId));
@@ -959,11 +959,11 @@ class SessionManager
          * Surveys
          */
         $survey_user_list = array();
-        $survey_list = survey_manager::get_surveys($course['code'], $sessionId);
+        $survey_list = SurveyManager::get_surveys($course['code'], $sessionId);
 
         $surveys_total = count($survey_list);
         foreach ($survey_list as $survey) {
-            $user_list = survey_manager::get_people_who_filled_survey(
+            $user_list = SurveyManager::get_people_who_filled_survey(
                 $survey['survey_id'],
                 false,
                 $course['real_id']

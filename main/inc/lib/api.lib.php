@@ -3614,8 +3614,8 @@ function api_item_property_update(
     $to_user_id = intval($to_user_id);
     $start_visible = Database::escape_string($start_visible);
     $end_visible = Database::escape_string($end_visible);
-    $start_visible = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
-    $end_visible = ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
+    $start_visible = $start_visible == 0 ? '0000-00-00 00:00:00' : $start_visible;
+    $end_visible = $end_visible == 0 ? '0000-00-00 00:00:00' : $end_visible;
     $to_filter = '';
     $time = api_get_utc_datetime();
 
@@ -3696,9 +3696,15 @@ function api_item_property_update(
                                 visibility          = '$visibility',
                                 session_id          = '$session_id' $set_type
                             WHERE $filter";
+                    $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool','$item_id','$time', '$user_id', '$time', '$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";
+                    $result = Database::query($sql);
+
+                    $id = Database::insert_id();
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    Database::query($sql);
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3708,6 +3714,7 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
+                $result = Database::query($sql);
             }
             break;
         case 'visible' : // Change item to visible.
@@ -3733,6 +3740,11 @@ function api_item_property_update(
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                    $result = Database::query($sql);
+
+                    $id = Database::insert_id();
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    Database::query($sql);
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3742,6 +3754,7 @@ function api_item_property_update(
                             lastedit_user_id='$user_id',
                             visibility='$visibility' $set_type
                         WHERE $filter";
+                $result = Database::query($sql);
             }
             break;
         case 'invisible' : // Change item to invisible.
@@ -3764,9 +3777,15 @@ function api_item_property_update(
                                 visibility = '$visibility',
                                 session_id = '$session_id' $set_type
                             WHERE $filter";
+                    $result = Database::query($sql);
                 } else {
                     $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, session_id)
                             VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
+                    $result = Database::query($sql);
+
+                    $id = Database::insert_id();
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    Database::query($sql);
                 }
             } else {
                 $sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -3776,6 +3795,7 @@ function api_item_property_update(
                             lastedit_user_id = '$user_id',
                             visibility = '$visibility' $set_type
                         WHERE $filter";
+                $result = Database::query($sql);
             }
             break;
         default : // The item will be added or updated.
@@ -3787,14 +3807,18 @@ function api_item_property_update(
                       lastedit_date = '$time',
                       lastedit_user_id='$user_id' $set_type
                     WHERE $filter";
+            $result = Database::query($sql);
     }
-    $result = Database::query($sql);
+
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows($result) == 0) {
         $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, session_id)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
         $res = Database::query($sql);
         if (!$res) {
+            $id = Database::insert_id();
+            $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+            Database::query($sql);
             return false;
         }
     }
@@ -4632,7 +4656,22 @@ function copy_folder_course_session(
                         session_id = '$session_id'";
                 Database::query($sql);
                 $document_id = Database::insert_id();
-                api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+
+                $sql = "UPDATE $tbl_course_description SET id = $document_id WHERE iid = $document_id";
+                Database::query($sql);
+
+                api_item_property_update(
+                    $course_info,
+                    TOOL_DOCUMENT,
+                    $document_id,
+                    'FolderCreated',
+                    api_get_user_id(),
+                    0,
+                    0,
+                    null,
+                    null,
+                    $session_id
+                );
             }
         }
 
@@ -4960,14 +4999,9 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
             if (Database::num_rows($res) > 0) {
                 // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);
-                $insert = "INSERT INTO $t_settings " .
-                        "(variable,subkey," .
-                        "type,category," .
-                        "selected_value,title," .
-                        "comment,scope," .
-                        "subkeytext,access_url)" .
-                        " VALUES " .
-                        "('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL")."," .
+                $insert = "INSERT INTO $t_settings (variable, subkey, type,category, selected_value, title, comment, scope, subkeytext, access_url)
+                        VALUES
+                        ('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL")."," .
                         "'".$row['type']."','".$row['category']."'," .
                         "'$value','".$row['title']."'," .
                         "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
@@ -4989,14 +5023,8 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
             if (Database::num_rows($res) > 0) { // We have a setting for access_url 1, but none for the current one, so create one.
                 $row = Database::fetch_array($res);
                 if ($row['access_url_changeable'] == 1) {
-                    $insert = "INSERT INTO $t_settings " .
-                            "(variable,subkey," .
-                            "type,category," .
-                            "selected_value,title," .
-                            "comment,scope," .
-                            "subkeytext,access_url, access_url_changeable)" .
-                            " VALUES " .
-                            "('".$row['variable']."',".
+                    $insert = "INSERT INTO $t_settings (variable,subkey, type,category, selected_value,title, comment,scope, subkeytext,access_url, access_url_changeable) VALUES
+                            ('".$row['variable']."',".
                             (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL")."," .
                             "'".$row['type']."','".$row['category']."'," .
                             "'$value','".$row['title']."'," .
@@ -5048,7 +5076,8 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
         $res = Database::query($sql);
         return $res !== false;
     } else {
-        $sql = "UPDATE $t_s SET selected_value = NULL WHERE category = '$category' AND access_url = $access_url";
+        $sql = "UPDATE $t_s SET selected_value = NULL
+                WHERE category = '$category' AND access_url = $access_url";
         if (is_array($fieldtype) && count($fieldtype)>0) {
             $sql .= " AND ( ";
             $i = 0;

@@ -31,12 +31,14 @@ class CourseDescription
     }
 
 	/**
-	 * Returns an array of objects of type CourseDescription corresponding to a specific course, without session ids (session id = 0)
+	 * Returns an array of objects of type CourseDescription corresponding to
+     * a specific course, without session ids (session id = 0)
 	 *
 	 * @param int Course id
 	 * @return array Array of CourseDescriptions
 	 */
-	public static function get_descriptions($course_id) {
+	public static function get_descriptions($course_id)
+    {
 		// Get course code
 		$course_info = api_get_course_info_by_id($course_id);
         if (!empty($course_info)) {
@@ -45,7 +47,8 @@ class CourseDescription
             return array();
         }
 		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$sql = "SELECT * FROM $t_course_desc WHERE c_id = $course_id AND session_id = '0';";
+		$sql = "SELECT * FROM $t_course_desc
+		        WHERE c_id = $course_id AND session_id = '0'";
 		$sql_result = Database::query($sql);
 		$results = array();
 		while($row = Database::fetch_array($sql_result)) {
@@ -72,7 +75,9 @@ class CourseDescription
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$condition_session = api_get_session_condition($this->session_id, true, true);
         $course_id = api_get_course_int_id();
-		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id $condition_session ORDER BY id ";
+		$sql = "SELECT * FROM $tbl_course_description
+		        WHERE c_id = $course_id $condition_session
+		        ORDER BY id ";
 		$rs = Database::query($sql);
 		$data = array();
 		while ($description = Database::fetch_array($rs)) {
@@ -86,9 +91,11 @@ class CourseDescription
 	/**
      * Get all data of course description by session id,
      * first you must set session_id property with the object CourseDescription
+     * @deprecated
      * @return array
      */
-	public function get_description_history($description_type) {
+	public function get_description_history($description_type)
+    {
 		$tbl_stats_item_property = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
 		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -119,7 +126,8 @@ class CourseDescription
      * @param	int		session id (optional)
      * @return array
      */
-	public function get_data_by_description_type($description_type, $course_code = '', $session_id = null) {
+	public function get_data_by_description_type($description_type, $course_code = '', $session_id = null)
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$course_id = api_get_course_int_id();
 
@@ -132,7 +140,8 @@ class CourseDescription
             $course_id = $course_info['real_id'];
 		}
         $description_type = intval($description_type);
-		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id AND description_type='$description_type' $condition_session ";
+		$sql = "SELECT * FROM $tbl_course_description
+		        WHERE c_id = $course_id AND description_type='$description_type' $condition_session ";
 		$rs = Database::query($sql);
 		$data = array();
 		if ($description = Database::fetch_array($rs)) {
@@ -143,7 +152,14 @@ class CourseDescription
 		return $data;
 	}
 
-    public function get_data_by_id($id, $course_code = '', $session_id = null) {
+    /**
+     * @param int $id
+     * @param string $course_code
+     * @param int $session_id
+     * @return array
+     */
+    public function get_data_by_id($id, $course_code = '', $session_id = null)
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$course_id = api_get_course_int_id();
 
@@ -156,7 +172,8 @@ class CourseDescription
             $course_id = $course_info['real_id'];
 		}
         $id = intval($id);
-		$sql = "SELECT * FROM $tbl_course_description WHERE c_id = $course_id AND id='$id' $condition_session ";
+		$sql = "SELECT * FROM $tbl_course_description
+		        WHERE c_id = $course_id AND id='$id' $condition_session ";
 		$rs = Database::query($sql);
 		$data = array();
 		if ($description = Database::fetch_array($rs)) {
@@ -165,19 +182,23 @@ class CourseDescription
 			$data['description_content'] = $description['content'];
 			$data['progress'] 			 = $description['progress'];
 		}
+
 		return $data;
 	}
 
 
 	/**
-     * Get maximum description type by session id, first you must set session_id properties with the object CourseDescription
+     * Get maximum description type by session id,
+     * first you must set session_id properties with the object CourseDescription
      * @return  int  maximum description time adding one
      */
-	public function get_max_description_type() {
+	public function get_max_description_type()
+    {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
-		$sql = "SELECT MAX(description_type) as MAX FROM $tbl_course_description WHERE c_id = $course_id AND session_id='".$this->session_id."'";
+		$sql = "SELECT MAX(description_type) as MAX FROM $tbl_course_description
+		        WHERE c_id = $course_id AND session_id='".$this->session_id."'";
 		$rs  = Database::query($sql);
 		$max = Database::fetch_array($rs);
 		$description_type = $max['MAX']+1;
@@ -189,7 +210,8 @@ class CourseDescription
 
 	/**
      * Insert a description to the course_description table,
-     * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
+     * first you must set description_type, title, content, progress and
+     * session_id properties with the object CourseDescription
      * @return  int  affected rows
      */
 	public function insert()
@@ -211,16 +233,26 @@ class CourseDescription
 		$last_id = Database::insert_id();
 		$affected_rows = Database::affected_rows($result);
 		if ($last_id > 0) {
-			//insert into item_property
-			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $last_id, 'CourseDescriptionAdded', api_get_user_id());
-		}
-		return $affected_rows;
+            $sql = "UPDATE $tbl_course_description SET id = $last_id WHERE iid = $last_id";
+            Database::query($sql);
 
+			//insert into item_property
+			api_item_property_update(
+				api_get_course_info(),
+				TOOL_COURSE_DESCRIPTION,
+				$last_id,
+				'CourseDescriptionAdded',
+				api_get_user_id()
+			);
+		}
+
+		return $affected_rows;
 	}
 
 	/**
      * Insert a row like history inside track_e_item_property table
-     * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
+     * first you must set description_type, title, content, progress and
+     * session_id properties with the object CourseDescription
      * @param 	int 	description type
      * @return  int		affected rows
      */
@@ -243,6 +275,10 @@ class CourseDescription
 			 	session_id			= '".intval($this->session_id)."'";
 		$result = Database::query($sql);
 		$affected_rows = Database::affected_rows($result);
+
+        $sql = "UPDATE $tbl_course_description SET id = $last_id WHERE iid = $last_id";
+        Database::query($sql);
+
 		return $affected_rows;
 	}
 
@@ -255,25 +291,32 @@ class CourseDescription
     {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$sql = "UPDATE $tbl_course_description SET
-						title       = '".Database::escape_string($this->title)."',
-						content     = '".Database::escape_string($this->content)."',
-						progress    = '".$this->progress."'
-				WHERE 	id          = '".intval($this->id)."' AND
-						session_id  = '".$this->session_id."' AND
-						c_id = ".api_get_course_int_id()."
-						";
+                    title       = '".Database::escape_string($this->title)."',
+                    content     = '".Database::escape_string($this->content)."',
+                    progress    = '".$this->progress."'
+                WHERE
+                    id = '".intval($this->id)."' AND
+                    session_id = '".$this->session_id."' AND
+                    c_id = ".api_get_course_int_id();
 		$result = Database::query($sql);
 		$affected_rows = Database::affected_rows($result);
 
 		if ($this->id > 0) {
 			//insert into item_property
-			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionUpdated', api_get_user_id());
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_COURSE_DESCRIPTION,
+                $this->id,
+                'CourseDescriptionUpdated',
+                api_get_user_id()
+            );
 		}
 		return $affected_rows;
 	}
 
 	/**
-     * Delete a description, first you must set description_type and session_id properties with the object CourseDescription
+     * Delete a description, first you must set description_type and session_id
+     * properties with the object CourseDescription
      * @return int	affected rows
      */
 	public function delete()
@@ -281,13 +324,23 @@ class CourseDescription
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 		$course_id = api_get_course_int_id();
 		$sql = "DELETE FROM $tbl_course_description
-			 	WHERE c_id = $course_id AND id = '".intval($this->id)."' AND session_id = '".intval($this->session_id)."'";
+			 	WHERE
+			 	    c_id = $course_id AND
+			 	    id = '".intval($this->id)."' AND
+			 	    session_id = '".intval($this->session_id)."'";
 		$result = Database::query($sql);
 		$affected_rows = Database::affected_rows($result);
 		if ($this->id > 0) {
 			//insert into item_property
-			api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $this->id, 'CourseDescriptionDeleted', api_get_user_id());
+            api_item_property_update(
+                api_get_course_info(),
+                TOOL_COURSE_DESCRIPTION,
+                $this->id,
+                'CourseDescriptionDeleted',
+                api_get_user_id()
+            );
 		}
+
 		return $affected_rows;
 	}
 
@@ -301,7 +354,8 @@ class CourseDescription
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
 
-		$sql = "SELECT id FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($description_type)."'";
+		$sql = "SELECT id FROM $tbl_course_description
+		        WHERE c_id = $course_id AND description_type = '".intval($description_type)."'";
 		$rs  = Database::query($sql);
 		$row = Database::fetch_array($rs);
 		$description_id = $row['id'];
@@ -315,12 +369,17 @@ class CourseDescription
 	 * @param int		Description type (optional)
 	 * @return string   img html
 	 */
-	 public function get_progress_porcent($with_icon = false, $description_type = THEMATIC_ADVANCE) {
+	 public function get_progress_porcent($with_icon = false, $description_type = THEMATIC_ADVANCE)
+     {
 	 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 	 	$session_id = intval($session_id);
         $course_id = api_get_course_int_id();
 
-		$sql = "SELECT progress FROM $tbl_course_description WHERE c_id = $course_id AND description_type = '".intval($description_type)."' AND session_id = '".intval($this->session_id)."' ";
+		$sql = "SELECT progress FROM $tbl_course_description
+		        WHERE
+		            c_id = $course_id AND
+		            description_type = '".intval($description_type)."' AND
+		            session_id = '".intval($this->session_id)."' ";
 		$rs  = Database::query($sql);
 		$progress = '';
 		$img = '';
@@ -361,7 +420,8 @@ class CourseDescription
 	 * Get description titles editable by default
 	 * @return array
 	 */
-	public function get_default_description_title_editable() {
+	public function get_default_description_title_editable()
+    {
 		$default_description_title_editable = array();
 		$default_description_title_editable[1] = true;
 		$default_description_title_editable[2] = true;
@@ -378,7 +438,8 @@ class CourseDescription
 	 * Get description icons by default
 	 * @return array
 	 */
-	public function get_default_description_icon() {
+	public function get_default_description_icon()
+    {
 		$default_description_icon = array();
 		$default_description_icon[1]= 'info.png';
 		$default_description_icon[2]= 'objective.png';
@@ -396,7 +457,8 @@ class CourseDescription
 	 * Get questions by default for help
 	 * @return array
 	 */
-	public function get_default_question() {
+	public function get_default_question()
+    {
 		$question = array();
 		$question[1]= get_lang('GeneralDescriptionQuestions');
 		$question[2]= get_lang('ObjectivesQuestions');
@@ -413,7 +475,8 @@ class CourseDescription
 	 * Get informations by default for help
 	 * @return array
 	 */
-	public function get_default_information() {
+	public function get_default_information()
+    {
 		$information = array();
 		$information[1]= get_lang('GeneralDescriptionInformation');
 		$information[2]= get_lang('ObjectivesInformation');
@@ -430,7 +493,8 @@ class CourseDescription
 	 * Set description id
 	 * @return void
 	 */
-	public function set_id($id) {
+	public function set_id($id)
+    {
 		$this->id = $id;
 	}
 
@@ -439,7 +503,8 @@ class CourseDescription
      * @param int Course ID
      * @return void
      */
-    public function set_course_id($id) {
+    public function set_course_id($id)
+    {
         $this->course_id = intval($id);
     }
 
@@ -447,7 +512,8 @@ class CourseDescription
 	 * Set description title
 	 * @return void
 	 */
-	public function set_title($title) {
+	public function set_title($title)
+    {
 		$this->title = $title;
 	}
 
@@ -455,7 +521,8 @@ class CourseDescription
 	 * Set description content
 	 * @return void
 	 */
-	public function set_content($content) {
+	public function set_content($content)
+    {
 		$this->content = $content;
 	}
 
@@ -463,7 +530,8 @@ class CourseDescription
 	 * Set description session id
 	 * @return void
 	 */
-	public function set_session_id($session_id) {
+	public function set_session_id($session_id)
+    {
 		$this->session_id = $session_id;
 	}
 
@@ -471,7 +539,8 @@ class CourseDescription
 	 * Set description type
 	 * @return void
 	 */
-	public function set_description_type($description_type) {
+	public function set_description_type($description_type)
+    {
 		$this->description_type = $description_type;
 	}
 
@@ -479,7 +548,8 @@ class CourseDescription
 	 * Set progress of a description
 	 * @return void
 	 */
-	public function set_progress($progress) {
+	public function set_progress($progress)
+    {
 		$this->progress = $progress;
 	}
 
@@ -487,7 +557,8 @@ class CourseDescription
 	 * get description id
 	 * @return int
 	 */
-	public function get_id() {
+	public function get_id()
+    {
 		return $this->id;
 	}
 
@@ -495,7 +566,8 @@ class CourseDescription
 	 * get description title
 	 * @return string
 	 */
-	public function get_title() {
+	public function get_title()
+    {
 		return $this->title;
 	}
 
@@ -503,7 +575,8 @@ class CourseDescription
 	 * get description content
 	 * @return string
 	 */
-	public function get_content() {
+	public function get_content()
+    {
 		return $this->content;
 	}
 
@@ -511,7 +584,8 @@ class CourseDescription
 	 * get session id
 	 * @return int
 	 */
-	public function get_session_id() {
+	public function get_session_id()
+    {
 		return $this->session_id;
 	}
 
@@ -519,7 +593,8 @@ class CourseDescription
 	 * get description type
 	 * @return int
 	 */
-	public function get_description_type() {
+	public function get_description_type()
+    {
 		return $this->description_type;
 	}
 
@@ -527,7 +602,8 @@ class CourseDescription
 	 * get progress of a description
 	 * @return int
 	 */
-	public function get_progress() {
+	public function get_progress()
+    {
 		return $this->progress;
 	}
 }

@@ -126,12 +126,21 @@ class GlossaryManager
             }
 
             $id = Database::insert_id();
+            if ($id) {
 
-            $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
-            Database::query($sql);
+                $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
+                Database::query($sql);
 
-            //insert into item_property
-            api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, $id, 'GlossaryAdded', api_get_user_id());
+                //insert into item_property
+                api_item_property_update(
+                    api_get_course_info(),
+                    TOOL_GLOSSARY,
+                    $id,
+                    'GlossaryAdded',
+                    api_get_user_id()
+                );
+            }
+
             $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
             // display the feedback message
             if ($message) {

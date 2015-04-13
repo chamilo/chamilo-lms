@@ -224,12 +224,16 @@ class MessageManager
 
         // Validating fields
         if (empty($subject) && empty($group_id)) {
-            return get_lang('YouShouldWriteASubject');
+            Display::addFlash(Display::return_message(get_lang('YouShouldWriteASubject'), 'warning'));
+            return false;
         } else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {
-            return sprintf(
+            $warning = sprintf(
                 get_lang("FilesSizeExceedsX"),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
             );
+
+            Display::addFlash(Display::return_message($warning , 'warning'));
+            return false;
         }
 
         $inbox_last_id = null;

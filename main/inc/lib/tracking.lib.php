@@ -5670,14 +5670,18 @@ class TrackingCourseLog
                                 WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($sql);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[5] = $obj_document->title;
+                        if ($obj_document) {
+                            $row[5] = $obj_document->title;
+                        }
     					break;
     				case 'glossary':
                         $sql = "SELECT name FROM $table_tool
     					        WHERE c_id = $course_id AND glossary_id = $ref";
     					$rs_document = Database::query($sql);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[5] = $obj_document->name;
+                        if ($obj_document) {
+                            $row[5] = $obj_document->name;
+                        }
     					break;
     				case 'lp':
                         $sql = "SELECT name
@@ -5691,14 +5695,18 @@ class TrackingCourseLog
                                 WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($sql);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[5] = $obj_document->title;
+                        if ($obj_document) {
+                            $row[5] = $obj_document->title;
+                        }
     					break;
     				case 'course_description':
                         $sql = "SELECT title FROM $table_tool
                                 WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($sql);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[5] = $obj_document->title;
+                        if ($obj_document) {
+                            $row[5] = $obj_document->title;
+                        }
     					break;
     				case 'thematic':
     					$rs = Database::query("SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref");

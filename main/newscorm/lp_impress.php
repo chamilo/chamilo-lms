@@ -65,8 +65,10 @@ foreach ($list as $toc) {
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<h2>'.$toc['title'].'</h2>';
     $src = $_SESSION['oLP']->get_link('http', $toc['id']);
-    //just showing the src in a iframe ...
-    $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
+    if ($toc['type'] !== 'dokeos_chapter') {
+        //just showing the src in a iframe ...
+        $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="' . $src . '"></iframe>';
+    }
     $html .= "</div>";
     $step ++;
 }

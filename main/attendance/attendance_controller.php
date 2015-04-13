@@ -179,6 +179,7 @@ class AttendanceController
     public function attendanceSetVisible($attendanceId)
     {
         $attendance = new Attendance();
+        $affectedRows = null;
         if (!empty($attendanceId)) {
             $affectedRows = $attendance->changeVisibility($attendanceId, 1);
         }

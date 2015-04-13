@@ -145,9 +145,14 @@ class Dropbox_Work
 
         	Database::query($sql);
 			$this->id = Database::insert_id(); // Get automatically inserted id
+			if ($this->id) {
+				$sql = "UPDATE ".$dropbox_cnf['tbl_file']." SET id = iid WHERE iid = {$this->id}";
+				Database::query($sql);
+			}
 		}
 
-        $sql = "SELECT count(file_id) as count FROM ".$dropbox_cnf['tbl_person']."
+        $sql = "SELECT count(file_id) as count
+        		FROM ".$dropbox_cnf['tbl_person']."
 				WHERE c_id = $course_id AND file_id = ".intval($this->id)." AND user_id = ".$this->uploader_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -155,11 +160,13 @@ class Dropbox_Work
 
             // Insert entries into person table
             $sql = "INSERT INTO ".$dropbox_cnf['tbl_person']." (c_id, file_id, user_id)
-                    VALUES ($course_id,
-                            ".intval($this->id)."
-                            , ".intval($this->uploader_id)."
-                            )";
+                    VALUES ($course_id, ".intval($this->id)." , ".intval($this->uploader_id).")";
             Database::query($sql);
+			/*$id = Database::insert_id();
+			if ($id) {
+				$sql = "UPDATE ".$dropbox_cnf['tbl_person']." SET id = iid WHERE iid = {$this->id}";
+				Database::query($sql);
+			}*/
         }
 	}
 
@@ -211,7 +218,8 @@ class Dropbox_Work
 		// Getting the feedback on the work.
 		if ($action == 'viewfeedback' AND $this->id == $_GET['id']) {
 			$feedback2 = array();
-			$sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']." WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
+			$sql_feedback = "SELECT * FROM ".$dropbox_cnf['tbl_feedback']."
+			                 WHERE c_id = $course_id AND file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = Database::query($sql_feedback);
 			while ($row_feedback = Database::fetch_array($result)) {
 				$row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
@@ -337,7 +345,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 *
 	 * @param unknown_type $id
 	 */
-	function _createExistingSentWork ($id)
+	function _createExistingSentWork($id)
     {
         $dropbox_cnf = getDropboxConf();
         $id = intval($id);
@@ -367,7 +375,8 @@ class Dropbox_SentWork extends Dropbox_Work
                     'name' => $user_info['complete_name'],
                     'user_id' => $dest_user_id,
 				    'feedback_date' => $res['feedback_date'],
-                    'feedback' => $res['feedback']);
+                    'feedback' => $res['feedback']
+                );
 			}
 		}
 	}
@@ -392,7 +401,8 @@ class Dropbox_Person
 	 * @param bool $isCourseTutor
 	 * @return Dropbox_Person
 	 */
-	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor) {
+	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor)
+    {
 	    $course_id = api_get_course_int_id();
 
 		// Fill in properties
@@ -413,7 +423,8 @@ class Dropbox_Person
 
         // Find all entries where this person is the recipient
 		$sql = "SELECT DISTINCT r.file_id, r.cat_id
-                FROM $post_tbl r INNER JOIN $person_tbl p
+                FROM $post_tbl r
+                INNER JOIN $person_tbl p
                     ON (r.file_id = p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
                 WHERE
                      p.user_id = ".intval($this->userId)." AND
@@ -427,7 +438,8 @@ class Dropbox_Person
 		}
 		// Find all entries where this person is the sender/uploader
         $sql = "SELECT DISTINCT f.id
-				FROM $file_tbl f INNER JOIN $person_tbl p
+				FROM $file_tbl f
+				INNER JOIN $person_tbl p
 				ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
                 WHERE
                     f.uploader_id   = ".intval($this->userId)." AND
@@ -455,7 +467,9 @@ class Dropbox_Person
 		$sort = $this->_orderBy;
 		$aval = $a->$sort;
 		$bval = $b->$sort;
-		if ($sort == 'recipients') {  // The recipients property is an array so we do the comparison based on the first item of the recipients array
+		if ($sort == 'recipients') {
+		    // The recipients property is an array so we do the comparison based
+		    // on the first item of the recipients array
 		    $aval = $aval[0]['name'];
 			$bval = $bval[0]['name'];
 		}
@@ -507,7 +521,8 @@ class Dropbox_Person
 	 * $sort can be lastDate, firstDate, title, size, ...
 	 * @param unknown_type $sort
 	 */
-	function orderReceivedWork($sort) {
+	function orderReceivedWork($sort)
+    {
 		switch($sort) {
 			case 'lastDate':
 				$this->_orderBy = 'last_upload_date';
@@ -537,14 +552,18 @@ class Dropbox_Person
 	/**
 	 * Deletes all the received work of this person
 	 */
-	function deleteAllReceivedWork () {
+	function deleteAllReceivedWork()
+    {
 	    $course_id = api_get_course_int_id();
         $dropbox_cnf = getDropboxConf();
 		// Delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w) {
-			Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'");
+            $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']."
+			        WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'";
+			Database::query($sql);
 		}
-		removeUnusedFiles();	// Check for unused files
+        // Check for unused files
+		removeUnusedFiles();
 	}
 
 	/**
@@ -591,7 +610,8 @@ class Dropbox_Person
 			}
 		}
 		// Delete entries in person table concerning received works
-        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id = '".$this->userId."' AND file_id ='".$id."'";
+        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']."
+                WHERE c_id = $course_id AND user_id = '".$this->userId."' AND file_id ='".$id."'";
 		Database::query($sql);
 		removeUnusedFiles();	// Check for unused files
 	}
@@ -605,7 +625,9 @@ class Dropbox_Person
         $dropbox_cnf = getDropboxConf();
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w) {
-			Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'");
+            $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']."
+                    WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$w->id."'";
+			Database::query($sql);
 			removeMoreIfMailing($w->id);
 		}
 		removeUnusedFiles();	// Check for unused files
@@ -638,7 +660,8 @@ class Dropbox_Person
 		}
 		//$file_id = $this->sentWork[$index]->id;
 		// Delete entries in person table concerning sent works
-		Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'");
+        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";
+		Database::query($sql);
 		removeMoreIfMailing($id);
 		removeUnusedFiles();	// Check for unused files
 	}
@@ -684,7 +707,15 @@ class Dropbox_Person
 		if (($ownerid = $this->receivedWork[$wi]->uploader_id) > $dropbox_cnf['mailingIdBase']) {
 		    $ownerid = getUserOwningThisMailing($ownerid);
 		}
-		api_item_property_update($_course, TOOL_DROPBOX, $this->receivedWork[$wi]->id, 'DropboxFileUpdated', $this->userId, null, $ownerid) ;
+        api_item_property_update(
+            $_course,
+            TOOL_DROPBOX,
+            $this->receivedWork[$wi]->id,
+            'DropboxFileUpdated',
+            $this->userId,
+            null,
+            $ownerid
+        );
 
 	}
 
@@ -701,7 +732,9 @@ class Dropbox_Person
 			switch ($type) {
 				case 'uploader_id':
 					if ($work->uploader_id == $value ||
-						($work->uploader_id > $dropbox_cnf['mailingIdBase'] && getUserOwningThisMailing($work->uploader_id) == $value)) {
+						($work->uploader_id > $dropbox_cnf['mailingIdBase'] &&
+                        getUserOwningThisMailing($work->uploader_id) == $value)
+                    ) {
 						$new_received_work[] = $work;
 					}
 					break;

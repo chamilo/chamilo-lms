@@ -331,7 +331,7 @@ class Wiki
         $id = Database::insert_id();
 
         if ($id > 0) {
-            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $insertId";
+            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
             Database::query($sql);
 
             //insert into item_property
@@ -346,7 +346,8 @@ class Wiki
         }
 
         if ($_clean['page_id']	== 0) {
-            $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'" WHERE c_id = '.$course_id.' AND id="'.$id.'"';
+            $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
+                    WHERE c_id = '.$course_id.' AND id="'.$id.'"';
             Database::query($sql);
         }
 
@@ -356,7 +357,9 @@ class Wiki
                    VALUES ($course_id, '".$id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
             Database::query($sql);
 
-            $sql = "UPDATE $tbl_wiki_conf SET page_id = $survey_id WHERE iid = $survey_id";
+            $confId = Database::insert_id();
+
+            $sql = "UPDATE $tbl_wiki_conf SET page_id = $confId WHERE iid = $confId";
             Database::query($sql);
         } else {
             $sql = 'UPDATE '.$tbl_wiki_conf.' SET

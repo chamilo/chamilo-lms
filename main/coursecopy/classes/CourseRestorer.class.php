@@ -818,7 +818,7 @@ class CourseRestorer
 
 				if (file_exists($path.$document->path)) {
 					switch ($this->file_option) {
-						case FILE_OVERWRITE :
+						case FILE_OVERWRITE:
 							rmdirr($path.$document->path);
                             copyDirTo(
                                 $this->course->backup_path . '/' . $document->path,
@@ -1123,11 +1123,15 @@ class CourseRestorer
 			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro) {
-				$sql = "DELETE FROM ".$tool_intro_table." WHERE c_id = ".$this->destination_course_id."  AND id='".self::DBUTF8escapestring($tool_intro->id)."'";
+				$sql = "DELETE FROM ".$tool_intro_table."
+				        WHERE c_id = ".$this->destination_course_id."  AND id='".self::DBUTF8escapestring($tool_intro->id)."'";
 				Database::query($sql);
                 $tool_intro->intro_text = DocumentManager::replace_urls_inside_content_html_from_copy_course($tool_intro->intro_text,$this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
-				$sql = "INSERT INTO ".$tool_intro_table." SET c_id = ".$this->destination_course_id." , id='".self::DBUTF8escapestring($tool_intro->id)."', intro_text = '".self::DBUTF8escapestring($tool_intro->intro_text)."'";
-				$sql.= ", session_id = $sessionId";
+				$sql = "INSERT INTO ".$tool_intro_table." SET
+				            c_id = ".$this->destination_course_id.",
+				            id='".self::DBUTF8escapestring($tool_intro->id)."',
+				            intro_text = '".self::DBUTF8escapestring($tool_intro->intro_text)."'
+				            session_id = $sessionId";
                 Database::query($sql);
 
 				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = Database::insert_id();
@@ -1156,7 +1160,12 @@ class CourseRestorer
 			$result=Database::query($sql);
 			list($orderMax)=Database::fetch_array($result,'NUM');
 			$display_order=$orderMax+1;
-			$sql = "INSERT INTO ".$link_cat_table." SET c_id = ".$this->destination_course_id." , category_title = '".self::DBUTF8escapestring($link_cat->title)."', description='".self::DBUTF8escapestring($link_cat->description)."', display_order='".$display_order."' $condition_session ";
+			$sql = "INSERT INTO $link_cat_table SET
+			            c_id = ".$this->destination_course_id.",
+			            category_title = '".self::DBUTF8escapestring($link_cat->title)."',
+			            description = '".self::DBUTF8escapestring($link_cat->description)."',
+			            display_order = '".$display_order."'
+			            $condition_session ";
 			Database::query($sql);
 			$new_id = Database::insert_id();
 			$this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
@@ -1190,8 +1199,8 @@ class CourseRestorer
         				content = '".self::DBUTF8escapestring($event->content)."',
                         all_day = '".$event->all_day."',
         				start_date = '".$event->start_date."',
-        				end_date = '".$event->end_date."'";
-                $sql.= ", session_id = $sessionId";
+        				end_date = '".$event->end_date."',
+        				session_id = $sessionId";
 
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
@@ -1205,7 +1214,9 @@ class CourseRestorer
 				if (!empty($this->course->orig)) {
 
 					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
-					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
+					$sql = 'SELECT path, comment, size, filename
+					        FROM '.$table_attachment.'
+					        WHERE c_id = '.$this->destination_course_id.' AND agenda_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
 
@@ -1215,7 +1226,13 @@ class CourseRestorer
 						//$copy_result = true;
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET c_id = ".$this->destination_course_id." , path = '".self::DBUTF8escapestring($new_filename)."', comment = '".self::DBUTF8escapestring($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , agenda_id = '".$new_event_id."' ";
+							$sql = "INSERT INTO ".$table_attachment." SET
+                                        c_id = ".$this->destination_course_id.",
+                                        path = '".self::DBUTF8escapestring($new_filename)."',
+                                        comment = '".self::DBUTF8escapestring($attachment_event->comment)."',
+                                        size = '".$attachment_event->size."',
+                                        filename = '".$attachment_event->filename."',
+                                        agenda_id = '".$new_event_id."' ";
 							Database::query($sql);
 						}
 					}
@@ -1226,7 +1243,13 @@ class CourseRestorer
 						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET c_id = ".$this->destination_course_id." , path = '".self::DBUTF8escapestring($new_filename)."', comment = '".self::DBUTF8escapestring($event->attachment_comment)."', size = '".$event->attachment_size."', filename = '".$event->attachment_filename."' , agenda_id = '".$new_event_id."' ";
+							$sql = "INSERT INTO ".$table_attachment." SET
+                                c_id = ".$this->destination_course_id.",
+                                path = '".self::DBUTF8escapestring($new_filename)."',
+                                comment = '".self::DBUTF8escapestring($event->attachment_comment)."',
+                                size = '".$event->attachment_size."',
+                                filename = '".$event->attachment_filename."',
+                                agenda_id = '".$new_event_id."' ";
 							Database::query($sql);
 						}
 					}
@@ -1266,7 +1289,12 @@ class CourseRestorer
 					$session_id = intval($session_id);
 					$condition_session = " , session_id = '$session_id' ";
 				}
-				$sql = "INSERT INTO ".$table." SET c_id = ".$this->destination_course_id." , description_type = '".self::DBUTF8escapestring($cd->description_type)."',title = '".self::DBUTF8escapestring($cd->title)."', content = '".self::DBUTF8escapestring($description_content)."' $condition_session";
+				$sql = "INSERT INTO ".$table." SET
+				        c_id = ".$this->destination_course_id." ,
+				        description_type = '".self::DBUTF8escapestring($cd->description_type)."',
+				        title = '".self::DBUTF8escapestring($cd->title)."',
+				        content = '".self::DBUTF8escapestring($description_content)."'
+				        $condition_session";
 				Database::query($sql);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::insert_id();
 			}
@@ -1294,17 +1322,16 @@ class CourseRestorer
                 );
 
 				$sql = "INSERT INTO ".$table." " ."SET
-							c_id = ".$this->destination_course_id." ,
-							title = '".self::DBUTF8escapestring($announcement->title)."'," .
-							"content = '".self::DBUTF8escapestring($announcement->content)."', " .
-							"end_date = '".$announcement->date."', " .
-							"display_order = '".$announcement->display_order."', " .
-							"email_sent = '".$announcement->email_sent."', "
-                    . "session_id = $sessionId";
+							c_id = ".$this->destination_course_id.",
+							title = '".self::DBUTF8escapestring($announcement->title)."',
+							content = '".self::DBUTF8escapestring($announcement->content)."',
+							end_date = '".$announcement->date."',
+							display_order = '".$announcement->display_order."',
+							email_sent = '".$announcement->email_sent."',
+                            session_id = $sessionId";
 				Database::query($sql);
 				$new_announcement_id = Database::insert_id();
 				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
-
 
 				$origin_path = $this->course->backup_path.'/upload/announcements/';
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
@@ -1314,30 +1341,49 @@ class CourseRestorer
 
 					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 
-					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE c_id = '.$this->destination_course_id.' AND announcement_id = '.$id;
+					$sql = 'SELECT path, comment, size, filename
+					        FROM '.$table_attachment.'
+					        WHERE c_id = '.$this->destination_course_id.' AND announcement_id = '.$id;
 					$attachment_event = Database::query($sql);
 					$attachment_event = Database::fetch_object($attachment_event);
 
-					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
+					if (file_exists($origin_path.$attachment_event->path) &&
+                        !is_dir($origin_path.$attachment_event->path)
+                    ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
 						//error_log($destination_path.$new_filename); error_log($copy_result);
 						//$copy_result = true;
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET c_id = ".$this->destination_course_id." , path = '".self::DBUTF8escapestring($new_filename)."', comment = '".self::DBUTF8escapestring($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , announcement_id = '".$new_announcement_id."' ";
+							$sql = "INSERT INTO ".$table_attachment." SET
+							        c_id = ".$this->destination_course_id.",
+							        path = '".self::DBUTF8escapestring($new_filename)."',
+							        comment = '".self::DBUTF8escapestring($attachment_event->comment)."',
+							        size = '".$attachment_event->size."',
+							        filename = '".$attachment_event->filename."',
+							        announcement_id = '".$new_announcement_id."'
+							        ";
 							Database::query($sql);
 						}
 					}
 				} else {
 					// get the info of the file
-					if(!empty($announcement->attachment_path) && is_file($origin_path.$announcement->attachment_path) && is_readable($origin_path.$announcement->attachment_path)) {
+					if (!empty($announcement->attachment_path) &&
+                        is_file($origin_path.$announcement->attachment_path) &&
+                        is_readable($origin_path.$announcement->attachment_path)
+                    ) {
 						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
 						$copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
 
 						if ($copy_result) {
 							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-							$sql = "INSERT INTO ".$table_attachment." SET c_id = ".$this->destination_course_id." , path = '".self::DBUTF8escapestring($new_filename)."', comment = '".self::DBUTF8escapestring($announcement->attachment_comment)."', size = '".$announcement->attachment_size."', filename = '".$announcement->attachment_filename."' , announcement_id = '".$new_announcement_id."' ";
+							$sql = "INSERT INTO ".$table_attachment." SET
+							        c_id = ".$this->destination_course_id." ,
+							        path = '".self::DBUTF8escapestring($new_filename)."',
+							        comment = '".self::DBUTF8escapestring($announcement->attachment_comment)."',
+							        size = '".$announcement->attachment_size."', filename = '".$announcement->attachment_filename."',
+							        announcement_id = '".$new_announcement_id."' ";
 							Database::query($sql);
 						}
 					}

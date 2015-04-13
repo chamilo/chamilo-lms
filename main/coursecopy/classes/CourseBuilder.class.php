@@ -80,15 +80,9 @@ class CourseBuilder
         $this->course = new Course();
         $this->course->code = $_course['official_code'];
         $this->course->type = $type;
-        $this->course->path = api_get_path(
-                SYS_COURSE_PATH
-            ).$_course['path'].'/';
-        $this->course->backup_path = api_get_path(
-                SYS_COURSE_PATH
-            ).$_course['path'];
-        $this->course->encoding = api_get_system_encoding(
-        ); //current platform encoding
-        $this->course->db_name = $_course['dbName'];
+        $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
+        $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
+        $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
     }
 
@@ -954,7 +948,7 @@ class CourseBuilder
         $id_list = array()
     ) {
         $table = Database:: get_course_table(TABLE_ANNOUNCEMENT);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -962,22 +956,27 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' '.$sessionCondition;
+        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
         $table_attachment = Database:: get_course_table(
             TABLE_ANNOUNCEMENT_ATTACHMENT
         );
         while ($obj = Database::fetch_object($db_result)) {
-            $sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE c_id = '.$course_id.' AND announcement_id = '.$obj->id.'';
+
+            $sql = 'SELECT path, comment, filename, size
+                    FROM '.$table_attachment.'
+                    WHERE c_id = '.$courseId.' AND announcement_id = '.$obj->id.'';
             $result = Database::query($sql);
             $attachment_obj = Database::fetch_object($result);
             $att_path = $att_filename = $att_size = $atth_comment = '';
+
             if (!empty($attachment_obj)) {
                 $att_path = $attachment_obj->path;
                 $att_filename = $attachment_obj->filename;
                 $att_size = $attachment_obj->size;
                 $atth_comment = $attachment_obj->comment;
             }
+
             $announcement = new Announcement(
                 $obj->id,
                 $obj->title,
@@ -991,7 +990,6 @@ class CourseBuilder
                 $atth_comment
             );
             $this->course->add_resource($announcement);
-
         }
     }
 
@@ -1467,11 +1465,13 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' '.$sessionCondition;
+        $sql = 'SELECT * FROM '.$table_attendance.'
+                WHERE c_id = '.$course_id.' '.$sessionCondition;
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result, 'ASSOC')) {
             $obj = new Attendance($row);
-            $sql = 'SELECT * FROM '.$table_attendance_calendar.' WHERE c_id = '.$course_id.' AND attendance_id = '.$row['id'];
+            $sql = 'SELECT * FROM '.$table_attendance_calendar.'
+                    WHERE c_id = '.$course_id.' AND attendance_id = '.$row['id'];
 
             $result = Database::query($sql);
             while ($sub_row = Database::fetch_array($result, 'ASSOC')) {

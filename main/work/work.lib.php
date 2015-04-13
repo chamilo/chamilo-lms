@@ -4034,10 +4034,11 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
         // Add the directory
         $id = Database::insert_id();
 
-        $sql = "UPDATE $work_table SET id = iid WHERE iid = $id";
-        Database::query($sql);
-
         if ($id) {
+
+            $sql = "UPDATE $work_table SET id = iid WHERE iid = $id";
+            Database::query($sql);
+
             // Folder created
             api_item_property_update(
                 $courseInfo,
@@ -4203,13 +4204,14 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         Database::query($sql);
 
         $my_last_id = Database::insert_id();
+        if ($my_last_id) {
 
-        $sql = "UPDATE $workTable SET
-                    has_properties  = $my_last_id ,
-                    view_properties = 1
-                WHERE c_id = $course_id AND id = $workId";
-        Database::query($sql);
-        exit;
+            $sql = "UPDATE $workTable SET
+                        has_properties  = $my_last_id,
+                        view_properties = 1
+                    WHERE c_id = $course_id AND id = $workId";
+            Database::query($sql);
+        }
     } else {
         $sql = "UPDATE $table SET
                     expires_on = '".$expiryDate."',

@@ -288,13 +288,13 @@ class Attendance
 	 */
 	public function attendance_add($link_to_gradebook = false)
 	{
-		global $_course;
+		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
-		$table_link 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$session_id 	= api_get_session_id();
-		$user_id 		= api_get_user_id();
-		$course_code	= api_get_course_id();
-		$course_id      = api_get_course_int_id();
+		$table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+		$session_id = api_get_session_id();
+		$user_id = api_get_user_id();
+		$course_code = api_get_course_id();
+		$course_id = api_get_course_int_id();
 		$title_gradebook= Database::escape_string($this->attendance_qualify_title);
 		$value_calification  = 0;
 		$weight_calification =	floatval($this->attendance_weight);
@@ -311,11 +311,19 @@ class Attendance
 		if (!empty($affected_rows)) {
 			// save inside item property table
 			$last_id = Database::insert_id();
+			if ($last_id) {
 
-			$sql = "UPDATE $tbl_attendance SET cat_id = $last_id WHERE iid = $last_id";
-			Database::query($sql);
+				$sql = "UPDATE $tbl_attendance SET id = iid WHERE iid = $last_id";
+				Database::query($sql);
 
-			api_item_property_update($_course, TOOL_ATTENDANCE, $last_id,"AttendanceAdded", $user_id);
+				api_item_property_update(
+					$_course,
+					TOOL_ATTENDANCE,
+					$last_id,
+					"AttendanceAdded",
+					$user_id
+				);
+			}
 		}
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {

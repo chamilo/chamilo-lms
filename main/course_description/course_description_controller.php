@@ -45,6 +45,7 @@ class CourseDescriptionController
         if (!is_array($data['descriptions'])) {
             $data['descriptions'] = array($data['descriptions']);
         }
+
         foreach ($data['descriptions'] as $description) {
             if (strpos($description, '<iframe') !== false && $browser['name'] == 'Chrome') {
                 header("X-XSS-Protection: 0");
@@ -70,6 +71,8 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $data = array();
         $data['id'] = $id;
+        $affected_rows = null;
+        $message = array();
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 $check = Security::check_token();

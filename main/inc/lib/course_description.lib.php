@@ -233,7 +233,7 @@ class CourseDescription
 		$last_id = Database::insert_id();
 		$affected_rows = Database::affected_rows($result);
 		if ($last_id > 0) {
-            $sql = "UPDATE $tbl_course_description SET id = $last_id WHERE iid = $last_id";
+            $sql = "UPDATE $tbl_course_description SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
 			//insert into item_property
@@ -276,7 +276,7 @@ class CourseDescription
 		$result = Database::query($sql);
 		$affected_rows = Database::affected_rows($result);
 
-        $sql = "UPDATE $tbl_course_description SET id = $last_id WHERE iid = $last_id";
+        $sql = "UPDATE $tbl_course_description SET id = iid WHERE iid = $last_id";
         Database::query($sql);
 
 		return $affected_rows;

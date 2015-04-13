@@ -196,7 +196,7 @@ class GroupManager
         $lastId = Database::insert_id();
 
         if ($lastId) {
-            $sql = "UPDATE $table_group SET id = $lastId WHERE iid = $lastId";
+            $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
             Database::query($sql);
 
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
@@ -812,7 +812,7 @@ class GroupManager
             $categoryId = $categoryId +1;
         }
 
-        $sql = "UPDATE $table_group_category SET id = $categoryId WHERE iid = $categoryId";
+        $sql = "UPDATE $table_group_category SET id = iid WHERE iid = $categoryId";
         Database::query($sql);
 
         return $categoryId;

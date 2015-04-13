@@ -752,26 +752,26 @@ class Exercise
      */
     public function save($type_e = '')
     {
-        global $_course;
-        $TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
+        $_course = api_get_course_info();
+        $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
-        $id                     = $this->id;
-        $exercise               = $this->exercise;
-        $description            = $this->description;
-        $sound                  = $this->sound;
-        $type                   = $this->type;
-        $attempts               = $this->attempts;
-        $feedback_type          = $this->feedback_type;
-        $random                 = $this->random;
-        $random_answers         = $this->random_answers;
-        $active                 = $this->active;
-        $propagate_neg          = $this->propagate_neg;
-        $review_answers         = (isset($this->review_answers) && $this->review_answers) ? 1 : 0;
-        $randomByCat            = $this->randomByCat;
-        $text_when_finished     = $this->text_when_finished;
-        $display_category_name  = intval($this->display_category_name);
-        $pass_percentage        = intval($this->pass_percentage);
-        $session_id             = api_get_session_id();
+        $id = $this->id;
+        $exercise = $this->exercise;
+        $description = $this->description;
+        $sound = $this->sound;
+        $type = $this->type;
+        $attempts = $this->attempts;
+        $feedback_type = $this->feedback_type;
+        $random = $this->random;
+        $random_answers = $this->random_answers;
+        $active = $this->active;
+        $propagate_neg = $this->propagate_neg;
+        $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
+        $randomByCat = $this->randomByCat;
+        $text_when_finished = $this->text_when_finished;
+        $display_category_name = intval($this->display_category_name);
+        $pass_percentage = intval($this->pass_percentage);
+        $session_id = api_get_session_id();
 
         //If direct we do not show results
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -847,42 +847,55 @@ class Exercise
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql = "INSERT INTO $TBL_EXERCICES (
-                        c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
-                        results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                        text_when_finished, display_category_name, pass_percentage
-                    )
-					VALUES(
-						".$this->course_id.",
-						'$start_time','$end_time',
-						'".Database::escape_string($exercise)."',
-						'".Database::escape_string($description)."',
-						'".Database::escape_string($sound)."',
-						".intval($type).",
-						".intval($random).",
-						".intval($random_answers).",
-						".intval($active).",
-						".intval($results_disabled).",
-						".intval($attempts).",
-						".intval($feedback_type).",
-						".intval($expired_time).",
-						".intval($session_id).",
-						".intval($review_answers).",
-						".intval($randomByCat).",
-						'".Database::escape_string($text_when_finished)."',
-						".intval($display_category_name).",
-                        ".intval($pass_percentage)."
-						)";
-            Database::query($sql);
-            $this->id = Database::insert_id();
+            $params = [
+                'c_id' => $this->course_id,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'title' => $exercise,
+                'description' => $description,
+                'sound' => $sound,
+                'type' => $type,
+                'random' => $random,
+                'random_answers' => $random_answers,
+                'active' => $active,
+                'results_disabled' => $results_disabled,
+                'max_attempt' => $attempts,
+                'feedback_type' => $feedback_type,
+                'expired_time' => $expired_time,
+                'session_id' => $session_id,
+                'review_answers' => $review_answers,
+                'random_by_category' => $randomByCat,
+                'text_when_finished' => $text_when_finished,
+                'display_category_name' => $display_category_name,
+                'pass_percentage' => $pass_percentage
+            ];
 
-            // insert into the item_property table
-            api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());
-            // This function save the quiz again, carefull about start_time and end_time if you remove this line (see above)
-            api_set_default_visibility($this->id, TOOL_QUIZ, null, true);
+            $this->id = Database::insert($TBL_EXERCICES, $params);
 
-            if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
-                $this->search_engine_save();
+            if ($this->id) {
+
+                $sql = "UPDATE $TBL_EXERCICES SET id = iid WHERE iid = {$this->id} ";
+                Database::query($sql);
+
+                // insert into the item_property table
+                api_item_property_update(
+                    $this->course,
+                    TOOL_QUIZ,
+                    $this->id,
+                    'QuizAdded',
+                    api_get_user_id()
+                );
+
+                // This function save the quiz again, carefull about start_time
+                // and end_time if you remove this line (see above)
+                api_set_default_visibility($this->id, TOOL_QUIZ, null, true);
+
+                if (api_get_setting(
+                        'search_enabled'
+                    ) == 'true' && extension_loaded('xapian')
+                ) {
+                    $this->search_engine_save();
+                }
             }
         }
 
@@ -893,16 +906,16 @@ class Exercise
     /**
      * Updates question position
      */
-    function update_question_positions()
+    public function update_question_positions()
     {
         $quiz_question_table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         //Fixes #3483 when updating order
         $question_list = $this->selectQuestionList(true);
         if (!empty($question_list)) {
             foreach ($question_list as $position => $questionId) {
-                $sql="UPDATE $quiz_question_table SET
-                        question_order ='".intval($position)."'".
-                    "WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);
+                $sql = "UPDATE $quiz_question_table SET
+                        question_order ='".intval($position)."'
+                        WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);
                 Database::query($sql);
             }
         }
@@ -928,8 +941,10 @@ class Exercise
                 }
             }
             $this->questionList[$pos] = $questionId;
+
             return true;
         }
+
         return false;
     }
 
@@ -3951,10 +3966,16 @@ class Exercise
         $sessionId = api_get_session_id();
         $course_id = api_get_course_int_id();
         // Save a new quiz
-        $sql = "INSERT INTO $tbl_quiz (c_id, title, type, random, active, results_disabled, max_attempt, start_time,end_time,feedback_type,expired_time, session_id, propagate_neg) ".
-            " VALUES('$course_id', '".$title."', $type, $random, $active, $results_disabled, $max_attempt,'','', $feedback, $expired_time, $sessionId, $propagateNegative)";
+        $sql = "INSERT INTO $tbl_quiz (c_id, title, type, random, active, results_disabled, max_attempt, start_time,end_time,feedback_type,expired_time, session_id, propagate_neg)
+                VALUES('$course_id', '".$title."', $type, $random, $active, $results_disabled, $max_attempt,'','', $feedback, $expired_time, $sessionId, $propagateNegative)";
         Database::query($sql);
         $quiz_id = Database::insert_id();
+
+        if ($quiz_id) {
+
+            $sql = "UPDATE $tbl_quiz SET id = iid WHERE iid = {$quiz_id} ";
+            Database::query($sql);
+        }
 
         return $quiz_id;
     }

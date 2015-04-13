@@ -368,7 +368,8 @@ abstract class Question
                     //$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id = $category_id WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
                     //$res = Database::query($sql);
                 } else {
-                    $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                    $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id)
+                            VALUES (".api_get_course_int_id().", $question_id, $category_id)";
                     Database::query($sql);
                 }
             }
@@ -757,11 +758,14 @@ abstract class Question
             }
         } else {
             // creates a new question
-            $sql	= "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
-					   WHERE 	question.id					= test_question.question_id AND
-								test_question.exercice_id	= ".intval($exerciseId)." AND
-								question.c_id 				= $c_id AND
-								test_question.c_id 			= $c_id ";
+            $sql = "SELECT max(position)
+                    FROM $TBL_QUESTIONS as question,
+                    $TBL_EXERCICE_QUESTION as test_question
+                    WHERE
+                        question.id = test_question.question_id AND
+						test_question.exercice_id = ".intval($exerciseId)." AND
+						question.c_id = $c_id AND
+						test_question.c_id = $c_id ";
             $result	= Database::query($sql);
             $current_position = Database::result($result,0,0);
             $this->updatePosition($current_position+1);
@@ -780,32 +784,56 @@ abstract class Question
             Database::query($sql);
 
             $this->id = Database::insert_id();
+            if ($this->id) {
 
-            api_item_property_update($this->course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',api_get_user_id());
-
-            // If hotspot, create first answer
-            if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
-                $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-                $sql = "INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					    VALUES (".$c_id.", '1', ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
+                $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = {$this->id}";
                 Database::query($sql);
-            }
 
-            if ($type == HOT_SPOT_DELINEATION ) {
-                $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-                $sql="INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-					  VALUES (".$c_id.", '1', ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
-                Database::query($sql);
-            }
+                api_item_property_update(
+                    $this->course,
+                    TOOL_QUIZ,
+                    $this->id,
+                    'QuizQuestionAdded',
+                    api_get_user_id()
+                );
 
-            if (api_get_setting('search_enabled')=='true') {
-                if ($exerciseId != 0) {
-                    $this -> search_engine_edit($exerciseId, TRUE);
-                } else {
-                    /**
-                     * actually there is *not* an user interface for
-                     * creating questions without a relation with an exercise
-                     */
+                // If hotspot, create first answer
+                if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
+                    $TBL_ANSWERS = Database::get_course_table(
+                        TABLE_QUIZ_ANSWER
+                    );
+                    $sql = "INSERT INTO $TBL_ANSWERS (c_id, question_id , answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type)
+                            VALUES (".$c_id.", ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
+                    Database::query($sql);
+                    $id = Database::insert_id();
+
+                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE iid = $id";
+                    Database::query($sql);
+                }
+
+                if ($type == HOT_SPOT_DELINEATION) {
+                    $TBL_ANSWERS = Database::get_course_table(
+                        TABLE_QUIZ_ANSWER
+                    );
+                    $sql = "INSERT INTO $TBL_ANSWERS (c_id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
+                          VALUES (".$c_id.", ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+                    Database::query($sql);
+
+                    $id = Database::insert_id();
+
+                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
+                    Database::query($sql);
+                }
+
+                if (api_get_setting('search_enabled') == 'true') {
+                    if ($exerciseId != 0) {
+                        $this->search_engine_edit($exerciseId, true);
+                    } else {
+                        /**
+                         * actually there is *not* an user interface for
+                         * creating questions without a relation with an exercise
+                         */
+                    }
                 }
             }
         }
@@ -1085,22 +1113,30 @@ abstract class Question
         } else {
             $course_info = $course_info;
         }
-        $TBL_QUESTIONS        = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUESTION_OPTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
-        $question     = $this->question;
-        $description  = $this->description;
-        $weighting    = $this->weighting;
-        $position     = $this->position;
-        $type         = $this->type;
-        $level        = intval($this->level);
-        $extra        = $this->extra;
+        $question = $this->question;
+        $description = $this->description;
+        $weighting = $this->weighting;
+        $position = $this->position;
+        $type = $this->type;
+        $level = intval($this->level);
+        $extra = $this->extra;
 
         //Using the same method used in the course copy to transform URLs
 
         if ($this->course['id'] != $course_info['id']) {
-            $description  = DocumentManager::replace_urls_inside_content_html_from_copy_course($description, $this->course['id'], $course_info['id']);
-            $question     = DocumentManager::replace_urls_inside_content_html_from_copy_course($question, $this->course['id'], $course_info['id']);
+            $description = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $description,
+                $this->course['id'],
+                $course_info['id']
+            );
+            $question = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                $question,
+                $this->course['id'],
+                $course_info['id']
+            );
         }
 
         $course_id = $course_info['real_id'];
@@ -1114,28 +1150,44 @@ abstract class Question
         Database::query($sql);
 
         $new_question_id = Database::insert_id();
+        if ($new_question_id) {
 
-        if (!empty($options)) {
-            //Saving the quiz_options
-            foreach ($options as $item) {
-                $item['question_id'] 	= $new_question_id;
-                $item['c_id'] 			= $course_id;
-                unset($item['id']);
-                Database::insert($TBL_QUESTION_OPTIONS, $item);
+            $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = $new_question_id";
+            Database::query($sql);
+
+            if (!empty($options)) {
+                //Saving the quiz_options
+                foreach ($options as $item) {
+                    $item['question_id'] = $new_question_id;
+                    $item['c_id'] = $course_id;
+                    unset($item['id']);
+                    $id = Database::insert($TBL_QUESTION_OPTIONS, $item);
+
+                    $sql = "UPDATE $TBL_QUESTION_OPTIONS SET id = iid WHERE iid = $id";
+                    Database::query($sql);
+                }
             }
+
+            // Duplicates the picture of the hotspot
+            $this->exportPicture($new_question_id, $course_info);
         }
 
-        // Duplicates the picture of the hotspot
-        $this->exportPicture($new_question_id, $course_info);
         return $new_question_id;
     }
 
+    /**
+     * @return string
+     */
     public function get_question_type_name()
     {
         $key = self::$questionTypes[$this->type];
         return get_lang($key[1]);
     }
 
+    /**
+     * @param string $type
+     * @return null
+     */
     public static function get_question_type($type)
     {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
@@ -1144,6 +1196,9 @@ abstract class Question
         return self::$questionTypes[$type];
     }
 
+    /**
+     * @return array
+     */
     public static function get_question_type_list()
     {
         if (api_get_setting('enable_nanogong') != 'true') {
@@ -1171,6 +1226,7 @@ abstract class Question
                 }
             }
         }
+
         return null;
     }
 
@@ -1426,31 +1482,91 @@ abstract class Question
         echo '</div>';
     }
 
-    static function saveQuestionOption($question_id, $name, $course_id, $position = 0) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $params['question_id']  = intval($question_id);
-        $params['name']         = $name;
-        $params['position']     = $position;
-        $params['c_id']         = $course_id;
+    /**
+     * @param int $question_id
+     * @param string $name
+     * @param int $course_id
+     * @param int $position
+     * @return bool|int
+     */
+    static function saveQuestionOption($question_id, $name, $course_id, $position = 0)
+    {
+        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        $params['question_id'] = intval($question_id);
+        $params['name'] = $name;
+        $params['position'] = $position;
+        $params['c_id'] = $course_id;
         $result  = self::readQuestionOption($question_id, $course_id);
         $last_id = Database::insert($TBL_EXERCICE_QUESTION_OPTION, $params);
+        if ($last_id) {
+            $sql = "UPDATE $TBL_EXERCICE_QUESTION_OPTION SET id = iid WHERE iid = $last_id";
+            Database::query($sql);
+        }
+
         return $last_id;
     }
 
-    static function deleteAllQuestionOptions($question_id, $course_id) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        Database::delete($TBL_EXERCICE_QUESTION_OPTION, array('c_id = ? AND question_id = ?'=> array($course_id, $question_id)));
+    /**
+     * @param int $question_id
+     * @param int $course_id
+     */
+    static function deleteAllQuestionOptions($question_id, $course_id)
+    {
+        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+        Database::delete(
+            $TBL_EXERCICE_QUESTION_OPTION,
+            array(
+                'c_id = ? AND question_id = ?' => array(
+                    $course_id,
+                    $question_id
+                )
+            )
+        );
     }
 
-    static function updateQuestionOption($id, $params, $course_id) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?'=>array($course_id, $id)));
+    /**
+     * @param int $id
+     * @param array $params
+     * @param int $course_id
+     * @return bool|int
+     */
+    static function updateQuestionOption($id, $params, $course_id)
+    {
+        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(
+            TABLE_QUIZ_QUESTION_OPTION
+        );
+        $result = Database::update(
+            $TBL_EXERCICE_QUESTION_OPTION,
+            $params,
+            array('c_id = ? AND id = ?' => array($course_id, $id))
+        );
         return $result;
     }
 
-    static function readQuestionOption($question_id, $course_id) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array('where'=>array('c_id = ? AND question_id = ?' =>array($course_id, $question_id)), 'order'=>'id ASC'));
+    /**
+     * @param int $question_id
+     * @param int $course_id
+     * @return array
+     */
+    static function readQuestionOption($question_id, $course_id)
+    {
+        $TBL_EXERCICE_QUESTION_OPTION = Database::get_course_table(
+            TABLE_QUIZ_QUESTION_OPTION
+        );
+        $result = Database::select(
+            '*',
+            $TBL_EXERCICE_QUESTION_OPTION,
+            array(
+                'where' => array(
+                    'c_id = ? AND question_id = ?' => array(
+                        $course_id,
+                        $question_id
+                    )
+                ),
+                'order' => 'id ASC'
+            )
+        );
+
         return $result;
     }
 
@@ -1526,10 +1642,13 @@ abstract class Question
         $level = intval($level);
 
         // Get the max position
-        $sql = "SELECT max(position) as max_position"
-            ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
-            ." ON q.id = r.question_id"
-            ." AND exercice_id = $quiz_id AND q.c_id = $course_id AND r.c_id = $course_id";
+        $sql = "SELECT max(position) as max_position
+                FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r
+                ON
+                    q.id = r.question_id AND
+                    exercice_id = $quiz_id AND
+                    q.c_id = $course_id AND
+                    r.c_id = $course_id";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
         $max_position = $row_max->max_position +1;
@@ -1537,22 +1656,28 @@ abstract class Question
         // Insert the new question
         $sql = "INSERT INTO $tbl_quiz_question (c_id, question, description, ponderation, position, type, level)
                 VALUES ($course_id, '".Database::escape_string($question_name)."', '".Database::escape_string($question_description)."', '$max_score', $max_position, $type, $level)";
-
         Database::query($sql);
+
         // Get the question ID
         $question_id = Database::insert_id();
+        if ($question_id) {
 
-        // Get the max question_order
-        $sql = "SELECT max(question_order) as max_order "
-            ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";
-        $rs_max_order = Database::query($sql);
-        $row_max_order = Database::fetch_object($rs_max_order);
-        $max_order = $row_max_order->max_order + 1;
-        // Attach questions to quiz
-        $sql = "INSERT INTO $tbl_quiz_rel_question "
-            ."(c_id, question_id,exercice_id,question_order)"
-            ." VALUES($course_id, $question_id, $quiz_id, $max_order)";
-        Database::query($sql);
+            $sql = "UPDATE $tbl_quiz_question SET id = iid WHERE iid = $id";
+            Database::query($sql);
+
+            // Get the max question_order
+            $sql = "SELECT max(question_order) as max_order
+                    FROM $tbl_quiz_rel_question
+                    WHERE c_id = $course_id AND exercice_id = $quiz_id ";
+            $rs_max_order = Database::query($sql);
+            $row_max_order = Database::fetch_object($rs_max_order);
+            $max_order = $row_max_order->max_order + 1;
+            // Attach questions to quiz
+            $sql = "INSERT INTO $tbl_quiz_rel_question (c_id, question_id,exercice_id,question_order)
+                    VALUES($course_id, $question_id, $quiz_id, $max_order)";
+            Database::query($sql);
+        }
+
         return $question_id;
     }
 

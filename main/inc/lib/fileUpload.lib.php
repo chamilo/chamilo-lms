@@ -1228,7 +1228,7 @@ function add_document(
 
     if (Database::query($sql)) {
         $documentId = Database::insert_id();
-        $sql = "UPDATE $table_document SET id = $documentId WHERE iid = $documentId";
+        $sql = "UPDATE $table_document SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
         if ($documentId) {

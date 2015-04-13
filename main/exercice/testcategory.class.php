@@ -75,19 +75,26 @@ class Testcategory
 		// lets add in BDD if not the same name
 		if ($data_verif['nb'] <= 0) {
 			$c_id = api_get_course_int_id();
-			$sql = "INSERT INTO $t_cattable VALUES ('$c_id', '', '$v_name', '$v_description')";
+			$sql = "INSERT INTO $t_cattable (c_id, title, description) VALUES ('$c_id','$v_name', '$v_description')";
 			Database::query($sql);
             $new_id = Database::insert_id();
-            // add test_category in item_property table
-            $course_code = api_get_course_id();
-            $course_info = api_get_course_info($course_code);
-            api_item_property_update(
-                $course_info,
-                TOOL_TEST_CATEGORY,
-                $new_id,
-                'TestCategoryAdded',
-                api_get_user_id()
-            );
+
+			if ($new_id) {
+
+				$sql = "UPDATE $t_cattable SET id = iid WHERE iid = $new_id";
+				Database::query($sql);
+
+				// add test_category in item_property table
+				$course_code = api_get_course_id();
+				$course_info = api_get_course_info($course_code);
+				api_item_property_update(
+					$course_info,
+					TOOL_TEST_CATEGORY,
+					$new_id,
+					'TestCategoryAdded',
+					api_get_user_id()
+				);
+			}
 
 			return $new_id;
 		} else {
@@ -117,7 +124,13 @@ class Testcategory
             // item_property update
             $course_code = api_get_course_id();
             $course_info = api_get_course_info($course_code);
-            api_item_property_update($course_info, TOOL_TEST_CATEGORY, $this->id, 'TestCategoryDeleted', api_get_user_id());
+			api_item_property_update(
+				$course_info,
+				TOOL_TEST_CATEGORY,
+				$this->id,
+				'TestCategoryDeleted',
+				api_get_user_id()
+			);
 			return true;
 		}
 	}
@@ -162,6 +175,7 @@ class Testcategory
 		        WHERE category_id=$in_id AND c_id=".api_get_course_int_id();
 		$res = Database::query($sql);
 		$row = Database::fetch_array($res);
+
 		return $row['nb'];
 	}
 
@@ -175,11 +189,11 @@ class Testcategory
 		echo "</textarea>";
 	}
 
-
 	/**
      * Return an array of all Category objects in the database
-	   If in_field=="" Return an array of all category objects in the database
-	   Otherwise, return an array of all in_field value in the database (in_field = id or name or description)
+	 * If in_field=="" Return an array of all category objects in the database
+	 * Otherwise, return an array of all in_field value
+	 * in the database (in_field = id or name or description)
 	 */
 	public static function getCategoryListInfo($in_field="", $in_courseid="")
     {
@@ -230,6 +244,7 @@ class Testcategory
             $data = Database::fetch_array($res);
 			$result = $data['category_id'];
 		}
+
 		return $result;
 	}
 
@@ -264,6 +279,7 @@ class Testcategory
 		if (Database::num_rows($res) > 0) {
 			$result = $data['title'];
 		}
+
 		return $result;
 	}
 
@@ -276,17 +292,18 @@ class Testcategory
 	public static function getListOfCategoriesIDForTest($in_testid)
     {
 		// parcourir les questions d'un test, recup les categories uniques dans un tableau
-		$tabcat = array();
+		$result = array();
 		$quiz = new Exercise();
 		$quiz->read($in_testid);
 		$tabQuestionList = $quiz->selectQuestionList();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ???
 		for ($i=1; $i <= count($tabQuestionList); $i++) {
-			if (!in_array(Testcategory::getCategoryForQuestion($tabQuestionList[$i]), $tabcat)) {
-				$tabcat[] = Testcategory::getCategoryForQuestion($tabQuestionList[$i]);
+			if (!in_array(Testcategory::getCategoryForQuestion($tabQuestionList[$i]), $result)) {
+				$result[] = Testcategory::getCategoryForQuestion($tabQuestionList[$i]);
 			}
 		}
-		return $tabcat;
+
+		return $result;
 	}
 
 	/**
@@ -666,9 +683,9 @@ class Testcategory
         $courseId = intval($courseId);
 
         if (empty($sessionId)) {
-            $sessionCondition = api_get_session_condition($sessionId, true, false, 'i.id_session');
+            $sessionCondition = api_get_session_condition($sessionId, true, false, 'i.session_id');
         } else {
-            $sessionCondition = api_get_session_condition($sessionId, true, true, 'i.id_session');
+            $sessionCondition = api_get_session_condition($sessionId, true, true, 'i.session_id');
         }
 
         if (empty($courseId)) {

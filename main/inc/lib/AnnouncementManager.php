@@ -348,7 +348,7 @@ class AnnouncementManager
 
         $last_id = Database::insert($tbl_announcement, $params);
 
-        $sql = "UPDATE $tbl_announcement SET id = $last_id WHERE iid = $last_id";
+        $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
         Database::query($sql);
 
         if (empty($last_id)) {
@@ -464,7 +464,7 @@ class AnnouncementManager
         //store the attach file
         $last_id = Database::insert_id();
         if ($last_id) {
-            $sql = "UPDATE $lp_item_view_table SET id = $last_id WHERE iid = $last_id";
+            $sql = "UPDATE $lp_item_view_table SET id = iid WHERE iid = $last_id";
             Database::query($sql);
 
             if (!empty($file)) {
@@ -1206,7 +1206,7 @@ class AnnouncementManager
                 $result = Database::query($sql);
 
                 $insertId = Database::insert_id();
-                $sql = "UPDATE $tbl_announcement_attachment SET id = $insertId WHERE iid = $insertId";
+                $sql = "UPDATE $tbl_announcement_attachment SET id = iid WHERE iid = $insertId";
                 Database::query($sql);
 
                 $return = 1;

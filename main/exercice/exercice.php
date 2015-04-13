@@ -364,25 +364,24 @@ $condition_session = api_get_session_condition($session_id, true, true);
 
 // Only for administrators
 if ($is_allowedToEdit) {
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
+    $total_sql = "SELECT count(iid) as count FROM $TBL_EXERCICES
                   WHERE c_id = $courseId AND active<>'-1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCICES
             WHERE c_id = $courseId AND active<>'-1' $condition_session
-            ORDER BY title LIMIT ".$from.",".$limit;
+            ORDER BY title
+            LIMIT ".$from.",".$limit;
 } else {
     // Only for students
-    $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES
+    $total_sql = "SELECT count(iid) as count FROM $TBL_EXERCICES
                   WHERE c_id = $courseId AND active = '1' $condition_session ";
     $sql = "SELECT * FROM $TBL_EXERCICES
             WHERE c_id = $courseId AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from.",".$limit;
 }
-
 $result = Database::query($sql);
-$exercises_count = Database :: num_rows($result);
-
 $result_total = Database::query($total_sql);
+
 $total_exercises = 0;
 
 if (Database :: num_rows($result_total)) {
@@ -410,6 +409,7 @@ if ($is_allowedToEdit) {
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 }
+
 $total = $total_exercises + $hp_count;
 
 $token = Security::get_token();
@@ -477,7 +477,7 @@ $exercise_obj = new Exercise();
 $list_ordered = null;
 
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
-    $exercise_list[$row['id']] = $row;
+    $exercise_list[$row['iid']] = $row;
 }
 
 if (isset($list_ordered) && !empty($list_ordered)) {
@@ -489,6 +489,7 @@ if (isset($list_ordered) && !empty($list_ordered)) {
     }
     $exercise_list = $new_question_list;
 }
+
 echo '<div class="table-responsive">';
 echo '<table class="'.Display::return_default_table_class().'">';
 
@@ -644,10 +645,10 @@ if (!empty($exercise_list)) {
                 $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
                 // Count number exercise - teacher
-                $sql = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
+                $sql = "SELECT count(*) count FROM $TBL_EXERCICE_QUESTION
                         WHERE c_id = $courseId AND exercice_id = $my_exercise_id";
                 $sqlresult = Database::query($sql);
-                $rowi = Database :: result($sqlresult, 0);
+                $rowi = Database :: result($sqlresult, 0, 0);
 
                 if ($session_id == $row['session_id']) {
                     // Settings

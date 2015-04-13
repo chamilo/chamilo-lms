@@ -3936,7 +3936,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         Database::query($sql);
         $workId = Database::insert_id();
 
-        $sql = "UPDATE $work_table SET id = $workId WHERE iid = $workId ";
+        $sql = "UPDATE $work_table SET id = iid WHERE iid = $workId ";
         Database::query($sql);
 
         if ($workId) {
@@ -4034,7 +4034,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
         // Add the directory
         $id = Database::insert_id();
 
-        $sql = "UPDATE $work_table SET id = $id WHERE iid = $id";
+        $sql = "UPDATE $work_table SET id = iid WHERE iid = $id";
         Database::query($sql);
 
         if ($id) {

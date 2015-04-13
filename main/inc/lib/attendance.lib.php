@@ -716,7 +716,7 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-				$sql = "UPDATE $tbl_attendance_sheet SET id = $insertId WHERE iid = $insertId";
+				$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
 				Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
@@ -748,7 +748,7 @@ class Attendance
 				$result = Database::query($sql);
 
 				$insertId = Database::insert_id();
-				$sql = "UPDATE $tbl_attendance_sheet SET id = $insertId WHERE iid = $insertId";
+				$sql = "UPDATE $tbl_attendance_sheet SET id = iid WHERE iid = $insertId";
 				Database::query($sql);
 
 				$affected_rows += Database::affected_rows($result);
@@ -856,7 +856,7 @@ class Attendance
 					Database::query($sql);
 
 					$insertId = Database::insert_id();
-					$sql = "UPDATE $tbl_attendance_result SET id = $insertId WHERE iid = $insertId";
+					$sql = "UPDATE $tbl_attendance_result SET id = iid WHERE iid = $insertId";
 					Database::query($sql);
 				}
 			}
@@ -907,7 +907,7 @@ class Attendance
 
 		$insertId = Database::insert_id();
 
-		$sql = "UPDATE $tbl_attendance_sheet_log SET id = $insertId WHERE iid = $insertId";
+		$sql = "UPDATE $tbl_attendance_sheet_log SET id = iid WHERE iid = $insertId";
 		Database::query($sql);
 
 		return Database::affected_rows($result);
@@ -1420,7 +1420,7 @@ class Attendance
 			$id = Database::insert($tbl_attendance_calendar, $params);
 
 			if ($id) {
-				$sql = "UPDATE $tbl_attendance_calendar SET id = $id WHERE iid = $id";
+				$sql = "UPDATE $tbl_attendance_calendar SET id = iid WHERE iid = $id";
 				Database::query($sql);
 				$affected_rows++;
 			}
@@ -1465,7 +1465,7 @@ class Attendance
 				);
                 $insertId = Database::insert($table, $params);
 
-                $sql = "UPDATE $table SET id = $insertId WHERE iid = $insertId";
+                $sql = "UPDATE $table SET id = iid WHERE iid = $insertId";
                 Database::query($sql);
 			}
 		}

@@ -609,7 +609,7 @@ class SurveyManager
             );
             $insertId = Database::insert($table_survey_question_group, $params);
 
-            $sql = "UPDATE $table_survey_question_group SET id = $insertId WHERE iid = $insertId";
+            $sql = "UPDATE $table_survey_question_group SET id = iid WHERE iid = $insertId";
             Database::query($sql);
 
             $group_id[$row['id']] = $insertId;
@@ -636,7 +636,7 @@ class SurveyManager
             );
             $insertId = Database::insert($table_survey_question, $params);
 
-            $sql = "UPDATE $table_survey_question SET id = $insertId WHERE iid = $insertId";
+            $sql = "UPDATE $table_survey_question SET id = iid WHERE iid = $insertId";
             Database::query($sql);
 
             $question_id[$row['question_id']] = $insertId;

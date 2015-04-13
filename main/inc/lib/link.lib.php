@@ -193,7 +193,7 @@ class Link extends Model
                 Database:: query($sql);
                 $link_id = Database:: insert_id();
                 // iid
-                $sql = "UPDATE $tbl_link SET id = $link_id WHERE iid = $link_id";
+                $sql = "UPDATE $tbl_link SET id = iid WHERE iid = $link_id";
                 Database:: query($sql);
 
                 if ($link_id) {
@@ -350,7 +350,7 @@ class Link extends Model
                 Database:: query($sql);
                 $linkId = Database:: insert_id();
                 // iid
-                $sql = "UPDATE $tbl_categories SET id = $linkId WHERE iid = $linkId";
+                $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
                 Database:: query($sql);
 
                 if ($linkId) {

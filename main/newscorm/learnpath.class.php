@@ -216,7 +216,7 @@ class learnpath
             Database::query($sql);
             $this->lp_view_id = Database::insert_id();
 
-            $sql = "UPDATE $lp_table SET id = ".$this->lp_view_id." WHERE iid = ".$this->lp_view_id;
+            $sql = "UPDATE $lp_table SET id = iid WHERE iid = ".$this->lp_view_id;
 
             Database::query($sql);
 
@@ -388,7 +388,7 @@ class learnpath
                             Database::query($sql);
                             $insertId = Database::insert_id();
 
-                            $sql = "UPDATE $lp_item_view_table SET id = $insertId WHERE iid = $insertId";
+                            $sql = "UPDATE $lp_item_view_table SET id = iid WHERE iid = $insertId";
                             Database::query($sql);
                         }
                     }
@@ -587,7 +587,7 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
 
-        $sql = "UPDATE $tbl_lp_item SET id = $new_item_id WHERE iid = $new_item_id";
+        $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
         Database::query($sql);
 
         if ($this->debug > 2) {
@@ -787,7 +787,7 @@ class learnpath
                 Database::query($sql);
                 $id = Database :: insert_id();
                 if ($id > 0) {
-                    $sql = "UPDATE $tbl_lp SET id = $id WHERE iid = $id";
+                    $sql = "UPDATE $tbl_lp SET id = iid WHERE iid = $id";
                     Database::query($sql);
 
                     $course_info = api_get_course_info();
@@ -3670,7 +3670,7 @@ class learnpath
             $id = Database :: insert_id();
             $this->lp_view_id = $id;
 
-            $sql = "UPDATE $lp_view_table SET id = $id WHERE iid = $id";
+            $sql = "UPDATE $lp_view_table SET id = iid WHERE iid = $id";
             Database::query($sql);
         }
 
@@ -4215,7 +4215,7 @@ class learnpath
             Database::query($sql);
 
             $insertId = Database::insert_id();
-            $sql = "UPDATE $tbl_tool SET id = $insertId WHERE iid = $insertId";
+            $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
             Database::query($sql);
 
         } elseif (($set_visibility == 'v') && ($num > 0)) {
@@ -4267,7 +4267,7 @@ class learnpath
         $res = Database::query($sql);
         $view_id = Database::insert_id();
 
-        $sql = "UPDATE $lp_view_table SET id = $view_id WHERE iid = $view_id";
+        $sql = "UPDATE $lp_view_table SET id = iid WHERE iid = $view_id";
         Database::query($sql);
 
         if ($view_id) {

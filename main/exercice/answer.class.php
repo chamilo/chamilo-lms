@@ -512,21 +512,21 @@ class Answer
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
         $flag = 0;
-		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
+		$sql = "INSERT INTO $TBL_REPONSES (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
 		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
 
-			$answer					= Database::escape_string($this->new_answer[$i]);
-            $correct				= Database::escape_string($this->new_correct[$i]);
-			$comment				= Database::escape_string($this->new_comment[$i]);
-			$weighting				= Database::escape_string($this->new_weighting[$i]);
-			$position				= Database::escape_string($this->new_position[$i]);
-			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
-			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
-			$destination			= Database::escape_string($this->new_destination[$i]);
+			$answer = Database::escape_string($this->new_answer[$i]);
+			$correct = Database::escape_string($this->new_correct[$i]);
+			$comment = Database::escape_string($this->new_comment[$i]);
+			$weighting = Database::escape_string($this->new_weighting[$i]);
+			$position = Database::escape_string($this->new_position[$i]);
+			$hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
+			$hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
+			$destination = Database::escape_string($this->new_destination[$i]);
 
             if (!(isset($this->position[$i]))) {
                 $flag = 1;
-			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
+			    $sql .= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
                 // https://support.chamilo.org/issues/6558
                 // function updateAnswers already escape_string, error if we do it twice.
@@ -545,31 +545,39 @@ class Answer
         }
 
 		if ($flag == 1) {
-            $sql = api_substr($sql,0,-1);
+            $sql = api_substr($sql, 0, -1);
             Database::query($sql);
+			$id = Database::insert_id();
+
+			$sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
+			Database::query($sql);
         }
+
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers+1;
             while ($this->position[$i]) {
                 $position = $this->position[$i];
-                $sql = "DELETE FROM $TBL_REPONSES WHERE c_id = {$this->course_id} AND question_id = '".($questionId)."' AND position ='$position'";
+                $sql = "DELETE FROM $TBL_REPONSES
+                		WHERE
+                			c_id = {$this->course_id} AND
+                			question_id = '".($questionId)."' AND
+                			position ='$position'";
                 Database::query($sql);
                 $i++;
             }
-
         }
 
 		// moves $new_* arrays
-		$this->answer=$this->new_answer;
-		$this->correct=$this->new_correct;
-		$this->comment=$this->new_comment;
-		$this->weighting=$this->new_weighting;
-		$this->position=$this->new_position;
-		$this->hotspot_coordinates=$this->new_hotspot_coordinates;
-		$this->hotspot_type=$this->new_hotspot_type;
+		$this->answer = $this->new_answer;
+		$this->correct = $this->new_correct;
+		$this->comment = $this->new_comment;
+		$this->weighting = $this->new_weighting;
+		$this->position = $this->new_position;
+		$this->hotspot_coordinates = $this->new_hotspot_coordinates;
+		$this->hotspot_type = $this->new_hotspot_type;
 
-		$this->nbrAnswers=$this->new_nbrAnswers;
-		$this->destination=$this->new_destination;
+		$this->nbrAnswers = $this->new_nbrAnswers;
+		$this->destination = $this->new_destination;
 		// clears $new_* arrays
 
 		$this->cancel();
@@ -617,7 +625,7 @@ class Answer
 		// if at least one answer
 		if ($this->nbrAnswers) {
 			// inserts new answers into data base
-			$sql = "INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
+			$sql = "INSERT INTO $TBL_REPONSES (c_id, question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 			$c_id = $course_info['real_id'];
 
 			for ($i=1;$i <= $this->nbrAnswers;$i++) {
@@ -626,24 +634,28 @@ class Answer
                     $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->comment[$i],$this->course['id'], $course_info['id']) ;
                 }
 
-				$answer					= Database::escape_string($this->answer[$i]);
-				$correct				= Database::escape_string($this->correct[$i]);
+				$answer = Database::escape_string($this->answer[$i]);
+				$correct = Database::escape_string($this->correct[$i]);
 
                 if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ) {
                     $correct = $fixed_list[intval($correct)];
                 }
 
-				$comment				= Database::escape_string($this->comment[$i]);
-				$weighting				= Database::escape_string($this->weighting[$i]);
-				$position				= Database::escape_string($this->position[$i]);
-				$hotspot_coordinates	= Database::escape_string($this->hotspot_coordinates[$i]);
-				$hotspot_type			= Database::escape_string($this->hotspot_type[$i]);
-				$destination			= Database::escape_string($this->destination[$i]);
+				$comment = Database::escape_string($this->comment[$i]);
+				$weighting = Database::escape_string($this->weighting[$i]);
+				$position = Database::escape_string($this->position[$i]);
+				$hotspot_coordinates = Database::escape_string($this->hotspot_coordinates[$i]);
+				$hotspot_type = Database::escape_string($this->hotspot_type[$i]);
+				$destination = Database::escape_string($this->destination[$i]);
 				$sql.="($c_id, '$i','$newQuestionId','$answer','$correct','$comment'," .
 						"'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 			}
 			$sql = api_substr($sql,0,-1);
+
 			Database::query($sql);
-		}
+            $id = Database::insert_id();
+            $sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
+            Database::query($sql);
+        }
 	}
 }

@@ -3746,7 +3746,7 @@ class learnpathItem
 
                         $insertId = Database::insert($iva_table, $params);
 
-                        $sql = "UPDATE $iva_table SET id = $insertId WHERE iid = $insertId";
+                        $sql = "UPDATE $iva_table SET id = iid WHERE iid = $insertId";
                         Database::query($sql);
                     }
                 }
@@ -3846,7 +3846,7 @@ class learnpathItem
                 }
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
 
-                $sql = "UPDATE $item_view_table SET id = ".$this->db_item_view_id." WHERE iid = ".$this->db_item_view_id;
+                $sql = "UPDATE $item_view_table SET id = iid WHERE iid = ".$this->db_item_view_id;
                 Database::query($sql);
 
                 $inserted = true;
@@ -3893,7 +3893,7 @@ class learnpathItem
 
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
 
-                $sql = "UPDATE $item_view_table SET id = ".$this->db_item_view_id." WHERE iid = ".$this->db_item_view_id;
+                $sql = "UPDATE $item_view_table SET id = iid WHERE iid = ".$this->db_item_view_id;
                 Database::query($sql);
 
             } else {
@@ -4172,7 +4172,7 @@ class learnpathItem
 
                             $insertId = Database::insert($iva_table, $params);
 
-                            $sql = "UPDATE $iva_table SET id = $insertId WHERE iid = $insertId";
+                            $sql = "UPDATE $iva_table SET id = iid WHERE iid = $insertId";
                             Database::query($sql);
                         }
                     }

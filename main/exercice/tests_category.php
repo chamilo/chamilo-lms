@@ -71,7 +71,7 @@ function edit_category_form($in_action) {
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-        $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
         $form->addButtonSave(get_lang('ModifyCategory'), 'SubmitNote');
 
         // setting the defaults
@@ -139,7 +139,7 @@ function add_category_form($in_action) {
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-    $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+    $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
     $form->addButtonCreate(get_lang('AddTestCategory'), 'SubmitNote');
     // setting the rules
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');

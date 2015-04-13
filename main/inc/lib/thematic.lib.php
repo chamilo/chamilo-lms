@@ -297,7 +297,7 @@ class Thematic
             $result = Database::query($sql);
             $last_id = Database::insert_id();
             if ($last_id) {
-                $sql = "UPDATE $tbl_thematic SET id = $last_id WHERE iid = $last_id";
+                $sql = "UPDATE $tbl_thematic SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
                 api_item_property_update($_course, 'thematic', $last_id,"ThematicAdded", $user_id);
             }
@@ -644,7 +644,7 @@ class Thematic
                 }
             }
         }
-        
+
         return $data;
     }
 
@@ -678,7 +678,7 @@ class Thematic
             $last_id = Database::insert_id();
 
             if ($last_id) {
-                $sql = "UPDATE $tbl_thematic_advance SET id = $last_id WHERE iid = $last_id";
+                $sql = "UPDATE $tbl_thematic_advance SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
 
                 api_item_property_update($_course, 'thematic_advance', $last_id,"ThematicAdvanceAdded", $user_id);
@@ -873,7 +873,7 @@ class Thematic
                 $result = Database::query($ins);
                 $last_id = Database::insert_id();
                 if ($last_id) {
-                    $sql = "UPDATE $tbl_thematic_plan SET id = $last_id WHERE iid = $last_id";
+                    $sql = "UPDATE $tbl_thematic_plan SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
                     api_item_property_update($_course, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
                 }
@@ -885,7 +885,7 @@ class Thematic
             $result = Database::query($ins);
             $last_id = Database::insert_id();
             if ($last_id) {
-                $sql = "UPDATE $tbl_thematic_plan SET id = $last_id WHERE iid = $last_id";
+                $sql = "UPDATE $tbl_thematic_plan SET id = iid WHERE iid = $last_id";
                 Database::query($sql);
                 api_item_property_update($_course, 'thematic_plan', $last_id,"ThematicPlanAdded", $user_id);
             }

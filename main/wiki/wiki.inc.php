@@ -331,7 +331,7 @@ class Wiki
         $id = Database::insert_id();
 
         if ($id > 0) {
-            $sql = "UPDATE $tbl_wiki SET id = $insertId WHERE iid = $insertId";
+            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $insertId";
             Database::query($sql);
 
             //insert into item_property
@@ -429,7 +429,7 @@ class Wiki
         $id = Database::insert_id();
 
         if ($id) {
-            $sql = "UPDATE $tbl_wiki SET id = $id WHERE iid = $id";
+            $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
             Database::query($sql);
 
             api_item_property_update(

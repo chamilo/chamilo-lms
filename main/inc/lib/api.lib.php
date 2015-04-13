@@ -3703,7 +3703,7 @@ function api_item_property_update(
                     $result = Database::query($sql);
 
                     $id = Database::insert_id();
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
                     Database::query($sql);
                 }
             } else {
@@ -3743,7 +3743,7 @@ function api_item_property_update(
                     $result = Database::query($sql);
 
                     $id = Database::insert_id();
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
                     Database::query($sql);
                 }
             } else {
@@ -3784,7 +3784,7 @@ function api_item_property_update(
                     $result = Database::query($sql);
 
                     $id = Database::insert_id();
-                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+                    $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
                     Database::query($sql);
                 }
             } else {
@@ -3817,7 +3817,7 @@ function api_item_property_update(
         $res = Database::query($sql);
         if (!$res) {
             $id = Database::insert_id();
-            $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = $id WHERE iid = $id";
+            $sql = "UPDATE $TABLE_ITEMPROPERTY SET id = iid WHERE iid = $id";
             Database::query($sql);
             return false;
         }
@@ -4657,7 +4657,7 @@ function copy_folder_course_session(
                 Database::query($sql);
                 $document_id = Database::insert_id();
 
-                $sql = "UPDATE $tbl_course_description SET id = $document_id WHERE iid = $document_id";
+                $sql = "UPDATE $tbl_course_description SET id = iid WHERE iid = $document_id";
                 Database::query($sql);
 
                 api_item_property_update(

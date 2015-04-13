@@ -2572,7 +2572,7 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
                 $res = Database::query($sql);
 
                 $insertId = Database::insert_id();
-                $sql = "UPDATE $table_threads_qualify SET id = $insertId WHERE iid = $insertId";
+                $sql = "UPDATE $table_threads_qualify SET id = iid WHERE iid = $insertId";
                 Database::query($sql);
 
                 return $res;
@@ -2707,7 +2707,7 @@ function store_qualify_historical(
         Database::query($sql1);
 
         $insertId = Database::insert_id();
-        $sql = "UPDATE $table_threads_qualify_log SET id = $insertId WHERE iid = $insertId";
+        $sql = "UPDATE $table_threads_qualify_log SET id = iid WHERE iid = $insertId";
         Database::query($sql);
 
         // Update

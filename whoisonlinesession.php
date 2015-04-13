@@ -4,9 +4,6 @@
  * Shows who is online in a specific session
  * @package chamilo.main
  */
-/**
- * Initialization
- */
 
 include_once './main/inc/global.inc.php';
 api_block_anonymous_users();
@@ -47,7 +44,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 	$session_is_coach = array();
 	if (isset($_user['user_id']) && $_user['user_id'] != '') {
 		$_user['user_id'] = intval($_user['user_id']);
-		$sql = "SELECT DISTINCT id,
+		$sql = "SELECT DISTINCT session.id,
 					name,
 					date_start,
 					date_end
@@ -62,7 +59,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 			$session_is_coach[$session['id']] = $session;
 		}
 
-		$sql = "SELECT DISTINCT id,
+		$sql = "SELECT DISTINCT session.id,
 					name,
 					date_start,
 					date_end

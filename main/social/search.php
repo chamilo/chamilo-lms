@@ -68,24 +68,25 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $social_right_content .= get_lang('SorryNoResults');
     }
 
-    $results = '<div id="online_grid_container"><div class="span9">';
+    $results = '<div id="online_grid_container">';
     if (is_array($users) && count($users) > 0) {
         $results .= Display::page_subheader(get_lang('Users'));
-        $results .= '<ul class="thumbnails">';
+        $results .= '<div class="row">';
+        $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
 
-            $send_inv      = '<button class="btn btn-mini disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button><br /><br />';
+            $send_inv      = '<button class="'.$buttonClass.' disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button>';
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
             $user_info     = api_get_user_info($user['user_id'], true);
-            $url           = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
+            $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user['user_id'] != api_get_user_id()) {
-                $send_inv = '<a href="#" class="btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
-                             <button class="btn btn-mini"><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button></a><br /><br />';
+                $send_inv = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="' . $user['user_id'] . '">
+                             <i class="fa fa-user"></i> '.get_lang('SendInvitation').'</a>';
             }
-            $send_msg = '<a href="#" class="btn-to-send-message" data-send-to="' . $user['user_id'] . '">
-                        <button class="btn btn-mini"><i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</button></a>';
+            $send_msg = '<a href="#" class="btn-to-send-message '.$buttonClass.'" data-send-to="' . $user['user_id'] . '">
+                        <i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</a>';
             if (empty($user['picture_uri'])) {
                 $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
                 $img = '<img src="'.$picture['file'].'">';
@@ -109,25 +110,24 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             $user_info['complete_name'] = Display::url($status_icon.$user_info['complete_name'], $url);
             $invitations = $user['tag'].$send_inv.$send_msg;
 
-            $results .= '<li class="col-md-3">
-                            <div class="row">
-                                <div class="col-md-12">
+            $results .= '<div class="col-md-4">
+                            <div class="card">
+                                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                                <div class="avatar">
+                                '.$img.'
+                                </div>
+                                <div class="content">
                                     '.$user_info['complete_name'].'
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="media">
-                                    '.$img.'
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="media">
+                                    <div class="btn-group">
                                     '.$invitations.'
                                     </div>
                                 </div>
                             </div>
-                        </li>';
+                      </div>';
+
+
         }
-        $results .= '</ul></div></div>';
+        $results .= '</div></div>';
         $social_right_content .= $results;
     }
 

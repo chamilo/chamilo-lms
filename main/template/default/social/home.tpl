@@ -9,16 +9,13 @@
             {{ social_menu_block }}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             {{ social_search_block }}
             {{ social_skill_block }}
             {{ social_group_block }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
             {{ social_auto_extend_link }}
-        </div>
-        <div class="col-md-3">
-
         </div>
     </div>
 {% endblock %}

@@ -5952,4 +5952,90 @@ class SessionManager
 
         return false;
     }
+
+    /**
+     * Get list of sessions based on users of a group for a group admin
+     * @param int $userId The user id
+     * @return array
+     */
+    public static function getSessionsFollowedForGroupAdmin($userId)
+    {
+        $sessionList = array();
+
+        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $sessionUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $groups = GroupPortalManager::get_groups_by_user($userId, GROUP_USER_PERMISSION_ADMIN);
+
+        $groupsId = array_keys($groups);
+        $subgroupsId = [];
+        $userIdList = [];
+
+        foreach ($groupsId as $groupId) {
+            $subgroupsId = array_merge($subgroupsId, GroupPortalManager::getGroupsByDepthLevel($groupId));
+        }
+
+        $groupsId = array_merge($groupsId, $subgroupsId);
+
+        $groupsId = array_unique($groupsId);
+
+        if (empty($groupsId)) {
+            return [];
+        }
+
+        foreach ($groupsId as $groupId) {
+            $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+            if (empty($groupUsers)) {
+                continue;
+            }
+
+            foreach ($groupUsers as $member) {
+                if ($member['user_id'] == $userId ) {
+                    continue;
+                }
+
+                $userIdList[] = intval($member['user_id']);
+            }
+        }
+
+        $userIdList = array_unique($userIdList);
+
+        if (empty($userIdList)) {
+            return [];
+        }
+
+        $sql = "SELECT DISTINCT s.* "
+            . "FROM $sessionTable s "
+            . "INNER JOIN $sessionUserTable sru ON s.id = sru.id_session "
+            . "WHERE ( "
+            . "sru.id_user IN (" . implode(', ', $userIdList) . ") "
+            . "AND sru.relation_type = 0"
+            . ")";
+
+        if (api_is_multiple_url_enabled()) {
+            $sessionAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId != -1) {
+                $sql = "SELECT DISTINCT s.* "
+                    . "FROM $sessionTable s "
+                    . "INNER JOIN $sessionUserTable sru ON s.id = sru.id_session "
+                    . "INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id "
+                    . "WHERE srau.access_url_id = $accessUrlId "
+                    . "AND ( "
+                    . "sru.id_user IN (" . implode(', ', $userIdList) . ") "
+                    . "AND sru.relation_type = 0"
+                    . ")";
+            }
+        }
+
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $sessionList[] = $row;
+        }
+
+        return $sessionList;
+    }
 }

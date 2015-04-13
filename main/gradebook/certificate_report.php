@@ -26,7 +26,12 @@ $selectedMonth = isset($_POST['month']) && !empty($_POST['month']) ? intval($_PO
 $selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? $_POST['year'] : null;
 
 $userId = api_get_user_id();
+
+if (api_is_student_boss()) {
+    $sessions = SessionManager::getSessionsFollowedForGroupAdmin($userId);
+} else {
 $sessions = SessionManager::getSessionsCoachedByUser($userId);
+}
 
 if ($selectedSession > 0) {
     if (!SessionManager::isValidId($selectedSession)) {

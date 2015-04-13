@@ -44,6 +44,30 @@ $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
 $tpl->assign('isAdministration', true);
 
+$dialogForm = new FormValidator('form');
+$dialogForm->addHidden('id', null);
+$dialogForm->addText('name', get_lang('Name'), true, ['id' => 'name']);
+$dialogForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);
+$dialogForm->addSelect('parent_id', get_lang('Parent'), [], ['id' => 'parent_id']);
+$dialogForm->addHtml('<ul id="skill_edit_holder" class="holder holder_simple"></ul>');
+$dialogForm->addHtml('<div id="gradebook_row">');
+$dialogForm->addSelect(
+    'gradebook_id',
+    [get_lang('Gradebook'), get_lang('WithCertificate')],
+    [],
+    ['id' => 'gradebook_id']
+);
+$dialogForm->addHtml('<ul id="gradebook_holder" class="holder holder_simple"></ul>');
+$dialogForm->addHtml('</div>');
+$dialogForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+$tpl->assign('dialogForm', $dialogForm->returnForm());
+
+$saveProfileForm = new FormValidator('form');
+$saveProfileForm->addHidden('profile_id', null);
+$saveProfileForm->addText('name', get_lang('Name'), true, ['id' => 'name_profile']);
+$saveProfileForm->addTextarea('description', get_lang('Description'), ['id' => 'description_profile', 'rows' => 6]);
+$tpl->assign('saveProfileForm', $saveProfileForm->returnForm());
+
 $content = $tpl->fetch('default/skill/skill_wheel.tpl');
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

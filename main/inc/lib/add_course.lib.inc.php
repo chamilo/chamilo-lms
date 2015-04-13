@@ -688,10 +688,10 @@ class AddCourse
         ];
 
         $counter = 1;
-        foreach ($settings as $setting) {
+        foreach ($settings as $variable => $setting) {
             Database::query(
-                "INSERT INTO $TABLESETTING (id, c_id, variable,value,category)
-                 VALUES ($counter, $course_id, '".$setting."', '".$setting['default']."', '".$setting['category']."')"
+                "INSERT INTO $TABLESETTING (id, c_id, variable, value, category)
+                 VALUES ($counter, $course_id, '".$variable."', '".$setting['default']."', '".$setting['category']."')"
             );
             $counter++;
         }
@@ -1132,20 +1132,33 @@ class AddCourse
      * @param int $counter
      * @param array $file
      */
-    function insertDocument($course_id, $counter, $file)
+    public static function insertDocument($course_id, $counter, $file)
     {
-        $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLETOOLDOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $tableItem = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tableDocument = Database::get_course_table(TABLE_DOCUMENT);
 
-        $sql = "INSERT INTO $TABLETOOLDOCUMENT (id, c_id, path,title,filetype,size)
+        $now = api_get_utc_datetime();
+
+        $sql = "INSERT INTO $tableDocument (id, c_id, path,title,filetype,size)
                 VALUES ($counter, $course_id, '".$file['path']."', '".$file['title']."', '".$file['filetype']."', '".$file['size']."')";
         Database::query($sql);
         $docId = Database:: insert_id();
 
-        Database::query(
-            "INSERT INTO $TABLEITEMPROPERTY (id, c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-            VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, 0, NULL, 0)"
-        );
+        if ($docId) {
+            $sql = "UPDATE $tableDocument SET id = iid WHERE iid = $docId";
+            Database::query($sql);
+
+            Database::query(
+                "INSERT INTO $tableItem (id, c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                VALUES ($counter, $course_id,'document',1,'$now', '$now', $docId, 'DocumentAdded', 1, 0, NULL, 0)"
+            );
+
+            $id = Database:: insert_id();
+
+            $sql = "UPDATE $tableItem SET id = iid WHERE iid = $id";
+            Database::query($sql);
+        }
+
     }
 
     /**

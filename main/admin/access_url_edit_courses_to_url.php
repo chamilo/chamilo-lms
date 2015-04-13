@@ -87,13 +87,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$course_list = $_POST['course_list'];
 
 	if (!is_array($course_list)) {
-		$course_list=array();
+		$course_list = array();
 	}
 
 	if ($form_sent == 1) {
 		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
-		} elseif(is_array($course_list) ) {
+		} elseif (is_array($course_list)) {
 			UrlManager::update_urls_rel_course($course_list, $access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
 		}
@@ -117,14 +117,14 @@ $ajax_search = $add_type == 'unique' ? true : false;
 if($ajax_search) {
 	$courses = UrlManager::get_url_rel_course_data($access_url_id);
 	foreach ($courses as $course) {
-		$course_list[$course['c_id']] = $course ;
+		$course_list[$course['c_id']] = $course;
 	}
 } else {
 	$courses = UrlManager::get_url_rel_course_data();
 
 	foreach ($courses as $course) {
 		if ($course['access_url_id'] == $access_url_id) {
-			$course_list[$course['c_id']] = $course ;
+			$course_list[$course['c_id']] = $course;
 		}
 	}
 

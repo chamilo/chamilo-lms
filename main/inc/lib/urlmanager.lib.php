@@ -369,8 +369,9 @@ class UrlManager
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql= "SELECT c_id FROM $table_url_rel_course
-               WHERE access_url_id = ".intval($urlId)." AND
-                     c_id = '".intval($courseId)."'";
+               WHERE
+                    access_url_id = ".intval($urlId)." AND
+                    c_id = '".intval($courseId)."'";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
 
@@ -385,7 +386,7 @@ class UrlManager
      * @param int $urlId
      * @return boolean true if success
      * */
-    public static function relation_url_usergroup_exist($userGroupId, $urlId)
+    public static function relationUrlUsergroupExist($userGroupId, $urlId)
     {
         $table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
         $sql= "SELECT usergroup_id FROM $table
@@ -479,6 +480,7 @@ class UrlManager
                 }
             }
         }
+
         return 	$result_array;
     }
 
@@ -495,7 +497,7 @@ class UrlManager
         if (is_array($userGroupList) && is_array($urlList)) {
             foreach ($urlList as $urlId) {
                 foreach ($userGroupList as $userGroupId) {
-                    $count = self::relation_url_usergroup_exist($userGroupId, $urlId);
+                    $count = self::relationUrlUsergroupExist($userGroupId, $urlId);
                     if ($count == 0) {
                         $result = self::addUserGroupToUrl($userGroupId, $urlId);
                         if ($result) {
@@ -657,17 +659,17 @@ class UrlManager
     }
 
     /**
-     * @param string $courseId
+     * @param int $courseId
      * @param int $url_id
      * @return resource
      */
-    public static function add_course_to_url($courseId, $url_id=1)
+    public static function add_course_to_url($courseId, $url_id = 1)
     {
-        $table_url_rel_course= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $table_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         if (empty($url_id)) {
             $url_id = 1;
         }
-        $count = UrlManager::relation_url_course_exist($course_code,$url_id);
+        $count = UrlManager::relation_url_course_exist($courseId, $url_id);
         if (empty($count)) {
             $sql = "INSERT INTO $table_url_rel_course
                     SET c_id = '".intval($courseId)."', access_url_id = ".intval($url_id);
@@ -848,7 +850,8 @@ class UrlManager
     {
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-        $sql = "SELECT c_id FROM $table_url_rel_course WHERE access_url_id=".intval($access_url_id);
+        $sql = "SELECT c_id FROM $table_url_rel_course
+                WHERE access_url_id=".intval($access_url_id);
         $result = Database::query($sql);
 
         $existing_courses = array();

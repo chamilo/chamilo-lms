@@ -1341,14 +1341,16 @@ class Agenda
         }
 
         $dateCondition = null;
-        if (!empty($start)  && !empty($end)) {
+
+        if (!empty($start) && !empty($end)) {
             $dateCondition .= "AND (
-                (agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND
-                (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL)
+                 agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
+                 agenda.end_date BETWEEN '".$start."' AND '".$end."'
             )";
         }
 
         $sql .= $dateCondition;
+        //echo $sql;
         $allowComments = api_get_configuration_value('allow_agenda_event_comment');
 
         $result = Database::query($sql);
@@ -1543,7 +1545,7 @@ class Agenda
      */
     private function formatEventDate($utcTime)
     {
-        return date('c', api_strtotime(api_get_local_time($utcTime)));
+        return date(DateTime::ISO8601, api_strtotime(api_get_local_time($utcTime)));
     }
 
     /**

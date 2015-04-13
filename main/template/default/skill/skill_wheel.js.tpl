@@ -341,14 +341,14 @@ function open_popup(skill_id, parent_id) {
         var parent_info = get_skill_info(skill.extra.parent_id);
 
         if ("{{ isAdministration }}") {
-            $("#id").attr('value', skill.id);
-            $("#name").attr('value', skill.name);
-            $("#short_code").attr('value', skill.short_code);
-            $("#description").attr('value', skill.description);
+            $('input[name="id"]').val(skill.id);
+            $("#name").val(skill.name);
+            $("#short_code").val(skill.short_code);
+            $("#description").val(skill.description);
         } else {
-            $("#name").text(skill.name);
-            $("#short_code").text(skill.short_code);
-            $("#description").text(skill.description);
+            $("#name").prop('readonly', true).val(skill.name);
+            $("#short_code").prop('readonly', true).val(skill.short_code);
+            $("#description").prop('readonly', true).val(skill.description);
         }
 
         // Filling parent_id
@@ -364,20 +364,30 @@ function open_popup(skill_id, parent_id) {
 
         if ("{{ isAdministration }}") {
             $("#dialog-form").dialog({
-                buttons: {
-                    "{{ "Save"|get_lang }}": function () {
-                        var params = $("#add_item").find(':input').serialize();
-                        add_skill(params);
+                buttons: [
+                    {
+                        text: "{{ "Save"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function() {
+                            var params = $("#add_item").find(':input').serialize();
+                            add_skill(params);
+                        }
                     },
-                    /*"{{ "Delete"|get_lang }}" : function() {
-                     },*/
-                    "{{ "CreateChildSkill"|get_lang }}": function () {
-                        open_popup(0, skill.id);
+                    {
+                        text: "{{ "CreateChildSkill"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function() {
+                            open_popup(0, skill.id);
+                        }
                     },
-                    "{{ "AddSkillToProfileSearch"|get_lang }}": function () {
-                        add_skill_in_profile_list(skill.id, skill.name);
+                    {
+                        text: "{{ "AddSkillToProfileSearch"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function () {
+                            add_skill_in_profile_list(skill.id, skill.name);
+                        }
                     }
-                }
+                ],
             });
         }
 
@@ -396,7 +406,7 @@ function open_popup(skill_id, parent_id) {
     }
 
     if (parent) {
-        $("#id").attr('value','');
+        $('input[name="id"]').attr('value','');
         $("#name").attr('value', '');
         $("#short_code").attr('value', '');
         $("#description").attr('value', '');
@@ -413,12 +423,16 @@ function open_popup(skill_id, parent_id) {
         });
 
         $("#dialog-form").dialog({
-            buttons: {
-                 "{{ "Save"|get_lang }}" : function() {
-                     var params = $("#add_item").find(':input').serialize();
-                     add_skill(params);
-                  }
-            },
+            buttons: [
+                {
+                    text: "{{ "Save"|get_lang }}",
+                    class: 'btn btn-primary',
+                    click: function() {
+                        var params = $("#add_item").find(':input').serialize();
+                        add_skill(params);
+                    }
+                }
+            ],
             close: function() {
                 $("#name").attr('value', '');
                 $("#description").attr('value', '');
@@ -651,38 +665,42 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
         });
 
         /** Managing text - maximum two words */
-        var insert_two_words = false;
-
         textEnter.append("tspan")
         .attr("x", 0)
         .text(function(d) {
-            if (d.depth && d.name.length > max_size_text_length) {
-                if (d.depth) {
-                    first_part = d.name.split(" ")[0];
-                    second_part = d.name.split(" ")[1];
-                    if (first_part.length >= max_size_text_length) {
-                        insert_two_words = false;
-                        return first_part.substring(0, max_size_text_length -3)  + ' ... ';
-                    } else {
-                        return first_part;
-                    }
-                } else {
-                    return "";
+            if (d.depth && d.name) {
+                var nameParts = d.name.split(' ');
+
+                if (nameParts[0].length > max_size_text_length) {
+                    return nameParts[0].substring(0, max_size_text_length - 3)  + '...';
                 }
-            } else {
-                insert_two_words = false;
-                return d.depth ? d.name : "";
+
+                return nameParts[0];
             }
+
+            return d.depth ? d.name : '';
         });
 
-        if (insert_two_words) {
-            textEnter.append("tspan")
-            .attr("x", 0)
-            .attr("dy", "1em")
-            .text(function(d) {
-                return d.depth && d.name.length > max_size_text_length ? d.name.split(" ")[1] || "" : "";
-            });
-        }
+        textEnter.append("tspan")
+        .attr("x", 0)
+        .attr("dy", "1em")
+        .text(function(d) {
+            if (d.depth && d.name) {
+                var nameParts = d.name.split(' ');
+
+                if (nameParts.length >= 2) {
+                    if (nameParts[1].length > max_size_text_length) {
+                        return nameParts[1].substring(0, max_size_text_length - 3)  + '...';
+                    }
+
+                    return nameParts[1];
+                }
+
+                return '';
+            }
+
+            return d.depth ? d.name : '';
+        });
 
         /* Icon settings */
         /*

@@ -54,7 +54,7 @@ $tpl->assign('ranking', $ranking);
 $tpl->assign('countSkill', $countSkill);
 $tpl->assign('mySkills', $mySkills);
 
-$dialogForm = new FormValidator('form');
+$dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
 $dialogForm->addHidden('id', null);
 $dialogForm->addText('name', get_lang('Name'), false, ['id' => 'name']);
 $dialogForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);

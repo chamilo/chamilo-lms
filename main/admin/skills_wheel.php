@@ -44,7 +44,7 @@ $url  = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl->assign('url', $url);
 $tpl->assign('isAdministration', true);
 
-$dialogForm = new FormValidator('form');
+$dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
 $dialogForm->addHidden('id', null);
 $dialogForm->addText('name', get_lang('Name'), true, ['id' => 'name']);
 $dialogForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);
@@ -62,7 +62,7 @@ $dialogForm->addHtml('</div>');
 $dialogForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
 $tpl->assign('dialogForm', $dialogForm->returnForm());
 
-$saveProfileForm = new FormValidator('form');
+$saveProfileForm = new FormValidator('form', 'post', null, null, ['id' => 'dialog-form-profile']);
 $saveProfileForm->addHidden('profile_id', null);
 $saveProfileForm->addText('name', get_lang('Name'), true, ['id' => 'name_profile']);
 $saveProfileForm->addTextarea('description', get_lang('Description'), ['id' => 'description_profile', 'rows' => 6]);

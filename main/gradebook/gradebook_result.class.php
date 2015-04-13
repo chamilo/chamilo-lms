@@ -14,7 +14,7 @@ class GradeBookResult
     /**
      * constructor of the class
      */
-    public function GradeBookResult($get_questions=false,$get_answers=false)
+    public function __construct($get_questions=false,$get_answers=false)
     {
         //nothing to do
         /*
@@ -35,12 +35,13 @@ class GradeBookResult
      * @param	boolean		Whether to get only visible exercises (true) or all of them (false). Defaults to false.
      * @return	array		A list of exercises available
      */
-    private function _readGradebookList($only_visible = false) {
+    private function _readGradebookList($only_visible = false)
+    {
         $return = array();
-        $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_EXERCISES= Database::get_course_table(TABLE_QUIZ_TEST);
 
-        $sql="SELECT id,title,type,random,active FROM $TBL_EXERCISES";
-        if($only_visible) {
+        $sql = "SELECT id,title,type,random,active FROM $TBL_EXERCISES";
+        if ($only_visible) {
             $sql.= ' WHERE active=1';
         }
         $sql .= ' ORDER BY title';
@@ -58,7 +59,8 @@ class GradeBookResult
      * Gets the questions related to one exercise
      * @param	integer		Exercise ID
      */
-    private function _readGradeBookQuestionsList($e_id) {
+    private function _readGradeBookQuestionsList($e_id)
+    {
         $return = array();
         $TBL_EXERCISE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -77,14 +79,18 @@ class GradeBookResult
         while($row=Database::fetch_array($result,'ASSOC')) {
             $return[] = $row;
         }
+
         return true;
     }
+
     /**
      * Gets the results of all students (or just one student if access is limited)
      * @param	string		The document path (for HotPotatoes retrieval)
-     * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
+     * @param	integer		User ID. Optional. If no user ID is provided,
+     * we take all the results. Defauts to null
      */
-    function _getGradeBookReporting($document_path,$user_id=null) {
+    public function _getGradeBookReporting($document_path, $user_id = null)
+    {
         $return = array();
         $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_USER          	    = Database::get_main_table(TABLE_MAIN_USER);
@@ -125,12 +131,12 @@ class GradeBookResult
 					ORDER BY c_id ASC, exe_date ASC";
         }
 
-        $results=StatsUtils::getManyResultsXCol($sql,8);
-        $hpresults=StatsUtils::getManyResultsXCol($hpsql,7);
+        $results = StatsUtils::getManyResultsXCol($sql, 8);
+        $hpresults = StatsUtils::getManyResultsXCol($hpsql, 7);
 
         $NoTestRes = 0;
         $NoHPTestRes = 0;
-        $j=0;
+        $j = 0;
         //Print the results of tests
         if (is_array($results)) {
             for ($i = 0; $i < sizeof($results); $i++) {

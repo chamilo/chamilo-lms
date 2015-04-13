@@ -133,7 +133,7 @@ $(document).ready(function() {
     /* Close button in gradebook select */
     $("#gradebook_holder").on("click", "a.closebutton", function() {
         gradebook_id = $(this).attr('rel');
-        skill_id = $('#id').attr('value');
+        skill_id = $('input[name="id"]').attr('value');
         delete_gradebook_from_skill(skill_id, gradebook_id);
     });
 
@@ -180,7 +180,7 @@ $(document).ready(function() {
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true,
-        width   : 600,
+        width   : 900,
         height  : 550
     });
 
@@ -215,7 +215,7 @@ $(document).ready(function() {
         if (skill) {
             var parent_info = get_skill_info(skill.extra.parent_id);
 
-            $("#id").attr('value',   skill.id);
+            $('input[name="id"]').attr('value',   skill.id);
             $("#name").attr('value', skill.name);
             $("#short_code").attr('value', skill.short_code);
             $("#description").attr('value', skill.description);
@@ -232,21 +232,30 @@ $(document).ready(function() {
             });
 
             $("#dialog-form").dialog({
-                buttons: {
-                     "{{ "Edit"|get_lang }}" : function() {
-                         var params = $("#add_item").find(':input').serialize();
-                         add_skill(params);
-                      },
-                      /*"{{ "Delete"|get_lang }}" : function() {
-                      },*/
-                      "{{ "CreateChildSkill"|get_lang }}" : function() {
-                          open_popup(0, skill.id);
-
-                      },
-                      "{{ "AddSkillToProfileSearch"|get_lang }}" : function() {
-                          add_skill_in_profile_list(skill.id, skill.name);
-                      }
-                },
+                buttons: [
+                    {
+                        text: "{{ "Edit"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function() {
+                            var params = $("#add_item").find(':input').serialize();
+                            add_skill(params);
+                        }
+                    },
+                    {
+                        text: "{{ "CreateChildSkill"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function() {
+                            open_popup(0, skill.id);
+                        }
+                    },
+                    {
+                        text: "{{ "AddSkillToProfileSearch"|get_lang }}",
+                        class: 'btn btn-primary',
+                        click: function() {
+                            add_skill_in_profile_list(skill.id, skill.name);
+                        }
+                    }
+                ],
                 close: function() {
                     $("#name").attr('value','');
                     $("#description").attr('value', '');
@@ -378,50 +387,5 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="">
     <p class="validateTips"></p>
-    <form id="add_item" class="form-horizontal" name="form">
-        <fieldset>
-            <div class="control-group">
-                <label class="control-label" for="name">{{ 'Name' | get_lang }}</label>
-                <div class="controls">
-                    <!--<input type="text" name="name" id="name" class="span4" readonly />-->
-                    <p id="name" class="span4">
-                    </p>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">{{ 'ShortCode' | get_lang }}</label>
-                <div class="controls">
-                    <!--<input type="text" name="short_code" id="short_code" class="span2" readonly />-->
-                    <p id="short_code" class="span4">
-                    </p>
-                </div>
-            </div>
-            <div id="skill_row" class="control-group">
-                <label class="control-label" for="name">{{'Parent'|get_lang}}</label>
-                <div class="controls">
-                    <ul id="skill_edit_holder" class="holder holder_simple">
-                    </ul>
-                </div>
-            </div>
-            <div id="gradebook_row" class="control-group">
-                <label class="control-label" for="name">{{'Gradebook'|get_lang}}</label>
-                <div class="controls">
-                    <ul id="gradebook_holder" class="holder holder_simple">
-                    </ul>
-                    <span class="help-block">
-                    {{ 'WithCertificate'|get_lang }}
-                    </span>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="name">{{ 'Description'|get_lang }}</label>
-                <div class="controls">
-                    <!--<textarea name="description" id="description" class="span4" rows="7" readonly>
-                    </textarea>-->
-                    <p id="description" class="span4">
-                    </p>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+    {{ dialogForm }}
 </div>

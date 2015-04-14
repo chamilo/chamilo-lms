@@ -7242,15 +7242,14 @@ class learnpath
             }
 
             if ($action != 'move') {
-                $form->addElement('text', 'title', get_lang('Title'), 'id="idTitle" class="learnpath_chapter_form" size="40%"');
+                $form->addElement('text', 'title', get_lang('Title'));
                 $form->applyFilter('title', 'html_filter');
                 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
-                //$form->addElement('textarea', 'description', get_lang('Description').' :', 'id="idDescription"');
             } else {
                 $form->addElement('hidden', 'title');
             }
 
-            $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_chapter_form" style="width:37%;" id="idParent" onchange="javascript: load_cbo(this.value);"');
+            $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', array('id' => 'idParent', 'onchange' => "javascript: load_cbo(this.value);"));
 
             foreach ($arrHide as $key => $value) {
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
@@ -7279,7 +7278,7 @@ class learnpath
             }
         }
 
-        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_chapter_form" style="width:37%;"');
+        $position = $form->addElement('select', 'previous', get_lang('Position'), '', array('id' => 'previous'));
         $padding = isset($value['padding']) ? $value['padding'] : 0;
         $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:' . $padding . 'px;"');
 
@@ -8544,7 +8543,8 @@ class learnpath
 
         $return .= '<li class="lp_resource_element">';
         $return .= '<img alt="" src="../img/new_test_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?lp_id=' . $this->lp_id . '">' . get_lang('NewExercise') . '</a>';
+        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?'.api_get_cidreq().'&lp_id=' . $this->lp_id . '">' .
+                    get_lang('NewExercise') . '</a>';
         $return .= '</li>';
 
         // Display hotpotatoes

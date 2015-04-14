@@ -135,23 +135,15 @@ class GlobalMultipleAnswer extends Question
         // Affiche un message si le score n'est pas renseign�
         $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
-        $navigator_info = api_get_navigator();
         global $text, $class;
 
-        //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $form = new FormValidator();
-                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
-                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
-                $form->addButtonSave($text, 'submitQuestion');
-            } else {
-                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
-                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
-                $form->addButtonSave($text, 'submitQuestion');
-                // setting the save button here and not in the question class.php
-            }
+            $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
+            $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+            $form->addButtonSave($text, 'submitQuestion');
+            // setting the save button here and not in the question class.php
         }
+
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
         $renderer->setElementTemplate('{element}&nbsp;', 'submitQuestion');
         $renderer->setElementTemplate('{element}', 'moreAnswers');

@@ -266,26 +266,11 @@ class UniqueAnswer extends Question
         $buttonGroup = [];
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $buttonGroup[] = $form->createElement(
-                    'submit',
-                    'lessAnswers',
-                    get_lang('LessAnswer'),
-                    'class="btn btn-primary"'
-                );
-                $buttonGroup[] = $form->createElement(
-                    'submit',
-                    'moreAnswers',
-                    get_lang('PlusAnswer'),
-                    'class="btn btn-primary"'
-                );
-                $buttonGroup[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
-            } else {
-                //setting the save button here and not in the question class.php
-                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
-                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-            }
+
+            //setting the save button here and not in the question class.php
+            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
 
             $form->addGroup($buttonGroup);
         }
@@ -484,6 +469,13 @@ class UniqueAnswer extends Question
                 '0@@0@@0@@0'
             )";
         Database::query($sql);
+
+        $id = Database::insert_id();
+        if ($id) {
+            $sql = "UPDATE $tbl_quiz_answer SET id = iid WHERE iid = $id";
+            Database::query($sql);
+        }
+
         if ($correct) {
             $sql = "UPDATE $tbl_quiz_question
                     SET ponderation = (ponderation + $score)

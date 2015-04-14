@@ -346,9 +346,6 @@ function lp_upload_quiz_action_handling() {
                             }
                         }
 
-                        //var_dump($answerValue);
-
-
                         if ($useCustomScore) {
                             if ($correct) {
                                 $score = $correctScore;
@@ -381,8 +378,6 @@ function lp_upload_quiz_action_handling() {
 
                         $total += $score;
                         $id++;
-
-                        //var_dump($score);
                     }
 
                     $objAnswer->save();
@@ -399,7 +394,6 @@ function lp_upload_quiz_action_handling() {
                             $questionObj->updateWeighting($total);
                             break;
                     }
-                    //var_dump($total);
 
                     $questionObj->save();
                 } else if ($detectQuestionType === FREE_ANSWER) {
@@ -410,7 +404,7 @@ function lp_upload_quiz_action_handling() {
                 }
             }
         }
-    // exit;
+
         if (isset($_SESSION['lpobject'])) {
             if ($debug > 0) {
                 error_log('New LP - SESSION[lpobject] is defined', 0);

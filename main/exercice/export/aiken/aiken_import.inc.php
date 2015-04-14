@@ -173,15 +173,20 @@ function aiken_import_exercise($file)
             $question->type = $question_array['type'];
             $question->setAnswer();
             $question->updateTitle($question_array['title']);
-            $question->updateDescription($question_array['description']);
+
+            if (isset($question_array['description'])) {
+                $question->updateDescription($question_array['description']);
+            }
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($last_exercise_id);
             $last_question_id = $question->selectId();
-            //3.create answer
+            //3. Create answer
             $answer = new Answer($last_question_id);
+
             $answer->new_nbrAnswers = count($question_array['answer']);
             $max_score = 0;
+
             foreach ($question_array['answer'] as $key => $answers) {
                 $key++;
                 $answer->new_answer[$key] = $answers['value'];
@@ -189,19 +194,26 @@ function aiken_import_exercise($file)
                 // Correct answers ...
                 if (in_array($key, $question_array['correct_answers'])) {
                     $answer->new_correct[$key] = 1;
-                    $answer->new_comment[$key] = $question_array['feedback'];
+                    if (isset($question_array['feedback'])) {
+                        $answer->new_comment[$key] = $question_array['feedback'];
+                    }
                 } else {
                     $answer->new_correct[$key] = 0;
                 }
-                $answer->new_weighting[$key] = $question_array['weighting'][$key - 1];
-                $max_score += $question_array['weighting'][$key - 1];
+
+                if (isset($question_array['weighting'][$key - 1])) {
+                    $answer->new_weighting[$key] = $question_array['weighting'][$key - 1];
+                    $max_score += $question_array['weighting'][$key - 1];
+                }
             }
+
             $answer->save();
             // Now that we know the question score, set it!
             $question->updateWeighting($max_score);
             $question->save();
         }
-        // delete the temp dir where the exercise was unzipped
+
+        // Delete the temp dir where the exercise was unzipped
         my_delete($baseWorkDir . $uploadPath);
         $operation = $last_exercise_id;
     }

@@ -1256,7 +1256,6 @@ abstract class Question
 				</style>';
         echo '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
-
 			function FCKeditor_OnComplete( editorInstance ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
@@ -1270,23 +1269,6 @@ abstract class Question
 			}
 		}
 
-		// hub 13-12-2010
-		function visiblerDevisibler(in_id) {
-			if (document.getElementById(in_id)) {
-				if (document.getElementById(in_id).style.display == "none") {
-					document.getElementById(in_id).style.display = "block";
-					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").src = "../img/div_hide.gif";
-					}
-				}
-				else {
-					document.getElementById(in_id).style.display = "none";
-					if (document.getElementById(in_id+"Img")) {
-						document.getElementById(in_id+"Img").src = "../img/div_show.gif";
-					}
-				}
-			}
-		}
 		</script>';
 
         // question name
@@ -1327,10 +1309,6 @@ abstract class Question
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
             // Categories
-            //$category_list = TestCategory::getCategoriesIdAndName();
-            //$form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
-
-            // Categories
             $tabCat = TestCategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
@@ -1344,7 +1322,7 @@ abstract class Question
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
         }
 
-        $form->addElement ('html','</div>');
+        $form->addElement('html','</div>');
 
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
@@ -1377,10 +1355,7 @@ abstract class Question
         $defaults['questionLevel'] = $this->level;
         $defaults['questionCategory'] = $this->category;
 
-        //$defaults['questionCategory']       = $this->category_list;
-        //$defaults['parent_id']              = $this->parent_id;
-
-        //Came from he question pool
+        // Came from he question pool
         if (isset($_GET['fromExercise'])) {
             $form->setDefaults($defaults);
         }
@@ -1401,7 +1376,6 @@ abstract class Question
      */
     public function processCreation($form, $objExercise = null)
     {
-        //$this->updateParentId($form->getSubmitValue('parent_id'));
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
@@ -1678,7 +1652,7 @@ abstract class Question
         $question_id = Database::insert_id();
         if ($question_id) {
 
-            $sql = "UPDATE $tbl_quiz_question SET id = iid WHERE iid = $id";
+            $sql = "UPDATE $tbl_quiz_question SET id = iid WHERE iid = $question_id";
             Database::query($sql);
 
             // Get the max question_order

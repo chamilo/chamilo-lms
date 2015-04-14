@@ -446,20 +446,22 @@ function lp_upload_quiz_action_handling() {
  * @param array $answers_data
  * @return int
  */
-function detectQuestionType($answers_data) {
+function detectQuestionType($answers_data)
+{
     $correct = 0;
     $isNumeric = false;
-    foreach ($answers_data as $answer_data) {
-        if (strtolower($answer_data[3]) == 'x') {
-            $correct++;
-        } else {
-            if (is_numeric($answer_data[3])) {
-                $isNumeric = true;
+
+    if (!empty($answers_data)) {
+        foreach ($answers_data as $answer_data) {
+            if (strtolower($answer_data[3]) == 'x') {
+                $correct++;
+            } else {
+                if (is_numeric($answer_data[3])) {
+                    $isNumeric = true;
+                }
             }
         }
     }
-
-    $type = '';
 
     if ($correct == 1) {
         $type = UNIQUE_ANSWER;

@@ -34,23 +34,43 @@ class Matching extends Question
     {
         $defaults = array();
         $nb_matches = $nb_options = 2;
+        $matches = array();
+
+        $answer = null;
+
+        if (isset($this->id)) {
+            $answer = new Answer($this->id);
+            $answer->read();
+
+            if (count($answer->nbrAnswers) > 0) {
+                $counter = 1;
+                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                    $correct = $answer->isCorrect($i);
+                    if (empty($correct)) {
+                        $matches[$answer->selectAutoId($i)] = chr(64 + $counter);
+                        $counter++;
+                    }
+                }
+            }
+        }
 
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
-            if (isset($_POST['lessMatches']))
+            if (isset($_POST['lessMatches'])) {
                 $nb_matches--;
-            if (isset($_POST['moreMatches']))
+            }
+            if (isset($_POST['moreMatches'])) {
                 $nb_matches++;
-            if (isset($_POST['lessOptions']))
+            }
+            if (isset($_POST['lessOptions'])) {
                 $nb_options--;
-            if (isset($_POST['moreOptions']))
+            }
+            if (isset($_POST['moreOptions'])) {
                 $nb_options++;
+            }
         } else if (!empty($this->id)) {
-            $answer = new Answer($this->id);
-            $answer->read();
             if (count($answer->nbrAnswers) > 0) {
-                $a_matches = $a_options = array();
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
@@ -71,9 +91,12 @@ class Matching extends Question
             $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
         }
-        $a_matches = array();
-        for ($i = 1; $i <= $nb_options; ++$i) {
-            $a_matches[$i] = chr(64 + $i);  // fill the array with A, B, C.....
+
+        if (empty($matches)) {
+            for ($i = 1; $i <= $nb_options; ++$i) {
+                // fill the array with A, B, C.....
+                $matches[$i] = chr(64 + $i);
+            }
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
@@ -119,7 +142,8 @@ class Matching extends Question
 
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
-            $form->addSelect("matches[$i]", null, $a_matches);
+
+            $form->addSelect("matches[$i]", null, $matches);
             $form->addText("weighting[$i]", null, true, ['value' => 10]);
 
             $form->addHtml('</tr>');
@@ -171,7 +195,7 @@ class Matching extends Question
 
         $form->addHtml('</table>');
         $group = array();
-        global $text, $class;
+        global $text;
 
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
@@ -209,14 +233,14 @@ class Matching extends Question
 
         $objAnswer = new Answer($this->id);
 
-        // insert the options
+        // Insert the options
         for ($i = 1; $i <= $nb_options; ++$i) {
             $position++;
             $option = $form->getSubmitValue('option['.$i.']');
             $objAnswer->createAnswer($option, 0, '', 0, $position);
         }
 
-        // insert the answers
+        // Insert the answers
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
             $answer = $form->getSubmitValue('answer['.$i.']');
@@ -234,6 +258,7 @@ class Matching extends Question
 
         $objAnswer->save();
         $this->save();
+        exit;
     }
 
     /**

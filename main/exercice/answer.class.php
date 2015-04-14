@@ -31,7 +31,7 @@ class Answer
     public $new_position;
     public $new_hotspot_coordinates;
     public $new_hotspot_type;
-
+    public $autoId;
     public $nbrAnswers;
     public $new_nbrAnswers;
     public $new_destination; // id of the next question if feedback option is set to Directfeedback
@@ -192,7 +192,7 @@ class Answer
 		$i = 1;
 		// while a record is found
 		$doubt_data = null;
-		while($object = Database::fetch_object($result)) {
+		while ($object = Database::fetch_object($result)) {
 		    if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
 		        $doubt_data = $object;
                 continue;
@@ -290,8 +290,10 @@ class Answer
 
 		if (Database::num_rows($rs) > 0) {
 			$row = Database::fetch_array($rs);
+
 			return $row;
 		}
+
 		return false;
 	}
 
@@ -380,6 +382,7 @@ class Answer
 	 		return null;
 	 	}
 	 	$row = Database::fetch_array($res);
+
 	 	return $row['type'];
 	 }
 
@@ -505,27 +508,24 @@ class Answer
      * @param string $hotspot_coordinates
      * @param string $hotspot_type
      */
-    public function updateAnswers($answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
+    public function updateAnswers($autoId, $answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
     {
-        $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        $idAnswer = $this->selectAnswerId();
-        $id = $this->getQuestionType() == 3 ? $idAnswer[0] : Database::escape_string($position);
+        $answerTable = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        //$id = $this->getQuestionType() == FILL_IN_BLANKS ? $idAnswer[0] : Database::escape_string($position);
+        $autoId = intval($autoId);
 
-        $questionId = $this->questionId;
+        $sql = "UPDATE $answerTable SET
+                    answer = '".Database::escape_string($answer)."',
+                    comment = '".Database::escape_string($comment)."',
+                    correct = '".Database::escape_string($correct)."',
+                    ponderation = '".Database::escape_string($weighting)."',
+                    position = '".Database::escape_string($position)."',
+                    destination = '".Database::escape_string($destination)."',
+                    hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
+                    hotspot_type = '".Database::escape_string($hotspot_type)."'
+                WHERE
+                    id_auto = $autoId";
 
-        $sql = "UPDATE $TBL_REPONSES SET
-                answer = '".Database::escape_string($answer)."',
-                comment = '".Database::escape_string($comment)."',
-                correct = '".Database::escape_string($correct)."',
-                ponderation = '".Database::escape_string($weighting)."',
-                position = '".Database::escape_string($position)."',
-                destination = '".Database::escape_string($destination)."',
-                hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
-                hotspot_type = '".Database::escape_string($hotspot_type)."'
-            WHERE
-                c_id = {$this->course_id} AND
-                id = '$id' AND
-                question_id = ".intval($questionId)."";
         Database::query($sql);
 	}
 
@@ -536,11 +536,14 @@ class Answer
 	 */
     public function save()
     {
-		$TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		$answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$questionId = intval($this->questionId);
 
 		$c_id = $this->course['real_id'];
-		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
+        $correctList = [];
+        $answerList = [];
+
+		for ($i=1; $i <= $this->new_nbrAnswers; $i++) {
 
 			$answer = Database::escape_string($this->new_answer[$i]);
 			$correct = Database::escape_string($this->new_correct[$i]);
@@ -550,22 +553,34 @@ class Answer
 			$hotspot_coordinates = Database::escape_string($this->new_hotspot_coordinates[$i]);
 			$hotspot_type = Database::escape_string($this->new_hotspot_type[$i]);
 			$destination = Database::escape_string($this->new_destination[$i]);
+            $autoId = $this->selectAutoId($i);
 
             if (!(isset($this->position[$i]))) {
-                $sql = "INSERT INTO $TBL_REPONSES (c_id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
-			    $sql .= "($c_id, '$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination');";
-
-                Database::query($sql);
-                $id = Database::insert_id();
+                $params = [
+                    'c_id' => $c_id,
+                    'question_id' => $questionId,
+                    'answer' => $answer,
+                    'correct' => $correct,
+                    'comment' => $comment,
+                    'ponderation' => $weighting,
+                    'position' => $position,
+                    'hotspot_coordinates' => $hotspot_coordinates,
+                    'hotspot_type' => $hotspot_type,
+                    'destination' => $destination
+                ];
+			    $id = Database::insert($answerTable, $params);
                 if ($id) {
-                    $sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
+                    $sql = "UPDATE $answerTable SET id = id_auto WHERE id_auto = $id";
                     Database::query($sql);
+                    $correctList[$id] = array('id' => $i, 'correct' => $correct);
+                    $answerList[$id] = $i;
                 }
             } else {
                 // https://support.chamilo.org/issues/6558
                 // function updateAnswers already escape_string, error if we do it twice.
                 // Feed function updateAnswers with none escaped strings
                 $this->updateAnswers(
+                    $autoId,
                     $this->new_answer[$i],
                     $this->new_comment[$i],
                     $this->new_correct[$i],
@@ -578,11 +593,40 @@ class Answer
             }
         }
 
+        /*if (!empty($correctList)) {
+            foreach ($correctList as $autoId => $data) {
+                $correct = $data['correct'];
+                if ($correct) {
+                    $sql = "UPDATE $answerTable
+                            SET correct = $autoId
+                            WHERE
+                                correct = $correct AND
+                                c_id = $c_id AND
+                                question_id = $questionId
+                            ";
+                    Database::query($sql);
+                }
+            }
+        }*/
+
+        /*if (!empty($answerList)) {
+            foreach ($answerList as $autoId => $counterId) {
+                $sql = "UPDATE $answerTable SET answer = $autoId
+                        WHERE
+                            answer = $counterId AND
+                            c_id = $c_id AND
+                            question_id = $questionId
+                        ";
+
+                Database::query($sql);
+            }
+        }*/
+
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
             while ($this->position[$i]) {
                 $position = $this->position[$i];
-                $sql = "DELETE FROM $TBL_REPONSES
+                $sql = "DELETE FROM $answerTable
                 		WHERE
                 			c_id = {$this->course_id} AND
                 			question_id = '".$questionId."' AND

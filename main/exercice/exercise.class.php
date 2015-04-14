@@ -760,8 +760,8 @@ class Exercise
         $description = $this->description;
         $sound = $this->sound;
         $type = $this->type;
-        $attempts = $this->attempts;
-        $feedback_type = $this->feedback_type;
+        $attempts = isset($this->attempts) ? $this->attempts : 0;
+        $feedback_type = isset($this->feedback_type) ? $this->feedback_type : 0;
         $random = $this->random;
         $random_answers = $this->random_answers;
         $active = $this->active;
@@ -2237,13 +2237,13 @@ class Exercise
         $user_answer = '';
 
         // Get answer list for matching
-        $sql_answer = 'SELECT id, answer FROM '.$table_ans.'
+        $sql_answer = 'SELECT id_auto, id, answer FROM '.$table_ans.'
                        WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'"';
         $res_answer = Database::query($sql_answer);
 
-        $answer_matching =array();
+        $answerMatching = array();
         while ($real_answer = Database::fetch_array($res_answer)) {
-            $answer_matching[$real_answer['id']] = $real_answer['answer'];
+            $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
         }
 
         $real_answers = array();
@@ -2261,12 +2261,12 @@ class Exercise
             $answerComment = $objAnswerTmp->selectComment($answerId);
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
-            $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+            $answerAutoId = $objAnswerTmp->selectAutoId($answerId);
 
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
             if ($debug) {
-                error_log("answer auto id: $numAnswer ");
+                error_log("answer auto id: $answerAutoId ");
                 error_log("answer correct: $answerCorrect ");
             }
 
@@ -2286,16 +2286,16 @@ class Exercise
                         $result = Database::query($sql);
                         $choice = Database::result($result,0,"answer");
 
-                        $studentChoice = ($choice == $numAnswer)?1:0;
+                        $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
-                            $totalScore+=$answerWeighting;
+                            $questionScore += $answerWeighting;
+                            $totalScore += $answerWeighting;
                         }
                     } else {
-                        $studentChoice = ($choice == $numAnswer) ? 1 : 0;
+                        $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
-                            $totalScore+=$answerWeighting;
+                            $questionScore += $answerWeighting;
+                            $totalScore += $answerWeighting;
                         }
                     }
                     break;
@@ -2318,7 +2318,7 @@ class Exercise
                         }
                     }
 
-                    $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                    $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
 
                     if (!empty($studentChoice)) {
                         if ($studentChoice == $answerCorrect) {
@@ -2348,14 +2348,14 @@ class Exercise
                             $choice[$ind] = 1;
                         }
 
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if ($studentChoice) {
                             $questionScore  +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
 
                         if (isset($studentChoice)) {
@@ -2376,13 +2376,13 @@ class Exercise
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
                         }
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool)$studentChoice;
                         if ($studentChoice) {
                             $questionScore +=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         if (isset($studentChoice)) {
                             $questionScore += $answerWeighting;
                         }
@@ -2403,8 +2403,7 @@ class Exercise
                             $option       = $result[1];
                             $choice[$my_answer_id] = $option;
                         }
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = $choice[$answerAutoId];
 
                         if ($answerCorrect == $studentChoice) {
                             //$answerCorrect = 1;
@@ -2414,7 +2413,7 @@ class Exercise
                             $real_answers[$answerId] = false;
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = $choice[$answerAutoId];
                         if ($answerCorrect == $studentChoice) {
                             //$answerCorrect = 1;
                             $real_answers[$answerId] = true;
@@ -2433,8 +2432,7 @@ class Exercise
                             $ind = $row['answer'];
                             $choice[$ind] = 1;
                         }
-                        $numAnswer=$objAnswerTmp->selectAutoId($answerId);
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
 
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
@@ -2450,7 +2448,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
+                        $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -2762,50 +2760,59 @@ class Exercise
                     break;
                 case MATCHING:
                     if ($from_database) {
-
-                        $sql_answer = 'SELECT id, answer, id_auto FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct = 0';
-                        $res_answer = Database::query($sql_answer);
+                        $sql = 'SELECT id, answer, id_auto
+                                FROM '.$table_ans.'
+                                WHERE
+                                    c_id = '.$course_id.' AND
+                                    question_id = "'.$questionId.'" AND
+                                    correct = 0';
+                        $res_answer = Database::query($sql);
                         // Getting the real answer
                         $real_list = array();
                         while ($real_answer = Database::fetch_array($res_answer)) {
-                            $real_list[$real_answer['id']] = $real_answer['answer'];
+                            $real_list[$real_answer['id_auto']] = $real_answer['answer'];
                         }
 
-                        $sql_select_answer = 'SELECT id, answer, correct, id_auto, ponderation FROM '.$table_ans.'
-                                              WHERE c_id = '.$course_id.' AND question_id="'.$questionId.'" AND correct <> 0
-                                              ORDER BY id_auto';
-                        $res_answers = Database::query($sql_select_answer);
+                        $sql = 'SELECT id, answer, correct, id_auto, ponderation
+                                FROM '.$table_ans.'
+                                WHERE
+                                    c_id = '.$course_id.' AND
+                                    question_id="'.$questionId.'" AND
+                                    correct <> 0
+                                ORDER BY id_auto';
+                        $res_answers = Database::query($sql);
 
                         $questionScore = 0;
 
                         while ($a_answers = Database::fetch_array($res_answers)) {
-                            $i_answer_id    = $a_answers['id']; //3
+                            $i_answer_id = $a_answers['id']; //3
                             $s_answer_label = $a_answers['answer'];  // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
-                            $sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                                WHERE exe_id = '$exeId' AND question_id = '$questionId' AND position = '$i_answer_id_auto'";
-                            $res_user_answer = Database::query($sql_user_answer);
+                            $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
+                                    WHERE
+                                        exe_id = '$exeId' AND
+                                        question_id = '$questionId' AND
+                                        position = '$i_answer_id_auto'";
+                            $res_user_answer = Database::query($sql);
 
-                            if (Database::num_rows($res_user_answer)>0 ) {
+                            if (Database::num_rows($res_user_answer) > 0) {
                                 $s_user_answer = Database::result($res_user_answer, 0, 0); //  rich - good looking
-
-                                //$s_user_answer = Database::result($res_user_answer, 0, 1); //  rich - good looking
                             } else {
                                 $s_user_answer = 0;
                             }
 
-                            //$i_answerWeighting = $objAnswerTmp->selectWeighting($i_answer_id);
                             $i_answerWeighting = $a_answers['ponderation'];
 
                             $user_answer = '';
-
                             if (!empty($s_user_answer)) {
                                 if ($s_user_answer == $i_answer_correct_answer) {
-                                    $questionScore  += $i_answerWeighting;
-                                    $totalScore     += $i_answerWeighting;
-                                    $user_answer = '<span>'.$real_list[$i_answer_id].'</span>';
+                                    $questionScore += $i_answerWeighting;
+                                    $totalScore += $i_answerWeighting;
+                                    if (isset($real_list[$i_answer_id])) {
+                                        $user_answer = '<span>'.$real_list[$i_answer_id].'</span>';
+                                    }
                                 } else {
                                     $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
                                 }
@@ -2824,19 +2831,18 @@ class Exercise
                         }
                         break(2); // break the switch and the "for" condition
                     } else {
-                        $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                         if ($answerCorrect) {
-                            if ($answerCorrect == $choice[$numAnswer]) {
+                            if ($answerCorrect == $choice[$answerAutoId]) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
 
-                                $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                $user_answer = '<span>'.$answerMatching[$choice[$answerAutoId]].'</span>';
                             } else {
-                                if (isset($answer_matching[$choice[$numAnswer]])) {
-                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                if (isset($answerMatching[$choice[$answerAutoId]])) {
+                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answerMatching[$choice[$answerAutoId]].'</span>';
                                 }
                             }
-                            $matching[$numAnswer] = $choice[$numAnswer];
+                            $matching[$answerAutoId] = $choice[$answerAutoId];
                         }
                         break;
                     }
@@ -3116,11 +3122,10 @@ class Exercise
                                 }
                             }
                         } elseif($answerType == MATCHING) {
-                            // if ($origin != 'learnpath') {
                             echo '<tr>';
-                            echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
+                            echo '<td>'.$answerMatching[$answerId].'</td>';
+                            echo '<td>'.$user_answer.' / <b><span style="color: #008000;">'.$answerMatching[$answerCorrect].'</span></b></td>';
                             echo '</tr>';
-                            //}
                         }
                     }
                 } else {
@@ -3319,11 +3324,11 @@ class Exercise
                             ExerciseShowFunctions::display_hotspot_order_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment);
                             break;
                         case MATCHING:
-                            // if ($origin != 'learnpath') {
                             echo '<tr>';
-                            echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
+                            echo '<td>'.$answerMatching[$answerId].'</td>';
+                            echo '<td>'.$user_answer.' / <b><span style="color: #008000;">'.$answerMatching[$answerCorrect].'</span></b></td>';
                             echo '</tr>';
-                            //}
+
                             break;
                     }
                 }

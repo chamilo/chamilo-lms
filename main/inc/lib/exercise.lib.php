@@ -624,7 +624,7 @@ class ExerciseLib
                             );
 
                             $size = strlen($student_item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
 
@@ -643,7 +643,7 @@ class ExerciseLib
                         // every [xxx] are replaced with an empty input field
                         foreach ($correct_answer_list[0] as $item) {
                             $size = strlen($item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
                             $answer = str_replace(
@@ -769,7 +769,7 @@ class ExerciseLib
                                 api_strlen($studentItem) - 2
                             );
                             $size = strlen($studentItem);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
 
@@ -788,7 +788,7 @@ class ExerciseLib
                         // every [xxx] are replaced with an empty input field
                         foreach ($correctAnswerList[0] as $item) {
                             $size = strlen($item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
                             $answer = str_replace(

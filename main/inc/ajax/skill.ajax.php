@@ -212,12 +212,13 @@ switch ($action) {
         break;
     case 'profile_matches':
         $skill_rel_user  = new SkillRelUser();
-        $skills = $_REQUEST['skill_id'];
+        $skills = (!empty($_REQUEST['skill_id'])?$_REQUEST['skill_id']:array());
 
         $total_skills_to_search = $skills;
         $users  = $skill_rel_user->get_user_by_skills($skills);
         $user_list = array();
         $count_skills = count($skills);
+        $ordered_user_list = null;
 
         if (!empty($users)) {
             foreach ($users as $user) {
@@ -255,7 +256,6 @@ switch ($action) {
                 $user_list[$user['user_id']]['total_found_skills'] = $found_counts;
             }
 
-            $ordered_user_list = array();
             foreach ($user_list as $user_id => $user_data) {
                 $ordered_user_list[$user_data['total_found_skills']][] = $user_data;
             }

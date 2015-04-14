@@ -38,8 +38,7 @@ class ExerciseLib
         $show_comment = false,
         $exercise_feedback = null,
         $show_answers = false
-    )
-    {
+    ) {
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
 
@@ -77,10 +76,8 @@ class ExerciseLib
                 }
             }
 
-            if (in_array(
-                    $answerType,
-                    array(FREE_ANSWER, ORAL_EXPRESSION)
-                ) && $freeze
+            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) &&
+                $freeze
             ) {
                 return '';
             }
@@ -160,7 +157,7 @@ class ExerciseLib
                 );
                 $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
-                $s .=  $form->return_form();
+                $s .=  $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
                 if (api_get_setting('enable_nanogong') == 'true') {

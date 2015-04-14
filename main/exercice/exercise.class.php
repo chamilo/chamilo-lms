@@ -2429,7 +2429,7 @@ class Exercise
                             $choice[$ind] = 1;
                         }
                         $numAnswer=$objAnswerTmp->selectAutoId($answerId);
-                        $studentChoice=$choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
 
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
@@ -2445,7 +2445,7 @@ class Exercise
                             }
                         }
                     } else {
-                        $studentChoice = $choice[$numAnswer];
+                        $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -2703,11 +2703,14 @@ class Exercise
                     if ($from_database) {
                         $query  = "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT."
                                    WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
-                        $resq   = Database::query($query);
-                        $choice = Database::result($resq,0,'answer');
+                        $resq = Database::query($query);
+                        $data = Database::fetch_array($resq);
+
+                        $choice = $data['answer'];
                         $choice = str_replace('\r\n', '', $choice);
                         $choice = stripslashes($choice);
-                        $questionScore = Database::result($resq, 0, "marks");
+                        $questionScore = $data['marks'];
+
                         if ($questionScore == -1) {
                             $totalScore+= 0;
                         } else {
@@ -2807,7 +2810,9 @@ class Exercise
                                 echo '<tr>';
                                 echo '<td>'.$s_answer_label.'</td>';
                                 echo '<td>'.$user_answer;
-                                echo ' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b> ';
+                                if (isset($real_list[$i_answer_correct_answer])) {
+                                    echo ' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b> ';
+                                }
                                 echo '</td>';
                                 echo '</tr>';
                             }
@@ -2817,12 +2822,14 @@ class Exercise
                         $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                         if ($answerCorrect) {
                             if ($answerCorrect == $choice[$numAnswer]) {
-                                $questionScore  += $answerWeighting;
-                                $totalScore     += $answerWeighting;
+                                $questionScore += $answerWeighting;
+                                $totalScore += $answerWeighting;
 
                                 $user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
                             } else {
-                                $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                if (isset($answer_matching[$choice[$numAnswer]])) {
+                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+                                }
                             }
                             $matching[$numAnswer] = $choice[$numAnswer];
                         }
@@ -3746,15 +3753,16 @@ class Exercise
             $answer      = $item['answer'];
             $answer_type = $item['answer_type'];
 
-            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER ) {
-                $open_question_list.='<tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
-                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
-                        </tr>
-                        <tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
-                        </tr>';
+            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
+                $open_question_list.='
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                        <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                    </tr>';
             }
         }
 

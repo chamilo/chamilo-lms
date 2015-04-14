@@ -807,7 +807,7 @@ abstract class Question
                     Database::query($sql);
                     $id = Database::insert_id();
 
-                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE iid = $id";
+                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
                     Database::query($sql);
                 }
 

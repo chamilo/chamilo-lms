@@ -17,7 +17,7 @@ class OralExpression extends Question
 	 */
 	public function __construct()
     {
-		parent::question();
+		parent::__construct();
 		$this -> type = ORAL_EXPRESSION;
 		$this -> isContent = $this-> getIsContent();
 	}

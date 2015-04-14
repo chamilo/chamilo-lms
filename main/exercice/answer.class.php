@@ -43,7 +43,7 @@ class Answer
      * @author 	Olivier Brouckaert
      * @param 	integer	Question ID that answers belong to
      */
-    function Answer($questionId, $course_id = null)
+    public function __construct($questionId, $course_id = null)
     {
         $this->questionId			= intval($questionId);
         $this->answer				= array();

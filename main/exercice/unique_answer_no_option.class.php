@@ -18,10 +18,10 @@ class UniqueAnswerNoOption extends Question
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswerNoOption()
+	public function __construct()
     {
 		//this is highly important
-		parent::question();
+		parent::__construct();
 		$this -> type = UNIQUE_ANSWER_NO_OPTION;
 		$this -> isContent = $this-> getIsContent();
 	}
@@ -251,7 +251,7 @@ class UniqueAnswerNoOption extends Question
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
         $form->addText("weighting[$i]", null, false, ['value' => 0, 'readonly' => 'readonly']);
-        
+
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');
 

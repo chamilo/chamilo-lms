@@ -19,9 +19,9 @@ class Matching extends Question
     /**
      * Constructor
      */
-    public function Matching()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this->type = MATCHING;
         $this->isContent = $this-> getIsContent();
     }
@@ -122,7 +122,7 @@ class Matching extends Question
             $form->addText("answer[$i]", null);
             $form->addSelect("matches[$i]", null, $a_matches);
             $form->addText("weighting[$i]", null, true, ['value' => 10]);
-            
+
             $form->addHtml('</tr>');
         }
 

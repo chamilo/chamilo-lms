@@ -15,9 +15,9 @@ class CalculatedAnswer extends Question
     /**
      * Constructor
      */
-    public function CalculatedAnswer()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this -> type = CALCULATED_ANSWER;
         $this -> isContent = $this-> getIsContent();
     }
@@ -31,7 +31,7 @@ class CalculatedAnswer extends Question
         $defaults = array();
 
         if (!empty($this->id)) {
-            $objAnswer = new answer($this->id);
+            $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
 
@@ -229,7 +229,7 @@ class CalculatedAnswer extends Question
                     $auxAnswer .= " [".$result."]@@".$formula;
                 }
                 $this->save();
-                $objAnswer = new answer($this->id);
+                $objAnswer = new Answer($this->id);
                 $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, null);
                 $objAnswer->position = array();
                 $objAnswer->save();

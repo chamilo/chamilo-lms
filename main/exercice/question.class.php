@@ -54,20 +54,20 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      */
-    public function Question()
+    public function __construct()
     {
-        $this->id=0;
-        $this->question='';
-        $this->description='';
-        $this->weighting=0;
-        $this->position=1;
-        $this->picture='';
+        $this->id = 0;
+        $this->question = '';
+        $this->description = '';
+        $this->weighting = 0;
+        $this->position = 1;
+        $this->picture = '';
         $this->level = 1;
-        $this->category=0;
+        $this->category = 0;
         // This variable is used when loading an exercise like an scenario with
         // an special hotspot: final_overlap, final_missing, final_excess
-        $this->extra='';
-        $this->exerciseList=array();
+        $this->extra = '';
+        $this->exerciseList = array();
         $this->course = api_get_course_info();
         $this->category_list = array();
         $this->parent_id = 0;
@@ -130,7 +130,7 @@ abstract class Question
                 $objQuestion->level			= (int) $object->level;
                 $objQuestion->extra         = $object->extra;
                 $objQuestion->course        = $course_info;
-                $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);
+                $objQuestion->category	    = TestCategory::getCategoryForQuestion($id);
 
                 $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION
                         WHERE c_id = $course_id AND question_id = $id";
@@ -1313,11 +1313,11 @@ abstract class Question
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
             // Categories
-            //$category_list = Testcategory::getCategoriesIdAndName();
+            //$category_list = TestCategory::getCategoriesIdAndName();
             //$form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
 
             // Categories
-            $tabCat = Testcategory::getCategoriesIdAndName();
+            $tabCat = TestCategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
             if (in_array($this->type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER))) {
@@ -1603,7 +1603,7 @@ abstract class Question
         $question_title = $this->question;
 
         // display question category, if any
-        $header = Testcategory::returnCategoryAndTitle($this->id);
+        $header = TestCategory::returnCategoryAndTitle($this->id);
         $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();

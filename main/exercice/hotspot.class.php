@@ -15,9 +15,9 @@ class HotSpot extends Question
 	static $typePicture = 'hotspot.png';
 	static $explanationLangVar = 'HotSpot';
 
-	public function HotSpot()
+	public function __construct()
 	{
-		parent::question();
+		parent::__construct();
 		$this -> type = HOT_SPOT;
 	}
 
@@ -85,9 +85,9 @@ class HotSpotDelineation extends HotSpot
 	static $typePicture = 'hotspot_delineation.gif';
 	static $explanationLangVar = 'HotspotDelineation';
 
-	function HotSpotDelineation()
+	function __construct()
 	{
-		parent::question();
+		parent::__construct();
 		$this -> type = HOT_SPOT_DELINEATION;
 
 	}

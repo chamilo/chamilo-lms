@@ -18,9 +18,9 @@ class MultipleAnswerCombination extends Question
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswerCombination()
+	public function __construct()
     {
-		parent::question();
+		parent::__construct();
 		$this -> type = MULTIPLE_ANSWER_COMBINATION;
 		$this -> isContent = $this-> getIsContent();
 	}

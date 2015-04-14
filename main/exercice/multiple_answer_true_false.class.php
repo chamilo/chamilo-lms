@@ -18,9 +18,9 @@ class MultipleAnswerTrueFalse extends Question
 	/**
 	 * Constructor
 	 */
-	public function MultipleAnswerTrueFalse()
+	public function __construct()
     {
-		parent::question();
+		parent::__construct();
 		$this->type = MULTIPLE_ANSWER_TRUE_FALSE;
 		$this->isContent = $this-> getIsContent();
         $this->options = array(1 => 'True', 2 => 'False', 3 => 'DoubtScore');
@@ -190,7 +190,7 @@ class MultipleAnswerTrueFalse extends Question
         $renderer->setElementTemplate($correctInputTemplate, 'option[1]');
         $renderer->setElementTemplate($wrongInputTemplate, 'option[2]');
         $renderer->setElementTemplate($doubtScoreInputTempalte, 'option[3]');
- 
+
         // 3 scores
         $form->addElement('text', 'option[1]', get_lang('Correct'), array('class' => 'span1', 'value' => '1'));
         $form->addElement('text', 'option[2]', get_lang('Wrong'), array('class' => 'span1', 'value' => '-0.5'));

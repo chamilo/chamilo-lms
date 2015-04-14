@@ -20,10 +20,10 @@ class UniqueAnswer extends Question
     /**
      * Constructor
      */
-    public function UniqueAnswer()
+    public function __construct()
     {
         //this is highly important
-        parent::question();
+        parent::__construct();
         $this->type = UNIQUE_ANSWER;
         $this->isContent = $this->getIsContent();
     }

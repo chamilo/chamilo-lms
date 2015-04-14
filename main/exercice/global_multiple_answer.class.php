@@ -12,9 +12,9 @@ class GlobalMultipleAnswer extends Question
     /**
      *
      */
-    public function GlobalMultipleAnswer()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this->type = GLOBAL_MULTIPLE_ANSWER;
         $this->isContent = $this->getIsContent();
     }

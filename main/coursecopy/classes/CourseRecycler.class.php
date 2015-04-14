@@ -459,7 +459,7 @@ class CourseRecycler
     {
         if (isset($this->course->resources[RESOURCE_TEST_CATEGORY])) {
             foreach ($this->course->resources[RESOURCE_TEST_CATEGORY] as $tab_test_cat) {
-                $obj_cat = new Testcategory($tab_test_cat->source_id);
+                $obj_cat = new TestCategory($tab_test_cat->source_id);
                 $obj_cat->removeCategory();
             }
         }

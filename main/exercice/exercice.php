@@ -727,14 +727,14 @@ if (!empty($exercise_list)) {
                         $random_number_of_question = $rowi;
                     }
                     if ($row['random_by_category'] > 0) {
-                        $nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory(
+                        $nbQuestionsTotal = TestCategory::getNumberOfQuestionRandomByCategory(
                             $my_exercise_id,
                             $random_number_of_question
                         );
                         $number_of_questions = $nbQuestionsTotal." ";
                         $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase");
                         $number_of_questions .= " - ";
-                        $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
+                        $number_of_questions .= min(TestCategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
                     } else {
                         $random_label = ' ('.get_lang('Random').') ';
                         $number_of_questions = $random_number_of_question.' '.$random_label;

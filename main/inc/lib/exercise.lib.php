@@ -63,7 +63,7 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
-                    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     echo Display::div(
                         $current_item . '. ' . $objQuestionTmp->selectTitle(),
                         array('class' => 'question_title')
@@ -970,7 +970,7 @@ class ExerciseLib
 
             if (!$only_questions) {
                 if ($show_title) {
-                    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     echo '<div class="question_title">' . $current_item . '. ' . $questionName . '</div>';
                 }
                 //@todo I need to the get the feedback type
@@ -3482,7 +3482,7 @@ class ExerciseLib
                 'score' => $total_score,
                 'total' => $total_weight
             );
-            echo Testcategory::get_stats_table_by_attempt(
+            echo TestCategory::get_stats_table_by_attempt(
                 $objExercise->id,
                 $category_list
             );

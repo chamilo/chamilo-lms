@@ -4215,7 +4215,7 @@ class Exercise
                 // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
                 // value is the array of question id of this category
                 $questionList = array();
-                $tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
+                $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
                 $isRandomByCategory = $this->selectRandomByCat();
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
@@ -4230,14 +4230,14 @@ class Exercise
                 */
                 // If test option is Grouped By Categories
                 if ($isRandomByCategory == 2) {
-                    $tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions);
+                    $tabCategoryQuestions = TestCategory::sortTabByBracketLabel($tabCategoryQuestions);
                 }
                 while (list($cat_id, $tabquestion) = each($tabCategoryQuestions)) {
                     $number_of_random_question = $this->random;
                     if ($this->random == -1) {
                         $number_of_random_question = count($this->questionList);
                     }
-                    $questionList = array_merge($questionList, Testcategory::getNElementsFromArray($tabquestion, $number_of_random_question));
+                    $questionList = array_merge($questionList, TestCategory::getNElementsFromArray($tabquestion, $number_of_random_question));
                 }
                 // shuffle the question list if test is not grouped by categories
                 if ($isRandomByCategory == 1) {
@@ -4469,7 +4469,7 @@ class Exercise
             $nb_random_questions = $this->random;
             $tab_categories_scores = array();
             for ($i=1; $i <= count($tab_question_list); $i++) {
-                $question_category_id = Testcategory::getCategoryForQuestion($tab_question_list[$i]);
+                $question_category_id = TestCategory::getCategoryForQuestion($tab_question_list[$i]);
                 if (!is_array($tab_categories_scores[$question_category_id])) {
                     $tab_categories_scores[$question_category_id] = array();
                 }

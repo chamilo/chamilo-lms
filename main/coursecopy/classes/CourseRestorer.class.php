@@ -1731,25 +1731,25 @@ class CourseRestorer
                 $title = $CourseCopyTestcategory->title;
                 $description = $CourseCopyTestcategory->description;
 
-                if (Testcategory::category_exists_with_title($title)) {
+                if (TestCategory::category_exists_with_title($title)) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
                             //Do nothing
                             break;
                         case FILE_RENAME:
                             $new_title = $title."_";
-                            while (Testcategory::category_exists_with_title(
+                            while (TestCategory::category_exists_with_title(
                                 $new_title
                             )) {
                                 $new_title .= "_";
                             }
-                            $test_category = new Testcategory(0, $new_title, $description);
+                            $test_category = new TestCategory(0, $new_title, $description);
                             $new_id = $test_category->addCategoryInBDD();
                             $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
                             break;
                         case FILE_OVERWRITE:
-                            $id = Testcategory::get_category_id_for_title($title);
-                            $my_cat = new Testcategory($id);
+                            $id = TestCategory::get_category_id_for_title($title);
+                            $my_cat = new TestCategory($id);
                             $my_cat->name = $title;
                             $my_cat->modifyCategory();
                             $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
@@ -1757,7 +1757,7 @@ class CourseRestorer
                     }
                 } else {
                     // create a new test_category
-                    $test_category = new Testcategory(0, $title, $description);
+                    $test_category = new TestCategory(0, $title, $description);
                     $new_id = $test_category->addCategoryInBDD();
                     $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
                 }
@@ -1774,7 +1774,7 @@ class CourseRestorer
                     $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
                     $question_category = $CourseCopyQuestion->question_category;
                     if ($question_category > 0) {
-                        Testcategory::add_category_for_question_id(
+                        TestCategory::add_category_for_question_id(
                             $tab_test_category_id_old_new[$question_category],
                             $new_quiz_question_id,
                             $course_id

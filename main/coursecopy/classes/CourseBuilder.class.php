@@ -621,7 +621,7 @@ class CourseBuilder
         while ($obj = Database::fetch_object($db_result)) {
             // find the question category
             // @todo : need to be adapted for multi category questions in 1.10
-            $question_category_id = Testcategory::getCategoryForQuestion(
+            $question_category_id = TestCategory::getCategoryForQuestion(
                 $obj->id,
                 $course_id
             );
@@ -712,7 +712,7 @@ class CourseBuilder
                 if (!isset($this->course->resources[$obj->id])) {
                     // find the question category
                     // @todo : need to be adapted for multi category questions in 1.10
-                    $question_category_id = Testcategory::getCategoryForQuestion(
+                    $question_category_id = TestCategory::getCategoryForQuestion(
                         $obj->id,
                         $course_id
                     );
@@ -850,12 +850,12 @@ class CourseBuilder
         $course_id = api_get_course_int_id();
 
         // get all test category in course
-        $tab_test_categories_id = Testcategory::getCategoryListInfo(
+        $tab_test_categories_id = TestCategory::getCategoryListInfo(
             "id",
             $course_id
         );
         foreach ($tab_test_categories_id as $test_category_id) {
-            $test_category = new Testcategory($test_category_id);
+            $test_category = new TestCategory($test_category_id);
             $copy_course_test_category = new CourseCopyTestcategory(
                 $test_category_id,
                 $test_category->name,

@@ -5695,41 +5695,7 @@ class CourseManager
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $groups = GroupPortalManager::get_groups_by_user($userId, GROUP_USER_PERMISSION_ADMIN);
-
-        $groupsId = array_keys($groups);
-        $subgroupsId = [];
-        $userIdList = [];
-
-        foreach ($groupsId as $groupId) {
-            $subgroupsId = array_merge($subgroupsId, GroupPortalManager::getGroupsByDepthLevel($groupId));
-        }
-
-        $groupsId = array_merge($groupsId, $subgroupsId);
-
-        $groupsId = array_unique($groupsId);
-
-        if (empty($groupsId)) {
-            return [];
-        }
-
-        foreach ($groupsId as $groupId) {
-            $groupUsers = GroupPortalManager::get_users_by_group($groupId);
-
-            if (empty($groupUsers)) {
-                continue;
-            }
-
-            foreach ($groupUsers as $member) {
-                if ($member['user_id'] == $userId ) {
-                    continue;
-                }
-
-                $userIdList[] = intval($member['user_id']);
-            }
-        }
-
-        $userIdList = array_unique($userIdList);
+        $userIdList = GroupPortalManager::getGroupUsersByUser($userId);
 
         if (empty($userIdList)) {
             return [];

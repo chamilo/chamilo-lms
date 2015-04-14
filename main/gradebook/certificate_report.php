@@ -30,6 +30,7 @@ $userId = api_get_user_id();
 $sessions = $courses = $months = [0 => get_lang('Select')];
 
 if (api_is_student_boss()) {
+    $userList = GroupPortalManager::getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
 $sessionsList = SessionManager::getSessionsCoachedByUser($userId);
@@ -118,6 +119,10 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 
         if (is_array($studentList) && !empty($studentList)) {
             foreach ($studentList as $student) {
+                if (api_is_student_boss() && !in_array($student['user_id'], $userList)) {
+                    continue;
+                }
+
                 $certificateStudent = array(
                     'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
                     'certificates' => array()

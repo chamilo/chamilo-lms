@@ -1359,4 +1359,59 @@ class GroupPortalManager
         }
         return true;
     }
+
+    /**
+     * Get the group member list by a user and his group role
+     * @param int $userId The user ID
+     * @param int $relationType Optional. The relation type. GROUP_USER_PERMISSION_ADMIN by default
+     * @param boolean $includeSubgroupsUsers Optional. Whether include the users from subgroups
+     * @return array
+     */
+    public static function getGroupUsersByUser(
+        $userId,
+        $relationType = GROUP_USER_PERMISSION_ADMIN,
+        $includeSubgroupsUsers = true
+    )
+    {
+        $userId = intval($userId);
+
+        $groups = GroupPortalManager::get_groups_by_user($userId, $relationType);
+
+        $groupsId = array_keys($groups);
+        $subgroupsId = [];
+        $userIdList = [];
+
+        if ($includeSubgroupsUsers) {
+            foreach ($groupsId as $groupId) {
+                $subgroupsId = array_merge($subgroupsId, GroupPortalManager::getGroupsByDepthLevel($groupId));
+            }
+
+            $groupsId = array_merge($groupsId, $subgroupsId);
+        }
+
+        $groupsId = array_unique($groupsId);
+
+        if (empty($groupsId)) {
+            return [];
+        }
+
+        foreach ($groupsId as $groupId) {
+            $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+            if (empty($groupUsers)) {
+                continue;
+            }
+
+            foreach ($groupUsers as $member) {
+                if ($member['user_id'] == $userId) {
+                    continue;
+                }
+
+                $userIdList[] = intval($member['user_id']);
+            }
+        }
+
+        return array_unique($userIdList);
+    }
+
 }

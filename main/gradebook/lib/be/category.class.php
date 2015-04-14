@@ -1038,12 +1038,15 @@ class Category implements GradebookItem
                     $sql .="AND session_id IS NULL OR session_id=0";
                 }
             } else {
-                $sql .= ' AND course_code in'
-                    .' (SELECT course_code'
-                    .' FROM '.$main_course_user_table
-                    .' WHERE user_id = '.api_get_user_id()
-                    .' AND status = '.COURSEMANAGER
-                    .')';
+                $sql .= ' AND course_code IN
+                     (
+                        SELECT c.code
+                        FROM '.$main_course_user_table.' cu INNER JOIN '.$courseTable.' c
+                        ON (cu.c_id = c.id)
+                        WHERE
+                            cu.user_id = '.api_get_user_id().' AND
+                            cu.status = '.COURSEMANAGER.'
+                    )';
             }
         }elseif (api_is_platform_admin()) {
             if (isset($session_id) && $session_id!=0) {
@@ -1079,9 +1082,8 @@ class Category implements GradebookItem
         $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'SELECT *'
-            .' FROM '.$tbl_grade_categories
-            .' WHERE parent_id = 0';
+        $sql = 'SELECT * FROM '.$tbl_grade_categories.'
+                WHERE parent_id = 0';
         if (!empty($course_code)) {
             $sql .= " AND course_code = '".Database::escape_string($course_code)."' ";
             if (!empty($session_id)) {
@@ -1091,7 +1093,8 @@ class Category implements GradebookItem
             $sql .= ' AND course_code in
                  (
                     SELECT c.code
-                    FROM '.$main_course_user_table.' cu INNER JOIN '.$courseTable.' c
+                    FROM '.$main_course_user_table.' cu
+                    INNER JOIN '.$courseTable.' c
                     ON (cu.c_id = c.id)
                     WHERE user_id = '.intval($user_id).'
                 )';
@@ -1103,6 +1106,7 @@ class Category implements GradebookItem
             $indcats = Category::load(null,$user_id,$course_code,0,null,$session_id);
             $cats = array_merge($cats, $indcats);
         }
+
         return $cats;
     }
 
@@ -1330,7 +1334,7 @@ class Category implements GradebookItem
 
         $result = Database::query($sql);
         $cats = array();
-        while ($data=Database::fetch_array($result)) {
+        while ($data = Database::fetch_array($result)) {
             $cats[] = array ($data['code'], $data['title']);
         }
 

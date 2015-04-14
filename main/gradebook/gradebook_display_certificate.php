@@ -41,10 +41,10 @@ switch ($action) {
         if (api_is_student_boss()) {
             $userList = GroupPortalManager::getGroupUsersByUser(api_get_user_id());
         } else {
-        $userList = array();
-        if (!empty($filterOfficialCodeGet)) {
-            $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
-        }
+            $userList = array();
+            if (!empty($filterOfficialCodeGet)) {
+                $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
+            }
         }
 
         Category::exportAllCertificates($cat_id, $userList);

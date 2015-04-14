@@ -34,7 +34,7 @@ if (api_is_student_boss()) {
     $userList = GroupPortalManager::getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
-$sessionsList = SessionManager::getSessionsCoachedByUser($userId);
+    $sessionsList = SessionManager::getSessionsCoachedByUser($userId);
 }
 
 foreach ($sessionsList as $session) {
@@ -60,15 +60,15 @@ if ($selectedSession > 0) {
     if (api_is_student_boss()) {
         $coursesList = CourseManager::getCoursesFollowedByGroupAdmin($userId);
     } else {
-    $coursesList = CourseManager::get_courses_list_by_user_id($userId);
+        $coursesList = CourseManager::get_courses_list_by_user_id($userId);
 
-    if (is_array($coursesList)) {
-        foreach ($coursesList as &$course) {
-            $courseInfo = api_get_course_info_by_id($course['real_id']);
+        if (is_array($coursesList)) {
+            foreach ($coursesList as &$course) {
+                $courseInfo = api_get_course_info_by_id($course['real_id']);
 
-            $course = array_merge($course, $courseInfo);
+                $course = array_merge($course, $courseInfo);
+            }
         }
-    }
     }
 }
 
@@ -76,7 +76,7 @@ foreach ($coursesList as $course) {
     if (isset($course['real_id'])) {
         $courses[$course['real_id']] = $course['title'];
     } else {
-    $courses[$course['id']] = $course['title'];
+        $courses[$course['id']] = $course['title'];
     }
 }
 

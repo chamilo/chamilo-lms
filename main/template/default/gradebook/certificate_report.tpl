@@ -41,11 +41,11 @@
 {% if not certificateStudents is empty %}
     <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
     {% if not exportAllLink is null %}
-    <div class="actions">
-        <a href="{{ exportAllLink }}" class="btn btn-info">
-            <i class="fa fa-check"></i> {{ 'ExportAllCertificatesToPDF' | get_lang }}
-        </a>
-    </div>
+        <div class="actions">
+            <a href="{{ exportAllLink }}" class="btn btn-info">
+                <i class="fa fa-check"></i> {{ 'ExportAllCertificatesToPDF' | get_lang }}
+            </a>
+        </div>
     {% endif %}
 
     <table class="table table-striped">

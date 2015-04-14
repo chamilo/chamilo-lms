@@ -82,7 +82,7 @@ switch ($_REQUEST['report']) {
     case 'users':
         // total amount of users
         $teachers = $students = array();
-        $countInvisible = isset($_GET['count_invisible_courses']) ? $_GET['count_invisible_courses'] : null;
+        $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
         Statistics::printStats(
             get_lang('NumberOfUsers'),
             array(

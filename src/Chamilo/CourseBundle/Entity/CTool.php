@@ -97,7 +97,7 @@ class CTool
      *
      * @ORM\Column(name="category", type="string", length=20, nullable=false)
      */
-    private $category;
+    private $category = 'authoring';
 
     /**
      * @var integer
@@ -110,6 +110,7 @@ class CTool
      * Set name
      *
      * @param string $name
+     *
      * @return CTool
      */
     public function setName($name)

@@ -4140,7 +4140,7 @@ class learnpath
      * @param	integer	Learnpath ID
      * @param	string	New visibility
      */
-    public function toggle_visibility($lp_id, $set_visibility = 1)
+    public static function toggle_visibility($lp_id, $set_visibility = 1)
     {
         $action = 'visible';
         if ($set_visibility != 1) {
@@ -4204,21 +4204,22 @@ class learnpath
                 ";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
-        //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
-        if (($set_visibility == 'i') && ($num > 0)) {
-            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+        if ($set_visibility == 'i' && $num > 0) {
+            $sql = "DELETE FROM $tbl_tool
+                    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
             Database::query($sql);
 
-        } elseif (($set_visibility == 'v') && ($num == 0)) {
-            $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
-            	    ($course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
+        } elseif ($set_visibility == 'v' && $num == 0) {
+            $sql = "INSERT INTO $tbl_tool (category, c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
+            	    ('authoring', $course_id, '$name', '$link', 'scormbuilder.gif', '$v', '0','pastillegris.gif', 0, $session_id)";
             Database::query($sql);
 
             $insertId = Database::insert_id();
-            $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
-            Database::query($sql);
-
-        } elseif (($set_visibility == 'v') && ($num > 0)) {
+            if ($insertId) {
+                $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $insertId";
+                Database::query($sql);
+            }
+        } elseif ($set_visibility == 'v' && $num > 0) {
             $sql = "UPDATE $tbl_tool SET
                         c_id = $course_id,
                         name = '$name',
@@ -4229,7 +4230,10 @@ class learnpath
                         address = 'pastillegris.gif',
                         added_tool = 0,
                         session_id = $session_id
-            	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            	    WHERE
+            	        c_id = ".$course_id." AND
+            	        (link='$link' and image='scormbuilder.gif' $session_condition)
+                    ";
             Database::query($sql);
         } else {
             // Parameter and database incompatible, do nothing, exit.

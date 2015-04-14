@@ -365,11 +365,28 @@ class Database
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
-        $result = self::getManager()->getConnection()->insert($table_name, $attributes);
-        if ($result) {
+        if (empty($attributes) || empty($table_name)) {
+            return false;
+        }
+        $filtred_attributes = array();
+        foreach($attributes as $key => $value) {
+            $filtred_attributes[$key] = "'".self::escape_string($value)."'";
+        }
+        //@todo check if the field exists in the table we should use a describe of that table
+        $params = array_keys($filtred_attributes);
+        $values = array_values($filtred_attributes);
+        if (!empty($params) && !empty($values)) {
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
+            self::query($sql);
+            if ($show_query) {
+                var_dump($sql);
+                error_log($sql);
+            }
 
             return self::insert_id();
         }
+
+        return false;
     }
 
     /**

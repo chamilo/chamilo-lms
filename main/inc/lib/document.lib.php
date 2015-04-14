@@ -2535,6 +2535,7 @@ class DocumentManager
                 }
             }
         }
+
         return $content_html;
     }
 

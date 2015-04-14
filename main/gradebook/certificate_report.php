@@ -117,6 +117,9 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
             "cat_id" => $gradebook->get_id()
         ));
 
+        $sessionName = api_get_session_name($selectedSession);
+        $courseName = api_get_course_info($selectedCourseInfo['code'])['title'];
+
         $studentList = GradebookUtils::get_list_users_certificates($gradebook->get_id());
 
         $certificateStudents = array();
@@ -129,6 +132,8 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 
                 $certificateStudent = array(
                     'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
+                    'sessionName' => $sessionName,
+                    'courseName' => $courseName,
                     'certificates' => array()
                 );
 

@@ -47,6 +47,8 @@
         <thead>
             <tr>
                 <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Sesion' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
                 <th>{{ 'Certificate' | get_lang }}</th>
             </tr>
@@ -54,6 +56,8 @@
         <tfoot>
             <tr>
                 <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Sesion' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
                 <th>{{ 'Certificate' | get_lang }}</th>
             </tr>
@@ -62,6 +66,8 @@
             {% for student in certificateStudents %}
                 <tr>
                     <td>{{ student.fullName }}</td>
+                    <td>{{ student.sessionName }}</td>
+                    <td>{{ student.courseName }}</td>
                     <td>
                         {% for certificate in student.certificates %}
                             <p>{{ certificate.createdAt }}</p>

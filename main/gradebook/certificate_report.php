@@ -27,10 +27,16 @@ $selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? $_POST['year']
 
 $userId = api_get_user_id();
 
+$sessions = $courses = $months = [0 => get_lang('Select')];
+
 if (api_is_student_boss()) {
-    $sessions = SessionManager::getSessionsFollowedForGroupAdmin($userId);
+    $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
-$sessions = SessionManager::getSessionsCoachedByUser($userId);
+$sessionsList = SessionManager::getSessionsCoachedByUser($userId);
+}
+
+foreach ($sessionsList as $session) {
+    $sessions[$session['id']] = $session['name'];
 }
 
 if ($selectedSession > 0) {
@@ -41,18 +47,18 @@ if ($selectedSession > 0) {
         exit;
     }
 
-    $courses = SessionManager::get_course_list_by_session_id($selectedSession);
+    $coursesList = SessionManager::get_course_list_by_session_id($selectedSession);
 
-    if (is_array($courses)) {
-        foreach ($courses as &$course) {
+    if (is_array($coursesList)) {
+        foreach ($coursesList as &$course) {
             $course['real_id'] = $course['id'];
         }
     }
 } else {
-    $courses = CourseManager::get_courses_list_by_user_id($userId);
+    $coursesList = CourseManager::get_courses_list_by_user_id($userId);
 
-    if (is_array($courses)) {
-        foreach ($courses as &$course) {
+    if (is_array($coursesList)) {
+        foreach ($coursesList as &$course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
 
             $course = array_merge($course, $courseInfo);
@@ -60,13 +66,12 @@ if ($selectedSession > 0) {
     }
 }
 
-$months = array();
+foreach ($coursesList as $course) {
+    $courses[$course['id']] = $course['title'];
+}
 
 for ($key = 1; $key <= 12; $key++) {
-    $months[] = array(
-        'key' => $key,
-        'name' => sprintf("%02d", $key)
-    );
+    $months[$key] = sprintf("%02d", $key);
 }
 
 $exportAllLink = null;
@@ -164,10 +169,31 @@ if (Session::has('reportErrorMessage')) {
     $template->assign('errorMessage', Session::read('reportErrorMessage'));
 }
 
-$template->assign('selectedSession', $selectedSession);
-$template->assign('selectedCourse', $selectedCourse);
-$template->assign('selectedMonth', $selectedMonth);
-$template->assign('selectedYear', $selectedYear);
+$form = new FormValidator(
+    'certificate_report_form',
+    'post',
+    api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+);
+$form->addHeader(get_lang('GradebookListOfStudentsCertificates'));
+$form->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
+$form->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
+$form->addGroup(
+    [
+        $form->createElement('select', 'month', null, $months, ['id' => 'month']),
+        $form->createElement('text', 'year', null, ['id' => 'year'])
+    ],
+    null,
+    get_lang('Date')
+);
+$form->addButtonSearch();
+$form->setDefaults([
+    'session' => $selectedSession,
+    'course' => $selectedCourse,
+    'month' => $selectedMonth,
+    'year' => $selectedYear
+]);
+
+$template->assign('form', $form->returnForm());
 $template->assign('sessions', $sessions);
 $template->assign('courses', $courses);
 $template->assign('months', $months);

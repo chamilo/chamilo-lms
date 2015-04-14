@@ -95,9 +95,9 @@ class CTool
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=20, nullable=false)
+     * @ORM\Column(name="category", type="string", length=20, nullable=false, options={"default" = "authoring"})
      */
-    private $category = 'authoring';
+    private $category;
 
     /**
      * @var integer

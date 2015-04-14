@@ -348,7 +348,7 @@ class User extends BaseUser //implements ParticipantInterface, ThemeUser
         $this->isActive = true;
         $this->active = 1;
         $this->registrationDate = new \DateTime();
-
+        $this->authSource = 'platform';
         $this->courses = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->classes = new ArrayCollection();

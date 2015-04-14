@@ -39,7 +39,7 @@ class CWiki
     /**
      * @var integer
      *
-     * @ORM\Column(name="page_id", type="integer", nullable=false)
+     * @ORM\Column(name="page_id", type="integer", nullable=true)
      */
     private $pageId;
 

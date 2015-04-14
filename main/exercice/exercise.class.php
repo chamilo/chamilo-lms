@@ -915,7 +915,10 @@ class Exercise
             foreach ($question_list as $position => $questionId) {
                 $sql = "UPDATE $quiz_question_table SET
                         question_order ='".intval($position)."'
-                        WHERE c_id = ".$this->course_id." AND question_id = ".intval($questionId)." AND exercice_id=".intval($this->id);
+                        WHERE
+                            c_id = ".$this->course_id." AND
+                            question_id = ".intval($questionId)." AND
+                            exercice_id=".intval($this->id);
                 Database::query($sql);
             }
         }
@@ -1768,8 +1771,6 @@ class Exercise
         $safe_lp_item_id = intval($safe_lp_item_id);
         $safe_lp_item_view_id = intval($safe_lp_item_view_id);
 
-        $trackValues = array();
-
         if (empty($safe_lp_id)) {
             $safe_lp_id = 0;
         }
@@ -1802,6 +1803,7 @@ class Exercise
         }
 
         $id = Database::insert($track_exercises, $params);
+
         return $id;
     }
 
@@ -2164,33 +2166,35 @@ class Exercise
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
-        $course_id              = api_get_course_int_id();
-        $objQuestionTmp         = Question::read($questionId, $course_id);
+        $course_id = api_get_course_int_id();
+        $objQuestionTmp = Question::read($questionId, $course_id);
 
         if ($objQuestionTmp === false) {
             return false;
         }
 
-        $questionName 			= $objQuestionTmp->selectTitle();
-        $questionWeighting 		= $objQuestionTmp->selectWeighting();
-        $answerType 			= $objQuestionTmp->selectType();
-        $quesId 				= $objQuestionTmp->selectId();
-        $extra                  = $objQuestionTmp->extra;
+        $questionName = $objQuestionTmp->selectTitle();
+        $questionWeighting = $objQuestionTmp->selectWeighting();
+        $answerType = $objQuestionTmp->selectType();
+        $quesId = $objQuestionTmp->selectId();
+        $extra = $objQuestionTmp->extra;
 
         $next = 1; //not for now
 
         // Extra information of the question
         if (!empty($extra)) {
             $extra = explode(':', $extra);
-            if ($debug) error_log(print_r($extra, 1));
+            if ($debug) {
+                error_log(print_r($extra, 1));
+            }
             // Fixes problems with negatives values using intval
-            $true_score     = floatval(trim($extra[0]));
-            $false_score    = floatval(trim($extra[1]));
-            $doubt_score    = floatval(trim($extra[2]));
+            $true_score = floatval(trim($extra[0]));
+            $false_score = floatval(trim($extra[1]));
+            $doubt_score = floatval(trim($extra[2]));
         }
 
-        $totalWeighting 		= 0;
-        $totalScore				= 0;
+        $totalWeighting = 0;
+        $totalScore = 0;
 
         // Destruction of the Question object
         unset($objQuestionTmp);
@@ -2215,12 +2219,12 @@ class Exercise
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
-            $params['course_id'] 	= api_get_course_int_id();
-            $params['session_id'] 	= api_get_session_id();
-            $params['user_id'] 		= isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();
-            $params['exercise_id']  = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;
-            $params['question_id'] 	= $questionId;
-            $params['exe_id'] 		= isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId;
+            $params['course_id'] = api_get_course_int_id();
+            $params['session_id'] = api_get_session_id();
+            $params['user_id'] = isset($exe_info['exe_user_id'])? $exe_info['exe_user_id'] : api_get_user_id();
+            $params['exercise_id'] = isset($exe_info['exe_exo_id'])? $exe_info['exe_exo_id'] : $this->id;
+            $params['question_id'] = $questionId;
+            $params['exe_id'] = isset($exe_info['exe_id']) ? $exe_info['exe_id'] : $exeId;
 
             $nano = new Nanogong($params);
 
@@ -2239,7 +2243,7 @@ class Exercise
 
         $answer_matching =array();
         while ($real_answer = Database::fetch_array($res_answer)) {
-            $answer_matching[$real_answer['id']]= $real_answer['answer'];
+            $answer_matching[$real_answer['id']] = $real_answer['answer'];
         }
 
         $real_answers = array();
@@ -2258,6 +2262,7 @@ class Exercise
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
             $numAnswer = $objAnswerTmp->selectAutoId($answerId);
+
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
             if ($debug) {

@@ -73,12 +73,16 @@ abstract class Question
         $this->parent_id = 0;
     }
 
+    /**
+     * @return int|null
+     */
     public function getIsContent()
     {
         $isContent = null;
         if (isset($_REQUEST['isContent'])) {
             $isContent = intval($_REQUEST['isContent']);
         }
+
         return $this->isContent = $isContent;
     }
 
@@ -86,7 +90,8 @@ abstract class Question
      * Reads question information from the data base
      *
      * @author Olivier Brouckaert
-     * @param integer $id - question ID
+     * @param int $id - question ID
+     * @param int $course_id
      *
      * @return Question
      */
@@ -106,11 +111,12 @@ abstract class Question
             return false;
         }
 
-        $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $sql = "SELECT question,description,ponderation,position,type,picture,level,extra
-                FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = $id ";
+                FROM $TBL_QUESTIONS
+                WHERE c_id = $course_id AND id = $id ";
 
         $result = Database::query($sql);
 
@@ -713,21 +719,20 @@ abstract class Question
      */
     public function save($exerciseId = 0)
     {
-        $TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-        $id			= $this->id;
-        $question	= $this->question;
+        $id = $this->id;
+        $question = $this->question;
         $description = $this->description;
-        $weighting	= $this->weighting;
-        $position	= $this->position;
-        $type		= $this->type;
-        $picture	= $this->picture;
-        $level		= $this->level;
-        $extra		= $this->extra;
-        $c_id 		= $this->course['real_id'];
-        $category   = $this->category;
-
+        $weighting = $this->weighting;
+        $position = $this->position;
+        $type = $this->type;
+        $picture = $this->picture;
+        $level = $this->level;
+        $extra = $this->extra;
+        $c_id = $this->course['real_id'];
+        $category = $this->category;
 
         // question already exists
         if(!empty($id)) {
@@ -743,8 +748,15 @@ abstract class Question
 				WHERE c_id = $c_id  AND id = ".intval($id)."";
             Database::query($sql);
             $this->saveCategory($category);
+
             if (!empty($exerciseId)) {
-                api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id());
+                api_item_property_update(
+                    $this->course,
+                    TOOL_QUIZ,
+                    $id,
+                    'QuizQuestionUpdated',
+                    api_get_user_id()
+                );
             }
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
@@ -806,9 +818,10 @@ abstract class Question
                             VALUES (".$c_id.", ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
                     Database::query($sql);
                     $id = Database::insert_id();
-
-                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
-                    Database::query($sql);
+                    if ($id) {
+                        $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
+                        Database::query($sql);
+                    }
                 }
 
                 if ($type == HOT_SPOT_DELINEATION) {
@@ -816,13 +829,14 @@ abstract class Question
                         TABLE_QUIZ_ANSWER
                     );
                     $sql = "INSERT INTO $TBL_ANSWERS (c_id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
-                          VALUES (".$c_id.", ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
+                            VALUES (".$c_id.", ".intval($this->id).", '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
                     Database::query($sql);
 
                     $id = Database::insert_id();
-
-                    $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
-                    Database::query($sql);
+                    if ($id) {
+                        $sql = "UPDATE $TBL_ANSWERS SET id = id_auto WHERE id_auto = $id";
+                        Database::query($sql);
+                    }
                 }
 
                 if (api_get_setting('search_enabled') == 'true') {
@@ -963,20 +977,20 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      * @param integer $exerciseId - exercise ID
-     * @param boolean $fromSave - comming from $this->save() or not
+     * @param boolean $fromSave - from $this->save() or not
      */
-    function addToList($exerciseId, $fromSave = false)
+    public function addToList($exerciseId, $fromSave = false)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $id = $this->id;
         // checks if the exercise ID is not in the list
         if (!in_array($exerciseId,$this->exerciseList)) {
-            $this->exerciseList[]=$exerciseId;
+            $this->exerciseList[]= $exerciseId;
             $new_exercise = new Exercise();
             $new_exercise->read($exerciseId);
             $count = $new_exercise->selectNbrQuestions();
             $count++;
-            $sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
+            $sql="INSERT INTO $exerciseRelQuestionTable (c_id, question_id, exercice_id, question_order) VALUES
 			     ({$this->course['real_id']}, ".intval($id).", ".intval($exerciseId).", '$count' )";
             Database::query($sql);
 
@@ -1407,17 +1421,18 @@ abstract class Question
      * abstract function which creates the form to create / edit the answers of the question
      * @param the FormValidator instance
      */
-    abstract function createAnswersForm ($form);
+    abstract function createAnswersForm($form);
 
     /**
      * abstract function which process the creation of answers
      * @param the FormValidator instance
      */
-    abstract function processAnswersCreation ($form);
-
+    abstract function processAnswersCreation($form);
 
     /**
      * Displays the menu of question types
+     *
+     * @param Exercise $objExercise
      */
     public static function display_type_menu($objExercise)
     {
@@ -1434,8 +1449,8 @@ abstract class Question
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = array (
-                UNIQUE_ANSWER           => self::$questionTypes[UNIQUE_ANSWER],
-                HOT_SPOT_DELINEATION    => self::$questionTypes[HOT_SPOT_DELINEATION]
+                UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
+                HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]
             );
         } else {
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
@@ -1458,7 +1473,8 @@ abstract class Question
                 $img = $img['filename'].'_na.'.$img['extension'];
                 echo Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
             } else {
-                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
+                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
+                    Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
             }
             echo '</div>';
             echo '</li>';

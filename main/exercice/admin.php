@@ -212,12 +212,12 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
                 api_not_allowed();
             }
             // saves the object into the session
-            Session::write('objQuestion',$objQuestion);
+            Session::write('objQuestion', $objQuestion);
         }
     }
 
     // checks if the object exists
-    if(is_object($objQuestion)) {
+    if (is_object($objQuestion)) {
         // gets the question ID
         $questionId = $objQuestion->selectId();
     }
@@ -226,7 +226,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 // if cancelling an exercise
 if ($cancelExercise) {
     // existing exercise
-    if($exerciseId) {
+    if ($exerciseId) {
         unset($modifyExercise);
     } else {
         // new exercise
@@ -239,7 +239,7 @@ if ($cancelExercise) {
 // if cancelling question creation/modification
 if ($cancelQuestion) {
     // if we are creating a new question from the question pool
-    if(!$exerciseId && !$questionId) {
+    if (!$exerciseId && !$questionId) {
         // goes back to the question pool
         header('Location: question_pool.php');
         exit();

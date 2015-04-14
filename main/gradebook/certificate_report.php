@@ -24,10 +24,11 @@ $selectedSession = isset($_POST['session']) && !empty($_POST['session']) ? intva
 $selectedCourse = isset($_POST['course']) && !empty($_POST['course']) ? intval($_POST['course']) : 0;
 $selectedMonth = isset($_POST['month']) && !empty($_POST['month']) ? intval($_POST['month']) : 0;
 $selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? trim($_POST['year']) : null;
+$selectedStudent = isset($_POST['student']) && !empty($_POST['student']) ? intval($_POST['student']) : 0;
 
 $userId = api_get_user_id();
 
-$sessions = $courses = $months = [0 => get_lang('Select')];
+$sessions = $courses = $months = $students = [0 => get_lang('Select')];
 
 if (api_is_student_boss()) {
     $userList = GroupPortalManager::getGroupUsersByUser($userId);
@@ -88,6 +89,7 @@ $certificateStudents = array();
 
 $searchSessionAndCourse = $selectedSession > 0 && $selectedCourse > 0;
 $searchCourseOnly = $selectedSession <= 0 && $selectedCourse > 0;
+$searchStudentOnly = $selectedStudent > 0;
 
 if ($searchSessionAndCourse || $searchCourseOnly) {
     $selectedCourseInfo = api_get_course_info_by_id($selectedCourse);
@@ -178,6 +180,62 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
             }
         }
     }
+} elseif ($searchStudentOnly) {
+    $selectedStudentInfo = api_get_user_info($selectedStudent);
+
+    if (empty($selectedStudentInfo)) {
+        Session::write('reportErrorMessage', get_lang('NoUser'));
+
+        Header::location($selfUrl);
+    }
+
+    $sessionList = SessionManager::getSessionsFollowedByUser($selectedStudent);
+
+    foreach ($sessionList as $session) {
+        $sessionCourseList = SessionManager::get_course_list_by_session_id($session['id']);
+
+        foreach ($sessionCourseList as $sessionCourse) {
+            $gradebookCategories = Category::load(null, null, $sessionCourse['code'], null, false, $session['id']);
+
+            $gradebook = null;
+
+            if (!empty($gradebookCategories)) {
+                $gradebook = current($gradebookCategories);
+            }
+
+            if (!is_null($gradebook)) {
+                $sessionName = $session['name'];
+                $courseName = $sessionCourse['title'];
+
+                $certificateStudent = [
+                    'fullName' => $selectedStudentInfo['complete_name'],
+                    'sessionName' => $sessionName,
+                    'courseName' => $courseName,
+                    'certificates' => []
+                ];
+
+                $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $selectedStudent,
+                    $gradebook->get_id()
+                );
+
+                if (!is_array($studentCertificates) || empty($studentCertificates)) {
+                    continue;
+                }
+
+                foreach ($studentCertificates as $certificate) {
+                    $certificateStudent['certificates'][] = array(
+                        'createdAt' => api_convert_and_format_date($certificate['created_at']),
+                        'id' => $certificate['id']
+                    );
+                }
+
+                if (count($certificateStudent['certificates']) > 0) {
+                    $certificateStudents[] = $certificateStudent;
+                }
+            }
+        }
+    }
 }
 
 /* View */
@@ -187,31 +245,54 @@ if (Session::has('reportErrorMessage')) {
     $template->assign('errorMessage', Session::read('reportErrorMessage'));
 }
 
-$form = new FormValidator(
+$searchBySessionCourseDateForm = new FormValidator(
     'certificate_report_form',
     'post',
     api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
 );
-$form->addHeader(get_lang('GradebookListOfStudentsCertificates'));
-$form->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
-$form->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
-$form->addGroup(
+$searchBySessionCourseDateForm->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
+$searchBySessionCourseDateForm->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
+$searchBySessionCourseDateForm->addGroup(
     [
-        $form->createElement('select', 'month', null, $months, ['id' => 'month']),
-        $form->createElement('text', 'year', null, ['id' => 'year'])
+        $searchBySessionCourseDateForm->createElement('select', 'month', null, $months, ['id' => 'month']),
+        $searchBySessionCourseDateForm->createElement(
+            'text',
+            'year',
+            null,
+            ['id' => 'year', 'placeholder' => get_lang('Year')]
+        )
     ],
     null,
     get_lang('Date')
 );
-$form->addButtonSearch();
-$form->setDefaults([
+$searchBySessionCourseDateForm->addButtonSearch();
+$searchBySessionCourseDateForm->setDefaults([
     'session' => $selectedSession,
     'course' => $selectedCourse,
     'month' => $selectedMonth,
     'year' => $selectedYear
 ]);
 
-$template->assign('form', $form->returnForm());
+if (api_is_student_boss()) {
+    foreach ($userList as $studentId) {
+        $students[$studentId] = api_get_user_info($studentId)['complete_name_with_username'];
+    }
+
+    $searchByStudentForm = new FormValidator(
+        'certificate_report_form',
+        'post',
+        api_get_path(WEB_CODE_PATH) . 'gradebook/certificate_report.php'
+    );
+    $searchByStudentForm->addSelect('student', get_lang('Students'), $students, ['id' => 'student']);
+    $searchByStudentForm->addButtonSearch();
+    $searchByStudentForm->setDefaults([
+        'student' => $selectedStudent
+    ]);
+
+    $template->assign('searchByStudentForm', $searchByStudentForm->returnForm());
+}
+
+$template->assign('searchBySessionCourseDateForm', $searchBySessionCourseDateForm->returnForm());
 $template->assign('sessions', $sessions);
 $template->assign('courses', $courses);
 $template->assign('months', $months);

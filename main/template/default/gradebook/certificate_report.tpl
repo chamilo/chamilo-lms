@@ -10,8 +10,6 @@
                 a: 'display_sessions_courses',
                 session: sessionId
             }, function (courseList) {
-                var $option = null;
-
                 $('<option>', {
                     value: 0,
                     text: "{{ 'Select' | get_lang }}"
@@ -30,18 +28,25 @@
     });
 </script>
 
-{{ form }}
+{{ searchBySessionCourseDateForm }}
+
+<hr>
+
+{{ searchByStudentForm }}
 
 {% if errorMessage is defined %}
     <div class="alert alert-error">{{ errorMessage }}</div>
 {% endif %}
 
 {% if not certificateStudents is empty %}
+    <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
+    {% if not exportAllLink is null %}
     <div class="actions">
         <a href="{{ exportAllLink }}" class="btn btn-info">
             <i class="fa fa-check"></i> {{ 'ExportAllCertificatesToPDF' | get_lang }}
         </a>
     </div>
+    {% endif %}
 
     <table class="table table-striped">
         <thead>

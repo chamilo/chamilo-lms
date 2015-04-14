@@ -23,7 +23,7 @@ $interbreadcrumb[] = array(
 $selectedSession = isset($_POST['session']) && !empty($_POST['session']) ? intval($_POST['session']) : 0;
 $selectedCourse = isset($_POST['course']) && !empty($_POST['course']) ? intval($_POST['course']) : 0;
 $selectedMonth = isset($_POST['month']) && !empty($_POST['month']) ? intval($_POST['month']) : 0;
-$selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? $_POST['year'] : null;
+$selectedYear = isset($_POST['year']) && !empty($_POST['year']) ? trim($_POST['year']) : null;
 
 $userId = api_get_user_id();
 
@@ -143,7 +143,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                             continue;
                         }
                     } elseif ($selectedMonth > 0 && !empty($selectedYear)) {
-                        if ($creationMonthYear != sprintf("%d %s", $selectedMonth, $selectedYear)) {
+                        if ($creationMonthYear != sprintf("%02d %s", $selectedMonth, $selectedYear)) {
                             continue;
                         }
                     }

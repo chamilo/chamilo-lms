@@ -5682,4 +5682,90 @@ class CourseManager
         }
         return $courses;
     }
+
+    /**
+     * Get list of courses based on users of a group for a group admin
+     * @param int $userId The user id
+     * @return array
+     */
+    public static function getCoursesFollowedByGroupAdmin($userId)
+    {
+        $coursesList = [];
+
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $groups = GroupPortalManager::get_groups_by_user($userId, GROUP_USER_PERMISSION_ADMIN);
+
+        $groupsId = array_keys($groups);
+        $subgroupsId = [];
+        $userIdList = [];
+
+        foreach ($groupsId as $groupId) {
+            $subgroupsId = array_merge($subgroupsId, GroupPortalManager::getGroupsByDepthLevel($groupId));
+        }
+
+        $groupsId = array_merge($groupsId, $subgroupsId);
+
+        $groupsId = array_unique($groupsId);
+
+        if (empty($groupsId)) {
+            return [];
+        }
+
+        foreach ($groupsId as $groupId) {
+            $groupUsers = GroupPortalManager::get_users_by_group($groupId);
+
+            if (empty($groupUsers)) {
+                continue;
+            }
+
+            foreach ($groupUsers as $member) {
+                if ($member['user_id'] == $userId ) {
+                    continue;
+                }
+
+                $userIdList[] = intval($member['user_id']);
+            }
+        }
+
+        $userIdList = array_unique($userIdList);
+
+        if (empty($userIdList)) {
+            return [];
+        }
+
+        $sql = "SELECT DISTINCT(c.id), c.title "
+            . "FROM $courseTable c "
+            . "INNER JOIN $courseUserTable cru ON c.code = cru.course_code "
+            . "WHERE ( "
+            . "cru.user_id IN(" . implode(', ', $userIdList) . ") "
+            . "AND cru.relation_type = 0 "
+            . ")";
+
+        if (api_is_multiple_url_enabled()) {
+            $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+            $accessUrlId = api_get_current_access_url_id();
+
+            if ($accessUrlId != -1) {
+                $sql = "SELECT DISTINCT(c.id), c.title "
+                    . "FROM $courseTable c "
+                    . "INNER JOIN $courseUserTable cru ON c.code = cru.course_code "
+                    . "INNER JOIN $courseAccessUrlTable crau ON c.code = crau.course_code "
+                    . "WHERE crau.access_url_id = $accessUrlId "
+                    . "AND ( "
+                    . "cru.id_user IN (" . implode(', ', $userIdList) . ") "
+                    . "AND cru.relation_type = 0 "
+                    . ")";
+            }
+        }
+
+        $result = Database::query($sql);
+
+        while ($row = Database::fetch_assoc($result)) {
+            $coursesList[] = $row;
+        }
+
+        return $coursesList;
+    }
 }

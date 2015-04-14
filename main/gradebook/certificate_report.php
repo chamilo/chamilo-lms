@@ -55,6 +55,9 @@ if ($selectedSession > 0) {
         }
     }
 } else {
+    if (api_is_student_boss()) {
+        $coursesList = CourseManager::getCoursesFollowedByGroupAdmin($userId);
+    } else {
     $coursesList = CourseManager::get_courses_list_by_user_id($userId);
 
     if (is_array($coursesList)) {
@@ -63,6 +66,7 @@ if ($selectedSession > 0) {
 
             $course = array_merge($course, $courseInfo);
         }
+    }
     }
 }
 

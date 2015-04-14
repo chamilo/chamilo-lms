@@ -247,7 +247,7 @@ class Statistics
                 $row[2] = $row[2];
             } else {
                 if (!empty($row[2])) {
-                    $originalData = $row[2];
+                    $originalData = str_replace('\\', '', $row[2]);
                     $row[2] = unserialize($originalData);
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
@@ -596,8 +596,8 @@ class Statistics
 
         $table = new SortableTable(
             'activities',
-            array('Statistics', 'get_number_of_activities'),
-            array('Statistics','get_activities_data'),
+            array('Statistics', 'getNumberOfActivities'),
+            array('Statistics','getActivitiesData'),
             5,
             50,
             'DESC'

@@ -94,13 +94,6 @@ class CourseRelUser
     protected $course;
 
     /**
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", inversedBy="course", cascade={"persist"})
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
-     */
-    //protected $group;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -130,27 +123,6 @@ class CourseRelUser
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * @param CGroupInfo $group
-     * @return $this
-     */
-    public function setGroup(CGroupInfo $group)
-    {
-        $this->group = $group;
-
-        return $this;
-    }
-
-    /**
-     * Get group
-     *
-     * @return CGroupInfo
-     */
-    public function getGroup()
-    {
-        return $this->group;
     }
 
     /**

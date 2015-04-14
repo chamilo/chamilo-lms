@@ -460,6 +460,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_online DROP COLUMN course");
         $this->addSql("ALTER TABLE track_e_attempt DROP COLUMN course_code");
 
+        $this->addSql("ALTER TABLE course_rel_user DROP COLUMN group_id");
+
         $this->addSql("DROP TABLE track_c_countries");
         $this->addSql("DROP TABLE track_c_browsers");
         $this->addSql("DROP TABLE track_c_os");

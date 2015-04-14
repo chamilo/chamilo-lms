@@ -40,8 +40,8 @@ class ZombieReport implements Countable
                 array(
                     'name' => 'ceiling',
                     'label' => get_lang('LastAccess'),
-                    'type' => 'datepickerdate',
-                    'default' => $this->get_ceiling(),
+                    'type' => 'date_picker',
+                    'default' => $this->get_ceiling('Y-m-d'),
                     'rules' => array(
 //                        array(
 //                            'type' => 'required',
@@ -121,7 +121,7 @@ class ZombieReport implements Countable
         return $form->isSubmitted() == false || $form->validate();
     }
 
-    function get_ceiling()
+    function get_ceiling($format = null)
     {
         $result = Request::get('ceiling');
         $result = $result ? $result : ZombieManager::last_year();
@@ -130,6 +130,9 @@ class ZombieReport implements Countable
         $result = is_array($result) ? mktime(0, 0, 0, $result['F'], $result['d'], $result['Y']) : $result;
         $result = is_numeric($result) ? (int) $result : $result;
         $result = is_string($result) ? strtotime($result) : $result;
+        if ($format) {
+            $result = date($format, $result);
+        }
         return $result;
     }
 

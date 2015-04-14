@@ -81,19 +81,19 @@ switch ($_REQUEST['report']) {
         break;
     case 'users':
         // total amount of users
+        $teachers = $students = array();
+        $countInvisible = isset($_GET['count_invisible_courses']) ? $_GET['count_invisible_courses'] : null;
         Statistics::printStats(
             get_lang('NumberOfUsers'),
             array(
-                get_lang('Teachers') => Statistics::countUsers(1, null, $_GET['count_invisible_courses']),
-                get_lang('Students') => Statistics::countUsers(5, null, $_GET['count_invisible_courses'])
+                get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
+                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible)
             )
         );
-        $teachers = $students = array();
-        $countInvisible = isset($_GET['count_invisible_courses']) ? $_GET['count_invisible_courses'] : null;
         foreach ($course_categories as $code => $name) {
             $name = str_replace(get_lang('Department'), "", $name);
-            $teachers[$name] = Statistics::countUsers(1, $code, $countInvisible);
-            $students[$name] = Statistics::countUsers(5, $code, $countInvisible);
+            $teachers[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
+            $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }
         // docents for each course category
         Statistics::printStats(get_lang('Teachers'), $teachers);

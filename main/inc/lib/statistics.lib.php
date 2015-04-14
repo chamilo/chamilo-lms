@@ -596,8 +596,8 @@ class Statistics
 
         $table = new SortableTable(
             'activities',
-            array('Statistics', 'get_number_of_activities'),
-            array('Statistics','get_activities_data'),
+            array('Statistics', 'getNumberOfActivities'),
+            array('Statistics','getActivitiesData'),
             5,
             50,
             'DESC'

@@ -8,7 +8,9 @@
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
-api_protect_course_script();
+if (!api_is_student_boss()) {
+    api_protect_course_script();
+}
 
 set_time_limit(0);
 ini_set('max_execution_time', 0);
@@ -25,7 +27,7 @@ function confirmation() {
 </script>";
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
@@ -36,10 +38,15 @@ $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['fi
 
 switch ($action) {
     case 'export_all_certificates':
+        if (api_is_student_boss()) {
+            $userList = GroupPortalManager::getGroupUsersByUser(api_get_user_id());
+        } else {
         $userList = array();
         if (!empty($filterOfficialCodeGet)) {
             $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
         }
+        }
+
         Category::exportAllCertificates($cat_id, $userList);
         break;
     case 'generate_all_certificates':

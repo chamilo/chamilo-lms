@@ -72,7 +72,11 @@ if ($selectedSession > 0) {
 }
 
 foreach ($coursesList as $course) {
+    if (isset($course['real_id'])) {
+        $courses[$course['real_id']] = $course['title'];
+    } else {
     $courses[$course['id']] = $course['title'];
+    }
 }
 
 for ($key = 1; $key <= 12; $key++) {

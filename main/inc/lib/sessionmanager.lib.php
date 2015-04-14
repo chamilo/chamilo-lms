@@ -1473,7 +1473,7 @@ class SessionManager
      * @param   boolean  optional, true if the function is called by a webservice, false otherwise.
      * @return	void	Nothing, or false on error
      * */
-    public static function delete_session($id_checked, $from_ws = false)
+    public static function delete($id_checked, $from_ws = false)
     {
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -1491,18 +1491,19 @@ class SessionManager
         }
 
         if (!api_is_platform_admin() && !$from_ws) {
-            $sql = 'SELECT session_admin_id FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION) . ' WHERE id IN (' . $id_checked.')';
+            $sql = 'SELECT session_admin_id FROM ' . $tbl_session. '
+                    WHERE id IN (' . $id_checked.')';
             $rs = Database::query($sql);
             if (Database::result($rs, 0, 0) != $userId) {
                 api_not_allowed(true);
             }
         }
 
-        Database::query("DELETE FROM $tbl_session WHERE id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_session_rel_user WHERE session_id IN($id_checked)");
         Database::query("DELETE FROM $tbl_url_session WHERE session_id IN($id_checked)");
+        Database::query("DELETE FROM $tbl_session WHERE id IN ($id_checked)");
 
         $sql_delete_sfv = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
         Database::query($sql_delete_sfv);
@@ -2468,9 +2469,9 @@ class SessionManager
             $session_id = $rows['id'];
             if ($delete_session) {
                 if ($from_ws) {
-                    SessionManager::delete_session($session_id, true);
+                    SessionManager::delete($session_id, true);
                 } else {
-                    SessionManager::delete_session($session_id);
+                    SessionManager::delete($session_id);
                 }
             }
         }

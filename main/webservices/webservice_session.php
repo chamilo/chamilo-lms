@@ -112,7 +112,7 @@ class WSSession extends WS
 		if($session_id instanceof WSError) {
 			return $session_id;
 		} else {
-			SessionManager::delete_session($session_id, true);
+			SessionManager::delete($session_id, true);
 			return true;
 		}
 	}

@@ -113,7 +113,7 @@ class ThematicController
                 case 'thematic_import_select':
                     break;
                 case 'thematic_import':
-                    $csv_import_array = Import::csv_to_array($_FILES['file']['tmp_name']);
+                    $csv_import_array = Import::csvToArray($_FILES['file']['tmp_name']);
 
                     if (isset($_POST['replace']) && $_POST['replace']) {
                         // Remove current thematic.

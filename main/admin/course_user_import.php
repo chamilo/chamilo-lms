@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This tool allows platform admins to update course-user relations by uploading
  * a CSV file
  * @package chamilo.admin
  */
+
 /**
  * Validates the imported data.
  */
@@ -135,7 +137,7 @@ function save_data($users_courses)
  */
 function parse_csv_data($file)
 {
-    $courses = Import :: csv_to_array($file);
+    $courses = Import :: csvToArray($file);
     return $courses;
 }
 
@@ -217,7 +219,7 @@ $form->display();
 <b>UserName</b>;<b>CourseCode</b>;<b>Status</b>
 jdoe;course01;<?php echo COURSEMANAGER; ?>
 
-    adam;course01;<?php echo STUDENT; ?>
+adam;course01;<?php echo STUDENT; ?>
 </pre>
         <?php
         echo COURSEMANAGER.': '.get_lang('Teacher').'<br />';

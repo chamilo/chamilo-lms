@@ -21,6 +21,10 @@ class Import
 	 */
 	static function csv_reader($path, $setFirstRowAsHeader = true)
 	{
+		if (empty($path)) {
+			return false;
+		}
+
 		$file = new \SplFileObject($path);
 		$csvReader = new CsvReader($file, ';');
 
@@ -51,14 +55,16 @@ class Import
 	 *
 	 * @deprecated use cvs_reader instead
 	 */
-	static function csv_to_array($filename)
+	static function csvToArray($filename)
 	{
 		$csvReader = self::csv_reader($filename);
-
-		$workflow = new Workflow($csvReader);
 		$resultArray = [];
-		$writer = new ArrayWriter($resultArray);
-		$result = $workflow->addWriter($writer)->process();
+
+		if ($csvReader) {
+			$workflow = new Workflow($csvReader);
+			$writer = new ArrayWriter($resultArray);
+			$result = $workflow->addWriter($writer)->process();
+		}
 
 		return $resultArray;
 	}

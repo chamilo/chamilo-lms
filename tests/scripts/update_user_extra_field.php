@@ -26,7 +26,7 @@ api_protect_admin_script();
 
 $extraField = new ExtraField('user');
 $file = 'file.csv';
-$users = Import :: csv_to_array($file);
+$users = Import :: csvToArray($file);
 foreach ($users as $user) {
     $userInfo = api_get_user_info_from_username($user['user']);
     if (!empty($userInfo)) {

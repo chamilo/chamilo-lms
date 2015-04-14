@@ -39,10 +39,10 @@ class ImportTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Import::csv_to_array
-     * @todo   Implement testCsv_to_array().
+     * @covers Import::csvToArray
+     * @todo   Implement testcsvToArray().
      */
-    public function testCsv_to_array()
+    public function testcsvToArray()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

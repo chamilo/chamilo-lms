@@ -212,7 +212,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         }
                     }
                 }
-                //$data = Import::csv_to_array($_FILES['file']['tmp_name']);
+                //$data = Import::csvToArray($_FILES['file']['tmp_name']);
                 $data = Import::csv_reader($_FILES['file']['tmp_name']);
                 $good = 0;
                 $bad = 0;

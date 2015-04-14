@@ -118,7 +118,7 @@ function save_data($users_classes, $deleteUsersNotInList = false) {
  * @return array All course-information read from the file
  */
 function parse_csv_data($file) {
-    $courses = Import::csv_to_array($file);
+    $courses = Import::csvToArray($file);
     return $courses;
 }
 $cidReset = true;

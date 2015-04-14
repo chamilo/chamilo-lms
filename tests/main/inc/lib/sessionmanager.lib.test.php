@@ -63,7 +63,7 @@ class TestSessionManager extends UnitTestCase {
 		global $_user;
 		$id_checked='';
 		$this->sessionmanager = new SessionManager();
-		$res=SessionManager::delete_session($id_checked);
+		$res=SessionManager::delete($id_checked);
 		$idsesion->expectOnce(Database :: get_main_table(TABLE_MAIN_SESSION));
 		$this->assertTrue(is_object($idsesion));
 		$this->assertTrue(is_null($res));

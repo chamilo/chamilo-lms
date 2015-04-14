@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This script allows platform admins to add users to courses.
 *	It displays a list of users and a list of courses;
@@ -65,8 +66,8 @@ if (is_array($extra_field_list)) {
 /* React on POSTed request */
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
-    $courses = is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
+    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
+    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
     $first_letter_user = $_POST['firstLetterUser'];
     $first_letter_course = $_POST['firstLetterCourse'];
 

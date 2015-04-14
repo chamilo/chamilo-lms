@@ -1,18 +1,20 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
 
 $cidReset = true;
 
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$session_id = intval($_GET['session_id']);
+$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 $formSent = 0;
 $errorMsg = '';
 
@@ -36,7 +38,7 @@ $interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmi
 
 set_time_limit(0);
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent'])) {
 	$formSent = $_POST['formSent'];
 	$file_type = ($_POST['file_type'] == 'csv')?'csv':'xml';
 	$session_id = $_POST['session_id'];
@@ -260,7 +262,7 @@ Display::display_header($tool_name);
 //select of sessions
 $sql = "SELECT id, name FROM $tbl_session ORDER BY name";
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){

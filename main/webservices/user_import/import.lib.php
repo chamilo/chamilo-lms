@@ -93,9 +93,9 @@ function save_data($users) {
 	if(is_array($users)) {
 		foreach ($users as $index => $user) {
 			$user = complete_missing_data($user);
-	
+
 			$user['Status'] = api_status_key($user['Status']);
-	
+
 			$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
 			foreach ($user['Courses'] as $index => $course) {
 				if(CourseManager :: course_exists($course))
@@ -105,24 +105,24 @@ function save_data($users) {
 				$class_id = ClassManager :: get_class_id($user['ClassName']);
 				ClassManager :: add_user($user_id, $class_id);
 			}
-	
+
 			// TODO: Hard-coded French texts.
-	
+
 			// Qualite
 			if (!empty($user['Qualite'])) {
 				UserManager::update_extra_field_value($user_id, 'qualite', $user['Qualite']);
 			}
-	
+
 			// Categorie
 			if (!empty($user['Categorie'])) {
 				UserManager::update_extra_field_value($user_id, 'categorie', $user['Categorie']);
 			}
-	
+
 			// Etat
 			if (!empty($user['Etat'])) {
 				UserManager::update_extra_field_value($user_id, 'etat', $user['Etat']);
 			}
-	
+
 			// Niveau
 			if (!empty($user['Niveau'])) {
 				UserManager::update_extra_field_value($user_id, 'niveau', $user['Niveau']);
@@ -137,7 +137,7 @@ function save_data($users) {
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file) {
-	$users = Import :: csv_to_array($file);
+	$users = Import :: csvToArray($file);
 	foreach ($users as $index => $user) {
 		if (isset ($user['Courses'])) {
 			$user['Courses'] = explode('|', trim($user['Courses']));

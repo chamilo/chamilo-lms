@@ -18,7 +18,7 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 
 if ($action == 'delete') {
-	SessionManager::delete_session($idChecked);
+	SessionManager::delete($idChecked);
 	header('Location: session_list.php');
 	exit();
 } elseif ($action == 'copy') {

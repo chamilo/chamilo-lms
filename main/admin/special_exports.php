@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Special exports
  *
@@ -7,6 +8,7 @@
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
  * @package chamilo.include.export
  */
+
 // including the global file
 $cidReset = true;
 require_once  '../inc/global.inc.php';
@@ -204,7 +206,7 @@ function fullexportspecial(){
     $code_course = '';
     $list_course = array();
     $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
-    $list_course = Database::get_course_list();
+    $list_course = CourseManager::get_course_list();
 
     $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
     $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -217,7 +219,7 @@ function fullexportspecial(){
             } else {
                 $querypath = $FileZip['PATH'];
             }
-            $course_id 		= $_course['real_id'];
+            $course_id = $_course['real_id'];
 
             //Add tem to the zip file course
             $sql = "SELECT path FROM $tbl_document AS docs, $tbl_property AS props
@@ -238,10 +240,12 @@ function fullexportspecial(){
             }
             //Add tem to the zip file session course
             $code_course = $_course['code'];
-            $sql_session = "SELECT id, name, c_id
-                            FROM $tbl_session_course
-                            INNER JOIN $tbl_session ON session_id = id
-                            WHERE course_code = '$code_course' ";
+            $sql_session = "SELECT s.id, name, c_id
+                            FROM $tbl_session_course sc
+                            INNER JOIN $tbl_session  s
+                            ON sc.session_id = s.id
+                            WHERE c_id = '$course_id' ";
+
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session_id = $rows_session['id'];

@@ -5686,7 +5686,7 @@ class CourseManager
     public static function get_course_list()
     {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        return Database::store_result(self::query("SELECT *, id as real_id FROM $table"));
+        return Database::store_result(Database::query("SELECT *, id as real_id FROM $table"));
     }
 
     /**

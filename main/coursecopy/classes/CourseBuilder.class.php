@@ -1317,10 +1317,11 @@ class CourseBuilder
             ); //current platform encoding
             $code_course = $_course['code'];
             $courseId = $_course['real_id'];
-            $sql_session = "SELECT id, name, c_id
-                FROM $tbl_session_course
-                INNER JOIN  $tbl_session ON session_id = id
-                WHERE c_id = '$courseId' ";
+            $sql_session = "SELECT s.id, name, c_id
+                FROM $tbl_session_course sc
+                INNER JOIN $tbl_session s
+                ON sc.session_id = s.id
+                WHERE sc.c_id = '$courseId' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session = new CourseSession(

@@ -20,7 +20,7 @@ class CourseSession extends Resource
 	 */
 	public function __construct($id,$title)
 	{
-		parent::__construct($id,RESOURCE_SESSION_COURSE);
+		parent::__construct($id, RESOURCE_SESSION_COURSE);
 		$this->title = $title;
 	}
 

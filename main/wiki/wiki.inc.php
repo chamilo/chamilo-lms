@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * Class Wiki
@@ -2134,8 +2134,8 @@ class Wiki
                         $obj->title.'</a>';
                 }
 
-                $row[] = $obj->user_id <>0 ? '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                    api_htmlentities($userinfo['complete_name']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+                $row[] = $obj->user_id < >0 ? UserManager::getUserProfileLink($userinfo) : get_lang('Anonymous').' ('.$obj->user_ip.')';
+
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
                 if ($all_vers=='1') {
@@ -3005,9 +3005,8 @@ class Wiki
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
                 $row = array();
                 if ($obj->user_id <> 0) {
-                    $row[] = '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                        '</a><a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.urlencode($obj->user_id).
+                    $row[] = UserManager::getUserProfileLink($userinfo).'
+                            <a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.urlencode($obj->user_id).
                         '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>';
                 } else {
                     $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
@@ -3017,7 +3016,14 @@ class Wiki
             }
 
             $table = new SortableTableFromArrayConfig($rows,1,10,'MostActiveUsersA_table','','','DESC');
-            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+            $table->set_additional_parameters(
+                array(
+                    'cidReq' => Security::remove_XSS($_GET['cidReq']),
+                    'action' => Security::remove_XSS($action),
+                    'session_id' => Security::remove_XSS($_GET['session_id']),
+                    'group_id' => Security::remove_XSS($_GET['group_id'])
+                )
+            );
             $table->set_header(0,get_lang('Author'), true);
             $table->set_header(1,get_lang('Contributions'), true,array ('style' => 'width:30px;'));
             $table->display();
@@ -3044,9 +3050,12 @@ class Wiki
             return;
         }
 
-        //first extract the date of last version
+        // First extract the date of last version
         $sql = 'SELECT * FROM '.$tbl_wiki.'
-                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    reflink = "'.Database::escape_string($page).'" AND
+                    '.$groupfilter.$condition_session.'
                 ORDER BY id DESC';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
@@ -3056,7 +3065,10 @@ class Wiki
 
         //select page to discuss
         $sql = 'SELECT * FROM '.$tbl_wiki.'
-                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    reflink="'.Database::escape_string($page).'" AND
+                    '.$groupfilter.$condition_session.'
                 ORDER BY id ASC';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
@@ -3066,18 +3078,24 @@ class Wiki
         //mode assignment: previous to show  page type
         $icon_assignment = null;
         if ($row['assignment']==1) {
-            $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
+            $icon_assignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
         } elseif($row['assignment']==2) {
-            $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
+            $icon_assignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
         }
 
         $countWPost = null;
         $avg_WPost_score = null;
 
-        //Show title and form to discuss if page exist
+        // Show title and form to discuss if page exist
         if ($id!='') {
-            //Show discussion to students if isn't hidden. Show page to all teachers if is hidden. Mode assignments: If is hidden, show pages to student only if student is the author
-            if ($row['visibility_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))) {
+            // Show discussion to students if isn't hidden.
+            // Show page to all teachers if is hidden.
+            // Mode assignments: If is hidden, show pages to student only if student is the author
+            if ($row['visibility_disc']==1 ||
+                api_is_allowed_to_edit(false,true) ||
+                api_is_platform_admin() ||
+                ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))
+            ) {
                 echo '<div id="wikititle">';
 
                 // discussion action: protecting (locking) the discussion
@@ -3144,9 +3162,7 @@ class Wiki
 
                 echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
 
-                echo ' ('.get_lang('MostRecentVersionBy').' <a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.
-                    Display::tag('span', api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])), array('title'=>$username)).
-                    '</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
+                echo ' ('.get_lang('MostRecentVersionBy').' '.UserManager::getUserProfileLink($lastuserinfo).' '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
 
                 echo '</div>';
 
@@ -3305,9 +3321,7 @@ class Wiki
                     echo '<p><table>';
                     echo '<tr>';
                     echo '<td rowspan="2">'.$author_photo.'</td>';
-                    echo '<td style=" color:#999999"><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                        Display::tag('span', api_htmlentities($userinfo['complete_name'])).
-                        '</a> ('.$author_status.') '.
+                    echo '<td style=" color:#999999">'.UserManager::getUserProfileLink($userinfo).' ('.$author_status.') '.
                         api_get_local_time($row['dtime'], null, date_default_timezone_get()).
                         ' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
                     echo '</tr>';
@@ -3383,12 +3397,10 @@ class Wiki
                 $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">
                 '.api_htmlentities($obj->title).'</a>';
                 if ($obj->user_id <>0) {
-                    $row[] =  '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                        '</a>';
+                    $row[] = UserManager::getUserProfileLink($userinfo);
                 }
                 else {
-                    $row[] =  get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
+                    $row[] = get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
                 }
                 $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
 
@@ -3496,13 +3508,11 @@ class Wiki
                 $row = array();
                 $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
                 $row[] = $ShowAssignment.$icon_task;
-                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'">'.
+                $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'">'.
                     api_htmlentities($obj->title).'</a>';
                 $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
                 if ($obj->user_id <> 0 ) {
-                    $row[] = '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                        '</a>';
+                    $row[] = UserManager::getUserProfileLink($userinfo);
                 } else {
                     $row[] = get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
                 }
@@ -3625,8 +3635,7 @@ class Wiki
                     $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.
                         api_htmlentities($obj->title).'</a>';
                     if ($obj->user_id <>0) {
-                        $row[] = '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                            Display::tag('span', api_htmlentities($userinfo['complete_name_with_username'])).'</a>';
+                        $row[] = UserManager::getUserProfileLink($userinfo);
                     }
                     else {
                         $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
@@ -3711,10 +3720,10 @@ class Wiki
         $userinfo = api_get_user_info($userId);
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
-        echo '<div class="actions">'.get_lang('UserContributions').': <a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-            Display::tag('span', api_htmlentities($userinfo['complete_name']), array('title'=>$username)).
-            '</a><a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.$userId.
-            '&session_id='.$this->session_id.'&group_id='.$this->group_id.'"></a></div>';
+        echo '<div class="actions">'.get_lang('UserContributions').': '.UserManager::getUserProfileLink($userinfo).
+            '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=usercontrib&user_id='.$userId.
+            '&session_id='.$this->session_id.'&group_id='.$this->group_id.'">
+            </a></div>';
 
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
             //only by professors if page is hidden
@@ -3852,6 +3861,8 @@ class Wiki
     }
 
     /**
+     * Restore page
+     * @return bool
      */
     public function restorePage()
     {
@@ -3868,7 +3879,7 @@ class Wiki
 
         /* Only teachers and platform admin can edit the index page.
         Only teachers and platform admin can edit an assignment teacher*/
-        if (($current_row['reflink']=='index' || $current_row['reflink']=='' || $current_row['assignment'] == 1) &&
+        if (($current_row['reflink'] == 'index' || $current_row['reflink'] == '' || $current_row['assignment'] == 1) &&
             (!api_is_allowed_to_edit(false,true) && $this->group_id == 0)
         ) {
             self::setMessage(
@@ -3897,9 +3908,7 @@ class Wiki
             //$icon_assignment = null;
             if ($current_row['assignment'] == 1) {
                 self::setMessage(Display::display_normal_message(get_lang('EditAssignmentWarning'), false, true));
-                //$icon_assignment = Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
             } elseif($current_row['assignment']==2) {
-                //$icon_assignment = Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
                 if (($userId == $current_row['user_id'])==false) {
                     if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                         $PassEdit = true;
@@ -3914,7 +3923,9 @@ class Wiki
 
             //show editor if edit is allowed
             if ($PassEdit) {
-                if ($current_row['editlock'] == 1 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false)) {
+                if ($current_row['editlock'] == 1 &&
+                    (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false)
+                ) {
                     self::setMessage(Display::display_normal_message(get_lang('PageLockedExtra'), false, true));
                 } else {
                     if ($last_row['is_editing']!=0 && $last_row['is_editing'] != $userId) {
@@ -3924,7 +3935,7 @@ class Wiki
                         $max_edit_time = 1200; // 20 minutes
                         $rest_time = $max_edit_time - $time_editing;
                         $userinfo = api_get_user_info($last_row['is_editing']);
-                        $is_being_edited = get_lang('ThisPageisBeginEditedBy').' <a href='.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.
+                        $is_being_edited = get_lang('ThisPageisBeginEditedBy').' <a href='.$userinfo['profile_url'].'>'.
                             Display::tag('span', $userinfo['complete_name_with_username']).
                             get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes');
                         self::setMessage(Display::display_normal_message($is_being_edited, false, true));
@@ -4504,8 +4515,8 @@ class Wiki
             $default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
             $default_table_for_content_End='</td></tr></table>';
             $content = $default_table_for_content_Start.sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH)).$default_table_for_content_End;
-            $title=get_lang('DefaultTitle');
-            $page_id=0;
+            $title = get_lang('DefaultTitle');
+            $page_id = 0;
         } else {
             $content = api_html_entity_decode($row['content']);
             $title = api_html_entity_decode($row['title']);
@@ -4618,25 +4629,27 @@ class Wiki
                         } else {
                             $message_task_delayedsubmit=get_lang('Yes');
                         }
+
                         if ($row['max_version']==0) {
                             $message_task_max_version=get_lang('No');
                         } else {
                             $message_task_max_version=$row['max_version'];
                         }
+
                         if ($row['max_text']==0) {
                             $message_task_max_text=get_lang('No');
                         } else {
                             $message_task_max_text=$row['max_text'];
                         }
 
-                        //comp message
+                        // Comp message
                         $message_task='<b>'.get_lang('DescriptionOfTheTask').'</b><p>'.$row['task'].'</p><hr>';
                         $message_task.='<p>'.get_lang('StartDate').': '.$message_task_startdate.'</p>';
                         $message_task.='<p>'.get_lang('EndDate').': '.$message_task_enddate;
                         $message_task.=' ('.get_lang('AllowLaterSends').') '.$message_task_delayedsubmit.'</p>';
                         $message_task.='<p>'.get_lang('OtherSettings').': '.get_lang('NMaxVersion').': '.$message_task_max_version;
                         $message_task.=' '.get_lang('NMaxWords').': '.$message_task_max_text;
-                        //display message
+                        // Display message
                         self::setMessage(Display::display_normal_message($message_task, false, true));
                     }
 
@@ -4655,22 +4668,22 @@ class Wiki
                     if ($row['is_editing']==0) {
                         self::setMessage(Display::display_normal_message(get_lang('WarningMaxEditingTime'), false, true));
                         $time_edit = date("Y-m-d H:i:s");
-                        $sql = 'UPDATE '.$tbl_wiki.' SET is_editing="'.$userId.'", time_edit="'.$time_edit.'"
+                        $sql = 'UPDATE '.$tbl_wiki.' SET
+                                is_editing = "'.$userId.'",
+                                time_edit = "'.$time_edit.'"
                                 WHERE c_id = '.$course_id.' AND  id="'.$row['id'].'"';
                         Database::query($sql);
                     } elseif ($row['is_editing']!= $userId) {
                         $timestamp_edit=strtotime($row['time_edit']);
-                        $time_editing=time()-$timestamp_edit;
-                        $max_edit_time=1200; // 20 minutes
-                        $rest_time=$max_edit_time-$time_editing;
+                        $time_editing = time() - $timestamp_edit;
+                        $max_edit_time = 1200; // 20 minutes
+                        $rest_time = $max_edit_time - $time_editing;
 
                         $userinfo = api_get_user_info($row['is_editing']);
                         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
-                        $is_being_edited = get_lang('ThisPageisBeginEditedBy').
-                            ' <a href='.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.
-                            Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                            '</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+                        $is_being_edited = get_lang('ThisPageisBeginEditedBy').' '.UserManager::getUserProfileLink($userinfo).'
+                            '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
                         self::setMessage(Display::display_normal_message($is_being_edited, false, true));
                         $this->redirectHome();
                     }
@@ -4818,10 +4831,8 @@ class Wiki
                     echo '</a>';
                     echo ' ('.get_lang('Version').' '.$row['version'].')';
                     echo ' '.get_lang('By').' ';
-                    if ($row['user_id']<>0) {
-                        echo '<a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
-                            Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                            '</a>';
+                    if ($row['user_id'] <> 0) {
+                        echo UserManager::getUserProfileLink($userinfo);
                     } else {
                         echo get_lang('Anonymous').' ('.api_htmlentities($row['user_ip']).')';
                     }

@@ -922,35 +922,6 @@ function store_add_dropbox()
     return get_lang('FileUploadSucces');
 }
 
-
-
-/**
-* This function displays the firstname and lastname of the user as a link to the user tool.
-*
-* @see this is the same function as in the new forum, so this probably has to move to a user library.
-*
-* @todo move this function to the user library (there is a duplicate in work.lib.php)
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function display_user_link_work($user_id, $name = '') {
-    if ($user_id != 0) {
-        if (empty($name)) {
-            $table_user = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT * FROM $table_user WHERE user_id = ".intval($user_id)."";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            return '<a href="../user/userInfo.php?uInfo='.$row['user_id'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a>';
-        } else {
-            $user_id = intval($user_id);
-            return '<a href="../user/userInfo.php?uInfo='.$user_id.'">'.Security::remove_XSS($name).'</a>';
-        }
-    } else {
-        return $name.' ('.get_lang('Anonymous').')';
-    }
-}
-
 /**
 * this function transforms the array containing all the feedback into something visually attractive.
 *
@@ -979,7 +950,8 @@ function feedback($array) {
 */
 function format_feedback($feedback)
 {
-    $output = display_user_link_work($feedback['author_user_id']);
+    $userInfo = api_get_user_info($feedback['author_user_id']);
+    $output = UserManager::getUserProfileLink($userInfo);
     $output .= '&nbsp;&nbsp;'.api_convert_and_format_date($feedback['feedback_date'], DATE_TIME_FORMAT_LONG).'<br />';
     $output .= '<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
     return $output;

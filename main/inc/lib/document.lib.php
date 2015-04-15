@@ -5749,24 +5749,6 @@ class DocumentManager
     }
 
     /**
-     * This function displays the name of the user and makes the link tothe user tool.
-     *
-     * @param $user_id
-     * @param $name
-     * @return a link to the userInfo.php
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version february 2006, dokeos 1.8
-     */
-    public static function display_user_link_document($user_id, $name)
-    {
-        if ($user_id != 0) {
-            return '<a href="../user/userInfo.php?uInfo=' . $user_id . '">' . $name . '</a>';
-        } else {
-            return get_lang('Anonymous');
-        }
-    }
-
-    /**
      * Creates form that asks for the directory name.
      * @return string	html-output text for the form
      */

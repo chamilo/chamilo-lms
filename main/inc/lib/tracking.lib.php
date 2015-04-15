@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
-use CpChart\Classes\pCache as pCache;
 
 /**
  *  Class Tracking
@@ -5594,7 +5594,8 @@ class TrackingCourseLog
 
     		if (in_array($row['col0'], array('thematic_plan', 'thematic_advance'))) {
     			$tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
-    			$sql = "SELECT thematic_id FROM $table_tool WHERE c_id = $course_id AND id = $ref";
+    			$sql = "SELECT thematic_id FROM $table_tool
+    			        WHERE c_id = $course_id AND id = $ref";
     			$rs_thematic  = Database::query($sql);
     			if (Database::num_rows($rs_thematic)) {
     				$row_thematic = Database::fetch_array($rs_thematic);
@@ -5739,9 +5740,11 @@ class TrackingCourseLog
     			}
     			$row[2] = $row2;
                 if (!empty($row['col3'])) {
+                    $userInfo = api_get_user_info($row['user_id']);
+
                     $row['col3'] = Display::url(
                         $row['col3'],
-                        api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&origin=tracking&uInfo='.$row['user_id']
+                        $userInfo['profile_url']
                     );
                     $row[3] = $row['col3'];
 

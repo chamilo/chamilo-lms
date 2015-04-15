@@ -237,11 +237,6 @@ define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
 define('TABLE_BLOGS_RATING', 'blog_rating');
 define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
 define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
-//end of Smartblogs
-
-// User information tables
-define('TABLE_USER_INFO',           'userinfo_def');
-define('TABLE_USER_INFO_CONTENT',   'userinfo_content');
 
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');

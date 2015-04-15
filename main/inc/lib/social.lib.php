@@ -553,11 +553,12 @@ class SocialManager extends UserManager
         if (!$nosession) {
             $session = '';
             $active = false;
-            if (!empty($my_course['session_name'])) {
+            if (!empty($my_course['session_name']) && !empty($my_course['id_session'])) {
 
                 // Request for the name of the general coach
                 $sql = 'SELECT lastname, firstname
-                        FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table.' tu
+                        FROM '.$tbl_session.' ts
+                        LEFT JOIN '.$main_user_table.' tu
                         ON ts.id_coach = tu.user_id
                         WHERE ts.id='.(int) $my_course['id_session'].' LIMIT 1';
                 $rs = Database::query($sql);
@@ -585,7 +586,7 @@ class SocialManager extends UserManager
         } else {
             $output = array($my_course['user_course_cat'], $result);
         }
-        //$my_course['creation_date'];
+
         return $output;
     }
 

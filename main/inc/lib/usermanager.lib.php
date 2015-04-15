@@ -5328,4 +5328,30 @@ EOF;
         }
         return $userPath;
     }
+
+    /**
+     * Displays the name of the user and makes the link to the user profile
+     * @param $userInfo
+     */
+    public static function getUserProfileLink($userInfo)
+    {
+        if (isset($userInfo) && isset($userInfo['user_id'])) {
+            return Display::url($userInfo['complete_name'], $userInfo['profile_url']);
+        } else {
+            return get_lang('Anonymous');
+        }
+    }
+
+    /**
+     * Displays the name of the user and makes the link to the user profile
+     * @param $userInfo
+     * @todo
+     */
+    public static function getUserProfileLinkWithPicture($userInfo)
+    {
+        $imagePath = UserManager::get_user_picture_path_by_id($userInfo['id'], 'web', false, true);
+        $userProfile = UserManager::get_picture_user($userInfo['id'], $imagePath['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+
+        return Display::url(Display::img($userProfile['file']), $userInfo['profile_url']);
+    }
 }

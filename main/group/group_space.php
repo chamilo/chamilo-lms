@@ -335,10 +335,14 @@ if (count($tutors) == 0) {
         $image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
         $image_repository = $image_path['dir'];
         $existing_image = $image_path['file'];
-        $completeName = api_get_person_name($tutor['firstname'], $tutor['lastname']);
+        $completeName = $tab_user_info['complete_name'];
         $photo = '<img src="'.$image_repository.$existing_image.'" alt="'.$completeName.'" width="32" height="32" title="'.$completeName.'" />';
-        $tutor_info .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?origin='.$my_origin.'&uInfo='.$tutor['user_id'].'">'.
-            $photo.'&nbsp;'.$completeName.'</a></li>';
+        $tutor_info .= '<li>';
+        $tutor_info .= Display::url(
+            $tab_user_info['complete_name'],
+            $tab_user_info['profile_url']
+        );
+        $tutor_info .= '</li>';
     }
     $tutor_info .= '</ul>';
 }
@@ -510,13 +514,12 @@ function email_filter($email)
  */
 function user_icon_filter($user_id)
 {
-    global $origin;
-    $userinfo = api_get_user_info($user_id);
+    $userInfo = api_get_user_info($user_id);
     $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
     $image_repository = $image_path['dir'];
     $existing_image = $image_path['file'];
-    $photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['complete_name'].'"  width="22" height="22" title="'.$userinfo['complete_name'].'" /></center>';
-    return '<a href="../user/userInfo.php?origin='.$origin.'&uInfo='.$user_id.'">'.$photo;
+    $photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userInfo['complete_name'].'"  width="22" height="22" title="'.$userInfo['complete_name'].'" /></center>';
+    return Display::url($photo, $userInfo['profile_url']);
 }
 
 /**
@@ -531,9 +534,8 @@ function user_icon_filter($user_id)
  */
 function user_name_filter($name, $url_params, $row)
 {
-    $tab_user_info = api_get_user_info($row[0]);
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
-    return '<a href="../user/userInfo.php?uInfo='.$row[0].'&'.$url_params.'" title="'.$username.'">'.$name.'</a>';
+    $userInfo = api_get_user_info($row[0]);
+    return UserManager::getUserProfileLink($userInfo);
 }
 
 // Footer

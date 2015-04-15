@@ -22,7 +22,7 @@
  * @todo complete the missing phpdoc the correct order should be
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 define('FORUM_NEW_POST', 0);
 
@@ -3085,7 +3085,9 @@ function store_edit_post($values)
 function display_user_link($user_id, $name, $origin = '', $in_title = '')
 {
     if ($user_id != 0) {
-        return '<a title="'.api_htmlentities($in_title, ENT_QUOTES).'" href="../user/userInfo.php?uInfo='.$user_id.'" '.(!empty($origin) ? 'target="_self"' : '').'>'.$name.'</a>';
+        $userInfo = api_get_user_info($user_id);
+
+        return '<a href="'.$userInfo['profile_url'].'">'.Security::remove_XSS($userInfo['complete_name']).'</a>';
     } else {
         return $name.' ('.get_lang('Anonymous').')';
     }
@@ -3100,7 +3102,8 @@ function display_user_link($user_id, $name, $origin = '', $in_title = '')
  */
 function display_user_image($user_id, $name, $origin = '')
 {
-    $link = '<a href="../user/userInfo.php?uInfo='.$user_id.'" '.(!empty($origin) ? 'target="_self"' : '').'>';
+    $userInfo = api_get_user_info($user_id);
+    $link = '<a href="'.$userInfo['profile_url'].'" '.(!empty($origin) ? 'target="_self"' : '').'>';
     if ($user_id != 0) {
         $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
         $friends_profile = UserManager::get_picture_user($user_id, $image_path['file'], 0, USER_IMAGE_SIZE_MEDIUM, 'width="96" height="96" ');

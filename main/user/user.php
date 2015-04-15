@@ -706,8 +706,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     USER_IMAGE_SIZE_SMALL,
                     ' width="22" height="22" '
                 );
+                $userInfo = api_get_user_info($user_id);
                 if (!api_is_anonymous()) {
-                    $photo = '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a>';
+                    $photo = Display::url(
+                        '<img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />',
+                        $userInfo['profile_url']
+                    );
                 } else {
                     $photo = '<img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />';
                 }
@@ -758,13 +762,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $temp[] = $user_id;
                 $temp['is_tutor'] = isset($o_course_user['is_tutor']) ? $o_course_user['is_tutor'] : '';
                 $temp['user_status_in_course'] = isset($o_course_user['status_rel']) ? $o_course_user['status_rel'] : '';
-                $temp['user_status_in_course_session'] = $o_course_user['status_session'];
             } else {
                 $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
                 $image_repository = $image_path['dir'];
                 $existing_image = $image_path['file'];
+                $userInfo = api_get_user_info($user_id);
                 if (!api_is_anonymous()) {
-                    $photo= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  width="22" height="22" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a>';
+                    $photo = UserManager::getUserProfileLinkWithPicture($userInfo);
                 } else {
                     $photo= '<img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  width="22" height="22" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />';
                 }

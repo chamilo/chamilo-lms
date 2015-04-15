@@ -2509,8 +2509,8 @@ class MySpace
         foreach ($users as $index => $user) {
             $user = MySpace::complete_missing_data($user);
             // coach only will registered users
-            $default_status = '5';
-            if ($user['create'] == '1') {
+            $default_status = STUDENT;
+            if ($user['create'] == COURSEMANAGER) {
                 $user['id'] = UserManager:: create_user(
                     $user['FirstName'],
                     $user['LastName'],
@@ -2544,7 +2544,7 @@ class MySpace
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
                         VALUES('$id_session','$enreg_course','$userid')";
                 $course_session = array('course' => $enreg_course, 'added' => 1);
-                //$user['added_at_session'] = $course_session;
+
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
@@ -2565,14 +2565,12 @@ class MySpace
             $sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
             Database::query($sql_update);
         }
-        // We don't delete the users (thoughts while dreaming)
-        //$sql_delete = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session'";
-        //Database::query($sql_delete);
 
         $new_users = array();
         foreach ($users as $index => $user) {
             $userid = $user['id'];
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) VALUES('$id_session','$userid')";
+            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
+                           VALUES ('$id_session','$userid')";
             Database::query($sql_insert);
             $user['added_at_session'] = 1;
             $new_users[] = $user;
@@ -2586,7 +2584,17 @@ class MySpace
             $i = 0;
             foreach ($users as $index => $user) {
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                $emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+                $emailbody = get_lang('Dear').' '.
+                    api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".
+                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                    get_lang('Username')." : $user[UserName]\n".
+                    get_lang('Pass')." : $user[Password]\n\n".
+                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".
+                    get_lang('Problem')."\n\n".
+                    get_lang('SignatureFormula').",\n\n".
+                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
+                    api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
                     api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS),
@@ -2594,6 +2602,7 @@ class MySpace
                     $emailsubject,
                     $emailbody
                 );
+                $userInfo = api_get_user_info($user['id']);
 
                 if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
@@ -2605,15 +2614,18 @@ class MySpace
                     if ($user['added_at_session'] == 1) {
                         $addedto .= get_lang('UserInSession');
                     }
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 } else {
                     $addedto = get_lang('UserNotAdded');
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 }
+
+                $registered_users .= UserManager::getUserProfileLink($userInfo)." - ".$addedto.'<br />';
             }
         } else {
             $i = 0;
             foreach ($users as $index => $user) {
+
+                $userInfo = api_get_user_info($user['id']);
+
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
                         $addedto = get_lang('UserCreatedPlatform');
@@ -2624,19 +2636,15 @@ class MySpace
                     if ($user['added_at_session'] == 1) {
                         $addedto .= ' '.get_lang('UserInSession');
                     }
-
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 } else {
                     $addedto = get_lang('UserNotAdded');
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 }
+                $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
             }
         }
 
         header('Location: course.php?id_session='.$id_session.'&action=show_message&message='.urlencode($registered_users));
-        exit ();
-
-        //header('Location: resume_session.php?id_session='.$id_session);
+        exit;
     }
 
     /**

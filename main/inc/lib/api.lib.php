@@ -2708,7 +2708,7 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
     $session_id = intval($session_id);
     $courseId = intval($courseId);
 
-    $sql = "SELECT DISTINCT id
+    $sql = "SELECT DISTINCT session.id
             FROM $session_table
             INNER JOIN $session_rel_course_rel_user_table session_rc_ru
             ON session.id = session_rc_ru.session_id

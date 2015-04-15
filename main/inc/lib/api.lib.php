@@ -1348,12 +1348,12 @@ function _api_format_user($user, $add_password = false)
         $result['complete_name_with_username'] = $result['complete_name'].' ('.$user['username'].')';
     }
 
-    $result['firstname']    = $firstname;
-    $result['lastname']     = $lastname;
+    $result['firstname'] = $firstname;
+    $result['lastname'] = $lastname;
 
     // Kept for historical reasons
-    $result['firstName']    = $firstname;
-    $result['lastName']     = $lastname;
+    $result['firstName'] = $firstname;
+    $result['lastName'] = $lastname;
 
     $attributes = array(
         'phone',
@@ -1407,12 +1407,11 @@ function _api_format_user($user, $add_password = false)
     $result['lastLogin'] = $last_login;
 
     // Getting user avatar.
-
     $picture_filename   = trim($result['picture_uri']);
-    $result['avatar']             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-    $result['avatar_small']       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
-    $result['avatar_sys_path']    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
-    $dir                = 'upload/users/'.$user_id.'/';
+    $result['avatar'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
+    $result['avatar_small'] = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
+    $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
+    $dir = 'upload/users/'.$user_id.'/';
 
     //if (!empty($picture_filename) && api_is_anonymous() ) {  //Why you have to be anonymous?
     if (!empty($picture_filename)) {
@@ -1453,6 +1452,8 @@ function _api_format_user($user, $add_password = false)
     if ($add_password) {
         $result['password'] = $user['password'];
     }
+
+    $result['profile_url'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_id;
 
     return $result;
 }
@@ -7201,7 +7202,7 @@ function api_block_account_captcha($username)
     global $_configuration;
     $minutesToBlock = isset($_configuration['captcha_time_to_block']) ? $_configuration['captcha_time_to_block'] : 10;
     $time = time() + $minutesToBlock*60;
-    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
+    UserManager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', api_get_utc_datetime($time));
 }
 
 /**
@@ -7214,7 +7215,7 @@ function api_clean_account_captcha($username)
         return false;
     }
     Session::erase('loginFailedCount');
-    Usermanager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
+    UserManager::update_extra_field_value($userInfo['user_id'], 'captcha_blocked_until_date', null);
 }
 
 /**

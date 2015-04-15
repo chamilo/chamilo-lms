@@ -1261,7 +1261,7 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
@@ -1321,7 +1321,7 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
@@ -1416,11 +1416,10 @@ class ImportCsv
     }
 }
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\NativeMailerHandler;
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\BufferHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 $logger = new Logger('cron');
 $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;

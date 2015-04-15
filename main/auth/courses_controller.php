@@ -532,7 +532,7 @@ class CoursesController
      */
     public function getSessionIcon($sessionName)
     {
-        return Display::return_icon('window_list.png', $sessionName, null, ICON_SIZE_BIG);
+        return Display::return_icon('window_list.png', $sessionName, null,ICON_SIZE_MEDIUM);
     }
 
     /**

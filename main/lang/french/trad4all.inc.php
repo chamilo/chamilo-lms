@@ -550,7 +550,7 @@ $Remote = "Distant";
 $FileToUpload = "Fichier à envoyer";
 $ContentMaker = "Créateur du contenu";
 $ContentProximity = "Situation du parcours";
-$UploadLocalFileFromGarbageDir = "Intégrer un fichier déposé par FTP sur le serveur";
+$UploadLocalFileFromGarbageDir = "Intégrer un paquet zip déposé par FTP sur le serveur dans le répertoire archive/";
 $ThisItemIsNotExportable = "Cet item n'est pas compatible SCORM pour le moment. Il n'est donc pas exportable.";
 $MoveCurrentChapter = "Déplacer le chapitre courant";
 $GenericScorm = "Scorm générique";
@@ -7056,4 +7056,8 @@ $DataTableSearch = "Recherche";
 $HideColumn = "Cacher la colonne";
 $DisplayColumn = "Montrer la colonne";
 $LegalAgreementAccepted = "Conditions légales acceptées";
+$WorkEmailAlertActivateOnlyForTeachers = "Envoyer un e-mail aux formateurs uniquement à la réception d'un nouveau travail";
+$WorkEmailAlertActivateOnlyForStudents = "Envoyer un e-mail à l'étudiant uniquement pour confirmer la réception d'un nouveau travail";
+$Uncategorized = "Non catégorisé";
+$NaturalYear = "Année naturelle (365 jours)";
 ?>

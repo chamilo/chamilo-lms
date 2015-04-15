@@ -54,6 +54,19 @@ $tpl->assign('ranking', $ranking);
 $tpl->assign('countSkill', $countSkill);
 $tpl->assign('mySkills', $mySkills);
 
+$dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
+$dialogForm->addHidden('id', null);
+$dialogForm->addText('name', get_lang('Name'), false, ['id' => 'name']);
+$dialogForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);
+$dialogForm->addLabel(get_lang('ShortCode'), '<ul id="skill_edit_holder" class="holder holder_simple"></ul>');
+$dialogForm->addHtml('<div id="gradebook_row">');
+$dialogForm->addLabel([get_lang('Gradebook'), get_lang('WithCertificate')], '<ul id="gradebook_holder" class="holder holder_simple"></ul>');
+$dialogForm->addHtml('<ul id="gradebook_holder" class="holder holder_simple"></ul>');
+$dialogForm->addHtml('</div>');
+$dialogForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+
+$tpl->assign('dialogForm', $dialogForm->returnForm());
+
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');
 $tpl->assign('content', $content);
 $tpl->display_no_layout_template();

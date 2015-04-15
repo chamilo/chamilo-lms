@@ -280,7 +280,7 @@ $(document).ready(function() {
     /* Click in profile */
     $("#saved_profiles").on("click", "li.load_profile", function() {
         profile_id = $(this).attr('rel');
-        $('#profile_id').attr('value',profile_id);
+        $('input[name="profile_id"]').val(profile_id);
         $.ajax({
            url: '{{ url }}&a=get_skills_by_profile&profile_id='+profile_id,
            success:function(json) {
@@ -317,7 +317,7 @@ $(document).ready(function() {
     /* Close button in gradebook select */
     $("#gradebook_holder").on("click", "a.closebutton", function() {
         gradebook_id = $(this).attr('rel');
-        skill_id = $('#id').attr('value');
+        skill_id = $('input[name="id"]').attr('value');
         delete_gradebook_from_skill(skill_id, gradebook_id);
     });
 
@@ -364,7 +364,7 @@ $(document).ready(function() {
     $("#dialog-form").dialog({
         autoOpen: false,
         modal   : true,
-        width   : 600,
+        width   : 900,
         height  : 630
     });
 
@@ -372,14 +372,14 @@ $(document).ready(function() {
     $("#dialog-form-profile").dialog({
         autoOpen: false,
         modal   : true,
-        width   : 500,
+        width   : 850,
         height  : 400
     });
 
     load_nodes(0, main_depth);
 
     function open_save_profile_popup() {
-        var profileId = $("#profile_id").val();
+        var profileId = $('input[name="profile_id"]').val();
         $.ajax({
             url: '{{ url }}&a=get_profile&profile_id='+profileId,
             success:function(data) {
@@ -392,36 +392,40 @@ $(document).ready(function() {
         });
 
         $("#dialog-form-profile").dialog({
-            buttons: {
-                "{{ "Save"|get_lang }}" : function() {
-                    var name = $("#name_profile").val();
-                    var description = $("#description_profile").val();
-                    var skill_list = return_skill_list_from_profile_search();
-                    skill_list = { 'skill_id' : skill_list };
-                    skill_params = $.param(skill_list);
+            buttons: [
+                {
+                    text: "{{ "Save"|get_lang }}",
+                    class: 'btn btn-primary',
+                    click: function() {
+                        var name = $("#name_profile").val();
+                        var description = $("#description_profile").val();
+                        var skill_list = return_skill_list_from_profile_search();
+                        skill_list = { 'skill_id' : skill_list };
+                        skill_params = $.param(skill_list);
 
-                    $.ajax({
-                        url: '{{ url }}&a=save_profile&name='+name+'&description='+description+'&'+skill_params+'&profile='+profileId,
-                        success:function(data) {
-                            if (data == 1 ) {
-                                update_my_saved_profiles();
-                                alert("{{ "Saved"|get_lang }}");
-                            } else {
-                                alert("{{ "Error"|get_lang }}");
+                        $.ajax({
+                            url: '{{ url }}&a=save_profile&name='+name+'&description='+description+'&'+skill_params+'&profile='+profileId,
+                            success:function(data) {
+                                if (data == 1 ) {
+                                    update_my_saved_profiles();
+                                    alert("{{ "Saved"|get_lang }}");
+                                } else {
+                                    alert("{{ "Error"|get_lang }}");
+                                }
+
+                                $("#dialog-form-profile").dialog("close");
+                                $("#name_profile").attr('value', '');
+                                $("#description_profile").attr('value', '');
+                                $('input[name="profile_id"]').val(0);
                             }
-
-                            $("#dialog-form-profile").dialog("close");
-                            $("#name_profile").attr('value', '');
-                            $("#description_profile").attr('value', '');
-                            $("#profile_id").attr('value', '0');
-                         }
-                     });
-                  }
-            },
+                        });
+                    }
+                }
+            ],
             close: function() {
-                $("#name_profile").attr('value', '');
-                $("#description_profile").attr('value', '');
-                $("#profile_id").attr('value', '0');
+                $("#name_profile").val('');
+                $("#description_profile").val('');
+                $('input[name="profile_id"]').val(0);
             }
         });
         $("#dialog-form-profile").dialog("open");
@@ -581,76 +585,11 @@ $(document).ready(function() {
 
 <div id="dialog-form" style="">
     <p class="validateTips"></p>
-    <form id="add_item" class="form-horizontal"  name="form">
-        <fieldset>
-            <input type="hidden" name="id" id="id"/>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{ 'Name' | get_lang }}</label>
-                <div class="col-sm-8">
-                    <input type="text" name="name" id="name" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label">{{ 'ShortCode' | get_lang }}</label>
-                <div class="col-sm-8">
-                    <input type="text" name="short_code" id="short_code" />
-                </div>
-            </div>
-
-             <div id="skill_row" class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{'Parent'|get_lang}}</label>
-                <div class="col-sm-8">
-                    <select id="parent_id" name="parent_id" />
-                    </select>
-                    <ul id="skill_edit_holder" class="holder holder_simple">
-                    </ul>
-                </div>
-            </div>
-
-            <div id="gradebook_row" class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{'Gradebook'|get_lang}}</label>
-                <div class="col-sm-8">
-                    <select id="gradebook_id" name="gradebook_id" multiple="multiple"/>
-                    </select>
-
-                    <ul id="gradebook_holder" class="holder holder_simple">
-                    </ul>
-
-                    <span class="help-block">
-                    {{ 'WithCertificate'|get_lang }}
-                    </span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{ 'Description'|get_lang }}</label>
-                <div class="col-sm-8">
-                    <textarea name="description" id="description" rows="7"></textarea>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+    {{ dialogForm }}
 </div>
 
 <div id="dialog-form-profile" style="display:none;">
-    <form id="save_profile_form" class="form-horizontal" name="form">
-        <input type="hidden" id="profile_id" name="profile_id"/>
-        <fieldset>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{"Name"|get_lang}}</label>
-                <div class="col-sm-8">
-                    <input type="text" name="name" id="name_profile" size="40" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="name">{{"Description"|get_lang}}</label>
-                <div class="col-sm-8">
-                    <textarea name="description" id="description_profile" rows="7"></textarea>
-                </div>
-            </div>
-        </fieldset>
-    </form>
+    {{ saveProfileForm }}
 </div>
 </div>
 </div>

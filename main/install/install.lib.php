@@ -2523,12 +2523,12 @@ function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm
 
     $migration = new \Doctrine\DBAL\Migrations\Migration($config);
     $migrations = $config->getMigrations();
-
-    foreach ($migrations as $migration) {
-        $migration->setEntityManager($manager);
+    /** @var Doctrine\DBAL\Migrations\Version $migration */
+    foreach ($migrations as $migrationItem) {
+        $migrationItem->getMigration()->setEntityManager($manager);
     }
 
-    //$to = 'Version110';
+    //$to = '110';
     // Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
     $versions = $migration->getSql($to);
     if ($debug) {

@@ -9,10 +9,13 @@ use Doctrine\ORM\EntityManager;
  * Class AbstractMigrationChamilo
  * @package Chamilo\CoreBundle\Migrations
  */
-class AbstractMigrationChamilo extends AbstractMigration
+abstract class AbstractMigrationChamilo extends AbstractMigration
 {
     private $manager;
 
+    /**
+     * @param EntityManager $manager
+     */
     public function setEntityManager(EntityManager $manager)
     {
         $this->manager = $manager;

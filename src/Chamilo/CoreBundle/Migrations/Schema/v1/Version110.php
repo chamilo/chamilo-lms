@@ -309,22 +309,18 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned DEFAULT NULL");
 
-        $table = $schema->getTable('session_rel_user');
-        $table->renameColumn('id_session', 'session_id');
-        $table->renameColumn('id_user', 'user_id');
+        $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int");
+        $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int");
 
-        $table = $schema->getTable('session_rel_course_rel_user');
-        $table->renameColumn('id_session', 'session_id');
-        $table->renameColumn('id_user', 'user_id');
+        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
+        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
 
-        $table = $schema->getTable('session_rel_course');
-        $table->renameColumn('id_session', 'session_id');
+        $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
 
-        $table = $schema->getTable('c_item_property');
-        $table->renameColumn('id_session', 'session_id');
+        $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");
 
-        $table = $schema->getTable('course_rel_user');
-        $table->renameColumn('tutor_id', 'is_tutor');
+        $this->addSql("ALTER TABLE course_rel_user CHANGE tutor_id is_tutor int");
+
 
         $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
@@ -441,7 +437,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES ('Føroyskt', 'faroese', 'fo', 'faroese', 0), ('Tagalog', 'tagalog', 'tl', 'tagalog',1), ('Tibetan', 'tibetan', 'bo', 'tibetan', 0), ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0)");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'show_glossary_in_extra_tools'");
 
-        $schema->renameTable('track_e_exercices', 'track_e_exercises');
+        //$schema->renameTable('track_e_exercices', 'track_e_exercises');
 
         $this->addSql("UPDATE c_student_publication SET date_of_qualification = NULL WHERE date_of_qualification = '0000-00-00 00:00:00'");
         $this->addSql("UPDATE c_student_publication SET sent_date = NULL WHERE sent_date = '0000-00-00 00:00:00'");

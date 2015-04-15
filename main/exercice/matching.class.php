@@ -23,7 +23,7 @@ class Matching extends Question
     {
         parent::__construct();
         $this->type = MATCHING;
-        $this->isContent = $this-> getIsContent();
+        $this->isContent = $this->getIsContent();
     }
 
     /**
@@ -37,13 +37,13 @@ class Matching extends Question
         $matches = array();
 
         $answer = null;
+        $counter = 1;
 
         if (isset($this->id)) {
             $answer = new Answer($this->id);
             $answer->read();
 
             if (count($answer->nbrAnswers) > 0) {
-                $counter = 1;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
                     if (empty($correct)) {
@@ -97,6 +97,11 @@ class Matching extends Question
                 // fill the array with A, B, C.....
                 $matches[$i] = chr(64 + $i);
             }
+        } else {
+            for ($i = $counter; $i <= $nb_options; ++$i) {
+                // fill the array with A, B, C.....
+                $matches[$i] = chr(64 + $i);
+            }
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
@@ -129,10 +134,12 @@ class Matching extends Question
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
             );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "matches[$i]"
             );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "weighting[$i]"
@@ -258,7 +265,6 @@ class Matching extends Question
 
         $objAnswer->save();
         $this->save();
-        exit;
     }
 
     /**

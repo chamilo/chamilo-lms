@@ -567,12 +567,10 @@ class Answer
                     'hotspot_type' => $hotspot_type,
                     'destination' => $destination
                 ];
-			    $id = Database::insert($answerTable, $params);
-                if ($id) {
-                    $sql = "UPDATE $answerTable SET id = id_auto WHERE id_auto = $id";
+                $autoId = Database::insert($answerTable, $params);
+                if ($autoId) {
+                    $sql = "UPDATE $answerTable SET id = id_auto WHERE id_auto = $autoId";
                     Database::query($sql);
-                    $correctList[$id] = array('id' => $i, 'correct' => $correct);
-                    $answerList[$id] = $i;
                 }
             } else {
                 // https://support.chamilo.org/issues/6558
@@ -590,23 +588,30 @@ class Answer
                     $this->new_hotspot_type[$i]
                 );
             }
+
+            $answerList[$i] = $autoId;
+            if ($correct) {
+                $correctList[$autoId] = array('id' => $i, 'correct' => $correct);
+            }
         }
 
-        /*if (!empty($correctList)) {
+        if (!empty($correctList)) {
             foreach ($correctList as $autoId => $data) {
                 $correct = $data['correct'];
-                if ($correct) {
-                    $sql = "UPDATE $answerTable
-                            SET correct = $autoId
-                            WHERE
-                                correct = $correct AND
-                                c_id = $c_id AND
-                                question_id = $questionId
-                            ";
-                    Database::query($sql);
+
+                if (isset($answerList[$correct])) {
+                    $correct = $answerList[$correct];
                 }
+
+                $sql = "UPDATE $answerTable
+                        SET correct = $correct
+                        WHERE
+                            id_auto = $autoId
+                        ";
+                Database::query($sql);
+
             }
-        }*/
+        }
 
         /*if (!empty($answerList)) {
             foreach ($answerList as $autoId => $counterId) {

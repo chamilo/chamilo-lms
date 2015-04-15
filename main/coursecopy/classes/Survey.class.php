@@ -89,7 +89,7 @@ class Survey extends Resource
 	 * @param string $invite_mail
 	 * @param string $reminder_mail
 	 */
-    public function Survey(
+    public function __construct(
         $id,
         $code,
         $title,
@@ -108,7 +108,7 @@ class Survey extends Resource
         $invite_mail,
         $reminder_mail
     ) {
-		parent::Resource($id,RESOURCE_SURVEY);
+		parent::__construct($id,RESOURCE_SURVEY);
 		$this->code = $code;
 		$this->title = $title;
 		$this->subtitle = $subtitle;
@@ -128,6 +128,7 @@ class Survey extends Resource
 		$this->question_ids = array();
 		$this->invitation_ids = array();
 	}
+
 	/**
 	 * Add a question to this survey
 	 */
@@ -135,6 +136,7 @@ class Survey extends Resource
 	{
 		$this->question_ids[] = $id;
 	}
+
 	/**
 	 * Add an invitation to this survey
 	 */
@@ -142,6 +144,7 @@ class Survey extends Resource
 	{
 		$this->invitation_ids[] = $id;
 	}
+
 	/**
 	 * Show this survey
 	 */

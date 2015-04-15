@@ -13,9 +13,9 @@ class ForumCategory extends Resource
     /**
      * Create a new ForumCategory
      */
-    function ForumCategory($obj)
+    public function __construct($obj)
     {
-        parent::Resource($obj->cat_id, RESOURCE_FORUMCATEGORY);
+        parent::__construct($obj->cat_id, RESOURCE_FORUMCATEGORY);
         $this->obj = $obj;
     }
 

@@ -90,9 +90,9 @@ class CourseRestorer
         } else {
             $this->course_origin_id = null;
         }
-		$this->file_option 						= FILE_RENAME;
-		$this->set_tools_invisible_by_default 	= false;
-		$this->skip_content 					= array();
+        $this->file_option = FILE_RENAME;
+        $this->set_tools_invisible_by_default = false;
+        $this->skip_content = array();
 	}
 
 	/**

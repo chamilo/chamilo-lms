@@ -19,9 +19,9 @@ class ScormDocument extends Resource
 	 * @param string $path
 	 * @param string $title
 	 */
-    public function ScormDocument($id, $path, $title)
+    public function __construct($id, $path, $title)
 	{
-		parent::Resource($id,RESOURCE_SCORM);
+		parent::__construct($id,RESOURCE_SCORM);
 		$this->path = 'scorm'.$path;
 		$this->title = $title;
 	}

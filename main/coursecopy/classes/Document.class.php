@@ -28,9 +28,9 @@ class Document extends Resource
      * @param string $file_type (DOCUMENT or FOLDER);
      * @param int $size
      */
-    public function Document($id, $path, $comment, $title, $file_type, $size)
+    public function __construct($id, $path, $comment, $title, $file_type, $size)
     {
-        parent::Resource($id, RESOURCE_DOCUMENT);
+        parent::__construct($id, RESOURCE_DOCUMENT);
         $this->path = 'document' . $path;
         $this->comment = $comment;
         $this->title = $title;

@@ -21,7 +21,7 @@ class CourseRecycler
      * @param course $course The course-object which contains the items to
      * delete
      */
-    public function CourseRecycler($course)
+    public function __construct($course)
     {
         $this->course = $course;
         $this->course_info = api_get_course_info($this->course->code);

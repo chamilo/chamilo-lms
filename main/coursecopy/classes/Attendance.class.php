@@ -20,7 +20,7 @@ class Attendance extends Resource
 	 */
     public function __construct($params)
     {
-		parent::Resource($params['id'], RESOURCE_ATTENDANCE);
+		parent::__construct($params['id'], RESOURCE_ATTENDANCE);
 		$this->params = $params;
 	}
 

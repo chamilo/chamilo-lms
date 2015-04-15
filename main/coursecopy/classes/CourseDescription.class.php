@@ -13,24 +13,25 @@ class CourseDescription extends Resource
 	/**
 	 * The title
 	 */
-	var $title;
+	public $title;
 	/**
 	 * The content
 	 */
-	var $content;
+	public $content;
 	/**
 	 * The description type
 	 */
-	var $description_type;
+	public $description_type;
+
 	/**
 	 * Create a new course description
 	 * @param int $id
 	 * @param string $title
 	 * @param string $content
 	 */
-	function __construct($id,$title,$content,$description_type)
+	public function __construct($id,$title,$content,$description_type)
 	{
-		parent::Resource($id,RESOURCE_COURSEDESCRIPTION);
+		parent::__construct($id,RESOURCE_COURSEDESCRIPTION);
 		$this->title = $title;
 		$this->content = $content;
 		$this->description_type = $description_type;

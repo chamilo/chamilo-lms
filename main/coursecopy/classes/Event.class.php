@@ -55,9 +55,9 @@ class CalendarEvent extends Resource
 	 * @param string $hour
 	 * @param int $duration
 	 */
-	function CalendarEvent($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0)
+	function __construct($id, $title, $content, $start_date, $end_date, $attachment_path = null, $attachment_filename= null, $attachment_size= null, $attachment_comment= null, $all_day = 0)
 	{
-		parent::Resource($id,RESOURCE_EVENT);
+		parent::__construct($id,RESOURCE_EVENT);
 
 		$this->title 				= $title;
 		$this->content 				= $content;

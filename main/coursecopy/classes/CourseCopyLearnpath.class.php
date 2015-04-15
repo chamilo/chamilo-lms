@@ -108,7 +108,7 @@ class CourseCopyLearnpath extends Resource
 	 * @param string $visibility
 	 * @param array  $items
 	 */
-	public function CourseCopyLearnpath(
+	public function __construct(
 		$id,
 		$type,
 		$name,
@@ -137,7 +137,7 @@ class CourseCopyLearnpath extends Resource
 		$session_id,
 		$items
 	) {
-		parent::Resource($id,RESOURCE_LEARNPATH);
+		parent::__construct($id, RESOURCE_LEARNPATH);
 		$this->lp_type = $type;
 		$this->name = $name;
 		$this->path = $path;

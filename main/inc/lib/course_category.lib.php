@@ -937,6 +937,7 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
 {
     // Start empty html
     $pageDiv = '';
+    $html='';
     $pageBottom = max(1, $pageCurrent - 3);
     $pageTop = min($pageTotal, $pageCurrent + 3);
 
@@ -975,17 +976,11 @@ function getCataloguePagination($pageCurrent, $pageLength, $pageTotal)
     }
 
     // Complete pagination html
-    $pageDiv = Display::div(
-        Display::tag(
-            'ul',
-            $pageDiv
-        ),
-        array(
-            'class' => 'pagination pagination-centered',
-        )
-    );
+    $pageDiv = Display::tag('ul',$pageDiv,array('class' => 'pagination'));
 
-    return $pageDiv;
+
+    $html.='<nav>'.$pageDiv.'</nav>';
+    return $html;
 }
 
 /**

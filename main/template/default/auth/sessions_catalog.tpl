@@ -7,13 +7,13 @@
                 dateFormat: 'yy-mm-dd'
             });
 
-            $('.accordion').click(function(e) {
+            $('#list-course').click(function(e) {
                 e.preventDefault();
                 var tempTarget = e.target.toString().split('#');
                 tempTarget = '#' + tempTarget[1];
                 // use the target of the link as the ID of the element to find
                 var target = $(tempTarget);
-                var targetContent = target.find('.accordion-inner');
+                var targetContent = target.find('.list');
 
                 if (targetContent.is(':empty')) {
                     var idParts = tempTarget.split('-');
@@ -42,11 +42,11 @@
                             targetContent.html('<ul class="items-session">' + coursesUL + '</ul>');
                             target.css({
                                 height: targetContent.outerHeight()
-                            }).addClass('in');
+                            }).addClass(' in');
                         }
                     });
                 } else {
-                    target.addClass('in');
+                    target.addClass(' in');
                 }
             });
         });
@@ -54,105 +54,102 @@
 
     <div class="col-md-3">
         {% if showCourses %}
-            <div class="well">
-                {% if not hiddenLinks %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if not hiddenLinks %}
                     <form class="form-search" method="post" action="{{ courseUrl }}">
-                        <fieldset>
+
                             <input type="hidden" name="sec_token" value="{{ searchToken }}">
                             <input type="hidden" name="search_course" value="1" />
-                            <div class="control-group">
-                                <div class="controls">
-                                    <div class="input-append">
-                                        <input class="span2" type="text" name="search_term" />
-                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <input  type="text" name="search_term" class="form-control"/>
+                                <button class="btn btn-block btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
                             </div>
-                        </fieldset>
-                    </form>
-                {% endif %}
 
-                {% if coursesCategoriesList is not empty %}
-                    <a class="btn btn-default" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick' | get_lang }}</a>
-                {% endif %}
+                    </form>
+                    {% endif %}
+
+                    {% if coursesCategoriesList is not empty %}
+                    <a class="btn btn-block btn-default" href="{{ api_get_self }}?action=display_random_courses">{{ 'RandomPick' | get_lang }}</a>
+                    {% endif %}
+                </div>
             </div>
 
             {% if coursesCategoriesList is not empty %}
-                <div class="well sidebar-nav">
-                    <h4>{{ 'CourseCategories' | get_lang }}</h4>
-                    <ul class="nav nav-list">
-                        {{ coursesCategoriesList }}
-                    </ul>
+                <div class="sidebar-nav">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {{ 'CourseCategories' | get_lang }}
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-categories">
+                                {{ coursesCategoriesList }}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         {% endif %}
 
         {% if showSessions %}
-            <div class="well sidebar-nav">
-                <h4>{{ 'Sessions' | get_lang }}</h4>
-                <ul class="nav nav-list">
-                    <li>{{ 'SearchSessions' | get_lang }}</li>
-                    <li>
+            <div class="sidebar-nav">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {{ 'Sessions' | get_lang }}
+                    </div>
+                    <div class="panel-body">
                         <form class="form-search" method="post" action="{{ api_get_self }}?action=display_sessions">
-                            <div class="input-append">
-                                <input type="date" name="date" id="date" class="span2 search-session" value="{{ searchDate }}" readonly>
-                                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
+                            <div class="form-group">
+                                <input type="date" name="date" id="date" class="form-control" value="{{ searchDate }}" readonly>
+                                <button class="btn btn-block btn-default" type="submit"><i class="fa fa-search"></i> {{ 'Search' | get_lang }}</button>
                             </div>
                         </form>
-                    </li>
-                </ul>
+                    </div>
+                </div>
+
             </div>
         {% endif %}
     </div>
     <div class="col-md-9">
         {% for session in sessions_blocks %}
-            <div class="well well-small session-group" id="session-{{ session.id }}">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="row padding-clear">
-                            <div class="col-md-2">
-                                <span class="thumbnail">
-                                    {{ session.icon }}
-                                </span>
+
+            <div class="panel panel-default" id="panel-{{ session.id }}">
+                <div class="panel-heading">
+                    {{ session.icon }} {{ session.name }}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="tutor">
+                                <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
                             </div>
-                            <div class="col-md-10 border-info">
-                                <h3>{{ session.name }}</h3>
-                                <div class="tutor">
-                                    <img src="{{ 'teacher.png' | icon(22) }}" width="16"> {{ 'GeneralCoach' | get_lang }} {{ session.coach_name }}
-                                </div>
+                            <a id="list-course" class="btn btn-default" data-toggle="collapse" href="#session-{{ session.id }}-courses">
+                                {{ 'CourseList' | get_lang }}
+                            </a>
+                            <div class="collapse" id="session-{{ session.id }}-courses">
+                                <div class="list"></div>
                             </div>
+
                         </div>
-                        <div class="row">
-                            <div class="accordion" id="session-{{ session.id }}-accordion">
-                                <div class="accordion-group">
-                                    <div class="accordion-heading">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#session-{{ session.id }}-accordion" href="#session-{{ session.id }}-courses">
-                                            {{ 'CourseList' | get_lang }}
-                                        </a>
-                                    </div>
-                                    <div id="session-{{ session.id }}-courses" class="accordion-body collapse in">
-                                        <div class="accordion-inner"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        {% if session.showDescription %}
+                        <div class="col-md-3">
+                            {% if session.showDescription %}
                             <div class="buttom-subscribed">
                                 <a class="ajax btn btn-large btn-info" href="{{ _p.web_ajax }}session.ajax.php?a=get_description&session={{ session.id }}">{{ 'Description' | get_lang }}</a>
                             </div>
-                        {% endif %}
-
-                        <div class="buttom-subscribed">
-                            {% if session.is_subscribed %}
-                                {{ already_subscribed_label }}
-                            {% else %}
-                                {{ session.subscribe_button }}
                             {% endif %}
+
+                            <div class="buttom-subscribed">
+                                {% if session.is_subscribed %}
+                                {{ already_subscribed_label }}
+                                {% else %}
+                                {{ session.subscribe_button }}
+                                {% endif %}
+                            </div>
+                            <div class="time"><img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}</div>
                         </div>
-                        <div class="time"><img src="{{ 'agenda.png' | icon(22) }}"> {{ session.date }}</div>
                     </div>
+
                 </div>
             </div>
         {% endfor %}

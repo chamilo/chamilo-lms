@@ -211,6 +211,15 @@ if (api_is_drh()) {
         Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH) . "mySpace/company_reports.php"
     );
+    $actions .= Display::url(
+        Display::return_icon(
+            "certificate_list.png",
+            get_lang("GradebookSeeListOfStudentsCertificates"),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH) . "gradebook/certificate_report.php"
+    );
 }
 
 $actions .= '<span style="float:right">';

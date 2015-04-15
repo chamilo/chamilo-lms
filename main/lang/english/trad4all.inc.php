@@ -557,7 +557,7 @@ $Remote = "Remote";
 $FileToUpload = "SCORM or AICC file to upload";
 $ContentMaker = "Authoring tool";
 $ContentProximity = "Course location";
-$UploadLocalFileFromGarbageDir = "Upload local file from main/archive directory";
+$UploadLocalFileFromGarbageDir = "Upload local .zip package from the archive/ directory";
 $ThisItemIsNotExportable = "This learning object or activity is not SCORM compliant. That's why it is not exportable.";
 $MoveCurrentChapter = "Move the current section";
 $GenericScorm = "Generic Scorm";
@@ -7067,4 +7067,8 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$WorkEmailAlertActivateOnlyForTeachers = "Activate only for teachers e-mail alert on new work submission";
+$WorkEmailAlertActivateOnlyForStudents = "Activate only for students e-mail alert on new work submission";
+$Uncategorized = "Uncategorized";
+$NaturalYear = "Natural year";
 ?>

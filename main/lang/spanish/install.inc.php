@@ -46,6 +46,7 @@ $Recommended = "Recomendado";
 $ScormDB = "Base de datos SCORM";
 $AdminLastName = "Apellidos del administrador";
 $AdminPhone = "Teléfono del administrador";
+$UpgradeFromLMS19x = "Actualizar desde una versión 1.9.*";
 $AdminFirstName = "Nombre del administrador";
 $InstituteURL = "URL de la organización";
 $UserDB = "Base de datos de usuarios";

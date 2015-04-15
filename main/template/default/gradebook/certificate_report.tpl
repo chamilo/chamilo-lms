@@ -10,8 +10,6 @@
                 a: 'display_sessions_courses',
                 session: sessionId
             }, function (courseList) {
-                var $option = null;
-
                 $('<option>', {
                     value: 0,
                     text: "{{ 'Select' | get_lang }}"
@@ -30,63 +28,32 @@
     });
 </script>
 
-<form action="{{ _p.web_main }}gradebook/certificate_report.php" method="post" class="form-horizontal">
-    <div class="control-group">
-        <label class="control-label" for="session">{{ 'Sessions' | get_lang }}</label>
-        <div class="controls">
-            <select name="session" id="session">
-                <option value="0">{{ 'Select' | get_lang }}</option>
-                {% for session in sessions %}
-                    <option value="{{ session.id }}" {{ selectedSession == session.id ? 'selected' : '' }}>{{ session.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="course">{{ 'Courses' | get_lang }}</label>
-        <div class="controls">
-            <select name="course" id="course">
-                <option value="0">{{ 'Select' | get_lang }}</option>
-                {% for course in courses %}
-                    <option value="{{ course.real_id }}" {{ selectedCourse == course.real_id ? 'selected' : ''}}>{{ course.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="month">{{ 'Date' | get_lang }}</label>
-        <div class="controls">
-            <select name="month" id="month">
-                <option value="0">{{ 'Select' | get_lang }}</option>
-                {% for month in months %}
-                    <option value="{{ month.key }}" {{ selectedMonth == month.key ? 'selected' : ''}}>{{ month.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="text" name="year" id="year" class="input-mini" value="{{ selectedYear }}">
-        </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary">{{ 'Search' | get_lang }}</button>
-        </div>
-    </div>
-</form>
+{{ searchBySessionCourseDateForm }}
 
-<h1 class="page-header">{{ 'GradebookListOfStudentsCertificates' | get_lang }}</h1>
+<hr>
+
+{{ searchByStudentForm }}
 
 {% if errorMessage is defined %}
     <div class="alert alert-error">{{ errorMessage }}</div>
 {% endif %}
 
 {% if not certificateStudents is empty %}
-    <p>
-        <a href="{{ exportAllLink }}" class="btn btn-info">{{ 'ExportAllCertificatesToPDF' | get_lang }}</a>
-    </p>
+    <h2 class="page-header">{{ "GradebookListOfStudentsCertificates" | get_lang }}</h2>
+    {% if not exportAllLink is null %}
+        <div class="actions">
+            <a href="{{ exportAllLink }}" class="btn btn-info">
+                <i class="fa fa-check"></i> {{ 'ExportAllCertificatesToPDF' | get_lang }}
+            </a>
+        </div>
+    {% endif %}
 
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Sesion' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
                 <th>{{ 'Certificate' | get_lang }}</th>
             </tr>
@@ -94,6 +61,8 @@
         <tfoot>
             <tr>
                 <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'Sesion' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
                 <th>{{ 'Date' | get_lang }}</th>
                 <th>{{ 'Certificate' | get_lang }}</th>
             </tr>
@@ -102,6 +71,8 @@
             {% for student in certificateStudents %}
                 <tr>
                     <td>{{ student.fullName }}</td>
+                    <td>{{ student.sessionName }}</td>
+                    <td>{{ student.courseName }}</td>
                     <td>
                         {% for certificate in student.certificates %}
                             <p>{{ certificate.createdAt }}</p>

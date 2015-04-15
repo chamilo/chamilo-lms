@@ -31,13 +31,17 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 
-            $limitDate = gmdate('Y-m-d');
+             // Initialize variables as a calendar year by default
+            $limitDateFormat = 'Y-01-01';
+            $limitDate = gmdate($limitDateFormat);
+            $resubscriptionOffset = "1 year";
 
-            switch ($resubscriptionLimit) {
-                case 'calendar_year':
-                    $resubscriptionLimit = "1 year";
-                    $limitDate = gmdate('Y-m-d', strtotime(gmdate('Y-m-d')." -$resubscriptionLimit"));
-                    break;
+            // No need to use a 'switch' with only two options so an 'if' is enough.
+            // However this could change if the number of options increases
+            if ($resubscriptionLimit === 'natural_year') {
+                $limitDateFormat = 'Y-m-d';
+                $limitDate = gmdate($limitDateFormat);
+                $limitDate = gmdate($limitDateFormat, strtotime("$limitDate -$resubscriptionOffset"));
             }
 
             $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = session_id";
@@ -92,9 +96,9 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             // Check if current course code matches with one of the users
             foreach ($currentSessionCourseResult as $currentSessionCourse) {
-                if (isset($userSessionCourses[$currentSessionCourse['c_id']])) {
-                    $endDate = $userSessionCourses[$currentSessionCourse['c_id']];
-                    $resubscriptionDate = gmdate('Y-m-d', strtotime($endDate." +$resubscriptionLimit"));
+                if (isset($userSessionCourses[$currentSessionCourse['course_code']])) {
+                    $endDate = $userSessionCourses[$currentSessionCourse['course_code']];
+                    $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);
                     throw new Exception(Display::label($icon . ' ' . $canResubscribeFrom, "info"));

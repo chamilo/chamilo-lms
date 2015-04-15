@@ -213,12 +213,15 @@ class CourseBuilder
                 $session_condition = api_get_session_condition(
                     $session_id,
                     true,
-                    true
+                    true,
+                    'd.session_id'
                 );
             } else {
                 $session_condition = api_get_session_condition(
                     $session_id,
-                    true
+                    true,
+                    false,
+                    'd.session_id'
                 );
             }
 
@@ -436,22 +439,36 @@ class CourseBuilder
                 $session_condition = api_get_session_condition(
                     $session_id,
                     true,
-                    true
+                    true,
+                    'l.session_id'
                 );
             } else {
                 $session_condition = api_get_session_condition(
                     $session_id,
-                    true
+                    true,
+                    false,
+                    'l.session_id'
                 );
             }
             $sql = "SELECT  l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
                     FROM $table l, $table_prop p
-                    WHERE l.c_id = $course_id AND p.c_id = $course_id AND p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 $session_condition
+                    WHERE
+                        l.c_id = $course_id AND
+                        p.c_id = $course_id AND
+                        p.ref=l.id AND
+                        p.tool = '".TOOL_LINK."' AND
+                        p.visibility != 2 $session_condition
                     ORDER BY l.display_order";
         } else {
             $sql = "SELECT l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
                     FROM $table l, $table_prop p
-                    WHERE l.c_id = $course_id AND p.c_id = $course_id AND p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 AND l.session_id = 0
+                    WHERE
+                        l.c_id = $course_id AND
+                        p.c_id = $course_id AND
+                        p.ref=l.id AND
+                        p.tool = '".TOOL_LINK."' AND
+                        p.visibility != 2 AND
+                        l.session_id = 0
                     ORDER BY l.display_order";
         }
 
@@ -616,15 +633,17 @@ class CourseBuilder
 
         // Building normal tests.
         $sql = "SELECT * FROM $table_que WHERE c_id = $course_id ";
+        $result = Database::query($sql);
 
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
+        while ($obj = Database::fetch_object($result)) {
             // find the question category
+
             // @todo : need to be adapted for multi category questions in 1.10
             $question_category_id = TestCategory::getCategoryForQuestion(
                 $obj->id,
                 $course_id
             );
+
             // build the backup resource question object
             $question = new QuizQuestion(
                 $obj->id,
@@ -638,7 +657,9 @@ class CourseBuilder
                 $obj->extra,
                 $question_category_id
             );
-            $sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
+
+            $sql = 'SELECT * FROM '.$table_ans.'
+                    WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
             $db_result2 = Database::query($sql);
 
             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -697,11 +718,11 @@ class CourseBuilder
                  )
         ";
 
-        $db_result = Database::query($sql);
-        if (Database::num_rows($db_result) > 0) {
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
             $build_orphan_questions = true;
             $orphanQuestionIds = array();
-            while ($obj = Database::fetch_object($db_result)) {
+            while ($obj = Database::fetch_object($result)) {
 
                 // Orphan questions
                 if (!empty($obj->question_id)) {

@@ -1100,6 +1100,9 @@ class CourseManager
         $condition_course = '';
         if (isset($course_code)) {
             $courseInfo = api_get_course_info($course_code);
+            if (empty($courseInfo)) {
+                return false;
+            }
             $courseId = $courseInfo['real_id'];
             $condition_course = ' AND c_id = ' . $courseId;
         }
@@ -1826,7 +1829,7 @@ class CourseManager
 
             $rs = Database::query($sql_query);
             while ($student = Database::fetch_array($rs)) {
-                $students[$student['id_user']] = $student;
+                $students[$student['user_id']] = $student;
             }
         }
 

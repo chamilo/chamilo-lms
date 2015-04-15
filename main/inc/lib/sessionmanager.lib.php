@@ -3713,14 +3713,15 @@ class SessionManager
      */
     public static function get_sessions_by_user($user_id, $ignore_visibility_for_admins = false)
     {
-        $session_categories = UserManager::get_sessions_by_category(
+        $sessionCategories = UserManager::get_sessions_by_category(
             $user_id,
             false,
             $ignore_visibility_for_admins
         );
-        $session_array = array();
-        if (!empty($session_categories)) {
-            foreach ($session_categories as $category) {
+
+        $sessionArray = array();
+        if (!empty($sessionCategories)) {
+            foreach ($sessionCategories as $category) {
                 if (isset($category['sessions'])) {
                     foreach ($category['sessions'] as $session) {
                         $session_array[] = $session;
@@ -3728,7 +3729,8 @@ class SessionManager
                 }
             }
         }
-        return $session_array;
+
+        return $sessionArray;
     }
 
     /**
@@ -3908,6 +3910,11 @@ class SessionManager
                         }
                     }
 
+                    $sessionCondition = '';
+                    if (!empty($session_category_id)) {
+                        $sessionCondition = "session_category_id = '$session_category_id',";
+                    }
+
                     // Creating the session.
                     $sql = "INSERT IGNORE INTO $tbl_session SET
                             name = '" . $session_name . "',
@@ -3915,7 +3922,7 @@ class SessionManager
                             date_start = '$date_start',
                             date_end = '$date_end',
                             visibility = '$visibilityAfterExpirationPerSession',
-                            session_category_id = '$session_category_id',
+                            $sessionCondition
                             session_admin_id = " . intval($defaultUserId) . $extraParameters . $extraSessionParameters;
                     Database::query($sql);
 

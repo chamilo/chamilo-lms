@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Implements the edition of course-session settings
  * @package chamilo.admin
  */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -26,9 +28,9 @@ $course_info = api_get_course_info($_REQUEST['course_code']);
 $courseId = $course_info['real_id'];
 $tool_name = $course_info['name'];
 $sql = "SELECT s.name, c.title
-        FROM $tbl_session_course sc, $tbl_session s,$tbl_course c
+        FROM $tbl_session_course sc, $tbl_session s, $tbl_course c
         WHERE
-            sc.session_id=s.id AND
+            sc.session_id = s.id AND
             sc.c_id = c.id AND
             sc.session_id='$id_session' AND
             sc.c_id ='".$courseId."'";
@@ -98,8 +100,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+
+if (api_is_multiple_url_enabled()) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     $sql="SELECT u.user_id,lastname,firstname,username

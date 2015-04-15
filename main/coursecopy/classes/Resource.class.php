@@ -25,6 +25,7 @@ define('RESOURCE_WIKI', 'wiki');
 define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
+define('RESOURCE_SESSION_COURSE', 'session_course');
 
 /**
  * Class Resource

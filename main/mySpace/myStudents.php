@@ -45,7 +45,7 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 
 $nameTools = get_lang('StudentDetails');
 
-$get_course_code = Security :: remove_XSS($_GET['course']);
+$get_course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
 if (isset($_GET['details'])) {
     if (!empty ($_GET['origin']) && $_GET['origin'] == 'user_course') {
@@ -157,7 +157,7 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = api_get_user_id();
 }
 
-$session_id = intval($_GET['id_session']);
+$session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 if (empty($session_id)) {
     $session_id = api_get_session_id();
 }
@@ -186,7 +186,8 @@ if ($check) {
                     $session_id
                 );
 
-                //@todo delete the stats.track_e_exercises records. First implement this http://support.chamilo.org/issues/1334
+                // @todo delete the stats.track_e_exercises records.
+                // First implement this http://support.chamilo.org/issues/1334
                 $message = Display::return_message(
                     get_lang('LPWasReset'),
                     'success'
@@ -345,10 +346,12 @@ if (!empty($student_id)) {
 
     // get average of score and average of progress by student
     $avg_student_progress = $avg_student_score = 0;
-    $course_code = Security :: remove_XSS($_GET['course']);
+    $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
     if (!CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
-        unset($courses[$key]);
+        if (isset($courses[$key])) {
+            unset($courses[$key]);
+        }
     } else {
 
         $avg_student_progress = Tracking::get_avg_student_progress(
@@ -372,13 +375,16 @@ if (!empty($student_id)) {
     // time spent on the course
     $courseInfo = api_get_course_info($course_code);
 
-    $time_spent_on_the_course = api_time_to_hms(
-        Tracking:: get_time_spent_on_the_course(
-            $user_info['user_id'],
-            $courseInfo['real_id'],
-            $session_id
-        )
-    );
+    $time_spent_on_the_course = 0;
+    if (!empty($courseInfo)) {
+        $time_spent_on_the_course = api_time_to_hms(
+            Tracking:: get_time_spent_on_the_course(
+                $user_info['user_id'],
+                $courseInfo['real_id'],
+                $session_id
+            )
+        );
+    }
 
     // get information about connections on the platform by student
     $first_connection_date = Tracking :: get_first_connection_date($user_info['user_id']);
@@ -622,9 +628,12 @@ if (!empty($student_id)) {
         $attendance = new Attendance();
 
         foreach ($courses_in_session as $key => $courses) {
-            $session_id   = $key;
+            $session_id = $key;
             $session_info = api_get_session_info($session_id);
-            $session_name = $session_info['name'];
+            $session_name = '';
+            if ($session_info) {
+                $session_name = $session_info['name'];
+            }
             $date_start = '';
 
             if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
@@ -721,10 +730,12 @@ if (!empty($student_id)) {
                         <td >'.$attendances_faults_avg.'</td>
                         <td >'.$scoretotal_display.'</td>';
 
-                        if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+                        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent">
+                            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         } else {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent">
+                            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         }
                         echo '</tr>';
                     }

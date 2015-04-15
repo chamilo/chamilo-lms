@@ -2831,10 +2831,10 @@ class UserManager
     public static function get_courses_list_by_session($user_id, $session_id)
     {
         // Database Table Definitions
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tableCourse = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $user_id = intval($user_id);
         $session_id = intval($session_id);
@@ -2842,11 +2842,11 @@ class UserManager
         $join_access_url = $where_access_url = '';
 
         if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
+            $urlId = api_get_current_access_url_id();
+            if ($urlId != -1) {
                 $tbl_url_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
                 $join_access_url = " ,  $tbl_url_session url_rel_session ";
-                $where_access_url = " AND access_url_id = $access_url_id AND url_rel_session.session_id = $session_id ";
+                $where_access_url = " AND access_url_id = $urlId AND url_rel_session.session_id = $session_id ";
             }
         }
 
@@ -2858,7 +2858,8 @@ class UserManager
         to our user or not */
 
         $sql = "SELECT DISTINCT
-                    c.visibility, c.id as real_id
+                    c.visibility,
+                    c.id as real_id
                 FROM $tbl_session_course_user as scu
                 INNER JOIN $tbl_session_course sc
                 ON (scu.session_id = sc.session_id AND scu.c_id = sc.c_id)

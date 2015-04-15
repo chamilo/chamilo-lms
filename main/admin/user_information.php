@@ -154,7 +154,6 @@ if (count($sessions) > 0) {
 
         $csvContent[] = array($session_item['session_name']);
         $csvContent[] = $headerList;
-
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info($my_course['code']);
             $sessionStatus = SessionManager::get_user_status_in_session(

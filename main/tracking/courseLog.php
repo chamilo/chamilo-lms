@@ -18,7 +18,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = intval($_REQUEST['id_session']);
+$session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
 
 if ($from == 'myspace') {
     $from_myspace = true;

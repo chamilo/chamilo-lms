@@ -112,12 +112,12 @@ function save_data($courses)
         }
 
         $params = array();
-        $params['title']            = $course['Title'];
-        $params['wanted_code']      = $course['Code'];
-        $params['tutor_name']       = null;
-        $params['course_category']  = $course['CourseCategory'];
-        $params['course_language']  = $course_language;
-        $params['user_id']          = $creatorId;
+        $params['title'] = $course['Title'];
+        $params['wanted_code'] = $course['Code'];
+        $params['tutor_name'] = null;
+        $params['course_category'] = $course['CourseCategory'];
+        $params['course_language'] = $course_language;
+        $params['user_id'] = $creatorId;
 
         $addMeAsTeacher = isset($_POST['add_me_as_teacher']) ? $_POST['add_me_as_teacher'] : false;
         $params['add_user_as_teacher'] = $addMeAsTeacher;
@@ -211,9 +211,8 @@ $form = new FormValidator('import', 'post', api_get_self(), null, array('enctype
 $form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
-$form->addElement('button', 'save', get_lang('Import'));
+$form->addButtonImport(get_lang('Import'), 'save');
 $form->addElement('hidden', 'formSent', 1);
-//$form->setDefaults(array('add_me_as_teacher' => 0));
 $form->display();
 
 ?>

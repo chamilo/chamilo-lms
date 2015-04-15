@@ -86,9 +86,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 if (!empty($msg)) {
 	Display::display_normal_message($msg, false);
 }
+// @todo use FormValidator!
 ?>
-
-
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1">
     <legend><?php echo $tool_name; ?></legend>

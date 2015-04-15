@@ -760,7 +760,7 @@ class Template
 
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
-        if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url_info  = api_get_access_url($access_url_id);

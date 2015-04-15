@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  * Class IndexManager
  */
@@ -417,7 +415,7 @@ class IndexManager
 
         // Showing only the courses of the current access_url_id.
         global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

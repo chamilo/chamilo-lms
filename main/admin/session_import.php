@@ -37,7 +37,6 @@ set_time_limit(0);
 $purification_option_for_usernames = false;
 $inserted_in_course = array();
 
-global $_configuration;
 $warn = null;
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) &&
@@ -285,8 +284,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         }
 
                         // Associate the session with access_url.
-                        global $_configuration;
-                        if ($_configuration['multiple_access_urls']) {
+                        if (api_is_multiple_url_enabled()) {
                             $access_url_id = api_get_current_access_url_id();
                             UrlManager::add_session_to_url($session_id, $access_url_id);
                         } else {

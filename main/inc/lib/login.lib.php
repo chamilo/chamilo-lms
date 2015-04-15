@@ -28,10 +28,9 @@ class Login
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
-        global $_configuration;
         $portal_url = api_get_path(WEB_PATH);
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url = api_get_access_url($access_url_id);
@@ -82,8 +81,9 @@ class Login
      * @param int $user
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
-    public static function send_password_to_user($user, $by_username = false) {
-        global $_configuration;
+    public static function send_password_to_user($user, $by_username = false)
+    {
+
         $email_subject = "[" . api_get_setting('siteName') . "] " . get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
@@ -95,7 +95,7 @@ class Login
         }
 
         $portal_url = api_get_path(WEB_PATH);
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url = api_get_access_url($access_url_id);

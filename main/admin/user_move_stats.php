@@ -5,6 +5,7 @@
  * User move script (to move between courses and sessions)
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -581,15 +582,16 @@ $htmlHeadXtra[] = '<script type="text/javascript">
  </script>';
 
 function get_courses_list_by_user_id_based_in_exercises($user_id) {
-    $TABLETRACK_EXERCICES       = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+    $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
     $user_id = intval($user_id);
     $sql = "SELECT DISTINCT exe_user_id, c_id, session_id
-            FROM $TABLETRACK_EXERCICES WHERE exe_user_id = $user_id
+            FROM $TABLETRACK_EXERCICES
+            WHERE exe_user_id = $user_id
             ORDER by exe_user_id, c_id ASC";
 
     $res = Database::query($sql);
     $course_list = array();
-    while($row = Database::fetch_array($res,'ASSOC')) {
+    while ($row = Database::fetch_array($res,'ASSOC')) {
         $course_list []= $row;
     }
     return $course_list;
@@ -641,7 +643,7 @@ foreach ($session_list as $session_data) {
 $combinations = array();
 
 if (!empty($user_list)) {
-    foreach ($user_list  as $user) {
+    foreach ($user_list as $user) {
         $user_id = $user['user_id'];
         $name = $user['firstname'].' '.$user['lastname'];
         $course_list_registered = CourseManager::get_courses_list_by_user_id(
@@ -658,7 +660,7 @@ if (!empty($user_list)) {
             // Recover the code for historical reasons. If it can be proven
             // that the code can be safely replaced by c_id in the following
             // PHP code, feel free to do so
-            $courseInfo = api_get_course_info_by_id($course_reg['c_id']);
+            $courseInfo = api_get_course_info_by_id($course_reg['real_id']);
             $course_reg['code'] = $courseInfo['code'];
             $new_course_list[] = $course_reg['code'].'_'.$course_reg['session_id'];
         }

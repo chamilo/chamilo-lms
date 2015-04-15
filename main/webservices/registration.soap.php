@@ -331,7 +331,7 @@ function WSCreateUsers($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
                 } else {
@@ -536,7 +536,7 @@ function WSCreateUser($params) {
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());
             } else {
@@ -827,7 +827,7 @@ function WSCreateUsersPasswordCrypted($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
                 } else {

@@ -320,7 +320,7 @@ if ($form->validate()) {
 			//$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';
 			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 			$portal_url = $_configuration['root_web'];
-			if ($_configuration['multiple_access_urls']) {
+			if (api_is_multiple_url_enabled()) {
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1) {
 					$url = api_get_access_url($access_url_id);

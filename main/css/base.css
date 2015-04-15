@@ -84,6 +84,10 @@ select {
 #announcements-slider .carousel-indicators .active{
   background: #C52D2F;
 }
+#announcements-slider .carousel-inner img {
+    height: auto;
+    width: 100%;
+}
 .carousel-indicators{
   bottom: 0px !important;
 }

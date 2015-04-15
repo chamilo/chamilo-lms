@@ -65,7 +65,8 @@
         "bower-asset/mediaelement": "2.16.*",
         "bower-asset/modernizr": "2.8.*",
         "bower-asset/jqueryui-timepicker-addon": "1.5.*",
-        "ramsey/array_column": "~1.1"
+        "ramsey/array_column": "~1.1",
+        "bower-asset/imageMap-resizer": "0.5.3"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

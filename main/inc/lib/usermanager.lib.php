@@ -5349,8 +5349,8 @@ EOF;
      */
     public static function getUserProfileLinkWithPicture($userInfo)
     {
-        $imagePath = UserManager::get_user_picture_path_by_id($userInfo['id'], 'web', false, true);
-        $userProfile = UserManager::get_picture_user($userInfo['id'], $imagePath['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+        $imagePath = UserManager::get_user_picture_path_by_id($userInfo['user_id'], 'web', false, true);
+        $userProfile = UserManager::get_picture_user($userInfo['user_id'], $imagePath['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 
         return Display::url(Display::img($userProfile['file']), $userInfo['profile_url']);
     }

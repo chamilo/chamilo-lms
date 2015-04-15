@@ -297,8 +297,6 @@ if ($form->validate()) {
         $warn = substr($warn, 0, -1);
     }
 
-    $tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
-    $tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
     $teachers = $course['course_teachers'];
 
     $title = $course['title'];
@@ -316,10 +314,10 @@ if ($form->validate()) {
         $department_url = 'http://' . $department_url;
     }
 
-    $sql = "UPDATE $course_table SET course_language='" . Database::escape_string($course_language) . "',
+    $sql = "UPDATE $course_table SET
+                course_language='" . Database::escape_string($course_language) . "',
                 title='" . Database::escape_string($title) . "',
                 category_code='" . Database::escape_string($category_code) . "',
-                tutor_name='" . Database::escape_string($tutor_name) . "',
                 visual_code='" . Database::escape_string($visual_code) . "',
                 department_name='" . Database::escape_string($department_name) . "',
                 department_url='" . Database::escape_string($department_url) . "',
@@ -370,16 +368,17 @@ if ($form->validate()) {
         }
     }
 
+    // No need to register me as a teacher.
+    /*
     $sql = "INSERT IGNORE INTO " . $course_user_table . " SET
             c_id = " . $courseInfo['real_id'] . ",
             user_id = '" . $tutor_id . "',
             status = '1',
-            role = '',
-            tutor_id='0',
-            sort='0',
+            is_tutor ='0',
+            sort = '0',
             user_course_cat='0'";
     Database::query($sql);
-
+    */
     if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
         $sql = "UPDATE $course_table SET
                 add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'

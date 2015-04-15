@@ -338,6 +338,54 @@ class CourseManager
     }
 
     /**
+     * @param int $userId
+     * @param int $courseId
+     *
+     * @return mixed
+     */
+    public static function getUserCourseInfo($userId, $courseId)
+    {
+
+        $result = Database::fetch_array(
+            Database::query(
+                "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
+                WHERE
+                    c_id  = '" . intval($courseId). "' AND
+                    user_id = " . intval($userId)
+            )
+        );
+
+        return $result;
+    }
+
+    /**
+     * @param int  $userId
+     * @param int  $courseId
+     * @param bool $isTutor
+     * @return bool
+     */
+    public static function updateUserCourseTutor($userId, $courseId, $isTutor)
+    {
+        $table = Database::escape_string(TABLE_MAIN_COURSE_USER);
+
+        $courseId = intval($courseId);
+        $isTutor = intval($isTutor);
+
+        $sql = "UPDATE $table SET is_tutor = '".$isTutor."'
+			    WHERE
+				    user_id = '".$userId."' AND
+				    c_id = '".$courseId."'";
+
+        $result = Database::query($sql);
+
+        if (Database::affected_rows($result) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param int $user_id
      * @param string $course_code
      * @return mixed
@@ -346,12 +394,12 @@ class CourseManager
     {
         $result = Database::fetch_array(
             Database::query(
-                "SELECT tutor_id FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
+                "SELECT is_tutor FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE course_code = '" . Database::escape_string($course_code) . "' AND user_id = " . intval($user_id)
             )
         );
 
-        return $result['tutor_id'];
+        return $result['is_tutor'];
     }
 
     /**
@@ -1316,15 +1364,13 @@ class CourseManager
                                 course.code,
                                 course_rel_user.status as status_rel,
                                 user.user_id,
-                                course_rel_user.role,
-                                course_rel_user.tutor_id,
+                                course_rel_user.is_tutor,
                                 user.*  ';
                 } else {
                     $sql = 'SELECT DISTINCT
                                 course_rel_user.status as status_rel,
                                 user.user_id,
-                                course_rel_user.role,
-                                course_rel_user.tutor_id,
+                                course_rel_user.is_tutor,
                                 user.*  ';
                 }
             }
@@ -1422,11 +1468,8 @@ class CourseManager
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
-                if (isset($user['role'])) {
-                    $user_info['role'] = $user['role'];
-                }
-                if (isset($user['tutor_id'])) {
-                    $user_info['tutor_id'] = $user['tutor_id'];
+                if (isset($user['is_tutor'])) {
+                    $user_info['is_tutor'] = $user['is_tutor'];
                 }
 
                 if (!empty($session_id)) {
@@ -1687,10 +1730,9 @@ class CourseManager
         while ($user = Database::fetch_array($rs)) {
             $user_info = api_get_user_info($user['user_id']);
             $user_info['status'] = $user['status'];
-            $user_info['role'] = $user['role'];
-            $user_info['tutor_id'] = $user['tutor_id'];
+            //$user_info['tutor_id'] = $user['tutor_id'];
             $user_info['email'] = $user['email'];
-            $users[$user['id_user']] = $user_info;
+            $users[$user['user_id']] = $user_info;
         }
 
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1700,8 +1742,7 @@ class CourseManager
         $session_id_coach = Database::result($rs, 0, 'id_coach');
         $user_info = api_get_user_info($session_id_coach);
         $user_info['status'] = $user['status'];
-        $user_info['role'] = $user['role'];
-        $user_info['tutor_id'] = $user['tutor_id'];
+        //$user_info['tutor_id'] = $user['tutor_id'];
         $user_info['email'] = $user['email'];
         $users[$session_id_coach] = $user_info;
 
@@ -2450,8 +2491,7 @@ class CourseManager
         $information = self::get_course_information($course_code);
         $courseId = $information['id'];
 
-        $student = Database::fetch_array(Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
-                WHERE user_id='" . $user_id . "'"));
+        $student = api_get_user_info($user_id);
 
         $name_course = $information['title'];
         $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " WHERE c_id ='" . $courseId . "'";
@@ -2460,15 +2500,14 @@ class CourseManager
         //if ($send_to_tutor_also = true)
         // Proposed change:
         if ($send_to_tutor_also) {
-            $sql .= " AND tutor_id=1";
+            $sql .= " AND is_tutor=1";
         } else {
             $sql .= " AND status=1";
         }
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            $tutor = Database::fetch_array(Database::query("SELECT * FROM " . Database::get_main_table(TABLE_MAIN_USER) . "
-                    WHERE user_id='" . $row['user_id'] . "'"));
+            $tutor = api_get_user_info($row['user_id']);
             $emailto = $tutor['email'];
             $emailsubject = get_lang('NewUserInTheCourse') . ': ' . $name_course;
             $emailbody = get_lang('Dear') . ': ' . api_get_person_name($tutor['firstname'], $tutor['lastname']) . "\n";
@@ -5092,8 +5131,7 @@ class CourseManager
                         c_id = '" . $courseId . "',
                         user_id = '" . $userId . "',
                         status = '1',
-                        role = '',
-                        tutor_id = '0',
+                        is_tutor = '0',
                         sort = '0',
                         user_course_cat='0'";
                 }

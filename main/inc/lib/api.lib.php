@@ -19,7 +19,7 @@ define('REQUIRED_MIN_MEMORY_LIMIT',         '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE',  '10');
 define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // USER STATUS CONSTANTS
 /** global status of a user: student */
@@ -5414,7 +5414,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
     $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
     $sql = "SELECT
-                tutor_id, status, role
+                is_tutor, status
             FROM $tbl_course_user
             WHERE
                 user_id  = '$userid' AND
@@ -5427,10 +5427,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
     if (Database::num_rows($result) > 0) {
         // This user has got a recorded state for this course.
         $cuData = Database::fetch_array($result);
-
-        $_courseUser['role'] = $cuData['role'];
         $is_courseMember = true;
-        $is_courseTutor = ($cuData['tutor_id'] == 1);
+        $is_courseTutor = ($cuData['is_tutor'] == 1);
         $is_courseAdmin = ($cuData['status'] == 1);
     }
 
@@ -5454,16 +5452,13 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
         $row = Database::store_result($result);
 
         if ($row[0]['id_coach'] == $userid) {
-            $_courseUser['role'] = 'Professor';
             $is_courseMember = true;
             $is_courseTutor = true;
             $is_courseAdmin = false;
             $is_courseCoach = true;
             $is_sessionAdmin = false;
-            Session::write('_courseUser',$_courseUser);
         }
         elseif ($row[0]['session_admin_id'] == $userid) {
-            $_courseUser['role'] = 'Professor';
             $is_courseMember = false;
             $is_courseTutor = false;
             $is_courseAdmin = false;
@@ -5481,7 +5476,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
             //if ($row = Database::fetch_array($result)) {
             if (Database::num_rows($result) > 0 ) {
-                $_courseUser['role'] = 'Professor';
                 $is_courseMember = true;
                 $is_courseTutor = true;
                 $is_courseCoach = true;

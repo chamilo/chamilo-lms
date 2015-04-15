@@ -1,6 +1,6 @@
 <?php
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /* For licensing terms, see /license.txt */
 /**
@@ -319,7 +319,6 @@ class Login
         global $_cid;
         global $_course;
         global $_real_cid;
-        global $_courseUser;
 
         global $is_courseAdmin;  //course teacher
         global $is_courseTutor;  //course teacher - some rights
@@ -526,23 +525,26 @@ class Login
                 $result = Database::query($sql);
 
                 $cuData = null;
-                if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
+                if (Database::num_rows($result) > 0) {
+                    // this  user have a recorded state for this course
                     $cuData = Database::fetch_array($result, 'ASSOC');
-                    $is_courseAdmin = (bool) ($cuData['status'] == 1 );
-                    $is_courseTutor = (bool) ($cuData['tutor_id'] == 1 );
+                    $is_courseAdmin = (bool) $cuData['status'] == 1;
+                    $is_courseTutor = (bool) $cuData['is_tutor'] == 1;
                     $is_courseMember = true;
 
-                    //Checking if the user filled the course legal agreement
+                    // Checking if the user filled the course legal agreement
                     if ($_course['activate_legal'] == 1 && !api_is_platform_admin()) {
-                        $user_is_subscribed = CourseManager::is_user_accepted_legal($user_id, $_course['id'], $session_id);
+                        $user_is_subscribed = CourseManager::is_user_accepted_legal(
+                            $user_id,
+                            $_course['id'],
+                            $session_id
+                        );
                         if (!$user_is_subscribed) {
                             $url = api_get_path(WEB_CODE_PATH) . 'course_info/legal.php?course_code=' . $_course['code'] . '&session_id=' . $session_id;
                             header('Location: ' . $url);
                             exit;
                         }
                     }
-                    $_courseUser['role'] = $cuData['role'];
-                    Session::write('_courseUser', $_courseUser);
                 }
 
                 //We are in a session course? Check session permissions
@@ -572,7 +574,6 @@ class Login
 
                         //I'm a session admin?
                         if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                            $_courseUser['role'] = 'Professor';
                             $is_courseMember = false;
                             $is_courseTutor = false;
                             $is_courseAdmin = false;
@@ -595,7 +596,6 @@ class Login
 
                                 switch ($session_course_status) {
                                     case '2': // coach - teacher
-                                        $_courseUser['role'] = 'Professor';
                                         $is_courseMember = true;
                                         $is_courseTutor = true;
                                         $is_courseCoach = true;
@@ -606,14 +606,12 @@ class Login
                                         } else {
                                             $is_courseAdmin = false;
                                         }
-                                        Session::write('_courseUser', $_courseUser);
                                         break;
                                     case '0': //student
                                         $is_courseMember = true;
                                         $is_courseTutor = false;
                                         $is_courseAdmin = false;
                                         $is_sessionAdmin = false;
-                                        Session::write('_courseUser', $_courseUser);
                                         break;
                                     default:
                                         //unregister user
@@ -621,7 +619,6 @@ class Login
                                         $is_courseTutor = false;
                                         $is_courseAdmin = false;
                                         $is_sessionAdmin = false;
-                                        Session::erase('_courseUser');
                                         break;
                                 }
                             } else {
@@ -630,7 +627,6 @@ class Login
                                 $is_courseTutor = false;
                                 $is_courseAdmin = false;
                                 $is_sessionAdmin = false;
-                                Session::erase('_courseUser');
                             }
                         }
                     }
@@ -647,7 +643,6 @@ class Login
                 $is_courseTutor = false;
                 $is_courseCoach = false;
                 $is_sessionAdmin = false;
-                Session::erase('_courseUser');
             }
 
             //Checking the course access
@@ -709,16 +704,13 @@ class Login
             Session::write('is_allowed_in_course', $is_allowed_in_course);
 
             Session::write('is_sessionAdmin', $is_sessionAdmin);
-        } else { // continue with the previous values
-            if (isset($_SESSION ['_courseUser'])) {
-                $_courseUser = $_SESSION ['_courseUser'];
-            }
-
-            $is_courseAdmin = $_SESSION ['is_courseAdmin'];
-            $is_courseTutor = $_SESSION ['is_courseTutor'];
-            $is_courseCoach = $_SESSION ['is_courseCoach'];
-            $is_courseMember = $_SESSION ['is_courseMember'];
-            $is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
+        } else {
+            // continue with the previous values
+            $is_courseAdmin = $_SESSION['is_courseAdmin'];
+            $is_courseTutor = $_SESSION['is_courseTutor'];
+            $is_courseCoach = $_SESSION['is_courseCoach'];
+            $is_courseMember = $_SESSION['is_courseMember'];
+            $is_allowed_in_course = $_SESSION['is_allowed_in_course'];
         }
     }
 

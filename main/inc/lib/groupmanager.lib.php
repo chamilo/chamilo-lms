@@ -445,7 +445,6 @@ class GroupManager
             $result['id'] = $db_object->id;
             $result['name'] = $db_object->name;
             $result['status'] = $db_object->status;
-            $result['tutor_id'] = isset($db_object->tutor_id) ? $db_object->tutor_id : null;
             $result['description'] = $db_object->description;
             $result['maximum_number_of_students'] = $db_object->max_student;
             $result['max_student'] = $db_object->max_student;
@@ -1480,8 +1479,9 @@ class GroupManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT tg.id, u.user_id, u.lastname, u.firstname, u.email
-            FROM ".$table_user." u, ".$table_group_tutor." tg
-            WHERE     tg.c_id = $course_id AND
+                FROM ".$table_user." u, ".$table_group_tutor." tg
+                WHERE
+                    tg.c_id = $course_id AND
                     tg.group_id='".$group_id."' AND
                     tg.user_id=u.user_id".$order_clause;
         $db_result = Database::query($sql);
@@ -1494,7 +1494,7 @@ class GroupManager
                 $member['email'] = $user->email;
                 $users[] = $member;
             } else {
-                $users[]=$user->user_id;
+                $users[] = $user->user_id;
             }
         }
         return $users;
@@ -1684,7 +1684,7 @@ class GroupManager
         $sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
 				FROM ".$user_table." user, ".$course_user_table." cu
 				WHERE cu.user_id=user.user_id
-				AND cu.tutor_id='1'
+				AND cu.is_tutor='1'
 				AND cu.c_id='".api_get_course_int_id()."'";
         $resultTutor = Database::query($sql);
         $tutors = array();
@@ -1705,10 +1705,10 @@ class GroupManager
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = intval($user_id);
 
-        $sql = "SELECT tutor_id FROM ".$course_user_table."
-		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"." AND tutor_id=1";
+        $sql = "SELECT is_tutor FROM ".$course_user_table."
+		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"." AND is_tutor=1";
         $db_result = Database::query($sql);
-        $result = (Database::num_rows($db_result) > 0);
+        $result = Database::num_rows($db_result) > 0;
 
         return $result;
     }
@@ -1799,7 +1799,7 @@ class GroupManager
                 $firstname = $this_user['firstname'];
                 $status = $this_user['status'];
                 //$role =  $this_user['role'];
-                $tutor_id = $this_user['tutor_id'];
+                $isTutor = $this_user['is_tutor'];
                 $full_name = api_get_person_name($firstname, $lastname);
                 if ($lastname == "" || $firstname == '') {
                     $full_name = $loginname;
@@ -1809,7 +1809,7 @@ class GroupManager
                 $complete_user['firstname'] = $firstname;
                 $complete_user['lastname'] = $lastname;
                 $complete_user['status'] = $status;
-                $complete_user['tutor_id'] = $tutor_id;
+                $complete_user['is_tutor'] = $isTutor;
                 $student_number_of_groups = self :: user_in_number_of_groups($user_id, $category['id']);
                 //filter: only add users that have not exceeded their maximum amount of groups
                 if ($student_number_of_groups < $number_of_groups_limit) {
@@ -1868,7 +1868,6 @@ class GroupManager
     {
         $user_array_out = array();
         foreach ($user_array_in as $this_user) {
-            //if ($this_user['status_rel'] == STUDENT && $this_user['tutor_id'] == 0) {
             if (api_get_session_id()) {
                 if ($this_user['status_session'] == 0) {
                     $user_array_out[] = $this_user;
@@ -1951,8 +1950,6 @@ class GroupManager
         } elseif ($groupInfo[$state_key] == self::TOOL_PUBLIC) {
             return true;
         } elseif (api_is_allowed_to_edit(false, true)) {
-            return true;
-        } elseif ($groupInfo['tutor_id'] == $user_id) { //this tutor implementation was dropped
             return true;
         } elseif ($groupInfo[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
             return false;
@@ -2188,7 +2185,11 @@ class GroupManager
                     $tutor = api_get_user_info($tutor_id);
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $tutor['username']), ENT_QUOTES);
                     if (api_get_setting('show_email_addresses') == 'true') {
-                        $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';
+                        $tutor_info .= Display::tag(
+                            'span',
+                            Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])),
+                            array('title'=>$username)
+                        ).', ';
                     } else {
                         if (api_is_allowed_to_edit()) {
                             $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';

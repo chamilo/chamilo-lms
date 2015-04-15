@@ -2085,7 +2085,8 @@ class SessionManager
                         VALUES ('$sessionId', '$courseId')";
                 Database::query($sql);
 
-                //We add the current course in the existing courses array, to avoid adding another time the current course
+                // We add the current course in the existing courses array,
+                // to avoid adding another time the current course
                 $existingCourses[] = array('c_id' => $courseId);
                 $nbr_courses++;
 
@@ -2111,7 +2112,6 @@ class SessionManager
                 SET nbr_courses = $nbr_courses
                 WHERE id = '$sessionId'";
         Database::query($sql);
-        exit;
     }
 
     /**

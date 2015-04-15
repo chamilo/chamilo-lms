@@ -3,8 +3,8 @@
 
 namespace Chamilo\CoreBundle\Migrations\Schema\v1;
 
-use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo,
-    Doctrine\DBAL\Schema\Schema;
+use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Class Core
@@ -323,6 +323,9 @@ class Version110 extends AbstractMigrationChamilo
         $table = $schema->getTable('c_item_property');
         $table->renameColumn('id_session', 'session_id');
 
+        $table = $schema->getTable('course_rel_user');
+        $table->renameColumn('tutor_id', 'is_tutor');
+
         $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
@@ -461,6 +464,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_attempt DROP COLUMN course_code");
 
         $this->addSql("ALTER TABLE course_rel_user DROP COLUMN group_id");
+        $this->addSql("ALTER TABLE course_rel_user DROP COLUMN role");
 
         $this->addSql("DROP TABLE track_c_countries");
         $this->addSql("DROP TABLE track_c_browsers");

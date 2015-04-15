@@ -116,7 +116,7 @@
 //require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 //Conditional login
 if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login'] === true) {
@@ -1042,11 +1042,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $cuData = Database::fetch_array($result, 'ASSOC');
 
             $is_courseAdmin = (bool)($cuData['status'] == 1);
-            $is_courseTutor = (bool)($cuData['tutor_id'] == 1);
+            $is_courseTutor = (bool)($cuData['is_tutor'] == 1);
             $is_courseMember = true;
-
-            $_courseUser['role'] = $cuData['role'];
-            Session::write('_courseUser', $_courseUser);
         }
 
         // We are in a session course? Check session permissions
@@ -1076,7 +1073,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                 // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $_courseUser['role'] = 'Professor';
                     $is_courseMember     = false;
                     $is_courseTutor      = false;
                     $is_courseAdmin      = false;
@@ -1093,7 +1089,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
-                        $_courseUser['role'] = 'Professor';
                         $is_courseMember     = true;
                         $is_courseTutor      = false;
                         $is_courseCoach      = true;
@@ -1116,7 +1111,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                             switch ($session_course_status) {
                                 case '2': // coach - teacher
-                                    $_courseUser['role'] = 'Professor';
                                     $is_courseMember = true;
                                     $is_courseTutor = true;
                                     $is_courseCoach = true;
@@ -1127,27 +1121,22 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                     } else {
                                         $is_courseAdmin = false;
                                     }
-                                    Session::write('_courseUser', $_courseUser);
                                     break;
                                 case '0': //Student
-                                    $_courseUser['role'] = '';
                                     $is_courseMember = true;
                                     $is_courseTutor = false;
                                     $is_courseAdmin = false;
                                     $is_courseCoach = false;
                                     $is_sessionAdmin = false;
 
-                                    Session::write('_courseUser', $_courseUser);
                                     break;
                                 default:
                                     //unregister user
-                                    $_courseUser['role'] = '';
                                     $is_courseMember = false;
                                     $is_courseTutor = false;
                                     $is_courseAdmin = false;
                                     $is_sessionAdmin = false;
                                     $is_courseCoach = false;
-                                    Session::erase('_courseUser');
                                     break;
                             }
                         } else {
@@ -1157,7 +1146,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                             $is_courseAdmin = false;
                             $is_sessionAdmin = false;
                             $is_courseCoach = false;
-                            Session::erase('_courseUser');
                         }
                     }
                 }
@@ -1167,7 +1155,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $sessionInfo = SessionManager::getSessionFollowedByDrh($user_id, $session_id);
                     if (!empty($sessionInfo) && !empty($sessionInfo['course_list'])) {
                         if (isset($sessionInfo['course_list'][$_course['real_id']])) {
-                            $_courseUser['role'] = '';
                             $is_courseMember     = true;
                             $is_courseTutor      = false;
                             $is_courseCoach      = false;
@@ -1184,12 +1171,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     } else { // keys missing => not anymore in the course - user relation
         // course
-        $is_courseMember    = false;
-        $is_courseAdmin     = false;
-        $is_courseTutor     = false;
-        $is_courseCoach     = false;
-        $is_sessionAdmin    = false;
-        Session::erase('_courseUser');
+        $is_courseMember = false;
+        $is_courseAdmin = false;
+        $is_courseTutor = false;
+        $is_courseCoach = false;
+        $is_sessionAdmin = false;
     }
 
     //Checking the course access
@@ -1279,10 +1265,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else {
     // continue with the previous values
-
-    if (isset($_SESSION['_courseUser'])) {
-        $_courseUser       = $_SESSION ['_courseUser'];
-    }
 
     $is_courseAdmin       = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
     $is_courseTutor       = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;

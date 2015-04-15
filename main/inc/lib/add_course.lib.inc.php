@@ -1334,8 +1334,7 @@ class AddCourse
                                 c_id     = '" . $course_id . "',
                                 user_id         = '" . intval($user_id) . "',
                                 status          = '1',
-                                role            = '" . self::lang2db(get_lang('Professor')) . "',
-                                tutor_id        = '0',
+                                is_tutor        = '0',
                                 sort            = '" . ($i_course_sort) . "',
                                 user_course_cat = '0'";
                         Database::query($sql);
@@ -1358,8 +1357,7 @@ class AddCourse
                             c_id     = '" . Database::escape_string($course_id) . "',
                             user_id         = '" . Database::escape_string($key) . "',
                             status          = '1',
-                            role            = '',
-                            tutor_id        = '0',
+                            is_tutor        = '0',
                             sort            = '" . ($sort + 1) . "',
                             user_course_cat = '0'";
                         Database::query($sql);

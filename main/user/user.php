@@ -21,9 +21,6 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-/*		Libraries	*/
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-
 global $_configuration;
 
 if (!api_is_platform_admin(true)) {
@@ -36,7 +33,7 @@ if (!api_is_platform_admin(true)) {
 
 /* Constants and variables */
 $course_code = Database::escape_string(api_get_course_id());
-$session_id = api_get_session_id();
+$sessionId = api_get_session_id();
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 $course_info = api_get_course_info();
@@ -45,7 +42,7 @@ $courseCode = api_get_course_id();
 $courseId = api_get_course_int_id();
 
 //Can't auto unregister from a session
-if (!empty($session_id)) {
+if (!empty($sessionId)) {
     $course_info['unsubscribe']  = 0;
 }
 
@@ -75,6 +72,37 @@ $user_image_pdf_size = 80;
 if (api_is_allowed_to_edit(null, true)) {
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
+            case 'set_tutor':
+                $userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+                $isTutor = isset($_GET['is_tutor']) ? intval($_GET['is_tutor']) : 0;
+                if (!empty($userId)) {
+                    if ($sessionId) {
+                        /*$res = SessionManager::set_coach_to_course_session(
+                            $userId,
+                            $sessionId,
+                            $courseCode,
+                            true
+                        );*/
+                    } else {
+                        /*if (!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
+                            $userProperties['status'] = 1;
+                        } else{
+                            $userProperties['status'] = 5;
+                        }
+                        if (!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
+                            $userProperties['tutor'] = 1;
+                        } else{
+                            $userProperties['tutor'] = 0;
+                        }*/
+
+                        CourseManager::updateUserCourseTutor(
+                            $userId,
+                            $courseId,
+                            $isTutor
+                        );
+                    }
+                }
+                break;
             case 'export':
                 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
                 $table_users = Database::get_main_table(TABLE_MAIN_USER);
@@ -191,7 +219,7 @@ if (api_is_allowed_to_edit(null, true)) {
                         $sql_query .= ' , '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).' au ';
                     }
                     $sql_query .=" WHERE c_id = '$courseId' AND session_course_user.user_id = user.user_id ";
-                    $sql_query .= ' AND session_id = '.$session_id;
+                    $sql_query .= ' AND session_id = '.$sessionId;
 
                     if (api_is_multiple_url_enabled()) {
                         $sql_query .= " AND user.user_id = au.user_id AND access_url_id =  $current_access_url_id  ";
@@ -256,7 +284,7 @@ if (api_is_allowed_to_edit(null, true)) {
                     }
                 }
 
-                if ($session_id == 0) {
+                if ($sessionId == 0) {
 
                     // users directly subscribed to the course
                     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -585,10 +613,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $origin;
     global $is_western_name_order;
-    global $session_id;
     global $extraFields;
 
     $course_info = api_get_course_info();
+    $sessionId = api_get_session_id();
+    $course_code = api_get_course_id();
 
     $a_users = array();
 
@@ -631,13 +660,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
             break;
     }
 
-    $session_id = api_get_session_id();
-    $course_code = api_get_course_id();
     $active = isset($_GET['active']) ? $_GET['active'] : null;
 
     $a_course_users = CourseManager :: get_user_list_from_course_code(
         $course_code,
-        $session_id,
+        $sessionId,
         $limit,
         $order_by,
         null,
@@ -697,19 +724,20 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 }
 
                 $temp[] = $o_course_user['username'];
-                // Description.
-                $temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
+
                 // Groups.
                 $temp[] = implode(', ', $groupsNameList);
+
                 // Status
-                $default_status = '-';
+                $default_status = get_lang('Student');
                 if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) ||
                     (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)
                 ) {
                     $default_status = get_lang('CourseManager');
-                } elseif (isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) {
+                } elseif (isset($o_course_user['is_tutor']) && $o_course_user['is_tutor'] == 1) {
                     $default_status = get_lang('Tutor');
                 }
+
                 $temp[] = $default_status;
 
                 // Active
@@ -728,6 +756,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
                 // User id for actions
                 $temp[] = $user_id;
+                $temp['is_tutor'] = isset($o_course_user['is_tutor']) ? $o_course_user['is_tutor'] : '';
+                $temp['user_status_in_course'] = isset($o_course_user['status_rel']) ? $o_course_user['status_rel'] : '';
+                $temp['user_status_in_course_session'] = $o_course_user['status_session'];
             } else {
                 $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
                 $image_repository = $image_path['dir'];
@@ -749,7 +780,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     $temp[] = $o_course_user['firstname'];
                 }
                 $temp[] = $o_course_user['username'];
-                $temp[] = $o_course_user['role'];
                 // Group.
                 $temp[] = implode(', ', $groupsNameList);
 
@@ -792,20 +822,23 @@ function active_filter($active, $url_params, $row)
     if ($row[count($row)-1] <> $userId) {
         $result = '<center><img src="../img/icons/16/'.$image.'.png" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
     }
+
     return $result;
 }
-
 
 /**
  * Build the modify-column of the table
  * @param int $user_id The user id
  * @return string Some HTML-code
  */
-function modify_filter($user_id)
+function modify_filter($user_id, $row, $data)
 {
-    global $origin, $_course, $is_allowed_to_track, $charset, $course_info;
+    global $origin, $is_allowed_to_track, $charset;
 
+    $user_id = $data[0];
+    $course_info = $_course = api_get_course_info();
     $current_user_id = api_get_user_id();
+    $sessionId = api_get_session_id();
 
     $result = "";
 
@@ -823,9 +856,22 @@ function modify_filter($user_id)
     }
 
     if (api_is_allowed_to_edit(null, true)) {
+
+        if (empty($sessionId)) {
+            $isTutor = isset($data['is_tutor']) ? intval($data['is_tutor']) : 0;
+            $isTutor = empty($isTutor) ? 1 : 0;
+
+            $disabled = '';
+            if ($data['user_status_in_course'] == COURSEMANAGER) {
+                $disabled = 'disabled';
+            }
+            $result .= Display::url(
+                    get_lang('SetTutor'),
+                    'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id,
+                    array('class' => 'btn btn-default '.$disabled)
+                ).'&nbsp;';
+        }
         // edit
-        $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.
-            Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
             if ($user_id != $current_user_id || api_is_platform_admin()) {
@@ -880,8 +926,6 @@ if ($is_western_name_order) {
 }
 $indexList['username'] = $header_nr;
 $table->set_header($header_nr++, get_lang('LoginName'));
-$indexList['description'] = $header_nr;
-$table->set_header($header_nr++, get_lang('Description'), false);
 $indexList['groups'] = $header_nr;
 $table->set_header($header_nr++, get_lang('GroupSingle'), false);
 
@@ -934,13 +978,6 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-if (api_get_setting('allow_user_headings') == 'true' &&
-    $is_courseAdmin &&
-    api_is_allowed_to_edit() && $origin != 'learnpath'
-) {
-    // only course administrators see this line
-    echo "<div align=\"right\">", "<form method=\"post\" action=\"userInfo.php\">", get_lang("CourseAdministratorOnly"), " : ", "<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang("DefineHeadings")."\" />", "</form>", "</div>\n";
-}
 if ($origin != 'learnpath') {
     Display::display_footer();
 }

@@ -7,7 +7,7 @@
 * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya adding c_id support
 */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 
@@ -541,7 +541,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
                 || $dropbox_person -> isCourseAdmin
                 || dropbox_cnf('allowStudentToStudent')
                 || $current_user['status'] != 5                         // Always allow teachers.
-                || $current_user['tutor_id'] == 1                       // Always allow tutors.
+                || $current_user['is_tutor'] == 1                       // Always allow tutors.
                 ) && $current_user['user_id'] != $_user['user_id']) {   // Don't include yourself.
             if ($current_user['user_id'] == $current_user_id) {
                 continue;

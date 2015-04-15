@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -47,18 +46,11 @@ class CourseRelUser
     private $status;
 
     /**
-     * @var string
-     * @todo this value should be renamed to description
-     * @ORM\Column(name="role", type="string", length=60, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $role;
-
-    /**
-     * @var integer
+     * @var bool
      *
-     * @ORM\Column(name="tutor_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="is_tutor", type="boolean", nullable=true, unique=false)
      */
-    private $tutorId;
+    private $tutor;
 
     /**
      * @var integer
@@ -213,74 +205,6 @@ class CourseRelUser
         return $this->status;
     }
 
-    /**
-     * Set role
-     *
-     * @param string $role
-     * @return CourseRelUser
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * Set groupId
-     *
-     * @param integer $groupId
-     * @return CourseRelUser
-     */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId
-     *
-     * @return integer
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
-    }
-
-    /**
-     * Set tutorId
-     *
-     * @param integer $tutorId
-     * @return CourseRelUser
-     */
-    public function setTutorId($tutorId)
-    {
-        $this->tutorId = $tutorId;
-
-        return $this;
-    }
-
-    /**
-     * Get tutorId
-     *
-     * @return integer
-     */
-    public function getTutorId()
-    {
-        return $this->tutorId;
-    }
 
     /**
      * Set sort
@@ -303,6 +227,22 @@ class CourseRelUser
     public function getSort()
     {
         return $this->sort;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isTutor()
+    {
+        return $this->tutor;
+    }
+
+    /**
+     * @param boolean $tutor
+     */
+    public function setTutor($tutor)
+    {
+        $this->tutor = $tutor;
     }
 
     /**

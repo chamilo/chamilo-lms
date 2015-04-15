@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
-use CpChart\Classes\pCache as pCache;
 
 /**
  * Class MySpace
@@ -1253,7 +1253,7 @@ class MySpace
                 FROM $tbl_user AS u
                 INNER JOIN $tbl_course_rel_user AS cu
                 ON cu.user_id = u.user_id
-                WHERE cu.c_id = '".$courseId."' AND ISNULL(cu.role);";
+                WHERE cu.c_id = '".$courseId."'";
         $result = Database::query($sql);
         $time_spent = 0;
         $progress = 0;
@@ -1402,7 +1402,7 @@ class MySpace
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_course_rel_user AS cu
                     ON cu.user_id = u.user_id
-                    WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+                    WHERE cu.course_code = '".$course_code."'";
             $result = Database::query($sql);
             $time_spent = 0;
             $progress = 0;

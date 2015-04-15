@@ -26,7 +26,7 @@ class ZombieManager
      * @param bool $active_only if true returns only active users. Otherwise returns all users.
      * @return ResultSet
      */
-    static function list_zombies($ceiling, $active_only = true)
+    static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
     {
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
@@ -46,7 +46,6 @@ class ZombieManager
                     user.active,
                     access.login_date';
 
-        global $_configuration;
         if (api_is_multiple_url_enabled()) {
             $access_url_rel_user_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $current_url_id = api_get_current_access_url_id();
@@ -70,24 +69,31 @@ class ZombieManager
                         access.login_date <= '$ceiling' AND
                         user.user_id = access.login_user_id";
         }
-        if($active_only)
-        {
+        if ($active_only) {
             $sql .= ' AND user.active = 1';
         }
 
-        return ResultSet::create($sql);
+        $count = intval($count);
+        $from = intval($from);
+
+        $sql .=  " ORDER BY $column $direction";
+        $sql .= " LIMIT $count, $from ";
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
     }
 
+    /**
+     * @param $ceiling
+     */
     static function deactivate_zombies($ceiling)
     {
         $zombies = self::list_zombies($ceiling);
         $ids  = array();
-        foreach($zombies as $zombie)
-        {
+        foreach($zombies as $zombie) {
             $ids[] = $zombie['user_id'];
         }
         UserManager::deactivate_users($ids);
     }
-
-
 }

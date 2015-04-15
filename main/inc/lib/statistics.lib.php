@@ -96,9 +96,9 @@ class Statistics
     public static function countUsers($status = null, $categoryCode = null, $countInvisibleCourses = true, $onlyActive = false)
     {
         // Database table definitions
-        $course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_table         = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $user_table         = Database :: get_main_table(TABLE_MAIN_USER);
+        $course_user_table = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
+        $course_table = Database:: get_main_table(TABLE_MAIN_COURSE);
+        $user_table = Database:: get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
         $active_filter = $onlyActive?' AND active=1':'';
@@ -107,22 +107,33 @@ class Statistics
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number
                 FROM $user_table as u, $access_url_rel_user_table as url
-                WHERE u.user_id=url.user_id
-                AND access_url_id='".$current_url_id."'
+                WHERE
+                    u.user_id = url.user_id AND
+                    access_url_id = '".$current_url_id."'
                 $status_filter $active_filter";
             if (isset ($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                 FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
-                WHERE c.id = cu.c_id
-                AND c.category_code = '".Database::escape_string($categoryCode)."'
-                AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."'
-                $status_filter $active_filter";
+                WHERE
+                    c.id = cu.c_id AND
+                    c.category_code = '".Database::escape_string($categoryCode)."' AND
+                    cu.user_id = url.user_id AND
+                    access_url_id='".$current_url_id."'
+                    $status_filter $active_filter";
             }
         } else {
-            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE 1=1 $status_filter $active_filter";
+            $sql = "SELECT COUNT(DISTINCT(user_id)) AS number
+                    FROM $user_table WHERE 1=1 $status_filter $active_filter";
             if (isset ($categoryCode)) {
                 $status_filter = isset($status)?' AND status = '.intval($status):'';
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($categoryCode)."' $status_filter $active_filter";
+                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
+                    FROM $course_user_table cu, $course_table c
+                    WHERE
+                        c.id = cu.c_id AND
+                        c.category_code = '".Database::escape_string($categoryCode)."'
+                        $status_filter
+                        $active_filter
+                    ";
             }
         }
 

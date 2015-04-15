@@ -31,7 +31,7 @@ class ZombieReport implements Countable
 
     function get_parameters()
     {
-        
+
         $result = array(
             'name' => 'zombie_report_parameters',
             'method' => 'GET',
@@ -149,7 +149,7 @@ class ZombieReport implements Countable
     {
 
         /**
-         * todo check token 
+         * todo check token
          */
         $check = Security::check_token('post');
         Security::clear_token();
@@ -197,7 +197,7 @@ class ZombieReport implements Countable
 
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-        $items = ZombieManager::list_zombies($ceiling, $active_only);
+        $items = ZombieManager::listZombies($ceiling, $active_only);
         return count($items);
     }
 
@@ -209,7 +209,7 @@ class ZombieReport implements Countable
 
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
-        $items = ZombieManager::list_zombies($ceiling, $active_only)->limit($count, $from)->orderby($column, $direction);
+        $items = ZombieManager::listZombies($ceiling, $active_only, $count, $from, $column, $direction);
         $result = array();
         foreach ($items as $item) {
             $row = array();
@@ -231,7 +231,6 @@ class ZombieReport implements Countable
 
     function display_data($return = false)
     {
-
         $count = array($this, 'count');
         $data = array($this, 'get_data');
 
@@ -277,9 +276,9 @@ class ZombieReport implements Countable
 
     /**
      * Table formatter for the active column.
-     * 
-     * @param string $active 
-     * @return string 
+     *
+     * @param string $active
+     * @return string
      */
     function format_active($active)
     {

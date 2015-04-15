@@ -109,7 +109,7 @@ if (!empty($homep_new)) {
 }
 
 if (!empty($action)) {
-    if ($_POST['formSent']) {
+    if (isset($_POST['formSent'])) {
         switch ($action) {
             case 'edit_top':
                 // Filter

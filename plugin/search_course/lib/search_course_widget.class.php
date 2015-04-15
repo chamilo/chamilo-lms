@@ -227,8 +227,8 @@ EOT;
 
         $user_courses = $this->retrieve_user_courses();
 
-        $display_coursecode = (get_setting('display_coursecode_in_courselist') == 'true');
-        $display_teacher = (get_setting('display_teacher_in_courselist') == 'true');
+        $display_coursecode = (api_get_setting('display_coursecode_in_courselist') == 'true');
+        $display_teacher = (api_get_setting('display_teacher_in_courselist') == 'true');
 
         echo '<table cellpadding="4">';
         foreach ($courses as $key => $course)

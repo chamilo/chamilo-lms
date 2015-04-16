@@ -895,7 +895,7 @@ if (!empty($extra_data)) {
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->addElement('button', 'submit',get_lang('SearchUsers'));
+$form->addButtonSearch(get_lang('SearchUsers'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '</table>');

@@ -53,10 +53,10 @@
         "symfony/validator": "2.6.4",
         "gedmo/doctrine-extensions": "~2.3",
         "sonata-project/user-bundle": "~2.2",
-	"ramsey/array_column": "~1.1",
+	    "ramsey/array_column": "~1.1",
         "patchwork/utf8": "~1.2",
         "ddeboer/data-import": "@stable",
-        "phpoffice/phpexcel": "~1.8"
+        "phpoffice/phpexcel": "~1.8",
         "webit/eval-math": "dev-master",
         "fxp/composer-asset-plugin": "~1.0",
         "bower-asset/bootstrap": "3.3.*",
@@ -70,7 +70,7 @@
         "bower-asset/mediaelement": "2.16.*",
         "bower-asset/modernizr": "2.8.*",
         "bower-asset/jqueryui-timepicker-addon": "1.5.*",
-	"bower-asset/imageMap-resizer": "0.5.3"        
+	    "bower-asset/imageMap-resizer": "0.5.3"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

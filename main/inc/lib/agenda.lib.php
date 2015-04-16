@@ -1502,7 +1502,7 @@ class Agenda
         $access_url_id = api_get_current_access_url_id();
 
         $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-                       WHERE access_url_id = $access_url_id$condition";echo $sql;
+                       WHERE access_url_id = $access_url_id$condition";
         $result = Database::query($sql);
         $my_events = array();
         if (Database::num_rows($result)) {

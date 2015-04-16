@@ -92,8 +92,8 @@ if(!empty($_course['path']) && $editor != "stand_alone") {
                 $sessionId = api_get_session_id();
                 $groupId = api_get_group_id();
 
-				$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id();
-                $PathChamiloAjaxFileManager .= DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId) . '/';
+				$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().'/';
+                //$PathChamiloAjaxFileManager .= DocumentManager::getDocumentSuffix($courseInfo, $sessionId, $groupId) . '/';
 			}
 		}
 	}

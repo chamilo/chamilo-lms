@@ -1467,7 +1467,8 @@ function create_unexisting_directory(
     $desired_dir_name,
     $title = null,
     $visibility = null,
-    $generateNewNameIfExists = false
+    $generateNewNameIfExists = false,
+    $useSuffix = true
 ) {
     $course_id = $_course['real_id'];
     $session_id = intval($session_id);
@@ -1476,7 +1477,8 @@ function create_unexisting_directory(
         $desired_dir_name,
         $_course,
         $session_id,
-        $to_group_id
+        $to_group_id,
+        $useSuffix
     );
 
     if ($folderExists == true) {
@@ -1505,11 +1507,14 @@ function create_unexisting_directory(
     $systemFolderName = $desired_dir_name;
 
     // Adding suffix
-    $suffix = DocumentManager::getDocumentSuffix(
-        $_course,
-        $session_id,
-        $to_group_id
-    );
+    $suffix = '';
+    if ($useSuffix) {
+        $suffix = DocumentManager::getDocumentSuffix(
+            $_course,
+            $session_id,
+            $to_group_id
+        );
+    }
 
     $systemFolderName .= $suffix;
 

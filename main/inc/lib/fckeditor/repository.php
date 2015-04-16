@@ -68,14 +68,38 @@ if (api_is_in_course()) {
             $usf_dir_title = get_lang('SharedFolder');
             $usf_dir_name = '/shared_folder';
             $visibility = 0;
-            create_unexisting_directory($_course, $userId, $sessionId, 0, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory(
+                $_course,
+                $userId,
+                $sessionId,
+                0,
+                $to_user_id,
+                $base_work_dir,
+                $usf_dir_name,
+                $usf_dir_title,
+                $visibility,
+                false,
+                false
+            );
         }
         // Create dynamic user shared folder
         if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.$userId)) {
             $usf_dir_title = $userInfo['complete_name'];
             $usf_dir_name = '/shared_folder/sf_user_'.$userId;
             $visibility = 1;
-            create_unexisting_directory($_course, $userId, $sessionId, 0, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory(
+                $_course,
+                $userId,
+                $sessionId,
+                0,
+                $to_user_id,
+                $base_work_dir,
+                $usf_dir_name,
+                $usf_dir_title,
+                $visibility,
+                false,
+                false
+            );
         }
     } else {
         // Create shared folder session
@@ -83,8 +107,21 @@ if (api_is_in_course()) {
             $usf_dir_title = get_lang('SharedFolder').' ('.$sessionName.')';
             $usf_dir_name = '/shared_folder_session_'.$sessionId;
             $visibility = 0;
-            create_unexisting_directory($_course, $userId, $sessionId, 0, $to_user_id, $base_work_dir, $usf_dir_name, $usf_dir_title, $visibility);
+            create_unexisting_directory(
+                $_course,
+                $userId,
+                $sessionId,
+                0,
+                $to_user_id,
+                $base_work_dir,
+                $usf_dir_name,
+                $usf_dir_title,
+                $visibility,
+                false,
+                false
+            );
         }
+
         // Create dynamic user shared folder into a shared folder session.
         if (!file_exists($base_work_dir.'/shared_folder_session_'.$sessionId.'/sf_user_'.$userId)) {
             $usf_dir_title = $userInfo['complete_name'].' ('.$sessionName.')';
@@ -99,7 +136,9 @@ if (api_is_in_course()) {
                 $base_work_dir,
                 $usf_dir_name,
                 $usf_dir_title,
-                $visibility
+                $visibility,
+                false,
+                false
             );
         }
     }

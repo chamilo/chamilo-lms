@@ -4716,7 +4716,8 @@ class DocumentManager
         $folder,
         $courseInfo,
         $sessionId,
-        $groupId
+        $groupId,
+        $useSuffix = true
     ) {
         $courseId = $courseInfo['real_id'];
 
@@ -4725,13 +4726,17 @@ class DocumentManager
         }
 
         $sessionId = intval($sessionId);
-        $folderWithSuffix = self::fixDocumentName(
-            $folder,
-            'folder',
-            $courseInfo,
-            $sessionId,
-            $groupId
-        );
+        $folderWithSuffix = $folder;
+
+        if ($useSuffix) {
+            $folderWithSuffix = self::fixDocumentName(
+                $folder,
+                'folder',
+                $courseInfo,
+                $sessionId,
+                $groupId
+            );
+        }
 
         $folder = Database::escape_string($folder);
         $folderWithSuffix = Database::escape_string($folderWithSuffix);

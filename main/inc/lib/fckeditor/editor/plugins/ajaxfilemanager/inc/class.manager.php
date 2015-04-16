@@ -81,7 +81,6 @@ class manager
         } else {
             $this->currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
         }
-
         $this->currentFolderPath = (isUnderRoot($this->getCurrentFolderPath()) ? backslashToSlash((addTrailingSlash($this->getCurrentFolderPath()))) : $this->currentFolderPath);
         $this->currentFolderPath = base64_encode($this->currentFolderPath);
 

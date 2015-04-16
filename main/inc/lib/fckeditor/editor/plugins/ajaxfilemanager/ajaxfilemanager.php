@@ -27,6 +27,7 @@ if (CONFIG_LOAD_DOC_LATTER) {
     $manager = new manager();
     $manager->setSessionAction($sessionAction);
     $fileList   = $manager->getFileList();
+
     $folderInfo = $manager->getFolderInfo();
 }
 

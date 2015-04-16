@@ -1490,23 +1490,19 @@ class Agenda
         $start = intval($start);
         $end = intval($end);
 
-        $startCondition = '';
-        $endCondition = '';
-
+        $condition = null;
         if ($start !== 0) {
             $start = api_get_utc_datetime($start);
-            $startCondition = "AND start_date >= '".$start."'";
+            $condition = " AND (start_date >= '".$start."' OR end_date >= '".$start."')";
         }
-        if ($start !== 0) {
+        if ($end !== 0) {
             $end = api_get_utc_datetime($end);
-            $endCondition = "AND end_date <= '".$end."'";
+            $condition .= " AND (start_date <= '".$end."' OR end_date <= '".$end."')";
         }
-
         $access_url_id = api_get_current_access_url_id();
 
         $sql = "SELECT * FROM ".$this->tbl_global_agenda."
-               WHERE access_url_id = $access_url_id $startCondition $endCondition";
-
+                       WHERE access_url_id = $access_url_id$condition";echo $sql;
         $result = Database::query($sql);
         $my_events = array();
         if (Database::num_rows($result)) {

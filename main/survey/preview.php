@@ -206,7 +206,6 @@ if (api_is_course_admin() ||
 	$url = api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show;
 	$form = new FormValidator('question', 'post', $url);
 
-
 	if (is_array($questions) && count($questions) > 0) {
 		foreach ($questions as $key => & $question) {
 			$ch_type = 'ch_'.$question['type'];

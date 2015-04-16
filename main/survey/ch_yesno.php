@@ -83,13 +83,18 @@ class ch_yesno extends survey_question
             } else {
                 $class = 'inline';
             }
-
+            $name = 'question' . $questionData['question_id'];
             $form->addRadio(
-                'question' . $questionData['question_id'],
+                $name ,
                 null,
                 $questionData['options'],
                 array('label-class' => $class)
             );
+
+            if (!empty($answers)) {
+                var_dump(array_values($answers));
+                $form->setDefaults([$name => array_values($answers)]);
+            }
         }
     }
 }

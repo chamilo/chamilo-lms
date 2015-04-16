@@ -9,6 +9,7 @@
  *
  * 	@todo The question has to be more clearly indicated (same style as when filling the survey)
  */
+
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 
@@ -80,6 +81,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
     api_get_course_info()
 );
+
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
 	Display :: display_header(get_lang('ToolSurvey'));
@@ -99,7 +101,6 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 // Getting the survey information
 
-//$survey_data = SurveyManager::get_survey($survey_id);
 if (empty($survey_data)) {
     Display :: display_header(get_lang('ToolSurvey'));
     Display :: display_error_message(get_lang('InvallidSurvey'), false);

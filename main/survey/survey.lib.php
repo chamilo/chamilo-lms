@@ -1955,12 +1955,12 @@ class SurveyUtil
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if($row['type'] != 'pagebreak') {
-                    $questions[$row['sort']]['question_id'] 						= $row['question_id'];
-                    $questions[$row['sort']]['survey_id'] 							= $row['survey_id'];
-                    $questions[$row['sort']]['survey_question'] 					= $row['survey_question'];
-                    $questions[$row['sort']]['display'] 							= $row['display'];
-                    $questions[$row['sort']]['type'] 								= $row['type'];
-                    $questions[$row['sort']]['maximum_score'] 						= $row['max_value'];
+                    $questions[$row['sort']]['question_id'] = $row['question_id'];
+                    $questions[$row['sort']]['survey_id'] = $row['survey_id'];
+                    $questions[$row['sort']]['survey_question'] = $row['survey_question'];
+                    $questions[$row['sort']]['display'] = $row['display'];
+                    $questions[$row['sort']]['type'] = $row['type'];
+                    $questions[$row['sort']]['maximum_score'] = $row['max_value'];
                     $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
                 }
             }
@@ -1969,7 +1969,7 @@ class SurveyUtil
             $sql = "SELECT * FROM $table_survey_answer
 			        WHERE
                         c_id = $course_id AND
-                        survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
+                        survey_id = '".intval($_GET['survey_id'])."' AND
                         user = '".Database::escape_string($_GET['user'])."'";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1977,7 +1977,7 @@ class SurveyUtil
                 $all_answers[$row['question_id']][] = $row;
             }
             // Displaying all the questions
-            $second_parameter=array();
+            $second_parameter = array();
 
             foreach ($questions as & $question) {
                 // If the question type is a scoring then we have to format the answers differently
@@ -1994,9 +1994,15 @@ class SurveyUtil
                         $second_parameter[] = $all_answers[$question['question_id']][0]['option_id'];
                     }
                 }
+
                 $ch_type = 'ch_'.$question['type'];
+                /** @var survey_question $display */
                 $display = new $ch_type;
-                $display->render_question($question, $second_parameter);
+
+                $url = api_get_self();
+                $form = new FormValidator('question', 'post', $url);
+                $display->render($form, $question, $second_parameter);
+                $form->display();
             }
         }
     }
@@ -3428,7 +3434,7 @@ class SurveyUtil
      * @version January 2007
      *
      */
-    public static function save_invitations(
+    public static function saveInvitations(
         $users_array,
         $invitation_title,
         $invitation_text,
@@ -3555,9 +3561,12 @@ class SurveyUtil
             !empty($params['survey_code'])
         ) {
             $insertedId = Database::insert($table, $params);
+            if ($insertedId) {
 
-            $sql = "UPDATE $table SET survey_invitation_id = $insertId WHERE iid = $insertId";
-            Database::query($sql);
+                $sql = "UPDATE $table SET survey_invitation_id = $insertId
+                        WHERE iid = $insertId";
+                Database::query($sql);
+            }
         }
         return false;
     }

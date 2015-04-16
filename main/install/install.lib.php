@@ -2536,9 +2536,8 @@ function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm
         foreach ($versions as $version => $queries) {
             echo 'VERSION: '.$version.$nl;
             echo '----------------------------------------------'.$nl.$nl;
-
             foreach ($queries as $query) {
-                echo $query.$nl.$nl;
+                echo $query.$nl;
             }
             echo $nl.$nl;
         }

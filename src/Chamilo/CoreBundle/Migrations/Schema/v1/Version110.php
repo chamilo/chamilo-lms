@@ -51,8 +51,6 @@ class Version110 extends AbstractMigrationChamilo
             );
         }
 
-        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
-        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
         $this->addSql("ALTER TABLE session ADD COLUMN duration int");
         $this->addSql("ALTER TABLE session_rel_user ADD COLUMN duration int");
         $this->addSql("ALTER TABLE skill ADD COLUMN criteria text DEFAULT ''");
@@ -73,6 +71,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE track_e_course_access ADD COLUMN user_ip varchar(39) NOT NULL default ''");
         $this->addSql("ALTER TABLE track_e_online CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE track_e_login CHANGE COLUMN login_ip user_ip varchar(39) NOT NULL DEFAULT ''");
+
         $this->addSql("ALTER TABLE user MODIFY COLUMN user_id int unsigned DEFAULT null");
         $this->addSql("ALTER TABLE user DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT AFTER user_id");
@@ -81,11 +80,22 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE user MODIFY COLUMN chatcall_user_id int unsigned default 0");
         $this->addSql("ALTER TABLE user MODIFY COLUMN expiration_date datetime default NULL");
         $this->addSql("ALTER TABLE user MODIFY COLUMN registration_date datetime NOT NULL");
+
         $this->addSql("ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0");
         $this->addSql("ALTER TABLE session MODIFY COLUMN name char(100) NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE course_rel_user ADD COLUMN c_id int default NULL");
         $this->addSql("ALTER TABLE course_field_values ADD COLUMN c_id int default NULL");
+
         $this->addSql("ALTER TABLE session_rel_course_rel_user ADD COLUMN c_id int default NULL");
+        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
+        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
+
+        $this->addSql("ALTER TABLE access_url_rel_course ADD COLUMN c_id int");
+
+        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN position int NOT NULL default 0");
+        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN category varchar(255) default ''");
+        $this->addSql("ALTER TABLE session_rel_course ADD COLUMN c_id int unsigned");
+        $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
 
         $this->addSql("UPDATE course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
@@ -105,12 +115,12 @@ class Version110 extends AbstractMigrationChamilo
             //'c_blog_post',
             //'c_blog_rating',
             //'c_blog_rel_user',
-            'c_blog_task',
-            'c_blog_task_rel_user',
+            //'c_blog_task',
+            //'c_blog_task_rel_user',
             'c_calendar_event',
             'c_calendar_event_attachment',
-            'c_calendar_event_repeat',
-            'c_calendar_event_repeat_not',
+            //'c_calendar_event_repeat',
+            //'c_calendar_event_repeat_not',
             'c_chat_connected',
             'c_course_description',
             'c_course_setting',
@@ -125,7 +135,7 @@ class Version110 extends AbstractMigrationChamilo
             //'c_forum_forum',
             'c_forum_mailcue',
             'c_forum_notification',
-            'c_forum_post',
+            //'c_forum_post',
             //'c_forum_thread',
             'c_forum_thread_qualify',
             'c_forum_thread_qualify_log',
@@ -219,8 +229,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN blog_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_blog_rel_user MODIFY COLUMN user_id int unsigned DEFAULT NULL");
-        $this->addSql("ALTER TABLE c_blog_rating DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE c_blog_rating ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
+        $this->addSql("ALTER TABLE c_blog_rel_user DROP PRIMARY KEY");
+        $this->addSql("ALTER TABLE c_blog_rel_user ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_blog_task MODIFY COLUMN task_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_blog_task MODIFY COLUMN c_id int unsigned DEFAULT NULL");
@@ -280,6 +290,7 @@ class Version110 extends AbstractMigrationChamilo
 
         $this->addSql("ALTER TABLE c_forum_thread MODIFY COLUMN forum_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_forum_thread MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_forum_thread MODIFY COLUMN thread_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_forum_thread DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_forum_thread ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
@@ -298,6 +309,7 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_online_connected ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN c_id int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_answer DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_quiz_answer MODIFY COLUMN id_auto int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
@@ -306,24 +318,18 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_quiz_question_rel_category ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
-        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned DEFAULT NULL");
-        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned DEFAULT NULL");
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_session int unsigned");
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN id_user int unsigned");
+        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN relation_type int unsigned DEFAULT 0");
+        $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
 
-        $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int");
-        $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int");
+        $this->addSql("ALTER TABLE session_rel_user CHANGE id_session session_id int unsigned");
+        $this->addSql("ALTER TABLE session_rel_user CHANGE id_user user_id int unsigned");
+        $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
-        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_session session_id int");
-        $this->addSql("ALTER TABLE session_rel_course_rel_user CHANGE id_user user_id int");
-
-        $this->addSql("ALTER TABLE session_rel_course CHANGE id_session session_id int");
 
         $this->addSql("ALTER TABLE c_item_property CHANGE id_session session_id int");
-
         $this->addSql("ALTER TABLE course_rel_user CHANGE tutor_id is_tutor int");
-
-
-        $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
         $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_rel_question MODIFY COLUMN question_id int unsigned DEFAULT NULL");
@@ -372,11 +378,6 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_wiki_conf DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_wiki_conf ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
-        $this->addSql("ALTER TABLE session_rel_user MODIFY COLUMN relation_type int unsigned DEFAULT 0");
-        $this->addSql("ALTER TABLE session_rel_user DROP PRIMARY KEY");
-        $this->addSql("ALTER TABLE session_rel_user ADD COLUMN id int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
-
-
         // Course
         $this->addSql("ALTER TABLE c_survey ADD COLUMN visible_results INT UNSIGNED DEFAULT 0");
         $this->addSql("ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL");
@@ -415,6 +416,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE course_field_values SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE session_rel_course_rel_user SET c_id = (SELECT id FROM course WHERE code = course_code)");
         $this->addSql("UPDATE session_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
+
+        $this->addSql("UPDATE access_url_rel_course SET c_id = (SELECT id FROM course WHERE code = course_code)");
 
         $this->addSql("DELETE FROM settings_current WHERE variable = 'wcag_anysurfer_public_pages'");
         $this->addSql("DELETE FROM settings_options WHERE variable = 'wcag_anysurfer_public_pages'");

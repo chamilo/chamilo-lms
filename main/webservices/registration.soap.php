@@ -528,7 +528,7 @@ function WSCreateUser($params) {
                     phone = '".Database::escape_string($phone)."',
                     language = '".Database::escape_string($language)."',
                     registration_date = now(),
-                    expiration_date = '".Database::escape_string($expiration_date)."',
+                    $expirationDateStatement
                     hr_dept_id = '".Database::escape_string($hr_dept_id)."',
                     active = '".Database::escape_string($active)."'";
     $result = Database::query($sql);

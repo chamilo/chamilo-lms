@@ -2106,4 +2106,24 @@ class Display
                 </div>';
     }
 
+    /**
+     * Get the button HTML with an Awesome Font icon
+     * @param string $text The button content
+     * @param string $url The url to button
+     * @param string $icon The Awesome Font class for icon
+     * @param string $type Ooptional. The button Bootstrap class. Default 'default' class
+     * @param array $attributes The additional attributes
+     * @return string The button HTML
+     */
+    public static function toolbarButton($text, $url, $icon = 'check', $type = 'default', array $attributes = [])
+    {
+        $buttonClass = "btn btn-$type";
+
+        $icon = self::tag('i', null, ['class' => "fa fa-$icon"]);
+
+        $attributes['class'] = isset($attributes['class']) ? "$buttonClass {$attributes['class']}" : $buttonClass;
+
+        return self::url("$icon $text", $url, $attributes);
+    }
+
 }

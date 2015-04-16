@@ -23,6 +23,14 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 $message = Session::has('message') ? Session::read('message') : null;
 
+$toolbar = Display::toolbarButton(
+    get_lang('CreateSkill'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skill_create.php',
+    'plus',
+    'success',
+    ['title' => get_lang('CreateSkill')]
+);
+
 /* View */
 $skill = new Skill();
 $skillList = $skill->get_all();
@@ -33,6 +41,7 @@ $tpl->assign('skills', $skillList);
 
 $content = $tpl->fetch('default/skill/list.tpl');
 
+$tpl->assign('actions', $toolbar);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
 

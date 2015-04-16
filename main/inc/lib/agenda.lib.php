@@ -885,7 +885,7 @@ class Agenda
      * @param string $format
      * @return array|string
      */
-    public function get_events(
+    public function getEvents(
         $start,
         $end,
         $course_id = null,
@@ -900,7 +900,7 @@ class Agenda
             case 'course':
                 $session_id = $this->sessionId;
                 $courseInfo = api_get_course_info_by_id($course_id);
-                $this->get_course_events(
+                $this->getCourseEvents(
                     $start,
                     $end,
                     $courseInfo,
@@ -932,7 +932,7 @@ class Agenda
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
                                 $courseInfo = api_get_course_info($course_item['code']);
-                                $this->get_course_events($start, $end, $courseInfo, 0, $my_session_id);
+                                $this->getCourseEvents($start, $end, $courseInfo, 0, $my_session_id);
                             }
                         }
                     }
@@ -942,10 +942,10 @@ class Agenda
                     foreach ($my_course_list as $course_info_item) {
                         if (isset($course_id) && !empty($course_id)) {
                             if ($course_info_item['real_id'] == $course_id) {
-                                $this->get_course_events($start, $end, $course_info_item);
+                                $this->getCourseEvents($start, $end, $course_info_item);
                             }
                         } else {
-                            $this->get_course_events($start, $end, $course_info_item);
+                            $this->getCourseEvents($start, $end, $course_info_item);
                         }
                     }
                 }
@@ -1238,7 +1238,7 @@ class Agenda
      * @param int $user_id
      * @return array
      */
-    public function get_course_events($start, $end, $courseInfo, $groupId = 0, $session_id = 0, $user_id = 0)
+    public function getCourseEvents($start, $end, $courseInfo, $groupId = 0, $session_id = 0, $user_id = 0)
     {
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
@@ -1306,11 +1306,11 @@ class Agenda
                     INNER JOIN $tbl_property ip
                     ON (agenda.id = ip.ref AND agenda.c_id = ip.c_id)
                     WHERE
-                        ip.tool         ='".TOOL_CALENDAR_EVENT."' AND
+                        ip.tool = '".TOOL_CALENDAR_EVENT."' AND
                         $where_condition AND
-                        ip.visibility   = '1' AND
-                        agenda.c_id     = $course_id AND
-                        ip.c_id         = $course_id
+                        ip.visibility = '1' AND
+                        agenda.c_id = $course_id AND
+                        ip.c_id = $course_id
                     ";
         } else {
             $visibilityCondition = " ip.visibility='1' AND";
@@ -1343,14 +1343,23 @@ class Agenda
         $dateCondition = null;
 
         if (!empty($start) && !empty($end)) {
+            $date = new DateTime($start);
+            $month = $date->format('m');
+
             $dateCondition .= "AND (
                  agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
-                 agenda.end_date BETWEEN '".$start."' AND '".$end."'
+                 agenda.end_date BETWEEN '".$start."' AND '".$end."' OR
+                 (
+                 agenda.start_date <> '' AND agenda.end_date <> '' AND
+                 YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
+                 MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
+                 )
+
             )";
         }
 
         $sql .= $dateCondition;
-        //echo $sql;
+
         $allowComments = api_get_configuration_value('allow_agenda_event_comment');
 
         $result = Database::query($sql);
@@ -1766,10 +1775,8 @@ class Agenda
 
         if ($id) {
             $form_title = get_lang('ModifyCalendarItem');
-            $button = get_lang('ModifyEvent');
         } else {
             $form_title = get_lang('AddCalendarItem');
-            $button = get_lang('AgendaAdd');
         }
 
         $form->addElement('header', $form_title);
@@ -1899,7 +1906,13 @@ class Agenda
             );
         }
 
-        $form->addElement('button', 'submit', $button);
+
+        if ($id) {
+            $form->addButtonUpdate(get_lang('ModifyEvent'));
+        } else {
+            $form->addButtonSave(get_lang('AgendaAdd'));
+        }
+
         $form->setDefaults($params);
 
         $form->addRule('date_range', get_lang('ThisFieldIsRequired'), 'required');

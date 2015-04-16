@@ -25,6 +25,7 @@ define('RESOURCE_WIKI', 'wiki');
 define('RESOURCE_THEMATIC', 'thematic');
 define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
+define('RESOURCE_SESSION_COURSE', 'session_course');
 
 /**
  * Class Resource
@@ -70,7 +71,7 @@ class Resource
      * @param int $id The id of this resource in the source course.
      * @param constant $type The type of this resource.
      */
-    function Resource($id, $type)
+    public function __construct($id, $type)
     {
         $this->source_id = $id;
         $this->type = $type;
@@ -82,21 +83,24 @@ class Resource
     /**
      * Add linked resource
      */
-    function add_linked_resource($type, $id) {
+    function add_linked_resource($type, $id)
+    {
         $this->linked_resources[$type][] = $id;
     }
 
     /**
      * Get linked resources
      */
-    function get_linked_resources() {
+    function get_linked_resources()
+    {
         return $this->linked_resources;
     }
 
     /**
      * Checks if this resource links to a given resource
      */
-    function links_to(& $resource) {
+    function links_to(& $resource)
+    {
         $type = $resource->get_type();
         if (isset($this->linked_resources[$type]) &&
             is_array($this->linked_resources[$type])
@@ -130,8 +134,12 @@ class Resource
     /**
      * Get the constant which defines the tool of this resource. This is
      * used in the item_properties table.
-     * @param bool $for_item_property_table (optional)	Added by Ivan, 29-AUG-2009: A parameter for resolving differencies between defined TOOL_* constants and hardcoded strings that are stored in the database.
-     * Example: The constant TOOL_THREAD is defined in the main_api.lib.php with the value 'thread', but the "Forums" tool records in the field 'tool' in the item property table the hardcoded value 'forum_thread'.
+     * @param bool $for_item_property_table (optional)	Added by Ivan,
+     * 29-AUG-2009: A parameter for resolving differencies between defined TOOL_*
+     * constants and hardcoded strings that are stored in the database.
+     * Example: The constant TOOL_THREAD is defined in the main_api.lib.php
+     * with the value 'thread', but the "Forums" tool records in the field 'tool'
+     * in the item property table the hardcoded value 'forum_thread'.
      * @todo once the RESOURCE_* constants are replaced by the globally
      * defined TOOL_* constants, this function will be replaced by get_type()
      */

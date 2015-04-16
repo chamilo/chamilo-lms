@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@author Bart Mollet, Julio Montoya lot of fixes
 *	@package chamilo.admin
 */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -76,12 +78,12 @@ $url_id = api_get_current_access_url_id();
 
 switch ($action) {
     case 'move_up':
-        SessionManager::moveUp($sessionId, $_GET['course_code']);
+        SessionManager::moveUp($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
         exit;
         break;
     case 'move_down':
-        SessionManager::moveDown($sessionId, $_GET['course_code']);
+        SessionManager::moveDown($sessionId, $_GET['course_id']);
         header('Location: resume_session.php?id_session='.$sessionId);
         exit;
         break;
@@ -288,13 +290,15 @@ if ($session['nbr_courses'] == 0) {
 } else {
 	// select the courses
 
-    $orderBy = "ORDER BY position";
+    //$orderBy = "ORDER BY position";
+    $orderBy = '';
 
-	$sql = "SELECT code,title,visual_code, nbr_users
-			FROM $tbl_course, $tbl_session_rel_course
+	$sql = "SELECT c.id, code, title, visual_code, nbr_users
+			FROM $tbl_course c INNER JOIN $tbl_session_rel_course sc
+			ON (c.id = sc.c_id)
 			WHERE
-			    course_code = code AND
-			    id_session='$sessionId'
+			    sc.c_id = c.id AND
+			    session_id='$sessionId'
 			$orderBy";
 
     $result = Database::query($sql);
@@ -305,25 +309,26 @@ if ($session['nbr_courses'] == 0) {
 		//select the number of users
 
 		$sql = "SELECT count(*)
-                FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
+                FROM $tbl_session_rel_user sru,
+                $tbl_session_rel_course_rel_user srcru
 				WHERE
-				    srcru.id_user = sru.id_user AND
-				    srcru.id_session = sru.id_session AND
-				    srcru.course_code = '".Database::escape_string($course['code'])."' AND
+				    srcru.user_id = sru.user_id AND
+				    srcru.session_id = sru.session_id AND
+				    srcru.c_id = '".intval($course['id'])."' AND
 				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
-				    srcru.id_session = '".intval($sessionId)."'";
+				    srcru.session_id = '".intval($sessionId)."'";
 
 		$rs = Database::query($sql);
 		$course['nbr_users'] = Database::result($rs, 0, 0);
 
 		// Get coachs of the courses in session
 
-		$sql = "SELECT user.lastname,user.firstname,user.username
+		$sql = "SELECT user.lastname, user.firstname, user.username
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE
-				    session_rcru.id_user = user.user_id AND
-				    session_rcru.id_session = '".intval($sessionId)."' AND
-				    session_rcru.course_code ='".Database::escape_string($course['code'])."' AND
+				    session_rcru.user_id = user.user_id AND
+				    session_rcru.session_id = '".intval($sessionId)."' AND
+				    session_rcru.c_id ='".intval($course['id'])."' AND
 				    session_rcru.status=2";
 		$rs = Database::query($sql);
 
@@ -345,7 +350,7 @@ if ($session['nbr_courses'] == 0) {
         $orderButtons = null;
 
         $upIcon = 'up.png';
-        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_up';
+        $urlUp = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_up';
 
         if ($count == 0) {
             $upIcon = 'up_na.png';
@@ -358,7 +363,7 @@ if ($session['nbr_courses'] == 0) {
         );
 
         $downIcon = 'down.png';
-        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_code='.$course['code'].'&action=move_down';
+        $downUrl = api_get_self().'?id_session='.$sessionId.'&course_id='.$course['id'].'&action=move_down';
 
         if ($count +1 == count($courses)) {
             $downIcon = 'down_na.png';

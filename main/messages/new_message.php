@@ -254,11 +254,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 						$parent_id
 					);
 					if ($res) {
-						if (is_string($res)) {
-							$html .= Display::return_message($res, 'error');
-						} else {
-							$html .= MessageManager::display_success_message($user);
-						}
+						$html .= MessageManager::display_success_message($user);
 					}
 				}
 			} else {
@@ -384,8 +380,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
-    $tpl->assign('actions', $actions);
-    $tpl->assign('message', $show_message);
+    //$tpl->assign('actions', $actions);
+    //$tpl->assign('message', $show_message);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

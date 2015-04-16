@@ -83,7 +83,7 @@ function save_data($skills)
  */
 function parse_csv_data($file)
 {
-	$skills = Import :: csv_to_array($file);
+	$skills = Import :: csvToArray($file);
 	foreach ($skills as $index => $skill) {
 		$skills[$index] = $skill;
 	}

@@ -126,7 +126,7 @@ class AnnouncementEmail
                     c_id = $course_id AND
                     tool = '$tool' AND
                     ref = $id AND
-                    id_session = {$this->session_id} ";
+                    session_id = {$this->session_id} ";
         $rs = Database::query($sql);
 
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
@@ -311,12 +311,15 @@ class AnnouncementEmail
         }
 
         if ($sendToUsersInSession) {
-            $sessionList = SessionManager::get_session_by_course($this->course['code']);
+            $sessionList = SessionManager::get_session_by_course($this->course['real_id']);
             if (!empty($sessionList)) {
                 foreach ($sessionList as $sessionInfo) {
                     $sessionId = $sessionInfo['id'];
                     $message = $this->message(null, $sessionId);
-                    $userList = CourseManager::get_user_list_from_course_code($this->course['code'], $sessionId);
+                    $userList = CourseManager::get_user_list_from_course_code(
+                        $this->course['code'],
+                        $sessionId
+                    );
                     if (!empty($userList)) {
                         foreach ($userList as $user) {
                             MessageManager::send_message_simple(

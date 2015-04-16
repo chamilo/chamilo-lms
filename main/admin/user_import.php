@@ -247,7 +247,7 @@ function save_data($users)
  */
 function parse_csv_data($file)
 {
-    $users = Import :: csv_to_array($file);
+    $users = Import :: csvToArray($file);
     foreach ($users as $index => $user) {
         if (isset ($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));

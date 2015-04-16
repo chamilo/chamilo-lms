@@ -89,7 +89,7 @@ function fixDocumentNameCallback($p_event, &$p_header)
     $documentNameFixed = DocumentManager::undoFixDocumentName(
         $documentData['path'],
         $documentData['c_id'],
-        $documentData['id_session'],
+        $documentData['session_id'],
         $documentData['to_group_id']
     );
 
@@ -112,7 +112,7 @@ if (api_is_allowed_to_edit()) {
     }
     $querypath = Database::escape_string($querypath);
     // Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
+    $sql = "SELECT path, session_id, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -123,7 +123,7 @@ if (api_is_allowed_to_edit()) {
                 docs.filetype = 'file' AND
                 props.visibility <> '2' AND
                 props.to_group_id = ".$groupId." AND
-                props.id_session IN ('0', '$sessionId') AND
+                props.session_id IN ('0', '$sessionId') AND
                 docs.c_id = ".$courseId." ";
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
@@ -143,7 +143,7 @@ if (api_is_allowed_to_edit()) {
             strpos($not_deleted_file['path'], 'shared_folder') > 0
         ) {
             if (!empty($sessionId)) {
-                if ($not_deleted_file['id_session'] != $sessionId) {
+                if ($not_deleted_file['session_id'] != $sessionId) {
                     continue;
                 }
             }
@@ -174,7 +174,7 @@ if (api_is_allowed_to_edit()) {
        1st: Get all files that are visible in the given path
     */
     $querypath = Database::escape_string($querypath);
-    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
+    $sql = "SELECT path, session_id, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -185,7 +185,7 @@ if (api_is_allowed_to_edit()) {
                 docs.path               LIKE '".$querypath."/%' AND
                 props.visibility        = '1' AND
                 docs.filetype           = 'file' AND
-                props.id_session        IN ('0', '$sessionId') AND
+                props.session_id        IN ('0', '$sessionId') AND
                 props.to_group_id       = ".$groupId;
 
     $sql.= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
@@ -199,7 +199,7 @@ if (api_is_allowed_to_edit()) {
             strpos($all_visible_files['path'], 'shared_folder') > 0
         ) {
             if (!empty($sessionId)) {
-                if ($all_visible_files['id_session'] != $sessionId) {
+                if ($all_visible_files['session_id'] != $sessionId) {
                     continue;
                 }
             }
@@ -209,7 +209,7 @@ if (api_is_allowed_to_edit()) {
     }
 
     // 2nd: Get all folders that are invisible in the given path
-    $sql = "SELECT path, id_session, docs.id, props.to_group_id, docs.c_id
+    $sql = "SELECT path, session_id, docs.id, props.to_group_id, docs.c_id
             FROM $doc_table AS docs INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
@@ -219,7 +219,7 @@ if (api_is_allowed_to_edit()) {
                 props.tool          = '".TOOL_DOCUMENT."' AND
                 docs.path             LIKE '".$querypath."/%' AND
                 props.visibility    <> '1' AND
-                props.id_session    IN ('0', '$sessionId') AND
+                props.session_id    IN ('0', '$sessionId') AND
                 docs.filetype       = 'folder'";
     $query2 = Database::query($sql);
 
@@ -241,7 +241,7 @@ if (api_is_allowed_to_edit()) {
                         props.tool ='".TOOL_DOCUMENT."' AND
                         docs.path LIKE '".$invisible_folders['path']."/%' AND
                         docs.filetype       ='file' AND
-                        props.id_session    IN ('0', '$sessionId') AND
+                        props.session_id    IN ('0', '$sessionId') AND
                         props.visibility    ='1'";
             $query3 = Database::query($sql);
             // Add tem to an array

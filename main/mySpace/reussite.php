@@ -48,7 +48,7 @@ if (!empty($_GET['session'])) {
 				FROM $tbl_course as course
 				INNER JOIN $tbl_session_course AS rel_course
 				ON course.code = rel_course.course_code
-				AND rel_course.id_session = ".$session['id']."
+				AND rel_course.session_id = ".$session['id']."
 				ORDER BY title ASC";
 
 			$result_course = Database::query($sql_course);

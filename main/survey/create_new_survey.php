@@ -37,7 +37,7 @@ if (!api_is_allowed_to_edit()) {
 
 // Getting the survey information
 $survey_id = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 // Additional information
 $course_id = api_get_course_id();
@@ -91,7 +91,11 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 // Initialize the object
-$form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id);
+$form = new FormValidator(
+    'survey',
+    'post',
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id
+);
 
 $form->addElement('header', '', $tool_name);
 
@@ -229,15 +233,15 @@ if ($form->validate()) {
     // Exporting the values
     $values = $form->exportValues();
     // Storing the survey
-    $return = survey_manager::store_survey($values);
+    $return = SurveyManager::store_survey($values);
 
     /* // Deleting the shared survey if the survey is getting unshared (this only happens when editing)
       if (is_numeric($survey_data['survey_share']) && $values['survey_share']['survey_share'] == 0 && $values['survey_id'] != '') {
-      survey_manager::delete_survey($survey_data['survey_share'], true);
+      SurveyManager::delete_survey($survey_data['survey_share'], true);
       }
       // Storing the already existing questions and options of a survey that gets shared (this only happens when editing)
       if ($survey_data['survey_share'] == 0 && $values['survey_share']['survey_share'] !== 0 && $values['survey_id'] != '') {
-      survey_manager::get_complete_survey_structure($return['id']);
+      SurveyManager::get_complete_survey_structure($return['id']);
       }
      */
     if ($return['type'] == 'error') {

@@ -107,7 +107,7 @@ if (isset($_GET['import'])) {
             $file_type = $_POST['file_type'];
             $file_name = $_FILES['import_file']['tmp_name'];
             if ($file_type == 'csv') {
-                $results = Import :: csv_to_array($file_name);
+                $results = Import :: csvToArray($file_name);
             } else {
                 $results = parse_xml_data($file_name);
             }
@@ -328,11 +328,11 @@ if (isset($_GET['export'])) {
 
         switch ($file_type) {
             case 'xml' :
-                Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
+                Export :: arrayToXml($alldata, $filename, 'Result', 'XMLResults');
                 exit;
                 break;
             case 'csv' :
-                Export :: export_table_csv($alldata, $filename);
+                Export :: arrayToCsv($alldata, $filename);
                 exit;
                 break;
         }

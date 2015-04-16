@@ -53,7 +53,7 @@ function moveUserFromCourseToCourse($originCourse, $destinationCourse, $debug = 
     if (PHP_SAPI != 'cli') {
         $eol = "<br />".$eol;
     }
-    
+
     if (empty($originCourse)) {
         return $output;
     } else {
@@ -81,8 +81,8 @@ function moveUserFromCourseToCourse($originCourse, $destinationCourse, $debug = 
     // Now get the list of users subscribed to the course of origin
     $sql = "SELECT user_id
         FROM $tableCRU
-        WHERE status = ".STUDENT." 
-        AND course_code = '$originCourse'";
+        WHERE status = ".STUDENT."
+        AND c_id = '$courseId'";
     $output .= "$sql".$eol;
     $res = Database::query($sql);
     $numUsers = Database::num_rows($res);
@@ -92,7 +92,7 @@ function moveUserFromCourseToCourse($originCourse, $destinationCourse, $debug = 
     // Now get the list of users subscribed to the course of origin
     $sqlDestination = "SELECT user_id
         FROM $tableCRU
-        WHERE status = ".STUDENT." 
+        WHERE status = ".STUDENT."
         AND course_code = '$destinationCourse'";
     $output .= "$sqlDestination".$eol;
     $resDestination = Database::query($sqlDestination);

@@ -167,7 +167,7 @@ if (!empty($attempts) && $visible_return['value'] == true) {
         $attempt_link = Display::url(
             get_lang('Show'),
             $attempt_url,
-            array('class' => $btn_class . 'btn')
+            array('class' => $btn_class . 'btn btn-default')
         );
 
         $teacher_revised = Display::label(get_lang('Validated'), 'success');

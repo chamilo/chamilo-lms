@@ -15,8 +15,6 @@ if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);
 }
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 $_SESSION['who_is_online_counter'] = 2;
 
 $htmlHeadXtra[] = api_get_js('jquery.endless-scroll.js');
@@ -68,23 +66,23 @@ $(document).ready(function() {
     $("#link_load_more_items").click(function() {
         page = $("#link_load_more_items").attr("data_link");
         $.ajax({
-                beforeSend: function(objeto) {
-                    $("#display_response_id").html("'.addslashes(get_lang('Loading')).'");
-                },
-                type: "GET",
-                url: "main/inc/ajax/online.ajax.php?a=load_online_user",
-                data: "online_page_nr="+page,
-                success: function(data) {
-                    $("#display_response_id").html("");
-                    if (data != "end") {
-                        $("#link_load_more_items").remove();
-                        var last = $("#online_grid_container li:last");
-                        last.after(data);
-                    } else {
-                        $("#link_load_more_items").remove();
-                    }
+            beforeSend: function(objeto) {
+                $("#display_response_id").html("'.addslashes(get_lang('Loading')).'");
+            },
+            type: "GET",
+            url: "main/inc/ajax/online.ajax.php?a=load_online_user",
+            data: "online_page_nr="+page,
+            success: function(data) {
+                $("#display_response_id").html("");
+                if (data != "end") {
+                    $("#link_load_more_items").remove();
+                    var last = $("#online_grid_container li:last");
+                    last.after(data);
+                } else {
+                    $("#link_load_more_items").remove();
                 }
-            });
+            }
+        });
     });
 });
 </script>';
@@ -129,7 +127,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
             if (api_get_setting('allow_social_tool') == 'true') {
                 if (!api_is_anonymous()) {
                     $query = isset($_GET['q']) ? $_GET['q']: null;
-                    $social_right_content .= '<div class="span9">'.UserManager::get_search_form($query).'</div>';
+                    $social_right_content .= UserManager::get_search_form($query);
                 }
             }
             $social_right_content .= SocialManager::display_user_list($user_list);

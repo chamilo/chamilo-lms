@@ -183,7 +183,7 @@ if (isset($_GET['action'])) {
                 );
                 $data[] = $ticket_rem;
             }
-            Export::export_table_xls($data, $plugin->get_lang('Tickets'));
+            Export::arrayToXls($data, $plugin->get_lang('Tickets'));
             exit;
             break;
         case 'close_tickets':

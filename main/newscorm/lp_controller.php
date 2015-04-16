@@ -298,6 +298,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
             $sel = "SELECT lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) error_log('New LP - querying '.$sel, 0);
             $res = Database::query($sel);
+
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $type = $row['lp_type'];
@@ -497,16 +498,15 @@ switch ($action) {
                 $_SESSION['post_time'] = $_REQUEST['post_time'];
 
                 if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
-                	$publicated_on  = $_REQUEST['publicated_on'];
+                	$publicated_on = $_REQUEST['publicated_on'];
                 } else {
                 	$publicated_on = null;
                 }
 
                 if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
-                	$expired_on   = $_REQUEST['expired_on'];
-                	$expired_on   = $expired_on['Y'].'-'.$expired_on['F'].'-'.$expired_on['d'].' '.$expired_on['H'].':'.$expired_on['i'].':00';
+                	$expired_on = $_REQUEST['expired_on'];
                 } else {
-                	$expired_on   = null;
+                	$expired_on = null;
                 }
 
                 $new_lp_id = learnpath::add_lp(

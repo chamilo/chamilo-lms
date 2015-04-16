@@ -9,7 +9,6 @@
  */
 class CreateDrupalUser extends Plugin implements HookPluginInterface
 {
-
     /**
      * Class constructor
      */
@@ -56,8 +55,9 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $hook = HookCreateDrupalUser::create();
-        HookCreateUser::create()->attach($hook);
+        /** @var HookCreateDrupalUser $observer */
+        $observer = HookCreateDrupalUser::create();
+        HookCreateUser::create()->attach($observer);
     }
 
     /**
@@ -65,8 +65,13 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $hook = HookCreateDrupalUser::create();
-        HookCreateUser::create()->detach($hook);
+        /** @var HookCreateDrupalUser $observer */
+        $observer = HookCreateDrupalUser::create();
+        $event = HookCreateUser::create();
+
+        if ($event) {
+            $event->detach($observer);
+        }
     }
 
 }

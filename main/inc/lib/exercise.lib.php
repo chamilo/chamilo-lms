@@ -38,8 +38,7 @@ class ExerciseLib
         $show_comment = false,
         $exercise_feedback = null,
         $show_answers = false
-    )
-    {
+    ) {
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
 
@@ -63,7 +62,7 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
-                    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     echo Display::div(
                         $current_item . '. ' . $objQuestionTmp->selectTitle(),
                         array('class' => 'question_title')
@@ -77,10 +76,8 @@ class ExerciseLib
                 }
             }
 
-            if (in_array(
-                    $answerType,
-                    array(FREE_ANSWER, ORAL_EXPRESSION)
-                ) && $freeze
+            if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION)) &&
+                $freeze
             ) {
                 return '';
             }
@@ -160,7 +157,7 @@ class ExerciseLib
                 );
                 $form->addHtmlEditor("choice[" . $questionId . "]", null, false, false, $config);
                 $form->setDefaults(array("choice[" . $questionId . "]" => $fck_content));
-                $s .=  $form->return_form();
+                $s .=  $form->returnForm();
             } elseif ($answerType == ORAL_EXPRESSION) {
                 // Add nanog
                 if (api_get_setting('enable_nanogong') == 'true') {
@@ -624,7 +621,7 @@ class ExerciseLib
                             );
 
                             $size = strlen($student_item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
 
@@ -643,7 +640,7 @@ class ExerciseLib
                         // every [xxx] are replaced with an empty input field
                         foreach ($correct_answer_list[0] as $item) {
                             $size = strlen($item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
                             $answer = str_replace(
@@ -769,7 +766,7 @@ class ExerciseLib
                                 api_strlen($studentItem) - 2
                             );
                             $size = strlen($studentItem);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
 
@@ -788,7 +785,7 @@ class ExerciseLib
                         // every [xxx] are replaced with an empty input field
                         foreach ($correctAnswerList[0] as $item) {
                             $size = strlen($item);
-                            $attributes['class'] = detectInputAppropriateClass(
+                            $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
                             $answer = str_replace(
@@ -970,7 +967,7 @@ class ExerciseLib
 
             if (!$only_questions) {
                 if ($show_title) {
-                    Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     echo '<div class="question_title">' . $current_item . '. ' . $questionName . '</div>';
                 }
                 //@todo I need to the get the feedback type
@@ -2777,6 +2774,7 @@ class ExerciseLib
             TABLE_STATISTIC_TRACK_E_ATTEMPT
         );
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
         );
@@ -2789,12 +2787,12 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2806,6 +2804,8 @@ class ExerciseLib
     		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
+            INNER JOIN $courseTable c
+            ON (c.code = a.course_code)
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
@@ -2847,6 +2847,8 @@ class ExerciseLib
             TABLE_STATISTIC_TRACK_E_HOTSPOT
         );
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
         );
@@ -2860,12 +2862,12 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.hotspot_course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2873,6 +2875,8 @@ class ExerciseLib
     		FROM $track_exercises e
     		INNER JOIN $track_hotspot a
     		ON (a.hotspot_exe_id = e.exe_id)
+    		INNER JOIN $courseTable c
+    		ON (hotspot_course_code = c.code)
     		$courseCondition
     		WHERE
     		    exe_exo_id              = $exercise_id AND
@@ -2920,6 +2924,7 @@ class ExerciseLib
         $track_attempt = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT
         );
+        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseUserSession = Database::get_main_table(
             TABLE_MAIN_SESSION_COURSE_USER
@@ -2946,12 +2951,12 @@ class ExerciseLib
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id";
+            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = " . STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON cu.course_code = a.course_code AND cu.id_user = exe_user_id";
+            ON cu.c_id = a.c_id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND cu.status = 0 ";
         }
 
@@ -2963,6 +2968,8 @@ class ExerciseLib
     		    e.c_id = a.c_id AND
     		    e.session_id  = a.session_id
             )
+            INNER JOIN $courseTable c
+            ON c.code = a.course_code
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
@@ -3472,7 +3479,7 @@ class ExerciseLib
                 'score' => $total_score,
                 'total' => $total_weight
             );
-            echo Testcategory::get_stats_table_by_attempt(
+            echo TestCategory::get_stats_table_by_attempt(
                 $objExercise->id,
                 $category_list
             );

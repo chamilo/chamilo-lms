@@ -346,9 +346,6 @@ function lp_upload_quiz_action_handling() {
                             }
                         }
 
-                        //var_dump($answerValue);
-
-
                         if ($useCustomScore) {
                             if ($correct) {
                                 $score = $correctScore;
@@ -381,8 +378,6 @@ function lp_upload_quiz_action_handling() {
 
                         $total += $score;
                         $id++;
-
-                        //var_dump($score);
                     }
 
                     $objAnswer->save();
@@ -399,7 +394,6 @@ function lp_upload_quiz_action_handling() {
                             $questionObj->updateWeighting($total);
                             break;
                     }
-                    //var_dump($total);
 
                     $questionObj->save();
                 } else if ($detectQuestionType === FREE_ANSWER) {
@@ -410,7 +404,7 @@ function lp_upload_quiz_action_handling() {
                 }
             }
         }
-    // exit;
+
         if (isset($_SESSION['lpobject'])) {
             if ($debug > 0) {
                 error_log('New LP - SESSION[lpobject] is defined', 0);
@@ -452,20 +446,22 @@ function lp_upload_quiz_action_handling() {
  * @param array $answers_data
  * @return int
  */
-function detectQuestionType($answers_data) {
+function detectQuestionType($answers_data)
+{
     $correct = 0;
     $isNumeric = false;
-    foreach ($answers_data as $answer_data) {
-        if (strtolower($answer_data[3]) == 'x') {
-            $correct++;
-        } else {
-            if (is_numeric($answer_data[3])) {
-                $isNumeric = true;
+
+    if (!empty($answers_data)) {
+        foreach ($answers_data as $answer_data) {
+            if (strtolower($answer_data[3]) == 'x') {
+                $correct++;
+            } else {
+                if (is_numeric($answer_data[3])) {
+                    $isNumeric = true;
+                }
             }
         }
     }
-
-    $type = '';
 
     if ($correct == 1) {
         $type = UNIQUE_ANSWER;

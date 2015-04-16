@@ -745,9 +745,7 @@ class Display
         $size = ICON_SIZE_SMALL,
         $show_text = true,
         $return_only_path = false
-    )
-    {
-
+    ) {
         $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
 
@@ -779,7 +777,8 @@ class Display
         // it checks if there is an SVG version. If so, it uses it.
         // When moving this to production, the return_icon() calls should
         // ask for the SVG version directly
-        if (Chamilo::is_test_server()) {
+        $testServer = api_get_setting('server_type');
+        if ($testServer == 'test') {
             $svgImage = substr($image, 0, -3) . 'svg';
             if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
                 $icon = $w_code_path . $theme . 'svg/' . $svgImage;
@@ -1019,21 +1018,36 @@ class Display
         $lis = '';
         $i = 1;
         foreach ($header_list as $item) {
-            $item =self::tag('a', $item, array('href'=>'#'.$id.'-'.$i));
-            $lis .=self::tag('li', $item, $ul_attributes);
+            $active = '';
+            if ($i == 1) {
+                $active = ' active';
+            }
+            $item = self::tag('a', $item, array('href'=>'#'.$id.'-'.$i, 'role'=> 'tab'));
+            $ul_attributes['data-toggle'] = 'tab';
+            $ul_attributes['role'] = 'presentation';
+            $ul_attributes['class'] = $active;
+            $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul',$lis);
+        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs', 'role'=> 'tablist']);
 
         $i = 1;
         $divs = '';
         foreach ($content_list as $content) {
-            $content = self::tag('p',$content);
-            $divs .=self::tag('div', $content, array('id'=>$id.'-'.$i));
+            $active = '';
+            if ($i == 1) {
+                $active = ' active';
+            }
+            $divs .= self::tag('div', $content, array('id'=> $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel'));
             $i++;
         }
+
         $attributes['id'] = $id;
-        $main_div = self::tag('div',$ul.$divs, $attributes);
+        $attributes['role'] = 'tabpanel';
+        $attributes['class'] = 'tab-wrapper';
+
+        $main_div = self::tag('div', $ul.self::tag('div', $divs, ['class' => 'tab-content']), $attributes);
+
         return $main_div ;
     }
 
@@ -1359,7 +1373,7 @@ class Display
                     // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
                     " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
                     " AND ctt.visibility = '1' ".
-                    " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."'
+                    " AND tet.lastedit_user_id != $user_id AND tet.session_id = '".$course_info['id_session']."'
                  ORDER BY tet.lastedit_date";
 
         $res = Database::query($sql);
@@ -1404,7 +1418,7 @@ class Display
                 }
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
-                    $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
+                    $survey_info = SurveyManager::get_survey($item_property['ref'], 0, $course_code);
                     if (!empty($survey_info)) {
                         $invited_users = SurveyUtil::get_invited_users(
                             $survey_info['code'],

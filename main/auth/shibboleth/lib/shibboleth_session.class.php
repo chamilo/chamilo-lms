@@ -2,10 +2,9 @@
 
 namespace Shibboleth;
 
-use \ChamiloSession as Session;
-use \Chamilo;
-use \Database;
-use \Redirect;
+use Chamilo;
+use ChamiloSession as Session;
+use Database;
 
 
 /**
@@ -57,7 +56,7 @@ class ShibbolethSession
         /* This must be set for local.inc.php to register correctly the global variables in session
          * This is BAD. Logic should be migrated into a function and stop relying on global variables.
          */
-        global $_uid, $is_allowedCreateCourse, $is_platformAdmin, $_real_cid, $_courseUser, $is_courseAdmin;
+        global $_uid, $is_allowedCreateCourse, $is_platformAdmin, $_real_cid, $is_courseAdmin;
         global $is_courseMember, $is_courseTutor, $is_courseCoach, $is_allowed_in_course, $is_sessionAdmin, $_gid;
         $_uid = $uid;
 

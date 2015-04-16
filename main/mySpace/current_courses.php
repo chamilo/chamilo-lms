@@ -28,9 +28,9 @@ $session_id = 0;
 
 if (!empty($my_courses)) {
 	foreach ($my_courses as $course) {
-        $course_code    = $course['course_code'];
-        $course_id      = $course['real_id'];
-		$course_info    = api_get_course_info($course_code);
+		$course_code = $course['code'];
+		$course_id = $course['real_id'];
+		$course_info = api_get_course_info($course_code);
 
 		//Only show open courses
 		if ($course_info['visibility'] == 0) {

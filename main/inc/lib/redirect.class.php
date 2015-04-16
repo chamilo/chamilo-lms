@@ -12,7 +12,7 @@ class Redirect
      */
     public static function www()
     {
-        return Uri::www();
+        return api_get_path(WEB_PATH);
     }
 
     /**
@@ -141,7 +141,6 @@ class Redirect
      */
     protected static function navigate($url)
     {
-        //$url = Security::remove_XSS($url);
         session_write_close(); //should not be neeeded
         header("Location: $url");
         exit;

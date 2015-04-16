@@ -106,8 +106,9 @@ class Forum extends Resource
     /* function Forum($id, $title, $description, $category_id, $last_post, $topics, $posts, $allow_anonymous, $allow_edit, $approval_direct_post, $allow_attachements,
       $allow_new_topics, $default_view, $of_group, $group_public_private, $order, $locked, $session_id, $image)
       { */
-    function Forum($obj) {
-        parent::Resource($obj->forum_id, RESOURCE_FORUM);
+    function __construct($obj)
+    {
+        parent::__construct($obj->forum_id, RESOURCE_FORUM);
         $this->obj = $obj;
 
         /*

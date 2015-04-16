@@ -54,20 +54,28 @@ class Auth
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
         $user_id = intval($user_id);
-        $sql = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
-                      course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status,
-                      course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+        $sql = "SELECT
+                    course.code k,
+                    course.visual_code vc,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course.title i,
+                    course.tutor_name t,
+                    course.directory dir,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
-                WHERE course.code = course_rel_user.course_code
-                AND   course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                AND   course_rel_user.user_id = '" . $user_id . "' $without_special_courses
+                WHERE
+                    course.id = course_rel_user.c_id AND
+                    course_rel_user.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
+                    course_rel_user.user_id = '" . $user_id . "' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
         $courses = array();
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
             $courses[] = array(
-                'db' => $row['db'],
                 'code' => $row['k'],
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -139,12 +147,12 @@ class Auth
 
         $sql = "SELECT
                     course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-                    course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+                    course.title title, course.tutor_name tutor, course.directory, course_rel_user.status status,
                     course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course,
                 $TABLECOURSUSER  course_rel_user
                 WHERE
-                    course.code = course_rel_user.course_code AND
+                    course.id = course_rel_user.c_id AND
                     course_rel_user.user_id = '" . $user_id . "' AND
                     course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH . "
                     $without_special_courses
@@ -160,21 +168,28 @@ class Auth
     }
 
     /**
-     * stores  the changes in a course category (moving a course to a different course category)
-     * @param  string    Course code
+     * stores  the changes in a course category
+     * (moving a course to a different course category)
+     * @param  int    $courseId
      * @param  int       Category id
      * @return bool      True if it success
      */
-    public function store_changecoursecategory($course_code, $newcategory)
+    public function updateCourseCategory($courseId, $newcategory)
     {
-        $course_code = Database::escape_string($course_code);
+        $courseId = intval($courseId);
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
 
-
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
-        $resultQuery = Database::query("UPDATE $TABLECOURSUSER SET user_course_cat='" . $newcategory . "', sort='" . ($max_sort_value + 1) . "' WHERE course_code='" . $course_code . "' AND user_id='" . $current_user . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ");
+        $sql = "UPDATE $TABLECOURSUSER SET
+                    user_course_cat='" . $newcategory . "',
+                    sort='" . ($max_sort_value + 1) . "'
+                WHERE
+                    c_id ='" . $courseId . "' AND
+                    user_id='" . $current_user . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+        $resultQuery = Database::query($sql);
 
         $result = false;
         if (Database::affected_rows($resultQuery)) {
@@ -224,16 +239,29 @@ class Auth
         }
 
         if (count($target_course) > 0 && count($source_course) > 0) {
-            $sql_update1 = "UPDATE $TABLECOURSUSER SET sort='" . $target_course['sort'] . "'
-                            WHERE course_code='" . $source_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-            $sql_update2 = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
-                            WHERE course_code='" . $target_course['code'] . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
-            $result1 = Database::query($sql_update2);
-            $result2 = Database::query($sql_update1);
+            $courseInfo = api_get_course_info($source_course['code']);
+            $courseId = $courseInfo['real_id'];
+
+            $sql = "UPDATE $TABLECOURSUSER
+                    SET sort='" . $target_course['sort'] . "'
+                    WHERE
+                        c_id = '" . $courseId . "' AND
+                        user_id = '" . $current_user_id . "' AND
+                        relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+            $result1 = Database::query($sql);
+
+            $sql = "UPDATE $TABLECOURSUSER SET sort='" . $source_course['sort'] . "'
+                    WHERE
+                        c_id ='" . $courseId . "' AND
+                        user_id='" . $current_user_id . "' AND
+                        relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+            $result2 = Database::query($sql);
+
             if (Database::affected_rows($result1) && Database::affected_rows($result2)) {
                 $result = true;
             }
         }
+
         return $result;
     }
 
@@ -343,7 +371,10 @@ class Auth
         }
         $sql = "UPDATE $TABLECOURSUSER
                 SET user_course_cat='0'
-                WHERE user_course_cat='" . $category_id . "' AND user_id='" . $current_user_id . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
+                WHERE
+                    user_course_cat='" . $category_id . "' AND
+                    user_id='" . $current_user_id . "' AND
+                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . " ";
         Database::query($sql);
 
         return $result;
@@ -363,11 +394,17 @@ class Auth
         $course_code = Database::escape_string($course_code);
         $result = true;
 
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+
         // we check (once again) if the user is not course administrator
         // because the course administrator cannot unsubscribe himself
         // (s)he can only delete the course
         $sql = "SELECT * FROM $tbl_course_user
-                WHERE user_id='" . $current_user_id . "' AND course_code='" . $course_code . "' AND status='1' ";
+                WHERE
+                    user_id='" . $current_user_id . "' AND
+                    c_id ='" . $courseId . "' AND
+                    status='1' ";
         $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
         if ($number_of_rows > 0) {
@@ -491,15 +528,14 @@ class Auth
                     $limitFilter
                     ";
 
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_find = "SELECT *
                             FROM $TABLECOURS as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.course_code=course.code)
+                            ON (url_rel_course.c_id = course.id)
                             WHERE
                                 access_url_id = $url_access_id AND (
                                     code LIKE '%" . $search_term_safe . "%' OR

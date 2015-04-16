@@ -335,7 +335,7 @@ echo '<div class="clear"></div>';
 // send the csv file if asked
 if ($export_csv) {
     ob_end_clean();
-    Export :: export_table_csv($csv_content, 'reporting_course_tools');
+    Export :: arrayToCsv($csv_content, 'reporting_course_tools');
     exit;
 }
 

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	This script allows platform admins to add users to courses.
 *	It displays a list of users and a list of courses;
@@ -65,8 +66,8 @@ if (is_array($extra_field_list)) {
 /* React on POSTed request */
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
-    $courses = is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
+    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : array() ;
+    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : array() ;
     $first_letter_user = $_POST['firstLetterUser'];
     $first_letter_course = $_POST['firstLetterCourse'];
 
@@ -207,13 +208,13 @@ $sql = "SELECT code,visual_code,title
         ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sql = "SELECT code, visual_code, title
                 FROM $tbl_course as course
                 INNER JOIN $tbl_course_rel_access_url course_rel_url
-                ON (course_rel_url.course_code= course.code)
+                ON (course_rel_url.c_id = course.id)
                 WHERE
                     access_url_id =  $access_url_id  AND
                     (visual_code LIKE '".$first_letter_course."%' )
@@ -226,19 +227,19 @@ $db_courses = Database::store_result($result);
 unset($result);
 
 if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1){
         $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
             FROM $tbl_course_user as course_rel_user
             INNER JOIN $tbl_course as course
-            ON course.code = course_rel_user.course_code
+            ON course.id = course_rel_user.c_id
             INNER JOIN $tbl_course_rel_access_url course_rel_url
-            ON (course_rel_url.course_code= course.code)
+            ON (course_rel_url.c_id = course.id)
             WHERE
                 access_url_id =  $access_url_id  AND
-                course_rel_user.user_id='".$_user['user_id']."' AND
+                course_rel_user.user_id='".api_get_user_id()."' AND
                 course_rel_user.status='1'
             ORDER BY course.title";
     }

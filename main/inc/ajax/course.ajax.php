@@ -84,9 +84,9 @@ switch ($action) {
                     }
 
                     $results[] = array(
-                        'id' => $courseInfo['id'],
+                        'id' => $courseInfo['code'],
                         'text' => $title
-                        );
+                    );
                 }
                 echo json_encode($results);
             } else {
@@ -156,11 +156,11 @@ switch ($action) {
 
             $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname
                     FROM $user u
-                    INNER JOIN $session_course_user r ON u.user_id = r.id_user
-                    WHERE id_session = %d AND course_code =  '%s'
+                    INNER JOIN $session_course_user r ON u.user_id = r.user_id
+                    WHERE session_id = %d AND c_id =  '%s'
                     AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
             $needle = '%' . $_GET['q'] . '%';
-            $sql_query = sprintf($sql, $_GET['session_id'], $course['code'], $needle, $needle, $needle);
+            $sql_query = sprintf($sql, $_GET['session_id'], $course['real_id'], $needle, $needle, $needle);
 
             $result = Database::query($sql_query);
             while ($user = Database::fetch_assoc($result)) {
@@ -232,7 +232,7 @@ switch ($action) {
         $courses = array();
 
         foreach ($coursesData as $courseId => $course) {
-            $coachData = SessionManager::getCoachesByCourseSession($sessionId, $course['code']);
+            $coachData = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
 
             $coachName = '';
 

@@ -39,15 +39,16 @@ class SurveyInvitation extends Resource
 	 * @param string $invitation_date
 	 * @param string $reminder_date
 	 */
-	function SurveyInvitation($id,$code,$user,$invitation_code,$invitation_date,$reminder_date)
+	public function __construct($id,$code,$user,$invitation_code,$invitation_date,$reminder_date)
 	{
-		parent::Resource($id,RESOURCE_SURVEYINVITATION);
+		parent::__construct($id,RESOURCE_SURVEYINVITATION);
 		$this->code = $code;
 		$this->user = $user;
 		$this->invitation_code = $invitation_code;
 		$this->invitation_date = $invitation_date;
 		$this->reminder_date = $reminder_date;
 	}
+
 	/**
 	 * Show this invitation
 	 */

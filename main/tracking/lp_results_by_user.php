@@ -222,7 +222,7 @@ function export_complete_report_csv($filename, $array) {
         $header[] = array(get_lang('Course'),get_lang('LearningPath'), get_lang('Exercise'), get_lang('User'),get_lang('Attempt'), get_lang('Date'),get_lang('Results'));
         if (!empty($array)) {
             $array = array_merge($header, $array);
-            Export :: export_table_csv($array, $filename);
+            Export :: arrayToCsv($array, $filename);
         }
         exit;
         /*

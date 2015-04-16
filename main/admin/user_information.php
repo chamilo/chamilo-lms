@@ -154,12 +154,11 @@ if (count($sessions) > 0) {
 
         $csvContent[] = array($session_item['session_name']);
         $csvContent[] = $headerList;
-
         foreach ($session_item['courses'] as $my_course) {
             $courseInfo = api_get_course_info($my_course['code']);
             $sessionStatus = SessionManager::get_user_status_in_session(
                 $user['user_id'],
-                $my_course['code'],
+                $courseInfo['real_id'],
                 $id_session
             );
             $status = null;
@@ -258,9 +257,11 @@ $courseToolInformationTotal = null;
 /**
  * Show the courses in which this user is subscribed
  */
-$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c'.
-    ' WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code '.
-    ' AND cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
+$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c
+        WHERE
+            cu.user_id = '.$user['user_id'].' AND
+            cu.c_id = c.id AND
+            cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0) {
     $header = array(
@@ -283,14 +284,15 @@ if (Database::num_rows($res) > 0) {
     $data = array();
     $courseToolInformationTotal = null;
     while ($course = Database::fetch_object($res)) {
-        $courseInfo = api_get_course_info($course->code);
+        $courseInfo = api_get_course_info_by_id($course->c_id);
+        $courseCode = $courseInfo['code'];
         $courseToolInformation = null;
 
-        $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+        $tools = '<a href="course_information.php?code='.$courseCode.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
             '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
-            '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+            '<a href="course_edit.php?course_code='.$courseCode.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.
+            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$courseCode.'&user_id='.$user['user_id'].'">'.
                 Display::return_icon('delete.png', get_lang('Delete')).'</a>';
         }
 
@@ -309,7 +311,7 @@ if (Database::num_rows($res) > 0) {
         );
 
         $row = array(
-            Display::url($course->code, $courseInfo['course_public_url']),
+            Display::url($courseCode, $courseInfo['course_public_url']),
             $course->title,
             $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher'),
             $timeSpent,
@@ -391,7 +393,7 @@ if (isset($_GET['action'])) {
             }
             break;
         case 'export':
-            Export :: export_table_csv_utf8($csvContent, 'user_information_'.$user);
+            Export :: arrayToCsv($csvContent, 'user_information_'.$user);
             exit;
             break;
     }

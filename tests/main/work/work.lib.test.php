@@ -178,20 +178,6 @@ class TestWork extends UnitTestCase {
 	}
 
 	/**
-	* This function displays the firstname and lastname of the user as a link to the user tool.
-	* @see this is the same function as in the new forum, so this probably has to move to a user library.
-	* @todo move this function to the user library
-	*/
-
-	function testdisplay_user_link_work() {
-		global $_otherusers;
-		$user_id=1;
-		$res=display_user_link_work($user_id, $name='');
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	/**
 	* create a group of select from a date
 	*/
 

@@ -303,7 +303,10 @@ class DisplayGradebook
         $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
         $user_id = api_get_user_id();
         $course_code = $my_category['course_code'];
-        $status_user = api_get_status_of_user_in_course($user_id, $course_code);
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
+
+        $status_user = api_get_status_of_user_in_course($user_id, $courseId);
 
         //$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('AddGradebook') . '" /></a></td>';
 
@@ -396,6 +399,7 @@ class DisplayGradebook
 
         $userId = api_get_user_id();
         $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
         // Student.
@@ -404,7 +408,7 @@ class DisplayGradebook
         if (!empty($sessionId)) {
             $sessionStatus = SessionManager::get_user_status_in_course_session(
                 $userId,
-                $courseCode,
+                $courseId,
                 $sessionId
             );
         }
@@ -535,9 +539,6 @@ class DisplayGradebook
         $my_category = $catobj->shows_all_information_an_category($catobj->get_id());
         $user_id = api_get_user_id();
         $my_api_cidreq = api_get_cidreq();
-
-        //$course_code = $my_category['course_code'];
-        //$status_user = api_get_status_of_user_in_course ($user_id,$course_code);
 
         if (api_is_allowed_to_edit(null, true)) {
             if (empty($grade_model_id) || $grade_model_id == -1) {

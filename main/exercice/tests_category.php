@@ -28,7 +28,7 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
-$category = new Testcategory();
+$category = new TestCategory();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
@@ -55,14 +55,14 @@ Display::display_footer();
 // FUNCTIONS
 // form to edit a category
 /**
- * @todo move to testcategory.class.php
+ * @todo move to TestCategory.class.php
  * @param string $in_action
  */
 function edit_category_form($in_action) {
     $in_action = Security::remove_XSS($in_action);
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
-        $objcat = new Testcategory($category_id);
+        $objcat = new TestCategory($category_id);
 
         // initiate the object
         $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action . '&category_id=' . $category_id);
@@ -71,7 +71,7 @@ function edit_category_form($in_action) {
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-        $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+        $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
         $form->addButtonSave(get_lang('ModifyCategory'), 'SubmitNote');
 
         // setting the defaults
@@ -92,7 +92,7 @@ function edit_category_form($in_action) {
                 $v_id = Security::remove_XSS($values['category_id']);
                 $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
                 $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-                $objcat = new Testcategory($v_id, $v_name, $v_description);
+                $objcat = new TestCategory($v_id, $v_name, $v_description);
                 if ($objcat->modifyCategory()) {
                     Display::display_confirmation_message(get_lang('MofidfyCategoryDone'));
                 } else {
@@ -116,7 +116,7 @@ function edit_category_form($in_action) {
 function delete_category_form($in_action) {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
-        $catobject = new Testcategory($category_id);
+        $catobject = new TestCategory($category_id);
         if ($catobject->removeCategory()) {
             Display::display_confirmation_message(get_lang('DeleteCategoryDone'));
         } else {
@@ -129,7 +129,7 @@ function delete_category_form($in_action) {
 
 /**
  * form to add a category
- * @todo move to testcategory.class.php
+ * @todo move to TestCategory.class.php
  * @param string $in_action
  */
 function add_category_form($in_action) {
@@ -139,7 +139,7 @@ function add_category_form($in_action) {
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-    $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
+    $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
     $form->addButtonCreate(get_lang('AddTestCategory'), 'SubmitNote');
     // setting the rules
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
@@ -150,7 +150,7 @@ function add_category_form($in_action) {
             $values = $form->exportValues();
             $v_name = Security::remove_XSS($values['category_name'], COURSEMANAGER);
             $v_description = Security::remove_XSS($values['category_description'], COURSEMANAGER);
-            $objcat = new Testcategory(0, $v_name, $v_description);
+            $objcat = new TestCategory(0, $v_name, $v_description);
             if ($objcat->addCategoryInBDD()) {
                 Display::display_confirmation_message(get_lang('AddCategoryDone'));
             } else {

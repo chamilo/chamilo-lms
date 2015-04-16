@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Careers dashboard
  * @package chamilo.admin.career
  */
-/**
- * Code
- */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -22,7 +21,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
 
-Display :: display_header($nameTools);
+Display :: display_header(null);
 
 $form = new FormValidator('filter_form','GET', api_get_self());
 

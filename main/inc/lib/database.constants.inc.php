@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  *	This is the database constants definition for Chamilo
- *  This file is called by database.lib.php and database.mysqli.lib.php
+ *  This file is called by database.lib.php
  *
  *  @todo the table constants have all to start with TABLE_
  *        This is because of the analogy with the tool constants TOOL_
@@ -21,7 +21,7 @@ define('DB_COURSE_PREFIX', 'c_');
 // Main database tables
 define('TABLE_MAIN_COURSE',                 'course');
 define('TABLE_MAIN_USER',                   'user');
-define('TABLE_MAIN_CLASS',                  'class');
+define('TABLE_MAIN_CLASS',                  'class_item');
 define('TABLE_MAIN_ADMIN',                  'admin');
 define('TABLE_MAIN_COURSE_CLASS',           'course_rel_class');
 define('TABLE_MAIN_COURSE_USER',            'course_rel_user');
@@ -91,6 +91,7 @@ define('TABLE_MAIN_ACCESS_URL_REL_USER',    'access_url_rel_user');
 define('TABLE_MAIN_ACCESS_URL_REL_COURSE',  'access_url_rel_course');
 define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
 define('TABLE_MAIN_ACCESS_URL_REL_USERGROUP', 'access_url_rel_usergroup');
+// This table seems not to be use
 define('TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY', 'access_url_rel_course_category');
 
 // Global calendar
@@ -110,7 +111,7 @@ define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 // Web services
 define('TABLE_MAIN_USER_API_KEY',           'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD',           'course_field');
-define('TABLE_MAIN_COURSE_FIELD_OPTIONS',    'course_field_options');
+define('TABLE_MAIN_COURSE_FIELD_OPTIONS',   'course_field_options');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',    'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD',          'session_field');
 define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
@@ -138,14 +139,7 @@ define('TABLE_STATISTIC_TRACK_E_DEFAULT',           'track_e_default');
 define('TABLE_STATISTIC_TRACK_E_UPLOADS',           'track_e_uploads');
 define('TABLE_STATISTIC_TRACK_E_HOTSPOT',           'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY',     'track_e_item_property');
-define('TABLE_STATISTIC_TRACK_E_OPEN',              'track_e_open');
-
 define('TABLE_STATISTIC_TRACK_FILTERED_TERMS',      'track_filtered_terms');
-define('TABLE_STATISTIC_TRACK_C_BROWSERS',          'track_c_browsers');
-define('TABLE_STATISTIC_TRACK_C_COUNTRIES',         'track_c_countries');
-define('TABLE_STATISTIC_TRACK_C_OS',                'track_c_os');
-define('TABLE_STATISTIC_TRACK_C_PROVIDERS',         'track_c_providers');
-define('TABLE_STATISTIC_TRACK_C_REFERERS',          'track_c_referers');
 
 //Course catalog stats see #4191
 define('TABLE_STATISTIC_TRACK_COURSE_RANKING',      'track_course_ranking');
@@ -203,14 +197,14 @@ define('TABLE_DROPBOX_FILE',    'dropbox_file');
 define('TABLE_DROPBOX_PERSON',  'dropbox_person');
 
 // Course quiz (or test, or exercice) tables
-define('TABLE_QUIZ_QUESTION',               'quiz_question');
-define('TABLE_QUIZ_TEST',                   'quiz');
-define('TABLE_QUIZ_ORDER',                  'quiz_order');
-define('TABLE_QUIZ_ANSWER',                 'quiz_answer');
-define('TABLE_QUIZ_TEST_QUESTION',          'quiz_rel_question');
-define('TABLE_QUIZ_QUESTION_OPTION',        'quiz_question_option');
-define('TABLE_QUIZ_QUESTION_CATEGORY',      'quiz_question_category');
-define('TABLE_QUIZ_QUESTION_REL_CATEGORY',  'quiz_question_rel_category');
+define('TABLE_QUIZ_QUESTION', 'quiz_question');
+define('TABLE_QUIZ_TEST', 'quiz');
+define('TABLE_QUIZ_ORDER', 'quiz_order');
+define('TABLE_QUIZ_ANSWER', 'quiz_answer');
+define('TABLE_QUIZ_TEST_QUESTION', 'quiz_rel_question');
+define('TABLE_QUIZ_QUESTION_OPTION', 'quiz_question_option');
+define('TABLE_QUIZ_QUESTION_CATEGORY', 'quiz_question_category');
+define('TABLE_QUIZ_QUESTION_REL_CATEGORY', 'quiz_question_rel_category');
 
 // Linked resource table
 //@todo table exists?
@@ -244,11 +238,6 @@ define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
 define('TABLE_BLOGS_RATING', 'blog_rating');
 define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
 define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
-//end of Smartblogs
-
-// User information tables
-define('TABLE_USER_INFO',           'userinfo_def');
-define('TABLE_USER_INFO_CONTENT',   'userinfo_content');
 
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
@@ -293,9 +282,6 @@ define('TABLE_NOTEBOOK', 'notebook');
 // Message
 define('TABLE_MESSAGE', 'message');
 define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
-
-// Metadata
-define('TABLE_METADATA', 'metadata');
 
 // Attendance Sheet
 define('TABLE_ATTENDANCE',          'attendance');

@@ -156,7 +156,7 @@ foreach ($workPerUser as $work) {
         $column++;
         $table->setCellContents($row, $column, $userResult['sent_date']);
         $column++;
-        $dateQualification = !empty($workExtraData['expires_on']) && $workExtraData['expires_on'] != '0000-00-00 00:00:00' ? api_get_local_time($workExtraData['expires_on']) : '-';
+        $dateQualification = !empty($workExtraData['expires_on']) ? api_get_local_time($workExtraData['expires_on']) : '-';
         $table->setCellContents($row, $column, $dateQualification);
         $column++;
 

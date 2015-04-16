@@ -320,6 +320,8 @@ class AnnouncementManager
         $sendToUsersInSession = false
     ) {
         $_course = api_get_course_info();
+        $course_id = api_get_course_int_id();
+
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         // filter data
@@ -331,8 +333,6 @@ class AnnouncementManager
         } else {
             $end_date = Database::escape_string($end_date);
         }
-
-        $course_id = api_get_course_int_id();
 
         $order = self::get_last_announcement_order();
 
@@ -347,6 +347,9 @@ class AnnouncementManager
         );
 
         $last_id = Database::insert($tbl_announcement, $params);
+
+        $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
+        Database::query($sql);
 
         if (empty($last_id)) {
             return false;
@@ -460,50 +463,58 @@ class AnnouncementManager
 
         //store the attach file
         $last_id = Database::insert_id();
-        if (!empty($file)) {
-            self::add_announcement_attachment_file($last_id, $file_comment, $file);
-        }
+        if ($last_id) {
+            $sql = "UPDATE $lp_item_view_table SET id = iid WHERE iid = $last_id";
+            Database::query($sql);
 
-        // Store in item_property (first the groups, then the users
+            if (!empty($file)) {
+                self::add_announcement_attachment_file(
+                    $last_id,
+                    $file_comment,
+                    $file
+                );
+            }
 
-        if (!isset($to_users)) {
-            // when no user is selected we send it to everyone
-            $send_to = CourseManager::separateUsersGroups($to);
-            // storing the selected groups
-            if (is_array($send_to['groups'])) {
-                foreach ($send_to['groups'] as $group) {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ANNOUNCEMENT,
-                        $last_id,
-                        "AnnouncementAdded",
-                        api_get_user_id(),
-                        $group
-                    );
+            // Store in item_property (first the groups, then the users
+
+            if (!isset($to_users)) {
+                // when no user is selected we send it to everyone
+                $send_to = CourseManager::separateUsersGroups($to);
+                // storing the selected groups
+                if (is_array($send_to['groups'])) {
+                    foreach ($send_to['groups'] as $group) {
+                        api_item_property_update(
+                            $_course,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            "AnnouncementAdded",
+                            api_get_user_id(),
+                            $group
+                        );
+                    }
+                }
+            } else {
+                // the message is sent to everyone, so we set the group to 0
+                // storing the selected users
+                if (is_array($to_users)) {
+                    foreach ($to_users as $user) {
+                        api_item_property_update(
+                            $_course,
+                            TOOL_ANNOUNCEMENT,
+                            $last_id,
+                            "AnnouncementAdded",
+                            api_get_user_id(),
+                            '',
+                            $user
+                        );
+                    }
                 }
             }
-        } else {
-            // the message is sent to everyone, so we set the group to 0
-            // storing the selected users
-            if (is_array($to_users)) {
-                foreach ($to_users as $user) {
-                    api_item_property_update(
-                        $_course,
-                        TOOL_ANNOUNCEMENT,
-                        $last_id,
-                        "AnnouncementAdded",
-                        api_get_user_id(),
-                        '',
-                        $user
-                    );
-                }
+
+            if ($sendToUsersInSession) {
+                self::addAnnouncementToAllUsersInSessions($last_id);
             }
         }
-
-        if ($sendToUsersInSession) {
-            self::addAnnouncementToAllUsersInSessions($last_id);
-        }
-
         return $last_id;
     }
 
@@ -592,7 +603,7 @@ class AnnouncementManager
         $courseCode = api_get_course_id();
         $_course = api_get_course_info();
 
-        $sessionList = SessionManager::get_session_by_course(api_get_course_id());
+        $sessionList = SessionManager::get_session_by_course(api_get_course_int_id());
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $sessionInfo) {
@@ -1014,30 +1025,6 @@ class AnnouncementManager
     }
 
     /**
-     * returns all the javascript that is required for easily
-     * setting the target people/groups
-     * this goes into the $htmlHeadXtra[] array
-     */
-    public static function to_javascript()
-    {
-        $www = api_get_path(WEB_PATH);
-        /*
-         * Do not allow this kind of behaviour. js minifieds should be manage by the template class or assetic or whatever see #4757 for more info
-        if (api_get_setting('server_type') == 'test') {
-            $src = $www . 'main/announcements/resources/js/main.js';
-        } else {
-            $src = $www . 'main/announcements/resources/js/main.min.js';
-        }*/
-        $src = $www . 'main/announcements/resources/js/main.js';
-        $result = Javascript::tag($src);
-        $root = Chamilo::url();
-        $code = "var www = '$root';\n";
-        $code .= Javascript::get_lang('FieldRequired', 'Send2All', 'AddAnAttachment', 'Everybody');
-        $result .= Javascript::tag_code($code);
-        return $result;
-    }
-
-    /**
      * constructs the form to display all the groups and users the message has been sent to
      * input: 	$sent_to_array is a 2 dimensional array containing the groups and the users
      * 			the first level is a distinction between groups and users:
@@ -1215,11 +1202,17 @@ class AnnouncementManager
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 // Storing the attachments if any
                 $sql = 'INSERT INTO ' . $tbl_announcement_attachment . ' (c_id, filename, comment, path, announcement_id, size) ' .
-                    "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
+                        "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '" . intval($file['size']) . "' )";
                 $result = Database::query($sql);
+
+                $insertId = Database::insert_id();
+                $sql = "UPDATE $tbl_announcement_attachment SET id = iid WHERE iid = $insertId";
+                Database::query($sql);
+
                 $return = 1;
             }
         }
+
         return $return;
     }
 
@@ -1308,7 +1301,7 @@ class AnnouncementManager
         $user_id = api_get_user_id();
         $group_id = api_get_group_id();
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
 
@@ -1630,7 +1623,7 @@ class AnnouncementManager
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
         $userId = api_get_user_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
 
         if (api_is_allowed_to_edit(false,true))  {
             // check teacher status
@@ -1643,13 +1636,14 @@ class AnnouncementManager
                 }
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
 				FROM $tbl_announcement announcement, $tbl_item_property ip
-				WHERE   announcement.c_id   = $course_id AND
-                        ip.c_id             = $course_id AND
-                        announcement.id     = ip.ref AND
-                        ip.tool             = 'announcement' AND
-                        ip.visibility       <> '2'
-                        $group_condition
-                        $condition_session
+				WHERE
+				    announcement.c_id   = $course_id AND
+                    ip.c_id             = $course_id AND
+                    announcement.id     = ip.ref AND
+                    ip.tool             = 'announcement' AND
+                    ip.visibility       <> '2'
+                    $group_condition
+                    $condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC
 				LIMIT 0,$maximum";
@@ -1666,7 +1660,7 @@ class AnnouncementManager
                             "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
                     } else {
                         $cond_user_id = " AND (ip.lastedit_user_id = '".$userId."'
-                OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+                            OR ip.to_group_id IN (0, ".api_get_group_id()."))";
                     }
                 } else {
                     if (api_get_group_id() == 0) {
@@ -1725,24 +1719,25 @@ class AnnouncementManager
 
                         // the user is not identiefied => show only the general announcements
                         $sql="SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
-                    FROM $tbl_announcement announcement, $tbl_item_property ip
-                    WHERE
-                        announcement.c_id = $course_id AND
-                        ip.c_id = $course_id AND
-                        announcement.id = ip.ref
-                        AND ip.tool='announcement'
-                        AND ip.visibility='1'
-                        AND ip.to_group_id='0'
-                        $condition_session
-                    GROUP BY ip.ref
-                    ORDER BY display_order DESC
-                    LIMIT 0,$maximum";
+                                FROM $tbl_announcement announcement, $tbl_item_property ip
+                                WHERE
+                                    announcement.c_id = $course_id AND
+                                    ip.c_id = $course_id AND
+                                    announcement.id = ip.ref
+                                    AND ip.tool='announcement'
+                                    AND ip.visibility='1'
+                                    AND ip.to_group_id='0'
+                                    $condition_session
+                                GROUP BY ip.ref
+                                ORDER BY display_order DESC
+                                LIMIT 0,$maximum";
                     }
                 }
             }
         }
 
         $result = Database::query($sql);
+
         return Database::num_rows($result);
     }
 }

@@ -35,7 +35,7 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $data = array();
         $course_description_data = $course_description->get_description_data();
-        $data['descriptions'] = $course_description_data['descriptions'];
+        $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : '';
         $data['default_description_titles'] = $course_description->get_default_description_title();
         $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
         $data['default_description_icon'] = $course_description->get_default_description_icon();
@@ -45,6 +45,7 @@ class CourseDescriptionController
         if (!is_array($data['descriptions'])) {
             $data['descriptions'] = array($data['descriptions']);
         }
+
         foreach ($data['descriptions'] as $description) {
             if (!empty($description['content'])
                 && strpos($description['content'], '<iframe') !== false
@@ -73,6 +74,8 @@ class CourseDescriptionController
         $course_description->set_session_id($session_id);
         $data = array();
         $data['id'] = $id;
+        $affected_rows = null;
+        $message = array();
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 $check = Security::check_token();
@@ -85,7 +88,7 @@ class CourseDescriptionController
                     }
                     $description_type = $_POST['description_type'];
                     $id = $_POST['id'];
-                    $progress = $_POST['progress'];
+                    $progress = isset($_POST['progress']) ? $_POST['progress'] : '';
                     $course_description->set_description_type($description_type);
                     $course_description->set_title($title);
                     $course_description->set_content($content);
@@ -137,7 +140,7 @@ class CourseDescriptionController
                 if (isset($_GET['id_session'])) {
                     $session_id = intval($_GET['id_session']);
                 }
-                $course_description_data = $course_description->get_data_by_id(
+		$course_description_data = $course_description->get_data_by_id(
                     $id,
                     null,
                     $session_id
@@ -146,7 +149,7 @@ class CourseDescriptionController
                 $data['description_title'] = $course_description_data['description_title'];
                 $data['description_content'] = $course_description_data['description_content'];
                 $data['progress'] = $course_description_data['progress'];
-                $data['descriptions'] = $course_description->get_data_by_description_type(
+		$data['descriptions'] = $course_description->get_data_by_description_type(
                     $description_type,
                     null,
                     $session_id

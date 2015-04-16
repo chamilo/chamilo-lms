@@ -160,9 +160,9 @@ function userSessionList()
     // loop through all sessions
     while ($rowSession = Database::fetch_assoc($resSessions)) {
         // get courses of current session
-        $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
+        $sqlSessionCourse = "SELECT DISTINCT a.session_id, a.course_code, a.nbr_users
         FROM $tableBuySessionRelCourse a, $tableSessionRelCourse b
-        WHERE a.id_session = b.id_session AND a.id_session = " . $rowSession['session_id'] . ";";
+        WHERE a.session_id = b.session_id AND a.session_id = " . $rowSession['session_id'] . ";";
         $resSessionCourse = Database::query($sqlSessionCourse);
         $aux = array();
         // loop through courses of current session
@@ -197,7 +197,7 @@ function userSessionList()
         if ($currentUserId > 0) {
             $sql = "SELECT 1 FROM $tableSessionRelUser
                 WHERE id_session ='".$rowSession['session_id']."' AND
-                id_user = $currentUserId";
+                user_id = $currentUserId";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
@@ -244,24 +244,26 @@ function userCourseList()
     $currentUserId = api_get_user_id();
 
     $sql = "SELECT a.course_id, a.visible, a.price, b.*
-        FROM $tableBuyCourse a, $tableCourse b
-        WHERE a.course_id = b.id AND a.session_id = 0 AND a.visible = 1;";
+            FROM $tableBuyCourse a, $tableCourse b
+            WHERE a.course_id = b.id AND a.session_id = 0 AND a.visible = 1;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
         //check teacher
         $sql = "SELECT lastname, firstname
-        FROM course_rel_user a, user b
-        WHERE a.course_code='" . $row['code'] . "'
-        AND a.role<>'' AND a.role<>'NULL'
-        AND a.user_id=b.user_id;";
+            FROM $tableCourseRelUser a, user b
+            WHERE
+                a.c_id='" . $row['id'] . "' AND
+                a.role<>'' AND
+                a.role<>'NULL' AND
+                a.user_id=b.user_id;";
         $tmp = Database::query($sql);
         $rowTmp = Database::fetch_assoc($tmp);
         $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
         //check if the user is enrolled
         if ($currentUserId > 0) {
             $sql = "SELECT 1 FROM $tableCourseRelUser
-                WHERE course_code='" . $row['code'] . "'
+                WHERE c_id='" . $row['id'] . "'
                 AND user_id='" . $currentUserId . "';";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
@@ -305,14 +307,15 @@ function userCourseList()
  * @param string Session id or course code
  * @param int User id
  * @param string What has to be checked
+ * @todo fix this function because TABLE_MAIN_COURSE_USER needs a c_id not a course_code
  * @return boolean True if it is already bought, and false otherwise
  */
 function checkUserBuy($parameter, $user, $type = 'COURSE')
 {
     $sql = "SELECT 1 FROM %s WHERE %s ='" . Database::escape_string($parameter) . "' AND %s ='" . intval($user) . "';";
     $sql = $type === 'SESSION' ?
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'id_session', 'id_user') :
-        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'course_code', 'user_id');
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_SESSION_USER), 'session_id', 'user_id') :
+        sprintf($sql, Database::get_main_table(TABLE_MAIN_COURSE_USER), 'c_id', 'user_id');
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
@@ -485,9 +488,9 @@ function sessionInfo($code)
         AND b.id = '".$code."';";
     $res = Database::query($sql);
     $rowSession = Database::fetch_assoc($res);
-    $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
+    $sqlSessionCourse = "SELECT DISTINCT a.session_id, a.course_code, a.nbr_users
     FROM $tableBuySessionRelCourse a, $tableSessionRelCourse b
-    WHERE a.id_session = b.id_session AND a.id_session = " . $rowSession['session_id'] . ";";
+    WHERE a.session_id = b.session_id AND a.session_id = " . $rowSession['session_id'] . ";";
     $resSessionCourse = Database::query($sqlSessionCourse);
     $aux = array();
     // loop through courses of current session
@@ -521,13 +524,13 @@ function sessionInfo($code)
     //check if the user is enrolled in the current session
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableSessionRelUser
-            WHERE id_user = $currentUserId";
+                WHERE user_id = $currentUserId";
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
             $rowSession['enrolled'] = "YES";
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
-                WHERE user_id='".$currentUserId."';";
+                    WHERE user_id='".$currentUserId."';";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -563,26 +566,30 @@ function courseInfo($code)
     $currentUserId = api_get_user_id();
     $code = Database::escape_string($code);
     $sql = "SELECT a.course_id, a.visible, a.price, b.*
-        FROM $tableBuyCourse a, course b
-        WHERE a.course_id=b.id
-        AND a.visible = 1
-        AND b.id = '" . $code . "';";
+            FROM $tableBuyCourse a, course b
+            WHERE
+                a.course_id=b.id AND
+                a.visible = 1 AND
+                b.id = '" . $code . "'";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     // Check teacher
     $sql = "SELECT lastname, firstname
         FROM $tableCourseRelUser a, $tableUser b
-        WHERE a.course_code = '" . $row['code'] . "'
-        AND a.role <> '' AND a.role <> 'NULL'
-        AND a.user_id = b.user_id;";
+        WHERE
+            a.c_id = '" . $row['id'] . "' AND
+            a.role <> '' AND
+            a.role <> 'NULL' AND
+            a.user_id = b.user_id;";
     $tmp = Database::query($sql);
     $rowTmp = Database::fetch_assoc($tmp);
     $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
     //Check if student is enrolled
     if ($currentUserId > 0) {
         $sql = "SELECT 1 FROM $tableCourseRelUser
-            WHERE course_code='" . $row['code'] . "'
-            AND user_id='" . $currentUserId . "';";
+                WHERE
+                    c_id ='" . $row['id'] . "' AND
+                    user_id='" . $currentUserId . "';";
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
             $row['enrolled'] = "YES";

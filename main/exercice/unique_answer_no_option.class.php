@@ -18,10 +18,10 @@ class UniqueAnswerNoOption extends Question
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswerNoOption()
+	public function __construct()
     {
 		//this is highly important
-		parent::question();
+		parent::__construct();
 		$this -> type = UNIQUE_ANSWER_NO_OPTION;
 		$this -> isContent = $this-> getIsContent();
 	}
@@ -244,34 +244,24 @@ class UniqueAnswerNoOption extends Question
         $form->addElement('html_editor', 'answer[' . $i . ']', null, array(), $editor_config);
 
         $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
-
-
         $form->addElement('html_editor', 'comment[' . $i . ']', null, array(), $editor_config);
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
         $form->addText("weighting[$i]", null, false, ['value' => 0, 'readonly' => 'readonly']);
-        
+
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');
-
-        $navigator_info = api_get_navigator();
 
         $buttonGroup = [];
 
         global $text, $class;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $buttonGroup[] = $form->createElement('submit', 'moreAnswers','<i class="fa fa-plus"></i> '. get_lang('PlusAnswer'), 'class="btn btn-default"');
-                $buttonGroup[] = $form->createElement('submit', 'lessAnswers', '<i class="fa fa-minus"></i> '.get_lang('LessAnswer'), 'class="btn btn-default"');
-                $buttonGroup[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
-            } else {
-                //setting the save button here and not in the question class.php
-                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
-                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-            }
+            //setting the save button here and not in the question class.php
+            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
 
             $form->addGroup($buttonGroup);
         }

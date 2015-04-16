@@ -80,10 +80,10 @@ if (!empty($selectedCourse)) {
         );
     }
 
-    $sessionsByCourse = SessionManager::get_session_by_course($selectedCourse);
+    $sessionsByCourse = SessionManager::get_session_by_course($course['real_id']);
 
     foreach ($sessionsByCourse as $session) {
-        $coaches = CourseManager::get_coachs_from_course($session['id'], $selectedCourse);
+        $coaches = CourseManager::get_coachs_from_course($session['id'], $course['real_id']);
 
         if ($coaches) {
             foreach ($coaches as $coach) {
@@ -138,7 +138,7 @@ if (!empty($selectedSession)) {
             'name' => $course['title']
         );
 
-        $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['code']);
+        $coaches = CourseManager::get_coachs_from_course($selectedSession, $course['id']);
 
         if ($coaches) {
             foreach ($coaches as $coach) {

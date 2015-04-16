@@ -106,7 +106,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     if (Database :: num_rows($result) > 0) { // Ok
         // Check availability
         $row = Database :: fetch_array($result, 'ASSOC');
-        $tempdata = survey_manager :: get_survey($row['survey_id']);
+        $tempdata = SurveyManager :: get_survey($row['survey_id']);
         //exit if survey not available anymore
         check_time_availability($tempdata);
         // Check for double invitation records (insert should be done once)
@@ -181,7 +181,7 @@ if (Database::num_rows($result) > 1) {
 }
 
 // Getting the survey information
-$survey_data = survey_manager::get_survey($survey_invitation['survey_id']);
+$survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 // Storing the answers
@@ -552,7 +552,7 @@ if (isset($_POST['finish_survey'])) {
     Display::display_confirmation_message(get_lang('SurveyFinished'));
     echo $survey_data['survey_thanks'];
 
-    survey_manager::update_survey_answered(
+    SurveyManager::update_survey_answered(
         $survey_data,
         $survey_invitation['user'],
         $survey_invitation['survey_code']
@@ -1157,6 +1157,7 @@ if (isset($questions) && is_array($questions)) {
     foreach ($questions as $key => & $question) {
         $ch_type = 'ch_'.$question['type'];
         $display = new $ch_type;
+        // @todo move this in a function.
         $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml($question['survey_question']);
         $display->render($form, $question);

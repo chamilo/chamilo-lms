@@ -18,7 +18,7 @@ class SessionRelCourse
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     protected $id;
 
@@ -31,7 +31,7 @@ class SessionRelCourse
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected $session;
 
@@ -40,6 +40,13 @@ class SessionRelCourse
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position;
 
     /**
      * Constructor
@@ -123,4 +130,21 @@ class SessionRelCourse
     {
         return $this->nbrUsers;
     }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
 }

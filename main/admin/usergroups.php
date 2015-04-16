@@ -104,9 +104,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     // Setting the form elements
     $form->addElement('header', get_lang('Add'));
     $form->addElement('text', 'name', get_lang('Name'), array('size' => '70', 'id' => 'name'));
-    //$form->applyFilter('note_title', 'html_filter');
     $form->addHtmlEditor('description', get_lang('Description'), false, false, array('Width' => '95%', 'Height' => '250'));
-    //$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
     $form->addButtonCreate(get_lang('Add'));
 
     // Setting the rules

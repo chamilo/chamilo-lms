@@ -90,6 +90,13 @@
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
         $.datepicker.regional["local"] = $.datepicker.regional["{{ locale }}"];
 
+        $('.tab-wrapper a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show');
+
+            //$('#tabs a:first').tab('show') // Select first tab
+        })
+
         /**
          * Advanced options
          * Usage

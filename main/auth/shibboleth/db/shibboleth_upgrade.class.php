@@ -64,7 +64,7 @@ class ShibbolethUpgrade
     }
 
     public static function create_shibb_persistent_id_field_if_missing()
-    {        
+    {
         $db_name = Database :: get_main_database();
 
         $sql = "SELECT * FROM $db_name.user LIMIT 1";
@@ -78,7 +78,7 @@ class ShibbolethUpgrade
         }
 
         $sql = "ALTER table $db_name.user ADD COLUMN shibb_persistent_id varchar(255) NULL DEFAULT NULL;";
-        $result = api_sql_query($sql);
+        $result = Database::query($sql);
         return (bool) $result;
     }
 

@@ -65,7 +65,7 @@ class QuizQuestion extends Resource
      * @param int $type
      * @param int $position
      */
-    public function QuizQuestion(
+    public function __construct(
         $id,
         $question,
         $description,
@@ -77,7 +77,7 @@ class QuizQuestion extends Resource
         $extra,
         $question_category = 0
     ) {
-        parent::Resource($id, RESOURCE_QUIZQUESTION);
+        parent::__construct($id, RESOURCE_QUIZQUESTION);
         $this->question = $question;
         $this->description = $description;
         $this->ponderation = $ponderation;

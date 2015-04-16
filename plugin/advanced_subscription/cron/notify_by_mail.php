@@ -19,9 +19,9 @@ $sessionExtraFieldValue = new ExtraFieldValue('session');
  * Get session list
  */
 $joinTables = Database::get_main_table(TABLE_MAIN_SESSION) . ' s INNER JOIN ' .
-    Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su ON s.id = su.id_session INNER JOIN ' .
-    Database::get_main_table(TABLE_MAIN_USER_REL_USER) . ' uu ON su.id_user = uu.user_id INNER JOIN ' .
-    Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE) . ' asq ON su.id_session = asq.session_id AND su.id_user = asq.user_id';
+    Database::get_main_table(TABLE_MAIN_SESSION_USER) . ' su ON s.id = su.session_id INNER JOIN ' .
+    Database::get_main_table(TABLE_MAIN_USER_REL_USER) . ' uu ON su.user_id = uu.user_id INNER JOIN ' .
+    Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE) . ' asq ON su.session_id = asq.session_id AND su.user_id = asq.user_id';
 $columns = 's.id AS session_id, uu.friend_user_id AS superior_id, uu.user_id AS student_id, asq.id AS queue_id, asq.status AS status';
 $conditions = array(
     'where' => array(

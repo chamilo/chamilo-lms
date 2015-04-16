@@ -28,7 +28,7 @@ if ($form->validate()) {
     $data = $userGroup->getDataToExport();
     $data = array_merge($header, $data);
     $filename = 'export_classes_'.api_get_local_time();
-    Export::export_table_csv($data, $filename);
+    Export::arrayToCsv($data, $filename);
     exit;
 }
 

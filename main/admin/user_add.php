@@ -339,7 +339,8 @@ if( $form->validate()) {
             $hr_dept_id,
             $extra,
             null,
-            $send_mail
+            $send_mail,
+			$platform_admin
         );
 
 		Security::clear_token();
@@ -378,9 +379,6 @@ if( $form->validate()) {
 
 			foreach ($extra as $key => $value) {
 				UserManager::update_extra_field_value($user_id, $key, $value);
-			}
-			if ($platform_admin) {
-                UserManager::add_user_as_admin($user_id);
 			}
 			$message = get_lang('UserAdded');
 		}

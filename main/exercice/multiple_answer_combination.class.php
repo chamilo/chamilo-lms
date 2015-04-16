@@ -18,9 +18,9 @@ class MultipleAnswerCombination extends Question
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswerCombination()
+	public function __construct()
     {
-		parent::question();
+		parent::__construct();
 		$this -> type = MULTIPLE_ANSWER_COMBINATION;
 		$this -> isContent = $this-> getIsContent();
 	}
@@ -148,38 +148,16 @@ class MultipleAnswerCombination extends Question
         //only 1 answer the all deal ...
         $form->addText('weighting[1]', get_lang('Score'), false, ['value' => 10]);
 
-        $navigator_info = api_get_navigator();
-
         global $text, $class;
         //ie6 fix
         if ($obj_ex->edit_exercise_in_lp == true) {
-            $buttonGroup = [];
 
-            if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-                $buttonGroup[] = $form->createElement(
-                    'submit',
-                    'lessAnswers',
-                    '<i class="fa fa-minus"></i> '.get_lang('LessAnswer'),
-                    'class="btn btn-default"'
-                );
-                $buttonGroup[] = $form->createElement(
-                    'submit',
-                    'moreAnswers',
-                    '<i class="fa fa-plus"></i> '.get_lang('PlusAnswer'),
-                    'class="btn btn-default"'
-                );
-                $buttonGroup[] = $form->createElement(
-                    'submit',
-                    'submitQuestion',
-                    $text,
-                    'class="' . $class . '"'
-                );
-            } else {
-                // setting the save button here and not in the question class.php
-                $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-                $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
-                $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
-            }
+            // setting the save button here and not in the question class.php
+            $buttonGroup = [
+                $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true),
+                $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true),
+                $form->addButtonSave($text, 'submitQuestion', true)
+            ];
 
             $form->addGroup($buttonGroup);
         }

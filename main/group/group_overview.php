@@ -34,7 +34,7 @@ if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'export_all':
             $data = GroupManager::exportCategoriesAndGroupsToArray(null, true);
-            Export::export_table_csv($data);
+            Export::arrayToCsv($data);
             exit;
             break;
         case 'export_pdf':
@@ -53,12 +53,12 @@ if (isset($_GET['action'])) {
 
             switch ($_GET['type']) {
                 case 'csv':
-                    Export::export_table_csv($data);
+                    Export::arrayToCsv($data);
                     exit;
                     break;
                 case 'xls':
                     if (!empty($data)) {
-                        Export::export_table_xls($data);
+                        Export::arrayToXls($data);
                         exit;
                     }
                     break;

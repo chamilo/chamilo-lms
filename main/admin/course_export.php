@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 * 	This tool allows platform admins to export courses to CSV file
 *	@package chamilo.admin
 */
-/**
- * Code
- */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -25,12 +24,12 @@ $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
 $course_list = CourseManager::get_courses_list();
 $formSent = null;
+$courses = $selected_courses = array();
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$formSent = $_POST['formSent'];
-	$select_type=intval($_POST['select_type']);
+	$select_type = intval($_POST['select_type']);
 	$file_type = 'csv';
-	$courses = $selected_courses = array();
 
 	if ($select_type == 2) {
 		// Get selected courses from courses list in form sent
@@ -87,9 +86,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 if (!empty($msg)) {
 	Display::display_normal_message($msg, false);
 }
+// @todo use FormValidator!
 ?>
-
-
 <form method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
     <input type="hidden" name="formSent" value="1">
     <legend><?php echo $tool_name; ?></legend>
@@ -117,7 +115,9 @@ if (!empty($msg)) {
         <?php
         foreach($course_list as $course) {
         ?>
-        	<option value="<?php echo $course['code']; ?>" <?php if(is_array($selected_courses) && in_array($course['code'],$selected_courses)) echo 'selected="selected"'; ?>><?php echo $course['title'].' ('.$course['code'].') ' ?></option>
+        	<option value="<?php echo $course['code']; ?>" <?php if(is_array($selected_courses) && in_array($course['code'],$selected_courses)) echo 'selected="selected"'; ?>>
+                <?php echo $course['title'].' ('.$course['code'].') ' ?>
+            </option>
         <?php
         }
         ?>

@@ -19,7 +19,13 @@ switch($action) {
 
         if (!empty($max_page) && $page <= $max_page) {
             if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-                $user_list = who_is_online_in_this_course($page_rows, $images_to_show, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+                $user_list = who_is_online_in_this_course(
+                    $page_rows,
+                    $images_to_show,
+                    api_get_user_id(),
+                    api_get_setting('time_limit_whosonline'),
+                    $_GET['cidReq']
+                );
             } else {
                 $user_list = who_is_online($page_rows, $images_to_show);
             }

@@ -154,7 +154,6 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	    $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
 	    $_course['path'        ]         = $cData['directory'		 ]; // use as key in path
 	    $_course['dbName'      ]         = $cData['db_name'          ]; // use as key in db list
-	    $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
 	    $_course['titular'     ]         = $cData['tutor_name'       ];
 	    $_course['language'    ]         = $cData['course_language'  ];
 	    $_course['extLink'     ]['url' ] = $cData['department_url'   ];

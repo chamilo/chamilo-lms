@@ -43,8 +43,8 @@ if ($form->validate()) {
     if (isset($_FILES['import_file']['size']) && $_FILES['import_file']['size'] !== 0) {
 
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
-        //@todo : csv_to_array deprecated
-        $users  = Import::csv_to_array($_FILES['import_file']['tmp_name']);
+        //@todo : csvToArray deprecated
+        $users  = Import::csvToArray($_FILES['import_file']['tmp_name']);
 
         $invalid_users  = array();
         $clean_users    = array();

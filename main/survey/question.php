@@ -48,7 +48,7 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 $course_id = api_get_course_int_id();
 
 // Getting the survey information
-$surveyData = survey_manager::get_survey($_GET['survey_id']);
+$surveyData = SurveyManager::get_survey($_GET['survey_id']);
 
 if (empty($surveyData)) {
 	Display :: display_header(get_lang('ToolSurvey'));
@@ -146,7 +146,7 @@ if ($_GET['type'] == 'personality') {
 
 // We are editing a question
 if (isset($_GET['question_id']) && !empty($_GET['question_id'])) {
-	$formData = survey_manager::get_question($_GET['question_id']);
+	$formData = SurveyManager::get_question($_GET['question_id']);
 }
 
 $formData = $surveyQuestion->preSave($formData);

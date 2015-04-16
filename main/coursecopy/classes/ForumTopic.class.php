@@ -15,9 +15,9 @@ class ForumTopic extends Resource
      */
     /* function ForumTopic($id, $title, $time, $topic_poster_id, $topic_poster_name, $forum_id, $last_post, $replies, $views = 0, $sticky = 0, $locked = 0,
       $time_closed = null, $weight = 0, $title_qualify = null, $qualify_max = 0) */
-    function ForumTopic($obj)
+    function __construct($obj)
     {
-        parent::Resource($obj->thread_id, RESOURCE_FORUMTOPIC);
+        parent::__construct($obj->thread_id, RESOURCE_FORUMTOPIC);
         $this->obj = $obj;
         /*
           $this->title = $title;

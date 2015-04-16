@@ -172,6 +172,7 @@ switch ($action) {
         $form->addButtonCreate(get_lang('CreateDirectory'));
 
         if ($form->validate()) {
+
             $result = addDir(
                 $_POST,
                 $user_id,
@@ -179,6 +180,7 @@ switch ($action) {
                 $group_id,
                 $id_session
             );
+
             if ($result) {
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
             } else {

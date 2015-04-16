@@ -47,19 +47,20 @@ function activate_end_date() {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView  = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$learnpath_id   = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
+$isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
 /* MAIN CODE */
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-    $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+    $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     //error_log('New LP - User not authorized in lp_add.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+    exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
@@ -68,7 +69,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
 if (isset($_SESSION['gradebook'])){
-    $gradebook =	$_SESSION['gradebook'];
+    $gradebook = $_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
@@ -83,7 +84,8 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
 echo '<div class="actions">';
-echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.
+        Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 Display::display_normal_message(get_lang('AddLpIntro'), false);
@@ -95,7 +97,7 @@ if ($_POST AND empty($_REQUEST['lp_name'])) {
 $form = new FormValidator('lp_add', 'post', 'lp_controller.php');
 
 // Form title
-$form->addElement('header', null, get_lang('AddLpToStart'));
+$form->addElement('header', get_lang('AddLpToStart'));
 
 // Title
 $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('autofocus' => 'autofocus'));
@@ -124,8 +126,8 @@ $form->addElement('html','</div>');
 
 $defaults['activate_start_date_check']  = 1;
 
-$defaults['publicated_on']  = date('Y-m-d 08:00:00');
-$defaults['expired_on']     = date('Y-m-d 08:00:00',time()+86400);
+$defaults['publicated_on'] = date('Y-m-d 08:00:00');
+$defaults['expired_on'] = date('Y-m-d 08:00:00',time()+86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('CreateLearningPath'));

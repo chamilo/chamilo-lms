@@ -59,7 +59,10 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
             $result = UrlManager::add_user_to_url($user_id, $url_id);
             $user_info = api_get_user_info($user_id);
             if ($result) {
-                $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
+                $message = Display::return_message(
+                    get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
+                    'confirm'
+                );
             }
             break;
         case 'delete':
@@ -67,16 +70,16 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
             if(is_array($idChecked)) {
                 $my_temp = array();
                 foreach ($idChecked as $id){
-                    $my_temp[]= Database::escape_string($id);// forcing the escape_string
+                    $courseInfo = api_get_course_info($id);
+                    $my_temp[]= $courseInfo['real_id'];// forcing the escape_string
                 }
                 $idChecked = $my_temp;
+                $idChecked = "'".implode("','", $idChecked)."'";
 
-                $idChecked="'".implode("','",$idChecked)."'";
-
-                $result = Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
+                $result = Database::query("DELETE FROM $tbl_session_rel_course WHERE session_id='$id_session' AND c_id IN($idChecked)");
                 $nbr_affected_rows=Database::affected_rows($result);
 
-                Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
+                Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id='$id_session' AND c_id IN($idChecked)");
                 Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
             }
 
@@ -87,15 +90,15 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
             }
 
             if (!empty($_GET['user'])) {
-                $result = Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
+                $result = Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND session_id ='$id_session' AND user_id=".intval($_GET['user']));
                 $nbr_affected_rows = Database::affected_rows($result);
 
                 Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
-                $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
+                $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id ='$id_session' AND user_id=".intval($_GET['user']));
                 $nbr_affected_rows=Database::affected_rows($result);
 
-                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
+                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE session_id ='$id_session'");
             }
             break;
     }
@@ -216,10 +219,10 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
     		</tr>';
     } else {
     	// select the courses
-    	$sql = "SELECT code,title,visual_code, nbr_users
-    			FROM $tbl_course,$tbl_session_rel_course
-    			WHERE course_code = code
-    			AND	id_session='$id_session'
+    	$sql = "SELECT c.id, code,title,visual_code, nbr_users
+    			FROM $tbl_course c,$tbl_session_rel_course sc
+    			WHERE c.id = sc.c_id
+    			AND	session_id='$id_session'
     			ORDER BY title";
     	$result=Database::query($sql);
     	$courses=Database::store_result($result);
@@ -227,16 +230,20 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
     		//select the number of users
 
     		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
-    				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
-    				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = '".intval($id_session)."'";
+    				WHERE srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id AND srcru.c_id = '".Database::escape_string($course['id'])."'
+    				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.session_id = '".intval($id_session)."'";
 
     		$rs = Database::query($sql);
     		$course['nbr_users'] = Database::result($rs,0,0);
 
     		// Get coachs of the courses in session
 
-    		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-    				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
+    		$sql = "SELECT user.lastname,user.firstname,user.username
+    		        FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+    				WHERE
+    				    session_rcru.user_id = user.user_id AND
+    				    session_rcru.session_id = '".intval($id_session)."' AND
+    				    session_rcru.c_id ='".Database::escape_string($course['id'])."' AND session_rcru.status=2";
     		$rs = Database::query($sql);
 
     		$coachs = array();
@@ -299,16 +306,16 @@ if($_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
             $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
-                    WHERE su.id_session = $id_session AND (access_url_id = $url_id OR access_url_id is null )
+                    WHERE su.session_id = $id_session AND (access_url_id = $url_id OR access_url_id is null )
                     $order_clause";
         } else {
             $sql = "SELECT u.user_id, lastname, firstname, username
                     FROM $tbl_user u
                     INNER JOIN $tbl_session_rel_user su
-                    ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    AND su.id_session = ".$id_session.$order_clause;
+                    ON u.user_id = su.user_id AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    AND su.session_id = ".$id_session.$order_clause;
         }
 
     	$result = Database::query($sql);

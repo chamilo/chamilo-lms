@@ -9,7 +9,6 @@
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-global $_configuration;
 
 // create an ajax object
 $xajax = new xajax();
@@ -57,7 +56,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
 
 function search_sessions($needle, $type)
 {
-    global $_configuration, $tbl_session_rel_access_url, $tbl_session, $user_id;
+    global $tbl_session_rel_access_url, $tbl_session, $user_id;
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -74,7 +73,7 @@ function search_sessions($needle, $type)
             $without_assigned_sessions = " AND s.id NOT IN(".implode(',', $assigned_sessions_id).")";
         }
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql 	= " SELECT s.id, s.name FROM $tbl_session s
                         LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
                         WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."";

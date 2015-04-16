@@ -19,7 +19,7 @@ class Work extends Resource
      */
     public function __construct($params)
     {
-        parent::Resource($params['id'], RESOURCE_WORK);
+        parent::__construct($params['id'], RESOURCE_WORK);
         $this->params = $params;
     }
 

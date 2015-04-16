@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Implements the edition of course-session settings
  * @package chamilo.admin
  */
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -12,24 +14,29 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 $course_code = $_GET['course_code'];
 
-$formSent=0;
-$errorMsg='';
+$formSent = 0;
+$errorMsg = '';
 
 // Database Table Definitions
-$tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course			= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session		= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $course_info = api_get_course_info($_REQUEST['course_code']);
+$courseId = $course_info['real_id'];
 $tool_name = $course_info['name'];
+$sql = "SELECT s.name, c.title
+        FROM $tbl_session_course sc, $tbl_session s, $tbl_course c
+        WHERE
+            sc.session_id = s.id AND
+            sc.c_id = c.id AND
+            sc.session_id='$id_session' AND
+            sc.c_id ='".$courseId."'";
+$result = Database::query($sql);
 
-$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c
-WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc
-.id_session='$id_session' AND sc.course_code='".Database::escape_string($course_code)."'");
-
-if (!list($session_name,$course_title)=Database::fetch_row($result)) {
+if (!list($session_name,$course_title) = Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
@@ -41,11 +48,12 @@ $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_sessio
 
 $arr_infos = array();
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-	$formSent=1;
+	$formSent = 1;
 
 	// get all tutor by course_code in the session
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2";
+	$sql = "SELECT user_id
+	        FROM $tbl_session_rel_course_rel_user
+	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2";
 	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
@@ -61,7 +69,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 		foreach ($id_coachs as $id_coach) {
 			$id_coach = intval($id_coach);
-			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);
+			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $courseId);
 		}
 
 		// set status to 0 other tutors from multiple list
@@ -71,30 +79,29 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 			$rs2 = SessionManager::set_coach_to_course_session(
 				$nocoach_user_id,
 				$id_session,
-				$course_code,
+                $courseId,
 				true
 			);
 		}
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
 		exit();
-
 	}
 } else {
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user
-	        WHERE id_session = '$id_session' AND course_code = '".Database::escape_string($course_code)."' AND status = 2 ";
+	$sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
+	        WHERE session_id = '$id_session' AND c_id = '".$courseId."' AND status = 2 ";
 	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {
 		while ($infos = Database::fetch_array($rs)) {
-			$arr_infos[] = $infos['id_user'];
+			$arr_infos[] = $infos['user_id'];
 		}
 	}
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+
+if (api_is_multiple_url_enabled()) {
     $tbl_access_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $access_url_id = api_get_current_access_url_id();
     $sql="SELECT u.user_id,lastname,firstname,username

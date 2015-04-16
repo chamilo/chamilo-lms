@@ -326,7 +326,7 @@ class ImportCsv
      */
     private function importTeachers($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         /* Unique identifier: official-code username.
         Email address and password should never get updated. *ok
@@ -461,7 +461,7 @@ class ImportCsv
      */
     private function importStudents($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         /*
          * Another users import.
@@ -647,7 +647,7 @@ class ImportCsv
      */
     private function importCalendarStatic($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         if ($this->getDumpValues()) {
             // Remove all calendar items
@@ -704,7 +704,7 @@ class ImportCsv
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
-                        $courseInfo['code']
+                        $courseInfo['real_id']
                     );
 
                     if ($courseIncluded == false) {
@@ -892,7 +892,7 @@ class ImportCsv
      */
     private function importCourses($file, $moveFile = true)
     {
-        $data = Import::csv_to_array($file);
+        $data = Import::csvToArray($file);
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
@@ -1129,6 +1129,8 @@ class ImportCsv
                         foreach ($courses as $course) {
                             $courseArray = bracketsToArray($course);
                             $courseCode = $courseArray[0];
+                            $courseInfo = api_get_course_info($courseCode);
+
                             if (CourseManager::course_exists($courseCode)) {
                                 // Coaches
                                 $courseCoaches = isset($courseArray[1]) ? $courseArray[1] : null;
@@ -1145,7 +1147,7 @@ class ImportCsv
                                     }
                                     SessionManager::updateCoaches(
                                         $sessionId,
-                                        $courseCode,
+                                        $courseInfo['real_id'],
                                         $coachList,
                                         true
                                     );
@@ -1154,6 +1156,7 @@ class ImportCsv
                                 // Students
                                 $courseUsers = isset($courseArray[2]) ? $courseArray[2] : null;
                                 $courseUsers = explode(',', $courseUsers);
+
                                 if (!empty($courseUsers)) {
                                     $userList = array();
                                     foreach ($courseUsers as $username) {
@@ -1258,7 +1261,7 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
@@ -1279,7 +1282,7 @@ class ImportCsv
                         SessionManager::set_coach_to_course_session(
                             $userId,
                             $chamiloSessionId,
-                            $courseInfo['code']
+                            $courseInfo['real_id']
                         );
                         break;
                 }
@@ -1318,7 +1321,7 @@ class ImportCsv
                     continue;
                 }
 
-                $userId = Usermanager::get_user_id_from_username($chamiloUserName);
+                $userId = UserManager::get_user_id_from_username($chamiloUserName);
 
                 if (empty($userId)) {
                     $this->logger->addError('User does not exists: '.$chamiloUserName);
@@ -1413,11 +1416,10 @@ class ImportCsv
     }
 }
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\NativeMailerHandler;
-use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\BufferHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 $logger = new Logger('cron');
 $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;

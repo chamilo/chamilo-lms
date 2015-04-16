@@ -4,7 +4,7 @@
 * Exercise reminder overview
 * Then it shows the results on the screen.
 * @package chamilo.exercise
-* @author Julio Montoya Armas switchable fill in blank option added
+* @author Julio Montoya switchable fill in blank option added
 */
 require_once '../inc/global.inc.php';
 

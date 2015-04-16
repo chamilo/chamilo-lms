@@ -24,11 +24,11 @@ class Course
      */
     public function __construct()
     {
-        $this->resources    = array();
-        $this->code         = '';
-        $this->path         = '';
-        $this->backup_path  = '';
-        $this->encoding     = api_get_system_encoding();
+        $this->resources = array();
+        $this->code = '';
+        $this->path = '';
+        $this->backup_path = '';
+        $this->encoding = api_get_system_encoding();
     }
 
     /**

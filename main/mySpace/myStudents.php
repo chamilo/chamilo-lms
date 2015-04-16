@@ -45,7 +45,7 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 
 $nameTools = get_lang('StudentDetails');
 
-$get_course_code = Security :: remove_XSS($_GET['course']);
+$get_course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
 if (isset($_GET['details'])) {
     if (!empty ($_GET['origin']) && $_GET['origin'] == 'user_course') {
@@ -157,7 +157,7 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
     $user_id = api_get_user_id();
 }
 
-$session_id = intval($_GET['id_session']);
+$session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : 0;
 if (empty($session_id)) {
     $session_id = api_get_session_id();
 }
@@ -186,7 +186,8 @@ if ($check) {
                     $session_id
                 );
 
-                //@todo delete the stats.track_e_exercises records. First implement this http://support.chamilo.org/issues/1334
+                // @todo delete the stats.track_e_exercises records.
+                // First implement this http://support.chamilo.org/issues/1334
                 $message = Display::return_message(
                     get_lang('LPWasReset'),
                     'success'
@@ -237,7 +238,7 @@ if (!empty($sessions_coached_by_user)) {
     }
 }
 
-$sql = "SELECT course_code
+$sql = "SELECT c_id
         FROM $tbl_course_user
         WHERE
             relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
@@ -246,30 +247,30 @@ $rs = Database::query($sql);
 
 while ($row = Database :: fetch_array($rs)) {
     if ($drh_can_access_all_courses) {
-        $courses_in_session[0][] = $row['course_code'];
+        $courses_in_session[0][] = $row['c_id'];
     } else {
-        if (isset($courses[$row['course_code']])) {
-            $courses_in_session[0][] = $row['course_code'];
+        if (isset($courses[$row['c_id']])) {
+            $courses_in_session[0][] = $row['c_id'];
         }
     }
 }
 
 // Get the list of sessions where the user is subscribed as student
-$sql = 'SELECT id_session, course_code
+$sql = 'SELECT session_id, c_id
         FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-        WHERE id_user=' . intval($user_info['user_id']);
+        WHERE user_id=' . intval($user_info['user_id']);
 $rs = Database::query($sql);
 $tmp_sessions = array();
 while ($row = Database :: fetch_array($rs)) {
-    $tmp_sessions[] = $row['id_session'];
+    $tmp_sessions[] = $row['session_id'];
     if ($drh_can_access_all_courses) {
-        if (in_array($row['id_session'], $tmp_sessions)) {
-            $courses_in_session[$row['id_session']][] = $row['course_code'];
+        if (in_array($row['session_id'], $tmp_sessions)) {
+            $courses_in_session[$row['session_id']][] = $row['c_id'];
         }
     } else {
-        if (isset($courses_in_session_by_coach[$row['id_session']])) {
-            if (in_array($row['id_session'], $tmp_sessions)) {
-                $courses_in_session[$row['id_session']][] = $row['course_code'];
+        if (isset($courses_in_session_by_coach[$row['session_id']])) {
+            if (in_array($row['session_id'], $tmp_sessions)) {
+                $courses_in_session[$row['session_id']][] = $row['c_id'];
             }
         }
     }
@@ -345,10 +346,12 @@ if (!empty($student_id)) {
 
     // get average of score and average of progress by student
     $avg_student_progress = $avg_student_score = 0;
-    $course_code = Security :: remove_XSS($_GET['course']);
+    $course_code = isset($_GET['course']) ? Security :: remove_XSS($_GET['course']) : '';
 
     if (!CourseManager :: is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
-        unset($courses[$key]);
+        if (isset($courses[$key])) {
+            unset($courses[$key]);
+        }
     } else {
 
         $avg_student_progress = Tracking::get_avg_student_progress(
@@ -372,13 +375,16 @@ if (!empty($student_id)) {
     // time spent on the course
     $courseInfo = api_get_course_info($course_code);
 
-    $time_spent_on_the_course = api_time_to_hms(
-        Tracking:: get_time_spent_on_the_course(
-            $user_info['user_id'],
-            $courseInfo['real_id'],
-            $session_id
-        )
-    );
+    $time_spent_on_the_course = 0;
+    if (!empty($courseInfo)) {
+        $time_spent_on_the_course = api_time_to_hms(
+            Tracking:: get_time_spent_on_the_course(
+                $user_info['user_id'],
+                $courseInfo['real_id'],
+                $session_id
+            )
+        );
+    }
 
     // get information about connections on the platform by student
     $first_connection_date = Tracking :: get_first_connection_date($user_info['user_id']);
@@ -436,7 +442,7 @@ if (!empty($student_id)) {
     if ($session_id > 0) {
 
         $session_info  = api_get_session_info($session_id);
-        $course_coachs = api_get_coachs_from_course($session_id, $course_code);
+        $course_coachs = api_get_coachs_from_course($session_id, $info_course['real_id']);
         $nb_login = '';
         if (!empty($course_coachs)) {
             $info_tutor_name = array();
@@ -622,9 +628,12 @@ if (!empty($student_id)) {
         $attendance = new Attendance();
 
         foreach ($courses_in_session as $key => $courses) {
-            $session_id   = $key;
+            $session_id = $key;
             $session_info = api_get_session_info($session_id);
-            $session_name = $session_info['name'];
+            $session_name = '';
+            if ($session_info) {
+                $session_name = $session_info['name'];
+            }
             $date_start = '';
 
             if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
@@ -659,9 +668,10 @@ if (!empty($student_id)) {
 			</tr>';
 
             if (!empty($courses)) {
-                foreach ($courses as $course_code) {
-                    $courseInfo = api_get_course_info($course_code);
+                foreach ($courses as $courseId) {
+                    $courseInfo = api_get_course_info_by_id($courseId);
                     $courseId = $courseInfo['real_id'];
+                    $course_code = $courseInfo['code'];
 
                     if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
                         $course_info = CourseManager :: get_course_information($course_code);
@@ -720,10 +730,12 @@ if (!empty($student_id)) {
                         <td >'.$attendances_faults_avg.'</td>
                         <td >'.$scoretotal_display.'</td>';
 
-                        if (isset ($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+                        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&id_coach='.Security::remove_XSS($_GET['id_coach']).'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent">
+                            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         } else {
-                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
+                            echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id'].'&details=true&course='.$course_info['code'].'&origin='.Security::remove_XSS($_GET['origin']).'&id_session='.$session_id.'#infosStudent">
+                            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>';
                         }
                         echo '</tr>';
                     }
@@ -1040,11 +1052,11 @@ if (!empty($student_id)) {
 
         //@when using sessions we do not show the survey list
         if (empty($session_id)) {
-            $survey_list = survey_manager::get_surveys($course_code, $session_id);
+            $survey_list = SurveyManager::get_surveys($course_code, $session_id);
 
             $survey_data = array();
             foreach($survey_list as $survey) {
-                $user_list = survey_manager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
+                $user_list = SurveyManager::get_people_who_filled_survey($survey['survey_id'], false, $info_course['real_id']);
                 $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), array(), ICON_SIZE_SMALL);
                 if (in_array($student_id, $user_list)) {
                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), array(), ICON_SIZE_SMALL);
@@ -1157,7 +1169,7 @@ if (!empty($student_id)) {
 }
 if ($export_csv) {
     ob_end_clean();
-    Export :: export_table_csv($csv_content, 'reporting_student');
+    Export :: arrayToCsv($csv_content, 'reporting_student');
     exit;
 }
 

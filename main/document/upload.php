@@ -78,8 +78,8 @@ $(function () {
             return $('<tr><td>' + file.name + '<\/td> <td> ' + file.size + ' <\/td>  <td>&nbsp;' + file.result + ' <\/td> <\/tr>');
         }
     });
-    $('#tabs').tabs();
 });
+
 </script>";
 
 // Variables

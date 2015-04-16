@@ -22,7 +22,7 @@
  *  @package chamilo.forum
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
@@ -165,7 +165,11 @@ if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id']) &&
 
 // Student list
 
-if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(null, true) || $is_group_tutor)) {
+if ($my_action == 'liststd' &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) &&
+    (api_is_allowed_to_edit(null, true) || $is_group_tutor)
+) {
     $active = null;
     switch ($_GET['list']) {
         case 'qualify':
@@ -223,15 +227,16 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 
         if (Database::num_rows($student_list) > 0) {
             while ($row_student_list=Database::fetch_array($student_list)) {
+                $userInfo = api_get_user_info($row_student_list['user_id']);
                 if ($counter_stdlist % 2 == 0) {
                     $class_stdlist = 'row_odd';
                 } else {
                     $class_stdlist = 'row_even';
                 }
-                $name_user_theme = api_get_person_name($row_student_list['firstname'], $row_student_list['lastname']);
-                $table_list .= '<tr class="'.$class_stdlist.'"><td>
-                    <a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$row_student_list['user_id'].'&amp;tipo=sdtlist&amp;'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">
-                    '.$name_user_theme.'</a></td>';
+                $table_list .= '<tr class="'.$class_stdlist.'"><td>';
+                $table_list .= UserManager::getUserProfileLink($userInfo);
+
+                $table_list .= '</td>';
                 if ($_GET['list'] == 'qualify') {
                     $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
@@ -381,7 +386,7 @@ if (is_array($threads)) {
                 echo '<td>'.Display::tag('span', api_get_person_name($row['firstname'], $row['lastname']), array("title"=>api_htmlentities($poster_username, ENT_QUOTES))).'</td>';
             }
 
-            $last_post_info = get_last_post_by_thread($row['c_id'], $row['thread_id'], $row['forum_id'], is_allowed_to_edit());
+            $last_post_info = get_last_post_by_thread($row['c_id'], $row['thread_id'], $row['forum_id'], api_is_allowed_to_edit());
             $last_post = null;
 
             if ($last_post_info) {

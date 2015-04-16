@@ -531,7 +531,8 @@ if ($action != 'add') {
 				$dropbox_file_data[] = format_file_size($file_size);
                 $receivers_celldata = null;
 				foreach ($dropbox_file->recipients as $recipient) {
-					$receivers_celldata = display_user_link_work($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
+					$userInfo = api_get_user_info($recipient['user_id']);
+					$receivers_celldata = UserManager::getUserProfileLink($userInfo).', '.$receivers_celldata;
 				}
 				$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 				$dropbox_file_data[] = $receivers_celldata;

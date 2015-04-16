@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *  Shows the exercise results
  *
- * @author Julio Montoya Armas  - Simple exercise result page
+ * @author Julio Montoya - Simple exercise result page
  *
  */
 require_once '../inc/global.inc.php';
@@ -12,8 +13,8 @@ if (empty($origin)) {
     $origin = $_REQUEST['origin'];
 }
 
-$id 	       = isset($_REQUEST['id']) 	  ? intval($_GET['id']) : null; //exe id
-$show_headers  = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
+$id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
+$show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 
 if ($origin == 'learnpath') {
 	$show_headers = false;
@@ -35,9 +36,9 @@ if (empty($track_exercise_info)) {
     api_not_allowed($show_headers);
 }
 
-$exercise_id        = $track_exercise_info['exe_exo_id'];
-$student_id         = $track_exercise_info['exe_user_id'];
-$current_user_id    = api_get_user_id();
+$exercise_id = $track_exercise_info['exe_exo_id'];
+$student_id = $track_exercise_info['exe_user_id'];
+$current_user_id = api_get_user_id();
 
 $objExercise = new Exercise();
 
@@ -45,7 +46,7 @@ if (!empty($exercise_id)) {
     $objExercise->read($exercise_id);
 }
 
-//Only users can see their own results
+// Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
     	api_not_allowed($show_headers);

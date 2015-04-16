@@ -83,9 +83,9 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
     // loop through all sessions
     while ($rowSession = Database::fetch_assoc($resSessions)) {
         // get courses of current session
-        $sqlSessionCourse = "SELECT DISTINCT a.id_session, a.course_code, a.nbr_users
+        $sqlSessionCourse = "SELECT DISTINCT a.session_id, a.course_code, a.nbr_users
         FROM $tableBuySessionRelCourse a, $tableSessionRelCourse b
-        WHERE a.id_session = b.id_session AND a.id_session = " . $rowSession['session_id'] . ";";
+        WHERE a.session_id = b.session_id AND a.session_id = " . $rowSession['session_id'] . ";";
         $resSessionCourse = Database::query($sqlSessionCourse);
         $aux = array();
         // loop through courses of current session
@@ -119,15 +119,15 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         //check if the user is enrolled in the current session
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE id_session='".$rowSession['session_id']."' AND
-                id_user ='" . $_SESSION['_user']['user_id'] . "';";
+                WHERE session_id ='".$rowSession['session_id']."' AND
+                user_id ='" . api_get_user_id() . "'";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "YES";
             } else {
                 $sql = "SELECT 1 FROM $tableBuySessionTemporal
                     WHERE session_id ='".$rowSession['session_id']."' AND
-                    user_id='" . $_SESSION['_user']['user_id'] . "';";
+                    user_id='" . api_get_user_id() . "'";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result) > 0) {
                     $rowSession['enrolled'] = "TMP";
@@ -138,7 +138,7 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
         } else {
             $sql = "SELECT 1 FROM $tableBuySessionTemporal
                 WHERE session_id ='".$rowSession['session_id']."' AND
-                user_id='" . $_SESSION['_user']['user_id'] . "';";
+                user_id='" . api_get_user_id() . "'";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
                 $rowSession['enrolled'] = "TMP";
@@ -364,8 +364,8 @@ if ($_REQUEST['tab'] == 'save_currency') {
     $res = Database::query($sql);
     $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE country_id='" . $id . "';";
     $res = Database::query($sql);
-    if (!res) {
-        $content = $plugin->get_lang('ProblemToSaveTheCurrencyType') . Database::error();
+    if (!$res) {
+        $content = $plugin->get_lang('ProblemToSaveTheCurrencyType');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -386,8 +386,8 @@ if ($_REQUEST['tab'] == 'save_paypal') {
         WHERE id = '1';";
 
     $res = Database::query($sql);
-    if (!res) {
-        $content = $plugin->get_lang('ProblemToSaveThePaypalParameters') . Database::error();
+    if (!$res) {
+        $content = $plugin->get_lang('ProblemToSaveThePaypalParameters');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -403,8 +403,8 @@ if ($_REQUEST['tab'] == 'add_account') {
         VALUES ('" . $name . "','" . $account . "', '" . $swift . "');";
 
     $res = Database::query($sql);
-    if (!res) {
-        $content = $plugin->get_lang('ProblemToInsertANewAccount') . Database::error();
+    if (!$res) {
+        $content = $plugin->get_lang('ProblemToInsertANewAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -417,8 +417,8 @@ if ($_REQUEST['tab'] == 'delete_account') {
 
     $sql = "DELETE FROM $tableBuyCourseTransfer WHERE id='" . $id . "';";
     $res = Database::query($sql);
-    if (!res) {
-        $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
+    if (!$res) {
+        $content = $plugin->get_lang('ProblemToDeleteTheAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');
@@ -452,7 +452,7 @@ if ($_REQUEST['tab'] == 'save_mod') {
 
     $res = Database::query($sql);
     if (!$res) {
-        $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
+        $content = $plugin->get_lang('ProblemToSaveTheMessage');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         echo json_encode(array("status" => "true", "course_id" => $id));
@@ -479,8 +479,8 @@ if ($_REQUEST['tab'] == 'clear_order') {
     $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
 
     $res = Database::query($sql);
-    if (!res) {
-        $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
+    if (!$res) {
+        $content = $plugin->get_lang('ProblemToDeleteTheAccount');
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
         $content = get_lang('Saved');

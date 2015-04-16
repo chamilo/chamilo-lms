@@ -48,9 +48,6 @@ $(function() {
             load_cbo($(\'#idParent\').val());
         }
     }
-    //Loads LP item tabs
-
-    $("#resource_tab").tabs();
     $(\'.lp_resource_element\').click(function() {
         window.location.href = $(\'a\', this).attr(\'href\');
     });
@@ -99,14 +96,14 @@ $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpa
 
 switch ($type) {
     case 'chapter':
-        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
-        $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewChapter'));
+        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewChapter'));
         break;
     case 'document':
-        $interbreadcrumb[]= array ('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id(), 'name' => get_lang('NewStep'));
         break;
     default:
-        $interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[]= array('url' => '#', 'name' => get_lang('NewStep'));
         break;
 }
 
@@ -194,7 +191,6 @@ if (in_array($message, array('ItemUpdated'))) {
 }
 
 if (isset($new_item_id) && is_numeric($new_item_id)) {
-
     switch ($type) {
         case 'chapter':
             echo $learnPath->display_manipulate($new_item_id, $_POST['type']);

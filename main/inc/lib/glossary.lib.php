@@ -120,14 +120,32 @@ class GlossaryManager
 						'".Database::escape_string($session_id)."'
 						)";
             $result = Database::query($sql);
-            if ($result === false) { return false; }
+
+            if ($result === false) {
+                return false;
+            }
+
             $id = Database::insert_id();
-            //insert into item_property
-            api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, $id, 'GlossaryAdded', api_get_user_id());
+            if ($id) {
+
+                $sql = "UPDATE $t_glossary SET glossary_id = $id WHERE iid = $id";
+                Database::query($sql);
+
+                //insert into item_property
+                api_item_property_update(
+                    api_get_course_info(),
+                    TOOL_GLOSSARY,
+                    $id,
+                    'GlossaryAdded',
+                    api_get_user_id()
+                );
+            }
+
             $_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
             // display the feedback message
-            if ($message)
+            if ($message) {
                 Display::display_confirmation_message(get_lang('TermAdded'));
+            }
 
             return $id;
         }
@@ -422,23 +440,24 @@ class GlossaryManager
 
         //condition for the session
         $session_id         = api_get_session_id();
-        $condition_session  = api_get_session_condition($session_id, true, true);
+        $condition_session  = api_get_session_condition($session_id, true, true, 'glossary.session_id');
         $column             = intval($column);
         if (!in_array($direction,array('DESC', 'ASC'))) {
             $direction          = 'ASC';
         }
-        $from               = intval($from);
-        $number_of_items    = intval($number_of_items);
+        $from = intval($from);
+        $number_of_items = intval($number_of_items);
 
         $sql = "SELECT glossary.name 			as col0,
 					   glossary.description 	as col1,
 					   $col2
-					   glossary.session_id as session_id
+					   glossary.session_id
 				FROM $t_glossary glossary, $t_item_propery ip
-				WHERE 	glossary.glossary_id = ip.ref AND
-						tool = '".TOOL_GLOSSARY."' $condition_session AND
-						glossary.c_id = ".api_get_course_int_id()." AND
-						ip.c_id = ".api_get_course_int_id()."
+				WHERE
+				    glossary.glossary_id = ip.ref AND
+					tool = '".TOOL_GLOSSARY."' $condition_session AND
+					glossary.c_id = ".api_get_course_int_id()." AND
+					ip.c_id = ".api_get_course_int_id()."
 		        ORDER BY col$column $direction
 		        LIMIT $from,$number_of_items";
         $res = Database::query($sql);

@@ -101,7 +101,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
-        $events = $agenda->get_events(
+        $events = $agenda->getEvents(
             $start,
             $end,
             api_get_course_int_id(),

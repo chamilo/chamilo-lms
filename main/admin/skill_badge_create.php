@@ -95,7 +95,7 @@ $interbreadcrumb = array(
 );
 
 $tpl = new Template(get_lang('CreateBadge'));
-$tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
+$tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 
 $contentTemplate = $tpl->get_template('skill/badge_create.tpl');

@@ -80,15 +80,9 @@ class CourseBuilder
         $this->course = new Course();
         $this->course->code = $_course['official_code'];
         $this->course->type = $type;
-        $this->course->path = api_get_path(
-                SYS_COURSE_PATH
-            ).$_course['path'].'/';
-        $this->course->backup_path = api_get_path(
-                SYS_COURSE_PATH
-            ).$_course['path'];
-        $this->course->encoding = api_get_system_encoding(
-        ); //current platform encoding
-        $this->course->db_name = $_course['dbName'];
+        $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
+        $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
+        $this->course->encoding = api_get_system_encoding();
         $this->course->info = $_course;
     }
 
@@ -219,12 +213,15 @@ class CourseBuilder
                 $session_condition = api_get_session_condition(
                     $session_id,
                     true,
-                    true
+                    true,
+                    'd.session_id'
                 );
             } else {
                 $session_condition = api_get_session_condition(
                     $session_id,
-                    true
+                    true,
+                    false,
+                    'd.session_id'
                 );
             }
 
@@ -442,22 +439,36 @@ class CourseBuilder
                 $session_condition = api_get_session_condition(
                     $session_id,
                     true,
-                    true
+                    true,
+                    'l.session_id'
                 );
             } else {
                 $session_condition = api_get_session_condition(
                     $session_id,
-                    true
+                    true,
+                    false,
+                    'l.session_id'
                 );
             }
             $sql = "SELECT  l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
                     FROM $table l, $table_prop p
-                    WHERE l.c_id = $course_id AND p.c_id = $course_id AND p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 $session_condition
+                    WHERE
+                        l.c_id = $course_id AND
+                        p.c_id = $course_id AND
+                        p.ref=l.id AND
+                        p.tool = '".TOOL_LINK."' AND
+                        p.visibility != 2 $session_condition
                     ORDER BY l.display_order";
         } else {
             $sql = "SELECT l.id, l.title, l.url, l.description, l.category_id, l.on_homepage
                     FROM $table l, $table_prop p
-                    WHERE l.c_id = $course_id AND p.c_id = $course_id AND p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 AND l.session_id = 0
+                    WHERE
+                        l.c_id = $course_id AND
+                        p.c_id = $course_id AND
+                        p.ref=l.id AND
+                        p.tool = '".TOOL_LINK."' AND
+                        p.visibility != 2 AND
+                        l.session_id = 0
                     ORDER BY l.display_order";
         }
 
@@ -622,15 +633,17 @@ class CourseBuilder
 
         // Building normal tests.
         $sql = "SELECT * FROM $table_que WHERE c_id = $course_id ";
+        $result = Database::query($sql);
 
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
+        while ($obj = Database::fetch_object($result)) {
             // find the question category
+
             // @todo : need to be adapted for multi category questions in 1.10
-            $question_category_id = Testcategory::getCategoryForQuestion(
+            $question_category_id = TestCategory::getCategoryForQuestion(
                 $obj->id,
                 $course_id
             );
+
             // build the backup resource question object
             $question = new QuizQuestion(
                 $obj->id,
@@ -644,7 +657,9 @@ class CourseBuilder
                 $obj->extra,
                 $question_category_id
             );
-            $sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
+
+            $sql = 'SELECT * FROM '.$table_ans.'
+                    WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
             $db_result2 = Database::query($sql);
 
             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -703,11 +718,11 @@ class CourseBuilder
                  )
         ";
 
-        $db_result = Database::query($sql);
-        if (Database::num_rows($db_result) > 0) {
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
             $build_orphan_questions = true;
             $orphanQuestionIds = array();
-            while ($obj = Database::fetch_object($db_result)) {
+            while ($obj = Database::fetch_object($result)) {
 
                 // Orphan questions
                 if (!empty($obj->question_id)) {
@@ -718,7 +733,7 @@ class CourseBuilder
                 if (!isset($this->course->resources[$obj->id])) {
                     // find the question category
                     // @todo : need to be adapted for multi category questions in 1.10
-                    $question_category_id = Testcategory::getCategoryForQuestion(
+                    $question_category_id = TestCategory::getCategoryForQuestion(
                         $obj->id,
                         $course_id
                     );
@@ -856,12 +871,12 @@ class CourseBuilder
         $course_id = api_get_course_int_id();
 
         // get all test category in course
-        $tab_test_categories_id = Testcategory::getCategoryListInfo(
+        $tab_test_categories_id = TestCategory::getCategoryListInfo(
             "id",
             $course_id
         );
         foreach ($tab_test_categories_id as $test_category_id) {
-            $test_category = new Testcategory($test_category_id);
+            $test_category = new TestCategory($test_category_id);
             $copy_course_test_category = new CourseCopyTestcategory(
                 $test_category_id,
                 $test_category->name,
@@ -954,7 +969,7 @@ class CourseBuilder
         $id_list = array()
     ) {
         $table = Database:: get_course_table(TABLE_ANNOUNCEMENT);
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
 
         $sessionCondition = api_get_session_condition(
             $session_id,
@@ -962,22 +977,27 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$course_id.' '.$sessionCondition;
+        $sql = 'SELECT * FROM '.$table.' WHERE c_id = '.$courseId.' '.$sessionCondition;
         $db_result = Database::query($sql);
         $table_attachment = Database:: get_course_table(
             TABLE_ANNOUNCEMENT_ATTACHMENT
         );
         while ($obj = Database::fetch_object($db_result)) {
-            $sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE c_id = '.$course_id.' AND announcement_id = '.$obj->id.'';
+
+            $sql = 'SELECT path, comment, filename, size
+                    FROM '.$table_attachment.'
+                    WHERE c_id = '.$courseId.' AND announcement_id = '.$obj->id.'';
             $result = Database::query($sql);
             $attachment_obj = Database::fetch_object($result);
             $att_path = $att_filename = $att_size = $atth_comment = '';
+
             if (!empty($attachment_obj)) {
                 $att_path = $attachment_obj->path;
                 $att_filename = $attachment_obj->filename;
                 $att_size = $attachment_obj->size;
                 $atth_comment = $attachment_obj->comment;
             }
+
             $announcement = new Announcement(
                 $obj->id,
                 $obj->title,
@@ -991,7 +1011,6 @@ class CourseBuilder
                 $atth_comment
             );
             $this->course->add_resource($announcement);
-
         }
     }
 
@@ -1297,9 +1316,12 @@ class CourseBuilder
             $this->course->encoding = api_get_system_encoding(
             ); //current platform encoding
             $code_course = $_course['code'];
-            $sql_session = "SELECT id, name, course_code  FROM $tbl_session_course
-                INNER JOIN  $tbl_session ON id_session = id
-                WHERE course_code = '$code_course' ";
+            $courseId = $_course['real_id'];
+            $sql_session = "SELECT s.id, name, c_id
+                FROM $tbl_session_course sc
+                INNER JOIN $tbl_session s
+                ON sc.session_id = s.id
+                WHERE sc.c_id = '$courseId' ";
             $query_session = Database::query($sql_session);
             while ($rows_session = Database::fetch_assoc($query_session)) {
                 $session = new CourseSession(
@@ -1465,11 +1487,13 @@ class CourseBuilder
             $with_base_content
         );
 
-        $sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' '.$sessionCondition;
+        $sql = 'SELECT * FROM '.$table_attendance.'
+                WHERE c_id = '.$course_id.' '.$sessionCondition;
         $db_result = Database::query($sql);
         while ($row = Database::fetch_array($db_result, 'ASSOC')) {
             $obj = new Attendance($row);
-            $sql = 'SELECT * FROM '.$table_attendance_calendar.' WHERE c_id = '.$course_id.' AND attendance_id = '.$row['id'];
+            $sql = 'SELECT * FROM '.$table_attendance_calendar.'
+                    WHERE c_id = '.$course_id.' AND attendance_id = '.$row['id'];
 
             $result = Database::query($sql);
             while ($sub_row = Database::fetch_array($result, 'ASSOC')) {

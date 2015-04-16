@@ -34,11 +34,11 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 	PROCESSING
 */
 
-$safe_post_file_comment = isset($_GET['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
-$safe_comment_text      = isset($_GET['comment_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY) : null;
-$safe_comment_title     = isset($_GET['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;
-$safe_task_name         = isset($_GET['task_name']) ? Security::remove_XSS($_POST['task_name']) : null;
-$safe_task_description  = isset($_GET['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
+$safe_post_file_comment = isset($_POST['post_file_comment']) ? Security::remove_XSS($_POST['post_file_comment']) : null;
+$safe_comment_text      = isset($_POST['comment_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['comment_text'])), COURSEMANAGERLOWSECURITY) : null;
+$safe_comment_title     = isset($_POST['comment_title']) ? Security::remove_XSS($_POST['comment_title']) : null;
+$safe_task_name         = isset($_POST['task_name']) ? Security::remove_XSS($_POST['task_name']) : null;
+$safe_task_description  = isset($_POST['task_description']) ? Security::remove_XSS($_POST['task_description']) : null;
 
 if (!empty($_POST['new_post_submit'])) {
 	Blog:: create_post(
@@ -72,6 +72,7 @@ if (!empty($_POST['new_comment_submit'])) {
 }
 
 if (!empty($_POST['new_task_submit'])) {
+
 	Blog:: create_task(
 		$blog_id,
 		$safe_task_name,
@@ -106,7 +107,7 @@ if (!empty($_POST['assign_task_submit'])) {
 		$blog_id,
 		$_POST['task_user_id'],
 		$_POST['task_task_id'],
-		$_POST['task_year'] . "-" . $_POST['task_month'] . "-" . $_POST['task_day']
+		$_POST['task_day']
 	);
 	$return_message = array(
 		'type' => 'confirmation',
@@ -119,7 +120,7 @@ if (isset($_POST['assign_task_edit_submit'])) {
 		$blog_id,
 		$_POST['task_user_id'],
 		$_POST['task_task_id'],
-		$_POST['task_year'] . "-" . $_POST['task_month'] . "-" . $_POST['task_day'],
+		$_POST['task_day'],
 		$_POST['old_user_id'],
 		$_POST['old_task_id'],
 		$_POST['old_target_date']
@@ -219,9 +220,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 /*
 	DISPLAY
 */
-$htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript"></script>';
 
-// Set bredcrumb
+// Set breadcrumb
 switch ($action) {
 	case 'new_post' :
 		$nameTools = get_lang('NewPost');
@@ -426,20 +426,19 @@ switch ($action) {
 		break;
 	case 'manage_tasks' :
 		if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
-			if (isset($_GET['do']) && $_GET['do'] == 'add')
-			{
-				Blog :: display_new_task_form($blog_id);
+			if (isset($_GET['do']) && $_GET['do'] == 'add') {
+				Blog:: display_new_task_form($blog_id);
 			}
-			if (isset($_GET['do']) && $_GET['do'] == 'assign')
-			{
-				Blog :: display_assign_task_form($blog_id);
+			if (isset($_GET['do']) && $_GET['do'] == 'assign') {
+				Blog:: display_assign_task_form($blog_id);
 			}
-			if (isset($_GET['do']) && $_GET['do'] == 'edit')
-			{
-				Blog :: display_edit_task_form($blog_id, intval($_GET['task_id']));
+			if (isset($_GET['do']) && $_GET['do'] == 'edit') {
+				Blog:: display_edit_task_form(
+					$blog_id,
+					intval($_GET['task_id'])
+				);
 			}
-			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment')
-			{
+			if (isset($_GET['do']) && $_GET['do'] == 'edit_assignment') {
 				Blog :: display_edit_assigned_task_form($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
 			}
 			Blog :: display_task_list($blog_id);

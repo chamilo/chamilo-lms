@@ -192,6 +192,9 @@ class Link extends Model
                 $catlinkstatus = get_lang('LinkAdded');
                 Database:: query($sql);
                 $link_id = Database:: insert_id();
+                // iid
+                $sql = "UPDATE $tbl_link SET id = iid WHERE iid = $link_id";
+                Database:: query($sql);
 
                 if ($link_id) {
                     api_set_default_visibility($link_id, TOOL_LINK);
@@ -345,8 +348,11 @@ class Link extends Model
                         '$session_id'
                         )";
                 Database:: query($sql);
-
                 $linkId = Database:: insert_id();
+                // iid
+                $sql = "UPDATE $tbl_categories SET id = iid WHERE iid = $linkId";
+                Database:: query($sql);
+
                 if ($linkId) {
                     // add link_category visibility
                     // course ID is taken from context in api_set_default_visibility
@@ -790,7 +796,7 @@ class Link extends Model
         $tblItemProperty = Database:: get_course_table(TABLE_ITEM_PROPERTY);
         $courseId = intval($courseId);
         // Condition for the session.
-        $sessionCondition = api_get_session_condition($sessionId, true, true);
+        $sessionCondition = api_get_session_condition($sessionId, true, true, 'linkcat.session_id');
 
         // Getting links
         $sql = "SELECT *, linkcat.id
@@ -859,7 +865,7 @@ class Link extends Model
 
         // Condition for the session.
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 'link.session_id');
         $catid = intval($catid);
 
         $course_id = api_get_course_int_id();

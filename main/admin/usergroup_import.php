@@ -103,7 +103,7 @@ $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
-    $classes = Import::csv_to_array($_FILES['import_file']['tmp_name']);
+    $classes = Import::csvToArray($_FILES['import_file']['tmp_name']);
     $errors = validate_data($classes);
     if (count($errors) == 0) {
         $number_of_added_classes = save_data($classes);

@@ -269,8 +269,7 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
     if (api_is_platform_admin()) {
         $courseInfo = api_get_course_info();
         if (!empty($course_list)) {
-            $courseIdList = array_keys($course_list);
-            if (!in_array($courseInfo['real_id'], $courseIdList)) {
+            if (!in_array($courseInfo['real_id'], $course_list)) {
                 $course_list = array_merge($course_list, array($courseInfo));
             }
         } else {
@@ -323,7 +322,7 @@ $TBL_COURSE_REL_CATEGORY	= Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CA
 // Get course categories for the selected course
 
 // get category list for the course $selected_course
-$categoryList = Testcategory::getCategoriesIdAndName($selected_course);
+$categoryList = TestCategory::getCategoriesIdAndName($selected_course);
 $selectCourseCategory = Display::select(
     'courseCategoryId',
     $categoryList,
@@ -583,7 +582,7 @@ if ($exerciseId > 0) {
                                         }
                                     }
 
-                                    $categoryIdFromQuestion = Testcategory::getCategoryForQuestion(
+                                    $categoryIdFromQuestion = TestCategory::getCategoryForQuestion(
                                         $question_obj->id,
                                         $selected_course
                                     );
@@ -946,6 +945,6 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
  */
 function get_question_categorie_for_question($in_courseid, $in_questionid)
 {
-	$cat = Testcategory::getCategoryNameForQuestion($in_questionid, $in_courseid);
+	$cat = TestCategory::getCategoryNameForQuestion($in_questionid, $in_courseid);
 	return $cat;
 }

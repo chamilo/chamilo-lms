@@ -132,7 +132,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
             $data[] = array($user['username'], $groupInfo['name']);
         }
         $filename = 'export_user_class_' . api_get_local_time();
-        Export::export_table_csv($data, $filename);
+        Export::arrayToCsv($data, $filename);
         exit;
     }
 }

@@ -158,24 +158,21 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 			$userid_match_login[$tmp] = $user_id;
 		}
 	}
-	if (!empty($_POST['id_session']))
-	{
+	if (!empty($_POST['id_session'])) {
 		$num = 0;
 		$tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session	  = Database::get_main_table(TABLE_MAIN_SESSION);
-		foreach($UserList as $user_id)
-		{
+		foreach ($UserList as $user_id) {
 			$sql = 'INSERT INTO '.$tbl_session_user.' SET
-					id_user="'.intval($user_id).'",
-					id_session = "'.intval($id_session).'"';
+					user_id ="'.intval($user_id).'",
+					session_id = "'.intval($id_session).'"';
 			$res_user = Database::query($sql);
-			if ($res_user)
-			{
+			if ($res_user) {
 				$num++;
 			}
 		}
-		if($num>0)
-		{
+
+		if($num>0) {
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
 			$res = Database::query($sql);
 		}

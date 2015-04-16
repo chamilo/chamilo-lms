@@ -31,6 +31,7 @@ $currentCourseRepository = $_course['path'];
 $is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
 
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $course_access_settings = CourseManager:: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
@@ -62,7 +63,7 @@ $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname
     FROM $tbl_user as user, $tbl_course_user as course_rel_user
-    WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'
+    WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
     ORDER BY ".$target_name." ASC";
 $q_result_titulars = Database::query($s_sql_course_titular);
 
@@ -414,7 +415,7 @@ if ($form->validate() && is_settings_editable()) {
     $updateValues = $form->exportValues();
 
     $visibility = $updateValues['visibility'];
-    $deletePicture = $updateValues['delete_picture'];
+    $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 
     if ($deletePicture) {
         CourseManager::deleteCoursePicture($course_code);
@@ -476,6 +477,8 @@ if ($form->validate() && is_settings_editable()) {
         $updateValues[$index] = Database::escape_string($value);
     }
 
+    $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : '';
+
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "UPDATE $table_course SET
         title 				    = '".$updateValues['title']."',
@@ -487,7 +490,7 @@ if ($form->validate() && is_settings_editable()) {
         subscribe  			    = '".$updateValues['subscribe']."',
         unsubscribe  		    = '".$updateValues['unsubscribe']."',
         legal                   = '".$updateValues['legal']."',
-        activate_legal          = '".$updateValues['activate_legal']."',
+        activate_legal          = '".$activeLegal."',
         registration_code 	    = '".$updateValues['course_registration_password']."'
         WHERE code = '".$course_code."'";
     Database::query($sql);

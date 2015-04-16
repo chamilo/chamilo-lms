@@ -553,11 +553,12 @@ class SocialManager extends UserManager
         if (!$nosession) {
             $session = '';
             $active = false;
-            if (!empty($my_course['session_name'])) {
+            if (!empty($my_course['session_name']) && !empty($my_course['id_session'])) {
 
                 // Request for the name of the general coach
                 $sql = 'SELECT lastname, firstname
-                        FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table.' tu
+                        FROM '.$tbl_session.' ts
+                        LEFT JOIN '.$main_user_table.' tu
                         ON ts.id_coach = tu.user_id
                         WHERE ts.id='.(int) $my_course['id_session'].' LIMIT 1';
                 $rs = Database::query($sql);
@@ -585,7 +586,7 @@ class SocialManager extends UserManager
         } else {
             $output = array($my_course['user_course_cat'], $result);
         }
-        //$my_course['creation_date'];
+
         return $output;
     }
 
@@ -928,15 +929,7 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
-        if ($wrap) {
-            if ($add_row) {
-                $html .='<div class="row">';
-            }
-
-            $html .= '<div class="col-md-'.$column_size.'">';
-
-            $html .= '<ul id="online_grid_container" class="thumbnails">';
-        }
+        $html .= '<div class="row">';
 
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid);
@@ -965,16 +958,26 @@ class SocialManager extends UserManager
 
             }
             $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-            $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
-            $html .= '<li class="col-md-'.($column_size / 3).' thumbnail">'.$img.'<div class="caption">'.$name.'</div></li>';
+            $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a>';
+
+            $html .= '<div class="col-md-4">
+                        <div class="card">
+                            <div class="avatar">'.$img.'</div>
+                            <div class="content">
+                            '.$name.'
+                            </div>
+                        </div>
+                      </div>';
+
         }
         $counter = $_SESSION['who_is_online_counter'];
 
         if ($wrap) {
-            $html .= '</ul></div>';
+            $html .= '</div>';
         }
         if (count($user_list) >= 9) {
-            $html .= '<div class="col-md-'.$column_size.'"><a class="btn btn-large btn-default" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            $html .= '<div class="col-md-'.$column_size.'">
+                        <a class="btn btn-large btn-default" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
         }
         if ($wrap && $add_row) {
             $html .= '</div>';

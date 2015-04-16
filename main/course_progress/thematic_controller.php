@@ -113,7 +113,7 @@ class ThematicController
                 case 'thematic_import_select':
                     break;
                 case 'thematic_import':
-                    $csv_import_array = Import::csv_to_array($_FILES['file']['tmp_name'], 'horizontal');
+                    $csv_import_array = Import::csvToArray($_FILES['file']['tmp_name']);
 
                     if (isset($_POST['replace']) && $_POST['replace']) {
                         // Remove current thematic.
@@ -126,22 +126,35 @@ class ThematicController
                     // Import the progress.
                     $current_thematic = null;
 
-                    foreach ($csv_import_array as $data) {
-                        foreach ($data as $key => $item) {
-                            if ($key == 'title') {
-                                $thematic->set_thematic_attributes(null, $item[0], $item[1], api_get_session_id());
+                    foreach ($csv_import_array as $item) {
+                        $key = $item['type'];
+                        switch ($key) {
+                            case 'title':
+                                $thematic->set_thematic_attributes(null, $item['data1'], $item['data2'], api_get_session_id());
                                 $current_thematic = $thematic->thematic_save();
                                 $description_type = 0;
-                            }
-                            if ($key == 'plan') {
-                                $thematic->set_thematic_plan_attributes($current_thematic, $item[0], $item[1], $description_type);
+                                break;
+                            case 'plan':
+                                $thematic->set_thematic_plan_attributes(
+                                    $current_thematic,
+                                    $item['data1'],
+                                    $item['data2'],
+                                    $description_type
+                                );
                                 $thematic->thematic_plan_save();
                                 $description_type++;
-                            }
-                            if ($key == 'progress') {
-                                $thematic->set_thematic_advance_attributes(null, $current_thematic, 0, $item[2], $item[0], $item[1]);
+                                break;
+                            case 'progress':
+                                $thematic->set_thematic_advance_attributes(
+                                    null,
+                                    $current_thematic,
+                                    0,
+                                    $item['data3'],
+                                    $item['data1'],
+                                    $item['data2']
+                                );
                                 $thematic->thematic_advance_save();
-                            }
+                                break;
                         }
                     }
                     $action = 'thematic_details';
@@ -149,6 +162,7 @@ class ThematicController
                 case 'thematic_export':
                     $list = $thematic->get_thematic_list();
                     $csv = array();
+                    $csv[] = array('type', 'data1', 'data2', 'data3');
                     foreach ($list as $theme) {
                         $csv[] = array('title', $theme['title'], $theme['content']);
                         $data = $thematic->get_thematic_plan_data($theme['id']);
@@ -164,7 +178,7 @@ class ThematicController
                             }
                         }
                     }
-                    Export::export_table_csv($csv);
+                    Export::arrayToCsv($csv);
                     exit;
                     // Don't continue building a normal page.
                     return;

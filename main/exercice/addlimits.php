@@ -18,8 +18,7 @@ api_protect_course_script();
 
 $dsp_percent = false;
 $debug=0;
-if($debug>0)
-{
+if($debug>0) {
 	echo str_repeat('&nbsp;',0).'Entered exercise_result.php'."<br />\n";var_dump($_POST);
 }
 // general parameters passed via POST/GET

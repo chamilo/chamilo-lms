@@ -16,7 +16,7 @@ $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $sql = "SELECT i.* FROM $document d
        INNER JOIN $itemProperty i
-       ON (d.c_id = i.c_id AND i.ref = d.id AND d.session_id = i.id_session)
+       ON (d.c_id = i.c_id AND i.ref = d.id AND d.session_id = i.session_id)
        WHERE
             d.path LIKE '%_DELETED_%' AND
             i.visibility IN (1, 0) AND
@@ -35,7 +35,7 @@ if (!empty($docs)) {
                 SET visibility = 2
                 WHERE
                     c_id = $courseId AND
-                    id_session = $sessionId AND
+                    session_id = $sessionId AND
                     ref = $ref AND
                     tool =  'document'
                 ";

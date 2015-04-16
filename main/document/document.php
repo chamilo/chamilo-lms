@@ -27,7 +27,8 @@
  * @package chamilo.document
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
+
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
@@ -1216,7 +1217,6 @@ if ($is_allowed_to_edit ||
 
 $dirForm = null;
 
-
 /* 	CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
 if ($is_allowed_to_edit ||
@@ -1712,7 +1712,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                     $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
                     $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                     $user_link = '<div class="document_owner">'.
-                        get_lang('Owner').': '.DocumentManager::display_user_link_document($document_data['insert_user_id'], $user_name).'</div>';
+                        get_lang('Owner').': '.UserManager::displayUserProfile($user_info).'</div>';
                 }
             }
 

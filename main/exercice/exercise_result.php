@@ -10,7 +10,7 @@
 *	@package chamilo.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@author Julio Montoya Armas switchable fill in blank option added
+* 	@author Julio Montoya switchable fill in blank option added
 *
 *	@todo	split more code up in functions, move functions to library?
 */

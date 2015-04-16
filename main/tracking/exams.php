@@ -173,7 +173,7 @@ $s_css_class = null;
 
 if (!empty($courseList) && is_array($courseList)) {
     foreach ($courseList as $courseInfo) {
-        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+        $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 
         $newSessionList = array();
         if (!empty($sessionList)) {

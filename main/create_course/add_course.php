@@ -220,11 +220,21 @@ if ($form->validate()) {
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
-                $content = $form->return_form();
+                $content = $form->returnForm();
             }
         } else {
             // Create a request for a new course.
-            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id(), $exemplary_content);
+            $request_id = CourseRequestManager::create_course_request(
+                $wanted_code,
+                $title,
+                $description,
+                $category_code,
+                $course_language,
+                $objetives,
+                $target_audience,
+                api_get_user_id(),
+                $exemplary_content
+            );
 
             if ($request_id) {
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
@@ -249,7 +259,7 @@ if ($form->validate()) {
         $message = Display :: return_message(get_lang('Explanation'));
     }
     // Display the form.
-    $content = $form->return_form();
+    $content = $form->returnForm();
 }
 
 $tpl->assign('message', $message);

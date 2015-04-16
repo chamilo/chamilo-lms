@@ -426,9 +426,9 @@ function ldap_get_number_of_users() {
  * @author    Mustapha Alouani
  */
 function ldap_get_user_data($from, $number_of_items, $column, $direction) {
-    
+
     global $extldap_user_correspondance;
-    
+
     $users = array();
     $is_western_name_order = api_is_western_name_order();
     if (isset($_GET['submit'])) {
@@ -554,40 +554,39 @@ function ldap_add_user_to_session($UserList, $id_session) {
 
     $id_session = (int) $id_session;
     // Once users are imported in the users base, we can assign them to the session
-    $result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
-            "WHERE id_session='$id_session'");
+    $result=Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'");
     $CourseList=array();
     while ($row=Database::fetch_array($result)) {
-        $CourseList[]=$row['course_code'];
+        $CourseList[]=$row['c_id'];
     }
     foreach ($CourseList as $enreg_course) {
         foreach ($UserList as $enreg_user) {
             $enreg_user = (int) $enreg_user;
             Database::query("INSERT IGNORE ".
               " INTO $tbl_session_rel_course_rel_user ".
-              "(id_session,course_code,id_user) VALUES ".
+              "(session_id,c_id,user_id) VALUES ".
               "('$id_session','$enreg_course','$enreg_user')");
         }
-        $sql = "SELECT COUNT(id_user) as nbUsers ".
+        $sql = "SELECT COUNT(user_id) as nbUsers ".
                " FROM $tbl_session_rel_course_rel_user " .
-               " WHERE id_session='$id_session' ".
-               " AND course_code='$enreg_course'";
+               " WHERE session_id='$id_session' ".
+               " AND c_id='$enreg_course'";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         Database::query("UPDATE $tbl_session_rel_course  ".
                " SET nbr_users=$nbr_users " .
-               " WHERE id_session='$id_session' ".
-               " AND course_code='$enreg_course'");
+               " WHERE session_id='$id_session' ".
+               " AND c_id='$enreg_course'");
     }
     foreach ($UserList as $enreg_user) {
         $enreg_user = (int) $enreg_user;
         Database::query("INSERT IGNORE INTO $tbl_session_rel_user ".
-               " (id_session, id_user) " .
+               " (session_id, user_id) " .
                " VALUES('$id_session','$enreg_user')");
     }
     // We update the number of users in the session
-    $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_user ".
-           " WHERE id_session='$id_session' ".
+    $sql = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_user ".
+           " WHERE session_id='$id_session' ".
            " AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ";
     $rs = Database::query($sql);
     list($nbr_users) = Database::fetch_array($rs);

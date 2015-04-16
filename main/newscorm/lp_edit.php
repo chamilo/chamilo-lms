@@ -63,22 +63,6 @@ $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ar
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
-// Metadata
-//$clean_scorm_id=Security::remove_XSS($_GET['lp_id']);
-//$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Scorm.'.$clean_scorm_id).'">'.get_lang('AddMetadata').'</a>';
-//$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
-
-// Encoding
-/* // Chamilo 1.8.8: Deprecated code.
-$encoding_select = $form->addElement('select', 'lp_encoding', get_lang('Charset'));
-$encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
-foreach ($encodings as $encoding) {
-    if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
-          $s_selected_encoding = $encoding;
-      }
-      $encoding_select->addOption($encoding,$encoding);
-}
-*/
 $form->addElement('hidden', 'lp_encoding');
 
 // Origin
@@ -204,8 +188,7 @@ if ($enableLpExtraFields) {
     $extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
 }
 
-//Submit button
-//$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+// Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
 
 // Hidden fields

@@ -64,7 +64,7 @@ if (Gradebook::is_active()) {
     $defaults['category_id'] = '';
 }
 
-if ($homework['expires_on'] != '0000-00-00 00:00:00') {
+if (!empty($homework['expires_on'])) {
     $homework['expires_on'] = api_get_local_time($homework['expires_on']);
     $there_is_a_expire_date = true;
     $defaults['enableExpiryDate'] = true;
@@ -73,7 +73,7 @@ if ($homework['expires_on'] != '0000-00-00 00:00:00') {
     $there_is_a_expire_date = false;
 }
 
-if ($homework['ends_on'] != '0000-00-00 00:00:00') {
+if (!empty($homework['ends_on'])) {
     $homework['ends_on'] = api_get_local_time($homework['ends_on']);
     $there_is_a_end_date = true;
     $defaults['enableEndDate'] = true;
@@ -108,6 +108,7 @@ if ($form->validate()) {
     }
 
     if ($editCheck) {
+        var_dump($params);exit;
         updateWork($workId, $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);

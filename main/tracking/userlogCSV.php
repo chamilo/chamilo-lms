@@ -22,14 +22,6 @@ $user_id = api_get_user_id();
 $course_id = api_get_course_id();
 $courseId = api_get_course_int_id();
 
-/*
-$role_id = RolesRights::get_local_user_role_id($user_id, $course_id);
-$location_id = RolesRights::get_course_tool_location_id($course_id, TOOL_TRACKING);
-$is_allowed = RolesRights::is_allowed_which_rights($role_id, $location_id);
-
-//block users without view right
-RolesRights::protect_location($role_id, $location_id);
-*/
 //YW Hack security to quick fix RolesRights bug
 $is_allowed = true;
 
@@ -75,11 +67,11 @@ $now = api_get_utc_datetime();
 $sql = "SELECT 1
         FROM $tbl_session_course_user AS session_course_user
         INNER JOIN $tbl_session AS session
-            ON session_course_user.id_session = session.id
+            ON session_course_user.session_id = session.id
             AND ((date_start <= '$now'
             AND date_end >= '$now')
             OR (date_start='0000-00-00' AND date_end='0000-00-00'))
-        WHERE id_session='" . $_SESSION['id_session'] . "' AND course_code='$_cid'";
+        WHERE session_id='" . $_SESSION['id_session'] . "' AND course_code='$_cid'";
 //echo $sql;
 $result = Database::query($sql);
 if (!Database::num_rows($result)) {
@@ -123,8 +115,8 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
         if ($is_allowedToTrackEverybodyInCourse) {
             // if user can track everybody : list user of course
             $sql = "SELECT count(user_id)
-                        FROM $TABLECOURSUSER
-                        WHERE course_code = '$_cid' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                    FROM $TABLECOURSUSER
+                    WHERE c_id = '$courseId' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
 
         } else {
             // if user can only track one group : list users of this group
@@ -163,7 +155,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             $sql = "SELECT u.user_id, u.firstname,u.lastname
                 FROM $TABLECOURSUSER cu , $TABLEUSER u
                 WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                AND cu.course_code = '$_cid'
+                AND cu.c_id = '$courseId'
                 LIMIT $offset,$step";
         } else {
             // list of users of this group

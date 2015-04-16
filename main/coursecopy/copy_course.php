@@ -86,14 +86,14 @@ if (Security::check_token('post') && (
     $course_info = api_get_course_info();
     $sql = 'SELECT *
             FROM '.$table_c.' c, '.$table_cu.' cu
-            WHERE cu.course_code = c.code';
+            WHERE cu.c_id = c.id';
     if (!api_is_platform_admin()) {
         $sql .= ' AND cu.status=1 ';
     }
     $sql .= ' AND
         target_course_code IS NULL AND
         cu.user_id = '.$user_info['user_id'].' AND
-        c.code != '."'".$course_info['sysCode']."'".'
+        c.c_id != '."'".$course_info['id']."'".'
     ORDER BY title ASC';
     $res = Database::query($sql);
     if (Database::num_rows($res) == 0) {
@@ -101,7 +101,8 @@ if (Security::check_token('post') && (
     } else {
         $options = array();
         while ($obj = Database::fetch_object($res)) {
-            $options[$obj->code] = $obj->title;
+            $courseInfo = api_get_course_info_by_id($obj->c_id);
+            $options[$courseInfo['code']] = $obj->title;
         }
 
         $form = new FormValidator('copy_course', 'post', 'copy_course.php?'.api_get_cidreq());

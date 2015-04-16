@@ -4,9 +4,6 @@
  * Shows who is online in a specific session
  * @package chamilo.main
  */
-/**
- * Initialization
- */
 
 include_once './main/inc/global.inc.php';
 api_block_anonymous_users();
@@ -47,27 +44,28 @@ Display::display_header(get_lang('UserOnlineListSession'));
 	$session_is_coach = array();
 	if (isset($_user['user_id']) && $_user['user_id'] != '') {
 		$_user['user_id'] = intval($_user['user_id']);
-		$result = Database::query("SELECT DISTINCT id,
-										name,
-										date_start,
-										date_end
-									FROM $tbl_session as session
-									INNER JOIN $tbl_session_course_user as srcru
-										ON srcru.id_user = ".$_user['user_id']." AND srcru.status=2
-										AND session.id = srcru.id_session
-									ORDER BY date_start, date_end, name");
+		$sql = "SELECT DISTINCT session.id,
+					name,
+					date_start,
+					date_end
+				FROM $tbl_session as session
+				INNER JOIN $tbl_session_course_user as srcru
+					ON srcru.user_id = ".$_user['user_id']." AND srcru.status=2
+					AND session.id = srcru.session_id
+				ORDER BY date_start, date_end, name";
+		$result = Database::query($sql);
 
 		while ($session = Database:: fetch_array($result)) {
 			$session_is_coach[$session['id']] = $session;
 		}
 
-		$sql = "SELECT DISTINCT id,
-										name,
-										date_start,
-										date_end
-								FROM $tbl_session as session
-								WHERE session.id_coach = ".$_user['user_id']."
-								ORDER BY date_start, date_end, name";
+		$sql = "SELECT DISTINCT session.id,
+					name,
+					date_start,
+					date_end
+				FROM $tbl_session as session
+				WHERE session.id_coach = ".$_user['user_id']."
+				ORDER BY date_start, date_end, name";
         $result = Database::query($sql);
 		while ($session = Database:: fetch_array($result)) {
 			$session_is_coach[$session['id']] = $session;
@@ -144,9 +142,4 @@ Display::display_header(get_lang('UserOnlineListSession'));
 </table>
 <?php
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display::display_footer();

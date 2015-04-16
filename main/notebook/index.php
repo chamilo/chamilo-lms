@@ -5,9 +5,6 @@
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration
  */
-/**
- * Code
- */
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';

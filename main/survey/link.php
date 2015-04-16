@@ -8,14 +8,14 @@ $survey_id = isset($_REQUEST['i']) ? intval($_REQUEST['i']) : null;
 if (empty($survey_id)) {
     api_not_allowed(true);
 }
-if (!survey_manager::survey_generation_hash_available()) {
+if (!SurveyManager::survey_generation_hash_available()) {
     api_not_allowed(true);
 }
 $course_info  = api_get_course_info_by_id($_REQUEST['c']);
 
-$hash_is_valid = survey_manager::validate_survey_hash($survey_id, $_REQUEST['c'], $_REQUEST['s'], $_REQUEST['g'], $_REQUEST['h']);
+$hash_is_valid = SurveyManager::validate_survey_hash($survey_id, $_REQUEST['c'], $_REQUEST['s'], $_REQUEST['g'], $_REQUEST['h']);
 if ($hash_is_valid && $course_info) {
-    $survey_data = survey_manager::get_survey($survey_id, null, $course_info['code']);
+    $survey_data = SurveyManager::get_survey($survey_id, null, $course_info['code']);
 
     $invitation_code = api_get_unique_id();
 

@@ -14,25 +14,25 @@ class TestSurvey extends UnitTestCase {
 	$this->UnitTestCase('');
 
 	}
-	public function setUp() {				
-		$this->smanager = new survey_manager();
+	public function setUp() {
+		$this->smanager = new SurveyManager();
 		$this->squestion = new question();
 		$this->syesno = new yesno();
 		$this->smultiplechoice = new multiplechoice();
 		$this->spersonality = new personality();
-		$this->smultipleresponse = new multipleresponse();		
+		$this->smultipleresponse = new multipleresponse();
 	}
 
-	public function tearDown() {		
+	public function tearDown() {
 		$this-> smanager = null;
 		$this-> squestion = null;
 		$this-> syesno = null;
 		$this->smultiplechoice = null;
 		$this->personality = null;
-		$this->multipleresponse = null;							
+		$this->multipleresponse = null;
 	}
-	
-	
+
+
 	public function testStoreSurvey() {
 		global $_user,$cidReq;
 		$values = array(
@@ -45,20 +45,20 @@ class TestSurvey extends UnitTestCase {
 						  'survey_introduction' => '',
 						  'survey_thanks' =>  '',
 						  'survey_type' =>  '0',
-						  'parent_id' =>  '0', 
-						  'submit_survey' => ''		
-					   );	
+						  'parent_id' =>  '0',
+						  'submit_survey' => ''
+					   );
 		$res = $this->smanager->store_survey($values);
 		$this->assertTrue($res);
-		$this->assertTrue(is_array($res));				
+		$this->assertTrue(is_array($res));
 	}
 
-	
-	public function testGetSurvey() {			   
-		$course_code = 'COURSETEST';			   											 	
+
+	public function testGetSurvey() {
+		$course_code = 'COURSETEST';
 		$survey_id=1;
 		$res3 = $this->smanager->get_survey($survey_id,0,$course_code);
-		$this->assertTrue(is_array($res3));		
+		$this->assertTrue(is_array($res3));
 	}
 
 	public function testStoreSharedSurvey() {
@@ -73,9 +73,9 @@ class TestSurvey extends UnitTestCase {
 						  'survey_introduction' => 'introduction',
 						  'survey_thanks' =>  '',
 						  'survey_type' =>  '1',
-						  'parent_id' =>  '1', 
-						  'submit_survey' => ''		
-					   );	
+						  'parent_id' =>  '1',
+						  'submit_survey' => ''
+					   );
 		$res = $this->smanager->store_shared_survey($values);
 		$this->assertTrue($res);
 		//var_dump($res);
@@ -98,19 +98,19 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->squestion->html);
 		//var_dump($res);
 	}
-	
+
 	public function testYesNoCreateForm() {
 		$form_content=array();
 		$res1 = $this->syesno->create_form($form_content);
 		$this->assertNull($res1);
 	}
 
-	public function testMultipleChoiceCreateForm() {		
+	public function testMultipleChoiceCreateForm() {
 		$form_content=array();
 		$res2 = $this->smultiplechoice->create_form($form_content);
-		$this->assertNull($res2);		
+		$this->assertNull($res2);
 	}
-	
+
 
 	public function testPersonalityCreateForm() {
 		$form_content=array();
@@ -125,7 +125,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->smultipleresponse->html);
 		$this->assertTrue($this->smultipleresponse->html);
 	}
-	
+
 	public function testQuestionRenderQuestion() {
 		ob_start();
 		$form_content=array();
@@ -134,7 +134,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 	}
-	
+
 	public function testMultipleChoiseRenderQuestion() {
 		ob_start();
 		$form_content=array();
@@ -143,7 +143,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNull($this->smultiplechoice->html);
 		ob_end_clean();
 	}
-	
+
 	public function testYesNoRenderQuestion() {
 		ob_start();
 		$form_content=array();
@@ -171,7 +171,7 @@ class TestSurvey extends UnitTestCase {
 	}
 
 	//save the survey
-	 
+
 	 public function testCopySurvey() {
 		$parent_survey = Database::escape_string($parent_survey);
 		$new_survey_id = '1';
@@ -204,7 +204,7 @@ class TestSurvey extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-	
+
 	public function testSaveQuestion() {
 		$form_content=array();
 		$res = $this->smanager->save_question($form_content);
@@ -237,13 +237,13 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNull($res);
 		//var_dump($res);
 	}
- 
+
 	//get the survey
 
 	public function testGetPeopleWhoFilledSurvey() {
 		$survey_id=1;
 		$all_user_info=false;
-		$survey_data = survey_manager::get_survey($survey_id);
+		$survey_data = SurveyManager::get_survey($survey_id);
 		$result = $this->smanager->get_people_who_filled_survey($survey_id,false);
 		$this->assertTrue(is_array($result));
 		//var_dump($result);
@@ -263,9 +263,9 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNull($res);
 		//var_dump($res);
 	}
-	
+
 	//move the survey
- 
+
 	public function testMoveSurveyQuestion() {
 		$direction='moveup';
 		$survey_question_id=1;
@@ -276,23 +276,23 @@ class TestSurvey extends UnitTestCase {
 	}
 
 	//epmty the survey
-	
+
 	public function testEmpty_survey() {
 		$survey_id=null;
 		$res = $this->smanager->empty_survey($survey_id);
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	//functions delete
-	 
+
 	 public function testHandleAction() {
 		$form_content = array('');
 		$res = $this->squestion->handle_action($form_content);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	 
+
 		public function testDeleteAllSurveyQuestions() {
 		$survey_id=1;
 		$shared=false;
@@ -310,7 +310,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res);
 	}
-	
+
 	public function testDeleteSharedSurveyQuestion() {
 		$survey_id=1;
 		$question_id=01;
@@ -318,7 +318,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 		public function testDeleteSurvey() {
 		$survey_id=1;
 		$shared=false;
@@ -327,7 +327,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testDeleteAllSurveyQuestionsOptions() {
 		$survey_id=1;
 		$shared=false;
@@ -344,7 +344,7 @@ class TestSurvey extends UnitTestCase {
 		if(is_bool($result))
 		$this->assertTrue(is_bool($result));
 		$this->assertTrue($result === true || $result===false);
-		$this->assertTrue($result);	
+		$this->assertTrue($result);
 		//var_dump($result);
 	}
 
@@ -356,9 +356,9 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($res === true || $res === false);
 		//var_dump($res);
 	}
-	
+
 	//Contest the answer
-	 
+
 	public function testUpdateSurveyAnswered() {
 		global $user;
 		$survey_code = 'Survey1';
@@ -373,10 +373,10 @@ class TestSurvey extends UnitTestCase {
  * This functon only is added to the end of the test and the end of the files in the all test.
  */
 /*	public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);				
+		global $cidReq;
+		$resu = CourseManager::delete_course($cidReq);
 	}*/
- 
+
 }
 
 ?>

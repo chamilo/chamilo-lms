@@ -378,7 +378,7 @@ function return_menu() {
     } elseif (!empty($_SESSION['_user']['language'])) {
         $lang = $_SESSION['_user']['language'];
     } else {
-        $lang = get_setting('platformLanguage');
+        $lang = api_get_setting('platformLanguage');
     }
 
     //Preparing home folder for multiple urls

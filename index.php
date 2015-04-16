@@ -13,7 +13,6 @@ define('CHAMILO_HOMEPAGE', true);
 $cidReset = true;
 
 require_once 'main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'userportal.lib.php';
 require_once 'main/chat/chat_functions.lib.php';
 
 // The section (for the tabs).
@@ -101,11 +100,6 @@ if (!empty($_POST['submitAuth'])) {
         Database::free_result($result_last_login);
 
         //Event::event_login();
-        if (api_is_platform_admin()) {
-            // decode all open event informations and fill the track_c_* tables
-            include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
-            decodeOpenInfos();
-        }
     }
     // End login -- if ($_POST['submitAuth'])
 } else {

@@ -56,7 +56,11 @@ if (isset($current_thread['thread_id'])) {
             $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
             // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
             // The course admin him/herself can do this off course always
-            if ( GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
+            if (
+                GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) ||
+                ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) ||
+                (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
+            ) {
                 if (api_is_allowed_to_session_edit(false,true)) {
                     if ($locked == false) {
                         echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$row['post_id']."&amp;origin=".$origin."&amp;edit=edition&amp;id_attach=".$id_attach."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a>";
@@ -65,7 +69,7 @@ if (isset($current_thread['thread_id'])) {
             }
 
             if ($origin != 'learnpath') {
-                if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
+                if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) || api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
                     if ($locked == false) {
                         echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&amp;origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'),array(),  ICON_SIZE_SMALL)."</a>";
                     }
@@ -79,7 +83,7 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
-            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_id());
+            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_int_id());
             $current_qualify_thread = show_qualify('1', $row['poster_id'],$_GET['thread']);
 
             if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
@@ -94,8 +98,10 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
-            if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
-                if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
+            if (($current_forum_category && $current_forum_category['locked']==0) &&
+                $current_forum['locked']==0 && $current_thread['locked']==0 || api_is_allowed_to_edit(false,true)
+            ) {
+                if ($_user['user_id'] || ($current_forum['allow_anonymous']==1 && !$_user['user_id'])) {
                     if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
                         echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=replymessage&amp;origin='.$origin.'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>";
                         echo '<a href="reply.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;post='.$row['post_id'].'&amp;action=quote&amp;origin='.$origin.'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>";
@@ -114,12 +120,12 @@ if (isset($current_thread['thread_id'])) {
             }
             echo "</td>";
             // prepare the notification icon
-            if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
+            if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) && !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
                 $post_image=Display::return_icon('forumpostnew.gif');
             } else {
                 $post_image=Display::return_icon('forumpost.gif');
             }
-            if ($row['post_notification']=='1' AND $row['poster_id']==$_user['user_id']) {
+            if ($row['post_notification']=='1' && $row['poster_id']==$_user['user_id']) {
                 $post_image.=Display::return_icon('forumnotification.gif',get_lang('YouWillBeNotified'));
             }
             // The post title
@@ -151,7 +157,9 @@ if (isset($current_thread['thread_id'])) {
                     echo Display::return_icon('attachment.gif',get_lang('Attachment'));
                     echo '<a href="download.php?file='.$realname.'"> '.$user_filename.' </a>';
 
-                    if (($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
+                    if (($current_forum['allow_edit']==1 && $row['user_id']==$_user['user_id']) ||
+                        (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))
+                    )	{
                         echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment['id'].'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a><br />';
                     }
                     echo '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';

@@ -26,7 +26,7 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 
         $toolName = Display::return_icon(
-                survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
+                SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
                 get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
                 array('align' => 'middle', 'height' => '22px')
         ).' ';
@@ -255,7 +255,7 @@ class survey_question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = survey_manager::save_question(
+            $message = SurveyManager::save_question(
                 $surveyData,
                 $formData
             );

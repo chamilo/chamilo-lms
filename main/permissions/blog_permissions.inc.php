@@ -22,7 +22,9 @@ $course_id = api_get_course_int_id();
 // Remove the blog creater because he has all the rights automatically
 // and we want to keep it that way.
 $tbl_course_rel_user = $table=Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$sql = "SELECT user_id FROM $tbl_course_rel_user WHERE status = '1' AND course_code = '".$_SESSION['_cid']."'";
+$sql = "SELECT user_id
+		FROM $tbl_course_rel_user
+		WHERE status = '1' AND c_id = '".api_get_course_int_id()."'";
 $result = Database::query($sql);
 while ($user = Database::fetch_assoc($result)) {
 	unset($blog_users[$user['user_id']]);

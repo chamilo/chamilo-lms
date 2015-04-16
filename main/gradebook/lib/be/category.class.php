@@ -775,13 +775,14 @@ class Category implements GradebookItem
         if (api_is_allowed_to_edit()) {
             $parent = Category::load($parent);
             $code = $parent[0]->get_course_code();
+            $courseInfo = api_get_course_info($code);
+            $courseId = $courseInfo['real_id'];
             if (isset($code) && $code != '0') {
                 $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-                $sql .= ' AND user_id IN ('
-                    .' SELECT user_id FROM '.$main_course_user_table
-                    ." WHERE course_code = '".Database::escape_string($code)."'"
-                    .' AND status = '.COURSEMANAGER
-                    .')';
+                $sql .= ' AND user_id IN (
+                            SELECT user_id FROM '.$main_course_user_table.'
+                            WHERE c_id = '.$courseId.' AND status = '.COURSEMANAGER.'
+                        )';
             } else {
                 $sql .= ' AND user_id = '.api_get_user_id();
             }
@@ -994,11 +995,11 @@ class Category implements GradebookItem
     public function get_root_categories_for_student($stud_id, $course_code = null, $session_id = null)
     {
         $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'SELECT *'
-            .' FROM '.$tbl_grade_categories
-            .' WHERE parent_id = 0';
+        $sql = "SELECT * FROM $tbl_grade_categories WHERE parent_id = 0";
+
         if (!api_is_allowed_to_edit()) {
             $sql .= ' AND visible = 1';
             //proceed with checks on optional parameters course & session
@@ -1008,20 +1009,20 @@ class Category implements GradebookItem
                 // session, we don't check his registration to these, but this
                 // could be an improvement
                 if (!empty($session_id)) {
-                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."'"
-                        ." AND session_id = ".(int)$session_id;
+                    $sql .= " AND course_code = '".Database::escape_string($course_code)."' AND session_id = ".(int)$session_id;
                 } else {
-                    $sql .= " AND course_code  = '".Database::escape_string($course_code)."' AND
-                              session_id is null OR session_id=0";
+                    $sql .= " AND course_code = '".Database::escape_string($course_code)."' AND session_id is null OR session_id=0";
                 }
             } else {
                 //no optional parameter, proceed as usual
-                $sql .= ' AND course_code in'
-                    .' (SELECT course_code'
-                    .' FROM '.$main_course_user_table
-                    .' WHERE user_id = '.intval($stud_id)
-                    .' AND status = '.STUDENT
-                    .')';
+                $sql .= ' AND course_code in
+                     (
+                        SELECT c.code
+                        FROM '.$main_course_user_table.' cu INNER JOIN '.$courseTable.' c
+                        ON (cu.c_id = c.id)
+                        WHERE cu.user_id = '.intval($stud_id).'
+                        AND cu.status = '.STUDENT.'
+                    )';
             }
         } elseif (api_is_allowed_to_edit() && !api_is_platform_admin()) {
             //proceed with checks on optional parameters course & session
@@ -1037,12 +1038,15 @@ class Category implements GradebookItem
                     $sql .="AND session_id IS NULL OR session_id=0";
                 }
             } else {
-                $sql .= ' AND course_code in'
-                    .' (SELECT course_code'
-                    .' FROM '.$main_course_user_table
-                    .' WHERE user_id = '.api_get_user_id()
-                    .' AND status = '.COURSEMANAGER
-                    .')';
+                $sql .= ' AND course_code IN
+                     (
+                        SELECT c.code
+                        FROM '.$main_course_user_table.' cu INNER JOIN '.$courseTable.' c
+                        ON (cu.c_id = c.id)
+                        WHERE
+                            cu.user_id = '.api_get_user_id().' AND
+                            cu.status = '.COURSEMANAGER.'
+                    )';
             }
         }elseif (api_is_platform_admin()) {
             if (isset($session_id) && $session_id!=0) {
@@ -1068,29 +1072,32 @@ class Category implements GradebookItem
      * @param string course code (optional)
      * @param int session id (optional)
      */
-    public function get_root_categories_for_teacher ($user_id, $course_code = null, $session_id = null)
+    public function get_root_categories_for_teacher($user_id, $course_code = null, $session_id = null)
     {
         if ($user_id == null) {
             return Category::load(null,null,$course_code,0,null,$session_id);
         }
 
+        $courseTable = Database :: get_main_table(TABLE_MAIN_COURSE);
         $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'SELECT *'
-            .' FROM '.$tbl_grade_categories
-            .' WHERE parent_id = 0';
+        $sql = 'SELECT * FROM '.$tbl_grade_categories.'
+                WHERE parent_id = 0';
         if (!empty($course_code)) {
             $sql .= " AND course_code = '".Database::escape_string($course_code)."' ";
             if (!empty($session_id)) {
                 $sql .= " AND session_id = ".(int)$session_id;
             }
         } else {
-            $sql .= ' AND course_code in'
-                .' (SELECT course_code'
-                .' FROM '.$main_course_user_table
-                .' WHERE user_id = '.intval($user_id)
-                .')';
+            $sql .= ' AND course_code in
+                 (
+                    SELECT c.code
+                    FROM '.$main_course_user_table.' cu
+                    INNER JOIN '.$courseTable.' c
+                    ON (cu.c_id = c.id)
+                    WHERE user_id = '.intval($user_id).'
+                )';
         }
         $result = Database::query($sql);
         $cats = Category::create_category_objects_from_sql_result($result);
@@ -1099,6 +1106,7 @@ class Category implements GradebookItem
             $indcats = Category::load(null,$user_id,$course_code,0,null,$session_id);
             $cats = array_merge($cats, $indcats);
         }
+
         return $cats;
     }
 
@@ -1285,17 +1293,20 @@ class Category implements GradebookItem
         $tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
-            .' WHERE cc.code = cu.course_code'
+        $sql = 'SELECT DISTINCT(code), title
+                FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
+            .' WHERE cc.id = cu.c_id '
             .' AND cu.status = '.COURSEMANAGER;
         if (!api_is_platform_admin()) {
             $sql .= ' AND cu.user_id = '.$user_id;
         }
-        $sql .= ' AND cc.code NOT IN'
-            .' (SELECT course_code FROM '.$tbl_grade_categories
-            .' WHERE parent_id = 0'
-//                .' AND user_id = '.$user_id
-            .' AND course_code IS NOT null)';
+        $sql .= ' AND cc.code NOT IN
+             (
+                SELECT course_code FROM '.$tbl_grade_categories.'
+                WHERE
+                    parent_id = 0 AND
+                    course_code IS NOT NULL
+                )';
         $result = Database::query($sql);
 
         $cats=array();
@@ -1314,16 +1325,16 @@ class Category implements GradebookItem
     {
         $tbl_main_courses = Database :: get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT(code), title FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu'
-            .' WHERE cc.code = cu.course_code'
-            .' AND cu.status = '.COURSEMANAGER;
+        $sql = 'SELECT DISTINCT(code), title
+                FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
+                WHERE cc.id = cu.c_id AND cu.status = '.COURSEMANAGER;
         if (!api_is_platform_admin()) {
             $sql .= ' AND cu.user_id = '.intval($user_id);
         }
 
         $result = Database::query($sql);
         $cats = array();
-        while ($data=Database::fetch_array($result)) {
+        while ($data = Database::fetch_array($result)) {
             $cats[] = array ($data['code'], $data['title']);
         }
 

@@ -17,7 +17,7 @@
  * @return void
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 function LoginCheck($uid) {
 	global $_course, $_configuration;
@@ -38,9 +38,11 @@ function LoginCheck($uid) {
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
 		if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, c_id, session_id, access_url_id)
+            		  VALUES ($uid,$uid,'$login_date','$user_ip', '".$_course['real_id']."' , '$session_id' , '$access_url_id' )";
 		} else {
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$user_ip', '$session_id', '$access_url_id')";
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,user_ip, session_id, access_url_id)
+                      VALUES ($uid,$uid,'$login_date','$user_ip', '$session_id', '$access_url_id')";
 		}
 		@Database::query($query);
 	}
@@ -100,7 +102,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     if (empty($user_id)) {
-        $user_id = intval($_GET['uid']);
+        $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
     }
 
     //Changing global chat status to offline
@@ -110,16 +112,21 @@ function online_logout($user_id = null, $logout_redirect = false) {
     }
 
     // selecting the last login of the user
-    $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id=$user_id ORDER BY login_date DESC LIMIT 0,1";
-    $q_last_connection=Database::query($sql_last_connection);
+    $sql = "SELECT login_id, login_date
+    		FROM $tbl_track_login
+    		WHERE login_user_id = $user_id
+    		ORDER BY login_date DESC
+    		LIMIT 0,1";
+    $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection)>0) {
         $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
     }
 
     if (!isset($_SESSION['login_as'])) {
         $current_date = api_get_utc_datetime();
-        $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
-        Database::query($s_sql_update_logout_date);
+        $sql = "UPDATE $tbl_track_login SET logout_date='".$current_date."'
+        		WHERE login_id='$i_id_last_connection'";
+        Database::query($sql);
     }
     LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
 
@@ -310,13 +317,13 @@ function who_is_online_count($time_limit = null, $friends = false)
         $time_limit = intval($time_limit);
     }
 	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $table_user			= Database::get_main_table(TABLE_MAIN_USER);
+	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 	$query = '';
 
-    $online_time 		= time() - $time_limit*60;
-	$current_date		= api_get_utc_datetime($online_time);
+	$online_time = time() - $time_limit * 60;
+	$current_date = api_get_utc_datetime($online_time);
 
 	if ($friends) {
 		// 	who friends from social network is online

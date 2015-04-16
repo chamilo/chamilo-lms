@@ -34,6 +34,7 @@ $interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('Cours
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $course_code = $courseInfo['code'];
+$courseId = $courseInfo['real_id'];
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -43,7 +44,7 @@ $sql = "SELECT user.user_id,lastname,firstname
         WHERE
             course_user.status='1' AND
             course_user.user_id=user.user_id AND
-            course_user.course_code='" . $course_code . "'" .
+            course_user.c_id ='" . $courseId . "'" .
         $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
@@ -122,11 +123,11 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     $form->addElement('checkbox', 'add_teachers_to_sessions_courses', null, get_lang('TeachersWillBeAddedAsCoachInAllCourseSessions'));
 }
 
-$coursesInSession = SessionManager::get_session_by_course($courseInfo['code']);
+$coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($coursesInSession)) {
     foreach ($coursesInSession as $session) {
         $sessionId = $session['id'];
-        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['code']);
+        $coaches = SessionManager::getCoachesByCourseSession($sessionId, $courseInfo['real_id']);
         $teachers = $allTeachers;
 
         $sessionTeachers = array();
@@ -296,8 +297,6 @@ if ($form->validate()) {
         $warn = substr($warn, 0, -1);
     }
 
-    $tutor_id = isset($course['tutor_name']) ? $course['tutor_name'] : null;
-    $tutor_name = isset($platform_teachers[$tutor_id]) ? $platform_teachers[$tutor_id] : null;
     $teachers = $course['course_teachers'];
 
     $title = $course['title'];
@@ -315,10 +314,10 @@ if ($form->validate()) {
         $department_url = 'http://' . $department_url;
     }
 
-    $sql = "UPDATE $course_table SET course_language='" . Database::escape_string($course_language) . "',
+    $sql = "UPDATE $course_table SET
+                course_language='" . Database::escape_string($course_language) . "',
                 title='" . Database::escape_string($title) . "',
                 category_code='" . Database::escape_string($category_code) . "',
-                tutor_name='" . Database::escape_string($tutor_name) . "',
                 visual_code='" . Database::escape_string($visual_code) . "',
                 department_name='" . Database::escape_string($department_name) . "',
                 department_url='" . Database::escape_string($department_url) . "',
@@ -343,7 +342,7 @@ if ($form->validate()) {
         if (!empty($sessionCoaches)) {
             foreach ($sessionCoaches as $sessionId => $teacherInfo) {
                 $coachesToSubscribe = $teacherInfo['coaches_by_session'];
-                SessionManager::updateCoaches($sessionId, $course['code'], $coachesToSubscribe, true);
+                SessionManager::updateCoaches($sessionId, $courseId, $coachesToSubscribe, true);
             }
         }
 
@@ -360,7 +359,7 @@ if ($form->validate()) {
                 if (!empty($coachesToSubscribe)) {
                     SessionManager::updateCoaches(
                         $sessionId,
-                        $course['code'],
+                        $courseId,
                         $coachesToSubscribe,
                         true
                     );
@@ -369,18 +368,20 @@ if ($form->validate()) {
         }
     }
 
+    // No need to register me as a teacher.
+    /*
     $sql = "INSERT IGNORE INTO " . $course_user_table . " SET
-                course_code = '" . Database::escape_string($course_code) . "',
-                user_id = '" . $tutor_id . "',
-                status = '1',
-                role = '',
-                tutor_id='0',
-                sort='0',
-                user_course_cat='0'";
+            c_id = " . $courseInfo['real_id'] . ",
+            user_id = '" . $tutor_id . "',
+            status = '1',
+            is_tutor ='0',
+            sort = '0',
+            user_course_cat='0'";
     Database::query($sql);
-
+    */
     if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
-        $sql = "UPDATE $course_table SET add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
+        $sql = "UPDATE $course_table SET
+                add_teachers_to_sessions_courses = '$addTeacherToSessionCourses'
                 WHERE id = " . $courseInfo['real_id'];
         Database::query($sql);
     }

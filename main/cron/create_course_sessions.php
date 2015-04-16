@@ -62,7 +62,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
             0,
             SESSION_INVISIBLE
         );
-        SessionManager::add_courses_to_session($sessionId, array($course['code']));
+        SessionManager::add_courses_to_session($sessionId, array($course['id']));
         echo "Session '".$sessionName."' created.\nCourse '".$course['title']."' added.\n\n";
     }
 }

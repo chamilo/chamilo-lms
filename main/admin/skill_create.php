@@ -22,8 +22,25 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 /* Process data */
+$skillParentId = isset($_GET['parent']) ? intval($_GET['parent']) : 0;
+
+$formDefaultValues = [];
+
 $objSkill = new Skill();
 $objGradebook = new Gradebook();
+
+if ($skillParentId > 0) {
+    $skillParentInfo = $objSkill->get_skill_info($skillParentId);
+
+    $formDefaultValues = [
+        'parent_id' => $skillParentInfo['id'],
+        'gradebook_id' => []
+    ];
+
+    foreach ($skillParentInfo['gradebooks'] as $gradebook) {
+        $formDefaultValues['gradebook_id'][] = intval($gradebook['id']);
+    }
+}
 
 $allSkills = $objSkill->get_all();
 $allGradebooks = $objGradebook->find('all');
@@ -54,6 +71,8 @@ $createForm->addSelect(
 $createForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
 $createForm->addButtonSave(get_lang('Save'));
 $createForm->addHidden('id', null);
+
+$createForm->setDefaults($formDefaultValues);
 
 if ($createForm->validate()) {
     $created = $objSkill->add($createForm->getSubmitValues());

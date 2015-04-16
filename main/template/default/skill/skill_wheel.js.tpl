@@ -2,6 +2,59 @@
 {% include template ~ "/layout/topbar.tpl" %}
 <script>
 
+var SkillWheel = {
+    getSkillInfo: function(skillId) {
+        return $.getJSON(
+            '{{ url }}',
+            {
+                a: 'get_skill_info',
+                id: parseInt(skillId)
+            }
+        );
+    },
+    showFormSkill: function(skillId) {
+        skillId = parseInt(skillId);
+
+        var formSkill = $('form[name="form"]');
+
+        var getSkillInfo = SkillWheel.getSkillInfo(skillId);
+
+        $.when(getSkillInfo).done(function(skillInfo) {
+            var getSkillParentInfo = SkillWheel.getSkillInfo(skillInfo.extra.parent_id);
+
+            $.when(getSkillParentInfo).done(function(skillParentInfo) {
+                formSkill.find('p#parent').text(skillParentInfo.name);
+            });
+
+            formSkill.find('p#name').text(skillInfo.name);
+
+            if (skillInfo.short_code.length > 0) {
+                formSkill.find('p#short_code').text(skillInfo.short_code).parent().parent().show();
+            } else {
+                formSkill.find('p#short_code').parent().parent().hide();
+            }
+
+            if (skillInfo.description.length > 0) {
+                formSkill.find('p#description').text(skillInfo.description).parent().parent().show();
+            } else {
+                formSkill.find('p#description').parent().parent().hide();
+            }
+
+            if (skillInfo.gradebooks.length > 0) {
+                formSkill.find('ul#gradebook').empty().parent().parent().show();
+
+                $.each(skillInfo.gradebooks, function(index, gradebook) {
+                    $('<li>').text(gradebook.name).appendTo(formSkill.find('ul#gradebook'));
+                });
+            } else {
+                formSkill.find('ul#gradebook').parent().parent().hide();
+            }
+
+            $('#frm-skill').modal('show');
+        });
+    }
+};
+
 /* Skill wheel settings */
 var debug = true;
 var url = '{{ url }}';
@@ -455,7 +508,11 @@ function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis)
             //alert('Middle mouse button pressed');
             break;
         case 3:
-            open_popup(d.id);
+            if (typeof d.id === 'undefined') {
+                break;
+            }
+
+            SkillWheel.showFormSkill(d.id);
             //alert('Right mouse button pressed');
             break;
         default:

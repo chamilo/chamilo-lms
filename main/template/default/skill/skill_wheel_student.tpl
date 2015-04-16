@@ -110,7 +110,6 @@ $(document).ready(function() {
     });
 
     /* change background color */
-    $(document).ready(function () {
         $("#celestial").click(function () {
             $("#page-back").css("background","#A9E2F3");
         });
@@ -126,16 +125,8 @@ $(document).ready(function() {
         $("#light-yellow").click(function () {
             $("#page-back").css("background","#F7F8E0");
         });
-    });
 
     /* Wheel skill popup form */
-
-    /* Close button in gradebook select */
-    $("#gradebook_holder").on("click", "a.closebutton", function() {
-        gradebook_id = $(this).attr('rel');
-        skill_id = $('input[name="id"]').attr('value');
-        delete_gradebook_from_skill(skill_id, gradebook_id);
-    });
 
     $("#skill_id").fcbkcomplete({
         json_url: "{{ url }}&a=find_skills",
@@ -150,40 +141,6 @@ $(document).ready(function() {
         newel: true
     });
 
-    $("#parent_id").fcbkcomplete({
-        json_url: "{{ url }}&a=find_skills",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"{{ 'StartToType' | get_lang }}",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_skills_edit_form",
-        filter_selected: true,
-        newel: true
-    });
-
-    $("#gradebook_id").fcbkcomplete({
-        json_url: "{{ url }}&a=find_gradebooks",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"{{ 'StartToType' | get_lang }}",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_gradebook",
-        filter_selected: true,
-        newel: true
-    });
-
-    //Open dialog
-    $("#dialog-form").dialog({
-        autoOpen: false,
-        modal   : true,
-        width   : 900,
-        height  : 550
-    });
-
     //Open dialog
     $("#dialog-course-info").dialog({
         autoOpen: false,
@@ -193,81 +150,6 @@ $(document).ready(function() {
     });
 
     load_nodes(0, main_depth);
-
-    function open_popup(skill_id, parent_id) {
-        //Cleaning selected
-        $("#gradebook_id").find('option').remove();
-        $("#parent_id").find('option').remove();
-
-        $("#gradebook_holder").find('li').remove();
-        $("#skill_edit_holder").find('li').remove();
-
-        var skill = false;
-        if (skill_id) {
-            skill = get_skill_info(skill_id);
-        }
-
-        var parent = false;
-        if (parent_id) {
-            parent = get_skill_info(parent_id);
-        }
-
-        if (skill) {
-            var parent_info = get_skill_info(skill.extra.parent_id);
-
-            $('input[name="id"]').attr('value',   skill.id);
-            $("#name").attr('value', skill.name);
-            $("#short_code").attr('value', skill.short_code);
-            $("#description").attr('value', skill.description);
-
-            //Filling parent_id
-            $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');
-
-            $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
-
-            //Filling the gradebook_id
-            jQuery.each(skill.gradebooks, function(index, data) {
-                $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-                $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');
-            });
-
-            $("#dialog-form").dialog({
-                buttons: [
-                    {
-                        text: "{{ "Edit"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function() {
-                            var params = $("#add_item").find(':input').serialize();
-                            add_skill(params);
-                        }
-                    },
-                    {
-                        text: "{{ "CreateChildSkill"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function() {
-                            open_popup(0, skill.id);
-                        }
-                    },
-                    {
-                        text: "{{ "AddSkillToProfileSearch"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function() {
-                            add_skill_in_profile_list(skill.id, skill.name);
-                        }
-                    }
-                ],
-                close: function() {
-                    $("#name").attr('value','');
-                    $("#description").attr('value', '');
-                    //Redirect to the main root
-                    load_nodes(0, main_depth);
-
-                }
-            });
-
-            $("#dialog-form").dialog("open");
-        }
-    }
 });
 
 </script>
@@ -385,7 +267,21 @@ $(document).ready(function() {
     </div>
 </div>
 
-<div id="dialog-form" style="">
-    <p class="validateTips"></p>
-    {{ dialogForm }}
+<div class="modal fade" id="frm-skill" tabindex="-1" role="dialog" aria-labelledby="form-skill-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="form-skill-title">{{ "Skill" | get_lang }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ dialogForm }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close" | get_lang }}</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -47,7 +47,7 @@ if ($isDrhOfCourse) {
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
     Display::display_header(get_lang('SurveyList'));
-    SurveyUtil::survey_list_user(api_get_user_id());
+    SurveyUtil::getSurveyList(api_get_user_id());
     Display::display_footer();
     exit;
 }
@@ -62,7 +62,10 @@ $table_user = Database:: get_main_table(TABLE_MAIN_USER);
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+        'name' => get_lang('SurveyList')
+    );
     $tool_name = get_lang('SearchASurvey');
 } else {
     $tool_name = get_lang('SurveyList');
@@ -87,6 +90,7 @@ Display::display_introduction_section('survey', 'left');
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     SurveyUtil::display_survey_search_form();
 }
+
 // Action handling: deleting a survey
 if ($action == 'delete' && isset($_GET['survey_id'])) {
     // Getting the information of the survey (used for when the survey is shared)

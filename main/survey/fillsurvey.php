@@ -1157,6 +1157,7 @@ if (isset($questions) && is_array($questions)) {
     foreach ($questions as $key => & $question) {
         $ch_type = 'ch_'.$question['type'];
         $display = new $ch_type;
+        // @todo move this in a function.
         $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml($question['survey_question']);
         $display->render($form, $question);

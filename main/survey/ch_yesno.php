@@ -92,8 +92,7 @@ class ch_yesno extends survey_question
             );
 
             if (!empty($answers)) {
-                var_dump(array_values($answers));
-                $form->setDefaults([$name => array_values($answers)]);
+                $form->setDefaults([$name => current($answers)]);
             }
         }
     }

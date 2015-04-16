@@ -91,7 +91,11 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 // Initialize the object
-$form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id);
+$form = new FormValidator(
+    'survey',
+    'post',
+    api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.$survey_id
+);
 
 $form->addElement('header', '', $tool_name);
 

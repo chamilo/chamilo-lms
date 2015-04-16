@@ -1861,12 +1861,12 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
-    static function display_user_report($people_filled, $survey_data)
+    public static function display_user_report($people_filled, $survey_data)
     {
         // Database table definitions
-        $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
         // Actions bar
         echo '<div class="actions">';
@@ -1926,6 +1926,7 @@ class SurveyUtil
             echo '>'.$name.'</option>';
         }
         echo '</select>';
+
         $course_id = api_get_course_int_id();
         // Step 2: displaying the survey and the answer of the selected users
         if (isset($_GET['user'])) {
@@ -1988,7 +1989,7 @@ class SurveyUtil
                         }
                     }
                 } else {
-                    $second_parameter = $answers[$question['question_id']];
+                    $second_parameter = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
                     if ($question['type'] == 'open') {
                         $second_parameter = array();
                         $second_parameter[] = $all_answers[$question['question_id']][0]['option_id'];
@@ -2001,7 +2002,10 @@ class SurveyUtil
 
                 $url = api_get_self();
                 $form = new FormValidator('question', 'post', $url);
-                $display->render($form, $question, $second_parameter);
+                $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
+                $form->addHtml($question['survey_question']);
+                $display->render($form, $question);
+                $form->addHtml('</div></div>');
                 $form->display();
             }
         }
@@ -3560,8 +3564,8 @@ class SurveyUtil
             (!empty($params['user']) || !empty($params['group_id'])) &&
             !empty($params['survey_code'])
         ) {
-            $insertedId = Database::insert($table, $params);
-            if ($insertedId) {
+            $insertId = Database::insert($table, $params);
+            if ($insertId) {
 
                 $sql = "UPDATE $table SET survey_invitation_id = $insertId
                         WHERE iid = $insertId";
@@ -4278,7 +4282,7 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version April 2007
      */
-    public static function survey_list_user($user_id)
+    public static function getSurveyList($user_id)
     {
         $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
@@ -4286,16 +4290,18 @@ class SurveyUtil
         $sessionId = api_get_session_id();
 
         // Database table definitions
-        $table_survey_question   = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer     = Database :: get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey 			 = Database :: get_course_table(TABLE_SURVEY);
-        $all_question_id = array();
+        $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey = Database:: get_course_table(TABLE_SURVEY);
 
-        $sql = 'SELECT question_id FROM '.$table_survey_question." WHERE c_id = $course_id";
+        $sql = 'SELECT question_id
+                FROM '.$table_survey_question."
+                WHERE c_id = $course_id";
         $result = Database::query($sql);
 
-        while($row = Database::fetch_array($result, 'ASSOC')) {
+        $all_question_id = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $all_question_id[] = $row;
         }
 
@@ -4319,6 +4325,7 @@ class SurveyUtil
                 break;
             }
         }
+
         echo '<div class="survey-block">';
         echo '<div class="title-survey-block">';
         echo  Display::return_icon('survey.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_SMALL);
@@ -4328,19 +4335,23 @@ class SurveyUtil
         echo '	<th>'.get_lang('SurveyName').'</th>';
         echo '	<th>'.get_lang('Anonymous').'</th>';
         echo '</tr>';
-        $sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
+
+        $sql = "SELECT *
+                FROM $table_survey survey,
+                $table_survey_invitation survey_invitation
 				WHERE
-				survey_invitation.user 	= $user_id AND
-				survey.code 			= survey_invitation.survey_code AND
-				survey.avail_from 		<= '".date('Y-m-d H:i:s')."' AND
-				survey.avail_till 		>= '".date('Y-m-d H:i:s')."' AND
-				survey.c_id 			= $course_id AND
-				survey.session_id = $sessionId AND
-				survey_invitation.c_id = $course_id
+                    survey_invitation.user = $user_id AND
+                    survey.code = survey_invitation.survey_code AND
+                    survey.avail_from <= '".date('Y-m-d H:i:s')."' AND
+                    survey.avail_till >= '".date('Y-m-d H:i:s')."' AND
+                    survey.c_id = $course_id AND
+                    survey.session_id = $sessionId AND
+                    survey_invitation.c_id = $course_id
 				";
         $result = Database::query($sql);
         $counter = 0;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+
             // Get the user into survey answer table (user or anonymus)
             $sql = "SELECT user FROM $table_survey_answer
 					WHERE c_id = $course_id AND survey_id = (

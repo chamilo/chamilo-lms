@@ -118,7 +118,7 @@ class ssoDrupal
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
+                        if (empty($uData['expiration_date']) OR $uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {
 
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {

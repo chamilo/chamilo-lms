@@ -123,7 +123,8 @@ class sso {
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date('Y-m-d H:i:s')
+                        if (empty($uData['expiration_date'])
+                            or $uData['expiration_date'] > date('Y-m-d H:i:s')
                             or $uData['expiration_date']=='0000-00-00 00:00:00') {
 
                             //If Multiple URL is enabled

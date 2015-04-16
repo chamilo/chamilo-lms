@@ -616,7 +616,8 @@ class Template
             'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
             'mediaelement/build/mediaelement-and-player.min.js',
-            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js'
+            'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
+            'imagemap-resizer/js/imageMapResizer.min.js'
         ];
 
         if ($isoCode != 'en') {

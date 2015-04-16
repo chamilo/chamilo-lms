@@ -465,6 +465,9 @@ $(function() {
     $(".td_actions").parent('tr').mouseout(function() {
         $(".td_actions").hide();
     });*/
+
+    /* Make responsive image maps */
+    $('map').imageMapResize();
 });
 </script>
 {{ css_custom_file_to_string }}

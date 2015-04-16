@@ -5508,20 +5508,25 @@ class CourseManager
     {
         $grouplist = array();
         $userlist = array();
+
         foreach ($to as $to_item) {
-            list($type, $id) = explode(':', $to_item);
-            switch ($type) {
-                case 'GROUP':
-                    $grouplist[] = intval($id);
-                    break;
-                case 'USER':
-                    $userlist[] = intval($id);
-                    break;
+            if (!empty($to_item)) {
+                list($type, $id) = explode(':', $to_item);
+
+                switch ($type) {
+                    case 'GROUP':
+                        $grouplist[] = intval($id);
+                        break;
+                    case 'USER':
+                        $userlist[] = intval($id);
+                        break;
+                }
             }
         }
 
         $send_to['groups'] = $grouplist;
         $send_to['users'] = $userlist;
+
         return $send_to;
     }
 

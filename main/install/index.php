@@ -16,8 +16,7 @@
 
 /*		CONSTANTS */
 
-use \ChamiloSession as Session;
-use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
@@ -660,7 +659,6 @@ if (@$_POST['step2']) {
             default:
                 break;
         }
-		exit;
     } else {
 		set_file_folder_permissions();
 

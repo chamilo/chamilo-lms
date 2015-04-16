@@ -528,7 +528,6 @@ class Auth
                     $limitFilter
                     ";
 
-        global $_configuration;
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {

@@ -20,21 +20,22 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 function get_number_of_courses()
 {
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
+    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (id = url_rel_course.c_id)";
+        $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course
+                 ON (c.id = url_rel_course.c_id)";
     }
 
     if (isset ($_GET['keyword'])) {
         $keyword = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
-                        title LIKE '".$keyword."' OR
-                        code LIKE '".$keyword."' OR
-                        visual_code LIKE '".$keyword."'
+                        c.title LIKE '".$keyword."' OR
+                        c.code LIKE '".$keyword."' OR
+                        c.visual_code LIKE '".$keyword."'
                 )
         ";
     } elseif (isset($_GET['keyword_code'])) {
@@ -47,13 +48,13 @@ function get_number_of_courses()
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 
         $sql .= " WHERE
-                    (code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
-                    title LIKE '".$keyword_title."' AND
-                    category_code LIKE '".$keyword_category."' AND
-                    course_language LIKE '".$keyword_language."' AND
-                    visibility LIKE '".$keyword_visibility."' AND
-                    subscribe LIKE '".$keyword_subscribe."' AND
-                    unsubscribe LIKE '".$keyword_unsubscribe."'
+                    (c.code LIKE '".$keyword_code."' OR c.visual_code LIKE '".$keyword_code."') AND
+                    c.title LIKE '".$keyword_title."' AND
+                    c.category_code LIKE '".$keyword_category."' AND
+                    c.course_language LIKE '".$keyword_language."' AND
+                    c.visibility LIKE '".$keyword_visibility."' AND
+                    c.subscribe LIKE '".$keyword_subscribe."' AND
+                    c.unsubscribe LIKE '".$keyword_unsubscribe."'
         ";
     }
 
@@ -61,7 +62,7 @@ function get_number_of_courses()
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
     ) {
-        $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
+        $sql.= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
     }
 
     $res = Database::query($sql);

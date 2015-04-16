@@ -75,11 +75,13 @@ function search_courses($needle, $type)
         }
 
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT c.code, c.title FROM $tbl_course c
-					LEFT JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
+            $sql = "SELECT c.code, c.title
+                    FROM $tbl_course c
+					LEFT JOIN $tbl_course_rel_access_url a
+                    ON (a.c_id = c.id)
                 	WHERE
                 		c.code LIKE '$needle%' $without_assigned_courses AND
-                		access_url_id = ".api_get_current_access_url_id()."";
+                		access_url_id = ".api_get_current_access_url_id();
         } else {
             $sql = "SELECT c.code, c.title
             		FROM $tbl_course c
@@ -199,14 +201,16 @@ if (isset($_POST['firstLetterCourse'])) {
 if (api_is_multiple_url_enabled()) {
 	$sql = " SELECT c.code, c.title
             FROM $tbl_course c
-            LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+            LEFT JOIN $tbl_course_rel_access_url a
+            ON (a.c_id = c.id)
             WHERE
                 c.code LIKE '$needle' $without_assigned_courses AND
                 access_url_id = ".api_get_current_access_url_id()."
             ORDER BY c.title";
 
 } else {
-	$sql= " SELECT c.code, c.title FROM $tbl_course c
+	$sql= " SELECT c.code, c.title
+	        FROM $tbl_course c
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }

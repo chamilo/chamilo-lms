@@ -821,6 +821,7 @@ class CourseManager
 
     /**
      * @return an array with the course info of all real courses on the platform
+     *@deprecate don't use this function
      */
     public static function get_real_course_list()
     {
@@ -833,36 +834,6 @@ class CourseManager
             $real_course_list[$result['code']] = $result;
         }
         return $real_course_list;
-    }
-
-    /**
-     * Returns an array with the course info of the real courses of which
-     * the current user is course admin
-     * @return array   A list of courses details for courses to which the user is subscribed as course admin (status = 1)
-     */
-    public static function get_real_course_list_of_user_as_course_admin($user_id)
-    {
-        $result_array = array();
-        if ($user_id != strval(intval($user_id))) {
-            return $result_array;
-        }
-        $sql_result = Database::query(
-            "SELECT *
-                FROM " . Database::get_main_table(TABLE_MAIN_COURSE) . " course
-                LEFT JOIN " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . " course_user
-                ON course.id = course_user.c_id
-                WHERE course.target_course_code IS NULL
-                    AND course_user.user_id = '$user_id'
-                    AND course_user.status = '1'"
-        );
-        if ($sql_result === false) {
-            return $result_array;
-        }
-        while ($result = Database::fetch_array($sql_result)) {
-            $result_array[] = $result;
-        }
-
-        return $result_array;
     }
 
     /**
@@ -1005,8 +976,8 @@ class CourseManager
                     ON (course_rel_url.c_id = course.id)
                     WHERE
                         access_url_id = $access_url_id  AND
-                        course_rel_user.user_id='$user_id' AND
-                        course_rel_user.status='1'
+                        course_rel_user.user_id = '$user_id' AND
+                        course_rel_user.status = '1'
                     ORDER BY course.title";
             }
         }
@@ -3099,51 +3070,6 @@ class CourseManager
     }
 
     /**
-     *    This code creates a select form element to let the user
-     *    choose a real course to link to.
-     *
-     *    A good non-display library should not use echo statements, but just return text/html
-     *    so users of the library can choose when to display.
-     *
-     *    We display the course code, but internally store the course id.
-     *
-     * @param boolean $has_size , true the select tag gets a size element, false it stays a dropdownmenu
-     * @param boolean $only_current_user_courses , true only the real courses of which the
-     *    current user is course admin are displayed, false all real courses are shown.
-     * @param string $element_name the name of the select element
-     * @return a string containing html code for a form select element.
-     * @deprecated Function not in use
-     */
-    public static function get_real_course_code_select_html(
-        $element_name,
-        $has_size = true,
-        $only_current_user_courses = true,
-        $user_id
-    ) {
-        if ($only_current_user_courses) {
-            $real_course_list = self::get_real_course_list_of_user_as_course_admin($user_id);
-        } else {
-            $real_course_list = self::get_real_course_list();
-        }
-
-        if ($has_size) {
-            $size_element = "size=\"" . SELECT_BOX_SIZE . "\"";
-        } else {
-            $size_element = "";
-        }
-        $html_code = "<select name=\"$element_name\" $size_element >\n";
-        foreach ($real_course_list as $real_course) {
-            $course_code = $real_course["code"];
-            $html_code .= "<option value=\"" . $course_code . "\">";
-            $html_code .= $course_code;
-            $html_code .= "</option>\n";
-        }
-        $html_code .= "</select>\n";
-
-        return $html_code;
-    }
-
-    /**
      *  Get count rows of a table inside a course database
      * @param  string $table   The table of which the rows should be counted
      * @param  int $session_id       optionally count rows by session id
@@ -3187,7 +3113,8 @@ class CourseManager
         //Deleting assigned courses to hrm_id
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT s.c_id FROM $tbl_course_rel_user s
-                    INNER JOIN $tbl_course_rel_access_url a ON (a.c_id = s.c_id)
+                    INNER JOIN $tbl_course_rel_access_url a
+                    ON (a.c_id = s.c_id)
                     WHERE
                         user_id = $hr_manager_id AND
                         relation_type=" . COURSE_RELATION_TYPE_RRHH . " AND
@@ -5751,28 +5678,28 @@ class CourseManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT(c.id), c.title "
-            . "FROM $courseTable c "
-            . "INNER JOIN $courseUserTable cru ON c.code = cru.course_code "
-            . "WHERE ( "
-            . "cru.user_id IN(" . implode(', ', $userIdList) . ") "
-            . "AND cru.relation_type = 0 "
-            . ")";
+        $sql = "SELECT DISTINCT(c.id), c.title
+            FROM $courseTable c
+            INNER JOIN $courseUserTable cru ON c.id = cru.c_id
+            WHERE (
+                cru.user_id IN (" . implode(', ', $userIdList) . ")
+                AND cru.relation_type = 0
+            )";
 
         if (api_is_multiple_url_enabled()) {
             $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $accessUrlId = api_get_current_access_url_id();
 
             if ($accessUrlId != -1) {
-                $sql = "SELECT DISTINCT(c.id), c.title "
-                    . "FROM $courseTable c "
-                    . "INNER JOIN $courseUserTable cru ON c.code = cru.course_code "
-                    . "INNER JOIN $courseAccessUrlTable crau ON c.code = crau.course_code "
-                    . "WHERE crau.access_url_id = $accessUrlId "
-                    . "AND ( "
-                    . "cru.id_user IN (" . implode(', ', $userIdList) . ") "
-                    . "AND cru.relation_type = 0 "
-                    . ")";
+                $sql = "SELECT DISTINCT(c.id), c.title
+                        FROM $courseTable c
+                        INNER JOIN $courseUserTable cru ON c.id = cru.c_id
+                        INNER JOIN $courseAccessUrlTable crau ON c.id = crau.c_id
+                        WHERE crau.access_url_id = $accessUrlId
+                            AND (
+                            cru.id_user IN (" . implode(', ', $userIdList) . ") AND
+                            cru.relation_type = 0
+                        )";
             }
         }
 

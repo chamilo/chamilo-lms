@@ -61,7 +61,6 @@ class AddCourseToSession
 						ORDER BY course.code ';
 			}
 
-			global $_configuration;
 			if (api_is_multiple_url_enabled()) {
 				$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$access_url_id = api_get_current_access_url_id();
@@ -83,7 +82,7 @@ class AddCourseToSession
 						$sql = 'SELECT course.code, course.visual_code, course.title
 								FROM '.$tbl_course.' course, '.$tbl_course_rel_access_url.' url_course
 								WHERE
-									url_course.course_code=course.code AND
+									url_course.c_id = course.id AND
 									access_url_id = '.$access_url_id.' AND
 									course.visual_code LIKE "'.$needle.'%" '.$cond_course_code.'
 								ORDER BY course.code ';

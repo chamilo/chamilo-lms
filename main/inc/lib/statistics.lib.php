@@ -479,7 +479,7 @@ class Statistics
     public static function printToolStats()
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
         $tools = array(
@@ -513,16 +513,18 @@ class Statistics
                         GROUP BY access_tool
                     ";
         } else {
-            $sql = "SELECT access_tool, count( access_id ) ".
-                "AS number_of_logins FROM $table ".
-                "WHERE access_tool IN ('".implode("','", $tools)."') ".
-                "GROUP BY access_tool ";
+            $sql = "SELECT access_tool, count( access_id ) AS number_of_logins
+                    FROM $table
+                    WHERE access_tool IN ('".implode("','", $tools)."')
+                    GROUP BY access_tool ";
         }
+
         $res = Database::query($sql);
         $result = array();
         while ($obj = Database::fetch_object($res)) {
             $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
         }
+
         Statistics::printStats(get_lang('PlatformToolAccess'), $result, true);
     }
 
@@ -532,17 +534,17 @@ class Statistics
     public static function printCourseByLanguageStats()
     {
         $table = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT course_language, count( c.code ) AS number_of_courses ".
-                "FROM $table as c, $access_url_rel_course_table as u
-                WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'
-                GROUP BY course_language
-                ORDER BY number_of_courses DESC";
+            $sql = "SELECT course_language, count( c.code ) AS number_of_courses
+                    FROM $table as c, $access_url_rel_course_table as u
+                    WHERE u.c_id = c.id AND access_url_id='".$current_url_id."'
+                    GROUP BY course_language
+                    ORDER BY number_of_courses DESC";
         } else {
-            $sql = "SELECT course_language, count( code ) AS number_of_courses ".
-                   "FROM $table GROUP BY course_language
+            $sql = "SELECT course_language, count( code ) AS number_of_courses
+                   FROM $table GROUP BY course_language
                    ORDER BY number_of_courses DESC";
         }
         $res = Database::query($sql);
@@ -679,10 +681,10 @@ class Statistics
                    HAVING c_id <> ''
                    AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         } else {
-            $sql = "SELECT * FROM $table ".
-                   "GROUP BY c_id ".
-                   "HAVING c_id <> '' ".
-                   "AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
+            $sql = "SELECT * FROM $table
+                   GROUP BY c_id
+                   HAVING c_id <> ''
+                   AND DATEDIFF( '".date('Y-m-d h:i:s')."' , access_date ) <= ". $date_diff;
         }
         $res = Database::query($sql);
         $sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
@@ -696,15 +698,21 @@ class Statistics
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
                 $course = array ();
                 $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
-                                //Allow sort by date hiding the numerical date
+                // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = array (get_lang("CourseCode"), true);
-            $table_header[] = array (get_lang("LastAccess"), true);
-            Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
+            $table_header[] = array(get_lang("CourseCode"), true);
+            $table_header[] = array(get_lang("LastAccess"), true);
+            Display:: display_sortable_table(
+                $table_header,
+                $courses,
+                array('column' => $column, 'direction' => $direction),
+                array(),
+                $parameters
+            );
         } else {
             echo get_lang('NoSearchResults');
         }

@@ -481,9 +481,9 @@ class IndexManager
                     FROM $main_category_table t1
                     $courseCategoryCondition
                     LEFT JOIN $main_category_table t2 ON t1.code = t2.parent_id
-                    LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
+                    LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=t3.code)
+                    ON (url_rel_course.c_id = t3.id)
                     WHERE url_rel_course.access_url_id = $url_access_id AND t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
             }

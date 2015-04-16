@@ -190,18 +190,18 @@ class UrlManager
     **/
     public static function get_url_rel_course_data($access_url_id = null)
     {
-        $where ='';
+        $where = '';
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
         if (!empty($access_url_id)) {
-            $where ="WHERE $table_url_rel_course.access_url_id = ".intval($access_url_id);
+            $where = " WHERE uc.access_url_id = ".intval($access_url_id);
         }
 
-        $sql = "SELECT u.id, c_id, title, access_url_id
+        $sql = "SELECT u.id, c_id, title, uc.access_url_id
                 FROM $tbl_course u
-                INNER JOIN $table_url_rel_course
-                ON $table_url_rel_course.c_id = u.id
+                INNER JOIN $table_url_rel_course uc
+                ON uc.c_id = u.id
                 $where
                 ORDER BY title, code";
 
@@ -223,8 +223,9 @@ class UrlManager
         $tableUrlRelCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT *
                 FROM $tableUrlRelCourse
-                WHERE $tableUrlRelCourse.c_id = '$courseId'";
+                WHERE c_id = '$courseId'";
         $res = Database::query($sql);
+
         return Database::num_rows($res);
     }
 
@@ -296,7 +297,6 @@ class UrlManager
 
     public static function getUrlRelCourseCategory($access_url_id = null)
     {
-
         $table_url_rel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $where = " WHERE 1=1 ";
@@ -851,7 +851,7 @@ class UrlManager
         $table_url_rel_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $sql = "SELECT c_id FROM $table_url_rel_course
-                WHERE access_url_id=".intval($access_url_id);
+                WHERE access_url_id = ".intval($access_url_id);
         $result = Database::query($sql);
 
         $existing_courses = array();

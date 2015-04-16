@@ -183,6 +183,24 @@ header #logo img{
 }
 
 /* END COURSE PROGRESS*/
+/* IMPRESS JS */
+  .impress-content{
+    position: relative;
+    width: 100%;
+    height:600px;
+  }
+  .impress-title{
+    position: absolute;
+    top:40%;
+    left: 0%;
+    text-align: center;
+    width: 100%;
+  }
+.impress-title h1{
+    font-size: 35px;
+}
+
+/* END IMPRESS JS*/
 
 /* SESSION CATALOG*/
 .session-group .padding-clear{

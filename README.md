@@ -1,6 +1,8 @@
 # Chamilo 1.10.x
 
 [![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.10.x)](https://travis-ci.org/chamilo/chamilo-lms)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=1.10.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.10.x)
+[![Code Coverage](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/coverage.png?b=1.10.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.10.x)
 
 ## Installation
 

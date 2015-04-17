@@ -15,7 +15,7 @@ class Agenda
     public $sessionId = 0;
     public $senderId;
     /** @var array */
-    public $course;dateCondition
+    public $course;
     public $comment;
 
     /**

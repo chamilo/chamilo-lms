@@ -92,7 +92,7 @@ $(document).ready(function() {
     });
 
     /* When clicking in a course title */
-    $("#skill_info").on("click", "a.course_description_popup", function(e) {
+    $("#skill_info").on("click", "a.course_description_popup[rel]", function(e) {
         e.preventDefault();
 
         var getCourseInfo = $.ajax(

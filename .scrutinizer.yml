@@ -14,6 +14,14 @@ build:
             - composer global require "fxp/composer-asset-plugin:1.0.0"
             - composer install -n
             - composer -v update
+filter:
+    excluded_paths:
+        - tests/*
+        - main/img/*
+        - main/lang/*
+        - archive/*
+        - data/*
+        - web/*
 checks:
     php:
         code_rating: true

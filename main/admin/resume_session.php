@@ -307,7 +307,6 @@ if ($session['nbr_courses'] == 0) {
 
 	foreach ($courses as $course) {
 		//select the number of users
-
 		$sql = "SELECT count(*)
                 FROM $tbl_session_rel_user sru,
                 $tbl_session_rel_course_rel_user srcru

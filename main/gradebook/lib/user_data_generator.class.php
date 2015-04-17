@@ -34,11 +34,12 @@ class UserDataGenerator
 	{
 		$this->userid = $userid;
 		$evals_filtered = array();
+		$result = array();
 		foreach ($evals as $eval) {
 			$toadd = true;
 			$coursecode = $eval->get_course_code();
 			if (isset($coursecode)) {
-				$result = Result :: load (null, $userid, $eval->get_id());
+				$result = Result :: load(null, $userid, $eval->get_id());
 				if (count($result) == 0) {
 					$toadd = false;
 				}

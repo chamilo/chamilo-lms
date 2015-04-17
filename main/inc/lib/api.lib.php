@@ -3159,9 +3159,10 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 * @author Julio Montoya
 * @version 1.0
 */
-function api_is_allowed($tool, $action, $task_id = 0) {
-    global $_course;
-    global $_user;
+function api_is_allowed($tool, $action, $task_id = 0)
+{
+    $_user = api_get_user_info();
+    $_course = api_get_course_info();
 
     if (api_is_course_admin()) {
         return true;

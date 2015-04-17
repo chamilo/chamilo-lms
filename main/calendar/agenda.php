@@ -180,7 +180,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 if (!empty($event['parent_event_id'])) {
                     $agenda->delete_event($eventId);
 
-                    $eventId = $agenda->add_event(
+                    $eventId = $agenda->addEvent(
                         $startDate,
                         $endDate,
                         $allDay,

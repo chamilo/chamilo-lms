@@ -119,7 +119,7 @@ class Agenda
      *
      * @return int
      */
-    public function add_event(
+    public function addEvent(
         $start,
         $end,
         $allDay,
@@ -418,7 +418,7 @@ class Agenda
                     for ($i = $origStartDate + 86400; $i <= $end; $i += 86400) {
                         $start = date('Y-m-d H:i:s', $i);
                         $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
-                        $this->add_event(
+                        $this->addEvent(
                             $start,
                             $repeatEnd,
                             $allDay,
@@ -434,7 +434,7 @@ class Agenda
                     for ($i = $origStartDate + 604800; $i <= $end; $i += 604800) {
                         $start = date('Y-m-d H:i:s', $i);
                         $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
-                        $this->add_event(
+                        $this->addEvent(
                             $start,
                             $repeatEnd,
                             $allDay,
@@ -451,7 +451,7 @@ class Agenda
                     while ($next_start <= $end) {
                         $start = date('Y-m-d H:i:s', $next_start);
                         $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
-                        $this->add_event(
+                        $this->addEvent(
                             $start,
                             $repeatEnd,
                             $allDay,
@@ -475,7 +475,7 @@ class Agenda
                     while ($next_start <= $end) {
                         $start = date('Y-m-d H:i:s', $next_start);
                         $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
-                        $this->add_event(
+                        $this->addEvent(
                             $start,
                             $repeatEnd,
                             $allDay,
@@ -895,7 +895,7 @@ class Agenda
     ) {
         switch ($this->type) {
             case 'admin':
-                $this->get_platform_events($start, $end);
+                $this->getPlatformEvents($start, $end);
                 break;
             case 'course':
                 $session_id = $this->sessionId;
@@ -912,10 +912,10 @@ class Agenda
             case 'personal':
             default:
                 // Getting personal events
-                $this->get_personal_events($start, $end);
+                $this->getPersonalEvents($start, $end);
 
                 // Getting platform/admin events
-                $this->get_platform_events($start, $end);
+                $this->getPlatformEvents($start, $end);
 
                 // Getting course events
                 $my_course_list = array();
@@ -1116,7 +1116,7 @@ class Agenda
      * @param int $end
      * @return array
      */
-    public function get_personal_events($start, $end)
+    public function getPersonalEvents($start, $end)
     {
         $start = intval($start);
         $end = intval($end);
@@ -1485,7 +1485,7 @@ class Agenda
      * @param int $end tms
      * @return array
      */
-    public function get_platform_events($start, $end)
+    public function getPlatformEvents($start, $end)
     {
         $start = intval($start);
         $end = intval($end);
@@ -2346,7 +2346,7 @@ class Agenda
                 $title = api_convert_encoding((string)$event->summary, $charset, 'UTF-8');
                 $description = api_convert_encoding((string)$event->description, $charset, 'UTF-8');
 
-                $id = $this->add_event(
+                $id = $this->addEvent(
                     $startDateTime,
                     $endDateTime,
                     'false',

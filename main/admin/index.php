@@ -118,6 +118,7 @@ if (api_is_platform_admin()) {
     api_get_configuration_value('limit_session_admin_role')
 ) {
     $items = array(
+        array('url'=>'user_list.php', 	'label' => get_lang('UserList')),
         array('url'=>'user_add.php', 	'label' => get_lang('AddUsers'))
     );
 } else {

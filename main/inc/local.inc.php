@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *
  *                             SCRIPT PURPOSE
@@ -119,7 +120,9 @@
 use ChamiloSession as Session;
 
 //Conditional login
-if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login'] === true) {
+if (isset($_SESSION['conditional_login']['uid']) &&
+    $_SESSION['conditional_login']['can_login'] === true
+) {
     $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);
 
@@ -207,12 +210,16 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $legal_option=true;
             }
 
-            if (isset($_POST['legal_accept_type']) && $legal_option===true) {
+            if (isset($_POST['legal_accept_type']) && $legal_option === true) {
                 $cond_array = explode(':', $_POST['legal_accept_type']);
                 if (!empty($cond_array[0]) && !empty($cond_array[1])) {
                     $time = time();
                     $condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
-                    UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
+                    UserManager::update_extra_field_value(
+                        $user_id,
+                        'legal_accept',
+                        $condition_to_save
+                    );
                 }
             }
         }
@@ -226,23 +233,25 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     }
 
     $cas_login = false;
-    if ($cas_activated  and !isset($_user['user_id']) and !isset($_POST['login']) && !$logout) {
+    if ($cas_activated && !isset($_user['user_id']) && !isset($_POST['login']) && !$logout) {
         require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
         $cas_login = cas_is_authenticated();
     }
-    if ((isset($_POST['login']) and isset($_POST['password'])) or ($cas_login)) {
+
+    if ((isset($_POST['login']) && isset($_POST['password'])) || ($cas_login)) {
 
         // $login && $password are given to log in
         if ($cas_login && empty($_POST['login'])) {
             $login = $cas_login;
         } else {
-            $login      = $_POST['login'];
-            $password   = $_POST['password'];
+            $login = $_POST['login'];
+            $password = $_POST['password'];
         }
 
         //Lookup the user in the main database
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status FROM $user_table
+        $sql = "SELECT user_id, username, password, auth_source, active, expiration_date, status
+                FROM $user_table
                 WHERE username = '".Database::escape_string($login)."'";
         $result = Database::query($sql);
 
@@ -250,7 +259,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
 
         if (Database::num_rows($result) > 0) {
-            $uData = Database::fetch_array($result);
+            $uData = Database::fetch_array($result, 'ASSOC');
 
             if ($allowCaptcha) {
 
@@ -302,14 +311,16 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             }
 
-
-            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE || $uData['auth_source'] == CAS_AUTH_SOURCE) {
+            if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE ||
+                $uData['auth_source'] == CAS_AUTH_SOURCE
+            ) {
                 //The authentification of this user is managed by Chamilo itself
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
 
                 // Check the user's password
-                if (($password == $uData['password'] or $cas_login) and (trim($login) == $uData['username'])) {
+                if (($password == $uData['password'] || $cas_login) && (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
+
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser'])
                         && file_exists($extAuthSource[$update_type]['updateUser'])
@@ -322,15 +333,13 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                         // Check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s')
-                            or empty($uData['expiration_date'])
+                            || empty($uData['expiration_date'])
                         ) {
                             global $_configuration;
 
-                            if (isset($_configuration['multiple_access_urls'])
-                                && $_configuration['multiple_access_urls']
-                            ) {
+                            if (api_is_multiple_url_enabled()) {
 
-                                //Check if user is an admin
+                                // Check if user is an admin
                                 $my_user_is_admin = UserManager::is_admin($uData['user_id']);
 
                                 // This user is subscribed in these sites => $my_url_list
@@ -403,7 +412,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             } else {
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
-                                $_user['status']  = $uData['status'];
+                                $_user['status'] = $uData['status'];
 
                                 Session::write('_user', $_user);
                                 Event::event_login();
@@ -637,7 +646,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $result = Database::query($sql);
                 if ($result !== false) {
                     if (Database::num_rows($result)>0) {
-                        //$row = Database::fetch_array($res);
                         $uData = Database::fetch_array($result);
 
                         if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
@@ -646,11 +654,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                             // check if the account is active (not locked)
                             if ($uData['active']=='1') {
                                 // check if the expiration date has not been reached
-                                if ($uData['expiration_date']>date('Y-m-d H:i:s')
-                                    or $uData['expiration_date']=='0000-00-00 00:00:00'
+                                if ($uData['expiration_date'] > date('Y-m-d H:i:s')
+                                    || empty($uData['expiration_date'])
                                 ) {
                                     $_user['user_id'] = $uData['user_id'];
-                                    $_user['status']  = $uData['status'];
+                                    $_user['status'] = $uData['status'];
 
                                     Session::write('_user', $_user);
                                     Event::event_login();
@@ -726,7 +734,7 @@ if (!empty($cDir)) {
 
 // if the requested course is different from the course in session
 
-if (!empty($cidReq) && (!isset($_SESSION['_cid']) or
+if (!empty($cidReq) && (!isset($_SESSION['_cid']) ||
     (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))
 ) {
     $cidReset = true;
@@ -747,9 +755,9 @@ if (isset($uidReset) && $uidReset) {
         unset($_SESSION['loginFailedCount']);
         unset($_SESSION['loginToBlock']);
 
-        $user_table     = Database::get_main_table(TABLE_MAIN_USER);
-        $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
-        $track_e_login  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $user_table = Database::get_main_table(TABLE_MAIN_USER);
+        $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+        $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT user.*, a.user_id is_admin, login.login_date
             FROM $user_table
@@ -792,9 +800,9 @@ if (isset($uidReset) && $uidReset) {
     Session::write('is_platformAdmin', $is_platformAdmin);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 } else { // continue with the previous values
-    $_user                    = $_SESSION['_user'];
-    $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
-    $is_allowedCreateCourse   = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
+    $_user = $_SESSION['_user'];
+    $is_platformAdmin = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
+    $is_allowedCreateCourse = isset($_SESSION['is_allowedCreateCourse']) ? $_SESSION['is_allowedCreateCourse'] : false;
 }
 
 /*  COURSE INIT */
@@ -817,9 +825,9 @@ if (isset($cidReset) && $cidReset) {
             // if a session id has been given in url, we store the session
 
             // Database Table Definitions
-            $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
-            $tbl_session_course          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_course_user     = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+            $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+            $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
             if (!empty($_GET['id_session'])) {
                 $_SESSION['id_session'] = intval($_GET['id_session']);
@@ -961,13 +969,14 @@ if (isset($cidReset) && $cidReset) {
 
                     //We select the last record for the current course in the course tracking table
                     //But only if the login date is < than now + max_life_time
-                    $sql = "SELECT course_access_id FROM $course_tracking_table
+                    $sql = "SELECT course_access_id
+                            FROM $course_tracking_table
                             WHERE
-                                user_id     = ".intval($_user['user_id'])." AND
+                                user_id = ".intval($_user['user_id'])." AND
                                 c_id = ".$_course['real_id']."  AND
                                 session_id  = ".api_get_session_id()." AND
                                 login_course_date > '$time' - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+                            ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result, 0, 0);
@@ -989,7 +998,7 @@ if (isset($cidReset) && $cidReset) {
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
-$user_id    = isset($_user['user_id']) ? $_user['user_id'] : null;
+$user_id = isset($_user['user_id']) ? $_user['user_id'] : null;
 
 //Course permissions
 //if this code is uncommented in some platforms the is_courseAdmin is not correctly saved see BT#5789
@@ -1264,12 +1273,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     Session::write('is_allowed_in_course', $is_allowed_in_course);
     Session::write('is_sessionAdmin', $is_sessionAdmin);
 } else {
-    // continue with the previous values
+    // Continue with the previous values
 
-    $is_courseAdmin       = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
-    $is_courseTutor       = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;
-    $is_courseCoach       = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
-    $is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
+    $is_courseAdmin = isset($_SESSION ['is_courseAdmin']) ? $_SESSION ['is_courseAdmin'] : false;
+    $is_courseTutor = isset($_SESSION ['is_courseTutor']) ? $_SESSION ['is_courseTutor'] : false;
+    $is_courseCoach = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
+    $is_courseMember = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
     $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
 }
 
@@ -1302,7 +1311,7 @@ if (api_get_setting('student_view_enabled') == "true") {
 if (isset($_cid)) {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $time = api_get_utc_datetime();
-    $sql = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
+    $sql = "UPDATE $tbl_course SET last_visit = '$time' WHERE code='$_cid'";
     Database::query($sql);
 }
 

@@ -348,12 +348,13 @@ class AnnouncementManager
 
         $last_id = Database::insert($tbl_announcement, $params);
 
-        $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
-        Database::query($sql);
-
         if (empty($last_id)) {
             return false;
         } else {
+
+            $sql = "UPDATE $tbl_announcement SET id = iid WHERE iid = $last_id";
+            Database::query($sql);
+
             if (!empty($file)) {
                 self::add_announcement_attachment_file(
                     $last_id,
@@ -531,7 +532,7 @@ class AnnouncementManager
      */
     public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '', $sendToUsersInSession = false)
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         $course_id = api_get_course_int_id();
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1109,7 +1110,7 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
-        global $tbl_item_property;
+        $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $tool = Database::escape_string($tool);
         $id = intval($id);
@@ -1134,12 +1135,15 @@ class AnnouncementManager
                 $sent_to_user[] = $row['to_user_id'];
             }
         }
+
         if (isset($sent_to_group)) {
             $sent_to['groups'] = $sent_to_group;
         }
+
         if (isset($sent_to_user)) {
             $sent_to['users'] = $sent_to_user;
         }
+
         return $sent_to;
     }
 
@@ -1225,7 +1229,7 @@ class AnnouncementManager
      */
     public static function edit_announcement_attachment_file($id_attach, $file, $file_comment)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $course_id = api_get_course_int_id();

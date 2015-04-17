@@ -34,6 +34,7 @@ class Link extends Model
         'session_id'
     );
     public $required = array('url', 'title');
+    private $course;
 
     /**
      *
@@ -41,6 +42,22 @@ class Link extends Model
     public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_LINK);
+    }
+
+    /**
+     * @param array $course
+     */
+    public function setCourse($course)
+    {
+        $this->course = $course;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCourse()
+    {
+        return !empty($this->course) ? $this->course : api_get_course_info();
     }
 
     /**
@@ -54,12 +71,30 @@ class Link extends Model
      */
     public function save($params, $show_query = null)
     {
-        $course_info = api_get_course_info();
+        $course_info = $this->getCourse();
+        $courseId = $course_info['real_id'];
+
         $params['session_id'] = api_get_session_id();
         $params['category_id'] = isset($params['category_id']) ? $params['category_id'] : 0;
 
+        $sql =  "SELECT MAX(display_order)
+                FROM  ".$this->table."
+                WHERE
+                    c_id = $courseId AND
+                    category_id = '" . intval($params['category_id'])."'";
+        $result = Database:: query($sql);
+        list ($orderMax) = Database:: fetch_row($result);
+        $order = $orderMax + 1;
+        $params['display_order'] = $order;
+
         $id = parent::save($params, $show_query);
         if (!empty($id)) {
+            // iid
+            $sql = "UPDATE ".$this->table." SET id = iid WHERE iid = $id";
+            Database:: query($sql);
+
+            api_set_default_visibility($id, TOOL_LINK);
+
             api_item_property_update(
                 $course_info,
                 TOOL_LINK,
@@ -167,46 +202,21 @@ class Link extends Model
                 return false;
             } else {
                 // Looking for the largest order number for this category.
-                $result = Database:: query(
-                    "SELECT MAX(display_order) FROM  " . $tbl_link . "
-                    WHERE
-                        c_id = $course_id AND
-                        category_id = '" . intval($selectcategory)."'"
-                );
-                list ($orderMax) = Database:: fetch_row($result);
-                $order = $orderMax + 1;
 
-                $sql = "INSERT INTO " . $tbl_link . "
-                    (c_id, url, title, description, category_id, display_order, on_homepage, target, session_id)
-                    VALUES
-                    (" . $course_id . ",
-                    '" . Database:: escape_string($urllink) . "',
-                    '" . Database:: escape_string($title) . "',
-                    '" . Database:: escape_string($description) . "',
-                    '" . Database:: escape_string($selectcategory) . "',
-                    '" . Database:: escape_string($order) . "',
-                    '" . Database:: escape_string($onhomepage) . "',
-                    '" . Database:: escape_string($target) . "',
-                    '" . Database:: escape_string($session_id) . "')";
+                $link = new Link();
+                $params = [
+                    'c_id' => $course_id,
+                    'url' => $urllink,
+                    'title' => $title,
+                    'description' => $description ,
+                    'category_id' => $selectcategory,
+                    'on_homepage' => $onhomepage,
+                    'target' => $target,
+                    'session_id' => $session_id,
+                ];
+                $link_id = $link->save($params);
 
                 $catlinkstatus = get_lang('LinkAdded');
-                Database:: query($sql);
-                $link_id = Database:: insert_id();
-                // iid
-                $sql = "UPDATE $tbl_link SET id = iid WHERE iid = $link_id";
-                Database:: query($sql);
-
-                if ($link_id) {
-                    api_set_default_visibility($link_id, TOOL_LINK);
-
-                    api_item_property_update(
-                        $_course,
-                        TOOL_LINK,
-                        $link_id,
-                        'LinkAdded',
-                        api_get_user_id()
-                    );
-                }
 
                 if ((api_get_setting('search_enabled') == 'true') &&
                     $link_id && extension_loaded('xapian')

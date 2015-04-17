@@ -615,7 +615,7 @@ EOT;
         $group = array();
         foreach ($options as $value => $text) {
             $attributes['value'] = $value;
-            $group[] = $this->createElement('checkbox', null, null, $text, $attributes);
+            $group[] = $this->createElement('checkbox', $value, null, $text, $attributes);
         }
 
         return $this->addGroup($group, $name, $label);

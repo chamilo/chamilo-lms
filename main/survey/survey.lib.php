@@ -1807,7 +1807,6 @@ class SurveyUtil
         }
         if ($action == 'deleteuserreport') {
             SurveyUtil::delete_user_report($_GET['survey_id'], $_GET['user']);
-            //SurveyUtil::display_user_report(); //Could work but looks a bit clunky
         }
     }
 
@@ -1854,7 +1853,8 @@ class SurveyUtil
     }
 
     /**
-     * This function displays the user report which is basically nothing more than a one-page display of all the questions
+     * This function displays the user report which is basically nothing more
+     * than a one-page display of all the questions
      * of the survey that is filled with the answers of the person who filled the survey.
      *
      * @return 	string	html code of the one-page survey with the answers of the selected user
@@ -1930,7 +1930,10 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         // Step 2: displaying the survey and the answer of the selected users
         if (isset($_GET['user'])) {
-            Display::display_normal_message(get_lang('AllQuestionsOnOnePage'), false);
+            Display::display_normal_message(
+                get_lang('AllQuestionsOnOnePage'),
+                false
+            );
 
             // Getting all the questions and options
             $sql = "SELECT
@@ -1950,12 +1953,14 @@ class SurveyUtil
 					    survey_question.question_id = survey_question_option.question_id AND
 					    survey_question_option.c_id = $course_id
 					WHERE
-					    survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
+					    survey_question.survey_id = '".Database::escape_string(
+                    $_GET['survey_id']
+                )."' AND
                         survey_question.c_id = $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if($row['type'] != 'pagebreak') {
+                if ($row['type'] != 'pagebreak') {
                     $questions[$row['sort']]['question_id'] = $row['question_id'];
                     $questions[$row['sort']]['survey_id'] = $row['survey_id'];
                     $questions[$row['sort']]['survey_question'] = $row['survey_question'];
@@ -1977,23 +1982,29 @@ class SurveyUtil
                 $answers[$row['question_id']][] = $row['option_id'];
                 $all_answers[$row['question_id']][] = $row;
             }
+
             // Displaying all the questions
-            $second_parameter = array();
 
             foreach ($questions as & $question) {
                 // If the question type is a scoring then we have to format the answers differently
-                if ($question['type'] == 'score') {
-                    if (is_array($question) && is_array($all_answers)) {
-                        foreach ($all_answers[$question['question_id']] as $key => & $answer_array) {
-                            $second_parameter[$answer_array['option_id']] = $answer_array['value'];
+                switch ($question['type']) {
+                    case 'score':
+                        $finalAnswer = array();
+                        if (is_array($question) && is_array($all_answers)) {
+                            foreach ($all_answers[$question['question_id']] as $key => & $answer_array) {
+                                $finalAnswer[$answer_array['option_id']] = $answer_array['value'];
+                            }
                         }
-                    }
-                } else {
-                    $second_parameter = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
-                    if ($question['type'] == 'open') {
-                        $second_parameter = array();
-                        $second_parameter[] = $all_answers[$question['question_id']][0]['option_id'];
-                    }
+                        break;
+                    case 'multipleresponse':
+                        $finalAnswer = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
+                        break;
+                    default:
+                        $finalAnswer = '';
+                        if (isset($all_answers[$question['question_id']])) {
+                            $finalAnswer = $all_answers[$question['question_id']][0]['option_id'];
+                        }
+                        break;
                 }
 
                 $ch_type = 'ch_'.$question['type'];
@@ -2004,7 +2015,7 @@ class SurveyUtil
                 $form = new FormValidator('question', 'post', $url);
                 $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
                 $form->addHtml($question['survey_question']);
-                $display->render($form, $question);
+                $display->render($form, $question, $finalAnswer);
                 $form->addHtml('</div></div>');
                 $form->display();
             }
@@ -2504,8 +2515,9 @@ class SurveyUtil
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a question filter but the question is selected for display
             //if (!($_POST['submit_question_filter'] || $_POST['export_report']) || in_array($row['question_id'], $_POST['questions_filter'])) {
-            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) &&
-                    in_array($row['question_id'], $_POST['questions_filter']))) {
+            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
+                (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
+            ) {
                 // <hub> modif 05-05-2010
                 // we do not show comment and pagebreak question types
                 if ($row['type'] == 'open') {
@@ -2535,7 +2547,11 @@ class SurveyUtil
         // Getting all the answers of the users
         $old_user = '';
         $answers_of_user = array();
-        $sql = "SELECT * FROM $table_survey_answer WHERE c_id = $course_id AND survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
+        $sql = "SELECT * FROM $table_survey_answer
+                WHERE
+                    c_id = $course_id AND
+                    survey_id='".intval($_GET['survey_id'])."'
+                ORDER BY user ASC";
         $result = Database::query($sql);
         $i = 1;
         while ($row = Database::fetch_array($result)) {
@@ -2545,10 +2561,17 @@ class SurveyUtil
                     $userParam = $i;
                     $i++;
                 }
-                SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields);
+                SurveyUtil::display_complete_report_row(
+                    $survey_data,
+                    $possible_answers,
+                    $answers_of_user,
+                    $userParam,
+                    $questions,
+                    $display_extra_user_fields
+                );
                 $answers_of_user=array();
             }
-            if ($questions[$row['question_id']]['type'] != 'open') {
+            if (isset($questions[$row['question_id']]) && $questions[$row['question_id']]['type'] != 'open') {
                 $answers_of_user[$row['question_id']][$row['option_id']] = $row;
             } else {
                 $answers_of_user[$row['question_id']][0] = $row;
@@ -2560,7 +2583,14 @@ class SurveyUtil
             $userParam = $i;
             $i++;
         }
-        SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields);
+        SurveyUtil::display_complete_report_row(
+            $survey_data,
+            $possible_answers,
+            $answers_of_user,
+            $userParam,
+            $questions,
+            $display_extra_user_fields
+        );
         // This is to display the last user
         echo '</table>';
         echo '</form>';
@@ -2577,20 +2607,26 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
-    static function display_complete_report_row($survey_data, $possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false)
-    {
+    static function display_complete_report_row(
+        $survey_data,
+        $possible_options,
+        $answers_of_user,
+        $user,
+        $questions,
+        $display_extra_user_fields = false
+    ) {
         $user = Security::remove_XSS($user);
         echo '<tr>';
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
-                $sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
-                $rs = Database::query($sql);
-                if ($row = Database::fetch_array($rs)) {
-                    $user_displayed = api_get_person_name($row['firstname'], $row['lastname']);
+                $userInfo = api_get_user_info($user);
+                if (!empty($userInfo)) {
+                    $user_displayed = $userInfo['complete_name'];
                 } else {
                     $user_displayed = '-';
                 }
-                echo '<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
+                echo '<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.
+                    $user_displayed.'</a></th>'; // the user column
             } else {
                 echo '<th>'.$user.'</th>'; // the user column
             }
@@ -2647,13 +2683,12 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function export_complete_report($survey_data, $user_id = 0)
+    public static function export_complete_report($survey_data, $user_id = 0)
     {
-
         // Database table definitions
-        $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
         // The first column
         $return = ';';
@@ -2702,24 +2737,30 @@ class SurveyUtil
         // Getting all the questions and options
         $return .= ';';
 
-        // Show extra field values
-        //if (!($_POST['submit_question_filter'] || $_POST['export_report']) || !empty($_POST['fields_filter'])) {
         // Show the fields names for user fields
         if (!empty($extra_user_fields)) {
             foreach ($extra_user_fields as & $field) {
                 $return .= '"'.str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)).'";';
             }
         }
-        //}
 
         $sql = "SELECT
-		            survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type,
-                    survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
+		            survey_question.question_id,
+		            survey_question.survey_id,
+		            survey_question.survey_question,
+		            survey_question.display,
+		            survey_question.sort,
+		            survey_question.type,
+                    survey_question_option.question_option_id,
+                    survey_question_option.option_text,
+                    survey_question_option.sort as option_sort
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
-				ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+				ON
+				    survey_question.question_id = survey_question_option.question_id AND
+				    survey_question_option.c_id = $course_id
 				WHERE
-				    survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
+				    survey_question.survey_id = '".intval($_GET['survey_id'])."' AND
 				    survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
         $result = Database::query($sql);
@@ -2729,7 +2770,9 @@ class SurveyUtil
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
+            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) &&
+                in_array($row['question_id'], $_POST['questions_filter']))
+            ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     $row['option_text'] = str_replace(array("\r","\n"),array('',''),$row['option_text']);
@@ -2755,7 +2798,13 @@ class SurveyUtil
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if ($old_user != $row['user'] && $old_user != '') {
-                $return .= SurveyUtil::export_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, true);
+                $return .= SurveyUtil::export_complete_report_row(
+                    $survey_data,
+                    $possible_answers,
+                    $answers_of_user,
+                    $old_user,
+                    true
+                );
                 $answers_of_user=array();
             }
             if($possible_answers_type[$row['question_id']] == 'open') {
@@ -2767,7 +2816,14 @@ class SurveyUtil
             }
             $old_user = $row['user'];
         }
-        $return .= SurveyUtil::export_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, true); // This is to display the last user
+        // This is to display the last user
+        $return .= SurveyUtil::export_complete_report_row(
+            $survey_data,
+            $possible_answers,
+            $answers_of_user,
+            $old_user,
+            true
+        );
         return $return;
     }
 
@@ -2782,15 +2838,20 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function export_complete_report_row($survey_data, $possible_options, $answers_of_user, $user, $display_extra_user_fields = false)
-    {
+    static function export_complete_report_row(
+        $survey_data,
+        $possible_options,
+        $answers_of_user,
+        $user,
+        $display_extra_user_fields = false
+    ) {
         $return = '';
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
-                $sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
-                $rs = Database::query($sql);
-                if ($row = Database::fetch_array($rs)) {
-                    $user_displayed = api_get_person_name($row['firstname'], $row['lastname']);
+                $userInfo = api_get_user_info($user);
+
+                if (!empty($userInfo)) {
+                    $user_displayed = $userInfo['complete_name'];
                 } else {
                     $user_displayed = '-';
                 }
@@ -2890,7 +2951,9 @@ class SurveyUtil
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
-            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
+            if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) &&
+                in_array($row['question_id'], $_POST['questions_filter']))
+            ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
                     if ($row['number_of_options'] == 0 && $row['type'] == 'open') {
@@ -2923,7 +2986,7 @@ class SurveyUtil
 				FROM $table_survey_question survey_question
 				LEFT JOIN $table_survey_question_option survey_question_option
 				ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
-				WHERE survey_question.survey_id = '".Database::escape_string($_GET['survey_id'])."' AND
+				WHERE survey_question.survey_id = '".intval($_GET['survey_id'])."' AND
 				survey_question.c_id = $course_id
 				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
         $result = Database::query($sql);
@@ -2949,7 +3012,8 @@ class SurveyUtil
         $column = 0;
         $old_user = '';
         $answers_of_user = array();
-        $sql = "SELECT * FROM $table_survey_answer WHERE c_id = $course_id AND survey_id='".Database::escape_string($_GET['survey_id'])."' ";
+        $sql = "SELECT * FROM $table_survey_answer
+                WHERE c_id = $course_id AND survey_id='".intval($_GET['survey_id'])."' ";
         if ($user_id != 0) {
             $sql .= "AND user='".Database::escape_string($user_id)."' ";
         }
@@ -2977,7 +3041,13 @@ class SurveyUtil
             }
             $old_user = $row['user'];
         }
-        $return = SurveyUtil::export_complete_report_row_xls($survey_data, $possible_answers, $answers_of_user, $old_user, true); // this is to display the last user
+        $return = SurveyUtil::export_complete_report_row_xls(
+            $survey_data,
+            $possible_answers,
+            $answers_of_user,
+            $old_user,
+            true
+        ); // this is to display the last user
         foreach ($return as $elem) {
             $worksheet->write($line, $column, $elem);
             $column++;
@@ -2995,8 +3065,13 @@ class SurveyUtil
      * @param	boolean	Whether to display user fields or not
      * @return	string	One line of the csv file
      */
-    static function export_complete_report_row_xls($survey_data, $possible_options, $answers_of_user, $user, $display_extra_user_fields = false)
-    {
+    static function export_complete_report_row_xls(
+        $survey_data,
+        $possible_options,
+        $answers_of_user,
+        $user,
+        $display_extra_user_fields = false
+    ) {
         $return = array();
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
@@ -3007,10 +3082,8 @@ class SurveyUtil
                 } else {
                     $user_displayed = '-';
                 }
-                //echo '		<th><a href="'.api_get_self().'?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$user.'">'.$user_displayed.'</a></th>'; // the user column
                 $return[] = $user_displayed;
             } else {
-                //echo '		<th>'.$user.'</th>'; // The user column
                 $return[] = $user;
             }
         } else {
@@ -3060,7 +3133,8 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function display_comparative_report() {
+    static function display_comparative_report()
+    {
         // Allowed question types for comparative report
         $allowed_question_types = array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown', 'percentage', 'score');
 
@@ -3068,7 +3142,6 @@ class SurveyUtil
         $questions = SurveyManager::get_questions($_GET['survey_id']);
 
         // Actions bar
-
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
@@ -3089,7 +3162,7 @@ class SurveyUtil
             if (is_array($allowed_question_types)) {
                 if (in_array($question['type'], $allowed_question_types)) {
                     echo '<option value="'.$question['question_id'].'"';
-                    if ($_GET['xaxis'] == $question['question_id']) {
+                    if (isset($_GET['xaxis']) && $_GET['xaxis'] == $question['question_id']) {
                         echo ' selected="selected"';
                     }
                     echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
@@ -3105,7 +3178,7 @@ class SurveyUtil
         foreach ($questions as $key => & $question) {
             if (in_array($question['type'], $allowed_question_types)) {
                 echo '<option value="'.$question['question_id'].'"';
-                if ($_GET['yaxis'] == $question['question_id']) {
+                if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
                     echo ' selected="selected"';
                 }
                 echo '">'.api_substr(strip_tags($question['question']), 0, 50).'</option>';
@@ -3168,11 +3241,18 @@ class SurveyUtil
                             if ($question_x['type'] == 'score') {
                                 for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                                     if ($ii == 0) {
-                                        $tableHtml .=  '		<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
+                                        $tableHtml .=  ' <th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
                                         break;
                                     } else {
-                                        $tableHtml .=  '		<td align="center">';
-                                        $votes =  SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], $x, $y);
+                                        $tableHtml .=  ' <td align="center">';
+                                        $votes = SurveyUtil::comparative_check(
+                                            $answers_x,
+                                            $answers_y,
+                                            $question_x['answersid'][($ii - 1)],
+                                            $question_y['answersid'][($ij)],
+                                            $x,
+                                            $y
+                                        );
                                         $tableHtml .=  $votes;
                                         array_push(
                                             $chartData,
@@ -3187,10 +3267,17 @@ class SurveyUtil
                                 }
                             } else {
                                 if ($ii == 0) {
-                                    $tableHtml .=  '		<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
+                                    $tableHtml .=  '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
-                                    $tableHtml .=  '		<td align="center">';
-                                    $votes =  SurveyUtil::comparative_check($answers_x, $answers_y, $question_x['answersid'][($ii-1)], $question_y['answersid'][($ij)], 0, $y);
+                                    $tableHtml .=  '<td align="center">';
+                                    $votes = SurveyUtil::comparative_check(
+                                        $answers_x,
+                                        $answers_y,
+                                        $question_x['answersid'][($ii - 1)],
+                                        $question_y['answersid'][($ij)],
+                                        0,
+                                        $y
+                                    );
                                     $tableHtml .= $votes;
                                     array_push(
                                         $chartData,
@@ -3271,17 +3358,18 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007 - Updated March 2008
      */
-    static function get_answers_of_question_by_user($survey_id, $question_id) {
+    static function get_answers_of_question_by_user($survey_id, $question_id)
+    {
         $course_id = api_get_course_int_id();
         // Database table definitions
-        $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer 			= Database :: get_course_table(TABLE_SURVEY_ANSWER);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
         $sql = "SELECT * FROM $table_survey_answer
-					WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'
-					AND question_id='".Database::escape_string($question_id)."'
-					ORDER BY USER ASC";
+                WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'
+                AND question_id='".intval($question_id)."'
+                ORDER BY USER ASC";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             if ($row['value'] == 0) {
@@ -3305,7 +3393,8 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version February 2007
      */
-    static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0) {
+    static function comparative_check($answers_x, $answers_y, $option_x, $option_y, $value_x = 0, $value_y = 0)
+    {
         if ($value_x == 0) {
             $check_x = $option_x;
         } else {
@@ -3329,6 +3418,7 @@ class SurveyUtil
                 }
             }
         }
+
         return $counter;
     }
 
@@ -3342,11 +3432,12 @@ class SurveyUtil
      *
      * @todo use survey_id parameter instead of $_GET
      */
-    static function get_survey_invitations_data() {
+    static function get_survey_invitations_data()
+    {
         $course_id = api_get_course_int_id();
         // Database table definition
-        $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
-        $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+        $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
 					survey_invitation.user as col1,
@@ -3364,6 +3455,7 @@ class SurveyUtil
         while ($row = Database::fetch_array($res)) {
             $survey_invitation_data[] = $row;
         }
+
         return $survey_invitation_data;
     }
 
@@ -3382,16 +3474,17 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
 
         // Database table definition
-        $table_survey_invitation 		= Database :: get_course_table(TABLE_SURVEY_INVITATION);
+        $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
         $sql = "SELECT count(user) AS total
 		        FROM $table_survey_invitation
 		        WHERE
                     c_id = $course_id AND
-                    survey_id='".Database::escape_string($_GET['survey_id'])."' AND
+                    survey_id='".intval($_GET['survey_id'])."' AND
                     session_id='".api_get_session_id()."' ";
         $res = Database::query($sql);
         $row = Database::fetch_array($res,'ASSOC');
+
         return $row['total'];
     }
 
@@ -3404,7 +3497,8 @@ class SurveyUtil
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
      */
-    static function save_invite_mail($mailtext, $mail_subject, $reminder = 0) {
+    static function save_invite_mail($mailtext, $mail_subject, $reminder = 0)
+    {
         $course_id = api_get_course_int_id();
         // Database table definition
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -4259,7 +4353,8 @@ class SurveyUtil
             "survey.anonymous							AS col8, ".
             "survey.survey_id							AS col9  ".
             "FROM $table_survey survey ".
-            "LEFT JOIN $table_survey_question survey_question ON (survey.survey_id = survey_question.survey_id AND survey.c_id = survey_question.c_id) ".
+            "LEFT JOIN $table_survey_question survey_question
+             ON (survey.survey_id = survey_question.survey_id AND survey.c_id = survey_question.c_id) ".
             ", $table_user user
                WHERE survey.author = user.user_id AND survey.c_id = $course_id $list_condition ";
         $sql .= " GROUP BY survey.survey_id";
@@ -4326,10 +4421,6 @@ class SurveyUtil
             }
         }
 
-        echo '<div class="survey-block">';
-        echo '<div class="title-survey-block">';
-        echo  Display::return_icon('survey.png', get_lang('CreateNewSurvey'),array('style'=>'inline-block'),ICON_SIZE_SMALL);
-        echo '<h3>'.get_lang('SurveyList').'</h3></div>';
         echo '<table id="list-survey" class="table ">';
         echo '<tr>';
         echo '	<th>'.get_lang('SurveyName').'</th>';
@@ -4388,7 +4479,6 @@ class SurveyUtil
             }
         }
         echo '</table>';
-        echo '</div>';
     }
 
     /**

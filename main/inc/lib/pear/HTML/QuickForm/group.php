@@ -42,7 +42,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    var $_name = '';
+    private $_name = '';
 
     /**
      * Array of grouped elements
@@ -50,15 +50,15 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @since     1.0
      * @access    private
      */
-    var $_elements = array();
+    private $_elements = array();
 
     /**
      * String to separate elements
      * @var       mixed
      * @since     2.5
-     * @access    private
+     * @access    public
      */
-    var $_separator = null;
+    public $_separator = null;
 
     /**
      * Required elements in this group
@@ -66,7 +66,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @since     2.5
      * @access    private
      */
-    var $_required = array();
+    private $_required = array();
 
    /**
     * Whether to change elements' names to $groupName[$elementName] or leave them as is
@@ -74,7 +74,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     * @since    3.0
     * @access   private
     */
-    var $_appendName = true;
+    private $_appendName = true;
 
     /**
      * Class constructor
@@ -347,14 +347,16 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    public function onQuickFormEvent($event, $arg, &$caller)
     {
         switch ($event) {
             case 'updateValue':
                 $this->_createElementsIfNotExist();
+
                 foreach (array_keys($this->_elements) as $key) {
                     if ($this->_appendName) {
                         $elementName = $this->_elements[$key]->getName();
+
                         if (is_null($elementName)) {
                             $this->_elements[$key]->setName($this->getName());
                         } elseif ('' === $elementName) {
@@ -369,10 +371,10 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                     }
                 }
                 break;
-
             default:
                 parent::onQuickFormEvent($event, $arg, $caller);
         }
+
         return true;
     }
 

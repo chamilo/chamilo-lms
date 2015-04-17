@@ -3658,7 +3658,7 @@ class SessionManager
      * Protect a session to be edited.
      * @param int $id
      */
-    static function protect_session_edit($id)
+    public static function protect_session_edit($id)
     {
         api_protect_admin_script(true);
         $session_info = self::fetch($id);
@@ -3679,7 +3679,7 @@ class SessionManager
      * @param $id
      * @return bool
      */
-    static function protect_teacher_session_edit($id)
+    public static function protect_teacher_session_edit($id)
     {
         if (!api_is_coach($id) && !api_is_platform_admin()) {
             api_not_allowed(true);
@@ -3724,7 +3724,7 @@ class SessionManager
             foreach ($sessionCategories as $category) {
                 if (isset($category['sessions'])) {
                     foreach ($category['sessions'] as $session) {
-                        $session_array[] = $session;
+                        $sessionArray[] = $session;
                     }
                 }
             }

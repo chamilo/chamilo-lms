@@ -92,20 +92,22 @@ $(document).ready(function() {
     });
 
     /* When clicking in a course title */
-    $("#skill_info").on("click", "a.course_description_popup", function() {
-        course_code = $(this).attr('rel');
-        $.ajax({
-            url: url+'&a=get_course_info_popup&code='+course_code,
-            async: false,
-            success: function(data) {
-                $('#course_info').html(data);
-                $("#dialog-course-info").dialog({
-                     close: function() {
-                        $('#course_info').html('');
-                    }
-                });
-                $("#dialog-course-info").dialog("open");
+    $("#skill_info").on("click", "a.course_description_popup", function(e) {
+        e.preventDefault();
+
+        var getCourseInfo = $.ajax(
+            url,
+            {
+                data: {
+                    a: 'get_course_info_popup',
+                    code: $(this).attr('rel')
+                }
             }
+        );
+
+        $.when(getCourseInfo).done(function(response) {
+            $('#frm-course-info').find('.modal-body').html(response);
+            $('#frm-course-info').modal('show');
         });
     });
 
@@ -141,15 +143,11 @@ $(document).ready(function() {
         newel: true
     });
 
-    //Open dialog
-    $("#dialog-course-info").dialog({
-        autoOpen: false,
-        modal   : true,
-        width   : 550,
-        height  : 250
-    });
-
     load_nodes(0, main_depth);
+
+    $('#frm-course-info').on('', function() {
+        $('#frm-course-info').find('.modal-body').html('');
+    });
 });
 
 </script>
@@ -260,10 +258,6 @@ $(document).ready(function() {
                 </div>
             </div>
         </div>
-        <div id="dialog-course-info" style="display:none;">
-            <div id="course_info">
-            </div>
-        </div>
     </div>
 </div>
 
@@ -279,6 +273,23 @@ $(document).ready(function() {
             <div class="modal-body">
                 {{ dialogForm }}
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close" | get_lang }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="frm-course-info" tabindex="-1" role="dialog" aria-labelledby="form-course-info-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="form-course-info-title">{{ "ChooseCourse" | get_lang }}</h4>
+            </div>
+            <div class="modal-body"></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close" | get_lang }}</button>
             </div>

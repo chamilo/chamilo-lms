@@ -1343,9 +1343,6 @@ class Agenda
         $dateCondition = null;
 
         if (!empty($start) && !empty($end)) {
-            $date = new DateTime($start);
-            $month = $date->format('m');
-
             $dateCondition .= "AND (
                  agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
                  agenda.end_date BETWEEN '".$start."' AND '".$end."' OR
@@ -1354,7 +1351,6 @@ class Agenda
                  YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
                  MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
                  )
-
             )";
         }
 

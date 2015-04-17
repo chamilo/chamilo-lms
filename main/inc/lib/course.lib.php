@@ -4750,6 +4750,8 @@ class CourseManager
      */
     public static function process_hot_course_item($courses, $my_course_code_list = array())
     {
+        $hotCourses = [];
+
         $ajax_url = api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=add_course_vote';
 
         $stok = Security::get_existing_token();
@@ -4803,8 +4805,10 @@ class CourseManager
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
             $my_course['extra_info']['rating_html'] = Display::return_rating_system('star_' . $course_info['real_id'],
                 $ajax_url . '&amp;course_id=' . $course_info['real_id'], $point_info);
+
+            $hotCourses[] = $my_course;
         }
-        return $courses;
+        return $hotCourses;
     }
 
     /**

@@ -380,7 +380,7 @@ class SystemAnnouncementManager
 		if ($add_to_calendar) {
 			$agenda = new Agenda();
 			$agenda->setType('admin');
-			$id = $agenda->add_event(
+			$id = $agenda->addEvent(
 				$date_start,
 				$date_end,
 				false,

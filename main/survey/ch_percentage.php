@@ -11,7 +11,7 @@ class ch_percentage extends survey_question
      * @param array $questionData
      * @param array $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = array(), $answers = '')
     {
         $options = array(
             '--' => '--'
@@ -21,9 +21,15 @@ class ch_percentage extends survey_question
             $options[$key] = $value;
         }
 
+        $name = 'question' . $questionData['question_id'];
+
         $form->addSelect(
-            'question'.$questionData['question_id'], null, $options
+            $name, null, $options
         );
+
+        if (!empty($answers)) {
+            $form->setDefaults([$name => $answers]);
+        }
     }
 }
 

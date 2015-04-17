@@ -1358,7 +1358,7 @@ function display_database_settings_form(
     </tr>
     <tr>
     <td>
-    <table class="data_table_no_border">
+    <table class="table">
     <tr>
       <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
       <?php if ($installType == 'update'): ?>
@@ -1487,9 +1487,9 @@ function display_configuration_parameter(
     echo "<tr>";
     echo "<td>$parameterName</td>";
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>\n";
+        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>";
     } else {
-        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>\n";
+        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>";
     }
     echo "</tr>";
 }
@@ -1520,13 +1520,12 @@ function display_configuration_settings_form(
     echo '<div class="RequirementHeading">';
     echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
     echo '</div>';
-    echo '<div class="RequirementContent">';
+
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
-    echo '</div>';
 
     echo '<fieldset>';
     echo '<legend>'.get_lang('Administrator').'</legend>';
-    echo '<table class="data_table_no_border">';
+    echo '<table class="table">';
 
     // Parameter 1: administrator's login
 
@@ -1558,7 +1557,7 @@ function display_configuration_settings_form(
     echo '<fieldset>';
     echo '<legend>'.get_lang('Platform').'</legend>';
 
-    echo '<table class="data_table_no_border">';
+    echo '<table class="table">';
 
     //First parameter: language
     echo "<tr>";

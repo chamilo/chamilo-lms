@@ -33,8 +33,6 @@ class CBlog
      * @var integer
      *
      * @ORM\Column(name="blog_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $blogId;
 

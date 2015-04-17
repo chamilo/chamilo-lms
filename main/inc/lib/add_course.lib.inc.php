@@ -430,6 +430,8 @@ class AddCourse
         if (empty($course_id)) {
             return false;
         }
+
+        $courseInfo = api_get_course_info_by_id($course_id);
         $now = api_get_utc_datetime(time());
 
         $tbl_course_homepage = Database::get_course_table(TABLE_TOOL_LIST);
@@ -636,16 +638,13 @@ class AddCourse
             );
         }
 
-        // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
         $sql = "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
                 VALUES ($course_id, 24,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . self::string2binary(
                 api_get_setting('course_create_active_tools', 'blogs')
             ) . "','1','squaregrey.gif','NO','_self','admin','0')";
         Database::query($sql);
-        // end of Smartblogs
 
-        /*  Course homepage tools for course admin only    */
-
+        /*  Course homepage tools for course admin only  */
         Database::query(
             "INSERT INTO $tbl_course_homepage  (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
             VALUES ($course_id, 25, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible_for_course_admin','1','', 'NO','_self','admin','0')"
@@ -764,9 +763,7 @@ class AddCourse
                 'certificates',
             );
 
-            $default_course_path = api_get_path(
-                    SYS_CODE_PATH
-                ) . 'default_course_document/';
+            $default_course_path = api_get_path(SYS_CODE_PATH) . 'default_course_document/';
 
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {
@@ -812,14 +809,10 @@ class AddCourse
                     }
 
                     $course_documents_folder = $sys_course_path . $course_repository . "/document/$media_type/";
-                    $default_course_path = api_get_path(
-                            SYS_CODE_PATH
-                        ) . 'default_course_document' . $path_documents;
-
-                    //echo 'try '.$course_documents_folder; echo '<br />';
+                    $default_course_path = api_get_path(SYS_CODE_PATH) . 'default_course_document' . $path_documents;
 
                     if (!is_dir($course_documents_folder)) {
-                        //Creating index.html
+                        // Creating index.html
                         mkdir($course_documents_folder, $perm);
                         $fd = fopen(
                             $course_documents_folder . 'index.html',
@@ -869,11 +862,16 @@ class AddCourse
                                     }
 
                                     Database::query(
-                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents" . $folder_path . "','" . $title . "','folder','0')"
+                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
+                                        VALUES ($course_id,'$path_documents" . $folder_path . "','" . $title . "','folder','0')"
                                     );
                                     $image_id = Database:: insert_id();
+
+
+
                                     Database::query(
-                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,0)"
+                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                                        VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,0)"
                                     );
                                 }
                             }
@@ -905,17 +903,25 @@ class AddCourse
 
                                     //Inserting file in the DB
                                     Database::query(
-                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents" . $value["file"] . "','" . $temp[count(
-                                            $temp
-                                        ) - 1] . "','file','$file_size')"
+                                        "INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size)
+                                        VALUES ($course_id,'$path_documents" . $value["file"] . "','" . $temp[count($temp) - 1] . "','file','$file_size')"
                                     );
                                     $image_id = Database:: insert_id();
-                                    if ($path_documents . $value['file'] == '/certificates/default.html') {
-                                        $example_cert_id = $image_id;
+                                    if ($image_id) {
+
+                                        $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
+                                        Database::query($sql);
+
+                                        if ($path_documents . $value['file'] == '/certificates/default.html') {
+                                            $example_cert_id = $image_id;
+                                        }
+                                        Database::query(
+                                            "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,1)"
+                                        );
+                                        $docId = Database:: insert_id();
+                                        $sql = "UPDATE $TABLEITEMPROPERTY SET id = iid WHERE iid = $docId";
+                                        Database::query($sql);
                                     }
-                                    Database::query(
-                                        "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,'$now','$now',$image_id,'DocumentAdded',1,0,NULL,1)"
-                                    );
                                 }
                             }
                         }
@@ -923,60 +929,57 @@ class AddCourse
                 }
             }
 
-            /* Agenda tool */
-
-            Database::query(
-                "INSERT INTO $TABLETOOLAGENDA  VALUES ($course_id, NULL, '" . self::lang2db(
-                    get_lang('AgendaCreationTitle')
-                ) . "', '" . self::lang2db(
-                    get_lang('AgendaCreationContenu')
-                ) . "', now(), now(), NULL, 0, 0)"
+            $agenda = new Agenda();
+            $agenda->setType('course');
+            $agenda->set_course($courseInfo);
+            $agenda->addEvent(
+                $now,
+                $now,
+                0,
+                get_lang('AgendaCreationTitle'),
+                get_lang('AgendaCreationContenu')
             );
-            // We need to add the item properties too!
-            $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id, '" . TOOL_CALENDAR_EVENT . "',1,'$now','$now',$insert_id,'AgendaAdded',1,0,NULL,1)";
-            Database::query($sql);
 
             /*  Links tool */
 
-            $add_google_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
-                    VALUES ($course_id, 'http://www.google.com','Google','" . self::lang2db(
-                    get_lang('Google')
-                ) . "','0','0','0','_self')";
-            Database::query($add_google_link_sql);
+            $link = new Link();
+            $link->setCourse($courseInfo);
+            $links = [
+                [
+                    'c_id' => $course_id,
+                    'url' => 'http://www.google.com',
+                    'title' => 'Google',
+                    'description' => get_lang('Google') ,
+                    'category_id' => 0,
+                    'on_homepage' => 0,
+                    'target' => '_self',
+                    'session_id' => 0
+                ],
+                [
+                    'c_id' => $course_id,
+                    'url' => 'http://www.wikipedia.org',
+                    'title' => 'Wikipedia',
+                    'description' => get_lang('Wikipedia') ,
+                    'category_id' => 0,
+                    'on_homepage' => 0,
+                    'target' => '_self',
+                    'session_id' => 0
+                ]
+            ];
 
-            // We need to add the item properties too!
-            $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                    VALUES ($course_id, '" . TOOL_LINK . "',1,'$now','$now',$insert_id,'LinkAdded',1,0,NULL,1)";
-            Database::query($sql);
+            foreach($links as $params) {
+                $link->save($params);
+            }
 
-            $add_wikipedia_link_sql = "INSERT INTO $TABLETOOLLINK  (c_id, url, title, description, category_id, display_order, on_homepage, target)
-                    VALUES ($course_id, 'http://www.wikipedia.org','Wikipedia','" . self::lang2db(
-                    get_lang('Wikipedia')
-                ) . "','0','1','0','_self')";
-            Database::query($add_wikipedia_link_sql);
-
-            // We need to add the item properties too!
-            $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY  (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,'$now','$now',$insert_id,'LinkAdded',1,0,NULL,1)";
-            Database::query($sql);
-
-            /* Annoucement tool */
-
-            $sql = "INSERT INTO $TABLETOOLANNOUNCEMENTS  (c_id, title,content,end_date,display_order,email_sent)
-                    VALUES ($course_id, '" . self::lang2db(
-                    get_lang('AnnouncementExampleTitle')
-                ) . "', '" . self::lang2db(
-                    get_lang('AnnouncementEx')
-                ) . "', '$now', '1','0')";
-            Database::query($sql);
-
-            // We need to add the item properties too!
-            $insert_id = Database:: insert_id();
-            $sql = "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                    VALUES ($course_id, '" . TOOL_ANNOUNCEMENT . "',1,'$now','$now',$insert_id,'AnnouncementAdded',1,0,NULL,1)";
-            Database::query($sql);
+            /* Announcement tool */
+            AnnouncementManager::add_announcement(
+                get_lang('AnnouncementExampleTitle'),
+                get_lang('AnnouncementEx'),
+                ['everyone' => 'everyone'],
+                null,
+                null,
+                $now
+            );
 
             /* Introduction text */
 
@@ -1103,8 +1106,7 @@ class AddCourse
             );
 
             /* Gradebook tool */
-            $course = api_get_course_info_by_id($course_id);
-            $course_code = $course['code'];
+            $course_code = $courseInfo['code'];
             // father gradebook
             Database::query(
                 "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)"

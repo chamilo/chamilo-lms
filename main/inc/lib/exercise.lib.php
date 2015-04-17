@@ -643,6 +643,9 @@ class ExerciseLib
                             $attributes['class'] = self::detectInputAppropriateClass(
                                 $size
                             );
+
+                            $attributes['class'] .= ' block_on_enter';
+
                             $answer = str_replace(
                                 $item,
                                 Display::input(

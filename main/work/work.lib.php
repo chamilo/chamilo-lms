@@ -4192,7 +4192,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $agenda->type = 'course';
 
         if (empty($agendaId)) {
-            $agendaId = $agenda->add_event(
+            $agendaId = $agenda->addEvent(
                 $date,
                 $end_date,
                 'false',

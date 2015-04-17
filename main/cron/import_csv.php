@@ -848,7 +848,7 @@ class ImportCsv
                     continue;
                 }
 
-                $eventId = $agenda->add_event(
+                $eventId = $agenda->addEvent(
                     $event['start'],
                     $event['end'],
                     false,

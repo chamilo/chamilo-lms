@@ -34,7 +34,7 @@ switch ($action) {
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
-        echo $agenda->add_event(
+        echo $agenda->addEvent(
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],

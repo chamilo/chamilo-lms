@@ -20,6 +20,7 @@ if (api_get_setting('allow_skills_tool') != 'true') {
 }
 
 $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
 
 /* Process data */
 $skillParentId = isset($_GET['parent']) ? intval($_GET['parent']) : 0;

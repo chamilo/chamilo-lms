@@ -30,6 +30,13 @@ $toolbar = Display::toolbarButton(
     'success',
     ['title' => get_lang('CreateSkill')]
 );
+$toolbar .= Display::toolbarButton(
+    get_lang('SkillsWheel'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skills_wheel.php',
+    'bullseye',
+    'primary',
+    ['title' => get_lang('CreateSkill')]
+);
 
 /* View */
 $skill = new Skill();

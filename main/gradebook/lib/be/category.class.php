@@ -1685,8 +1685,8 @@ class Category implements GradebookItem
                     );
 
                     if (
-                        api_is_student() &&
-                        api_get_configuration_value('hide_certificate_export_link_students')
+                        api_get_configuration_value('hide_certificate_export_link') ||
+                        (api_is_student() && api_get_configuration_value('hide_certificate_export_link_students'))
                     ) {
                         $exportToPDF = null;
                     }

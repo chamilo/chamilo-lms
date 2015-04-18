@@ -71,6 +71,7 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
                 //get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
                 $mainPath        = getParentFolderPath($folderInfo['path']);
                 $chamiloFolder   = substr($fullPath, strlen($mainPath) - strlen($fullPath) - 1);
+
                 $chamiloFile     = $tem['name']; //get	ajaxmanager
                 $chamiloFileSize = filesize($fullPath); //get ajaxmanager
                 //get Chamilo

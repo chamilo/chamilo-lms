@@ -559,7 +559,8 @@ class Template
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
-            'mediaelement/mediaelement-and-player.min.js'
+            'mediaelement/mediaelement-and-player.min.js',
+            'imagemap-resizer/imageMapResizer.min.js'
         );
 
         if (api_is_global_chat_enabled()) {

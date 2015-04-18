@@ -368,6 +368,9 @@ $(function() {
     $(".td_actions").parent('tr').mouseout(function() {
         $(".td_actions").hide();
     });*/
+
+    /* Make responsive image maps */
+    $('map').imageMapResize();
 });
 </script>
 {# Extra header configured in admin section, only shown to non-admins #}

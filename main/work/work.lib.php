@@ -3842,14 +3842,14 @@ function uploadWork($my_folder_data, $_course)
  * @param array $courseInfo
  * @param int $session_id
  */
-function sendAlertToTeacher($workId, $courseInfo, $session_id)
+function sendAlertToUsers($workId, $courseInfo, $session_id)
 {
+    $user_list = array();
     $workData = get_work_assignment_by_id($workId, $courseInfo['real_id']);
     //last value is to check this is not "just" an edit
     //YW Tis part serve to send a e-mail to the tutors when a new file is sent
     $send = api_get_course_setting('email_alert_manager_on_new_doc');
-
-    if ($send > 0) {
+    if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
         // Lets predefine some variables. Be sure to change the from address!
         if (empty($session_id)) {
             //Teachers
@@ -3870,9 +3870,35 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
                 2
             );
         }
-
+    }
+    if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_STUDENTS) {
+        if (!$session_id) {
+            $session_id = null;
+        }
+        $student = CourseManager::get_user_list_from_course_code(
+            api_get_course_id(),
+            $session_id,
+            null,
+            null,
+            STUDENT,
+            null,
+            null,
+            null,
+            null,
+            null,
+            array(api_get_user_id())
+        );
+        $user_list = array_merge($user_list, $student);
+    }
+    if ($send) {
+        $senderEmail = api_get_setting('emailAdministrator');
+        $senderName = api_get_person_name(
+            api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $subject = "[" . api_get_setting('siteName') . "] ".get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."  ";
-
         foreach ($user_list as $user_data) {
             $to_user_id = $user_data['user_id'];
             $user_info = api_get_user_info($to_user_id);
@@ -3882,8 +3908,19 @@ function sendAlertToTeacher($workId, $courseInfo, $session_id)
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".get_lang('DownloadLink')."\n";
             $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
             $message .= $url;
-
             MessageManager::send_message_simple($to_user_id, $subject, $message);
+            api_mail_html(
+                api_get_person_name(
+                    $user_info['firstname'].' '.$user_info['lastname'],
+                    null,
+                    PERSON_NAME_EMAIL_ADDRESS
+                ),
+                $user_info['email'],
+                $subject,
+                $message,
+                $senderName,
+                $senderEmail
+            );
         }
     }
 }
@@ -4013,7 +4050,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
                 $userId,
                 $groupId
             );
-            sendAlertToTeacher($workId, $courseInfo, $sessionId);
+            sendAlertToUsers($workId, $courseInfo, $sessionId);
             event_upload($workId, $userId, $courseInfo['code'], $sessionId);
             $message = Display::return_message(get_lang('DocAdd'));
         }

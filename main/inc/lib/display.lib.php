@@ -876,6 +876,7 @@ class Display
     public static function url($name, $url, $attributes = array())
     {
         if (!empty($url)) {
+            $url = preg_replace('#&amp;#', '&', $url);
             $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
             $attributes['href'] = $url;
         }

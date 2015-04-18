@@ -149,7 +149,7 @@ ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';
-    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
+    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-primary'));
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

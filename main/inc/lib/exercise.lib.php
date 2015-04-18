@@ -3495,7 +3495,7 @@ class ExerciseLib
         }
         // Remove audio auto play from questions on results page - refs BT#7939
         $exercise_content = preg_replace(
-            '/autoplay[\=\".+\"]+/',
+            ['/autoplay[\=\".+\"]+/','/autostart[\=\".+\"]+/'],
             '',
             $exercise_content
         );

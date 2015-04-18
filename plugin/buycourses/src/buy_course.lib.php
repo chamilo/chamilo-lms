@@ -22,17 +22,18 @@ function sync()
     $sql = "UPDATE $tableBuySessionRelCourse SET sync = 0";
     Database::query($sql);
 
-    $sql = "SELECT id_session, course_code, nbr_users FROM $tableSessionRelCourse";
+    $sql = "SELECT session_id, c_id, nbr_users FROM $tableSessionRelCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session='" . $row['id_session'] . "';";
+        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session=" . $row['session_id'];
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
-            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session='" . $row['id_session'] . "';";
+            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session=" . $row['session_id'];
             Database::query($sql);
         } else {
+            $courseCode = api_get_course_info_by_id($row['c_id'])['code'];
             $sql = "INSERT INTO $tableBuySessionRelCourse (id_session, course_code, nbr_users, sync)
-            VALUES ('" . $row['id_session'] . "', '" . $row['course_code'] . "', '" . $row['nbr_users'] . "', 1);";
+            VALUES (" . $row['session_id'] . ", '" . $courseCode . "', " . $row['nbr_users'] . ", 1);";
             Database::query($sql);
         }
     }
@@ -177,9 +178,9 @@ function userSessionList()
                 //check teacher
                 $sql = "SELECT lastname, firstname
                 FROM course_rel_user a, user b
-                WHERE a.course_code='" . $row['code'] . "'
+                WHERE a.c_id='" . $row['id'] . "'
                 AND a.role<>'' AND a.role<>'NULL'
-                AND a.user_id=b.user_id;";
+                AND a.user_id=b.id;";
                 $tmp = Database::query($sql);
                 $rowTmp = Database::fetch_assoc($tmp);
                 $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
@@ -196,7 +197,7 @@ function userSessionList()
         //check if the user is enrolled in the current session
         if ($currentUserId > 0) {
             $sql = "SELECT 1 FROM $tableSessionRelUser
-                WHERE id_session ='".$rowSession['session_id']."' AND
+                WHERE session_id ='".$rowSession['session_id']."' AND
                 user_id = $currentUserId";
             $result = Database::query($sql);
             if (Database::affected_rows($result) > 0) {
@@ -505,9 +506,9 @@ function sessionInfo($code)
             //check teacher
             $sql = "SELECT lastname, firstname
             FROM course_rel_user a, user b
-            WHERE a.course_code='".$row['code']."'
+            WHERE a.c_id='".$row['id']."'
             AND a.role<>'' AND a.role<>'NULL'
-            AND a.user_id=b.user_id;";
+            AND a.user_id=b.id;";
             $tmp = Database::query($sql);
             $rowTmp = Database::fetch_assoc($tmp);
             $row['teacher'] = $rowTmp['firstname'].' '.$rowTmp['lastname'];

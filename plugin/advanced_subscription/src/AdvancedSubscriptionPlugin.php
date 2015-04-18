@@ -1321,7 +1321,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $sql = "SELECT s.id FROM $tSession AS s
             INNER JOIN $tSessionFieldValues AS sfv ON s.id = sfv.session_id
             INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id
-            INNER JOIN $tSessionUser AS su ON s.id = su.id_session
+            INNER JOIN $tSessionUser AS su ON s.id = su.session_id
             WHERE
                 sf.field_variable = 'is_induction_session' AND
                 su.relation_type = 0 AND

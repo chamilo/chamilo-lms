@@ -100,9 +100,9 @@ if ($_REQUEST['tab'] == 'sessions_filter') {
                 //check teacher
                 $sql = "SELECT lastname, firstname
                 FROM course_rel_user a, user b
-                WHERE a.course_code='" . $row['code'] . "'
+                WHERE a.c_id=" . $row['id'] . "
                 AND a.role<>'' AND a.role<>'NULL'
-                AND a.user_id=b.user_id;";
+                AND a.user_id=b.id;";
                 $tmp = Database::query($sql);
                 $rowTmp = Database::fetch_assoc($tmp);
                 $row['teacher'] = $rowTmp['firstname'] . ' ' . $rowTmp['lastname'];
@@ -264,10 +264,10 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         //Check teacher
         $sql = "SELECT lastname, firstname
             FROM $tableCourseRelUser a, $tableUser b
-            WHERE a.course_code = '" . $row['code'] . "'
+            WHERE a.c_id = " . $row['id'] . "
             AND a.role <> ''
             AND a.role IS NOT NULL
-            AND a.user_id = b.user_id;";
+            AND a.user_id = b.id;";
 
         $tmp = Database::query($sql);
         $rowTmp = Database::fetch_assoc($tmp);
@@ -275,7 +275,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         //Check if the student is enrolled
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
             $sql = "SELECT 1 FROM $tableCourseRelUser
-                WHERE course_code = '" . $row['code'] . "'
+                WHERE c_id = " . $row['id'] . "
                 AND user_id = " . intval($_SESSION['_user']['user_id']) . ";";
 
             $tmp = Database::query($sql);
@@ -288,8 +288,8 @@ if ($_REQUEST['tab'] == 'courses_filter') {
             $row['enrolled'] = "NO";
         }
         // Check img
-        if (file_exists("../../../courses/" . $row['code'] . "/course-pic85x85.png")) {
-            $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
+        if (file_exists(api_get_path(SYS_COURSE_PATH) . $row['directory'] . "/course-pic85x85.png")) {
+            $row['course_img'] = "courses/" . $row['directory'] . "/course-pic85x85.png";
         } else {
             $row['course_img'] = "main/img/without_picture.png";
         }

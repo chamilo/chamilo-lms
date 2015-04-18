@@ -63,7 +63,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
             $userSessionCourses = array();
             foreach ($userSessions as $userSession) {
                 $userSessionCourseResult = Database::select(
-                    'course_code',
+                    'c_id',
                     Database::get_main_table(TABLE_MAIN_SESSION_COURSE),
                     array(
                         'where' => array(
@@ -96,8 +96,8 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             // Check if current course code matches with one of the users
             foreach ($currentSessionCourseResult as $currentSessionCourse) {
-                if (isset($userSessionCourses[$currentSessionCourse['course_code']])) {
-                    $endDate = $userSessionCourses[$currentSessionCourse['course_code']];
+                if (isset($userSessionCourses[$currentSessionCourse['c_id']])) {
+                    $endDate = $userSessionCourses[$currentSessionCourse['c_id']];
                     $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);

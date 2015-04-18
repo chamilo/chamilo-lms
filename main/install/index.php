@@ -105,11 +105,11 @@ $update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9
 
 $my_old_version = '';
 if (empty($tmp_version)) {
-	$tmp_version = get_config_param('system_version');
+    $tmp_version = get_config_param('system_version');
 }
 
 if (!empty($_POST['old_version'])) {
-	$my_old_version = $_POST['old_version'];
+    $my_old_version = $_POST['old_version'];
 } elseif (!empty($tmp_version)) {
     $my_old_version = $tmp_version;
 }
@@ -119,11 +119,11 @@ require_once __DIR__.'/version.php';
 // A protection measure for already installed systems.
 
 if (isAlreadyInstalledSystem()) {
-	// The system has already been installed, so block re-installation.
-	$global_error_code = 6;
-	// @todo uncomment this.
-	/*require '../inc/global_error_message.inc.php';
-	die();*/
+    // The system has already been installed, so block re-installation.
+    $global_error_code = 6;
+    // @todo uncomment this.
+    require '../inc/global_error_message.inc.php';
+    die();
 }
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */

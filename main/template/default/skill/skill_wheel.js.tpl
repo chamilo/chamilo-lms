@@ -2,6 +2,62 @@
 {% include template ~ "/layout/topbar.tpl" %}
 <script>
 
+var SkillWheel = {
+    currentSkill: null,
+    getSkillInfo: function(skillId) {
+        return $.getJSON(
+            '{{ url }}',
+            {
+                a: 'get_skill_info',
+                id: parseInt(skillId)
+            }
+        );
+    },
+    showFormSkill: function(skillId) {
+        skillId = parseInt(skillId);
+
+        var formSkill = $('form[name="form"]');
+
+        var getSkillInfo = SkillWheel.getSkillInfo(skillId);
+
+        $.when(getSkillInfo).done(function(skillInfo) {
+            SkillWheel.currentSkill = skillInfo;
+
+            var getSkillParentInfo = SkillWheel.getSkillInfo(skillInfo.extra.parent_id);
+
+            $.when(getSkillParentInfo).done(function(skillParentInfo) {
+                formSkill.find('p#parent').text(skillParentInfo.name);
+            });
+
+            formSkill.find('p#name').text(skillInfo.name);
+
+            if (skillInfo.short_code.length > 0) {
+                formSkill.find('p#short_code').text(skillInfo.short_code).parent().parent().show();
+            } else {
+                formSkill.find('p#short_code').parent().parent().hide();
+            }
+
+            if (skillInfo.description.length > 0) {
+                formSkill.find('p#description').text(skillInfo.description).parent().parent().show();
+            } else {
+                formSkill.find('p#description').parent().parent().hide();
+            }
+
+            if (skillInfo.gradebooks.length > 0) {
+                formSkill.find('ul#gradebook').empty().parent().parent().show();
+
+                $.each(skillInfo.gradebooks, function(index, gradebook) {
+                    $('<li>').text(gradebook.name).appendTo(formSkill.find('ul#gradebook'));
+                });
+            } else {
+                formSkill.find('ul#gradebook').parent().parent().hide();
+            }
+
+            $('#frm-skill').modal('show');
+        });
+    }
+};
+
 /* Skill wheel settings */
 var debug = true;
 var url = '{{ url }}';
@@ -316,134 +372,6 @@ function click_partition(d, path, text, icon, arc, x, y, r, p, vis) {
     });*/
 }
 
-/*
-    Open a popup in order to modify the skill
- */
-function open_popup(skill_id, parent_id) {
-    // Cleaning selects
-    $("#gradebook_id").find('option').remove();
-    $("#parent_id").find('option').remove();
-    //Cleaning lists
-    $("#gradebook_holder").find('li').remove();
-    $("#skill_edit_holder").find('li').remove();
-
-    var skill = false;
-    if (skill_id) {
-        skill = get_skill_info(skill_id);
-    }
-
-    var parent = false;
-    if (parent_id) {
-        parent = get_skill_info(parent_id);
-    }
-
-    if (skill) {
-        var parent_info = get_skill_info(skill.extra.parent_id);
-
-        if ("{{ isAdministration }}") {
-            $('input[name="id"]').val(skill.id);
-            $("#name").val(skill.name);
-            $("#short_code").val(skill.short_code);
-            $("#description").val(skill.description);
-        } else {
-            $("#name").prop('readonly', true).val(skill.name);
-            $("#short_code").prop('readonly', true).val(skill.short_code);
-            $("#description").prop('readonly', true).val(skill.description);
-        }
-
-        // Filling parent_id
-        $("#parent_id").append('<option class="selected" value="'+skill.extra.parent_id+'" selected="selected" >');
-
-        $("#skill_edit_holder").append('<li class="bit-box">'+parent_info.name+'</li>');
-
-        //Filling the gradebook_id
-        jQuery.each(skill.gradebooks, function(index, data) {
-            $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');
-        });
-
-        if ("{{ isAdministration }}") {
-            $("#dialog-form").dialog({
-                buttons: [
-                    {
-                        text: "{{ "Save"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function() {
-                            var params = $("#add_item").find(':input').serialize();
-                            add_skill(params);
-                        }
-                    },
-                    {
-                        text: "{{ "CreateChildSkill"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function() {
-                            open_popup(0, skill.id);
-                        }
-                    },
-                    {
-                        text: "{{ "AddSkillToProfileSearch"|get_lang }}",
-                        class: 'btn btn-primary',
-                        click: function () {
-                            add_skill_in_profile_list(skill.id, skill.name);
-                        }
-                    }
-                ],
-            });
-        }
-
-        $("#dialog-form").dialog({
-            close: function() {
-                $("#name").attr('value','');
-                $("#description").attr('value', '');
-                if ("{{ isAdministration }}") {
-                    //Redirect to the main root
-                    load_nodes(0, main_depth);
-                }
-            }
-        });
-
-        $("#dialog-form").dialog("open");
-    }
-
-    if (parent) {
-        $('input[name="id"]').attr('value','');
-        $("#name").attr('value', '');
-        $("#short_code").attr('value', '');
-        $("#description").attr('value', '');
-
-        //Filling parent_id
-        $("#parent_id").append('<option class="selected" value="'+parent.id+'" selected="selected" >');
-
-        $("#skill_edit_holder").append('<li class="bit-box">'+parent.name+'</li>');
-
-        //Filling the gradebook_id
-        jQuery.each(parent.gradebooks, function(index, data) {
-            $("#gradebook_id").append('<option class="selected" value="'+data.id+'" selected="selected" >');
-            $("#gradebook_holder").append('<li id="gradebook_item_'+data.id+'" class="bit-box">'+data.name+' <a rel="'+data.id+'" class="closebutton" href="#"></a> </li>');
-        });
-
-        $("#dialog-form").dialog({
-            buttons: [
-                {
-                    text: "{{ "Save"|get_lang }}",
-                    class: 'btn btn-primary',
-                    click: function() {
-                        var params = $("#add_item").find(':input').serialize();
-                        add_skill(params);
-                    }
-                }
-            ],
-            close: function() {
-                $("#name").attr('value', '');
-                $("#description").attr('value', '');
-                   load_nodes(0, main_depth);
-            }
-        });
-        $("#dialog-form").dialog("open");
-    }
-    return false;
-}
-
 /* Handles mouse clicks */
 function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis) {
     switch (d3.event.which) {
@@ -455,7 +383,11 @@ function handle_mousedown_event(d, path, text, icon, arc, x, y, r, padding, vis)
             //alert('Middle mouse button pressed');
             break;
         case 3:
-            open_popup(d.id);
+            if (typeof d.id === 'undefined') {
+                break;
+            }
+
+            SkillWheel.showFormSkill(d.id);
             //alert('Right mouse button pressed');
             break;
         default:
@@ -720,7 +652,7 @@ function load_nodes(load_skill_id, main_depth, extra_parent_id) {
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding +80) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
         })
         .on("click", function(d){
-            open_popup(d);
+            SkillWheel.showFormSkill(d.id);
         });
 
         icon_click.append("tspan")

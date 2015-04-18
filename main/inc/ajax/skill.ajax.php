@@ -74,7 +74,11 @@ switch ($action) {
         break;
     case 'get_course_info_popup':
         $course_info = api_get_course_info($_REQUEST['code']);
-        $courses = CourseManager::process_hot_course_item(array($course_info['real_id']));
+        $courses = CourseManager::process_hot_course_item(
+            [
+                ['c_id' => $course_info['real_id']]
+            ]
+        );
         Display::display_no_header();
         Display::$global_template->assign('hot_courses', $courses);
         echo Display::$global_template->fetch('default/layout/hot_course_item_popup.tpl');
@@ -115,27 +119,19 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $skill_info = $skill->get_skill_info($id);
         $courses = $skill->get_courses_by_skill($id);
+        $sessions = $skill->getSessionsBySkill($id);
+
         $html = '';
-        if (!empty($courses)) {
-            $html = sprintf(
-                get_lang('ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses'),
-                '<i>'.$skill_info['name'].'</i>'
-            ).'<br />';
-            foreach ($courses as $course) {
-                $url = '#';
-                $attributes = array('class' => 'course_description_popup', 'rel' => $course['code']);
-                $html .=
-                    Display::url(
-                        sprintf(
-                            get_lang('SkillXWithCourseX'),
-                            $skill_info['name'],
-                            $course['title']
-                        ),
-                        $url,
-                        $attributes
-                    ).'<br />';
-            }
+
+        if (!empty($courses) || !empty($sessions)) {
+            Display::display_no_header();
+            Display::$global_template->assign('skill', $skill_info);
+            Display::$global_template->assign('courses', $courses);
+            Display::$global_template->assign('sessions', $sessions);
+
+            $html = Display::$global_template->fetch('default/skill/skill_info.tpl');
         }
+
         echo $html;
         break;
     case 'get_skills_tree_json':

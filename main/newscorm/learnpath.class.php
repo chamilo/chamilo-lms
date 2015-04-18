@@ -8587,63 +8587,89 @@ class learnpath
      */
     public function get_links()
     {
+        $selfUrl = api_get_self();
+        $courseIdReq = api_get_cidreq();
+        $course = api_get_course_info();
         $course_id = api_get_course_int_id();
         $tbl_link = Database::get_course_table(TABLE_LINK);
+        $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
 
         $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($session_id, true, null, "link.session_id");
 
-        $sql = "SELECT id, title, category_id FROM $tbl_link
-                WHERE c_id = ".$course_id." $condition_session
-                ORDER BY title ASC";
-        $res_link = Database::query($sql);
+        $sql = "SELECT link.id as link_id,
+                    link.title as link_title,
+                    link.category_id as category_id,
+                    link_category.category_title as category_title
+                FROM $tbl_link as link
+                LEFT JOIN $linkCategoryTable as link_category
+                ON link.category_id = link_category.id
+                WHERE link.c_id = ".$course_id." $condition_session
+                ORDER BY link_category.category_title ASC, link.title ASC";
+        $links = Database::query($sql);
 
-        $return = '<ul class="lp_resource">';
-        $return .= '<li class="lp_resource_element">';
-        $return .= '<img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px" title="" />';
-        $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'link/link.php?' . api_get_cidreq() . '&action=addlink&amp;lp_id=' . $this->lp_id . '" title="' . get_lang('LinkAdd') . '">' . get_lang('LinkAdd') . '</a>';
-        $return .= '</li>';
-        $course_info = api_get_course_info();
+        $categorizedLinks = array();
+        $categories = array();
 
-        $linkCategories = Link::getLinkCategories($course_id, $session_id);
-        $categoryIdList = array();
-        if (!empty($linkCategories)) {
-            foreach ($linkCategories as $categoryInfo) {
-                $categoryIdList[] = $categoryInfo['id'];
+        while ($link = Database :: fetch_array($links)) {
+            if (!$link['category_id']) {
+                $link['category_title'] = get_lang('Uncategorized');
             }
+            $categories[$link['category_id']] = $link['category_title'];
+            $categorizedLinks[$link['category_id']][$link['link_id']] = $link['link_title'];
         }
 
-        while ($row_link = Database :: fetch_array($res_link)) {
-
-            // Check if category exists if not then consider as deleted.
-            if (!empty($row_link['category_id'])) {
-                $categoryId = $row_link['category_id'];
-                if (!in_array($categoryId, $categoryIdList)) {
-                    continue;
+        $linksHtmlCode =
+        '<script>
+            function toggle_tool(tool, id){
+                if(document.getElementById(tool+"_"+id+"_content").style.display == "none"){
+                    document.getElementById(tool+"_"+id+"_content").style.display = "block";
+                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'remove.gif";
+                } else {
+                    document.getElementById(tool+"_"+id+"_content").style.display = "none";
+                    document.getElementById(tool+"_"+id+"_opener").src = "' . api_get_path(WEB_IMG_PATH) . 'add.gif";
                 }
             }
-
-            $item_visibility = api_get_item_visibility(
-                $course_info,
-                TOOL_LINK,
-                $row_link['id'],
-                $session_id
-            );
-            if ($item_visibility != 2)  {
-                $return .= '<li class="lp_resource_element" data_id="'.$row_link['id'].'" data_type="'.TOOL_LINK.'" title="'.$row_link['title'].'" >';
-                $return .= '<a class="moved" href="#">';
-                $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-                $return .= '</a> ';
-                $return .= '<img alt="" src="../img/lp_link.gif" style="margin-right:5px;" title="" />';
-                $return .= '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_LINK . '&amp;file=' . $row_link['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
-                    $row_link['title'].
-                    '</a>';
-                $return .= '</li>';
+        </script>
+        <ul class="lp_resource">
+            <li class="lp_resource_element">
+                <img alt="" src="../img/linksnew.gif" style="margin-right:5px;width:16px"/>
+                <a href="'.api_get_path(REL_CODE_PATH).'link/link.php?'.$courseIdReq.
+                    '&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.get_lang('LinkAdd').'</a>
+            </li>';
+        foreach ($categorizedLinks as $categoryId => $links) {
+            $linkNodes = null;
+            foreach ($links as $key => $title) {
+                if (api_get_item_visibility($course, TOOL_LINK, $key, $session_id) != 2)  {
+                    $linkNodes .=
+                    '<li class="lp_resource_element" data_id="'.$key.
+                        '" data_type="'.TOOL_LINK.'" title="'.$title.'" >
+                        <a class="moved" href="#">'.
+                            $moveEverywhereIcon.
+                        '</a>
+                        <img alt="" src="../img/lp_link.gif" style="margin-right:5px;width:16px"/>
+                        <a href="'.$selfUrl.'?'.$courseIdReq.'&action=add_item&type='.
+                            TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id.'">'.
+                            Security::remove_XSS($title).
+                        '</a>
+                    </li>';
+                }
             }
+            $linksHtmlCode .=
+            '<li>
+                <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')"
+                style="vertical-align:middle">
+                    <img src="'.api_get_path(WEB_IMG_PATH).'add.gif" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
+                    align="absbottom" />
+                </a>
+                <span style="vertical-align:middle">'.Security::remove_XSS($categories[$categoryId]).'</span>
+            </li>
+            <div style="display:none" id="'.TOOL_LINK.'_'.$categoryId.'_content">'.$linkNodes.'</div>';
         }
-        $return .= '</ul>';
+        $linksHtmlCode .= '</ul>';
 
-        return $return;
+        return $linksHtmlCode;
     }
 
     /**

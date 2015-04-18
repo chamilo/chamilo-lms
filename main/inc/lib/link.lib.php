@@ -1840,13 +1840,6 @@ class Link extends Model
         $form->addRule('url', get_lang('GiveURL'), 'url');
         $form->addText('title', get_lang('LinkName'));
         $form->addTextarea('description', get_lang('Description'));
-        $form->addLabel(
-            get_lang('Metadata'),
-            Display::url(
-                get_lang('AddMetadata'),
-                "../metadata/index.php?eid='.urlencode('Link.'.$linkId).'"
-            )
-        );
 
         $resultcategories = Link::getLinkCategories($course_id, $session_id);
         $options = ['0' => '--'];

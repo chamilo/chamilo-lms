@@ -6,19 +6,18 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.admin
 */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
-
-global $_configuration;
 
 $current_access_url_id = api_get_current_access_url_id();
 
 $action = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
 
 // Blocks the possibility to delete a user
-$delete_user_available = true;
-if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
-	$delete_user_available = false;
+$deleteUserAvailable = true;
+if (api_get_configuration_value('deny_delete_users')) {
+    $deleteUserAvailable = false;
 }
 
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
@@ -301,69 +300,63 @@ function prepare_user_sql_query($is_count) {
 *	Make sure this function is protected because it does NOT check password!
 *
 *	This function defines globals.
-*   @param  int     User ID
+*   @param  int     $userId
 *   @return bool    False on failure, redirection on success
 *	@author Evie Embrechts
 *   @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
-function login_user($user_id) {
-    $user_id = intval($user_id);
-    $user_info = api_get_user_info($user_id);
+function login_user($userId)
+{
+    $userId = intval($userId);
+    $userInfo = api_get_user_info($userId);
 
     // Check if the user is allowed to 'login_as'
-    $can_login_as = api_can_login_as($user_id);
+    $canLoginAs = api_can_login_as($userId);
 
-    if (!$can_login_as) {
+    if (!$canLoginAs) {
+
         return false;
     }
 
-    //Load $_user to be sure we clean it before logging in
-	global $uidReset, $loginFailed, $_user;
+    $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $main_admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+	$track_e_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-	$main_user_table      = Database::get_main_table(TABLE_MAIN_USER);
-	$main_admin_table     = Database::get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table  = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    $firstname = $userInfo['firstname'];
+    $lastname = $userInfo['lastname'];
+    $userId = $userInfo['id'];
 
-	unset($_user['user_id']); // uid not in session ? prevent any hacking
-
-
-	$firstname  = $user_info['firstname'];
-	$lastname   = $user_info['lastname'];
-	$user_id    = $user_info['id'];
-
-	//$message = "Attempting to login as ".api_get_person_name($firstname, $lastname)." (id ".$user_id.")";
 	if (api_is_western_name_order()) {
-		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname,$user_id);
+		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname, $userId);
 	} else {
-		$message = sprintf(get_lang('AttemptingToLoginAs'), $lastname, $firstname, $user_id);
+		$message = sprintf(get_lang('AttemptingToLoginAs'), $lastname, $firstname, $userId);
 	}
 
-	$loginFailed = false;
-	$uidReset = false;
+	if ($userId) {
+	    // a uid is given (log in succeeded)
 
-	if ($user_id) { // a uid is given (log in succeeded)
-
-		$sql_query = "SELECT user.*, a.user_id is_admin,
+		$sql = "
+		    SELECT user.*, a.user_id is_admin,
 			UNIX_TIMESTAMP(login.login_date) login_date
 			FROM $main_user_table
 			LEFT JOIN $main_admin_table a
 			ON user.id = a.user_id
 			LEFT JOIN $track_e_login_table login
 			ON user.id = login.login_user_id
-			WHERE user.id = '".$user_id."'
-			ORDER BY login.login_date DESC LIMIT 1";
+			WHERE user.id = '".$userId."'
+			ORDER BY login.login_date DESC
+			LIMIT 1";
 
-		$sql_result = Database::query($sql_query);
+		$result = Database::query($sql);
 
-
-		if (Database::num_rows($sql_result) > 0) {
+		if (Database::num_rows($result) > 0) {
 			// Extracting the user data
 
-			$user_data = Database::fetch_array($sql_result);
+			$user_data = Database::fetch_array($result);
 
-            //Delog the current user
+            // Logout the current user
 
-			LoginDelete($_SESSION["_user"]["user_id"]);
+			LoginDelete(api_get_user_id());
 
 			// Cleaning session variables
 			unset($_SESSION['_user']);
@@ -371,26 +364,26 @@ function login_user($user_id) {
 			unset($_SESSION['is_allowedCreateCourse']);
 			unset($_SESSION['_uid']);
 
-
-			$_user['firstName'] 	= $user_data['firstname'];
-			$_user['lastName'] 		= $user_data['lastname'];
-			$_user['mail'] 			= $user_data['email'];
-			$_user['lastLogin'] 	= $user_data['login_date'];
-			$_user['official_code'] = $user_data['official_code'];
-			$_user['picture_uri'] 	= $user_data['picture_uri'];
-			$_user['user_id']		= $user_data['id'];
-            $_user['id']		= $user_data['id'];
-            $_user['status']        = $user_data['status'];
+            $_user['firstName'] = $user_data['firstname'];
+            $_user['lastName'] = $user_data['lastname'];
+            $_user['mail'] = $user_data['email'];
+            $_user['lastLogin'] = $user_data['login_date'];
+            $_user['official_code'] = $user_data['official_code'];
+            $_user['picture_uri'] = $user_data['picture_uri'];
+            $_user['user_id'] = $user_data['id'];
+            $_user['id'] = $user_data['id'];
+            $_user['status'] = $user_data['status'];
 
 			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
 			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
 
 			// Filling session variables with new data
-			$_SESSION['_uid']                   = $user_id;
-			$_SESSION['_user']                  = $_user;
-			$_SESSION['is_platformAdmin']       = $is_platformAdmin;
-			$_SESSION['is_allowedCreateCourse'] = $is_allowedCreateCourse;
-			$_SESSION['login_as']               = true; // will be useful later to know if the user is actually an admin or not (example reporting)s
+            $_SESSION['_uid'] = $userId;
+            $_SESSION['_user'] = $_user;
+            $_SESSION['is_platformAdmin'] = $is_platformAdmin;
+            $_SESSION['is_allowedCreateCourse'] = $is_allowedCreateCourse;
+            // will be useful later to know if the user is actually an admin or not (example reporting)
+            $_SESSION['login_as'] = true;
 
 			$target_url = api_get_path(WEB_PATH)."user_portal.php";
 			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
@@ -519,7 +512,7 @@ function user_filter($name, $params, $row) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $charset, $_admins_list, $delete_user_available;
+	global $charset, $_admins_list;
 	$is_admin   = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
@@ -631,7 +624,7 @@ function modify_filter($user_id, $url_params, $row) {
     if (api_is_platform_admin()) {
         $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.
             Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
-        if ($delete_user_available) {
+        if (api_get_configuration_value('deny_delete_users')) {
             if ($user_id != api_get_user_id() &&
                 !$user_is_anonymous &&
                 api_global_admin_can_edit_admin($user_id)
@@ -744,7 +737,7 @@ if (!empty($action)) {
                     $user_to_delete = $_GET['user_id'];
                     $current_user_id = api_get_user_id();
 
-					if ($delete_user_available && api_global_admin_can_edit_admin($_GET['user_id'])) {
+					if ($deleteUserAvailable && api_global_admin_can_edit_admin($_GET['user_id'])) {
 						if ($user_to_delete != $current_user_id && UserManager :: delete_user($_GET['user_id'])) {
 							$message = Display :: return_message(get_lang('UserDeleted'), 'confirmation');
 						} else {
@@ -906,7 +899,7 @@ $defaults['keyword_inactive'] = 1;
 $form->setDefaults($defaults);
 $form->addElement('html','</div>');
 
-$form = $form->return_form();
+$form = $form->returnForm();
 
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 $table->set_additional_parameters($parameters);
@@ -936,10 +929,10 @@ $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
-if (api_is_platform_admin() && !(isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'])) {
-    $table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+if (api_is_platform_admin() && !($deleteUserAvailable)) {
+    $table->set_form_actions(array('delete' => get_lang('DeleteFromPlatform')));
 } else {
-    $table->set_form_actions(array ('none' => get_lang('NoActionAvailable')));
+    $table->set_form_actions(array('none' => get_lang('NoActionAvailable')));
 }
 
 $table_result = $table->return_table();

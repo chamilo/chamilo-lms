@@ -7340,7 +7340,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         }
     }
 
-    $user_info = api_get_user_info($userId);
+    $userInfo = api_get_user_info($userId);
 
     $isDrh = function() use($loginAsUserId) {
         if (api_is_drh()) {
@@ -7362,7 +7362,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     };
 
-    return (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5) OR $isDrh());
+    return api_is_platform_admin() || (api_is_session_admin() && $userInfo['status'] == 5) || $isDrh();
 }
 
 /**

@@ -7,6 +7,8 @@
 *	@package chamilo.admin
 */
 
+use ChamiloSession as Session;
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
@@ -155,10 +157,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 if ($action == 'login_as') {
     $check = Security::check_token('get');
-    if (isset($_GET['user_id']) && api_can_login_as($_GET['user_id']) && $check) {
-        login_user($_GET['user_id']);
-    } else {
-        api_not_allowed(true);
+    if (isset($_GET['user_id']) && $check) {
+        $result = loginUser($_GET['user_id']);
+        if ($result == false) {
+            api_not_allowed(true);
+        }
     }
     Security::clear_token();
 }
@@ -305,7 +308,7 @@ function prepare_user_sql_query($is_count) {
 *	@author Evie Embrechts
 *   @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
-function login_user($userId)
+function loginUser($userId)
 {
     $userId = intval($userId);
     $userInfo = api_get_user_info($userId);
@@ -313,18 +316,13 @@ function login_user($userId)
     // Check if the user is allowed to 'login_as'
     $canLoginAs = api_can_login_as($userId);
 
-    if (!$canLoginAs) {
+    if (!$canLoginAs || empty($userInfo)) {
 
         return false;
     }
 
-    $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-    $main_admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
-	$track_e_login_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
     $firstname = $userInfo['firstname'];
     $lastname = $userInfo['lastname'];
-    $userId = $userInfo['id'];
 
 	if (api_is_western_name_order()) {
 		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname, $userId);
@@ -333,67 +331,41 @@ function login_user($userId)
 	}
 
 	if ($userId) {
-	    // a uid is given (log in succeeded)
 
-		$sql = "
-		    SELECT user.*, a.user_id is_admin,
-			UNIX_TIMESTAMP(login.login_date) login_date
-			FROM $main_user_table
-			LEFT JOIN $main_admin_table a
-			ON user.id = a.user_id
-			LEFT JOIN $track_e_login_table login
-			ON user.id = login.login_user_id
-			WHERE user.id = '".$userId."'
-			ORDER BY login.login_date DESC
-			LIMIT 1";
+        // Logout the current user
+        LoginDelete(api_get_user_id());
 
-		$result = Database::query($sql);
+        Session::erase('_user');
+        Session::erase('is_platformAdmin');
+        Session::erase('is_allowedCreateCourse');
+        Session::erase('_uid');
+        // Cleaning session variables
 
-		if (Database::num_rows($result) > 0) {
-			// Extracting the user data
+        $_user['firstName'] = $userInfo['firstname'];
+        $_user['lastName'] = $userInfo['lastname'];
+        $_user['mail'] = $userInfo['email'];
+        //$_user['lastLogin'] = $user_data['login_date'];
+        $_user['official_code'] = $userInfo['official_code'];
+        $_user['picture_uri'] = $userInfo['picture_uri'];
+        $_user['user_id'] = $userId;
+        $_user['id'] = $userId;
+        $_user['status'] = $userInfo['status'];
 
-			$user_data = Database::fetch_array($result);
+        // Filling session variables with new data
+        Session::write('_uid', $userId);
+        Session::write('_user', $userInfo);
+        Session::write('is_platformAdmin', (bool) (UserManager::is_admin($userId)));
+        Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+        // will be useful later to know if the user is actually an admin or not (example reporting)
+        Session::write('login_as', true);
 
-            // Logout the current user
+        $target_url = api_get_path(WEB_PATH)."user_portal.php";
+        $message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
+        Display :: display_header(get_lang('UserList'));
+        Display :: display_normal_message($message, false);
+        Display :: display_footer();
+        exit;
 
-			LoginDelete(api_get_user_id());
-
-			// Cleaning session variables
-			unset($_SESSION['_user']);
-			unset($_SESSION['is_platformAdmin']);
-			unset($_SESSION['is_allowedCreateCourse']);
-			unset($_SESSION['_uid']);
-
-            $_user['firstName'] = $user_data['firstname'];
-            $_user['lastName'] = $user_data['lastname'];
-            $_user['mail'] = $user_data['email'];
-            $_user['lastLogin'] = $user_data['login_date'];
-            $_user['official_code'] = $user_data['official_code'];
-            $_user['picture_uri'] = $user_data['picture_uri'];
-            $_user['user_id'] = $user_data['id'];
-            $_user['id'] = $user_data['id'];
-            $_user['status'] = $user_data['status'];
-
-			$is_platformAdmin = (bool) (!is_null($user_data['is_admin']));
-			$is_allowedCreateCourse = (bool) ($user_data['status'] == 1);
-
-			// Filling session variables with new data
-            $_SESSION['_uid'] = $userId;
-            $_SESSION['_user'] = $_user;
-            $_SESSION['is_platformAdmin'] = $is_platformAdmin;
-            $_SESSION['is_allowedCreateCourse'] = $is_allowedCreateCourse;
-            // will be useful later to know if the user is actually an admin or not (example reporting)
-            $_SESSION['login_as'] = true;
-
-			$target_url = api_get_path(WEB_PATH)."user_portal.php";
-			$message .= '<br />'.sprintf(get_lang('LoginSuccessfulGoToX'),'<a href="'.$target_url.'">'.$target_url.'</a>');
-			Display :: display_header(get_lang('UserList'));
-			Display :: display_normal_message($message,false);
-			Display :: display_footer();
-			exit;
-		} else {
-			exit ("<br />WARNING UNDEFINED UID !! ");
-		}
 	}
 }
 

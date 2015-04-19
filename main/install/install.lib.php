@@ -1749,7 +1749,7 @@ function lockSettings()
     }
 }
 
-function update_dir_and_files_permissions()
+function updateDirAndFilesPermissions()
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
@@ -1863,6 +1863,9 @@ function installSettings(
     $allowRegistration,
     $allowTeacherSelfRegistration
 ) {
+    $allowRegistration = $allowRegistration ? 'true' : 'false';
+    $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
+
     $sql = "
         INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
         ('Institution',NULL,'textfield','Platform','$organizationName','InstitutionTitle','InstitutionComment','platform',NULL, 1),
@@ -2165,6 +2168,7 @@ function installSettings(
         ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
         ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0),
         ('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);";
+
     Database::query($sql);
 
     $sql = "INSERT INTO settings_options (variable, value, display_text) VALUES

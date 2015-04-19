@@ -96,7 +96,7 @@ function preventMultipleLogin($userId)
  * @author Fernando P. García <fernando@develcuy.com>
  */
 function online_logout($user_id = null, $logout_redirect = false) {
-    global $_configuration, $extAuthSource;
+    global $extAuthSource;
 
     // Database table definition
     $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -119,7 +119,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     		LIMIT 0,1";
     $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection)>0) {
-        $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
+        $i_id_last_connection = Database::result($q_last_connection,0,"login_id");
     }
 
     if (!isset($_SESSION['login_as'])) {
@@ -128,6 +128,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
         		WHERE login_id='$i_id_last_connection'";
         Database::query($sql);
     }
+
     LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
 
     //the following code enables the use of an external logout function.

@@ -3445,7 +3445,6 @@ function getLastWorkStudentFromParentByUser(
 
     $userId = intval($userId);
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    //$commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = intval($parentId);
 
     $sql = "SELECT *
@@ -4051,24 +4050,24 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
         $dirName = '/'.$created_dir;
         $today = api_get_utc_datetime();
         $sql = "INSERT INTO " . $work_table . " SET
-                c_id                = $course_id,
-                url                 = '".Database::escape_string($dirName)."',
-                title               = '".Database::escape_string($params['new_dir'])."',
-                description         = '".Database::escape_string($params['description'])."',
-                author              = '',
-                active              = '1',
-                accepted            = '1',
-                filetype            = 'folder',
-                post_group_id       = '".$group_id."',
-                sent_date           = '".$today."',
-                qualification       = '".($params['qualification'] != '' ? Database::escape_string($params['qualification']) : '') ."',
-                parent_id           = '',
-                qualificator_id     = '',
-                weight              = '".Database::escape_string($params['weight'])."',
-                session_id          = '".$session_id."',
+                c_id = $course_id,
+                url = '".Database::escape_string($dirName)."',
+                title = '".Database::escape_string($params['new_dir'])."',
+                description = '".Database::escape_string($params['description'])."',
+                author = '',
+                active = '1',
+                accepted = '1',
+                filetype = 'folder',
+                post_group_id = '" . $group_id . "',
+                sent_date = '" . $today . "',
+                qualification = '".($params['qualification'] != '' ? Database::escape_string($params['qualification']) : '') ."',
+                parent_id = '',
+                qualificator_id = '',
+                weight = '".Database::escape_string($params['weight'])."',
+                session_id = '".$session_id."',
                 allow_text_assignment = '".Database::escape_string($params['allow_text_assignment'])."',
-                contains_file       = 0,
-                user_id             = '".$user_id."'";
+                contains_file = 0,
+                user_id = '".$user_id."'";
         Database::query($sql);
 
         // Add the directory
@@ -4201,7 +4200,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
                 array('GROUP:'.$groupId)
             );
         } else {
-            $agenda->edit_event(
+            $agenda->editEvent(
                 $agendaId,
                 $end_date,
                 $end_date,
@@ -4219,14 +4218,12 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
     $data = get_work_assignment_by_id($workId, $course_id);
 
     if (empty($data)) {
-        $expiryDateCondition = '';
         if (!empty($expiryDate)) {
             $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
         } else {
             $expiryDateCondition = "expires_on = null, ";
         }
 
-        $endOnCondition = '';
         if (!empty($endDate)) {
             $endOnCondition = "ends_on = '".Database::escape_string($endDate)."', ";
         } else {
@@ -4245,6 +4242,11 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
         $my_last_id = Database::insert_id();
         if ($my_last_id) {
+
+            $sql = "UPDATE $workTable SET
+                        id = iid
+                    WHERE iid = $my_last_id";
+            Database::query($sql);
 
             $sql = "UPDATE $workTable SET
                         has_properties  = $my_last_id,

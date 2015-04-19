@@ -108,7 +108,7 @@ if ($form->validate()) {
     }
 
     if ($editCheck) {
-        var_dump($params);exit;
+
         updateWork($workId, $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);

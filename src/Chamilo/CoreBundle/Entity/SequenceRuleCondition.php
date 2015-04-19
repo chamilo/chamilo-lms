@@ -1,0 +1,46 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Class SequenceRuleCondition
+ *
+ * @ORM\Table(name="sequence_rule_condition")
+ * @ORM\Entity
+ */
+class SequenceRuleCondition
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SequenceRule")
+     * @ORM\JoinColumn(name="sequence_rule_id", referencedColumnName="id")
+     **/
+    private $rule;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SequenceCondition")
+     * @ORM\JoinColumn(name="sequence_condition_id", referencedColumnName="id")
+     **/
+    private $condition;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

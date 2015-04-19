@@ -147,6 +147,76 @@ INSERT INTO skill_rel_skill VALUES(1, 1, 0, 0, 0);
 INSERT INTO course_type (id, name) VALUES (1, 'All tools');
 INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
 
+
+INSERT INTO sequence_rule (description)
+VALUES ('Si el usuario completa un 70% de una entidad o grupo de recursos podrá acceder acceder a otra entidad o grupo de recursos');
+
+INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false) VALUES
+('<= 100%','<=', 100.0, 2, null),
+('>= 70%','>=', 70.0, 0, null);
+
+INSERT INTO sequence_rule_condition VALUES
+  (1,1,1),
+  (2,1,2);
+
+INSERT INTO sequence_method (description,formula, assign, met_type) VALUES
+('Aumenta elemento completado','v#2 + $complete_items;', 2, 'add'),
+('Actualiza Avance por división', 'v#2 / v#3 * 100;', 1, 'div'),
+('Actualiza total de elementos', '$total_items;', 3,'update'),
+('Activa logro', '1;', 4, 'success'),
+('Almacena la fecha de logro', '(empty(v#5))? api_get_utc_datetime() : v#5;', 5, 'success'),
+('Activa disponibilidad', '1;', 6, 'pre'),
+('Almacena la fecha inicio de disponibilidad', '(empty(v#7))? api_get_utc_datetime() : v#7;', 7, 'pre'),
+('Almacena la fecha fin de disponibilidad', '(empty($available_end_date))? api_get_utc_datetime($available_end_date) : "0000-00-00 00:00:00";', 8, 'pre'),
+('Aumenta el total de elementos', 'v#3 + $total_items;', 3,'add'),
+('Actualiza elementos completados', '$complete_items;', 2,'update'),
+('Actualiza Avance', '$complete_items / $total_items * 100;', 1, 'update');
+
+INSERT INTO sequence_rule_method VALUES
+(1,1,1,1),
+(2,1,2,3),
+(3,1,3,0),
+(4,1,4,0),
+(5,1,5,0),
+(6,1,6,0),
+(7,1,7,0),
+(8,1,8,0),
+(9,1,9,2),
+(10,1,10,0),
+(11,1,11,0);
+
+INSERT INTO sequence_variable VALUES
+(1, 'Avance porcentual', 'advance', 0.0),
+(2, 'Elementos completados', 'complete_items', 0),
+(3, 'Total de elementos', 'total_items', 0),
+(4, 'Completado', 'success', 0),
+(5, 'Fecha de completado', 'success_date', '0000-00-00 00:00:00'),
+(6, 'Disponible', 'available', 0),
+(7, 'Fecha de inicio de disponibilidad', 'available_start_date', '0000-00-00 00:00:00'),
+(8, 'Fecha de fin de disponibilidad', 'available_end_date', '0000-00-00 00:00:00');
+
+INSERT INTO sequence_formula VALUES
+(1,1,2),
+(2,2,2),
+(3,2,3),
+(4,2,1),
+(5,3,3),
+(6,4,4),
+(7,5,5),
+(8,6,6),
+(9,7,7),
+(10,8,8),
+(11,9,3),
+(12,10,2),
+(13,11,1);
+INSERT INTO sequence_valid VALUES
+(1,1,1),
+(2,1,2);
+INSERT INTO sequence_type_entity VALUES
+(1,'Lp', 'Learning Path','c_lp'),
+(2,'Quiz', 'Quiz and Tests','c_quiz'),
+(3,'LpItem', 'Items of a Learning Path','c_lp_item');
+
 UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';
 
 

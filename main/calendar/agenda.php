@@ -201,7 +201,7 @@ if (api_is_allowed_to_edit(false, true) ||
                 }
 
                 // Editing normal event.
-                $agenda->edit_event(
+                $agenda->editEvent(
                     $eventId,
                     $startDate,
                     $endDate,

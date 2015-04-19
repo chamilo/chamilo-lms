@@ -54,7 +54,7 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
-        $agenda->edit_event(
+        $agenda->editEvent(
             $id,
             $_REQUEST['start'],
             $_REQUEST['end'],

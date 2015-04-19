@@ -550,7 +550,7 @@ class Agenda
      *
      * @return bool
      */
-    public function edit_event(
+    public function editEvent(
         $id,
         $start,
         $end,

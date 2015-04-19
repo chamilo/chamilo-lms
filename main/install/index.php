@@ -671,20 +671,7 @@ if (@$_POST['step2']) {
 
 		$dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
-		// Create database
-		$createDatabase = true;
-		$databases = $manager->getConnection()->getSchemaManager()->listDatabases();
-
-		if (in_array($dbNameForm, $databases)) {
-			$createDatabase = false;
-		}
-
-		// Create database
-		if ($createDatabase) {
-			//$manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
-			//$manager->getConnection()->getSchemaManager()->createDatabase($dbNameForm);
-		}
-		// Drop the database anyways
+		// Drop and create the database anyways
 		$manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
 		$manager = testDbConnect(
@@ -694,12 +681,12 @@ if (@$_POST['step2']) {
 			$dbNameForm
 		);
 
-		$metadatas = $manager->getMetadataFactory()->getAllMetadata();
+		$metadataList = $manager->getMetadataFactory()->getAllMetadata();
 		$schema = $manager->getConnection()->getSchemaManager()->createSchema();
 
-		// Create database
+		// Create database schema
 		$tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
-		$tool->createSchema($metadatas);
+		$tool->createSchema($metadataList);
 
 		// Inserting data
 		$data = file_get_contents('data.sql');
@@ -721,11 +708,14 @@ if (@$_POST['step2']) {
 				break;
 		}
 
+		// Insert users
+
 		$sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
 		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
 		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
 		Database::query($sql);
 
+		// Insert user as admin
 		$sql = "INSERT INTO admin VALUES(1, 1)";
 		Database::query($sql);
 
@@ -747,7 +737,7 @@ if (@$_POST['step2']) {
 		);
 
 		lockSettings();
-		update_dir_and_files_permissions();
+        updateDirAndFilesPermissions();
 
 		include 'install_files.inc.php';
 	}

@@ -81,21 +81,21 @@ class CLp
     /**
      * @var string
      *
-     * @ORM\Column(name="default_view_mod", type="string", length=32, nullable=false)
+     * @ORM\Column(name="default_view_mod", type="string", length=32, nullable=false, options={"default":"embedded"})
      */
     private $defaultViewMod;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="default_encoding", type="string", length=32, nullable=false)
+     * @ORM\Column(name="default_encoding", type="string", length=32, nullable=false, options={"default":"UTF-8"})
      */
     private $defaultEncoding;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="display_order", type="integer", nullable=false)
+     * @ORM\Column(name="display_order", type="integer", nullable=false, options={"default":"0"})
      */
     private $displayOrder;
 
@@ -109,7 +109,7 @@ class CLp
     /**
      * @var string
      *
-     * @ORM\Column(name="content_local", type="string", length=32, nullable=false)
+     * @ORM\Column(name="content_local", type="string", length=32, nullable=false, options={"default":"local"})
      */
     private $contentLocal;
 
@@ -123,7 +123,7 @@ class CLp
     /**
      * @var boolean
      *
-     * @ORM\Column(name="prevent_reinit", type="boolean", nullable=false)
+     * @ORM\Column(name="prevent_reinit", type="boolean", nullable=false, options={"default":"1"})
      */
     private $preventReinit;
 
@@ -193,7 +193,7 @@ class CLp
     /**
      * @var integer
      *
-     * @ORM\Column(name="use_max_score", type="integer", nullable=false)
+     * @ORM\Column(name="use_max_score", type="integer", nullable=false, options={"default":"1"})
      */
     private $useMaxScore;
 
@@ -231,6 +231,20 @@ class CLp
      * @ORM\Column(name="expired_on", type="datetime", nullable=false)
      */
     private $expiredOn;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->defaultViewMod = 'embedded';
+        $this->defaultEncoding = 'UTF-8';
+        $this->displayOrder = 0;
+        $this->contentLocal = 'local';
+        $this->preventReinit = 1;
+        $this->useMaxScore = 1;
+        $this->createdOn = new \DateTime();
+    }
 
     /**
      * Set lpType

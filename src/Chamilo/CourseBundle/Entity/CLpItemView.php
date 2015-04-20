@@ -81,7 +81,7 @@ class CLpItemView
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=32, nullable=false)
+     * @ORM\Column(name="status", type="string", length=32, nullable=false, options={"default":"not attempted"})
      */
     private $status;
 
@@ -102,7 +102,7 @@ class CLpItemView
     /**
      * @var string
      *
-     * @ORM\Column(name="core_exit", type="string", length=32, nullable=false)
+     * @ORM\Column(name="core_exit", type="string", length=32, nullable=false, options={"default":"none"})
      */
     private $coreExit;
 
@@ -112,6 +112,15 @@ class CLpItemView
      * @ORM\Column(name="max_score", type="string", length=8, nullable=true)
      */
     private $maxScore;
+
+    /**
+     * Constructor
+     */
+    public function __constructor()
+    {
+        $this->status = 'not attempted';
+        $this->coreExit = 'none';
+    }
 
     /**
      * Set lpItemId

@@ -88,7 +88,7 @@ class CLpItem
     /**
      * @var float
      *
-     * @ORM\Column(name="max_score", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="max_score", type="float", precision=10, scale=0, nullable=true, options={"default":"100"})
      */
     private $maxScore;
 
@@ -189,6 +189,14 @@ class CLpItem
      * @ORM\Column(name="prerequisite_max_score", type="float", precision=10, scale=0, nullable=true)
      */
     private $prerequisiteMaxScore;
+
+    /**
+     * Constructor
+     */
+    public function __constructor()
+    {
+        $this->maxScore = 100;
+    }
 
     /**
      * Set lpId

@@ -2532,7 +2532,6 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        //var_dump($quiz['exe_result'], $minScore, $maxScore);exit;
                                                         if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
                                                             $returnstatus = true;
                                                         } else {
@@ -2841,6 +2840,7 @@ class learnpathItem
         }
         // First check if parameters passed via GET can be saved here
         // in case it's a SCORM, we should get:
+
         if ($this->type == 'sco' || $this->type == 'au') {
             $status = $this->get_status(true);
             if ($this->prevent_reinit == 1 AND
@@ -3769,8 +3769,10 @@ class learnpathItem
             if (self::debug > 0) {
                 error_log('return false api_is_allowed_to_session_edit');
             }
+
             return false;
         }
+
         $course_id = api_get_course_int_id();
         $mode = $this->get_lesson_mode();
         $credit = $this->get_credit();
@@ -3819,7 +3821,8 @@ class learnpathItem
             $inserted = false;
 
             // This a special case for multiple attempts and Chamilo exercises.
-            if ($this->type == 'quiz' && $this->get_prevent_reinit() == 0 &&
+            if ($this->type == 'quiz' &&
+                $this->get_prevent_reinit() == 0 &&
                 $this->get_status() == 'completed'
             ) {
                 // We force the item to be restarted.
@@ -3846,26 +3849,28 @@ class learnpathItem
                 }
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
 
-                $sql = "UPDATE $item_view_table SET id = iid WHERE iid = ".$this->db_item_view_id;
-                Database::query($sql);
-
-                $inserted = true;
+                if ($this->db_item_view_id) {
+                    $sql = "UPDATE $item_view_table SET id = iid
+                            WHERE iid = " . $this->db_item_view_id;
+                    Database::query($sql);
+                    $inserted = true;
+                }
             }
 
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $check = "SELECT * FROM $item_view_table
-                      WHERE
+            $sql = "SELECT * FROM $item_view_table
+                    WHERE
                         c_id = $course_id AND
                         lp_item_id = " . $this->db_id . " AND
                         lp_view_id = " . $this->view_id . " AND
                         view_count = " . intval($this->get_attempt_id());
             if (self::debug > 2) {
                 error_log(
-                    'learnpathItem::write_to_db() - Querying item_view: ' . $check,
+                    'learnpathItem::write_to_db() - Querying item_view: ' . $sql,
                     0
                 );
             }
-            $check_res = Database::query($check);
+            $check_res = Database::query($sql);
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.
             if (!$inserted && Database::num_rows($check_res) < 1) {
@@ -3893,9 +3898,11 @@ class learnpathItem
 
                 $this->db_item_view_id = Database::insert($item_view_table, $params);
 
-                $sql = "UPDATE $item_view_table SET id = iid WHERE iid = ".$this->db_item_view_id;
-                Database::query($sql);
-
+                if ($this->db_item_view_id) {
+                    $sql = "UPDATE $item_view_table SET id = iid
+                            WHERE iid = " . $this->db_item_view_id;
+                    Database::query($sql);
+                }
             } else {
                 if ($this->type == 'hotpotatoes') {
                     $params = array(
@@ -4171,9 +4178,11 @@ class learnpathItem
                             );
 
                             $insertId = Database::insert($iva_table, $params);
-
-                            $sql = "UPDATE $iva_table SET id = iid WHERE iid = $insertId";
-                            Database::query($sql);
+                            if ($insertId) {
+                                $sql = "UPDATE $iva_table SET id = iid
+                                        WHERE iid = $insertId";
+                                Database::query($sql);
+                            }
                         }
                     }
                 }

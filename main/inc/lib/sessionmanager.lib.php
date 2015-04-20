@@ -919,7 +919,7 @@ class SessionManager
         if ($getAllSessions) {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
-                    LEFT JOIN  $workTableAssignment a
+                    LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
                     WHERE w.c_id = %s
                     AND parent_id = 0
@@ -927,7 +927,7 @@ class SessionManager
         } else {
             $sql = "SELECT count(w.id) as count
                     FROM $workTable w
-                    LEFT JOIN  $workTableAssignment a
+                    LEFT JOIN $workTableAssignment a
                     ON (a.publication_id = w.id AND a.c_id = w.c_id)
                     WHERE w.c_id = %s
                     AND parent_id = 0

@@ -185,10 +185,11 @@ class Tracking
                     path
                 FROM $TBL_LP_ITEM as i
                 INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                ON (i.id = iv.lp_item_id AND i.c_id = iv.c_id)
                 INNER JOIN $TBL_LP_VIEW as v
-                ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
+                ON (iv.lp_view_id = v.id AND v.c_id = iv.c_id)
                 WHERE
+                    v.c_id = $course_id AND
                     i.id = $my_item_id AND
                     i.lp_id = $lp_id  AND
                     v.user_id = $user_id AND
@@ -1291,9 +1292,10 @@ class Tracking
     		$condition_user = " AND user_id = $user_id ";
     	}
 
-    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds "
-            . "FROM $tbl_track_course "
-            . "WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
+    	$sql = "SELECT
+    	        SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
+                FROM $tbl_track_course
+                WHERE UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) ";
 
         if ($courseId != 0) {
             $sql .= "AND c_id = '$courseId' ";
@@ -1307,6 +1309,7 @@ class Tracking
 
         $rs = Database::query($sql);
     	$row = Database::fetch_array($rs);
+
     	return $row['nb_seconds'];
     }
 
@@ -1597,7 +1600,8 @@ class Tracking
      * @internal param \Student $mixed id
      * @internal param \Course $string code
      * @internal param \Exercise $int id (optional), filtered by exercise
-     * @internal param \Session $int id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
+     * @internal param \Session $int id (optional), if param $session_id is null
+     * it'll return results including sessions, 0 = session is not filtered
      * @return   string    value (number %) Which represents a round integer about the score average.
      */
     public static function get_avg_student_exercise_score(
@@ -1743,8 +1747,10 @@ class Tracking
      * @internal param \Student $int id
      * @internal param \Course $string code
      * @internal param \Exercise $int id
-     * @internal param \Learning $int path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
-     * @internal param \Learning $int path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @internal param \Learning $int path id (optional),
+     * for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @internal param \Learning $int path item id (optional),
+     * for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @return  int     count of attempts
      */
     public static function count_student_exercise_attempts(
@@ -2456,7 +2462,8 @@ class Tracking
      * @param   int|array   Array of user ids or an user id
      * @param   string      Course code
      * @param   array       List of LP ids
-     * @param   int         Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   int         Session id (optional), if param $session_id is null(default)
+     * it'll return results including sessions, 0 = session is not filtered
      * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
      * @param   bool        get only the latest attempts or ALL attempts
      * @return  string      Value (number %) Which represents a round integer explain in got in 3.
@@ -2534,7 +2541,8 @@ class Tracking
      * @param     int|array    Student id(s)
      * @param     string         Course code
      * @param     array         Limit average to listed lp ids
-     * @param     int            Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param     int            Session id (optional), if param $session_id is
+     * null(default) it'll return results including sessions, 0 = session is not filtered
      * @return     int         Total time
      */
     public static function get_time_spent_in_lp($student_id, $course_code, $lp_ids = array(), $session_id = null)
@@ -2567,7 +2575,7 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            //$res_row_lp = Database::query("SELECT DISTINCT(id) FROM $lp_table $condition_lp $condition_session");
+
             $res_row_lp = Database::query("SELECT DISTINCT(id) FROM $lp_table WHERE c_id = $course_id $condition_lp");
             $count_row_lp = Database::num_rows($res_row_lp);
 
@@ -2593,6 +2601,7 @@ class Tracking
                 }
             }
         }
+
         return $total_time;
     }
 
@@ -2660,7 +2669,7 @@ class Tracking
         $tbl_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
-        $a_students = array ();
+        $students = [];
 
         // At first, courses where $coach_id is coach of the course //
         $sql = 'SELECT session_id, c_id
@@ -2700,7 +2709,7 @@ class Tracking
             $rs = Database::query($sql);
 
             while ($row = Database::fetch_array($rs)) {
-                $a_students[$row['user_id']] = $row['user_id'];
+                $students[$row['user_id']] = $row['user_id'];
             }
         }
 
@@ -2737,17 +2746,17 @@ class Tracking
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            $a_students[$row['user_id']] = $row['user_id'];
+            $students[$row['user_id']] = $row['user_id'];
         }
 
-        return $a_students;
+        return $students;
     }
 
     /**
      * Get student followed by a coach inside a session
      * @param    int        Session id
      * @param    int        Coach id
-     * @return     array    students list
+     * @return   array    students list
      */
     public static function get_student_followed_by_coach_in_a_session($id_session, $coach_id)
     {
@@ -2755,7 +2764,7 @@ class Tracking
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
-        $a_students = array ();
+        $students = [];
         // At first, courses where $coach_id is coach of the course //
         $sql = 'SELECT c_id FROM ' . $tbl_session_course_user . '
                 WHERE session_id="' . $id_session . '" AND user_id=' . $coach_id.' AND status=2';
@@ -2771,7 +2780,7 @@ class Tracking
                         session_id = '" . $id_session . "'";
             $rs = Database::query($sql);
             while ($row = Database::fetch_array($rs)) {
-                $a_students[$row['user_id']] = $row['user_id'];
+                $students[$row['user_id']] = $row['user_id'];
             }
         }
 
@@ -2779,6 +2788,7 @@ class Tracking
         $sql = 'SELECT id_coach FROM ' . $tbl_session . '
                 WHERE id="' . $id_session.'" AND id_coach="' . $coach_id . '"';
         $result = Database::query($sql);
+
         //He is the session_coach so we select all the users in the session
         if (Database::num_rows($result) > 0) {
             $sql = 'SELECT DISTINCT srcru.user_id
@@ -2786,11 +2796,11 @@ class Tracking
                     WHERE session_id="' . $id_session . '"';
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result)) {
-                $a_students[$row['user_id']] = $row['user_id'];
+                $students[$row['user_id']] = $row['user_id'];
             }
         }
 
-        return $a_students;
+        return $students;
     }
 
     /**
@@ -2819,13 +2829,13 @@ class Tracking
 
         // Then, courses where $coach_id is coach of the session
         $sql = 'SELECT session_course_user.user_id
-                    FROM ' . $tbl_session_course_user . ' as session_course_user
-                    INNER JOIN ' . $tbl_session_course . ' as session_course
-                        ON session_course.c_id = session_course_user.c_id
-                    INNER JOIN ' . $tbl_session . ' as session
-                        ON session.id = session_course.session_id
-                        AND session.id_coach = ' . $coach_id . '
-                    WHERE user_id = ' . $student_id;
+                FROM ' . $tbl_session_course_user . ' as session_course_user
+                INNER JOIN ' . $tbl_session_course . ' as session_course
+                    ON session_course.c_id = session_course_user.c_id
+                INNER JOIN ' . $tbl_session . ' as session
+                    ON session.id = session_course.session_id
+                    AND session.id_coach = ' . $coach_id . '
+                WHERE user_id = ' . $student_id;
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
@@ -2860,6 +2870,7 @@ class Tracking
                 INNER JOIN '.$tbl_course.' c
                 ON (c.id = sc.c_id)
                 WHERE user_id = ' . $coach_id.' AND status = 2';
+
         if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
@@ -2982,7 +2993,11 @@ class Tracking
         $sql = "
             $select
             (
-                SELECT DISTINCT id, name, date_start, date_end
+                SELECT DISTINCT
+                    id,
+                    name,
+                    date_start,
+                    date_end
                 FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
                 WHERE
@@ -2990,12 +3005,16 @@ class Tracking
                     access_url_id = $access_url_id
                     $keywordCondition
             UNION
-                SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                SELECT DISTINCT
+                    session.id,
+                    session.name,
+                    session.date_start,
+                    session.date_end
                 FROM $tbl_session as session
                 INNER JOIN $tbl_session_course_user as session_course_user
                     ON session.id = session_course_user.session_id AND
-                    session_course_user.user_id= $coach_id AND
-                    session_course_user.status=2
+                    session_course_user.user_id = $coach_id AND
+                    session_course_user.status = 2
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
                 ON (session.id = session_rel_url.session_id)
                 WHERE
@@ -3010,12 +3029,13 @@ class Tracking
             return $row['count'];
         }
 
+        $sessions = [];
         while ($row = Database::fetch_array($rs)) {
-            $a_sessions[$row["id"]] = $row;
+            $sessions[$row['id']] = $row;
         }
 
-        if (is_array($a_sessions)) {
-            foreach ($a_sessions as & $session) {
+        if (!empty($sessions)) {
+            foreach ($sessions as & $session) {
                 if ($session['date_start'] == '0000-00-00') {
                     $session['status'] = get_lang('SessionActive');
                 }
@@ -3039,7 +3059,7 @@ class Tracking
             }
         }
 
-        return $a_sessions;
+        return $sessions;
     }
 
     /**

@@ -555,10 +555,10 @@ function display_student_publications_list(
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-    $session_id         = api_get_session_id();
-    $condition_session  = api_get_session_condition($session_id);
-    $course_id          = api_get_course_int_id();
-    $course_info        = api_get_course_info(api_get_course_id());
+    $session_id = api_get_session_id();
+    $condition_session = api_get_session_condition($session_id);
+    $course_id = api_get_course_int_id();
+    $course_info = api_get_course_info(api_get_course_id());
 
     $sort_params = array();
 
@@ -658,8 +658,13 @@ function display_student_publications_list(
             // form edit directory
             $homework = array();
             if (!empty($row['has_properties'])) {
-                $sql = Database::query('SELECT * FROM '.$work_assigment.'
-                WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
+                $sql = 'SELECT *
+                        FROM '.$work_assigment.'
+                        WHERE
+                            c_id = '.$course_id.' AND
+                            id = "'.$row['has_properties'].'"
+                        LIMIT 1';
+                $sql = Database::query($sql);
                 $homework = Database::fetch_array($sql);
             }
             // save original value for later
@@ -1143,7 +1148,7 @@ function deleteDirWork($id)
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-    $t_agenda   = Database::get_course_table(TABLE_AGENDA);
+    $t_agenda = Database::get_course_table(TABLE_AGENDA);
 
     $course_id = api_get_course_int_id();
 
@@ -1513,20 +1518,22 @@ function to_javascript_work()
                 $("#work_title").focus();
             }
 
-            $(document).ready(function () {
+            $(document).ready(function() {
                 setFocus();
 
+                var checked = $("#expiry_date").attr("checked");
+                if (checked) {
+                    $("#option2").show();
+                    $("#option3").show();
+                    $("#end_date").attr("checked", true);
+                } else {
+                    $("#option2").hide();
+                    $("#option3").hide();
+                    $("#end_date").attr("checked", false);
+                }
+
                 $("#expiry_date").click(function() {
-                    var checked = $("#expiry_date").attr("checked");
-                    if (checked) {
-                        $("#option2").show();
-                        $("#option3").show();
-                        $("#end_date").attr("checked", true);
-                    } else {
-                        $("#option2").hide();
-                        $("#option3").hide();
-                        $("#end_date").attr("checked", false);
-                    }
+                    $("#option2").toggle();
                 });
 
                 $("#end_date").click(function() {
@@ -3570,6 +3577,11 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 
     $commentId = Database::insert($commentTable, $params);
 
+    if ($commentId) {
+        $sql = "UPDATE $commentTable SET id = iid WHERE iid = $commentId";
+        Database::query($sql);
+    }
+
     $userIdListToSend = array();
 
     if (api_is_allowed_to_edit()) {
@@ -4033,7 +4045,7 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
  */
 function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
 {
-    $work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $user_id = intval($user_id);
     $group_id = intval($group_id);
@@ -4093,6 +4105,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
             if (api_get_course_setting('email_alert_students_on_new_homework') == 1) {
                 send_email_on_homework_creation(api_get_course_id());
             }
+
             return $id;
         }
     }
@@ -4217,18 +4230,19 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 
     $data = get_work_assignment_by_id($workId, $course_id);
 
-    if (empty($data)) {
-        if (!empty($expiryDate)) {
-            $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
-        } else {
-            $expiryDateCondition = "expires_on = null, ";
-        }
+    if (!empty($expiryDate)) {
+        $expiryDateCondition = "expires_on = '".Database::escape_string($expiryDate)."', ";
+    } else {
+        $expiryDateCondition = "expires_on = null, ";
+    }
 
-        if (!empty($endDate)) {
-            $endOnCondition = "ends_on = '".Database::escape_string($endDate)."', ";
-        } else {
-            $endOnCondition = "ends_on = null, ";
-        }
+    if (!empty($endDate)) {
+        $endOnCondition = "ends_on = '".Database::escape_string($endDate)."', ";
+    } else {
+        $endOnCondition = "ends_on = null, ";
+    }
+
+    if (empty($data)) {
 
         $sql = "INSERT INTO $table SET
                 c_id = $course_id ,
@@ -4243,7 +4257,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $my_last_id = Database::insert_id();
         if ($my_last_id) {
 
-            $sql = "UPDATE $workTable SET
+            $sql = "UPDATE $table SET
                         id = iid
                     WHERE iid = $my_last_id";
             Database::query($sql);
@@ -4256,8 +4270,8 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         }
     } else {
         $sql = "UPDATE $table SET
-                    expires_on = '".$expiryDate."',
-                    ends_on = '".$endDate."',
+                    $expiryDateCondition
+                    $endOnCondition
                     add_to_calendar  = $agendaId,
                     enable_qualification = '".$qualification."'
                 WHERE

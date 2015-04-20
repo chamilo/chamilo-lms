@@ -96,7 +96,7 @@ $form->addElement('hidden', 'work_id', $workId);
 $form->addButtonUpdate(get_lang('ModifyDirectory'));
 
 if ($form->validate()) {
-    $params = $form->exportValues();
+    $params = $form->getSubmitValues();
     $workId = $params['work_id'];
     $editCheck = false;
     $workData = get_work_data_by_id($workId);

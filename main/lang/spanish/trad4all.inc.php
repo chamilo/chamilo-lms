@@ -7109,4 +7109,5 @@ $CannotUpdateSkill = "No se puede actualizar la competencia";
 $BadgesManagement = "Gestionar las insignias";
 $CurrentBadges = "Insignias actuales";
 $SaveBadge = "Guardar insignia";
+$BadgeMeasuresXPixelsInPNG = "Medidas de la insignia 200x200 píxeles en formato PNG";
 ?>

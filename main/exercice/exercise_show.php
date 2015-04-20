@@ -13,7 +13,7 @@
 
 // name of the language file that needs to be included
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $language_file = array('exercice');
 
@@ -127,48 +127,9 @@ if ($origin != 'learnpath') {
 } else {
 	Display::display_reduced_header();
 }
-?>
-<script>
-var maxEditors = '<?php echo intval($maxEditors); ?>';
 
-function showfck(sid,marksid) {
-	document.getElementById(sid).style.display='block';
-	document.getElementById(marksid).style.display='block';
-	var comment = 'feedback_'+sid;
-	document.getElementById(comment).style.display='none';
-}
-
-function getFCK(vals,marksid) {
-	var f=document.getElementById('myform');
-
-	var m_id = marksid.split(',');
-	for(var i=0;i<m_id.length;i++){
-		var oHidn = document.createElement("input");
-		oHidn.type = "hidden";
-		var selname = oHidn.name = "marks_"+m_id[i];
-		var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
-		oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
-		f.appendChild(oHidn);
-	}
-
-	var ids = vals.split(',');
-	for(var k=0;k<ids.length;k++){
-		var oHidden = document.createElement("input");
-		oHidden.type = "hidden";
-		oHidden.name = "comments_"+ids[k];
-        if (maxEditors == 0) {
-            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
-            oHidden.value = oEditor.GetXHTML(true);
-        } else {
-            oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
-        }
-		f.appendChild(oHidden);
-	}
-}
-</script>
-<?php
-$show_results           = true;
-$show_only_total_score  = false;
+$show_results = true;
+$show_only_total_score = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
@@ -294,6 +255,47 @@ $useAdvancedEditor = true;
 if (count($questionList) > $maxEditors) {
     $useAdvancedEditor = false;
 }
+
+?>
+<script>
+var useAdvancedEditor = <?php echo intval($useAdvancedEditor); ?>;
+
+function showfck(sid,marksid) {
+	document.getElementById(sid).style.display='block';
+	document.getElementById(marksid).style.display='block';
+	var comment = 'feedback_'+sid;
+	document.getElementById(comment).style.display='none';
+}
+
+function getFCK(vals,marksid) {
+	var f = document.getElementById('myform');
+	var m_id = marksid.split(',');
+	for(var i=0;i<m_id.length;i++){
+		var oHidn = document.createElement("input");
+		oHidn.type = "hidden";
+		var selname = oHidn.name = "marks_"+m_id[i];
+		var selid = document.forms['marksform_'+m_id[i]].marks.selectedIndex;
+		oHidn.value = document.forms['marksform_'+m_id[i]].marks.options[selid].text;
+		f.appendChild(oHidn);
+	}
+
+	var ids = vals.split(',');
+	for(var k=0;k<ids.length;k++){
+		var oHidden = document.createElement("input");
+		oHidden.type = "hidden";
+		oHidden.name = "comments_"+ids[k];
+
+        if (useAdvancedEditor == 1) {
+            oEditor = FCKeditorAPI.GetInstance(oHidden.name) ;
+            oHidden.value = oEditor.GetXHTML(true);
+        } else {
+            oHidden.value = $("textarea[name='" + oHidden.name + "']").val();
+        }
+		f.appendChild(oHidden);
+	}
+}
+</script>
+<?php
 
 foreach ($questionList as $questionId) {
 

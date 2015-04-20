@@ -128,7 +128,7 @@ class CalculatedAnswer extends Question
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);'
             ),
-            array('ToolbarSet' => 'Test_Question_Description', 'Width' => '100%', 'Height' => '350'));
+            array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
         $form->addRule('answer', get_lang('GiveText'),'required');
         $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');

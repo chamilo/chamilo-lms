@@ -71,7 +71,13 @@ function edit_category_form($in_action) {
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
-        $form->addHtmlEditor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Height' => '200'));
+        $form->addHtmlEditor(
+            'category_description',
+            get_lang('CategoryDescription'),
+            false,
+            false,
+            array('ToolbarSet' => 'test_category', 'Height' => '200')
+        );
         $form->addButtonSave(get_lang('ModifyCategory'), 'SubmitNote');
 
         // setting the defaults

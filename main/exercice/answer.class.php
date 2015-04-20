@@ -184,9 +184,9 @@ class Answer
 		$result_question = Database::query($sql);
 		$question_type = Database::fetch_array($result_question);
 
-		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-               "FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
-               "ORDER BY $field $order";
+		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto
+                FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'
+                ORDER BY $field $order";
 		$result=Database::query($sql);
 
 		$i = 1;
@@ -326,8 +326,8 @@ class Answer
     public function getAnswersList($decode = false)
      {
 	 	$list = array();
-	 	for($i = 1; $i<=$this->nbrAnswers;$i++){
-	 		if(!empty($this->answer[$i])){
+         for ($i = 1; $i <= $this->nbrAnswers; $i++) {
+             if (!empty($this->answer[$i])) {
 
 	 			//Avoid problems when parsing elements with accents
 	 			if ($decode) {
@@ -336,16 +336,16 @@ class Answer
 	 			}
 
 	 			$list[] = array(
-                    'id'            => $i,
-                    'answer'        => $this->answer[$i],
-                    'comment'       => $this->comment[$i],
-                    'grade'         => $this->weighting[$i],
+                    'id' => $i,
+                    'answer' => $this->answer[$i],
+                    'comment' => $this->comment[$i],
+                    'grade' => $this->weighting[$i],
                     'hotspot_coord' => $this->hotspot_coordinates[$i],
-                    'hotspot_type'	=> $this->hotspot_type[$i],
-                    'correct'		=> $this->correct[$i],
-                    'destination'	=> $this->destination[$i]
+                    'hotspot_type' => $this->hotspot_type[$i],
+                    'correct' => $this->correct[$i],
+                    'destination' => $this->destination[$i]
 				);
-	 		}
+            }
 	 	}
 
 	 	return $list;
@@ -672,20 +672,20 @@ class Answer
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         $fixed_list = array();
 
-        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
-
-            //Selecting origin options
+        if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
+            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
+        ) {
+            // Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
 
-
             if (!empty($origin_options)) {
-                foreach($origin_options as $item) {
-            	   $new_option_list[]=$item['id'];
+                foreach ($origin_options as $item) {
+            	   $new_option_list[] = $item['id'];
                 }
             }
 
             $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
-            $i=0;
+            $i = 0;
             if (!empty($destination_options)) {
                 foreach($destination_options as $item) {
                     $fixed_list[$new_option_list[$i]] = $item['id'];
@@ -716,7 +716,9 @@ class Answer
 				$answer = $this->answer[$i];
 				$correct = $this->correct[$i];
 
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ) {
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
+                    self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE
+                ) {
                     $correct = $fixed_list[intval($correct)];
                 }
 
@@ -740,6 +742,7 @@ class Answer
                     'destination' => $destination
                 ];
                 $id = Database::insert($TBL_REPONSES, $params);
+
                 if ($id) {
                     $sql = "UPDATE $TBL_REPONSES SET id = id_auto WHERE id_auto = $id";
                     Database::query($sql);

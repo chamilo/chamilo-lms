@@ -1249,25 +1249,24 @@ abstract class Question
      * A subclass can redefine this function to add fields...
      * @param FormValidator $form
      */
-    public function createForm(&$form, $fck_config=0)
+    public function createForm(&$form)
     {
         echo '<style>
 					.media { display:none;}
 				</style>';
         echo '<script>
-			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
-			function FCKeditor_OnComplete( editorInstance ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-			      HideFCKEditorByInstanceName (editorInstance.Name);
-			   }
-			}
+        // hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
+        function FCKeditor_OnComplete( editorInstance ) {
+            if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name)) {
+                HideFCKEditorByInstanceName (editorInstance.Name);
+            }
+        }
 
-			function HideFCKEditorByInstanceName ( editorInstanceName ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-			      }
-			}
-		}
+        function HideFCKEditorByInstanceName ( editorInstanceName ) {
+            if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
+                document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+            }
+        }
 
 		</script>';
 
@@ -1283,19 +1282,19 @@ abstract class Question
         $form->addElement('hidden','answerType', $answerType);
 
         // html editor
-        $editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
-        if (is_array($fck_config)){
-            $editor_config = array_merge($editor_config, $fck_config);
-        }
+        $editorConfig = array(
+            'ToolbarSet' => 'TestQuestionDescription',
+            'Height' => '150'
+        );
 
         if (!api_is_allowed_to_edit(null,true)) {
-            $editor_config['UserStatus'] = 'student';
+            $editorConfig['UserStatus'] = 'student';
         }
 
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
+        $form->addHtmlEditor('questionDescription', get_lang('QuestionDescription'), false, false, $editorConfig);
 
         // hidden values
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
@@ -1322,7 +1321,7 @@ abstract class Question
             //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
         }
 
-        $form->addElement('html','</div>');
+        $form->addElement('html', '</div>');
 
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
@@ -1346,7 +1345,6 @@ abstract class Question
                     break;
             }
         }
-
 
         // default values
         $defaults = array();

@@ -37,6 +37,13 @@ $toolbar .= Display::toolbarButton(
     'primary',
     ['title' => get_lang('CreateSkill')]
 );
+$toolbar .= Display::toolbarButton(
+    get_lang('BadgesManagement'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skill_badge_list.php',
+    'certificate',
+    'warning',
+    ['title' => get_lang('BadgesManagement')]
+);
 
 /* View */
 $skill = new Skill();

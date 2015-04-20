@@ -23,7 +23,7 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
 
 /* Process data */
-$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 
 $objSkill = new Skill();
 $objGradebook = new Gradebook();

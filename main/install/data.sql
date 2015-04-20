@@ -149,7 +149,7 @@ INSERT INTO course_type (id, name) VALUES (2, 'Entry exam');
 
 
 INSERT INTO sequence_rule (description)
-VALUES ('Si el usuario completa un 70% de una entidad o grupo de recursos podrá acceder acceder a otra entidad o grupo de recursos');
+VALUES ('If user completes 70% of an entity or group of items, he will be able to access another entity or group of items');
 
 INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false) VALUES
 ('<= 100%','<=', 100.0, 2, null),
@@ -160,17 +160,17 @@ INSERT INTO sequence_rule_condition VALUES
   (2,1,2);
 
 INSERT INTO sequence_method (description,formula, assign, met_type) VALUES
-('Aumenta elemento completado','v#2 + $complete_items;', 2, 'add'),
-('Actualiza Avance por división', 'v#2 / v#3 * 100;', 1, 'div'),
-('Actualiza total de elementos', '$total_items;', 3,'update'),
-('Activa logro', '1;', 4, 'success'),
-('Almacena la fecha de logro', '(empty(v#5))? api_get_utc_datetime() : v#5;', 5, 'success'),
-('Activa disponibilidad', '1;', 6, 'pre'),
-('Almacena la fecha inicio de disponibilidad', '(empty(v#7))? api_get_utc_datetime() : v#7;', 7, 'pre'),
-('Almacena la fecha fin de disponibilidad', '(empty($available_end_date))? api_get_utc_datetime($available_end_date) : "0000-00-00 00:00:00";', 8, 'pre'),
-('Aumenta el total de elementos', 'v#3 + $total_items;', 3,'add'),
-('Actualiza elementos completados', '$complete_items;', 2,'update'),
-('Actualiza Avance', '$complete_items / $total_items * 100;', 1, 'update');
+('Add completed item','v#2 + $complete_items;', 2, 'add'),
+('Update progress by division', 'v#2 / v#3 * 100;', 1, 'div'),
+('Update items count', '$total_items;', 3,'update'),
+('Enable success', '1;', 4, 'success'),
+('Store success date', '(empty(v#5))? api_get_utc_datetime() : v#5;', 5, 'success'),
+('Enable availability', '1;', 6, 'pre'),
+('Store availability start date', '(empty(v#7))? api_get_utc_datetime() : v#7;', 7, 'pre'),
+('Store availability end date', '(empty($available_end_date))? api_get_utc_datetime($available_end_date) : "0000-00-00 00:00:00";', 8, 'pre'),
+('Increase the items count', 'v#3 + $total_items;', 3,'add'),
+('Update completed items', '$complete_items;', 2,'update'),
+('Update progress', '$complete_items / $total_items * 100;', 1, 'update');
 
 INSERT INTO sequence_rule_method VALUES
 (1,1,1,1),
@@ -186,14 +186,14 @@ INSERT INTO sequence_rule_method VALUES
 (11,1,11,0);
 
 INSERT INTO sequence_variable VALUES
-(1, 'Avance porcentual', 'advance', 0.0),
-(2, 'Elementos completados', 'complete_items', 0),
-(3, 'Total de elementos', 'total_items', 0),
-(4, 'Completado', 'success', 0),
-(5, 'Fecha de completado', 'success_date', '0000-00-00 00:00:00'),
-(6, 'Disponible', 'available', 0),
-(7, 'Fecha de inicio de disponibilidad', 'available_start_date', '0000-00-00 00:00:00'),
-(8, 'Fecha de fin de disponibilidad', 'available_end_date', '0000-00-00 00:00:00');
+(1, 'Percentile progress', 'advance', 0.0),
+(2, 'Completed items', 'complete_items', 0),
+(3, 'Items count', 'total_items', 0),
+(4, 'Completed', 'success', 0),
+(5, 'Completion date', 'success_date', '0000-00-00 00:00:00'),
+(6, 'Available', 'available', 0),
+(7, 'Availability start date', 'available_start_date', '0000-00-00 00:00:00'),
+(8, 'Availability end date', 'available_end_date', '0000-00-00 00:00:00');
 
 INSERT INTO sequence_formula VALUES
 (1,1,2),
@@ -217,7 +217,7 @@ INSERT INTO sequence_type_entity VALUES
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
-UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version';
 
 
 

@@ -1,6 +1,3 @@
-{% extends "default/layout/main.tpl" %}
-
-{% block body %}
     <script>
         (function () {
             var designer = null;
@@ -123,4 +120,3 @@
             </div>
         </div>
     </div>
-{% endblock %}

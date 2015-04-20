@@ -1,6 +1,3 @@
-{% extends "default/layout/main.tpl" %}
-
-{% block body %}
     <div class="col-md-12">
         <div class="openbadges-tabs">
         <ul class="nav nav-tabs">
@@ -55,4 +52,3 @@
             </div>
         </div>
     </div>
-{% endblock %}

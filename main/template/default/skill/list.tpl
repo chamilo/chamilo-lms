@@ -29,6 +29,9 @@
                     <a href="{{ _p.web_main }}admin/skill_create.php?parent={{ skill.id }}" class="btn btn-default">
                         <i class="fa fa-plus"></i> {{ "CreateChildSkill" | get_lang }}
                     </a>
+                    <a href="{{ _p.web_main }}admin/skill_badge_create.php?id={{ skill.id }}" class="btn btn-default">
+                        <i class="fa fa-plus"></i> {{ "CreateBadge" | get_lang }}
+                    </a>
                 </td>
             </tr>
         {% endfor %}

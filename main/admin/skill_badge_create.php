@@ -94,10 +94,20 @@ $interbreadcrumb = array(
     )
 );
 
+$toolbar = Display::toolbarButton(
+    get_lang('ManageSkills'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    'list',
+    'primary',
+    ['title' => get_lang('ManageSkills')]
+);
+
 $tpl = new Template(get_lang('CreateBadge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 
-$contentTemplate = $tpl->get_template('skill/badge_create.tpl');
+$contentTemplate = $tpl->fetch('default/skill/badge_create.tpl');
 
-$tpl->display($contentTemplate);
+$tpl->assign('actions', $toolbar);
+$tpl->assign('content', $contentTemplate);
+$tpl->display_one_col_template();

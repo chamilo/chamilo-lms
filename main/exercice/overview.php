@@ -155,7 +155,7 @@ if ($current_browser == 'Internet Explorer') {
     $btn_class = '';
 }
 
-if (!empty($attempts) && $visible_return['value'] == true) {
+if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
 

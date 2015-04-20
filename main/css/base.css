@@ -40,6 +40,9 @@ select {
   padding: 5px;
   margin-top: 10px;
 }
+.clear-header{
+  height: 60px;
+}
 .title-header-tools{
   text-align: center;
 }

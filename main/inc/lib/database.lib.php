@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
-use Doctrine\DBAL\Driver\Statement;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class Database
@@ -117,10 +117,11 @@ class Database
     /**
      * Connect to the database sets the entity manager.
      * @param array $params
+     * @param string $path
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function connect($params = [])
+    public function connect($params = [], $path = '')
     {
         $config = self::getDoctrineConfig();
         $config->setEntityNamespaces(
@@ -133,21 +134,22 @@ class Database
 
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
+        $path = isset($path) ? $path : api_get_path(SYS_PATH);
 
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            api_get_path(SYS_PATH)."vendor/symfony/validator"
+            $path."vendor/symfony/validator"
         );
 
         AnnotationRegistry::registerFile(
-            api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $path."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions
         AnnotationRegistry::registerAutoloadNamespace(
             'Gedmo\Mapping\Annotation',
-            api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
+            $path."vendor/gedmo/doctrine-extensions/lib"
         );
 
         $this->setConnection($entityManager->getConnection());

@@ -722,11 +722,13 @@ EOT;
     /**
      * @param string $name
      * @param string $label
+     *
      * @return mixed
      */
     public function addButtonAdvancedSettings($name, $label = '')
     {
         $label = !empty($label) ? $label : get_lang('AdvancedParameters');
+
         return $this->addElement('advanced_settings', $name, $label);
     }
 
@@ -739,6 +741,7 @@ EOT;
      *
      * @param int $delay (optional)	 The number of seconds between the moment the user
      * @param string $label (optional)	Custom label to be shown
+     *
      * submits the form and the start of the progress bar.
      * @deprecated ?
      */

@@ -1486,11 +1486,11 @@ function get_all_exercises_from_lp($lp_id, $course_id)
  *
  * @param int $id
  * @param int $question_id
- * @return str the comment
+ * @return string the comment
  */
 function get_comments($exe_id, $question_id)
 {
-    $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $table_track_attempt = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $sql = "SELECT teacher_comment
             FROM ".$table_track_attempt."
             WHERE exe_id='".Database::escape_string($exe_id)."' AND question_id = '".Database::escape_string($question_id)."'

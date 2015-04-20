@@ -136,7 +136,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
-    ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
+    ($is_allowedToEdit || $is_tutor) &&
+    $_GET['exeid'] == strval(intval($_GET['exeid']))
+) {
     $id = intval($_GET['exeid']); //filtered by post-condition
     $track_exercise_info = get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {

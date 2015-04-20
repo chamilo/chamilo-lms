@@ -358,10 +358,8 @@ function save_item(
                 }
                 $myLPI->set_time($time, 'scorm');
             }
-            //if ($debug > 1) { error_log('Done calling set_time - now '.$myLPI->get_total_time(), 0); }
-        } else {
-            //$time = $myLPI->get_total_time();
         }
+
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
             $myLPI->current_data = $suspend;
         }

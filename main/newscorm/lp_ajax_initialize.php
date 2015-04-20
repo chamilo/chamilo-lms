@@ -2,8 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This script contains the server part of the xajax interaction process. The client part is located
- * in lp_api.php or other api's.
+ * This script contains the server part of the xajax interaction process.
  * This script, in particular, enables the process of SCO's initialization. It
  * resets the JavaScript values for each SCO to the current LMS status.
  * @package chamilo.learnpath
@@ -11,7 +10,6 @@
  */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php
-use \ChamiloSession as Session;
 
 $use_anonymous = true;
 require_once '../inc/global.inc.php';
@@ -92,9 +90,9 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
 
     if (!empty($mylp_iv_id)) {
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
-            FROM $mycoursedb
-            WHERE lp_iv_id = $mylp_iv_id AND c_id = $course_id
-            ORDER BY id ASC;";
+                FROM $mycoursedb
+                WHERE lp_iv_id = $mylp_iv_id AND c_id = $course_id
+                ORDER BY id ASC;";
         $res = Database::query($sql);
         while ($row = Database::fetch_row($res)) {
             $phpobjectives[] = $row;

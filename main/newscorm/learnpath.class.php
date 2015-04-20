@@ -1467,7 +1467,7 @@ class learnpath
             error_log('New LP - In learnpath::edit_item_prereq(' . $id . ',' . $prerequisite_id . ',' . $mastery_score . ',' . $max_score . ')', 0);
         }
 
-        if (empty ($id) or ($id != strval(intval($id))) or empty ($prerequisite_id)) {
+        if (empty($id) || ($id != strval(intval($id))) || empty ($prerequisite_id)) {
             return false;
         }
 
@@ -1562,7 +1562,7 @@ class learnpath
             error_log('New LP - In learnpath::get_brother_chapters()', 0);
         }
 
-        if (empty ($id) OR $id != strval(intval($id))) {
+        if (empty($id)|| $id != strval(intval($id))) {
             return array ();
         }
 
@@ -1602,7 +1602,7 @@ class learnpath
             error_log('New LP - In learnpath::get_brother_items(' . $id . ')', 0);
         }
 
-        if (empty ($id) OR $id != strval(intval($id))) {
+        if (empty ($id) || $id != strval(intval($id))) {
             return array ();
         }
 
@@ -3768,7 +3768,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::move_item(' . $id . ',' . $direction . ')', 0);
         }
-        if (empty ($id) or empty ($direction)) {
+        if (empty($id) || empty($direction)) {
             return false;
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
@@ -4960,10 +4960,11 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::start_current_item()', 0);
         }
-        if ($this->current != 0 AND is_object($this->items[$this->current])) {
+        if ($this->current != 0 && is_object($this->items[$this->current])) {
             $type = $this->get_type();
             $item_type = $this->items[$this->current]->get_type();
-            if (($type == 2 && $item_type != 'sco') OR ($type == 3 && $item_type != 'au') OR
+            if (($type == 2 && $item_type != 'sco') ||
+                ($type == 3 && $item_type != 'au') ||
                 ($type == 1 && $item_type != TOOL_QUIZ && $item_type != TOOL_HOTPOTATOES)
             ) {
                 $this->items[$this->current]->open($allow_new_attempt);
@@ -5595,7 +5596,7 @@ class learnpath
 
             $audio = '';
 
-            if (!$update_audio OR $update_audio <> 'true') {
+            if (!$update_audio || $update_audio <> 'true') {
                 if (!empty($arrLP[$i]['audio'])) {
                     /*$audio .= '<span id="container'.$i.'"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</span>';
                     $audio .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
@@ -5628,7 +5629,7 @@ class learnpath
             $prerequisities_icon = '';
 
             if ($is_allowed_to_edit) {
-                if (!$update_audio OR $update_audio <> 'true') {
+                if (!$update_audio || $update_audio <> 'true') {
                     $move_icon .= '<a class="moved" href="#">';
                     $move_icon .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
                     $move_icon .= '</a>';

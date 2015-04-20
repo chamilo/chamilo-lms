@@ -134,7 +134,7 @@ class Database
 
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
-        $path = isset($path) ? $path : api_get_path(SYS_PATH);
+        $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(

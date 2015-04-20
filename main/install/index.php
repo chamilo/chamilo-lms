@@ -101,7 +101,18 @@ error_reporting(E_ALL);
 @set_time_limit(0);
 
 // Upgrading from any subversion of 1.9
-$update_from_version_8 = array('1.9.0', '1.9.2','1.9.4','1.9.6', '1.9.6.1', '1.9.8', '1.9.8.1', '1.9.8.2', '1.9.10', '1.9.10.2');
+$update_from_version_8 = array(
+	'1.9.0',
+	'1.9.2',
+	'1.9.4',
+	'1.9.6',
+	'1.9.6.1',
+	'1.9.8',
+	'1.9.8.1',
+	'1.9.8.2',
+	'1.9.10',
+	'1.9.10.2'
+);
 
 $my_old_version = '';
 if (empty($tmp_version)) {

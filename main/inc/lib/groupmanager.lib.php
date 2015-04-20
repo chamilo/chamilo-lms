@@ -196,6 +196,9 @@ class GroupManager
         $lastId = Database::insert_id();
 
         if ($lastId) {
+            $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
+            Database::query($sql);
+
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
 
@@ -315,41 +318,6 @@ class GroupManager
     }
 
     /**
-     * Create groups from all virtual courses in the given course.
-     * @deprecated
-     */
-    public static function create_groups_from_virtual_courses()
-    {
-        self :: delete_category(self::VIRTUAL_COURSE_CATEGORY);
-        $id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', self::TOOL_NOT_AVAILABLE, self::TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
-        $table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-        $course_id = api_get_course_int_id();
-
-        $sql = "UPDATE ".$table_group_cat." SET id=".self::VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
-        Database::query($sql);
-        $course = api_get_course_info();
-        $course['code'] = $course['sysCode'];
-        $course['title'] = $course['name'];
-        $virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($course['sysCode']);
-        $group_courses = $virtual_courses;
-        $group_courses[] = $course;
-        $ids = array ();
-        foreach ($group_courses as $index => $group_course) {
-            $users = CourseManager :: get_user_list_from_course_code($group_course['code']);
-            $members = array ();
-            foreach ($users as $index => $user) {
-                if ($user['status'] == 5 && $user['tutor_id'] == 0) {
-                    $members[] = $user['user_id'];
-                }
-            }
-            $id = self :: create_group($group_course['code'], self::VIRTUAL_COURSE_CATEGORY, 0, count($members));
-            self :: subscribe_users($members, $id);
-            $ids[] = $id;
-        }
-        return $ids;
-    }
-
-    /**
      * Create a group for every class subscribed to the current course
      * @param int $category_id The category in which the groups should be created
      * @return array
@@ -446,9 +414,9 @@ class GroupManager
 
         $sql = "DELETE FROM ".$forum_table."
                 WHERE c_id = $course_id AND forum_of_group IN ('".implode("' , '", $group_ids)."')";
-        Database::query($sql);
+        $result = Database::query($sql);
 
-        return Database::affected_rows();
+        return Database::affected_rows($result);
     }
 
     /**
@@ -477,7 +445,6 @@ class GroupManager
             $result['id'] = $db_object->id;
             $result['name'] = $db_object->name;
             $result['status'] = $db_object->status;
-            $result['tutor_id'] = isset($db_object->tutor_id) ? $db_object->tutor_id : null;
             $result['description'] = $db_object->description;
             $result['maximum_number_of_students'] = $db_object->max_student;
             $result['max_student'] = $db_object->max_student;
@@ -835,12 +802,18 @@ class GroupManager
                     max_student = '".Database::escape_string($maximum_number_of_students)."' ";
         Database::query($sql);
         $categoryId = Database::insert_id();
+
+        // @todo check if this code do something ... virtual course category?
         if ($categoryId == self::VIRTUAL_COURSE_CATEGORY) {
             $sql = "UPDATE  ".$table_group_category." SET id = ". ($categoryId +1)."
                     WHERE c_id = $course_id AND id = $categoryId";
             Database::query($sql);
-            return $categoryId +1;
+            $categoryId = $categoryId +1;
         }
+
+        $sql = "UPDATE $table_group_category SET id = iid WHERE iid = $categoryId";
+        Database::query($sql);
+
         return $categoryId;
     }
 
@@ -1506,8 +1479,9 @@ class GroupManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT tg.id, u.user_id, u.lastname, u.firstname, u.email
-            FROM ".$table_user." u, ".$table_group_tutor." tg
-            WHERE     tg.c_id = $course_id AND
+                FROM ".$table_user." u, ".$table_group_tutor." tg
+                WHERE
+                    tg.c_id = $course_id AND
                     tg.group_id='".$group_id."' AND
                     tg.user_id=u.user_id".$order_clause;
         $db_result = Database::query($sql);
@@ -1520,7 +1494,7 @@ class GroupManager
                 $member['email'] = $user->email;
                 $users[] = $member;
             } else {
-                $users[]=$user->user_id;
+                $users[] = $user->user_id;
             }
         }
         return $users;
@@ -1545,11 +1519,12 @@ class GroupManager
                     $group_id = intval($group_id);
                     $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
-                    $result &= Database::query($sql);
+                    Database::query($sql);
                 }
             }
         }
-        return $result;
+
+        return true;
     }
 
     /**
@@ -1572,7 +1547,7 @@ class GroupManager
             $group_id = intval($group_id);
             if (self::can_user_subscribe($user_id, $group_id)) {
                 $sql = "INSERT INTO " . $table_group_tutor . " (c_id, user_id, group_id)
-                    VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
+                        VALUES ('$course_id', '" . $user_id . "', '" . $group_id . "')";
                 $result &= Database::query($sql);
             }
         }
@@ -1709,7 +1684,7 @@ class GroupManager
         $sql = "SELECT user.user_id AS user_id, user.lastname AS lastname, user.firstname AS firstname
 				FROM ".$user_table." user, ".$course_user_table." cu
 				WHERE cu.user_id=user.user_id
-				AND cu.tutor_id='1'
+				AND cu.is_tutor='1'
 				AND cu.c_id='".api_get_course_int_id()."'";
         $resultTutor = Database::query($sql);
         $tutors = array();
@@ -1718,7 +1693,6 @@ class GroupManager
         }
         return $tutors;
     }
-
 
     /**
      * Is user a tutor in current course
@@ -1731,10 +1705,10 @@ class GroupManager
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $user_id = intval($user_id);
 
-        $sql = "SELECT tutor_id FROM ".$course_user_table."
-		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"."AND tutor_id=1";
+        $sql = "SELECT is_tutor FROM ".$course_user_table."
+		        WHERE user_id = '".$user_id."' AND c_id ='".api_get_course_int_id()."'"." AND is_tutor=1";
         $db_result = Database::query($sql);
-        $result = (Database::num_rows($db_result) > 0);
+        $result = Database::num_rows($db_result) > 0;
 
         return $result;
     }
@@ -1825,7 +1799,7 @@ class GroupManager
                 $firstname = $this_user['firstname'];
                 $status = $this_user['status'];
                 //$role =  $this_user['role'];
-                $tutor_id = $this_user['tutor_id'];
+                $isTutor = $this_user['is_tutor'];
                 $full_name = api_get_person_name($firstname, $lastname);
                 if ($lastname == "" || $firstname == '') {
                     $full_name = $loginname;
@@ -1835,7 +1809,7 @@ class GroupManager
                 $complete_user['firstname'] = $firstname;
                 $complete_user['lastname'] = $lastname;
                 $complete_user['status'] = $status;
-                $complete_user['tutor_id'] = $tutor_id;
+                $complete_user['is_tutor'] = $isTutor;
                 $student_number_of_groups = self :: user_in_number_of_groups($user_id, $category['id']);
                 //filter: only add users that have not exceeded their maximum amount of groups
                 if ($student_number_of_groups < $number_of_groups_limit) {
@@ -1894,7 +1868,6 @@ class GroupManager
     {
         $user_array_out = array();
         foreach ($user_array_in as $this_user) {
-            //if ($this_user['status_rel'] == STUDENT && $this_user['tutor_id'] == 0) {
             if (api_get_session_id()) {
                 if ($this_user['status_session'] == 0) {
                     $user_array_out[] = $this_user;
@@ -1977,8 +1950,6 @@ class GroupManager
         } elseif ($groupInfo[$state_key] == self::TOOL_PUBLIC) {
             return true;
         } elseif (api_is_allowed_to_edit(false, true)) {
-            return true;
-        } elseif ($groupInfo['tutor_id'] == $user_id) { //this tutor implementation was dropped
             return true;
         } elseif ($groupInfo[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
             return false;
@@ -2214,7 +2185,11 @@ class GroupManager
                     $tutor = api_get_user_info($tutor_id);
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $tutor['username']), ENT_QUOTES);
                     if (api_get_setting('show_email_addresses') == 'true') {
-                        $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';
+                        $tutor_info .= Display::tag(
+                            'span',
+                            Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])),
+                            array('title'=>$username)
+                        ).', ';
                     } else {
                         if (api_is_allowed_to_edit()) {
                             $tutor_info .= Display::tag('span', Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])), array('title'=>$username)).', ';

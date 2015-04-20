@@ -31,9 +31,10 @@ if (api_is_multiple_url_enabled()) {
 	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
-	$sql = "SELECT code,visual_code,title FROM $course_table as c
+	$sql = "SELECT code,visual_code,title
+		FROM $course_table as c
 		INNER JOIN $tbl_course_rel_access_url as course_rel_url
-		ON (c.code = course_rel_url.course_code)
+		ON (c.id = course_rel_url.c_id)
 		WHERE access_url_id = $access_url_id
 		ORDER BY visual_code";
 	}
@@ -59,6 +60,8 @@ if ($form->validate()) {
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
 	$course_code = Database::escape_string($export['course_code']);
+	$courseInfo = api_get_course_info($course_code);
+	$courseId = $courseInfo['real_id'];
 
 	$sql = "SELECT  u.user_id 	AS UserId,
 					u.lastname 	AS LastName,
@@ -71,7 +74,12 @@ if ($form->validate()) {
 					u.official_code	AS OfficialCode,
 					u.phone		AS Phone";
 	if (strlen($course_code) > 0) {
-		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ORDER BY lastname,firstname";
+		$sql .= " FROM $user_table u, $course_user_table cu
+					WHERE
+						u.user_id = cu.user_id AND
+						cu.c_id = '$courseId' AND
+						cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+					ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
 	} else {
 		global $_configuration;
@@ -119,11 +127,11 @@ if ($form->validate()) {
 
 	switch($file_type) {
 		case 'xml':
-			Export::export_table_xml($data,$filename,'Contact','Contacts');
+			Export::arrayToXml($data, $filename, 'Contact', 'Contacts');
 			exit;
 			break;
 		case 'csv':
-			Export::export_table_csv($data,$filename);
+			Export::arrayToCsv($data,$filename);
 			exit;
 			break;
 	}

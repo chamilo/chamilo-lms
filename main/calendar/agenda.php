@@ -5,7 +5,7 @@
  * @package chamilo.calendar
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
@@ -63,7 +63,7 @@ $nameTools = get_lang('Agenda');
 Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
 // permission stuff - also used by loading from global in agenda.inc.php
-$is_allowed_to_edit = api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 $agenda = new Agenda();
 $agenda->type = $type;
 $actions = $agenda->displayActions('calendar');
@@ -88,10 +88,10 @@ $agenda->type = $event_type;
 $message = null;
 $content = null;
 
-if (api_is_allowed_to_edit(false, true) OR
+if (api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_agenda') &&
     !api_is_anonymous() &&
-    api_is_allowed_to_session_edit(false, true)) OR
+    api_is_allowed_to_session_edit(false, true)) ||
     GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) &&
     GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
 ) {
@@ -180,7 +180,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 if (!empty($event['parent_event_id'])) {
                     $agenda->delete_event($eventId);
 
-                    $eventId = $agenda->add_event(
+                    $eventId = $agenda->addEvent(
                         $startDate,
                         $endDate,
                         $allDay,
@@ -201,7 +201,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 }
 
                 // Editing normal event.
-                $agenda->edit_event(
+                $agenda->editEvent(
                     $eventId,
                     $startDate,
                     $endDate,
@@ -239,7 +239,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 header("Location: $agendaUrl");
                 exit;
             } else {
-                $content = $form->return_form();
+                $content = $form->returnForm();
             }
             break;
         case 'importical':

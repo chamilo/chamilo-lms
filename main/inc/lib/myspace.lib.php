@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
-use CpChart\Classes\pCache as pCache;
 
 /**
  * Class MySpace
@@ -53,8 +53,8 @@ class MySpace
      * @param string $file_name     The name of the file which contains exported data.
      * @return string mixed             Returns a message (string) if an error occurred.
      */
-    function export_csv($header, $data, $file_name = 'export.csv') {
-
+    function export_csv($header, $data, $file_name = 'export.csv')
+    {
         $archive_path = api_get_path(SYS_ARCHIVE_PATH);
         $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
@@ -348,19 +348,38 @@ class MySpace
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
-			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
-			GROUP BY user_id ";
+        $sqlCoachs = "SELECT DISTINCT
+                        scu.user_id as id_coach,
+                        u.id as user_id,
+                        lastname,
+                        firstname,
+                        MAX(login_date) as login_date
+                        FROM $tbl_user u, $tbl_session_course_user scu, $tbl_track_login
+                        WHERE
+                            scu.user_id = u.id AND scu.status=2 AND login_user_id=u.id
+                        GROUP BY user_id ";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-					FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login , $tbl_session_rel_access_url session_rel_url
-					WHERE scu.id_user=user_id AND scu.status=2 AND login_user_id=user_id AND access_url_id = $access_url_id AND session_rel_url.session_id=id_session
-					GROUP BY user_id ";
+                $sqlCoachs = "SELECT DISTINCT
+                                    scu.user_id as id_coach,
+                                    u.id as user_id,
+                                    lastname,
+                                    firstname,
+                                    MAX(login_date) as login_date
+                                FROM $tbl_user u,
+                                $tbl_session_course_user scu,
+                                $tbl_track_login ,
+                                $tbl_session_rel_access_url session_rel_url
+                                WHERE
+                                    scu.user_id = u.id AND
+                                    scu.status = 2 AND
+                                    login_user_id = u.id AND
+                                    access_url_id = $access_url_id AND
+                                    session_rel_url.session_id = scu.session_id
+                                GROUP BY u.id";
             }
         }
         if (!empty($order[$tracking_column])) {
@@ -374,20 +393,24 @@ class MySpace
             $global_coaches[$coach['user_id']] = $coach;
         }
 
-        $sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-			FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.'
-			WHERE id_coach=user_id AND login_user_id=user_id
-			GROUP BY user_id
-			ORDER BY login_date '.$tracking_direction;
+        $sql_session_coach = 'SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
+                                FROM '.$tbl_user.' u ,'.$tbl_sessions.' as session,'.$tbl_track_login.'
+                                WHERE id_coach = u.id AND login_user_id = u.id
+                                GROUP BY u.id
+                                ORDER BY login_date '.$tracking_direction;
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-					FROM '.$tbl_user.','.$tbl_sessions.' as session,'.$tbl_track_login.' , '.$tbl_session_rel_access_url.' as session_rel_url
-					WHERE id_coach=user_id AND login_user_id=user_id  AND access_url_id = '.$access_url_id.' AND  session_rel_url.session_id=session.id
-					GROUP BY user_id
+                $sql_session_coach = 'SELECT session.id_coach, u.id as user_id, lastname, firstname, MAX(login_date) as login_date
+					FROM '.$tbl_user.' u ,'.$tbl_sessions.' as session, '.$tbl_track_login.' , '.$tbl_session_rel_access_url.' as session_rel_url
+					WHERE
+					    id_coach = u.id AND
+					    login_user_id = u.id  AND
+					    access_url_id = '.$access_url_id.' AND
+					    session_rel_url.session_id = session.id
+					GROUP BY  u.id
 					ORDER BY login_date '.$tracking_direction;
             }
         }
@@ -485,8 +508,8 @@ class MySpace
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    public static function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to) {
-
+    public static function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to)
+    {
         $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
@@ -552,6 +575,7 @@ class MySpace
         $return .= Display::grid_html($tableId);
         return $return;
     }
+
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @param   int $sessionId  The session ID
@@ -764,7 +788,7 @@ class MySpace
             get_lang('LastName'),
         );
         //add lessons of course
-        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $questions = SurveyManager::get_questions($surveyId, $courseId);
 
         foreach ($questions as $question) {
             $columns[] = $question['question'];
@@ -1215,6 +1239,7 @@ class MySpace
     {
         $course_code = $row[0];
         $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
         // the table header
         $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
@@ -1228,7 +1253,7 @@ class MySpace
                 FROM $tbl_user AS u
                 INNER JOIN $tbl_course_rel_user AS cu
                 ON cu.user_id = u.user_id
-                WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+                WHERE cu.c_id = '".$courseId."'";
         $result = Database::query($sql);
         $time_spent = 0;
         $progress = 0;
@@ -1377,7 +1402,7 @@ class MySpace
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_course_rel_user AS cu
                     ON cu.user_id = u.user_id
-                    WHERE cu.course_code = '".$course_code."' AND ISNULL(cu.role);";
+                    WHERE cu.course_code = '".$course_code."'";
             $result = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1589,7 +1614,7 @@ class MySpace
         $sql = "SELECT * FROM $tbl_course AS c
                 INNER JOIN $tbl_session_rel_course AS sc
                 ON sc.course_code = c.code
-                WHERE sc.id_session = '".$session_id."';";
+                WHERE sc.session_id = '".$session_id."';";
         $result = Database::query($sql);
         while ($row = Database::fetch_object($result)) {
             $courseCode = $row->code;
@@ -1599,11 +1624,11 @@ class MySpace
             // course code
             $return .= '    <td width="157px" >'.$row->title.'</td>';
             // get the users in the course
-            $sql = "SELECT user_id
+            $sql = "SELECT u.user_id
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_session_rel_course_rel_user AS scu
-                    ON u.user_id = scu.id_user
-                    WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$courseCode."';";
+                    ON u.user_id = scu.user_id
+                    WHERE scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
             $result_users = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1749,7 +1774,7 @@ class MySpace
             $sql = "SELECT * FROM $tbl_course AS c
                     INNER JOIN $tbl_session_rel_course AS sc
                     ON sc.course_code = c.code
-                    WHERE sc.id_session = '".$session_id."';";
+                    WHERE sc.session_id = '".$session_id."';";
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
                 $courseInfo = api_get_course_info($row->code);
@@ -1758,10 +1783,11 @@ class MySpace
                 $csv_row[] = $session_title;
                 $csv_row[] = $row->title;
                 // get the users in the course
-                $sql = "SELECT user_id FROM $tbl_user AS u
+                $sql = "SELECT scu.user_id
+                        FROM $tbl_user AS u
                         INNER JOIN $tbl_session_rel_course_rel_user AS scu
-                        ON u.user_id = scu.id_user
-                        WHERE scu.id_session = '".$session_id."' AND scu.course_code = '".$row->code."';";
+                        ON u.user_id = scu.user_id
+                        WHERE scu.session_id = '".$session_id."' AND scu.c_id = '".$courseId."'";
                 $result_users = Database::query($sql);
                 $time_spent = 0;
                 $progress = 0;
@@ -1781,14 +1807,28 @@ class MySpace
                     $progress += $progress_tmp[0];
                     $nb_progress_lp += $progress_tmp[1];
                     $score_tmp = Tracking :: get_avg_student_score($row_user->user_id, $row->code, array(), $session_id, true);
-                    if(is_array($score_tmp)) {
+                    if (is_array($score_tmp)) {
                         $score += $score_tmp[0];
                         $nb_score_lp += $score_tmp[1];
                     }
-                    $nb_messages += Tracking::count_student_messages($row_user->user_id, $row->code, $session_id);
-                    $nb_assignments += Tracking::count_student_assignments($row_user->user_id, $row->code, $session_id);
+                    $nb_messages += Tracking::count_student_messages(
+                        $row_user->user_id,
+                        $row->code,
+                        $session_id
+                    );
 
-                    $last_login_date_tmp = Tracking :: get_last_connection_date_on_the_course ($row_user->user_id, $courseId, $session_id, false);
+                    $nb_assignments += Tracking::count_student_assignments(
+                        $row_user->user_id,
+                        $row->code,
+                        $session_id
+                    );
+
+                    $last_login_date_tmp = Tracking:: get_last_connection_date_on_the_course(
+                        $row_user->user_id,
+                        $courseId,
+                        $session_id,
+                        false
+                    );
                     if($last_login_date_tmp != false && $last_login_date == false) { // TODO: To be cleaned.
                         $last_login_date = $last_login_date_tmp;
                     } else if($last_login_date_tmp != false && $last_login_date == false) { // TODO: Repeated previous condition. To be cleaned.
@@ -2070,15 +2110,22 @@ class MySpace
         while ($row_course = Database::fetch_row($res)) {
             $course_code = $row_course[0];
             $courseInfo = api_get_course_info($course_code);
+            $courseId = $courseInfo['real_id'];
             $avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
             // students directly subscribed to the course
             if (empty($session_id)) {
-                $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                        WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+                $sql = "SELECT user_id
+                        FROM $tbl_course_user as course_rel_user
+                        WHERE
+                            course_rel_user.status='5' AND
+                            course_rel_user.c_id = '$courseId'";
             } else {
-                $sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu
-                        WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+                $sql = "SELECT user_id FROM $tbl_session_course_user srcu
+                        WHERE
+                            c_id = '$courseId' AND
+                            session_id = '$session_id' AND
+                            status<>2";
             }
             $rs = Database::query($sql);
             $users = array();
@@ -2281,10 +2328,10 @@ class MySpace
     /**
      * Checks whether a username has been already subscribed in a session.
      * @param string a given username
-     * @param array  the array with the course list codes
+     * @param array  the array with the course list id
      * @param the session id
      * @return 0 if the user is not subscribed  otherwise it returns the user_id of the given username
-     * @author Julio Montoya Armas
+     * @author Julio Montoya
      */
     public static function user_available_in_session($username, $course_list, $id_session)
     {
@@ -2292,15 +2339,17 @@ class MySpace
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $id_session = intval($id_session);
         $username = Database::escape_string($username);
-        foreach($course_list as $enreg_course) {
-            $sql_select = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
-                            ON (rel.id_user=u.user_id)
-                            WHERE
-                                rel.id_session='$id_session' AND
-                                u.status='5' AND
-                                u.username ='$username' AND
-                                rel.course_code='$enreg_course'";
-            $rs = Database::query($sql_select);
+        foreach ($course_list as $courseId) {
+            $courseId = intval($courseId);
+            $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
+                     INNER JOIN $table_user u
+                     ON (rel.user_id = u.user_id)
+                     WHERE
+                        rel.session_id='$id_session' AND
+                        u.status='5' AND
+                        u.username ='$username' AND
+                        rel.c_id='$courseId'";
+            $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 return Database::result($rs, 0, 0);
             } else {
@@ -2310,14 +2359,19 @@ class MySpace
     }
 
     /**
-    This function checks whether some users in the uploaded file repeated and creates unique usernames if necesary.
-    A case: Within the file there is an user repeted twice (Julio Montoya / Julio Montoya) and the username fields are empty.
-    Then, this function would create unique usernames based on the first and the last name. Two users wiould be created - jmontoya and jmontoya2.
-    Of course, if in the database there is a user with the name jmontoya, the newly created two users registered would be jmontoya2 and jmontoya3.
-    @param $users list of users
-    @author Julio Montoya Armas
+     * This function checks whether some users in the uploaded file
+     * repeated and creates unique usernames if necesary.
+     * A case: Within the file there is an user repeted twice (Julio Montoya / Julio Montoya)
+     * and the username fields are empty.
+     * Then, this function would create unique usernames based on the first and the last name.
+     * Two users wiould be created - jmontoya and jmontoya2.
+     * Of course, if in the database there is a user with the name jmontoya,
+     * the newly created two users registered would be jmontoya2 and jmontoya3.
+     * @param $users list of users
+     * @author Julio Montoya Armas
      */
-    function check_all_usernames($users, $course_list, $id_session) {
+    function check_all_usernames($users, $course_list, $id_session)
+    {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $usernames = array();
         $new_users = array();
@@ -2356,20 +2410,21 @@ class MySpace
     }
 
     /**
-     * This functions checks whether there are users that are already registered in the DB by different creator than the current coach.
+     * This functions checks whether there are users that are already
+     * registered in the DB by different creator than the current coach.
      * @param string a given username
-     * @param array  the array with the course list codes
+     * @param array  the array with the course list ids
      * @param the session id
      * @author Julio Montoya Armas
      */
-    function get_user_creator($users, $course_list, $id_session) {
+    public function get_user_creator($users)
+    {
         $errors = array();
         foreach ($users as $index => $user) {
             // database table definition
             $table_user = Database::get_main_table(TABLE_MAIN_USER);
             $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $username = Database::escape_string($user['UserName']);
-            //echo "<br>";
             $sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
 
             $rs = Database::query($sql);
@@ -2382,6 +2437,7 @@ class MySpace
                 }
             }
         }
+
         return $errors;
     }
 
@@ -2431,17 +2487,19 @@ class MySpace
         if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
             $user['Password'] = api_generate_password();
         }
+
         return $user;
     }
 
     /**
      * Saves imported data.
      */
-    function save_data($users, $course_list, $id_session) {
-        $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_course             = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_user               = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    public function save_data($users, $course_list, $id_session)
+    {
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $id_session = intval($id_session);
         $sendMail = $_POST['sendMail'] ? 1 : 0;
@@ -2451,9 +2509,20 @@ class MySpace
         foreach ($users as $index => $user) {
             $user = MySpace::complete_missing_data($user);
             // coach only will registered users
-            $default_status = '5';
-            if ($user['create'] == '1') {
-                $user['id'] = UserManager :: create_user($user['FirstName'], $user['LastName'], $default_status, $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '');
+            $default_status = STUDENT;
+            if ($user['create'] == COURSEMANAGER) {
+                $user['id'] = UserManager:: create_user(
+                    $user['FirstName'],
+                    $user['LastName'],
+                    $default_status,
+                    $user['Email'],
+                    $user['UserName'],
+                    $user['Password'],
+                    $user['OfficialCode'],
+                    api_get_setting('PlatformLanguage'),
+                    $user['PhoneNumber'],
+                    ''
+                );
                 $user['added_at_platform'] = 1;
             } else {
                 $user['id'] = $user['create'];
@@ -2472,9 +2541,10 @@ class MySpace
             $enreg_course = Database::escape_string($enreg_course);
             foreach ($users as $index => $user) {
                 $userid = intval($user['id']);
-                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
+                $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
+                        VALUES('$id_session','$enreg_course','$userid')";
                 $course_session = array('course' => $enreg_course, 'added' => 1);
-                //$user['added_at_session'] = $course_session;
+
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
@@ -2484,23 +2554,23 @@ class MySpace
             $super_list[] = $new_users;
 
             //update the nbr_users field
-            $sql_select = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
+                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql_select);
             list($nbr_users) = Database::fetch_array($rs);
-            $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
+                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
             Database::query($sql_update);
 
             $sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
             Database::query($sql_update);
         }
-        // We don't delete the users (thoughts while dreaming)
-        //$sql_delete = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session'";
-        //Database::query($sql_delete);
 
         $new_users = array();
         foreach ($users as $index => $user) {
             $userid = $user['id'];
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$userid')";
+            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id)
+                           VALUES ('$id_session','$userid')";
             Database::query($sql_insert);
             $user['added_at_session'] = 1;
             $new_users[] = $user;
@@ -2514,7 +2584,17 @@ class MySpace
             $i = 0;
             foreach ($users as $index => $user) {
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                $emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('SignatureFormula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+                $emailbody = get_lang('Dear').' '.
+                    api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".
+                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                    get_lang('Username')." : $user[UserName]\n".
+                    get_lang('Pass')." : $user[Password]\n\n".
+                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".
+                    get_lang('Problem')."\n\n".
+                    get_lang('SignatureFormula').",\n\n".
+                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
+                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
+                    api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
                     api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS),
@@ -2522,6 +2602,7 @@ class MySpace
                     $emailsubject,
                     $emailbody
                 );
+                $userInfo = api_get_user_info($user['id']);
 
                 if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
@@ -2533,15 +2614,18 @@ class MySpace
                     if ($user['added_at_session'] == 1) {
                         $addedto .= get_lang('UserInSession');
                     }
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 } else {
                     $addedto = get_lang('UserNotAdded');
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 }
+
+                $registered_users .= UserManager::getUserProfileLink($userInfo)." - ".$addedto.'<br />';
             }
         } else {
             $i = 0;
             foreach ($users as $index => $user) {
+
+                $userInfo = api_get_user_info($user['id']);
+
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
                         $addedto = get_lang('UserCreatedPlatform');
@@ -2552,19 +2636,15 @@ class MySpace
                     if ($user['added_at_session'] == 1) {
                         $addedto .= ' '.get_lang('UserInSession');
                     }
-
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 } else {
                     $addedto = get_lang('UserNotAdded');
-                    $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
                 }
+                $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
             }
         }
 
         header('Location: course.php?id_session='.$id_session.'&action=show_message&message='.urlencode($registered_users));
-        exit ();
-
-        //header('Location: resume_session.php?id_session='.$id_session);
+        exit;
     }
 
     /**
@@ -2573,7 +2653,7 @@ class MySpace
      * @return array All userinformation read from the file
      */
     function parse_csv_data($file) {
-        $users = Import :: csv_to_array($file);
+        $users = Import :: csvToArray($file);
         foreach ($users as $index => $user) {
             if (isset ($user['Courses'])) {
                 $user['Courses'] = explode('|', trim($user['Courses']));

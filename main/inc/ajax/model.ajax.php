@@ -1004,7 +1004,7 @@ switch ($action) {
             'lastname',
         );
 
-        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $questions = SurveyManager::get_questions($surveyId, $courseId);
 
         foreach ($questions as $question_id => $question)
         {
@@ -1480,7 +1480,7 @@ if (in_array($action, $allowed_actions)) {
             default:
                 //TODO add date if exists
                 $file_name = (!empty($action)) ? $action : 'company_report';
-                Export::export_table_csv($array, $file_name);
+                Export::arrayToCsv($array, $file_name);
                 break;
         }
         exit;

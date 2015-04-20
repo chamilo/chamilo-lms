@@ -121,7 +121,7 @@ $table = new SortableTable(
 );
 
 $parameters = array(
-    'keyword' => Security::remove_XSS($_GET['keyword']),
+    //'keyword' => Security::remove_XSS($_GET['keyword']),
     'id_session' => $session_id,
     'cidReq' => api_get_course_id()
 );

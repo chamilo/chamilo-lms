@@ -10,7 +10,7 @@
 *	@package chamilo.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
-* 	@author Julio Montoya Armas switchable fill in blank option added
+* 	@author Julio Montoya switchable fill in blank option added
 *
 *	@todo	split more code up in functions, move functions to library?
 */
@@ -149,7 +149,7 @@ ExerciseLib::delete_chat_exercise_session($exe_id);
 
 if ($origin != 'learnpath') {
     echo '<hr>';
-    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
+    echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-primary'));
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

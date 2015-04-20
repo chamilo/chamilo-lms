@@ -27,21 +27,20 @@ if (!empty($sessionId)) {
     $sessionList[$sessionId]['selected'] = 'selected="selected"';
     $studentList['session']['id'] = $sessionId;
     // Assign variables
-    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants');
+    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants', 'vacancies');
     $sessionArray = api_get_session_info($sessionId);
     $extraSession = new ExtraFieldValue('session');
     $extraField = new ExtraField('session');
     // Get session fields
     $fieldList = $extraField->get_all(array(
-        'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+        'field_variable IN ( ?, ?, ?, ?, ?, ?)' => $fieldsArray
     ));
     // Index session fields
     foreach ($fieldList as $field) {
         $fields[$field['id']] = $field['field_variable'];
     }
-
-    $mergedArray = array_merge(array($sessionId), array_keys($fields));
-    $sessionFieldValueList = $extraSession->get_all(array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray));
+    $params = array(' session_id = ? '  => $sessionId);
+    $sessionFieldValueList = $extraSession->get_all(array('where' => $params));
     foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Check if session field value is set in session field list
         if (isset($fields[$sessionFieldValue['field_id']])) {
@@ -73,7 +72,7 @@ if (!empty($sessionId)) {
             $student['firstname'] . ', ' . $student['lastname'] :
             $student['lastname'] . ', ' . $student['firstname'];
     }
-    $tpl->assign('session', $studentList['session']);
+    $tpl->assign('session', $sessionArray);
     $tpl->assign('students', $studentList['students']);
 }
 

@@ -95,7 +95,7 @@ function save() {
 $course_code = api_get_course_id();
 $results = initializeReport($course_code);
 if (isset($_GET['action'])) {
-    Export::export_table_xls($results['export'], "COURSE_USER_REPORT" . $course_code);
+    Export::arrayToXls($results['export'], "COURSE_USER_REPORT" . $course_code);
 } else {
     Display::display_header();
     api_protect_course_script();

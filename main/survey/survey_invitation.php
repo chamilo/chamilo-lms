@@ -40,7 +40,7 @@ if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id'])) {
 }
 
 $survey_id = Security::remove_XSS($_GET['survey_id']);
-$survey_data = survey_manager::get_survey($survey_id);
+$survey_data = SurveyManager::get_survey($survey_id);
 
 if (empty($survey_data)) {
 	Display :: display_header($tool_name);
@@ -70,7 +70,7 @@ if (!is_numeric($survey_id)) {
 }
 
 // Getting all the people who have filled this survey
-$answered_data = survey_manager::get_people_who_filled_survey($survey_id);
+$answered_data = SurveyManager::get_people_who_filled_survey($survey_id);
 if ($survey_data['anonymous'] == 1) {
 	Display::display_normal_message(get_lang('AnonymousSurveyCannotKnowWhoAnswered').' '.count($answered_data).' '.get_lang('PeopleAnswered'));
 	$answered_data = array();
@@ -104,25 +104,36 @@ $course_id = api_get_course_int_id();
 
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
         FROM $table_survey_invitation survey_invitation
-        LEFT JOIN $table_user user ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
-        WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
+        LEFT JOIN $table_user user
+        ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
+        WHERE
+            survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
 
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-	if (!$_GET['view'] || $_GET['view'] == 'invited' || ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) || ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))) {
+	if (!$_GET['view'] ||
+		$_GET['view'] == 'invited' ||
+        ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) ||
+        ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))
+    ) {
 		echo '<tr>';
 		if (is_numeric($row['user'])) {
-			echo '			<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?editMainUserInfo='.$row['user'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a></td>';
+            $userInfo = api_get_user_info($row['user']);
+			echo '<td>';
+            echo UserManager::getUserProfileLink($userInfo);
+            echo '</td>';
 		} else {
-				echo '	<td>'.$row['user'].'</td>';
+            echo '<td>'.$row['user'].'</td>';
 		}
 		echo '	<td>'.$row['invitation_date'].'</td>';
 		echo '	<td>';
+
 		if (in_array($row['user'], $answered_data)) {
 			echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
 		} else {
 			echo '-';
 		}
+
 		echo '	</td>';
 		echo '</tr>';
 	}

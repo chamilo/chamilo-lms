@@ -317,7 +317,6 @@ function loadUsersInSelect(select){
 	else  // XMLHttpRequest non supporté par le navigateur
 	alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	nosessionUsers = makepost(document.getElementById('origin_users'));

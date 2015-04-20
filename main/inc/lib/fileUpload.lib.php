@@ -1223,11 +1223,14 @@ function add_document(
     $c_id = $_course['real_id'];
 
     $table_document = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "INSERT INTO $table_document (c_id, path, filetype, size, title, comment, readonly, session_id)
-	        VALUES ($c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
+    $sql = "INSERT INTO $table_document (id, c_id, path, filetype, size, title, comment, readonly, session_id)
+	        VALUES (null, $c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 
     if (Database::query($sql)) {
         $documentId = Database::insert_id();
+        $sql = "UPDATE $table_document SET id = iid WHERE iid = $documentId";
+        Database::query($sql);
+
         if ($documentId) {
             if ($save_visibility) {
                 api_set_default_visibility($documentId, TOOL_DOCUMENT, $group_id);

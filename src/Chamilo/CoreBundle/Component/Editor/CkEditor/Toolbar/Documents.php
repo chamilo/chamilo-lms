@@ -10,8 +10,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Documents extends Basic
 {
-    public $plugins = array(
-    );
+    public $plugins = array();
 
     /**
      * @return mixed
@@ -51,9 +50,10 @@ class Documents extends Basic
     {
         $plugins = array();
 
-        if (api_get_setting('show_glossary_in_documents') != 'none') {
+        if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             $plugins[] = 'glossary';
         }
+
         return $plugins;
     }
 }

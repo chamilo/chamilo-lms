@@ -8,7 +8,7 @@ class TestImport extends UnitTestCase {
     }
 	function testCsvToArray(){
 		$filename='';
-		$res=Import::csv_to_array($filename);
+		$res=Import::csvToArray($filename);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

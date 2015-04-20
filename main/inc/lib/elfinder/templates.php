@@ -11,7 +11,9 @@ $table = Database::get_main_table(TABLE_MAIN_SYSTEM_TEMPLATE);
 $sql = "SELECT * FROM $table";
 $result = Database::query($sql);
 $templates = Database::store_result($result, 'ASSOC');
-$editor = new CkEditor();
-$templates = $editor->simpleFormatTemplates($templates);
-$template->assign('templates', $templates);
-$template->display('default/javascript/editor/ckeditor/templates.tpl');
+if (!empty($templates)) {
+    $editor = new CkEditor();
+    $templates = $editor->simpleFormatTemplates($templates);
+    $template->assign('templates', $templates);
+    $template->display('default/javascript/editor/ckeditor/templates.tpl');
+}

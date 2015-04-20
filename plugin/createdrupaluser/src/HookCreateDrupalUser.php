@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class HookCreateDrupalUser
  * Hook to create an user in Drupal website
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -9,9 +10,8 @@
  */
 class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserverInterface
 {
-
     /**
-     * Class constructor
+     * Constructor
      */
     public function __construct()
     {

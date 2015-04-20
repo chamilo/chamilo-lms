@@ -59,7 +59,6 @@ class CourseRequestManager
         $user_id,
         $exemplary_content
     ) {
-        global $_configuration;
         $wanted_code = trim($wanted_code);
         $user_id = (int)$user_id;
         $exemplary_content = (bool)$exemplary_content ? 1 : 0;
@@ -95,7 +94,8 @@ class CourseRequestManager
         $db_name = isset($keys['currentCourseDbName']) ? $keys['currentCourseDbName'] : null;
         $directory = $keys['currentCourseRepository'];
 
-        $sql = sprintf('INSERT INTO %s (
+        $sql = sprintf(
+            'INSERT INTO %s (
                 code, user_id, directory, db_name,
                 course_language, title, description, category_code,
                 tutor_name, visual_code, request_date,
@@ -104,23 +104,37 @@ class CourseRequestManager
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s", "%s",
                 "%s", "%s", "%s",
-                "%s", "%s", "%s", "%s", "%s");', Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
-            Database::escape_string($code), Database::escape_string($user_id), Database::escape_string($directory), Database::escape_string($db_name),
-            Database::escape_string($course_language), Database::escape_string($title), Database::escape_string($description), Database::escape_string($category_code),
-            Database::escape_string($tutor_name), Database::escape_string($visual_code), Database::escape_string($request_date),
-            Database::escape_string($objetives), Database::escape_string($target_audience), Database::escape_string($status), Database::escape_string($info), Database::escape_string($exemplary_content));
+                "%s", "%s", "%s", "%s", "%s");',
+            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
+            Database::escape_string($code),
+            Database::escape_string($user_id),
+            Database::escape_string($directory),
+            Database::escape_string($db_name),
+            Database::escape_string($course_language),
+            Database::escape_string($title),
+            Database::escape_string($description),
+            Database::escape_string($category_code),
+            Database::escape_string($tutor_name),
+            Database::escape_string($visual_code),
+            Database::escape_string($request_date),
+            Database::escape_string($objetives),
+            Database::escape_string($target_audience),
+            Database::escape_string($status),
+            Database::escape_string($info),
+            Database::escape_string($exemplary_content)
+        );
+
         $result_sql = Database::query($sql);
 
         if (!$result_sql) {
             return false;
         }
+
         $last_insert_id = Database::insert_id();
 
         // E-mail notifications.
 
         // E-mail language: The platform language seems to be the best choice.
-        //$email_language = $course_language;
-        //$email_language = api_get_interface_language();
         $email_language = api_get_setting('platformLanguage');
 
         $email_subject = sprintf(get_lang('CourseRequestEmailSubject', null, $email_language), '['.api_get_setting('siteName').']', $code);
@@ -146,13 +160,12 @@ class CourseRequestManager
         $sender_name_teacher = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $sender_email_teacher = $user_info['mail'];
         $recipient_name_admin = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $recipient_email_admin = get_setting('emailAdministrator');
+        $recipient_email_admin = api_get_setting('emailAdministrator');
 
         $userInfo = api_get_user_info($user_id);
-        $plugin = new AppPlugin();
-        $className = $plugin->getSMSPluginName();
+
         $additionalParameters = array(
-            'smsType' => constant($className.'::NEW_COURSE_SUGGESTED_TEACHER'),
+            'smsType' => SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER,
             'userId' => $user_id,
             'userUsername' => $userInfo['username']
         );
@@ -189,7 +202,7 @@ class CourseRequestManager
         $recipient_email_teacher = $sender_email_teacher;
 
         $additionalParameters = array(
-            'smsType' => constant($className.'::COURSE_OPENING_REQUEST_CODE_REGISTERED'),
+            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED,
             'userId' => $user_info['user_id'],
             'courseCode' => $wanted_code
         );
@@ -464,14 +477,13 @@ class CourseRequestManager
             $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-            $sender_email = get_setting('emailAdministrator');
+            $sender_email = api_get_setting('emailAdministrator');
             $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
             $recipient_email = $user_info['mail'];
             $extra_headers = 'Bcc: '.$sender_email;
 
-            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE_APPROVED'),
+                'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
                 'userId' => $user_id,
                 'courseCode' => $course_info['code']
             );
@@ -543,14 +555,13 @@ class CourseRequestManager
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = get_setting('emailAdministrator');
+        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE_REJECTED'),
+            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
             'userId' => $user_id,
             'courseCode' => $code
         );
@@ -621,14 +632,13 @@ class CourseRequestManager
         $email_body .= "\n".get_lang('CourseRequestLegalNote', null, $email_language)."\n";
 
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-        $sender_email = get_setting('emailAdministrator');
+        $sender_email = api_get_setting('emailAdministrator');
         $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        $plugin = new AppPlugin();
         $additionalParameters = array(
-            'smsType' => constant($plugin->getSMSPluginName().'::COURSE_OPENING_REQUEST_CODE'),
+            'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE,
             'userId' => $user_id,
             'courseCode' => $code
         );

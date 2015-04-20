@@ -37,13 +37,22 @@ $interbreadcrumb = array(
     )
 );
 
+$toolbar = Display::toolbarButton(
+    get_lang('ManageSkills'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    'list',
+    'primary',
+    ['title' => get_lang('ManageSkills')]
+);
+
 $tpl = new Template(get_lang('Skills'));
 $tpl->assign('errorMessage', $errorMessage);
-$tpl->assign('platformAdminEmail', get_setting('emailAdministrator'));
 $tpl->assign('skills', $skills);
 
-$contentTemplate = $tpl->get_template('skill/badge_list.tpl');
+$contentTemplate = $tpl->fetch('default/skill/badge_list.tpl');
 
-$tpl->display($contentTemplate);
+$tpl->assign('actions', $toolbar);
+$tpl->assign('content', $contentTemplate);
+$tpl->display_one_col_template();
 
 Session::erase('errorMessage');

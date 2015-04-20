@@ -11,9 +11,6 @@
  */
 
 /*      CONSTANTS */
-
-define('SYSTEM_MAIN_DATABASE_FILE', 'database.sql');
-define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
@@ -41,10 +38,7 @@ function isAlreadyInstalledSystem()
     require $current_config_file;
 
     $current_version = null;
-    if (isset($_configuration['dokeos_version'])) {
-        $current_version = trim($_configuration['dokeos_version']);
-    }
-    if (empty($current_version)) {
+    if (isset($_configuration['system_version'])) {
         $current_version = trim($_configuration['system_version']);
     }
 
@@ -108,9 +102,9 @@ function checkPhpSettingExists($phpSetting)
     if (ini_get($phpSetting) != "") {
         return ini_get($phpSetting);
     }
+
     return false;
 }
-
 
 /**
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
@@ -282,7 +276,6 @@ function set_file_folder_permissions()
 {
     @chmod('.', 0755); //set permissions on install dir
     @chmod('..', 0755); //set permissions on parent dir of install dir
-    @chmod('country_data.csv.csv', 0755);
 }
 
 /**
@@ -311,13 +304,7 @@ function write_system_config_file($path)
     global $dbHostForm;
     global $dbUsernameForm;
     global $dbPassForm;
-    global $enableTrackingForm;
-    global $singleDbForm;
-    global $dbPrefixForm;
     global $dbNameForm;
-    global $dbStatsForm;
-    global $dbScormForm;
-    global $dbUserForm;
     global $urlForm;
     global $pathForm;
     global $urlAppendPath;
@@ -332,29 +319,21 @@ function write_system_config_file($path)
     $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
     $content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
 
-    $config['{DATE_GENERATED}']         = date('r');
-    $config['{DATABASE_HOST}']          = $dbHostForm;
-    $config['{DATABASE_USER}']          = $dbUsernameForm;
-    $config['{DATABASE_PASSWORD}']      = $dbPassForm;
-    $config['TRACKING_ENABLED']         = trueFalse($enableTrackingForm);
-    $config['SINGLE_DATABASE']          = trueFalse($singleDbForm);
-    $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');
-    $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');
-    $config['{DATABASE_PREFIX}']        = '';
-    $config['{DATABASE_MAIN}']          = $dbNameForm;
-    $config['{DATABASE_STATS}']         = $dbNameForm;
-    $config['{DATABASE_SCORM}']         = $dbNameForm;
-    $config['{DATABASE_PERSONAL}']      = $dbNameForm;
-    $config['{ROOT_WEB}']               = $urlForm;
-    $config['{ROOT_SYS}']               = $root_sys;
-    $config['{URL_APPEND_PATH}']        = $urlAppendPath;
-    $config['{PLATFORM_LANGUAGE}']      = $languageForm;
-    $config['{SECURITY_KEY}']           = md5(uniqid(rand().time()));
-    $config['{ENCRYPT_PASSWORD}']       = $encryptPassForm;
+    $config['{DATE_GENERATED}'] = date('r');
+    $config['{DATABASE_HOST}'] = $dbHostForm;
+    $config['{DATABASE_USER}'] = $dbUsernameForm;
+    $config['{DATABASE_PASSWORD}'] = $dbPassForm;
+    $config['{DATABASE_MAIN}'] = $dbNameForm;
+    $config['{ROOT_WEB}'] = $urlForm;
+    $config['{ROOT_SYS}'] = $root_sys;
+    $config['{URL_APPEND_PATH}'] = $urlAppendPath;
+    $config['{PLATFORM_LANGUAGE}'] = $languageForm;
+    $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
+    $config['{ENCRYPT_PASSWORD}'] = $encryptPassForm;
 
-    $config['SESSION_LIFETIME']         = $session_lifetime;
-    $config['{NEW_VERSION}']            = $new_version;
-    $config['NEW_VERSION_STABLE']       = trueFalse($new_version_stable);
+    $config['SESSION_LIFETIME'] = $session_lifetime;
+    $config['{NEW_VERSION}'] = $new_version;
+    $config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
 
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
@@ -461,6 +440,7 @@ function get_config_param($param, $updatePath = '')
     if (empty($updatePath) && !empty($_POST['updatePath'])) {
         $updatePath = $_POST['updatePath'];
     }
+
     if (empty($updatePath)) {
         $updatePath = api_get_path(SYS_PATH);
     }
@@ -469,11 +449,9 @@ function get_config_param($param, $updatePath = '')
 
     if (empty($updateFromConfigFile)) {
         // If update from previous install was requested,
-        // try to recover old config file from dokeos 1.8.x.
+        // try to recover config file from Chamilo 1.9.x
         if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
             $updateFromConfigFile = 'main/inc/conf/configuration.php';
-        } elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
-            $updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
         } else {
             // Give up recovering.
             //error_log('Chamilo Notice: Could not find previous config file at '.$updatePath.'main/inc/conf/configuration.php nor at '.$updatePath.'claroline/inc/conf/claro_main.conf.php in get_config_param(). Will start new config (in '.__FILE__.', line '.__LINE__.')', 0);
@@ -481,124 +459,23 @@ function get_config_param($param, $updatePath = '')
         }
     }
 
-    if (file_exists($updatePath.$updateFromConfigFile) && !is_dir($updatePath.$updateFromConfigFile)) {
-
-        // The parameter was not found among the global variables, so look into the old configuration file.
-
-        // Make sure the installedVersion file is read first so it is overwritten
-        // by the config file if the config file contains the version (from 1.8.4).
-        $config_data_2 = array();
-        if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
-            $config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
-        }
-        $configFile = array();
-        $config_data = file_to_array($updatePath.$updateFromConfigFile);
-        $config_data = array_merge($config_data, $config_data_2);
-        $val = '';
-
-        // Parse the configuration file, statement by statement (line by line, actually).
-        foreach ($config_data as $php_statement) {
-
-            if (strpos($php_statement, '=') !== false) {
-                // Variable assignment statement have been detected (probably).
-                // It is expected to be as follows:
-                // $variable = 'some_value'; // A comment that is not mandatory.
-
-                // Split the statement into its left and right sides.
-                $php_statement = explode('=', $php_statement);
-                $variable = trim($php_statement[0]);
-                $value = $php_statement[1];
-
-                if (substr($variable, 0, 1) == '$') {
-                    // We have for sure a php variable assignment detected.
-
-                    // On the left side: Retrieve the pure variable's name
-                    $variable = trim(str_replace('$', '', $variable));
-
-                    // On the right side: Remove the comment, if it exists.
-                    list($value) = explode(' //', $value);
-                    // Remove extra whitespace, if any. Remove the trailing semicolon (;).
-                    $value = substr(trim($value), 0, -1);
-                    // Remove surroundig quotes, restore escaped quotes.
-                    $value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
-                    $value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
-
-                    if (strtolower($value) == 'true') {
-
-                        // A boolean true value have been recognized.
-                        $value = 1;
-
-                    } elseif (strtolower($value) == 'false') {
-
-                        // A boolean false value have been recognized.
-                        $value = 0;
-
-                    } else {
-
-                        // Probably we have a string value, but also we have to check
-                        // possible string concatenations that may include string values
-                        // and other configuration variables. I this case we have to
-                        // get the calculated result of the concatenation.
-                        $implode_string = ' ';
-                        if (!strstr($value, '." ".') && strstr($value, '.$')) {
-                            // Yes, there is concatenation, insert a special separator string.
-                            $value = str_replace('.$', '." ".$', $value);
-                            $implode_string = '';
-                        }
-
-                        // Split the concatenated values, if they are more than one.
-                        $sub_strings = explode('." ".', $value);
-
-                        // Seek for variables and retrieve their values.
-                        foreach ($sub_strings as $key => & $sub_string) {
-                            if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
-                                // A variable has been detected, read it by recursive call.
-                                $sub_string = get_config_param(str_replace('$', '', $sub_string));
-                            }
-                        }
-
-                        // Concatenate everything into the final, the calculated string value.
-                        $value = implode($implode_string, $sub_strings);
-                    }
-
-                    // Cache the result value.
-                    $configFile[$variable] = $value;
-
-                    $a = explode("'", $variable);
-                    $key_tmp = isset($a[1]) ? $a[1] : null;
-                    if ($key_tmp == $param) {
-                        $val = $value;
-                    }
-                }
-            }
-        }
+    if (file_exists($updatePath.$updateFromConfigFile) &&
+        !is_dir($updatePath.$updateFromConfigFile)
+    ) {
+        require $updatePath.$updateFromConfigFile;
+        $config = new Zend\Config\Config($_configuration);
+        return $config->get($param);
     }
 
-    if ($param == 'dbGlu' && empty($val)) {
-        return '`.`';
-    }
-    //Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
-    if ($param == 'dokeos_version') {
-        //dokeos_version from configuration.php if empty
-        $dokeos_version = $val;
+    error_log('Config array could not be found in get_config_param()', 0);
+    return null;
 
-        if (empty($dokeos_version)) {
-            //checking the dokeos_version value exists in main/inc/installedVersion.inc.php
-            if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
-                $updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-                require ($updateFromInstalledVersionFile); //there are only 2 variables here: $stable & $dokeos_version
-                $stable = false;
-            }
-        }
-        return $dokeos_version;
+    /*if (file_exists($updatePath.$updateFromConfigFile)) {
+        return $val;
     } else {
-        if (file_exists($updatePath.$updateFromConfigFile)) {
-            return  $val;
-        } else {
-            error_log('Config array could not be found in get_config_param()', 0);
-            return null;
-        }
-    }
+        error_log('Config array could not be found in get_config_param()', 0);
+        return null;
+    }*/
 }
 
 /*      DATABASE RELATED FUNCTIONS */
@@ -612,13 +489,8 @@ function get_config_param($param, $updatePath = '')
  * @param   string  $param Name of param we want
  * @return  mixed   The parameter value or null if not found
  */
-function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
+function get_config_param_from_db($param = '')
 {
-
-    Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
-    Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-    Database::select_db($dbName);
-
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -629,395 +501,28 @@ function get_config_param_from_db($host, $login, $pass, $dbName, $param = '')
 }
 
 /**
- * Connects to the database server.
- */
-function database_server_connect()
-{
-    global $dbHostForm, $dbUsernameForm, $dbPassForm;
-    if (($res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm))) === false) {
-        $no = Database::errno();
-        $msg = Database::error();
-        echo '<hr />#'.$no.': '.$msg.'<hr />';
-        echo get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
-            get_lang('PleaseCheckTheseValues').' :<br /><br />'.
-            '<strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />'.
-            '<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
-            '<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
-            get_lang('PleaseGoBackToStep').' '. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
-            '<p><button type="submit" class="btn btn-default" name="step'. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'" value="&lt; '.get_lang('Back').'"><i class="fa fa-backward"> </i>'.get_lang('Back').'</button></p>'.
-            '</td></tr></table></form></body></html>';
-        exit ();
-    }
-    @Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-}
-
-/**
- * Database exists for the MYSQL user
- * @param string $database_name The name of the database to check
- * @return boolean
- */
-function database_exists($database_name)
-{
-    if (empty($database_name)) {
-        return false;
-    }
-    $select_database = @Database::select_db($database_name);
-    $show_database = false;
-    $sql = "SHOW DATABASES LIKE '".addslashes($database_name)."'";
-    $result = @Database::query($sql);
-    if (Database::num_rows($result)) {
-        $show_database = true;
-    }
-    return $select_database || $show_database;
-}
-
-/**
  * In step 3. Tests establishing connection to the database server.
  * If it's a single database environment the function checks if the database exist.
  * If the database does not exist we check the creation permissions.
  * @param   string  $dbHostForm DB host
  * @param   string  $dbUsernameForm DB username
  * @param   string  $dbPassForm DB password
- * @return int      1 when there is no problem;
- *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
- *                 -1 when there is no connection established.
+ * @return \Doctrine\ORM\EntityManager
  */
 function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
-    /*$dbParams = array(
+    $dbParams = array(
         'driver' => 'pdo_mysql',
         'host' => $dbHostForm,
         'user' => $dbUsernameForm,
         'password' => $dbPassForm,
-        ''
+        'dbname' => $dbNameForm
     );
-    $config = Database::getDoctrineConfig();
-    $entityManager = \Doctrine\ORM\EntityManager::create($dbParams, $config);
-    $dbConnect = 1;
-    try {
-        $entityManager->getConnection()->connect();
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        $dbConnect = -1;
-    }*/
 
-    //Checking user credentials
-    if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        $dbConnect = 1;
-    } else {
-        $dbConnect = -1;
-    }
+    $database = new \Database();
+    $database->connect($dbParams);
 
-    return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
-}
-
-/**
- * Fills the countries table with a list of countries.
- * @param   string  $trackCountriesTable    Table name
- */
-function fill_track_countries_table($trackCountriesTable)
-{
-    $file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-    $countries = file($file_path);
-    $addCountrySql = "INSERT INTO $trackCountriesTable (id, code, country, counter) VALUES ";
-    foreach ($countries as $line) {
-        $elems = explode(',', $line);
-        $addCountrySql .= '('.intval($elems[0]).',\''.Database::escape_string($elems[1]).'\',\''.Database::escape_string($elems[2]).'\','.intval($elems[3]).'),';
-    }
-    $addCountrySql = substr($addCountrySql, 0, -1);
-    @Database::query($addCountrySql);
-}
-
-/**
- * Creates the structure of the main database and fills it
- * with data. Placeholder symbols in the main database file
- * have to be replaced by the settings entered by the user during installation.
- *
- * @param array $installation_settings list of settings entered by the user
- * @param string  $dbScript optional path about the script for database
- * @return void
- */
-function load_main_database($installation_settings, $dbScript = '')
-{
-    if (!empty($dbScript)) {
-        if (file_exists($dbScript)) {
-            $sql_text = file_get_contents($dbScript);
-        }
-    } else {
-        $dbScript = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
-        if (file_exists($dbScript)) {
-            $sql_text = file_get_contents($dbScript);
-        }
-    }
-
-    //replace symbolic parameters with user-specified values
-    foreach ($installation_settings as $key => $value) {
-        $sql_text = str_replace($key, Database::escape_string($value), $sql_text);
-    }
-    parse_sql_queries($sql_text);
-}
-
-/**
- * Creates the structure of the stats database
- * @param   string  $dbScript Name of the file containing the SQL script inside the install directory
- */
-function load_database_script($dbScript)
-{
-    $dbScript = api_get_path(SYS_CODE_PATH).'install/'.$dbScript;
-    if (file_exists($dbScript)) {
-        $sql_text = file_get_contents($dbScript);
-    }
-    parse_sql_queries($sql_text);
-}
-
-/**
- * Parse SQL queries
- * @param string $sql_text SQL code
- */
-function parse_sql_queries($sql_text)
-{
-
-    //split in array of sql strings
-    $sql_instructions = array();
-    split_sql_file($sql_instructions, $sql_text);
-
-    //execute the sql instructions
-    $count = count($sql_instructions);
-    for ($i = 0; $i < $count; $i++) {
-        $this_sql_query = $sql_instructions[$i]['query'];
-        Database::query($this_sql_query);
-        //UTF8 fix see #5678
-        /*
-        if (strpos(strtolower($this_sql_query), 'create table') === false) {
-            Database::query($this_sql_query);
-        } else {
-            //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1);
-            $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';
-            Database::query($this_sql_query);
-        }*/
-    }
-}
-
-
-/**
- * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
- * Removes comment lines and splits up large sql files into individual queries
- * Last revision: September 23, 2001 - gandon
- * @param   array    $ret the split sql commands
- * @param   string   $sql the sql commands
- * @return  boolean  always true
- */
-function split_sql_file(&$ret, $sql)
-{
-    // do not trim, see bug #1030644
-    //$sql          = trim($sql);
-    $sql          = rtrim($sql, "\n\r");
-    $sql_len      = strlen($sql);
-    $char         = '';
-    $string_start = '';
-    $in_string    = false;
-    $nothing      = true;
-    $time0        = time();
-
-    for ($i = 0; $i < $sql_len; ++$i) {
-        $char = $sql[$i];
-
-        // We are in a string, check for not escaped end of strings except for
-        // back-quotes that can't be escaped
-        if ($in_string) {
-            for (;;) {
-                $i = strpos($sql, $string_start, $i);
-                // No end of string found -> add the current substring to the
-                // returned array
-                if (!$i) {
-                    $ret[] = $sql;
-                    return true;
-                } elseif ($string_start == '`' || $sql[$i - 1] != '\\') {
-                    // Back-quotes or no backslashes before quotes: it's indeed the
-                    // end of the string -> exit the loop
-                    $string_start = '';
-                    $in_string = false;
-                    break;
-                } else { // one or more Backslashes before the presumed end of string...
-                    // ... first checks for escaped backslashes
-                    $j = 2;
-                    $escaped_backslash = false;
-                    while ($i - $j > 0 && $sql[$i - $j] == '\\') {
-                        $escaped_backslash = !$escaped_backslash;
-                        $j++;
-                    }
-                    // ... if escaped backslashes: it's really the end of the
-                    // string -> exit the loop
-                    if ($escaped_backslash) {
-                        $string_start = '';
-                        $in_string = false;
-                        break;
-                    } else { // ... else loop
-                        $i++;
-                    }
-                } // end if...elseif...else
-            } // end for
-            // end if (in string)
-
-            // lets skip comments (/*, -- and #)
-        } elseif (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') ||
-            $char == '#' ||
-            ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')
-        ) {
-            $i = strpos($sql, $char == '/' ? '*/' : "\n", $i);
-            // didn't we hit end of string?
-            if ($i === false) {
-                break;
-            }
-            if ($char == '/') {
-                $i++;
-            }
-
-            // We are not in a string, first check for delimiter...
-        } elseif ($char == ';') {
-            // if delimiter found, add the parsed part to the returned array
-            $ret[] = array('query' => substr($sql, 0, $i), 'empty' => $nothing);
-            $nothing = true;
-            $sql = ltrim(substr($sql, min($i + 1, $sql_len)));
-            $sql_len = strlen($sql);
-            if ($sql_len) {
-                $i = -1;
-            } else {
-                // The submitted statement(s) end(s) here
-                return true;
-            }
-            // end elseif (is delimiter)
-
-            // ... then check for start of a string,...
-        } elseif (($char == '"') || ($char == '\'') || ($char == '`')) {
-            $in_string = true;
-            $nothing = false;
-            $string_start = $char;
-        // end elseif (is start of string)
-
-        } elseif ($nothing) {
-            $nothing = false;
-        }
-
-        // Send a fake header each 30 sec. to bypass browser timeout
-        $time1     = time();
-        if ($time1 >= $time0 + 30) {
-            $time0 = $time1;
-            header('X-pmaPing: Pong');
-        } // end if
-    } // end for
-
-    // add any rest to the returned array
-    if (!empty($sql) && preg_match('@[^[:space:]]+@', $sql)) {
-        $ret[] = array('query' => $sql, 'empty' => $nothing);
-    }
-
-    return true;
-} // end of the 'split_sql_file()' function
-
-/**
- * Get an SQL file's contents
- *
- * This function bases its parsing on the pre-set format of the specific SQL files in
- * the install/upgrade procedure:
- * Lines starting with "--" are comments (but need to be taken into account as they also hold sections names)
- * Other lines are considered to be one-line-per-query lines (this is checked quickly by this function)
- * @param   string  File to parse (in the current directory)
- * @param   string  Section to return
- * @param   boolean Print (true) or hide (false) error texts when they occur
- * @return  array Array of SQL statements
- */
-function get_sql_file_contents($file, $section, $print_errors = true)
-{
-    //check given parameters
-    if (empty($file)) {
-        $error = "Missing name of file to parse in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
-        $error = "Section '$section' is not authorized in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    $filePath = getcwd().'/'.$file;
-    if (!is_file($filePath) or !is_readable($filePath)) {
-        $error = "File $filePath not found or not readable in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-    //read the file in an array
-    // Empty lines should not be executed as SQL statements, because errors occur, see Task #2167.
-    $fileContents = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!is_array($fileContents) or count($fileContents) < 1) {
-        $error = "File $filePath looks empty in get_sql_file_contents()";
-        if ($print_errors) {
-            echo $error;
-        }
-        return false;
-    }
-
-    //prepare the resulting array
-    $section_contents = array();
-    $record = false;
-    foreach ($fileContents as $index => $line) {
-        if (substr($line, 0, 2) == '--') {
-            //This is a comment. Check if section name, otherwise ignore
-            $result = array();
-            if (preg_match('/^-- xx([A-Z]*)xx/', $line, $result)) { //we got a section name here
-                if ($result[1] == strtoupper($section)) {
-                    //we have the section we are looking for, start recording
-                    $record = true;
-                } else {
-                    //we have another section's header. If we were recording, stop now and exit loop
-                    if ($record) {
-                        break;
-                    }
-                    $record = false;
-                }
-            }
-        } else {
-            if ($record) {
-                if (!empty($line)) {
-                    $section_contents[] = $line;
-                }
-            }
-        }
-    }
-    //now we have our section's SQL statements group ready, return
-    return $section_contents;
-}
-
-/**
- * Adds a new document to the database - specific to version 1.8.0
- *
- * @param array $_course
- * @param string $path
- * @param string $fileType
- * @param int $fileSize
- * @param string $title
- * @return id if inserted document
- */
-function add_document_180($_course, $path, $fileType, $fileSize, $title, $comment = null)
-{
-    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-    $sql = "INSERT INTO $table_document
-    (`path`,`filetype`,`size`,`title`, `comment`)
-    VALUES ('$path','$fileType','$fileSize','".
-    Database::escape_string($title)."', '$comment')";
-    if (Database::query($sql)) {
-        //display_message("Added to database (id ".Database::insert_id().")!");
-        return Database::insert_id();
-    } else {
-        //display_error("The uploaded file could not be added to the database (".Database::error().")!");
-        return false;
-    }
+    return $database->getManager();
 }
 
 /*      DISPLAY FUNCTIONS */
@@ -1130,8 +635,7 @@ function display_language_selection()
  * @param string $installType
  * @param boolean $badUpdatePath
  * @param string The updatePath given (if given)
- * @param array $update_from_version_8 The different subversions from version 1.8
- * @param array $update_from_version_6 The different subversions from version 1.6
+ * @param array $update_from_version_8 The different subversions from version 1.9
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1140,8 +644,7 @@ function display_requirements(
     $installType,
     $badUpdatePath,
     $updatePath = '',
-    $update_from_version_8 = array(),
-    $update_from_version_6 = array()
+    $update_from_version_8 = array()
 ) {
     global $_setting;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
@@ -1463,7 +966,7 @@ function display_requirements(
         if ($badUpdatePath) { ?>
             <div class="error-message">
                 <?php echo get_lang('Error'); ?>!<br />
-                Chamilo <?php echo (isset($_POST['step2_update_6']) ? implode('|', $update_from_version_6) : implode('|', $update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
+                Chamilo <?php echo implode('|', $update_from_version_8).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
             </div>
         <?php }
         else {
@@ -1572,10 +1075,8 @@ function display_requirements(
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
-        }
-
-        // Check wether a Chamilo configuration file already exists.
-        elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+        } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+            // Check wether a Chamilo configuration file already exists.
             echo '<div class="warning-message"><h4><center>';
             echo get_lang('WarningExistingLMSInstallationDetected');
             echo '</center></h4></div>';
@@ -1589,16 +1090,10 @@ function display_requirements(
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <?php
         // Real code
-        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.8.x"';
+        echo '<button type="submit" class="btn btn-default" name="step2_update_8" value="Upgrade from Chamilo 1.9.x"';
         if ($error) echo ' disabled="disabled"';
-        // Temporary code for alpha version, disabling upgrade
-        //echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
-        //echo ' disabled="disabled"';
-        //end temp code
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS18x').'</button>';
-        echo ' <button type="submit" class="btn btn-default" name="step2_update_6" value="Upgrade from Chamilo 1.6.x"';
-        if ($error) echo ' disabled="disabled"';
-        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS16x').'</button>';
+        echo ' ><i class="fa fa-forward"> </i> '.get_lang('UpgradeFromLMS19x').'</button>';
+
         echo '</p>';
     }
 }
@@ -1839,64 +1334,20 @@ function display_database_settings_form(
     $dbHostForm,
     $dbUsernameForm,
     $dbPassForm,
-    $dbPrefixForm,
-    $enableTrackingForm,
-    $singleDbForm,
-    $dbNameForm,
-    $dbStatsForm,
-    $dbScormForm,
-    $dbUserForm
+    $dbNameForm
 ) {
-
     if ($installType == 'update') {
-        global $_configuration, $update_from_version_6;
+        global $_configuration;
+        $dbHostForm         = $_configuration['db_host'];
+        $dbUsernameForm     = $_configuration['db_user'];
+        $dbPassForm         = $_configuration['db_password'];
+        $dbNameForm         = $_configuration['main_database'];
 
-        if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $dbHostForm         = get_config_param('dbHost');
-            $dbUsernameForm     = get_config_param('dbLogin');
-            $dbPassForm         = get_config_param('dbPass');
-            $dbPrefixForm       = get_config_param('dbNamePrefix');
-            $enableTrackingForm = get_config_param('is_trackingEnabled');
-            $singleDbForm       = get_config_param('singleDbEnabled');
-            $dbHostForm         = get_config_param('mainDbName');
-            $dbStatsForm        = get_config_param('statsDbName');
-            $dbScormForm        = get_config_param('scormDbName');
-            $dbUserForm         = get_config_param('user_personal_database');
-            $dbScormExists      = true;
-        } else {
-            $dbHostForm         = $_configuration['db_host'];
-            $dbUsernameForm     = $_configuration['db_user'];
-            $dbPassForm         = $_configuration['db_password'];
-            $dbPrefixForm       = $_configuration['db_prefix'];
-            $enableTrackingForm = $_configuration['tracking_enabled'];
-            $singleDbForm       = $_configuration['single_database'];
-            $dbNameForm         = $_configuration['main_database'];
-            $dbStatsForm        = $_configuration['statistics_database'];
-            $dbScormForm        = $_configuration['scorm_database'];
-            $dbUserForm         = $_configuration['user_personal_database'];
-            $dbScormExists      = true;
-        }
-
-        if (empty($dbScormForm)) {
-            if ($singleDbForm) {
-                $dbScormForm = $dbNameForm;
-            } else {
-                $dbScormForm = $dbPrefixForm.'scorm';
-                $dbScormExists = false;
-            }
-        }
-
-        if (empty($dbUserForm)) {
-            $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
-        }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
         echo '</div>';
     } else {
-        if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
-            $dbPrefixForm = '';
-        }
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
@@ -1907,7 +1358,7 @@ function display_database_settings_form(
     </tr>
     <tr>
     <td>
-    <table class="data_table_no_border">
+    <table class="table">
     <tr>
       <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
       <?php if ($installType == 'update'): ?>
@@ -1928,29 +1379,23 @@ function display_database_settings_form(
     $example_password = get_lang('EG').' '.api_generate_password();
     displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
-    echo '<input type="hidden" name="enableTrackingForm" value="1" />';
-
-    $style = '';
-    if ($installType == INSTALL_TYPE_UPDATE) {
-        $style = '';
-    }
-
     //Database Name fix replace weird chars
     if ($installType != INSTALL_TYPE_UPDATE) {
         $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
         $dbNameForm = replace_dangerous_char($dbNameForm);
     }
 
-    displayDatabaseParameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
+    displayDatabaseParameter(
+        $installType,
+        get_lang('MainDB'),
+        'dbNameForm',
+        $dbNameForm,
+        '&nbsp;',
+        null,
+        'id="optional_param1"'
+    );
 
-    //Only for updates we show this options
-    if ($installType == INSTALL_TYPE_UPDATE) {
-        displayDatabaseParameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
-        if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
-            displayDatabaseParameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
-        }
-        displayDatabaseParameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
-    }
+    if ($installType != INSTALL_TYPE_UPDATE) {
     ?>
     <tr>
         <td></td>
@@ -1961,45 +1406,35 @@ function display_database_settings_form(
             </button>
         </td>
     </tr>
+    <?php } ?>
+
     <tr>
         <td>
         <?php
 
-        $dbConnect = testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm);
-
         $database_exists_text = '';
-
-        if (database_exists($dbNameForm)) {
-            $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-        } else {
-            if ($dbConnect == -1) {
-                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';
-            } else {
-                 //Try to create the database
-                $user_can_create_databases = false;
-                $multipleDbCheck = @Database::query("CREATE DATABASE ".mysql_real_escape_string($dbNameForm));
-                if ($multipleDbCheck !== false) {
-                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".mysql_real_escape_string($dbNameForm));
-                    $user_can_create_databases = true;
-                }
-
-                if ($user_can_create_databases) {
-                    $database_exists_text = '<div class="normal-message">'.sprintf(get_lang('DatabaseXWillBeCreated'), $dbNameForm, $dbUsernameForm).'</div>';
-                } else {
-                    $dbConnect = 0;
-                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';
-                }
+        $manager = null;
+        try {
+            $manager = testDbConnect(
+                $dbHostForm,
+                $dbUsernameForm,
+                $dbPassForm,
+                null
+            );
+            $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
+            if (in_array($dbNameForm, $databases)) {
+                $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
             }
+        } catch (Exception $e) {
+            $database_exists_text = $e->getMessage();
         }
 
-        if ($dbConnect == 1): ?>
+        if ($manager->getConnection()->isConnected()): ?>
         <td colspan="2">
             <?php echo $database_exists_text ?>
             <div id="db_status" class="confirmation-message">
-                Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
-                Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
-                Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
-                Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
+                Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br />
+                Database driver: <strong><?php echo $manager->getConnection()->getDriver()->getName(); ?></strong><br />
                 <div style="clear:both;"></div>
             </div>
         </td>
@@ -2009,8 +1444,6 @@ function display_database_settings_form(
             <div id="db_status" style="float:left;" class="error-message">
                 <div style="float:left;">
                     <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br />
-                    <strong>Database error: <?php echo Database::errno(); ?></strong><br />
-                    <?php echo Database::error().'<br />'; ?>
                 </div>
             </div>
         </td>
@@ -2025,7 +1458,7 @@ function display_database_settings_form(
       <td>&nbsp;</td>
       <td align="right">
           <input type="hidden" name="is_executable" id="is_executable" value="-" />
-           <?php if ($dbConnect == 1) { ?>
+           <?php if ($manager) { ?>
             <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                 <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
             </button>
@@ -2054,9 +1487,9 @@ function display_configuration_parameter(
     echo "<tr>";
     echo "<td>$parameterName</td>";
     if ($installType == INSTALL_TYPE_UPDATE && $displayWhenUpdate) {
-        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>\n";
+        echo '<td><input type="hidden" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'.$parameterValue."</td>";
     } else {
-        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>\n";
+        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$formFieldName.'" value="'.api_htmlentities($parameterValue, ENT_QUOTES).'" />'."</td>";
     }
     echo "</tr>";
 }
@@ -2087,24 +1520,23 @@ function display_configuration_settings_form(
     echo '<div class="RequirementHeading">';
     echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
     echo '</div>';
-    echo '<div class="RequirementContent">';
+
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
-    echo '</div>';
 
     echo '<fieldset>';
     echo '<legend>'.get_lang('Administrator').'</legend>';
-    echo '<table class="data_table_no_border">';
+    echo '<table class="table">';
 
-    //Parameter 1: administrator's login
+    // Parameter 1: administrator's login
 
     display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
-    //Parameter 2: administrator's password
+    // Parameter 2: administrator's password
     if ($installType != 'update') {
         display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
     }
 
-    //Parameters 3 and 4: administrator's names
+    // Parameters 3 and 4: administrator's names
     if (api_is_western_name_order()) {
         display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
         display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
@@ -2125,7 +1557,7 @@ function display_configuration_settings_form(
     echo '<fieldset>';
     echo '<legend>'.get_lang('Platform').'</legend>';
 
-    echo '<table class="data_table_no_border">';
+    echo '<table class="table">';
 
     //First parameter: language
     echo "<tr>";
@@ -2151,7 +1583,6 @@ function display_configuration_settings_form(
         echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />'."</td>";
     }
     echo "</tr>";
-
 
     //Parameter 9: campus name
     display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
@@ -2251,7 +1682,9 @@ function display_after_install_message($installType)
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large btn-install" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    <a class="btn btn-success btn-large btn-install" href="../../index.php">
+        <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
+    </a>
     <?php
 }
 
@@ -2304,9 +1737,9 @@ function get_countries_list_from_array($combo = false)
 }
 
 /**
- * Lockis settings that can't be changed in other portals
+ * Lock settings that can't be changed in other portals
  */
-function locking_settings()
+function lockSettings()
 {
     $access_url_locked_settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -2316,7 +1749,7 @@ function locking_settings()
     }
 }
 
-function update_dir_and_files_permissions()
+function updateDirAndFilesPermissions()
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
@@ -2417,3 +1850,712 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
     return $output;
 }
+
+
+function installSettings(
+    $organizationName,
+    $organizationUrl,
+    $campusName,
+    $adminEmail,
+    $adminLastName,
+    $adminFirstName,
+    $language,
+    $allowRegistration,
+    $allowTeacherSelfRegistration
+) {
+    $allowRegistration = $allowRegistration ? 'true' : 'false';
+    $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
+
+    $sql = "
+        INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
+        ('Institution',NULL,'textfield','Platform','$organizationName','InstitutionTitle','InstitutionComment','platform',NULL, 1),
+        ('InstitutionUrl',NULL,'textfield','Platform','$organizationUrl','InstitutionUrlTitle','InstitutionUrlComment',NULL,NULL, 1),
+        ('siteName',NULL,'textfield','Platform','$campusName','SiteNameTitle','SiteNameComment',NULL,NULL, 1),
+        ('emailAdministrator',NULL,'textfield','Platform','$adminEmail','emailAdministratorTitle','emailAdministratorComment',NULL,NULL, 1),
+        ('administratorSurname',NULL,'textfield','Platform','$adminLastName','administratorSurnameTitle','administratorSurnameComment',NULL,NULL, 1),
+        ('administratorName',NULL,'textfield','Platform','$adminFirstName','administratorNameTitle','administratorNameComment',NULL,NULL, 1),
+        ('show_administrator_data',NULL,'radio','Platform','true','ShowAdministratorDataTitle','ShowAdministratorDataComment',NULL,NULL, 1),
+        ('show_tutor_data',NULL,'radio','Session','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
+        ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
+        ('homepage_view',NULL,'radio','Course','activity_big','HomepageViewTitle','HomepageViewComment',NULL,NULL, 1),
+        ('show_toolshortcuts',NULL,'radio','Course','false','ShowToolShortcutsTitle','ShowToolShortcutsComment',NULL,NULL, 0),
+        ('allow_group_categories',NULL,'radio','Course','false','AllowGroupCategories','AllowGroupCategoriesComment',NULL,NULL, 0),
+        ('server_type',NULL,'radio','Platform','production','ServerStatusTitle','ServerStatusComment',NULL,NULL, 0),
+        ('platformLanguage',NULL,'link','Languages','$language','PlatformLanguageTitle','PlatformLanguageComment',NULL,NULL, 0),
+        ('showonline','world','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineWorld', 0),
+        ('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers', 0),
+        ('showonline','course','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineCourse', 0),
+        ('profile','name','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'name', 0),
+        ('profile','officialcode','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'officialcode', 0),
+        ('profile','email','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Email', 0),
+        ('profile','picture','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'UserPicture', 0),
+        ('profile','login','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Login', 0),
+        ('profile','password','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'UserPassword', 0),
+        ('profile','language','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'Language', 0),
+        ('default_document_quotum',NULL,'textfield','Course','100000000','DefaultDocumentQuotumTitle','DefaultDocumentQuotumComment',NULL,NULL, 0),
+        ('registration','officialcode','checkbox','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'OfficialCode', 0),
+        ('registration','email','checkbox','User','true','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Email', 0),
+        ('registration','language','checkbox','User','true','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Language', 0),
+        ('default_group_quotum',NULL,'textfield','Course','5000000','DefaultGroupQuotumTitle','DefaultGroupQuotumComment',NULL,NULL, 0),
+        ('allow_registration',NULL,'radio','Platform','$allowRegistration','AllowRegistrationTitle','AllowRegistrationComment',NULL,NULL, 0),
+        ('allow_registration_as_teacher',NULL,'radio','Platform','$allowTeacherSelfRegistration','AllowRegistrationAsTeacherTitle','AllowRegistrationAsTeacherComment',NULL,NULL, 0),
+        ('allow_lostpassword',NULL,'radio','Platform','true','AllowLostPasswordTitle','AllowLostPasswordComment',NULL,NULL, 0),
+        ('allow_user_headings',NULL,'radio','Course','false','AllowUserHeadings','AllowUserHeadingsComment',NULL,NULL, 0),
+        ('course_create_active_tools','course_description','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseDescription', 0),
+        ('course_create_active_tools','agenda','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Agenda', 0),
+        ('course_create_active_tools','documents','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Documents', 0),
+        ('course_create_active_tools','learning_path','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'LearningPath', 0),
+        ('course_create_active_tools','links','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Links', 0),
+        ('course_create_active_tools','announcements','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Announcements', 0),
+        ('course_create_active_tools','forums','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Forums', 0),
+        ('course_create_active_tools','dropbox','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Dropbox', 0),
+        ('course_create_active_tools','quiz','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Quiz', 0),
+        ('course_create_active_tools','users','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Users', 0),
+        ('course_create_active_tools','groups','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Groups', 0),
+        ('course_create_active_tools','chat','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Chat', 0),
+        ('course_create_active_tools','online_conference','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'OnlineConference', 0),
+        ('course_create_active_tools','student_publications','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'StudentPublications', 0),
+        ('allow_personal_agenda',NULL,'radio','User','true','AllowPersonalAgendaTitle','AllowPersonalAgendaComment',NULL,NULL, 0),
+        ('display_coursecode_in_courselist',NULL,'radio','Platform','false','DisplayCourseCodeInCourselistTitle','DisplayCourseCodeInCourselistComment',NULL,NULL, 0),
+        ('display_teacher_in_courselist',NULL,'radio','Platform','true','DisplayTeacherInCourselistTitle','DisplayTeacherInCourselistComment',NULL,NULL, 0),
+        ('permanently_remove_deleted_files',NULL,'radio','Tools','false','PermanentlyRemoveFilesTitle','PermanentlyRemoveFilesComment',NULL,NULL, 0),
+        ('dropbox_allow_overwrite',NULL,'radio','Tools','true','DropboxAllowOverwriteTitle','DropboxAllowOverwriteComment',NULL,NULL, 0),
+        ('dropbox_max_filesize',NULL,'textfield','Tools','100000000','DropboxMaxFilesizeTitle','DropboxMaxFilesizeComment',NULL,NULL, 0),
+        ('dropbox_allow_just_upload',NULL,'radio','Tools','true','DropboxAllowJustUploadTitle','DropboxAllowJustUploadComment',NULL,NULL, 0),
+        ('dropbox_allow_student_to_student',NULL,'radio','Tools','true','DropboxAllowStudentToStudentTitle','DropboxAllowStudentToStudentComment',NULL,NULL, 0),
+        ('dropbox_allow_group',NULL,'radio','Tools','true','DropboxAllowGroupTitle','DropboxAllowGroupComment',NULL,NULL, 0),
+        ('dropbox_allow_mailing',NULL,'radio','Tools','false','DropboxAllowMailingTitle','DropboxAllowMailingComment',NULL,NULL, 0),
+        ('administratorTelephone',NULL,'textfield','Platform','(000) 001 02 03','administratorTelephoneTitle','administratorTelephoneComment',NULL,NULL, 1),
+        ('extended_profile',NULL,'radio','User','false','ExtendedProfileTitle','ExtendedProfileComment',NULL,NULL, 0),
+        ('student_view_enabled',NULL,'radio','Platform','true','StudentViewEnabledTitle','StudentViewEnabledComment',NULL,NULL, 0),
+        ('show_navigation_menu',NULL,'radio','Course','false','ShowNavigationMenuTitle','ShowNavigationMenuComment',NULL,NULL, 0),
+        ('enable_tool_introduction',NULL,'radio','course','false','EnableToolIntroductionTitle','EnableToolIntroductionComment',NULL,NULL, 0),
+        ('page_after_login', NULL, 'radio','Platform','user_portal.php', 'PageAfterLoginTitle','PageAfterLoginComment', NULL, NULL, 0),
+        ('time_limit_whosonline', NULL, 'textfield','Platform','30', 'TimeLimitWhosonlineTitle','TimeLimitWhosonlineComment', NULL, NULL, 0),
+        ('breadcrumbs_course_homepage', NULL, 'radio','Course','course_title', 'BreadCrumbsCourseHomepageTitle','BreadCrumbsCourseHomepageComment', NULL, NULL, 0),
+        ('example_material_course_creation', NULL, 'radio','Platform','true', 'ExampleMaterialCourseCreationTitle','ExampleMaterialCourseCreationComment', NULL, NULL, 0),
+        ('account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL, 0),
+        ('use_session_mode', NULL, 'radio','Session','true', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL, 0),
+        ('allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL, 0),
+        ('registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL, 0),
+        ('donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL,0 ),
+        ('show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL, 1),
+        ('profile','phone','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'phone', 0),
+        ('service_visio', 'active', 'radio',NULL,'false', 'VisioEnable','', NULL, NULL, 0),
+        ('service_visio', 'visio_host', 'textfield',NULL,'', 'VisioHost','', NULL, NULL, 0),
+        ('service_visio', 'visio_port', 'textfield',NULL,'1935', 'VisioPort','', NULL, NULL, 0),
+        ('service_visio', 'visio_pass', 'textfield',NULL,'', 'VisioPassword','', NULL, NULL, 0),
+        ('service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL, 0),
+        ('service_ppt2lp', 'host', 'textfield', NULL, NULL, 'Host', NULL, NULL, NULL, 0),
+        ('service_ppt2lp', 'port', 'textfield', NULL, 2002, 'Port', NULL, NULL, NULL, 0),
+        ('service_ppt2lp', 'user', 'textfield', NULL, NULL, 'UserOnHost', NULL, NULL, NULL, 0),
+        ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
+        ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
+        ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
+        ('stylesheets', NULL, 'textfield','stylesheets','chamilo','',NULL, NULL, NULL, 1),
+        ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
+        ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
+        ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg;mov;flv;doc;docx;xls;xlsx;ppt;pptx;odt;odp;ods;pdf', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL, 0),
+        ('upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL, 0),
+        ('upload_extensions_replace_by', NULL, 'textfield', 'Security', 'dangerous', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL, 0),
+        ('show_number_of_courses', NULL, 'radio','Platform','false', 'ShowNumberOfCourses','ShowNumberOfCoursesComment', NULL, NULL, 0),
+        ('show_empty_course_categories', NULL, 'radio','Platform','true', 'ShowEmptyCourseCategories','ShowEmptyCourseCategoriesComment', NULL, NULL, 0),
+        ('show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL, 0),
+        ('show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL, 1),
+        ('split_users_upload_directory', NULL, 'radio','Tuning','true', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL, 0),
+        ('hide_dltt_markup', NULL, 'radio','Languages','true', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL, 0),
+        ('display_categories_on_homepage',NULL,'radio','Platform','false','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL, 1),
+        ('permissions_for_new_directories', NULL, 'textfield', 'Security', '0777', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL, 0),
+        ('permissions_for_new_files', NULL, 'textfield', 'Security', '0666', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL, 0),
+        ('show_tabs', 'campus_homepage', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsCampusHomepage', 1),
+        ('show_tabs', 'my_courses', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyCourses', 1),
+        ('show_tabs', 'reporting', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsReporting', 1),
+        ('show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration', 1),
+        ('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1),
+        ('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile', 1),
+        ('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL, 0),
+        ('platform_charset',NULL,'textfield','Languages','UTF-8','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
+        ('noreply_email_address', '', 'textfield', 'Platform', '', 'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL, 0),
+        ('survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL, 0),
+        ('openid_authentication',NULL,'radio','Security','false','OpenIdAuthentication','OpenIdAuthenticationComment',NULL,NULL, 0),
+        ('profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL', 0),
+        ('gradebook_enable',NULL,'radio','Gradebook','false','GradebookActivation','GradebookActivationComment',NULL,NULL, 0),
+        ('show_tabs','my_gradebook','checkbox','Platform','true','ShowTabsTitle','ShowTabsComment',NULL,'TabsMyGradebook', 1),
+        ('gradebook_score_display_coloring','my_display_coloring','checkbox','Gradebook','false','GradebookScoreDisplayColoring','GradebookScoreDisplayColoringComment',NULL,'TabsGradebookEnableColoring', 0),
+        ('gradebook_score_display_custom','my_display_custom','checkbox','Gradebook','false','GradebookScoreDisplayCustom','GradebookScoreDisplayCustomComment',NULL,'TabsGradebookEnableCustom', 0),
+        ('gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL, 0),
+        ('gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit', 0),
+        ('gradebook_number_decimals', NULL, 'select', 'Gradebook', '0', 'GradebookNumberDecimals', 'GradebookNumberDecimalsComment', NULL, NULL, 0),
+        ('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL, 0),
+        ('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme', 0),
+        ('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL, 0),
+        ('display_mini_month_calendar',NULL,'radio','Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL, 0),
+        ('display_upcoming_events',NULL,'radio','Tools','true','DisplayUpcomingEventsTitle','DisplayUpcomingEventsComment',NULL,NULL, 0),
+        ('number_of_upcoming_events',NULL,'textfield','Tools','1','NumberOfUpcomingEventsTitle','NumberOfUpcomingEventsComment',NULL,NULL, 0),
+        ('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL, 0),
+        ('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL, 0),
+        ('extendedprofile_registration', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyCompetences', 0),
+        ('extendedprofile_registration', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyDiplomas', 0),
+        ('extendedprofile_registration', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyTeach', 0),
+        ('extendedprofile_registration', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyPersonalOpenArea', 0),
+        ('extendedprofile_registrationrequired', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyCompetences', 0),
+        ('extendedprofile_registrationrequired', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyDiplomas', 0),
+        ('extendedprofile_registrationrequired', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyTeach', 0),
+        ('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea', 0),
+        ('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone', 0),
+        ('add_users_by_coach',NULL,'radio','Session','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL, 0),
+        ('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL, 0),
+        ('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL, 0),
+        ('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki', 0),
+        ('show_session_coach', NULL, 'radio','Session','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL, 0),
+        ('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook', 0),
+        ('allow_users_to_create_courses',NULL,'radio','Platform','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL, 0),
+        ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
+        ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
+        ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
+        ('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
+        ('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
+        ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
+        ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
+        ('allow_message_tool', NULL, 'radio', 'Tools', 'true', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,1),
+        ('allow_social_tool', NULL, 'radio', 'Tools', 'true', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL,1),
+        ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
+        ('show_session_data', NULL, 'radio', 'Session', 'false', 'ShowSessionDataTitle', 'ShowSessionDataComment', NULL, NULL, 1),
+        ('allow_use_sub_language', NULL, 'radio', 'Languages', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL,0),
+        ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL,1),
+        ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
+        ('course_create_active_tools','enable_search','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Search',0),
+        ('search_enabled',NULL,'radio','Search','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
+        ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
+        ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
+        ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
+        ('allow_coach_to_edit_course_session',NULL,'radio','Session','true','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
+        ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
+        ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
+        ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
+        ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
+        ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
+        ('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
+        ('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0),
+        ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
+        ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
+        ('more_buttons_maximized_mode',NULL,'radio','Editor','true','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
+        ('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0),
+        ('users_copy_files',NULL,'radio','Tools','true','AllowUsersCopyFilesTitle','AllowUsersCopyFilesComment',NULL,NULL, 1),
+        ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0),
+        ('allow_students_to_create_groups_in_social',NULL,'radio','Tools','false','AllowStudentsToCreateGroupsInSocialTitle','AllowStudentsToCreateGroupsInSocialComment',NULL,NULL, 0),
+        ('allow_send_message_to_all_platform_users',NULL,'radio','Tools','true','AllowSendMessageToAllPlatformUsersTitle','AllowSendMessageToAllPlatformUsersComment',NULL,NULL, 0),
+        ('message_max_upload_filesize',NULL,'textfield','Tools','20971520','MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0),
+        ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
+        ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
+        ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
+        ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
+        ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
+        ('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
+        ('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
+        ('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1),
+        ('sso_authentication_domain',NULL,'textfield','Security','','SSOServerDomainTitle','SSOServerDomainComment',NULL,NULL,1),
+        ('sso_authentication_auth_uri',NULL,'textfield','Security','/?q=user','SSOServerAuthURITitle','SSOServerAuthURIComment',NULL,NULL,1),
+        ('sso_authentication_unauth_uri',NULL,'textfield','Security','/?q=logout','SSOServerUnAuthURITitle','SSOServerUnAuthURIComment',NULL,NULL,1),
+        ('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1),
+        ('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0),
+        ('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0),
+        ('force_wiki_paste_as_plain_text',NULL,'radio','Editor','false','ForceWikiPasteAsPlainTextTitle','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0),
+        ('enabled_googlemaps',NULL,'radio','Editor','false','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0),
+        ('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0),
+        ('enabled_support_svg',				NULL,'radio',		'Tools',	'true',	'EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
+        ('pdf_export_watermark_enable',		NULL,'radio',		'Platform',	'false','PDFExportWatermarkEnableTitle',	'PDFExportWatermarkEnableComment',	'platform',NULL, 1),
+        ('pdf_export_watermark_by_course',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkByCourseTitle',	'PDFExportWatermarkByCourseComment','platform',NULL, 1),
+        ('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment',	'platform',NULL, 1),
+        ('enabled_insertHtml',				NULL,'radio',		'Editor',	'true','EnabledInsertHtmlTitle',			'EnabledInsertHtmlComment',NULL,NULL, 0),
+        ('students_export2pdf',				NULL,'radio',		'Tools',	'true',	'EnabledStudentExport2PDFTitle',	'EnabledStudentExport2PDFComment',NULL,NULL, 0),
+        ('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
+        ('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
+        ('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
+        ('show_default_folders',			NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+        ('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
+        ('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
+        ('course_hide_tools','course_description','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseDescription', 1),
+        ('course_hide_tools','calendar_event','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Agenda', 1),
+        ('course_hide_tools','document','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Documents', 1),
+        ('course_hide_tools','learnpath','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'LearningPath', 1),
+        ('course_hide_tools','link','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Links', 1),
+        ('course_hide_tools','announcement','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Announcements', 1),
+        ('course_hide_tools','forum','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Forums', 1),
+        ('course_hide_tools','dropbox','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Dropbox', 1),
+        ('course_hide_tools','quiz','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Quiz', 1),
+        ('course_hide_tools','user','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Users', 1),
+        ('course_hide_tools','group','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Groups', 1),
+        ('course_hide_tools','chat','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Chat', 1),
+        ('course_hide_tools','student_publication','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'StudentPublications', 1),
+        ('course_hide_tools','wiki','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Wiki', 1),
+        ('course_hide_tools','gradebook','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Gradebook', 1),
+        ('course_hide_tools','survey','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Survey', 1),
+        ('course_hide_tools','glossary','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Glossary', 1),
+        ('course_hide_tools','notebook','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Notebook', 1),
+        ('course_hide_tools','attendance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Attendances', 1),
+        ('course_hide_tools','course_progress','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseProgress', 1),
+        ('course_hide_tools','blog_management','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Blog',1),
+        ('course_hide_tools','tracking','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Stats',1),
+        ('course_hide_tools','course_maintenance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Maintenance',1),
+        ('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1),
+        ('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
+        ('show_groups_to_users',NULL,'radio','Session','false','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
+        ('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
+        ('hide_courses_in_sessions',NULL,'radio', 'Session','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
+        ('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
+        ('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
+        ('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
+        ('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
+        ('footer_extra_content', NULL, 'textarea', 'Tracking', '', 'FooterExtraContentTitle', 'FooterExtraContentComment', NULL, NULL, 1),
+        ('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1),
+        ('htmlpurifier_wiki', NULL, 'radio', 'Editor', 'false', 'HtmlPurifierWikiTitle', 'HtmlPurifierWikiComment', NULL, NULL, 0),
+        ('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0),
+        ('cas_server', NULL, 'textfield', 'CAS', '', 'CasMainServerTitle', 'CasMainServerComment', NULL, NULL, 0),
+        ('cas_server_uri', NULL, 'textfield', 'CAS', '', 'CasMainServerURITitle', 'CasMainServerURIComment', NULL, NULL, 0),
+        ('cas_port', NULL, 'textfield', 'CAS', '', 'CasMainPortTitle', 'CasMainPortComment', NULL, NULL, 0),
+        ('cas_protocol', NULL, 'radio', 'CAS', '', 'CasMainProtocolTitle', 'CasMainProtocolComment', NULL, NULL, 0),
+        ('cas_add_user_activate', NULL, 'radio', 'CAS', 'false', 'CasUserAddActivateTitle', 'CasUserAddActivateComment', NULL, NULL, 0),
+        ('update_user_info_cas_with_ldap', NULL, 'radio', 'CAS', 'true', 'UpdateUserInfoCasWithLdapTitle', 'UpdateUserInfoCasWithLdapComment', NULL, NULL, 0),
+        ('student_page_after_login', NULL, 'textfield', 'Platform', '', 'StudentPageAfterLoginTitle', 'StudentPageAfterLoginComment', NULL, NULL, 0),
+        ('teacher_page_after_login', NULL, 'textfield', 'Platform', '', 'TeacherPageAfterLoginTitle', 'TeacherPageAfterLoginComment', NULL, NULL, 0),
+        ('drh_page_after_login', NULL, 'textfield', 'Platform', '', 'DRHPageAfterLoginTitle', 'DRHPageAfterLoginComment', NULL, NULL, 0),
+        ('sessionadmin_page_after_login', NULL, 'textfield', 'Session', '', 'SessionAdminPageAfterLoginTitle', 'SessionAdminPageAfterLoginComment', NULL, NULL, 0),
+        ('student_autosubscribe', NULL, 'textfield', 'Platform', '', 'StudentAutosubscribeTitle', 'StudentAutosubscribeComment', NULL, NULL, 0),
+        ('teacher_autosubscribe', NULL, 'textfield', 'Platform', '', 'TeacherAutosubscribeTitle', 'TeacherAutosubscribeComment', NULL, NULL, 0),
+        ('drh_autosubscribe', NULL, 'textfield', 'Platform', '', 'DRHAutosubscribeTitle', 'DRHAutosubscribeComment', NULL, NULL, 0),
+        ('sessionadmin_autosubscribe', NULL, 'textfield', 'Session', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0),
+        ('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
+        ('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
+        ('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0),
+        ('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
+        ('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
+        ('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
+        ('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
+        ('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+        ('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
+        ('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
+        ('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+        ('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0),
+        ('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
+        ('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
+        ('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
+        ('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1),
+        ('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
+        ('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
+        ('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 0),
+        ('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
+        ('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
+        ('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
+        ('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
+        ('allow_session_admins_to_manage_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
+        ('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
+        ('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
+        ('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
+        ('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
+        ('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
+        ('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
+        ('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
+        ('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1),
+        ('tool_visible_by_default_at_creation','documents','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Documents', 1),
+        ('tool_visible_by_default_at_creation','learning_path','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'LearningPath', 1),
+        ('tool_visible_by_default_at_creation','links','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Links', 1),
+        ('tool_visible_by_default_at_creation','announcements','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Announcements', 1),
+        ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
+        ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
+        ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
+        ('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
+        ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
+        ('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0),
+        ('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);";
+
+    Database::query($sql);
+
+    $sql = "INSERT INTO settings_options (variable, value, display_text) VALUES
+        ('show_administrator_data','true','Yes'),
+        ('show_administrator_data','false','No'),
+        ('show_tutor_data','true','Yes'),
+        ('show_tutor_data','false','No'),
+        ('show_teacher_data','true','Yes'),
+        ('show_teacher_data','false','No'),
+        ('homepage_view','activity','HomepageViewActivity'),
+        ('homepage_view','2column','HomepageView2column'),
+        ('homepage_view','3column','HomepageView3column'),
+        ('homepage_view','vertical_activity','HomepageViewVerticalActivity'),
+        ('homepage_view','activity_big','HomepageViewActivityBig'),
+        ('show_toolshortcuts','true','Yes'),
+        ('show_toolshortcuts','false','No'),
+        ('allow_group_categories','true','Yes'),
+        ('allow_group_categories','false','No'),
+        ('server_type','production','ProductionServer'),
+        ('server_type','test','TestServer'),
+        ('allow_name_change','true','Yes'),
+        ('allow_name_change','false','No'),
+        ('allow_officialcode_change','true','Yes'),
+        ('allow_officialcode_change','false','No'),
+        ('allow_registration','true','Yes'),
+        ('allow_registration','false','No'),
+        ('allow_registration','approval','AfterApproval'),
+        ('allow_registration_as_teacher','true','Yes'),
+        ('allow_registration_as_teacher','false','No'),
+        ('allow_lostpassword','true','Yes'),
+        ('allow_lostpassword','false','No'),
+        ('allow_user_headings','true','Yes'),
+        ('allow_user_headings','false','No'),
+        ('allow_personal_agenda','true','Yes'),
+        ('allow_personal_agenda','false','No'),
+        ('display_coursecode_in_courselist','true','Yes'),
+        ('display_coursecode_in_courselist','false','No'),
+        ('display_teacher_in_courselist','true','Yes'),
+        ('display_teacher_in_courselist','false','No'),
+        ('permanently_remove_deleted_files','true','YesWillDeletePermanently'),
+        ('permanently_remove_deleted_files','false','NoWillDeletePermanently'),
+        ('dropbox_allow_overwrite','true','Yes'),
+        ('dropbox_allow_overwrite','false','No'),
+        ('dropbox_allow_just_upload','true','Yes'),
+        ('dropbox_allow_just_upload','false','No'),
+        ('dropbox_allow_student_to_student','true','Yes'),
+        ('dropbox_allow_student_to_student','false','No'),
+        ('dropbox_allow_group','true','Yes'),
+        ('dropbox_allow_group','false','No'),
+        ('dropbox_allow_mailing','true','Yes'),
+        ('dropbox_allow_mailing','false','No'),
+        ('extended_profile','true','Yes'),
+        ('extended_profile','false','No'),
+        ('student_view_enabled','true','Yes'),
+        ('student_view_enabled','false','No'),
+        ('show_navigation_menu','false','No'),
+        ('show_navigation_menu','icons','IconsOnly'),
+        ('show_navigation_menu','text','TextOnly'),
+        ('show_navigation_menu','iconstext','IconsText'),
+        ('enable_tool_introduction','true','Yes'),
+        ('enable_tool_introduction','false','No'),
+        ('page_after_login', 'index.php', 'CampusHomepage'),
+        ('page_after_login', 'user_portal.php', 'MyCourses'),
+        ('page_after_login', 'main/auth/courses.php', 'CourseCatalog'),
+        ('breadcrumbs_course_homepage', 'get_lang', 'CourseHomepage'),
+        ('breadcrumbs_course_homepage', 'course_code', 'CourseCode'),
+        ('breadcrumbs_course_homepage', 'course_title', 'CourseTitle'),
+        ('example_material_course_creation', 'true', 'Yes'),
+        ('example_material_course_creation', 'false', 'No'),
+        ('use_session_mode', 'true', 'Yes'),
+        ('use_session_mode', 'false', 'No'),
+        ('allow_email_editor', 'true' ,'Yes'),
+        ('allow_email_editor', 'false', 'No'),
+        ('show_email_addresses','true','Yes'),
+        ('show_email_addresses','false','No'),
+        ('upload_extensions_list_type', 'blacklist', 'Blacklist'),
+        ('upload_extensions_list_type', 'whitelist', 'Whitelist'),
+        ('upload_extensions_skip', 'true', 'Remove'),
+        ('upload_extensions_skip', 'false', 'Rename'),
+        ('show_number_of_courses', 'true', 'Yes'),
+        ('show_number_of_courses', 'false', 'No'),
+        ('show_empty_course_categories', 'true', 'Yes'),
+        ('show_empty_course_categories', 'false', 'No'),
+        ('show_back_link_on_top_of_tree', 'true', 'Yes'),
+        ('show_back_link_on_top_of_tree', 'false', 'No'),
+        ('show_different_course_language', 'true', 'Yes'),
+        ('show_different_course_language', 'false', 'No'),
+        ('split_users_upload_directory', 'true', 'Yes'),
+        ('split_users_upload_directory', 'false', 'No'),
+        ('hide_dltt_markup', 'false', 'No'),
+        ('hide_dltt_markup', 'true', 'Yes'),
+        ('display_categories_on_homepage','true','Yes'),
+        ('display_categories_on_homepage','false','No'),
+        ('default_forum_view', 'flat', 'Flat'),
+        ('default_forum_view', 'threaded', 'Threaded'),
+        ('default_forum_view', 'nested', 'Nested'),
+        ('survey_email_sender_noreply', 'coach', 'CourseCoachEmailSender'),
+        ('survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender'),
+        ('openid_authentication','true','Yes'),
+        ('openid_authentication','false','No'),
+        ('gradebook_enable','true','Yes'),
+        ('gradebook_enable','false','No'),
+        ('user_selected_theme','true','Yes'),
+        ('user_selected_theme','false','No'),
+        ('allow_course_theme','true','Yes'),
+        ('allow_course_theme','false','No'),
+        ('display_mini_month_calendar', 'true', 'Yes'),
+        ('display_mini_month_calendar', 'false', 'No'),
+        ('display_upcoming_events', 'true', 'Yes'),
+        ('display_upcoming_events', 'false', 'No'),
+        ('show_closed_courses', 'true', 'Yes'),
+        ('show_closed_courses', 'false', 'No'),
+        ('ldap_version', '2', 'LDAPVersion2'),
+        ('ldap_version', '3', 'LDAPVersion3'),
+        ('visio_use_rtmpt','true','Yes'),
+        ('visio_use_rtmpt','false','No'),
+        ('add_users_by_coach', 'true', 'Yes'),
+        ('add_users_by_coach', 'false', 'No'),
+        ('extend_rights_for_coach', 'true', 'Yes'),
+        ('extend_rights_for_coach', 'false', 'No'),
+        ('extend_rights_for_coach_on_survey', 'true', 'Yes'),
+        ('extend_rights_for_coach_on_survey', 'false', 'No'),
+        ('show_session_coach', 'true', 'Yes'),
+        ('show_session_coach', 'false', 'No'),
+        ('allow_users_to_create_courses','true','Yes'),
+        ('allow_users_to_create_courses','false','No'),
+        ('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
+        ('allow_reservation', 'true', 'Yes'),
+        ('allow_reservation', 'false', 'No'),
+        ('allow_message_tool', 'true', 'Yes'),
+        ('allow_message_tool', 'false', 'No'),
+        ('allow_social_tool', 'true', 'Yes'),
+        ('allow_social_tool', 'false', 'No'),
+        ('allow_students_to_browse_courses','true','Yes'),
+        ('allow_students_to_browse_courses','false','No'),
+        ('show_email_of_teacher_or_tutor ', 'true', 'Yes'),
+        ('show_email_of_teacher_or_tutor ', 'false', 'No'),
+        ('show_session_data ', 'true', 'Yes'),
+        ('show_session_data ', 'false', 'No'),
+        ('allow_use_sub_language', 'true', 'Yes'),
+        ('allow_use_sub_language', 'false', 'No'),
+        ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone'),
+        ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual'),
+        ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic'),
+        ('allow_terms_conditions', 'true', 'Yes'),
+        ('allow_terms_conditions', 'false', 'No'),
+        ('search_enabled', 'true', 'Yes'),
+        ('search_enabled', 'false', 'No'),
+        ('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
+        ('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults'),
+        ('show_courses_descriptions_in_catalog', 'true', 'Yes'),
+        ('show_courses_descriptions_in_catalog', 'false', 'No'),
+        ('allow_coach_to_edit_course_session','true','Yes'),
+        ('allow_coach_to_edit_course_session','false','No'),
+        ('show_glossary_in_extra_tools', 'none', 'None'),
+        ('show_glossary_in_extra_tools', 'exercise', 'Exercise'),
+        ('show_glossary_in_extra_tools', 'lp', 'Learning path'),
+        ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath'),
+        ('send_email_to_admin_when_create_course','true','Yes'),
+        ('send_email_to_admin_when_create_course','false','No'),
+        ('go_to_course_after_login','true','Yes'),
+        ('go_to_course_after_login','false','No'),
+        ('math_mimetex','true','Yes'),
+        ('math_mimetex','false','No'),
+        ('math_asciimathML','true','Yes'),
+        ('math_asciimathML','false','No'),
+        ('enabled_asciisvg','true','Yes'),
+        ('enabled_asciisvg','false','No'),
+        ('include_asciimathml_script','true','Yes'),
+        ('include_asciimathml_script','false','No'),
+        ('youtube_for_students','true','Yes'),
+        ('youtube_for_students','false','No'),
+        ('block_copy_paste_for_students','true','Yes'),
+        ('block_copy_paste_for_students','false','No'),
+        ('more_buttons_maximized_mode','true','Yes'),
+        ('more_buttons_maximized_mode','false','No'),
+        ('students_download_folders','true','Yes'),
+        ('students_download_folders','false','No'),
+        ('users_copy_files','true','Yes'),
+        ('users_copy_files','false','No'),
+        ('allow_students_to_create_groups_in_social','true','Yes'),
+        ('allow_students_to_create_groups_in_social','false','No'),
+        ('allow_send_message_to_all_platform_users','true','Yes'),
+        ('allow_send_message_to_all_platform_users','false','No'),
+        ('use_users_timezone', 'true', 'Yes'),
+        ('use_users_timezone', 'false', 'No'),
+        ('allow_user_course_subscription_by_course_admin', 'true', 'Yes'),
+        ('allow_user_course_subscription_by_course_admin', 'false', 'No'),
+        ('show_link_bug_notification', 'true', 'Yes'),
+        ('show_link_bug_notification', 'false', 'No'),
+        ('course_validation', 'true', 'Yes'),
+        ('course_validation', 'false', 'No'),
+        ('sso_authentication', 'true', 'Yes'),
+        ('sso_authentication', 'false', 'No'),
+        ('sso_authentication_protocol', 'http://', 'http://'),
+        ('sso_authentication_protocol', 'https://', 'https://'),
+        ('enabled_wiris','true','Yes'),
+        ('enabled_wiris','false','No'),
+        ('allow_spellcheck','true','Yes'),
+        ('allow_spellcheck','false','No'),
+        ('force_wiki_paste_as_plain_text','true','Yes'),
+        ('force_wiki_paste_as_plain_text','false','No'),
+        ('enabled_googlemaps','true','Yes'),
+        ('enabled_googlemaps','false','No'),
+        ('enabled_imgmap','true','Yes'),
+        ('enabled_imgmap','false','No'),
+        ('enabled_support_svg','true','Yes'),
+        ('enabled_support_svg','false','No'),
+        ('pdf_export_watermark_enable','true','Yes'),
+        ('pdf_export_watermark_enable','false','No'),
+        ('pdf_export_watermark_by_course','true','Yes'),
+        ('pdf_export_watermark_by_course','false','No'),
+        ('enabled_insertHtml','true','Yes'),
+        ('enabled_insertHtml','false','No'),
+        ('students_export2pdf','true','Yes'),
+        ('students_export2pdf','false','No'),
+        ('show_users_folders','true','Yes'),
+        ('show_users_folders','false','No'),
+        ('show_default_folders','true','Yes'),
+        ('show_default_folders','false','No'),
+        ('show_chat_folder','true','Yes'),
+        ('show_chat_folder','false','No'),
+        ('enabled_text2audio','true','Yes'),
+        ('enabled_text2audio','false','No'),
+        ('enabled_support_pixlr','true','Yes'),
+        ('enabled_support_pixlr','false','No'),
+        ('show_groups_to_users','true','Yes'),
+        ('show_groups_to_users','false','No'),
+        ('accessibility_font_resize', 'true', 'Yes'),
+        ('accessibility_font_resize', 'false', 'No'),
+        ('hide_courses_in_sessions','true','Yes'),
+        ('hide_courses_in_sessions','false','No'),
+        ('enable_quiz_scenario', 'true', 'Yes'),
+        ('enable_quiz_scenario', 'false', 'No'),
+        ('enable_nanogong','true','Yes'),
+        ('enable_nanogong','false','No'),
+        ('show_documents_preview', 'true', 'Yes'),
+        ('show_documents_preview', 'false', 'No'),
+        ('htmlpurifier_wiki', 'true', 'Yes'),
+        ('htmlpurifier_wiki', 'false', 'No'),
+        ('cas_activate', 'true', 'Yes'),
+        ('cas_activate', 'false', 'No'),
+        ('cas_protocol', 'CAS1', 'CAS1Text'),
+        ('cas_protocol', 'CAS2', 'CAS2Text'),
+        ('cas_protocol', 'SAML', 'SAMLText'),
+        ('cas_add_user_activate', 'false', 'No'),
+        ('cas_add_user_activate', 'platform', 'casAddUserActivatePlatform'),
+        ('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
+        ('update_user_info_cas_with_ldap', 'true', 'Yes'),
+        ('update_user_info_cas_with_ldap', 'false', 'No'),
+        ('scorm_cumulative_session_time','true','Yes'),
+        ('scorm_cumulative_session_time','false','No'),
+        ('allow_hr_skills_management', 'true', 'Yes'),
+        ('allow_hr_skills_management', 'false', 'No'),
+        ('enable_help_link', 'true', 'Yes'),
+        ('enable_help_link', 'false', 'No'),
+        ('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
+        ('allow_users_to_change_email_with_no_password', 'false', 'No'),
+        ('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
+        ('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'),
+        ('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
+        ('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'),
+        ('use_custom_pages','true','Yes'),
+        ('use_custom_pages','false','No'),
+        ('languagePriority1','platform_lang','PlatformLanguage'),
+        ('languagePriority1','user_profil_lang','UserLanguage'),
+        ('languagePriority1','user_selected_lang','UserSelectedLanguage'),
+        ('languagePriority1','course_lang','CourseLanguage'),
+        ('languagePriority2','platform_lang','PlatformLanguage'),
+        ('languagePriority2','user_profil_lang','UserLanguage'),
+        ('languagePriority2','user_selected_lang','UserSelectedLanguage'),
+        ('languagePriority2','course_lang','CourseLanguage'),
+        ('languagePriority3','platform_lang','PlatformLanguage'),
+        ('languagePriority3','user_profil_lang','UserLanguage'),
+        ('languagePriority3','user_selected_lang','UserSelectedLanguage'),
+        ('languagePriority3','course_lang','CourseLanguage'),
+        ('languagePriority4','platform_lang','PlatformLanguage'),
+        ('languagePriority4','user_profil_lang','UserLanguage'),
+        ('languagePriority4','user_selected_lang','UserSelectedLanguage'),
+        ('languagePriority4','course_lang','CourseLanguage'),
+        ('allow_global_chat', 'true', 'Yes'),
+        ('allow_global_chat', 'false', 'No'),
+        ('login_is_email','true','Yes'),
+        ('login_is_email','false','No'),
+        ('courses_default_creation_visibility', '3', 'OpenToTheWorld'),
+        ('courses_default_creation_visibility', '2', 'OpenToThePlatform'),
+        ('courses_default_creation_visibility', '1', 'Private'),
+        ('courses_default_creation_visibility', '0', 'CourseVisibilityClosed'),
+        ('allow_browser_sniffer', 'true', 'Yes'),
+        ('allow_browser_sniffer', 'false', 'No'),
+        ('enable_wami_record', 'true', 'Yes'),
+        ('enable_wami_record', 'false', 'No'),
+        ('teachers_can_change_score_settings', 'true', 'Yes'),
+        ('teachers_can_change_score_settings', 'false', 'No'),
+        ('teachers_can_change_grade_model_settings', 'true', 'Yes'),
+        ('teachers_can_change_grade_model_settings', 'false', 'No'),
+        ('gradebook_locking_enabled', 'true', 'Yes'),
+        ('gradebook_locking_enabled', 'false', 'No'),
+        ('gradebook_enable_grade_model', 'true', 'Yes'),
+        ('gradebook_enable_grade_model', 'false', 'No'),
+        ('allow_session_admins_to_manage_all_sessions', 'true', 'Yes'),
+        ('allow_session_admins_to_manage_all_sessions', 'false', 'No'),
+        ('allow_skills_tool', 'true', 'Yes'),
+        ('allow_skills_tool', 'false', 'No'),
+        ('allow_public_certificates', 'true', 'Yes'),
+        ('allow_public_certificates', 'false', 'No'),
+        ('platform_unsubscribe_allowed', 'true', 'Yes'),
+        ('platform_unsubscribe_allowed', 'false', 'No'),
+        ('activate_email_template', 'true', 'Yes'),
+        ('activate_email_template', 'false', 'No'),
+         ('enable_iframe_inclusion', 'true', 'Yes'),
+        ('enable_iframe_inclusion', 'false', 'No'),
+        ('show_hot_courses', 'true', 'Yes'),
+        ('show_hot_courses', 'false', 'No'),
+        ('enable_webcam_clip', 'true', 'Yes'),
+        ('enable_webcam_clip', 'false', 'No'),
+        ('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
+        ('prevent_session_admins_to_manage_all_users', 'false', 'No'),
+        ('documents_default_visibility_defined_in_course', 'true', 'Yes'),
+        ('documents_default_visibility_defined_in_course', 'false', 'No'),
+        ('enabled_mathjax','true','Yes'),
+        ('enabled_mathjax','false','No');
+    ";
+    Database::query($sql);
+}
+
+function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
+{
+    $debug = true;
+    // Config doctrine migrations
+
+    $db = \Doctrine\DBAL\DriverManager::getConnection(array(
+        'dbname' => $dbNameForm,
+        'user' => $dbUsernameForm,
+        'password' => $dbPassForm,
+        'host' => $dbHostForm,
+        'driver' => 'pdo_mysql',
+        'charset' => 'utf8',
+        'driverOptions' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+        )
+    ));
+
+    $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($db);
+
+    // Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
+    $config->setMigrationsTableName('version');
+    // Namespace of your migration classes, do not forget escape slashes, do not add last slash
+    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\v'.$chamiloVersion);
+    // Directory where your migrations are located
+
+    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v'.$chamiloVersion);
+    // Load your migrations
+    $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
+
+    $migration = new \Doctrine\DBAL\Migrations\Migration($config);
+    $migrations = $config->getMigrations();
+    /** @var Doctrine\DBAL\Migrations\Version $migration */
+    foreach ($migrations as $migrationItem) {
+        $migrationItem->getMigration()->setEntityManager($manager);
+    }
+
+    //$to = '110';
+    // Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
+    $versions = $migration->getSql($to);
+    if ($debug) {
+        $nl = '<br>';
+        foreach ($versions as $version => $queries) {
+            echo 'VERSION: '.$version.$nl;
+            echo '----------------------------------------------'.$nl.$nl;
+            foreach ($queries as $query) {
+                echo $query.$nl;
+            }
+            echo $nl.$nl;
+        }
+    }
+
+    try {
+        $migration->migrate($to); // Execute migration!
+        if ($debug) {
+            echo 'DONE'.$nl;
+        }
+    } catch (Exception $ex) {
+        if ($debug) {
+            echo 'ERROR: '.$ex->getMessage().$nl;
+        }
+    }
+}
+
+

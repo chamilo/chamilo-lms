@@ -149,7 +149,7 @@ class GradebookTable extends SortableTable
         $user_id = api_get_user_id();
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-        $status_user = api_get_status_of_user_in_course($user_id, $course_code);
+        $status_user = api_get_status_of_user_in_course($user_id, api_get_course_int_id());
 
         if (empty($session_id)) {
             $statusToFilter = STUDENT;

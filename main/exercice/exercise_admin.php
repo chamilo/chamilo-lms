@@ -124,7 +124,7 @@ if ($form->validate()) {
 } else {
     // DISPLAY FORM
     if (isset($_SESSION['gradebook'])) {
-        $gradebook=    $_SESSION['gradebook'];
+        $gradebook = $_SESSION['gradebook'];
     }
 
     if (!empty($gradebook) && $gradebook=='view') {
@@ -134,7 +134,7 @@ if ($form->validate()) {
     $interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
     $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
 
-    Display::display_header($nameTools,get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
 

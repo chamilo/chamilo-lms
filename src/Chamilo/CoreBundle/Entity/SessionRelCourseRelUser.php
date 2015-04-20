@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *      name="session_rel_course_rel_user",
  *      indexes={
- *          @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"id_user"}),
+ *          @ORM\Index(name="idx_session_rel_course_rel_user_id_user", columns={"user_id"}),
  *          @ORM\Index(name="idx_session_rel_course_rel_user_course_id", columns={"c_id"})
  *      }
  * )
@@ -30,7 +30,7 @@ class SessionRelCourseRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue
      */
     private $id;
 
@@ -58,14 +58,14 @@ class SessionRelCourseRelUser
     /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="sessionCourseSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
 
     /**
      * @var Session
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="userCourseSubscriptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     protected $session;
 

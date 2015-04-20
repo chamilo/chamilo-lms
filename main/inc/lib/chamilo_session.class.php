@@ -1,16 +1,16 @@
 <?php
 /**
  * Chamilo session (i.e. the session that maintains the connection open after usr login)
- * 
+ *
  * Usage:
- * 
- * 
+ *
+ *
  *      use ChamiloSession as Session;
- * 
+ *
  *      Session::read('name');
- * 
+ *
  * Or
- * 
+ *
  *      Chamilo::session()->...
  *      session()->...
  *
@@ -27,7 +27,7 @@ class ChamiloSession extends System\Session
 
     /**
      * Generate new session instance
-     * @return ChamiloSession 
+     * @return ChamiloSession
      */
     static function instance()
     {
@@ -74,54 +74,8 @@ class ChamiloSession extends System\Session
     {
         global $_configuration;
 
-        /* Causes too many problems and is not configurable dynamically.
-          if ($already_installed) {
-          $session_lifetime = 360000;
-          if (isset($_configuration['session_lifetime'])) {
-          $session_lifetime = $_configuration['session_lifetime'];
-          }
-          //session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
-          }
-         */
-
-        if (isset($_configuration['session_stored_in_db']) && 
-                $_configuration['session_stored_in_db'] && 
-                function_exists('session_set_save_handler')
-           ) {
-            $handler = new SessionHandlerDatabase();
-            @session_set_save_handler(
-                array($handler, 'open'),
-                array($handler, 'close'),
-                array($handler, 'read'),
-                array($handler, 'write'),
-                array($handler, 'destroy'),
-                array($handler, 'garbage')
-            );
-        }
-
-        // An alternative session handler, storing the session in memcache,
-        // and in the DB as backup for memcache server failure, can be used
-        // by defining specific configuration settings. 
-        // This requires memcache or memcached and the php5-memcache module
-        // to be installed.
-        // See configuration.dist.php for greater details
-        if (isset($_configuration['session_stored_in_db_as_backup']) && 
-                $_configuration['session_stored_in_db_as_backup'] && 
-                function_exists('session_set_save_handler')
-           ) {
-            $handler = new SessionHandlerMemcache();
-            session_set_save_handler(
-                array(&$handler, 'open'),
-                array(&$handler, 'close'),
-                array(&$handler, 'read'),
-                array(&$handler, 'write'),
-                array(&$handler, 'destroy'),
-                array(&$handler, 'gc')
-            );
-        }
-
         /*
-         * Prevent Session fixation bug fixes  
+         * Prevent Session fixation bug fixes
          * See http://support.chamilo.org/issues/3600
          * http://php.net/manual/en/session.configuration.php
          * @todo use session_set_cookie_params with some custom admin parameters
@@ -131,12 +85,12 @@ class ChamiloSession extends System\Session
         //the session ID is only accepted from a cookie
         ini_set('session.use_only_cookies', 1);
 
-        //HTTPS only if possible 
+        //HTTPS only if possible
         //ini_set('session.cookie_secure', 1);
-        //session ID in the cookie is only readable by the server 
+        //session ID in the cookie is only readable by the server
         ini_set('session.cookie_httponly', 1);
 
-        //Use entropy file    
+        //Use entropy file
         //session.entropy_file
         //ini_set('session.entropy_length', 128);
         //Do not include the identifier in the URL, and not to read the URL for
@@ -197,40 +151,5 @@ class ChamiloSession extends System\Session
     public function is_expired()
     {
         return $this->end_time() < time();
-    }
-
-    /**
-     * The current (logged in) user.
-     * @return CurrentUser The current user instance
-     */
-    public function user()
-    {
-        static $result = null;
-        if (empty($result)) {
-            $result = CurrentUser::instance();
-        }
-        return $result;
-    }
-
-    /**
-     * Returns the current (active) course
-     * @return CurrentCourse The current course instance
-     */
-    public function course()
-    {
-        static $result = null;
-        if (empty($result)) {
-            $result = CurrentCourse::instance();
-        }
-        return $result;
-    }
-
-    /**
-     * The current group for the current (logged in) user.
-     * @return int the current group id
-     */
-    public function group_id()
-    {
-        return Session::read('_gid');
     }
 }

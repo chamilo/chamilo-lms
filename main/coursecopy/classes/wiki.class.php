@@ -21,8 +21,18 @@ class Wiki extends Resource
 	var $progress;
 	var $version;
 
-	function Wiki($id, $page_id, $reflink, $title, $content, $user_id, $group_id, $timestamp, $progress, $version)
-	{
+	public function __construct(
+		$id,
+		$page_id,
+		$reflink,
+		$title,
+		$content,
+		$user_id,
+		$group_id,
+		$timestamp,
+		$progress,
+		$version
+	) {
 		parent::Resource($id,RESOURCE_WIKI);
 		$this->id						= $id;
 		$this->page_id					= $page_id;

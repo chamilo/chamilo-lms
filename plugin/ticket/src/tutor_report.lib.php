@@ -16,6 +16,7 @@ function initializeReport($course_code)
     $table_reporte_semanas = Database::get_main_table('rp_reporte_semanas');
     $table_students_report = Database::get_main_table('rp_students_report');
     $table_semanas_curso = Database::get_main_table('rp_semanas_curso');
+    $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
     $table_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $table_post = Database::get_course_table(TABLE_FORUM_POST, $course_info['dbName']);
     $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION, $course_info['dbName']);
@@ -43,10 +44,13 @@ function initializeReport($course_code)
         }
     }
 
+
     $sql = "REPLACE INTO $table_students_report (user_id, week_report_id, work_ok , thread_ok , quiz_ok , pc_ok)
 			SELECT cu.user_id, rs.id, 0, 0, 0, 0
 			FROM $table_course_rel_user cu
-			LEFT JOIN $table_reporte_semanas rs ON cu.course_code = rs.course_code
+			INNER JOIN $courseTable c
+			ON (c.id = cu.c_id)
+			LEFT JOIN $table_reporte_semanas rs ON c.code = rs.course_code
 			WHERE cu.status = 5 AND rs.course_code = '$course_code'
 			ORDER BY cu.user_id, rs.id";
     if (!Database::query($sql)) {

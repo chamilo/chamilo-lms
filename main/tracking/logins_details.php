@@ -70,15 +70,18 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
 </h3>
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
     <?php
-// check if uid is tutor of this group
+    // check if uid is tutor of this group
+    $courseId = api_get_course_int_id();
 
     if (( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
         if ($is_allowedToTrackEverybodyInCourse) {
             $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
-                    WHERE cu.user_id = u.user_id AND cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
-                        AND cu.course_code = '$_cid'
-                        AND u.user_id = '$uInfo'";
+                    WHERE
+                        cu.user_id = u.user_id AND
+                        cu.relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
+                        cu.c_id = '$courseId' AND
+                        u.user_id = '$uInfo'";
         } else {
             $sql = "SELECT u.firstname,u.lastname, u.email
                     FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u

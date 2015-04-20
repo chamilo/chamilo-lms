@@ -38,7 +38,7 @@ class Link extends Resource
 	 * @param string $url
 	 * @param string $description
 	 */
-    public function Link(
+    public function __construct(
         $id,
         $title,
         $url,
@@ -47,7 +47,7 @@ class Link extends Resource
         $on_homepage
     )
 	{
-		parent::Resource($id,RESOURCE_LINK);
+		parent::__construct($id,RESOURCE_LINK);
 		$this->title = $title;
 		$this->url = $url;
 		$this->description = $description;

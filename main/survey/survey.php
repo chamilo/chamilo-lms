@@ -56,7 +56,7 @@ $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_
 if (isset($_GET['survey_id'])) {
 	$course_code = api_get_course_id();
 	if ($course_code!=-1) {
-		$survey_data = survey_manager::get_survey($survey_id);
+		$survey_data = SurveyManager::get_survey($survey_id);
 	} else {
 		Display :: display_header(get_lang('ToolSurvey'));
 		Display :: display_error_message(get_lang('NotAllowed'), false);
@@ -108,11 +108,11 @@ $message_information    = isset($_GET['message']) ? Security::remove_XSS($_GET['
 
 if (isset($action)) {
 	if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {
-		survey_manager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
+		SurveyManager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
 		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'));
 	}
 	if ($action == 'delete' AND is_numeric($_GET['question_id'])) {
-		survey_manager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
+		SurveyManager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
 	}
 }
 

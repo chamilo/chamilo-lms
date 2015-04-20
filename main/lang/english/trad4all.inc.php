@@ -7071,4 +7071,17 @@ $WorkEmailAlertActivateOnlyForTeachers = "Activate only for teachers e-mail aler
 $WorkEmailAlertActivateOnlyForStudents = "Activate only for students e-mail alert on new work submission";
 $Uncategorized = "Uncategorized";
 $NaturalYear = "Natural year";
+$AutoWeight = "Automatic weight";
+$AutoWeightExplanation = "Use the automatic weight distribution to speed things up. The system will then distribute the total weight evenly between the evaluation items below.";
+$EditWeight = "Edit weight";
+$TheSkillHasBeenCreated = "The skill has been created";
+$CreateSkill = "Create skill";
+$CannotCreateSkill = "Cannot create skill";
+$SkillEdit = "Edit skill";
+$TheSkillHasBeenUpdated = "The skill has been updated";
+$CannotUpdateSkill = "Cannot update skill";
+$BadgesManagement = "Badges management";
+$CurrentBadges = "Current badges";
+$SaveBadge = "Save badge";
+$BadgeMeasuresXPixelsInPNG = "Badge measures 200x200 pixels in PNG";
 ?>

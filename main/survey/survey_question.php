@@ -26,7 +26,7 @@ class survey_question
         $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 
         $toolName = Display::return_icon(
-                survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
+                SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
                 get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
                 array('align' => 'middle', 'height' => '22px')
         ).' ';
@@ -151,7 +151,7 @@ class survey_question
         $answerList = Session::read('answer_list');
 
         if (empty($answerList)) {
-            $answerList = $formData['answers'];
+            $answerList = isset($formData['answers']) ? $formData['answers'] : array();
             Session::write('answer_list', $answerList);
         }
 
@@ -225,19 +225,22 @@ class survey_question
         }
 
         if (!isset($_POST['delete_answer'])) {
-            foreach ($formData['answers'] as $index => $data) {
-                if ($index > $counter) {
-                    unset($formData['answers'][$index]);
+            if (isset($formData['answers'])) {
+                foreach ($formData['answers'] as $index => $data) {
+                    if ($index > $counter) {
+                        unset($formData['answers'][$index]);
+                    }
                 }
-            }
 
-            for ($i = 0; $i <= $counter; $i++) {
-                if (!isset($formData['answers'][$i])) {
-                    $formData['answers'][$i] = '';
+                for ($i = 0; $i <= $counter; $i++) {
+                    if (!isset($formData['answers'][$i])) {
+                        $formData['answers'][$i] = '';
+                    }
                 }
             }
         }
 
+        $formData['answers'] = isset($formData['answers']) ? $formData['answers'] : [];
         Session::write('answer_list', $formData['answers']);
 
         return $formData;
@@ -255,7 +258,7 @@ class survey_question
         if (isset($_POST['buttons']) && isset($_POST['buttons']['save'])) {
             Session::erase('answer_count');
             Session::erase('answer_list');
-            $message = survey_manager::save_question(
+            $message = SurveyManager::save_question(
                 $surveyData,
                 $formData
             );

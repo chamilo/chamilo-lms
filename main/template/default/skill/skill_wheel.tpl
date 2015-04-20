@@ -2,17 +2,6 @@
 
 <script>
 
-function add_skill(params) {
-    $.ajax({
-        async: false,
-        url: url+'&a=add&'+params,
-        success:function(my_id) {
-            //Close dialog
-            $("#dialog-form").dialog("close");
-        }
-    });
-}
-
 /* Skill search input in the left menu */
 function check_skills_sidebar() {
     //Selecting only selected skills
@@ -260,9 +249,25 @@ $(document).ready(function() {
         return false;
     });
 
-    $("#save_profile_form_button").submit(function() {
-        open_save_profile_popup();
-        return false;
+    $("form#save_profile_form_button").on('submit', function(e) {
+        e.preventDefault();
+
+        var profileId = parseInt($('input[name="profile_id"]').val());
+
+        var getProfileInfo = $.getJSON(
+            '{{ url }}',
+            {
+                a: 'get_profile',
+                profile_id: profileId
+            }
+        );
+
+        $.when(getProfileInfo).done(function(profileInfo) {
+            $("#name_profile").val(profileInfo.name);
+            $("#description_profile").val(profileInfo.description);
+
+            $('#frm-save-profile').modal('show');
+        });
     });
 
     /* Close button in profile matcher items */
@@ -334,102 +339,7 @@ $(document).ready(function() {
         newel: true
     });
 
-    $("#parent_id").fcbkcomplete({
-        json_url: "{{ url }}&a=find_skills",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"{{ 'StartToType' | get_lang }}",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_skills_edit_form",
-        filter_selected: true,
-        newel: true
-    });
-
-    $("#gradebook_id").fcbkcomplete({
-        json_url: "{{ url }}&a=find_gradebooks",
-        cache: false,
-        filter_case: false,
-        filter_hide: true,
-        complete_text:"{{ 'StartToType' | get_lang }}",
-        firstselected: true,
-        //onremove: "testme",
-        onselect:"check_gradebook",
-        filter_selected: true,
-        newel: true
-    });
-
-    //Skill popup (edit, create child... )
-    $("#dialog-form").dialog({
-        autoOpen: false,
-        modal   : true,
-        width   : 900,
-        height  : 630
-    });
-
-    //Save search profile dialog
-    $("#dialog-form-profile").dialog({
-        autoOpen: false,
-        modal   : true,
-        width   : 850,
-        height  : 400
-    });
-
     load_nodes(0, main_depth);
-
-    function open_save_profile_popup() {
-        var profileId = $('input[name="profile_id"]').val();
-        $.ajax({
-            url: '{{ url }}&a=get_profile&profile_id='+profileId,
-            success:function(data) {
-                if (data) {
-                    var obj = jQuery.parseJSON (data);
-                    $("#name_profile").attr('value', obj.name);
-                    $("#description_profile").attr('value', obj.description);
-                }
-            }
-        });
-
-        $("#dialog-form-profile").dialog({
-            buttons: [
-                {
-                    text: "{{ "Save"|get_lang }}",
-                    class: 'btn btn-primary',
-                    click: function() {
-                        var name = $("#name_profile").val();
-                        var description = $("#description_profile").val();
-                        var skill_list = return_skill_list_from_profile_search();
-                        skill_list = { 'skill_id' : skill_list };
-                        skill_params = $.param(skill_list);
-
-                        $.ajax({
-                            url: '{{ url }}&a=save_profile&name='+name+'&description='+description+'&'+skill_params+'&profile='+profileId,
-                            success:function(data) {
-                                if (data == 1 ) {
-                                    update_my_saved_profiles();
-                                    alert("{{ "Saved"|get_lang }}");
-                                } else {
-                                    alert("{{ "Error"|get_lang }}");
-                                }
-
-                                $("#dialog-form-profile").dialog("close");
-                                $("#name_profile").attr('value', '');
-                                $("#description_profile").attr('value', '');
-                                $('input[name="profile_id"]').val(0);
-                            }
-                        });
-                    }
-                }
-            ],
-            close: function() {
-                $("#name_profile").val('');
-                $("#description_profile").val('');
-                $('input[name="profile_id"]').val(0);
-            }
-        });
-        $("#dialog-form-profile").dialog("open");
-    }
 
     function update_my_saved_profiles() {
         $.ajax({
@@ -441,7 +351,6 @@ $(document).ready(function() {
     }
 
     /* change background color */
-    $(document).ready(function () {
         $("#celestial").click(function () {
             $("#page-back").css("background","#A9E2F3");
         });
@@ -457,7 +366,6 @@ $(document).ready(function() {
         $("#light-yellow").click(function () {
             $("#page-back").css("background","#F7F8E0");
         });
-    });
 
     /* Generated random colour */
     /*
@@ -473,6 +381,71 @@ $(document).ready(function() {
         }
         return d.colour || "#fff";
     }*/
+
+    $('#form-button-edit').on('click', function(e) {
+        e.preventDefault();
+
+        if (SkillWheel.currentSkill === null) {
+            return;
+        }
+
+        window.location.href = "{{ _p.web_main }}admin/skill_edit.php?id=" + SkillWheel.currentSkill.id;
+    });
+
+    $('#form-button-create-child').on('click', function(e) {
+        e.preventDefault();
+
+        if (SkillWheel.currentSkill === null) {
+            return;
+        }
+
+        window.location.href = "{{ _p.web_main }}admin/skill_create.php?parent=" + SkillWheel.currentSkill.id;
+    });
+
+    $('#form-button-add-to-profile').on('click', function(e) {
+        e.preventDefault();
+
+        if (SkillWheel.currentSkill === null) {
+            return;
+        }
+
+        add_skill_in_profile_list(SkillWheel.currentSkill.id, SkillWheel.currentSkill.name);
+    });
+
+    $('#frm-save-profile').on('hidden.bs.modal', function () {
+        $("#name_profile").val('');
+        $("#description_profile").val('');
+        $('input[name="profile_id"]').val(0);
+    });
+
+    $('#form-button-save-profile').on('click', function(e) {
+        e.preventDefault();
+
+        var saveProfile = $.ajax(
+            '{{ url }}',
+            {
+                data: {
+                    a: 'save_profile',
+                    name: $("#name_profile").val(),
+                    description: $("#description_profile").val(),
+                    skill_id: return_skill_list_from_profile_search(),
+                    profile: $('input[name="profile_id"]').val()
+                }
+            }
+        );
+
+        $.when(saveProfile).done(function(response) {
+            if (parseInt(response) === 1 ) {
+                update_my_saved_profiles();
+
+                alert("{{ "Saved" | get_lang }}");
+            } else {
+                alert("{{ "Error" | get_lang }}");
+            }
+
+            $('#frm-save-profile').modal('hide');
+        });
+    });
 });
 </script>
 <div id="page-back" class="page-skill">
@@ -582,14 +555,59 @@ $(document).ready(function() {
             </div>
         </div>
 </div>
-
-<div id="dialog-form" style="">
-    <p class="validateTips"></p>
-    {{ dialogForm }}
+</div>
 </div>
 
-<div id="dialog-form-profile" style="display:none;">
-    {{ saveProfileForm }}
+<div class="modal fade" id="frm-skill" tabindex="-1" role="dialog" aria-labelledby="form-skill-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="form-skill-title">{{ "Skill" | get_lang }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ dialogForm }}
+            </div>
+            <div class="modal-footer">
+                <button id="form-button-edit" class="btn btn-primary">
+                    <i class="fa fa-edit"></i> {{ "Edit" | get_lang }}
+                </button>
+                <button id="form-button-create-child" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> {{ "CreateChildSkill" | get_lang }}
+                </button>
+                <button id="form-button-add-to-profile" class="btn btn-primary">
+                    <i class="fa fa-check"></i> {{ "AddSkillToProfileSearch" | get_lang }}
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <i class="fa fa-close"></i> {{ "Close" | get_lang }}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
+<div class="modal fade" id="frm-save-profile" tabindex="-1" role="dialog" aria-labelledby="form-save-profile-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ "Close" | get_lang }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="form-save-profile-title">{{ "SkillProfile" | get_lang }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ saveProfileForm }}
+            </div>
+            <div class="modal-footer">
+                <button id="form-button-save-profile" class="btn btn-primary">
+                    <i class="fa fa-save"></i> {{ "Save" | get_lang }}
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    <i class="fa fa-close"></i> {{ "Close" | get_lang }}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

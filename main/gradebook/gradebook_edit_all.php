@@ -7,7 +7,6 @@
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
 
-$language_file= 'gradebook';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;

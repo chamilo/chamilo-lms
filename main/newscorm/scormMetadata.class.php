@@ -27,11 +27,10 @@ class scormMetadata
      * @param	mixed	Depending on the type, can be the DB ID of the learnpath item or the pointer to the <metadata> element in the imsmanifest.xml file
      * @return	boolean	True on success, false on failure
      */
-    public function __construct($type = 'manifest', &$element) {
+    public function __construct($type = 'manifest', &$element)
+    {
         if (isset($element)) {
-
             // Parsing using PHP5 DOMXML methods.
-
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.

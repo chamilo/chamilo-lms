@@ -5,12 +5,7 @@
  * @package chamilo.certificate
  */
 
-/**
- * Initialization
- */
-
 require_once '../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'certificate.lib.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -42,7 +37,6 @@ switch ($action) {
             $pageFormat = $pdfParams['orientation'] == 'landscape' ? 'A4-L' : 'A4';
 
             $userInfo = api_get_user_info($certificate->user_id);
-
             $pdfName = replace_dangerous_char(get_lang('Certificate') . ' ' . $userInfo['username']);
 
             $pdf = new PDF($pageFormat, $pdfParams['orientation'], $pdfParams);

@@ -165,8 +165,9 @@ class BlockDaily extends Block
 
         foreach ($courses as $row_course) {
             $score = null;
-            $course_code = $row_course['code'];
-            $course_info = api_get_course_info($course_code);
+            $courseId = $row_course['c_id'];
+            $course_info = api_get_course_info_by_id($courseId);
+            $course_code = $course_info['code'];
             if (empty($course_info)) {
                 continue;
             }
@@ -189,7 +190,7 @@ class BlockDaily extends Block
                 $attendance['done'] = $row['attendance_qualify_max'];
                 $attendance['id'] = $row['id'];
                 //$attendance['name'] = $row['name'];
-                $attendance['course_code'] = $course_code;
+                $attendance['course_code'] = $course_info['code'];
 
                 if ($attendance['done'] != '0') {
                     $attendances[] = '<a href="' . api_get_path(WEB_PATH).'main/attendance/index.php?cidReq=' . $attendance['course_code'] . '&action=attendance_sheet_print&attendance_id=' . $attendance['id'] . $param_gradebook . '">' . Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
@@ -204,7 +205,7 @@ class BlockDaily extends Block
             // Number of students
 
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
-                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.course_code='$course_code'";
+                    WHERE course_rel_user.status=" . STUDENT . " AND course_rel_user.c_id=$courseId";
             $rs = Database::query($sql);
             $users = array();
             while ($row = Database::fetch_array($rs)) {

@@ -10,8 +10,6 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 
-global $_configuration;
-
 $xajax = new xajax();
 $xajax->registerFunction('search_courses');
 
@@ -56,7 +54,7 @@ if (!api_is_platform_admin()) {
 
 function search_courses($needle, $type)
 {
-    global $_configuration, $tbl_course, $tbl_course_rel_access_url,$user_id;
+    global $tbl_course, $tbl_course_rel_access_url,$user_id;
 
     $xajax_response = new xajaxResponse();
     $return = '';
@@ -76,12 +74,20 @@ function search_courses($needle, $type)
             $without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
         }
 
-        if ($_configuration['multiple_access_urls']) {
-            $sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-                WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT c.code, c.title
+                    FROM $tbl_course c
+					LEFT JOIN $tbl_course_rel_access_url a
+                    ON (a.c_id = c.id)
+                	WHERE
+                		c.code LIKE '$needle%' $without_assigned_courses AND
+                		access_url_id = ".api_get_current_access_url_id();
         } else {
-            $sql = "SELECT c.code, c.title FROM $tbl_course c
-                WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
+            $sql = "SELECT c.code, c.title
+            		FROM $tbl_course c
+                	WHERE
+                		c.code LIKE '$needle%'
+                		$without_assigned_courses ";
         }
 
 		$rs	= Database::query($sql);
@@ -156,7 +162,7 @@ $UserList = array();
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $courses_list = $_POST['CoursesList'];
-    $affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
+    $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows)	{
         $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
     }
@@ -195,14 +201,16 @@ if (isset($_POST['firstLetterCourse'])) {
 if (api_is_multiple_url_enabled()) {
 	$sql = " SELECT c.code, c.title
             FROM $tbl_course c
-            LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+            LEFT JOIN $tbl_course_rel_access_url a
+            ON (a.c_id = c.id)
             WHERE
                 c.code LIKE '$needle' $without_assigned_courses AND
                 access_url_id = ".api_get_current_access_url_id()."
             ORDER BY c.title";
 
 } else {
-	$sql= " SELECT c.code, c.title FROM $tbl_course c
+	$sql= " SELECT c.code, c.title
+	        FROM $tbl_course c
             WHERE  c.code LIKE '$needle' $without_assigned_courses
             ORDER BY c.title";
 }

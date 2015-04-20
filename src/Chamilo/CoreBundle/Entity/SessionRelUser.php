@@ -12,13 +12,22 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *    name="session_rel_user",
  *      indexes={
- *          @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"id_user", "moved_to"})
+ *          @ORM\Index(name="idx_session_rel_user_id_user_moved", columns={"user_id", "moved_to"})
  *      }
  * )
  * @ORM\Entity
  */
 class SessionRelUser
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $iid;
+
     public $relationTypeList = array(
         0 => 'student',
         1 => 'drh'
@@ -26,22 +35,20 @@ class SessionRelUser
 
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_session", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
     private $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="relation_type", type="integer", nullable=false, unique=false)
      */
     private $relationType;
 

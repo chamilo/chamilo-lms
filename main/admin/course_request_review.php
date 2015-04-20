@@ -24,13 +24,13 @@ api_protect_admin_script();
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Filltering passed to this page parameters.
-$accept_course_request = intval($_GET['accept_course_request']);
-$reject_course_request = intval($_GET['reject_course_request']);
-$request_info = intval($_GET['request_info']);
-$delete_course_request = intval($_GET['delete_course_request']);
-$message = trim(Security::remove_XSS(stripslashes(urldecode($_GET['message']))));
-$is_error_message = !empty($_GET['is_error_message']);
-$keyword = Database::escape_string(trim($_GET['keyword']));
+$accept_course_request = isset($_GET['accept_course_request']) ? intval($_GET['accept_course_request']) : '';
+$reject_course_request = isset($_GET['reject_course_request']) ? intval($_GET['reject_course_request']) : '';
+$request_info = isset($_GET['request_info']) ? intval($_GET['request_info']) : '';
+$delete_course_request = isset($_GET['delete_course_request']) ? intval($_GET['delete_course_request']) : '';
+$message = isset($_GET['message']) ? trim(Security::remove_XSS(stripslashes(urldecode($_GET['message'])))) : '';
+$is_error_message = isset($_GET['is_error_message']) ? !empty($_GET['is_error_message']) : '';
+$keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : '';
 
 if ($course_validation_feature) {
 
@@ -188,14 +188,14 @@ function email_filter($teacher)
 function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
-    $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+    $result = '<a href="course_request_edit.php?id='.$id.'&caller=0">'.Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
         '&nbsp;<a href="?accept_course_request='.$id.'">'.Display::return_icon('accept.png', get_lang('AcceptThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;'),16).'</a>'.
         '&nbsp;<a href="?reject_course_request='.$id.'">'.Display::return_icon('error.png', get_lang('RejectThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeRejected'), $code), ENT_QUOTES)).'\')) return false;'),16).'</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
         $result .= '&nbsp;<a href="?request_info='.$id.'">'.Display::return_icon('request_info.gif', get_lang('AskAdditionalInfo'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('AdditionalInfoWillBeAsked'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
     }
     if (DELETE_ACTION_ENABLED) {
-        $result .= '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.gif', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
+        $result .= '&nbsp;<a href="?delete_course_request='.$id.'">'.Display::return_icon('delete.png', get_lang('DeleteThisCourseRequest'), array('style' => 'vertical-align: middle;', 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;')).'</a>';
     }
 
     return $result;

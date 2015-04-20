@@ -31,7 +31,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             $resubscriptionLimit = Resubscription::create()->get('resubscription_limit');
 
-            // Initialize variables as a calendar year by default
+             // Initialize variables as a calendar year by default
             $limitDateFormat = 'Y-01-01';
             $limitDate = gmdate($limitDateFormat);
             $resubscriptionOffset = "1 year";
@@ -44,15 +44,15 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 $limitDate = gmdate($limitDateFormat, strtotime("$limitDate -$resubscriptionOffset"));
             }
 
-            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = id_session";
+            $join = " INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)."ON id = session_id";
 
             // User sessions and courses
             $userSessions = Database::select(
-                'id_session, date_end',
+                'session_id, date_end',
                 Database::get_main_table(TABLE_MAIN_SESSION_USER).$join,
                 array(
                     'where' => array(
-                        'id_user = ? AND date_end >= ?' => array(
+                        'user_id = ? AND date_end >= ?' => array(
                             api_get_user_id(),
                             $limitDate
                         )
@@ -63,19 +63,19 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
             $userSessionCourses = array();
             foreach ($userSessions as $userSession) {
                 $userSessionCourseResult = Database::select(
-                    'course_code',
+                    'c_id',
                     Database::get_main_table(TABLE_MAIN_SESSION_COURSE),
                     array(
                         'where' => array(
-                            'id_session = ?' => array(
-                                $userSession['id_session']
+                            'session_id = ?' => array(
+                                $userSession['session_id']
                             )
                         )
                     )
                 );
                 foreach ($userSessionCourseResult as $userSessionCourse) {
-                    if (!isset($userSessionCourses[$userSessionCourse['course_code']])) {
-                        $userSessionCourses[$userSessionCourse['course_code']] = $userSession['date_end'];
+                    if (!isset($userSessionCourses[$userSessionCourse['c_id']])) {
+                        $userSessionCourses[$userSessionCourse['c_id']] = $userSession['date_end'];
                     }
 
                 }
@@ -83,11 +83,11 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             // Current session and courses
             $currentSessionCourseResult = Database::select(
-                'course_code',
+                'c_id',
                 Database::get_main_table(TABLE_MAIN_SESSION_COURSE),
                 array(
                     'where' => array(
-                        'id_session = ?' => array(
+                        'session_id = ?' => array(
                             $data['session_id']
                         )
                     )
@@ -96,8 +96,8 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
 
             // Check if current course code matches with one of the users
             foreach ($currentSessionCourseResult as $currentSessionCourse) {
-                if (isset($userSessionCourses[$currentSessionCourse['course_code']])) {
-                    $endDate = $userSessionCourses[$currentSessionCourse['course_code']];
+                if (isset($userSessionCourses[$currentSessionCourse['c_id']])) {
+                    $endDate = $userSessionCourses[$currentSessionCourse['c_id']];
                     $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
                     $icon = Display::return_icon('students.gif', get_lang('Student'));
                     $canResubscribeFrom = sprintf(get_plugin_lang('CanResubscribeFromX', 'resubscription'), $resubscriptionDate);

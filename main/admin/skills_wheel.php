@@ -45,21 +45,27 @@ $tpl->assign('url', $url);
 $tpl->assign('isAdministration', true);
 
 $dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
-$dialogForm->addHidden('id', null);
-$dialogForm->addText('name', get_lang('Name'), true, ['id' => 'name']);
-$dialogForm->addText('short_code', get_lang('ShortCode'), false, ['id' => 'short_code']);
-$dialogForm->addSelect('parent_id', get_lang('Parent'), [], ['id' => 'parent_id']);
-$dialogForm->addHtml('<ul id="skill_edit_holder" class="holder holder_simple"></ul>');
-$dialogForm->addHtml('<div id="gradebook_row">');
-$dialogForm->addSelect(
-    'gradebook_id',
-    [get_lang('Gradebook'), get_lang('WithCertificate')],
-    [],
-    ['id' => 'gradebook_id']
+$dialogForm->addLabel(
+    get_lang('Name'),
+    Display::tag('p', null, ['id' => 'name', 'class' => 'form-control-static'])
 );
-$dialogForm->addHtml('<ul id="gradebook_holder" class="holder holder_simple"></ul>');
-$dialogForm->addHtml('</div>');
-$dialogForm->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
+$dialogForm->addLabel(
+    get_lang('ShortCode'),
+    Display::tag('p', null, ['id' => 'short_code', 'class' => 'form-control-static'])
+);
+$dialogForm->addLabel(
+    get_lang('Parent'),
+    Display::tag('p', null, ['id' => 'parent', 'class' => 'form-control-static'])
+);
+$dialogForm->addLabel(
+    [get_lang('Gradebook'), get_lang('WithCertificate')],
+    Display::tag('ul', null, ['id' => 'gradebook', 'class' => 'form-control-static list-unstyled'])
+);
+$dialogForm->addLabel(
+    get_lang('Description'),
+    Display::tag('p', null, ['id' => 'description', 'class' => 'form-control-static'])
+);
+
 $tpl->assign('dialogForm', $dialogForm->returnForm());
 
 $saveProfileForm = new FormValidator('form', 'post', null, null, ['id' => 'dialog-form-profile']);

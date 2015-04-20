@@ -20,7 +20,7 @@ class Thematic extends Resource
     */
     public function __construct($params)
     {
-        parent::Resource($params['id'], RESOURCE_THEMATIC);
+        parent::__construct($params['id'], RESOURCE_THEMATIC);
         $this->params = $params;
     }
 

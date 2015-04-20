@@ -37,32 +37,38 @@ if (empty($id_user) || empty($id_session)) {
 }
 
 if (!api_is_platform_admin()) {
-    $sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+    $sql = 'SELECT session_admin_id
+            FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).'
+            WHERE id='.$id_session;
     $rs = Database::query($sql);
     if (Database::result($rs,0,0)!=$_user['user_id']) {
         api_not_allowed(true);
     }
 }
 
-$formSent=0;
-$errorMsg=$firstLetterCourse=$firstLetterSession='';
-$CourseList=$SessionList=array();
-$courses=$sessions=array();
-$noPHP_SELF=true;
+$formSent = 0;
+$errorMsg = $firstLetterCourse = $firstLetterSession = '';
+$CourseList = $SessionList = array();
+$courses = $sessions = array();
+$noPHP_SELF = true;
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
-    $formSent			= $_POST['formSent'];
-    $CourseList			= $_POST['SessionCoursesList'];
+    $formSent = $_POST['formSent'];
+    $CourseList = $_POST['SessionCoursesList'];
 
     if (!is_array($CourseList)) {
         $CourseList=array();
     }
 
-    $sql="SELECT distinct code
-			FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course
-			ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru
-			ON (srcru.id_session =  session_rel_course.id_session)
-			WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
+    $sql = "SELECT DISTINCT course.id
+			FROM $tbl_course course
+			LEFT JOIN $tbl_session_rel_course session_rel_course
+			ON course.id = session_rel_course.c_id
+			INNER JOIN $tbl_session_rel_course_rel_user as srcru
+			ON (srcru.session_id = session_rel_course.session_id)
+			WHERE
+			    user_id = $id_user AND
+			    session_rel_course.session_id = $id_session";
 
     $rs = Database::query($sql);
     $existingCourses = Database::store_result($rs);
@@ -70,37 +76,41 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
         exit;
     }
-    foreach($CourseList as $enreg_course) {
+
+    foreach ($CourseList as $enreg_course) {
         $exists = false;
         foreach($existingCourses as $existingCourse) {
-            if($enreg_course == $existingCourse['course_code']) {
+            if ($enreg_course == $existingCourse['id']) {
                 $exists=true;
             }
         }
+
         if(!$exists) {
             $enreg_course = Database::escape_string($enreg_course);
             $sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
-							WHERE id_user='".$id_user."' AND course_code='".$enreg_course."' AND id_session=$id_session";
+						   WHERE user_id = '".$id_user."' AND c_id='".$enreg_course."' AND session_id=$id_session";
             $result = Database::query($sql_delete);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
+                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1
+                                WHERE session_id='$id_session' AND c_id = '$enreg_course'";
                 Database::query($sql_update);
             }
         }
     }
-    foreach($existingCourses as $existingCourse) {
-        //$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
-        if (!in_array($existingCourse['code'], $CourseList)){
-            $existingCourse = Database::escape_string($existingCourse['code']);
-            $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$existingCourse','$id_user')";
-            $result = Database::query($sql_insert);
+
+    foreach ($existingCourses as $existingCourse) {
+        if (!in_array($existingCourse['id'], $CourseList)){
+            $existingCourse = Database::escape_string($existingCourse['id']);
+            $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id,c_id,user_id)
+                    VALUES ('$id_session','$existingCourse','$id_user')";
+            $result = Database::query($sql);
             if (Database::affected_rows($result)) {
                 //update session rel course table
-                $sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND course_code='$existingCourse'";
-                Database::query($sql_update);
+                $sql  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1
+                         WHERE session_id='$id_session' AND c_id = '$existingCourse'";
+                Database::query($sql);
             }
-
         }
     }
     header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('CoursesUpdated'));
@@ -121,29 +131,33 @@ echo '<legend>'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete
 
 $nosessionCourses = $sessionCourses = array();
 // actual user
-$sql = "SELECT code, title, visual_code, srcru.id_session
-        FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru
-        ON course.code = srcru.course_code  WHERE srcru.id_user = $id_user AND id_session = $id_session";
+$sql = "SELECT course.id, code, title, visual_code, srcru.session_id
+        FROM $tbl_course course
+        INNER JOIN $tbl_session_rel_course_rel_user as srcru
+        ON course.id = srcru.c_id
+        WHERE srcru.user_id = $id_user AND session_id = $id_session";
 
 //all
-$sql_all="SELECT code, title, visual_code, src.id_session " .
-    "FROM $tbl_course course inner JOIN $tbl_session_rel_course  as src  " .
-    "ON course.code = src.course_code AND id_session = $id_session";
+$sql_all="SELECT course.id, code, title, visual_code, src.session_id
+        FROM $tbl_course course
+        INNER JOIN $tbl_session_rel_course  as src
+        ON course.id = src.c_id AND session_id = $id_session";
 $result=Database::query($sql);
 $Courses=Database::store_result($result);
 
-$result=Database::query($sql_all);
-$CoursesAll=Database::store_result($result);
+$result = Database::query($sql_all);
+$CoursesAll = Database::store_result($result);
 
 $course_temp = array();
-foreach($Courses as $course) {
-    $course_temp[] = $course['code'];
+foreach ($Courses as $course) {
+    $course_temp[] = $course['id'];
 }
+
 foreach($CoursesAll as $course) {
-    if (in_array($course['code'], $course_temp)) {
-        $nosessionCourses[$course['code']] = $course ;
+    if (in_array($course['id'], $course_temp)) {
+        $nosessionCourses[$course['id']] = $course ;
     } else {
-        $sessionCourses[$course['code']] = $course ;
+        $sessionCourses[$course['id']] = $course ;
     }
 }
 
@@ -171,7 +185,7 @@ unset($Courses);
                     <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" style="width:320px;"> <?php
                         foreach($nosessionCourses as $enreg) {
                             ?>
-                            <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES).'"'; if(in_array($enreg['code'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
                         <?php
                         }
                         ?>  </select></div> <?php
@@ -192,17 +206,17 @@ unset($Courses);
                 echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('EditSessionCourses').'</button>';
                 ?>
             </td>
-            <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
-                    <?php
-                    foreach($sessionCourses as $enreg) {
-                        ?>
-                        <option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
-                    <?php
-                    }
-                    unset($sessionCourses);
-                    ?>
-
-                </select></td>
+            <td width="45%" align="center">
+                <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
+            <?php
+            foreach($sessionCourses as $enreg) {
+                ?>
+                <option value="<?php echo $enreg['id']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
+            <?php
+            }
+            unset($sessionCourses);
+            ?>
+            </select></td>
         </tr>
     </table>
 </form>

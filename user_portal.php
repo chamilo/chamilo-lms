@@ -15,7 +15,7 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore */
 $cidReset = true;
@@ -43,14 +43,24 @@ $courseAndSessions = $controller->return_courses_and_sessions($userId);
 
 // Check if a user is enrolled only in one course for going directly to the course after the login.
 if (api_get_setting('go_to_course_after_login') == 'true') {
-
 	$count_of_sessions = $courseAndSessions['session_count'];
 	$count_of_courses_no_sessions = $courseAndSessions['course_count'];
-
+    // User is subscribe in 1 session and 0 courses.
 	if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
 		$sessions = SessionManager::get_sessions_by_user($userId);
+
 		if (isset($sessions[0])) {
 			$sessionInfo = $sessions[0];
+            // Session only has 1 course.
+            if (isset($sessionInfo['courses']) && count($sessionInfo['courses']) == 1) {
+                $courseCode = $sessionInfo['courses'][0]['code'];
+                $courseInfo = api_get_course_info($courseCode);
+                $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
+                header('Location:'.$courseUrl);
+                exit;
+            }
+
+            // Session has many courses.
 			if (isset($sessionInfo['session_id'])) {
 				$url = api_get_path(WEB_CODE_PATH).'session/?session_id='.$sessionInfo['session_id'];
 
@@ -60,6 +70,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
 		}
 	}
 
+    // User is subscribed to 1 course.
 	if (!isset($_SESSION['coursesAlreadyVisited']) &&
 		$count_of_sessions == 0 && $count_of_courses_no_sessions == 1
 	) {

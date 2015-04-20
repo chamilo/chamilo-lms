@@ -14,9 +14,9 @@ class ForumPost extends Resource
     /**
      * Create a new ForumPost
      */
-    public function ForumPost($obj)
+    public function __construct($obj)
     {
-        parent::Resource($obj->post_id, RESOURCE_FORUMPOST);
+        parent::__construct($obj->post_id, RESOURCE_FORUMPOST);
         $this->obj = $obj;
     }
 

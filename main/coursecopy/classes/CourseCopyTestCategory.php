@@ -25,8 +25,9 @@ class CourseCopyTestcategory extends Resource
      * @param string $title
      * @param string $description
      */
-    function CourseCopyTestcategory($id, $title, $description) {
-        parent::Resource($id, RESOURCE_TEST_CATEGORY);
+    public function __construct($id, $title, $description)
+    {
+        parent::__construct($id, RESOURCE_TEST_CATEGORY);
         $this->title = $title;
         $this->description = $description;
     }

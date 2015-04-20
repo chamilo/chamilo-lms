@@ -22,7 +22,10 @@ if (empty($id_session )) {
     api_not_allowed();
 }
 
-$course_code    = Database::escape_string(trim($_GET['course_code']));
+$course_code = Database::escape_string(trim($_GET['course_code']));
+$courseInfo = api_get_course_info($course_code);
+$courseId = $courseInfo['real_id'];
+
 $page           = isset($_GET['page']) ? intval($_GET['page']) : null;
 $action         = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort   = api_sort_by_first_name() ? 'firstname':'lastname';
@@ -41,9 +44,9 @@ if (is_array($idChecked)) {
 
 $sql = "SELECT s.name, c.title
         FROM $tbl_session_rel_course src
-		INNER JOIN $tbl_session s ON s.id = src.id_session
-		INNER JOIN $tbl_course c ON c.code = src.course_code
-		WHERE src.id_session='$id_session' AND src.course_code='$course_code' ";
+		INNER JOIN $tbl_session s ON s.id = src.session_id
+		INNER JOIN $tbl_course c ON c.id = src.c_id
+		WHERE src.session_id='$id_session' AND src.c_id='$courseId' ";
 
 $result = Database::query($sql);
 if (!list($session_name,$course_title) = Database::fetch_row($result)) {
@@ -55,12 +58,16 @@ switch ($action) {
     case 'delete':
         if (is_array($idChecked) && count($idChecked)>0) {
             array_map('intval', $idChecked);
-            $idChecked = implode(',',$idChecked);
+            $idChecked = implode(',', $idChecked);
         }
         if (!empty($idChecked)) {
-            $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".$course_code."' AND id_user IN($idChecked)");
+            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
+                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND user_id IN($idChecked)";
+            $result = Database::query($sql);
             $nbr_affected_rows = Database::affected_rows($result);
-            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".$course_code."'");
+            $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
+                    WHERE session_id='$id_session' AND c_id='".$courseId."'";
+            Database::query($sql);
         }
         header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
         exit();
@@ -77,12 +84,12 @@ $limit  = 20;
 $from   = $page * $limit;
 $is_western_name_order = api_is_western_name_order();
 $sql = "SELECT DISTINCT
-         u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.id_user as is_subscribed
+         u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username, scru.user_id as is_subscribed
          FROM $tbl_session_rel_user s
-         INNER JOIN $tbl_user u ON (u.user_id=s.id_user)
+         INNER JOIN $tbl_user u ON (u.user_id=s.user_id)
          LEFT JOIN $tbl_session_rel_course_rel_user scru
-         ON (s.id_session = scru.id_session AND s.id_user = scru.id_user AND scru.course_code = '".$course_code."' )
-         WHERE s.id_session='$id_session'
+         ON (s.session_id = scru.session_id AND s.user_id = scru.user_id AND scru.c_id = '".$courseId."' )
+         WHERE s.session_id='$id_session'
          ORDER BY $sort $direction
          LIMIT $from,".($limit+1);
 

@@ -21,11 +21,11 @@ class Quiz extends Resource
      */
     public $obj; //question
 
-    public function Quiz($obj)
+    public function __construct($obj)
     {
         $this->obj = $obj;
         $this->obj->quiz_type = $this->obj->type;
-        parent::Resource($obj->id, RESOURCE_QUIZ);
+        parent::__construct($obj->id, RESOURCE_QUIZ);
     }
 
     /**

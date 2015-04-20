@@ -19,11 +19,11 @@ class Matching extends Question
     /**
      * Constructor
      */
-    public function Matching()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this->type = MATCHING;
-        $this->isContent = $this-> getIsContent();
+        $this->isContent = $this->getIsContent();
     }
 
     /**
@@ -33,25 +33,44 @@ class Matching extends Question
     public function createAnswersForm($form)
     {
         $defaults = array();
-        $navigator_info = api_get_navigator();
-
         $nb_matches = $nb_options = 2;
+        $matches = array();
+
+        $answer = null;
+        $counter = 1;
+
+        if (isset($this->id)) {
+            $answer = new Answer($this->id);
+            $answer->read();
+
+            if (count($answer->nbrAnswers) > 0) {
+                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
+                    $correct = $answer->isCorrect($i);
+                    if (empty($correct)) {
+                        $matches[$answer->selectAutoId($i)] = chr(64 + $counter);
+                        $counter++;
+                    }
+                }
+            }
+        }
+
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
             $nb_options = $form->getSubmitValue('nb_options');
-            if (isset($_POST['lessMatches']))
+            if (isset($_POST['lessMatches'])) {
                 $nb_matches--;
-            if (isset($_POST['moreMatches']))
+            }
+            if (isset($_POST['moreMatches'])) {
                 $nb_matches++;
-            if (isset($_POST['lessOptions']))
+            }
+            if (isset($_POST['lessOptions'])) {
                 $nb_options--;
-            if (isset($_POST['moreOptions']))
+            }
+            if (isset($_POST['moreOptions'])) {
                 $nb_options++;
+            }
         } else if (!empty($this->id)) {
-            $answer = new Answer($this->id);
-            $answer->read();
             if (count($answer->nbrAnswers) > 0) {
-                $a_matches = $a_options = array();
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     if ($answer->isCorrect($i)) {
@@ -72,9 +91,17 @@ class Matching extends Question
             $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
         }
-        $a_matches = array();
-        for ($i = 1; $i <= $nb_options; ++$i) {
-            $a_matches[$i] = chr(64 + $i);  // fill the array with A, B, C.....
+
+        if (empty($matches)) {
+            for ($i = 1; $i <= $nb_options; ++$i) {
+                // fill the array with A, B, C.....
+                $matches[$i] = chr(64 + $i);
+            }
+        } else {
+            for ($i = $counter; $i <= $nb_options; ++$i) {
+                // fill the array with A, B, C.....
+                $matches[$i] = chr(64 + $i);
+            }
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);
@@ -107,10 +134,12 @@ class Matching extends Question
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
             );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "matches[$i]"
             );
+
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "weighting[$i]"
@@ -120,25 +149,21 @@ class Matching extends Question
 
             $form->addHtml("<td>$i</td>");
             $form->addText("answer[$i]", null);
-            $form->addSelect("matches[$i]", null, $a_matches);
+
+            $form->addSelect("matches[$i]", null, $matches);
             $form->addText("weighting[$i]", null, true, ['value' => 10]);
-            
+
             $form->addHtml('</tr>');
         }
 
         $form->addHtml('</tbody></table>');
         $group = array();
 
-        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $group[] = $form->createElement('submit', 'lessMatches', get_lang('DelElem'), 'class="btn btn-default"');
-            $group[] = $form->createElement('submit', 'moreMatches', get_lang('AddElem'), 'class="btn btn-default"');
-        } else {
-            $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessMatches');
-            $renderer->setElementTemplate('{element}</div></div>', 'moreMatches');
+        $renderer->setElementTemplate('<div class="form-group"><div class="col-sm-offset-2">{element}', 'lessMatches');
+        $renderer->setElementTemplate('{element}</div></div>', 'moreMatches');
 
-            $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true);
-            $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true);
-        }
+        $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true);
+        $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true);
 
         $form->addGroup($group);
 
@@ -177,19 +202,12 @@ class Matching extends Question
 
         $form->addHtml('</table>');
         $group = array();
-        global $text, $class;
+        global $text;
 
-        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            // setting the save button here and not in the question class.php
-            $group[] = $form->createElement('submit', 'submitQuestion', $text, 'class="' . $class . '"');
-            $group[] = $form->createElement('submit', 'lessOptions', get_lang('DelElem'), 'class="minus"');
-            $group[] = $form->createElement('submit', 'moreOptions', get_lang('AddElem'), 'class="plus"');
-        } else {
-            // setting the save button here and not in the question class.php
-            $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
-            $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
-            $group[] = $form->addButtonSave($text, 'submitQuestion', true);
-        }
+        // setting the save button here and not in the question class.php
+        $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
+        $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
+        $group[] = $form->addButtonSave($text, 'submitQuestion', true);
 
         $form->addGroup($group);
 
@@ -201,9 +219,13 @@ class Matching extends Question
             }
         }
 
-        $form->setConstants(array('nb_matches' => $nb_matches, 'nb_options' => $nb_options));
+        $form->setConstants(
+            array(
+                'nb_matches' => $nb_matches,
+                'nb_options' => $nb_options
+            )
+        );
     }
-
 
     /**
      * abstract function which creates the form to create / edit the answers of the question
@@ -211,29 +233,36 @@ class Matching extends Question
      */
     public function processAnswersCreation($form)
     {
-        $nb_matches = $form -> getSubmitValue('nb_matches');
-        $nb_options = $form -> getSubmitValue('nb_options');
-        $this -> weighting = 0;
-        $objAnswer = new Answer($this->id);
-
+        $nb_matches = $form->getSubmitValue('nb_matches');
+        $nb_options = $form->getSubmitValue('nb_options');
+        $this->weighting = 0;
         $position = 0;
 
-        // insert the options
-        for($i=1 ; $i<=$nb_options; ++$i) {
+        $objAnswer = new Answer($this->id);
+
+        // Insert the options
+        for ($i = 1; $i <= $nb_options; ++$i) {
             $position++;
-            $option = $form -> getSubmitValue('option['.$i.']');
+            $option = $form->getSubmitValue('option['.$i.']');
             $objAnswer->createAnswer($option, 0, '', 0, $position);
         }
 
-        // insert the answers
-        for($i=1 ; $i<=$nb_matches ; ++$i) {
+        // Insert the answers
+        for ($i = 1; $i <= $nb_matches; ++$i) {
             $position++;
-            $answer = $form -> getSubmitValue('answer['.$i.']');
-            $matches = $form -> getSubmitValue('matches['.$i.']');
-            $weighting = $form -> getSubmitValue('weighting['.$i.']');
-            $this -> weighting += $weighting;
-            $objAnswer->createAnswer($answer,$matches,'',$weighting,$position);
+            $answer = $form->getSubmitValue('answer['.$i.']');
+            $matches = $form->getSubmitValue('matches['.$i.']');
+            $weighting = $form->getSubmitValue('weighting['.$i.']');
+            $this->weighting += $weighting;
+            $objAnswer->createAnswer(
+                $answer,
+                $matches,
+                '',
+                $weighting,
+                $position
+            );
         }
+
         $objAnswer->save();
         $this->save();
     }
@@ -252,6 +281,7 @@ class Matching extends Question
                 <th>'.get_lang('ElementList').'</th>
                 <th>'.get_lang('CorrespondsTo').'</th>
               </tr>';
+
         return $header;
     }
 }

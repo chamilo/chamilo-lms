@@ -1,1 +1,0 @@
-Used to extract metadata from external resources : youtube, dailymotion, etc

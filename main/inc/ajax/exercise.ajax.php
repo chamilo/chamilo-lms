@@ -286,11 +286,11 @@ switch ($action) {
 
             } else {
                 // We know the user we get the exe_id.
-                $exe_id        = $exercise_stat_info['exe_id'];
-                $total_score   = $exercise_stat_info['exe_result'];
+                $exe_id = $exercise_stat_info['exe_id'];
+                $total_score = $exercise_stat_info['exe_result'];
 
                 //Getting the list of attempts
-                $attempt_list  = Event::getAllExerciseEventByExeId($exe_id);
+                $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
             }
 
             // Updating Reminder algorythm.

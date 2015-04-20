@@ -398,7 +398,7 @@ class scorm extends learnpath
                         VALUES ($course_id, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
                 Database::query($sql);
-                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql.' : '.Database::error(), 0); }
+                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql, 0); }
                 $item_id = Database::insert_id();
                 // Now update previous item to change next_item_id.
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";

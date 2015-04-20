@@ -80,7 +80,6 @@ CREATE TABLE IF NOT EXISTS admin (
 -- Dumping data for table admin
 --
 
-
 /*!40000 ALTER TABLE admin DISABLE KEYS */;
 LOCK TABLES admin WRITE;
 INSERT INTO admin VALUES (1, 1);
@@ -189,8 +188,8 @@ CREATE TABLE IF NOT EXISTS course_category (
   parent_id varchar(40) default NULL,
   tree_pos int unsigned default NULL,
   children_count smallint default NULL,
-  auth_course_child enum('TRUE','FALSE') default 'TRUE',
-  auth_cat_child enum('TRUE','FALSE') default 'TRUE',
+  auth_course_child varchar(40) default 'TRUE',
+  auth_cat_child varchar(40) default 'TRUE',
   PRIMARY KEY  (id),
   UNIQUE KEY code (code),
   KEY parent_id (parent_id),
@@ -3624,7 +3623,7 @@ CREATE TABLE c_quiz_answer(
   ponderation float(6,2) NOT NULL default 0,
   position mediumint unsigned NOT NULL default 1,
   hotspot_coordinates text,
-  hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
+  hotspot_type varchar(40) default NULL,
   destination text NOT NULL,
   answer_code char(10) default '',
   PRIMARY KEY (id_auto, c_id)
@@ -3685,7 +3684,7 @@ CREATE TABLE c_tool(
   admin varchar(255) default NULL,
   address varchar(255) default NULL,
   added_tool tinyint unsigned default 1,
-  target enum('_self','_blank') NOT NULL default '_self',
+  target varchar(20) NOT NULL default '_self',
   category varchar(20) not null default 'authoring',
   session_id int default 0,
   PRIMARY KEY (id, c_id)
@@ -3796,7 +3795,7 @@ CREATE TABLE c_link(
   description text,
   category_id int unsigned default NULL,
   display_order int unsigned NOT NULL default 0,
-  on_homepage enum('0','1') NOT NULL default '0',
+  on_homepage char(10) NOT NULL default '0',
   target char(10) default '_self',
   session_id int default 0,
   PRIMARY KEY (id, c_id)
@@ -4252,7 +4251,7 @@ CREATE TABLE c_blog_rating(
     rating_id int NOT NULL AUTO_INCREMENT ,
     c_id INT NOT NULL,
     blog_id int NOT NULL default 0,
-    rating_type enum( 'post', 'comment' ) NOT NULL default 'post',
+    rating_type char(40) NOT NULL default 'post',
     item_id int NOT NULL default 0,
     user_id int NOT NULL default 0,
     rating int NOT NULL default 0,
@@ -4376,7 +4375,7 @@ CREATE TABLE c_course_setting  (
   PRIMARY KEY (id, c_id)
 );
 
-CREATE TABLE c_survey  (
+CREATE TABLE c_survey (
   survey_id int unsigned NOT NULL auto_increment,
   c_id INT NOT NULL,
   code varchar(20) default NULL,
@@ -4396,7 +4395,7 @@ CREATE TABLE c_survey  (
   invite_mail text NOT NULL,
   reminder_mail text NOT NULL,
   mail_subject VARCHAR( 255 ) NOT NULL,
-  anonymous enum('0','1') NOT NULL default '0',
+  anonymous char(10) NOT NULL default '0',
   access_condition TEXT DEFAULT NULL,
   shuffle bool NOT NULL default '0',
   one_question_per_page bool NOT NULL default '0',
@@ -4600,17 +4599,6 @@ CREATE TABLE c_thematic_advance(
 
 ALTER TABLE c_thematic_advance ADD INDEX (thematic_id);
 
-CREATE TABLE IF NOT EXISTS c_metadata (
-  c_id INT NOT NULL,
-  eid VARCHAR(250) NOT NULL,
-  mdxmltext TEXT default '',
-  md5 CHAR(32) default '',
-  htmlcache1 TEXT default '',
-  htmlcache2 TEXT default '',
-  indexabletext TEXT default '',
-  PRIMARY KEY (c_id, eid)
-);
-
 DROP TABLE IF EXISTS c_student_publication_rel_document;
 CREATE TABLE IF NOT EXISTS c_student_publication_rel_document (id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, work_id INT NOT NULL, document_id INT NOT NULL, c_id INT NOT NULL);
 DROP TABLE IF EXISTS c_student_publication_rel_user;
@@ -4628,5 +4616,5 @@ CREATE TABLE c_attendance_calendar_rel_group (
 
 -- Version
 LOCK TABLES settings_current WRITE;
-UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version';
 UNLOCK TABLES;

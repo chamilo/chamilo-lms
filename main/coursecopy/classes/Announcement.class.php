@@ -30,15 +30,15 @@ class Announcement extends Resource
 	 * Has the e-mail been sent?
 	 */
     public $email_sent;
-	
+
     public $attachment_path;
-	
+
     public $attachment_filename;
-	
+
     public $attachment_size;
-	
+
     public $attachment_comment;
-	
+
 	/**
 	 * Create a new announcement
 	 * @param int $id
@@ -47,22 +47,22 @@ class Announcement extends Resource
 	 * @param string $date
 	 * @param int display_order
 	 */
-    function Announcement($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment)
+    function __construct($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment)
     {
-		parent::Resource($id,RESOURCE_ANNOUNCEMENT);
-		
+		parent::__construct($id,RESOURCE_ANNOUNCEMENT);
+
 		$this->content	= $content;
 		$this->title 	= $title;
 		$this->date 	= $date;
 		$this->display_order	= $display_order;
-		$this->email_sent	 	= $email_sent;		
-		
+		$this->email_sent	 	= $email_sent;
+
 		$this->attachment_path 	= $path;
 		$this->attachment_filename = $filename;
 		$this->attachment_size 	= $size;
-		$this->attachment_comment 	= $comment;		
+		$this->attachment_comment 	= $comment;
 	}
-	
+
 	/**
 	 * Show this announcement
 	 */

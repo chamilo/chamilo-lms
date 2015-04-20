@@ -170,7 +170,7 @@ if (!api_is_allowed_to_edit()) {
 Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
-if (!is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit()) {
 	if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
 		api_not_allowed();
 	}
@@ -184,13 +184,16 @@ if (isset($_POST['comment'])) {
 	// Fixing the path if it is wrong
 	$comment = Database::escape_string(trim($_POST['comment']));
 	$title = Database::escape_string(trim($_POST['title']));
-    //Just in case see BT#3525
+
+    // Just in case see BT#3525
     if (empty($title)) {
 		$title = $documen_data['title'];
 	}
+
 	if (empty($title)) {
 		$title = get_document_title($_POST['filename']);
 	}
+
     if (!empty($document_id)) {
         $query = "UPDATE $dbTable SET comment='".$comment."', title='".$title."' WHERE c_id = $course_id AND id = ".$document_id;
         Database::query($query);
@@ -458,12 +461,9 @@ if ($owner_id == api_get_user_id() ||
 	}
 
 	if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
-		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
-
-		//Updated on field
+		// Updated on field
 		$last_edit_date = api_get_local_time($last_edit_date);
         $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
-		$form->addElement('static', null, get_lang('Metadata'), $metadata_link);
 		$form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
 	}
 

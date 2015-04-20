@@ -27,8 +27,18 @@ $interbreadcrumb = array(
     )
 );
 
+$toolbar = Display::toolbarButton(
+    get_lang('ManageSkills'),
+    api_get_path(WEB_CODE_PATH) . 'admin/skill_list.php',
+    'list',
+    'primary',
+    ['title' => get_lang('ManageSkills')]
+);
+
 $tpl = new Template(get_lang('Badges'));
 $tpl->assign('backpack', $backpack);
-$contentTemplate = $tpl->get_template('skill/badge.tpl');
+$contentTemplate = $tpl->fetch('default/skill/badge.tpl');
 
-$tpl->display($contentTemplate);
+$tpl->assign('actions', $toolbar);
+$tpl->assign('content', $contentTemplate);
+$tpl->display_one_col_template();

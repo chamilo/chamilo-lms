@@ -1,0 +1,27 @@
+# .scrutinizer.yml - see https://scrutinizer-ci.com/docs/guides/php/continuous-integration-deployment for doc
+build:
+    environment:
+        php:
+            version: 5.6.0
+            ini:
+                'date.timezone': 'US/Pacific'
+                'phar.readonly': false
+        hosts:
+            my.chamilodev.net: '127.0.0.1'
+    dependencies:
+        before:
+            - composer global require "fxp/composer-asset-plugin:1.0.0"
+            - composer install -n
+            - composer -v update
+filter:
+    excluded_paths:
+        - tests/*
+        - main/img/*
+        - main/lang/*
+        - archive/*
+        - data/*
+        - web/*
+checks:
+    php:
+        code_rating: true
+        duplication: true

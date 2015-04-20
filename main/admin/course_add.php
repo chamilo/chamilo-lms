@@ -40,18 +40,24 @@ $form = new FormValidator('update_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addText('title', get_lang('Title'), true, array ('class' => 'span6'));
+$form->addText('title', get_lang('Title'), true);
 $form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 // Code
-$form->addText('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->addText('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')) , false, array('maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 $form->addRule('visual_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
-$form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" ');
+$form->addElement(
+    'select',
+    'course_teachers',
+    get_lang('CourseTeachers'),
+    $teachers,
+    ' id="course_teachers" class="chzn-select"  style="width:350px" multiple="multiple" '
+);
 $form->applyFilter('course_teachers', 'html_filter');
 
 // Category code
@@ -123,33 +129,31 @@ $form->add_progress_bar();
 $form->addButtonCreate(get_lang('CreateCourse'));
 
 // Set some default values.
-$values['course_language']  = api_get_setting('platformLanguage');
-$values['disk_quota']       = round(api_get_setting('default_document_quotum')/1024/1024, 1);
+$values['course_language'] = api_get_setting('platformLanguage');
+$values['disk_quota'] = round(api_get_setting('default_document_quotum')/1024/1024, 1);
 
 $default_course_visibility = api_get_setting('courses_default_creation_visibility');
 
 if (isset($default_course_visibility)) {
-    $values['visibility']       = api_get_setting('courses_default_creation_visibility');
+    $values['visibility'] = api_get_setting('courses_default_creation_visibility');
 } else {
-    $values['visibility']       = COURSE_VISIBILITY_OPEN_PLATFORM;
+    $values['visibility'] = COURSE_VISIBILITY_OPEN_PLATFORM;
 }
-$values['subscribe']        = 1;
-$values['unsubscribe']      = 0;
+$values['subscribe'] = 1;
+$values['unsubscribe'] = 0;
+$values['course_teachers'] = array(api_get_user_id());
 
 $form->setDefaults($values);
 
 // Validate the form
 if ($form->validate()) {
-    $course          = $form->exportValues();
-    $teacher_id      = $course['tutor_id'];
-    $course_teachers = $course['course_teachers'];
+    $course = $form->exportValues();
 
+    $course_teachers = isset($course['course_teachers']) ? $course['course_teachers'] : null;
     $course['disk_quota'] = $course['disk_quota']*1024*1024;
-
-    $course['exemplary_content']    = empty($course['exemplary_content']) ? false : true;
-    $course['teachers']             = $course_teachers;
-    $course['user_id']              = $teacher_id;
-    $course['wanted_code']          = $course['visual_code'];
+    $course['exemplary_content'] = empty($course['exemplary_content']) ? false : true;
+    $course['teachers'] = $course_teachers;
+    $course['wanted_code'] = $course['visual_code'];
     $course['gradebook_model_id']   = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
     $course['course_category'] = $course['category_code'];

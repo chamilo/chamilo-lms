@@ -5,9 +5,6 @@
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration
  */
-/**
- * Code
- */
 
 // Including the global initialization file
 require_once '../inc/global.inc.php';
@@ -102,10 +99,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 		$form->setConstants(array('sec_token' => $token));
 		$form->display();
 	}
-}
-
-// Action handling: Editing a note
-elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) {
+} elseif (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) {
+    // Action handling: Editing a note
 
 	if (!empty($_GET['isStudentView'])) {
 		NotebookManager::display_notes();
@@ -165,11 +160,12 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric(
 	}
 
 	NotebookManager::display_notes();
-}
+} elseif (
+	isset($_GET['action']) && $_GET['action'] == 'changeview' &&
+	in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
+) {
 
-// Action handling: changing the view (sorting order)
-elseif ($_GET['action'] == 'changeview' AND in_array($_GET['view'], array('creation_date', 'update_date', 'title'))) {
-
+	// Action handling: changing the view (sorting order)
 	switch ($_GET['view']) {
 		case 'creation_date':
 			if (!$_GET['direction'] OR $_GET['direction'] == 'ASC') {

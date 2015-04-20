@@ -136,7 +136,7 @@ class TestMySpaceLib extends UnitTestCase {
 
 	public function testGetUserCreator() {
 		//ob_start();
-		$res = MySpace::get_user_creator($users = array(), $course_list = array(), $id_session = 1);
+		$res = MySpace::get_user_creator($users = array());
  		$this->assertTrue(is_array($res));
 		//ob_end_clean();
 	 	//var_dump($res);

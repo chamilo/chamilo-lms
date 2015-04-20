@@ -1,9 +1,6 @@
 <?php
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'message.lib.php';
-require_once $libpath.'usermanager.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 
 /**
@@ -11,8 +8,8 @@ require_once(dirname(__FILE__).'/cm_webservice.php');
  *
  * @author marcosousa
  */
-class WSCMInbox extends WSCM {
-    
+class WSCMInbox extends WSCM
+{
     public function unreadMessage($username, $password)
     {
         if($this->verifyUserPass($username, $password) == "valid")
@@ -22,7 +19,7 @@ class WSCMInbox extends WSCM {
             $condition_msg_status = ' msg_status = 1 '; // define('MESSAGE_STATUS_UNREAD', '1');
 
             $sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE $condition_msg_status AND user_receiver_id=".$user_id;
-            
+
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_array($sql_result);
             return $result['number_messages'];
@@ -30,11 +27,11 @@ class WSCMInbox extends WSCM {
         return "0";
     }
 
-    
+
     public function get_message_id($username, $password, $from, $number_of_items)
-    { 
+    {
         if($this->verifyUserPass($username, $password) == "valid")
-        { 
+        {
             $user_id = UserManager::get_user_id_from_username($username);
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -48,7 +45,7 @@ class WSCMInbox extends WSCM {
             while ($result = Database::fetch_row($sql_result)) {
                 $message .= $result[0]."#";
             }
-            
+
             return $message;
 
         } else
@@ -84,7 +81,7 @@ class WSCMInbox extends WSCM {
                     break;
                 default :
                     $field_table = "title";
-            } 
+            }
 
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
@@ -193,7 +190,7 @@ class WSCMInbox extends WSCM {
             $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
                            " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
             $result = Database::query($query);
-            
+
             $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
                            " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".api_get_utc_datetime()."','$subject','$content','$group_id','$parent_id', '".api_get_utc_datetime()."')";
             $result = Database::query($query);

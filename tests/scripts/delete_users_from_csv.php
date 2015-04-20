@@ -9,7 +9,7 @@ api_protect_admin_script();
 $debug = true;
 
 $file = 'file.csv';
-$users = Import :: csv_to_array($file);
+$users = Import :: csvToArray($file);
 foreach ($users as $user) {
     //$userInfo = api_get_user_info_from_username($user['UserName']);
     $userInfo = api_get_user_info_from_email($user['Email']);

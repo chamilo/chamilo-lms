@@ -227,6 +227,28 @@ EOT;
 
     /**
      * @param string $name
+     * @param string $label
+     * @param array $attributes
+     * @return mixed
+     */
+    public function addDatePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DatePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $attributes
+     * @return mixed
+     */
+    public function addDateTimePicker($name, $label, $attributes = [])
+    {
+        return $this->addElement('DateTimePicker', $name, $label, $attributes);
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      */
     public function addHidden($name, $value)
@@ -593,7 +615,7 @@ EOT;
         $group = array();
         foreach ($options as $value => $text) {
             $attributes['value'] = $value;
-            $group[] = $this->createElement('checkbox', null, null, $text, $attributes);
+            $group[] = $this->createElement('checkbox', $value, null, $text, $attributes);
         }
 
         return $this->addGroup($group, $name, $label);
@@ -700,11 +722,13 @@ EOT;
     /**
      * @param string $name
      * @param string $label
+     *
      * @return mixed
      */
     public function addButtonAdvancedSettings($name, $label = '')
     {
         $label = !empty($label) ? $label : get_lang('AdvancedParameters');
+
         return $this->addElement('advanced_settings', $name, $label);
     }
 
@@ -717,6 +741,7 @@ EOT;
      *
      * @param int $delay (optional)	 The number of seconds between the moment the user
      * @param string $label (optional)	Custom label to be shown
+     *
      * submits the form and the start of the progress bar.
      * @deprecated ?
      */

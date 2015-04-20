@@ -16,7 +16,7 @@ require_once(api_get_path(SYS_PATH).'main/auth/external_login/functions.inc.php'
 *
 **/
 function cas_configured() {
-	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri; 
+	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
     $res = false;
     if (!empty($cas_auth_ver) && !empty($cas_auth_server) && !empty($cas_auth_port)) {
         $res = true;
@@ -33,7 +33,7 @@ function cas_configured() {
 
 function cas_is_authenticated()
 {
-	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri; 
+	global $cas_auth_ver, $cas_auth_server, $cas_auth_port, $cas_auth_uri;
 	global $PHPCAS_CLIENT;
 	global $logout;
 
@@ -42,13 +42,13 @@ function cas_is_authenticated()
     }
 
 
-	if (!is_object($PHPCAS_CLIENT) ) 
+	if (!is_object($PHPCAS_CLIENT) )
 	{
 		phpCAS::client($cas_auth_ver,$cas_auth_server,$cas_auth_port,$cas_auth_uri);
 		phpCAS::setNoCasServerValidation();
 	}
-	$auth = phpCAS::checkAuthentication(); 
-  
+	$auth = phpCAS::checkAuthentication();
+
 	if ($auth) {
 		$login= trim(phpCAS::getUser());
 		/*
@@ -85,7 +85,7 @@ function cas_is_authenticated()
 		if (!$logout){
 		    // get user info from username
 		    $tab_user_info = UserManager::get_user_info($login);
-		    
+
 		    // user found in the chamilo database
 		    if (is_array($tab_user_info)) {
 		        // if option is on we update user automatically from ldap server
@@ -105,13 +105,13 @@ function cas_is_authenticated()
 		        // if option is on we can ADD user automatically from ldap server or by modify own profil
 		        $user_added = false;
 		        switch (api_get_setting("cas_add_user_activate")) {
-		            case PLATFORM_AUTH_SOURCE : 
+		            case PLATFORM_AUTH_SOURCE :
 		                // user will have to modify firstname, lastname, email in chamilo profil edit
 		                $userdata = get_lang("EditInProfil");
           				UserManager::create_user($userdata, $userdata, '5', $userdata, $login, 'casplaceholder', '','','','',CAS_AUTH_SOURCE);
           				$user_added = $login;
 		                break;
-		            case LDAP_AUTH_SOURCE : 
+		            case LDAP_AUTH_SOURCE :
 		                // user info are read from ldap connexion
 	                    // get user info from ldap server
 	                    // user has already been authenticated by CAS
@@ -137,8 +137,8 @@ function cas_is_authenticated()
 //				"FROM $user_table ".
 //				"WHERE username = '$login' ";
 //
-//			$result = api_sql_query($sql,__FILE__,__LINE__);
-//			if(mysql_num_rows($result) == 0) { 
+//			$result = Database::query($sql,__FILE__,__LINE__);
+//			if(mysql_num_rows($result) == 0) {
 //				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
 //				$rnumber=rand(0,256000);
 //				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
@@ -153,8 +153,8 @@ function cas_is_authenticated()
 //		}
 		return $login;
 	}
-	else 
-	{ 
+	else
+	{
 		return false;
 	}
 }

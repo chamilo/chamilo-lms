@@ -331,7 +331,7 @@ function WSCreateUsers($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
                 } else {
@@ -536,7 +536,7 @@ function WSCreateUser($params) {
     if ($result) {
         //echo "id returned";
         $return = Database::insert_id();
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
                 UrlManager::add_user_to_url($return, api_get_current_access_url_id());
             } else {
@@ -827,7 +827,7 @@ function WSCreateUsersPasswordCrypted($params) {
         if ($result) {
             //echo "id returned";
             $return = Database::insert_id();
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 if (api_get_current_access_url_id() != -1) {
                     UrlManager::add_user_to_url($return, api_get_current_access_url_id());
                 } else {
@@ -1089,10 +1089,9 @@ function WSCreateUserPasswordCrypted($params) {
             }
         }
     } else {
-        $error = Database::error();
-        if ($debug) error_log($error);
         return 0;
     }
+
     return $return;
 }
 
@@ -2551,9 +2550,8 @@ function WSCreateCourseByTitle($params) {
         $orig_course_id_value[] = $course_param['original_course_id_value'];
         $extra_list = $course_param['extra'];
 
-        $dbnamelength = strlen($_configuration['db_prefix']);
         // Ensure the database prefix + database name do not get over 40 characters
-        $maxlength = 40 - $dbnamelength;
+        $maxlength = 40;
 
         if (empty($wanted_code)) {
             $wanted_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
@@ -2745,7 +2743,6 @@ function WSEditCourse($params){
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -2903,7 +2900,6 @@ function WSCourseDescription($params) {
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -3068,7 +3064,6 @@ function WSEditCourseDescription($params) {
     }
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
     $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -3788,11 +3783,11 @@ function WSDeleteSession($params) {
 
         $sql_session = "DELETE FROM $tbl_session WHERE id = '$idChecked'";
         @Database::query($sql_session);
-        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_course WHERE id_session = '$idChecked'";
+        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_course WHERE session_id = '$idChecked'";
         @Database::query($sql_session_rel_course);
-        $sql_session_rel_course_rel_user = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session = '$idChecked'";
+        $sql_session_rel_course_rel_user = "DELETE FROM $tbl_session_rel_course_rel_user WHERE session_id = '$idChecked'";
         @Database::query($sql_session_rel_course_rel_user);
-        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$idChecked'";
+        $sql_session_rel_course = "DELETE FROM $tbl_session_rel_user WHERE session_id = '$idChecked'";
         @Database::query($sql_session_rel_course);
         $results[] = 1;
         continue;
@@ -4254,7 +4249,7 @@ function WSUnsubscribeUserFromCourse($params) {
     $results = array();
     $orig_user_id_value = array();
     $orig_course_id_value = array();
-    foreach($userscourses_params as $usercourse_param) {
+    foreach ($userscourses_params as $usercourse_param) {
 
         $original_user_id_values     = $usercourse_param['original_user_id_values'];
         $original_user_id_name         = $usercourse_param['original_user_id_name'];
@@ -4283,17 +4278,22 @@ function WSUnsubscribeUserFromCourse($params) {
 
         // Get course code from original course id
 
-        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res_course     = Database::query($sql_course);
-        $row_course     = Database::fetch_row($res_course);
+        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv
+                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $res_course = Database::query($sql_course);
+        $row_course = Database::fetch_row($res_course);
 
         $course_code = $row_course[0];
+
+        $courseInfo = api_get_course_info($course_code);
+        $courseId = $courseInfo['real_id'];
 
         if (empty($course_code)) {
             $results[] = 0;
             continue;
         } else {
-            $sql = "SELECT code FROM $table_course WHERE code ='$course_code' AND visibility = '0'";
+            $sql = "SELECT code FROM $table_course
+                    WHERE code ='$course_code' AND visibility = '0'";
             $resul = Database::query($sql);
             $r_check_code = Database::fetch_row($resul);
             if (!empty($r_check_code[0])) {
@@ -4307,9 +4307,8 @@ function WSUnsubscribeUserFromCourse($params) {
             continue;
         }
 
-        foreach($usersList as $user_id) {
-            $course_code = Database::escape_string($course_code);
-            $sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND course_code = '".$course_code."'";
+        foreach ($usersList as $user_id) {
+            $sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND c_id = '".$courseId."'";
             $result = Database::query($sql);
             $return = Database::affected_rows($result);
         }
@@ -4320,7 +4319,11 @@ function WSUnsubscribeUserFromCourse($params) {
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_values' => $orig_user_id_value[$i],'original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_values' => $orig_user_id_value[$i],
+            'original_course_id_value' => $orig_course_id_value[$i],
+            'result' => $results[$i]
+        );
     }
 
     return $output;
@@ -4469,17 +4472,18 @@ function WSSuscribeUsersToSession($params){
             continue;
         }
 
-        $sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $sql = "SELECT user_id FROM $tbl_session_rel_user
+                WHERE session_id='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $result = Database::query($sql);
         $existingUsers = array();
         while($row = Database::fetch_array($result)){
-            $existingUsers[] = $row['id_user'];
+            $existingUsers[] = $row['user_id'];
         }
-        $sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+        $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'";
         $result=Database::query($sql);
         $CourseList = array();
         while($row = Database::fetch_array($result)) {
-            $CourseList[] = $row['course_code'];
+            $CourseList[] = $row['c_id'];
         }
 
         foreach ($CourseList as $enreg_course) {
@@ -4491,7 +4495,8 @@ function WSSuscribeUsersToSession($params){
             foreach ($usersList as $enreg_user) {
                 if(!in_array($enreg_user, $existingUsers)) {
                     $enreg_user = Database::escape_string($enreg_user);
-                    $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
+                    $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
+                                  VALUES('$id_session', '$enreg_course', '$enreg_user')";
                     $result = Database::query($insert_sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
@@ -4499,11 +4504,14 @@ function WSSuscribeUsersToSession($params){
                 }
             }
             // count users in this session-course relation
-            $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $sql = "SELECT COUNT(user_id) as nbUsers
+                    FROM $tbl_session_rel_course_rel_user
+                    WHERE session_id = '$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql);
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
-            $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+            $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
+                           WHERE session_id='$id_session' AND c_id='$enreg_course'";
             Database::query($update_sql);
         }
 
@@ -4512,7 +4520,7 @@ function WSSuscribeUsersToSession($params){
         foreach ($usersList as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $nbr_users++;
-            $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
+            $insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(session_id, user_id) VALUES('$id_session','$enreg_user')";
             Database::query($insert_sql);
         }
         // update number of users in the session
@@ -4528,7 +4536,11 @@ function WSSuscribeUsersToSession($params){
     $count_results = count($results);
     $output = array();
     for($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_user_id_values' => $orig_user_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_user_id_values' => $orig_user_id_value[$i],
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i]
+        );
     }
 
     return $output;
@@ -4743,17 +4755,18 @@ function WSUnsuscribeUsersFromSession($params) {
             continue;
         }
 
-        $sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $sql = "SELECT user_id FROM $tbl_session_rel_user
+                WHERE session_id ='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
         $result = Database::query($sql);
         $existingUsers = array();
         while($row = Database::fetch_array($result)){
-            $existingUsers[] = $row['id_user'];
+            $existingUsers[] = $row['user_id'];
         }
-        $sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+        $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id='$id_session'";
         $result = Database::query($sql);
         $CourseList = array();
-        while($row = Database::fetch_array($result)) {
-            $CourseList[] = $row['course_code'];
+        while ($row = Database::fetch_array($result)) {
+            $CourseList[] = $row['c_id'];
         }
 
         foreach ($CourseList as $enreg_course) {
@@ -4764,7 +4777,7 @@ function WSUnsuscribeUsersFromSession($params) {
             foreach ($existingUsers as $existing_user) {
                 if (!in_array($existing_user, $usersList)) {
                     $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
+                            WHERE session_id ='$id_session' AND c_id='$enreg_course' AND user_id='$existing_user'";
                     $result = Database::query($sql);
 
                     if (Database::affected_rows($result)) {
@@ -4773,14 +4786,14 @@ function WSUnsuscribeUsersFromSession($params) {
                 }
             }
             // Count users in this session-course relation.
-            $sql = "SELECT COUNT(id_user) as nbUsers
+            $sql = "SELECT COUNT(user_id) as nbUsers
                     FROM $tbl_session_rel_course_rel_user
-                    WHERE id_session='$id_session' AND course_code='$enreg_course'";
+                    WHERE session_id = '$id_session' AND c_id='$enreg_course'";
             $rs = Database::query($sql);
             list($nbr_users) = Database::fetch_array($rs);
             // update the session-course relation to add the users total
             $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users
-                           WHERE id_session='$id_session' AND course_code='$enreg_course'";
+                           WHERE session_id ='$id_session' AND c_id ='$enreg_course'";
             Database::query($update_sql);
         }
 
@@ -4788,7 +4801,10 @@ function WSUnsuscribeUsersFromSession($params) {
         foreach ($usersList as $enreg_user) {
             $enreg_user = Database::escape_string($enreg_user);
             $delete_sql = "DELETE FROM $tbl_session_rel_user
-                           WHERE id_session = '$id_session' AND id_user ='$enreg_user' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+                           WHERE
+                                session_id = '$id_session' AND
+                                user_id = '$enreg_user' AND
+                                relation_type<>".SESSION_RELATION_TYPE_RRHH."";
             $result = Database::query($delete_sql);
             $return = Database::affected_rows($result);
         }
@@ -4973,14 +4989,18 @@ function WSSuscribeCoursesToSession($params) {
     $orig_session_id_value = array();
     foreach ($coursessessions_params as $coursesession_param) {
 
-        $original_session_id_value  = $coursesession_param['original_session_id_value'];
-        $original_session_id_name   = $coursesession_param['original_session_id_name'];
-        $original_course_id_name    = $coursesession_param['original_course_id_name'];
-        $original_course_id_values  = $coursesession_param['original_course_id_values'];
-        $orig_session_id_value[]    = $original_session_id_value;
+        $original_session_id_value = $coursesession_param['original_session_id_value'];
+        $original_session_id_name = $coursesession_param['original_session_id_name'];
+        $original_course_id_name = $coursesession_param['original_course_id_name'];
+        $original_course_id_values = $coursesession_param['original_course_id_values'];
+        $orig_session_id_value[] = $original_session_id_value;
 
         // get session id from original session id
-        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
+        $sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv
+                        WHERE
+                            sfv.field_id=sf.id AND
+                            field_variable='$original_session_id_name' AND
+                            field_value='$original_session_id_value'";
         if ($debug) error_log($sql_session);
 
         $res_session = Database::query($sql_session);
@@ -4994,25 +5014,31 @@ function WSSuscribeCoursesToSession($params) {
         }
 
         // Get course list from row_original_course_id_values
-        $course_list = array();
+        $course_list = [];
+        $courseCodeList = [];
         foreach ($original_course_id_values as $row_original_course_list) {
 
             $course_code = Database::escape_string($row_original_course_list['course_code']);
 
-            $sql_course = "SELECT course_code FROM $t_cf cf, $t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
+            $sql_course = "SELECT course_code FROM $t_cf cf, $t_cfv cfv
+                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
             $res_course = Database::query($sql_course);
             $row_course = Database::fetch_row($res_course);
+            $courseId = null;
             if (empty($row_course[0])) {
                 continue; // course_code doesn't exist.
             } else {
-                $sql = "SELECT code FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
+                $sql = "SELECT id FROM $tbl_course WHERE code ='".$row_course[0]."' AND visibility = '0'";
                 $resu = Database::query($sql);
                 $r_check_course = Database::fetch_row($resu);
                 if (!empty($r_check_course[0])) {
                     continue; // user_id is not active.
                 }
+                $courseInfo = api_get_course_info($row_course[0]);
+                $courseId = $courseInfo['real_id'];
             }
-            $course_list[] = $row_course[0];
+            $courseCodeList[] = $row_course[0];
+            $course_list[] = $courseId;
         }
 
         if (empty($course_list)) {
@@ -5020,7 +5046,7 @@ function WSSuscribeCoursesToSession($params) {
             continue;
         }
 
-        $orig_course_id_value[] = implode(',', $course_list);
+        $orig_course_id_value[] = implode(',', $courseCodeList);
 
         // Get general coach ID
         $sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";
@@ -5029,17 +5055,17 @@ function WSSuscribeCoursesToSession($params) {
         $id_coach = $id_coach[0];
 
         // get list of courses subscribed to this session
-        $sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+        $sql = "SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'";
 
         $rs = Database::query($sql);
         $existingCourses = Database::store_result($rs);
-        $nbr_courses=count($existingCourses);
+        $nbr_courses = count($existingCourses);
 
         // get list of users subscribed to this session
-        $sql= "SELECT id_user FROM $tbl_session_rel_user
-               WHERE id_session = '$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
-        $result=Database::query($sql);
-        $user_list=Database::store_result($result);
+        $sql= "SELECT user_id FROM $tbl_session_rel_user
+               WHERE session_id = '$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+        $result = Database::query($sql);
+        $user_list = Database::store_result($result);
 
         $course_directory = array();
         // Pass through the courses list we want to add to the session.
@@ -5049,7 +5075,7 @@ function WSSuscribeCoursesToSession($params) {
 
             // Check if the course we want to add is already subscribed.
             foreach ($existingCourses as $existingCourse) {
-                if ($enreg_course == $existingCourse['course_code']) {
+                if ($enreg_course == $existingCourse['c_id']) {
                     $exists = true;
                 }
             }
@@ -5057,27 +5083,28 @@ function WSSuscribeCoursesToSession($params) {
             if (!$exists) {
                 // if the course isn't subscribed yet
 
-                $sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code) VALUES ('$id_session','$enreg_course')";
-                Database::query($sql_insert_rel_course);
+                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id) VALUES ('$id_session','$enreg_course')";
+                Database::query($sql);
 
                 // We add the current course in the existing courses array, to avoid adding another time the current course
-                $existingCourses[] = array('course_code' => $enreg_course);
+                $existingCourses[] = array('c_id' => $enreg_course);
                 $nbr_courses++;
 
                 // subscribe all the users from the session to this course inside the session
                 $nbr_users = 0;
 
                 foreach ($user_list as $enreg_user) {
-                    $enreg_user_id = Database::escape_string($enreg_user['id_user']);
-                    $sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session,course_code,id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
-                    $result = Database::query($sql_insert);
+                    $enreg_user_id = Database::escape_string($enreg_user['user_id']);
+                    $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
+                            VALUES ('$id_session','$enreg_course','$enreg_user_id')";
+                    $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
                     }
                 }
-                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
+                Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE session_id='$id_session' AND c_id='$enreg_course'");
 
-                $sql_directory = "SELECT directory FROM $tbl_course WHERE code = '$enreg_course'";
+                $sql_directory = "SELECT directory FROM $tbl_course WHERE id = '$enreg_course'";
                 $res_directory = Database::query($sql_directory);
                 $row_directory = Database::fetch_row($res_directory);
                 $course_directory[] = $row_directory[0];
@@ -5094,7 +5121,11 @@ function WSSuscribeCoursesToSession($params) {
     $count_results = count($results);
     $output = array();
     for ($i = 0; $i < $count_results; $i++) {
-        $output[] = array('original_course_id_values' => $orig_course_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
+        $output[] = array(
+            'original_course_id_values' => $orig_course_id_value[$i],
+            'original_session_id_value' => $orig_session_id_value[$i],
+            'result' => $results[$i]
+        );
     }
     return $output;
 }
@@ -5218,12 +5249,15 @@ function WSUnsuscribeCoursesFromSession($params) {
 
         // Get courses list from row_original_course_id_values
         $course_list = array();
+        $courseIdList = [];
         foreach ($original_course_id_values as $row_original_course_list) {
             $course_code = Database::escape_string($row_original_course_list['course_code']);
 
-            $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
+            $sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv
+                           WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$course_code'";
             $res_course = Database::query($sql_course);
             $row_course = Database::fetch_row($res_course);
+            $courseId = null;
             if (empty($row_course[0])) {
                 continue; // Course_code doesn't exist'
             } else {
@@ -5233,8 +5267,10 @@ function WSUnsuscribeCoursesFromSession($params) {
                 if (!empty($r_check_course[0])) {
                     continue; // user_id is not active.
                 }
+                $courseId = $row_course[0];
             }
             $course_list[] = $row_course[0];
+            $courseIdList[] = $courseId;
         }
 
         if (empty($course_list)) {
@@ -5244,10 +5280,10 @@ function WSUnsuscribeCoursesFromSession($params) {
 
         $orig_course_id_value[] = implode(',', $course_list);
 
-        foreach ($course_list as $enreg_course) {
-            $enreg_course = Database::escape_string($enreg_course);
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='$enreg_course' AND id_session='$id_session'");
-            $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='$enreg_course' AND id_session='$id_session'");
+        foreach ($courseIdList as $courseId) {
+            $courseId = intval($courseId);
+            Database::query("DELETE FROM $tbl_session_rel_course WHERE c_id ='$courseId' AND session_id='$id_session'");
+            $result = Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE c_id='$courseId' AND session_id = '$id_session'");
             $return = Database::affected_rows($result);
         }
 

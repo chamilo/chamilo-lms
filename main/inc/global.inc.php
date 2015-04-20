@@ -54,18 +54,6 @@ if (!isset($GLOBALS['_configuration'])) {
     $GLOBALS['_configuration'] = $_configuration;
 }
 
-// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
-if (empty($_configuration['system_version'])) {
-    $_configuration['system_version']   = $_configuration['dokeos_version'];
-    $_configuration['system_stable']    = $_configuration['dokeos_stable'];
-    $_configuration['software_url']     = 'http://www.chamilo.org/';
-}
-
-// For backward compatibility.
-$_configuration['dokeos_version']   = $_configuration['system_version'];
-$_configuration['dokeos_stable']    = $_configuration['system_stable'];
-$userPasswordCrypted                = $_configuration['password_encryption'];
-
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/api.lib.php';
 
@@ -115,13 +103,6 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }
 
-/*  DATABASE CONNECTION  */
-
-// @todo: this shouldn't be done here. It should be stored correctly during installation.
-if (empty($_configuration['statistics_database']) && $already_installed) {
-    $_configuration['statistics_database'] = $_configuration['main_database'];
-}
-global $database_connection;
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
 $dbPersistConnection = api_get_configuration_value('db_persistent_connection');
@@ -137,26 +118,8 @@ $params = array(
     'client_flags' => $dbFlags,
 );
 
-if (!$_configuration['db_host']) {
-    $global_error_code = 4;
-    // A configuration option about database server is missing.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
-if (!($conn_return = @Database::connect($params))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
 // Doctrine ORM configuration
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
-
-// the connection configuration
 $dbParams = array(
     'driver' => 'pdo_mysql',
     'host' => $_configuration['db_host'],
@@ -165,50 +128,15 @@ $dbParams = array(
     'dbname' => $_configuration['main_database'],
 );
 
-$config = Database::getDoctrineConfig();
-
-$config->setEntityNamespaces(
-    array(
-        'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
-        'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-        'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity'
-    )
-);
-
-$entityManager = EntityManager::create($dbParams, $config);
-
-// Registering Constraints
-use Doctrine\Common\Annotations\AnnotationRegistry;
-AnnotationRegistry::registerAutoloadNamespace(
-    'Symfony\Component\Validator\Constraint',
-    api_get_path(SYS_PATH)."vendor/symfony/validator"
-);
-
-AnnotationRegistry::registerFile(
-    api_get_path(SYS_PATH)."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
-);
-
-// Registering gedmo extensions
-AnnotationRegistry::registerAutoloadNamespace(
-    'Gedmo\Mapping\Annotation',
-    api_get_path(SYS_PATH)."vendor/gedmo/doctrine-extensions/lib"
-);
-
-/*$repo = $entityManager->getRepository('ChamiloCoreBundle:Session');
-$repo = $entityManager->getRepository('ChamiloUserBundle:User');
-$repo = $entityManager->getRepository('ChamiloCoreBundle:Course');*/
-
-/*try {
-    $connect = $entityManager->getConnection()->connect();
+try {
+    $database = new \Database();
+    $database->connect($dbParams);
 } catch (Exception $e) {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
     die();
-}*/
-
-$database = new \Database();
-$database->setManager($entityManager);
+}
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {
@@ -253,16 +181,6 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
-// The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-Database::query("set session sql_mode='';");
-
-/*if (!Database::select_db($_configuration['main_database'], $database_connection)) {
-    $global_error_code = 5;
-    // Connection to the main Chamilo database is impossible, it might be missing or restricted or its configuration option might be incorrect.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}*/
-
 /* Initialization of the default encodings */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
@@ -280,17 +198,6 @@ $charset_initial_value = $charset;
 api_initialize_internationalization();
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
-
-// Initialization of the database encoding to be used.
-Database::query("SET SESSION character_set_server='utf8';");
-Database::query("SET SESSION collation_server='utf8_general_ci';");
-
-if (api_is_utf8($charset)) {
-    // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
-    Database::query("SET NAMES 'utf8';");
-} else {
-    Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
-}
 
 // Start session after the internationalization library has been initialized.
 Chamilo::session()->start($already_installed);

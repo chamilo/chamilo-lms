@@ -8,7 +8,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
@@ -358,10 +358,8 @@ function save_item(
                 }
                 $myLPI->set_time($time, 'scorm');
             }
-            //if ($debug > 1) { error_log('Done calling set_time - now '.$myLPI->get_total_time(), 0); }
-        } else {
-            //$time = $myLPI->get_total_time();
         }
+
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
             $myLPI->current_data = $suspend;
         }
@@ -443,9 +441,10 @@ function save_item(
         $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql = "SELECT login_id, login_date
-            FROM $tbl_track_login
-            WHERE login_user_id= ".api_get_user_id()."
-            ORDER BY login_date DESC LIMIT 0,1";
+                FROM $tbl_track_login
+                WHERE login_user_id= ".api_get_user_id()."
+                ORDER BY login_date DESC
+                LIMIT 0,1";
 
         $q_last_connection = Database::query($sql);
         if (Database::num_rows($q_last_connection) > 0) {

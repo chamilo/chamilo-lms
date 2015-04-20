@@ -39,7 +39,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $send_mail = $_POST['sendMail'] ? 1 : 0;
 
         // CSV
-        $users = Import::csv_to_array($_FILES['import_file']['tmp_name']);
+        $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
         $user_list = array();
         foreach ($users as $user_data) {
             $username = $user_data['username'];

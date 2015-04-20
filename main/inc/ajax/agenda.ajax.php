@@ -34,7 +34,7 @@ switch ($action) {
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
         $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
-        echo $agenda->add_event(
+        echo $agenda->addEvent(
             $_REQUEST['start'],
             $_REQUEST['end'],
             $_REQUEST['all_day'],
@@ -54,7 +54,7 @@ switch ($action) {
         }
         $id_list = explode('_', $_REQUEST['id']);
         $id = $id_list[1];
-        $agenda->edit_event(
+        $agenda->editEvent(
             $id,
             $_REQUEST['start'],
             $_REQUEST['end'],
@@ -101,7 +101,7 @@ switch ($action) {
         $start = isset($_REQUEST['start']) ? api_strtotime($_REQUEST['start']) : null;
         $end = isset($_REQUEST['end']) ? api_strtotime($_REQUEST['end']) : null;
 
-        $events = $agenda->get_events(
+        $events = $agenda->getEvents(
             $start,
             $end,
             api_get_course_int_id(),

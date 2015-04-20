@@ -7100,4 +7100,14 @@ $WorkEmailAlertActivateOnlyForTeachers = "Activar sólo para profesores el aviso
 $WorkEmailAlertActivateOnlyForStudents = "Activar sólo para alumnos el aviso por correo electrónico del envío de una nueva tarea";
 $Uncategorized = "Sin categoría";
 $NaturalYear = "Año natural";
+$TheSkillHasBeenCreated = "La competencia ha sido creada";
+$CreateSkill = "Crear competencia";
+$CannotCreateSkill = "No se puede crear la competencia";
+$SkillEdit = "Editar competencia";
+$TheSkillHasBeenUpdated = "La competencia ha sido actualizada";
+$CannotUpdateSkill = "No se puede actualizar la competencia";
+$BadgesManagement = "Gestionar las insignias";
+$CurrentBadges = "Insignias actuales";
+$SaveBadge = "Guardar insignia";
+$BadgeMeasuresXPixelsInPNG = "Medidas de la insignia 200x200 píxeles en formato PNG";
 ?>

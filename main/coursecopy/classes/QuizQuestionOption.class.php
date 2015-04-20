@@ -20,9 +20,9 @@ class QuizQuestionOption extends Resource
      * @param int $type
      * @param int $position
      */
-    public function QuizQuestionOption($obj)
+    public function __construct($obj)
     {
-        parent::Resource($obj->id, RESOURCE_QUIZQUESTION);
+        parent::__construct($obj->id, RESOURCE_QUIZQUESTION);
         $this->obj = $obj;
     }
 }

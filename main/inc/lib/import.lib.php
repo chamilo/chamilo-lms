@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Ddeboer\DataImport\Workflow;
+use Ddeboer\DataImport\Reader\CsvReader;
+use Ddeboer\DataImport\Writer\ArrayWriter;
+
 /**
  * Class Import
  * This class provides some functions which can be used when importing data from
@@ -15,9 +19,20 @@ class Import
 	 * @param string $path
 	 * @return \CsvReader
 	 */
-	static function csv_reader($path)
+	static function csv_reader($path, $setFirstRowAsHeader = true)
 	{
-		return new CsvReader($path);
+		if (empty($path)) {
+			return false;
+		}
+
+		$file = new \SplFileObject($path);
+		$csvReader = new CsvReader($file, ';');
+
+		if ($setFirstRowAsHeader) {
+			$csvReader->setHeaderRowNumber(0);
+		}
+
+		return $csvReader;
 	}
 
 	/**
@@ -40,68 +55,17 @@ class Import
 	 *
 	 * @deprecated use cvs_reader instead
 	 */
-	static function csv_to_array($filename, $csv_order = 'vertical') {
-		$result = array();
+	static function csvToArray($filename)
+	{
+		$csvReader = self::csv_reader($filename);
+		$resultArray = [];
 
-		// Encoding detection.
-
-		$handle = fopen($filename, 'r');
-		if ($handle === false) {
-			return $result;
-		}
-		$buffer = array();
-		$i = 0;
-		while (!feof($handle) && $i < 200) {
-			// We assume that 200 lines are enough for encoding detection.
-			$buffer[] = fgets($handle);
-			$i++;
-		}
-		fclose($handle);
-		$buffer = implode("\n", $buffer);
-		$from_encoding = api_detect_encoding($buffer);
-		unset($buffer);
-
-		// Reading the file, parsing and importing csv data.
-
-		$handle = fopen($filename, 'r');
-		if ($handle === false) {
-			return $result;
+		if ($csvReader) {
+			$workflow = new Workflow($csvReader);
+			$writer = new ArrayWriter($resultArray);
+			$result = $workflow->addWriter($writer)->process();
 		}
 
-		if ($csv_order == 'vertical') {
-			$keys = api_fgetcsv($handle, null, ';');
-			foreach ($keys as $key => &$key_value) {
-				$key_value = api_to_system_encoding($key_value, $from_encoding);
-			}
-		}
-
-		while (($row_tmp = api_fgetcsv($handle, null, ';')) !== false) {
-			$row = array();
-			// Avoid empty lines in csv
-			if (is_array($row_tmp) && count($row_tmp) > 0 && $row_tmp[0] != '') {
-				if (!is_null($row_tmp[0])) {
-					if ($csv_order == 'vertical') {
-						foreach ($row_tmp as $index => $value) {
-							$row[$keys[$index]] = api_to_system_encoding($value, $from_encoding);
-						}
-					} else {
-						$first = null;
-						$count = 1;
-						foreach ($row_tmp as $index => $value) {
-							if ($count == 1) {
-								$first = $value;
-							} else {
-								$row[$first][] = api_to_system_encoding($value, $from_encoding);
-							}
-							$count++;
-						}
-					}
-					$result[] = $row;
-				}
-			}
-		}
-
-		fclose($handle);
-		return $result;
+		return $resultArray;
 	}
 }

@@ -39,10 +39,6 @@ if (api_is_allowed_to_edit()) {
 			$current_section=get_lang('EditBlog');
 			$my_url='action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
 		}
-		/*$interbreadcrumb[] = array(
-			'url' => 'blog_admin.php?' . $my_url,
-			'name' => $current_section
-		);*/
 		Display::display_header('');
 	}
 	echo '<div class="actions">';

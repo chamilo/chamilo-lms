@@ -16,9 +16,9 @@ class FillBlanks extends Question
     /**
      * Constructor
      */
-    public function FillBlanks()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this -> type = FILL_IN_BLANKS;
         $this -> isContent = $this-> getIsContent();
     }
@@ -32,7 +32,7 @@ class FillBlanks extends Question
         $defaults = array();
 
         if (!empty($this->id)) {
-            $objAnswer = new answer($this->id);
+            $objAnswer = new Answer($this->id);
 
             // the question is encoded like this
             // [A] B [C] D [E] F::10,10,10@1
@@ -179,7 +179,7 @@ class FillBlanks extends Question
 		$answer.= '@'.$is_multiple;
 
 		$this->save();
-        $objAnswer = new answer($this->id);
+        $objAnswer = new Answer($this->id);
         $objAnswer->createAnswer($answer, 0, '', 0, '1');
         $objAnswer->save();
 	}

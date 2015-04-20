@@ -443,46 +443,47 @@ class CourseHome
         // Condition for the session
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
-        $condition_session = api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true, 't.session_id');
 
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
-                $condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
+                $conditions = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") ';
                 if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
-                    $condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
+                    $conditions = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction" OR category = "plugin") OR (name = "'.TOOL_TRACKING.'") )   ';
                 }
                 $sql = "SELECT *
-                        FROM $course_tool_table
-                        $condition_display_tools AND
+                        FROM $course_tool_table t
+                        $conditions AND
                         c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
                 break;
             case TOOL_AUTHORING:
-                $sql = "SELECT * FROM $course_tool_table
+                $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'authoring' AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
                 break;
             case TOOL_INTERACTION:
-                $sql = "SELECT * FROM $course_tool_table
+                $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'interaction' AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_VISIBLE:
-                $sql = "SELECT * FROM $course_tool_table
+                $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_PLATFORM:
-                $sql = "SELECT * FROM $course_tool_table
-                        WHERE category = 'admin' AND c_id = $course_id $condition_session ORDER BY id";
+                $sql = "SELECT * FROM $course_tool_table t
+                        WHERE category = 'admin' AND c_id = $course_id $condition_session
+                        ORDER BY id";
                 $result = Database::query($sql);
                 break;
             case TOOL_DRH:
-                $sql = "SELECT * FROM $course_tool_table
+                $sql = "SELECT * FROM $course_tool_table t
                         WHERE name IN ('tracking') AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
@@ -490,7 +491,7 @@ class CourseHome
             case TOOL_COURSE_PLUGIN:
                 //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
                 // but plugins are not present in the tool table, only globally and inside the course_settings table once configured
-                $sql = "SELECT * FROM $course_tool_table
+                $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'plugin' AND c_id = $course_id $condition_session
                         ORDER BY id";
                 $result = Database::query($sql);
@@ -553,6 +554,8 @@ class CourseHome
         $course_link_table = Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
+        $condition_session = api_get_session_condition($session_id, true, true, 'tip.session_id');
+
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
                 $sql_links = "SELECT tl.*, tip.visibility
@@ -576,7 +579,8 @@ class CourseHome
             case TOOL_STUDENT_VIEW:
                 $sql_links = "SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
-                    LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
+                    LEFT JOIN $course_item_property_table tip
+                    ON tip.tool='link' AND tip.ref=tl.id
                     WHERE
                         tl.c_id 		= $course_id AND
                         tip.c_id 		= $course_id AND
@@ -585,7 +589,8 @@ class CourseHome
             case TOOL_ADMIN:
                 $sql_links = "SELECT tl.*, tip.visibility
                     FROM $course_link_table tl
-                    LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
+                    LEFT JOIN $course_item_property_table tip
+                    ON tip.tool='link' AND tip.ref=tl.id
                     WHERE
                         tl.c_id = $course_id AND
                         tip.c_id = $course_id AND

@@ -226,7 +226,7 @@ if (!$inATest) {
                 $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style'=>$styleType));
 
                 // Question category
-                $txtQuestionCat = Security::remove_XSS(Testcategory::getCategoryNameForQuestion($objQuestionTmp->id));
+                $txtQuestionCat = Security::remove_XSS(TestCategory::getCategoryNameForQuestion($objQuestionTmp->id));
                 if (empty($txtQuestionCat)) {
                     $txtQuestionCat = "-";
                 }

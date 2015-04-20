@@ -541,7 +541,7 @@ class DocumentManager
 
         // Condition for the session
         $sessionId = api_get_session_id();
-        $condition_session = " AND (id_session = '$sessionId' OR (id_session = '0') )";
+        $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0') )";
         $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 
         $sharedCondition = null;
@@ -565,7 +565,7 @@ class DocumentManager
                     docs.size,
                     docs.readonly,
                     docs.session_id,
-                    last.id_session item_property_session_id,
+                    last.session_id item_property_session_id,
                     last.lastedit_date,
                     last.visibility,
                     last.insert_user_id
@@ -739,7 +739,7 @@ class DocumentManager
         if ($can_see_invisible) {
             // condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             $show_users_condition = "";
             if (api_get_setting('show_users_folders') == 'false') {
                 $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
@@ -760,7 +760,8 @@ class DocumentManager
                             last.to_group_id	= " . $to_group_id . " AND
                             docs.path NOT LIKE '%shared_folder%' AND
                             docs.path NOT LIKE '%_DELETED_%' AND
-                            last.visibility 	<> 2 $condition_session ";
+                            last.visibility 	<> 2
+                            $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY  AS last
@@ -806,7 +807,7 @@ class DocumentManager
             // No invisible folders
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get visible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM
@@ -816,7 +817,8 @@ class DocumentManager
                         docs.filetype = 'folder' AND
                         last.tool = '" . TOOL_DOCUMENT . "' AND
                         last.to_group_id = " . $to_group_id . " AND
-                        last.visibility = 1 $condition_session AND
+                        last.visibility = 1
+                        $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
                         docs.c_id = {$_course['real_id']} ";
             $result = Database::query($sql);
@@ -827,7 +829,7 @@ class DocumentManager
 
             // Condition for the session
             $session_id = api_get_session_id();
-            $condition_session = api_get_session_condition($session_id);
+            $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
             //get invisible folders
             $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
@@ -844,7 +846,7 @@ class DocumentManager
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //condition for the session
                 $session_id = api_get_session_id();
-                $condition_session = api_get_session_condition($session_id);
+                $condition_session = api_get_session_condition($session_id, true, false, 'docs.session_id');
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
@@ -1044,23 +1046,7 @@ class DocumentManager
             $sql = "DELETE FROM $TABLE_DOCUMENT
                     WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
             Database::query($sql);
-            self::delete_document_metadata($document_id);
         }
-    }
-
-    /**
-     * @param int $document_id
-     */
-    public static function delete_document_metadata($document_id)
-    {
-        // needed to deleted medadata
-        require_once api_get_path(SYS_CODE_PATH) . 'metadata/md_funcs.php';
-        $mdStore = new mdstore(true);
-
-        //delete metadata
-        $eid = 'Document' . '.' . $document_id;
-        $mdStore->mds_delete($eid);
-        $mdStore->mds_delete_offspring($eid);
     }
 
     /**
@@ -1527,7 +1513,7 @@ class DocumentManager
         //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
 
         $session_id = intval($session_id);
-        $condition = "AND id_session IN  ('$session_id', '0') ";
+        $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*
@@ -1639,7 +1625,7 @@ class DocumentManager
         } else {
             $user_status = SessionManager::get_user_status_in_course_session(
                 $user_id,
-                $course_info['code'],
+                $course_info['real_id'],
                 $session_id
             );
 
@@ -1825,7 +1811,7 @@ class DocumentManager
         $official_code = $user_info['official_code'];
 
         //Teacher information
-        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+        $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
         $teacher_info = api_get_user_info($info_teacher_id);
         $teacher_first_name = $teacher_info['firstname'];
         $teacher_last_name = $teacher_info['lastname'];
@@ -2549,6 +2535,7 @@ class DocumentManager
                 }
             }
         }
+
         return $content_html;
     }
 
@@ -2940,7 +2927,7 @@ class DocumentManager
 
         if (isset($session_id)) {
             $session_id = intval($session_id);
-            $session_condition = " AND props.id_session='" . $session_id . "' ";
+            $session_condition = " AND props.session_id='" . $session_id . "' ";
         }
 
         $sql = "SELECT SUM(size)
@@ -3198,7 +3185,7 @@ class DocumentManager
         $overwrite_url = null,
         $showInvisibleFiles = false,
         $showOnlyFolders = false,
-        $folderId = 0
+        $folderId = false
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
@@ -3231,7 +3218,11 @@ class DocumentManager
                     $user_in_course = true;
                 }
             } else {
-                $user_status = SessionManager::get_user_status_in_course_session($user_id, $course_info['code'], $session_id);
+                $user_status = SessionManager::get_user_status_in_course_session(
+                    $user_id,
+                    $course_info['real_id'],
+                    $session_id
+                );
                 //is true if is an student, course session teacher or coach
                 if (in_array($user_status, array('0', '2', '6'))) {
                     $user_in_course = true;
@@ -3241,7 +3232,7 @@ class DocumentManager
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
+        $condition_session = " AND (last.session_id = '$session_id' OR last.session_id = '0' )";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {
@@ -3271,7 +3262,8 @@ class DocumentManager
             }
         }
 
-        if ($folderId !== 0) {
+        $parentData = [];
+        if ($folderId !== false) {
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
             if (!empty($parentData)) {
                 $cleanedPath = $parentData['path'];
@@ -3295,7 +3287,6 @@ class DocumentManager
         }
 
         $levelCondition = null;
-
         if ($folderId === false) {
             $levelCondition = " AND docs.path NOT LIKE'/%/%'";
         }
@@ -3344,6 +3335,7 @@ class DocumentManager
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
         $newResources = array();
+
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
@@ -3361,16 +3353,20 @@ class DocumentManager
         }
 
         $label = get_lang('Documents');
+
+        $documents = [];
         if ($folderId === false) {
             $documents[$label] = array(
                 'id' => 0,
                 'files' => $newResources
             );
         } else {
-            $documents[$parentData['title']] = array(
-                'id' => intval($folderId),
-                'files' => $newResources
-            );
+            if (!empty($parentData)) {
+                $documents[$parentData['title']] = array(
+                    'id' => intval($folderId),
+                    'files' => $newResources
+                );
+            }
         }
 
         $write_result = self::write_resources_tree(
@@ -3627,7 +3623,6 @@ class DocumentManager
             $image = $img_path.'nolines_minus.gif';
         }
         $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
-
 
         $return .= '<img alt="" src="' . $img_path . 'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
         $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
@@ -4251,7 +4246,7 @@ class DocumentManager
      */
     public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
     {
-        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+        $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 
         if (!empty($sessionList)) {
             foreach ($sessionList as $session) {
@@ -5754,39 +5749,22 @@ class DocumentManager
     }
 
     /**
-     * This function displays the name of the user and makes the link tothe user tool.
-     *
-     * @param $user_id
-     * @param $name
-     * @return a link to the userInfo.php
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @version february 2006, dokeos 1.8
-     */
-    public static function display_user_link_document($user_id, $name)
-    {
-        if ($user_id != 0) {
-            return '<a href="../user/userInfo.php?uInfo=' . $user_id . '">' . $name . '</a>';
-        } else {
-            return get_lang('Anonymous');
-        }
-    }
-
-    /**
      * Creates form that asks for the directory name.
      * @return string	html-output text for the form
      */
     public static function create_dir_form($dirId)
     {
         global $document_id;
-        $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq(), '', null, false);
+        $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq());
         $form->addElement('hidden', 'create_dir', 1);
         $form->addElement('hidden', 'dir_id', intval($document_id));
         $form->addElement('hidden', 'id', intval($dirId));
-        $form->addElement('header', '', get_lang('CreateDir'));
-        $form->addElement('text', 'dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
-        $form->addButtonCreate(get_lang('CreateFolder'), 'submit');
-        $new_folder_text = $form->returnForm();
-        return $new_folder_text;
+        $form->addElement('header', get_lang('CreateDir'));
+        $form->addText('dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
+        $form->addButtonCreate(get_lang('CreateFolder'));
+
+        return $form->returnForm();
+
     }
 
     /**

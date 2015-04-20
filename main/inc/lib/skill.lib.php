@@ -531,6 +531,7 @@ class Skill extends Model
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $this->table_skill_rel_skill = Database::get_main_table(TABLE_MAIN_SKILL_REL_SKILL);
         $this->table_gradebook = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $this->sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
     }
 
     /**
@@ -1201,7 +1202,8 @@ class Skill extends Model
                 ON g.id = sg.gradebook_id
                 INNER JOIN {$this->table_course} c
                 ON c.code = g.course_code
-                WHERE sg.skill_id = $skill_id";
+                WHERE sg.skill_id = $skill_id
+                AND (g.session_id IS NULL OR g.session_id = 0)";
         $result   = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -1371,4 +1373,26 @@ class Skill extends Model
 
         return $list;
     }
+
+    /**
+     * Get the session list where the user can achieve a skill
+     * @param int $skillId The skill id
+     * @return array
+     */
+    public function getSessionsBySkill($skillId)
+    {
+        $skillId = intval($skillId);
+
+        $sql = "SELECT s.id, s.name
+                FROM {$this->table_gradebook} g
+                INNER JOIN {$this->table_skill_rel_gradebook} sg ON g.id = sg.gradebook_id
+                INNER JOIN {$this->sessionTable} s ON g.session_id = s.id
+                WHERE sg.skill_id = $skillId
+                AND g.session_id > 0";
+
+        $result   = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
 }

@@ -54,11 +54,16 @@ foreach ($new_session_list as $session_item) {
     $user_course_list[] = $session_item['code'];
 }*/
 
+$userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
 $user_course_list = array();
 foreach ($course_list as $course) {
-    $status = SessionManager::get_user_status_in_course_session($userId, $course['code'], $session_id);
-    if ($status || api_is_platform_admin()) {
+    $status = SessionManager::get_user_status_in_course_session(
+        $userId,
+        $course['real_id'],
+        $session_id
+    );
+    if ($status !== false || api_is_platform_admin() || $userIsGeneralCoach) {
         $user_course_list[] = $course['code'];
     }
 }
@@ -562,9 +567,6 @@ $(function() {
         echo Display::grid_js('exercises', '', $column_exercise, $column_exercise_model, $extra_params_exercise, $my_real_array);
     }
 ?>
-    // Generate tabs with jquery-ui
-    $('#tabs').tabs();
-    $( "#sub_tab" ).tabs();
 });
 </script>
 

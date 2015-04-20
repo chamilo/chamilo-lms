@@ -25,20 +25,6 @@ function update_db_info($action, $old_path, $new_path = '')
             $old_path = Database::escape_string($old_path);
             $to_delete = "WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
             $query = "DELETE FROM $dbTable " . $to_delete;
-            $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
-
-            if (Database::num_rows($result)) {
-                require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
-                $mdStore = new mdstore(TRUE);  // create if needed
-
-                $md_type = (substr($dbTable, -13) == 'scormdocument') ? 'Scorm' : 'Document';
-
-                while ($row = Database::fetch_array($result)) {
-                    $eid = $md_type . '.' . $row['id'];
-                    $mdStore->mds_delete($eid);
-                    $mdStore->mds_delete_offspring($eid);
-                }
-            }
             Database::query($query);
             break;
         case 'update':

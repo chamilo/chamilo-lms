@@ -153,10 +153,10 @@ class ClassManager
      * @param  int $class_id The class id
      * @param string $course_code The course code
      */
-    public static function subscribe_to_course($class_id, $course_code) {
+    public static function subscribe_to_course($class_id, $course_code)
+    {
         $tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
         $tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-        $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".Database::escape_string($course_code)."', class_id = '".Database::escape_string($class_id)."'";
         Database::query($sql);
         $sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".intval($class_id)."'";

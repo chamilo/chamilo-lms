@@ -28,9 +28,9 @@ class LinkCategory extends Resource
 	 * @param string $title
 	 * @param string $description
 	 */
-	function LinkCategory($id,$title,$description,$display_order)
+	function __construct($id,$title,$description,$display_order)
 	{
-		parent::Resource($id,RESOURCE_LINKCATEGORY);
+		parent::__construct($id,RESOURCE_LINKCATEGORY);
 		$this->title = $title;
 		$this->description = $description;
 		$this->display_order = $display_order;

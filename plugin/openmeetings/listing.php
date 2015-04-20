@@ -31,7 +31,7 @@ if ($teacher) {
             $title = sprintf(get_lang('VideoConferenceXCourseX'), $id, $course_info['name']);
             $content = Display::url(get_lang('GoToTheVideoConference'), $_GET['url']);
 
-            $event_id = $agenda->add_event(
+            $event_id = $agenda->addEvent(
                 $_REQUEST['start'],
                 null,
                 'true',

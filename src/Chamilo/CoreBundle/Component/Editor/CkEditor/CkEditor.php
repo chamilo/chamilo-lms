@@ -3,8 +3,9 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor;
 
-use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
+use Chamilo\CoreBundle\Component\Editor\Editor;
+
 //use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
@@ -53,6 +54,7 @@ class CkEditor extends Editor
         $toolbar = new Toolbar\Basic($this->toolbarSet, $this->config, 'CkEditor');
         $toolbar->setLanguage($this->getLocale());
         $config = $toolbar->getConfig();
+
         $javascript = $this->toJavascript($config);
         $html = "<script>
            CKEDITOR.replace('".$this->getName()."',

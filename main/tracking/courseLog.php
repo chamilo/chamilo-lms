@@ -18,7 +18,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-$session_id = intval($_REQUEST['id_session']);
+$session_id = isset($_REQUEST['id_session']) ? intval($_REQUEST['id_session']) : 0;
 
 if ($from == 'myspace') {
     $from_myspace = true;
@@ -302,7 +302,7 @@ $coaches = null;
 if (!empty($session_id)) {
     $coaches = CourseManager::get_coachs_from_course_to_string(
         $session_id,
-        $courseInfo['code'],
+        $courseInfo['real_id'],
         ',',
         false
     );
@@ -318,7 +318,7 @@ if (!empty($coaches)) {
     echo $coaches;
 }
 
-$sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+$sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
 if (!empty($sessionList)) {
     echo Display::page_subheader2(get_lang('SessionList'));
     $sessionToShow = array();
@@ -517,7 +517,7 @@ if ($export_csv) {
     ob_end_clean();
     array_unshift($csv_content, $csv_headers); // Adding headers before the content.
 
-    Export::export_table_csv($csv_content, 'reporting_student_list');
+    Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 }
 Display::display_footer();

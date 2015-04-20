@@ -942,9 +942,9 @@ class GradebookUtils
 
     /**
      * returns users within a course given by param
-     * @param int $course_id
+     * @param string $courseCode
      */
-    public static function get_users_in_course($course_id)
+    public static function get_users_in_course($courseCode)
     {
         $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_user = Database:: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -952,16 +952,18 @@ class GradebookUtils
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
         $current_session = api_get_session_id();
-        $course_id = Database::escape_string($course_id);
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
 
         if (!empty($current_session)) {
             $sql = "SELECT user.user_id, user.username, lastname, firstname, official_code
                     FROM $tbl_session_course_user as scru, $tbl_user as user
                     WHERE
-                        scru.id_user=user.user_id AND
+                        scru.user_id = user.user_id AND
                         scru.status=0  AND
-                        scru.course_code='$course_id' AND
-                        id_session ='$current_session'
+                        scru.c_id='$courseId' AND
+                        session_id ='$current_session'
                     $order_clause
                     ";
         } else {
@@ -970,8 +972,8 @@ class GradebookUtils
                     WHERE
                         course_rel_user.user_id=user.user_id AND
                         course_rel_user.status='.STUDENT.' AND
-                        course_rel_user.course_code = "'.$course_id.'" '.
-                $order_clause;
+                        course_rel_user.c_id = "'.$courseId.'" '.
+                    $order_clause;
         }
 
         $result = Database::query($sql);
@@ -1082,8 +1084,8 @@ class GradebookUtils
         if (!api_is_platform_admin()) {
             $sql .= ' AND user.user_id = cru.user_id AND
                       cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' AND
-                      cru.course_code in (
-                            SELECT course_code FROM '.$tbl_cru . '
+                      cru.c_id in (
+                            SELECT c_id FROM '.$tbl_cru . '
                             WHERE
                                 user_id = ' . api_get_user_id() . ' AND
                                 status = ' . COURSEMANAGER . '

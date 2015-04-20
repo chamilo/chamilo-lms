@@ -26,7 +26,7 @@
 *   Modified by hubert.borderiou (2011-10-21 question category)
 */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;
@@ -235,7 +235,6 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 );
 
 $clock_expired_time = null;
-
 
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
@@ -833,7 +832,12 @@ if (!empty($error)) {
 
     echo '<script>
         $(function() {
-            //$(".exercise_save_now_button").hide();
+
+            // Block form submition on enter
+            $(".block_on_enter").keypress(function(event) {
+                return event.keyCode != 13;
+            });
+
             $(".main_question").mouseover(function() {
                 //$(this).find(".exercise_save_now_button").show();
                 //$(this).addClass("question_highlight");
@@ -913,7 +917,7 @@ if (!empty($error)) {
             $.ajax({
                 type:"post",
                 async: false,
-                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
+                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
@@ -978,7 +982,7 @@ if (!empty($error)) {
             $.ajax({
                 type:"post",
                 async: false,
-                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
+                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {

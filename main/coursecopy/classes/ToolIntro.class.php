@@ -22,9 +22,9 @@ class ToolIntro extends Resource
 	 * @param int $id The id of this tool introduction in the Chamilo-course
 	 * @param string $intro_text
 	 */
-	function ToolIntro($id, $intro_text)
+	public function __construct($id, $intro_text)
 	{
-		parent::Resource($id,RESOURCE_TOOL_INTRO);
+		parent::__construct($id,RESOURCE_TOOL_INTRO);
 		$this->id = $id;
 		$this->intro_text = $intro_text;
 	}

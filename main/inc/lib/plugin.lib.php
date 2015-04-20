@@ -29,7 +29,7 @@ class AppPlugin
     public $installedPluginListObject = array();
 
     /**
-     *
+     * Constructor
      */
     public function __construct()
     {
@@ -183,6 +183,7 @@ class AppPlugin
         } else {
             $urlId = intval($urlId);
         }
+
         // First call the custom uninstall to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
         if (is_file($pluginPath) && is_readable($pluginPath)) {
@@ -271,7 +272,8 @@ class AppPlugin
     }
 
     /**
-     * Loads the translation files inside a plugin if exists. It loads by default english see the hello world plugin
+     * Loads the translation files inside a plugin if exists.
+     * It loads by default english see the hello world plugin
      *
      * @param string $plugin_name
      *
@@ -350,11 +352,11 @@ class AppPlugin
                         $_template['plugin_info'] = $plugin_info;
                     }
 
-                    //Setting the plugin info available in the template if exists
+                    // Setting the plugin info available in the template if exists
 
                     $template->assign($plugin_name, $_template);
 
-                    //Loading the Twig template plugin files if exists
+                    // Loading the Twig template plugin files if exists
                     $template_list = array();
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
@@ -372,6 +374,7 @@ class AppPlugin
                 }
             }
         }
+
         return true;
     }
 
@@ -422,6 +425,7 @@ class AppPlugin
             }
             $plugin_info['settings'] = $settings_filtered;
             $plugin_data[$plugin_name] = $plugin_info;
+
             return $plugin_info;
         }
     }
@@ -464,7 +468,19 @@ class AppPlugin
     public function add_to_region($plugin, $region)
     {
         $access_url_id = api_get_current_access_url_id();
-        api_add_setting($plugin, $region, $plugin, 'region', 'Plugins', $plugin, null, null, null, $access_url_id, 1);
+        api_add_setting(
+            $plugin,
+            $region,
+            $plugin,
+            'region',
+            'Plugins',
+            $plugin,
+            null,
+            null,
+            null,
+            $access_url_id,
+            1
+        );
     }
 
     /**
@@ -516,7 +532,7 @@ class AppPlugin
                         ICON_SIZE_SMALL
                     );
                 }
-                //$icon = null;
+
                 $form->addElement('html', '<div><h3>'.$icon.' '.Security::remove_XSS($pluginTitle).'</h3><div>');
 
                 $groups = array();
@@ -555,6 +571,7 @@ class AppPlugin
                 $courseSettings = array_merge($courseSettings, $pluginCourseSetting);
             }
         }
+
         return $courseSettings;
     }
 
@@ -591,13 +608,31 @@ class AppPlugin
      * Get first SMS plugin name
      * @return string|boolean
      */
-    public function getSMSPluginName() {
+    public function getSMSPluginName()
+    {
         $installedPluginsList = $this->getInstalledPluginListObject();
         foreach ($installedPluginsList as $installedPlugin) {
             if ($installedPlugin->isMailPlugin) {
+
                 return get_class($installedPlugin);
             }
         }
+
+        return false;
+    }
+
+    /**
+     * @return SmsPluginLibraryInterface
+     */
+    public function getSMSPluginLibrary()
+    {
+        $className = $this->getSMSPluginName();
+        $className = str_replace("Plugin", "", $className);
+
+        if (class_exists($className)) {
+            return new $className;
+        }
+
         return false;
     }
 }

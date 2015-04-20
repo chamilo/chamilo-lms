@@ -4,14 +4,14 @@
 /**
  * Class Clockworksms
  * This script handles incoming SMS information, process it and sends an SMS if everything is right
- * 
+ *
  * @package chamilo.plugin.clockworksms.lib
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  *
  * Clockworksms-Chamilo connector class
  */
 
-class Clockworksms
+class Clockworksms implements SmsPluginLibraryInterface
 {
     public $apiKey;
     public $api;
@@ -35,7 +35,9 @@ class Clockworksms
         if ($clockWorkSMSPlugin == true) {
             $this->apiKey = $clockWorkSMSApiKey;
             // Setting Clockworksms api
-            define('CONFIG_SECURITY_API_KEY', $this->apiKey);
+            if (!defined('CONFIG_SECURITY_API_KEY')) {
+                define('CONFIG_SECURITY_API_KEY', $this->apiKey);
+            }
             $trimmedApiKey = trim(CONFIG_SECURITY_API_KEY);
             if (!empty($trimmedApiKey)) {
                 $this->api = new Clockwork(CONFIG_SECURITY_API_KEY);
@@ -47,27 +49,29 @@ class Clockworksms
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
                 );
-                $email_form = get_setting('emailAdministrator');
+                $email_form = api_get_setting('emailAdministrator');
                 $emailsubject = 'Clockworksms error';
                 $emailbody = 'Key cannot be blank';
                 $sender_name = $recipient_name;
                 $email_admin = $email_form;
-                api_mail_html($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name, $email_admin);
+                api_mail_html(
+                    $recipient_name,
+                    $email_form,
+                    $emailsubject,
+                    $emailbody,
+                    $sender_name,
+                    $email_admin
+                );
             }
             $this->plugin_enabled = true;
         }
     }
 
     /**
-     * getMobilePhoneNumberById (retrieves a user mobile phone number by user id)
-     * @param   int User id
-     * @return  int User's mobile phone number
+     * @inheritdoc
      */
-    private function getMobilePhoneNumberById($userId)
+    public function getMobilePhoneNumberById($userId)
     {
-        require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
-        require_once api_get_path(LIBRARY_PATH).'extra_field_value.lib.php';
-
         $mobilePhoneNumberExtraField = new ExtraField('user');
         $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
 
@@ -93,10 +97,11 @@ class Clockworksms
     {
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
         if (!empty($trimmedKey)) {
+            $phoneExists = array_key_exists("mobilePhoneNumber", $additionalParameters);
+            $to = $phoneExists ? $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']);
+
             $message = array(
-                "to" => array_key_exists("mobilePhoneNumber",$additionalParameters) ?
-                    $additionalParameters['mobilePhoneNumber'] :
-                    $this->getMobilePhoneNumberById($additionalParameters['userId']),
+                "to" => $to,
                 "message" => $this->getSms($additionalParameters)
             );
 
@@ -104,7 +109,7 @@ class Clockworksms
                 $result = $this->api->send($message);
 
                 // Commented for future message logging / tracking purposes
-                /*if( $result["success"] ) {
+                /*if ($result["success"]) {
                     echo "Message sent - ID: " . $result["id"];
                 } else {
                     echo "Message failed - Error: " . $result["error_message"];
@@ -133,7 +138,8 @@ class Clockworksms
             )
         );
 
-        if (empty($result)) {
+        //if (empty($result)) {
+        if (0) {
             $tpl->assign('message', '');
         } else {
             $templatePath = 'clockworksms/sms_templates/';
@@ -166,8 +172,8 @@ class Clockworksms
         $tool_name = $plugin->get_lang('plugin_title');
         $tpl = new Template($tool_name);
 
-        switch (constant('ClockworksmsPlugin::'.$additionalParameters['smsType'])) {
-            case ClockworksmsPlugin::WELCOME_LOGIN_PASSWORD:
+        switch ($additionalParameters['smsType']) {
+            case SmsPlugin::WELCOME_LOGIN_PASSWORD:
                 $userInfo = api_get_user_info($additionalParameters['userId']);
                 return $this->buildSms(
                     $plugin,
@@ -181,7 +187,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::NEW_FILE_SHARED_COURSE_BY:
+            case SmsPlugin::NEW_FILE_SHARED_COURSE_BY:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -194,7 +200,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::ACCOUNT_APPROVED_CONNECT:
+            case SmsPlugin::ACCOUNT_APPROVED_CONNECT:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -206,7 +212,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::NEW_COURSE_BEEN_CREATED:
+            case SmsPlugin::NEW_COURSE_BEEN_CREATED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -219,7 +225,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
+            case SmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -232,7 +238,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
+            case SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -244,7 +250,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -256,7 +262,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -268,7 +274,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -280,7 +286,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::COURSE_OPENING_REQUEST_CODE:
+            case SmsPlugin::COURSE_OPENING_REQUEST_CODE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -292,7 +298,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::BEEN_SUBSCRIBED_COURSE:
+            case SmsPlugin::BEEN_SUBSCRIBED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -304,7 +310,7 @@ class Clockworksms
                     )
                 );
                 break;
-            case ClockworksmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
+            case SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -317,7 +323,7 @@ class Clockworksms
                 );
                 break;
             // Message types to be implemented. Fill the array parameter with arguments.
-            /*case ClockworksmsPlugin::ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD:
+            /*case SmsPlugin::ACCOUNT_CREATED_UPDATED_LOGIN_PASSWORD:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -328,7 +334,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::PASSWORD_UPDATED_LOGIN_PASSWORD:
+            /*case SmsPlugin::PASSWORD_UPDATED_LOGIN_PASSWORD:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -339,7 +345,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::REQUESTED_PASSWORD_CHANGE:
+            /*case SmsPlugin::REQUESTED_PASSWORD_CHANGE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -350,7 +356,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::RECEIVED_NEW_PERSONAL_MESSAGES:
+            /*case SmsPlugin::RECEIVED_NEW_PERSONAL_MESSAGES:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -361,7 +367,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::NEW_USER_PENDING_APPROVAL:
+            /*case SmsPlugin::NEW_USER_PENDING_APPROVAL:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -372,7 +378,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::POSTED_FORUM_COURSE:
+            /*case SmsPlugin::POSTED_FORUM_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -383,7 +389,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::CHECK_EMAIL_CONNECT_MORE_INFO:
+            /*case SmsPlugin::CHECK_EMAIL_CONNECT_MORE_INFO:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -394,7 +400,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::STUDENT_ANSWERED_TEST:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -405,7 +411,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::STUDENT_ANSWERED_TEST_OPEN_QUESTION:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST_OPEN_QUESTION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -416,7 +422,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::STUDENT_ANSWERED_TEST_VOICE_QUESTION:
+            /*case SmsPlugin::STUDENT_ANSWERED_TEST_VOICE_QUESTION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -427,7 +433,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::ANSWER_OPEN_QUESTION_TEST_REVIEWED:
+            /*case SmsPlugin::ANSWER_OPEN_QUESTION_TEST_REVIEWED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -438,7 +444,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::NEW_THREAD_STARTED_FORUM:
+            /*case SmsPlugin::NEW_THREAD_STARTED_FORUM:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -449,7 +455,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::NEW_ANSWER_POSTED_FORUM:
+            /*case SmsPlugin::NEW_ANSWER_POSTED_FORUM:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -460,7 +466,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::NEW_SYSTEM_ANNOUNCEMENT_ADDED:
+            /*case SmsPlugin::NEW_SYSTEM_ANNOUNCEMENT_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -471,7 +477,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::TEST_NEW_SYSTEM_ANNOUNCEMENT_ADDED:
+            /*case SmsPlugin::TEST_NEW_SYSTEM_ANNOUNCEMENT_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -482,7 +488,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::SYSTEM_ANNOUNCEMENT_UPDATE:
+            /*case SmsPlugin::SYSTEM_ANNOUNCEMENT_UPDATE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -493,7 +499,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::TEST_SYSTEM_ANNOUNCEMENT_UPDATE:
+            /*case SmsPlugin::TEST_SYSTEM_ANNOUNCEMENT_UPDATE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -504,7 +510,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE_STUDENT_SUBMITS_PAPER:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE_STUDENT_SUBMITS_PAPER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -515,7 +521,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK_STUDENT_SUBMITS_PAPER:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK_STUDENT_SUBMITS_PAPER:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -526,7 +532,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -537,7 +543,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK:
+            /*case SmsPlugin::USER_UPLOADED_ASSIGNMENT_CHECK:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -548,7 +554,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::SUBSCRIBED_SESSION:
+            /*case SmsPlugin::SUBSCRIBED_SESSION:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -559,7 +565,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::SUBSCRIBED_SESSION_CSV:
+            /*case SmsPlugin::SUBSCRIBED_SESSION_CSV:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -570,7 +576,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_SUGGESTED_BE_FRIENDS:
+            /*case SmsPlugin::USER_SUGGESTED_BE_FRIENDS:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -581,7 +587,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_ANSWERED_INBOX_MESSAGE:
+            /*case SmsPlugin::USER_ANSWERED_INBOX_MESSAGE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -592,7 +598,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::BEEN_INVITED_JOIN_GROUP:
+            /*case SmsPlugin::BEEN_INVITED_JOIN_GROUP:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -603,7 +609,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::MESSAGES_SENT_EDITED_GROUP_EDITED:
+            /*case SmsPlugin::MESSAGES_SENT_EDITED_GROUP_EDITED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -614,7 +620,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::MESSAGES_SENT_EDITED_GROUP_ADDED:
+            /*case SmsPlugin::MESSAGES_SENT_EDITED_GROUP_ADDED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -625,7 +631,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::BEEN_INVITED_COMPLETE_SURVEY_COURSE:
+            /*case SmsPlugin::BEEN_INVITED_COMPLETE_SURVEY_COURSE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -636,7 +642,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::REMINDER_ASSIGNMENT_COURSE_DUE:
+            /*case SmsPlugin::REMINDER_ASSIGNMENT_COURSE_DUE:
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -647,7 +653,7 @@ class Clockworksms
                     )
                 );
                 break;*/
-            /*case ClockworksmsPlugin::USER_DETAILS_MODIFIED:
+            /*case SmsPlugin::USER_DETAILS_MODIFIED:
                 return $this->buildSms(
                     $plugin,
                     $tpl,

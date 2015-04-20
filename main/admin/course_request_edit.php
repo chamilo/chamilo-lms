@@ -31,10 +31,8 @@ if ($course_validation_feature) {
         $is_error_message = true;
     } else {
 
-        global $_configuration;
-        $dbnamelength = strlen($_configuration['db_prefix']);
         // Ensure the database prefix + database name do not get over 40 characters.
-        $maxlength = 40 - $dbnamelength;
+        $maxlength = 40;
 
         // Build the form.
         $form = new FormValidator('add_course', 'post', 'course_request_edit.php?id='.$id.'&caller='.$caller);

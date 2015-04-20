@@ -15,9 +15,9 @@ class CalculatedAnswer extends Question
     /**
      * Constructor
      */
-    public function CalculatedAnswer()
+    public function __construct()
     {
-        parent::question();
+        parent::__construct();
         $this -> type = CALCULATED_ANSWER;
         $this -> isContent = $this-> getIsContent();
     }
@@ -31,7 +31,7 @@ class CalculatedAnswer extends Question
         $defaults = array();
 
         if (!empty($this->id)) {
-            $objAnswer = new answer($this->id);
+            $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
 
@@ -128,7 +128,7 @@ class CalculatedAnswer extends Question
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);'
             ),
-            array('ToolbarSet' => 'Test_Question_Description', 'Width' => '100%', 'Height' => '350'));
+            array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
         $form->addRule('answer', get_lang('GiveText'),'required');
         $form->addRule('answer', get_lang('DefineBlanks'),'regex','/\[.*\]/');
@@ -162,7 +162,6 @@ class CalculatedAnswer extends Question
 
         global $text, $class;
         // setting the save button here and not in the question class.php
-        //$form->addElement('style_submit_button', 'submitQuestion', $text, 'class="'.$class.'"');
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
@@ -230,7 +229,7 @@ class CalculatedAnswer extends Question
                     $auxAnswer .= " [".$result."]@@".$formula;
                 }
                 $this->save();
-                $objAnswer = new answer($this->id);
+                $objAnswer = new Answer($this->id);
                 $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, null);
                 $objAnswer->position = array();
                 $objAnswer->save();

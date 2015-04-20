@@ -71,13 +71,11 @@ if (!api_is_allowed_to_edit()) {
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
 
-    if ($homework['expires_on'] != '0000-00-00 00:00:00' ||
-        $homework['ends_on'] != '0000-00-00 00:00:00'
-    ) {
+    if (!empty($homework['expires_on'] || !empty($homework['ends_on'])) {
         $time_now = time();
 
         if (!empty($homework['expires_on']) &&
-            $homework['expires_on'] != '0000-00-00 00:00:00'
+            !empty($homework['expires_on'])
         ) {
             $time_expires 	= api_strtotime($homework['expires_on'], 'UTC');
             $difference 	= $time_expires - $time_now;
@@ -86,15 +84,11 @@ if (!empty($my_folder_data)) {
             }
         }
 
-        if (empty($homework['expires_on']) ||
-            $homework['expires_on'] == '0000-00-00 00:00:00'
-        ) {
+        if (empty($homework['expires_on'])) {
             $has_expired = false;
         }
 
-        if (!empty($homework['ends_on']) &&
-            $homework['ends_on'] != '0000-00-00 00:00:00'
-        ) {
+        if (!empty($homework['ends_on'])) {
             $time_ends 		= api_strtotime($homework['ends_on'], 'UTC');
             $difference2 	= $time_ends - $time_now;
             if ($difference2 < 0) {
@@ -102,7 +96,7 @@ if (!empty($my_folder_data)) {
             }
         }
 
-        $ends_on 	= api_convert_and_format_date($homework['ends_on']);
+        $ends_on = api_convert_and_format_date($homework['ends_on']);
         $expires_on = api_convert_and_format_date($homework['expires_on']);
     }
 }

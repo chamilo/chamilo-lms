@@ -49,19 +49,32 @@ if (isset($_POST['export'])) {
 
 if (isset($_GET["id_student"])) {
 	$id_student = intval($_GET["id_student"]);
-	$sql_coachs = "SELECT DISTINCT srcru.id_user as id_coach" .
-		"FROM $tbl_session_rel_course_rel_user as srcru " .
-		"WHERE srcru.id_user='$id_student' AND srcru.status=2";
+	$sql_coachs = "SELECT DISTINCT srcru.user_id as id_coach
+		FROM $tbl_session_rel_course_rel_user as srcru
+		WHERE srcru.user_id='$id_student' AND srcru.status=2";
 } else {
 	if (api_is_platform_admin()) {
-		$sql_coachs = "SELECT DISTINCT srcru.id_user as id_coach, user_id, lastname, firstname
+		$sql_coachs = "SELECT DISTINCT
+			srcru.user_id as id_coach, user_id, lastname, firstname
 			FROM $tbl_user, $tbl_session_rel_course_rel_user srcru
-			WHERE srcru.id_user=user_id AND srcru.status=2 ".$order_clause;
+			WHERE
+			 	srcru.user_id=user_id AND
+			 	srcru.status=2 ".$order_clause;
 	} else {
-		$sql_coachs = "SELECT DISTINCT id_user as id_coach, $tbl_user.user_id, lastname, firstname
-			FROM $tbl_user as user, $tbl_session_rel_course_user as srcu, $tbl_course_user as course_rel_user
-			WHERE course_rel_user.course_code=srcu.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".intval($_SESSION["_uid"])."'
-			AND srcu.id_user=user.user_id AND srcu.status=2 ".$order_clause;
+		$sql_coachs = "SELECT DISTINCT user_id as id_coach, $tbl_user.user_id, lastname, firstname
+			FROM
+			$tbl_user as user,
+			$tbl_session_rel_course_user as srcu,
+			$tbl_course_user as course_rel_user,
+			$tbl_course as c
+			WHERE
+			 	c.id = course_rel_user.c_id AND
+				c.code = srcu.course_code AND
+				course_rel_user.status='1' AND
+				course_rel_user.user_id='".api_get_user_id()."' AND
+				srcu.user_id = user.user_id AND
+				srcu.status = 2
+				".$order_clause;
 	}
 }
 

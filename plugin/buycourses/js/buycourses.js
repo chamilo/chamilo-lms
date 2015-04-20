@@ -7,7 +7,7 @@ $(document).ready(function () {
     $("input[name='price']").change(function () {
         $(this).parent().next().children().attr("style", "display:none");
         $(this).parent().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod")
+        $(this).parent().parent().addClass("fmod");
         $(this).parent().parent().children().each(function () {
             $(this).addClass("btop");
         });
@@ -16,7 +16,7 @@ $(document).ready(function () {
     $("input[name='price']").keyup(function () {
         $(this).parent().next().children().attr("style", "display:none");
         $(this).parent().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod")
+        $(this).parent().parent().addClass("fmod");
         $(this).parent().parent().children().each(function () {
             $(this).addClass("btop");
         });
@@ -25,7 +25,7 @@ $(document).ready(function () {
     $("input[name='visible']").change(function () {
         $(this).parent().next().next().children().attr("style", "display:none");
         $(this).parent().next().next().children().next().attr("style", "display:''");
-        $(this).parent().parent().addClass("fmod")
+        $(this).parent().parent().addClass("fmod");
         $(this).parent().parent().children().each(function () {
             $(this).addClass("btop");
         });

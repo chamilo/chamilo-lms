@@ -55,10 +55,18 @@ class SurveyQuestion extends Resource
 	 * @param int	 $shared_question_id
 	 * @param int	 $max_value
 	 */
-	function SurveyQuestion($id,$survey_id,$survey_question,$survey_question_comment,
-							$type,$display,$sort,$shared_question_id,$max_value)
-	{
-		parent::Resource($id,RESOURCE_SURVEYQUESTION);
+	function __construct(
+		$id,
+		$survey_id,
+		$survey_question,
+		$survey_question_comment,
+		$type,
+		$display,
+		$sort,
+		$shared_question_id,
+		$max_value
+	) {
+		parent::__construct($id,RESOURCE_SURVEYQUESTION);
 		$this->survey_id = $survey_id;
 		$this->survey_question = $survey_question;
 		$this->survey_question_comment = $survey_question_comment;

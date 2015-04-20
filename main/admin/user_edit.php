@@ -97,7 +97,12 @@ $extra_data = UserManager :: get_extra_user_data($user_id, true);
 $user_data = array_merge($user_data, $extra_data);
 
 // Create the form
-$form = new FormValidator('user_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator(
+    'user_edit',
+    'post',
+    '',
+    ''
+);
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'user_id', $user_id);
 
@@ -131,7 +136,7 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
 // Email
-$form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
+$form->addElement('text', 'email', get_lang('Email'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
@@ -144,7 +149,7 @@ if (api_get_setting('login_is_email') == 'true') {
 
 // OpenID
 if (api_get_setting('openid_authentication') == 'true') {
-	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => '40'));
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'));
 }
 
 // Phone
@@ -159,7 +164,6 @@ if (strlen($user_data['picture_uri']) > 0) {
 }
 
 // Username
-
 if (api_get_setting('login_is_email') != 'true') {
     $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
@@ -219,23 +223,6 @@ $form->addElement(
 );
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
-
-/*
-$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
-$drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
-
-if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
-} else {
-	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
-}
-
-foreach($drh_list as $drh) {
-	$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
-}
-$form->addElement('html', '</div>');
-*/
 
 // Platform admin
 if (api_is_platform_admin()) {

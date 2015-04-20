@@ -7,7 +7,7 @@
 * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Julio Montoya adding c_id support
 */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 
@@ -509,11 +509,28 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
     // List of all users in this course and all virtual courses combined with it
     if (api_get_session_id()) {
         $complete_user_list_for_dropbox = array();
-        if (api_get_setting('dropbox_allow_student_to_student')=='true' || $_user['status'] != STUDENT) {
-            $complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
+        if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
+            $complete_user_list_for_dropbox = CourseManager:: get_user_list_from_course_code(
+                $course_info['code'],
+                api_get_session_id(),
+                null,
+                null,
+                0
+            );
         }
-        $complete_user_list2 = CourseManager::get_coach_list_from_course_code($course_info['code'], api_get_session_id());
-        $complete_user_list_for_dropbox = array_merge($complete_user_list_for_dropbox, $complete_user_list2);
+
+        $hideCoach = api_get_configuration_value('dropbox_hide_course_coach');
+
+        if ($hideCoach == false) {
+            $complete_user_list2 = CourseManager::get_coach_list_from_course_code(
+                $course_info['code'],
+                api_get_session_id()
+            );
+            $complete_user_list_for_dropbox = array_merge(
+                $complete_user_list_for_dropbox,
+                $complete_user_list2
+            );
+        }
     } else {
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
             $complete_user_list_for_dropbox = CourseManager :: get_user_list_from_course_code($course_info['code'], api_get_session_id());
@@ -541,7 +558,7 @@ function display_add_form($dropbox_unid, $viewReceivedCategory, $viewSentCategor
                 || $dropbox_person -> isCourseAdmin
                 || dropbox_cnf('allowStudentToStudent')
                 || $current_user['status'] != 5                         // Always allow teachers.
-                || $current_user['tutor_id'] == 1                       // Always allow tutors.
+                || $current_user['is_tutor'] == 1                       // Always allow tutors.
                 ) && $current_user['user_id'] != $_user['user_id']) {   // Don't include yourself.
             if ($current_user['user_id'] == $current_user_id) {
                 continue;
@@ -879,9 +896,8 @@ function store_add_dropbox()
     if ($b_send_mail) {
         foreach ($new_work_recipients as $recipient_id) {
             $recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
-            $plugin = new AppPlugin();
             $additionalParameters = array(
-                'smsType' => constant($plugin->getSMSPluginName().'::NEW_FILE_SHARED_COURSE_BY'),
+                'smsType' => SmsPlugin::NEW_FILE_SHARED_COURSE_BY,
                 'userId' => $recipient_id,
                 'courseTitle' => $_course['title'],
                 'userUsername' => $recipent_temp['username']
@@ -923,35 +939,6 @@ function store_add_dropbox()
     return get_lang('FileUploadSucces');
 }
 
-
-
-/**
-* This function displays the firstname and lastname of the user as a link to the user tool.
-*
-* @see this is the same function as in the new forum, so this probably has to move to a user library.
-*
-* @todo move this function to the user library (there is a duplicate in work.lib.php)
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function display_user_link_work($user_id, $name = '') {
-    if ($user_id != 0) {
-        if (empty($name)) {
-            $table_user = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "SELECT * FROM $table_user WHERE user_id = ".intval($user_id)."";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            return '<a href="../user/userInfo.php?uInfo='.$row['user_id'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a>';
-        } else {
-            $user_id = intval($user_id);
-            return '<a href="../user/userInfo.php?uInfo='.$user_id.'">'.Security::remove_XSS($name).'</a>';
-        }
-    } else {
-        return $name.' ('.get_lang('Anonymous').')';
-    }
-}
-
 /**
 * this function transforms the array containing all the feedback into something visually attractive.
 *
@@ -980,7 +967,8 @@ function feedback($array) {
 */
 function format_feedback($feedback)
 {
-    $output = display_user_link_work($feedback['author_user_id']);
+    $userInfo = api_get_user_info($feedback['author_user_id']);
+    $output = UserManager::getUserProfileLink($userInfo);
     $output .= '&nbsp;&nbsp;'.api_convert_and_format_date($feedback['feedback_date'], DATE_TIME_FORMAT_LONG).'<br />';
     $output .= '<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
     return $output;

@@ -97,12 +97,15 @@ if ($is_allowedToTrack) {
         // BEGIN users in this course
         $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
                 FROM $TABLECOURSUSER, $table_user
-                WHERE $TABLECOURSUSER.course_code = '" . $_cid . "' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
+                WHERE
+                    $TABLECOURSUSER.c_id = '" . api_get_course_int_id() . "' AND
+                    $TABLECOURSUSER.user_id = $table_user.user_id AND
+                    $TABLECOURSUSER.relation_type<>" . COURSE_RELATION_TYPE_RRHH . "
                 ORDER BY $table_user.lastname";
         $results = StatsUtils::getManyResults3Col($sql);
 
         //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
-        $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '" . $_cid . "'";
+        $sql = "SELECT visual_code FROM $TABLECOURSE WHERE code = '" . api_get_course_id() . "'";
         $_course['visual_code'] = StatsUtils::getOneResult($sql);
 
         if (is_array($results)) {
@@ -167,7 +170,7 @@ if ($is_allowedToTrack) {
 
         $sql = "SELECT count(*)
                 FROM $TABLECOURSUSER
-                WHERE course_code = '" . $_cid . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
+                WHERE c_id = '" . api_get_course_int_id() . "' AND relation_type<>" . COURSE_RELATION_TYPE_RRHH . "";
         $count = StatsUtils::getOneResult($sql);
         $title_line = get_lang('CountUsers') . " ; " . $count . "\n";
     }

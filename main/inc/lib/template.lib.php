@@ -451,11 +451,12 @@ class Template
 
         //Here we can add system parameters that can be use in any template
         $_s = array(
-            'software_name'  => $_configuration['software_name'],
+            'software_name' => $_configuration['software_name'],
             'system_version' => $_configuration['system_version'],
-            'site_name'      => api_get_setting('siteName'),
-            'institution'    => api_get_setting('Institution'),
-            'date'       => api_format_date('now', DATE_FORMAT_LONG),
+            'site_name' => api_get_setting('siteName'),
+            'institution' => api_get_setting('Institution'),
+            'date' => api_format_date('now', DATE_FORMAT_LONG),
+            'timezone' => _api_get_timezone()
         );
         $this->assign('_s', $_s);
     }
@@ -760,7 +761,7 @@ class Template
 
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
-        if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url_info  = api_get_access_url($access_url_id);
@@ -947,13 +948,13 @@ class Template
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $id_course  = api_get_course_id();
+            $courseId  = api_get_course_int_id();
             $id_session = api_get_session_id();
-            if (isset($id_course) && $id_course != -1) {
+            if (!empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
-                    $email_link   = array();
+                    $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $courseId);
+                    $email_link = array();
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
@@ -973,10 +974,10 @@ class Template
 
         if (api_get_setting('show_teacher_data') == 'true') {
             // course manager
-            $id_course = api_get_course_id();
-            if (isset($id_course) && $id_course != -1) {
+            $courseId = api_get_course_int_id();
+            if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail         = CourseManager::get_emails_of_tutors_to_course($id_course);
+                $mail= CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {

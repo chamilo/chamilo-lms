@@ -7,6 +7,7 @@
         <tr>
             <th>{{ "Name" | get_lang }}</th>
             <th>{{ "ShortCode" | get_lang }}</th>
+            <th>{{ "Description" | get_lang }}</th>
             <th>{{ "Options" | get_lang }}</th>
         </tr>
     </thead>
@@ -14,6 +15,7 @@
         <tr>
             <th>{{ "Name" | get_lang }}</th>
             <th>{{ "ShortName" | get_lang }}</th>
+            <th>{{ "Description" | get_lang }}</th>
             <th>{{ "Options" | get_lang }}</th>
         </tr>
     </tfoot>
@@ -22,6 +24,7 @@
             <tr>
                 <td>{{ skill.name }}</td>
                 <td>{{ skill.short_code }}</td>
+                <td>{{ skill.description }}</td>
                 <td>
                     <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-default">
                         <i class="fa fa-edit"></i> {{ "Edit" | get_lang }}

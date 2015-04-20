@@ -48,7 +48,7 @@
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'BadgePreview' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
             </li>
             <li class="active">
                 <a href="#">{{ 'Edit' | get_lang }}</a>
@@ -86,7 +86,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="image">{{ 'Image' | get_lang }}</label>
                                     <div class="col-sm-10">
-                                        <input data-placement="left" data-toggle="tooltip" title="{{ 'Medidas de la insignia 200 x 200 pixeles en formato PNG' | get_lang }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
+                                        <input data-placement="left" data-toggle="tooltip" title="{{ "BadgeMeasuresXPixelsInPNG" | get_lang | format("200x200") }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -98,7 +98,7 @@
                             </fieldset>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-primary btn-large"><i class="fa fa-floppy-o"></i> {{ 'Guardar Insignia'| get_lang }}</button>
+                                    <button type="submit" class="btn btn-primary btn-large"><i class="fa fa-floppy-o"></i> {{ 'SaveBadge'| get_lang }}</button>
                                 </div>
                             </div>
                         </form>
@@ -109,7 +109,7 @@
                                 <i class="fa fa-plus"></i> {{ 'DesignNewBadge' | get_lang }}
                             </button>
                         </div>
-                        <p class="openbadges-text">{{'OpenBadgeImagePreview' | get_lang }}</p>
+                        <p class="openbadges-text">{{'BadgePreview' | get_lang }}</p>
                         <div class="openbadges-img {{ skill.icon ? '' : 'hide' }}" id="badge-container">
                             <img id="badge-preview" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon ? [_p.web_data, skill.icon] | join('') : '' }}">
                         </div>

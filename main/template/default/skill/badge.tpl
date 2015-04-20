@@ -5,7 +5,7 @@
                 <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
             </li>
             <li>
-                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'Insignias Actuales' | get_lang }}</a>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ "CurrentBadges" | get_lang }}</a>
             </li>
         </ul>
     </div>
@@ -19,7 +19,7 @@
                             {{ 'OpenBadgesBannerText' | get_lang }}
                         </p>
                         <p class="lead">
-                            {{ 'OpenBadgesIntroduction' | get_lang }} <a href="http://openbadges.org">http://openbadges.org/</a>.
+                            {{ 'OpenBadgesIntroduction' | get_lang }}
                         </p>
                     </div>
                     <div class="col-xs-12 col-md-6">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <h3 class="sub-title">{{ 'OpenBadgesBannerCall' | get_lang }}</h3>
+                <h3 class="sub-title">{{ 'OpenBadgesActionCall' | get_lang }}</h3>
                 <div class="block-content">
                     <div class="block-title">{{ 'IssuerDetails' | get_lang }}</div>
 

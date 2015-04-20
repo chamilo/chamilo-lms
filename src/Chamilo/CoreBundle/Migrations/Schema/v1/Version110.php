@@ -7,13 +7,16 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Class Core
+ * Class Version110
+ * Migrate file to updated to Chamilo 1.10
+ *
  * @package Chamilo\CoreBundle\Migrations\Schema\v1
  */
 class Version110 extends AbstractMigrationChamilo
 {
     /**
      * @param Schema $schema
+     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -564,6 +567,9 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("UPDATE c_student_publication_assignment SET ends_on = NULL WHERE ends_on = '0000-00-00 00:00:00'");
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function postUp(Schema $schema)
     {
         $this->addSql("ALTER TABLE track_e_access DROP COLUMN access_cours_code");
@@ -743,6 +749,9 @@ class Version110 extends AbstractMigrationChamilo
         //$this->addSql("UPDATE settings_current SET selected_value = '1.10.0.35' WHERE variable = 'chamilo_database_version'");
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
     }

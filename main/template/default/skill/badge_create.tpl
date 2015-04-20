@@ -86,7 +86,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="image">{{ 'Image' | get_lang }}</label>
                                     <div class="col-sm-10">
-                                        <input data-placement="left" data-toggle="tooltip" title="{{ "BadgeMeasuresPixelsInPNG" | get_lang }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
+                                        <input data-placement="left" data-toggle="tooltip" title="{{ "BadgeMeasuresXPixelsInPNG" | get_lang }}" type="file" name="image" id="image" class="help-badges-img" accept="image/*">
                                     </div>
                                 </div>
                                 <div class="form-group">

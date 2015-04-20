@@ -7083,4 +7083,5 @@ $CannotUpdateSkill = "Cannot update skill";
 $BadgesManagement = "Badges management";
 $CurrentBadges = "Current badges";
 $SaveBadge = "Save badge";
+$BadgeMeasuresXPixelsInPNG = "Badge measures 200x200 pixels in PNG";
 ?>

@@ -48,7 +48,10 @@
 
     {# topbar #}
     {% block topbar %}
-    {% include template ~ "/layout/topbar.tpl" %}
+        {% include template ~ "/layout/topbar.tpl" %}
+        {% if show_toolbar == 1 %}
+            <div class="clear-header"></div>
+        {% endif %}
     {% endblock %}
         <header>
             <section id="main" class="container">

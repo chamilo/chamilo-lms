@@ -1,65 +1,64 @@
-    <script>
-        (function () {
-            var designer = null;
-            $(document).on('ready',function(){
-                $('.help-badges').tooltip();
-                $('.help-badges-img').tooltip();
-            }
-            );
+<script>
+    (function () {
+        var designer = null;
+        $(document).on('ready', function () {
+            $('.help-badges').tooltip();
+            $('.help-badges-img').tooltip();
+        });
 
-            $(document).on('ready', function () {
-                $('#btn-open-designer').on('click', function (e) {
-                    e.preventDefault();
+        $(document).on('ready', function () {
+            $('#btn-open-designer').on('click', function (e) {
+                e.preventDefault();
 
-                    var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ _p.web }}';
-                    designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
-                    designerUrl = designerUrl + '&close=true';
-                    designerUrl = designerUrl + '&hidePublish=true';
+                var designerUrl = 'https://www.openbadges.me/designer.html?origin={{ _p.web }}';
+                designerUrl = designerUrl + '&email={{ platformAdminEmail }}';
+                designerUrl = designerUrl + '&close=true';
+                designerUrl = designerUrl + '&hidePublish=true';
 
-                    var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
-                    designer = window.open(designerUrl, '', windowOptions);
-                });
-
-                $('#image').on('change', function () {
-                    var self = this;
-
-                    if (self.files.length > 0) {
-                        var image = self.files[0];
-
-                        if (!image.type.match(/image.*/)) {
-                            return;
-                        }
-
-                        var fileReader = new FileReader();
-                        fileReader.onload = function (e) {
-                            $('#badge-preview').attr('src', e.target.result);
-                            $('#badge-container').removeClass('hide');
-                        };
-                        fileReader.readAsDataURL(image);
-                    }
-                });
+                var windowOptions = 'width=1200,height=680,location=0,menubar=0,status=0,toolbar=0';
+                designer = window.open(designerUrl, '', windowOptions);
             });
-        })();
-    </script>
-    <div class="col-md-12">
 
-        <div class="openbadges-tabs">
-            <ul class="nav nav-tabs">
-                <li>
-                    <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
-                </li>
-                <li>
-                    <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'BadgePreview' | get_lang }}</a>
-                </li>
-                <li class="active">
-                    <a href="#">{{ 'Edit' | get_lang }}</a>
-                </li>
-            </ul>
-        </div>
+            $('#image').on('change', function () {
+                var self = this;
 
-        <div class="tab-content">
-            <div class="tab-pane active">
-                <div class="openbadges-introduction">
+                if (self.files.length > 0) {
+                    var image = self.files[0];
+
+                    if (!image.type.match(/image.*/)) {
+                        return;
+                    }
+
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        $('#badge-preview').attr('src', e.target.result);
+                        $('#badge-container').removeClass('hide');
+                    };
+                    fileReader.readAsDataURL(image);
+                }
+            });
+        });
+    })();
+</script>
+<div class="col-md-12">
+
+    <div class="openbadges-tabs">
+        <ul class="nav nav-tabs">
+            <li>
+                <a href="{{ _p.web_main }}admin/skill_badge.php">{{ 'Home' | get_lang }}</a>
+            </li>
+            <li>
+                <a href="{{ _p.web_main }}admin/skill_badge_list.php">{{ 'BadgePreview' | get_lang }}</a>
+            </li>
+            <li class="active">
+                <a href="#">{{ 'Edit' | get_lang }}</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-content">
+        <div class="tab-pane active">
+            <div class="openbadges-introduction">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="block-edit">
@@ -116,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
+</div>

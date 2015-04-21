@@ -105,7 +105,7 @@ class ExerciseLib
             $num_suggestions = 0;
 
             if ($answerType == MATCHING) {
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped">';
                 // Iterate through answers
                 $x = 1;
                 //mark letters for each answer
@@ -214,7 +214,7 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped">';
                 $s .= Display::tag(
                     'tr',
                     $header,
@@ -240,7 +240,7 @@ class ExerciseLib
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="data_table">';
+                    $s .= '<table class="table table-hover table-striped">';
                     $s .= Display::tag(
                         'tr',
                         $header,

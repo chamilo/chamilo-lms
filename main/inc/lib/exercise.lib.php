@@ -223,16 +223,17 @@ class ExerciseLib
             }
 
             if ($show_comment) {
-                if (in_array(
-                    $answerType,
-                    array(
-                        MULTIPLE_ANSWER,
-                        MULTIPLE_ANSWER_COMBINATION,
-                        UNIQUE_ANSWER,
-                        UNIQUE_ANSWER_NO_OPTION,
-                        GLOBAL_MULTIPLE_ANSWER
+                if (
+                    in_array(
+                        $answerType,
+                        array(
+                            MULTIPLE_ANSWER,
+                            MULTIPLE_ANSWER_COMBINATION,
+                            UNIQUE_ANSWER,
+                            UNIQUE_ANSWER_NO_OPTION,
+                            GLOBAL_MULTIPLE_ANSWER
+                        )
                     )
-                )
                 ) {
                     $header = Display::tag('th', get_lang('Options'));
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
@@ -329,7 +330,8 @@ class ExerciseLib
                         $s .= $answer_input;
                     }
 
-                } elseif ($answerType == MULTIPLE_ANSWER ||
+                } elseif (
+                    $answerType == MULTIPLE_ANSWER ||
                     $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                     $answerType == GLOBAL_MULTIPLE_ANSWER
                 ) {

@@ -82,7 +82,8 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options">';
+            echo '<div class="question_options row">';
+
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
 
@@ -263,7 +264,7 @@ class ExerciseLib
                 $attributes = array();
 
                 // Unique answer
-                if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+                if (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, UNIQUE_ANSWER_IMAGE])) {
                     $input_id = 'choice-' . $questionId . '-' . $answerId;
                     if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                         $attributes = array(
@@ -282,6 +283,11 @@ class ExerciseLib
                         }
                     }
 
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                            . 'class="exercise-unique-answer-image col-sm-6 col-md-4" style="text-align: center">';
+                    }
+
                     $answer = Security::remove_XSS($answer, STUDENT);
                     $s .= Display::input(
                         'hidden',
@@ -289,7 +295,15 @@ class ExerciseLib
                         '0'
                     );
 
-                    $answer_input = '<label class="radio">';
+                    $answer_input = null;
+
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        $attributes['style'] = 'display: none;';
+
+                        $answer = '<div class="thumbnail">' . $answer . '</div>';
+                    }
+
+                    $answer_input .= '<label class="radio">';
                     $answer_input .= Display::input(
                         'radio',
                         'choice[' . $questionId . ']',
@@ -298,6 +312,10 @@ class ExerciseLib
                     );
                     $answer_input .= $answer;
                     $answer_input .= '</label>';
+
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        $answer_input .= "</div>";
+                    }
 
                     if ($show_comment) {
                         $s .= '<tr><td>';

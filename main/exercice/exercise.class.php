@@ -2277,6 +2277,7 @@ class Exercise
             switch ($answerType) {
                 // for unique answer
                 case UNIQUE_ANSWER:
+                case UNIQUE_ANSWER_IMAGE:
                 case UNIQUE_ANSWER_NO_OPTION:
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -2937,7 +2938,7 @@ class Exercise
                     if ($debug) error_log('Showing questions $from '.$from);
                     //display answers (if not matching type, or if the answer is correct)
                     if ($answerType != MATCHING || $answerCorrect) {
-                        if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, GLOBAL_MULTIPLE_ANSWER))) {
+                        if (in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, GLOBAL_MULTIPLE_ANSWER))) {
                             //if ($origin != 'learnpath') {
                             ExerciseShowFunctions::display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, 0, 0, 0, $results_disabled);
                             //}
@@ -3132,6 +3133,7 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER :
+                        case UNIQUE_ANSWER_IMAGE:
                         case UNIQUE_ANSWER_NO_OPTION:
                         case MULTIPLE_ANSWER :
                         case GLOBAL_MULTIPLE_ANSWER :
@@ -3604,8 +3606,7 @@ class Exercise
             } elseif ($answerType == ORAL_EXPRESSION) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id, $nano);
-
-            } elseif ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION])) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
                 //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {

@@ -45,7 +45,8 @@ abstract class Question
         MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
         GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
-        CALCULATED_ANSWER =>			array('calculated_answer.class.php' , 'CalculatedAnswer')
+        CALCULATED_ANSWER =>			array('calculated_answer.class.php' , 'CalculatedAnswer'),
+        UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage']
         //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
     );
 

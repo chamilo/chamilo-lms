@@ -230,6 +230,7 @@ class ExerciseLib
                             MULTIPLE_ANSWER,
                             MULTIPLE_ANSWER_COMBINATION,
                             UNIQUE_ANSWER,
+                            UNIQUE_ANSWER_IMAGE,
                             UNIQUE_ANSWER_NO_OPTION,
                             GLOBAL_MULTIPLE_ANSWER
                         )
@@ -284,9 +285,23 @@ class ExerciseLib
                         }
                     }
 
+                    if ($show_comment) {
+                        $s .= '<tr><td>';
+                    }
+
                     if ($answerType == UNIQUE_ANSWER_IMAGE) {
-                        $s .= '<div id="answer' . $questionId . $numAnswer . '" '
-                            . 'class="exercise-unique-answer-image col-sm-6 col-md-4" style="text-align: center">';
+                        if ($show_comment) {
+                            if (empty($comment)) {
+                                $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                    . 'class="exercise-unique-answer-image col-xs-6" style="text-align: center">';
+                            } else {
+                                $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                    . 'class="exercise-unique-answer-image col-xs-6 col-sm-12" style="text-align: center">';
+                            }
+                        } else {
+                            $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                . 'class="exercise-unique-answer-image col-xs-6 col-md-4" style="text-align: center">';
+                        }
                     }
 
                     $answer = Security::remove_XSS($answer, STUDENT);
@@ -319,7 +334,6 @@ class ExerciseLib
                     }
 
                     if ($show_comment) {
-                        $s .= '<tr><td>';
                         $s .= $answer_input;
                         $s .= '</td>';
                         $s .= '<td>';

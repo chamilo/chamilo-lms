@@ -66,11 +66,10 @@ function save_item(
     $userNavigatesAway = 0,
     $statusSignalReceived = 0
 ) {
-    //global $debug;
     $debug = 0;
     $return = null;
 
-    if ($debug > 0) {
+    if ($debug) {
         error_log('lp_ajax_save_item.php : save_item() params: ');
         error_log("item_id: $item_id");
         error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
@@ -172,7 +171,11 @@ function save_item(
         $my_type = $myLPI->get_type();
         // Set status to completed for hotpotatoes if score > 80%.
         if ($my_type == 'hotpotatoes') {
-            if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
+            if ((empty($status) ||
+                $status == 'undefined' ||
+                $status == 'not attempted') &&
+                $max > 0
+            ) {
                 if (($score/$max) > 0.8) {
                     $myStatus = 'completed';
                     if ($debug > 1) {
@@ -199,7 +202,7 @@ function save_item(
             /*
              * This is a specific implementation for SCORM 1.2, matching page 26 of SCORM 1.2's RTE
              * "Normally the SCO determines its own status and passes it to the LMS.
-             * 1) If cmi.core.credit is set to “credit” and there is a mastery
+             * 1) If cmi.core.credit is set to "credit" and there is a mastery
              *    score in the manifest (adlcp:masteryscore), the LMS can change
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
@@ -217,27 +220,27 @@ function save_item(
              * There is some additional requirements that must be adhered to
              * successfully handle these cases:
              * Upon initial launch
-             *   the LMS should set the cmi.core.lesson_status to “not attempted”.
+             *   the LMS should set the cmi.core.lesson_status to "not attempted".
              * Upon receiving the LMSFinish() call or the user navigates away,
-             *   the LMS should set the cmi.core.lesson_status for the SCO to “completed”.
-             * After setting the cmi.core.lesson_status to “completed”,
+             *   the LMS should set the cmi.core.lesson_status for the SCO to "completed".
+             * After setting the cmi.core.lesson_status to "completed",
              *   the LMS should now check to see if a Mastery Score has been
              *   specified in the cmi.student_data.mastery_score, if supported,
              *   or the manifest that the SCO is a member of.
              *   If a Mastery Score is provided and the SCO did set the
              *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
              *   to the Mastery Score and set the cmi.core.lesson_status to
-             *   either “passed” or “failed”.  If no Mastery Score is provided,
-             *   the LMS will leave the cmi.core.lesson_status as “completed”
+             *   either "passed" or "failed".  If no Mastery Score is provided,
+             *   the LMS will leave the cmi.core.lesson_status as "completed"
              */
             $masteryScore = $myLPI->get_mastery_score();
-            if ($masteryScore == -1 or empty($masteryScore)) {
+            if ($masteryScore == -1 || empty($masteryScore)) {
                 $masteryScore = false;
             }
             $credit = $myLPI->get_credit();
 
             /**
-             * 1) If cmi.core.credit is set to “credit” and there is a mastery
+             * 1) If cmi.core.credit is set to "credit" and there is a mastery
              *    score in the manifest (adlcp:masteryscore), the LMS can change
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
@@ -254,6 +257,7 @@ function save_item(
                 }
                 $statusIsSet = true;
             }
+
             /**
              *  2) If there is no mastery score in the manifest
              *    (adlcp:masteryscore), the LMS cannot override SCO
@@ -266,6 +270,7 @@ function save_item(
                 }
                 //if no status was set directly, we keep the previous one
             }
+
             /**
              * 3) If the student is taking the SCO for no-credit, there is no
              *    change to the lesson_status, with one exception.  If the
@@ -280,35 +285,36 @@ function save_item(
                 }
                 //if no status was set directly, we keep the previous one
             }
+
             /**
              * If a SCO sets the cmi.core.lesson_status then there is no problem.
-             *   However, the SCORM does not force the SCO to set the
-             *   cmi.core.lesson_status.  There is some additional requirements
-             *   that must be adhered to successfully handle these cases:
+             * However, the SCORM does not force the SCO to set the
+             * cmi.core.lesson_status.  There is some additional requirements
+             * that must be adhered to successfully handle these cases:
              */
             if (!$statusIsSet && empty($status) && !$statusSignalReceived) {
                 /**
                  * Upon initial launch the LMS should set the
-                 *   cmi.core.lesson_status to “not attempted”.
+                 * cmi.core.lesson_status to "not attempted".
                  */
                 // this case should be handled by LMSInitialize() and xajax_switch_item()
                 /**
                  * Upon receiving the LMSFinish() call or the user navigates
                  * away, the LMS should set the cmi.core.lesson_status for the
-                 * SCO to “completed”.
+                 * SCO to "completed".
                  */
-                if ($lmsFinish or $userNavigatesAway) {
+                if ($lmsFinish || $userNavigatesAway) {
                     $myStatus = 'completed';
                     /**
-                     * After setting the cmi.core.lesson_status to “completed”,
-                     *   the LMS should now check to see if a Mastery Score has been
-                     *   specified in the cmi.student_data.mastery_score, if supported,
-                     *   or the manifest that the SCO is a member of.
-                     *   If a Mastery Score is provided and the SCO did set the
-                     *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
-                     *   to the Mastery Score and set the cmi.core.lesson_status to
-                     *   either “passed” or “failed”.  If no Mastery Score is provided,
-                     *   the LMS will leave the cmi.core.lesson_status as “completed”
+                     * After setting the cmi.core.lesson_status to "completed",
+                     * the LMS should now check to see if a Mastery Score has been
+                     * specified in the cmi.student_data.mastery_score, if supported,
+                     * or the manifest that the SCO is a member of.
+                     * If a Mastery Score is provided and the SCO did set the
+                     * cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
+                     * to the Mastery Score and set the cmi.core.lesson_status to
+                     * either "passed" or "failed".  If no Mastery Score is provided,
+                     * the LMS will leave the cmi.core.lesson_status as "completed"
                      */
                     if ($masteryScore && (isset($score) && $score != -1)) {
                         if ($score >= $masteryScore) {
@@ -327,6 +333,7 @@ function save_item(
         // If no previous condition changed the SCO status, proceed with a
         // generic behaviour
         if (!$statusIsSet && !$statusSignalReceived) {
+
             // Default behaviour
             if (isset($status) && $status != '' && $status != 'undefined') {
                 if ($debug > 1) {
@@ -372,6 +379,7 @@ function save_item(
         } else {
             //$time = $myLPI->get_total_time();
         }
+
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
             $myLPI->current_data = $suspend;
         }
@@ -493,22 +501,22 @@ if (isset($_REQUEST['interact'])) {
 }
 
 echo save_item(
-    (!empty($_REQUEST['lid'])?$_REQUEST['lid']:null),
-    (!empty($_REQUEST['uid'])?$_REQUEST['uid']:null),
-    (!empty($_REQUEST['vid'])?$_REQUEST['vid']:null),
-    (!empty($_REQUEST['iid'])?$_REQUEST['iid']:null),
-    (!empty($_REQUEST['s'])?$_REQUEST['s']:null),
-    (!empty($_REQUEST['max'])?$_REQUEST['max']:null),
-    (!empty($_REQUEST['min'])?$_REQUEST['min']:null),
-    (!empty($_REQUEST['status'])?$_REQUEST['status']:null),
-    (!empty($_REQUEST['t'])?$_REQUEST['t']:null),
-    (!empty($_REQUEST['suspend'])?$_REQUEST['suspend']:null),
-    (!empty($_REQUEST['loc'])?$_REQUEST['loc']:null),
+    (!empty($_REQUEST['lid']) ? $_REQUEST['lid'] : null),
+    (!empty($_REQUEST['uid']) ? $_REQUEST['uid'] : null),
+    (!empty($_REQUEST['vid']) ? $_REQUEST['vid'] : null),
+    (!empty($_REQUEST['iid']) ? $_REQUEST['iid'] : null),
+    (!empty($_REQUEST['s']) ? $_REQUEST['s'] : null),
+    (!empty($_REQUEST['max']) ? $_REQUEST['max'] : null),
+    (!empty($_REQUEST['min']) ? $_REQUEST['min'] : null),
+    (!empty($_REQUEST['status']) ? $_REQUEST['status'] : null),
+    (!empty($_REQUEST['t']) ? $_REQUEST['t'] : null),
+    (!empty($_REQUEST['suspend']) ? $_REQUEST['suspend'] : null),
+    (!empty($_REQUEST['loc']) ? $_REQUEST['loc'] : null),
     $interactions,
-    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:''),
-    (!empty($_REQUEST['session_id'])?$_REQUEST['session_id']:''),
-    (!empty($_REQUEST['course_id'])?$_REQUEST['course_id']:''),
-    (empty($_REQUEST['finish'])?0:1),
-    (empty($_REQUEST['userNavigatesAway'])?0:1),
-    (empty($_REQUEST['statusSignalReceived'])?0:1)
+    (!empty($_REQUEST['core_exit']) ? $_REQUEST['core_exit'] : ''),
+    (!empty($_REQUEST['session_id']) ? $_REQUEST['session_id'] : ''),
+    (!empty($_REQUEST['course_id']) ? $_REQUEST['course_id'] : ''),
+    (empty($_REQUEST['finish']) ? 0 : 1),
+    (empty($_REQUEST['userNavigatesAway']) ? 0 : 1),
+    (empty($_REQUEST['statusSignalReceived']) ? 0 : 1)
 );

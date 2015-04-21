@@ -26,14 +26,14 @@
 /**
  * Database connection settings
  */
-// Your MySQL server
+// Database host
 $_configuration['db_host'] = '{DATABASE_HOST}';
-// Your MySQL username
-$_configuration['db_user'] = '{DATABASE_USER}';
-// Your MySQL password
-$_configuration['db_password'] = '{DATABASE_PASSWORD}';
-// main Chamilo database
+// Database name
 $_configuration['main_database'] = '{DATABASE_MAIN}';
+// Database username
+$_configuration['db_user'] = '{DATABASE_USER}';
+// Database password
+$_configuration['db_password'] = '{DATABASE_PASSWORD}';
 // Enable access to database management for platform admins.
 $_configuration['db_manager_enabled'] = false;
 
@@ -46,13 +46,16 @@ $_configuration['root_web'] = '{ROOT_WEB}';
 // Path to the webroot of system, example: /var/www/
 $_configuration['root_sys'] = '{ROOT_SYS}';
 
-// Path from your WWW-root to the root of your Chamilo installation, example: chamilo (this means chamilo is installed in /var/www/chamilo/
+// Path from your WWW-root to the root of your Chamilo installation,
+// example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] = '{URL_APPEND_PATH}';
 
-// Directory of the Chamilo code. You could change this but it is not advised since this has not been tested yet.
+// Directory of the Chamilo code.
+// You could change this but it is not advised since this has not been tested yet.
 $_configuration['code_append'] = "main/";
 
-// Directory to store all course-related files. You could change this but it is not advised since this has not been tested yet.
+// Directory to store all course-related files.
+// You could change this but it is not advised since this has not been tested yet.
 $_configuration['course_folder'] = "courses/";
 
 // URL to your phpMyAdmin installation.
@@ -67,7 +70,7 @@ $_configuration['db_admin_path'] = '';
 // You can leave these lines uncommented even if you don't use CAS authentification
 $extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
 $extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
-//
+
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
 // $extAuthSource["extldap"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";
@@ -102,8 +105,10 @@ $_configuration[1]['hosting_limit_sessions'] = 0;
 // Set a maximum disk space used, in MB (set to 1024 for 1GB, 5120 for 5GB, etc)
 // Default (0) = no limit
 $_configuration[1]['hosting_limit_disk_space'] = 0;
-// Set a maximum number of usable courses. Default (0) = no limit. Should always be lower than the hosting_limit_courses.
-// If set, defining a course as "hidden" will free room for new courses (up to the hosting_limit_courses, if any value is set there).
+// Set a maximum number of usable courses. Default (0) = no limit.
+// Should always be lower than the hosting_limit_courses.
+// If set, defining a course as "hidden" will free room for
+// new courses (up to the hosting_limit_courses, if any value is set there).
 // hosting_limit_enabled_courses is the maximum number of courses that are *not* hidden.
 $_configuration[1]['hosting_limit_active_courses'] = 0;
 // Email to warn if limit was reached.
@@ -122,11 +127,20 @@ $_configuration['hosting_total_size_limit'] = 0;
 $_configuration['cdn_enable'] = false;
 // The following setting will be ignored if the previous one is set to false
 $_configuration['cdn'] = array(
-  //You can define several CDNs and split them by extensions
-  //Replace the following by your full CDN URL, which should point to
-  // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
-    'http://cdn.chamilo.org' => array('.css','.js','.jpg','.jpeg','.png','.gif','.avi','.flv'),
-  // copy the line above and modify following your needs
+    // You can define several CDNs and split them by extensions
+    // Replace the following by your full CDN URL, which should point to
+    // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
+    'http://cdn.chamilo.org' => array(
+        '.css',
+        '.js',
+        '.jpg',
+        '.jpeg',
+        '.png',
+        '.gif',
+        '.avi',
+        '.flv'
+    ),
+    // copy the line above and modify following your needs
 );
 
 /**
@@ -143,7 +157,7 @@ $_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
 // Activation for multi-url access
-//$_configuration['multiple_access_urls']					= true;
+//$_configuration['multiple_access_urls'] = true;
 $_configuration['software_name'] = 'Chamilo';
 $_configuration['software_url'] = 'http://www.chamilo.org/';
 //Deny the elimination of users
@@ -168,7 +182,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Enable captcha
 //$_configuration['enable_captcha'] = true;
 //$_configuration['allow_captcha'] = true;
-// Prevent account from logging in for a certain amount of time if captcha is wrong for the specified number of times
+// Prevent account from logging in for a certain amount of time
+// if captcha is wrong for the specified number of times
 //$_configuration['captcha_number_mistakes_to_block_account'] = 5;
 // Prevent account from logging in for the specified number of minutes
 //$_configuration['captcha_time_to_block'] = 5;//minutes
@@ -263,7 +278,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['openbadges_backpack'] = 'https://backpack.openbadges.org/';
 // Custom name_order_conventions
 //$_configuration['name_order_conventions'] = array(
-//  'french' => array('format' => 'title last_name first_name',  'sort_by' => 'last_name')
+// 'french' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name')
 //);
 // Shows a warning message explaining that the site uses cookies
 //$_configuration['cookie_warning'] = false;
@@ -282,7 +297,8 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['allow_delete_attendance'] = false;
 // Enable Gravatar profile image if no local image has been given
 //$_configuration['gravatar_enabled'] = true;
-// If Gravatar is enabled, tells which type of picture we want (default is "mm"). Options: mm | identicon | monsterid | wavatar
+// If Gravatar is enabled, tells which type of picture we want (default is "mm").
+// Options: mm | identicon | monsterid | wavatar
 //$_configuration['gravatar_type'] = 'mm';
 // Course log - Default columns to hide
 //$_configuration['course_log_hide_columns'] = array(1, 9);

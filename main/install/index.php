@@ -716,6 +716,8 @@ if (@$_POST['step2']) {
         $tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
         $tool->createSchema($metadataList);
 
+        $sysPath = api_get_path(SYS_PATH);
+
         finishInstallation(
             $manager,
             $sysPath,

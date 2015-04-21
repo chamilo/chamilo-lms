@@ -696,56 +696,23 @@ if (@$_POST['step2']) {
 		$tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
 		$tool->createSchema($metadataList);
 
-		// Inserting data
-		$data = file_get_contents('data.sql');
-		$result = $manager->getConnection()->prepare($data);
-		$result->execute();
-		$result->closeCursor();
-
-		// Create users
-		switch ($encryptPassForm) {
-			case 'md5' :
-				$passToStore = md5($passForm);
-				break;
-			case 'sha1' :
-				$passToStore = sha1($passForm);
-				break;
-			case 'none' :
-			default:
-				$passToStore = $passForm;
-				break;
-		}
-
-		// Insert users
-
-		$sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
-		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
-		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
-		Database::query($sql);
-
-		// Insert user as admin
-		$sql = "INSERT INTO admin VALUES(1, 1)";
-		Database::query($sql);
-
-		// The chosen during the installation platform language should be enabled.
-		$sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
-		Database::query($sql);
-
-		// Install settings
-		installSettings(
+		finishInstallation(
+			$manager,
+            $sysPath,
+			$encryptPassForm,
+			$passForm,
+			$adminLastName,
+			$adminFirstName,
+			$loginForm,
+			$emailForm,
+			$adminPhoneForm,
+			$languageForm,
 			$institutionForm,
 			$institutionUrlForm,
 			$campusForm,
-			$emailForm,
-			$adminLastName,
-			$adminFirstName,
-			$languageForm,
 			$allowSelfReg,
-    		$allowSelfRegProf
+			$allowSelfRegProf
 		);
-
-		lockSettings();
-        updateDirAndFilesPermissions();
 
 		include 'install_files.inc.php';
 	}

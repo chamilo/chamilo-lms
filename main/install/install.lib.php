@@ -10,6 +10,8 @@
  *   of older versions before upgrading.
  */
 
+use Doctrine\ORM\EntityManager;
+
 /*      CONSTANTS */
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
@@ -507,7 +509,7 @@ function get_config_param_from_db($param = '')
  * @param   string  $dbHostForm DB host
  * @param   string  $dbUsernameForm DB username
  * @param   string  $dbPassForm DB password
- * @return \Doctrine\ORM\EntityManager
+ * @return EntityManager
  */
 function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
@@ -1855,7 +1857,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 function installSettings(
     $organizationName,
     $organizationUrl,
-    $campusName,
+    $siteName,
     $adminEmail,
     $adminLastName,
     $adminFirstName,
@@ -1870,7 +1872,7 @@ function installSettings(
         INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES
         ('Institution',NULL,'textfield','Platform','$organizationName','InstitutionTitle','InstitutionComment','platform',NULL, 1),
         ('InstitutionUrl',NULL,'textfield','Platform','$organizationUrl','InstitutionUrlTitle','InstitutionUrlComment',NULL,NULL, 1),
-        ('siteName',NULL,'textfield','Platform','$campusName','SiteNameTitle','SiteNameComment',NULL,NULL, 1),
+        ('siteName',NULL,'textfield','Platform','$siteName','SiteNameTitle','SiteNameComment',NULL,NULL, 1),
         ('emailAdministrator',NULL,'textfield','Platform','$adminEmail','emailAdministratorTitle','emailAdministratorComment',NULL,NULL, 1),
         ('administratorSurname',NULL,'textfield','Platform','$adminLastName','administratorSurnameTitle','administratorSurnameComment',NULL,NULL, 1),
         ('administratorName',NULL,'textfield','Platform','$adminFirstName','administratorNameTitle','administratorNameComment',NULL,NULL, 1),
@@ -2558,4 +2560,89 @@ function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm
     }
 }
 
+/**
+ * @param EntityManager $manager
+ * @param string $sysPath
+ * @param string $encryptPassForm
+ * @param string $passForm
+ * @param string $adminLastName
+ * @param string $adminFirstName
+ * @param string $loginForm
+ * @param string $emailForm
+ * @param string $adminPhoneForm
+ * @param string $languageForm
+ * @param string $institutionForm
+ * @param string $institutionUrlForm
+ * @param string $siteName
+ * @param string $allowSelfReg
+ * @param string $allowSelfRegProf
+ */
+function finishInstallation(
+    $manager,
+    $sysPath,
+    $encryptPassForm,
+    $passForm,
+    $adminLastName,
+    $adminFirstName,
+    $loginForm,
+    $emailForm,
+    $adminPhoneForm,
+    $languageForm,
+    $institutionForm,
+    $institutionUrlForm,
+    $siteName,
+    $allowSelfReg,
+    $allowSelfRegProf
+) {
+    $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+    // Inserting data
+    $data = file_get_contents($sysPath.'main/install/data.sql');
+    $result = $manager->getConnection()->prepare($data);
+    $result->execute();
+    $result->closeCursor();
 
+    // Create users
+    switch ($encryptPassForm) {
+        case 'md5' :
+            $passToStore = md5($passForm);
+            break;
+        case 'sha1' :
+            $passToStore = sha1($passForm);
+            break;
+        case 'none' :
+        default:
+            $passToStore = $passForm;
+            break;
+    }
+
+    // Insert users
+
+    $sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
+		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
+		(2, 'Anonymous', 'Joe', '', '', 'platform', 'anonymous@localhost', 6, 'anonymous', NULL, 1, NOW(), NULL, 1,NULL,'$languageForm')";
+    Database::query($sql);
+
+    // Insert user as admin
+    $sql = "INSERT INTO admin VALUES(1, 1)";
+    Database::query($sql);
+
+    // The chosen during the installation platform language should be enabled.
+    $sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
+    Database::query($sql);
+
+    // Install settings
+    installSettings(
+        $institutionForm,
+        $institutionUrlForm,
+        $siteName,
+        $emailForm,
+        $adminLastName,
+        $adminFirstName,
+        $languageForm,
+        $allowSelfReg,
+        $allowSelfRegProf
+    );
+
+    lockSettings();
+    updateDirAndFilesPermissions();
+}

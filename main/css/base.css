@@ -4088,9 +4088,6 @@ tr.forum_category_header a {
     background-color: #a0e5fc;
 }
 
-.current {
-    font-weight: bold;
-}
 .structure {
     /*border-bottom: 1px solid #666666;*/
     font-weight: bold;
@@ -5793,12 +5790,40 @@ ul.holder li.bit-box{
     display: block;
   }
 }
+#settings .form-inline{
+  margin-bottom: 15px;
+}
 #search_settings{
   margin-bottom: 15px;
 }
 .src-image {
     display: none;
 }
+/* thematic progress */
+#panel-thematic .title-topics{
+  font-size: 15px;
+  color:#00829C;
+  font-weight: bold;
+}
+#panel-thematic .current{
+  background-color: #E7F1F7;
+}
+#panel-thematic .separate{
+  margin-bottom: 10px;
+}
+#panel-thematic .date{
+  font-size: 11px;
+  color: #8A6D3B;
+  background: #FCF8E3;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  padding: 5px;
+}
+#panel-thematic .views ul li{
+  font-size: 12px;
+}
+/* end thematic progress*/
 .card {
     overflow: hidden;
     position: relative;

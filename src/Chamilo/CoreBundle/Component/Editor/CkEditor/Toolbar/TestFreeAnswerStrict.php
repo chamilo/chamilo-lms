@@ -11,7 +11,8 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 class TestFreeAnswerStrict extends Basic
 {
     /**
-     * @return mixed
+     * Get the toolbar config
+     * @return array
      */
     public function getConfig()
     {
@@ -42,6 +43,10 @@ class TestFreeAnswerStrict extends Basic
         return $config;
     }
 
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
     protected function getNormalToolbar()
     {
         return [];

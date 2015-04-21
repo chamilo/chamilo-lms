@@ -131,6 +131,7 @@ class Basic extends Toolbar
     }
 
     /**
+     * Get the toolbar config
      * @return array
      */
     public function getConfig()
@@ -191,7 +192,7 @@ class Basic extends Toolbar
     }
 
     /**
-     * Get the small toolbar configuration
+     * Get the toolbar configuration when CKEditor is minimized
      * @return array
      */
     protected function getMinimizedToolbar()

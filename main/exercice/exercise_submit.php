@@ -1128,6 +1128,7 @@ if (!empty($error)) {
     	echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
     }
     echo '</form>';
+    echo '</div>';
 }
 
 if ($origin != 'learnpath') {

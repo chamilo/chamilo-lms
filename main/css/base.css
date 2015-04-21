@@ -4913,7 +4913,7 @@ i.size-32.icon-new-work{
 }
 
 .text-h3 {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .text-h4 {
@@ -5793,12 +5793,12 @@ ul.holder li.bit-box{
     display: block;
   }
 }
-
-
+#search_settings{
+  margin-bottom: 15px;
+}
 .src-image {
     display: none;
 }
-
 .card {
     overflow: hidden;
     position: relative;
@@ -5810,7 +5810,6 @@ ul.holder li.bit-box{
     color: rgb(136, 172, 217);
     margin-bottom: 20px;
 }
-
 .card .header-bg {
     /* This stretches the canvas across the entire hero unit */
     position: absolute;

@@ -1338,14 +1338,13 @@ class Agenda
         if (!empty($start)  && !empty($end)) {
              $dateCondition .= "AND (
                  agenda.start_date BETWEEN '".$start."' AND '".$end."' OR
-                 agenda.end_date BETWEEN '".$start."' AND '".$end."'
                  agenda.end_date BETWEEN '".$start."' AND '".$end."' OR
                  (
                  agenda.start_date <> '' AND agenda.end_date <> '' AND
                  YEAR(agenda.start_date) = YEAR(agenda.end_date) AND
                  MONTH('$start') BETWEEN MONTH(agenda.start_date) AND MONTH(agenda.end_date)
                  )
-             )";
+            )";
         }
 
         $sql .= $dateCondition;

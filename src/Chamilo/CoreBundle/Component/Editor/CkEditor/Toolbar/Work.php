@@ -22,7 +22,7 @@ class Work extends Basic
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
-            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
@@ -77,7 +77,7 @@ class Work extends Basic
         ];
     }
 
-    protected function getSmallToolbar()
+    protected function getMinimizedToolbar()
     {
         return [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],

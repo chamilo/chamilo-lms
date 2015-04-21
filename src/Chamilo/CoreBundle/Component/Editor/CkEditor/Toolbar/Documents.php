@@ -19,7 +19,7 @@ class Documents extends Basic
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
-            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
         }
 
         $config['extraPlugins'] = $this->getPluginsToString();
@@ -70,7 +70,7 @@ class Documents extends Basic
         ];
     }
 
-    protected function getSmallToolbar()
+    protected function getMinimizedToolbar()
     {
         return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],

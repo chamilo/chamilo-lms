@@ -136,7 +136,7 @@ class Basic extends Toolbar
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') == 'true') {
-            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
@@ -194,7 +194,7 @@ class Basic extends Toolbar
      * Get the small toolbar configuration
      * @return array
      */
-    protected function getSmallToolbar()
+    protected function getMinimizedToolbar()
     {
         return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],

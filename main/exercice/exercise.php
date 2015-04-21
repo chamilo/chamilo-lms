@@ -661,10 +661,16 @@ if (!empty($exercise_list)) {
                 $rowi = Database :: result($sqlresult, 0, 0);
 
                 if ($session_id == $row['session_id']) {
-                    // Settings
+                    // Questions list
                     $actions = Display::url(
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
                         'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
+                    );
+
+                    // Test settings
+                    $actions .= Display::url(
+                        Display::return_icon('settings.png', get_lang('Configure'), '', ICON_SIZE_SMALL),
+                        'exercise_admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
                     );
 
                     // Exercise results

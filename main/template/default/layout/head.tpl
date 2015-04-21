@@ -12,6 +12,7 @@
 {#  Improve usability in portal devices #}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ title_string }}</title>
+{{ social_meta }}
 {{ css_static_file_to_string }}
 {{ js_file_to_string }}
 <script>
@@ -24,7 +25,6 @@ var plugins = [
     //'ckeditor_wiris',
     'dialogui',
     'glossary',
-    'justify',
     'leaflet',
     'mapping',
     'maximize',

@@ -19,6 +19,7 @@ class Basic extends Toolbar
     public $defaultPlugins = array(
         'adobeair',
         'ajax',
+        'audio',
         'bidi',
         'colorbutton',
         'colordialog',
@@ -52,6 +53,7 @@ class Basic extends Toolbar
         'tableresize',
         'templates',
         'uicolor',
+        'video',
         'widget',
         'wikilink',
         'wordcount',
@@ -133,7 +135,68 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
+
+        /*filebrowserFlashBrowseUrl
+        filebrowserFlashUploadUrl
+        filebrowserImageBrowseLinkUrl
+        filebrowserImageBrowseUrl
+        filebrowserImageUploadUrl
+        filebrowserUploadUrl*/
+
+        $config['extraPlugins'] = $this->getPluginsToString();
+
+        //$config['oembed_maxWidth'] = '560';
+        //$config['oembed_maxHeight'] = '315';
+
+        //$config['allowedContent'] = true;
+
+        /*$config['wordcount'] = array(
+            // Whether or not you want to show the Word Count
+            'showWordCount' => true,
+            // Whether or not you want to show the Char Count
+            'showCharCount' => true,
+            // Option to limit the characters in the Editor
+            'charLimit' => 'unlimited',
+            // Option to limit the words in the Editor
+            'wordLimit' => 'unlimited'
+        );*/
+
+        //$config['skins'] = 'moono';
+
+        if (isset($this->config)) {
+            $this->config = array_merge($config, $this->config);
+        } else {
+            $this->config = $config;
+        }
+
+        //$config['width'] = '100';
+        //$config['height'] = '200';
+        return $this->config;
+    }
+
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
+    protected function getNormalToolbar()
+    {
+        return null;
+    }
+
+    /**
+     * Get the small toolbar configuration
+     * @return array
+     */
+    protected function getSmallToolbar()
+    {
+        return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
@@ -142,8 +205,15 @@ class Basic extends Toolbar
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             ['Toolbarswitch']
         ];
+    }
 
-        $config['toolbar_maxToolbar'] = [
+    /**
+     * Get the toolbar configuration when CKEditor is maximized
+     * @return array
+     */
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -172,55 +242,6 @@ class Basic extends Toolbar
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch'],
         ];
-
-        // file manager (elfinder)
-
-        // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
-        $config['filebrowserBrowseUrl'] = api_get_path(WEB_LIBRARY_PATH).'elfinder/filemanager.php';
-
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
-
-        /*filebrowserFlashBrowseUrl
-        filebrowserFlashUploadUrl
-        filebrowserImageBrowseLinkUrl
-        filebrowserImageBrowseUrl
-        filebrowserImageUploadUrl
-        filebrowserUploadUrl*/
-
-        $config['extraPlugins'] = $this->getPluginsToString();
-
-        $config['format_tags'] = 'p;h1;h2;h3;h4;h5;h6';
-
-        //$config['oembed_maxWidth'] = '560';
-        //$config['oembed_maxHeight'] = '315';
-
-        //$config['allowedContent'] = true;
-
-        /*$config['wordcount'] = array(
-            // Whether or not you want to show the Word Count
-            'showWordCount' => true,
-            // Whether or not you want to show the Char Count
-            'showCharCount' => true,
-            // Option to limit the characters in the Editor
-            'charLimit' => 'unlimited',
-            // Option to limit the words in the Editor
-            'wordLimit' => 'unlimited'
-        );*/
-
-        $config['toolbar'] = 'minToolbar';
-        $config['smallToolbar'] = 'minToolbar';
-        $config['maximizedToolbar'] = 'maxToolbar';
-
-        //$config['skins'] = 'moono';
-
-        if (isset($this->config)) {
-            $this->config = array_merge($config, $this->config);
-        } else {
-            $this->config = $config;
-        }
-
-        //$config['width'] = '100';
-        //$config['height'] = '200';
-        return $this->config;
     }
+
 }

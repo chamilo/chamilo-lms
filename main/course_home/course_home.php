@@ -154,13 +154,15 @@ if (api_is_invitee()) {
 Session::erase('toolgroup');
 Session::erase('_gid');
 
-$is_speacialcourse = CourseManager::is_special_course($course_code);
+$isSpecialCourse = CourseManager::is_special_course($course_code);
 
-if ($is_speacialcourse) {
-    $autoreg = Security::remove_XSS($_GET['autoreg']);
-    if ($autoreg == 1) {
-        if (CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT)) {
-            Session::write('is_allowed_in_course', true);
+if ($isSpecialCourse) {
+    if (isset($_GET['autoreg'])) {
+        $autoRegistration = Security::remove_XSS($_GET['autoreg']);
+        if ($autoRegistration == 1) {
+            if (CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT)) {
+                Session::write('is_allowed_in_course', true);
+            }
         }
     }
 }

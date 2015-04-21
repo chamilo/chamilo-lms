@@ -502,7 +502,7 @@ $(document).ready(function() {
                                 <select id="skill_id" name="skill_id" /></select>
                                 <div class="button-skill">
                                     <a class="btn btn-default btn-block btn-large btn-danger load_root" rel="0" href="#">{{ "ViewSkillsWheel"|get_lang }}</a>
-                                    <!-- <a id="clear_selection" class="btn">{{ "Clear"|get_lang }}</a> -->
+                                    <!-- <a id="clear_selection" class="btn btn-danger">{{ "Clear"|get_lang }}</a> -->
                                 </div>
                                 <ul id="skill_holder" class="holder_simple border"></ul>
                             </form>

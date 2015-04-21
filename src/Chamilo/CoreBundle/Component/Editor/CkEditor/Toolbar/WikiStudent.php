@@ -13,16 +13,25 @@ class WikiStudent extends Basic
 
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
-            ['Undo', 'Redo'],
-            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
-        ];
-        $config['toolbar_maxToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        $config['forcePasteAsPlainText'] = false;
+
+        if (api_get_setting('force_wiki_paste_as_plain_text') == 'true') {
+            $config['forcePasteAsPlainText'] = true;
+        }
+
+        return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -51,14 +60,64 @@ class WikiStudent extends Basic
             ['PageBreak', 'ShowBlocks'],
             ['Toolbarswitch']
         ];
+    }
 
-        $config['forcePasteAsPlainText'] = false;
+    protected function getNormalToolbar()
+    {
+        return [
+            [
+                'Maximize',
+                'Save',
+                'NewPage',
+                'PageBreak',
+                'Preview',
+                '-',
+                'PasteText',
+                '-',
+                'Undo',
+                'Redo',
+                '-',
+                'SelectAll',
+                '-',
+                'Find'
+            ],
+            ['Wikilink', 'Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            ['Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'leaflet'],
+            ['Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            [
+                'Subscript',
+                'Superscript',
+                '-',
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight',
+                '-',
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor'
+            ],
+            ['ShowBlocks']
+        ];
+    }
 
-        if (api_get_setting('force_wiki_paste_as_plain_text') == 'true') {
-            $config['forcePasteAsPlainText'] = true;
-        }
-
-        return $config;
+    protected function getSmallToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

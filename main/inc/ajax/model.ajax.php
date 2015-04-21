@@ -213,8 +213,21 @@ switch ($action) {
         if ($searchByGroups) {
             $groups = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_ADMIN);
             $groupsId = array_keys($groups);
+            $subgroupsId = [];
 
             if (is_array($groupsId)) {
+                foreach ($groupsId as $groupId) {
+                    $subgroupsId = array_merge(
+                        $subgroupsId,
+                        GroupPortalManager::getGroupsByDepthLevel($groupId)
+                    );
+                }
+
+                $groupsId = array_merge(
+                    $groupsId,
+                    $subgroupsId
+                );
+
                 foreach ($groupsId as $groupId) {
                     $groupUsers = GroupPortalManager::get_users_by_group($groupId);
 
@@ -261,6 +274,11 @@ switch ($action) {
 
         if (!empty($sessionIdList)) {
             $sessionIdList = array_unique($sessionIdList);
+        }
+
+        if (api_is_student_boss() && empty($userIdList)) {
+            $count = 0;
+            break;
         }
 
         if ($action == 'get_user_course_report') {
@@ -567,6 +585,11 @@ switch ($action) {
             //$sidx = 'training_hours';
         }
 
+        if (api_is_student_boss() && empty($userIdList)) {
+            $result = [];
+            break;
+        }
+
         $result = CourseManager::get_user_list_from_course_code(
             null,
             null,
@@ -619,6 +642,11 @@ switch ($action) {
 
         if (!in_array($sidx, array('title'))) {
             $sidx = 'title';
+        }
+
+        if (api_is_student_boss() && empty($userIdList)) {
+            $result = [];
+            break;
         }
 
         $result = CourseManager::get_user_list_from_course_code(

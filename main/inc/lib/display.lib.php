@@ -745,19 +745,20 @@ class Display
         $size = ICON_SIZE_SMALL,
         $show_text = true,
         $return_only_path = false
-    ) {
+    )
+    {
 
-        $code_path   = api_get_path(SYS_CODE_PATH);
+        $code_path = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
 
         $image = trim($image);
-        $theme = 'css/'.api_get_visual_theme().'/icons/';
+        $theme = 'css/' . api_get_visual_theme() . '/icons/';
         $icon = '';
         $size_extra = '';
 
         if (isset($size)) {
             $size = intval($size);
-            $size_extra = $size.'/';
+            $size_extra = $size . '/';
         } else {
             $size = ICON_SIZE_SMALL;
         }
@@ -770,8 +771,30 @@ class Display
             $icon = $w_code_path.'img/icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.'img/'.$image;
+            $icon = $w_code_path . 'img/' . $image;
         }
+
+        // Special code to enable SVG - refs #7359 - Needs more work
+        // The code below does something else to "test out" SVG: for each icon,
+        // it checks if there is an SVG version. If so, it uses it.
+        // When moving this to production, the return_icon() calls should
+        // ask for the SVG version directly
+        if (Chamilo::is_test_server()) {
+            $svgImage = substr($image, 0, -3) . 'svg';
+            if (is_file($code_path . $theme . 'svg/' . $svgImage)) {
+                $icon = $w_code_path . $theme . 'svg/' . $svgImage;
+            } elseif (is_file($code_path . 'img/icons/svg/' . $svgImage)) {
+                $icon = $w_code_path . 'img/icons/svg/' . $svgImage;
+            }
+
+            if (empty($additional_attributes['height'])) {
+                $additional_attributes['height'] = $size;
+            }
+            if (empty($additional_attributes['width'])) {
+                $additional_attributes['width'] = $size;
+            }
+        }
+
         $icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;

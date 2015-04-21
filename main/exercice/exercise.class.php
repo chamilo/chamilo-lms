@@ -1621,7 +1621,7 @@ class Exercise
             $this->id,
             null,
             null,
-            api_get_course_id(),
+            api_get_course_int_id(),
             $session_id
         );
 

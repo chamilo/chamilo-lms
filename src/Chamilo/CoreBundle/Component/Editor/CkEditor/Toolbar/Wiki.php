@@ -13,15 +13,11 @@ class Wiki extends Basic
 
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
-            ['Undo', 'Redo'],
-            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
-        ];
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+        }
 
         $config['forcePasteAsPlainText'] = false;
 
@@ -30,6 +26,67 @@ class Wiki extends Basic
         }
 
         return $config;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            [
+                'Maximize',
+                'Save',
+                'NewPage',
+                'Templates',
+                'PageBreak',
+                'Preview',
+                '-',
+                'PasteText',
+                '-',
+                'Undo',
+                'Redo',
+                '-',
+                'SelectAll',
+                '-',
+                'Find'
+            ],
+            ['Wikilink','Link','Unlink','Anchor'],
+            ['Image','Video','Flash','Oembed','Youtube','Audio','Asciimath'],
+            ['Table','HorizontalRule','Smiley','SpecialChar','leaflet'],
+            ['Format','Font','FontSize'],
+            ['Bold','Italic','Underline'],
+            [
+                'Subscript',
+                'Superscript',
+                '-',
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight',
+                'JustifyFull',
+                '-',
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor',
+                api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
+            ],
+            ['Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Wikilink', 'Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

@@ -239,7 +239,7 @@ $group = array(
 $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
 
 // submit button
-$form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
+$form->addButtonSave(get_lang('SaveSettings'), 'submit');
 
 if ($form->validate()) {
     $values = $form->exportValues();

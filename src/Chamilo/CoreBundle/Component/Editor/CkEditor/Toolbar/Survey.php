@@ -13,16 +13,19 @@ class Survey extends Basic
 
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
-            ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table',  'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
-        ];
-        $config['toolbar_maxToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
             ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
@@ -51,8 +54,33 @@ class Survey extends Basic
             ['PageBreak', 'ShowBlocks', 'Source'],
             ['Toolbarswitch']
         ];
+    }
 
-        return $config;
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Maximize'],
+            ['Link', 'Unlink'],
+            ['Image'],
+            ['Table'],
+            ['FontSize'],
+            ['Bold', 'Italic'],
+            ['NumberedList', 'BulletedList', '-', 'TextColor'],
+            ['Source']
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
+            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

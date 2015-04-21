@@ -97,15 +97,15 @@ if ($course_validation_feature) {
         $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
 
         // Submit buttons.
-        $submit_buttons[] = $form->createElement('style_submit_button', 'save_button', get_lang('Save'), array('class' => 'save'));
+        $submit_buttons[] = $form->addButtonSave(get_lang('Save'), 'save_button', true);
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED) {
-            $submit_buttons[] = $form->createElement('style_submit_button', 'accept_button', get_lang('Accept'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/accept.png);'));
+            $submit_buttons[] = $form->addButtonSave(get_lang('Accept'), 'accept_button', true);
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && $course_request_info['status'] != COURSE_REQUEST_REJECTED) {
-            $submit_buttons[] = $form->createElement('style_submit_button', 'reject_button', get_lang('Reject'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'icons/16/error.png);'));
+            $submit_buttons[] = $form->addButtonCancel(get_lang('Reject'), 'reject_button', true);
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && intval($course_request_info['info']) <= 0) {
-            $submit_buttons[] = $form->createElement('style_submit_button', 'ask_info_button', get_lang('AskAdditionalInfo'), array('class' => 'save', 'style' => 'background-image: url('.api_get_path(WEB_IMG_PATH).'request_info.gif);'));
+            $submit_buttons[] = $form->addButtonPreview(get_lang('AskAdditionalInfo'), 'ask_info_button', true);
         }
         $form->addGroup($submit_buttons);
 

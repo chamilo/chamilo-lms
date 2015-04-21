@@ -16,7 +16,47 @@ class Announcements extends Basic
      */
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getSmallToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
+            ['Table', 'SpecialChar'],
+            [
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor',
+                'Source'
+            ],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            [
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight'
+            ]
+        ];
+    }
+
+    protected function getSmallToolbar()
+    {
+        return [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
@@ -25,8 +65,6 @@ class Announcements extends Basic
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             ['Toolbarswitch']
         ];
-
-        return $config;
     }
 
 }

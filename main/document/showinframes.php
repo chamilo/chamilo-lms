@@ -329,7 +329,7 @@ $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if (!$is_nanogong_available) {
     if (in_array(strtolower($pathinfo['extension']) , array('html', "htm"))) {
-        echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
+        echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank">'.get_lang('CutPasteLink').'</a>';
     }
 }
 
@@ -426,7 +426,7 @@ if ($is_freemind_available) {
 if ($is_nanogong_available) {
     $file_url_web = DocumentManager::generateAudioTempFolder($file_url_sys);
     echo '<div align="center">';
-    echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
+    echo '<a class="btn btn-default" href="'.$file_url_web.'" target="_blank"><i class="fa fa-download"></i> '.get_lang('Download').'</a>';
     echo '<br/>';
     echo '<br/>';
     echo DocumentManager::readNanogongFile($to_url);

@@ -563,9 +563,10 @@ class Database
             $class = isset($owner['class']) ? $owner['class'] : null;
             $server_type = api_get_setting('server_type');
             if (!empty($line) && !empty($server_type) && $server_type != 'production') {
+                $errMsg = self::error($connection);
                 $info = '<pre>' .
                     '<strong>DATABASE ERROR #'.self::errno($connection).':</strong><br /> ' .
-                    self::remove_XSS(self::error($connection)) . '<br />' .
+                    self::remove_XSS($errMsg) . '<br />' .
                     '<strong>QUERY       :</strong><br /> ' .
                     self::remove_XSS($query) . '<br />' .
                     '<strong>FILE        :</strong><br /> ' .

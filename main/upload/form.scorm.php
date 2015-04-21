@@ -52,7 +52,11 @@ $form = new FormValidator(
     'POST',
     'upload.php',
     '',
-    'id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"'
+    array(
+        'id' => "upload_form",
+        'enctype' => "multipart/form-data",
+        'style' => "background-image:url(\'../img/scorm.jpg\');background-repeat:no-repeat;background-position:620px;"
+    )
 );
 $form->addElement('header', '', $nameTools);
 $form->addElement('hidden', 'curdirpath', $path);

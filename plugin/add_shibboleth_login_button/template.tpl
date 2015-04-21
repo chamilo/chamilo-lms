@@ -10,6 +10,6 @@
             <div class='shibboleth_plugin_clear'>&nbsp;</div>
         {% endif %}
         <div class='shibboleth_plugin_comm'>{{ add_shibboleth_login_button.comm_label }}</div>
-        <button class="btn" onclick="javascript:self.location.href='main/auth/shibboleth/login.php'">{{ "LoginEnter"|get_lang }}</button>    
+        <button class="btn btn-default" onclick="javascript:self.location.href='main/auth/shibboleth/login.php'">{{ "LoginEnter"|get_lang }}</button>
     </div>
 {% endif %}

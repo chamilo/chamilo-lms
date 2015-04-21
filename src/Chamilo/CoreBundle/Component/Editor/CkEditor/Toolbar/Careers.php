@@ -4,12 +4,13 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestProposedAnswer toolbar configuration
+ * Careers toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class TestProposedAnswer extends Basic
+class Careers extends Basic
 {
+
     /**
      * @return mixed
      */
@@ -19,12 +20,8 @@ class TestProposedAnswer extends Basic
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getSmallToolbar();
-
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
-
-        $config['toolbarCanCollapse'] = true;
-        $config['toolbarStartupExpanded'] = false;
 
         return $config;
     }
@@ -32,7 +29,7 @@ class TestProposedAnswer extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -40,15 +37,13 @@ class TestProposedAnswer extends Basic
                 'Image',
                 'Mapping',
                 'Video',
-                'Flash',
-                'Youtube',
                 'Oembed',
+                'Youtube',
+                'Flash',
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar',
-                'Asciimath',
-                'Asciisvg'
+                'SpecialChar'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -65,31 +60,26 @@ class TestProposedAnswer extends Basic
     protected function getNormalToolbar()
     {
         return [
-            [
-                'Maximize',
-                'Bold',
-                'Image',
-                'Link',
-                'PasteFromWord',
-                'Audio',
-                'Table',
-                'Subscript',
-                'Superscript',
-                'Source'
-            ]
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Maximize']
         ];
     }
 
     protected function getSmallToolbar()
     {
         return [
-            ['Templates'],
-            ['PasteFromWord'],
-            ['Link'],
-            ['Image', 'Video', 'Flash', 'Audio', 'Asciimath', 'Asciisvg'],
-            ['Table'],
-            ['Bold'],
-            ['Source', 'Toolbarswitch']
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch', 'ShowBlocks']
         ];
     }
 

@@ -331,10 +331,10 @@ if ($group_id != 0) {
                 )
             )
             ) {
-                $social_right_content .= '<a class="btn" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
+                $social_right_content .= '<a class="btn btn-default" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
                     ) . '">' . get_lang('JoinGroup') . '</a>';
             } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-                $social_right_content .= '<a class="btn" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
+                $social_right_content .= '<a class="btn btn-default" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
                     ) . '">' . get_lang('YouHaveBeenInvitedJoinNow') . '</a>';
             }
             $social_right_content .= '<br /><br />';
@@ -447,10 +447,10 @@ if ($group_id != 0) {
             )
         )
         ) {
-            $social_right_content .= '<a class="btn" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
+            $social_right_content .= '<a class="btn btn-default" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
                 ) . '">' . get_lang('JoinGroup') . '</a>';
         } elseif ($my_group_role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $social_right_content .= '<a class="btn" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
+            $social_right_content .= '<a class="btn btn-default" href="groups.php?id=' . $group_id . '&action=join&u=' . api_get_user_id(
                 ) . '">' . get_lang('YouHaveBeenInvitedJoinNow') . '</a>';
         }
     }
@@ -618,7 +618,7 @@ if ($group_id != 0) {
         //Avoiding my groups
         $join_url = '';
         if (!in_array($id, $my_group_list)) {
-            $join_url = '<a class="btn" href="groups.php?id=' . $id . '&action=join&u=' . api_get_user_id(
+            $join_url = '<a class="btn btn-default" href="groups.php?id=' . $id . '&action=join&u=' . api_get_user_id(
                 ) . '">' . get_lang('JoinGroup') . '</a> ';
         }
 
@@ -705,7 +705,7 @@ if ($group_id != 0) {
 
             $join_url = '';
             if (!in_array($id, $my_group_list)) {
-                $join_url = '<a class="btn" href="groups.php?id=' . $id . '&action=join&u=' . api_get_user_id(
+                $join_url = '<a class="btn btn-default" href="groups.php?id=' . $id . '&action=join&u=' . api_get_user_id(
                     ) . '">' . get_lang('JoinGroup') . '</a> ';
             }
             $item_4 = '<div class="box_description_group_actions" >' . $join_url . '</div>';
@@ -740,7 +740,7 @@ if ($group_id != 0) {
                         'allow_students_to_create_groups_in_social'
                     ) == 'true'
                 ) {
-                    $create_group_item = '<a class="btn" href="' . api_get_path(
+                    $create_group_item = '<a class="btn btn-default" href="' . api_get_path(
                             WEB_PATH
                         ) . 'main/social/group_add.php">' . get_lang(
                             'CreateASocialGroup'
@@ -748,7 +748,7 @@ if ($group_id != 0) {
                     //$my_group_content = $create_group_item. $my_group_content;
                 } else {
                     if (api_is_allowed_to_edit(null, true)) {
-                        $create_group_item = '<a class="btn" href="' . api_get_path(
+                        $create_group_item = '<a class="btn btn-default" href="' . api_get_path(
                                 WEB_PATH
                             ) . 'main/social/group_add.php">' . get_lang(
                                 'CreateASocialGroup'
@@ -816,7 +816,7 @@ if ($group_id != 0) {
                 'allow_students_to_create_groups_in_social'
             ) == 'true'
         ) {
-            $create_group_item = '<a class="btn" href="' . api_get_path(
+            $create_group_item = '<a class="btn btn-default" href="' . api_get_path(
                     WEB_PATH
                 ) . 'main/social/group_add.php">' . get_lang(
                     'CreateASocialGroup'
@@ -824,7 +824,7 @@ if ($group_id != 0) {
             //$my_group_content = $create_group_item. $my_group_content;
         } else {
             if (api_is_allowed_to_edit(null, true)) {
-                $create_group_item = '<a class="btn" href="' . api_get_path(
+                $create_group_item = '<a class="btn btn-default" href="' . api_get_path(
                         WEB_PATH
                     ) . 'main/social/group_add.php">' . get_lang(
                         'CreateASocialGroup'

@@ -26,7 +26,7 @@ $form->addElement(
     'Facebook connexion image URL',
     ''
 );
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
+$form->addButtonSave(get_lang('Save'), 'submit_button');
 //get default value for form
 $tab_default_add_facebook_login_button_facebook_button_url = api_get_setting(
     'add_facebook_login_button_facebook_button_url'

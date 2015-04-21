@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$MobilePhoneNumberWrong = "Fartelefonnummarið væntar tøl ella nýtir stavir";
+$FieldTypeMobilePhoneNumber = "Fartelefonnummar";
+$Username = "Brúkaranavn";
 $Month = "Máni";
 $Week = "Vika";
 $MessageEmptyMessageOrSubject = "Evnis regla og boð mugu bæði vera nýtt";
@@ -16,6 +19,8 @@ $Learnpaths = "Skeið";
 $Scormtool = "Skeið";
 $CreateCourse = "Stovna eitt skeið";
 $EditDocument = "Broyt";
+$MailMarkSelectedAsUnread = "Marka sum ólisin boð";
+$MailMarkSelectedAsRead = "Marka sum lisin boð";
 $Administrator = "Umsitari";
 $AdminUsers = "Brúkarar";
 $AdminCourses = "Skeið";
@@ -88,6 +93,7 @@ $JulyLong = "Juli";
 $OctoberLong = "Oktober";
 $DecemberLong = "Desember";
 $Agenda = "Kalendari";
+$Average = "Miðal";
 $Learnpath = "Skeið";
 $Chat = "Prát";
 $Tracking = "Frásagnir";
@@ -156,7 +162,6 @@ $MailNotifyInvitation = "Send teldupost um inbjóðingar";
 $MailNotifyMessage = "Send teldupost um persónlig boð";
 $MailNotifyGroupMessage = "Send teldupost um boð í bólkum";
 $ToolSearch = "Leita";
-$Average = "Miðal";
 $Me = "Eg";
 $Vote = "Atkvøða";
 $Votes = "Atkvøður";
@@ -169,9 +174,4 @@ $CourseCatalog = "Yvirlit yvir skeið";
 $MarkAll = "Vel alt";
 $UnmarkAll = "Frável alt";
 $DataTableSearch = "Leita";
-$MailMarkSelectedAsRead = "Marka sum lisin boð";
-$MailMarkSelectedAsUnread = "Marka sum ólisin boð";
-$Username = "Brúkaranavn";
-$FieldTypeMobilePhoneNumber = "Fartelefonnummar";
-$MobilePhoneNumberWrong = "Fartelefonnummarið væntar tøl ella nýtir stavir";
 ?>

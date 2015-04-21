@@ -13,15 +13,23 @@ class TermsAndConditions extends Basic
 
     public function getConfig()
     {
-        $config['toolbar_minToolbar'] = [
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getNormalToolbar();
+            $config['toolbar_maxToolbar'] = $this->getNormalToolbar();
+        }
+
+        return $config;
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
         ];
-
-        $config['toolbar_maxToolbar'] = $config['toolbar_minToolbar'];
-
-        return $config;
     }
 
 }

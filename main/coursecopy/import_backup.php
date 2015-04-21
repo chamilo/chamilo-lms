@@ -137,10 +137,10 @@ if (Security::check_token('post') && (
         CourseSelectForm::display_form($course, $hiddenFields);
     } elseif ($filename === false) {
         Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
-        echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+        echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
     } else {
         Display::display_warning_message(get_lang('NoResourcesInBackupFile'));
-        echo '<a class="btn" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
+        echo '<a class="btn btn-default" href="import_backup.php?' . api_get_cidreq() . '">' . get_lang('TryAgain') . '</a>';
     }
 } else {
     $user = api_get_user_info();

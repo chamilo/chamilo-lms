@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$YourLanguageNotThereContactUs = "Algun idioma non se atopa na lista? Aceptamos contribucións de novas traduccións! Contactar info@chamilo.org";
+$DateTimezoneSettingNotSet = "Detectamos que a súa instalación de PHP non ten o parámetro date.timezone configurado. Este é un requerimento para instalar Chamilo. Asegúrese que estea configurado verificando o seu arquivo de configuración php.ini, senón terá problemas ao usar Chamilo. Agora xa o sabe!";
 $StatDB = "Base de datos de Seguimento.";
 $EnableTracking = "Permitir Seguemento";
 $InstituteShortName = "Acrónimo da Institución";
@@ -44,7 +46,6 @@ $Recommended = "(recomendado)";
 $ScormDB = "BD Scorm";
 $AdminLastName = "Apelidos do administrador";
 $AdminPhone = "Teléfono do administrador";
-$OK = "De acordo";
 $AdminFirstName = "Nome do administrador";
 $InstituteURL = "URL desta institución";
 $UserDB = "BD de usuario";
@@ -59,7 +60,6 @@ $CheckDatabaseConnection = "Comprobar a conexión da base de datos";
 $PrintOverview = "Mostrar Visión Xeral";
 $Installing = "Instalar";
 $of = "de";
-$Step = "Paso";
 $MoreDetails = "Para máis detalles";
 $ServerRequirements = "Requisitos do servidor";
 $ServerRequirementsInfo = "As librarías e funcións que o servidor debe fornecer para poder utilizar Chamilo con todas as súas capacidades";
@@ -93,8 +93,6 @@ $ReadWarningBelow = "lea a advertencia inferior";
 $SecurityAdvice = "Aviso de seguridade";
 $YouHaveMoreThanXCourses = "Ten vostede máis de %d cursos na súa plataforma Chamilo! Somente se actualizaron %d cursos. Para actualizar os outros, %s faga clic aquí %s";
 $ToProtectYourSiteMakeXAndYReadOnly = "Para protexer o seu sitio, configure %s e %s como ficheiros de só lectura (CHMOD 444).";
-$Error = "Erro";
-$Back = "Volver";
 $HasNotBeenFound = "non se encontrou";
 $PleaseGoBackToStep1 = "Por favor, volva ao Paso 1";
 $HasNotBeenFoundInThatDir = "non se atopou neste directorio";

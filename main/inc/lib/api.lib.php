@@ -3385,7 +3385,7 @@ function api_not_allowed($print_headers = false, $message = null)
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'col-md-3 autocapitalize_off')); //new
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'col-md-3')); //new
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn col-md-3'));
+        $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
         $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);

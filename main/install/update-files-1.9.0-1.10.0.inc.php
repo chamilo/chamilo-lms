@@ -137,10 +137,11 @@ if (defined('SYSTEM_INSTALLATION')) {
     );
     $list = scandir($langPath);
     foreach ($list as $entry) {
-        if (is_dir($langPath.$entry) && in_array($entry, $officialLanguages)) {
+        if (is_dir($langPath . $entry) && in_array($entry, $officialLanguages)
+        ) {
             foreach ($filesToDelete as $file) {
-                if (is_file($langPath.$entry.'/'.$file.'.inc.php')) {
-                    unlink($langPath.$entry.'/'.$file.'.inc.php');
+                if (is_file($langPath . $entry . '/' . $file . '.inc.php')) {
+                    unlink($langPath . $entry . '/' . $file . '.inc.php');
                 }
             }
         }
@@ -148,6 +149,11 @@ if (defined('SYSTEM_INSTALLATION')) {
     // Remove the "main/conference/" directory that wasn't used since years long
     // past - see rrmdir function declared below
     @rrmdir(api_get_path(SYS_CODE_PATH).'conference');
+    // Other files that we renamed
+    // events.lib.inc.php has been renamed to events.lib.php
+    if (is_file(api_get_path(LIBRARY_PATH).'events.lib.inc.php')) {
+        @unlink(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
+    }
 
 } else {
     echo 'You are not allowed here !'. __FILE__;

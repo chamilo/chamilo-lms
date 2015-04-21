@@ -2753,7 +2753,6 @@ class learnpath
                         $prereq = preg_replace('/[^a-zA-Z_0-9](' . $id . ')[^a-zA-Z_0-9]/', 'ITEM_' . $this->refs_list[$id], $prereq);
                     }
                 }
-                //error_log('New LP - In learnpath::get_scorm_prereq_string(): returning modified string: ' . $prereq, 0);
 
                 return $prereq;
             }

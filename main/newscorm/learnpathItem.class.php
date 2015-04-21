@@ -2843,9 +2843,9 @@ class learnpathItem
 
         if ($this->type == 'sco' || $this->type == 'au') {
             $status = $this->get_status(true);
-            if ($this->prevent_reinit == 1 AND
-                $status != $this->possible_status[0] AND
-                $status != $this->possible_status[1]
+            if ($this->prevent_reinit == 1 &&
+                $status != $this->possible_status[0] && // not attempted
+                $status != $this->possible_status[1]    //incomplete
             ) {
                 if (self::debug > 1) {
                     error_log(
@@ -2862,7 +2862,8 @@ class learnpathItem
                         0
                     );
                 }
-                //get all new settings from the URL
+
+                // Get all new settings from the URL
                 if ($from_outside) {
                     if (self::debug > 1) {
                         error_log(

@@ -189,7 +189,7 @@ function save_item(
             /*
              * This is a specific implementation for SCORM 1.2, matching page 26 of SCORM 1.2's RTE
              * "Normally the SCO determines its own status and passes it to the LMS.
-             * 1) If cmi.core.credit is set to “credit” and there is a mastery
+             * 1) If cmi.core.credit is set to "credit" and there is a mastery
              *    score in the manifest (adlcp:masteryscore), the LMS can change
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
@@ -207,18 +207,18 @@ function save_item(
              * There is some additional requirements that must be adhered to
              * successfully handle these cases:
              * Upon initial launch
-             *   the LMS should set the cmi.core.lesson_status to “not attempted”.
+             *   the LMS should set the cmi.core.lesson_status to "not attempted".
              * Upon receiving the LMSFinish() call or the user navigates away,
-             *   the LMS should set the cmi.core.lesson_status for the SCO to “completed”.
-             * After setting the cmi.core.lesson_status to “completed”,
+             *   the LMS should set the cmi.core.lesson_status for the SCO to "completed".
+             * After setting the cmi.core.lesson_status to "completed",
              *   the LMS should now check to see if a Mastery Score has been
              *   specified in the cmi.student_data.mastery_score, if supported,
              *   or the manifest that the SCO is a member of.
              *   If a Mastery Score is provided and the SCO did set the
              *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
              *   to the Mastery Score and set the cmi.core.lesson_status to
-             *   either “passed” or “failed”.  If no Mastery Score is provided,
-             *   the LMS will leave the cmi.core.lesson_status as “completed”
+             *   either "passed" or "failed".  If no Mastery Score is provided,
+             *   the LMS will leave the cmi.core.lesson_status as "completed"
              */
             $masteryScore = $myLPI->get_mastery_score();
             if ($masteryScore == -1 or empty($masteryScore)) {
@@ -227,7 +227,7 @@ function save_item(
             $credit = $myLPI->get_credit();
 
             /**
-             * 1) If cmi.core.credit is set to “credit” and there is a mastery
+             * 1) If cmi.core.credit is set to "credit" and there is a mastery
              *    score in the manifest (adlcp:masteryscore), the LMS can change
              *    the status to either passed or failed depending on the
              *    student's score compared to the mastery score.
@@ -256,6 +256,7 @@ function save_item(
                 }
                 //if no status was set directly, we keep the previous one
             }
+
             /**
              * 3) If the student is taking the SCO for no-credit, there is no
              *    change to the lesson_status, with one exception.  If the
@@ -270,6 +271,7 @@ function save_item(
                 }
                 //if no status was set directly, we keep the previous one
             }
+
             /**
              * If a SCO sets the cmi.core.lesson_status then there is no problem.
              *   However, the SCORM does not force the SCO to set the
@@ -279,26 +281,26 @@ function save_item(
             if (!$statusIsSet && empty($status) && !$statusSignalReceived) {
                 /**
                  * Upon initial launch the LMS should set the
-                 *   cmi.core.lesson_status to “not attempted”.
+                 *   cmi.core.lesson_status to "not attempted".
                  */
                 // this case should be handled by LMSInitialize() and xajax_switch_item()
                 /**
                  * Upon receiving the LMSFinish() call or the user navigates
                  * away, the LMS should set the cmi.core.lesson_status for the
-                 * SCO to “completed”.
+                 * SCO to "completed".
                  */
                 if ($lmsFinish or $userNavigatesAway) {
                     $myStatus = 'completed';
                     /**
-                     * After setting the cmi.core.lesson_status to “completed”,
+                     * After setting the cmi.core.lesson_status to "completed",
                      *   the LMS should now check to see if a Mastery Score has been
                      *   specified in the cmi.student_data.mastery_score, if supported,
                      *   or the manifest that the SCO is a member of.
                      *   If a Mastery Score is provided and the SCO did set the
                      *   cmi.core.score.raw, the LMS shall compare the cmi.core.score.raw
                      *   to the Mastery Score and set the cmi.core.lesson_status to
-                     *   either “passed” or “failed”.  If no Mastery Score is provided,
-                     *   the LMS will leave the cmi.core.lesson_status as “completed”
+                     *   either "passed" or "failed".  If no Mastery Score is provided,
+                     *   the LMS will leave the cmi.core.lesson_status as "completed”
                      */
                     if ($masteryScore && (isset($score) && $score != -1)) {
                         if ($score >= $masteryScore) {
@@ -431,10 +433,6 @@ function save_item(
         }
     }
     $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
-
-    if ($debug > 0) {
-        $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$myStatus.")',2);";
-    }
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.

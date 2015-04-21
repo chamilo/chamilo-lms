@@ -23,10 +23,10 @@ $uncompress = 1;
  * because if the file size exceed the maximum file upload
  * size set in php.ini, all variables from POST are cleared !
  */
-$user_file = Request::is_post() ? Request::file('user_file') : array();
+$user_file = isset($_GET['user_file']) ? $_GET['user_file'] : array();
 $user_file = $user_file ? $user_file : array();
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
-if (Request::is_post() && $is_error) {
+if (isset($_POST) && $is_error) {
     return api_failure::set_failure('upload_file_too_big');
     unset($_FILES['user_file']);
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {

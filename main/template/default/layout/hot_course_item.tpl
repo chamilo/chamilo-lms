@@ -1,14 +1,14 @@
 {% for hot_course in hot_courses %}               
     {% if hot_course.extra_info.title %}        
-        <div class="col-md-12 hot-course-box">
-            <div class="well_border">
+
+
                 <div class="row">
-                    <div class="span2">
+                    <div class="col-md-2">
                         <div class="thumbnail">
                             <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title|e }}" />
                         </div>
                     </div>
-                    <div class="span6">
+                    <div class="col-md-10">
                         <div class="categories-course-description">
                             <div class="text-h3">{{ hot_course.extra_info.title}}</div>
                             <div class="text-h5">{{ hot_course.extra_info.teachers }}</div>
@@ -22,7 +22,7 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
+
+
     {% endif %}
 {% endfor %}

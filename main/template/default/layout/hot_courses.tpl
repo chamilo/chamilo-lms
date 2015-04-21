@@ -21,19 +21,21 @@ $(document).ready( function() {
 });
 </script>
 <section id="hot_courses">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{ "HottestCourses"|get_lang}}
             {% if _u.is_admin %}
             <span class="pull-right">
                 <a title="{{ "Hide"|get_lang }}" alt="{{ "Hide"|get_lang }}" href="{{ _p.web_main }}admin/settings.php?search_field=show_hot_courses&submit_button=&_qf__search_settings=&category=search_setting">
-                    <img src="{{ "visible.png"|icon(32) }}">
+                    <img src="{{ "eyes.png"|icon(22) }}">
                 </a>
             </span>
             {% endif %}
-            {{ "HottestCourses"|display_page_subheader }}
-        </div>
 
-        {% include template ~ '/layout/hot_course_item.tpl' %}
+        </div>
+        <div class="panel-body">
+            {% include template ~ '/layout/hot_course_item.tpl' %}
+        </div>
     </div>
 </section>
 {% endif %}

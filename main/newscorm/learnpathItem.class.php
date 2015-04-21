@@ -115,7 +115,8 @@ class learnpathItem
             } else {
                 $course_id = intval($course_id);
             }
-            $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
+            $sql = "SELECT * FROM $items_table
+                    WHERE c_id = $course_id AND id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 $this->error =
@@ -373,7 +374,7 @@ class learnpathItem
 
     /**
      * Gets the current attempt_id for this user on this item
-     * @return    integer    The attempt_id for this item view by this user, or 1 if none defined
+     * @return int attempt_id for this item view by this user or 1 if none defined
      */
     public function get_attempt_id()
     {
@@ -394,6 +395,7 @@ class learnpathItem
                 0
             );
         }
+
         return $res;
     }
 
@@ -592,9 +594,9 @@ class learnpathItem
             $row = Database::fetch_array($res);
             $lp_iv_id = $row[0];
             $iva_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-            $iva_sql = "SELECT * FROM $iva_table
-                        WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
-            $res_sql = Database::query($iva_sql);
+            $sql = "SELECT * FROM $iva_table
+                    WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
+            $res_sql = Database::query($sql);
             while ($row = Database::fetch_array($res_sql)) {
                 $this->interactions[$row['interaction_id']] = array(
                     $row['interaction_id'],
@@ -638,10 +640,10 @@ class learnpathItem
                 $iva_table = Database::get_course_table(
                     TABLE_LP_IV_INTERACTION
                 );
-                $iva_sql = "SELECT count(id) as mycount
-                            FROM $iva_table
-                            WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
-                $res_sql = Database::query($iva_sql);
+                $sql = "SELECT count(id) as mycount
+                        FROM $iva_table
+                        WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
+                $res_sql = Database::query($sql);
                 if (Database::num_rows($res_sql) > 0) {
                     $row = Database::fetch_array($res_sql);
                     $return = $row['mycount'];
@@ -950,6 +952,7 @@ class learnpathItem
      * Returns 1 if seriousgame_mode is activated, 0 otherwise
      *
      * @return int (0 or 1)
+     * @deprecated seriousgame_mode seems not to be used
      * @author ndiechburg <noel@cblue.be>
      **/
     public function get_seriousgame_mode()
@@ -988,12 +991,13 @@ class learnpathItem
                 0
             );
         }
+
         return $this->seriousgame_mode;
     }
 
     /**
      * Gets the item's reference column
-     * @return string    The item's reference field (generally used for SCORM identifiers)
+     * @return string The item's reference field (generally used for SCORM identifiers)
      */
     public function get_ref()
     {
@@ -1029,14 +1033,8 @@ class learnpathItem
         if (!isset($abs_path)) {
             $path = $this->get_file_path();
             $abs_path = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/' . $path;
-            //echo "Abs path coming from item : ".$abs_path."<br />\n";
         }
-        /*
-		else {
-			echo "Abs path coming from param: ".$abs_path."<br />\n";
-		}
-		*/
-        //error_log(str_repeat(' ',$recursivity).'Analyse file '.$abs_path, 0);
+
         $files_list = array();
         $type = $this->get_type();
 
@@ -1690,8 +1688,10 @@ class learnpathItem
 
     /**
      * Gets the item status
-     * @param  boolean $check_db   Do or don't check into the database for the latest value. Optional. Default is true
-     * @param  boolean $update_local   Do or don't update the local attribute value with what's been found in DB
+     * @param  boolean $check_db  Do or don't check into the database for the
+     * latest value. Optional. Default is true
+     * @param  boolean $update_local   Do or don't update the local attribute
+     * value with what's been found in DB
      * @return string  Current status or 'Not attempted' if no status set yet
      */
     public function get_status($check_db = true, $update_local = false)
@@ -3670,7 +3670,7 @@ class learnpathItem
      * @return    boolean        True or false on error
      */
     public function write_objectives_to_db()
-    {error_log('ddd');
+    {
         if (self::debug > 0) {
             error_log('learnpathItem::write_objectives_to_db()', 0);
         }

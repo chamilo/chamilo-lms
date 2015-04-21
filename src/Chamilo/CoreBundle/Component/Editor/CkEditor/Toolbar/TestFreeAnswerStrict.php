@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class TestFreeAnswerStrict
+ * TestFreeAnswerStrict toolbar configuration
+ * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestFreeAnswerStrict extends Basic
@@ -14,23 +15,12 @@ class TestFreeAnswerStrict extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-//            array('name' => 'document',  'groups' =>array('mode', 'document', 'doctools')),
-//            array('name' => 'clipboard',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
-            /*'/',
-            array('name' => 'basicstyles',    'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',    'groups' =>array('list', 'indent', 'blocks', 'align' )),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')*/
-        );
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getNormalToolbar();
+            $config['toolbar_maxToolbar'] = $this->getNormalToolbar();
+        }
 
         $config['fullPage'] = false;
 
@@ -51,4 +41,10 @@ class TestFreeAnswerStrict extends Basic
         //$config['height'] = '200';
         return $config;
     }
+
+    protected function getNormalToolbar()
+    {
+        return [];
+    }
+
 }

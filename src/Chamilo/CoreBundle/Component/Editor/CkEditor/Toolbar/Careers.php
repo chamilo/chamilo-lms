@@ -4,13 +4,16 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * PortalNews toolbar configuration
+ * Careers toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class PortalNews extends Basic
+class Careers extends Basic
 {
 
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -26,7 +29,7 @@ class PortalNews extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -40,10 +43,7 @@ class PortalNews extends Basic
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar',
-                'Inserthtml',
-                'Asciimath',
-                'Asciisvg'
+                'SpecialChar'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -53,35 +53,33 @@ class PortalNews extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     protected function getNormalToolbar()
     {
         return [
-            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
-            ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
-            ['Table', 'SpecialChar'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
-            '/',
-            ['Styles', 'Format', 'Font', 'FontSize'],
-            ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Maximize']
         ];
     }
 
     protected function getMinimizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteText'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch', 'ShowBlocks']
         ];
     }
 

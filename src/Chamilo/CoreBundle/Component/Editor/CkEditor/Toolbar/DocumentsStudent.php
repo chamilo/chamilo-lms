@@ -4,40 +4,90 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class Documents
+ * DocumentsStudent toolbar configuration
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class DocumentsStudent extends Basic
 {
+
     /**
      * @return mixed
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            array('name' => 'document',  'groups' => array('document', 'doctools')),
-            array('name' => 'clipboard', 'groups' => array('clipboard', 'undo')),
-            array('name' => 'editing',   'groups' => array( 'find', 'selection', 'spellchecker')),
-            //array('name' => 'forms'),
-            '/',
-            array('name' => 'basicstyles', 'groups' => array('basicstyles', 'cleanup')),
-            array('name' => 'paragraph',   'groups' => array('list', 'indent', 'blocks', 'align', 'bidi')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            //array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
-        $config['extraPlugins'] = $this->getPluginsToString();
-        //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
-        //$config['mathJaxLib'] = api_get_path(WEB_LIBRARY_JS_PATH).'/math_jax/MathJax.js?config=default';
+        if (api_get_setting('more_buttons_maximized_mode') != 'true') {
+            $config['toolbar'] = $this->getNormalToolbar();
+        } else {
+            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
+
         $config['fullPage'] = true;
 
         return $config;
+    }
+
+    protected function getMaximizedToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Youtube',
+                'Flash',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Asciimath',
+                'Asciisvg'
+            ],
+            '/',
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks'],
+            ['Toolbarswitch']
+        ];
+    }
+
+    protected function getNormalToolbar()
+    {
+        return [
+            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            ['Table', 'SpecialChar'],
+            ['Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'OrderedList', 'UnorderedList'],
+            '/',
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Bold', 'Italic', 'Underline'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['ShowBlocks']
+        ];
+    }
+
+    protected function getMinimizedToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            ['Toolbarswitch']
+        ];
     }
 
 }

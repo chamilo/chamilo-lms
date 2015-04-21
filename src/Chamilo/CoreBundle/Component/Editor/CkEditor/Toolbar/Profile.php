@@ -4,13 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * PortalNews toolbar configuration
+ * Profile toolbar configuration
  * 
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class PortalNews extends Basic
+class Profile extends Basic
 {
-
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -40,10 +42,7 @@ class PortalNews extends Basic
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar',
-                'Inserthtml',
-                'Asciimath',
-                'Asciisvg'
+                'SpecialChar'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -60,15 +59,15 @@ class PortalNews extends Basic
     protected function getNormalToolbar()
     {
         return [
-            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
-            ['Table', 'SpecialChar'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
+            ['Table', 'Smiley'],
             '/',
-            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['Source']
         ];
     }
 
@@ -77,10 +76,10 @@ class PortalNews extends Basic
         return [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
     }

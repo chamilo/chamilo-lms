@@ -4,17 +4,13 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Documents toolbar configuration
+ * Forum toolbar configuration
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
-class Documents extends Basic
+class Forum extends Basic
 {
-    public $plugins = array();
 
-    /**
-     * @return mixed
-     */
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -23,52 +19,35 @@ class Documents extends Basic
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
         }
 
-        $config['extraPlugins'] = $this->getPluginsToString();
-        //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
-        //$config['mathJaxLib'] = api_get_path(WEB_LIBRARY_JS_PATH).'/math_jax/MathJax.js?config=default';
-        $config['fullPage'] = true;
-
         return $config;
-    }
-
-    /**
-     * @return array
-     */
-    public function getConditionalPlugins()
-    {
-        $plugins = array();
-
-        if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-            $plugins[] = 'glossary';
-        }
-
-        return $plugins;
     }
 
     protected function getNormalToolbar()
     {
         return [
             ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
-            ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
             ['Table', 'SpecialChar'],
             [
+                'NumberedList',
+                'BulletedList',
+                '-',
                 'Outdent',
                 'Indent',
                 '-',
                 'TextColor',
                 'BGColor',
-                '-',
-                'NumberedList',
-                'BulletedList',
-                '-',
-                api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
                 'Source'
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            [
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight'
+            ]
         ];
     }
 
@@ -77,11 +56,11 @@ class Documents extends Basic
         return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch', 'ShowBlocks']
+            ['Toolbarswitch']
         ];
     }
 

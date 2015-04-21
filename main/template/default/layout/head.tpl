@@ -25,7 +25,6 @@ var plugins = [
     //'ckeditor_wiris',
     'dialogui',
     'glossary',
-    'justify',
     'leaflet',
     'mapping',
     'maximize',

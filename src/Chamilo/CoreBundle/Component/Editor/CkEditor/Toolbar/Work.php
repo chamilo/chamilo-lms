@@ -4,19 +4,26 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * PortalNews toolbar configuration
- * 
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
+ * Work toolbar configuration
+ *
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
-class PortalNews extends Basic
+class Work extends Basic
 {
 
+    public $plugins = array(
+    );
+
+    /**
+     * @return mixed
+     */
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
+
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
@@ -26,7 +33,7 @@ class PortalNews extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -41,9 +48,7 @@ class PortalNews extends Basic
                 'leaflet',
                 'Smiley',
                 'SpecialChar',
-                'Inserthtml',
-                'Asciimath',
-                'Asciisvg'
+                'Asciimath'
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -53,22 +58,22 @@ class PortalNews extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     protected function getNormalToolbar()
     {
         return [
-            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Maxmize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
-            ['Table', 'SpecialChar'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
+            ['Table', 'Smiley'],
             '/',
-            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['Source']
         ];
     }
 
@@ -77,10 +82,9 @@ class PortalNews extends Basic
         return [
             ['NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
     }

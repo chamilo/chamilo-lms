@@ -17,16 +17,47 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = array(
-        'oembed',
-        'video',
+        'adobeair',
+        'ajax',
         'audio',
-        'wordcount',
-        'templates',
-        'justify',
+        'bidi',
         'colorbutton',
+        'colordialog',
+        'dialogui',
+        'dialogadvtab',
+        'div',
+        'divarea',
+        'docprops',
+        'find',
         'flash',
-        'link',
-        'table'
+        'font',
+        'iframe',
+        'iframedialog',
+        'indentblock',
+        'justify',
+        'language',
+        'lineutils',
+        'liststyle',
+        'newpage',
+        'oembed',
+        'pagebreak',
+        'preview',
+        'print',
+        'save',
+        'selectall',
+        'sharedspace',
+        'showblocks',
+        'smiley',
+        'sourcedialog',
+        'stylesheetparser',
+        'tableresize',
+        'templates',
+        'uicolor',
+        'video',
+        'widget',
+        'wikilink',
+        'wordcount',
+        'xml'
     );
 
     /**
@@ -45,6 +76,10 @@ class Basic extends Toolbar
     ) {
         // Adding plugins depending of platform conditions
         $plugins = array();
+
+        if (api_get_setting('show_glossary_in_documents') != 'none') {
+            $plugins[] = 'glossary';
+        }
 
         if (api_get_setting('youtube_for_students') == 'true') {
             $plugins[] = 'youtube';
@@ -83,6 +118,14 @@ class Basic extends Toolbar
             // Missing
         }
 
+        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+            $plugins[] = 'toolbarswitch';
+        }
+
+        if (api_get_setting('allow_spellcheck') == 'true') {
+            $plugins[] = 'scayt';
+        }
+
         $this->defaultPlugins = array_merge($this->defaultPlugins, $plugins);
         parent::__construct($toolbar, $config, $prefix);
     }
@@ -92,30 +135,11 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
-        // Original from ckeditor
-        $config['toolbarGroups'] = array(
-            array('name' => 'document',   'groups' =>array('mode', 'document', 'doctools')),
-            array('name' => 'clipboard',  'groups' =>array('clipboard', 'undo', )),
-            array('name' => 'editing',    'groups' =>array('clipboard', 'undo', )),
-            //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
-            '/',
-            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup', )),
-            array('name' => 'paragraph',   'groups' =>array('list', 'indent', 'blocks', 'align')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
-            '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'allMedias'),
-            array('name' => 'mode')
-        );
+        if (api_get_setting('more_buttons_maximized_mode') == 'true') {
+            $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
 
-        // file manager (elfinder)
-
-        // http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html
-        $config['filebrowserBrowseUrl'] = api_get_path(WEB_LIBRARY_PATH).'elfinder/filemanager.php';
+            $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
+        }
 
         $config['customConfig'] = api_get_path(WEB_LIBRARY_PATH).'javascript/ckeditor/config_js.php';
 
@@ -156,4 +180,68 @@ class Basic extends Toolbar
         //$config['height'] = '200';
         return $this->config;
     }
+
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
+    protected function getNormalToolbar()
+    {
+        return null;
+    }
+
+    /**
+     * Get the small toolbar configuration
+     * @return array
+     */
+    protected function getMinimizedToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['Toolbarswitch']
+        ];
+    }
+
+    /**
+     * Get the toolbar configuration when CKEditor is maximized
+     * @return array
+     */
+    protected function getMaximizedToolbar()
+    {
+        return [
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
+            ['Link', 'Unlink', 'Anchor', 'Glossary'],
+            [
+                'Image',
+                'Mapping',
+                'Video',
+                'Oembed',
+                'Flash',
+                'Youtube',
+                'Audio',
+                'leaflet',
+                'Smiley',
+                'SpecialChar',
+                'Asciimath',
+                'Asciisvg'
+            ],
+            '/',
+            ['Table', '-', 'CreateDiv'],
+            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+            ['PageBreak', 'ShowBlocks', 'Source'],
+            ['Toolbarswitch'],
+        ];
+    }
+
 }

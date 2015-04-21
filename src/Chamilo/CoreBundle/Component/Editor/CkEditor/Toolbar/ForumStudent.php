@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * PortalNews toolbar configuration
- * 
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
+ * ForumStudent toolbar configuration
+ *
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
-class PortalNews extends Basic
+class ForumStudent extends Basic
 {
 
     public function getConfig()
@@ -17,6 +17,7 @@ class PortalNews extends Basic
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
+
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
@@ -26,7 +27,7 @@ class PortalNews extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -34,14 +35,13 @@ class PortalNews extends Basic
                 'Image',
                 'Mapping',
                 'Video',
-                'Oembed',
-                'Youtube',
                 'Flash',
+                'Youtube',
+                'Oembed',
                 'Audio',
                 'leaflet',
                 'Smiley',
                 'SpecialChar',
-                'Inserthtml',
                 'Asciimath',
                 'Asciisvg'
             ],
@@ -52,8 +52,8 @@ class PortalNews extends Basic
             ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['PageBreak', 'ShowBlocks'],
+            ['Toolbarswitch'],
         ];
     }
 
@@ -64,23 +64,24 @@ class PortalNews extends Basic
             ['Link', 'Unlink', 'Anchor'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio'],
             ['Table', 'SpecialChar'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'Source'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'TextColor', 'BGColor'],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['ShowBlocks']
         ];
     }
 
     protected function getMinimizedToolbar()
     {
         return [
-            ['NewPage', 'Templates', '-', 'PasteFromWord'],
+            ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            ['JustifyLeft', 'JustifyCenter'],
+            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
             ['Toolbarswitch']
         ];
     }

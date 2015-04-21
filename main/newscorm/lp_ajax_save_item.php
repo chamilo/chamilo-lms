@@ -8,7 +8,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
@@ -443,10 +443,6 @@ function save_item(
         }
     }
     $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
-
-    if ($debug > 0) {
-        $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$myStatus.")',2);";
-    }
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.

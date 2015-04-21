@@ -82,7 +82,8 @@ class ExerciseLib
                 return '';
             }
 
-            echo '<div class="question_options">';
+            echo '<div class="question_options row">';
+
             // construction of the Answer object (also gets all answers details)
             $objAnswerTmp = new Answer($questionId);
 
@@ -104,7 +105,7 @@ class ExerciseLib
             $num_suggestions = 0;
 
             if ($answerType == MATCHING) {
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped">';
                 // Iterate through answers
                 $x = 1;
                 //mark letters for each answer
@@ -213,7 +214,7 @@ class ExerciseLib
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="data_table">';
+                $s .= '<table class="table table-hover table-striped">';
                 $s .= Display::tag(
                     'tr',
                     $header,
@@ -222,22 +223,24 @@ class ExerciseLib
             }
 
             if ($show_comment) {
-                if (in_array(
-                    $answerType,
-                    array(
-                        MULTIPLE_ANSWER,
-                        MULTIPLE_ANSWER_COMBINATION,
-                        UNIQUE_ANSWER,
-                        UNIQUE_ANSWER_NO_OPTION,
-                        GLOBAL_MULTIPLE_ANSWER
+                if (
+                    in_array(
+                        $answerType,
+                        array(
+                            MULTIPLE_ANSWER,
+                            MULTIPLE_ANSWER_COMBINATION,
+                            UNIQUE_ANSWER,
+                            UNIQUE_ANSWER_IMAGE,
+                            UNIQUE_ANSWER_NO_OPTION,
+                            GLOBAL_MULTIPLE_ANSWER
+                        )
                     )
-                )
                 ) {
                     $header = Display::tag('th', get_lang('Options'));
                     if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
-                    $s .= '<table class="data_table">';
+                    $s .= '<table class="table table-hover table-striped">';
                     $s .= Display::tag(
                         'tr',
                         $header,
@@ -263,7 +266,7 @@ class ExerciseLib
                 $attributes = array();
 
                 // Unique answer
-                if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+                if (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, UNIQUE_ANSWER_IMAGE])) {
                     $input_id = 'choice-' . $questionId . '-' . $answerId;
                     if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
                         $attributes = array(
@@ -282,6 +285,25 @@ class ExerciseLib
                         }
                     }
 
+                    if ($show_comment) {
+                        $s .= '<tr><td>';
+                    }
+
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        if ($show_comment) {
+                            if (empty($comment)) {
+                                $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                    . 'class="exercise-unique-answer-image col-xs-6" style="text-align: center">';
+                            } else {
+                                $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                    . 'class="exercise-unique-answer-image col-xs-6 col-sm-12" style="text-align: center">';
+                            }
+                        } else {
+                            $s .= '<div id="answer' . $questionId . $numAnswer . '" '
+                                . 'class="exercise-unique-answer-image col-xs-6 col-md-4" style="text-align: center">';
+                        }
+                    }
+
                     $answer = Security::remove_XSS($answer, STUDENT);
                     $s .= Display::input(
                         'hidden',
@@ -289,7 +311,15 @@ class ExerciseLib
                         '0'
                     );
 
-                    $answer_input = '<label class="radio">';
+                    $answer_input = null;
+
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        $attributes['style'] = 'display: none;';
+
+                        $answer = '<div class="thumbnail">' . $answer . '</div>';
+                    }
+
+                    $answer_input .= '<label class="radio">';
                     $answer_input .= Display::input(
                         'radio',
                         'choice[' . $questionId . ']',
@@ -299,8 +329,11 @@ class ExerciseLib
                     $answer_input .= $answer;
                     $answer_input .= '</label>';
 
+                    if ($answerType == UNIQUE_ANSWER_IMAGE) {
+                        $answer_input .= "</div>";
+                    }
+
                     if ($show_comment) {
-                        $s .= '<tr><td>';
                         $s .= $answer_input;
                         $s .= '</td>';
                         $s .= '<td>';
@@ -311,7 +344,8 @@ class ExerciseLib
                         $s .= $answer_input;
                     }
 
-                } elseif ($answerType == MULTIPLE_ANSWER ||
+                } elseif (
+                    $answerType == MULTIPLE_ANSWER ||
                     $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
                     $answerType == GLOBAL_MULTIPLE_ANSWER
                 ) {

@@ -100,7 +100,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
             $( "#question_list" ).accordion({
                 icons: icons,
-                autoHeight: false,
+                heightStyle: "content",
                 active: false, // all items closed by default
                 collapsible: true,
                 header: ".header_operations"

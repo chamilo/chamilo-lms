@@ -5865,3 +5865,41 @@ ul.holder li.bit-box{
     border-radius: 50%;
     border: 5px solid rgba(0,0,30,0.8);
 }
+
+.question_options .exercise-unique-answer-image {
+
+}
+
+@media (min-width: 768px) {
+    .question_options .exercise-unique-answer-image:nth-child(2n-1) {
+        clear: both;
+    }
+}
+
+@media (min-width: 992px) {
+    .question_options .exercise-unique-answer-image:nth-child(2n-1) {
+        clear: none;
+    }
+
+    .question_options .exercise-unique-answer-image:nth-child(3n-2) {
+        clear: both;
+    }
+}
+
+.question_options label > input + div.thumbnail {
+    border-color: transparent;
+    border-width: 5px;
+}
+
+.question_options label > input:checked + div.thumbnail {
+    border: 5px solid red;
+}
+
+.question_options div.thumbnail p {
+    margin: 0;
+}
+
+.question_options div.thumbnail img {
+    height: auto !important;
+    max-width: 100%;
+}

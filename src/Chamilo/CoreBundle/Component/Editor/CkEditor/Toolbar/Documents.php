@@ -13,7 +13,8 @@ class Documents extends Basic
     public $plugins = array();
 
     /**
-     * @return mixed
+     * Get the toolbar config
+     * @return array
      */
     public function getConfig()
     {
@@ -45,6 +46,10 @@ class Documents extends Basic
         return $plugins;
     }
 
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
     protected function getNormalToolbar()
     {
         return [
@@ -72,6 +77,10 @@ class Documents extends Basic
         ];
     }
 
+    /**
+     * Get the toolbar configuration when CKEditor is minimized
+     * @return array
+     */
     protected function getMinimizedToolbar()
     {
         return [

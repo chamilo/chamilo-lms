@@ -146,16 +146,14 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
     /*echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';*/
 
-    if (ADD_DOCUMENT_TO_WORK) {
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
-        echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_document.php?'.api_get_cidreq().'&id='.$workId.'">';
+    echo Display::return_icon('new_document.png', get_lang('AddDocument'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
-        echo Display::return_icon('user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/add_user.php?'.api_get_cidreq().'&id='.$workId.'">';
+    echo Display::return_icon('user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
-        echo Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-    }
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=export_pdf">';
+    echo Display::return_icon('pdf.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $display_output = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_missing.php?'.api_get_cidreq().'&amp;id='.$workId.'&amp;list=without">'.
     Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -198,24 +196,11 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
-        get_lang('Score'),
+        get_lang('Feedback'),
         get_lang('Date'),
         get_lang('Status'),
         get_lang('Actions')
     );
-
-    if (ALLOW_USER_COMMENTS) {
-        $columns = array(
-            get_lang('Type'),
-            get_lang('FirstName'),
-            get_lang('LastName'),
-            get_lang('Title'),
-            get_lang('Feedback'),
-            get_lang('Date'),
-            get_lang('Status'),
-            get_lang('Actions')
-        );
-    }
 
     $column_model = array(
         array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
@@ -235,6 +220,7 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('Title'),
+        get_lang('Feedback'),
         get_lang('Date'),
         get_lang('Actions')
     );
@@ -244,31 +230,10 @@ if (!empty($work_data['enable_qualification']) &&
         array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',  'index'=>'lastname',  'width'=>'35', 'align'=>'left', 'search' => 'true'),
         array('name'=>'title',     'index'=>'title',     'width'=>'40', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
+        array('name'=>'qualification',  'index'=>'qualification',  'width'=>'25', 'align'=>'left', 'search' => 'true'),
         array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'45', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
         array('name'=>'actions',   'index'=>'actions',   'width'=>'40', 'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
     );
-
-    if (ALLOW_USER_COMMENTS) {
-        $columns = array(
-            get_lang('Type'),
-            get_lang('FirstName'),
-            get_lang('LastName'),
-            get_lang('Title'),
-            get_lang('Feedback'),
-            get_lang('Date'),
-            get_lang('Actions')
-        );
-
-        $column_model = array(
-            array('name'=>'type',      'index'=>'file',      'width'=>'8',  'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
-            array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',  'index'=>'lastname',  'width'=>'35', 'align'=>'left', 'search' => 'true'),
-            array('name'=>'title',     'index'=>'title',     'width'=>'40', 'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
-            array('name'=>'qualification',  'index'=>'qualification',  'width'=>'25', 'align'=>'left', 'search' => 'true'),
-            array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'45', 'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-            array('name'=>'actions',   'index'=>'actions',   'width'=>'40', 'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
-        );
-    }
 }
 
 $extra_params = array(

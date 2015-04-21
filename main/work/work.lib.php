@@ -14,11 +14,6 @@ use ChamiloSession as Session;
  *  @todo   this lib should be convert in a static class and moved to main/inc/lib
  */
 
-$addDocumentToWork = api_get_configuration_value('add_document_to_work');
-define('ADD_DOCUMENT_TO_WORK', $addDocumentToWork);
-$workUserComments = api_get_configuration_value('work_user_comments');
-define('ALLOW_USER_COMMENTS', $workUserComments);
-
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param   string  Current dir
@@ -841,37 +836,24 @@ function display_student_publications_list(
 function showStudentWorkGrid()
 {
     $courseInfo = api_get_course_info();
-    $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'left', 'sortable'=>'false')
-    );
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student&'.api_get_cidreq();
 
     $columns = array(
         get_lang('Type'),
         get_lang('Title'),
-        get_lang('HandOutDateLimit')
+        get_lang('HandOutDateLimit'),
+        get_lang('Feedback'),
+        get_lang('LastUpload')
     );
 
-    if (ALLOW_USER_COMMENTS) {
-        $columns = array(
-            get_lang('Type'),
-            get_lang('Title'),
-            get_lang('HandOutDateLimit'),
-            get_lang('Feedback'),
-            get_lang('LastUpload')
-        );
-
-        $columnModel = array(
-            array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
-            array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
-            array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'left', 'sortable'=>'false'),
-            array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'left'),
-            array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'left'),
-        );
-    }
+    $columnModel = array(
+        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'title', 'index'=>'title', 'width'=>'250',   'align'=>'left'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'80',  'align'=>'left', 'sortable'=>'false'),
+        array('name'=>'feedback', 'index'=>'feedback', 'width'=>'80',  'align'=>'left'),
+        array('name'=>'last_upload', 'index'=>'feedback', 'width'=>'125',  'align'=>'left'),
+    );
 
     if ($courseInfo['show_score'] == 0) {
         $columnModel[] = array(
@@ -1778,26 +1760,25 @@ function getWorkListStudent(
             $whereCondition
         );
 
-        if (ADD_DOCUMENT_TO_WORK) {
-           $count = getTotalWorkComment($workList, $courseInfo);
+        $count = getTotalWorkComment($workList, $courseInfo);
 
-            if (!is_null($count) && !empty($count)) {
-                $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
-            }
-
-            /*$score = getTotalWorkScore($workList);
-
-            if (!is_null($score) && !empty($score)) {
-                $work['title'] .= ' '.Display::return_icon('rate_work.png', get_lang('Score'));
-            }*/
-
-            $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
-
-            if (!empty($lastWork)) {
-                $work['last_upload'] = Display::label($lastWork['qualification'], 'warning').' - ';
-                $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
-            }
+        if (!is_null($count) && !empty($count)) {
+            $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info');
         }
+
+        /*$score = getTotalWorkScore($workList);
+
+        if (!is_null($score) && !empty($score)) {
+            $work['title'] .= ' '.Display::return_icon('rate_work.png', get_lang('Score'));
+        }*/
+
+        $lastWork = getLastWorkStudentFromParentByUser($userId, $work['id'], $courseInfo);
+
+        if (!empty($lastWork)) {
+            $work['last_upload'] = Display::label($lastWork['qualification'], 'warning').' - ';
+            $work['last_upload'] .= api_get_local_time($lastWork['sent_date']);
+        }
+
 
         $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
         $work['others'] = Display::url(
@@ -1973,11 +1954,6 @@ function get_work_user_list_from_documents(
     $whereCondition,
     $getCount = false
 ) {
-
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return array();
-    }
-
     if ($getCount) {
         $select1 = " SELECT count(u.user_id) as count ";
         $select2 = " SELECT count(u.user_id) as count ";
@@ -2932,9 +2908,6 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
  */
 function getAllDocumentToWork($workId, $courseId)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return array();
-    }
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = array(
         'work_id = ? and c_id = ?' => array($workId, $courseId)
@@ -3038,9 +3011,6 @@ function deleteUserToWork($userId, $workId, $courseId)
  */
 function userIsSubscribedToWork($userId, $workId, $courseId)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return true;
-    }
     $subscribedUsers = getAllUserToWork($workId, $courseId);
 
     if (empty($subscribedUsers)) {
@@ -3101,16 +3071,12 @@ function getStudentSubscribedToWork(
         );
     }
 
-    if (ADD_DOCUMENT_TO_WORK == true) {
-        $usersInWork = getAllUserToWork($workId, $courseId, $getCount);
+    $usersInWork = getAllUserToWork($workId, $courseId, $getCount);
 
-        if (empty($usersInWork)) {
-            return $usersInCourse;
-        } else {
-            return $usersInWork;
-        }
-    } else {
+    if (empty($usersInWork)) {
         return $usersInCourse;
+    } else {
+        return $usersInWork;
     }
 
 }
@@ -3123,9 +3089,6 @@ function getStudentSubscribedToWork(
  */
 function allowOnlySubscribedUser($userId, $workId, $courseId)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return true;
-    }
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
@@ -3204,10 +3167,6 @@ function getWorkDescriptionToolbar()
  */
 function getWorkComments($work)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return array();
-    }
-
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $userTable= Database::get_main_table(TABLE_MAIN_USER);
 
@@ -3253,10 +3212,6 @@ function getWorkComments($work)
  */
 function getTotalWorkScore($workList)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     $count = 0;
     foreach ($workList as $data) {
         $count += $data['qualification_score'];
@@ -3273,10 +3228,6 @@ function getTotalWorkScore($workList)
  */
 function getTotalWorkComment($workList, $courseInfo = array())
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3296,10 +3247,6 @@ function getTotalWorkComment($workList, $courseInfo = array())
  */
 function getWorkCommentCount($id, $courseInfo = array())
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3332,10 +3279,6 @@ function getWorkCommentCountFromParent(
     $courseInfo = array(),
     $sessionId = 0
 ) {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3379,10 +3322,6 @@ function getLastWorkStudentFromParent(
     $courseInfo = array(),
     $sessionId = 0
 ) {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3436,10 +3375,6 @@ function getLastWorkStudentFromParentByUser(
     $courseInfo = array(),
     $sessionId = 0
 ) {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3486,9 +3421,6 @@ function getLastWorkStudentFromParentByUser(
  */
 function getWorkComment($id, $courseInfo = array())
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return array();
-    }
     if (empty($courseInfo)) {
         $courseInfo = api_get_course_info();
     }
@@ -3561,10 +3493,6 @@ function deleteCommentFile($id, $courseInfo = array())
  */
 function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
-
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
 
     $params = array(
@@ -3652,9 +3580,6 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
  */
 function getWorkCommentForm($work)
 {
-    if (ADD_DOCUMENT_TO_WORK == false) {
-        return null;
-    }
     $form = new FormValidator(
         'work_comment',
         'post',
@@ -3662,21 +3587,22 @@ function getWorkCommentForm($work)
     );
 
     $form->addElement('file', 'file', get_lang('Attachment'));
-    $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+    $form->addElement('textarea', 'comment', get_lang('Comment'), array('rows' => '8'));
     $form->addElement('hidden', 'id', $work['id']);
     if (api_is_allowed_to_edit()) {
         $form->addElement('checkbox', 'send_mail', null, get_lang('SendMail'));
     }
-    $form->addElement('button', 'button', get_lang('Send'));
+    $form->addButtonSend(get_lang('Send'), 'button');
 
-    return $form->return_form();
+    return $form->returnForm();
 }
 
 /**
  * @param array $homework result of get_work_assignment_by_id()
  * @return string
  */
-function getWorkDateValidationStatus($homework) {
+function getWorkDateValidationStatus($homework)
+{
     $message = null;
     $has_expired = false;
     $has_ended = false;

@@ -90,7 +90,6 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
 
         $tpl = new Template();
         $tpl->assign('work', $work);
-        $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
         $tpl->assign('comments', $comments);
         if (api_is_allowed_to_session_edit()) {
             $tpl->assign('form', $commentForm);

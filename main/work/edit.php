@@ -71,7 +71,7 @@ if (!api_is_allowed_to_edit()) {
 if (!empty($my_folder_data)) {
     $homework = get_work_assignment_by_id($my_folder_data['id']);
 
-    if (!empty($homework['expires_on'] || !empty($homework['ends_on'])) {
+    if (!empty($homework['expires_on']) || !empty($homework['ends_on'])) {
         $time_now = time();
 
         if (!empty($homework['expires_on']) &&
@@ -273,15 +273,14 @@ if (!empty($work_id)) {
             $comments = getWorkComments($work_item);
 
             $template = $tpl->get_template('work/comments.tpl');
-            $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
             $tpl->assign('comments', $comments);
 
-            $content .= $form->return_form();
+            $content .= $form->returnForm();
             $content  .= $tpl->fetch($template);
         }
     } elseif ($is_author) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
-            $content .= $form->return_form();
+            $content .= $form->returnForm();
         } else {
             $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
         }

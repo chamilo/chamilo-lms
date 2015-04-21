@@ -6,10 +6,6 @@ require_once '../inc/global.inc.php';
 // Including necessary files
 require_once 'work.lib.php';
 
-if (ADD_DOCUMENT_TO_WORK == false) {
-    exit;
-}
-
 $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;

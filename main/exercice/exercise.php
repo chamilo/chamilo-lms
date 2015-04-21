@@ -108,7 +108,10 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('ToolGradebook'));
+    $interbreadcrumb[] = array(
+        'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $nameTools = get_lang('Exercices');
@@ -179,7 +182,7 @@ if ($is_allowedToEdit) {
         if ($choice == 'clean_all_test') {
             $check = Security::check_token('get');
             if ($check) {
-                // list des exercices dans un test
+                // list of exercises in a course/session
                 // we got variable $courseId $courseInfo session api_get_session_id()
                 $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
                     $courseInfo,
@@ -219,7 +222,7 @@ if ($is_allowedToEdit) {
         if ($objExerciseTmp->read($exerciseId)) {
             if ($check) {
                 switch ($choice) {
-                    case 'delete' :
+                    case 'delete':
                         // deletes an exercise
                         if ($exercise_action_locked == false) {
                             $objExerciseTmp->delete();
@@ -230,7 +233,7 @@ if ($is_allowedToEdit) {
                             Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
                         }
                         break;
-                    case 'enable' :
+                    case 'enable':
                         // enables an exercise
                         $objExerciseTmp->enable();
                         $objExerciseTmp->save();
@@ -238,33 +241,33 @@ if ($is_allowedToEdit) {
                         // "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable' :
+                    case 'disable':
                         // disables an exercise
                         $objExerciseTmp->disable();
                         $objExerciseTmp->save();
                         api_item_property_update($courseInfo, TOOL_QUIZ, $objExerciseTmp->id, 'invisible', $userId);
                         Display :: display_confirmation_message(get_lang('VisibilityChanged'));
                         break;
-                    case 'disable_results' :
+                    case 'disable_results':
                         //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsDisabled'));
                         break;
-                    case 'enable_results' :
+                    case 'enable_results':
                         //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
                         Display :: display_confirmation_message(get_lang('ResultsEnabled'));
                         break;
-                    case 'clean_results' :
+                    case 'clean_results':
                         //clean student results
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->clean_results(true);
                             Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
                         }
                         break;
-                    case 'copy_exercise' : //copy an exercise
+                    case 'copy_exercise': //copy an exercise
                         $objExerciseTmp->copy_exercise();
                         Display :: display_confirmation_message(get_lang('ExerciseCopied'));
                         break;
@@ -278,7 +281,7 @@ if ($is_allowedToEdit) {
 
     if (!empty($hpchoice)) {
         switch ($hpchoice) {
-            case 'delete' :
+            case 'delete':
                 // deletes an exercise
                 $imgparams = array();
                 $imgcount = 0;
@@ -308,7 +311,7 @@ if ($is_allowedToEdit) {
                     my_delete($documentPath.$uploadPath."/".$fld."/");
                 }
                 break;
-            case 'enable' : // enables an exercise
+            case 'enable': // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
@@ -324,7 +327,7 @@ if ($is_allowedToEdit) {
                 //$dialogBox = get_lang('ViMod');
 
                 break;
-            case 'disable' : // disables an exercise
+            case 'disable': // disables an exercise
                 $newVisibilityStatus = "0"; //"invisible"
                 $query = "SELECT id FROM $TBL_DOCUMENT
                           WHERE c_id = $courseId AND path='".Database :: escape_string($file)."'";
@@ -338,7 +341,7 @@ if ($is_allowedToEdit) {
                     $userId
                 );
                 break;
-            default :
+            default:
                 break;
         }
     }
@@ -423,7 +426,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
     echo '</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">';
-    echo Display::return_icon('database.png', get_lang('QuestionPool'),'', ICON_SIZE_MEDIUM);
+    echo Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
     echo '</a>';
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
@@ -436,12 +439,15 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo Display::url(
         Display::return_icon(
             'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM),
+            get_lang('CleanAllStudentsResultsForAllTests'),
             '',
-            array(
-                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-                'href' => api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
-            )
+            ICON_SIZE_MEDIUM
+        ),
+        '',
+        array(
+            'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
+            'href' => api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
+        )
     );
 }
 
@@ -629,7 +635,11 @@ if (!empty($exercise_list)) {
                     )
                 );
 
-                $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                $move = Display::return_icon(
+                    'all_directions.png',
+                    get_lang('Move'),
+                    array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;')
+                );
                 $move = null;
 
                 $class_tip = '';
@@ -711,8 +721,15 @@ if (!empty($exercise_list)) {
                 if ($session_id == $row['session_id']) {
                     if ($locked == false) {
                         $actions .= Display::url(
-                            Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '',
-                            array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));
+                            Display::return_icon(
+                                'delete.png',
+                                get_lang('Delete'),
+                                '',
+                                ICON_SIZE_SMALL
+                            ),
+                            '',
+                            array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'])
+                        );
                     } else {
                         $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
                     }

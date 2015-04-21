@@ -3259,7 +3259,7 @@ class CourseManager
                 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $orderBy = ' ORDER BY position';
                 $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                    ON (c.code = src.course_code AND session_id = $sessionId) ";
+                                    ON (c.code = src.c_id AND session_id = $sessionId) ";
             }
         }
 

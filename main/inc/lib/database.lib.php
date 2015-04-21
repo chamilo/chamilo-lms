@@ -11,10 +11,6 @@ use Doctrine\ORM\EntityManager;
  */
 class Database
 {
-    /* Variable use only in the installation process to log errors.
-    See the Database::query function */
-    static $log_queries = false;
-
     /**
      * @var EntityManager
      */
@@ -54,7 +50,9 @@ class Database
     }
 
     /**
-     *  Returns the name of the main database.
+     * Returns the name of the main database.
+     *
+     * @return string
      */
     public static function get_main_database()
     {
@@ -62,13 +60,11 @@ class Database
     }
 
     /**
-     * A more generic method than the other get_main_xxx_table methods,
-     * This one returns the correct complete name of any table of the main
-     * database of which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
-     * instead of directly using magic words in your tool code.
+     * Get main table
      *
-     * @param string $table, the name of the table
+     * @param string $table
+     *
+     * @return mixed
      */
     public static function get_main_table($table)
     {
@@ -76,13 +72,11 @@ class Database
     }
 
     /**
-     * A more generic method than the older get_course_xxx_table methods,
-     * This one can return the correct complete name of any course table of
-     * which you pass the short name as a parameter.
-     * Please, define table names as constants in this library and use them
-     * instead of directly using magic words in your tool code.
+     * Get course table
      *
-     * @param string $table, the name of the table
+     * @param string $table
+     *
+     * @return string
      */
     public static function get_course_table($table)
     {
@@ -92,6 +86,7 @@ class Database
     /**
      * Counts the number of rows in a table
      * @param string $table The table of which the rows should be counted
+     *
      * @return int The number of rows in the given table.
      * @deprecated
      */
@@ -101,7 +96,6 @@ class Database
 
         return $obj->n;
     }
-
 
     /**
      * Returns the number of affected rows in the last database operation.
@@ -116,14 +110,16 @@ class Database
 
     /**
      * Connect to the database sets the entity manager.
-     * @param array $params
-     * @param string $path
+     *
+     * @param array  $params
+     * @param string $sysPath
+     * @param string $entityRootPath
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function connect($params = [], $path = '')
+    public function connect($params = [], $sysPath = '', $entityRootPath = '')
     {
-        $config = self::getDoctrineConfig($path);
+        $config = self::getDoctrineConfig($entityRootPath);
 
         $config->setEntityNamespaces(
             array(
@@ -135,22 +131,22 @@ class Database
 
         $params['charset'] = 'utf8';
         $entityManager = EntityManager::create($params, $config);
-        $path = !empty($path) ? $path : api_get_path(SYS_PATH);
+        $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
         // Registering Constraints
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
-            $path."vendor/symfony/validator"
+            $sysPath."vendor/symfony/validator"
         );
 
         AnnotationRegistry::registerFile(
-            $path."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
+            $sysPath."vendor/symfony/doctrine-bridge/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php"
         );
 
         // Registering gedmo extensions
         AnnotationRegistry::registerAutoloadNamespace(
             'Gedmo\Mapping\Annotation',
-            $path."vendor/gedmo/doctrine-extensions/lib"
+            $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
 
         $this->setConnection($entityManager->getConnection());
@@ -190,20 +186,22 @@ class Database
 
     /**
      * Escape MySQL wildchars _ and % in LIKE search
-     * @param string            The string to escape
+     * @param string $text            The string to escape
+     *
      * @return string           The escaped string
      */
-    public static function escape_sql_wildcards($in_txt)
+    public static function escape_sql_wildcards($text)
     {
-        $out_txt = api_preg_replace("/_/", "\_", $in_txt);
-        $out_txt = api_preg_replace("/%/", "\%", $out_txt);
+        $text = api_preg_replace("/_/", "\_", $text);
+        $text = api_preg_replace("/%/", "\%", $text);
 
-        return $out_txt;
+        return $text;
     }
 
     /**
      * Escapes a string to insert into the database as text
-     * @param $string
+     *
+     * @param string $string
      *
      * @return string
      */
@@ -214,12 +212,14 @@ class Database
         return trim($string, "'");
     }
 
+
     /**
-     * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
-     * @param resource      The result from a call to sql_query (e.g. Database::query)
-     * @param string        Optional: "ASSOC","NUM" or "BOTH", as the constant used in mysql_fetch_array.
-     * @return array        Array of results as returned by php
-     * @author Yannick Warnier <yannick.warnier@beeznest.com>
+     * Gets the array from a SQL result (as returned by Database::query)
+     *
+     * @param Statement $result
+     * @param string    $option Optional: "ASSOC","NUM" or "BOTH"
+     *
+     * @return array|mixed
      */
     public static function fetch_array(Statement $result, $option = 'BOTH')
     {
@@ -232,9 +232,10 @@ class Database
 
     /**
      * Gets an associative array from a SQL result (as returned by Database::query).
-     * This method is equivalent to calling Database::fetch_array() with 'ASSOC' value for the optional second parameter.
-     * @param resource $result  The result from a call to sql_query (e.g. Database::query).
-     * @return array            Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
+     *
+     * @param Statement $result
+     *
+     * @return array
      */
     public static function fetch_assoc(Statement $result)
     {
@@ -242,9 +243,11 @@ class Database
     }
 
     /**
-     * Gets the next row of the result of the SQL query (as returned by Database::query) in an object form
+     * Gets the next row of the result of the SQL query
+     * (as returned by Database::query) in an object form
      *
      * @param Statement $result
+     *
      * @return mixed
      */
     public static function fetch_object(Statement $result)
@@ -253,7 +256,9 @@ class Database
     }
 
     /**
-     * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
+     * Gets the array from a SQL result (as returned by Database::query)
+     * help achieving database independence
+     *
      * @param Statement $result
      *
      * @return mixed
@@ -276,6 +281,7 @@ class Database
 
     /**
      * Gets the ID of the last item inserted into the database
+     *
      * @return string
      */
     public static function insert_id()
@@ -298,8 +304,8 @@ class Database
      * specific line and a field
      *
      * @param Statement $resource
-     * @param int $row
-     * @param string $field
+     * @param int       $row
+     * @param string    $field
      *
      * @return mixed
      */
@@ -314,6 +320,7 @@ class Database
 
     /**
      * @param $query
+     *
      * @return Statement
      *
      * @throws \Doctrine\DBAL\DBALException
@@ -350,8 +357,9 @@ class Database
      * Stores a query result into an array.
      *
      * @author Olivier Brouckaert
-     * @param  resource $result - the return value of the query
-     * @param  option BOTH, ASSOC, or NUM
+     * @param  Statement $result - the return value of the query
+     * @param  string $option BOTH, ASSOC, or NUM
+     *
      * @return array - the value returned by the query
      */
     public static function store_result(Statement $result, $option = 'BOTH')
@@ -361,9 +369,10 @@ class Database
 
     /**
      * Database insert
-     * @param string $table_name
-     * @param array $attributes
-     * @param bool $show_query
+     * @param string    $table_name
+     * @param array     $attributes
+     * @param bool      $show_query
+     *
      * @return bool|int
      */
     public static function insert($table_name, $attributes, $show_query = false)
@@ -536,6 +545,7 @@ class Database
 
     /**
      * @param array $conditions
+     *
      * @return string
      */
     public static function parse_where_conditions($conditions)
@@ -544,8 +554,11 @@ class Database
     }
 
     /**
-     * Experimental useful database update
-     * @todo lot of stuff to do here
+     * @param string $table_name
+     * @param array  $where_conditions
+     * @param bool   $show_query
+     *
+     * @return int
      */
     public static function delete($table_name, $where_conditions, $show_query = false)
     {
@@ -564,6 +577,7 @@ class Database
      * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
      * @param array $where_conditions where conditions i.e array('id = ?' =>'4')
      * @param bool $show_query
+     *
      * @return bool|int
      */
     public static function update(

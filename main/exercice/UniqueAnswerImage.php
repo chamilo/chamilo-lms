@@ -11,7 +11,7 @@ class UniqueAnswerImage extends UniqueAnswer
 {
 
     static $typePicture = 'mcua.png';
-    static $explanationLangVar = 'UniqueSelect';
+    static $explanationLangVar = 'UniqueAnswerImage';
 
     public function __construct()
     {

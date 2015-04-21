@@ -15,7 +15,8 @@ class Work extends Basic
     );
 
     /**
-     * @return mixed
+     * Get the toolbar config
+     * @return array
      */
     public function getConfig()
     {
@@ -30,6 +31,10 @@ class Work extends Basic
         return $config;
     }
 
+    /**
+     * Get the toolbar configuration when CKEditor is maximized
+     * @return array
+     */
     protected function getMaximizedToolbar()
     {
         return [
@@ -62,6 +67,10 @@ class Work extends Basic
         ];
     }
 
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
     protected function getNormalToolbar()
     {
         return [
@@ -77,6 +86,10 @@ class Work extends Basic
         ];
     }
 
+    /**
+     * Get the toolbar configuration when CKEditor is minimized
+     * @return array
+     */
     protected function getMinimizedToolbar()
     {
         return [

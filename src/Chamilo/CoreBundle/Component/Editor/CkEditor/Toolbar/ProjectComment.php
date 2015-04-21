@@ -10,6 +10,11 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class ProjectComment extends Basic
 {
+
+    /**
+     * Get the toolbar config
+     * @return array
+     */
     public function getConfig()
     {
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -22,6 +27,10 @@ class ProjectComment extends Basic
         return $config;
     }
 
+    /**
+     * Get the toolbar configuration when CKEditor is maximized
+     * @return array
+     */
     protected function getMaximizedToolbar()
     {
         return [
@@ -54,6 +63,10 @@ class ProjectComment extends Basic
         ];
     }
 
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
     protected function getNormalToolbar()
     {
         return [
@@ -67,6 +80,10 @@ class ProjectComment extends Basic
         ];
     }
 
+    /**
+     * Get the toolbar configuration when CKEditor is minimized
+     * @return array
+     */
     protected function getMinimizedToolbar()
     {
         return [

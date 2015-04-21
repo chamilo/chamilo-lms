@@ -123,7 +123,8 @@ class Database
      */
     public function connect($params = [], $path = '')
     {
-        $config = self::getDoctrineConfig();
+        $config = self::getDoctrineConfig($path);
+
         $config->setEntityNamespaces(
             array(
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
@@ -601,19 +602,23 @@ class Database
     }
 
     /**
+     * Get Doctrine configuration
+     * @param string $path
+     *
      * @return \Doctrine\ORM\Configuration
      */
-    public static function getDoctrineConfig()
+    public static function getDoctrineConfig($path)
     {
         $isDevMode = true;
         $isSimpleMode = false;
         $proxyDir = null;
         $cache = null;
+        $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
         $paths = array(
-            api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity',
-            api_get_path(SYS_PATH).'src/Chamilo/UserBundle/Entity',
-            api_get_path(SYS_PATH).'src/Chamilo/CourseBundle/Entity'
+            $path.'src/Chamilo/CoreBundle/Entity',
+            $path.'src/Chamilo/UserBundle/Entity',
+            $path.'src/Chamilo/CourseBundle/Entity'
         );
 
         /*$doctrineCache = api_get_path(SYS_ARCHIVE_PATH).'doctrine/';

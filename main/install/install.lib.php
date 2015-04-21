@@ -1751,20 +1751,29 @@ function lockSettings()
     }
 }
 
+/**
+ * Update dir values
+ */
 function updateDirAndFilesPermissions()
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."' WHERE variable  = 'permissions_for_new_directories'";
+    $sql = "UPDATE $table SET selected_value = '0" . decoct($permissions_for_new_directories) . "'
+              WHERE variable  = 'permissions_for_new_directories'";
     Database::query($sql);
 
-    $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
+    $sql = "UPDATE $table SET selected_value = '0" . decoct($permissions_for_new_files) . "' WHERE variable  = 'permissions_for_new_files'";
     Database::query($sql);
 
-    unset($_SESSION['permissions_for_new_directories']);
-    unset($_SESSION['permissions_for_new_files']);
+    if (isset($_SESSION['permissions_for_new_directories'])) {
+        unset($_SESSION['permissions_for_new_directories']);
+    }
+
+    if (isset($_SESSION['permissions_for_new_files'])) {
+        unset($_SESSION['permissions_for_new_files']);
+    }
 }
 
 function compare_setting_values($current_value, $wanted_value)

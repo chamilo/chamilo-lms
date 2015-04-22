@@ -3259,7 +3259,7 @@ class CourseManager
                 $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $orderBy = ' ORDER BY position';
                 $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                    ON (c.code = src.course_code AND session_id = $sessionId) ";
+                                    ON (c.id = src.c_id AND session_id = $sessionId) ";
             }
         }
 
@@ -3512,8 +3512,10 @@ class CourseManager
         $html .= '</div>';
         $notifications = isset($params['notifications']) ? $params['notifications'] : null;
         $param_class = isset($params['class']) ? $params['class'] : null;
+        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
 
         $html .= '<div class="col-md-10 ' . $param_class . '">';
+        $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
         $html .= '<h4 class="title">' . $params['title'] . $notifications . '</h4> ';
 
         if (isset($params['show_description'], $params['description']) && $params['show_description'] == 1) {
@@ -3535,8 +3537,7 @@ class CourseManager
         $html .= '</div>';
 
         $html .= '</div>';
-        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
-        $html .= '<div class="pull-right">' . $params['right_actions'] . '</div>';
+
         $html .= '</div>';
         $html .= '</div>';
         return $html;
@@ -4804,7 +4805,7 @@ class CourseManager
             ) {
                 $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'),
                     api_get_path(WEB_AJAX_PATH) . 'course_home.ajax.php?a=show_course_information&amp;code=' . $course_info['code'],
-                    array('class' => 'ajax btn'));
+                    array('class' => 'btn btn-default ajax'));
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);

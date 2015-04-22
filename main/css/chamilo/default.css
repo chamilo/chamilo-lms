@@ -131,15 +131,17 @@ a:focus {
 
   background-color:#00829C;
 }
+.nav > li > a:hover, .nav > li > a:focus{
+   background-color: transparent;
+}
+
 .navbar-inverse li a{
   line-height: 26px !important;
   background: none !important;
   border-right:1px solid rgba(0, 0, 0, 0.2) !important;
   border-left:1px solid rgba(255, 255, 255, 0.1) !important;
 }
-.nav > li > a:hover, .nav > li > a:focus{
-  background-color: transparent;
-}
+
 .navbar-inverse .navbar-brand:hover, .navbar-inverse .navbar-brand:focus{
   color: #ffffff;
 }
@@ -154,6 +156,12 @@ a:focus {
   filter: none !important;
   border-left-color: transparent !important;
 }
+.navbar-inverse .dropdown-menu li a:hover,
+.navbar-inverse .dropdown-menu li a:focus{
+  background:#3C4147 !important;
+  color: #fff;
+}
+
 .badge-warning{
   background-color: #FD6600;
 }

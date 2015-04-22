@@ -11,7 +11,8 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 class UniqueAnswerImage extends Basic
 {
     /**
-     * @return mixed
+     * Get the toolbar config
+     * @return array
      */
     public function getConfig()
     {

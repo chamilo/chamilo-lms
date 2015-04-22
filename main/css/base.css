@@ -4088,9 +4088,6 @@ tr.forum_category_header a {
     background-color: #a0e5fc;
 }
 
-.current {
-    font-weight: bold;
-}
 .structure {
     /*border-bottom: 1px solid #666666;*/
     font-weight: bold;
@@ -4913,7 +4910,7 @@ i.size-32.icon-new-work{
 }
 
 .text-h3 {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .text-h4 {
@@ -5793,12 +5790,40 @@ ul.holder li.bit-box{
     display: block;
   }
 }
-
-
+#settings .form-inline{
+  margin-bottom: 15px;
+}
+#search_settings{
+  margin-bottom: 15px;
+}
 .src-image {
     display: none;
 }
-
+/* thematic progress */
+#panel-thematic .title-topics{
+  font-size: 15px;
+  color:#00829C;
+  font-weight: bold;
+}
+#panel-thematic .current{
+  background-color: #E7F1F7;
+}
+#panel-thematic .separate{
+  margin-bottom: 10px;
+}
+#panel-thematic .date{
+  font-size: 11px;
+  color: #8A6D3B;
+  background: #FCF8E3;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  padding: 5px;
+}
+#panel-thematic .views ul li{
+  font-size: 12px;
+}
+/* end thematic progress*/
 .card {
     overflow: hidden;
     position: relative;
@@ -5810,7 +5835,6 @@ ul.holder li.bit-box{
     color: rgb(136, 172, 217);
     margin-bottom: 20px;
 }
-
 .card .header-bg {
     /* This stretches the canvas across the entire hero unit */
     position: absolute;
@@ -5840,4 +5864,42 @@ ul.holder li.bit-box{
     -moz-border-radius: 50%;
     border-radius: 50%;
     border: 5px solid rgba(0,0,30,0.8);
+}
+
+.question_options .exercise-unique-answer-image {
+
+}
+
+@media (min-width: 768px) {
+    .question_options .exercise-unique-answer-image:nth-child(2n-1) {
+        clear: both;
+    }
+}
+
+@media (min-width: 992px) {
+    .question_options .exercise-unique-answer-image:nth-child(2n-1) {
+        clear: none;
+    }
+
+    .question_options .exercise-unique-answer-image:nth-child(3n-2) {
+        clear: both;
+    }
+}
+
+.question_options label > input + div.thumbnail {
+    border-color: transparent;
+    border-width: 5px;
+}
+
+.question_options label > input:checked + div.thumbnail {
+    border: 5px solid red;
+}
+
+.question_options div.thumbnail p {
+    margin: 0;
+}
+
+.question_options div.thumbnail img {
+    height: auto !important;
+    max-width: 100%;
 }

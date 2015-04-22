@@ -14,7 +14,7 @@
  * @package chamilo.install
  */
 
-/*		CONSTANTS */
+/* CONSTANTS */
 
 use ChamiloSession as Session;
 
@@ -26,7 +26,7 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-/*		PHP VERSION CHECK */
+/* PHP VERSION CHECK */
 
 // Including necessary libraries.
 require_once '../inc/lib/api.lib.php';
@@ -44,23 +44,23 @@ require_once 'install.lib.php';
 // We need to provide some limited support for it through initialization of the
 // global array-type variable $_setting.
 $_setting = array(
-	'platform_charset' => 'UTF-8',
-	'server_type' => 'production', // 'production' | 'test'
-	'permissions_for_new_directories' => '0770',
-	'permissions_for_new_files' => '0660',
-	'stylesheets' => 'chamilo'
+    'platform_charset' => 'UTF-8',
+    'server_type' => 'production', // 'production' | 'test'
+    'permissions_for_new_directories' => '0770',
+    'permissions_for_new_files' => '0660',
+    'stylesheets' => 'chamilo'
 );
 
 // Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
-	$search = array('../', '\\0');
-	$install_language = str_replace($search, '', urldecode($_POST['language_list']));
-	Session::write('install_language',$install_language);
+    $search = array('../', '\\0');
+    $install_language = str_replace($search, '', urldecode($_POST['language_list']));
+    Session::write('install_language', $install_language);
 } elseif (isset($_SESSION['install_language']) && $_SESSION['install_language']) {
-	$install_language = $_SESSION['install_language'];
+    $install_language = $_SESSION['install_language'];
 } else {
-	// Trying to switch to the browser's language, it is covenient for most of the cases.
-	$install_language = detect_browser_language();
+    // Trying to switch to the browser's language, it is covenient for most of the cases.
+    $install_language = detect_browser_language();
 }
 
 // Language validation.
@@ -99,16 +99,16 @@ error_reporting(E_ALL);
 
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = array(
-	'1.9.0',
-	'1.9.2',
-	'1.9.4',
-	'1.9.6',
-	'1.9.6.1',
-	'1.9.8',
-	'1.9.8.1',
-	'1.9.8.2',
-	'1.9.10',
-	'1.9.10.2'
+    '1.9.0',
+    '1.9.2',
+    '1.9.4',
+    '1.9.6',
+    '1.9.6.1',
+    '1.9.8',
+    '1.9.8.1',
+    '1.9.8.2',
+    '1.9.10',
+    '1.9.10.2'
 );
 
 $my_old_version = '';
@@ -134,185 +134,185 @@ if (isAlreadyInstalledSystem()) {
     die();
 }
 
-/*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
+/* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
 // Is valid request
 $is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
 /*foreach ($_POST as $request_index => $request_value) {
-	if (substr($request_index, 0, 4) == 'step') {
-		if ($request_index != $is_valid_request) {
-			unset($_POST[$request_index]);
-		}
-	}
+    if (substr($request_index, 0, 4) == 'step') {
+        if ($request_index != $is_valid_request) {
+            unset($_POST[$request_index]);
+        }
+    }
 }*/
 
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
 if (!empty($_POST['updatePath'])) {
-	$proposedUpdatePath = $_POST['updatePath'];
+    $proposedUpdatePath = $_POST['updatePath'];
 }
 
 if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_update_6']) {
-	if (@$_POST['step2_install']) {
-		$installType = 'new';
-		$_POST['step2'] = 1;
-	} else {
-		$installType = 'update';
-		if (@$_POST['step2_update_8']) {
-			$emptyUpdatePath = false;
-			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
-			if (file_exists($proposedUpdatePath)) {
-				if (in_array($my_old_version, $update_from_version_8)) {
-					$_POST['step2'] = 1;
-				} else {
-					$badUpdatePath = true;
-				}
-			} else {
-				$badUpdatePath = true;
-			}
-		}
-	}
+    if (@$_POST['step2_install']) {
+        $installType = 'new';
+        $_POST['step2'] = 1;
+    } else {
+        $installType = 'update';
+        if (@$_POST['step2_update_8']) {
+            $emptyUpdatePath = false;
+            $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
+            if (file_exists($proposedUpdatePath)) {
+                if (in_array($my_old_version, $update_from_version_8)) {
+                    $_POST['step2'] = 1;
+                } else {
+                    $badUpdatePath = true;
+                }
+            } else {
+                $badUpdatePath = true;
+            }
+        }
+    }
 } elseif (@$_POST['step1']) {
-	$_POST['updatePath'] = '';
-	$installType = '';
-	$updateFromConfigFile = '';
-	unset($_GET['running']);
+    $_POST['updatePath'] = '';
+    $installType = '';
+    $updateFromConfigFile = '';
+    unset($_GET['running']);
 } else {
-	$installType = isset($_GET['installType']) ? $_GET['installType'] : null;
-	$updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
+    $installType = isset($_GET['installType']) ? $_GET['installType'] : null;
+    $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
-	// This is the main configuration file of the system before the upgrade.
-	include api_get_path(CONFIGURATION_PATH).'configuration.php'; // Don't change to include_once
+    // This is the main configuration file of the system before the upgrade.
+    include api_get_path(CONFIGURATION_PATH) . 'configuration.php'; // Don't change to include_once
 }
 
 if (!isset($_GET['running'])) {
-	$dbHostForm = 'localhost';
-	$dbUsernameForm = 'root';
-	$dbPassForm = '';
-	$dbNameForm = 'chamilo';
+    $dbHostForm = 'localhost';
+    $dbUsernameForm = 'root';
+    $dbPassForm = '';
+    $dbNameForm = 'chamilo';
 
-	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
-	$urlAppendPath  = api_remove_trailing_slash(api_get_path(REL_PATH));
-  	$urlForm 		= api_get_path(WEB_PATH);
-	$pathForm 		= api_get_path(SYS_PATH);
-	$emailForm = 'webmaster@localhost';
-	if (!empty($_SERVER['SERVER_ADMIN'])) {
-		$emailForm      = $_SERVER['SERVER_ADMIN'];
-	}
-	$email_parts = explode('@', $emailForm);
-	if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
-		$emailForm .= '.localdomain';
-	}
-	$adminLastName	= 'Doe';
-	$adminFirstName	= 'John';
-	$loginForm		= 'admin';
-	$passForm		= api_generate_password();
+    // Extract the path to append to the url if Chamilo is not installed on the web root directory.
+    $urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
+    $urlForm = api_get_path(WEB_PATH);
+    $pathForm = api_get_path(SYS_PATH);
+    $emailForm = 'webmaster@localhost';
+    if (!empty($_SERVER['SERVER_ADMIN'])) {
+        $emailForm = $_SERVER['SERVER_ADMIN'];
+    }
+    $email_parts = explode('@', $emailForm);
+    if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
+        $emailForm .= '.localdomain';
+    }
+    $adminLastName = 'Doe';
+    $adminFirstName = 'John';
+    $loginForm = 'admin';
+    $passForm = api_generate_password();
 
-	$campusForm		= 'My campus';
-	$educationForm	= 'Albert Einstein';
-	$adminPhoneForm	= '(000) 001 02 03';
-	$institutionForm    = 'My Organisation';
-	$institutionUrlForm = 'http://www.chamilo.org';
-	$languageForm	    = api_get_interface_language();
+    $campusForm = 'My campus';
+    $educationForm = 'Albert Einstein';
+    $adminPhoneForm = '(000) 001 02 03';
+    $institutionForm = 'My Organisation';
+    $institutionUrlForm = 'http://www.chamilo.org';
+    $languageForm = api_get_interface_language();
 
-	$checkEmailByHashSent = 0;
-	$ShowEmailnotcheckedToStudent = 1;
-	$userMailCanBeEmpty = 1;
-	$allowSelfReg = 1;
-	$allowSelfRegProf = 1;
-	$encryptPassForm = 'sha1';
-	$session_lifetime = 360000;
+    $checkEmailByHashSent = 0;
+    $ShowEmailNotCheckedToStudent = 1;
+    $userMailCanBeEmpty = 1;
+    $allowSelfReg = 1;
+    $allowSelfRegProf = 1;
+    $encryptPassForm = 'sha1';
+    $session_lifetime = 360000;
 } else {
-	foreach ($_POST as $key => $val) {
-		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
-		if (is_string($val)) {
-			if ($magic_quotes_gpc) {
-				$val = stripslashes($val);
-			}
-			$val = trim($val);
-			$_POST[$key] = $val;
-		} elseif (is_array($val)) {
-			foreach ($val as $key2 => $val2) {
-				if ($magic_quotes_gpc) {
-					$val2 = stripslashes($val2);
-				}
-				$val2 = trim($val2);
-				$_POST[$key][$key2] = $val2;
-			}
-		}
-		$GLOBALS[$key] = $_POST[$key];
-	}
+    foreach ($_POST as $key => $val) {
+        $magic_quotes_gpc = ini_get('magic_quotes_gpc');
+        if (is_string($val)) {
+            if ($magic_quotes_gpc) {
+                $val = stripslashes($val);
+            }
+            $val = trim($val);
+            $_POST[$key] = $val;
+        } elseif (is_array($val)) {
+            foreach ($val as $key2 => $val2) {
+                if ($magic_quotes_gpc) {
+                    $val2 = stripslashes($val2);
+                }
+                $val2 = trim($val2);
+                $_POST[$key][$key2] = $val2;
+            }
+        }
+        $GLOBALS[$key] = $_POST[$key];
+    }
 }
 
-/*		NEXT STEPS IMPLEMENTATION */
+/* NEXT STEPS IMPLEMENTATION */
 
 $total_steps = 7;
 if (!$_POST) {
-	$current_step = 1;
-} elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])))  && ($emptyUpdatePath or $badUpdatePath))) {
-	$current_step = 2;
-} elseif (!empty($_POST['step2']) or (!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])) )) {
-	$current_step = 3;
+    $current_step = 1;
+} elseif (!empty($_POST['language_list']) or !empty($_POST['step1']) or ((!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6']))) && ($emptyUpdatePath or $badUpdatePath))) {
+    $current_step = 2;
+} elseif (!empty($_POST['step2']) or (!empty($_POST['step2_update_8']) or (!empty($_POST['step2_update_6'])))) {
+    $current_step = 3;
 } elseif (!empty($_POST['step3'])) {
-	$current_step = 4;
+    $current_step = 4;
 } elseif (!empty($_POST['step4'])) {
-	$current_step = 5;
+    $current_step = 5;
 } elseif (!empty($_POST['step5'])) {
-	$current_step = 6;
+    $current_step = 6;
 }
 
 // Managing the $encryptPassForm
 if ($encryptPassForm == '1') {
-	$encryptPassForm = 'sha1';
+    $encryptPassForm = 'sha1';
 } elseif ($encryptPassForm == '0') {
-	$encryptPassForm = 'none';
+    $encryptPassForm = 'none';
 }
 
 ?>
 <!DOCTYPE html>
 <head>
-	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
-	<style type="text/css" media="screen, projection">
-		/*<![CDATA[*/
+    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
+    <style type="text/css" media="screen, projection">
+        /*<![CDATA[*/
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
-		@import "../css/base.css";
-		@import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
-		/*]]>*/
-	</style>
-	<script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript">
-		$(document).ready( function() {
+        @import "../css/base.css";
+        @import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
+        /*]]>*/
+    </style>
+    <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function() {
             $("#button_please_wait").hide();
-			$("button").addClass('btn btn-default');
+            $("button").addClass('btn btn-default');
 
-    		// Allow Chamilo install in IE
-    		$("button").click(function() {
-    			$("#is_executable").attr("value",$(this).attr("name"));
-    		});
+            // Allow Chamilo install in IE
+            $("button").click(function() {
+                $("#is_executable").attr("value",$(this).attr("name"));
+            });
 
-			//Blocking step6 button
-    		$("#button_step6").click(function() {
-            	$("#button_step6").hide();
-    			$("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
+            //Blocking step6 button
+            $("#button_step6").click(function() {
+                $("#button_step6").hide();
+                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait'));?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
-    			$("#is_executable").attr("value",'step6');
-        	});
-	 	});
+                $("#is_executable").attr("value",'step6');
+            });
+        });
 
-		init_visibility=0;
+        init_visibility=0;
         $(document).ready( function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
-					$("#id_contact_form").css("display","block");
-					$("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#id_contact_form").css("display","block");
+                    $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 } else {
-					$("#id_contact_form").css("display","none");
-					$("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#id_contact_form").css("display","none");
+                    $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 }
             });
         });
@@ -330,32 +330,32 @@ if ($encryptPassForm == '1') {
             data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
 
             $.ajax({
-				contentType: "application/x-www-form-urlencoded",
-				beforeSend: function(objeto) {},
-				type: "POST",
-				url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
-				data: data_post,
-				success: function(datos) {
-					if (datos == 'required_field_error') {
-						message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
-					} else if (datos == '1') {
-						message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
-					} else {
-						message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
-					}
-					alert(message);
-				}
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function(objeto) {},
+                type: "POST",
+                url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+                data: data_post,
+                success: function(datos) {
+                    if (datos == 'required_field_error') {
+                        message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
+                    } else if (datos == '1') {
+                        message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                    } else {
+                        message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
+                    }
+                    alert(message);
+                }
             });
         }
     </script>
-	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+    <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>" class="install-chamilo">
 
 <div id="page-wrap">
 <div id="main" class="container well-install">
     <header>
-		<div class="row">
+        <div class="row">
             <div id="header_left" class="col-md-4">
                 <div id="logo">
                     <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
@@ -375,7 +375,7 @@ if ($encryptPassForm == '1') {
                 </div>
             </div>
         </div>
-	</header>
+    </header>
     <?php
     echo '<div class="page-header"><h1>'.get_lang('ChamiloInstallation').' &ndash; '.get_lang('Version_').' '.$new_version.'</h1></div>';
     ?>
@@ -393,10 +393,10 @@ if ($encryptPassForm == '1') {
                 </ol>
             </div>
             <div id="note">
-				<a class="btn btn-default" href="../../documentation/installation_guide.html" target="_blank">
+                <a class="btn btn-default" href="../../documentation/installation_guide.html" target="_blank">
                     <?php echo get_lang('ReadTheInstallationGuide'); ?>
                 </a>
-			</div>
+            </div>
         </div>
 
         <div class="col-md-9">
@@ -404,190 +404,210 @@ if ($encryptPassForm == '1') {
 <form class="form-horizontal" id="install_form" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 <?php
 
-    $instalation_type_label = '';
-    if ($installType == 'new'){
-        $instalation_type_label  = get_lang('NewInstallation');
-    }elseif ($installType == 'update') {
-        $update_from_version = isset($update_from_version) ? $update_from_version : null;
-        $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
-    }
-    if (!empty($instalation_type_label) && empty($_POST['step6'])) {
-    	echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
-    }
+$instalation_type_label = '';
+if ($installType == 'new') {
+    $instalation_type_label  = get_lang('NewInstallation');
+} elseif ($installType == 'update') {
+    $update_from_version = isset($update_from_version) ? $update_from_version : null;
+    $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+}
+if (!empty($instalation_type_label) && empty($_POST['step6'])) {
+    echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
+}
     ?>
-	<input type="hidden" name="updatePath"           value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
-	<input type="hidden" name="urlAppendPath"        value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
-	<input type="hidden" name="pathForm"             value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="urlForm"              value="<?php echo api_htmlentities($urlForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbHostForm"           value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbUsernameForm"       value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbPassForm"           value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="dbNameForm"           value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="allowSelfReg"         value="<?php echo api_htmlentities($allowSelfReg, ENT_QUOTES); ?>" />
-	<input type="hidden" name="allowSelfRegProf"     value="<?php echo api_htmlentities($allowSelfRegProf, ENT_QUOTES); ?>" />
-	<input type="hidden" name="emailForm"            value="<?php echo api_htmlentities($emailForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="adminLastName"        value="<?php echo api_htmlentities($adminLastName, ENT_QUOTES); ?>" />
-	<input type="hidden" name="adminFirstName"       value="<?php echo api_htmlentities($adminFirstName, ENT_QUOTES); ?>" />
-	<input type="hidden" name="adminPhoneForm"       value="<?php echo api_htmlentities($adminPhoneForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="loginForm"            value="<?php echo api_htmlentities($loginForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="passForm"             value="<?php echo api_htmlentities($passForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="languageForm"         value="<?php echo api_htmlentities($languageForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="campusForm"           value="<?php echo api_htmlentities($campusForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="educationForm"        value="<?php echo api_htmlentities($educationForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="institutionForm"      value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="institutionUrlForm"   value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
-	<input type="hidden" name="ShowEmailnotcheckedToStudent" value="<?php echo api_htmlentities($ShowEmailnotcheckedToStudent, ENT_QUOTES); ?>" />
-	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
-	<input type="hidden" name="encryptPassForm"      value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="session_lifetime"     value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
-	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
-	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
+    <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) echo api_htmlentities($proposedUpdatePath, ENT_QUOTES); ?>" />
+    <input type="hidden" name="urlAppendPath"      value="<?php echo api_htmlentities($urlAppendPath, ENT_QUOTES); ?>" />
+    <input type="hidden" name="pathForm"           value="<?php echo api_htmlentities($pathForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="urlForm"            value="<?php echo api_htmlentities($urlForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbHostForm"         value="<?php echo api_htmlentities($dbHostForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbUsernameForm"     value="<?php echo api_htmlentities($dbUsernameForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbPassForm"         value="<?php echo api_htmlentities($dbPassForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="dbNameForm"         value="<?php echo api_htmlentities($dbNameForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="allowSelfReg"       value="<?php echo api_htmlentities($allowSelfReg, ENT_QUOTES); ?>" />
+    <input type="hidden" name="allowSelfRegProf"   value="<?php echo api_htmlentities($allowSelfRegProf, ENT_QUOTES); ?>" />
+    <input type="hidden" name="emailForm"          value="<?php echo api_htmlentities($emailForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="adminLastName"      value="<?php echo api_htmlentities($adminLastName, ENT_QUOTES); ?>" />
+    <input type="hidden" name="adminFirstName"     value="<?php echo api_htmlentities($adminFirstName, ENT_QUOTES); ?>" />
+    <input type="hidden" name="adminPhoneForm"     value="<?php echo api_htmlentities($adminPhoneForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="loginForm"          value="<?php echo api_htmlentities($loginForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="passForm"           value="<?php echo api_htmlentities($passForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="languageForm"       value="<?php echo api_htmlentities($languageForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="campusForm"         value="<?php echo api_htmlentities($campusForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="educationForm"      value="<?php echo api_htmlentities($educationForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="institutionForm"    value="<?php echo api_htmlentities($institutionForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="institutionUrlForm" value="<?php echo api_stristr($institutionUrlForm, 'http://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : api_stristr($institutionUrlForm, 'https://', false) ? api_htmlentities($institutionUrlForm, ENT_QUOTES) : 'http://'.api_htmlentities($institutionUrlForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="checkEmailByHashSent" value="<?php echo api_htmlentities($checkEmailByHashSent, ENT_QUOTES); ?>" />
+    <input type="hidden" name="ShowEmailNotCheckedToStudent" value="<?php echo api_htmlentities($ShowEmailNotCheckedToStudent, ENT_QUOTES); ?>" />
+    <input type="hidden" name="userMailCanBeEmpty" value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
+    <input type="hidden" name="encryptPassForm"    value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES); ?>" />
+    <input type="hidden" name="session_lifetime"   value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
+    <input type="hidden" name="old_version"        value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
+    <input type="hidden" name="new_version"        value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
 <?php
 
 if (@$_POST['step2']) {
-	//STEP 3 : LICENSE
-	display_license_agreement();
+    //STEP 3 : LICENSE
+    display_license_agreement();
 } elseif (@$_POST['step3']) {
-	//STEP 4 : MYSQL DATABASE SETTINGS
-	display_database_settings_form(
-		$installType,
-		$dbHostForm,
-		$dbUsernameForm,
-		$dbPassForm,
-		$dbNameForm
-	);
+    //STEP 4 : MYSQL DATABASE SETTINGS
+    display_database_settings_form(
+        $installType,
+        $dbHostForm,
+        $dbUsernameForm,
+        $dbPassForm,
+        $dbNameForm
+    );
 } elseif (@$_POST['step4']) {
-	//STEP 5 : CONFIGURATION SETTINGS
+    //STEP 5 : CONFIGURATION SETTINGS
 
-	//if update, try getting settings from the database...
-	if ($installType == 'update') {
-		$db_name = $dbNameForm;
+    //if update, try getting settings from the database...
+    if ($installType == 'update') {
+        $db_name = $dbNameForm;
 
-		$manager = testDbConnect(
-			$dbHostForm,
-			$dbUsernameForm,
-			$dbPassForm,
-			$dbNameForm
-		);
+        $manager = testDbConnect(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            $dbNameForm
+        );
 
-		$tmp = get_config_param_from_db('platformLanguage');
-		if (!empty($tmp)) $languageForm = $tmp;
+        $tmp = get_config_param_from_db('platformLanguage');
+        if (!empty($tmp)) {
+            $languageForm = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('emailAdministrator');
-		if (!empty($tmp)) $emailForm = $tmp;
+        $tmp = get_config_param_from_db('emailAdministrator');
+        if (!empty($tmp)) {
+            $emailForm = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('administratorName');
-		if (!empty($tmp)) $adminFirstName = $tmp;
+        $tmp = get_config_param_from_db('administratorName');
+        if (!empty($tmp)) {
+            $adminFirstName = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('administratorSurname');
-		if (!empty($tmp)) $adminLastName = $tmp;
+        $tmp = get_config_param_from_db('administratorSurname');
+        if (!empty($tmp)) {
+            $adminLastName = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('administratorTelephone');
-		if (!empty($tmp)) $adminPhoneForm = $tmp;
+        $tmp = get_config_param_from_db('administratorTelephone');
+        if (!empty($tmp)) {
+            $adminPhoneForm = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('siteName');
-		if (!empty($tmp)) $campusForm = $tmp;
+        $tmp = get_config_param_from_db('siteName');
+        if (!empty($tmp)) {
+            $campusForm = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('Institution');
-		if (!empty($tmp)) $institutionForm = $tmp;
+        $tmp = get_config_param_from_db('Institution');
+        if (!empty($tmp)) {
+            $institutionForm = $tmp;
+        }
 
-		$tmp = get_config_param_from_db('InstitutionUrl');
-		if (!empty($tmp)) $institutionUrlForm = $tmp;
+        $tmp = get_config_param_from_db('InstitutionUrl');
+        if (!empty($tmp)) {
+            $institutionUrlForm = $tmp;
+        }
 
-		// For version 1.9
-		$urlForm = $_configuration['root_web'];
-		$encryptPassForm = get_config_param('userPasswordCrypted');
-		// Managing the $encryptPassForm
-		if ($encryptPassForm == '1') {
-			$encryptPassForm = 'sha1';
-		} elseif ($encryptPassForm == '0') {
-			$encryptPassForm = 'none';
-		}
+        // For version 1.9
+        $urlForm = $_configuration['root_web'];
+        $encryptPassForm = get_config_param('userPasswordCrypted');
+        // Managing the $encryptPassForm
+        if ($encryptPassForm == '1') {
+            $encryptPassForm = 'sha1';
+        } elseif ($encryptPassForm == '0') {
+            $encryptPassForm = 'none';
+        }
 
-		$allowSelfReg = false;
-		$tmp = get_config_param_from_db('allow_registration');
-		if (!empty($tmp)) $allowSelfReg = $tmp;
+        $allowSelfReg = false;
+        $tmp = get_config_param_from_db('allow_registration');
+        if (!empty($tmp)) {
+            $allowSelfReg = $tmp;
+        }
 
-		$allowSelfRegProf = false;
-		$tmp = get_config_param_from_db('allow_registration_as_teacher');
-		if (!empty($tmp)) $allowSelfRegProf = $tmp;
-	}
+        $allowSelfRegProf = false;
+        $tmp = get_config_param_from_db('allow_registration_as_teacher');
+        if (!empty($tmp)) {
+            $allowSelfRegProf = $tmp;
+        }
+    }
 
-	display_configuration_settings_form(
-		$installType,
-		$urlForm,
-		$languageForm,
-		$emailForm,
-		$adminFirstName,
-		$adminLastName,
-		$adminPhoneForm,
-		$campusForm,
-		$institutionForm,
-		$institutionUrlForm,
-		$encryptPassForm,
-		$allowSelfReg,
-		$allowSelfRegProf,
-		$loginForm,
-		$passForm
-	);
+    display_configuration_settings_form(
+        $installType,
+        $urlForm,
+        $languageForm,
+        $emailForm,
+        $adminFirstName,
+        $adminLastName,
+        $adminPhoneForm,
+        $campusForm,
+        $institutionForm,
+        $institutionUrlForm,
+        $encryptPassForm,
+        $allowSelfReg,
+        $allowSelfRegProf,
+        $loginForm,
+        $passForm
+    );
 
 } elseif (@$_POST['step5']) {
-	//STEP 6 : LAST CHECK BEFORE INSTALL
+    //STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
     <div class="RequirementHeading">
-		<h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
-	</div>
+       <h2><?php echo display_step_sequence().get_lang('LastCheck'); ?></h2>
+    </div>
     <div class="RequirementContent">
-		<?php echo get_lang('HereAreTheValuesYouEntered'); ?>
-	</div><br />
+       <?php echo get_lang('HereAreTheValuesYouEntered'); ?>
+    </div><br />
 
-    <?php if ($installType == 'new'): ?>
-	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
-	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
-	<?php else: ?>
-	<?php endif;
+    <?php
+    if ($installType == 'new') {
+        echo get_lang('AdminLogin') . ' : <strong>' . $loginForm . '</strong><br />';
+        echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
+    }
 
-	if (api_is_western_name_order()) {
-		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
-	} else {
-		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
-	}
+    if (api_is_western_name_order()) {
+        echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
+    } else {
+        echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
+    }
 
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
-	<?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
-	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
-	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
-	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
-	<?php echo get_lang('EncryptMethodUserPass').' : ';
-  	echo $encryptPassForm;
-	?>
+    <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
+    <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
+    <?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
+    <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
+    <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
+    <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
+    <?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
+    <?php echo get_lang('EncryptMethodUserPass').' : ';
+    echo $encryptPassForm;
+    ?>
     <br /><br />
 
-	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
-	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
-	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-	<?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
-	<?php
-	if ($installType == 'new') {
-		echo Display::display_warning_message(
-			'<h3 style="text-align: center">'.get_lang(
-				'Warning'
-			).'</h3><br />'.get_lang('TheInstallScriptWillEraseAllTables'),
-			false
-		);
-	}
-	?>
+    <?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
+    <?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
+    <?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
+    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
+    <?php
+    if ($installType == 'new') {
+        echo Display::display_warning_message(
+            '<h3 style="text-align: center">'.get_lang(
+                'Warning'
+            ).'</h3><br />'.get_lang('TheInstallScriptWillEraseAllTables'),
+            false
+        );
+    }
+    ?>
 
-	<table width="100%">
+    <table width="100%">
         <tr>
             <td>
                 <button type="submit" class="btn btn-default" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" >
-					<i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
-				</button>
+                    <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+                </button>
             </td>
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -599,11 +619,11 @@ if (@$_POST['step2']) {
                 <button class="btn btn-save" id="button_please_wait"></button>
             </td>
         </tr>
-	</table>
+    </table>
 
-<?php
+    <?php
 } elseif (@$_POST['step6']) {
-	//STEP 6 : INSTALLATION PROCESS
+    //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
     $msg = get_lang('InstallExecution');
     if ($installType == 'update') {
@@ -622,22 +642,22 @@ if (@$_POST['step2']) {
         ob_flush(); //#5565
     }
 
-	if ($installType == 'update') {
-		remove_memory_and_time_limits();
+    if ($installType == 'update') {
+        remove_memory_and_time_limits();
 
-		$manager = testDbConnect(
-			$dbHostForm,
-			$dbUsernameForm,
-			$dbPassForm,
-			$dbNameForm
-		);
+        $manager = testDbConnect(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            $dbNameForm
+        );
 
-		$perm = api_get_permissions_for_new_directories();
-		$perm_file = api_get_permissions_for_new_files();
+        $perm = api_get_permissions_for_new_directories();
+        $perm_file = api_get_permissions_for_new_files();
 
         Log::notice('Starting migration process from '.$my_old_version.' ('.time().')');
 
-		switch ($my_old_version) {
+        switch ($my_old_version) {
             case '1.9.0':
             case '1.9.2':
             case '1.9.4':
@@ -647,19 +667,19 @@ if (@$_POST['step2']) {
             case '1.9.8.1':
             case '1.9.8.2':
             case '1.9.10':
-			case '1.9.10.2':
+            case '1.9.10.2':
 
-				// Fix type "enum" before running the migration with Doctrine
-				Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
-				Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
-				Database::query("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
-				Database::query("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
-				Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
-				Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
-				Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+                // Fix type "enum" before running the migration with Doctrine
+                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+                Database::query("ALTER TABLE course_category MODIFY COLUMN auth_cat_child VARCHAR(40) DEFAULT 'TRUE'");
+                Database::query("ALTER TABLE c_quiz_answer MODIFY COLUMN hotspot_type varchar(40) default NULL");
+                Database::query("ALTER TABLE c_tool MODIFY COLUMN target varchar(20) NOT NULL default '_self'");
+                Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
+                Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
+                Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
 
-				// Migrate using the file Version110.php
-				migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager);
+                // Migrate using the file Version110.php
+                migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager);
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
@@ -668,77 +688,79 @@ if (@$_POST['step2']) {
                 break;
         }
     } else {
-		set_file_folder_permissions();
+        set_file_folder_permissions();
 
-		$manager = testDbConnect(
-			$dbHostForm,
-			$dbUsernameForm,
-			$dbPassForm,
-			null
-		);
+        $manager = testDbConnect(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            null
+        );
 
-		$dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
-		// Drop and create the database anyways
-		$manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
+        // Drop and create the database anyways
+        $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
-		$manager = testDbConnect(
-			$dbHostForm,
-			$dbUsernameForm,
-			$dbPassForm,
-			$dbNameForm
-		);
+        $manager = testDbConnect(
+            $dbHostForm,
+            $dbUsernameForm,
+            $dbPassForm,
+            $dbNameForm
+        );
 
-		$metadataList = $manager->getMetadataFactory()->getAllMetadata();
-		$schema = $manager->getConnection()->getSchemaManager()->createSchema();
+        $metadataList = $manager->getMetadataFactory()->getAllMetadata();
+        $schema = $manager->getConnection()->getSchemaManager()->createSchema();
 
-		// Create database schema
-		$tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
-		$tool->createSchema($metadataList);
+        // Create database schema
+        $tool = new \Doctrine\ORM\Tools\SchemaTool($manager);
+        $tool->createSchema($metadataList);
 
-		finishInstallation(
-			$manager,
+        $sysPath = api_get_path(SYS_PATH);
+
+        finishInstallation(
+            $manager,
             $sysPath,
-			$encryptPassForm,
-			$passForm,
-			$adminLastName,
-			$adminFirstName,
-			$loginForm,
-			$emailForm,
-			$adminPhoneForm,
-			$languageForm,
-			$institutionForm,
-			$institutionUrlForm,
-			$campusForm,
-			$allowSelfReg,
-			$allowSelfRegProf
-		);
+            $encryptPassForm,
+            $passForm,
+            $adminLastName,
+            $adminFirstName,
+            $loginForm,
+            $emailForm,
+            $adminPhoneForm,
+            $languageForm,
+            $institutionForm,
+            $institutionUrlForm,
+            $campusForm,
+            $allowSelfReg,
+            $allowSelfRegProf
+        );
 
-		include 'install_files.inc.php';
-	}
+        include 'install_files.inc.php';
+    }
     display_after_install_message($installType);
 
     // Hide the "please wait" message sent previously
     echo '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
 
 } elseif (@$_POST['step1'] || $badUpdatePath) {
-	//STEP 1 : REQUIREMENTS
+    //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
-	if (empty($proposedUpdatePath)) {
-		$proposedUpdatePath = $_POST['updatePath'];
-	}
+    if (empty($proposedUpdatePath)) {
+        $proposedUpdatePath = $_POST['updatePath'];
+    }
     display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8);
 } else {
-	// This is the start screen.
+    // This is the start screen.
     display_language_selection();
 }
 ?>
-</form>
-</div>                  <!-- col-md-9-->
-</div>  <!-- row -->
-</div> <!-- main end-->
-<div class="push"></div>
-</div><!-- wrapper end-->
-<footer></footer>
-</body>
+          </form>
+        </div> <!-- col-md-9-->
+      </div> <!-- row -->
+    </div> <!-- main end-->
+    <div class="push"></div>
+  </div><!-- wrapper end-->
+  <footer></footer>
+  </body>
 </html>

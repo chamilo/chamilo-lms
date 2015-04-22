@@ -77,7 +77,7 @@ class Basic extends Toolbar
         // Adding plugins depending of platform conditions
         $plugins = array();
 
-        if (api_get_setting('show_glossary_in_documents') != 'none') {
+        if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             $plugins[] = 'glossary';
         }
 
@@ -131,6 +131,7 @@ class Basic extends Toolbar
     }
 
     /**
+     * Get the toolbar config
      * @return array
      */
     public function getConfig()
@@ -191,7 +192,7 @@ class Basic extends Toolbar
     }
 
     /**
-     * Get the small toolbar configuration
+     * Get the toolbar configuration when CKEditor is minimized
      * @return array
      */
     protected function getMinimizedToolbar()

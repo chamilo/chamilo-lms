@@ -454,16 +454,6 @@ $(function() {
             },200);
         }
     );
-    /*
-    $(".td_actions").hide();
-
-    $(".td_actions").parent('tr').mouseover(function() {
-       $(".td_actions").show();
-    });
-
-    $(".td_actions").parent('tr').mouseout(function() {
-        $(".td_actions").hide();
-    });*/
 
     /* Make responsive image maps */
     $('map').imageMapResize();

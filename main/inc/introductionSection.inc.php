@@ -219,100 +219,61 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $userInfo = $_SESSION['_user'];
         $courseInfo = api_get_course_info();
         //die('<pre>'.print_r($courseInfo,1).'</pre>');
+        $thematic_description_html = '
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div id="panel-thematic" class="panel panel-default">
+                <div class="panel-heading">
+                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <h4>
+                        '. $thematic_advance .' : '. $courseInfo['name'] . ' <b>( '. $thematicScore .' )</b>
+                </h4>
+                </a>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <img src="' . $userInfo['avatar'] . '" class="img-responsive">
+                            </div>
+                            <div class="progress">
+                                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: ' . $thematicScore . ';">
+                                            '.$thematicScore.'
+                                        </div>
+                            </div>
+                            <div class="separate"><a href="' . $thematicUrl . '" class="btn btn-block btn-info">' . get_lang('ShowFullCourseAdvance') . '</a></div>
+                        </div>';
 
-        $thematic_description_html =
-            '<div class="thematic-postit">
-                <div class="row"><div class="col-md-12">
-                    <div class="accordion" id="progress-bar-course">
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <div class="title-accordion">
-                                    <div class="row score-thematic">
-                                        <div class="col-md-12">';
-        $thematic_description_html .=      '<div class="col-md-3 name-student">
-                                                <h2>' . $userInfo['firstName'] . '</h2>
-                                                <h3>' . $userInfo['lastName'] . '</h3>
-                                            </div>
-                                            <div class="col-md-3 score">
-                                                <h1>' . $thematicScore . '</h1>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <h3>' . $thematic_advance . '</h3>
-                                                <p>' . $courseInfo['name'] . '</p>
-                                            </div>
-                                        ';
-        $thematic_description_html .=   '<div class="col-md-3">
-                                            <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hide-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
-                                            ' . get_lang('SeeDetail') . '
-                                            </a>
-                                            <a id="thematic-hide" class="btn btn-small accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
-                                            ' . get_lang('Hide') . '
-                                            </a>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
-        $thematic_description_html .=
-            '<div class="accordion-body collapse in" id="pross" style="height: auto !important;">
-                                <div class="accordion-inner">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="thumbnail">
-                                                        <img src="' . $userInfo['avatar'] . '" class="img-polaroid">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="info-progress">
-                                                        <div class="tittle-score">' . $thematic_advance . '&nbsp;' . $thematicScore .'
-                                                        </div>
-                                                        <div class="progress progress-striped">
-                                                            <div class="bar" style="width: ' . $thematicScore . ';"></div>
-                                                        </div>
-                                                        <a href="' . $thematicUrl . '" class="btn btn-info">' . get_lang('ShowFullCourseAdvance') . '</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>';
-        $thematic_description_html .=
-            '<div class="col-md-8">
-                                            <div class="row">';
-        $thematic_description_html .=
-            '<div class="col-md-6 items-progress'.$class1.'">
-                                                    <div class="topics">' . $subTitle1 . '</div>
-                                                    <p class="title_topics">' . $thematic_info['title'] . '</p>
-                                                    <p class="date">' . $thematic_advance_info['start_date'] . '</p>
-                                                    <h3 class="title">' . $thematic_advance_info['content'] . '</h3>
-                                                    <p class="time">' . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
-                                                </div>';
+        $thematic_description_html .= '<div class="col-md-9">';
+
+        $thematic_description_html .= '<div class="row">';
+        $thematic_description_html .= '<div class="col-md-6 items-progress'.$class1.'">
+                                    <div class="topics">' . $subTitle1 . '</div>
+                                    <h4 class="title-topics">' . $thematic_info['title'] . '</h4>
+                                    <p class="date">' . $thematic_advance_info['start_date'] . '</p>
+                                    <div class="views">' . $thematic_advance_info['content'] . '</div>
+                                    <p class="time">' . get_lang('DurationInHours') . ' : ' . $thematic_advance_info['duration'] . ' - <a href="' . $thematicUrl . '">' . get_lang('SeeDetail') . '</a></p>
+                                </div>';
 
         if (!empty($thematic_advance_info2)) {
             $thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
             $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
-            $thematic_description_html .=
-                '<div class="col-md-6 items-progress">
-                                                    <div class="topics">'.$subTitle2.'</div>
-                                                    <p class="title_topics">'.$thematic_info2['title'].'</p>
-                                                    <p class="date">'.$thematic_advance_info2['start_date'].'</p>
-                                                    <h3 class="title">'.$thematic_advance_info2['content'].'</h3>
-                                                    <p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
-                                                </div>';
+            $thematic_description_html .= '<div class="col-md-6 items-progress">
+                                                <div class="topics">'.$subTitle2.'</div>
+                                                <h4 class="title-topics">'.$thematic_info2['title'].'</h4>
+                                                <p class="date">'.$thematic_advance_info2['start_date'].'</p>
+                                                <div class="views">'.$thematic_advance_info2['content'].'</div>
+                                                <p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+                                            </div>';
         }
-        $thematic_description_html.=
-            '</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>';
+        $thematic_description_html.='</div>';
+
+        $thematic_description_html.='</div></div></div></div></div></div>';
+
+
+
     }
 }
 

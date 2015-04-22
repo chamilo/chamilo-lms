@@ -3078,7 +3078,7 @@ class Tracking
         $sql = "SELECT DISTINCT code, c_id
                 FROM $tbl_session_course sc
                 INNER JOIN $courseTable c
-                sc.c_id = c.id
+                ON sc.c_id = c.id
                 WHERE session_id= $session_id";
 
         $result = Database::query($sql);

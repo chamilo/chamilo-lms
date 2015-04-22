@@ -4492,8 +4492,8 @@ class SurveyUtil
     {
         //	LAST NAME and FIRST NAME
         $field_list_array = array();
-        $field_list_array['lastname']['name'] = get_lang('Lastname');
-        $field_list_array['firstname']['name'] = get_lang('Firstname');
+        $field_list_array['lastname']['name'] = get_lang('LastName');
+        $field_list_array['firstname']['name'] = get_lang('FirstName');
 
         if (api_get_setting('profile', 'name') != 'true') {
             $field_list_array['firstname']['visibility'] = 0;

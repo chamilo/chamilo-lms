@@ -7,7 +7,7 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class Draggable extends Matching
+class Draggable extends Question
 {
 
     static $typePicture = 'matching.png';
@@ -236,7 +236,7 @@ class Draggable extends Matching
         $header .= '<table class="' . $this->question_table_class . '">
             <tr>
                 <th>' . get_lang('ElementList') . '</th>
-                <th>' . get_lang('CorrespondsTo') . '</th>
+                <th>' . get_lang('Status') . '</th>
             </tr>';
 
         return $header;

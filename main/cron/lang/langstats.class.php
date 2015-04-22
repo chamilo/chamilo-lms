@@ -44,7 +44,7 @@ class langstats
                     }
                     $err = $this->db->exec(
                         'CREATE TABLE lang_freq ('
-                        . ' id integer PRIMARY KEY AUTOINCREMENT, '
+                        . ' id integer PRIMARY KEY AUTOINCREMENT, ' //autoincrement in SQLITE
                         . ' term_name text, term_file text, term_count integer default 0)'
                     );
                     if ($err === false) {

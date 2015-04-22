@@ -508,8 +508,17 @@ class Answer
      * @param string $hotspot_coordinates
      * @param string $hotspot_type
      */
-    public function updateAnswers($autoId, $answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
-    {
+    public function updateAnswers(
+        $autoId,
+        $answer,
+        $comment,
+        $correct,
+        $weighting,
+        $position,
+        $destination,
+        $hotspot_coordinates,
+        $hotspot_type
+    ) {
         $answerTable = Database :: get_course_table(TABLE_QUIZ_ANSWER);
         //$id = $this->getQuestionType() == FILL_IN_BLANKS ? $idAnswer[0] : Database::escape_string($position);
         $autoId = intval($autoId);

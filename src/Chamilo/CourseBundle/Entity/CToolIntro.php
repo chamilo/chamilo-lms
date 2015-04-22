@@ -32,7 +32,7 @@ class CToolIntro
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", nullable=true)
+     * @ORM\Column(name="id", type="string", nullable=false)
      */
     private $id;
 

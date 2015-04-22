@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * Class AddCourse
@@ -378,7 +379,7 @@ class AddCourse
     {
         $pictures = array();
         foreach ($files as $key => $value) {
-            if ($value[$type] != '') {
+            if (isset($value[$type]) && $value[$type] != '') {
                 $pictures[][$type] = $value[$type];
             }
         }
@@ -773,6 +774,7 @@ class AddCourse
                     array(),
                     $folder
                 );
+
                 $sorted_array = self::sort_pictures($files, 'dir');
                 $sorted_array = array_merge(
                     $sorted_array,
@@ -981,101 +983,117 @@ class AddCourse
                 $now
             );
 
+            $manager = Database::getManager();
+
             /* Introduction text */
 
             $intro_text = '<p style="text-align: center;">
                             <img src="' . api_get_path(REL_CODE_PATH) . 'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
                             <h2>' . self::lang2db(get_lang('IntroductionText')) . '</h2>
                          </p>';
-            Database::query(
-                "INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_COURSE_HOMEPAGE . "','" . $intro_text . "', 0)"
-            );
-            Database::query(
-                "INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_STUDENTPUBLICATION . "','" . self::lang2db(
-                    get_lang('IntroductionTwo')
-                ) . "', 0)"
-            );
 
-            // Wiki intro
-            $intro_wiki = '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">' . self::lang2db(
-                    get_lang('IntroductionWiki')
-                ) . '</td></tr></table>';
-            Database::query(
-                "INSERT INTO $TABLEINTROS  VALUES ($course_id, '" . TOOL_WIKI . "','" . $intro_wiki . "', 0)"
-            );
+            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro
+                ->setCId($course_id)
+                ->setId(TOOL_COURSE_HOMEPAGE)
+                ->setSessionId(0)
+                ->setIntroText($intro_text);
+            $manager->persist($toolIntro);
+
+            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro
+                ->setCId($course_id)
+                ->setId(TOOL_STUDENTPUBLICATION)
+                ->setSessionId(0)
+                ->setIntroText(get_lang('IntroductionTwo'));
+            $manager->persist($toolIntro);
+
+
+            $toolIntro = new Chamilo\CourseBundle\Entity\CToolIntro();
+            $toolIntro
+                ->setCId($course_id)
+                ->setId(TOOL_WIKI)
+                ->setSessionId(0)
+                ->setIntroText(get_lang('IntroductionWiki'));
+            $manager->persist($toolIntro);
+
+            $manager->flush();
 
             /*  Exercise tool */
+            $exercise = new Exercise($course_id);
+            $exercise->exercise = get_lang('ExerciceEx');
+            $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                        <td width="110" valign="top" align="left">
+                            <img src="' . api_get_path(WEB_CODE_PATH) . 'default_course_document/images/mr_dokeos/thinking.jpg">
+                        </td>
+                        <td valign="top" align="left">' . get_lang('Antique') . '</td></tr>
+                    </table>';
+            $exercise->type = 1;
+            $exercise->setRandom(0);
+            $exercise->active = 1;
+            $exercise->results_disabled = 0;
+            $exercise->description = $html;
+            $exercise->save();
 
-            Database::query(
-                "INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id, '1', '1', '" . self::lang2db(
-                    get_lang('Ridiculise')
-                ) . "', '0', '" . self::lang2db(
-                    get_lang('NoPsychology')
-                ) . "', '-5', '1')"
-            );
-            Database::query(
-                "INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '2', '1', '" . self::lang2db(
-                    get_lang('AdmitError')
-                ) . "', '0', '" . self::lang2db(
-                    get_lang('NoSeduction')
-                ) . "', '-5', '2')"
-            );
-            Database::query(
-                "INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '3', '1', '" . self::lang2db(
-                    get_lang('Force')
-                ) . "', '1', '" . self::lang2db(get_lang('Indeed')) . "', '5', '3')"
-            );
-            Database::query(
-                "INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '4', '1', '" . self::lang2db(
-                    get_lang('Contradiction')
-                ) . "', '1', '" . self::lang2db(get_lang('NotFalse')) . "', '5', '4')"
-            );
+            $exercise_id = $exercise->id;
 
-            $html = Database::escape_string(
-                '<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="' . api_get_path(
-                    WEB_CODE_PATH
-                ) . 'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">' . get_lang(
-                    'Antique'
-                ) . '</td></tr></table>'
-            );
+            $question = new MultipleAnswer();
+            $question->question = get_lang('SocraticIrony');
+            $question->description = get_lang('ManyAnswers');
+            $question->weighting = 10;
+            $question->position = 1;
+            $question->course = $courseInfo;
+            $question->save($exercise_id);
+            $questionId = $question->id;
 
-            Database::query(
-                'INSERT INTO ' . $TABLEQUIZ .
-                ' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
-                ' VALUES (' . $course_id . ', "' . self::lang2db(
-                    get_lang('ExerciceEx')
-                ) . '",' .
-                ' "' . $html . '", "1", "0", "0", "1", "0")'
-            );
-            $exercise_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEQUIZQUESTIONLIST  (c_id, id, question, description, ponderation, position, type, picture, level)
-                            VALUES ( '.$course_id.', '1', '" . self::lang2db(
-                    get_lang('SocraticIrony')
-                ) . "', '" . self::lang2db(
-                    get_lang('ManyAnswers')
-                ) . "', '10', '1', '2','',1)"
-            );
-            Database::query(
-                "INSERT INTO $TABLEQUIZQUESTION  (c_id, question_id, exercice_id, question_order) VALUES ('.$course_id.', 1,1,1)"
-            );
+            $answer = new Answer($questionId, $courseInfo['real_id']);
+
+            $answer->createAnswer(get_lang('Ridiculise'), 0, get_lang('NoPsychology'), -5, 1);
+            $answer->createAnswer(get_lang('AdmitError'), 0, get_lang('NoSeduction'), -5, 2);
+            $answer->createAnswer(get_lang('Force'), 1, get_lang('Indeed'), 5, 3);
+            $answer->createAnswer(get_lang('Contradiction'), 1, get_lang('NotFalse'), 5, 4);
+
+            $answer->save();
 
             /* Forum tool */
 
-            Database::query(
-                "INSERT INTO $TABLEFORUMCATEGORIES VALUES ($course_id, 1,'" . self::lang2db(
-                    get_lang('ExampleForumCategory')
-                ) . "', '', 1, 0, 0)"
-            );
-            $insert_id = Database:: insert_id();
-            Database::query(
-                "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-                            VALUES ($course_id, 'forum_category',1,'$now','$now',$insert_id,'ForumCategoryAdded',1,0,NULL,1)"
-            );
+            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-            Database::query(
+            $params = [
+                'forum_category_title' => get_lang('ExampleForumCategory'),
+                'forum_category_comment' => ''
+            ];
+
+            $forumCategoryId = store_forumcategory($params, $courseInfo, false);
+
+            $params = [
+                'forum_category' => $forumCategoryId,
+                'forum_title' => get_lang('ExampleForum'),
+                'forum_comment' => '',
+                'default_view_type_group' => ['default_view_type' => 'flat'],
+            ];
+
+            $forumId = store_forum($params, $courseInfo, true);
+
+            $forumInfo = get_forum_information($forumId, $courseInfo['real_id']);
+
+            $params = [
+                'post_title' => get_lang('ExampleThread'),
+                'forum_id' => $forumId,
+                'post_text' => get_lang('ExampleThreadContent'),
+                'calification_notebook_title' => '',
+                'numeric_calification' => '',
+                'weight_calification' => '',
+                'forum_category' => $forumCategoryId
+            ];
+
+            store_thread($forumInfo, $params, $courseInfo, false);
+
+
+            /*Database::query(
                 "INSERT INTO $TABLEFORUMS (c_id, forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id )
-                            VALUES ($course_id, '" . self::lang2db(
+                 VALUES ($course_id, '" . self::lang2db(
                     get_lang('ExampleForum')
                 ) . "', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)"
             );
@@ -1083,8 +1101,8 @@ class AddCourse
             Database::query(
                 "INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
                              VALUES ($course_id, '" . TOOL_FORUM . "', 1,'$now','$now',$insert_id,'ForumAdded',1,0,NULL,1)"
-            );
-
+            );*/
+/*
             Database::query(
                 "INSERT INTO $TABLEFORUMTHREADS (c_id, thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max, session_id)
                             VALUES ($course_id, 1, '" . self::lang2db(
@@ -1103,21 +1121,24 @@ class AddCourse
                 ) . "', '" . self::lang2db(
                     get_lang('ExampleThreadContent')
                 ) . "', 1, 1, 1, '', '$now', 0, 0, 1)"
-            );
+            );*/
 
             /* Gradebook tool */
             $course_code = $courseInfo['code'];
             // father gradebook
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)"
+                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)"
             );
             $gbid = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)"
+                "INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id)
+                VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)"
             );
             $gbid = Database:: insert_id();
             Database::query(
-                "INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked) VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)"
+                "INSERT INTO $TABLEGRADEBOOKLINK (type, ref_id, user_id, course_code, category_id, created_at, weight, visible, locked)
+                VALUES (1,$exercise_id,1,'$course_code',$gbid,'$now',100,1,0)"
             );
         }
 
@@ -1201,13 +1222,11 @@ class AddCourse
         $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
         //$description        = $params['description'];
 
-        $category_code = $params['course_category'];
+        $category_code = isset($params['course_category']) ? $params['course_category'] : '';
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
-        $user_id = empty($params['user_id']) ? api_get_user_id() : intval(
-            $params['user_id']
-        );
+        $user_id = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
         $department_name = isset($params['department_name']) ?
             $params['department_name'] : null;
         $department_url = isset($params['department_url']) ?

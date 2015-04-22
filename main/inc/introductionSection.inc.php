@@ -52,13 +52,13 @@ if (!empty($courseId)) {
 $renderer =& $form->defaultRenderer();
 $renderer->setCustomElementTemplate('<div style="width: 80%; margin: 0px auto; padding-bottom: 10px; ">{element}</div>');
 
-$toolbar_set = 'IntroductionTool';
-$width = '100%';
-$height = '300';
+$config = array(
+    'ToolbarSet' => 'IntroductionTool',
+    'Width' => '100%',
+    'Height' => '300'
+);
 
-$editor_config = array('ToolbarSet' => $toolbar_set, 'Width' => $width, 'Height' => $height);
-
-$form->addHtmlEditor('intro_content', null, null, false, $editor_config);
+$form->addHtmlEditor('intro_content', null, null, false, $config);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
 
 /* INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
@@ -70,6 +70,7 @@ if ($intro_editAllowed) {
         if ($form->validate()) {
             $form_values = $form->exportValues();
             $intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
+
             if (!empty($intro_content)) {
                 $sql = "REPLACE $TBL_INTRODUCTION
                         SET
@@ -111,7 +112,10 @@ if ($intro_editAllowed) {
 // Getting course intro
 $intro_content = null;
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
-        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = 0";
+        WHERE
+            c_id = $course_id AND
+            id = '".Database::escape_string($moduleId)."' AND
+            session_id = 0";
 
 $intro_dbQuery = Database::query($sql);
 if (Database::num_rows($intro_dbQuery) > 0) {
@@ -122,7 +126,10 @@ if (Database::num_rows($intro_dbQuery) > 0) {
 // Getting session intro
 if (!empty($session_id)) {
     $sql = "SELECT intro_text FROM $TBL_INTRODUCTION
-        WHERE c_id = $course_id AND id='".Database::escape_string($moduleId)."' AND session_id = '".intval($session_id)."'";
+            WHERE
+                c_id = $course_id AND
+                id = '".Database::escape_string($moduleId)."' AND
+                session_id = '".intval($session_id)."'";
     $intro_dbQuery = Database::query($sql);
     $introSessionContent = null;
     if (Database::num_rows($intro_dbQuery) > 0) {
@@ -198,9 +205,6 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     }
 
     if (!empty($thematic_advance_info)) {
-
-        /*$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.
-            $thematic->get_total_average_of_thematic_advances().'%';*/
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances() . '%';
         $thematicUrl = api_get_path(WEB_CODE_PATH) .
@@ -218,7 +222,6 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         );
         $userInfo = $_SESSION['_user'];
         $courseInfo = api_get_course_info();
-        //die('<pre>'.print_r($courseInfo,1).'</pre>');
         $thematic_description_html = '
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <div id="panel-thematic" class="panel panel-default">
@@ -269,11 +272,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                                             </div>';
         }
         $thematic_description_html.='</div>';
-
         $thematic_description_html.='</div></div></div></div></div></div>';
-
-
-
     }
 }
 

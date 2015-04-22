@@ -381,7 +381,7 @@ class Database
             return false;
         }
         $filtred_attributes = array();
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
         //@todo check if the field exists in the table we should use a describe of that table

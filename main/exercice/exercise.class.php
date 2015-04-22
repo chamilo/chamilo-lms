@@ -51,36 +51,36 @@ class Exercise
      *
      * @author Olivier Brouckaert
      */
-    public function Exercise($course_id = null)
+    public function __construct($course_id = null)
     {
-        $this->id				= 0;
-        $this->exercise			= '';
-        $this->description		= '';
-        $this->sound			= '';
-        $this->type				= ALL_ON_ONE_PAGE;
-        $this->random			= 0;
-        $this->random_answers	= 0;
-        $this->active			= 1;
-        $this->questionList		= array();
-        $this->timeLimit 		= 0;
-        $this->end_time 		= '0000-00-00 00:00:00';
-        $this->start_time 		= '0000-00-00 00:00:00';
+        $this->id = 0;
+        $this->exercise = '';
+        $this->description = '';
+        $this->sound = '';
+        $this->type = ALL_ON_ONE_PAGE;
+        $this->random = 0;
+        $this->random_answers = 0;
+        $this->active = 1;
+        $this->questionList = array();
+        $this->timeLimit = 0;
+        $this->end_time = '0000-00-00 00:00:00';
+        $this->start_time = '0000-00-00 00:00:00';
         $this->results_disabled = 1;
-        $this->expired_time 	= '0000-00-00 00:00:00';
-        $this->propagate_neg    = 0;
-        $this->review_answers	= false;
-        $this->randomByCat      = 0;	//
+        $this->expired_time = '0000-00-00 00:00:00';
+        $this->propagate_neg = 0;
+        $this->review_answers = false;
+        $this->randomByCat = 0;    //
         $this->text_when_finished = ""; //
         $this->display_category_name = 0;
-        $this->pass_percentage  = null;
+        $this->pass_percentage = null;
 
         if (!empty($course_id)) {
-            $course_info        = api_get_course_info_by_id($course_id);
+            $course_info = api_get_course_info_by_id($course_id);
         } else {
-            $course_info 		= api_get_course_info();
+            $course_info = api_get_course_info();
         }
-        $this->course_id    = $course_info['real_id'];
-        $this->course   	= $course_info;
+        $this->course_id = $course_info['real_id'];
+        $this->course = $course_info;
     }
 
     /**
@@ -106,27 +106,27 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
-            $this->id                       = $id;
-            $this->exercise                 = $object->title;
-            $this->name                     = $object->title;
-            $this->title                    = $object->title;
-            $this->description              = $object->description;
-            $this->sound                    = $object->sound;
-            $this->type                     = $object->type;
+            $this->id = $id;
+            $this->exercise = $object->title;
+            $this->name = $object->title;
+            $this->title = $object->title;
+            $this->description = $object->description;
+            $this->sound = $object->sound;
+            $this->type = $object->type;
             if (empty($this->type)) {
                 $this->type = ONE_PER_PAGE;
             }
-            $this->random                   = $object->random;
-            $this->random_answers           = $object->random_answers;
-            $this->active                   = $object->active;
-            $this->results_disabled         = $object->results_disabled;
-            $this->attempts                 = $object->max_attempt;
-            $this->feedback_type            = $object->feedback_type;
-            $this->propagate_neg            = $object->propagate_neg;
-            $this->randomByCat              = $object->random_by_category;
-            $this->text_when_finished       = $object->text_when_finished;
-            $this->display_category_name    = $object->display_category_name;
-            $this->pass_percentage          = $object->pass_percentage;
+            $this->random = $object->random;
+            $this->random_answers = $object->random_answers;
+            $this->active = $object->active;
+            $this->results_disabled = $object->results_disabled;
+            $this->attempts = $object->max_attempt;
+            $this->feedback_type = $object->feedback_type;
+            $this->propagate_neg = $object->propagate_neg;
+            $this->randomByCat = $object->random_by_category;
+            $this->text_when_finished = $object->text_when_finished;
+            $this->display_category_name = $object->display_category_name;
+            $this->pass_percentage = $object->pass_percentage;
             $this->sessionId = $object->session_id;
 
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
@@ -428,19 +428,21 @@ class Exercise
     {
         if ($from_db && !empty($this->id)) {
             $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
             $sql = "SELECT DISTINCT e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                    FROM $TBL_EXERCICE_QUESTION e
+                    INNER JOIN $TBL_QUESTIONS  q
+                    ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= ".intval($this->id)."";
             $result = Database::query($sql);
 
             $count_question_orders = Database::num_rows($result);
 
             $sql = "SELECT e.question_id, e.question_order
-                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                    FROM $TBL_EXERCICE_QUESTION e
+                    INNER JOIN $TBL_QUESTIONS  q
+                    ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= ".intval($this->id)."
 					ORDER BY question_order";
             $result = Database::query($sql);
@@ -462,8 +464,10 @@ class Exercise
                     $question_list = $temp_question_list;
                 }
             }
+
             return $question_list;
         }
+
         return $this->questionList;
     }
 
@@ -752,7 +756,7 @@ class Exercise
      */
     public function save($type_e = '')
     {
-        $_course = api_get_course_info();
+        $_course = $this->course;
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = $this->id;
@@ -771,7 +775,7 @@ class Exercise
         $text_when_finished = $this->text_when_finished;
         $display_category_name = intval($this->display_category_name);
         $pass_percentage = intval($this->pass_percentage);
-        $session_id = api_get_session_id();
+        $session_id = $this->sessionId;
 
         //If direct we do not show results
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -824,16 +828,24 @@ class Exercise
             Database::query($sql);
 
             // update into the item_property table
-            api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizUpdated', api_get_user_id());
+            api_item_property_update(
+                $_course,
+                TOOL_QUIZ,
+                $id,
+                'QuizUpdated',
+                api_get_user_id()
+            );
 
             if (api_get_setting('search_enabled')=='true') {
                 $this->search_engine_edit();
             }
         } else {
-            // creates a new exercise
+            // Creates a new exercise
 
-            // In this case of new exercise, we don't do the api_get_utc_datetime() for date because, bellow, we call function api_set_default_visibility()
-            // In this function, api_set_default_visibility, the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
+            // In this case of new exercise, we don't do the api_get_utc_datetime()
+            // for date because, bellow, we call function api_set_default_visibility()
+            // In this function, api_set_default_visibility,
+            // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
                 $start_time = Database::escape_string($this->start_time);
@@ -888,12 +900,14 @@ class Exercise
 
                 // This function save the quiz again, carefull about start_time
                 // and end_time if you remove this line (see above)
-                api_set_default_visibility($this->id, TOOL_QUIZ, null, true);
+                api_set_default_visibility(
+                    $this->id,
+                    TOOL_QUIZ,
+                    null,
+                    $this->course
+                );
 
-                if (api_get_setting(
-                        'search_enabled'
-                    ) == 'true' && extension_loaded('xapian')
-                ) {
+                if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                     $this->search_engine_save();
                 }
             }
@@ -3090,19 +3104,19 @@ class Exercise
                                     $final_missing = 100;
                                     $final_excess = 100;
                                 } else {
-                                    // the final overlap is the percentage of the initial polygon 
+                                    // the final overlap is the percentage of the initial polygon
                                     // that is overlapped by the user's polygon
                                     $final_overlap = round(((float) $overlap / (float) $poly_answer_area) * 100);
                                     if ($debug > 1) {
                                         error_log(__LINE__ . ' - Final overlap is ' . $final_overlap, 0);
                                     }
-                                    // the final missing area is the percentage of the initial polygon 
+                                    // the final missing area is the percentage of the initial polygon
                                     // that is not overlapped by the user's polygon
                                     $final_missing = 100 - $final_overlap;
                                     if ($debug > 1) {
                                         error_log(__LINE__ . ' - Final missing is ' . $final_missing, 0);
                                     }
-                                    // the final excess area is the percentage of the initial polygon's size 
+                                    // the final excess area is the percentage of the initial polygon's size
                                     // that is covered by the user's polygon outside of the initial polygon
                                     $final_excess = round((((float) $poly_user_area - (float) $overlap) / (float) $poly_answer_area) * 100);
                                     if ($debug > 1) {
@@ -4566,7 +4580,7 @@ class Exercise
                 }
                 $tabres = $questionList;
             } else {
-                // Problem, random by category has been selected and 
+                // Problem, random by category has been selected and
                 // we have no $this->isRandom number of question selected
                 // Should not happened
             }

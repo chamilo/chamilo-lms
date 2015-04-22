@@ -23,7 +23,8 @@ function fill_courses()
     foreach ($courses as $i => $course) {
         //first check that the first item doesn't exist already
     	$output[$i]['line-init'] = $course['title'];
-    	$output[$i]['line-info'] = ($res = CourseManager::create_course($course)? $res: get_lang('NotInserted'));
+        $res = CourseManager::create_course($course);
+    	$output[$i]['line-info'] = $res ? get_lang('Added') : get_lang('NotInserted');
     	$i++;
     }
 

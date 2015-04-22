@@ -5506,8 +5506,8 @@ class CourseManager
      * This function separates the users from the groups
      * users have a value USER:XXX (with XXX the groups id have a value
      *  GROUP:YYY (with YYY the group id)
-     * @param    array   Array of strings that define the type and id of each destination
-     * @return   array   Array of groups and users (each an array of IDs)
+     * @param  array $to Array of strings that define the type and id of each destination
+     * @return array Array of groups and users (each an array of IDs)
      */
     public static function separateUsersGroups($to)
     {
@@ -5516,7 +5516,9 @@ class CourseManager
 
         foreach ($to as $to_item) {
             if (!empty($to_item)) {
-                list($type, $id) = explode(':', $to_item);
+                $parts = explode(':', $to_item);
+                $type = isset($parts[0]) ? $parts[0] : '';
+                $id = isset($parts[1]) ? $parts[1] : '';
 
                 switch ($type) {
                     case 'GROUP':

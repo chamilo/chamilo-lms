@@ -1,18 +1,19 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This script contains a data filling procedure for users
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  *
  */
-/**
- * Initialisation section
- */
+
 /**
  * Loads the data and injects it into the Chamilo database, using the Chamilo
  * internal functions.
  * @return  array  List of user IDs for the users that have just been inserted
  */
-function fill_courses() {
+function fill_courses()
+{
     $eol = PHP_EOL;
     $courses = array(); //declare only to avoid parsing notice
     require_once 'data_courses.php'; //fill the $users array
@@ -25,5 +26,6 @@ function fill_courses() {
     	$output[$i]['line-info'] = ($res = CourseManager::create_course($course)? $res: get_lang('NotInserted'));
     	$i++;
     }
+
     return $output;
 }

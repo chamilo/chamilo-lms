@@ -815,7 +815,7 @@ if ($sessionId == 0) {
             $base_work_dir,
             $usf_dir_name,
             $usf_dir_title,
-            $visibility
+            $visibility,
             false,
             false
         );

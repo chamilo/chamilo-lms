@@ -1,4 +1,636 @@
 
+INSERT INTO settings_current
+(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
+VALUES
+('Institution',NULL,'textfield','Platform','{ORGANISATIONNAME}','InstitutionTitle','InstitutionComment','platform',NULL, 1),
+('InstitutionUrl',NULL,'textfield','Platform','{ORGANISATIONURL}','InstitutionUrlTitle','InstitutionUrlComment',NULL,NULL, 1),
+('siteName',NULL,'textfield','Platform','{CAMPUSNAME}','SiteNameTitle','SiteNameComment',NULL,NULL, 1),
+('emailAdministrator',NULL,'textfield','Platform','{ADMINEMAIL}','emailAdministratorTitle','emailAdministratorComment',NULL,NULL, 1),
+('administratorSurname',NULL,'textfield','Platform','{ADMINLASTNAME}','administratorSurnameTitle','administratorSurnameComment',NULL,NULL, 1),
+('administratorName',NULL,'textfield','Platform','{ADMINFIRSTNAME}','administratorNameTitle','administratorNameComment',NULL,NULL, 1),
+('show_administrator_data',NULL,'radio','Platform','true','ShowAdministratorDataTitle','ShowAdministratorDataComment',NULL,NULL, 1),
+('show_tutor_data',NULL,'radio','Session','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
+('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
+('homepage_view',NULL,'radio','Course','activity_big','HomepageViewTitle','HomepageViewComment',NULL,NULL, 1),
+('show_toolshortcuts',NULL,'radio','Course','false','ShowToolShortcutsTitle','ShowToolShortcutsComment',NULL,NULL, 0),
+('allow_group_categories',NULL,'radio','Course','false','AllowGroupCategories','AllowGroupCategoriesComment',NULL,NULL, 0),
+('server_type',NULL,'radio','Platform','production','ServerStatusTitle','ServerStatusComment',NULL,NULL, 0),
+('platformLanguage',NULL,'link','Languages','{PLATFORMLANGUAGE}','PlatformLanguageTitle','PlatformLanguageComment',NULL,NULL, 0),
+('showonline','world','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineWorld', 0),
+('showonline','users','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineUsers', 0),
+('showonline','course','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineCourse', 0),
+('profile','name','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'name', 0),
+('profile','officialcode','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'officialcode', 0),
+('profile','email','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Email', 0),
+('profile','picture','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'UserPicture', 0),
+('profile','login','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'Login', 0),
+('profile','password','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'UserPassword', 0),
+('profile','language','checkbox','User','true','ProfileChangesTitle','ProfileChangesComment',NULL,'Language', 0),
+('default_document_quotum',NULL,'textfield','Course','100000000','DefaultDocumentQuotumTitle','DefaultDocumentQuotumComment',NULL,NULL, 0),
+('registration','officialcode','checkbox','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'OfficialCode', 0),
+('registration','email','checkbox','User','true','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Email', 0),
+('registration','language','checkbox','User','true','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Language', 0),
+('default_group_quotum',NULL,'textfield','Course','5000000','DefaultGroupQuotumTitle','DefaultGroupQuotumComment',NULL,NULL, 0),
+('allow_registration',NULL,'radio','Platform','{ALLOWSELFREGISTRATION}','AllowRegistrationTitle','AllowRegistrationComment',NULL,NULL, 0),
+('allow_registration_as_teacher',NULL,'radio','Platform','{ALLOWTEACHERSELFREGISTRATION}','AllowRegistrationAsTeacherTitle','AllowRegistrationAsTeacherComment',NULL,NULL, 0),
+('allow_lostpassword',NULL,'radio','Platform','true','AllowLostPasswordTitle','AllowLostPasswordComment',NULL,NULL, 0),
+('allow_user_headings',NULL,'radio','Course','false','AllowUserHeadings','AllowUserHeadingsComment',NULL,NULL, 0),
+('course_create_active_tools','course_description','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseDescription', 0),
+('course_create_active_tools','agenda','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Agenda', 0),
+('course_create_active_tools','documents','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Documents', 0),
+('course_create_active_tools','learning_path','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'LearningPath', 0),
+('course_create_active_tools','links','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Links', 0),
+('course_create_active_tools','announcements','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Announcements', 0),
+('course_create_active_tools','forums','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Forums', 0),
+('course_create_active_tools','dropbox','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Dropbox', 0),
+('course_create_active_tools','quiz','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Quiz', 0),
+('course_create_active_tools','users','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Users', 0),
+('course_create_active_tools','groups','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Groups', 0),
+('course_create_active_tools','chat','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Chat', 0),
+('course_create_active_tools','online_conference','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'OnlineConference', 0),
+('course_create_active_tools','student_publications','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'StudentPublications', 0),
+('allow_personal_agenda',NULL,'radio','User','true','AllowPersonalAgendaTitle','AllowPersonalAgendaComment',NULL,NULL, 0),
+('display_coursecode_in_courselist',NULL,'radio','Platform','false','DisplayCourseCodeInCourselistTitle','DisplayCourseCodeInCourselistComment',NULL,NULL, 0),
+('display_teacher_in_courselist',NULL,'radio','Platform','true','DisplayTeacherInCourselistTitle','DisplayTeacherInCourselistComment',NULL,NULL, 0),
+('permanently_remove_deleted_files',NULL,'radio','Tools','false','PermanentlyRemoveFilesTitle','PermanentlyRemoveFilesComment',NULL,NULL, 0),
+('dropbox_allow_overwrite',NULL,'radio','Tools','true','DropboxAllowOverwriteTitle','DropboxAllowOverwriteComment',NULL,NULL, 0),
+('dropbox_max_filesize',NULL,'textfield','Tools','100000000','DropboxMaxFilesizeTitle','DropboxMaxFilesizeComment',NULL,NULL, 0),
+('dropbox_allow_just_upload',NULL,'radio','Tools','true','DropboxAllowJustUploadTitle','DropboxAllowJustUploadComment',NULL,NULL, 0),
+('dropbox_allow_student_to_student',NULL,'radio','Tools','true','DropboxAllowStudentToStudentTitle','DropboxAllowStudentToStudentComment',NULL,NULL, 0),
+('dropbox_allow_group',NULL,'radio','Tools','true','DropboxAllowGroupTitle','DropboxAllowGroupComment',NULL,NULL, 0),
+('dropbox_allow_mailing',NULL,'radio','Tools','false','DropboxAllowMailingTitle','DropboxAllowMailingComment',NULL,NULL, 0),
+('administratorTelephone',NULL,'textfield','Platform','(000) 001 02 03','administratorTelephoneTitle','administratorTelephoneComment',NULL,NULL, 1),
+('extended_profile',NULL,'radio','User','false','ExtendedProfileTitle','ExtendedProfileComment',NULL,NULL, 0),
+('student_view_enabled',NULL,'radio','Platform','true','StudentViewEnabledTitle','StudentViewEnabledComment',NULL,NULL, 0),
+('show_navigation_menu',NULL,'radio','Course','false','ShowNavigationMenuTitle','ShowNavigationMenuComment',NULL,NULL, 0),
+('enable_tool_introduction',NULL,'radio','course','false','EnableToolIntroductionTitle','EnableToolIntroductionComment',NULL,NULL, 0),
+('page_after_login', NULL, 'radio','Platform','user_portal.php', 'PageAfterLoginTitle','PageAfterLoginComment', NULL, NULL, 0),
+('time_limit_whosonline', NULL, 'textfield','Platform','30', 'TimeLimitWhosonlineTitle','TimeLimitWhosonlineComment', NULL, NULL, 0),
+('breadcrumbs_course_homepage', NULL, 'radio','Course','course_title', 'BreadCrumbsCourseHomepageTitle','BreadCrumbsCourseHomepageComment', NULL, NULL, 0),
+('example_material_course_creation', NULL, 'radio','Platform','true', 'ExampleMaterialCourseCreationTitle','ExampleMaterialCourseCreationComment', NULL, NULL, 0),
+('account_valid_duration',NULL, 'textfield','Platform','3660', 'AccountValidDurationTitle','AccountValidDurationComment', NULL, NULL, 0),
+('use_session_mode', NULL, 'radio','Session','true', 'UseSessionModeTitle','UseSessionModeComment', NULL, NULL, 0),
+('allow_email_editor', NULL, 'radio', 'Tools', 'false', 'AllowEmailEditorTitle', 'AllowEmailEditorComment', NULL, NULL, 0),
+('registered', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL, 0),
+('donotlistcampus', NULL, 'textfield', NULL, 'false', NULL, NULL, NULL, NULL,0 ),
+('show_email_addresses', NULL,'radio','Platform','false','ShowEmailAddresses','ShowEmailAddressesComment',NULL,NULL, 1),
+('profile','phone','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'phone', 0),
+('service_visio', 'active', 'radio',NULL,'false', 'VisioEnable','', NULL, NULL, 0),
+('service_visio', 'visio_host', 'textfield',NULL,'', 'VisioHost','', NULL, NULL, 0),
+('service_visio', 'visio_port', 'textfield',NULL,'1935', 'VisioPort','', NULL, NULL, 0),
+('service_visio', 'visio_pass', 'textfield',NULL,'', 'VisioPassword','', NULL, NULL, 0),
+('service_ppt2lp', 'active', 'radio',NULL,'false', 'ppt2lp_actived','', NULL, NULL, 0),
+('service_ppt2lp', 'host', 'textfield', NULL, NULL, 'Host', NULL, NULL, NULL, 0),
+('service_ppt2lp', 'port', 'textfield', NULL, 2002, 'Port', NULL, NULL, NULL, 0),
+('service_ppt2lp', 'user', 'textfield', NULL, NULL, 'UserOnHost', NULL, NULL, NULL, 0),
+('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
+('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
+('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
+('stylesheets', NULL, 'textfield','stylesheets','chamilo','',NULL, NULL, NULL, 1),
+('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
+('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
+('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg;mov;flv;doc;docx;xls;xlsx;ppt;pptx;odt;odp;ods;pdf', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL, 0),
+('upload_extensions_skip', NULL, 'radio', 'Security', 'true', 'UploadExtensionsSkip', 'UploadExtensionsSkipComment', NULL, NULL, 0),
+('upload_extensions_replace_by', NULL, 'textfield', 'Security', 'dangerous', 'UploadExtensionsReplaceBy', 'UploadExtensionsReplaceByComment', NULL, NULL, 0),
+('show_number_of_courses', NULL, 'radio','Platform','false', 'ShowNumberOfCourses','ShowNumberOfCoursesComment', NULL, NULL, 0),
+('show_empty_course_categories', NULL, 'radio','Platform','true', 'ShowEmptyCourseCategories','ShowEmptyCourseCategoriesComment', NULL, NULL, 0),
+('show_back_link_on_top_of_tree', NULL, 'radio','Platform','false', 'ShowBackLinkOnTopOfCourseTree','ShowBackLinkOnTopOfCourseTreeComment', NULL, NULL, 0),
+('show_different_course_language', NULL, 'radio','Platform','true', 'ShowDifferentCourseLanguage','ShowDifferentCourseLanguageComment', NULL, NULL, 1),
+('split_users_upload_directory', NULL, 'radio','Tuning','true', 'SplitUsersUploadDirectory','SplitUsersUploadDirectoryComment', NULL, NULL, 0),
+('hide_dltt_markup', NULL, 'radio','Languages','true', 'HideDLTTMarkup','HideDLTTMarkupComment', NULL, NULL, 0),
+('display_categories_on_homepage',NULL,'radio','Platform','false','DisplayCategoriesOnHomepageTitle','DisplayCategoriesOnHomepageComment',NULL,NULL, 1),
+('permissions_for_new_directories', NULL, 'textfield', 'Security', '0777', 'PermissionsForNewDirs', 'PermissionsForNewDirsComment', NULL, NULL, 0),
+('permissions_for_new_files', NULL, 'textfield', 'Security', '0666', 'PermissionsForNewFiles', 'PermissionsForNewFilesComment', NULL, NULL, 0),
+('show_tabs', 'campus_homepage', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsCampusHomepage', 1),
+('show_tabs', 'my_courses', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyCourses', 1),
+('show_tabs', 'reporting', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsReporting', 1),
+('show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration', 1),
+('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1),
+('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile', 1),
+('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL, 0),
+('platform_charset',NULL,'textfield','Languages','UTF-8','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
+('noreply_email_address', '', 'textfield', 'Platform', '', 'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL, 0),
+('survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL, 0),
+('openid_authentication',NULL,'radio','Security','false','OpenIdAuthentication','OpenIdAuthenticationComment',NULL,NULL, 0),
+('profile','openid','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'OpenIDURL', 0),
+('gradebook_enable',NULL,'radio','Gradebook','false','GradebookActivation','GradebookActivationComment',NULL,NULL, 0),
+('show_tabs','my_gradebook','checkbox','Platform','true','ShowTabsTitle','ShowTabsComment',NULL,'TabsMyGradebook', 1),
+('gradebook_score_display_coloring','my_display_coloring','checkbox','Gradebook','false','GradebookScoreDisplayColoring','GradebookScoreDisplayColoringComment',NULL,'TabsGradebookEnableColoring', 0),
+('gradebook_score_display_custom','my_display_custom','checkbox','Gradebook','false','GradebookScoreDisplayCustom','GradebookScoreDisplayCustomComment',NULL,'TabsGradebookEnableCustom', 0),
+('gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL, 0),
+('gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit', 0),
+('gradebook_number_decimals', NULL, 'select', 'Gradebook', '0', 'GradebookNumberDecimals', 'GradebookNumberDecimalsComment', NULL, NULL, 0),
+('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL, 0),
+('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme', 0),
+('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL, 0),
+('display_mini_month_calendar',NULL,'radio','Tools', 'true', 'DisplayMiniMonthCalendarTitle', 'DisplayMiniMonthCalendarComment', NULL, NULL, 0),
+('display_upcoming_events',NULL,'radio','Tools','true','DisplayUpcomingEventsTitle','DisplayUpcomingEventsComment',NULL,NULL, 0),
+('number_of_upcoming_events',NULL,'textfield','Tools','1','NumberOfUpcomingEventsTitle','NumberOfUpcomingEventsComment',NULL,NULL, 0),
+('show_closed_courses',NULL,'radio','Platform','false','ShowClosedCoursesTitle','ShowClosedCoursesComment',NULL,NULL, 0),
+('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL, 0),
+('extendedprofile_registration', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyCompetences', 0),
+('extendedprofile_registration', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyDiplomas', 0),
+('extendedprofile_registration', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyTeach', 0),
+('extendedprofile_registration', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyPersonalOpenArea', 0),
+('extendedprofile_registrationrequired', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyCompetences', 0),
+('extendedprofile_registrationrequired', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyDiplomas', 0),
+('extendedprofile_registrationrequired', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyTeach', 0),
+('extendedprofile_registrationrequired', 'mypersonalopenarea', 'checkbox','User','false', 'ExtendedProfileRegistrationRequiredTitle','ExtendedProfileRegistrationRequiredComment', NULL, 'MyPersonalOpenArea', 0),
+('registration','phone','textfield','User','false','RegistrationRequiredFormsTitle','RegistrationRequiredFormsComment',NULL,'Phone', 0),
+('add_users_by_coach',NULL,'radio','Session','false','AddUsersByCoachTitle','AddUsersByCoachComment',NULL,NULL, 0),
+('extend_rights_for_coach',NULL,'radio','Security','false','ExtendRightsForCoachTitle','ExtendRightsForCoachComment',NULL,NULL, 0),
+('extend_rights_for_coach_on_survey',NULL,'radio','Security','true','ExtendRightsForCoachOnSurveyTitle','ExtendRightsForCoachOnSurveyComment',NULL,NULL, 0),
+('course_create_active_tools','wiki','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Wiki', 0),
+('show_session_coach', NULL, 'radio','Session','false', 'ShowSessionCoachTitle','ShowSessionCoachComment', NULL, NULL, 0),
+('course_create_active_tools','gradebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Gradebook', 0),
+('allow_users_to_create_courses',NULL,'radio','Platform','true','AllowUsersToCreateCoursesTitle','AllowUsersToCreateCoursesComment',NULL,NULL, 0),
+('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
+('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
+('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
+('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
+('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
+('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
+('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
+('allow_message_tool', NULL, 'radio', 'Tools', 'true', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,1),
+('allow_social_tool', NULL, 'radio', 'Tools', 'true', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL,1),
+('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
+('show_session_data', NULL, 'radio', 'Session', 'false', 'ShowSessionDataTitle', 'ShowSessionDataComment', NULL, NULL, 1),
+('allow_use_sub_language', NULL, 'radio', 'Languages', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL,0),
+('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL,1),
+('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
+('course_create_active_tools','enable_search','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Search',0),
+('search_enabled',NULL,'radio','Search','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
+('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
+('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
+('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
+('allow_coach_to_edit_course_session',NULL,'radio','Session','true','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
+('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
+('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
+('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
+('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
+('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
+('enabled_asciisvg',NULL,'radio','Editor','false','AsciiSvgTitle','AsciiSvgComment',NULL,NULL, 0),
+('include_asciimathml_script',NULL,'radio','Editor','false','IncludeAsciiMathMlTitle','IncludeAsciiMathMlComment',NULL,NULL, 0),
+('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
+('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
+('more_buttons_maximized_mode',NULL,'radio','Editor','true','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
+('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0),
+('users_copy_files',NULL,'radio','Tools','true','AllowUsersCopyFilesTitle','AllowUsersCopyFilesComment',NULL,NULL, 1),
+('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0),
+('allow_students_to_create_groups_in_social',NULL,'radio','Tools','false','AllowStudentsToCreateGroupsInSocialTitle','AllowStudentsToCreateGroupsInSocialComment',NULL,NULL, 0),
+('allow_send_message_to_all_platform_users',NULL,'radio','Tools','true','AllowSendMessageToAllPlatformUsersTitle','AllowSendMessageToAllPlatformUsersComment',NULL,NULL, 0),
+('message_max_upload_filesize',NULL,'textfield','Tools','20971520','MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0),
+('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
+('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
+('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
+('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
+('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
+('course_validation', NULL, 'radio', 'Platform', 'false', 'EnableCourseValidation', 'EnableCourseValidationComment', NULL, NULL, 1),
+('course_validation_terms_and_conditions_url', NULL, 'textfield', 'Platform', '', 'CourseValidationTermsAndConditionsLink', 'CourseValidationTermsAndConditionsLinkComment', NULL, NULL, 1),
+('sso_authentication',NULL,'radio','Security','false','EnableSSOTitle','EnableSSOComment',NULL,NULL,1),
+('sso_authentication_domain',NULL,'textfield','Security','','SSOServerDomainTitle','SSOServerDomainComment',NULL,NULL,1),
+('sso_authentication_auth_uri',NULL,'textfield','Security','/?q=user','SSOServerAuthURITitle','SSOServerAuthURIComment',NULL,NULL,1),
+('sso_authentication_unauth_uri',NULL,'textfield','Security','/?q=logout','SSOServerUnAuthURITitle','SSOServerUnAuthURIComment',NULL,NULL,1),
+('sso_authentication_protocol',NULL,'radio','Security','http://','SSOServerProtocolTitle','SSOServerProtocolComment',NULL,NULL,1),
+('enabled_wiris',NULL,'radio','Editor','false','EnabledWirisTitle','EnabledWirisComment',NULL,NULL, 0),
+('allow_spellcheck',NULL,'radio','Editor','false','AllowSpellCheckTitle','AllowSpellCheckComment',NULL,NULL, 0),
+('force_wiki_paste_as_plain_text',NULL,'radio','Editor','false','ForceWikiPasteAsPlainTextTitle','ForceWikiPasteAsPlainTextComment',NULL,NULL, 0),
+('enabled_googlemaps',NULL,'radio','Editor','false','EnabledGooglemapsTitle','EnabledGooglemapsComment',NULL,NULL, 0),
+('enabled_imgmap',NULL,'radio','Editor','true','EnabledImageMapsTitle','EnabledImageMapsComment',NULL,NULL, 0),
+('enabled_support_svg',				NULL,'radio',		'Tools',	'true',	'EnabledSVGTitle','EnabledSVGComment',NULL,NULL, 0),
+('pdf_export_watermark_enable',		NULL,'radio',		'Platform',	'false','PDFExportWatermarkEnableTitle',	'PDFExportWatermarkEnableComment',	'platform',NULL, 1),
+('pdf_export_watermark_by_course',	NULL,'radio',		'Platform',	'false','PDFExportWatermarkByCourseTitle',	'PDFExportWatermarkByCourseComment','platform',NULL, 1),
+('pdf_export_watermark_text',		NULL,'textfield',	'Platform',	'',		'PDFExportWatermarkTextTitle',		'PDFExportWatermarkTextComment',	'platform',NULL, 1),
+('enabled_insertHtml',				NULL,'radio',		'Editor',	'true','EnabledInsertHtmlTitle',			'EnabledInsertHtmlComment',NULL,NULL, 0),
+('students_export2pdf',				NULL,'radio',		'Tools',	'true',	'EnabledStudentExport2PDFTitle',	'EnabledStudentExport2PDFComment',NULL,NULL, 0),
+('exercise_min_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMinScoreTitle',			'ExerciseMinScoreComment','platform',NULL, 	1),
+('exercise_max_score', 				NULL,'textfield',	'Course',	'',		'ExerciseMaxScoreTitle',			'ExerciseMaxScoreComment','platform',NULL, 	1),
+('show_users_folders',				NULL,'radio',		'Tools',	'true',	'ShowUsersFoldersTitle','ShowUsersFoldersComment',NULL,NULL, 0),
+('show_default_folders',			NULL,'radio',		'Tools',	'true',	'ShowDefaultFoldersTitle','ShowDefaultFoldersComment',NULL,NULL, 0),
+('show_chat_folder',				NULL,'radio',		'Tools',	'true',	'ShowChatFolderTitle','ShowChatFolderComment',NULL,NULL, 0),
+('enabled_text2audio',				NULL,'radio',		'Tools',	'false',	'Text2AudioTitle','Text2AudioComment',NULL,NULL, 0),
+('course_hide_tools','course_description','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseDescription', 1),
+('course_hide_tools','calendar_event','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Agenda', 1),
+('course_hide_tools','document','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Documents', 1),
+('course_hide_tools','learnpath','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'LearningPath', 1),
+('course_hide_tools','link','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Links', 1),
+('course_hide_tools','announcement','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Announcements', 1),
+('course_hide_tools','forum','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Forums', 1),
+('course_hide_tools','dropbox','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Dropbox', 1),
+('course_hide_tools','quiz','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Quiz', 1),
+('course_hide_tools','user','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Users', 1),
+('course_hide_tools','group','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Groups', 1),
+('course_hide_tools','chat','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Chat', 1),
+('course_hide_tools','student_publication','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'StudentPublications', 1),
+('course_hide_tools','wiki','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Wiki', 1),
+('course_hide_tools','gradebook','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Gradebook', 1),
+('course_hide_tools','survey','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Survey', 1),
+('course_hide_tools','glossary','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Glossary', 1),
+('course_hide_tools','notebook','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Notebook', 1),
+('course_hide_tools','attendance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Attendances', 1),
+('course_hide_tools','course_progress','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseProgress', 1),
+('course_hide_tools','blog_management','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Blog',1),
+('course_hide_tools','tracking','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Stats',1),
+('course_hide_tools','course_maintenance','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'Maintenance',1),
+('course_hide_tools','course_setting','checkbox','Tools','false','CourseHideToolsTitle','CourseHideToolsComment',NULL,'CourseSettings',1),
+('enabled_support_pixlr',NULL,'radio','Tools','false','EnabledPixlrTitle','EnabledPixlrComment',NULL,NULL, 0),
+('show_groups_to_users',NULL,'radio','Session','false','ShowGroupsToUsersTitle','ShowGroupsToUsersComment',NULL,NULL, 0),
+('accessibility_font_resize',NULL,'radio','Platform','false','EnableAccessibilityFontResizeTitle','EnableAccessibilityFontResizeComment',NULL,NULL, 1),
+('hide_courses_in_sessions',NULL,'radio', 'Session','false','HideCoursesInSessionsTitle',	'HideCoursesInSessionsComment','platform',NULL, 1),
+('enable_quiz_scenario',  NULL,'radio','Course','false','EnableQuizScenarioTitle','EnableQuizScenarioComment',NULL,NULL, 1),
+('enable_nanogong',NULL,'radio','Tools','false','EnableNanogongTitle','EnableNanogongComment',NULL,NULL, 0),
+('filter_terms',NULL,'textarea','Security','','FilterTermsTitle','FilterTermsComment',NULL,NULL, 0),
+('header_extra_content', NULL, 'textarea', 'Tracking', '', 'HeaderExtraContentTitle', 'HeaderExtraContentComment', NULL, NULL, 1),
+('footer_extra_content', NULL, 'textarea', 'Tracking', '', 'FooterExtraContentTitle', 'FooterExtraContentComment', NULL, NULL, 1),
+('show_documents_preview', NULL, 'radio', 'Tools', 'false', 'ShowDocumentPreviewTitle', 'ShowDocumentPreviewComment', NULL, NULL, 1),
+('htmlpurifier_wiki', NULL, 'radio', 'Editor', 'false', 'HtmlPurifierWikiTitle', 'HtmlPurifierWikiComment', NULL, NULL, 0),
+('cas_activate', NULL, 'radio', 'CAS', 'false', 'CasMainActivateTitle', 'CasMainActivateComment', NULL, NULL, 0),
+('cas_server', NULL, 'textfield', 'CAS', '', 'CasMainServerTitle', 'CasMainServerComment', NULL, NULL, 0),
+('cas_server_uri', NULL, 'textfield', 'CAS', '', 'CasMainServerURITitle', 'CasMainServerURIComment', NULL, NULL, 0),
+('cas_port', NULL, 'textfield', 'CAS', '', 'CasMainPortTitle', 'CasMainPortComment', NULL, NULL, 0),
+('cas_protocol', NULL, 'radio', 'CAS', '', 'CasMainProtocolTitle', 'CasMainProtocolComment', NULL, NULL, 0),
+('cas_add_user_activate', NULL, 'radio', 'CAS', 'false', 'CasUserAddActivateTitle', 'CasUserAddActivateComment', NULL, NULL, 0),
+('update_user_info_cas_with_ldap', NULL, 'radio', 'CAS', 'true', 'UpdateUserInfoCasWithLdapTitle', 'UpdateUserInfoCasWithLdapComment', NULL, NULL, 0),
+('student_page_after_login', NULL, 'textfield', 'Platform', '', 'StudentPageAfterLoginTitle', 'StudentPageAfterLoginComment', NULL, NULL, 0),
+('teacher_page_after_login', NULL, 'textfield', 'Platform', '', 'TeacherPageAfterLoginTitle', 'TeacherPageAfterLoginComment', NULL, NULL, 0),
+('drh_page_after_login', NULL, 'textfield', 'Platform', '', 'DRHPageAfterLoginTitle', 'DRHPageAfterLoginComment', NULL, NULL, 0),
+('sessionadmin_page_after_login', NULL, 'textfield', 'Session', '', 'SessionAdminPageAfterLoginTitle', 'SessionAdminPageAfterLoginComment', NULL, NULL, 0),
+('student_autosubscribe', NULL, 'textfield', 'Platform', '', 'StudentAutosubscribeTitle', 'StudentAutosubscribeComment', NULL, NULL, 0),
+('teacher_autosubscribe', NULL, 'textfield', 'Platform', '', 'TeacherAutosubscribeTitle', 'TeacherAutosubscribeComment', NULL, NULL, 0),
+('drh_autosubscribe', NULL, 'textfield', 'Platform', '', 'DRHAutosubscribeTitle', 'DRHAutosubscribeComment', NULL, NULL, 0),
+('sessionadmin_autosubscribe', NULL, 'textfield', 'Session', '', 'SessionadminAutosubscribeTitle', 'SessionadminAutosubscribeComment', NULL, NULL, 0),
+('scorm_cumulative_session_time', NULL, 'radio', 'Course', 'true', 'ScormCumulativeSessionTimeTitle', 'ScormCumulativeSessionTimeComment', NULL, NULL, 0),
+('allow_hr_skills_management', NULL, 'radio', 'Gradebook', 'true', 'AllowHRSkillsManagementTitle', 'AllowHRSkillsManagementComment', NULL, NULL, 1),
+('enable_help_link', NULL, 'radio', 'Platform', 'true', 'EnableHelpLinkTitle', 'EnableHelpLinkComment', NULL, NULL, 0),
+('teachers_can_change_score_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeScoreSettingsTitle', 'TeachersCanChangeScoreSettingsComment', NULL, NULL, 1),
+('allow_users_to_change_email_with_no_password', NULL, 'radio', 'User', 'false', 'AllowUsersToChangeEmailWithNoPasswordTitle', 'AllowUsersToChangeEmailWithNoPasswordComment', NULL, NULL, 0),
+('show_admin_toolbar', NULL, 'radio', 'Platform', 'show_to_admin', 'ShowAdminToolbarTitle', 'ShowAdminToolbarComment', NULL, NULL, 1),
+('allow_global_chat', NULL, 'radio', 'Platform', 'true', 'AllowGlobalChatTitle', 'AllowGlobalChatComment', NULL, NULL, 1),
+('languagePriority1', NULL, 'radio', 'Languages', 'course_lang', 'LanguagePriority1Title', 'LanguagePriority1Comment', NULL, NULL, 0),
+('languagePriority2', NULL, 'radio', 'Languages','user_profil_lang', 'LanguagePriority2Title', 'LanguagePriority2Comment', NULL, NULL, 0),
+('languagePriority3', NULL, 'radio', 'Languages','user_selected_lang', 'LanguagePriority3Title', 'LanguagePriority3Comment', NULL, NULL, 0),
+('languagePriority4', NULL, 'radio', 'Languages', 'platform_lang','LanguagePriority4Title', 'LanguagePriority4Comment', NULL, NULL, 0),
+('login_is_email', NULL, 'radio', 'Platform', 'false', 'LoginIsEmailTitle', 'LoginIsEmailComment', NULL, NULL, 0),
+('courses_default_creation_visibility', NULL, 'radio', 'Course', '2', 'CoursesDefaultCreationVisibilityTitle', 'CoursesDefaultCreationVisibilityComment', NULL, NULL, 1),
+('allow_browser_sniffer', NULL, 'radio', 'Tuning', 'false', 'AllowBrowserSnifferTitle', 'AllowBrowserSnifferComment', NULL, NULL, 0),
+('enable_wami_record',NULL,'radio','Tools','false','EnableWamiRecordTitle','EnableWamiRecordComment',NULL,NULL, 0),
+('gradebook_enable_grade_model', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableGradeModelTitle', 'GradebookEnableGradeModelComment', NULL, NULL, 1),
+('teachers_can_change_grade_model_settings', NULL, 'radio', 'Gradebook', 'true', 'TeachersCanChangeGradeModelSettingsTitle', 'TeachersCanChangeGradeModelSettingsComment', NULL, NULL, 1),
+('gradebook_default_weight', NULL, 'textfield', 'Gradebook', '100', 'GradebookDefaultWeightTitle', 'GradebookDefaultWeightComment', NULL, NULL, 0),
+('ldap_description', NULL, 'radio', 'LDAP', NULL, 'LdapDescriptionTitle', 'LdapDescriptionComment', NULL, NULL, 0),
+('shibboleth_description', NULL, 'radio', 'Shibboleth', 'false', 'ShibbolethMainActivateTitle', 'ShibbolethMainActivateComment', NULL, NULL, 0),
+('facebook_description', NULL, 'radio', 'Facebook', 'false', 'FacebookMainActivateTitle', 'FacebookMainActivateComment', NULL, NULL, 0),
+('gradebook_locking_enabled', NULL, 'radio', 'Gradebook', 'false', 'GradebookEnableLockingTitle', 'GradebookEnableLockingComment', NULL, NULL, 0),
+('gradebook_default_grade_model_id', NULL, 'select', 'Gradebook', '', 'GradebookDefaultGradeModelTitle', 'GradebookDefaultGradeModelComment', NULL, NULL, 1),
+('allow_session_admins_to_manage_all_sessions', NULL, 'radio', 'Session', 'false', 'AllowSessionAdminsToSeeAllSessionsTitle', 'AllowSessionAdminsToSeeAllSessionsComment', NULL, NULL, 1),
+('allow_skills_tool', NULL, 'radio', 'Platform', 'false', 'AllowSkillsToolTitle', 'AllowSkillsToolComment', NULL, NULL, 1),
+('allow_public_certificates', NULL, 'radio', 'Course', 'false', 'AllowPublicCertificatesTitle', 'AllowPublicCertificatesComment', NULL, NULL, 1),
+('platform_unsubscribe_allowed', NULL, 'radio', 'Platform', 'false', 'PlatformUnsubscribeTitle', 'PlatformUnsubscribeComment', NULL, NULL, 1),
+('activate_email_template', NULL, 'radio', 'Platform', 'false', 'ActivateEmailTemplateTitle', 'ActivateEmailTemplateComment', NULL, NULL, 0),
+('enable_iframe_inclusion', NULL, 'radio', 'Editor', 'false', 'EnableIframeInclusionTitle', 'EnableIframeInclusionComment', NULL, NULL, 1),
+('show_hot_courses', NULL, 'radio', 'Platform', 'true', 'ShowHotCoursesTitle', 'ShowHotCoursesComment', NULL, NULL, 1),
+('enable_webcam_clip',NULL,'radio','Tools','false','EnableWebCamClipTitle','EnableWebCamClipComment',NULL,NULL, 0),
+('use_custom_pages', NULL, 'radio','Platform','false','UseCustomPagesTitle','UseCustomPagesComment', NULL, NULL, 1),
+('tool_visible_by_default_at_creation','documents','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Documents', 1),
+('tool_visible_by_default_at_creation','learning_path','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'LearningPath', 1),
+('tool_visible_by_default_at_creation','links','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Links', 1),
+('tool_visible_by_default_at_creation','announcements','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Announcements', 1),
+('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
+('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
+('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
+('prevent_session_admins_to_manage_all_users', NULL, 'radio', 'Session', 'false', 'PreventSessionAdminsToManageAllUsersTitle', 'PreventSessionAdminsToManageAllUsersComment', NULL, NULL, 1),
+('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
+('enabled_mathjax', NULL, 'radio', 'Editor', 'false', 'EnableMathJaxTitle', 'EnableMathJaxComment', NULL, NULL, 0),
+('meta_twitter_site', NULL, 'textfield', 'Tracking', '', 'MetaTwitterSiteTitle', 'MetaTwitterSiteComment', NULL, NULL, 1),
+('meta_twitter_creator', NULL, 'textfield', 'Tracking', '', 'MetaTwitterCreatorTitle', 'MetaTwitterCreatorComment', NULL, NULL, 1),
+('meta_title', NULL, 'textfield', 'Tracking', '', 'MetaTitleTitle', 'MetaTitleComment', NULL, NULL, 1),
+('meta_description', NULL, 'textfield', 'Tracking', '', 'MetaDescriptionTitle', 'MetaDescriptionComment', NULL, NULL, 1),
+('meta_image_path', NULL, 'textfield', 'Tracking', '', 'MetaImagePathTitle', 'MetaImagePathComment', NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield',NULL, '0', 'DatabaseVersion','', NULL, NULL, 0);
+
+INSERT INTO settings_options (variable, value, display_text)
+VALUES
+('show_administrator_data','true','Yes'),
+('show_administrator_data','false','No'),
+('show_tutor_data','true','Yes'),
+('show_tutor_data','false','No'),
+('show_teacher_data','true','Yes'),
+('show_teacher_data','false','No'),
+('homepage_view','activity','HomepageViewActivity'),
+('homepage_view','2column','HomepageView2column'),
+('homepage_view','3column','HomepageView3column'),
+('homepage_view','vertical_activity','HomepageViewVerticalActivity'),
+('homepage_view','activity_big','HomepageViewActivityBig'),
+('show_toolshortcuts','true','Yes'),
+('show_toolshortcuts','false','No'),
+('allow_group_categories','true','Yes'),
+('allow_group_categories','false','No'),
+('server_type','production','ProductionServer'),
+('server_type','test','TestServer'),
+('allow_name_change','true','Yes'),
+('allow_name_change','false','No'),
+('allow_officialcode_change','true','Yes'),
+('allow_officialcode_change','false','No'),
+('allow_registration','true','Yes'),
+('allow_registration','false','No'),
+('allow_registration','approval','AfterApproval'),
+('allow_registration_as_teacher','true','Yes'),
+('allow_registration_as_teacher','false','No'),
+('allow_lostpassword','true','Yes'),
+('allow_lostpassword','false','No'),
+('allow_user_headings','true','Yes'),
+('allow_user_headings','false','No'),
+('allow_personal_agenda','true','Yes'),
+('allow_personal_agenda','false','No'),
+('display_coursecode_in_courselist','true','Yes'),
+('display_coursecode_in_courselist','false','No'),
+('display_teacher_in_courselist','true','Yes'),
+('display_teacher_in_courselist','false','No'),
+('permanently_remove_deleted_files','true','YesWillDeletePermanently'),
+('permanently_remove_deleted_files','false','NoWillDeletePermanently'),
+('dropbox_allow_overwrite','true','Yes'),
+('dropbox_allow_overwrite','false','No'),
+('dropbox_allow_just_upload','true','Yes'),
+('dropbox_allow_just_upload','false','No'),
+('dropbox_allow_student_to_student','true','Yes'),
+('dropbox_allow_student_to_student','false','No'),
+('dropbox_allow_group','true','Yes'),
+('dropbox_allow_group','false','No'),
+('dropbox_allow_mailing','true','Yes'),
+('dropbox_allow_mailing','false','No'),
+('extended_profile','true','Yes'),
+('extended_profile','false','No'),
+('student_view_enabled','true','Yes'),
+('student_view_enabled','false','No'),
+('show_navigation_menu','false','No'),
+('show_navigation_menu','icons','IconsOnly'),
+('show_navigation_menu','text','TextOnly'),
+('show_navigation_menu','iconstext','IconsText'),
+('enable_tool_introduction','true','Yes'),
+('enable_tool_introduction','false','No'),
+('page_after_login', 'index.php', 'CampusHomepage'),
+('page_after_login', 'user_portal.php', 'MyCourses'),
+('page_after_login', 'main/auth/courses.php', 'CourseCatalog'),
+('breadcrumbs_course_homepage', 'get_lang', 'CourseHomepage'),
+('breadcrumbs_course_homepage', 'course_code', 'CourseCode'),
+('breadcrumbs_course_homepage', 'course_title', 'CourseTitle'),
+('example_material_course_creation', 'true', 'Yes'),
+('example_material_course_creation', 'false', 'No'),
+('use_session_mode', 'true', 'Yes'),
+('use_session_mode', 'false', 'No'),
+('allow_email_editor', 'true' ,'Yes'),
+('allow_email_editor', 'false', 'No'),
+('show_email_addresses','true','Yes'),
+('show_email_addresses','false','No'),
+('upload_extensions_list_type', 'blacklist', 'Blacklist'),
+('upload_extensions_list_type', 'whitelist', 'Whitelist'),
+('upload_extensions_skip', 'true', 'Remove'),
+('upload_extensions_skip', 'false', 'Rename'),
+('show_number_of_courses', 'true', 'Yes'),
+('show_number_of_courses', 'false', 'No'),
+('show_empty_course_categories', 'true', 'Yes'),
+('show_empty_course_categories', 'false', 'No'),
+('show_back_link_on_top_of_tree', 'true', 'Yes'),
+('show_back_link_on_top_of_tree', 'false', 'No'),
+('show_different_course_language', 'true', 'Yes'),
+('show_different_course_language', 'false', 'No'),
+('split_users_upload_directory', 'true', 'Yes'),
+('split_users_upload_directory', 'false', 'No'),
+('hide_dltt_markup', 'false', 'No'),
+('hide_dltt_markup', 'true', 'Yes'),
+('display_categories_on_homepage','true','Yes'),
+('display_categories_on_homepage','false','No'),
+('default_forum_view', 'flat', 'Flat'),
+('default_forum_view', 'threaded', 'Threaded'),
+('default_forum_view', 'nested', 'Nested'),
+('survey_email_sender_noreply', 'coach', 'CourseCoachEmailSender'),
+('survey_email_sender_noreply', 'noreply', 'NoReplyEmailSender'),
+('openid_authentication','true','Yes'),
+('openid_authentication','false','No'),
+('gradebook_enable','true','Yes'),
+('gradebook_enable','false','No'),
+('user_selected_theme','true','Yes'),
+('user_selected_theme','false','No'),
+('allow_course_theme','true','Yes'),
+('allow_course_theme','false','No'),
+('display_mini_month_calendar', 'true', 'Yes'),
+('display_mini_month_calendar', 'false', 'No'),
+('display_upcoming_events', 'true', 'Yes'),
+('display_upcoming_events', 'false', 'No'),
+('show_closed_courses', 'true', 'Yes'),
+('show_closed_courses', 'false', 'No'),
+('ldap_version', '2', 'LDAPVersion2'),
+('ldap_version', '3', 'LDAPVersion3'),
+('visio_use_rtmpt','true','Yes'),
+('visio_use_rtmpt','false','No'),
+('add_users_by_coach', 'true', 'Yes'),
+('add_users_by_coach', 'false', 'No'),
+('extend_rights_for_coach', 'true', 'Yes'),
+('extend_rights_for_coach', 'false', 'No'),
+('extend_rights_for_coach_on_survey', 'true', 'Yes'),
+('extend_rights_for_coach_on_survey', 'false', 'No'),
+('show_session_coach', 'true', 'Yes'),
+('show_session_coach', 'false', 'No'),
+('allow_users_to_create_courses','true','Yes'),
+('allow_users_to_create_courses','false','No'),
+('breadcrumbs_course_homepage', 'session_name_and_course_title', 'SessionNameAndCourseTitle'),
+('allow_reservation', 'true', 'Yes'),
+('allow_reservation', 'false', 'No'),
+('allow_message_tool', 'true', 'Yes'),
+('allow_message_tool', 'false', 'No'),
+('allow_social_tool', 'true', 'Yes'),
+('allow_social_tool', 'false', 'No'),
+('allow_students_to_browse_courses','true','Yes'),
+('allow_students_to_browse_courses','false','No'),
+('show_email_of_teacher_or_tutor ', 'true', 'Yes'),
+('show_email_of_teacher_or_tutor ', 'false', 'No'),
+('show_session_data ', 'true', 'Yes'),
+('show_session_data ', 'false', 'No'),
+('allow_use_sub_language', 'true', 'Yes'),
+('allow_use_sub_language', 'false', 'No'),
+('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone'),
+('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual'),
+('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic'),
+('allow_terms_conditions', 'true', 'Yes'),
+('allow_terms_conditions', 'false', 'No'),
+('search_enabled', 'true', 'Yes'),
+('search_enabled', 'false', 'No'),
+('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
+('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults'),
+('show_courses_descriptions_in_catalog', 'true', 'Yes'),
+('show_courses_descriptions_in_catalog', 'false', 'No'),
+('allow_coach_to_edit_course_session','true','Yes'),
+('allow_coach_to_edit_course_session','false','No'),
+('show_glossary_in_extra_tools', 'none', 'None'),
+('show_glossary_in_extra_tools', 'exercise', 'Exercise'),
+('show_glossary_in_extra_tools', 'lp', 'Learning path'),
+('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath'),
+('send_email_to_admin_when_create_course','true','Yes'),
+('send_email_to_admin_when_create_course','false','No'),
+('go_to_course_after_login','true','Yes'),
+('go_to_course_after_login','false','No'),
+('math_mimetex','true','Yes'),
+('math_mimetex','false','No'),
+('math_asciimathML','true','Yes'),
+('math_asciimathML','false','No'),
+('enabled_asciisvg','true','Yes'),
+('enabled_asciisvg','false','No'),
+('include_asciimathml_script','true','Yes'),
+('include_asciimathml_script','false','No'),
+('youtube_for_students','true','Yes'),
+('youtube_for_students','false','No'),
+('block_copy_paste_for_students','true','Yes'),
+('block_copy_paste_for_students','false','No'),
+('more_buttons_maximized_mode','true','Yes'),
+('more_buttons_maximized_mode','false','No'),
+('students_download_folders','true','Yes'),
+('students_download_folders','false','No'),
+('users_copy_files','true','Yes'),
+('users_copy_files','false','No'),
+('allow_students_to_create_groups_in_social','true','Yes'),
+('allow_students_to_create_groups_in_social','false','No'),
+('allow_send_message_to_all_platform_users','true','Yes'),
+('allow_send_message_to_all_platform_users','false','No'),
+('use_users_timezone', 'true', 'Yes'),
+('use_users_timezone', 'false', 'No'),
+('allow_user_course_subscription_by_course_admin', 'true', 'Yes'),
+('allow_user_course_subscription_by_course_admin', 'false', 'No'),
+('show_link_bug_notification', 'true', 'Yes'),
+('show_link_bug_notification', 'false', 'No'),
+('course_validation', 'true', 'Yes'),
+('course_validation', 'false', 'No'),
+('sso_authentication', 'true', 'Yes'),
+('sso_authentication', 'false', 'No'),
+('sso_authentication_protocol', 'http://', 'http://'),
+('sso_authentication_protocol', 'https://', 'https://'),
+('enabled_wiris','true','Yes'),
+('enabled_wiris','false','No'),
+('allow_spellcheck','true','Yes'),
+('allow_spellcheck','false','No'),
+('force_wiki_paste_as_plain_text','true','Yes'),
+('force_wiki_paste_as_plain_text','false','No'),
+('enabled_googlemaps','true','Yes'),
+('enabled_googlemaps','false','No'),
+('enabled_imgmap','true','Yes'),
+('enabled_imgmap','false','No'),
+('enabled_support_svg','true','Yes'),
+('enabled_support_svg','false','No'),
+('pdf_export_watermark_enable','true','Yes'),
+('pdf_export_watermark_enable','false','No'),
+('pdf_export_watermark_by_course','true','Yes'),
+('pdf_export_watermark_by_course','false','No'),
+('enabled_insertHtml','true','Yes'),
+('enabled_insertHtml','false','No'),
+('students_export2pdf','true','Yes'),
+('students_export2pdf','false','No'),
+('show_users_folders','true','Yes'),
+('show_users_folders','false','No'),
+('show_default_folders','true','Yes'),
+('show_default_folders','false','No'),
+('show_chat_folder','true','Yes'),
+('show_chat_folder','false','No'),
+('enabled_text2audio','true','Yes'),
+('enabled_text2audio','false','No'),
+('enabled_support_pixlr','true','Yes'),
+('enabled_support_pixlr','false','No'),
+('show_groups_to_users','true','Yes'),
+('show_groups_to_users','false','No'),
+('accessibility_font_resize', 'true', 'Yes'),
+('accessibility_font_resize', 'false', 'No'),
+('hide_courses_in_sessions','true','Yes'),
+('hide_courses_in_sessions','false','No'),
+('enable_quiz_scenario', 'true', 'Yes'),
+('enable_quiz_scenario', 'false', 'No'),
+('enable_nanogong','true','Yes'),
+('enable_nanogong','false','No'),
+('show_documents_preview', 'true', 'Yes'),
+('show_documents_preview', 'false', 'No'),
+('htmlpurifier_wiki', 'true', 'Yes'),
+('htmlpurifier_wiki', 'false', 'No'),
+('cas_activate', 'true', 'Yes'),
+('cas_activate', 'false', 'No'),
+('cas_protocol', 'CAS1', 'CAS1Text'),
+('cas_protocol', 'CAS2', 'CAS2Text'),
+('cas_protocol', 'SAML', 'SAMLText'),
+('cas_add_user_activate', 'false', 'No'),
+('cas_add_user_activate', 'platform', 'casAddUserActivatePlatform'),
+('cas_add_user_activate', 'extldap', 'casAddUserActivateLDAP'),
+('update_user_info_cas_with_ldap', 'true', 'Yes'),
+('update_user_info_cas_with_ldap', 'false', 'No'),
+('scorm_cumulative_session_time','true','Yes'),
+('scorm_cumulative_session_time','false','No'),
+('allow_hr_skills_management', 'true', 'Yes'),
+('allow_hr_skills_management', 'false', 'No'),
+('enable_help_link', 'true', 'Yes'),
+('enable_help_link', 'false', 'No'),
+('allow_users_to_change_email_with_no_password', 'true', 'Yes'),
+('allow_users_to_change_email_with_no_password', 'false', 'No'),
+('show_admin_toolbar', 'do_not_show', 'DoNotShow'),
+('show_admin_toolbar', 'show_to_admin', 'ShowToAdminsOnly'),
+('show_admin_toolbar', 'show_to_admin_and_teachers', 'ShowToAdminsAndTeachers'),
+('show_admin_toolbar', 'show_to_all', 'ShowToAllUsers'),
+('use_custom_pages','true','Yes'),
+('use_custom_pages','false','No'),
+('languagePriority1','platform_lang','PlatformLanguage'),
+('languagePriority1','user_profil_lang','UserLanguage'),
+('languagePriority1','user_selected_lang','UserSelectedLanguage'),
+('languagePriority1','course_lang','CourseLanguage'),
+('languagePriority2','platform_lang','PlatformLanguage'),
+('languagePriority2','user_profil_lang','UserLanguage'),
+('languagePriority2','user_selected_lang','UserSelectedLanguage'),
+('languagePriority2','course_lang','CourseLanguage'),
+('languagePriority3','platform_lang','PlatformLanguage'),
+('languagePriority3','user_profil_lang','UserLanguage'),
+('languagePriority3','user_selected_lang','UserSelectedLanguage'),
+('languagePriority3','course_lang','CourseLanguage'),
+('languagePriority4','platform_lang','PlatformLanguage'),
+('languagePriority4','user_profil_lang','UserLanguage'),
+('languagePriority4','user_selected_lang','UserSelectedLanguage'),
+('languagePriority4','course_lang','CourseLanguage'),
+('allow_global_chat', 'true', 'Yes'),
+('allow_global_chat', 'false', 'No'),
+('login_is_email','true','Yes'),
+('login_is_email','false','No'),
+('courses_default_creation_visibility', '3', 'OpenToTheWorld'),
+('courses_default_creation_visibility', '2', 'OpenToThePlatform'),
+('courses_default_creation_visibility', '1', 'Private'),
+('courses_default_creation_visibility', '0', 'CourseVisibilityClosed'),
+('allow_browser_sniffer', 'true', 'Yes'),
+('allow_browser_sniffer', 'false', 'No'),
+('enable_wami_record', 'true', 'Yes'),
+('enable_wami_record', 'false', 'No'),
+('teachers_can_change_score_settings', 'true', 'Yes'),
+('teachers_can_change_score_settings', 'false', 'No'),
+('teachers_can_change_grade_model_settings', 'true', 'Yes'),
+('teachers_can_change_grade_model_settings', 'false', 'No'),
+('gradebook_locking_enabled', 'true', 'Yes'),
+('gradebook_locking_enabled', 'false', 'No'),
+('gradebook_enable_grade_model', 'true', 'Yes'),
+('gradebook_enable_grade_model', 'false', 'No'),
+('allow_session_admins_to_manage_all_sessions', 'true', 'Yes'),
+('allow_session_admins_to_manage_all_sessions', 'false', 'No'),
+('allow_skills_tool', 'true', 'Yes'),
+('allow_skills_tool', 'false', 'No'),
+('allow_public_certificates', 'true', 'Yes'),
+('allow_public_certificates', 'false', 'No'),
+('platform_unsubscribe_allowed', 'true', 'Yes'),
+('platform_unsubscribe_allowed', 'false', 'No'),
+('activate_email_template', 'true', 'Yes'),
+('activate_email_template', 'false', 'No'),
+ ('enable_iframe_inclusion', 'true', 'Yes'),
+('enable_iframe_inclusion', 'false', 'No'),
+('show_hot_courses', 'true', 'Yes'),
+('show_hot_courses', 'false', 'No'),
+('enable_webcam_clip', 'true', 'Yes'),
+('enable_webcam_clip', 'false', 'No'),
+('prevent_session_admins_to_manage_all_users', 'true', 'Yes'),
+('prevent_session_admins_to_manage_all_users', 'false', 'No'),
+('documents_default_visibility_defined_in_course', 'true', 'Yes'),
+('documents_default_visibility_defined_in_course', 'false', 'No'),
+('enabled_mathjax','true','Yes'),
+('enabled_mathjax','false','No');
+
+
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;','arabic','ar','arabic',0),
 ('Asturianu','asturian','ast','asturian',0),
@@ -127,6 +759,772 @@ INSERT INTO access_url(url, description, active, created_by) VALUES ('http://loc
 INSERT INTO access_url_rel_user VALUES(1, 1);
 
 -- Adding the platform templates
+-- Adding the platform templates
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleCourseTitle', 'TemplateTitleCourseTitleDescription', 'coursetitle.gif', '
+<head>
+                {CSS}
+                <style type="text/css">
+                .gris_title         	{
+                    color: silver;
+                }
+                h1
+                {
+                    text-align: right;
+                }
+                </style>
+
+            </head>
+            <body>
+            <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+            <tbody>
+            <tr>
+            <td style="vertical-align: middle; width: 50%;" colspan="1" rowspan="1">
+                <h1>TITULUS 1<br>
+                <span class="gris_title">TITULUS 2</span><br>
+                </h1>
+            </td>
+            <td style="width: 50%;">
+                <img style="width: 100px; height: 100px;" alt="Chamilo logo" src="{COURSE_DIR}images/logo_chamilo.png"></td>
+            </tr>
+            </tbody>
+            </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+
+/*
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleCheckList', 'TemplateTitleCheckListDescription', 'checklist.gif', '
+      <head>
+                   {CSS}
+                </head>
+                <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td style="vertical-align: top; width: 66%;">
+                <h3>Lorem ipsum dolor sit amet</h3>
+                <ul>
+                    <li>consectetur adipisicing elit</li>
+                    <li>sed do eiusmod tempor incididunt</li>
+                    <li>ut labore et dolore magna aliqua</li>
+                </ul>
+
+                <h3>Ut enim ad minim veniam</h3>
+                <ul>
+                    <li>quis nostrud exercitation ullamco</li>
+                    <li>laboris nisi ut aliquip ex ea commodo consequat</li>
+                    <li>Excepteur sint occaecat cupidatat non proident</li>
+                </ul>
+
+                <h3>Sed ut perspiciatis unde omnis</h3>
+                <ul>
+                    <li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
+                    <li>eaque ipsa quae ab illo inventore veritatis</li>
+                    <li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
+                </ul>
+
+                </td>
+                <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
+                <h3>Ut enim ad minima</h3>
+                Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
+                <h3>
+                <img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br></h3>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                <p><br>
+                <br>
+                </p>
+                </body>
+');
+*/
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleTeacher', 'TemplateTitleTeacherDescription', 'yourinstructor.gif', '
+<head>
+                   {CSS}
+                   <style type="text/css">
+                    .text
+                    {
+                        font-weight: normal;
+                    }
+                    </style>
+                </head>
+                <body>
+                    <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                    <tbody>
+                    <tr>
+                    <td></td>
+                    <td style="height: 33%;"></td>
+                    <td></td>
+                    </tr>
+                    <tr>
+                    <td style="width: 25%;"></td>
+                    <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right; font-weight: bold;" colspan="1" rowspan="1">
+                    <span class="text">
+                    <br>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque.</span>
+                    </td>
+                    <td style="width: 25%; font-weight: bold;">
+                    <img style="width: 180px; height: 241px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_case.png "></td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <p><br>
+                    <br>
+                    </p>
+                </body>
+');
+
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleLeftList', 'TemplateTitleListLeftListDescription', 'leftlist.gif', '
+<head>
+               {CSS}
+           </head>
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td style="width: 66%;"></td>
+                <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 248px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_reads.png "><br>
+                </td>
+                </tr>
+                <tr align="right">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">Lorem
+                ipsum dolor sit amet.
+                </td>
+                </tr>
+                <tr align="right">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+                Vivamus
+                a quam.&nbsp;<br>
+                </td>
+                </tr>
+                <tr align="right">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+                Proin
+                a est stibulum ante ipsum.</td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleLeftRightList', 'TemplateTitleLeftRightListDescription', 'leftrightlist.gif', '
+
+<head>
+               {CSS}
+            </head>
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; height: 400px; width: 720px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td></td>
+                <td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="{COURSE_DIR}images/trainer/trainer_join_hands.png "><br>
+                </td>
+                <td></td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">Lorem
+                ipsum dolor sit amet.
+                </td>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
+                Convallis
+                ut.&nbsp;Cras dui magna.</td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
+                Vivamus
+                a quam.&nbsp;<br>
+                </td>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
+                Etiam
+                lacinia stibulum ante.<br>
+                </td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
+                Proin
+                a est stibulum ante ipsum.</td>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
+                Consectetuer
+                adipiscing elit. <br>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleRightList', 'TemplateTitleRightListDescription', 'rightlist.gif', '
+    <head>
+               {CSS}
+            </head>
+            <body style="direction: ltr;">
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td style="vertical-align: bottom; width: 50%;" colspan="1" rowspan="4"><img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png"><br>
+                </td>
+                <td style="width: 50%;"></td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
+                Convallis
+                ut.&nbsp;Cras dui magna.</td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
+                Etiam
+                lacinia.<br>
+                </td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
+                Consectetuer
+                adipiscing elit. <br>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+
+/*
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleComparison', 'TemplateTitleComparisonDescription', 'compare.gif', '
+<head>
+            {CSS}
+            </head>
+
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tr>
+                    <td style="height: 10%; width: 33%;"></td>
+                    <td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br>
+                    </td>
+                    <td style="height: 10%; width: 33%;"></td>
+                </tr>
+            <tr>
+            <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
+            Lorem ipsum dolor sit amet.
+            </td>
+            <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 33%;">
+            Convallis
+            ut.&nbsp;Cras dui magna.</td>
+            </tr>
+            </body>
+');
+*/
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleDiagram', 'TemplateTitleDiagramDescription', 'diagram.gif', '
+    <head>
+                       {CSS}
+                    </head>
+
+                    <body>
+                    <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                    <tbody>
+                    <tr>
+                    <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; height: 33%; width: 33%;">
+                    <br>
+                    Etiam
+                    lacinia stibulum ante.
+                    Convallis
+                    ut.&nbsp;Cras dui magna.</td>
+                    <td colspan="1" rowspan="3">
+                        <img style="width: 350px; height: 267px;" alt="Alaska chart" src="{COURSE_DIR}images/diagrams/alaska_chart.png "></td>
+                    </tr>
+                    <tr>
+                    <td colspan="1" rowspan="1">
+                    <img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png "></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <p><br>
+                    <br>
+                    </p>
+                    </body>
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleDesc', 'TemplateTitleCheckListDescription', 'description.gif', '
+<head>
+                       {CSS}
+                    </head>
+                    <body>
+                        <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                        <tbody>
+                        <tr>
+                        <td style="width: 50%; vertical-align: top;">
+                            <img style="width: 48px; height: 49px; float: left;" alt="01" src="{COURSE_DIR}images/small/01.png " hspace="5"><br>Lorem ipsum dolor sit amet<br><br><br>
+                            <img style="width: 48px; height: 49px; float: left;" alt="02" src="{COURSE_DIR}images/small/02.png " hspace="5">
+                            <br>Ut enim ad minim veniam<br><br><br>
+                            <img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br><br><br>
+                            <img style="width: 48px; height: 49px; float: left;" alt="04" src="{COURSE_DIR}images/small/04.png " hspace="5">Neque porro quisquam est</td>
+
+                        <td style="vertical-align: top; width: 50%; text-align: right;" colspan="1" rowspan="1">
+                            <img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br></td>
+                        </tr><tr></tr>
+                        </tbody>
+                        </table>
+                        <p><br>
+                        <br>
+                        </p>
+                    </body>
+');
+
+/*
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleObjectives', 'TemplateTitleObjectivesDescription', 'courseobjectives.gif', '
+<head>
+                   {CSS}
+                </head>
+
+                <body>
+                    <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                    <tbody>
+                    <tr>
+                    <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
+                    <img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br>
+                    </td>
+                    <td style="height: 10%; width: 66%;"></td>
+                    </tr>
+                    <tr>
+                    <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 66%;">
+                    <h3>Lorem ipsum dolor sit amet</h3>
+                    <ul>
+                    <li>consectetur adipisicing elit</li>
+                    <li>sed do eiusmod tempor incididunt</li>
+                    <li>ut labore et dolore magna aliqua</li>
+                    </ul>
+                    <h3>Ut enim ad minim veniam</h3>
+                    <ul>
+                    <li>quis nostrud exercitation ullamco</li>
+                    <li>laboris nisi ut aliquip ex ea commodo consequat</li>
+                    <li>Excepteur sint occaecat cupidatat non proident</li>
+                    </ul>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                <p><br>
+                <br>
+                </p>
+                </body>
+');
+*/
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleCycle', 'TemplateTitleCycleDescription', 'cyclechart.gif', '
+<head>
+                   {CSS}
+                   <style>
+                   .title
+                   {
+                       color: white; font-weight: bold;
+                   }
+                   </style>
+                </head>
+
+
+                <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="6">
+                <tbody>
+                <tr>
+                    <td style="text-align: center; vertical-align: bottom; height: 10%;" colspan="3" rowspan="1">
+                        <img style="width: 250px; height: 76px;" alt="arrow" src="{COURSE_DIR}images/diagrams/top_arrow.png ">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 5%; width: 45%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
+                        <span class="title">Lorem ipsum</span>
+                    </td>
+
+                    <td style="height: 5%; width: 10%;"></td>
+                    <td style="height: 5%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
+                        <span class="title">Sed ut perspiciatis</span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td style="background-color: rgb(204, 204, 255); width: 45%; vertical-align: top;">
+                            <ul>
+                                <li>dolor sit amet</li>
+                                <li>consectetur adipisicing elit</li>
+                                <li>sed do eiusmod tempor&nbsp;</li>
+                                <li>adipisci velit, sed quia non numquam</li>
+                                <li>eius modi tempora incidunt ut labore et dolore magnam</li>
+                            </ul>
+                </td>
+                <td style="width: 10%;"></td>
+                <td style="background-color: rgb(204, 204, 255); width: 45%; vertical-align: top;">
+                    <ul>
+                    <li>ut enim ad minim veniam</li>
+                    <li>quis nostrud exercitation</li><li>ullamco laboris nisi ut</li>
+                    <li> Quis autem vel eum iure reprehenderit qui in ea</li>
+                    <li>voluptate velit esse quam nihil molestiae consequatur,</li>
+                    </ul>
+                    </td>
+                    </tr>
+                    <tr align="center">
+                    <td style="height: 10%; vertical-align: top;" colspan="3" rowspan="1">
+                    <img style="width: 250px; height: 76px;" alt="arrow" src="{COURSE_DIR}images/diagrams/bottom_arrow.png ">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                <p><br>
+                <br>
+                </p>
+                </body>
+');
+
+/*
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleLearnerWonder', 'TemplateTitleLearnerWonderDescription', 'learnerwonder.gif', '
+<head>
+               {CSS}
+            </head>
+
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td style="width: 33%;" colspan="1" rowspan="4">
+                    <img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br>
+                </td>
+                <td style="width: 66%;"></td>
+                </tr>
+                <tr align="center">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+                Convallis
+                ut.&nbsp;Cras dui magna.</td>
+                </tr>
+                <tr align="center">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+                Etiam
+                lacinia stibulum ante.<br>
+                </td>
+                </tr>
+                <tr align="center">
+                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
+                Consectetuer
+                adipiscing elit. <br>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+*/
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleTimeline', 'TemplateTitleTimelineDescription', 'phasetimeline.gif', '
+<head>
+               {CSS}
+                <style>
+                .title
+                {
+                    font-weight: bold; text-align: center;
+                }
+                </style>
+            </head>
+
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="5">
+                <tbody>
+                <tr class="title">
+                    <td style="vertical-align: top; height: 3%; background-color: rgb(224, 224, 224);">Lorem ipsum</td>
+                    <td style="height: 3%;"></td>
+                    <td style="vertical-align: top; height: 3%; background-color: rgb(237, 237, 237);">Perspiciatis</td>
+                    <td style="height: 3%;"></td>
+                    <td style="vertical-align: top; height: 3%; background-color: rgb(245, 245, 245);">Nemo enim</td>
+                </tr>
+
+                <tr>
+                    <td style="vertical-align: top; width: 30%; background-color: rgb(224, 224, 224);">
+                        <ul>
+                        <li>dolor sit amet</li>
+                        <li>consectetur</li>
+                        <li>adipisicing elit</li>
+                    </ul>
+                    <br>
+                    </td>
+                    <td>
+                        <img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
+                    </td>
+
+                    <td style="vertical-align: top; width: 30%; background-color: rgb(237, 237, 237);">
+                        <ul>
+                            <li>ut labore</li>
+                            <li>et dolore</li>
+                            <li>magni dolores</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
+                    </td>
+
+                    <td style="vertical-align: top; background-color: rgb(245, 245, 245); width: 30%;">
+                        <ul>
+                            <li>neque porro</li>
+                            <li>quisquam est</li>
+                            <li>qui dolorem&nbsp;&nbsp;</li>
+                        </ul>
+                        <br><br>
+                    </td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+
+/*
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleStopAndThink', 'TemplateTitleStopAndThinkDescription', 'stopthink.gif', '
+<head>
+               {CSS}
+            </head>
+            <body>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                <tr>
+                <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
+                    <img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
+                <br>
+                </td>
+                <td style="height: 10%; width: 66%;"></td>
+                </tr>
+                <tr>
+                <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 66%; vertical-align: middle; text-align: center;">
+                    <h3>Attentio sectetur adipisicing elit</h3>
+                    <ul>
+                        <li>sed do eiusmod tempor incididunt</li>
+                        <li>ut labore et dolore magna aliqua</li>
+                        <li>quis nostrud exercitation ullamco</li>
+                    </ul><br></td>
+                </tr>
+                </tbody>
+                </table>
+            <p><br>
+            <br>
+            </p>
+            </body>
+');
+*/
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleTable', 'TemplateTitleCheckListDescription', 'table.gif', '
+<head>
+                   {CSS}
+                   <style type="text/css">
+                .title
+                {
+                    font-weight: bold; text-align: center;
+                }
+
+                .items
+                {
+                    text-align: right;
+                }
+
+
+                    </style>
+
+                </head>
+                <body>
+                <br />
+               <h2>A table</h2>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px;" border="1" cellpadding="5" cellspacing="0">
+                <tbody>
+                <tr class="title">
+                    <td>City</td>
+                    <td>2005</td>
+                    <td>2006</td>
+                    <td>2007</td>
+                    <td>2008</td>
+                </tr>
+                <tr class="items">
+                    <td>Lima</td>
+                    <td>10,40</td>
+                    <td>8,95</td>
+                    <td>9,19</td>
+                    <td>9,76</td>
+                </tr>
+                <tr class="items">
+                <td>New York</td>
+                    <td>18,39</td>
+                    <td>17,52</td>
+                    <td>16,57</td>
+                    <td>16,60</td>
+                </tr>
+                <tr class="items">
+                <td>Barcelona</td>
+                    <td>0,10</td>
+                    <td>0,10</td>
+                    <td>0,05</td>
+                    <td>0,05</td>
+                </tr>
+                <tr class="items">
+                <td>Paris</td>
+                    <td>3,38</td>
+                    <td >3,63</td>
+                    <td>3,63</td>
+                    <td>3,54</td>
+                </tr>
+                </tbody>
+                </table>
+                <br>
+                </body>
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleAudio', 'TemplateTitleAudioDescription', 'audiocomment.gif', '
+<head>
+               {CSS}
+            </head>
+                   <body>
+                    <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                    <tbody>
+                    <tr>
+                    <td>
+                    <div align="center">
+                    <span style="text-align: center;">
+                        <embed  type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" width="300" height="20" bgcolor="#FFFFFF" src="{REL_PATH}main/inc/lib/mediaplayer/player.swf" allowfullscreen="false" allowscriptaccess="always" flashvars="file={COURSE_DIR}audio/ListeningComprehension.mp3&amp;autostart=true"></embed>
+                    </span></div>
+
+                    <br>
+                    </td>
+                    <td colspan="1" rowspan="3"><br>
+                        <img style="width: 300px; height: 341px; float: right;" alt="image" src="{COURSE_DIR}images/diagrams/head_olfactory_nerve.png "><br></td>
+                    </tr>
+                    <tr>
+                    <td colspan="1" rowspan="1">
+                        <img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_glasses.png"><br></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                    </tbody>
+                    </table>
+                    <p><br>
+                    <br>
+                    </p>
+                    </body>
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleVideo', 'TemplateTitleVideoDescription', 'video.gif', '
+<head>
+                {CSS}
+            </head>
+
+            <body>
+            <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+            <tbody>
+            <tr>
+            <td style="width: 50%; vertical-align: top;">
+
+                 <div style="text-align: center;" id="player810625-parent">
+                    <div style="border-style: none; overflow: hidden; width: 320px; height: 240px; background-color: rgb(220, 220, 220);">
+
+                        <div id="player810625">
+                            <div id="player810625-config" style="overflow: hidden; display: none; visibility: hidden; width: 0px; height: 0px;">url={REL_PATH}main/default_course_document/video/flv/example.flv width=320 height=240 loop=false play=false downloadable=false fullscreen=true displayNavigation=true displayDigits=true align=left dispPlaylist=none playlistThumbs=false</div>
+                        </div>
+
+                        <embed
+                            type="application/x-shockwave-flash"
+                            src="{REL_PATH}main/inc/lib/mediaplayer/player.swf"
+                            width="320"
+                            height="240"
+                            id="single"
+                            name="single"
+                            quality="high"
+                            allowfullscreen="true"
+                            flashvars="width=320&height=240&autostart=false&file={REL_PATH}main/default_course_document/video/flv/example.flv&repeat=false&image=&showdownload=false&link={REL_PATH}main/default_course_document/video/flv/example.flv&showdigits=true&shownavigation=true&logo="
+                        />
+
+                    </div>
+                </div>
+
+            </td>
+            <td style="background: transparent url({IMG_DIR}faded_grey.png) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 50%;">
+            <h3><br>
+            </h3>
+            <h3>Lorem ipsum dolor sit amet</h3>
+                <ul>
+                <li>consectetur adipisicing elit</li>
+                <li>sed do eiusmod tempor incididunt</li>
+                <li>ut labore et dolore magna aliqua</li>
+                </ul>
+            <h3>Ut enim ad minim veniam</h3>
+                <ul>
+                <li>quis nostrud exercitation ullamco</li>
+                <li>laboris nisi ut aliquip ex ea commodo consequat</li>
+                <li>Excepteur sint occaecat cupidatat non proident</li>
+                </ul>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            <p><br>
+            <br>
+            </p>
+             <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
+            </body>
+');
+
+INSERT INTO system_template (title, comment, image, content) VALUES
+('TemplateTitleFlash', 'TemplateTitleFlashDescription', 'flash.gif', '
+<head>
+               {CSS}
+            </head>
+            <body>
+            <center>
+                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 100%; height: 400px;" border="0" cellpadding="15" cellspacing="6">
+                <tbody>
+                    <tr>
+                    <td align="center">
+                    <embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="{COURSE_DIR}flash/SpinEchoSequence.swf" play="true" loop="true" menu="true"></embed></span><br />
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+                <p><br>
+                <br>
+                </p>
+            </center>
+            </body>
+');
+
+
 
 
 INSERT INTO user_friend_relation_type (id,title)
@@ -218,7 +1616,3 @@ INSERT INTO sequence_type_entity VALUES
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
 UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version';
-
-
-
-

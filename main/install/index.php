@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Chamilo installation
  *
@@ -14,8 +15,6 @@
  * @package chamilo.install
  */
 
-/* CONSTANTS */
-
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -25,8 +24,6 @@ define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
-
-/* PHP VERSION CHECK */
 
 // Including necessary libraries.
 require_once '../inc/lib/api.lib.php';
@@ -85,7 +82,8 @@ $charset = 'UTF-8';
 
 // Initialization of the internationalization library.
 api_initialize_internationalization();
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
+// Initialization of the default encoding that will be used by the multibyte
+// string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
 
 // Page encoding initialization.

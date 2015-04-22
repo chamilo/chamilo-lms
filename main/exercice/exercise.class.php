@@ -2758,6 +2758,8 @@ class Exercise
                         }
                     }
                     break;
+                case DRAGGABLE:
+                    //no break
                 case MATCHING:
                     if ($from_database) {
                         $sql = 'SELECT id, answer, id_auto
@@ -2811,11 +2813,21 @@ class Exercise
                                     $questionScore += $i_answerWeighting;
                                     $totalScore += $i_answerWeighting;
                                     if (isset($real_list[$i_answer_id])) {
+                                        if ($answerType == DRAGGABLE) {
+                                            $user_answer = Display::label(get_lang('Correct'), 'success');
+                                        } else {
                                         $user_answer = '<span>'.$real_list[$i_answer_id].'</span>';
+                                        }
                                     }
                                 } else {
+                                    if ($answerType == DRAGGABLE) {
+                                        $user_answer = Display::label(get_lang('NotCorrect'), 'danger');
+                                    } else {
                                     $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+                                    }
                                 }
+                            } elseif ($answerType == DRAGGABLE) {
+                                $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                             }
 
                             if ($show_result) {
@@ -2937,6 +2949,15 @@ class Exercise
                 if ($from == 'exercise_result') {
                     if ($debug) error_log('Showing questions $from '.$from);
                     //display answers (if not matching type, or if the answer is correct)
+                    if (
+                        !in_array(
+                            $answerType,
+                            [MATCHING, DRAGGABLE]
+                        ) ||
+                        $answerCorrect
+                    ) {
+                        
+                    }
                     if ($answerType != MATCHING || $answerCorrect) {
                         if (
                             in_array(
@@ -3521,6 +3542,8 @@ class Exercise
                                 $answerComment
                             );
                             break;
+                        case DRAGGABLE:
+                            //no break
                         case MATCHING:
                             echo '<tr>';
                             echo '<td>' . $answerMatching[$answerId] . '</td>';
@@ -3828,7 +3851,7 @@ class Exercise
                 } else {
                     Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
-            } elseif ($answerType == MATCHING) {
+            } elseif (in_array($answerType, [MATCHING, DRAGGABLE])) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);

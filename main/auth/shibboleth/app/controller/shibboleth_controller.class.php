@@ -89,7 +89,7 @@ class ShibbolethController
         $title = get_lang('InternalLogin');
         if (Shibboleth::session()->is_logged_in())
         {
-            $message = get_lang('already_logged_in');
+            $message = get_lang('AlreadyLoggedIn');
             Shibboleth::display()->message_page($message, $title);
         }
         $index_manager = new IndexManager('');

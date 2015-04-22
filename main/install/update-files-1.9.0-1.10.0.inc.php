@@ -110,6 +110,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         'help',
         'import',
         'index',
+        'install',
         'learnpath',
         'link',
         'md_document',

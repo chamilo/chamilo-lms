@@ -45,14 +45,18 @@ class AddCourseToSession
 
 			if ($type=='single') {
 				// search users where username or firstname or lastname begins likes $needle
-				$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.session_id
-					FROM '.$tbl_course.' course
-					LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
-						ON course.code = session_rel_course.course_code
-						AND session_rel_course.session_id = '.intval($id_session).'
-					WHERE
-						course.visual_code LIKE "'.$needle.'%" OR
-						course.title LIKE "'.$needle.'%"';
+				$sql = 'SELECT
+							course.code,
+						 	course.visual_code,
+						 	course.title,
+						 	session_rel_course.session_id
+						FROM '.$tbl_course.' course
+						LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
+							ON course.id = session_rel_course.c_id
+							AND session_rel_course.session_id = '.intval($id_session).'
+						WHERE
+							course.visual_code LIKE "'.$needle.'%" OR
+							course.title LIKE "'.$needle.'%"';
 			} else {
 				$sql = 'SELECT course.code, course.visual_code, course.title
 						FROM '.$tbl_course.' course
@@ -67,10 +71,14 @@ class AddCourseToSession
 				if ($access_url_id != -1){
 
 					if ($type=='single') {
-						$sql = 'SELECT course.code, course.visual_code, course.title, session_rel_course.session_id
+						$sql = 'SELECT
+						            course.code,
+						            course.visual_code,
+						            course.title,
+						            session_rel_course.session_id
 								FROM '.$tbl_course.' course
 								LEFT JOIN '.$tbl_session_rel_course.' session_rel_course
-									ON course.code = session_rel_course.course_code
+									ON course.id = session_rel_course.c_id
 									AND session_rel_course.session_id = '.intval($id_session).'
 								INNER JOIN '.$tbl_course_rel_access_url.' url_course
 								ON (url_course.c_id = course.id)

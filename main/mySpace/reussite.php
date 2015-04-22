@@ -44,10 +44,10 @@ if (!empty($_GET['session'])) {
 	if (Database::num_rows($result_session) > 0) {
 		echo '<table class="data_table"><tr><th>'.get_lang('Session').'</th><th>'.get_lang('MoyenneTest').'</th><th>'.get_lang('MoyenneExamen').'</th></tr>';
 		while ($session = Database::fetch_array($result_session)) {
-			$sql_course = "SELECT title, code, id
+			$sql_course = "SELECT title, code, course.id
 				FROM $tbl_course as course
 				INNER JOIN $tbl_session_course AS rel_course
-				ON course.code = rel_course.course_code
+				ON course.id = rel_course.c_id
 				AND rel_course.session_id = ".$session['id']."
 				ORDER BY title ASC";
 

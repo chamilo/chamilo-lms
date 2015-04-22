@@ -1404,7 +1404,7 @@ class MySpace
                     FROM $tbl_user AS u
                     INNER JOIN $tbl_course_rel_user AS cu
                     ON cu.user_id = u.user_id
-                    WHERE cu.course_code = '".$course_code."'";
+                    WHERE cu.c_id = '".$courseId."'";
             $result = Database::query($sql);
             $time_spent = 0;
             $progress = 0;
@@ -1615,13 +1615,12 @@ class MySpace
         // getting all the courses of the user
         $sql = "SELECT * FROM $tbl_course AS c
                 INNER JOIN $tbl_session_rel_course AS sc
-                ON sc.course_code = c.code
+                ON sc.c_id = c.id
                 WHERE sc.session_id = '".$session_id."';";
         $result = Database::query($sql);
         while ($row = Database::fetch_object($result)) {
             $courseCode = $row->code;
-            $courseInfo = api_get_course_info($row->code);
-            $courseId = $courseInfo['real_id'];
+            $courseId = $row->c_id;
             $return .= '<tr>';
             // course code
             $return .= '    <td width="157px" >'.$row->title.'</td>';
@@ -1775,12 +1774,11 @@ class MySpace
             // getting all the courses of the session
             $sql = "SELECT * FROM $tbl_course AS c
                     INNER JOIN $tbl_session_rel_course AS sc
-                    ON sc.course_code = c.code
+                    ON sc.c_id = c.id
                     WHERE sc.session_id = '".$session_id."';";
             $result = Database::query($sql);
             while ($row = Database::fetch_object($result)) {
-                $courseInfo = api_get_course_info($row->code);
-                $courseId = $courseInfo['real_id'];
+                $courseId = $row->c_id;
                 $csv_row = array();
                 $csv_row[] = $session_title;
                 $csv_row[] = $row->title;

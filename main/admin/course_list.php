@@ -170,20 +170,23 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-    $sql = "SELECT  c.code AS col0,
-                    c.title AS col1,
-                    c.code AS col2,
-                    c.course_language AS col3,
-                    c.category_code AS col4,
-                    c.subscribe AS col5,
-                    c.unsubscribe AS col6,
-                    c.code AS col7,
-                    c.visibility AS col8,
-                    c.directory as col9,
-                    c.visual_code
+    $sql = "SELECT
+                c.code AS col0,
+                c.title AS col1,
+                c.code AS col2,
+                c.course_language AS col3,
+                c.category_code AS col4,
+                c.subscribe AS col5,
+                c.unsubscribe AS col6,
+                c.code AS col7,
+                c.visibility AS col8,
+                c.directory as col9,
+                c.visual_code
             FROM $course_table c
-            INNER JOIN $session_rel_course r ON c.code = r.course_code
-            INNER JOIN $session s ON r.session_id = s.id
+            INNER JOIN $session_rel_course r
+            ON c.id = r.c_id
+            INNER JOIN $session s
+            ON r.session_id = s.id
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
@@ -206,6 +209,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     }
     return $courses;
 }
+
 /**
  * Filter to display the edit-buttons
  */

@@ -564,7 +564,7 @@ class Login
                                 FROM $tbl_session session, $tbl_session_course_user session_rcru
                                 WHERE
                                    session_rcru.session_id = session.id AND
-                                   session_rcru.course_code = '$_cid' AND
+                                   session_rcru.c_id = '$_real_cid' AND
                                    session_rcru.user_id = '$user_id' AND
                                    session_rcru.session_id  = $session_id AND
                                    session_rcru.status = 2";

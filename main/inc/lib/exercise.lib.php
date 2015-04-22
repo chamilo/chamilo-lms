@@ -2843,7 +2843,7 @@ class ExerciseLib
     		    e.session_id  = a.session_id
             )
             INNER JOIN $courseTable c
-            ON (c.code = a.course_code)
+            ON (c.id = a.c_id)
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND
@@ -3007,7 +3007,7 @@ class ExerciseLib
     		    e.session_id  = a.session_id
             )
             INNER JOIN $courseTable c
-            ON c.code = a.course_code
+            ON c.id = a.c_id
     		$courseCondition
     		WHERE
     		    exe_exo_id = $exercise_id AND

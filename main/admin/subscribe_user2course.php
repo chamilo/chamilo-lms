@@ -226,24 +226,6 @@ $result = Database::query($sql);
 $db_courses = Database::store_result($result);
 unset($result);
 
-if (api_is_multiple_url_enabled()) {
-    $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1){
-        $sqlNbCours = "	SELECT course_rel_user.course_code, course.title
-            FROM $tbl_course_user as course_rel_user
-            INNER JOIN $tbl_course as course
-            ON course.id = course_rel_user.c_id
-            INNER JOIN $tbl_course_rel_access_url course_rel_url
-            ON (course_rel_url.c_id = course.id)
-            WHERE
-                access_url_id =  $access_url_id  AND
-                course_rel_user.user_id='".api_get_user_id()."' AND
-                course_rel_user.status='1'
-            ORDER BY course.title";
-    }
-}
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <?php

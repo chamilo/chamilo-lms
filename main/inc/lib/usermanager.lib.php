@@ -4541,7 +4541,7 @@ class UserManager
                     INNER JOIN '.$table_session_course_user.' sru
                     ON sru.user_id=u.user_id
                     WHERE
-                        sru.course_code="'.Database::escape_string($courseCode).'" AND
+                        sru.c_id="'.$courseId.'" AND
                         sru.status=2';
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs);

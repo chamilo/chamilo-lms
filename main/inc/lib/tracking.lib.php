@@ -400,7 +400,7 @@ class Tracking
                             $action = '<td></td>';
                         }
 
-                        if ($extend_this_attempt OR $extend_all) {
+                        if ($extend_this_attempt || $extend_all) {
                             $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
                             foreach ($list1 as $id => $interaction) {
                                 if (($counter % 2) == 0) {
@@ -761,7 +761,7 @@ class Tracking
                         $action =  '<td></td>';
                     }
 
-                    if ($extend_this_attempt OR $extend_all) {
+                    if ($extend_this_attempt || $extend_all) {
                         $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
                         foreach ($list1 as $id => $interaction) {
                             if (($counter % 2) == 0) {
@@ -4122,7 +4122,10 @@ class Tracking
                         $progress = $progress.'%';
                     }
 
-                    if ($course_code == $_GET['course'] && empty($_GET['session_id'])) {
+                    if (isset($_GET['course']) &&
+                        $course_code == $_GET['course'] &&
+                        empty($_GET['session_id'])
+                    ) {
                         $html .= '<tr class="row_odd" style="background-color:#FBF09D">';
                     } else {
                         $html .= '<tr class="row_even">';
@@ -4133,7 +4136,6 @@ class Tracking
 
                     $html .= '<td align="center">'.$time.'</td>';
                     $html .= '<td align="center">'.$progress.'</td>';
-
                     $html .= '<td align="center">';
                     if (is_numeric($percentage_score)) {
                         $html .= $percentage_score.'%';
@@ -4143,7 +4145,10 @@ class Tracking
                     $html .= '</td>';
                     $html .= '<td align="center">'.$last_connection.'</td>';
                     $html .= '<td align="center">';
-                    if ($course_code == $_GET['course'] && empty($_GET['session_id'])) {
+                    if (isset($_GET['course']) &&
+                        $course_code == $_GET['course'] &&
+                        empty($_GET['session_id'])
+                    ) {
                         $html .= '<a href="#">';
                         $html .= Display::return_icon('2rightarrow_na.gif', get_lang('Details'));
                     } else {
@@ -4586,10 +4591,14 @@ class Tracking
                             $course_info['real_id'],
                             $session_id
                         );
-                        $best_score = ExerciseLib::show_score(
-                            $best_score_data['exe_result'],
-                            $best_score_data['exe_weighting']
-                        );
+
+                        $best_score = '';
+                        if (!empty($best_score_data)) {
+                            $best_score = ExerciseLib::show_score(
+                                $best_score_data['exe_result'],
+                                $best_score_data['exe_weighting']
+                            );
+                        }
 
                         if ($attempts > 0) {
                             $exercise_stat = ExerciseLib::get_best_attempt_by_user(
@@ -4627,20 +4636,20 @@ class Tracking
                             $graph = Display::url($graph, '#', array('id'=>$exercices['id'], 'class'=>'opener'));
                         }
 
-                        $html .= Display::tag('td', $attempts,                 array('align'=>'center'));
-                        $html .= Display::tag('td', $percentage_score_result,  array('align'=>'center'));
-                        $html .= Display::tag('td', $position,                 array('align'=>'center'));
-                        $html .= Display::tag('td', $best_score,               array('align'=>'center'));
-                        $html .= Display::tag('td', $graph,                    array('align'=>'center'));
+                        $html .= Display::tag('td', $attempts, array('align'=>'center'));
+                        $html .= Display::tag('td', $percentage_score_result, array('align'=>'center'));
+                        $html .= Display::tag('td', $position, array('align'=>'center'));
+                        $html .= Display::tag('td', $best_score, array('align'=>'center'));
+                        $html .= Display::tag('td', $graph, array('align'=>'center'));
                         //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
 
                     } else {
                         // Exercise configuration NO results
-                        $html .= Display::tag('td', $attempts,    array('align'=>'center'));
-                        $html .= Display::tag('td', '-',          array('align'=>'center'));
-                        $html .= Display::tag('td', '-',          array('align'=>'center'));
-                        $html .= Display::tag('td', '-',          array('align'=>'center'));
-                        $html .= Display::tag('td', '-',          array('align'=>'center'));
+                        $html .= Display::tag('td', $attempts, array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
+                        $html .= Display::tag('td', '-', array('align'=>'center'));
                     }
                     $html .= '</tr>';
                 }
@@ -4652,11 +4661,11 @@ class Tracking
 
             //LP table results
             $html .='<table class="data_table">';
-            $html .= Display::tag('th', get_lang('Learnpaths'),         array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('LatencyTimeSpent'),   array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Progress'),           array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('Score'),              array('class'=>'head', 'style'=>'color:#000'));
-            $html .= Display::tag('th', get_lang('LastConnexion'),      array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Learnpaths'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('LatencyTimeSpent'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Progress'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('Score'), array('class'=>'head', 'style'=>'color:#000'));
+            $html .= Display::tag('th', get_lang('LastConnexion'), array('class'=>'head', 'style'=>'color:#000'));
             $html .= '</tr>';
 
             $list = new LearnpathList(api_get_user_id(), $course_info['code'], $session_id, 'publicated_on ASC', true);
@@ -4675,7 +4684,7 @@ class Tracking
                         $percentage_score = '0%';
                     }
 
-                    $time_spent_in_lp       = api_time_to_hms($time_spent_in_lp);
+                    $time_spent_in_lp = api_time_to_hms($time_spent_in_lp);
 
                     $html .= '<tr class="row_even">';
                     $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_controller.php?cidReq={$course_code}&id_session=$session_id&lp_id=$lp_id&action=view";
@@ -4703,6 +4712,7 @@ class Tracking
             }
             $html .='</table>';
         }
+
         return $html;
     }
 
@@ -4871,7 +4881,7 @@ class Tracking
     /**
      *
      * Returns a thumbnail of the function generate_exercise_result_graph
-     * @param 	array attempts
+     * @param  array $attempts
      */
     static function generate_exercise_result_thumbnail_graph($attempts)
     {
@@ -5232,22 +5242,22 @@ class Tracking
     */
     public static function setUserSearchForm($form)
     {
-    global $_configuration;
-    $form->addElement('text', 'keyword', get_lang('Keyword'));
-    $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
-    if (isset($_configuration['save_user_last_login']) &&
-        $_configuration['save_user_last_login']
-    ) {
-        $form->addElement(
-            'select',
-            'sleeping_days',
-            get_lang('InactiveDays'),
-            array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
-        );
-    }
-    $form->addElement('button', 'submit', get_lang('Search'));
+        global $_configuration;
+        $form->addElement('text', 'keyword', get_lang('Keyword'));
+        $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+        if (isset($_configuration['save_user_last_login']) &&
+            $_configuration['save_user_last_login']
+        ) {
+            $form->addElement(
+                'select',
+                'sleeping_days',
+                get_lang('InactiveDays'),
+                array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
+            );
+        }
+        $form->addElement('button', 'submit', get_lang('Search'));
 
-    return $form;
+        return $form;
     }
 
     /**
@@ -5313,7 +5323,8 @@ class Tracking
             return array();
         }
         // Now we have two arrays of courses and sessions with enough data to proceed
-        // If no course could be found, we shouldn't return anything. Sessions can be empty (then we only return the pure-course-context results)
+        // If no course could be found, we shouldn't return anything.
+        // Sessions can be empty (then we only return the pure-course-context results)
         if (count($courses) < 1) {
             return array();
         }
@@ -5529,6 +5540,7 @@ class TrackingCourseLog
                 )";
     	$res = Database::query($sql);
     	$obj = Database::fetch_object($res);
+
     	return $obj->total_number_of_items;
     }
 
@@ -5959,7 +5971,9 @@ class TrackingCourseLog
     			}
     			$users = implode(',',$new_user_array);
     			//selecting only the necessary information NOT ALL the user list
-    			$sql = "SELECT user.user_id, field.field_value FROM $table_user user INNER JOIN $table_user_field_values field
+    			$sql = "SELECT user.user_id, field.field_value
+    			        FROM $table_user user
+    			        INNER JOIN $table_user_field_values field
                         ON (user.user_id = field.user_id)
                         WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
 
@@ -6177,7 +6191,7 @@ class TrackingCourseLog
     		// we need to display an additional profile field
     		$user['additional'] = '';
 
-    		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+    		if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
     			if (isset($additional_user_profile_info[$user['user_id']]) &&
                     is_array($additional_user_profile_info[$user['user_id']])
                 ) {
@@ -6220,7 +6234,7 @@ class TrackingCourseLog
 
             $user_row[]= $user['first_connection'];
             $user_row[]= $user['last_connection'];
-            if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+            if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
                 $user_row[]= $user['additional'];
             }
 
@@ -6571,8 +6585,8 @@ class TrackingUserLog
      * @param    int        Session id (optional, default = 0)
      * @return     void
      */
-    public static function display_document_tracking_info($view, $user_id, $course_code, $session_id = 0) {
-
+    public static function display_document_tracking_info($view, $user_id, $course_code, $session_id = 0)
+    {
     	// protect data
     	$user_id     = intval($user_id);
         $courseId = api_get_course_int_id($course_code);

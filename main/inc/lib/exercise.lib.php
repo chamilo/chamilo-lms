@@ -2519,13 +2519,13 @@ class ExerciseLib
             $session_id,
             false
         );
+
         $best_score_data = array();
         $best_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval(
-                        $result['exe_weighting']
-                    ) != 0
+                if (!empty($result['exe_weighting']) &&
+                    intval($result['exe_weighting']) != 0
                 ) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     if ($score >= $best_score) {
@@ -2535,6 +2535,7 @@ class ExerciseLib
                 }
             }
         }
+
         return $best_score_data;
     }
 

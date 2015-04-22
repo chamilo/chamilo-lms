@@ -1,11 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Reporting page on the user's own progress
  * @package chamilo.tracking
- */
-/**
- * Code
  */
 
 $cidReset = true;
@@ -57,6 +55,9 @@ if (!empty($course_user_list)) {
     $count = 1;
     foreach ($items as $result) {
         $login = $result['login'];
+        $courseId = $result['c_id'];
+        $courseInfo = api_get_course_info_by_id($courseId);
+
         if ($count == 1) {
             $first = '<a href="#'.$login.'">'.get_lang('First').'</a>';
         }
@@ -72,7 +73,7 @@ if (!empty($course_user_list)) {
                         </div>
                         <div class="span3">'.sprintf(
                             get_lang('YouHaveEnteredTheCourseXInY'),
-                            $result['course_code'],
+                            $courseInfo['code'],
                             api_convert_and_format_date($login, DATE_FORMAT_LONG)
                         ).'</div>
                     </li>';
@@ -80,9 +81,7 @@ if (!empty($course_user_list)) {
     }
 }
 
-$content = '';
-
-$content .= Tracking::show_user_progress(api_get_user_id(), $sessionId);
+$content = Tracking::show_user_progress(api_get_user_id(), $sessionId);
 $content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
 
 if (!empty($dates)) {

@@ -3,13 +3,8 @@
 
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements)
- * @package chamilo.learnpath.scorm
- * @author	Yannick Warnier <ywarnier@beeznest.org>
- */
-
-/**
- * Defines the "scorm" child of class "learnpath"
  * @package chamilo.learnpath
+ * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 class scorm extends learnpath
 {
@@ -53,7 +48,7 @@ class scorm extends learnpath
 
     /**
      * Opens a resource
-     * @param	integer	Database ID of the resource
+     * @param	integer	$id Database ID of the resource
      */
     public function open($id)
     {
@@ -133,7 +128,8 @@ class scorm extends learnpath
                                     $this->metadata = new scormMetadata('manifest', $child);
                                     break;
                                 case 'organizations':
-                                    // Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest. It contains at least one 'organization' sub-element.
+                                    // Contains the course structure - this element appears 1 and only 1 time in a package imsmanifest.
+                                    // It contains at least one 'organization' sub-element.
                                     $orgs_attribs = $child->attributes;
                                     foreach ($orgs_attribs as $orgs_attrib) {
                                         // Attributes of the <organizations> element.
@@ -158,8 +154,8 @@ class scorm extends learnpath
                                                 // Ignore here.
                                                 break;
                                             case XML_ATTRIBUTE_NODE:
-                                                // Just in case there would be interesting attributes inside the organization tag. There shouldn't
-                                                // as this is a node-level, not a data level.
+                                                // Just in case there would be interesting attributes inside the organization tag.
+                                                // There shouldn't as this is a node-level, not a data level.
                                                 //$manifest['organizations'][$i][$orgnode->name] = $orgnode->value;
                                                 //$found_an_org = true;
                                                 break;
@@ -272,22 +268,22 @@ class scorm extends learnpath
 
     /**
      * Import the scorm object (as a result from the parse_manifest function) into the database structure
-     * @param string $course_code
-     * @param int $use_max_score
+     * @param string $courseCode
+     * @param int $userMaxScore
      * @return bool	Returns -1 on error
      */
-    public function import_manifest($course_code, $use_max_score = 1)
+    public function import_manifest($courseCode, $userMaxScore = 1)
     {
         if ($this->debug > 0) {
-            error_log('New LP - Entered import_manifest('.$course_code.')', 0);
+            error_log('New LP - Entered import_manifest('.$courseCode.')', 0);
         }
-        $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
+        $courseInfo = api_get_course_info($courseCode);
+        $courseId = $courseInfo['real_id'];
 
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $use_max_score = intval($use_max_score);
+        $userMaxScore = intval($userMaxScore);
 
         foreach ($this->organizations as $id => $dummy) {
             $is_session = api_get_session_id();
@@ -298,7 +294,7 @@ class scorm extends learnpath
             // -for learnpath
             // -for items
             // -for views?
-            $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $course_id ";
+            $get_max = "SELECT MAX(display_order) FROM $new_lp WHERE c_id = $courseId ";
             $res_max = Database::query($get_max);
             $dsp = 1;
             if (Database::num_rows($res_max) > 0) {
@@ -309,16 +305,35 @@ class scorm extends learnpath
             $myname = api_utf8_decode($myname);
 
             $sql = "INSERT INTO $new_lp (c_id, lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id, use_max_score)" .
-                    "VALUES ($course_id , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $use_max_score)";
+                    "VALUES ($courseId , 2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."', 'scorm_api.php', $dsp, $session_id, $userMaxScore)";
             if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting path: '. $sql, 0); }
 
-            $res = Database::query($sql);
+            Database::query($sql);
             $lp_id = Database::insert_id();
-            $this->lp_id = $lp_id;
 
-            // Insert into item_property.
-            api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'LearnpathAdded', api_get_user_id());
-            api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'visible', api_get_user_id());
+            if ($lp_id) {
+                $sql = "UPDATE $new_lp SET id = iid WHERE iid = $lp_id";
+                Database::query($sql);
+
+                $this->lp_id = $lp_id;
+
+                // Insert into item_property.
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LEARNPATH,
+                    $this->lp_id,
+                    'LearnpathAdded',
+                    api_get_user_id()
+                );
+
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_LEARNPATH,
+                    $this->lp_id,
+                    'visible',
+                    api_get_user_id()
+                );
+            }
 
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
@@ -373,8 +388,9 @@ class scorm extends learnpath
                 $max_score = intval($item['max_score']);
 
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
-                    // If max score is not set The use_max_score parameter is check in order to use 100 (chamilo style) or '' (strict scorm)
-                    if ($use_max_score) {
+                    // If max score is not set The use_max_score parameter
+                    // is check in order to use 100 (chamilo style) or '' (strict scorm)
+                    if ($userMaxScore) {
                         $max_score = 100;
                     } else {
                         $max_score = "NULL";
@@ -395,16 +411,23 @@ class scorm extends learnpath
                 $item['parameters'] = Database::escape_string($item['parameters']);
 
                 $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
-                        VALUES ($course_id, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
+                        VALUES ($courseId, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
                 Database::query($sql);
                 if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql, 0); }
                 $item_id = Database::insert_id();
-                // Now update previous item to change next_item_id.
-                $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
-                Database::query($upd);
-                // Update previous item id.
-                $previous = $item_id;
+
+                if ($item_id) {
+                    $sql = "UPDATE $new_lp_item SET id = iid WHERE iid = $item_id";
+                    Database::query($sql);
+
+                    // Now update previous item to change next_item_id.
+                    $upd = "UPDATE $new_lp_item SET next_item_id = $item_id
+                            WHERE c_id = $courseId AND id = $previous";
+                    Database::query($upd);
+                    // Update previous item id.
+                    $previous = $item_id;
+                }
 
                 // Code for indexing, now only index specific fields like terms and the title.
                 if (!empty($_POST['index_document'])) {
@@ -452,7 +475,7 @@ class scorm extends learnpath
                         $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
-                        $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
+                        $sql = sprintf($sql, $tbl_se_ref, $courseCode, TOOL_LEARNPATH, $lp_id, $previous, $did);
                         Database::query($sql);
                     }
                 }
@@ -495,9 +518,9 @@ class scorm extends learnpath
         if ($this->debug > 1) {
             error_log('New LP - import_package() - zip file path = ' . $zip_file_path . ', zip file name = ' . $zip_file_name, 0);
         }
-        $course_rel_dir     = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
-        $course_sys_dir     = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
-        $current_dir        = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
+        $course_rel_dir = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
+        $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
+        $current_dir = replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
             error_log( 'New LP - import_package() - current_dir = ' . $current_dir, 0);
@@ -663,23 +686,26 @@ class scorm extends learnpath
                 if ($this->debug > 1) { error_log('New LP - changed back to init dir: '.$course_sys_dir.$new_dir, 0); }
             }
         } else {
+
             return '';
         }
+
         return $course_sys_dir.$new_dir.$manifest;
     }
 
     /**
      * Sets the proximity setting in the database
-     * @param	string	Proximity setting
+     * @param	string	$proxy Proximity setting
      */
     public function set_proximity($proxy = '')
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In scorm::set_proximity('.$proxy.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_local = '$proxy'
+                    WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -693,12 +719,12 @@ class scorm extends learnpath
      */
     public function set_theme($theme = '')
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In scorm::set_theme('.$theme.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -712,12 +738,12 @@ class scorm extends learnpath
      */
     public function set_preview_image($preview_image = '')
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In scorm::set_theme('.$preview_image.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -731,12 +757,12 @@ class scorm extends learnpath
      */
     public function set_author($author = '')
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In scorm::set_author('.$author.') method', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -746,16 +772,17 @@ class scorm extends learnpath
 
     /**
      * Sets the content maker setting in the database
-     * @param	string	Proximity setting
+     * @param	string	$maker
      */
     public function set_maker($maker = '')
     {
-        $course_id = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In scorm::set_maker method('.$maker.')', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$course_id." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
+                    WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -787,18 +814,17 @@ class scorm extends learnpath
         //write the zip file somewhere (might be too big to return)
 
         require_once 'learnpath_functions.inc.php';
-        $course_id = api_get_course_int_id();
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $_course = api_get_course_info(api_get_course_id());
+        $courseId = api_get_course_int_id();
+        $_course = api_get_course_info();
 
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." AND id=".$lp_id;
+        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$courseId." AND id=".$lp_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];
         $list = explode('/', $LPname);
         $LPnamesafe = $list[0];
-        //$zipfoldername = '/tmp';
-        //$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;
         $zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/temp/'.$LPnamesafe;
         $scormfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$LPnamesafe;
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
@@ -891,30 +917,22 @@ class scorm extends learnpath
      * @return	integer	New LP ID or false on failure
      * TODO @TODO Implement imsmanifest_path parameter
      */
-    public function reimport_manifest($course, $lp_id = null, $imsmanifest_path = '')
+    public function reimport_manifest($courseCode, $lp_id = null, $imsmanifest_path = '')
     {
         if ($this->debug > 0) { error_log('In scorm::reimport_manifest() method', 0); }
-        global $_course;
-        // RECOVERING PATH FROM DB
-        $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course = Datbase::escape_string($course);
-        $sql = "SELECT * FROM $main_table WHERE code = '$course'";
-        if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql, 0); }
-        //$res = Database::query($sql);
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $this->cc = $course;
-        } else {
-            $this->error = 'Course code does not exist in database ('.$sql.')';
+
+        $courseInfo = api_get_course_info($courseCode);
+        if (empty($courseInfo)) {
+            $this->error = 'Course code does not exist in database';
             return false;
         }
 
-        // TODO: Make it flexible to use any course_code (still using env course code here)
-        //$lp_table = Database::get_course_table(LEARNPATH_TABLE);
-        $course_id = api_get_course_int_id();
+        $this->cc = $courseInfo['code'];
+        $courseId = $courseInfo['real_id'];
+
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
-        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." AND id = '$lp_id'";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$courseId." AND id = '$lp_id'";
         if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql, 0); }
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
@@ -939,9 +957,9 @@ class scorm extends learnpath
             $this->subdir = $row['path'];
         }
         // Parse the manifest (it is already in this lp's details).
-        $manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';
+        $manifest_file = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';
         if ($this->subdir == '') {
-            $manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/imsmanifest.xml';
+            $manifest_file = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/scorm/imsmanifest.xml';
         }
         echo $manifest_file;
         if (is_file($manifest_file) && is_readable($manifest_file)) {
@@ -950,7 +968,7 @@ class scorm extends learnpath
             $manifest = $this->parse_manifest($manifest_file);
             // Import new LP in DB (ignore the current one).
             if ($this->debug > 1) { error_log('New LP - In scorm::reimport_manifest() - Importing manifest '.$manifest_file, 0); }
-            $this->import_manifest(api_get_course_id());
+            $this->import_manifest($this->cc);
         } else {
             if ($this->debug > 0) { error_log('New LP - In scorm::reimport_manifest() - Could not find manifest file at '.$manifest_file, 0); }
         }

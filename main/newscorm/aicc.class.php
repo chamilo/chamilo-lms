@@ -40,16 +40,15 @@ class aicc extends learnpath
 
     /**
      * Class constructor. Based on the parent constructor.
-     * @param	string	Course code
-     * @param	integer	Learnpath ID in DB
-     * @param	integer	User ID
+     * @param	string	$course_code
+     * @param	integer	$resource_id Learnpath ID in DB
+     * @param	integer	$user_id
      */
-    public function __construct($course_code = null, $resource_id = null, $user_id = null) {
+    public function __construct($course_code = null, $resource_id = null, $user_id = null)
+    {
         if ($this->debug > 0) { error_log('In aicc::aicc()', 0); }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
-        } else {
-            //do nothing but still build the aicc object
         }
     }
 
@@ -57,7 +56,8 @@ class aicc extends learnpath
      * Opens a resource
      * @param	integer	Database ID of the resource
      */
-    public function open($id) {
+    public function open($id)
+    {
         if ($this->debug > 0) { error_log('In aicc::open()', 0); }
         // Redefine parent method.
     }
@@ -67,7 +67,8 @@ class aicc extends learnpath
      * @param	string	Path to the config files dir on the system. If not defined, uses the base path of the course's scorm dir
      * @return	array	Structured array representing the config files' contents
      */
-    function parse_config_files($dir = '') {
+    function parse_config_files($dir = '')
+    {
         if ($this->debug > 0) {error_log('New LP - In aicc::parse_config_files('.$dir.')', 0); }
         if (empty($dir)) {
             // Get the path of the AICC config files dir.
@@ -208,27 +209,25 @@ class aicc extends learnpath
                 }
             }
         }
+
         return $this->config;
     }
 
     /**
      * Import the aicc object (as a result from the parse_config_files function) into the database structure
-     * @param	string	Unique course code
+     * @param	string	$course_code
      * @return	bool	Returns -1 on error
      */
-    function import_aicc($course_code) {
-        $course_id = api_get_course_int_id();
+    public function import_aicc($course_code)
+    {
+        $courseInfo = api_get_course_info($course_code);
+        $course_id = $courseInfo['real_id'];
+
+        if (empty($course_id)) {
+            return false;
+        }
 
         if ($this->debug > 0) { error_log('New LP - In aicc::import_aicc('.$course_code.')', 0); }
-        // Get table names.
-        $new_lp = 'lp';
-        $new_lp_item = 'lp_item';
-
-        // The previous method wasn't safe to get the database name, so do it manually with the course_code.
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) { error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__, 0); return -1; }
-        $row = Database::fetch_array($res);
 
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -249,11 +248,31 @@ class aicc extends learnpath
                 "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
         if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '. $sql, 0); }
-        $res = Database::query($sql);
+        Database::query($sql);
         $lp_id = Database::insert_id();
-        $this->lp_id = $lp_id;
-        api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'LearnpathAdded', api_get_user_id());
-        api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'visible', api_get_user_id());
+
+        if ($lp_id) {
+            $sql = "UPDATE $new_lp SET id = iid  WHERE iid = $lp_id";
+            Database::query($sql);
+
+            $this->lp_id = $lp_id;
+
+            api_item_property_update(
+                $courseInfo,
+                TOOL_LEARNPATH,
+                $this->lp_id,
+                'LearnpathAdded',
+                api_get_user_id()
+            );
+
+            api_item_property_update(
+                $courseInfo,
+                TOOL_LEARNPATH,
+                $this->lp_id,
+                'visible',
+                api_get_user_id()
+            );
+        }
 
         $previous = 0;
         foreach ($this->aulist as $identifier => $dummy) {
@@ -275,7 +294,6 @@ class aicc extends learnpath
             $parent = 0; // TODO: Deal with the parent.
             $previous = 0;
             $prereq = $oAu->prereq_string;
-            //$previous = (!empty($this->au_order_list_new_id[x]) ? $this->au_order_list_new_id[x] : 0); // TODO: Deal with the previous.
             $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order) " .
                     "VALUES " .
                     "($course_id, $lp_id, 'au','".$oAu->identifier."','".$title."'," .
@@ -286,6 +304,12 @@ class aicc extends learnpath
             Database::query($sql_item);
             if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0); }
             $item_id = Database::insert_id();
+
+            if ($item_id) {
+                $sql = "UPDATE $new_lp_item SET id = iid WHERE iid = $lp_id";
+                Database::query($sql);
+            }
+
             // Now update previous item to change next_item_id.
             if ($previous != 0) {
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
@@ -302,7 +326,8 @@ class aicc extends learnpath
      * @param	string	Current path (optional)
      * @return string	Absolute path to the AICC description files or empty string on error
      */
-    function import_local_package($file_path, $current_dir = '') {
+    function import_local_package($file_path, $current_dir = '')
+    {
         // TODO: Prepare info as given by the $_FILES[''] vector.
         $file_info = array();
         $file_info['tmp_name'] = $file_path;
@@ -316,7 +341,8 @@ class aicc extends learnpath
      * @param	string	Zip file info as given by $_FILES['userFile']
      * @return	string	Absolute path to the AICC config files directory or empty string on error
      */
-    function import_package($zip_file_info, $current_dir = '') {
+    function import_package($zip_file_info, $current_dir = '')
+    {
         if ($this->debug > 0) { error_log('In aicc::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0); }
         //ini_set('error_log', 'E_ALL');
         $maxFilledSpace = 1000000000;
@@ -527,9 +553,10 @@ class aicc extends learnpath
 
     /**
      * Sets the proximity setting in the database
-     * @param	string	Proximity setting
+     * @param	string	$proxy Proximity setting
      */
-    function set_proximity($proxy = '') {
+    function set_proximity($proxy = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_proximity('.$proxy.') method', 0); }
         $lp = $this->get_id();
@@ -547,7 +574,8 @@ class aicc extends learnpath
      * Sets the theme setting in the database
      * @param	string	Theme setting
      */
-    function set_theme($theme = '') {
+    function set_theme($theme = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_theme('.$theme.') method', 0); }
         $lp = $this->get_id();
@@ -563,9 +591,10 @@ class aicc extends learnpath
 
     /**
      * Sets the image LP in the database
-     * @param	string	Theme setting
+     * @param	string	$preview_image Theme setting
      */
-    function set_preview_image($preview_image = '') {
+    function set_preview_image($preview_image = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {error_log('In aicc::set_preview_image('.$preview_image.') method', 0); }
         $lp = $this->get_id();
@@ -581,9 +610,10 @@ class aicc extends learnpath
 
     /**
      * Sets the Author LP in the database
-     * @param	string	Theme setting
+     * @param	string	$author
      */
-    function set_author($author = '') {
+    function set_author($author = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_author('.$author.') method', 0); }
         $lp = $this->get_id();
@@ -599,9 +629,10 @@ class aicc extends learnpath
 
     /**
      * Sets the content maker setting in the database
-     * @param	string	Proximity setting
+     * @param	string	$maker
      */
-    function set_maker($maker = '') {
+    function set_maker($maker = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_maker method('.$maker.')', 0); }
         $lp = $this->get_id();
@@ -619,7 +650,8 @@ class aicc extends learnpath
      * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath()
      * @param	integer	Learnpath ID (optional, taken from object context if not defined)
      */
-    function export_zip($lp_id = null) {
+    function export_zip($lp_id = null)
+    {
         if ($this->debug > 0) { error_log('In aicc::export_zip method('.$lp_id.')', 0); }
         if (empty($lp_id)) {
             if (!is_object($this)) {
@@ -682,7 +714,8 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's path as declared in config file course.crs
      */
-    function get_res_path($id) {
+    function get_res_path($id)
+    {
         if ($this->debug > 0) { error_log('In aicc::get_res_path('.$id.') method', 0); }
         $path = '';
         if (isset($this->resources[$id])) {
@@ -697,7 +730,8 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's type as declared in the assignable unit (.au) file
      */
-    function get_res_type($id) {
+    function get_res_type($id)
+    {
         if ($this->debug > 0) { error_log('In aicc::get_res_type('.$id.') method', 0); }
         $type = '';
         if (isset($this->resources[$id])) {

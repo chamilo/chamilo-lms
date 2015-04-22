@@ -23,7 +23,6 @@ class aiccResource
      */
     public function aiccResource($type = 'config', $params)
     {
-
         if (isset($params)) {
             switch ($type) {
                 case 'db':
@@ -46,9 +45,11 @@ class aiccResource
                                 break;
                         }
                     }
+
                     return true;
             }
         }
+
         return false;
     }
 }

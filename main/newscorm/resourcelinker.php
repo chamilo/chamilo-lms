@@ -9,14 +9,10 @@
  * @todo reorganise code,
  * use Database API instead of creating table names locally.
  */
-/**
- * Code
- */
-/* INIT SECTION */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $use_anonymous = true;
 
@@ -34,10 +30,6 @@ include 'resourcelinker.inc.php';
 
 $link_table = Database :: get_course_table(TABLE_LINK);
 $item_property_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-//$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
-//$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-//$tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -141,7 +133,8 @@ if (!empty ($_POST['external_link_submit'])) {
                 $external_link = 'http://'.$external_link;
             }
 
-            $sql = "INSERT INTO $link_table (c_id, url, title, category_id) VALUES ($course_id, '$external_link','$external_link','$add_2_links')";
+            $sql = "INSERT INTO $link_table (c_id, url, title, category_id)
+                    VALUES ($course_id, '$external_link','$external_link','$add_2_links')";
             $result = Database::query($sql);
             $addedresource[] = "Link";
             $addedresourceid[] = Database::insert_id();

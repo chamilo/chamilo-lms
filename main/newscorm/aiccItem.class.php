@@ -84,9 +84,11 @@ class aiccItem extends learnpathItem
                                 break;
                          }
                      }
+
                     return true;
             }
         }
+
         return false;
     }
 
@@ -97,7 +99,8 @@ class aiccItem extends learnpathItem
      * @param	integer	Optional relative order of the item at this level
      * @param	integer	Optional level. If not given, assumes it's level 0
      */
-    function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0) {
+    function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
+    {
         $list[] = array(
             'au_type' => $this->au_type,
             'command_line' => $this->command_line,
@@ -124,7 +127,8 @@ class aiccItem extends learnpathItem
      * Save function. Uses the parent save function and adds a layer for AICC.
      * @param	boolean	Save from URL params (1) or from object attributes (0)
      */
-    function save($from_outside = true, $prereqs_complete = false) {
+    function save($from_outside = true, $prereqs_complete = false)
+    {
         parent::save($from_outside, $prereqs_complete = false);
         // Under certain conditions, the scorm_contact should not be set, because no scorm signal was sent.
         $this->aicc_contact = true;

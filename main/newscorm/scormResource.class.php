@@ -100,8 +100,8 @@ class scormResource
             }
 
             // End parsing using PHP5 DOMXML methods.
-
         }
+
         return false;
     }
 
@@ -109,7 +109,8 @@ class scormResource
      * Path getter
      * @return	string	Path for this resource
      */
-    public function get_path() {
+    public function get_path()
+    {
         if (!empty($this->href)) {
             return Database::escape_string($this->href);
         } else {
@@ -121,7 +122,8 @@ class scormResource
      * Scorm type getter
      * @return	string	generally 'asset' or 'sco' as these are the only two values defined in SCORM 1.2
      */
-    public function get_scorm_type() {
+    public function get_scorm_type()
+    {
         if (!empty($this->scormtype)) {
             return Database::escape_string($this->scormtype);
         } else {

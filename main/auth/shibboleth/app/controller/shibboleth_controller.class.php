@@ -44,7 +44,7 @@ class ShibbolethController
 
         if ($user->is_empty())
         {
-            $message = get_lang('no_login');
+            $message = get_lang('SystemCouldNotLogYouIn');
             Shibboleth::display()->error_page($message);
         }
 
@@ -86,7 +86,7 @@ class ShibbolethController
      */
     public function admin_login()
     {
-        $title = get_lang('internal_login');
+        $title = get_lang('InternalLogin');
         if (Shibboleth::session()->is_logged_in())
         {
             $message = get_lang('already_logged_in');
@@ -125,7 +125,7 @@ class ShibbolethController
 
         if ($reason = $form->get_reason())
         {
-            $subject = get_lang('request_status');
+            $subject = get_lang('RequestStatus');
             $status = $form->get_status();
             $status = Shibboleth::format_status($status);
 
@@ -139,17 +139,17 @@ EOT;
             $success = Shibboleth::email_admin($subject, $message);
             if ($success)
             {
-                $request_submitted = get_lang('request_submitted');
+                $request_submitted = get_lang('RequestSubmitted');
                 Shibboleth::display()->message_page($request_submitted);
             }
             else
             {
-                $request_failed = get_lang('request_failed');
+                $request_failed = get_lang('RequestFailed');
                 Shibboleth::display()->error_page($request_failed);
             }
         }
 
-        $title = get_lang('request_status');
+        $title = get_lang('RequestStatus');
         Display :: display_header($title);
         echo $form->display();
         Display :: display_footer();

@@ -31,8 +31,8 @@ class ShibbolethEmailForm
     function display()
     {
         
-        $email = get_lang('email');
-        $submit = get_lang('submit');
+        $email = get_lang('Email');
+        $submit = get_lang('Submit');
         return <<<EOT
         <form id="email_form" action="" method="post">
             <label for="">$email</label>

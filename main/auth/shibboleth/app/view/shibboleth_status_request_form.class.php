@@ -32,13 +32,13 @@ class ShibbolethStatusRequestForm
     {
         if ($this->is_submitted() && $this->get_reason() == '')
         {
-            $reason_is_mandatory = get_lang('reason_is_mandatory');
+            $reason_is_mandatory = get_lang('ReasonIsMandatory');
             Display::display_error_message($reason_is_mandatory);
         }
 
-        $status_request_message = get_lang('status_request_message');
-        $label_new_status = get_lang('new_status');
-        $label_reason = get_lang('reason');
+        $status_request_message = get_lang('StatusRequestMessage');
+        $label_new_status = get_lang('NewStatus');
+        $label_reason = get_lang('Reason');
         $label_ok = get_lang('Ok');
         $label_cancel = get_lang('Cancel');
 

@@ -29,7 +29,7 @@ class ShibbolethDisplay
 
     public function error_page($message)
     {
-        $page_title = get_lang('page_title');
+        $page_title = get_lang('ShibbolethLogin');
 
         Display :: display_header($page_title);
         Display :: display_error_message($message);
@@ -39,7 +39,7 @@ class ShibbolethDisplay
     
     public function message_page($message, $title = '')
     {
-        $title = $title ? $title : get_lang('page_title');
+        $title = $title ? $title : get_lang('ShibbolethLogin');
 
         Display :: display_header($title);
         Display :: display_confirmation_message($message);
@@ -49,7 +49,7 @@ class ShibbolethDisplay
     
     public function page($content, $title = '')
     {
-        $title = $title ? $title : get_lang('page_title');
+        $title = $title ? $title : get_lang('ShibbolethLogin');
 
         Display :: display_header($title);
         echo $content;

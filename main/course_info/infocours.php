@@ -155,9 +155,16 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
     $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 }
 
-$group = array();
-$group[]=$form->createElement('SelectTheme', 'course_theme', null, array('class'=>' ', 'id'=>'course_theme_id'));
-$form->addGroup($group, '', array(get_lang("Stylesheets")), '');
+if (api_get_setting('allow_course_theme') == 'true') {
+    $group = array();
+    $group[] = $form->createElement(
+        'SelectTheme',
+        'course_theme',
+        null,
+        array('class' => ' ', 'id' => 'course_theme_id')
+    );
+    $form->addGroup($group, '', array(get_lang("Stylesheets")), '');
+}
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
 $form->addButtonSave(get_lang('SaveSettings'),'submit_save');

@@ -21,5 +21,3 @@ if (api_get_setting('server_type') == 'test')
     include_once $__dir . '/test/shibboleth_test_helper.class.php';
     include_once $__dir . '/test/shibboleth_test.class.php';
 }
-
-$language_files[] = 'shibboleth';

@@ -12,7 +12,6 @@
 /**
  * Requires
  */
-$language_file = array('hotspot','shibboleth');
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php'; 
 global $_configuration;

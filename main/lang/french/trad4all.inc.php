@@ -1267,7 +1267,7 @@ $DirMv = "Élément déplacé";
 $ComMod = "Commentaire modifié";
 $Rename = "Renommer";
 $NameDir = "Nom du nouveau répertoire";
-$DownloadFile = "Charger le fichier";
+$DownloadFile = "Télécharger le fichier";
 $Builder = "Créer un parcours";
 $MailMarkSelectedAsUnread = "Marquer comme non lu";
 $ViewModeImpress = "Affichage actuel: Impress";
@@ -7194,4 +7194,5 @@ $CurrentBadges = "Badges actuels";
 $SaveBadge = "Enregistrer le badge";
 $BadgeMeasuresXPixelsInPNG = "Propriétés recommandées du badge: 200x200 pixels au format PNG";
 $SetTutor = "Faire coach";
+$UniqueAnswerImage = "Sélection d'image";
 ?>

@@ -1754,8 +1754,8 @@ class Display
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
             foreach ($list as $item) {
-                $html .= '<dt>'.$item['title'].'</dd>';
-                $html .= '<dd>'.$item['content'].'</dt>';
+                $html .= '<dt>'.$item['title'].'</dt>';
+                $html .= '<dd>'.$item['content'].'</dd>';
             }
             $html .= '</dl>';
         }

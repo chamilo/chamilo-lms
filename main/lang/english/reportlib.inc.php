@@ -1,5 +1,4 @@
 <?php
-$Reports = 'Rapports';
 $DownloadFile = 'T&eacute;l&eacute;charger le fichier.';
 $ErrorWhileBuildingReport = 'Une erreur est survenue pendant la pr&eacute;paration de ce rapport.';
 $UnknownFormat = 'Format inconnu.';

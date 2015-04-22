@@ -75,6 +75,7 @@ $LinkAdded = "Lenken ble lagt til";
 $LinkMod = "Rediger lenke";
 $LinkModded = "Lenken har blitt endret";
 $LinkDel = "Slett lenke";
+$EducationManager = "Prosjektadministrator";
 $Titular = "Lærer";
 $AdministrationTools = "Administrasjonsverktøy";
 $CatList = "Kategorier";

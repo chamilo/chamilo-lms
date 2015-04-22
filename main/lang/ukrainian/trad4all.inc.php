@@ -304,6 +304,7 @@ $PostDeleted = "Повідомлення видалено";
 $ThreadCanBeFoundHere = "Тему можна знайти тут";
 $DeleteCompleteThread = "Видалити закінчену тему?";
 $PostDeletedSpecial = "Спеціальне повідомлення видалено";
+$AdminLogin = "Логін адміністратора";
 $Titular = "Відповідальний";
 $AdministrationTools = "Інструменти адміністрування";
 $CatList = "Категорії";

@@ -139,7 +139,7 @@ class Redirect
      */
     protected static function navigate($url)
     {
-        $url = Security::remove_XSS($url);
+        // $url = Security::remove_XSS($url);
         session_write_close(); //should not be neeeded
         header("Location: $url");
         exit;

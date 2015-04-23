@@ -900,28 +900,25 @@ class UserManager
      */
     public static function create_username($firstname, $lastname, $language = null, $encoding = null)
     {
-        if (is_null($encoding)) {
-            $encoding = api_get_system_encoding();
-        }
-        if (is_null($language)) {
-            $language = api_get_interface_language();
-        }
         if (empty($firstname) && empty($lastname)) {
             return false;
         }
-        $firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
+
+        $firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', $firstname), 0, 1); // The first letter only.
         //Looking for a space in the lastname
         $pos = api_strpos($lastname, ' ');
         if ($pos !== false) {
             $lastname = api_substr($lastname, 0, $pos);
         }
 
-        $lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
-        //$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;
+        $lastname = preg_replace(USERNAME_PURIFIER, '', $lastname);
         $username = $firstname.$lastname;
         if (empty($username)) {
             $username = 'user';
         }
+
+        $username = URLify::transliterate($username);
+
         return strtolower(substr($username, 0, USERNAME_MAX_LENGTH - 3));
     }
 
@@ -944,7 +941,7 @@ class UserManager
             // In this case the actual input parameter $firstname should contain ASCII-letters and digits only.
             // For making this method tolerant of mistakes, let us transliterate and purify the suggested input username anyway.
             // So, instead of the sentence $username = $firstname; we place the following:
-            $username = strtolower(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)));
+            $username = strtolower(preg_replace(USERNAME_PURIFIER, '', $firstname));
         } else {
             $username = self::create_username($firstname, $lastname, $language, $encoding);
         }
@@ -957,6 +954,9 @@ class UserManager
             }
             $username = $temp_username;
         }
+
+        $username = URLify::transliterate($username);
+
         return $username;
     }
 
@@ -973,8 +973,9 @@ class UserManager
             // 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
             // 2. Applying the strict purifier.
             // 3. Length limitation.
-            $toreturn = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
-            return $toreturn;
+            $return  = api_get_setting('login_is_email') == 'true' ? substr(preg_replace(USERNAME_PURIFIER_MAIL, '', $username), 0, USERNAME_MAX_LENGTH) : substr(preg_replace(USERNAME_PURIFIER, '', $username), 0, USERNAME_MAX_LENGTH);
+            $return = URLify::transliterate($return);
+            return $return;
         }
         // 1. Applying the shallow purifier.
         // 2. Length limitation.

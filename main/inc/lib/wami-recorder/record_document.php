@@ -29,7 +29,7 @@ if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid ==
 // Clean
 $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
-$waminame = replace_dangerous_char($waminame, 'strict');
+$waminame = api_replace_dangerous_char($waminame, 'strict');
 $waminame = disable_dangerous_file($waminame);
 $wamidir  = Security::remove_XSS($wamidir);
 $content = file_get_contents('php://input');

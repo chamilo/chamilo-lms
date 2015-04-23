@@ -5943,7 +5943,7 @@ class learnpath
         // Creating LP folder
         if ($folder) {
             //Limits title size
-            $title = api_substr(replace_dangerous_char($lp_name), 0 , 80);
+            $title = api_substr(api_replace_dangerous_char($lp_name), 0 , 80);
             $dir   = $dir.$title;
             $filepath = api_get_path(SYS_COURSE_PATH) . $course['path'] . '/document';
             if (!is_dir($filepath.'/'.$dir)) {
@@ -6009,9 +6009,9 @@ class learnpath
             $dir = '/';
         }
 
-        // stripslashes() before calling replace_dangerous_char() because $_POST['title']
+        // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
-        $title = replace_dangerous_char(stripslashes($_POST['title']));
+        $title = api_replace_dangerous_char(stripslashes($_POST['title']));
         $title = disable_dangerous_file($title);
 
         $filename = $title;
@@ -9673,7 +9673,7 @@ EOD;
             $res = unlink($file);
             if ($res === false) { error_log('Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__, 0); }
         }
-        $name = replace_dangerous_char($this->get_name()).'.zip';
+        $name = api_replace_dangerous_char($this->get_name()).'.zip';
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     }
 

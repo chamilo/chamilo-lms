@@ -53,7 +53,7 @@ abstract class OpenofficeDocument extends learnpath
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
         $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) -1);
-        $this->file_path = $this->created_dir.'/'.replace_dangerous_char($file['name'], 'strict');
+        $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name'], 'strict');
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 
@@ -62,7 +62,7 @@ abstract class OpenofficeDocument extends learnpath
         global $_course, $_user, $_configuration;
 
         $this->file_name = (strrpos($file['name'], '.') > 0 ? substr($file['name'], 0, strrpos($file['name'], '.')) : $file['name']);
-        $this->file_name = replace_dangerous_char($this->file_name, 'strict');
+        $this->file_name = api_replace_dangerous_char($this->file_name, 'strict');
         $this->file_name = strtolower($this->file_name);
 
         $visio_dir = ($action_after_conversion == 'add_docs_to_visio') ? VIDEOCONF_UPLOAD_PATH : '';

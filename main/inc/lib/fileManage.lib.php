@@ -163,7 +163,7 @@ function my_rename($file_path, $new_file_name) {
 	$path = dirname($file_path);
 	$old_file_name = basename($file_path);
 
-	$new_file_name = replace_dangerous_char($new_file_name);
+	$new_file_name = api_replace_dangerous_char($new_file_name);
 
 	// If no extension, take the old one
 	if ((strpos($new_file_name, '.') === false) && ($dotpos = strrpos($old_file_name, '.'))) {

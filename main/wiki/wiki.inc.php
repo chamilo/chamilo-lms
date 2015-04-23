@@ -1747,7 +1747,7 @@ class Wiki
         }
 
         $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
-        $exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
+        $exportFile = api_replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
         //$clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
         //$array_clean_wikiContents= explode('|', $clean_wikiContents);

@@ -74,7 +74,7 @@ class TestEvents extends UnitTestCase {
 		global $_configuration;
 		global $_user;
 		global $TABLETRACK_LOGIN;
-		$res=Event::event_login();
+		$res=Event::event_login(1);
 		$this->assertNull($res);
 		//var_dump($res);
 	}

@@ -68,7 +68,7 @@ $saveDir=$dirBaseDocuments.$_SESSION['draw_dir'];
 
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
-$filename = replace_dangerous_char($filename, 'strict');
+$filename = api_replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
 // a bit extension

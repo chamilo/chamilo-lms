@@ -319,7 +319,7 @@ class DocumentManager
         if (!is_file($full_file_name)) {
             return false;
         }
-        $filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
+        $filename = ($name == '') ? basename($full_file_name) : api_replace_dangerous_char($name);
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
@@ -4571,7 +4571,7 @@ class DocumentManager
         $title = get_lang('DefaultCertificate');
         $comment = null;
 
-        $fileName = replace_dangerous_char($title);
+        $fileName = api_replace_dangerous_char($title);
         $filePath = api_get_path(SYS_COURSE_PATH) . "{$courseData['path']}/document{$dir}";
         $fileFullPath = "{$filePath}/{$fileName}.html";
         $fileSize = 0;

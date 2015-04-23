@@ -1255,7 +1255,7 @@ function updateDirName($work_data, $newPath)
     $path = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
-    $newPath = replace_dangerous_char($newPath);
+    $newPath = api_replace_dangerous_char($newPath);
     $newPath = disable_dangerous_file($newPath);
 
     if ($oldPath == '/'.$newPath) {
@@ -3558,7 +3558,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
             $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                replace_dangerous_char($fileData['name'], 'strict')
+                api_replace_dangerous_char($fileData['name'], 'strict')
             );
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
@@ -3706,7 +3706,7 @@ function uploadWork($my_folder_data, $_course)
     $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
 
     // Replace dangerous characters
-    $filename = replace_dangerous_char($filename, 'strict');
+    $filename = api_replace_dangerous_char($filename, 'strict');
 
     // Transform any .php file in .phps fo security
     $filename = php2phps($filename);
@@ -3980,7 +3980,7 @@ function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
     $course_id = $courseInfo['real_id'];
 
-    $directory = replace_dangerous_char($params['new_dir']);
+    $directory = api_replace_dangerous_char($params['new_dir']);
     $directory = disable_dangerous_file($directory);
     $created_dir = create_unexisting_work_directory($base_work_dir, $directory);
 
@@ -4924,7 +4924,7 @@ function exportAllWork($userId, $courseInfo, $format = 'pdf')
                     $pdf->content_to_pdf(
                         $content,
                         null,
-                        replace_dangerous_char($userInfo['complete_name']),
+                        api_replace_dangerous_char($userInfo['complete_name']),
                         $courseInfo['code']
                     );
                 }
@@ -5059,7 +5059,7 @@ function exportAllStudentWorkFromPublication(
                 if (!empty($content)) {
                     $params = array(
                         'filename' => $workData['title'] . '_' . api_get_local_time(),
-                        'pdf_title' => replace_dangerous_char($workData['title']),
+                        'pdf_title' => api_replace_dangerous_char($workData['title']),
                         'course_code' => $courseInfo['code'],
                         'add_signatures' => false
                     );
@@ -5126,7 +5126,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
         }
 
         // Start download of created file
-        $name = basename(replace_dangerous_char($userInfo['complete_name'])).'.zip';
+        $name = basename(api_replace_dangerous_char($userInfo['complete_name'])).'.zip';
         Event::event_download($name.'.zip (folder)');
         if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
             DocumentManager::file_send_for_download($tempZipFile, true, $name);

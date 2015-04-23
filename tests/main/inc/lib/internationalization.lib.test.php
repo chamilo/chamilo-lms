@@ -198,22 +198,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_file_system_encode() {
-		$string = 'áéíóú@/\!?Ç´`+*?-_'; // UTF-8
-		$from_encoding = 'UTF-8';
-		$res = api_file_system_encode($string, $from_encoding);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	public function test_api_file_system_decode() {
-		$string='áéíóú@/\!?Ç´`+*?-_'; // UTF-8
-		$to_encoding = 'UTF-8';
-		$res = api_file_system_decode($string, $to_encoding);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
 	public function test_api_transliterate() {
 		$string = 'Фёдор Михайлович Достоевкий'; // UTF-8
 		/*
@@ -489,16 +473,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_preg_replace_callback() {
-		$pattern = '/иван/i'; // UTF-8
-		$subject = '-- Ivan (en) -- Иван (bg) -- иван --'; // UTF-8
-		$limit = -1;
-		$count = null;
-		$encoding = 'UTF-8';
-		$res = api_preg_replace_callback($pattern, create_function('$matches', 'return api_ucfirst($matches[0], \'UTF-8\');'), $subject, $limit, $count, $encoding);
-		$this->assertTrue($res == '-- Ivan (en) -- Иван (bg) -- Иван --'); // UTF-8
-		//var_dump($res);
-	}
 
 	public function test_api_preg_split() {
 		$pattern = '/иван/i'; // UTF-8
@@ -560,22 +534,11 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_split() {
-		$pattern = '[/.-]';
-		$string = '08/22/2009';
-		$limit = null;
-		$res = api_split($pattern, $string, $limit);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue(count($res) == 3);
-		//var_dump($res);
-	}
-
-
-/**
- * ----------------------------------------------------------------------------
- * String comparison
- * ----------------------------------------------------------------------------
- */
+	/**
+	 * ----------------------------------------------------------------------------
+	 * String comparison
+	 * ----------------------------------------------------------------------------
+	 */
 
 	public function test_api_strcasecmp() {
 		$string1 = 'áéíóu'; // UTF-8
@@ -760,18 +723,6 @@ class TestInternationalization extends UnitTestCase {
 		$keys = array_keys($array);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($array[$keys[0]] == 'áedc');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_knatcasersort() {
-		$array = array('img2.png' => 'aíó', 'img10.png' => 'úéo', 'IMG12.PNG' => 'áed', 'IMG1.PNG' => 'áedc'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_knatcasersort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'áed');
 		//var_dump($array);
 		//var_dump($res);
 	}
@@ -1285,37 +1236,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_is_latin1_compatible() {
-		$language = 'portuguese';
-		$res = api_is_latin1_compatible($language);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-
-	/*
-	// This test works. It has been disabled, because it is time-consuming.
-	public function test_api_detect_language() {
-		$encoding = 'UTF-8';
-		$strings = $this->language_strings;
-		$is_test_ok = true;
-		foreach ($strings as $language => $string) {
-			if (api_is_language_supported($language)) {
-				$res = api_detect_language($string, $encoding);
-				$non_utf8_encoding = api_get_non_utf8_encoding($res);
-				if (!empty($non_utf8_encoding)) {
-					$is_ok = ($res == $language) || (api_is_encoding_supported($non_utf8_encoding) ? $string == api_utf8_encode(api_utf8_decode($string, $non_utf8_encoding), $non_utf8_encoding) : true);
-				} else {
-					$is_ok = true;
-				}
-				$is_test_ok = $is_test_ok && $is_ok;
-				echo ($is_ok ? '<span style="color: green; font-weight: bold;">Ok</span>' : '<span style="color: red; font-weight: bold;">Failed</span>').' '.$language.': '.$string.' => <strong>'.$res.'</strong><br />';
-			}
-		}
-		echo '<br />';
-		$this->assertTrue($is_test_ok);
-	}
-	*/
 
 	/*
 	// This test works. It has been disabled, because it is time-consuming.

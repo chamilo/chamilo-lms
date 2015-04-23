@@ -131,8 +131,7 @@ class ExtraFieldOption extends Model
         $optionInfo = self::get_field_option_by_field_and_option($params['field_id'], $params['option_value']);
 
         // Use URLify only for new items
-        //$optionValue = URLify::filter($params['option_value']);
-        $optionValue = replace_dangerous_char($params['option_value']);
+        $optionValue = api_replace_dangerous_char($params['option_value']);
         $option = $params['option_value'];
 
         if ($optionInfo == false) {
@@ -144,6 +143,7 @@ class ExtraFieldOption extends Model
                 'option_order'        => $order,
                 'tms'                 => api_get_utc_datetime(),
             );
+
             return parent::save($new_params, $show_query);
         }
 
@@ -244,7 +244,7 @@ class ExtraFieldOption extends Model
                 foreach ($list as $option) {
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
                     // Use URLify only for new items
-                    $optionValue = replace_dangerous_char($option);
+                    $optionValue = api_replace_dangerous_char($option);
                     $option = trim($option);
 
                     if ($option_info == false) {

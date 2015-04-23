@@ -199,7 +199,7 @@ class GroupManager
             $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
             Database::query($sql);
 
-            $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
+            $desired_dir_name= '/'.api_replace_dangerous_char($name,'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
 
             $newFolderData = create_unexisting_directory(

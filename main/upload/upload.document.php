@@ -128,7 +128,7 @@ if (isset($_POST['submit_image'])) {
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname']!='') {
 	$added_slash = ($path=='/')?'':'/';
-	$dir_name = $path.$added_slash.replace_dangerous_char($_POST['dirname']);
+	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
 	$created_dir = create_unexisting_directory($_course,$_user['user_id'],api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$_POST['dirname']);
     if ($created_dir) {
         Display::display_normal_message(get_lang('DirCr'));

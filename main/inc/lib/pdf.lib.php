@@ -335,7 +335,7 @@ class PDF
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
-            $pdf_name = replace_dangerous_char($pdf_name);
+            $pdf_name = api_replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
         // F to save the pdf in a file
@@ -443,7 +443,7 @@ class PDF
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
-            $pdf_name = replace_dangerous_char($pdf_name);
+            $pdf_name = api_replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
         $this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file

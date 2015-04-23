@@ -1349,6 +1349,7 @@ function _api_format_user($user, $add_password = false)
     }
 
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
+
     $result['complete_name_with_username'] = $result['complete_name'];
 
     if (!empty($user['username'])) {
@@ -1389,12 +1390,12 @@ function _api_format_user($user, $add_password = false)
     }
     $user_id = intval($user['user_id']);
     $result['user_id'] = $user_id;
+    $saveUserLastLogin = api_get_configuration_value('save_user_last_login');
 
-    if (isset($_configuration['save_user_last_login']) &&
-        $_configuration['save_user_last_login']
-    ) {
+    if ($saveUserLastLogin) {
         $last_login = $user['last_login'];
     } else {
+
         if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
             $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
             // Convert the timestamp back into a datetime
@@ -1482,6 +1483,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
         // @todo trigger an exception here
         return false;
     }
+
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
             WHERE id='".intval($user_id)."'";
     $result = Database::query($sql);
@@ -1502,6 +1504,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
         }
         $user = _api_format_user($result_array, $show_password);
+
         return $user;
     }
     return false;
@@ -1709,6 +1712,11 @@ function api_get_course_info($course_code = null, $strict = false)
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
         $courseId = api_get_course_int_id($course_code);
+
+        if (empty($courseId)) {
+            return array();
+        }
+
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT course.*, course_category.code faCode, course_category.name faName
@@ -1717,17 +1725,20 @@ function api_get_course_info($course_code = null, $strict = false)
                  ON course.category_code =  course_category.code
                  WHERE course.id = $courseId";
         $result = Database::query($sql);
-        $_course = array();
+        $courseInfo = array();
         if (Database::num_rows($result) > 0) {
-            $course_data = Database::fetch_array($result);
-            $_course = api_format_course_array($course_data);
+            $data = Database::fetch_array($result);
+            $courseInfo = api_format_course_array($data);
         }
-        return $_course;
+
+        return $courseInfo;
     }
+
     global $_course;
     if ($_course == '-1') {
         $_course = array();
     }
+
     return $_course;
 }
 
@@ -5598,8 +5609,10 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  * @return string                           The cleaned filename.
  */
 
-function replace_dangerous_char($filename, $strict = 'loose')
+function api_replace_dangerous_char($filename, $strict = 'loose')
 {
+    return URLify::filter($filename, 250);
+    /*
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
     static $replace = array('_', '', '_', '_', '_', '_', '_', '-', '-', '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
@@ -5633,7 +5646,7 @@ function replace_dangerous_char($filename, $strict = 'loose')
         $filename = substr($filename, 0, -$extension_len);
         return substr($filename, 0, 250 - $extension_len).$extension;
     }
-    return substr($filename, 0, 250);
+    return substr($filename, 0, 250);*/
 }
 
 /**
@@ -6531,7 +6544,7 @@ function api_get_home_path() {
         $access_url_id = api_get_current_access_url_id();
         $url_info = api_get_access_url($access_url_id);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url = replace_dangerous_char($url);
+        $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
         // if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
@@ -7731,7 +7744,7 @@ function api_create_protected_dir($name, $parentDirectory)
         return false;
     }
 
-    $fullPath = $parentDirectory . replace_dangerous_char($name);
+    $fullPath = $parentDirectory . api_replace_dangerous_char($name);
 
     if (mkdir($fullPath, api_get_permissions_for_new_directories(), true)) {
         $fp = fopen($fullPath . '/index.html', 'w');

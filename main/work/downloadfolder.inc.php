@@ -178,7 +178,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 }
 
 if (!empty($files)) {
-    $fileName = replace_dangerous_char($work_data['title']);
+    $fileName = api_replace_dangerous_char($work_data['title']);
     // Logging
     Event::event_download($fileName .'.zip (folder)');
 

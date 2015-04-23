@@ -321,7 +321,7 @@ if (($is_allowedToTrack || $is_allowedToTrackEverybodyInCourse)) {
             str_replace(" ", "_", $title[0] . '_' . $title[1] . '.csv')
         )
     );
-    $filename = replace_dangerous_char($filename);
+    $filename = api_replace_dangerous_char($filename);
     if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {
         header('Content-Disposition: filename= ' . $filename);
     } else {

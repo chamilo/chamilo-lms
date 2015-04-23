@@ -216,7 +216,7 @@ class ExtraFieldValue extends Model
                                     break;
                             }
 
-                            $cleanedName = replace_dangerous_char($value['name']);
+                            $cleanedName = api_replace_dangerous_char($value['name']);
                             $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params[$this->handler_id]}_$cleanedName";
 
                             if (!file_exists($sysCodePath . $fileDir)) {

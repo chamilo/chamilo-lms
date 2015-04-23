@@ -25,13 +25,13 @@ if ($webcamuserid!= api_get_user_id() || api_get_user_id()==0 || $webcamuserid==
 	api_not_allowed();
 	die();
 }
-	
+
 
 //clean
 $webcamname = Security::remove_XSS($webcamname);
 $webcamname = Database::escape_string($webcamname);
 $webcamname = addslashes(trim($webcamname));
-$webcamname = replace_dangerous_char($webcamname, 'strict');
+$webcamname = api_replace_dangerous_char($webcamname, 'strict');
 $webcamname = disable_dangerous_file($webcamname);
 $webcamdir = Security::remove_XSS($webcamdir);
 
@@ -54,8 +54,8 @@ $groupId=$_SESSION['_gid'];
 $webcamname_to_save=$webcamname;
 $title_to_save=str_replace('_',' ',$webcamname);
 $webcamname_noex=basename($webcamname, ".jpg");
-if (file_exists($saveDir.'/'.$webcamname_noex.'.'.$ext)){ 
-		$i = 1;		
+if (file_exists($saveDir.'/'.$webcamname_noex.'.'.$ext)){
+		$i = 1;
 		while (file_exists($saveDir.'/'.$webcamname_noex.'_'.$i.'.'.$ext)) $i++;
 		$webcamname_to_save = $webcamname_noex . '_' . $i . '.'.$ext;
 		$title_to_save = $webcamname_noex . '_' . $i . '.'.$ext;

@@ -231,7 +231,7 @@ if ($form->validate()) {
 			if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')) {
 				mkdir(api_get_path(SYS_CODE_PATH).'upload/users/', api_get_permissions_for_new_directories());
 			}
-			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
+			$picture_uri = uniqid('').'_'.api_replace_dangerous_char($picture['name']);
 			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
 			move_uploaded_file($picture['tmp_name'], $picture_location);
 		}

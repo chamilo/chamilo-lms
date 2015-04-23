@@ -5413,20 +5413,20 @@ class CourseManager
      * Generates a course code from a course title
      * @todo Such a function might be useful in other places too. It might be moved in the CourseManager class.
      * @todo the function might be upgraded for avoiding code duplications (currently, it might suggest a code that is already in use)
-     * @param string A course title
-     * @param string The course title encoding (defaults to type defined globally)
+     * @param string $title A course title
      * @return string A proposed course code
+     * +
      * @assert (null,null) === false
      * @assert ('ABC_DEF', null) === 'ABCDEF'
      * @assert ('ABC09*^[%A', null) === 'ABC09A'
      */
-    public static function generate_course_code($course_title, $encoding = null)
+    public static function generate_course_code($title)
     {
-        if (empty($encoding)) {
-            $encoding = api_get_system_encoding();
-        }
-        return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0,
-            CourseManager::MAX_COURSE_LENGTH_CODE);
+        return substr(
+            preg_replace('/[^A-Z0-9]/', '', strtoupper(api_replace_dangerous_char($title))),
+            0,
+            CourseManager::MAX_COURSE_LENGTH_CODE
+        );
     }
 
     /**

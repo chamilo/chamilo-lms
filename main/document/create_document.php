@@ -253,7 +253,7 @@ $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
 function document_exists($filename) {
     global $dir;
     // Clean up the name, only ASCII characters should stay. (and strict)
-    $cleanName = replace_dangerous_char($filename, 'strict');
+    $cleanName = api_replace_dangerous_char($filename, 'strict');
 
     // No "dangerous" files
     $cleanName = disable_dangerous_file($cleanName);
@@ -409,7 +409,7 @@ if ($form->validate()) {
 	$filename = $values['title'];
 	$filename = addslashes(trim($filename));
 	$filename = Security::remove_XSS($filename);
-	$filename = replace_dangerous_char($filename);
+	$filename = api_replace_dangerous_char($filename);
 	$filename = disable_dangerous_file($filename);
     $filename .= DocumentManager::getDocumentSuffix(
         $_course,

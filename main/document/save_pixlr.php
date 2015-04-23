@@ -28,7 +28,7 @@ if(!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
 
 if(!isset($_SESSION['paint_dir']) || !isset($_SESSION['whereami']) ){
 	api_not_allowed();
-	die();	
+	die();
 }
 
 //pixlr return
@@ -68,7 +68,7 @@ $contents = file_get_contents($urlcontents_to_save);//replace line 45.
 //a bit title security
 $filename = addslashes(trim($filename));
 $filename = Security::remove_XSS($filename);
-$filename = replace_dangerous_char($filename, 'strict');
+$filename = api_replace_dangerous_char($filename, 'strict');
 $filename = disable_dangerous_file($filename);
 
 if (strlen(trim($filename))==0) {
@@ -77,7 +77,7 @@ if (strlen(trim($filename))==0) {
 }
 
 //check file_get_contents
-if ($contents === false) { 
+if ($contents === false) {
 	echo "I cannot read: ".$urlcontents;
     exit;
 }
@@ -113,22 +113,22 @@ if(strpos($current_mime, 'image')===false) {
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;
 
-if($currentTool=='document/createpaint'){		
-	//check save as and prevent rewrite an older file with same name	
+if($currentTool=='document/createpaint'){
+	//check save as and prevent rewrite an older file with same name
 	if (0 != $groupId){
         $group_properties  = GroupManager :: get_group_properties($groupId);
         $groupPath = $group_properties['directory'];
 	} else {
 		$groupPath ='';
-	}	
-	
-	if (file_exists($saveDir.'/'.$filename.'.'.$extension)){ 
-		$i = 1;		
+	}
+
+	if (file_exists($saveDir.'/'.$filename.'.'.$extension)){
+		$i = 1;
 		while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++;
 		$paintFileName = $filename . '_' . $i . '.'.$extension;
 		$title = $filename . '_' . $i . '.'.$extension;
 	}
-	
+
 	//
 	$documentPath = $saveDir.'/'.$paintFileName;
 	//add new document to disk
@@ -138,25 +138,25 @@ if($currentTool=='document/createpaint'){
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 
 }elseif($currentTool=='document/editpaint'){
-	
+
 	$documentPath = $saveDir.'/'.$paintFileName;
 	//add new document to disk
 	file_put_contents( $documentPath, $contents );
-	
+
 	//check path
 	if(!isset($_SESSION['paint_file'])){
 		api_not_allowed();
 		die();
 	}
-	if($_SESSION['paint_file']==$paintFileName){		   
+	if($_SESSION['paint_file']==$paintFileName){
 		$document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$paintFileName);
 		update_existing_document($_course, $document_id, filesize($documentPath), null);
-		api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], $groupId, null, null, null, $current_session_id);		
+		api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'], $groupId, null, null, null, $current_session_id);
 	}else{
 		//add a new document
 		$doc_id = add_document($_course, $relativeUrlPath.'/'.$paintFileName, 'file', filesize($documentPath), $title);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
-	}	
+	}
 }
 
 
@@ -172,9 +172,9 @@ unset($_SESSION['temp_realpath_image']);
 
 if (!isset($_SESSION['exit_pixlr'])) {
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php';
-	echo '<script>window.parent.location.href="'.$location.'"</script>';					 
+	echo '<script>window.parent.location.href="'.$location.'"</script>';
 	api_not_allowed(true);
-} else {	
+} else {
 	echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('PleaseStandBy').'</div>';
 	$location=api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($_SESSION['exit_pixlr']);
 	echo '<script>window.parent.location.href="'.$location.'"</script>';

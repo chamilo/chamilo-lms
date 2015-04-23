@@ -1254,7 +1254,7 @@ if ($is_allowed_to_edit ||
                 $curdirpath = $document_data['path'];
             }
             $added_slash = ($curdirpath == '/') ? '' : '/';
-            $dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
+            $dir_name = $curdirpath.$added_slash.api_replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
             $dir_check = $base_work_dir.$dir_name;
             $visibility = empty($groupId) ? null : 1;

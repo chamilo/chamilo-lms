@@ -377,7 +377,7 @@ function downloadMP3_google($filepath, $dir)
 	}
 
 	$documentPath = $filepath.'/'.$audio_filename;
-
+	/*
 
 	//prev for a fine unicode, borrowed from main api TODO:clean
 	// Safe replacements for some non-letter characters (whitout blank spaces)
@@ -391,19 +391,20 @@ function downloadMP3_google($filepath, $dir)
 	// Transliteration to ASCII letters, they are not dangerous for filesystems.
 	$filename = api_transliterate($filename, 'x', $encoding);
     // Replacing remaining dangerous non-letter characters.
-    $clean_text = str_replace($search, $replace, $filename);
+    $clean_text = str_replace($search, $replace, $filename);*/
+	$clean_text = api_replace_dangerous_char($clean_text);
 
 	//adding the file
-		//add new file to disk
-		file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
-		//add document to database
-		$current_session_id = api_get_session_id();
-		$groupId=$_SESSION['_gid'];
-		$file_size = filesize($documentPath);
-		$relativeUrlPath=$dir;
-		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
-        Display::display_confirmation_message(get_lang('DocumentCreated'));
+	//add new file to disk
+	file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
+	//add document to database
+	$current_session_id = api_get_session_id();
+	$groupId=$_SESSION['_gid'];
+	$file_size = filesize($documentPath);
+	$relativeUrlPath=$dir;
+	$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);
+	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $groupId, null, null, null, $current_session_id);
+	Display::display_confirmation_message(get_lang('DocumentCreated'));
 	//return to location
 	echo '<script>window.location.href="'.$location.'"</script>';
 }
@@ -454,7 +455,7 @@ function downloadMP3_pediaphon($filepath, $dir){
 
 	$documentPath = $filepath.'/'.$audio_filename;
 
-	//prev for a fine unicode, borrowed from main api TODO:clean
+	/*//prev for a fine unicode, borrowed from main api TODO:clean
 	// Safe replacements for some non-letter characters (whitout blank spaces)
 	$search  = array("\0", "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
 	$replace = array('',  '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
@@ -466,7 +467,8 @@ function downloadMP3_pediaphon($filepath, $dir){
 	// Transliteration to ASCII letters, they are not dangerous for filesystems.
 	$filename = api_transliterate($filename, 'x', $encoding);
     // Replacing remaining dangerous non-letter characters.
-    $clean_text = str_replace($search, $replace, $filename);
+    $clean_text = str_replace($search, $replace, $filename);*/
+	$clean_text = api_replace_dangerous_char($clean_text);
 
 	//adding the file
 

@@ -149,7 +149,7 @@ if (api_is_multiple_url_enabled()) {
 	if ($access_url_id != -1) {
 		$url_info = api_get_access_url($access_url_id);
 		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-		$clean_url = replace_dangerous_char($url);
+		$clean_url = api_replace_dangerous_char($url);
 		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
 
@@ -406,7 +406,7 @@ if (!empty($action)) {
 				} else {
 					// New links are added as new files in the home/ directory
 					if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
-						$filename = replace_dangerous_char($link_name, 'strict').'.html';
+						$filename = api_replace_dangerous_char($link_name, 'strict').'.html';
 					}
 
 					// "home_" prefix for links are renamed to "user_" prefix (to avoid name clash with existing home page files)

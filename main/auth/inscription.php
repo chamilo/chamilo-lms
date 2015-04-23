@@ -6,7 +6,7 @@
  *  @package    chamilo.auth
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 //quick hack to adapt the registration form result to the selected registration language
 if (!empty($_POST['language'])) {
@@ -294,7 +294,7 @@ if (!CustomPages::enabled()) {
         if ($access_url_id != -1) {
             $url_info = api_get_access_url($access_url_id);
             $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-            $clean_url = replace_dangerous_char($url);
+            $clean_url = api_replace_dangerous_char($url);
             $clean_url = str_replace('/', '-', $clean_url);
             $clean_url .= '/';
             $home_old  = api_get_path(SYS_PATH).'home/';
@@ -591,7 +591,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    Event::event_login();
+    Event::event_login($user_id);
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970

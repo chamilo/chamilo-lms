@@ -69,7 +69,7 @@ if (api_is_multiple_url_enabled()) {
         $url_info = api_get_access_url($access_url_id);
         $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 
-        $clean_url = replace_dangerous_char($url);
+        $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
 

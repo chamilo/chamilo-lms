@@ -1346,10 +1346,11 @@ class Tracking
      */
     public static function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false)
     {
-    	$tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    	$sql = 'SELECT login_date FROM ' . $tbl_track_login . '
+    	$table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+    	$sql = 'SELECT login_date FROM ' . $table . '
                 WHERE login_user_id = ' . intval($student_id) . '
-                ORDER BY login_date DESC LIMIT 0,1';
+                ORDER BY login_date
+                DESC LIMIT 0,1';
 
     	$rs = Database::query($sql);
     	if (Database::num_rows($rs) > 0) {

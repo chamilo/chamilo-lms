@@ -709,11 +709,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($res);
 	}
 
-	function testApiCreateIncludePathSetting(){
-		$res=api_create_include_path_setting();
-		$this->assertTrue($res);
-	}
-
 	function testApiGetCurrentAccessUrlId(){
 		$res=api_get_current_access_url_id();
 		$this->assertTrue($res);

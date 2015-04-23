@@ -24,17 +24,20 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
+require_once __DIR__.'/../../app/AppKernel.php';
+
+$kernel = new AppKernel();
+
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other initialisation files.
 $includePath = __DIR__;
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
-$main_configuration_file_path = $includePath.'/conf/configuration.php';
 
 $already_installed = false;
-if (file_exists($main_configuration_file_path)) {
-    require_once $main_configuration_file_path;
+if (file_exists($kernel->getConfigurationFile())) {
+    require_once $kernel->getConfigurationFile();
     $already_installed = true;
 } else {
     $_configuration = array();
@@ -65,17 +68,14 @@ api_check_php_version($includePath.'/');
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 
-$default_username_length = 40;
+$defaultUserNameLength = 40;
 if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
+    $defaultUserNameLength = 100;
 }
-define('USERNAME_MAX_LENGTH', $default_username_length);
+define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
-
-// Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting());
 
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
@@ -105,7 +105,7 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
 
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
+/*$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
 // $_configuration['db_client_flags'] can be set in configuration.php to pass
 // flags to the DB connection
 $dbFlags = api_get_configuration_value('db_client_flags');
@@ -116,7 +116,7 @@ $params = array(
     'password' => $_configuration['db_password'],
     'persistent' => $dbPersistConnection,
     'client_flags' => $dbFlags,
-);
+);*/
 
 // Doctrine ORM configuration
 
@@ -181,18 +181,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
-/* Initialization of the default encodings */
-// The platform's character set must be retrieved at this early moment.
-$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-$result = Database::query($sql);
-while ($row = Database::fetch_array($result)) {
-    $charset = $row[0];
-}
-if (empty($charset)) {
-    $charset = 'UTF-8';
-}
-// Preserving the value of the global variable $charset.
-$charset_initial_value = $charset;
+$charset = 'UTF-8';
 
 // Enables the portablity layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
@@ -520,10 +509,6 @@ if (is_array($language_files)) {
     }
 }
 
-// The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
-// So, we have to reassign this variable again in order to keep its value right.
-$charset = $charset_initial_value;
-
 // The global variable $text_dir has been defined in the language file trad4all.inc.php.
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
 $text_dir = api_get_text_direction();
@@ -544,34 +529,40 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
     $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
-        WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $sql = "SELECT login_id, login_date
+            FROM $tbl_track_login
+            WHERE
+                login_user_id='".$_user["user_id"]."'
+            ORDER BY login_date DESC
+            LIMIT 0,1";
 
-    $q_last_connection = Database::query($sql_last_connection);
+    $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 
         // is the latest logout_date still relevant?
-        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
-        $q_logout_date = Database::query($sql_logout_date);
+        $sql = "SELECT logout_date FROM $tbl_track_login
+                WHERE login_id = $i_id_last_connection";
+        $q_logout_date = Database::query($sql);
         $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
             Event::event_login($_user['user_id']);
             // now that it's created, we can get its ID and carry on
-            $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
         $now = api_get_utc_datetime(time());
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='$now' WHERE login_id='$i_id_last_connection'";
-        Database::query($s_sql_update_logout_date);
+        $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
+                WHERE login_id='$i_id_last_connection'";
+        Database::query($sql);
         // Saves the last login in the user table see BT#7297
         if (isset($_configuration['save_user_last_login']) &&
             $_configuration['save_user_last_login']
         ) {
             $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "UPDATE $tableUser SET last_login ='$now' WHERE user_id = ".$_user["user_id"];
+            $sql = "UPDATE $tableUser SET last_login = '$now'
+                    WHERE user_id = ".$_user["user_id"];
             Database::query($sql);
         }
     }

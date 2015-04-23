@@ -5,6 +5,11 @@ main/inc/conf
 archive/*
 !archive/.htaccess
 
+app/cache/*
+!app/cache/.htaccess
+
+app/logs/*
+
 # Courses
 
 courses/*
@@ -53,8 +58,3 @@ composer.lock
 vendor
 web/assets/*
 
-# Data directory (new directory for archive/)
-data/*
-!data/index.html
-data/badges/*
-!data/badges/index.html

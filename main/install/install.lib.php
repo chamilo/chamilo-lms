@@ -895,20 +895,20 @@ function display_requirements(
 
     echo '<table class="table">
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'inc/conf/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'inc/conf/').'</td>
+                <td class="requirements-item">'.api_get_path(CONFIGURATION_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(CONFIGURATION_PATH)).'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/users/</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/users/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/users/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/sessions/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/sessions/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/sessions/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/sessions/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/courses/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/courses/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/courses/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/courses/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
@@ -917,10 +917,6 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_ARCHIVE_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_DATA_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_DATA_PATH)).'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_COURSE_PATH).'</td>
@@ -939,8 +935,8 @@ function display_requirements(
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PATH).'home/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'home/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'home/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'home/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
@@ -1011,19 +1007,19 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_CODE_PATH).'upload/users/';
+        $checked_writable = api_get_path(SYS_APP_PATH).'upload/users/';
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
-        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
+        $checkedWritable = api_get_path(SYS_APP_PATH).'upload/sessions/';
         if (!is_writable($checkedWritable)) {
             $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);
         }
 
-        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
+        $checkedWritable = api_get_path(SYS_APP_PATH).'upload/courses/';
         if (!is_writable($checkedWritable)) {
             $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);
@@ -1041,12 +1037,6 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_DATA_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
         $checked_writable = api_get_path(SYS_COURSE_PATH);
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
@@ -1057,7 +1047,7 @@ function display_requirements(
             $error = true;
         }
 
-        $checked_writable = api_get_path(SYS_PATH).'home/';
+        $checked_writable = api_get_path(SYS_APP_PATH).'home/';
         if (!is_writable($checked_writable)) {
             $notWritable[] = realpath($checked_writable);
             @chmod($checked_writable, $perm);

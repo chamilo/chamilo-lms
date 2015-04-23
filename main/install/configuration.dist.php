@@ -50,14 +50,6 @@ $_configuration['root_sys'] = '{ROOT_SYS}';
 // example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] = '{URL_APPEND_PATH}';
 
-// Directory of the Chamilo code.
-// You could change this but it is not advised since this has not been tested yet.
-$_configuration['code_append'] = "main/";
-
-// Directory to store all course-related files.
-// You could change this but it is not advised since this has not been tested yet.
-$_configuration['course_folder'] = "courses/";
-
 // URL to your phpMyAdmin installation.
 // If not empty, a link will be available in the Platform Administration
 $_configuration['db_admin_path'] = '';
@@ -68,8 +60,8 @@ $_configuration['db_admin_path'] = '';
 // CAS IMPLEMENTATION
 // -> Go to your portal Chamilo > Administration > CAS to activate CAS
 // You can leave these lines uncommented even if you don't use CAS authentification
-$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
-$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
+//$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
+//$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
 
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration

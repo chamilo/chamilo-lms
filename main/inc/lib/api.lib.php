@@ -272,6 +272,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
+define('SYS_APP_PATH', 'SYS_APP_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
@@ -576,8 +577,10 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
- * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
- * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
+ * api_get_path(SYS_APP_PATH)                   /var/www/chamilo/app
+ *
+ * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache
+ * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/app/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
@@ -591,11 +594,11 @@ require_once __DIR__.'/internationalization.lib.php';
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
- * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
+ * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/app/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/data/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
- * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
+ * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/app/cache/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
@@ -640,11 +643,12 @@ function api_get_path($path_type, $path = null)
         SYS_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
-        SYS_ARCHIVE_PATH        => 'archive/',
-        WEB_ARCHIVE_PATH        => 'archive/',
+        SYS_ARCHIVE_PATH        => 'app/cache/',
+        WEB_ARCHIVE_PATH        => 'app/cache/',
+        SYS_APP_PATH            => 'app/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        CONFIGURATION_PATH      => 'inc/conf/',
+        CONFIGURATION_PATH      => 'app/config/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
         WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
         WEB_AJAX_PATH           => 'inc/ajax/',
@@ -669,15 +673,17 @@ function api_get_path($path_type, $path = null)
     static $root_web;
     static $root_sys;
     static $root_rel;
-    static $code_folder;
-    static $course_folder;
+
+
 
     // Always load root_web modifications for multiple url features
     global $_configuration;
     //default $_configuration['root_web'] configuration
     $root_web = $_configuration['root_web'];
 
-    $data_folder    = 'data/';
+    $data_folder = 'data/';
+    $code_folder = 'main/';
+    $course_folder = 'courses/';
 
     // Configuration data for already installed system.
     $root_sys = $_configuration['root_sys'];
@@ -696,9 +702,8 @@ function api_get_path($path_type, $path = null)
     if (!$is_this_function_initialized) {
         global $_configuration;
 
-        $root_rel       = $_configuration['url_append'];
-        $code_folder    = $_configuration['code_append'];
-        $course_folder  = $_configuration['course_folder'];
+        $root_rel = $_configuration['url_append'];
+
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
@@ -723,7 +728,6 @@ function api_get_path($path_type, $path = null)
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
                 $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 $code_folder = 'main/';
-                $course_folder = 'courses/';
             }
             // Here we give up, so we don't touch anything.
         }
@@ -745,8 +749,9 @@ function api_get_path($path_type, $path = null)
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
-        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[SYS_COURSE_PATH]         = $root_sys.$course_folder;
+
+        $paths[WEB_COURSE_PATH]         = $root_web.'app/'.$course_folder;
+
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
@@ -760,6 +765,8 @@ function api_get_path($path_type, $path = null)
 
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+
+        $paths[SYS_APP_PATH]            = $paths[SYS_PATH].$paths[SYS_APP_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
@@ -782,7 +789,8 @@ function api_get_path($path_type, $path = null)
 
         $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
         $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-        $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
+        $paths[CONFIGURATION_PATH]      = $paths[SYS_PATH].$paths[CONFIGURATION_PATH];
+        $paths[SYS_COURSE_PATH]         = $paths[SYS_APP_PATH].$course_folder;
 
         $is_this_function_initialized = true;
     } else {
@@ -5665,34 +5673,6 @@ function api_request_uri() {
     return $uri;
 }
 
-/**
- * Creates the "include_path" php-setting, following the rule that
- * PEAR packages of Chamilo should be read before other external packages.
- * To be used in global.inc.php only.
- * @author Ivan Tcholakov, 06-NOV-2008.
- */
-function api_create_include_path_setting() {
-    $include_path = ini_get('include_path');
-    if (!empty($include_path)) {
-        $include_path_array = explode(PATH_SEPARATOR, $include_path);
-        $dot_found = array_search('.', $include_path_array);
-        if ($dot_found !== false) {
-            $result = array();
-            foreach ($include_path_array as $path) {
-                $result[] = $path;
-                if ($path == '.') {
-                    // The path of Chamilo PEAR packages is to be inserted after the current directory path.
-                    $result[] = api_get_path(LIBRARY_PATH).'pear';
-                }
-            }
-            return implode(PATH_SEPARATOR, $result);
-        }
-        // Current directory is not listed in the include_path setting, low probability is here.
-        return api_get_path(LIBRARY_PATH).'pear'.PATH_SEPARATOR.$include_path;
-    }
-    // The include_path setting is empty, low probability is here.
-    return api_get_path(LIBRARY_PATH).'pear';
-}
 
 /** Gets the current access_url id of the Chamilo Platform
  * @author Julio Montoya <gugli100@gmail.com>
@@ -7974,27 +7954,6 @@ function api_protect_course_group($tool, $showHeader = true)
     }
 }
 
-/**
- * Check if Chmailo is installed correctly. If so, return the version
- * @return array ('installed' => 0/1, 'message' => error/db version)
- */
-function apiIsSystemInstalled()
-{
-    $root = __DIR__.'/../../../';
-    $configFile = $root.'main/inc/conf/configuration.php';
-    if (!is_readable($configFile)) {
-        return array ('installed' => 0, 'message' => 'No config file');
-    }
-    $result = Database::query(
-        "SELECT selected _value FROM settings_current WHERE variable = 'chamilo_database_version'"
-    );
-    if ($result == false) {
-        return array ('installed' => 0, 'message' => 'No way to recover version');
-    }
-    $settingsRow = Database::fetch_assoc($result);
-    $version = $settingsRow['selected_value'];
-    return array('installed' => 1, 'message' => $version);
-}
 
 /**
  * Limit the access to Session Admins wheen the limit_session_admin_role

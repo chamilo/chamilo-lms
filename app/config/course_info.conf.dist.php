@@ -29,15 +29,15 @@ $canBeEmpty['department_name']		= true;
 $canBeEmpty['department_url']		= true;
 */
 
-$showDiskQuota						= true;
+$showDiskQuota = true;
 //$showDiskUse						= true;
 //$showLinkToChangeDiskQuota		= true;
-$showExpirationDate 				= true;
-$showCreationDate 					= true;
-$showLastEdit 						= true;
-$showLastVisit 						= true;
-$canReportExpirationDate			= true; // Needs to be true
-											// if ScriptToReportExpirationDate
-											// is not automaticly called
+$showExpirationDate = true;
+$showCreationDate = true;
+$showLastEdit = true;
+$showLastVisit = true;
+$canReportExpirationDate = true; // Needs to be true
+// if ScriptToReportExpirationDate
+// is not automaticly called
 //$linkToChangeDiskQuota			= 'changeQuota.php';
-$urlScriptToReportExpirationDate	= 'postpone.php'; // external script to postpone the expiration of course.
+$urlScriptToReportExpirationDate = 'postpone.php'; // external script to postpone the expiration of course.

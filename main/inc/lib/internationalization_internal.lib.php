@@ -256,43 +256,6 @@ function _api_get_character_map_name($encoding) {
 }
 
 /**
- * This function parses a given conversion table (a text file) and creates in the memory
- * two tables for conversion - character set from/to Unicode codepoints.
- * @param string $name		The name of the thext file that contains the conversion table, for example 'CP1252' (file CP1252.TXT will be parsed).
- * @return array			Returns an array that contains forward and reverse tables (from/to Unicode).
- */
-function &_api_parse_character_map($name) {
-    $result = array();
-    $file = dirname(__FILE__).'/internationalization_database/conversion/' . $name . '.TXT';
-    if (file_exists($file)) {
-        $text = @file_get_contents($file);
-        if ($text !== false) {
-            $text = explode(chr(10), $text);
-            foreach ($text as $line) {
-                if (empty($line)) {
-                    continue;
-                }
-                if (!empty($line) && trim($line) && $line[0] != '#') {
-                    $matches = array();
-                    preg_match('/[[:space:]]*0x([[:alnum:]]*)[[:space:]]+0x([[:alnum:]]*)[[:space:]]+/', $line, $matches);
-                    $ord = hexdec(trim($matches[1]));
-                    if ($ord > 127) {
-                        $codepoint =  hexdec(trim($matches[2]));
-                        $result['local'][$ord] = $codepoint;
-                        $result['unicode'][$codepoint] = $ord;
-                    }
-                }
-            }
-        } else {
-            return false ;
-        }
-    } else {
-        return false;
-    }
-    return $result;
-}
-
-/**
  * Takes an UTF-8 string and returns an array of integer values representing the Unicode characters.
  * Astral planes are supported ie. the ints in the output can be > 0xFFFF. Occurrances of the BOM are ignored.
  * Surrogates are not allowed.
@@ -801,7 +764,8 @@ function & _api_non_utf8_encodings() {
  * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
  * @link http://php.net/manual/en/function.mb-internal-encoding
  */
-function _api_mb_internal_encoding($encoding = null) {
+function _api_mb_internal_encoding($encoding = null)
+{
     static $mb_internal_encoding = null;
     if (empty($encoding)) {
         if (is_null($mb_internal_encoding)) {
@@ -844,98 +808,6 @@ function _api_mb_regex_encoding($encoding = null) {
         return @mb_regex_encoding($encoding);
     }
     return false;
-}
-
-/**
- * Retrieves specified internal encoding configuration variable within the PHP iconv extension.
- * @param string $type	The parameter $type could be: 'iconv_internal_encoding', 'iconv_input_encoding', or 'iconv_output_encoding'.
- * @return mixed		The function returns the requested encoding or FALSE on error.
- * @link http://php.net/manual/en/function.iconv-get-encoding
- */
-function _api_iconv_get_encoding($type) {
-    return _api_iconv_set_encoding($type);
-}
-
-/**
- * Sets specified internal encoding configuration variables within the PHP iconv extension.
- * @param string $type					The parameter $type could be: 'iconv_internal_encoding', 'iconv_input_encoding', or 'iconv_output_encoding'.
- * @param string $encoding (optional)	The desired encoding to be set.
- * @return bool							Returns TRUE on success, FALSE on error.
- * Note: This function is used in the global initialization script for setting these three internal encodings to the platform's character set.
- * @link http://php.net/manual/en/function.iconv-set-encoding
- */
-function _api_iconv_set_encoding($type, $encoding = null) {
-    static $iconv_internal_encoding = null;
-    static $iconv_input_encoding = null;
-    static $iconv_output_encoding = null;
-    if (!ICONV_INSTALLED) {
-        return false;
-    }
-    switch ($type) {
-        case 'iconv_internal_encoding':
-            if (empty($encoding)) {
-                if (is_null($iconv_internal_encoding)) {
-                    $iconv_internal_encoding = @iconv_get_encoding($type);
-                }
-                return $iconv_internal_encoding;
-            }
-            if (_api_iconv_supports($encoding)) {
-                if(@iconv_set_encoding($type, $encoding)) {
-                    $iconv_internal_encoding = $encoding;
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        case 'iconv_input_encoding':
-            if (empty($encoding)) {
-                if (is_null($iconv_input_encoding)) {
-                    $iconv_input_encoding = @iconv_get_encoding($type);
-                }
-                return $iconv_input_encoding;
-            }
-            if (_api_iconv_supports($encoding)) {
-                if(@iconv_set_encoding($type, $encoding)) {
-                    $iconv_input_encoding = $encoding;
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        case 'iconv_output_encoding':
-            if (empty($encoding)) {
-                if (is_null($iconv_output_encoding)) {
-                    $iconv_output_encoding = @iconv_get_encoding($type);
-                }
-                return $iconv_output_encoding;
-            }
-            if (_api_iconv_supports($encoding)) {
-                if(@iconv_set_encoding($type, $encoding)) {
-                    $iconv_output_encoding = $encoding;
-                    return true;
-                }
-                return false;
-            }
-            return false;
-    }
-    return false;
-}
-
-/**
- * Checks whether a given encoding is known to define single-byte characters only.
- * The result might be not accurate for unknown by this library encodings. This is not fatal,
- * then the library picks up conversions plus Unicode related internal algorithms.
- * @param string $encoding		A given encoding identificator.
- * @return bool					TRUE if the encoding is known as single-byte (for ISO-8859-15, WINDOWS-1251, etc.), FALSE otherwise.
- */
-function _api_is_single_byte_encoding($encoding) {
-    static $checked = array();
-    if (!isset($checked[$encoding])) {
-        $character_map = _api_get_character_map_name(api_refine_encoding_id($encoding));
-        $checked[$encoding] = (!empty($character_map)
-            && !in_array($character_map, array('UTF-8', 'HTML-ENTITIES')));
-    }
-    return $checked[$encoding];
 }
 
 /**

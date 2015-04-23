@@ -6,6 +6,7 @@
  * Internationalization library for Chamilo 1.8.7 LMS
  * A library implementing internationalization related functions.
  * License: GNU General Public License Version 3 (Free Software Foundation)
+ * @todo use Patchwork-UTF8 instead of custom changes.
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
@@ -58,12 +59,12 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 // The following constants are used for tuning language detection functionality.
 // We reduce the text for language detection to the given number of characters
 // for increasing speed and to decrease memory consumption.
-define ('LANGUAGE_DETECT_MAX_LENGTH', 2000);
+define('LANGUAGE_DETECT_MAX_LENGTH', 2000);
 // Maximum allowed difference in so called delta-points for aborting certain language detection.
 // The value 80000 is good enough for speed and detection accuracy.
 // If you set the value of $max_delta too low, no language will be recognized.
 // $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
-define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
+define('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
 /**
  * Initialization of some internal default values in the internationalization library.
@@ -1811,6 +1812,7 @@ function api_strlen($string, $encoding = null) {
     if (_api_iconv_supports($encoding)) {
         return @iconv_strlen($string, $encoding);
     }
+
     return strlen($string);
 }
 
@@ -3300,8 +3302,8 @@ function api_detect_encoding($string, $language = null) {
  */
 function api_is_valid_utf8(&$string)
 {
-    return Utf8::isUtf8($string);
 
+    return Utf8::isUtf8($string);
 }
 
 /**

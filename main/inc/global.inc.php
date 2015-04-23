@@ -194,8 +194,12 @@ if (empty($charset)) {
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
+// Enables the portablity layer and configures PHP for UTF-8
+//\Patchwork\Utf8\Bootup::initAll();
+
 // Initialization of the internationalization library.
 api_initialize_internationalization();
+
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
 

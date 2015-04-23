@@ -1228,7 +1228,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                         }
                     }
                     foreach ($valid_encodings as $key => &$encoding) {
-                        if (api_is_encoding_supported($key) && Database::is_encoding_supported($key)) {
+                        if (api_is_encoding_supported($key)) {
                             $encoding = $key;
                         } else {
                             unset($valid_encodings[$key]);

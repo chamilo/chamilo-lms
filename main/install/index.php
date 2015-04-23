@@ -125,7 +125,6 @@ require_once __DIR__.'/version.php';
 if (isAlreadyInstalledSystem()) {
     // The system has already been installed, so block re-installation.
     $global_error_code = 6;
-    // @todo uncomment this.
     require '../inc/global_error_message.inc.php';
     die();
 }
@@ -407,6 +406,7 @@ if ($installType == 'new') {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
     $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
 }
+
 if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
 }
@@ -675,7 +675,14 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
 
                 // Migrate using the file Version110.php
-                migrate('110', 1, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager);
+                migrate(
+                    110,
+                    $dbNameForm,
+                    $dbUsernameForm,
+                    $dbPassForm,
+                    $dbHostForm,
+                    $manager
+                );
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';

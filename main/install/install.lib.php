@@ -636,6 +636,7 @@ function display_language_selection()
  *
  * @param string $installType
  * @param boolean $badUpdatePath
+ * @param boolean $badUpdatePath
  * @param string The updatePath given (if given)
  * @param array $update_from_version_8 The different subversions from version 1.9
  *
@@ -978,13 +979,19 @@ function display_requirements(
             <table border="0" cellpadding="5" align="center">
             <tr>
             <td><?php echo get_lang('OldVersionRootPath'); ?>:</td>
-            <td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : api_get_path(SYS_SERVER_ROOT_PATH).'old_version/'; ?>" /></td>
+            <td>
+                <input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : api_get_path(SYS_SERVER_ROOT_PATH).'old_version/'; ?>" />
+            </td>
             </tr>
             <tr>
             <td colspan="2" align="center">
-                <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Back'); ?>" ><i class="fa fa-backward"><?php echo get_lang('Back'); ?></i></button>
+                <button type="submit" class="btn btn-default" name="step1" value="<?php echo get_lang('Back'); ?>" >
+                    <i class="fa fa-backward"> <?php echo get_lang('Back'); ?></i>
+                </button>
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                <button type="submit" class="btn btn-success" name="<?php echo (isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
+                <button type="submit" class="btn btn-success" name="<?php echo (isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
+                    <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
+                </button>
             </td>
             </tr>
             </table>
@@ -1087,8 +1094,12 @@ function display_requirements(
         // And now display the choice buttons (go back or install)
         ?>
         <p align="center" style="padding-top:15px">
-        <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
-        <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> ><i class="fa fa-forward"> </i> <?php echo get_lang('NewInstallation'); ?></button>
+        <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
+            <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+        </button>
+        <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> >
+            <i class="fa fa-forward"> </i> <?php echo get_lang('NewInstallation'); ?>
+        </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <?php
         // Real code
@@ -1136,9 +1147,13 @@ function display_license_agreement()
                 <tr>
                     <td></td>
                     <td align="center">
-                        <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?></button>
+                        <button type="submit" class="btn btn-default" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" >
+                            <i class="fa fa-backward"> </i> <?php echo get_lang('Previous'); ?>
+                        </button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                        <button type="submit" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?></button>
+                        <button type="submit" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
+                            <i class="fa fa-forward"> </i> <?php echo get_lang('Next'); ?>
+                        </button>
                     </td>
                 </tr>
             </table>
@@ -1148,11 +1163,9 @@ function display_license_agreement()
 
     <!-- Contact information form -->
     <div>
-
-            <a href="javascript://" class = "advanced_parameters" >
-                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
-               </a>
-
+        <a href="javascript://" class = "advanced_parameters" >
+        <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+        </a>
     </div>
 
     <div id="id_contact_form" style="display:block">
@@ -1907,7 +1920,16 @@ function installSettings(
     }
 }
 
-function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
+/**
+ * @param string $chamiloVersion
+ * @param string $dbNameForm
+ * @param string $dbUsernameForm
+ * @param string $dbPassForm
+ * @param string $dbHostForm
+ * @param $manager
+ * @throws \Doctrine\DBAL\DBALException
+ */
+function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
 {
     $debug = true;
     // Config doctrine migrations
@@ -1929,22 +1951,24 @@ function migrate($to, $chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm
     // Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
     $config->setMigrationsTableName('version');
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
-    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\v'.$chamiloVersion);
+    $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
 
-    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/v'.$chamiloVersion);
+    $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/V'.$chamiloVersion);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
 
     $migration = new \Doctrine\DBAL\Migrations\Migration($config);
     $migrations = $config->getMigrations();
+
     /** @var Doctrine\DBAL\Migrations\Version $migration */
     foreach ($migrations as $migrationItem) {
         $migrationItem->getMigration()->setEntityManager($manager);
     }
 
-    //$to = '110';
-    // Retrieve SQL queries that should be run to migrate you schema to $to version, if $to == null - schema will be migrated to latest version
+    $to = null;
+    // Retrieve SQL queries that should be run to migrate you schema to $to version,
+    // if $to == null - schema will be migrated to latest version
     $versions = $migration->getSql($to);
     if ($debug) {
         $nl = '<br>';

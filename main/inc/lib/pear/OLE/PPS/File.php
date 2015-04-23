@@ -20,8 +20,6 @@
 // $Id: File.php,v 1.11 2007/02/13 21:00:42 schmidt Exp $
 
 
-require_once api_get_path(LIBRARY_PATH).'pear/OLE/PPS.php';
-
 /**
 * Class for creating File PPS's for OLE containers
 *

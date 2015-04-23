@@ -22,11 +22,6 @@
  */
 
 /**
- * Class representing an action to perform on HTTP request.
- */
-require_once 'HTML/QuickForm/Action.php';
-
-/**
  * This action handles output of the form.
  *
  * If you want to customize the form display, subclass this class and

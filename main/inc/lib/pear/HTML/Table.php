@@ -59,14 +59,6 @@
  * @link       http://pear.php.net/package/HTML_Table
  */
 
-
-/**
-* Requires PEAR, HTML_Common and HTML_Table_Storage
-*/
-require_once 'PEAR.php';
-require_once 'HTML/Common.php';
-require_once 'HTML/Table/Storage.php';
-
 /**
  * PEAR::HTML_Table makes the design of HTML tables easy, flexible, reusable and efficient.
  *

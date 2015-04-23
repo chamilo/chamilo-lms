@@ -57,13 +57,9 @@ if ($_POST['formSent'])
                 }
             }
             Display::display_normal_message(get_lang('ClassesSubscribed'));
-        }
-        else // remove classes from courses
-            {
-            foreach ($courses as $course_code)
-            {
-                foreach ($classes as $class_id)
-                {
+        } else {// remove classes from courses
+            foreach ($courses as $course_code) {
+                foreach ($classes as $class_id) {
                     ClassManager :: unsubscribe_from_course($class_id, $course_code);
                 }
             }

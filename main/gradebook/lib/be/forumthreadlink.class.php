@@ -47,7 +47,7 @@ class ForumThreadLink extends AbstractLink
 			.' forum_thread WHERE thread_id NOT IN'
 			.' (SELECT ref_id FROM '.$tbl_grade_links
 			.' WHERE type = '.LINK_FORUM_THREAD
-			." AND course_code = '".Database::escape_string($this->get_course_code())."'"
+			." AND c_id = ".intval($this->course_id)
 			.') AND forum_thread.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql);

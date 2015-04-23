@@ -318,8 +318,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 $session_course_relation = SessionManager::relation_session_course_exist($session_id, $courseId);
                                 if (!$session_course_relation) {
                                     $sql_course = "INSERT INTO $tbl_session_course SET
-                                            c_id = '$courseId',
-                                            session_id='$session_id'";
+                                            c_id = $courseId,
+                                            session_id = $session_id";
                                     $rs_course = Database::query($sql_course);
                                     SessionManager::installCourse($id_session, $courseId);
                                 }
@@ -384,8 +384,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $courseId = $course_info['real_id'];
 
                                         $sql_course = "INSERT INTO $tbl_session_course SET
-                                                c_id = '".$courseId."',
-                                                session_id='$session_id'";
+                                                c_id = $courseId,
+                                                session_id = $session_id";
                                         $rs_course = Database::query($sql_course);
 
                                         SessionManager::installCourse($id_session, $courseId);

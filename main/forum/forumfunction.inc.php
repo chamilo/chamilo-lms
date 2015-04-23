@@ -2048,9 +2048,9 @@ function get_thread_users_qualify($thread_id)
                      AND qualify.thread_id = '".Database::escape_string($thread_id)."'
                      AND post.thread_id = '".Database::escape_string($thread_id)."'
                      AND course_user.status not in('1')
-                     AND course_code = '".$course_code."' AND
-                     qualify.c_id = $course_id AND
-                     post.c_id = $course_id
+                     AND course_user.c_id = $course_id
+                     AND qualify.c_id = $course_id
+                     AND post.c_id = $course_id
                  $orderby ";
     }
     $result = Database::query($sql);
@@ -2119,7 +2119,7 @@ function get_thread_users_not_qualify($thread_id)
                 AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                 AND post.thread_id = '".Database::escape_string($thread_id)."'
                 AND course_user.status not in('1')
-                AND course_code = '".$course_code."' AND post.c_id = $course_id  $orderby";
+                AND course_user.c_id = $course_id AND post.c_id = $course_id  $orderby";
     }
     $result = Database::query($sql);
 

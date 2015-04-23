@@ -56,7 +56,7 @@ $tbl_admin = Database:: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_course_user = Database:: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course = Database:: get_main_table(TABLE_MAIN_COURSE);
 
-$s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
+$s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
 $q_tutor = Database::query($s_select_course_tutor_name);
 $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 
@@ -499,7 +499,7 @@ if ($form->validate() && is_settings_editable()) {
         legal                   = '".$updateValues['legal']."',
         activate_legal          = '".$activeLegal."',
         registration_code 	    = '".$updateValues['course_registration_password']."'
-        WHERE code = '".$course_code."'";
+        WHERE id = $courseId";
     Database::query($sql);
 
     // Insert/Updates course_settings table

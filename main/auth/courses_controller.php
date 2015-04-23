@@ -338,6 +338,7 @@ class CoursesController
             $message = get_lang('YouAreNowUnsubscribed');
         }
         $action = 'sortmycourses';
+        $error = '';
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
         } else {

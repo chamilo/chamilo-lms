@@ -92,7 +92,7 @@ if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 	$sql = "SELECT hotspot_coordinate
             FROM $tbl_track_e_hotspot
             WHERE   hotspot_question_id = $questionId AND
-                    hotspot_course_code = '$course_code' AND
+                    c_id = $course_id AND
                     hotspot_exe_id = $exe_id
             ORDER by hotspot_id";
 	$rs = @Database::query($sql); // don't output error because we are in Flash execution.

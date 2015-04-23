@@ -1708,13 +1708,14 @@ function api_get_course_info($course_code = null, $strict = false)
 {
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
+        $courseId = api_get_course_int_id($course_code);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $sql = "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
                  ON course.category_code =  course_category.code
-                 WHERE course.code = '$course_code'";
+                 WHERE course.id = $courseId";
         $result = Database::query($sql);
         $_course = array();
         if (Database::num_rows($result) > 0) {

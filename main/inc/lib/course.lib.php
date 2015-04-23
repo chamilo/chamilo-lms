@@ -329,7 +329,7 @@ class CourseManager
             Database::query(
                 "SELECT status FROM " . Database::get_main_table(TABLE_MAIN_COURSE_USER) . "
                 WHERE
-                    c_id  = '" . $courseId. "' AND
+                    c_id  = $courseId AND
                     user_id = " . intval($user_id)
             )
         );
@@ -757,7 +757,7 @@ class CourseManager
 
         // Check in advance whether subscription is allowed or not for this course.
         $sql = "SELECT code, visibility FROM $course_table
-                WHERE code = '$course_code' AND subscribe = '" . SUBSCRIBE_NOT_ALLOWED . "'";
+                WHERE id = $courseId AND subscribe = '" . SUBSCRIBE_NOT_ALLOWED . "'";
         if (Database::num_rows(Database::query($sql)) > 0) {
             if ($debug) {
                 error_log('Subscription is not allowed for this course');
@@ -1138,7 +1138,7 @@ class CourseManager
 
         $result = Database::query(
             'SELECT status FROM ' . Database::get_main_table(TABLE_MAIN_COURSE_USER) .
-            ' WHERE c_id="' . $courseId . '" and user_id="' . $user_id . '"'
+            ' WHERE c_id = ' . $courseId . ' AND user_id = ' . $user_id . ''
         );
 
         if (Database::num_rows($result) > 0) {
@@ -1301,7 +1301,7 @@ class CourseManager
                 $sessionCondition = " session_course_user.session_id IN ('$sessionIdListTostring') ";
             }
 
-            $courseCondition = " course.code = '".$course_code."' ";
+            $courseCondition = " course.id = $courseId";
             if (!empty($courseCodeList)) {
                 $courseCodeListForSession = array_map(array('Database', 'escape_string'), $courseCodeList);
                 $courseCodeListForSession = implode('","', $courseCodeListForSession);
@@ -2461,8 +2461,9 @@ class CourseManager
             return false;
         }
 
-        $course_code = Database::escape_string($course_code);
-        $information = self::get_course_information($course_code);
+        $courseId = intval($courseId);
+        $information = api_get_course_info_by_id($courseId);
+        $course_code = $information['code'];
         $courseId = $information['id'];
 
         $student = api_get_user_info($user_id);
@@ -2849,6 +2850,7 @@ class CourseManager
         $t_cf = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $fname = Database::escape_string($fname);
         $course_code = Database::escape_string($course_code);
+        $courseId = api_get_course_int_id($course_code);
         $fvalues = '';
         if (is_array($fvalue)) {
             foreach ($fvalue as $val) {
@@ -2870,7 +2872,7 @@ class CourseManager
 
             $tms = time();
             $sqlcfv = "SELECT * FROM $t_cfv
-                       WHERE course_code = '$course_code' AND field_id = '" . $rowcf['id'] . "'
+                       WHERE c_id = $courseId AND field_id = '" . $rowcf['id'] . "'
                        ORDER BY id";
             $rescfv = Database::query($sqlcfv);
             $n = Database::num_rows($rescfv);
@@ -2903,8 +2905,8 @@ class CourseManager
                 }
                 return true;
             } else {
-                $sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms) " .
-                    "VALUES ('$course_code'," . $rowcf['id'] . ",'$fvalues',FROM_UNIXTIME($tms))";
+                $sqli = "INSERT INTO $t_cfv (c_id, course_code,field_id,field_value,tms) " .
+                    "VALUES ($courseId, '$course_code'," . $rowcf['id'] . ",'$fvalues',FROM_UNIXTIME($tms))";
                 $resi = Database::query($sqli);
                 return ($resi ? true : false);
             }
@@ -3141,7 +3143,7 @@ class CourseManager
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
                 $sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type)
-                        VALUES('$courseId', $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
+                        VALUES($courseId, $hr_manager_id, '" . DRH . "', '" . COURSE_RELATION_TYPE_RRHH . "')";
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $affected_rows++;
@@ -3308,13 +3310,14 @@ class CourseManager
 
         $is_special = false;
         $course_code = Database::escape_string($course_code);
+        $courseId = api_get_course_int_id($course_code);
         $sql = "SELECT course_code
                 FROM $tbl_course_field_value tcfv
                 INNER JOIN $tbl_course_field tcf ON tcfv.field_id =  tcf.id
                 WHERE
                     tcf.field_variable = 'special_course' AND
                     tcfv.field_value = 1 AND
-                    course_code='$course_code'";
+                    c_id = $courseId";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         if ($num_rows > 0) {
@@ -4345,7 +4348,7 @@ class CourseManager
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id = $user_id AND c_id = '$courseId' ";
+                    WHERE user_id = $user_id AND c_id = $courseId ";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
@@ -4357,7 +4360,7 @@ class CourseManager
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id = $user_id AND c_id ='$courseId' AND session_id = $session_id";
+                    WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
@@ -4397,12 +4400,12 @@ class CourseManager
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $sql = "UPDATE $table SET legal_agreement = '1'
-                    WHERE user_id = $user_id AND c_id  = '$courseId' ";
+                    WHERE user_id = $user_id AND c_id  = $courseId ";
             Database::query($sql);
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $sql = "UPDATE  $table SET legal_agreement = '1'
-                    WHERE user_id = $user_id AND c_id = '$courseId' AND session_id = $session_id";
+                    WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
             Database::query($sql);
         }
     }

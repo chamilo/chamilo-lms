@@ -38,7 +38,7 @@
  *
  * */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once dirname(__FILE__) . '/ldap.inc.php';
 require_once dirname(__FILE__) . '/functions.inc.php';
@@ -65,7 +65,7 @@ if ($ldap_user !== false) {
     Session::write('_user', $_user);
     $uidReset = true;
     $logging_in = true;
-    Event::event_login();
+    Event::event_login($_user['user_id']);
 } else {
     error_log('extldap_authenticate error');
     $loginFailed = true;

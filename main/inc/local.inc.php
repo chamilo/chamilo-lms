@@ -109,12 +109,6 @@
 *    @package chamilo.include
 */
 
-/*
-     INIT SECTION
-     variables should be initialised here
- */
-
-//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
 use ChamiloSession as Session;
@@ -131,7 +125,7 @@ if (isset($_SESSION['conditional_login']['uid']) &&
     Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset=true;
-    Event::event_login();
+    Event::event_login($_user['user_id']);
 }
 
 // parameters passed via GET
@@ -321,7 +315,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if (($password == $uData['password'] || $cas_login) && (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
 
-                    $update_type= $update_type['update_type'];
+                    $update_type = $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser'])
                         && file_exists($extAuthSource[$update_type]['updateUser'])
                     ) {
@@ -361,7 +355,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
-                                        Event::event_login();
+                                        Event::event_login($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         $loginFailed = true;
@@ -387,7 +381,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user['status']  = $uData['status'];
                                         Session::write('_user', $_user);
-                                        Event::event_login();
+                                        Event::event_login($_user['user_id']);
                                         $logging_in = true;
                                     } else {
                                         //This means a secondary admin wants to login so we check as he's a normal user
@@ -395,7 +389,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                             $_user['user_id'] = $uData['user_id'];
                                             $_user['status']  = $uData['status'];
                                             Session::write('_user', $_user);
-                                            Event::event_login();
+                                            Event::event_login($_user['user_id']);
                                             $logging_in = true;
                                         } else {
                                             $loginFailed = true;
@@ -410,13 +404,15 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
+
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status'] = $uData['status'];
 
                                 Session::write('_user', $_user);
-                                Event::event_login();
+                                Event::event_login($uData['user_id']);
                                 $logging_in = true;
+
                             }
                         } else {
                             $loginFailed = true;
@@ -661,7 +657,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     $_user['status'] = $uData['status'];
 
                                     Session::write('_user', $_user);
-                                    Event::event_login();
+                                    Event::event_login($_user['user_id']);
                                 } else {
                                     $loginFailed = true;
                                     Session::erase('_uid');

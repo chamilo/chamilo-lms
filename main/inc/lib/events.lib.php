@@ -55,14 +55,15 @@ class Event
      * @author Julio Montoya 2013
      * @desc Record information for login event when an user identifies himself with username & password
      */
-    public static function event_login()
+    public static function event_login($userId)
     {
-        $userInfo = api_get_user_info();
+        $userInfo = api_get_user_info($userId);
+
+        $userId = intval($userId);
+
         if (empty($userInfo)) {
             return false;
         }
-
-        $userId = api_get_user_id();
 
         $TABLETRACK_LOGIN = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 

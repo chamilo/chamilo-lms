@@ -37,7 +37,7 @@
  *          - index.php?loginFailed=1&error=unrecognize_sso_origin');
  * */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once dirname(__FILE__) . '/ldap.inc.php';
 require_once dirname(__FILE__) . '/functions.inc.php';
@@ -60,8 +60,9 @@ if ($ldap_user !== false) {
             $is_platformAdmin = true;
             Database::query("INSERT INTO admin values ('$chamilo_uid')");
         }
+        Event::event_login($chamilo_uid);
     }
-    Event::event_login();
+
 } else {
     $loginFailed = true;
     $uidReset = false;

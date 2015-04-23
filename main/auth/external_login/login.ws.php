@@ -6,7 +6,7 @@
  * have 'ws' in his auth_source field instead of 'platform'.
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // Configure the web service URL here. e.g. http://174.1.1.19:8020/login.asmx?WSDL
 $wsUrl = '';
@@ -27,7 +27,7 @@ if ($isValid === 1) {
     Session::write('_user', $_user);
     $uidReset = true;
     $logging_in = true;
-    Event::event_login();
+    Event::event_login($_user['user_id']);
 } else {
     //error_log('WS authentication error - user not approved by external WS');
     $loginFailed = true;

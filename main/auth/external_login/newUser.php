@@ -8,7 +8,7 @@
   You also have to implements the external_get_user_info function in functions.inc.php
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once(dirname(__FILE__) . '/functions.inc.php');
 
@@ -46,7 +46,7 @@ if ($user !== false && ($chamilo_uid = external_add_user($user)) !== false) {
     // Can user create course
     $is_allowedCreateCourse = (bool) (($user['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $user['status'] == SESSIONADMIN));
 
-    Event::event_login();
+    Event::event_login($chamilo_uid);
 } else {
     $loginFailed = true;
     unset($_user['user_id']);

@@ -79,7 +79,7 @@ class ShibbolethSession
         $_SESSION['noredirection'] = true;
 
         //must be called before 'init_local.inc.php'
-        Event::event_login();
+        Event::event_login($_uid);
 
         //used in 'init_local.inc.php' this is BAD but and should be changed
         $loginFailed = false;

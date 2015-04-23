@@ -21,25 +21,21 @@
  */
 //require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once('authldap.php');
 
 $loginLdapSucces = ldap_login($login, $password);
 
-if ($loginLdapSucces)
-{
+if ($loginLdapSucces) {
 	$loginFailed = false;
 	$uidReset = true;
 	$_user['user_id'] = $uData['user_id'];
 	Session::write('_uid',$_uid);
     // Jand: copied from event_login in events.lib.php to enable login statistics:
-	Event::event_login();
-}
-else
-{
+	Event::event_login($uData['user_id']);
+} else {
 	$loginFailed = true;
 	unset($_user['user_id']);
 	$uidReset = false;
 }
-?>

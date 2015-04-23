@@ -1,6 +1,6 @@
 <?php
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /* For licensing terms, see /license.txt */
 /**
@@ -150,7 +150,7 @@ class sso {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        Event::event_login();
+                                        Event::event_login($_user['user_id']);
                                         // Redirect to homepage
                                         $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
                                         header('Location: '. $sso_target);
@@ -181,7 +181,7 @@ class sso {
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);
                                     Session::write('_user', $_user);
-                                    Event::event_login();
+                                    Event::event_login($_user['user_id']);
                                 } else {
                                     //Secondary URL admin wants to login
                                     // so we check as a normal user
@@ -189,7 +189,7 @@ class sso {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user', $_user);
-                                        Event::event_login();
+                                        Event::event_login($_user['user_id']);
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');

@@ -149,7 +149,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         $params['wanted_code']      = api_utf8_decode($courseNode->CourseCode);
                         $params['tutor_name']       = null;
                         $params['course_category']  = null;
-                        $params['course_language']  = api_get_valid_language(api_utf8_decode($courseNode->CourseLanguage));
+                        $params['course_language']  = api_utf8_decode($courseNode->CourseLanguage);
                         $params['user_id']          = api_get_user_id();
 
                         // Looking up for the teacher.
@@ -559,7 +559,7 @@ $form->display();
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;Sessions&gt;
     &lt;Users&gt;
         &lt;User&gt;

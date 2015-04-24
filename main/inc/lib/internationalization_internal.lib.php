@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * File: internationalization_internal.lib.php
  * Main API extension library for Chamilo 1.8.7 LMS,
@@ -17,26 +18,6 @@
  */
 $_api_encoding = null;
 $_api_collator = null;
-/**
- * This function returns an array of those languages that can use Latin 1 encoding.
- * Appendix to "Language support"
- * @return array	The array of languages that can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
- * Note: The returned language identificators are purified, without suffixes.
- */
-function _api_get_latin1_compatible_languages() {
-    static $latin1_languages;
-    if (!isset($latin1_languages)) {
-        $latin1_languages = array();
-        $encodings = & _api_non_utf8_encodings();
-        foreach ($encodings as $key => $value) {
-            if (api_is_latin1($value[0])) {
-                $latin1_languages[] = $key;
-            }
-        }
-    }
-    return $latin1_languages;
-}
-
 
 /**
  * Appendix to "Language recognition"
@@ -164,76 +145,6 @@ function _api_clean_person_name($person_name) {
 function _api_convert_encoding(&$string, $to_encoding, $from_encoding)
 {
     return mb_convert_encoding($string, $to_encoding, $from_encoding);
-    /*
-    $str = (string)$string;
-    static $character_map = array();
-    static $utf8_compatible = array('UTF-8', 'US-ASCII');
-    if (empty($str)) {
-        return $str;
-    }
-    $to_encoding = api_refine_encoding_id($to_encoding);
-    $from_encoding = api_refine_encoding_id($from_encoding);
-    if (api_equal_encodings($to_encoding, $from_encoding)) {
-        return $str;
-    }
-    if ($to_encoding == 'HTML-ENTITIES') {
-        return api_htmlentities($str, ENT_QUOTES, $from_encoding);
-    }
-    if ($from_encoding == 'HTML-ENTITIES') {
-        return api_html_entity_decode($str, ENT_QUOTES, $to_encoding);
-    }
-    $to = _api_get_character_map_name($to_encoding);
-    $from = _api_get_character_map_name($from_encoding);
-    if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_compatible) && in_array($from, $utf8_compatible))) {
-        return $str;
-    }
-    if (!isset($character_map[$to])) {
-        $character_map[$to] = &_api_parse_character_map($to);
-    }
-    if ($character_map[$to] === false) {
-        return $str;
-    }
-    if (!isset($character_map[$from])) {
-        $character_map[$from] = &_api_parse_character_map($from);
-    }
-    if ($character_map[$from] === false) {
-        return $str;
-    }
-    if ($from != 'UTF-8') {
-        $len = api_byte_count($str);
-        $codepoints = array();
-        for ($i = 0; $i < $len; $i++) {
-            $ord = ord($str[$i]);
-            if ($ord > 127) {
-                if (isset($character_map[$from]['local'][$ord])) {
-                    $codepoints[] = $character_map[$from]['local'][$ord];
-                } else {
-                    $codepoints[] = 0xFFFD; // U+FFFD REPLACEMENT CHARACTER is the general substitute character in the Unicode Standard.
-                }
-            } else {
-                $codepoints[] = $ord;
-            }
-        }
-    } else {
-        $codepoints = _api_utf8_to_unicode($str);
-    }
-    if ($to != 'UTF-8') {
-        foreach ($codepoints as $i => &$codepoint) {
-            if ($codepoint > 127) {
-                if (isset($character_map[$to]['unicode'][$codepoint])) {
-                    $codepoint = chr($character_map[$to]['unicode'][$codepoint]);
-                } else {
-                    $codepoint = '?'; // Unknown character.
-                }
-            } else {
-                $codepoint = chr($codepoint);
-            }
-        }
-        $str = implode($codepoints);
-    } else {
-        $str = _api_utf8_from_unicode($codepoints);
-    }
-    return $str;*/
 }
 
 /**
@@ -422,231 +333,10 @@ function _api_utf8_chr($codepoint) {
     return $result;
 }
 
-/**
- * Takes the first UTF-8 character in a string and returns its Unicode codepoint.
- * @param string $utf8_character	The UTF-8 encoded character.
- * @return int						Returns: the codepoint; or 0xFFFD (unknown character) when the input string is empty.
- * This is a UTF-8 aware version of the function ord().
- * @link http://php.net/manual/en/function.ord.php
- * Note about a difference with the original funtion ord(): ord('') returns 0.
- */
-function _api_utf8_ord($utf8_character) {
-    if ($utf8_character == '') {
-        return 0xFFFD;
-    }
-    $codepoints = _api_utf8_to_unicode($utf8_character);
-    return $codepoints[0];
-}
-
-/**
- * Makes a html-entity from Unicode codepoint.
- * @param int $codepoint			The Unicode codepoint.
- * @return string					Returns the corresponding html-entity; or ASCII character if $codepoint < 128.
- */
-function _api_html_entity_from_unicode($codepoint) {
-    if ($codepoint < 128) {
-        return chr($codepoint);
-    }
-    return '&#'.$codepoint.';';
-}
-
-/**
- * Appendix to "Common multibyte string functions"
- */
-
-/**
- * The following function reads case folding properties about a given character from a file-based "database".
- * @param int $codepoint			The Unicode codepoint that represents a caharacter.
- * @param string $type (optional)	The type of initial case to be altered: 'lower' (default) or 'upper'.
- * @return array					Returns an array with properties used to change case of the character.
- */
-function &_api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
-    static $config = array();
-    static $range = array();
-    if (!isset($range[$codepoint])) {
-        if ($codepoint > 128 && $codepoint < 256)  {
-            $range[$codepoint] = '0080_00ff'; // Latin-1 Supplement
-        } elseif ($codepoint < 384) {
-            $range[$codepoint] = '0100_017f'; // Latin Extended-A
-        } elseif ($codepoint < 592) {
-            $range[$codepoint] = '0180_024F'; // Latin Extended-B
-        } elseif ($codepoint < 688) {
-            $range[$codepoint] = '0250_02af'; // IPA Extensions
-        } elseif ($codepoint >= 880 && $codepoint < 1024) {
-            $range[$codepoint] = '0370_03ff'; // Greek and Coptic
-        } elseif ($codepoint < 1280) {
-            $range[$codepoint] = '0400_04ff'; // Cyrillic
-        } elseif ($codepoint < 1328) {
-            $range[$codepoint] = '0500_052f'; // Cyrillic Supplement
-        } elseif ($codepoint < 1424) {
-            $range[$codepoint] = '0530_058f'; // Armenian
-        } elseif ($codepoint >= 7680 && $codepoint < 7936) {
-            $range[$codepoint] = '1e00_1eff'; // Latin Extended Additional
-        } elseif ($codepoint < 8192) {
-            $range[$codepoint] = '1f00_1fff'; // Greek Extended
-        } elseif ($codepoint >= 8448 && $codepoint < 8528) {
-            $range[$codepoint] = '2100_214f'; // Letterlike Symbols
-        } elseif ($codepoint < 8592) {
-            $range[$codepoint] = '2150_218f'; // Number Forms
-        } elseif ($codepoint >= 9312 && $codepoint < 9472) {
-            $range[$codepoint] = '2460_24ff'; // Enclosed Alphanumerics
-        } elseif ($codepoint >= 11264 && $codepoint < 11360) {
-            $range[$codepoint] = '2c00_2c5f'; // Glagolitic
-        } elseif ($codepoint < 11392) {
-            $range[$codepoint] = '2c60_2c7f'; // Latin Extended-C
-        } elseif ($codepoint < 11520) {
-            $range[$codepoint] = '2c80_2cff'; // Coptic
-        } elseif ($codepoint >= 65280 && $codepoint < 65520) {
-            $range[$codepoint] = 'ff00_ffef'; // Halfwidth and Fullwidth Forms
-        } else {
-            $range[$codepoint] = false;
-        }
-        if ($range[$codepoint] === false) {
-            return null;
-        }
-        if (!isset($config[$range[$codepoint]])) {
-            $file = dirname(__FILE__).'/internationalization_database/casefolding/' . $range[$codepoint] . '.php';
-            if (file_exists($file)) {
-                include $file;
-            }
-        }
-    }
-    if ($range[$codepoint] === false || !isset($config[$range[$codepoint]])) {
-        return null;
-    }
-    $result = array();
-    $count = count($config[$range[$codepoint]]);
-    for ($i = 0; $i < $count; $i++) {
-        if ($type === 'lower' && $config[$range[$codepoint]][$i][$type][0] === $codepoint) {
-            $result[] = $config[$range[$codepoint]][$i];
-        } elseif ($type === 'upper' && $config[$range[$codepoint]][$i][$type] === $codepoint) {
-            $result[] = $config[$range[$codepoint]][$i];
-        }
-    }
-    return $result;
-}
-
-/**
- * A callback for serving the function api_ucwords().
- * @param array $matches	Input array of matches corresponding to a single word
- * @return string			Returns a with first char of the word in uppercase
- */
-function _api_utf8_ucwords_callback($matches) {
-    return $matches[2] . api_ucfirst(ltrim($matches[0]), 'UTF-8');
-}
-
-/**
- * Appendix to "Common sting operations with arrays"
- */
-
-/**
- * This callback function converts from UTF-8 to other encoding. It works with strings or arrays of strings.
- * @param mixed $variable	The variable to be converted, a string or an array.
- * @return mixed			Returns the converted form UTF-8 $variable with the same type, string or array.
- */
-function _api_array_utf8_decode($variable) {
-    global $_api_encoding;
-    if (is_array($variable)) {
-        return array_map('_api_array_utf8_decode', $variable);
-    }
-    if (is_string($variable)) {
-        return api_utf8_decode($variable, $_api_encoding);
-    }
-    return $variable;
-}
 
 /**
  * Appendix to "String comparison"
  */
-
-/**
- * Returns an instance of Collator class (ICU) created for a specified language.
- * @param string $language (optional)	Language indentificator: 'english', 'french' ... If it is omited, the current interface language is assumed.
- * @return object						Returns a instance of Collator class that is suitable for common string comparisons.
- */
-function _api_get_collator($language = null) {
-    static $collator = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
-    }
-    if (!isset($collator[$language])) {
-        $locale = _api_get_locale_from_language($language);
-        $collator[$language] = collator_create($locale);
-        if (is_object($collator[$language])) {
-            collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
-        }
-    }
-    return $collator[$language];
-}
-
-/**
- * Returns an instance of Collator class (ICU) created for a specified language. This collator treats substrings of digits as numbers.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return object						Returns a instance of Collator class that is suitable for alpha-numerical comparisons.
- */
-function _api_get_alpha_numerical_collator($language = null) {
-    static $collator = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
-    }
-    if (!isset($collator[$language])) {
-        $locale = _api_get_locale_from_language($language);
-        $collator[$language] = collator_create($locale);
-        if (is_object($collator[$language])) {
-            collator_set_attribute($collator[$language], Collator::CASE_FIRST, Collator::UPPER_FIRST);
-            collator_set_attribute($collator[$language], Collator::NUMERIC_COLLATION, Collator::ON);
-        }
-    }
-    return $collator[$language];
-}
-
-/**
- * A string comparison callback function for sorting.
- * @param string $string1		The first string.
- * @param string $string2		The second string.
- * @return int					Returns 0 if $string1 = $string2 or if there is an error; 1 if $string1 > $string2; -1 if $string1 < $string2.
- */
-function _api_cmp($string1, $string2) {
-    global $_api_collator, $_api_encoding;
-    $result = collator_compare($_api_collator, api_utf8_encode($string1, $_api_encoding), api_utf8_encode($string2, $_api_encoding));
-    return $result === false ? 0 : $result;
-}
-
-/**
- * A reverse string comparison callback function for sorting.
- * @param string $string1		The first string.
- * @param string $string2		The second string.
- * @return int					Returns 0 if $string1 = $string2 or if there is an error; 1 if $string1 < $string2; -1 if $string1 > $string2.
- */
-function _api_rcmp($string1, $string2) {
-    global $_api_collator, $_api_encoding;
-    $result = collator_compare($_api_collator, api_utf8_encode($string2, $_api_encoding), api_utf8_encode($string1, $_api_encoding));
-    return $result === false ? 0 : $result;
-}
-
-/**
- * A case-insensitive string comparison callback function for sorting.
- * @param string $string1		The first string.
- * @param string $string2		The second string.
- * @return int					Returns 0 if $string1 = $string2 or if there is an error; 1 if $string1 > $string2; -1 if $string1 < $string2.
- */
-function _api_casecmp($string1, $string2) {
-    global $_api_collator, $_api_encoding;
-    $result = collator_compare($_api_collator, api_strtolower(api_utf8_encode($string1, $_api_encoding), 'UTF-8'), api_strtolower(api_utf8_encode($string2, $_api_encoding), 'UTF-8'));
-    return $result === false ? 0 : $result;
-}
-
-/**
- * A reverse case-insensitive string comparison callback function for sorting.
- * @param string $string1		The first string.
- * @param string $string2		The second string.
- * @return int					Returns 0 if $string1 = $string2 or if there is an error; 1 if $string1 < $string2; -1 if $string1 > $string2.
- */
-function _api_casercmp($string1, $string2) {
-    global $_api_collator, $_api_encoding;
-    $result = collator_compare($_api_collator, api_strtolower(api_utf8_encode($string2, $_api_encoding), 'UTF-8'), api_strtolower(api_utf8_encode($string1, $_api_encoding), 'UTF-8'));
-    return $result === false ? 0 : $result;
-}
 
 /**
  * A reverse function from php-core function strnatcmp(), performs string comparison in reverse natural (alpha-numerical) order.
@@ -659,103 +349,12 @@ function _api_strnatrcmp($string1, $string2) {
 }
 
 /**
- * A reverse function from php-core function strnatcasecmp(), performs string comparison in reverse case-insensitive natural (alpha-numerical) order.
- * @param string $string1		The first string.
- * @param string $string2		The second string.
- * @return int					Returns 0 if $string1 = $string2; >0 if $string1 < $string2; <0 if $string1 > $string2.
- */
-function _api_strnatcasercmp($string1, $string2) {
-    return strnatcasecmp($string2, $string1);
-}
-
-/**
- * A function that translates sorting flag constants from php core to correspondent constants from intl extension.
- * @param int $sort_flag (optional)		Sorting modifier flag as it is defined for php core. The default value is SORT_REGULAR.
- * @return int							Retturns the corresponding sorting modifier flag as it is defined in intl php-extension.
- */
-function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
-    switch ($sort_flag) {
-        case SORT_STRING:
-        case SORT_LOCALE_STRING:
-            return Collator::SORT_STRING;
-        case SORT_NUMERIC:
-            return Collator::SORT_NUMERIC;
-    }
-    return Collator::SORT_REGULAR;
-}
-
-/**
  * ICU locales (accessible through intl extension).
  */
 
 /**
- * Returns isocode (see api_get_language_isocode()) which is purified accordingly to
- * be used by the php intl extension (ICU library).
- * @param string $language (optional)	This is the name of the folder containing translations for the corresponding language.
- * If $language is omitted, interface language is assumed then.
- * @return string						The found language locale id or null on error. Examples: bg, en, pt_BR, ...
- */
-function _api_get_locale_from_language($language = null) {
-    static $locale = array();
-    if (empty($language)) {
-        $language = api_get_interface_language();
-    }
-    if (!isset($locale[$language])) {
-        $locale[$language] = str_replace('-', '_', api_get_language_isocode($language));
-    }
-    return $locale[$language];
-}
-
-/**
- * Sets/gets the default internal value of the locale id (for the intl extension, ICU).
- * @param string $locale (optional)	The locale id to be set. When it is omitted, the function returns (gets, reads) the default internal value.
- * @return mixed						When the function sets the default value, it returns TRUE on success or FALSE on error. Otherwise the function returns as string the current default value.
- */
-function _api_set_default_locale($locale = null) {
-    static $default_locale = 'en';
-    if (!empty($locale)) {
-        $default_locale = $locale;
-        if (INTL_INSTALLED) {
-            return @locale_set_default($locale);
-        }
-        return true;
-    } else {
-        if (INTL_INSTALLED) {
-            $default_locale = @locale_get_default();
-        }
-    }
-    return $default_locale;
-}
-
-/**
- * Gets the default internal value of the locale id (for the intl extension, ICU).
- * @return string		Returns as string the current default value.
- */
-function api_get_default_locale() {
-    return _api_set_default_locale();
-}
-
-/**
  * Appendix to "Encoding management functions"
  */
-
-/**
- * Returns a table with non-UTF-8 encodings for all system languages.
- * @return array		Returns an array in the form array('language1' => array('encoding1', encoding2', ...), ...)
- * Note: The function api_get_non_utf8_encoding() returns the first encoding from this array that is correspondent to the given language.
- */
-function & _api_non_utf8_encodings() {
-    static $encodings;
-    if (!isset($encodings)) {
-        $file = dirname(__FILE__).'/internationalization_database/non_utf8_encodings.php';
-        if (file_exists($file)) {
-            $encodings = include ($file);
-        } else {
-            $encodings = array('english' => array('ISO-8859-15'));
-        }
-    }
-    return $encodings;
-}
 
 /**
  * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
@@ -766,48 +365,7 @@ function & _api_non_utf8_encodings() {
  */
 function _api_mb_internal_encoding($encoding = null)
 {
-    static $mb_internal_encoding = null;
-    if (empty($encoding)) {
-        if (is_null($mb_internal_encoding)) {
-            if (MBSTRING_INSTALLED) {
-                $mb_internal_encoding = @mb_internal_encoding();
-            } else {
-                $mb_internal_encoding = 'UTF-8';
-            }
-        }
-        return $mb_internal_encoding;
-    }
-    $mb_internal_encoding = $encoding;
-    if (_api_mb_supports($encoding)) {
-        return @mb_internal_encoding($encoding);
-    }
-    return false;
-}
-
-/**
- * Sets/Gets internal character encoding of the regular expression functions (ereg-like) within the PHP mbstring extension.
- * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding.
- * @return string						When $encoding parameter is not given, the function returns the internal encoding.
- * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
- * @link http://php.net/manual/en/function.mb-regex-encoding
- */
-function _api_mb_regex_encoding($encoding = null) {
-    static $mb_regex_encoding = null;
-    if (empty($encoding)) {
-        if (is_null($mb_regex_encoding)) {
-            if (MBSTRING_INSTALLED) {
-                $mb_regex_encoding = @mb_regex_encoding();
-            } else {
-                $mb_regex_encoding = 'UTF-8';
-            }
-        }
-        return $mb_regex_encoding;
-    }
-    $mb_regex_encoding = $encoding;
-    if (_api_mb_supports($encoding)) {
-        return @mb_regex_encoding($encoding);
-    }
-    return false;
+    return mb_internal_encoding($encoding);
 }
 
 /**

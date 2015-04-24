@@ -27,7 +27,7 @@ api_protect_course_group(GroupManager::GROUP_TOOL_CHAT, false);
 
 /*  TRACKING */
 Event::event_access_tool(TOOL_CHAT);
-header('Content-Type: text/html; charset='.api_get_system_encoding());
+header('Content-Type: text/html; charset=UTF-8');
 
 /*
  * Choose CSS style (platform's, user's, or course's)
@@ -45,7 +45,7 @@ $courseCode = Security::remove_XSS($_GET['cidReq']);
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="<?php echo api_get_system_encoding(); ?>" />
+<meta charset="UTF-8" />
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
 <?php
 echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';

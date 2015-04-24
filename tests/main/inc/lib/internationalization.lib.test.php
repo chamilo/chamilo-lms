@@ -619,15 +619,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_is_latin1() {
-		$encoding = 'ISO-8859-15';
-		$strict = false;
-		$res = api_is_latin1($encoding, false);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-
 	public function test_api_get_system_encoding() {
 		$res = api_get_system_encoding();
 		$this->assertTrue(is_string($res));
@@ -652,19 +643,6 @@ class TestInternationalization extends UnitTestCase {
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res == 'WINDOWS-1251');
-		//var_dump($res);
-	}
-
-	public function test_api_get_valid_encodings() {
-		$res = api_get_valid_encodings();
-		$ok = is_array($res) && !empty($res);
-		$this->assertTrue($ok);
-		if ($ok) {
-			foreach ($res as $value) {
-				$ok = $ok && is_string($value);
-			}
-			$this->assertTrue($ok);
-		}
 		//var_dump($res);
 	}
 
@@ -845,54 +823,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-
-/**
- * ----------------------------------------------------------------------------
- * Language management functions
- * ----------------------------------------------------------------------------
- */
-
-	public function test_api_is_language_supported() {
-		$language1 = 'english';
-		$language2 = 'english_org';
-		$language3 = 'EnGlIsh';
-		$language4 = 'EnGlIsh_oRg';
-		$language5 = 'french';
-		$language6 = 'french_corporate';
-		$language7 = 'frEncH';
-		$language8 = 'freNch_corPorAte';
-		$language9 = 'xxxxxxxxxxxxxx';
-		$res1 = api_is_language_supported($language1);
-		$res2 = api_is_language_supported($language2);
-		$res3 = api_is_language_supported($language3);
-		$res4 = api_is_language_supported($language4);
-		$res5 = api_is_language_supported($language5);
-		$res6 = api_is_language_supported($language6);
-		$res7 = api_is_language_supported($language7);
-		$res8 = api_is_language_supported($language8);
-		$res9 = api_is_language_supported($language9);
-		$this->assertTrue(
-			$res1 === true
-			&& $res2 === true
-			&& $res3 === true
-			&& $res4 === true
-			&& $res5 === true
-			&& $res6 === true
-			&& $res7 === true
-			&& $res8 === true
-			&& $res9 === false
-		);
-		//var_dump($res1);
-		//var_dump($res2);
-		//var_dump($res3);
-		//var_dump($res4);
-		//var_dump($res5);
-		//var_dump($res6);
-		//var_dump($res7);
-		//var_dump($res8);
-		//var_dump($res9);
-	}
-
 	public function test_api_get_valid_language() {
 		$enabled_languages_info = api_get_languages();
 		$enabled_languages = $enabled_languages_info['folder'];
@@ -1027,40 +957,7 @@ class TestInternationalization extends UnitTestCase {
 			$res[] = api_get_text_direction($language);
 		}
 		$this->assertTrue($res === $expected_results);
-		//var_dump($res);
 	}
-
-
-	/*
-	// This test works. It has been disabled, because it is time-consuming.
-	public function test_api_detect_encoding() {
-		$strings = $this->language_strings;
-		$is_test_ok = true;
-
-		foreach ($strings as $language => $string) {
-			if (api_is_language_supported($language)) {
-				$is_ok = api_is_utf8(api_detect_encoding($string)); // Checking whether the input string is UTF-8.
-				$is_test_ok = $is_test_ok && $is_ok;
-				$non_utf8_encoding = api_get_non_utf8_encoding($language);
-				if (!empty($non_utf8_encoding) && api_is_encoding_supported($non_utf8_encoding)) {
-					$res = api_detect_encoding(api_utf8_decode($string, $non_utf8_encoding));
-					$test_string = api_utf8_encode(api_utf8_decode($string, $non_utf8_encoding), $res);
-					$is_ok = api_equal_encodings($non_utf8_encoding, $res) || $string == $test_string;
-					echo $language.'<br />';
-					echo $string.'<br />';
-					echo $test_string.'<br />';
-					echo ($is_ok ? '<span style="color: green; font-weight: bold;">Ok</span>' : '<span style="color: red; font-weight: bold;">Failed</span>').' '.$non_utf8_encoding.' => <strong>'.$res.'</strong><br />';
-					echo '<br />';
-				} else {
-					$is_ok = true;
-				}
-				$is_test_ok = $is_test_ok && $is_ok;
-			}
-		}
-
-		$this->assertTrue($is_test_ok);
-	}
-	*/
 
 	// The second function for testing api_detect_encoding().
 	public function test_api_detect_encoding_2() {

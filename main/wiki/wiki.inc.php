@@ -586,7 +586,7 @@ class Wiki
         $course_id = api_get_course_int_id();
 
         // Filter no _uass
-        if (api_eregi('_uass', $values['title']) ||
+        if (api_strpos('_uass', $values['title']) === false ||
             (api_strtoupper(trim($values['title'])) == 'INDEX' ||
             api_strtoupper(trim(api_htmlentities($values['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))
         ) {

@@ -528,7 +528,7 @@ if ($count_fields > 0) {
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;Contacts&gt;
     &lt;Contact&gt;
         <b>&lt;LastName&gt;xxx&lt;/LastName&gt;</b>

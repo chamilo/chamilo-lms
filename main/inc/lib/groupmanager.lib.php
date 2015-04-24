@@ -1885,7 +1885,7 @@ class GroupManager
      * Check if a user has access to a certain group tool
      * @param int $user_id The user id
      * @param int $group_id The group id
-     * @param constant $tool The tool to check the access rights. This should be
+     * @param string $tool The tool to check the access rights. This should be
      * one of constants: GROUP_TOOL_DOCUMENTS
      * @return bool True if the given user has access to the given tool in the
      * given course.

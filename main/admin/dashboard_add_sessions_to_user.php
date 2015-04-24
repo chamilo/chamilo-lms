@@ -61,9 +61,6 @@ function search_sessions($needle, $type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
         $needle = Database::escape_string($needle);
         $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
         $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);

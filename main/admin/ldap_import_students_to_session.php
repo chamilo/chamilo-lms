@@ -80,9 +80,8 @@ elseif(!empty($annee) && empty($id_session))
 
 	$sessions=Database::store_result($result);
 	$nbr_results=count($sessions);
-	foreach($sessions as $row)
-	{
-		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name'], ENT_COMPAT, api_get_system_encoding()).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
+	foreach($sessions as $row) {
+		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name']).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
 	}
 	echo '</select>';
 	echo '<input type="submit" value="'.get_lang('Submit').'">';
@@ -114,8 +113,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		$info = ldap_get_entries($ds, $sr);
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_system_encoding());
-			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_system_encoding());
+			$nom_form[] = $info[$key]["sn"][0];
+			$prenom_form[] = $info[$key]["givenname"][0];
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);

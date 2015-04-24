@@ -186,12 +186,6 @@ $charset = 'UTF-8';
 // Enables the portablity layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
-// Initialization of the internationalization library.
-//api_initialize_internationalization();
-
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-//api_set_internationalization_default_encoding($charset);
-
 // Start session after the internationalization library has been initialized.
 Chamilo::session()->start($already_installed);
 

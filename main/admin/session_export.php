@@ -105,7 +105,7 @@ if (isset($_POST['formSent'])) {
 			fputs($fp,"SessionName;Coach;DateStart;DateEnd;Visibility;SessionCategory;Users;Courses;\n");
 		} else {
 			$cvs = false;
-			fputs($fp, "<?xml version=\"1.0\" encoding=\"".api_get_system_encoding()."\"?>\n<Sessions>\n");
+			fputs($fp, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sessions>\n");
 		}
 
 		while($row=Database::fetch_array($result)) {

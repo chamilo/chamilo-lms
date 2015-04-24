@@ -306,14 +306,6 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     $passwordKey = isset($extldap_user_correspondance['password']) ? $extldap_user_correspondance['password'] : 'userPassword';
     $password        = $data[$passwordKey][0];
 
-    // Structure
-  /*  $structure       = $data['edupersonprimaryorgunitdn'][0];
-    $array_structure = explode(",", $structure);
-    $array_val       = explode("=", $array_structure[0]);
-    $etape           = $array_val[1];
-    $array_val       = explode("=", $array_structure[1]);
-    $annee           = $array_val[1];
-*/
     // To ease management, we add the step-year (etape-annee) code
     //$official_code = $etape."-".$annee;
     $official_code = api_convert_encoding($data[$extldap_user_correspondance['official_code']][0], api_get_system_encoding(), 'UTF-8');

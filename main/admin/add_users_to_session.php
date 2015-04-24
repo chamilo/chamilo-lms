@@ -76,9 +76,6 @@ function search_users($needle, $type)
             $needle = '';
         }
 
-        // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
         $needle = Database::escape_string($needle);
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
         $showOfficialCode = false;

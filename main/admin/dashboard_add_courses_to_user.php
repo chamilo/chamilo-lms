@@ -60,8 +60,6 @@ function search_courses($needle, $type)
     $return = '';
     if (!empty($needle) && !empty($type)) {
         // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$needle = Database::escape_string($needle);
 
         $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);

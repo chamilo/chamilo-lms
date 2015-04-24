@@ -97,7 +97,7 @@ function save_data($courses)
 {
     $msg = '';
     foreach ($courses as $course) {
-        $course_language = api_get_valid_language($course['Language']);
+        $course_language = $course['Language'];
         $teachers = getTeacherListInArray($course['Teacher']);
         $teacherList = array();
         $creatorId = api_get_user_id();

@@ -2815,18 +2815,18 @@ class Exercise
                                     if ($answerType == DRAGGABLE) {
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
-                                    if (isset($real_list[$i_answer_id])) {
-                                        $user_answer = Display::span($real_list[$i_answer_id]);
-                                    }
+                                        if (isset($real_list[$i_answer_id])) {
+                                            $user_answer = Display::span($real_list[$i_answer_id]);
+                                        }
                                     }
                                 } else {
                                     if ($answerType == DRAGGABLE) {
                                         $user_answer = Display::label(get_lang('NotCorrect'), 'danger');
                                     } else {
-                                    $user_answer = Display::span(
-                                        $real_list[$s_user_answer],
-                                        ['style' => 'color: #FF0000; text-decoration: line-through;']
-                                    );
+                                        $user_answer = Display::span(
+                                            $real_list[$s_user_answer],
+                                            ['style' => 'color: #FF0000; text-decoration: line-through;']
+                                        );
                                     }
                                 }
                             } elseif ($answerType == DRAGGABLE) {
@@ -2835,15 +2835,15 @@ class Exercise
 
                             if ($show_result) {
                                 echo '<tr>';
-                                echo '<td>'.$s_answer_label.'</td>';
-                                echo '<td>'.$user_answer;
+                                echo '<td>' . $s_answer_label . '</td>';
+                                echo '<td>' . $user_answer;
                                 if ($answerType == MATCHING) {
-                                if (isset($real_list[$i_answer_correct_answer])) {
-                                    echo Display::span(
-                                        $real_list[$i_answer_correct_answer],
-                                        ['style' => 'color: #008000; font-weight: bold;']
-                                    );
-                                }
+                                    if (isset($real_list[$i_answer_correct_answer])) {
+                                        echo Display::span(
+                                            $real_list[$i_answer_correct_answer],
+                                            ['style' => 'color: #008000; font-weight: bold;']
+                                        );
+                                    }
                                 }
                                 echo '</td>';
                                 echo '</tr>';

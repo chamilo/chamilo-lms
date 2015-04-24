@@ -110,7 +110,7 @@ class ExerciseLib
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
-                $s .= '<table class="table table-hover table-striped">';
+                    $s .= '<table class="table table-hover table-striped">';
                 }
                 // Iterate through answers
                 $x = 1;

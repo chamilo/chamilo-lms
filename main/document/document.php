@@ -345,16 +345,12 @@ switch ($action) {
                 $document_info = DocumentManager::get_document_data_by_id(
                     $document_id,
                     api_get_course_id(),
-                    true,
                     0
                 );
             }
             $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::get_user_picture_path_by_id(
-                api_get_user_id(),
-                'system'
-            );
-            $user_folder = $my_path['dir'].'my_files/';
+            $my_path = UserManager::getUserPathById(api_get_user_id());
+            $user_folder = $my_path.'my_files/';
             $my_path = null;
 
             if (!file_exists($user_folder)) {

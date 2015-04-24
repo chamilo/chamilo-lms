@@ -3188,13 +3188,7 @@ function getWorkComments($work)
     $comments = Database::store_result($result, 'ASSOC');
     if (!empty($comments)) {
         foreach ($comments as &$comment) {
-            $pictureInfo = UserManager::get_picture_user(
-                $comment['user_id'],
-                $comment['picture_uri'],
-                24,
-                USER_IMAGE_SIZE_SMALL
-            );
-            $comment['picture'] = $pictureInfo['file'];
+            $comment['picture'] = UserManager::getUserPicture($comment['user_id']);
             $commentInfo = getWorkComment($comment['id']);
 
             if (!empty($commentInfo)) {

@@ -410,10 +410,10 @@ class UserManager
 
         // Delete user picture
         /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
-        a user has 4 differnt sized photos to be deleted. */
+        a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
-            $img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
+            $img_path = api_get_path(SYS_APP_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
             if (file_exists($img_path))
                 unlink($img_path);
         }
@@ -1175,7 +1175,7 @@ class UserManager
      * @param    string    The id
      * @param    boolean    Whether to return the user's extra fields (defaults to false)
      * @return    array     All user information as an associative array
-     * @todo    Use api_get_user_info() instead
+     * @deprecated Use api_get_user_info() instead
      */
     public static function get_user_info_by_id($user_id, $user_fields = false)
     {
@@ -1191,7 +1191,9 @@ class UserManager
             $resf = Database::query($sqlf);
             if (Database::num_rows($resf) > 0) {
                 while ($rowf = Database::fetch_array($resf)) {
-                    $sqlv = "SELECT * FROM $t_ufv WHERE field_id = ".$rowf['id']." AND user_id = ".$user['user_id']." ORDER BY id DESC";
+                    $sqlv = "SELECT * FROM $t_ufv
+                             WHERE field_id = ".$rowf['id']." AND user_id = ".$user['user_id']."
+                             ORDER BY id DESC";
                     $resv = Database::query($sqlv);
                     if (Database::num_rows($resv) > 0) {
                         //There should be only one value for a field and a user
@@ -1213,93 +1215,194 @@ class UserManager
      * with dirname() or the file with basename(). This also works for the
      * functions dealing with the user's productions, as they are located in
      * the same directory.
-     * @param    integer    User ID
-     * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    deprecated see #7110
-     * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
-     * @return    array     Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
+     * @param   integer   $id User ID
+     * @param   string    $type Type of path to return (can be 'system', 'web')
+     * @param   array $userInfo user information to avoid query the DB
+     * returns the /main/img/unknown.jpg image set it at true
+     *
+     * @return    array     Array of 2 elements: 'dir' and 'file' which contain
+     * the dir and file as the name implies if image does not exist it will
+     * return the unknow image if anonymous parameter is true if not it returns an empty array
      */
-    public static function get_user_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
+    public static function get_user_picture_path_by_id($id, $type = 'web', $userInfo = [])
     {
         switch ($type) {
             case 'system': // Base: absolute system path.
                 $base = api_get_path(SYS_CODE_PATH);
                 break;
-            case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_CODE_PATH);
-                break;
             case 'web': // Base: absolute web path.
+            default:
                 $base = api_get_path(WEB_CODE_PATH);
                 break;
-            case 'none':
-            default: // Base: empty, the result path below will be relative.
-                $base = '';
-        }
-        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
-        $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
-
-        if ((empty($id) || empty($type)) && !$gravatarEnabled) {
-            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
         }
 
-        $user_id = intval($id);
+        $anonymousPath = array(
+            'dir' => $base.'img/',
+            'file' => 'unknown.jpg',
+            'email' => '',
+        );
 
-        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT email, picture_uri FROM $user_table WHERE user_id=".$user_id;
-        $res = Database::query($sql);
-
-        if (!Database::num_rows($res) && !$gravatarEnabled) {
-            return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
+        if ((empty($id) || empty($type))) {
+            return $anonymousPath;
         }
 
-        $user = Database::fetch_array($res);
+        $id = intval($id);
+        if (empty($userInfo)) {
+            $user_table = Database:: get_main_table(TABLE_MAIN_USER);
+            $sql = "SELECT email, picture_uri FROM $user_table
+                    WHERE user_id=".$id;
+            $res = Database::query($sql);
 
-        $picture_filename = trim($user['picture_uri']);
-
-        if (api_get_setting('split_users_upload_directory') === 'true') {
-            $userPath = 'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
-            $systemImagePath = api_get_path(SYS_CODE_PATH).$userPath;
-            $dir = $base.$userPath;
+            if (!Database::num_rows($res)) {
+                return $anonymousPath;
+            }
+            $user = Database::fetch_array($res);
         } else {
-            $userPath = 'upload/users/'.$user_id.'/';
-            $systemImagePath = api_get_path(SYS_CODE_PATH).$userPath;
-            $dir = $base.$userPath;
+            $user = $userInfo;
         }
+
+        $pictureFilename = trim($user['picture_uri']);
+
+        $dir = self::getUserPathById($id, $type);
+
+        return array(
+            'dir' => $dir,
+            'file' => $pictureFilename,
+            'email' => $user['email'],
+        );
+    }
+
+    /**
+     * Get user path from user ID (returns an array).
+     * The return format is a complete path to a folder ending with "/"
+     * @param   integer $id User ID
+     * @param   string  $type Type of path to return (can be 'system', 'web')
+     * @return  string  User folder path (i.e. /var/www/chamilo/main/upload/users/1/1/)
+     */
+    public static function getUserPathById($id, $type)
+    {
+        $id = intval($id);
+        if (!$id) {
+            return null;
+        }
+
+        $userPath = "upload/users/$id/";
+        if (api_get_setting('split_users_upload_directory') === 'true') {
+            $userPath = 'upload/users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+        }
+
+        switch ($type) {
+            case 'system': // Base: absolute system path.
+                $userPath = api_get_path(SYS_APP_PATH).$userPath;
+                break;
+            case 'web': // Base: absolute web path.
+                $userPath = api_get_path(WEB_PATH).'app/'.$userPath;
+                break;
+        }
+
+        return $userPath;
+    }
+
+    /**
+     * Gets the current user image
+     * @param string $user_id
+     * @param string $size it can be USER_IMAGE_SIZE_SMALL,
+     * USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
+     * @param bool $addRandomId
+     * @param array $userInfo to avoid query the DB
+     *
+     * @return string
+     */
+    public static function getUserPicture(
+        $user_id,
+        $size = USER_IMAGE_SIZE_MEDIUM,
+        $addRandomId = true,
+        $userInfo = []
+    ) {
+        $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
+        $pictureWebFile = $imageWebPath['file'];
+        $pictureWebDir = $imageWebPath['dir'];
+
+        switch ($size) {
+            case USER_IMAGE_SIZE_SMALL:
+                $pictureAnonymous = 'unknown_22.jpg';
+                $realSizeName = 'small_';
+                $gravatarSize = 22;
+                break;
+            case USER_IMAGE_SIZE_MEDIUM:
+                $pictureAnonymous = 'unknown_50_50.jpg';
+                $realSizeName = 'medium_';
+                $gravatarSize = 50;
+                break;
+            case USER_IMAGE_SIZE_ORIGINAL:
+                $pictureAnonymous = 'unknown.jpg';
+                $realSizeName = '';
+                $gravatarSize = 108;
+                break;
+            case USER_IMAGE_SIZE_BIG:
+                $pictureAnonymous = 'unknown.jpg';
+                $realSizeName = 'big_';
+                $gravatarSize = 200;
+                break;
+        }
+
+        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
 
         if ($gravatarEnabled) {
-            $avatarSize = api_getimagesize($noPicturePath['dir'].$noPicturePath['file']);
-            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                $avatarSize['width'] :
-                $avatarSize['height'];
-            return array(
-                'dir' => '',
-                'file' => self::getGravatar(
-                    $user['email'],
-                    $avatarSize,
-                    api_get_configuration_value('gravatar_type')
-                )
+            $file = self::getGravatar(
+                $imageWebPath['email'],
+                $gravatarSize,
+                api_get_configuration_value('gravatar_type')
             );
+
+            if ($addRandomId) {
+                $file .= '&rand='.uniqid();
+            }
+            return $file;
+        }
+        $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
+
+        if ($pictureWebFile == 'unknown.jpg') {
+
+            return $anonymousPath;
         }
 
-        if (empty($picture_filename) && $anonymous) {
-            return $noPicturePath;
+        $pictureSysPath = self::get_user_picture_path_by_id($user_id, 'system');
+
+        $file = $pictureSysPath['dir'].$realSizeName.$pictureWebFile;
+        $picture = '';
+        if (file_exists($file)) {
+            $picture = $pictureWebDir.$realSizeName.$pictureWebFile;
+        } else {
+            $file = $pictureSysPath['dir'].$pictureWebFile;
+            if (file_exists($file) && !is_dir($file)) {
+                $picture = $pictureWebFile['dir'].$pictureWebFile;
+            }
         }
 
-        return array('dir' => $dir, 'file' => $picture_filename);
+        if (empty($picture)) {
+            return $anonymousPath;
+        }
+
+        if ($addRandomId) {
+            $picture .= '?rand='.uniqid();
+        }
+
+        return $picture;
     }
 
     /**
      * Creates new user photos in various sizes of a user, or deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
-     * @param     int $user_id        The user internal identification number.
-     * @param     string $file        The common file name for the newly created photos.
-     *                                 It will be checked and modified for compatibility with the file system.
-     *                                 If full name is provided, path component is ignored.
-     *                                 If an empty name is provided, then old user photos are deleted only,
+     * @param   int $user_id The user internal identification number.
+     * @param   string $file The common file name for the newly created photos.
+     *                       It will be checked and modified for compatibility with the file system.
+     *                       If full name is provided, path component is ignored.
+     *                       If an empty name is provided, then old user photos are deleted only,
      * @see     UserManager::delete_user_picture() as the prefered way for deletion.
-     * @param     string $source_file    The full system name of the image from which user photos will be created.
-     * @return     string/bool            Returns the resulting common file name of created images which usually should be stored in database.
-     * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
+     * @param   string $source_file The full system name of the image from which user photos will be created.
+     * @return  string/bool Returns the resulting common file name of created images which usually should be stored in database.
+     * When deletion is requested returns empty string. In case of internal error or negative validation returns FALSE.
      */
     public static function update_user_picture($user_id, $file = null, $source_file = null)
     {
@@ -1312,11 +1415,12 @@ class UserManager
         }
 
         // User-reserved directory where photos have to be placed.
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
+
         $path = $path_info['dir'];
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
-            @mkdir($path, api_get_permissions_for_new_directories(), true);
+            mkdir($path, api_get_permissions_for_new_directories(), true);
         }
 
         // The old photos (if any).
@@ -1358,7 +1462,7 @@ class UserManager
             $filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
             $filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
         } else {
-            $filename = replace_dangerous_char($filename);
+            $filename = api_replace_dangerous_char($filename);
             if (PREFIX_IMAGE_FILENAME_WITH_UID) {
                 $filename = uniqid('').'_'.$filename;
             }
@@ -1406,7 +1510,7 @@ class UserManager
         }
 
         // User-reserved directory where extra file have to be placed.
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
         $path = $path_info['dir'];
         if (!empty($extra_field)) {
             $path .= $extra_field . '/';
@@ -1450,7 +1554,7 @@ class UserManager
      * productions on the filesystem before the removal request has been carried
      * out because they'll have to be re-read afterwards anyway.
      *
-     * @param    $user_id    User id
+     * @param    int $user_id    User id
      * @param    $force    Optional parameter to force building after a removal request
      * @return    A string containing the XHTML code to dipslay the production list, or FALSE
      */
@@ -1489,7 +1593,7 @@ class UserManager
      * Returns an array with the user's productions.
      *
      * @param    $user_id    User id
-     * @return    An array containing the user's productions
+     * @return   array  An array containing the user's productions
      */
     public static function get_user_productions($user_id)
     {
@@ -1847,7 +1951,7 @@ class UserManager
             return false;
         }
 
-        $path_info = self::get_user_picture_path_by_id($user_id, 'web', true);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'web');
         $path = $path_info['dir'];
         $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
         $del_text = get_lang('Delete');
@@ -1879,7 +1983,7 @@ class UserManager
         if (!$full_path) {
             // Nothing to do
         } else {
-            $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+            $path_info = self::get_user_picture_path_by_id($user_id, 'system');
             $path = $path_info['dir'];
         }
         $extra_data = self::get_extra_user_data_by_field($user_id, $extra_field);
@@ -1914,7 +2018,7 @@ class UserManager
     public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
     {
         $extra_file = Security::filter_filename($extra_file);
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
         if (strpos($extra_file, $extra_field) !== false) {
             $path_extra_file = $path_info['dir'].$extra_file;
         } else {
@@ -3239,97 +3343,7 @@ class UserManager
         return $temp;
     }
 
-    /**
-     * Gets the current user image
-     * @param string user id
-     * @param string picture user name
-     * @param string height
-     * @param string picture size it can be USER_IMAGE_SIZE_SMALL,  USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
-     * @param string style css
-     * @return array with the file and the style of an image i.e $array['file'] $array['style']
-     */
-    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM, $style = '')
-    {
-        $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
-        $picture = array();
-        $picture['style'] = $style;
-        if ($picture_file == 'unknown.jpg') {
-            switch ($size_picture) {
-                case USER_IMAGE_SIZE_ORIGINAL :
-                case USER_IMAGE_SIZE_BIG :
-                case USER_IMAGE_SIZE_MEDIUM :
-                    $picture_file = 'unknown.jpg';
-                    break;
-                case USER_IMAGE_SIZE_SMALL:
-                    $picture_file = 'unknown_22.jpg';
-                    break;
-            }
-            $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
-            if (!$gravatarEnabled) {
-                return $picture;
-            }
-        }
 
-        switch ($size_picture) {
-            case USER_IMAGE_SIZE_ORIGINAL :
-                $size_picture = '';
-                break;
-            case USER_IMAGE_SIZE_BIG :
-                $size_picture = 'big_';
-                break;
-            case USER_IMAGE_SIZE_MEDIUM :
-                $size_picture = 'medium_';
-                break;
-            case USER_IMAGE_SIZE_SMALL :
-                $size_picture = 'small_';
-                break;
-            default:
-                $size_picture = 'medium_';
-        }
-
-        $image_array_sys = self::get_user_picture_path_by_id($user_id, 'system', false, true);
-        $image_array = self::get_user_picture_path_by_id($user_id, 'web', false, true);
-
-        $file = $image_array_sys['dir'].$size_picture.$picture_file;
-
-        if (file_exists($file)) {
-            $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
-            $picture['style'] = '';
-            if ($height > 0) {
-                $dimension = api_getimagesize($picture['file']);
-                $margin = (($height - $dimension['width']) / 2);
-
-                //@ todo the padding-top should not be here
-                $picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].'px;" ';
-                $picture['original_height'] = $dimension['width'];
-                $picture['original_width'] = $dimension['height'];
-            }
-        } else {
-            $file = $image_array_sys['dir'].$picture_file;
-            if (file_exists($file) && !is_dir($file)) {
-                $picture['file'] = $image_array['dir'].$picture_file;
-            } else {
-                switch ($size_picture) {
-                    case 'big_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-                        break;
-                    case 'medium_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_50_50.jpg';
-                        break;
-                    case 'small_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-                        break;
-                    default:
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-                        break;
-                }
-            }
-        }
-        if ($gravatarEnabled) {
-            $picture['file'] = $image_array['file'];
-        }
-        return $picture;
-    }
 
     /**
      * @author Isaac flores <isaac.flores@dokeos.com>
@@ -5287,7 +5301,14 @@ EOF;
      * @return String containing either just a URL or a complete image tag
      * @source http://gravatar.com/site/implement/images/php/
      */
-    public static function getGravatar( $email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array() ) {
+    private static function getGravatar(
+        $email,
+        $s = 80,
+        $d = 'mm',
+        $r = 'g',
+        $img = false,
+        $atts = array()
+    ) {
         $url = 'http://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&d=$d&r=$r";
@@ -5300,40 +5321,13 @@ EOF;
         return $url;
     }
 
-    /**
-     * Get user path from user ID (returns an array).
-     * The return format is a complete path to a folder ending with "/"
-     * @param   integer User ID
-     * @param   string  Optional. Type of path to return (can be 'system', 'rel', 'web')
-     * @return  string  User folder path (i.e. /var/www/chamilo/main/upload/users/1/1/)
-     */
-    public static function getUserPathById($id, $type = null)
-    {
-        $user_id = intval($id);
-        if (!$user_id) {
-            return null;
-        }
-        $userPath = "upload/users/$user_id/";
-        if (api_get_setting('split_users_upload_directory') === 'true') {
-            $userPath = 'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
-        }
-        switch ($type) {
-            case 'system': // Base: absolute system path.
-                $userPath = api_get_path(SYS_CODE_PATH).$userPath;
-                break;
-            case 'rel': // Base: semi-absolute web path (no server base).
-                $userPath = api_get_path(REL_CODE_PATH).$userPath;
-                break;
-            case 'web': // Base: absolute web path.
-                $userPath = api_get_path(WEB_CODE_PATH).$userPath;
-                break;
-        }
-        return $userPath;
-    }
+
 
     /**
      * Displays the name of the user and makes the link to the user profile
-     * @param $userInfo
+     * @param array $userInfo
+     *
+     * @return string
      */
     public static function getUserProfileLink($userInfo)
     {
@@ -5346,14 +5340,13 @@ EOF;
 
     /**
      * Displays the name of the user and makes the link to the user profile
+     *
      * @param $userInfo
-     * @todo
+     *
+     * @return string
      */
     public static function getUserProfileLinkWithPicture($userInfo)
     {
-        $imagePath = UserManager::get_user_picture_path_by_id($userInfo['user_id'], 'web', false, true);
-        $userProfile = UserManager::get_picture_user($userInfo['user_id'], $imagePath['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-
-        return Display::url(Display::img($userProfile['file']), $userInfo['profile_url']);
+        return Display::url(Display::img($userInfo['avatar']), $userInfo['profile_url']);
     }
 }

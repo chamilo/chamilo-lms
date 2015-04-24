@@ -627,7 +627,7 @@ if ($show_full_profile) {
     $count_pending_invitations = 0;
     if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
         $pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-        $list_get_path_web     = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+        $list_get_path_web = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
         $count_pending_invitations = count($pending_invitations);
     }
 

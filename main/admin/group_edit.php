@@ -120,7 +120,7 @@ if ( $form->validate()) {
 Display::display_header($tool_name);
 
 // Group picture
-$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
+$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id, 'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');

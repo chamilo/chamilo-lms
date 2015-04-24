@@ -23,5 +23,11 @@ if (php_sapi_name()!='cli') {
 $client = new nusoap_client(api_get_path(WEB_CODE_PATH).'cron/user_import/service.php');
 
 // call import_user method
-$response = $client->call('import_users', array('filepath'	=> api_get_path(SYS_CODE_PATH)."upload/users_import.csv", 'security_key'=>$_configuration['security_key']));
+$response = $client->call(
+    'import_users',
+    array(
+        'filepath' => api_get_path(SYS_APP_PATH)."upload/users_import.csv",
+        'security_key' => $_configuration['security_key'],
+    )
+);
 echo $response;

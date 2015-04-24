@@ -615,6 +615,8 @@ class Attendance
 		foreach ($a_course_users as $key => $user_data) {
 			$value = array();
 			$uid = $user_data['user_id'];
+			$userInfo = api_get_user_info($uid);
+
 			$status = $user_data['status'];
 
 			if (!empty($groupId)) {
@@ -654,16 +656,7 @@ class Attendance
 				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
 
-			// user's picture
-			$image_path = UserManager::get_user_picture_path_by_id($uid, 'web', false);
-			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-
-			if (!empty($image_path['file'])) {
-				$photo = '<center><a class="ajax" href="'.$image_path['dir'].$image_path['file'].'"  >
-						  <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
-			} else {
-				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
-			}
+			$photo = '<img src ="'.$userInfo['avatar_small'].'" />';
 
 			$value['photo'] = $photo;
 			$value['firstname'] = $user_data['firstname'];

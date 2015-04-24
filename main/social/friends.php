@@ -117,9 +117,9 @@ if (count($friends) == 0) {
                 $friend_html.='<li class="span2">';
                 $friend = $friends[$j];
                 $user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
-                $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
+				$userPicture = UserManager::getUserPicture($friend['friend_user_id']);
                 $friend_html.='<div class="thumbnail" onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-                $friend_html.='<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" />                                    ';
+                $friend_html.='<img src="'.$userPicture.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" />                                    ';
                 $friend_html.='<div class="caption">
                                <a href="profile.php?u='.$friend['friend_user_id'].'"> <h5>'.$user_name.'</h5></a>';
                 $friend_html.='<p><button onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'  />'.get_lang('Delete').'</button></p>

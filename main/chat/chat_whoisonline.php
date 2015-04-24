@@ -127,18 +127,7 @@ if (!empty($course)) {
 					} else {
 						$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
 					}
-				    $userImage = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-                    if (substr($userImage['file'],0,7) != 'unknown') {
-				        $fileUrl = $userImage['dir'].'medium_'.$userImage['file'];
-                    } else {
-				        $fileUrl = $userImage['dir'].$userImage['file'];
-                    }
-
-                    if (api_get_configuration_value('gravatar_enabled')) {
-                        $fileUrl = $userImage['file'];
-                    }
-
-				    $email = $user['email'];
+					$fileUrl = Usermanager::getUserPicture($user['user_id'], USER_IMAGE_SIZE_MEDIUM);
 				    $url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
 			?>
 			<li class="list-group-item">

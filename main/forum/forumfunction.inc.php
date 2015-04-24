@@ -3182,10 +3182,8 @@ function display_user_image($user_id, $name, $origin = '')
     $userInfo = api_get_user_info($user_id);
     $link = '<a href="'.$userInfo['profile_url'].'" '.(!empty($origin) ? 'target="_self"' : '').'>';
     if ($user_id != 0) {
-        $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-        $friends_profile = UserManager::get_picture_user($user_id, $image_path['file'], 0, USER_IMAGE_SIZE_MEDIUM, 'width="96" height="96" ');
 
-        return $link.'<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' alt="'.$name.'"  title="'.$name.'" /></a>';
+        return $link.'<img src="'.$userInfo['avatar'].'"  alt="'.$name.'"  title="'.$name.'" /></a>';
     } else {
         return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'" /></a>';
     }

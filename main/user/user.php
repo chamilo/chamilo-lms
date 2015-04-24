@@ -692,30 +692,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
             $temp = array();
             if (api_is_allowed_to_edit(null, true)) {
-                $temp[] = $user_id;
-                $image_path = UserManager::get_user_picture_path_by_id(
-                    $user_id,
-                    'web',
-                    false,
-                    true
-                );
-                $user_profile = UserManager::get_picture_user(
-                    $user_id,
-                    $image_path['file'],
-                    22,
-                    USER_IMAGE_SIZE_SMALL,
-                    ' width="22" height="22" '
-                );
-                $userInfo = api_get_user_info($user_id);
-                if (!api_is_anonymous()) {
-                    $photo = Display::url(
-                        '<img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />',
-                        $userInfo['profile_url']
-                    );
-                } else {
-                    $photo = '<img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />';
-                }
 
+                $userInfo = api_get_user_info($user_id);
+                $photo = '<img src="'.$userInfo['avatar_small'].'" alt="'.$userInfo['complete_name'].'" title="'.$userInfo['complete_name'].'" />';
+
+                $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];
 
@@ -763,15 +744,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $temp['is_tutor'] = isset($o_course_user['is_tutor']) ? $o_course_user['is_tutor'] : '';
                 $temp['user_status_in_course'] = isset($o_course_user['status_rel']) ? $o_course_user['status_rel'] : '';
             } else {
-                $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-                $image_repository = $image_path['dir'];
-                $existing_image = $image_path['file'];
                 $userInfo = api_get_user_info($user_id);
-                if (!api_is_anonymous()) {
-                    $photo = UserManager::getUserProfileLinkWithPicture($userInfo);
-                } else {
-                    $photo= '<img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  width="22" height="22" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" />';
-                }
+                $userPicture = $userInfo['avatar'];
+
+                $photo= '<img src="'.$userPicture.'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
+
                 $temp[] = $user_id;
                 $temp[] = $photo;
                 $temp[] = $o_course_user['official_code'];

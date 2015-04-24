@@ -422,14 +422,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$users = array ();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
-		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
-		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'">
-                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
-		} else {
-			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
-		}
+		$userPicture = UserManager::getUserPicture($user[0], USER_IMAGE_SIZE_SMALL);
+		$photo = '<img src="'.$userPicture.'" width="22" height="22" alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" />';
+
         if ($user[7] == 1 && !empty($user[10])) {
             // check expiration date
             $expiration_time = convert_sql_date($user[10]);

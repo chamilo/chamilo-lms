@@ -126,14 +126,13 @@ class SocialManager extends UserManager
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
-                $path = UserManager::get_user_picture_path_by_id($row['friend_user_id'], 'web', false, true);
                 $my_user_info = api_get_user_info($row['friend_user_id']);
                 $list_ids_friends[] = array(
                     'friend_user_id' => $row['friend_user_id'],
                     'firstName' => $my_user_info['firstName'],
                     'lastName' => $my_user_info['lastName'],
                     'username' => $my_user_info['username'],
-                    'image' => $path['file']
+                    'image' => $my_user_info['avatar']
                 );
             } else {
                 $list_ids_friends[] = $row;
@@ -144,55 +143,25 @@ class SocialManager extends UserManager
     }
 
     /**
-     * get list web path of contacts by user id
-     * @param int user id
-     * @param int group id
-     * @param string name to search
-     * @param array
-     * @author isaac flores paz
-     */
-    public static function get_list_path_web_by_user_id($user_id, $id_group = null, $search_name = null)
-    {
-        $combine_friend = array();
-        $list_ids = self::get_friends($user_id, $id_group, $search_name);
-        if (is_array($list_ids)) {
-            foreach ($list_ids as $values_ids) {
-                $list_path_image_friend[] = UserManager::get_user_picture_path_by_id(
-                    $values_ids['friend_user_id'],
-                    'web',
-                    false,
-                    true
-                );
-                $combine_friend = array(
-                    'id_friend' => $list_ids,
-                    'path_friend' => $list_path_image_friend
-                );
-            }
-        }
-
-        return $combine_friend;
-    }
-
-    /**
      * get web path of user invitate
      * @author isaac flores paz
      * @author Julio Montoya setting variable array
      * @param int user id
+     *
      * @return array
      */
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
-        $list_ids = self::get_list_invitation_of_friends_by_user_id((int) $user_id);
-        $list_path_image_friend = array();
+        $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
+        $list = array();
         foreach ($list_ids as $values_ids) {
-            $list_path_image_friend[] = UserManager::get_user_picture_path_by_id(
+            $list[] = UserManager::get_user_picture_path_by_id(
                 $values_ids['user_sender_id'],
-                'web',
-                false,
-                true
+                'web'
             );
         }
-        return $list_path_image_friend;
+
+        return $list;
     }
 
     /**
@@ -219,20 +188,19 @@ class SocialManager extends UserManager
 
         $now = api_get_utc_datetime();
 
-        $sql_exist = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
-                      WHERE
-                        user_sender_id='.$user_id.' AND
-                        user_receiver_id='.$friend_id.' AND
-                        msg_status IN(5,6,7);
-                    ';
-
-        $res_exist = Database::query($sql_exist);
+        $sql = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id='.$user_id.' AND
+                    user_receiver_id='.$friend_id.' AND
+                    msg_status IN(5,6,7);
+                ';
+        $res_exist = Database::query($sql);
         $row_exist = Database::fetch_array($res_exist, 'ASSOC');
 
         if ($row_exist['count'] == 0) {
 
-            $sql = ' INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content)
-                   VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$now.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
+            $sql = 'INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content)
+                    VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$now.'","'.$clean_message_title.'","'.$clean_message_content.'") ';
             Database::query($sql);
 
             $sender_info = api_get_user_info($user_id);
@@ -247,7 +215,7 @@ class SocialManager extends UserManager
 
             return true;
         } else {
-            //invitation already exist
+            // invitation already exist
             $sql_if_exist = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
                              WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
             $res_if_exist = Database::query($sql_if_exist);
@@ -278,6 +246,7 @@ class SocialManager extends UserManager
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
+
         return $row['count_message_in_box'];
     }
 
@@ -285,21 +254,22 @@ class SocialManager extends UserManager
      * Get invitation list received by user
      * @author isaac flores paz
      * @param int user id
-     * @return array()
+     * @return array
      */
     public static function get_list_invitation_of_friends_by_user_id($user_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT user_sender_id,send_date,title,content
+        $sql = 'SELECT user_sender_id, send_date, title, content
                 FROM '.$tbl_message.'
                 WHERE
-                    user_receiver_id='.intval($user_id).' AND
+                    user_receiver_id = '.intval($user_id).' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $list_friend_invitation = array();
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[] = $row;
         }
+
         return $list_friend_invitation;
     }
 
@@ -641,23 +611,10 @@ class SocialManager extends UserManager
                     get_lang('EditGroup').'</a></div>';
             }
         } else {
-            $img_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true, true);
-            $big_image = UserManager::get_picture_user($user_id, $img_array['file'], '', USER_IMAGE_SIZE_BIG);
+            $big_image = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
+            $normal_image = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);
 
-            $big_image = $big_image['file'];
-            $normal_image = $img_array['dir'].$img_array['file'];
-            if (!api_get_configuration_value('gravatar_enabled')) {
-                $big_image .= '?'.uniqid();
-                $normal_image .= '?'.uniqid();
-            }
-
-            //--- User image
-            if ($img_array['file'] != 'unknown.jpg') {
-                $html .= '<a class="expand-image" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
-            } else {
-                $html .= '<img src='.$normal_image.' width="110px" />';
-            }
-
+            $html .= '<a class="expand-image" href="'.$big_image.'"><img class="img-responsive" src='.$normal_image.' /> </a>';
         }
         $html .= '</div>';
 
@@ -933,6 +890,8 @@ class SocialManager extends UserManager
 
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid);
+            $name = $user_info['complete_name'];
+
             // Anonymous users can't have access to the profile
             if (!api_is_anonymous()) {
                 if (api_get_setting('allow_social_tool') == 'true') {
@@ -943,21 +902,12 @@ class SocialManager extends UserManager
             } else {
                 $url = '#';
             }
-            $image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 
-            // reduce image
-            $name = $user_info['complete_name'];
-            $status_icon = Display::span('', array('class' => 'online_user_in_text'));
             $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
+            $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+            $userPicture = $user_info['avatar'];
 
-            $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
-            if (($image_array['file'] == 'unknown.jpg'
-                || !file_exists($image_array['dir'].$image_array['file'])) &&
-                !api_get_configuration_value('gravatar_enabled')) {
-                $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-
-            }
-            $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+            $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$userPicture.'">';
             $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a>';
 
             $html .= '<div class="col-md-4">
@@ -993,6 +943,7 @@ class SocialManager extends UserManager
     {
         global $interbreadcrumb;
         $safe_user_id = intval($user_id);
+        $currentUserId = api_get_user_id();
 
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT * FROM $user_table WHERE user_id = ".$safe_user_id;
@@ -1000,38 +951,16 @@ class SocialManager extends UserManager
         $html = null;
         if (Database::num_rows($result) == 1) {
             $user_object = Database::fetch_object($result);
-            $alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+            $userInfo = api_get_user_info($user_id);
+            $alt = $userInfo['complete_name'].($currentUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
             $status = get_status_from_code($user_object->status);
             $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
 
             $html .= '<div class ="thumbnail">';
+            $fullurl = $userInfo['avatar'];
 
-            $sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
-            $sysdir = $sysdir_array['dir'];
-            $webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
-            if (strlen(trim($user_object->picture_uri)) > 0) {
-                $webdir = $webdir_array['dir'];
-                $fullurl = $webdir;
-                $fullurl .= api_get_configuration_value('gravatar_enabled') ?
-                    $webdir_array['file'] :
-                    $user_object->picture_uri;
-                $system_image_path = $sysdir.$user_object->picture_uri;
-                list($width, $height, $type, $attr) = @getimagesize($system_image_path);
-                $height += 30;
-                $width += 30;
-                // get the path,width and height from original picture
-                $big_image = $webdir.'big_'.$user_object->picture_uri;
-                $big_image_size = api_getimagesize($big_image);
-                $big_image_width = $big_image_size['width'];
-                $big_image_height = $big_image_size['height'];
-                $url_big_image = $big_image.'?rnd='.time();
-                //echo '<a href="javascript:void()" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');" >';
-                $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
-            } else {
-                $html .= api_get_configuration_value('gravatar_enabled') ?
-                    '<img src="'.$webdir_array['file'].'" alt="'.$alt.'" />' :
-                    Display::return_icon('unknown.jpg', get_lang('Unknown'));
-            }
+            $html .= '<img src="'.$fullurl.'" alt="'.$alt.'" />';
+
             if (!empty($status)) {
                 $html .= '<div class="caption">'.$status.'</div>';
             }
@@ -1073,7 +1002,7 @@ class SocialManager extends UserManager
      */
     public static function display_productions($user_id)
     {
-        $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
+        $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
         $sysdir = UserManager::getUserPathById($user_id, 'system');
         $webdir = UserManager::getUserPathById($user_id, 'web');
 
@@ -1355,6 +1284,7 @@ class SocialManager extends UserManager
                 class="pull-right btn btn-default" /><i class="fa fa-pencil"></i> '.get_lang('Post').'</button>
                 </form>';
         $formattedList .= '</div>';
+
         return $formattedList;
     }
 
@@ -1377,7 +1307,6 @@ class SocialManager extends UserManager
         $users = array();
         $data = array();
         foreach ($messages as $key => $message) {
-            $date = api_get_local_time($message['send_date']);
             $userIdLoop = $message['user_sender_id'];
             $userFriendIdLoop = $message['user_receiver_id'];
 
@@ -1414,7 +1343,7 @@ class SocialManager extends UserManager
      * @param   boolean $isOwnWall  Determines if the author is in its own social wall or not
      * @return  string  $html       The formatted header message post
      */
-    private  static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
+    private static function headerMessagePost($authorId, $receiverId, $users, $message, $isOwnWall = false)
     {
         $date = api_get_local_time($message['send_date']);
         $avatarAuthor = $users[$authorId]['avatar'];
@@ -1423,8 +1352,7 @@ class SocialManager extends UserManager
             $users[$authorId]['firstname'],
             $users[$authorId]['lastname']
         );
-        // Deprecated since 2014-10-29
-        //$avatarReceiver = $users[$receiverId]['avatar'];
+
         $urlReceiver = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$receiverId;
         $nameCompleteReceiver = api_get_person_name(
             $users[$receiverId]['firstname'],
@@ -1438,14 +1366,9 @@ class SocialManager extends UserManager
 
         $wallImage = '';
         if (!empty($message['path'])) {
-            $pathUserInfo = UserManager::get_user_picture_path_by_id($authorId, 'web', true);
-            $imageBig = $pathUserInfo['file'];
-            $imageSmall = $pathUserInfo['file'];
-            if (!api_get_configuration_value('gravatar_enabled')) {
-                $pathImg = UserManager::getUserPathById($authorId, 'web').'message_attachments';
-                $imageBig = $pathImg .self::getImagePath($message['path'], IMAGE_WALL_BIG);
-                $imageSmall =  $pathImg. self::getImagePath($message['path'], IMAGE_WALL_SMALL);
-            }
+            $imageBig = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_BIG);
+            $imageSmall = UserManager::getUserPicture($authorId, USER_IMAGE_SIZE_SMALL);
+
             $wallImage = '<a class="thumbnail ajax" href="'.$imageBig.'"><img src="'.$imageSmall.'"></a>';
         }
 
@@ -1628,7 +1551,7 @@ class SocialManager extends UserManager
 
                 if (isset($friends[$k])) {
                     $friend = $friends[$k];
-                    $name_user    = api_get_person_name($friend['firstName'], $friend['lastName']);
+                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
                     if ($user_info_friend['user_is_online']) {
@@ -1639,8 +1562,8 @@ class SocialManager extends UserManager
 
                     $friendHtml.= '<li class="">';
                     // the height = 92 must be the same in the image_friend_network span style in default.css
-                    $friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 20, USER_IMAGE_SIZE_SMALL);
-                    $friendHtml.= '<img src="'.$friends_profile['file'].'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
+                    $friends_profile = UserManager::getUserPicture($friend['friend_user_id'], USER_IMAGE_SIZE_SMALL);
+                    $friendHtml.= '<img src="'.$friends_profile.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
                     $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
                     $friendHtml.= $statusIcon .'<a href="profile.php?' .'u=' . $friend['friend_user_id'] . $link_shared . '">' . $name_user .'</a>';
                     $friendHtml.= '</li>';

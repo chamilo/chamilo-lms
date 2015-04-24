@@ -342,7 +342,6 @@ $(function() {
                 var text = $(this).val();
                 var name = $(this).attr('name');
                 $(this).after(this.outerHTML).remove();
-                //var has_string = $(name).find(":contains('[')");
                 $('input[name=' + name + ']').val(text);
             });
         });

@@ -900,7 +900,7 @@ function display_requirements(
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/users/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/users/').'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/users/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/sessions/</td>

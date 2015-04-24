@@ -396,18 +396,8 @@ if ($group_id != 0) {
                     } else {
                         $icon = '';
                     }
-                    $image_path = UserManager::get_user_picture_path_by_id(
-                        $member['user_id'],
-                        'web',
-                        false,
-                        true
-                    );
-                    $picture = UserManager::get_picture_user(
-                        $member['user_id'],
-                        $image_path['file'],
-                        60,
-                        USER_IMAGE_SIZE_MEDIUM
-                    );
+
+                    $userPicture = UserManager::getUserPicture($member['user_id']);
 
                     $member_content .= '<div class="">';
                     $member_name = Display::url(
@@ -418,7 +408,7 @@ if ($group_id != 0) {
                         'profile.php?u=' . $member['user_id']
                     );
                     $member_content .= Display::div(
-                        '<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="' . $picture['file'] . '"/>&nbsp' . $member_name
+                        '<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="' . $userPicture . '"/>&nbsp' . $member_name
                     );
                     $member_content .= '</div>';
 

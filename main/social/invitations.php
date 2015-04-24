@@ -87,23 +87,28 @@ if (is_array($_GET) && count($_GET)>0) {
         }
     }
 }
-//Block Avatar Social
-$userInfo    = UserManager::get_user_info_by_id($user_id);
-//Block Menu Social
+
+// Block Menu Social
 $social_menu_block = SocialManager::show_social_menu('invitations');
-//Block Invitations
+// Block Invitations
 $socialInvitationsBlock = '<div id="id_response" align="center"></div>';
 
 $user_id = api_get_user_id();
-$list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
-$list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
-$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
-$number_loop                = count($list_get_invitation);
+$list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
+$list_get_invitation_sent = SocialManager::get_list_invitation_sent_by_user_id($user_id);
+$pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
+$number_loop = count($list_get_invitation);
 
 $total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 
 if ($total_invitations == 0 && count($_GET) <= 0) {
-    $socialInvitationsBlock .= '<div class="row"><div class="col-md-12"><a class="btn btn-default" href="search.php">'.get_lang('TryAndFindSomeFriends').'</a></div></div>';
+    $socialInvitationsBlock .= '<div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-default" href="search.php">'.
+                get_lang('TryAndFindSomeFriends').'
+            </a>
+            </div>
+        </div>';
 }
 
 if ($number_loop != 0) {
@@ -113,21 +118,21 @@ if ($number_loop != 0) {
 
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
+        $user_info = api_get_user_info($sender_user_id);
+        $userPicture = $user_info['avatar'];
         $socialInvitationsBlock .= '<div id="id_'.$sender_user_id.'" class="well">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
-        $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
-        $user_info	= api_get_user_info($sender_user_id);
-        $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);
-        $content 	= Security::remove_XSS($invitation['content'], STUDENT, true);
-        $date		= api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
+
+        $title = Security::remove_XSS($invitation['title'], STUDENT, true);
+        $content = Security::remove_XSS($invitation['content'], STUDENT, true);
+        $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $socialInvitationsBlock .= '<div class="row">';
         $socialInvitationsBlock .= '<div class="col-md-2">';
-        $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$friends_profile['file'].'"/></a>';
+        $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$userPicture.'"/></a>';
         $socialInvitationsBlock .= '</div>';
         $socialInvitationsBlock .= '<div class="col-md-10">';
         $socialInvitationsBlock .= '<h4 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
-                                    '.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>:
+                                    '.$user_info['complete_name'].'</a>:
                                     </h4>';
         $socialInvitationsBlock .= '<div class="content-invitation">'.$content.'</div>';
         $socialInvitationsBlock .= '<div class="date-invitation">'.get_lang('DateSend').' : '.$date.'</div>';
@@ -150,23 +155,20 @@ if (count($list_get_invitation_sent) > 0) {
     $socialInvitationsBlock .= '<div class="panel-body">';
     foreach ($list_get_invitation_sent as $invitation) {
         $sender_user_id = $invitation['user_receiver_id'];
+        $user_info = api_get_user_info($sender_user_id);
 
         $socialInvitationsBlock .= '<div id="id_'.$sender_user_id.'" class="well">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
-        $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
-        $user_info	= api_get_user_info($sender_user_id);
-
-        $title      = Security::remove_XSS($invitation['title'], STUDENT, true);
-        $content    = Security::remove_XSS($invitation['content'], STUDENT, true);
-        $date       = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
+        $title = Security::remove_XSS($invitation['title'], STUDENT, true);
+        $content = Security::remove_XSS($invitation['content'], STUDENT, true);
+        $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
 
         $socialInvitationsBlock .= '<div class="row">';
         $socialInvitationsBlock .= '<div class="col-md-2">';
-        $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$friends_profile['file'].'"  /></a>';
+        $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$user_info['avatar'].'"  /></a>';
         $socialInvitationsBlock .= '</div>';
         $socialInvitationsBlock .= '<div class="col-md-10">';
-        $socialInvitationsBlock .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a></h4>';
+        $socialInvitationsBlock .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
         $socialInvitationsBlock .= '<div class="content-invitation">'.$title.' : '.$content.'</div>';
         $socialInvitationsBlock .= '<div class="date-invitation">'. get_lang('DateSend').' : '.$date.'</div>';
         $socialInvitationsBlock .= '</div>';

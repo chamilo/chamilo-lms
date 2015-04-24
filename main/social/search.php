@@ -74,10 +74,9 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
         $results .= '<div class="row">';
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
-
-            $send_inv      = '<button class="'.$buttonClass.' disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button>';
+            $send_inv = '<button class="'.$buttonClass.' disabled "><i class="fa fa-user"></i> '.get_lang('SendInvitation').'</button>';
             $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user['user_id']));
-            $user_info     = api_get_user_info($user['user_id'], true);
+            $user_info = api_get_user_info($user['user_id'], true);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'];
 
             // Show send invitation icon if they are not friends yet
@@ -87,18 +86,8 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             }
             $send_msg = '<a href="#" class="btn-to-send-message '.$buttonClass.'" data-send-to="' . $user['user_id'] . '">
                         <i class="fa fa-envelope"></i> '.get_lang('SendMessage').'</a>';
-            if (empty($user['picture_uri'])) {
-                $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-                $img = '<img src="'.$picture['file'].'">';
-            } else {
-                $picture = UserManager::get_picture_user(
-                    $user['user_id'],
-                    $user['picture_uri'],
-                    50,
-                    USER_IMAGE_SIZE_ORIGINAL
-                );
-                $img = '<img src="'.$picture['file'].'" width="100" height="100">';
-            }
+
+            $img = '<img src="'.$user_info['avatar'].'" width="100" height="100">';
 
             if ($user_info['user_is_online']) {
                 $status_icon = Display::span('', array('class' => 'online_user_in_text'));
@@ -152,20 +141,20 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
         $social_right_content .= '<ul class="thumbnails">';
         foreach ($groups as $group) {
-            $group['name']         = Security::remove_XSS($group['name'], STUDENT, true);
-            $group['description']  = Security::remove_XSS($group['description'], STUDENT, true);
-            $id                    = $group['id'];
-            $url_open              = '<a href="groups.php?id='.$id.'">';
-            $url_close             = '</a>';
-            $name                  = cut($group['name'], 60, true);
-            $count_users_group     = count(GroupPortalManager::get_all_users_by_group($id));
+            $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
+            $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
+            $id = $group['id'];
+            $url_open = '<a href="groups.php?id='.$id.'">';
+            $url_close = '</a>';
+            $name = cut($group['name'], 60, true);
+            $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
             if ($count_users_group == 1) {
                 $count_users_group = $count_users_group.' '.get_lang('Member');
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            $picture              = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], 80);
-            $tags                 = GroupPortalManager::get_group_tags($group['id']);
+            $picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], 80);
+            $tags = GroupPortalManager::get_group_tags($group['id']);
             $group['picture_uri'] = '<img src="'.$picture['file'].'" width="50" />';
 
 

@@ -1,14 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script manages the display of forum threads in flat view
  * @copyright Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  * @package chamilo.forum
  */
+
 //delete attachment file
-if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
+if ((isset($_GET['action']) &&
+    $_GET['action']=='delete_attach') &&
+    isset($_GET['id_attach'])
+) {
     delete_attachment(0,$_GET['id_attach']);
 }
+
 if (isset($current_thread['thread_id'])) {
     $rows = get_posts($current_thread['thread_id']);
     $increment = 0;
@@ -21,13 +27,13 @@ if (isset($current_thread['thread_id'])) {
             echo '<table width="100%" class="forum_table" cellspacing="5" border="0">';
             // the style depends on the status of the message: approved or not
             if ($row['visible']=='0') {
-                $titleclass='forum_message_post_title_2_be_approved';
-                $messageclass='forum_message_post_text_2_be_approved';
-                $leftclass='forum_message_left_2_be_approved';
+                $titleclass = 'forum_message_post_title_2_be_approved';
+                $messageclass = 'forum_message_post_text_2_be_approved';
+                $leftclass = 'forum_message_left_2_be_approved';
             } else {
-                $titleclass='forum_message_post_title';
-                $messageclass='forum_message_post_text';
-                $leftclass='forum_message_left';
+                $titleclass = 'forum_message_post_title';
+                $messageclass = 'forum_message_post_text';
+                $leftclass = 'forum_message_left';
             }
             echo "<tr>";
             echo "<td rowspan=\"3\" class=\"$leftclass\">";
@@ -45,15 +51,15 @@ if (isset($current_thread['thread_id'])) {
                 }
                 echo display_user_link($row['user_id'], $name, '', $username).'<br />';
             } else {
-                echo Display::tag('span', $name, array('title'=>api_htmlentities($username, ENT_QUOTES))).'<br />';
+                echo Display::tag('span', $name, array('title' => api_htmlentities($username, ENT_QUOTES))).'<br />';
             }
 
             $group_id = api_get_group_id();
 
             echo api_convert_and_format_date($row['post_date']).'<br /><br />';
             // get attach id
-            $attachment_list=get_attachment($row['post_id']);
-            $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
+            $attachment_list = get_attachment($row['post_id']);
+            $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
             // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
             // The course admin him/herself can do this off course always
             if (
@@ -74,7 +80,9 @@ if (isset($current_thread['thread_id'])) {
                         echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$row['post_id']."&amp;origin=".$origin."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png', get_lang('Delete'),array(),  ICON_SIZE_SMALL)."</a>";
                     }
                 }
-                if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
+                if (api_is_allowed_to_edit(false,true) &&
+                    !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])
+                ) {
                     display_visible_invisible_icon('post', $row['post_id'], $row['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id, 'origin'=>$origin ));
                     echo "";
                     if ($increment>0) {
@@ -120,13 +128,17 @@ if (isset($current_thread['thread_id'])) {
             }
             echo "</td>";
             // prepare the notification icon
-            if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) && !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])) {
-                $post_image=Display::return_icon('forumpostnew.gif');
+            if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) &&
+                !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]) &&
+                !empty($whatsnew_post_info[$_GET['forum']][$row['thread_id']])
+            ) {
+                $post_image = Display::return_icon('forumpostnew.gif');
             } else {
-                $post_image=Display::return_icon('forumpost.gif');
+                $post_image = Display::return_icon('forumpost.gif');
             }
-            if ($row['post_notification']=='1' && $row['poster_id']==$_user['user_id']) {
-                $post_image.=Display::return_icon('forumnotification.gif',get_lang('YouWillBeNotified'));
+
+            if ($row['post_notification']=='1' && $row['poster_id'] == $_user['user_id']) {
+                $post_image .= Display::return_icon('forumnotification.gif', get_lang('YouWillBeNotified'));
             }
             // The post title
 
@@ -151,7 +163,7 @@ if (isset($current_thread['thread_id'])) {
             if (!empty($attachment_list) && is_array($attachment_list)) {
                 foreach ($attachment_list as $attachment) {
                     echo '<tr><td colspan="2" height="50%">';
-                    $realname=$attachment['path'];
+                    $realname = $attachment['path'];
                     $user_filename=$attachment['filename'];
 
                     echo Display::return_icon('attachment.gif',get_lang('Attachment'));

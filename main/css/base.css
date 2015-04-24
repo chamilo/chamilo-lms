@@ -5883,8 +5883,11 @@ ul.holder li.bit-box{
 .question_options ul.exercise-draggable-answer{
     float: left;
     margin-bottom: 20px;
+    min-height: 2em;
+    min-width: 100%;
 }
 ul.exercise-draggable-answer li {
+    cursor: move;
     float: left;
     margin: 0 20px 20px 0;
     padding: 5px;

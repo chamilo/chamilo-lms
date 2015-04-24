@@ -27,7 +27,8 @@
                         .attr('href', '#')
                         .addClass('btn btn-default btn-xs')
                         .append(
-                            $('<i>').addClass('fa fa-refresh')
+                            "{{ "Undo" | get_lang }} ",
+                            $('<i>').addClass('fa fa-undo')
                         )
                         .on('click', function (e) {
                             e.preventDefault();

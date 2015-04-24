@@ -100,7 +100,7 @@ class CourseDescription
 		$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		$description_id = $this->get_id_by_description_type($description_type);
-		$item_property_id = api_get_item_property_id($course_id, TOOL_COURSE_DESCRIPTION, $description_id);
+		$item_property_id = api_get_item_property_id(api_get_course_id(), TOOL_COURSE_DESCRIPTION, $description_id);
 
 		$course_id = api_get_course_int_id();
 
@@ -276,9 +276,6 @@ class CourseDescription
 		$result = Database::query($sql);
 		$affected_rows = Database::affected_rows($result);
 
-        $sql = "UPDATE $tbl_course_description SET id = iid WHERE iid = $last_id";
-        Database::query($sql);
-
 		return $affected_rows;
 	}
 
@@ -372,7 +369,7 @@ class CourseDescription
 	 public function get_progress_porcent($with_icon = false, $description_type = THEMATIC_ADVANCE)
      {
 	 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-	 	$session_id = intval($session_id);
+	 	$session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
 
 		$sql = "SELECT progress FROM $tbl_course_description

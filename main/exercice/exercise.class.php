@@ -1876,7 +1876,7 @@ class Exercise
                     }
 					$class .= ' question-validate-btn'; // used to select it with jquery
                     $all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
-                    $all_button .= '&nbsp;<span id="save_all_reponse"></span>';
+                    $all_button .= '&nbsp;' . Display::span(null, ['id' => 'save_all_reponse']);
                     $html .= $all_button;
                 }
             }
@@ -2816,14 +2816,17 @@ class Exercise
                                         $user_answer = Display::label(get_lang('Correct'), 'success');
                                     } else {
                                     if (isset($real_list[$i_answer_id])) {
-                                        $user_answer = '<span>'.$real_list[$i_answer_id].'</span>';
+                                        $user_answer = Display::span($real_list[$i_answer_id]);
                                     }
                                     }
                                 } else {
                                     if ($answerType == DRAGGABLE) {
                                         $user_answer = Display::label(get_lang('NotCorrect'), 'danger');
                                     } else {
-                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+                                    $user_answer = Display::span(
+                                        $real_list[$s_user_answer],
+                                        ['style' => 'color: #FF0000; text-decoration: line-through;']
+                                    );
                                     }
                                 }
                             } elseif ($answerType == DRAGGABLE) {
@@ -2836,7 +2839,10 @@ class Exercise
                                 echo '<td>'.$user_answer;
                                 if ($answerType == MATCHING) {
                                 if (isset($real_list[$i_answer_correct_answer])) {
-                                    echo ' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b> ';
+                                    echo Display::span(
+                                        $real_list[$i_answer_correct_answer],
+                                        ['style' => 'color: #008000; font-weight: bold;']
+                                    );
                                 }
                                 }
                                 echo '</td>';
@@ -2850,10 +2856,13 @@ class Exercise
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
 
-                                $user_answer = '<span>'.$answerMatching[$choice[$answerAutoId]].'</span>';
+                                $user_answer = Display::span($answerMatching[$choice[$answerAutoId]]);
                             } else {
                                 if (isset($answerMatching[$choice[$answerAutoId]])) {
-                                    $user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answerMatching[$choice[$answerAutoId]].'</span>';
+                                    $user_answer = Display::span(
+                                        $answerMatching[$choice[$answerAutoId]],
+                                        ['style' => 'color: #FF0000; text-decoration: line-through;']
+                                    );
                                 }
                             }
                             $matching[$answerAutoId] = $choice[$answerAutoId];
@@ -3224,10 +3233,15 @@ class Exercise
                             }
                         } elseif($answerType == MATCHING) {
                             echo '<tr>';
-                            echo '<td>' . $answerMatching[$answerId] . '</td>';
-                            echo '<td>' . $user_answer . ' / <b>'
-                                . '<span style="color: #008000;">' . $answerMatching[$answerCorrect] . '</span>'
-                                . '</b></td>';
+                            echo Display::tag('td', $answerMatching[$answerId]);
+                            echo Display::tag(
+                                'td',
+                                "$user_answer / " . Display::tag(
+                                    'strong',
+                                    $answerMatching[$answerCorrect],
+                                    ['style' => 'color: #008000; font-weight: bold;']
+                                )
+                            );
                             echo '</tr>';
                         }
                     }
@@ -3545,10 +3559,15 @@ class Exercise
                             //no break
                         case MATCHING:
                             echo '<tr>';
-                            echo '<td>' . $answerMatching[$answerId] . '</td>';
-                            echo '<td>' . $user_answer . ' / <b>'
-                                . '<span style="color: #008000;">' . $answerMatching[$answerCorrect] . '</span></b>'
-                                . '</td>';
+                            echo Display::tag('td', $answerMatching[$answerId]);
+                            echo Display::tag(
+                                'td',
+                                "$user_answer / " . Display::tag(
+                                    'strong',
+                                    $answerMatching[$answerCorrect],
+                                    ['style' => 'color: #008000; font-weight: bold;']
+                                )
+                            );
                             echo '</tr>';
 
                             break;

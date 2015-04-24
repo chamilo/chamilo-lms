@@ -175,15 +175,14 @@ Les répertoires suivants doivent êtres lisibles, éditables et exécutables pa
 <br /><br />
 Remplacez [chamilo] par le répertoire où vous avez placé le contenu du zip:
 <ul>
-  <li>[chamilo]/main/inc/conf/</li>
-  <li>[chamilo]/main/upload/users/</li>
-  <li>[chamilo]/main/upload/sessions/</li>
-  <li>[chamilo]/main/upload/courses/</li>
-  <li>[chamilo]/main/default_course_document/images/</li>
-  <li>[chamilo]/archive/</li>
-  <li>[chamilo]/courses/</li>
-  <li>[chamilo]/home/</li>
-  <li>[chamilo]/data/</li>
+    <li>[chamilo]/app/config/</li>
+    <li>[chamilo]/app/upload/users/</li>
+    <li>[chamilo]/app/upload/sessions/</li>
+    <li>[chamilo]/app/upload/courses/</li>
+    <li>[chamilo]/main/default_course_document/images/</li>
+    <li>[chamilo]/app/cache/</li>
+    <li>[chamilo]/app/courses/</li>
+    <li>[chamilo]/app/home/</li>
 </ul>
 Optionnellement, vous pouvez faire la même chose pour les répertoires suivants
 si vous souhaitez permettre l'envoi de styles CSS ou la définition de nouvelles
@@ -532,14 +531,16 @@ choose "Configure the homepage" in the Chamilo administration section.</p>
 Les répertoires suivants doivent être accessibles en lecture, écriture et
 exécution pour le serveur web:
 <ul>
-  <li>chamilo/main/inc/conf/</li>
-  <li>chamilo/main/upload/users/</li>
-  <li>chamilo/main/default_course_document/</li>
-  <li>chamilo/archive/</li>
-  <li>chamilo/courses/</li>
-  <li>chamilo/home/</li>
+    <li>[chamilo]/app/config/</li>
+    <li>[chamilo]/app/upload/users/</li>
+    <li>[chamilo]/app/upload/sessions/</li>
+    <li>[chamilo]/app/upload/courses/</li>
+    <li>[chamilo]/app/cache/</li>
+    <li>[chamilo]/app/courses/</li>
+    <li>[chamilo]/app/home/</li>
+    <li>[chamilo]/app/logs/</li>
+    <li>[chamilo]/main/default_course_document/images/</li>
 </ul>
-
 On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
 <em>chmod 0777</em> command, but if you are unsure, we recommend you seek advice for
 your own OS on <a href="http://www.chamilo.org/forum">our forum</a>.

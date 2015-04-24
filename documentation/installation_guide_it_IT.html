@@ -107,15 +107,15 @@
 <p class="p9"><span class="s3">Sostituisci </span><span class="s1">[chamilo] con la cartella dove hai posizionato i file di installazione di chamilo:</span></p>
 <p class="p3"><span class="s1"></span><br></p>
 <ul>
-  <li class="li2"><span class="s1">[chamilo]/main/inc/conf/</span></li>
-  <li class="li2"><span class="s1">[chamilo]/main/upload/users/</span></li>
-  <li clasS="li2">[chamilo]/main/upload/sessions/</li>
-  <li class="li2">[chamilo]/main/upload/courses/</li>
-  <li class="li2"><span class="s1">[chamilo]/main/default_course_document/images/</span></li>
-  <li class="li2"><span class="s1">[chamilo]/archive/</span></li>
-  <li class="li2"><span class="s1">[chamilo]/courses/</span></li>
-  <li class="li2"><span class="s1">[chamilo]/home/</span></li>
-  <li class="li2"><span class="s1">[chamilo]/data/</span></li>
+  <li>[chamilo]/app/config/</li>
+  <li>[chamilo]/app/upload/users/</li>
+  <li>[chamilo]/app/upload/sessions/</li>
+  <li>[chamilo]/app/upload/courses/</li>
+  <li>[chamilo]/app/cache/</li>
+  <li>[chamilo]/app/courses/</li>
+  <li>[chamilo]/app/home/</li>
+  <li>[chamilo]/app/logs/</li>
+  <li>[chamilo]/main/default_course_document/images/</li>
 </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Opzionalmente puoi fare lo stesso alle seguenti cartelle se vuoi consentire il caricamento dei pacchetti di stile CSS (CSS styles package) e la definizione di sotto-linguaggi (sub-language definition):</span></p>
@@ -274,14 +274,17 @@
 <p class="p2"><span class="s1"><b>3.5 In entrambi gli ultimi casi</b></span></p>
 <p class="p2"><span class="s1">Le seguenti cartelle devono essere leggibili (readable), scrivibili (writeble) ed eseguibili (executable) dal webserver:</span></p>
 <p class="p3"><span class="s1"></span><br></p>
-<ul>
-  <li class="li2"><span class="s1">chamilo/main/inc/conf/</span></li>
-  <li class="li2"><span class="s1">chamilo/main/upload/users/</span></li>
-  <li class="li2"><span class="s1">chamilo/main/default_course_document/</span></li>
-  <li class="li2"><span class="s1">chamilo/archive/</span></li>
-  <li class="li2"><span class="s1">chamilo/courses/</span></li>
-  <li class="li2"><span class="s1">chamilo/home/</span></li>
-</ul>
+  <ul>
+    <li>[chamilo]/app/config/</li>
+    <li>[chamilo]/app/upload/users/</li>
+    <li>[chamilo]/app/upload/sessions/</li>
+    <li>[chamilo]/app/upload/courses/</li>
+    <li>[chamilo]/app/cache/</li>
+    <li>[chamilo]/app/courses/</li>
+    <li>[chamilo]/app/home/</li>
+    <li>[chamilo]/app/logs/</li>
+    <li>[chamilo]/main/default_course_document/images/</li>
+  </ul>
 <p class="p3"><span class="s1"></span><br></p>
 <p class="p2"><span class="s1">Sui sistemi operativi Linux, Mac OS X e BSD puoi facilmente settare queste impostazioni utilizzando il comando “chmod 0777”, ma se non ne sei sicuro, ti raccomandiamo di chiedere consiglio per il tuo sistema operativo sul nostro forum. In Windows devi controllare le proprietà di tutte le cartelle sopraindicate.</span></p>
 <p class="p3"><span class="s1"></span><br></p>

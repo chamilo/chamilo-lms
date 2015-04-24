@@ -21,28 +21,6 @@ class AppKernel
         return $this->rootDir;
     }
 
-    /*public function getCacheDir()
-    {
-        return dirname(dirname(__DIR__)).'/cache/'.$this->environment;
-    }
-
-    public function getLogDir()
-    {
-        return dirname(dirname(__DIR__)).'/log/';
-    }*/
-
-    /*public function getLogDir()
-    {
-        return $this->rootDir.'/../logs/'.$this->environment.'/logs/';
-    }
-
-    public function getCacheDir()
-    {
-        return $this->rootDir.'/../data/temp/'.$this->environment.'/cache/';
-    }*/
-
-    // Custom paths
-
     /**
      * Returns the real root path
      * @return string

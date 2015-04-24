@@ -7231,4 +7231,6 @@ $RequestSubmitted = "Your request has been submitted.";
 $RequestFailed = "We are not able to fulfill your request at this time. Please contact your administrator.";
 $InternalLogin = "Internal login";
 $AlreadyLoggedIn = "You are already logged in";
+$Draggable = "Draggable";
+$Incorrect = "Incorrect";
 ?>

@@ -4470,9 +4470,9 @@ class UserManager
                 $sql = "INSERT IGNORE INTO $userRelUserTable(user_id, friend_user_id, relation_type) "
                     . "VALUES ($subscribedUserId, $userId, $relationType)";
 
-                Database::query($sql);
+                $result = Database::query($sql);
 
-                $affectedRows = Database::affected_rows();
+                $affectedRows = Database::affected_rows($result);
             }
         }
 

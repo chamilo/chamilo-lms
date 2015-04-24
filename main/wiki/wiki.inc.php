@@ -334,7 +334,7 @@ class Wiki
             $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
             Database::query($sql);
 
-            //insert into item_property
+            // insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_WIKI,
@@ -346,7 +346,8 @@ class Wiki
         }
 
         if ($_clean['page_id']	== 0) {
-            $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
+            $sql = 'UPDATE '.$tbl_wiki.' SET
+                    page_id="'.$id.'"
                     WHERE c_id = '.$course_id.' AND id="'.$id.'"';
             Database::query($sql);
         }
@@ -382,7 +383,14 @@ class Wiki
         }
 
 
-        api_item_property_update($_course, 'wiki', $id, 'WikiAdded', api_get_user_id(), $groupId);
+        api_item_property_update(
+            $_course,
+            'wiki',
+            $id,
+            'WikiAdded',
+            api_get_user_id(),
+            $groupId
+        );
         self::check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
         $this->setWikiData($id);
 
@@ -508,7 +516,8 @@ class Wiki
 
         // session_id
         $session_id = api_get_session_id();
-        // Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
+        // Unlike ordinary pages of pages of assignments.
+        // Allow create a ordinary page although there is a assignment with the same name
         if ($_clean['assignment']==2 || $_clean['assignment']==1) {
             $page = str_replace(' ','_',$values['title']."_uass".$assig_user_id);
         } else {
@@ -570,16 +579,16 @@ class Wiki
             $_clean['enddate_assig'] = '0000-00-00 00:00:00';
         }
 
-        $_clean['delayedsubmit']=Database::escape_string($values['delayedsubmit']);
-        $_clean['max_text']=Database::escape_string($values['max_text']);
-        $_clean['max_version']=Database::escape_string($values['max_version']);
+        $_clean['delayedsubmit'] = Database::escape_string($values['delayedsubmit']);
+        $_clean['max_text'] = Database::escape_string($values['max_text']);
+        $_clean['max_version'] = Database::escape_string($values['max_version']);
 
         $course_id = api_get_course_int_id();
 
         // Filter no _uass
         if (api_eregi('_uass', $values['title']) ||
             (api_strtoupper(trim($values['title'])) == 'INDEX' ||
-                api_strtoupper(trim(api_htmlentities($values['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))
+            api_strtoupper(trim(api_htmlentities($values['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))
         ) {
             self::setMessage(Display::display_warning_message(get_lang('GoAndEditMainPage'), false, true));
         } else {
@@ -594,17 +603,30 @@ class Wiki
                 Database::query($sql);
                 $Id = Database::insert_id();
                 if ($Id > 0) {
+
+                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $Id";
+                    Database::query($sql);
+
                     //insert into item_property
-                    api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $groupId);
+                    api_item_property_update(
+                        api_get_course_info(),
+                        TOOL_WIKI,
+                        $Id,
+                        'WikiAdded',
+                        api_get_user_id(),
+                        $groupId
+                    );
                 }
 
-                $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE c_id = '.$course_id.' AND id="'.$Id.'"';
+                $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
+                        WHERE c_id = '.$course_id.' AND id="'.$Id.'"';
                 Database::query($sql);
 
                 //insert wiki config
                 $sql = " INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
                         VALUES ($course_id, '".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
                 Database::query($sql);
+
                 $this->setWikiData($Id);
                 self::check_emailcue(0, 'A');
                 return get_lang('NewWikiSaved');
@@ -629,8 +651,10 @@ class Wiki
 
         $form->addElement('select', 'progress', get_lang('Progress'), $progress);
 
-        if ((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && isset($row['reflink']) && $row['reflink'] != 'index') {
-
+        if ((api_is_allowed_to_edit(false,true) ||
+            api_is_platform_admin()) &&
+            isset($row['reflink']) && $row['reflink'] != 'index'
+        ) {
             $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
@@ -1898,7 +1922,6 @@ class Wiki
         $link2teacher = $values['title'] = $title_orig."_uass".$userId;
 
         //first: teacher name, photo, and assignment description (original content)
-        // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
         $content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
         <table border="0">
             <tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr>
@@ -3223,10 +3246,14 @@ class Wiki
                 echo '<hr noshade size="1">';
                 $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
-                $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user
-                  WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."'
-                  ORDER BY id DESC";
-                $result=Database::query($sql);
+                $sql = "SELECT *
+                        FROM $tbl_wiki_discuss reviews, $user_table user
+                        WHERE
+                            reviews.c_id = $course_id AND
+                            reviews.publication_id='".$id."' AND
+                            user.user_id='".$firstuserid."'
+                        ORDER BY reviews.id DESC";
+                $result = Database::query($sql);
 
                 $countWPost = Database::num_rows($result);
                 echo get_lang('NumComments').": ".$countWPost; //comment's numbers

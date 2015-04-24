@@ -2812,12 +2812,12 @@ class Exercise
                                 if ($s_user_answer == $i_answer_correct_answer) {
                                     $questionScore += $i_answerWeighting;
                                     $totalScore += $i_answerWeighting;
+                                    if ($answerType == DRAGGABLE) {
+                                        $user_answer = Display::label(get_lang('Correct'), 'success');
+                                    } else {
                                     if (isset($real_list[$i_answer_id])) {
-                                        if ($answerType == DRAGGABLE) {
-                                            $user_answer = Display::label(get_lang('Correct'), 'success');
-                                        } else {
                                         $user_answer = '<span>'.$real_list[$i_answer_id].'</span>';
-                                        }
+                                    }
                                     }
                                 } else {
                                     if ($answerType == DRAGGABLE) {
@@ -2834,8 +2834,10 @@ class Exercise
                                 echo '<tr>';
                                 echo '<td>'.$s_answer_label.'</td>';
                                 echo '<td>'.$user_answer;
+                                if ($answerType == MATCHING) {
                                 if (isset($real_list[$i_answer_correct_answer])) {
                                     echo ' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b> ';
+                                }
                                 }
                                 echo '</td>';
                                 echo '</tr>';
@@ -2956,9 +2958,6 @@ class Exercise
                         ) ||
                         $answerCorrect
                     ) {
-                        
-                    }
-                    if ($answerType != MATCHING || $answerCorrect) {
                         if (
                             in_array(
                                 $answerType,

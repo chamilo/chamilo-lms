@@ -35,22 +35,6 @@ class Draggable extends Question
         $matches = array();
 
         $answer = null;
-        $counter = 1;
-
-        if (isset($this->id)) {
-            $answer = new Answer($this->id);
-            $answer->read();
-
-            if (count($answer->nbrAnswers) > 0) {
-                for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
-                    $correct = $answer->isCorrect($i);
-                    if (empty($correct)) {
-                        $matches[$answer->selectAutoId($i)] = chr(64 + $counter);
-                        $counter++;
-                    }
-                }
-            }
-        }
 
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');
@@ -72,6 +56,9 @@ class Draggable extends Question
                 $nb_options++;
             }
         } else if (!empty($this->id)) {
+            $answer = new Answer($this->id);
+            $answer->read();
+
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
                 
@@ -95,16 +82,8 @@ class Draggable extends Question
             $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
         }
 
-        if (empty($matches)) {
-            for ($i = 1; $i <= $nb_options; ++$i) {
-                // fill the array with A, B, C.....
-                $matches[$i] = chr(64 + $i);
-            }
-        } else {
-            for ($i = $counter; $i <= $nb_options; ++$i) {
-                // fill the array with A, B, C.....
-                $matches[$i] = chr(64 + $i);
-            }
+        for ($i = 1; $i <= $nb_matches; ++$i) {
+            $matches[$i] = $i;
         }
 
         $form->addElement('hidden', 'nb_matches', $nb_matches);

@@ -18,8 +18,8 @@
                     value = dropedOnId.split('_')[2];
 
                 $('#' + originSelectId + ' option')
-                    .filter(function () {
-                        return $(this).val() == value;
+                    .filter(function (index) {
+                        return index === parseInt(value);
                     })
                     .attr("selected", true);
 

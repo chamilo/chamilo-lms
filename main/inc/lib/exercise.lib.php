@@ -955,7 +955,8 @@ class ExerciseLib
                                 'id' => "window_{$windowId}_select",
                                 'class' => 'select_option',
                                 'style' => 'display: none;'
-                            ]
+                            ],
+                            false
                         );
 
                         if (!empty($answerCorrect) && !empty($selectedValue)) {

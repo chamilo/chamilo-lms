@@ -1,0 +1,8 @@
+order deny,allow
+deny from all
+
+# pChart generated files should be allowed
+<FilesMatch "^[0-9a-f]+$">
+	order allow,deny
+	allow from all
+</FilesMatch>

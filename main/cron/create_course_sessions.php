@@ -114,6 +114,25 @@ function getQuarterFirstMonth($quarter)
 }
 
 /**
+ * Get the quarter in Roman letters
+ * @param   int Quarter
+ * @return  string  Roman letters
+ */
+function getQuarterRoman($quarter)
+{
+    switch ($quarter) {
+        case 1:
+            return 'I';
+        case 2:
+            return 'II';
+        case 3:
+            return 'III';
+        case 4:
+            return 'IV';
+    }
+}
+
+/**
  * Creates one session per course with $administratorId as the creator and
  * adds it to the session starting on $startDate and finishing on $endDate
  * @param   array   $courses Courses
@@ -133,10 +152,11 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
     foreach ($courses as $course) {
         //$period = date("m/Y", api_strtotime($startDate));
         $month = date("m", api_strtotime($startDate));
-        $year = date("y", api_strtotime($startDate));
+        $year = date("Y", api_strtotime($startDate));
         $quarter = getQuarter($month);
-        $period = $year . ' - ' . $quarter;
-        $sessionName = $course['title'] . " (" . $period . ")";
+        $quarter = getQuarterRoman($quarter);
+        $period = $year . '-' . $quarter;
+        $sessionName = '[' . $period . '] ' . $course['title'];
         $sessionId = SessionManager::create_session(
             $sessionName,
             $startDate,
@@ -174,7 +194,8 @@ $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['
 createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['endDate']);
 
 // Creates course sessions for the following month
-if (date("Y-m-d") >= date("Y-m-".OFFSET)) {
+$offsetDay = intval(substr($dates['endDate'], 8, 2)) - OFFSET;
+if (date("Y-m-d") >= date(substr($dates['endDate'], 0, 8) . $offsetDay)) {
     $dates = getQuarterFirstAndLastDates(date("Y-m-d", api_strtotime(date("Y-m-01")." + 3 month")));
     // Get courses that don't have any session the next month
     $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);

@@ -62,7 +62,7 @@ if ($modifyIn) {
         $reponse = unserialize($reponse);
         $comment = unserialize($comment);
         $weighting = unserialize($weighting);
-    } elseif ($answerType == MATCHING) {
+    } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
         $option = unserialize($option);
         $match = unserialize($match);
         $sel = unserialize($sel);
@@ -368,7 +368,7 @@ if ($submitAnswers || $buttonBack) {
         } else {
             unset($setWeighting);
         }
-    } elseif ($answerType == MATCHING) {
+    } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
         if ($debug > 0) {
             echo str_repeat('&nbsp;', 2) . '$answerType is MATCHING' . "<br />\n";
         }
@@ -621,7 +621,7 @@ if ($modifyAnswers) {
                 $weighting = unserialize($weighting);
             }
         }
-    } elseif ($answerType == MATCHING) {
+    } elseif(in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
         if ($debug > 0) {
             echo str_repeat('&nbsp;', 2) . '$answerType is MATCHING' . "<br />\n";
         }
@@ -1066,7 +1066,7 @@ if ($modifyAnswers) {
                     <?php
                 }
                 //end of FREE_ANSWER type*/
-                elseif ($answerType == MATCHING) {
+                elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                     ?>
 
                 <h3>

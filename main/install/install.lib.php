@@ -289,7 +289,7 @@ function write_courses_htaccess_file($url_append)
 {
     $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
     $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-    $fp = @fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
+    $fp = @fopen(api_get_path(SYS_COURSE_PATH).'.htaccess', 'w');
     if ($fp) {
         fwrite($fp, $content);
         return fclose($fp);

@@ -12,10 +12,12 @@ app/logs/*
 
 # Courses
 
+app/courses/*
 courses/*
 !courses/index.html
 
 # Home
+app/home/*
 home/*
 
 # User images

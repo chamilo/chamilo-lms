@@ -18,8 +18,10 @@ User-Agent: *
 # Directories
 Disallow: /app/cache/
 Disallow: /app/logs/
+Disallow: /app/courses/
 Disallow: /courses/
 Disallow: /documentation/
+Disallow: /app/home/
 Disallow: /home/
 Disallow: /main/
 Disallow: /plugin/

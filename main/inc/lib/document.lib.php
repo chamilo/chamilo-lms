@@ -2406,7 +2406,7 @@ class DocumentManager
                 $orig_course_info_path = $origin_course_info_path;
             }
         } else {
-            $orig_course_path = api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'] . '/';
+            $orig_course_path = api_get_path(SYS_COURSE_PATH).$orig_course_info['path'] . '/';
             $orig_course_info_path = $orig_course_info['path'];
         }
 

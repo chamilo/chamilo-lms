@@ -867,6 +867,7 @@ class GroupPortalManager
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_group_picture_path_by_id($group_id, 'system', true);
+
         $path = $path_info['dir'];
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
@@ -984,14 +985,14 @@ class GroupPortalManager
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
             if (!empty($picture_filename)) {
-                $dir = $base.'upload/users/groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
+                $dir = $base.'upload/groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
             } elseif ($preview) {
-                $dir = $base.'upload/users/groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
+                $dir = $base.'upload/groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             } else {
-                $dir = $base.'upload/users/groups/'.$id.'/';
+                $dir = $base.'upload/groups/'.$id.'/';
             }
         } else {
-            $dir = $base.'upload/users/groups/'.$id.'/';
+            $dir = $base.'upload/groups/'.$id.'/';
         }
 
         if (empty($picture_filename) && $anonymous) {
@@ -1160,8 +1161,8 @@ class GroupPortalManager
 
     /**
      * Shows the left column of the group page
-     * @param int group id
-     * @param int user id
+     * @param int $group_id
+     * @param int $user_id
      *
      */
     public static function show_group_column_information($group_id, $user_id, $show = '')
@@ -1252,7 +1253,8 @@ class GroupPortalManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $topic_id = intval($topic_id);
         $group_id = intval($group_id);
-        $sql = "UPDATE $table_message SET msg_status=3 WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
+        $sql = "UPDATE $table_message SET msg_status=3
+                WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
         Database::query($sql);
     }
 
@@ -1291,23 +1293,34 @@ class GroupPortalManager
     /**
      * @param FormValidator $form
      * @param array
+     *
+     * @return FormValidator
      */
     public static function setGroupForm($form, $groupData = array())
     {
         // Name
-        $form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>120));
+        $form->addElement('text', 'name', get_lang('Name'), array('maxlength'=>120));
         $form->applyFilter('name', 'html_filter');
         $form->applyFilter('name', 'trim');
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
         // Description
-        $form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()"));
+        $form->addElement(
+            'textarea',
+            'description',
+            get_lang('Description'),
+            array(
+                'cols' => 58,
+                'onKeyDown' => "textarea_maxlength()",
+                'onKeyUp' => "textarea_maxlength()",
+            )
+        );
         $form->applyFilter('description', 'html_filter');
         $form->applyFilter('description', 'trim');
-        $form->addRule('name', '', 'maxlength',255);
+        $form->addRule('name', '', 'maxlength', 255);
 
         // Url
-        $form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
+        $form->addElement('text', 'url', 'URL');
         $form->applyFilter('url', 'html_filter');
         $form->applyFilter('url', 'trim');
 
@@ -1324,8 +1337,8 @@ class GroupPortalManager
 
         // Status
         $status = array();
-        $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-        $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+        $status[GROUP_PERMISSION_OPEN] = get_lang('Open');
+        $status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
         if (!empty($groupData)) {
@@ -1335,6 +1348,7 @@ class GroupPortalManager
             // Set default values
             $form->setDefaults($groupData);
         }
+
         return $form;
     }
 

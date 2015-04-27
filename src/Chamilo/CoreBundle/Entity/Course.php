@@ -4,13 +4,13 @@
 namespace Chamilo\CoreBundle\Entity;
 
 //use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Course
@@ -947,6 +947,7 @@ class Course
      * Set targetCourseCode
      *
      * @param string $targetCourseCode
+     *
      * @return Course
      */
     public function setTargetCourseCode($targetCourseCode)
@@ -970,6 +971,7 @@ class Course
      * Set subscribe
      *
      * @param boolean $subscribe
+     *
      * @return Course
      */
     public function setSubscribe($subscribe)
@@ -993,6 +995,7 @@ class Course
      * Set unsubscribe
      *
      * @param boolean $unsubscribe
+     *
      * @return Course
      */
     public function setUnsubscribe($unsubscribe)
@@ -1016,6 +1019,7 @@ class Course
      * Set registrationCode
      *
      * @param string $registrationCode
+     *
      * @return Course
      */
     public function setRegistrationCode($registrationCode)
@@ -1039,6 +1043,7 @@ class Course
      * Set legal
      *
      * @param string $legal
+     *
      * @return Course
      */
     public function setLegal($legal)
@@ -1062,6 +1067,7 @@ class Course
      * Set activateLegal
      *
      * @param integer $activateLegal
+     *
      * @return Course
      */
     public function setActivateLegal($activateLegal)
@@ -1085,6 +1091,7 @@ class Course
      * Set courseTypeId
      *
      * @param integer $courseTypeId
+     *
      * @return Course
      */
     public function setCourseTypeId($courseTypeId)
@@ -1109,7 +1116,7 @@ class Course
      */
     public function getAbsoluteSysCoursePath()
     {
-        return realpath(__DIR__.'/../../../data/courses/'.$this->getDirectory()).'/';
+        return realpath(__DIR__.'/../../../app/courses/'.$this->getDirectory()).'/';
     }
 
     /**

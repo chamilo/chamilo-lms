@@ -245,7 +245,7 @@ EOT;
             $details = implode(' - ', $details);
             $title = $course['title'];
 
-            $href = api_get_path(WEB_PATH) . 'courses/' . $course['code'] .'/index.php';
+            $href = api_get_path(WEB_COURSE_PATH).$course['code'] .'/index.php';
             echo '<tr><td><b><a href="' . $href . '">' . "$title</a></b><br/>$details</td><td>";
             if (!api_is_anonymous())
             {

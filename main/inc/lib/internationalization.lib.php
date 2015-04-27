@@ -1151,7 +1151,7 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  * @param string $from_encoding (optional)	The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
  * @return string							Returns the converted string.
  */
-function api_xml_http_response_encode($string, $from_encoding = null) {
+function api_xml_http_response_encode($string, $from_encoding = 'UTF8') {
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if (empty($from_encoding)) {
             $from_encoding = _api_mb_internal_encoding();

@@ -80,13 +80,7 @@ function validate_text_empty (str,msg) {
 }
 
 jQuery(document).ready(function() {
- 	/* Binds a tab id in the url */
-    $("#tab_browse").bind("tabsselect", function(event, ui) {
-		window.location.href=ui.tab;
-    });
 
-	/*$("#tabs").tabs();
-	$("#tab_browse").tabs();*/
     var valor = "' . $anchor . '";
 
     $(".head").click(function() {
@@ -865,7 +859,11 @@ if ($group_id != 0) {
 }
 
 $show_message = null;
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {
+if (isset($_REQUEST['action']) &&
+    $_REQUEST['action'] == 'show_message' &&
+    isset($_REQUEST['msg']) &&
+    $_REQUEST['msg'] == 'topic_deleted'
+) {
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 

@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -127,10 +128,10 @@ if ($number_loop != 0) {
         $content = Security::remove_XSS($invitation['content'], STUDENT, true);
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
         $socialInvitationsBlock .= '<div class="row">';
-        $socialInvitationsBlock .= '<div class="col-md-2">';
+        $socialInvitationsBlock .= '<div class="col-md-3">';
         $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$userPicture.'"/></a>';
         $socialInvitationsBlock .= '</div>';
-        $socialInvitationsBlock .= '<div class="col-md-10">';
+        $socialInvitationsBlock .= '<div class="col-md-9">';
         $socialInvitationsBlock .= '<h4 class="title-profile"><a href="profile.php?u='.$sender_user_id.'">
                                     '.$user_info['complete_name'].'</a>:
                                     </h4>';
@@ -164,10 +165,10 @@ if (count($list_get_invitation_sent) > 0) {
         $date = api_convert_and_format_date($invitation['send_date'], DATE_TIME_FORMAT_LONG);
 
         $socialInvitationsBlock .= '<div class="row">';
-        $socialInvitationsBlock .= '<div class="col-md-2">';
+        $socialInvitationsBlock .= '<div class="col-md-3">';
         $socialInvitationsBlock .= '<a href="profile.php?u='.$sender_user_id.'"><img src="'.$user_info['avatar'].'"  /></a>';
         $socialInvitationsBlock .= '</div>';
-        $socialInvitationsBlock .= '<div class="col-md-10">';
+        $socialInvitationsBlock .= '<div class="col-md-9">';
         $socialInvitationsBlock .= '<h4 class="title-profile"><a class="profile_link" href="profile.php?u='.$sender_user_id.'">'.$user_info['complete_name'].'</a></h4>';
         $socialInvitationsBlock .= '<div class="content-invitation">'.$title.' : '.$content.'</div>';
         $socialInvitationsBlock .= '<div class="date-invitation">'. get_lang('DateSend').' : '.$date.'</div>';
@@ -192,8 +193,8 @@ if (count($pending_invitations) > 0) {
         $new_invitation[]=$invitation;
 
         $socialInvitationsBlock .= '<div class="well"><div class="row">';
-            $socialInvitationsBlock .= '<div class="col-md-2">'.$invitation['picture_uri'].'</div>';
-            $socialInvitationsBlock .= '<div class="col-md-10">';
+            $socialInvitationsBlock .= '<div class="col-md-3">'.$invitation['picture_uri'].'</div>';
+            $socialInvitationsBlock .= '<div class="col-md-9">';
             $socialInvitationsBlock .= '<h4 class="tittle-profile">'.$invitation['name'].'</h4>';
             $socialInvitationsBlock .= '<div class="description-group">'.$invitation['description'].'</div>';
             $socialInvitationsBlock .= '<div class="btn-group" role="group">';

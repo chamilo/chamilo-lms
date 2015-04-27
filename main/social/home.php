@@ -209,7 +209,9 @@ if (!empty($results)) {
             Display::url(
                 $result['picture_uri'],
                 $group_url
-            ),$result['name'],$group_info.$group_actions
+            ),
+            $result['name'],
+            $group_info.$group_actions,
         );
     }
 }
@@ -256,9 +258,9 @@ if ($list > 0) {
     $social_group_block .= '<div class="list-group-newest">';
     $social_group_block .= '<div class="group-title">' . get_lang('Newest') . '</div>';
     for($i = 0;$i < $list; $i++){
-        $social_group_block.='<div class="items">';
-        $social_group_block.='<div class="group-image">' . $groups_newest[$i][0] . '</div>';
-        $social_group_block.='<div class="group-info">' . $groups_newest[$i][1];
+        $social_group_block.='<div class="row">';
+        $social_group_block.='<div class="col-md-2">' . $groups_newest[$i][0] . '</div>';
+        $social_group_block.='<div class="col-md-4">' . $groups_newest[$i][1];
         $social_group_block.= $groups_newest[$i][2] . '</div>';
         $social_group_block.="</div>";
     }
@@ -270,9 +272,9 @@ if ($list > 0) {
     $social_group_block .= '<div class="group-title">' . get_lang('Popular') . '</div>';
 
     for($i = 0;$i < $list; $i++){
-        $social_group_block.='<div class="items">';
-        $social_group_block.='<div class="group-image">' . $groups_pop[$i][0] . '</div>';
-        $social_group_block.='<div class="group-info">' . $groups_pop[$i][1];
+        $social_group_block.='<div class="row">';
+        $social_group_block.='<div class="col-md-2">' . $groups_pop[$i][0] . '</div>';
+        $social_group_block.='<div class="col-md-4">' . $groups_pop[$i][1];
         $social_group_block.= $groups_pop[$i][2] . '</div>';
         $social_group_block.="</div>";
     }

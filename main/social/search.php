@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
@@ -31,7 +32,6 @@ if (!empty($extra_fields)) {
         }
     }
 }
-$user_info = UserManager::get_user_info_by_id($user_id);
 
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('search');
@@ -136,15 +136,14 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
 
     $grid_groups = array();
     if (is_array($groups) && count($groups) > 0) {
-        $social_right_content .= '<div class="col-md-9">';
+        $social_right_content .= '<div class="row">';
         $social_right_content .= Display::page_subheader(get_lang('Groups'));
 
-        $social_right_content .= '<ul class="thumbnails">';
         foreach ($groups as $group) {
             $group['name'] = Security::remove_XSS($group['name'], STUDENT, true);
             $group['description'] = Security::remove_XSS($group['description'], STUDENT, true);
             $id = $group['id'];
-            $url_open = '<a href="groups.php?id='.$id.'">';
+            $url_open = '<a class="btn btn-default" href="groups.php?id='.$id.'">';
             $url_close = '</a>';
             $name = cut($group['name'], 60, true);
             $count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
@@ -153,31 +152,27 @@ if ($query != '' || ($query_vars['search_type']=='1' && count($query_vars)>2) ) 
             } else {
                 $count_users_group = $count_users_group.' '.get_lang('Members');
             }
-            $picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], 80);
+            $picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'], GROUP_IMAGE_SIZE_ORIGINAL);
             $tags = GroupPortalManager::get_group_tags($group['id']);
-            $group['picture_uri'] = '<img src="'.$picture['file'].'" width="50" />';
+            $group['picture_uri'] = '<img src="'.$picture['file'].'" />';
 
-
-            $item_0  = Display::div($group['picture_uri']);
             $members = Display::span($count_users_group);
             $item_1  = Display::tag('h3', $url_open.$name.$url_close).$members;
 
             $social_right_content .= '
-                <li class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <div class="media">
-                                '.$item_0.'
-                            </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="avatar">
+                            '.$group['picture_uri'].'
                         </div>
-                        <div class="col-md-6">
+                        <div class="content">
                             '.$item_1.'
                             <p>'.$group['description'].'</p>
                             <p>'.$tags.'</p>
                             <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>
                         </div>
                     </div>
-                </li>';
+                </div>';
 
         }
         $social_right_content .= '</ul></div></div>';

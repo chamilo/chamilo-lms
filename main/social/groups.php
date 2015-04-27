@@ -85,8 +85,8 @@ jQuery(document).ready(function() {
 		window.location.href=ui.tab;
     });
 
-	$("#tabs").tabs();
-	$("#tab_browse").tabs();
+	/*$("#tabs").tabs();
+	$("#tab_browse").tabs();*/
     var valor = "' . $anchor . '";
 
     $(".head").click(function() {
@@ -221,7 +221,8 @@ $tpl = new Template();
 
 $create_thread_link = '';
 $userInfo = api_get_user_info(api_get_user_id(), true);
-if ($group_id != 0) {
+
+if (!empty($group_id)) {
     SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
@@ -277,7 +278,7 @@ if ($group_id != 0) {
     $is_group_member = GroupPortalManager::is_group_member($group_id);
 
     // details about the current group
-    $social_right_content = '<div class="span9">';
+    $social_right_content = '<div class="col-md-12">';
     $social_right_content .= '<div id="social-group-details">';
     //Group's title
     $social_right_content .= Display::tag(
@@ -319,7 +320,7 @@ if ($group_id != 0) {
     $social_right_content .= '</div>';
 
     //-- Show message groups
-    $social_right_content .= '<div class="span9">';
+    $social_right_content .= '<div class="col-md-12">';
 
     if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         if (!$is_group_member) {
@@ -447,7 +448,7 @@ if ($group_id != 0) {
     $social_right_content .= '</div>'; // end layout messages
 
 } else {
-    // My groups -----
+    // My groups
     $results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0);
     $grid_my_groups = array();
     $my_group_list = array();
@@ -848,7 +849,7 @@ if ($group_id != 0) {
     if (!empty($create_group_item)) {
         $social_right_content .= Display::div(
             $create_group_item,
-            array('class' => 'span9')
+            array('class' => 'col-md-12')
         );
     }
     $headers = array(
@@ -856,7 +857,7 @@ if ($group_id != 0) {
         get_lang('Popular'),
         get_lang('MyGroups')
     );
-    $social_right_content .= '<div class="span9">' . Display::tabs(
+    $social_right_content .= '<div class="col-md-12">' . Display::tabs(
             $headers,
             array($newest_content, $popular_content, $my_group_content),
             'tab_browse'

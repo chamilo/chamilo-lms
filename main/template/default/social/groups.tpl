@@ -8,7 +8,7 @@
             {{ social_menu_block }}
         </div>
     </div>
-    <div id="wallMessages" class="col-md-5" style="min-height:1px">
+    <div class="col-md-9" style="min-height:1px">
         <div class="row">
             <div class="col-md-12">
                 <div id="message_ajax_reponse" class=""></div>
@@ -20,10 +20,6 @@
         <div id="display_response_id" class="col-md-5"></div>
         {{ social_auto_extend_link }}
     </div>
-    <div class="col-md-4">
-        <div class="row">
-            {{ social_right_information }}
-        </div>
-    </div>
+
 </div>
 {% endblock %}

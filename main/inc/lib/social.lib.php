@@ -563,7 +563,17 @@ class SocialManager extends UserManager
     /**
      * Shows the avatar block in social pages
      *
-     * @param string highlight link possible values: group_add, home, messages, messages_inbox, messages_compose ,messages_outbox ,invitations, shared_profile, friends, groups search
+     * @param string highlight link possible values:
+     * group_add,
+     * home,
+     * messages,
+     * messages_inbox,
+     * messages_compose,
+     * messages_outbox,
+     * invitations,
+     * shared_profile,
+     * friends,
+     * groups search
      * @param int group id
      * @param int user id
      *
@@ -599,10 +609,14 @@ class SocialManager extends UserManager
 
         $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
-            //--- Group image
+            // Group image
             $group_info = GroupPortalManager::get_group_data($group_id);
-            $big = GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'], 160, GROUP_IMAGE_SIZE_BIG);
-
+            $big = GroupPortalManager::get_picture_group(
+                $group_id,
+                $group_info['picture_uri'],
+                160,
+                GROUP_IMAGE_SIZE_BIG
+            );
 
             $html .= Display::url('<img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />', api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id);
             if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) {
@@ -1503,6 +1517,7 @@ class SocialManager extends UserManager
         if (api_get_setting('allow_social_tool') != 'true') {
             return '';
         }
+
         $socialAvatarBlock = SocialManager::show_social_avatar_block($groupBlock, $groupId, $userId);
 
         $profileEditionLink = null;

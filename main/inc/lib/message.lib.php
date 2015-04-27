@@ -1075,7 +1075,7 @@ class MessageManager
                 $items = $topic['count'];
                 $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
 
-                $html .= '<div class="span1">';
+                $html .= '<div class="col-md-1">';
                 $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' => 'group_discussions_replies'));
                 $html .= '</div>';
 
@@ -1085,7 +1085,7 @@ class MessageManager
                     $topic['title'] = get_lang('Untitled');
                 }
 
-                $html .= '<div class="span4">';
+                $html .= '<div class="col-md-4">';
                 $html .= Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
 
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
@@ -1113,7 +1113,7 @@ class MessageManager
                 $user_info .= '<div class="message-group-author"><img src="'.$image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
                 $user_info .= '</td>';
 
-                $html .= '<div class="span2">';
+                $html .= '<div class="col-md-2">';
                 $html .= $user_info;
                 $html .= '</div>';
                 $html .= '</div>';

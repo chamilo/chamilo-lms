@@ -3681,7 +3681,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
     }
 
-    $form->addButtonUpload(get_lang('Send'), 'submitWork');
+    $form->addButtonUpload(get_lang('Upload'), 'submitWork');
 }
 
 /**

@@ -1539,7 +1539,6 @@ class HTML_QuickForm extends HTML_Common
             return false;
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
@@ -1726,7 +1725,6 @@ class HTML_QuickForm extends HTML_Common
     */
     function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
-            include_once 'HTML/QuickForm/Renderer/Default.php';
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
@@ -1773,7 +1771,6 @@ class HTML_QuickForm extends HTML_Common
             return '';
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $test = array();
         $js_escape = array(

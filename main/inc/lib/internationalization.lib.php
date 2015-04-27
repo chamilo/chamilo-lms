@@ -236,10 +236,12 @@ function get_lang($variable, $reserved = null, $language = null) {
 
 /**
  * Gets the current interface language.
- * @param bool $purified (optional)	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
+ * @param bool $purified (optional)	When it is true, a purified (refined)
+ * language value will be returned, for example 'french' instead of 'french_unicode'.
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false, $check_sub_language = false) {
+function api_get_interface_language($purified = false, $check_sub_language = false)
+{
     global $language_interface;
 
     if (empty($language_interface)) {
@@ -250,11 +252,15 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
         static $parent_language_name = null;
 
         if (!isset($parent_language_name)) {
-            //2. The current language is a sub language so we grab the father's
+            // 2. The current language is a sub language so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
             $language_id   = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
-            if (!empty($language_id) && !empty($language_info)) {
+
+            if (!empty($language_id) &&
+                !empty($language_info) &&
+                !empty($language_info['parent_id'])) {
+
                 $language_info = api_get_language_info($language_info['parent_id']);
                 $parent_language_name = $language_info['english_name'];
                 if (!empty($parent_language_name)) {
@@ -266,9 +272,10 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             return $parent_language_name;
         }
     } else {
-        //2. Normal way
+        // 2. Normal way
         $interface_language = $purified ? api_purify_language_id($language_interface) : $language_interface;
     }
+
     return $interface_language;
 }
 
@@ -1052,7 +1059,7 @@ function api_convert_encoding($string, $to_encoding, $from_encoding = null)
  * This function is aimed at replacing the function utf8_encode() for human-language strings.
  * @link http://php.net/manual/en/function.utf8-encode
  */
-function api_utf8_encode($string, $from_encoding = null)
+function api_utf8_encode($string, $from_encoding = 'UTF-8')
 {
     return mb_convert_encoding($string, 'UTF-8', $from_encoding);
 }
@@ -1092,12 +1099,14 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  * Converts all applicable characters to HTML entities.
  * @param string $string				The input string.
  * @param int $quote_style (optional)	The quote style - ENT_COMPAT (default), ENT_QUOTES, ENT_NOQUOTES.
- * @param string $encoding (optional)	The encoding (of the input string) used in conversion. If it is omited, the platform character set is assumed.
+ * @param string $encoding (optional)	The encoding (of the input string) used in conversion.
+ * If it is omited, the platform character set is assumed.
  * @return string						Returns the converted string.
  * This function is aimed at replacing the function htmlentities() for human-language strings.
  * @link http://php.net/manual/en/function.htmlentities
  */
-function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
+function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8')
+{
     switch($quote_style) {
         case ENT_COMPAT:
             $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);

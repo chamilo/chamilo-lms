@@ -91,24 +91,24 @@ class HTML_QuickForm_RuleRegistry
             // Regular expression
             $rule =& $this->getRule('regex');
             $rule->addData($ruleName, $data1);
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['regex'];
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['regex'];
 
         } elseif ($type == 'function' || $type == 'callback') {
             // Callback function
             $rule =& $this->getRule('callback');
             $rule->addData($ruleName, $data1, $data2, 'function' == $type);
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['callback'];
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['callback'];
 
         } elseif (is_object($data1)) {
             // An instance of HTML_QuickForm_Rule
             $this->_rules[strtolower(get_class($data1))] = $data1;
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
 
         } else {
             // Rule class name
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
         }
-    } // end func registerRule
+    }
 
     /**
      * Returns a reference to the requested rule object

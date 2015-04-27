@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
@@ -52,12 +53,22 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
+$form->addElement(
+	'textarea',
+	'description',
+	get_lang('Description'),
+	array(
+		'rows' => 3,
+		'cols' => 58,
+		'onKeyDown' => "text_longitud()",
+		'onKeyUp' => "text_longitud()",
+	)
+);
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
+$form->addElement('text', 'url', get_lang('URL'), array('size' => 35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 // Picture
@@ -68,7 +79,7 @@ if (strlen($group_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
-//Group Parentship
+// Group parent
 $groups = array();
 $groups = GroupPortalManager::get_groups_list($group_id);
 $groups[0] = get_lang('NoParentship');
@@ -78,8 +89,8 @@ $form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups
 
 // Status
 $status = array();
-$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+$status[GROUP_PERMISSION_OPEN] = get_lang('Open');
+$status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
 // Submit button
@@ -100,17 +111,28 @@ if ( $form->validate()) {
 		$picture_uri = GroupPortalManager::delete_group_picture($group_id);
 		}
 	elseif (!empty($picture['name'])) {
-		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+        $picture_uri = GroupPortalManager::update_group_picture(
+            $group_id,
+            $_FILES['picture']['name'],
+            $_FILES['picture']['tmp_name']
+        );
 	}
 
-	$name 			= $group['name'];
-	$description	= $group['description'];
-	$url 			= $group['url'];
-	$status 		= intval($group['visibility']);
-  $parent_group_id = intval($group['parent_group']);
+	$name = $group['name'];
+	$description = $group['description'];
+	$url = $group['url'];
+	$status = intval($group['visibility']);
+	$parent_group_id = intval($group['parent_group']);
 
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
-  GroupPortalManager::set_parent_group($group_id,$parent_group_id);
+    GroupPortalManager::update(
+        $group_id,
+        $name,
+        $description,
+        $url,
+        $status,
+        $picture_uri
+    );
+    GroupPortalManager::set_parent_group($group_id, $parent_group_id);
 
 	$tok = Security::get_token();
 	header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
@@ -127,10 +149,10 @@ $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'i
 $image_size = api_getimagesize($image_file);
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
-if ($image_size['width'] > 300) { //limit display width to 300px
+if ($image_size['width'] > 300) {
+    // limit display width to 300px
 	$img_attributes .= 'width="300" ';
 }
 

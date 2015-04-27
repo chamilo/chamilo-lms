@@ -42,20 +42,35 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     $picture_element = $form->getElement('picture');
-    $picture 		= $picture_element->getValue();
-    $picture_uri 	= '';
-    $name 			= $values['name'];
-    $description	= $values['description'];
-    $url 			= $values['url'];
-    $status 		= intval($values['visibility']);
-    $picture 		= $_FILES['picture'];
+    $picture = $picture_element->getValue();
+    $picture_uri = '';
+    $name = $values['name'];
+    $description = $values['description'];
+    $url = $values['url'];
+    $status = intval($values['visibility']);
+    $picture = $_FILES['picture'];
 
     $group_id = GroupPortalManager::add($name, $description, $url, $status);
-    GroupPortalManager::add_user_to_group(api_get_user_id(), $group_id, GROUP_USER_PERMISSION_ADMIN);
+    GroupPortalManager::add_user_to_group(
+        api_get_user_id(),
+        $group_id,
+        GROUP_USER_PERMISSION_ADMIN
+    );
 
     if (!empty($picture['name'])) {
-        $picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-        GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
+        $picture_uri = GroupPortalManager::update_group_picture(
+            $group_id,
+            $_FILES['picture']['name'],
+            $_FILES['picture']['tmp_name']
+        );
+        GroupPortalManager::update(
+            $group_id,
+            $name,
+            $description,
+            $url,
+            $status,
+            $picture_uri
+        );
     }
     header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupAdded')));
     exit();
@@ -64,21 +79,20 @@ if ($form->validate()) {
 $nameTools = get_lang('AddGroup');
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
-$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
-$interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
+$interbreadcrumb[] = array('url' => 'home.php', 'name' => get_lang('Social'));
+$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_add');
 $social_menu_block = SocialManager::show_social_menu('group_add');
 
-$social_right_content = $form->return_form();
+$social_right_content = $form->returnForm();
 
 $tpl = new Template();
 $tpl->set_help('Groups');
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-//$tpl->assign('actions', $actions);
-//$tpl->assign('message', $show_message);
+
 $social_layout = $tpl->get_template('social/add_groups.tpl');
 $tpl->display($social_layout);

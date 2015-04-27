@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
@@ -15,6 +16,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // User permissions
 api_protect_admin_script();
+
+$group_id = 0;
 
 $htmlHeadXtra[] = '<script>
 textarea = "";
@@ -96,27 +99,38 @@ $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('Add'));
 
 // Validate form
-if( $form->validate()) {
+if ($form->validate()) {
 	$check = Security::check_token('post');
 	if ($check) {
 		$values = $form->exportValues();
 
-		$picture_element = $form->getElement('picture');
-		$picture 		= $picture_element->getValue();
-		$picture_uri 	= '';
-		$name 			= $values['name'];
-		$description	= $values['description'];
-		$url 			= $values['url'];
-		$status 		= intval($values['visibility']);
-		$picture 		= $_FILES['picture'];
+        $picture_element = $form->getElement('picture');
+        $picture = $picture_element->getValue();
+        $picture_uri = '';
+        $name = $values['name'];
+        $description = $values['description'];
+        $url = $values['url'];
+        $status = intval($values['visibility']);
+        $picture = $_FILES['picture'];
         $parent_group_id = intval($values['parent_group']);
 
 		$group_id = GroupPortalManager::add($name, $description, $url, $status);
         GroupPortalManager::set_parent_group($group_id,$parent_group_id);
 
 		if (!empty($picture['name'])) {
-			$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-			GroupPortalManager::update($group_id, $name, $description, $url,$status, $picture_uri);
+            $picture_uri = GroupPortalManager::update_group_picture(
+                $group_id,
+                $_FILES['picture']['name'],
+                $_FILES['picture']['tmp_name']
+            );
+            GroupPortalManager::update(
+                $group_id,
+                $name,
+                $description,
+                $url,
+                $status,
+                $picture_uri
+            );
 		}
 
 		//@todo send emails
@@ -157,7 +171,7 @@ if( $form->validate()) {
 
 // Display form
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
+
 if (!empty($message)) {
     Display::display_normal_message(stripslashes($message));
 }

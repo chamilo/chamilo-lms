@@ -254,8 +254,7 @@ class MatchingDraggable extends Question
                 <tr>
                     <th>' . get_lang('ElementList') . '</th>
                     <th>' . get_lang('CorrespondsTo') . '</th>
-                </tr>
-            </table>';
+                </tr>';
 
         return $header;
     }

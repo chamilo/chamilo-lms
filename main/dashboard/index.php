@@ -32,9 +32,6 @@ if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 $dashboar_plugin_styles = DashboardManager::get_links_for_styles_from_dashboard_plugins();
 $htmlHeadXtra[] = $dashboar_plugin_styles;
 
-// interbreadcrumb
-//$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('Dashboard'));
-
 // course description controller object
 $dashboard_controller = new DashboardController();
 

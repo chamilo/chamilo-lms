@@ -6,6 +6,7 @@
  * the requested action
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.dashboard
  */
 class DashboardController
@@ -17,7 +18,8 @@ class DashboardController
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		$this->user_id = api_get_user_id();
 		$this->toolname = 'dashboard';
 		$this->view = new View($this->toolname);
@@ -28,8 +30,8 @@ class DashboardController
 	 * @param string message (optional)
 	 * render to dashboard.php view
 	 */
-	public function display($msg = false) {
-
+	public function display($msg = false)
+	{
 		$data = array();
 		$user_id = $this->user_id;
 
@@ -85,8 +87,8 @@ class DashboardController
 	 * This method allow store user blocks from dashboard manager
 	 * render to dashboard.php view
 	 */
-	public function store_user_block() {
-
+	public function store_user_block()
+    {
 		$data = array();
 		$user_id = $this->user_id;
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
@@ -111,7 +113,8 @@ class DashboardController
 	 * This method is used when you close a block from dashboard block interface
 	 * render to dashboard.php view
 	 */
-	public function close_user_block($path) {
+	public function close_user_block($path)
+    {
 		$user_id = $this->user_id;
 		$result = DashboardManager::close_user_block($user_id, $path);
 		$this->display($result);

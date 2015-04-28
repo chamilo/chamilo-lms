@@ -71,7 +71,8 @@
         "bower-asset/modernizr": "2.8.*",
         "bower-asset/jqueryui-timepicker-addon": "@stable",
 	    "bower-asset/imageMap-resizer": "0.5.3",
-        "bower-asset/jsPlumb" : "1.7.5"
+        "bower-asset/jsPlumb" : "1.7.5",
+        "bower-asset/xcolor": "1.8.0"
     },
     "require-dev": {
         "behat/behat": "2.5.*@stable",

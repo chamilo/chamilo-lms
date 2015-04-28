@@ -254,7 +254,7 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
         if (!isset($parent_language_name)) {
             // 2. The current language is a sub language so we grab the father's
             // setting according to the internalization_database/name_order_convetions.php file
-            $language_id   = api_get_language_id($language_interface);
+            $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
 
             if (!empty($language_id) &&

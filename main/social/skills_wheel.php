@@ -66,7 +66,7 @@ $tpl->assign('url', $url);
 
 $tpl->assign('user_info', $userInfo);
 $tpl->assign('ranking', $ranking);
-$tpl->assign('skills', $mySkills);
+$tpl->assign('skills', $skills);
 
 $content = $tpl->fetch('default/skill/skill_wheel_student.tpl');
 $tpl->assign('content', $content);

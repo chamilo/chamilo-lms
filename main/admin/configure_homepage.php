@@ -406,7 +406,7 @@ if (!empty($action)) {
 				} else {
 					// New links are added as new files in the home/ directory
 					if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
-						$filename = api_replace_dangerous_char($link_name, 'strict').'.html';
+						$filename = api_replace_dangerous_char($link_name).'.html';
 					}
 
 					// "home_" prefix for links are renamed to "user_" prefix (to avoid name clash with existing home page files)

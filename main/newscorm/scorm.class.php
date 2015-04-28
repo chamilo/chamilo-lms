@@ -520,7 +520,7 @@ class scorm extends learnpath
         }
         $course_rel_dir = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
-        $current_dir = api_replace_dangerous_char(trim($current_dir),'strict'); // Current dir we are in, inside scorm/
+        $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
             error_log( 'New LP - import_package() - current_dir = ' . $current_dir, 0);
@@ -535,7 +535,7 @@ class scorm extends learnpath
         $this->zipname = $file_base_name; // Save for later in case we don't have a title.
 
         if ($this->debug > 1) { error_log("New LP - base file name is : ".$file_base_name, 0); }
-        $new_dir = api_replace_dangerous_char(trim($file_base_name),'strict');
+        $new_dir = api_replace_dangerous_char(trim($file_base_name));
         $this->subdir = $new_dir;
         if ($this->debug > 1) { error_log("New LP - subdir is first set to : ".$this->subdir, 0); }
 

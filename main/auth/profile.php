@@ -322,7 +322,8 @@ function is_profile_editable() {
  * @param    $user_id    User id
  * @return    The filename of the new production or FALSE if the upload has failed
  */
-function upload_user_production($user_id) {
+function upload_user_production($user_id)
+{
     $production_repository = UserManager::getUserPathById($user_id, 'system');
 
     if (!file_exists($production_repository)) {
@@ -372,12 +373,12 @@ function check_user_email($email) {
 }
 
 /*        MAIN CODE */
-$filtered_extension         = false;
-$update_success             = false;
-$upload_picture_success     = false;
-$upload_production_success  = false;
-$msg_fail_changue_email     = false;
-$msg_is_not_password        = false;
+$filtered_extension = false;
+$update_success = false;
+$upload_picture_success = false;
+$upload_production_success = false;
+$msg_fail_changue_email = false;
+$msg_is_not_password = false;
 
 if (is_platform_authentication()) {
     if (!empty($_SESSION['change_email'])) {

@@ -42,7 +42,7 @@ $_course = api_get_course_info($course_code);
 $filename = trim($_GET['filename']);
 $filename = Security::remove_XSS($filename);
 $filename = Database::escape_string($filename);
-$filename = api_replace_dangerous_char($filename, $strict = 'loose'); // or strict
+$filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
 $title = trim(str_replace('_chnano_.', '.', $filename)); //hide nanogong wav tag at title

@@ -14,7 +14,7 @@ $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {
     $current_dir = '';
 } else {
-    $current_dir = api_replace_dangerous_char(trim($_POST['current_dir']), 'strict');
+    $current_dir = api_replace_dangerous_char(trim($_POST['current_dir']));
 }
 $uncompress = 1;
 
@@ -43,7 +43,7 @@ if (isset($_POST) && $is_error) {
     $extension = $info['extension'];
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
-    $new_dir = api_replace_dangerous_char(trim($file_base_name), 'strict');
+    $new_dir = api_replace_dangerous_char(trim($file_base_name));
     $type = learnpath::get_package_type($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
 
     $proximity = 'local';
@@ -116,7 +116,7 @@ if (isset($_POST) && $is_error) {
     $filename = $info['basename'];
     $extension = $info['extension'];
     $file_base_name = str_replace('.'.$extension, '', $filename);
-    $new_dir = api_replace_dangerous_char(trim($file_base_name), 'strict');
+    $new_dir = api_replace_dangerous_char(trim($file_base_name));
 
     $result = learnpath::verify_document_size($s);
     if ($result == true) {

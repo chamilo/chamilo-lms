@@ -252,8 +252,7 @@ $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
  */
 function document_exists($filename) {
     global $dir;
-    // Clean up the name, only ASCII characters should stay. (and strict)
-    $cleanName = api_replace_dangerous_char($filename, 'strict');
+    $cleanName = api_replace_dangerous_char($filename);
 
     // No "dangerous" files
     $cleanName = disable_dangerous_file($cleanName);

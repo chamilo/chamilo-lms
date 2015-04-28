@@ -598,14 +598,14 @@ class SocialManager extends UserManager
         );
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::get_number_of_messages(true);
-        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
+        /*$count_unread_message = MessageManager::get_number_of_messages(true);
+        $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;*/
 
-        $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+        /*$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
         $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION, false);
         $group_pending_invitations = count($group_pending_invitations);
         $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : '');*/
 
         $html = '<div class="avatar-profile">';
         if (in_array($show, $show_groups) && !empty($group_id)) {
@@ -819,6 +819,7 @@ class SocialManager extends UserManager
                     }
                 }
             }
+
             $html .= '</ul></div></div>';
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
@@ -834,17 +835,20 @@ class SocialManager extends UserManager
                         }
                         $i++;
                     }
-                    //to avoid repeted courses
+                    // To avoid repeated courses
                     $course_list_code = array_unique_dimensional($course_list_code);
                 }
 
-                //-----Announcements
+                // Announcements
                 $my_announcement_by_user_id = intval($user_id);
                 $announcements = array();
                 foreach ($course_list_code as $course) {
                     $course_info = api_get_course_info($course['code']);
                     if (!empty($course_info)) {
-                        $content = AnnouncementManager::get_all_annoucement_by_user_course($course_info['code'], $my_announcement_by_user_id);
+                        $content = AnnouncementManager::get_all_annoucement_by_user_course(
+                            $course_info['code'],
+                            $my_announcement_by_user_id
+                        );
 
                         if (!empty($content)) {
                             $url = Display::url(Display::return_icon('announcement.png', get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')', api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']);
@@ -867,10 +871,19 @@ class SocialManager extends UserManager
         if ($show_delete_account_button) {
             $html .= '<div class="sidebar-nav"><ul><li>';
             $url = api_get_path(WEB_CODE_PATH).'auth/unsubscribe_account.php';
-            $html .= Display::url(Display::return_icon('delete.png', get_lang('Unsubscribe'), array(), ICON_SIZE_TINY).get_lang('Unsubscribe'), $url);
+            $html .= Display::url(
+                Display::return_icon(
+                    'delete.png',
+                    get_lang('Unsubscribe'),
+                    array(),
+                    ICON_SIZE_TINY
+                ).get_lang('Unsubscribe'),
+                $url
+            );
             $html .= '</li></ul></div>';
         }
         $html .= '';
+
         return $html;
     }
 

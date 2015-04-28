@@ -3552,7 +3552,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
             $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                api_replace_dangerous_char($fileData['name'], 'strict')
+                api_replace_dangerous_char($fileData['name'])
             );
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
@@ -3700,7 +3700,7 @@ function uploadWork($my_folder_data, $_course)
     $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
 
     // Replace dangerous characters
-    $filename = api_replace_dangerous_char($filename, 'strict');
+    $filename = api_replace_dangerous_char($filename);
 
     // Transform any .php file in .phps fo security
     $filename = php2phps($filename);

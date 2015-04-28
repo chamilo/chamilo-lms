@@ -1,4 +1,3 @@
-
 <footer> <!-- start of #footer section -->
     <div class="container">
         <div class="row">

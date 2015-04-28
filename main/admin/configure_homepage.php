@@ -143,6 +143,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 $languageGet = isset($_GET['language']) ? Security::remove_XSS($_GET['language']) : $lang;
 
 // Ensuring availability of main files in the corresponding language
+$homePath = api_get_path(SYS_APP_PATH).'home/';
 
 if (api_is_multiple_url_enabled()) {
 	$access_url_id = api_get_current_access_url_id();
@@ -153,9 +154,9 @@ if (api_is_multiple_url_enabled()) {
 		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
 
-		$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
-		$homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
-		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+		$homep = $homePath; //homep for Home Path
+		$homep_new = $homePath.'home/'.$clean_url; //homep for Home Path added the url
+		$new_url_dir = $homePath.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)) {
 			mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -163,16 +164,16 @@ if (api_is_multiple_url_enabled()) {
 	}
 } else {
 	$homep_new = '';
-	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+	$homep = $homePath; //homep for Home Path
 }
 
-$menuf	 = 'home_menu'; //menuf for Menu File
-$newsf	 = 'home_news'; //newsf for News File
-$topf 	 = 'home_top'; //topf for Top File
+$menuf = 'home_menu'; //menuf for Menu File
+$newsf = 'home_news'; //newsf for News File
+$topf = 'home_top'; //topf for Top File
 $noticef = 'home_notice'; //noticef for Notice File
-$menutabs= 'home_tabs'; //menutabs for tabs Menu
-$mtloggedin= 'home_tabs_logged_in'; //menutabs for tabs Menu
-$ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
+$menutabs = 'home_tabs'; //menutabs for tabs Menu
+$mtloggedin = 'home_tabs_logged_in'; //menutabs for tabs Menu
+$ext = '.html'; //ext for HTML Extension - when used frequently, variables are
 // faster than hardcoded strings
 $homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
 

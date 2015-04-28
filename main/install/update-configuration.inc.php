@@ -13,8 +13,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     Log::notice("Starting " . basename(__FILE__));
 
     // Edit the configuration file
-    $file   = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
-    $fh     = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
+    $file = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
+    $fh = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
 
     $found_version_old = false;
     $found_stable_old = false;
@@ -38,7 +38,6 @@ if (defined('SYSTEM_INSTALLATION')) {
             $found_software_url = true;
             $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
         } elseif (stripos($line, '$userPasswordCrypted') !== false) {
-            //$line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
             $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";
         } elseif (stripos($line, '?>') !== false) {
             $ignore = true;

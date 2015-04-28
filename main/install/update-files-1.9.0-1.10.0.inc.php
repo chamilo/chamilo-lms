@@ -137,6 +137,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         'wiki',
         'work',
     );
+
     $list = scandir($langPath);
     foreach ($list as $entry) {
         if (is_dir($langPath . $entry) &&
@@ -163,7 +164,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         unlink(api_get_path(SYS_PATH).'courses/.htaccess');
     }
 
-    // Move files and dirs.
+    // Move dirs into new structures.
 
     $movePathList = [
         api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH).'groups',
@@ -171,6 +172,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH).'badges',
         api_get_path(SYS_PATH).'courses' => api_get_path(SYS_COURSE_PATH),
         api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb',
+        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH).'home',
     ];
 
     foreach ($movePathList as $origin => $destination) {
@@ -178,6 +180,10 @@ if (defined('SYSTEM_INSTALLATION')) {
             rename($origin, $destination);
         }
     }
+
+    // Remove archive
+    @rrmdir(api_get_path(SYS_PATH).'archive');
+
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

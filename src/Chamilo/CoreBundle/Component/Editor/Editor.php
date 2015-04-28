@@ -3,10 +3,9 @@
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Routing\RouterInterface;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Template;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Class Editor
@@ -202,6 +201,7 @@ class Editor
                         $this->setConfigAttribute('height', $value);
                         break;
                     case 'FullPage':
+                    case 'fullPage':
                         $this->setConfigAttribute('fullPage', $value);
                         break;
                     default:

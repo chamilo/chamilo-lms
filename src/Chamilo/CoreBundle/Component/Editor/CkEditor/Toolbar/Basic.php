@@ -17,7 +17,7 @@ class Basic extends Toolbar
      * @var array
      */
     public $defaultPlugins = array(
-        'adobeair',
+       'adobeair',
         'ajax',
         'audio',
         'bidi',
@@ -26,7 +26,8 @@ class Basic extends Toolbar
         'dialogui',
         'dialogadvtab',
         'div',
-        'divarea',
+        //if you activate this plugin the html, head tags will not be saved
+        //'divarea',
         'docprops',
         'find',
         'flash',
@@ -34,30 +35,30 @@ class Basic extends Toolbar
         'iframe',
         'iframedialog',
         'indentblock',
-        'justify',
-        'language',
-        'lineutils',
-        'liststyle',
-        'newpage',
-        'oembed',
-        'pagebreak',
-        'preview',
-        'print',
-        'save',
-        'selectall',
-        'sharedspace',
-        'showblocks',
-        'smiley',
-        'sourcedialog',
-        'stylesheetparser',
-        'tableresize',
-        'templates',
-        'uicolor',
-        'video',
-        'widget',
-        'wikilink',
-        'wordcount',
-        'xml'
+       'justify',
+       'language',
+       'lineutils',
+       'liststyle',
+       'newpage',
+       'oembed',
+       'pagebreak',
+       'preview',
+       'print',
+       'save',
+       'selectall',
+       'sharedspace',
+       'showblocks',
+       'smiley',
+       'sourcedialog',
+       'stylesheetparser',
+       'tableresize',
+       'templates',
+       'uicolor',
+       'video',
+       'widget',
+       'wikilink',
+       'wordcount',
+       'xml'
     );
 
     /**
@@ -114,9 +115,9 @@ class Basic extends Toolbar
             $plugins[] = 'mapping';
         }
 
-        if (api_get_setting('block_copy_paste_for_students') == 'true') {
+        /*if (api_get_setting('block_copy_paste_for_students') == 'true') {
             // Missing
-        }
+        }*/
 
         if (api_get_setting('more_buttons_maximized_mode') == 'true') {
             $plugins[] = 'toolbarswitch';
@@ -136,6 +137,7 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
+        $config = array();
         if (api_get_setting('more_buttons_maximized_mode') == 'true') {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
 
@@ -155,8 +157,6 @@ class Basic extends Toolbar
 
         //$config['oembed_maxWidth'] = '560';
         //$config['oembed_maxHeight'] = '315';
-
-        //$config['allowedContent'] = true;
 
         /*$config['wordcount'] = array(
             // Whether or not you want to show the Word Count

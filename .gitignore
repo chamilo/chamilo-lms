@@ -17,27 +17,13 @@ courses/*
 !courses/index.html
 
 # Home
-app/home/*
 home/*
 
-# User images
-app/upload/users/*
-!app/upload/users/index.html
-
-# Session images
-app/upload/sessions/*
-!main/upload/sessions/index.html
-
-# Course images
-app/upload/courses/*
-!app/upload/courses/index.html
+# Upload content
+app/upload/*
 
 # Logs and databases #
 *.log
-
-# Xapian indexes directory
-searchdb/*
-!searchdb/index.html
 
 # IDE settings
 

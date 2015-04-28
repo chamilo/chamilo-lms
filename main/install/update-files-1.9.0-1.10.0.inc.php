@@ -86,6 +86,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         'xhosa',
         'yoruba',
     );
+
     $filesToDelete = array(
         'accessibility',
         'admin',
@@ -169,6 +170,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH).'users',
         api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH).'badges',
         api_get_path(SYS_PATH).'courses' => api_get_path(SYS_COURSE_PATH),
+        api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb',
     ];
 
     foreach ($movePathList as $origin => $destination) {

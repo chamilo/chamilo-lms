@@ -656,7 +656,7 @@ function handle_search()
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        $xapian_path = api_get_path(SYS_PATH).'searchdb';
+        $xapian_path = api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb';
 
         /*
         @todo Test the Xapian connection

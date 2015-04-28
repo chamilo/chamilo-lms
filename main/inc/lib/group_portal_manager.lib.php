@@ -960,7 +960,7 @@ class GroupPortalManager
                 break;
             case 'web': // Base: absolute web path.
             default:
-                $base = api_get_path(WEB_PATH).'app/uploads/';
+                $base = api_get_path(WEB_UPLOAD_PATH);
                 break;
         }
 

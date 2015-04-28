@@ -138,7 +138,8 @@ if (defined('SYSTEM_INSTALLATION')) {
     );
     $list = scandir($langPath);
     foreach ($list as $entry) {
-        if (is_dir($langPath . $entry) && in_array($entry, $officialLanguages)
+        if (is_dir($langPath . $entry) &&
+            in_array($entry, $officialLanguages)
         ) {
             foreach ($filesToDelete as $file) {
                 if (is_file($langPath . $entry . '/' . $file . '.inc.php')) {
@@ -147,6 +148,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
+
     // Remove the "main/conference/" directory that wasn't used since years long
     // past - see rrmdir function declared below
     @rrmdir(api_get_path(SYS_CODE_PATH).'conference');
@@ -156,6 +158,24 @@ if (defined('SYSTEM_INSTALLATION')) {
         @unlink(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
     }
 
+    if (is_file(api_get_path(SYS_PATH).'courses/.htaccess')) {
+        unlink(api_get_path(SYS_PATH).'courses/.htaccess');
+    }
+
+    // Move files and dirs.
+
+    $movePathList = [
+        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH).'groups',
+        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH).'users',
+        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH).'badges',
+        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_COURSE_PATH),
+    ];
+
+    foreach ($movePathList as $origin => $destination) {
+        if (is_dir($origin)) {
+            rename($origin, $destination);
+        }
+    }
 } else {
     echo 'You are not allowed here !'. __FILE__;
 }

@@ -1296,7 +1296,7 @@ class UserManager
                 $userPath = api_get_path(SYS_UPLOAD_PATH).$userPath;
                 break;
             case 'web': // Base: absolute web path.
-                $userPath = api_get_path(WEB_PATH).'app/upload/'.$userPath;
+                $userPath = api_get_path(WEB_UPLOAD_PATH).$userPath;
                 break;
         }
 

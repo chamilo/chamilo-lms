@@ -3,8 +3,10 @@
 
 /**
  * Class Model
- * This class provides basic methods to implement a CRUD for a new table in the database see examples in: career.lib.php and promotion.lib.php
+ * This class provides basic methods to implement a CRUD for a new table in the
+ * database see examples in: career.lib.php and promotion.lib.php
  * Include/require it in your code to use its features.
+ *
  * @package chamilo.library
  */
 class Model
@@ -12,8 +14,11 @@ class Model
     public $table;
     public $columns;
     public $required;
-    public $is_course_model =false;
+    public $is_course_model = false;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
     }
@@ -37,6 +42,9 @@ class Model
 
     /**
      * Deletes an item
+     * @param int $id
+     *
+     * @return bool
      */
     public function delete($id)
     {
@@ -53,11 +61,13 @@ class Model
         if ($result != 1) {
             return false;
         }
+
         return true;
     }
 
     /**
      * @param array $params
+     *
      * @return array
      */
     private function clean_parameters($params)
@@ -70,34 +80,46 @@ class Model
                 }
             }
         }
+
         return $clean_params;
     }
 
     /**
      * Displays the title + grid
      */
-    public function display() {
+    public function display()
+    {
     }
 
     /**
      * Gets an element
+     * @param int $id
+     *
+     * @return array|mixed
      */
     public function get($id)
     {
         if (empty($id)) {
             return array();
         }
-        $params = array('id = ?'=>intval($id));
+        $params = array('id = ?' => intval($id));
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
             $params = array('id = ? AND c_id = ?' => array($id, $course_id));
         }
-        $result = Database::select('*',$this->table, array('where' => $params),'first');
+        $result = Database::select(
+            '*',
+            $this->table,
+            array('where' => $params),
+            'first'
+        );
+
         return $result;
     }
 
     /**
      * @param array $options
+     *
      * @return array
      */
     public function get_all($options = null)
@@ -120,7 +142,13 @@ class Model
      */
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array('where' => array('parent_id = ?' => '0')),'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array('where' => array('parent_id = ?' => '0')),
+            'first'
+        );
+
         return $row['count'];
     }
 
@@ -178,6 +206,7 @@ class Model
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
      * @param array $params
+     *
      * @return bool
      *
      */
@@ -210,6 +239,7 @@ class Model
                 }
             }
         }
+
         return false;
     }
 }

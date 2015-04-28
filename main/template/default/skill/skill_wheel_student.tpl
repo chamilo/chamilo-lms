@@ -172,7 +172,7 @@ $(document).ready(function() {
                                 {% if skill.iconThumb is empty %}
                                     <img src="{{ 'badges.png' | icon(32) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
-                                    <img src="{{ _p.web_data }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    <img src="{{ _p.web_upload }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

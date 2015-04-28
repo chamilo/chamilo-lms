@@ -64,7 +64,9 @@ $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 
-$htmlHeadXtra[] = (new Template())->fetch('default/exercise/submit.js.tpl');
+$template = new Template();
+
+$htmlHeadXtra[] = $template->fetch('default/exercise/submit.js.tpl');
 
 // General parameters passed via POST/GET
 

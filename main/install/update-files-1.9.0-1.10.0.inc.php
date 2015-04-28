@@ -13,9 +13,6 @@
 Log::notice('Entering file');
 
 if (defined('SYSTEM_INSTALLATION')) {
-
-    $conf_dir = api_get_path(CONFIGURATION_PATH);
-
     // Changes for 1.10.x
     // Delete directories and files that are not necessary anymore
     // pChart (1) lib, etc

@@ -218,7 +218,11 @@ function handle_stylesheets()
         $is_style_changeable = true;
     }
 
-    $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets#tabs-2');
+    $form = new FormValidator(
+        'stylesheet_upload',
+        'post',
+        'settings.php?category=Stylesheets#tabs-2'
+    );
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
@@ -250,7 +254,7 @@ function handle_stylesheets()
             $values = $form->exportValues();
             $picture_element = $form->getElement('new_stylesheet');
             $picture = $picture_element->getValue();
-            $result  = upload_stylesheet($values, $picture);
+            $result = upload_stylesheet($values, $picture);
 
             // Add event to the system log.
             $user_id = api_get_user_id();
@@ -269,7 +273,13 @@ function handle_stylesheets()
         }
     }
 
-    $form_change = new FormValidator('stylesheet_upload', 'post', api_get_self().'?category=Stylesheets', null, array('id' => 'stylesheets_id'));
+    $form_change = new FormValidator(
+        'stylesheet_upload',
+        'post',
+        api_get_self().'?category=Stylesheets',
+        null,
+        array('id' => 'stylesheets_id')
+    );
 
     $list_of_styles = array();
     $list_of_names  = array();
@@ -392,10 +402,11 @@ function upload_stylesheet($values, $picture)
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
+    $cssToUpload = api_get_path(SYS_APP_PATH).'Resources/public/css/';
 
     // Create the folder if needed.
-    if (!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/')) {
-        mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', api_get_permissions_for_new_directories());
+    if (!is_dir($cssToUpload.$style_name.'/')) {
+        mkdir($cssToUpload.$style_name.'/', api_get_permissions_for_new_directories());
     }
 
     $info = pathinfo($picture['name']);
@@ -409,11 +420,23 @@ function upload_stylesheet($values, $picture)
             $single_directory = true;
             $invalid_files = array();
 
+            $allowedFiles = array(
+                'jpg',
+                'jpeg',
+                'png',
+                'gif',
+                'css',
+                'ico',
+                'psd',
+                'woff',
+                'woff2'
+            );
+
             for ($i = 0; $i < $num_files; $i++) {
                 $file = $zip->statIndex($i);
                 if (substr($file['name'], -1) != '/') {
                     $path_parts = pathinfo($file['name']);
-                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico','psd'))) {
+                    if (!in_array($path_parts['extension'], $allowedFiles)) {
                         $valid = false;
                         $invalid_files[] = $file['name'];
                     }
@@ -434,10 +457,10 @@ function upload_stylesheet($values, $picture)
                 // If the zip does not contain a single directory, extract it.
                 if (!$single_directory) {
                     // Extract zip file.
-                    $zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+                    $zip->extractTo($cssToUpload.$style_name.'/');
                     $result = true;
                 } else {
-                    $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
+                    $extraction_path = $cssToUpload.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
                         if (substr($entry, -1) == '/')
@@ -472,7 +495,7 @@ function upload_stylesheet($values, $picture)
         }
     } else {
         // Simply move the file.
-        move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+        move_uploaded_file($picture['tmp_name'], $cssToUpload.$style_name.'/'.$picture['name']);
         $result = true;
     }
     return $result;
@@ -1202,7 +1225,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
         switch ($row['type']) {
             case 'textfield':
                 if (in_array($row['variable'], $convert_byte_to_mega_list)) {
-                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('class' => 'span1', 'maxlength' => '8'));
+                    $form->addElement('text', $row['variable'], array(get_lang($row['title']), get_lang($row['comment']), get_lang('MB')), array('maxlength' => '8'));
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value']/1024/1024, 1);
                 } elseif ($row['variable'] == 'account_valid_duration') {
@@ -1227,7 +1250,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('class'=>'span6','rows'=>'10'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $value;
                 } elseif ($row['variable'] == 'footer_extra_content') {
                     $file = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
@@ -1235,10 +1258,10 @@ function generate_settings_form($settings, $settings_by_access_list) {
                     if (file_exists($file)) {
                         $value = file_get_contents($file);
                     }
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10', 'class'=>'span6'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $value;
                 } else {
-                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10','class'=>'span6'), $hideme);
+                    $form->addElement('textarea', $row['variable'], array(get_lang($row['title']), get_lang($row['comment'])) , array('rows'=>'10'), $hideme);
                     $default_values[$row['variable']] = $row['selected_value'];
                 }
                 break;

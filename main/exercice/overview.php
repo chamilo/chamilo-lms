@@ -163,7 +163,7 @@ if (!empty($attempts) && $visible_return['value'] == true) {
             $attempt_result['exe_result'],
             $attempt_result['exe_weighting']
         );
-        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?' . api_get_cidreq() . '&id=' . $attempt_result['exe_id'] . '&height=500&width=950' . $url_suffix;
+        $attempt_url = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?' . api_get_cidreq() . '&id=' . $attempt_result['exe_id'] . '&modal_size=lg' . $url_suffix;
         $attempt_link = Display::url(
             get_lang('Show'),
             $attempt_url,

@@ -166,10 +166,10 @@ class ExtraFieldValue extends Model
 
                             switch ($this->type) {
                                 case 'course':
-                                    $fileDir = api_get_path(SYS_APP_PATH)."upload/courses/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                                     break;
                                 case 'session':
-                                    $fileDir = api_get_path(SYS_APP_PATH)."upload/sessions/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
                                     break;
                                 case 'user':
                                     $fileDir = UserManager::getUserPathById($this->handler_id, 'system');
@@ -204,10 +204,10 @@ class ExtraFieldValue extends Model
 
                             switch ($this->type) {
                                 case 'course':
-                                    $fileDir = api_get_path(SYS_APP_PATH)."upload/courses/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                                     break;
                                 case 'session':
-                                    $fileDir = api_get_path(SYS_APP_PATH)."upload/sessions/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
                                     break;
                                 case 'user':
                                     $fileDir = UserManager::getUserPathById($this->handler_id, 'system');

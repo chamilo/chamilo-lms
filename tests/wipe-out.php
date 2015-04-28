@@ -52,7 +52,7 @@ $homepath = api_get_path(SYS_PATH).'home';
 $clean_dirs = array(
     api_get_path(SYS_COURSE_PATH),              //courses
     api_get_path(SYS_APP_PATH).'config/',
-    api_get_path(SYS_APP_PATH).'upload/users/',
+    api_get_path(SYS_UPLOAD_PATH).'users/',
     api_get_path(SYS_ARCHIVE_PATH)
 );
 

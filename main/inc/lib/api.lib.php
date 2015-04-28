@@ -273,6 +273,7 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_APP_PATH', 'SYS_APP_PATH');
+define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
@@ -577,7 +578,8 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
- * api_get_path(SYS_APP_PATH)                   /var/www/chamilo/app
+ * api_get_path(SYS_APP_PATH)                   /var/www/chamilo/app/
+ * api_get_path(SYS_UPLOAD_PATH)                /var/www/chamilo/app/upload/
  *
  * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/app/courses/
@@ -594,7 +596,7 @@ require_once __DIR__.'/internationalization.lib.php';
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
- * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/app/courses/
+ * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/data/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
@@ -646,6 +648,7 @@ function api_get_path($path_type, $path = null)
         SYS_ARCHIVE_PATH        => 'app/cache/',
         WEB_ARCHIVE_PATH        => 'app/cache/',
         SYS_APP_PATH            => 'app/',
+        SYS_UPLOAD_PATH         => 'app/upload/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
         CONFIGURATION_PATH      => 'app/config/',
@@ -750,7 +753,7 @@ function api_get_path($path_type, $path = null)
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
 
-        $paths[WEB_COURSE_PATH]         = $root_web.'app/'.$course_folder;
+        $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
 
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
@@ -762,11 +765,12 @@ function api_get_path($path_type, $path = null)
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_CODE_PATH].'default_course_document/';
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_PATH].'main/default_course_document/';
 
-
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
 
         $paths[SYS_APP_PATH]            = $paths[SYS_PATH].$paths[SYS_APP_PATH];
+        $paths[SYS_UPLOAD_PATH]         = $paths[SYS_PATH].$paths[SYS_UPLOAD_PATH];
+
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
@@ -5580,20 +5584,19 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     return false;
 }
 
+
 /**
  * Replaces "forbidden" characters in a filename string.
  *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author René Haentjens, UGent (RH)
- * @author Ivan Tcholakov, JUN-2009.        Transliteration functionality has been added.
- * @param  string $filename                 The filename string.
- * @param  string $strict (optional)        When it is 'strict', all non-ASCII charaters will be replaced. Additional ASCII replacemets will be done too.
- * @return string                           The cleaned filename.
+ * @param string $filename
+ * @param int $length
+ * @param bool $file_name
+ * @return string
  */
-
-function api_replace_dangerous_char($filename, $strict = 'loose')
+function api_replace_dangerous_char($filename)
 {
-    return URLify::filter($filename, 250);
+    return URLify::filter($filename, 250, '', true);
+
     /*
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');

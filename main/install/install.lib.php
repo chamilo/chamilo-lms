@@ -899,16 +899,16 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(CONFIGURATION_PATH)).'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/users/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/users/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_UPLOAD_PATH).'users/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH).'users/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/sessions/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/sessions/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_UPLOAD_PATH).'sessions/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH).'sessions/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'upload/courses/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'upload/courses/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_UPLOAD_PATH).'courses/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH).'courses/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
@@ -1007,19 +1007,19 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_APP_PATH).'upload/users/';
+        $checked_writable = api_get_path(SYS_UPLOAD_PATH).'users/';
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
-        $checkedWritable = api_get_path(SYS_APP_PATH).'upload/sessions/';
+        $checkedWritable = api_get_path(SYS_UPLOAD_PATH).'sessions/';
         if (!is_writable($checkedWritable)) {
             $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);
         }
 
-        $checkedWritable = api_get_path(SYS_APP_PATH).'upload/courses/';
+        $checkedWritable = api_get_path(SYS_UPLOAD_PATH).'courses/';
         if (!is_writable($checkedWritable)) {
             $notWritable[] = $checkedWritable;
             @chmod($checkedWritable, $perm);

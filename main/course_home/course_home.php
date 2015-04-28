@@ -28,11 +28,10 @@
 *	@package chamilo.course_home
 */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $use_anonymous = true;
 
-// Inlcuding the global initialization file.
 require_once dirname(__FILE__).'/../inc/global.inc.php';
 
 // Delete LP sessions - commented out after seeing that normal
@@ -135,6 +134,7 @@ $user_id = api_get_user_id();
 $course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $show_message = '';
+
 
 if (api_is_invitee()) {
     $isInASession = $sessionId > 0;

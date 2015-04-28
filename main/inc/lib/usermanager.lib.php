@@ -413,7 +413,8 @@ class UserManager
         a user has 4 different sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
-            $img_path = api_get_path(SYS_APP_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
+            $path = self::getUserPathById($user_id);
+            $img_path = $path.$user_info['picture_uri'];
             if (file_exists($img_path))
                 unlink($img_path);
         }
@@ -1242,7 +1243,7 @@ class UserManager
             'email' => '',
         );
 
-        if ((empty($id) || empty($type))) {
+        if (empty($id) || empty($type)) {
             return $anonymousPath;
         }
 
@@ -1277,7 +1278,7 @@ class UserManager
      * The return format is a complete path to a folder ending with "/"
      * @param   integer $id User ID
      * @param   string  $type Type of path to return (can be 'system', 'web')
-     * @return  string  User folder path (i.e. /var/www/chamilo/main/upload/users/1/1/)
+     * @return  string  User folder path (i.e. /var/www/chamilo/app/upload/users/1/1/)
      */
     public static function getUserPathById($id, $type)
     {
@@ -1286,17 +1287,16 @@ class UserManager
             return null;
         }
 
-        $userPath = "upload/users/$id/";
+        $userPath = "users/$id/";
         if (api_get_setting('split_users_upload_directory') === 'true') {
-            $userPath = 'upload/users/'.substr((string) $id, 0, 1).'/'.$id.'/';
+            $userPath = 'users/'.substr((string) $id, 0, 1).'/'.$id.'/';
         }
-
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $userPath = api_get_path(SYS_APP_PATH).$userPath;
+                $userPath = api_get_path(SYS_UPLOAD_PATH).$userPath;
                 break;
             case 'web': // Base: absolute web path.
-                $userPath = api_get_path(WEB_PATH).'app/'.$userPath;
+                $userPath = api_get_path(WEB_PATH).'app/upload/'.$userPath;
                 break;
         }
 
@@ -1306,7 +1306,7 @@ class UserManager
     /**
      * Gets the current user image
      * @param string $user_id
-     * @param string $size it can be USER_IMAGE_SIZE_SMALL,
+     * @param int $size it can be USER_IMAGE_SIZE_SMALL,
      * USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool $addRandomId
      * @param array $userInfo to avoid query the DB
@@ -1322,6 +1322,10 @@ class UserManager
         $imageWebPath = self::get_user_picture_path_by_id($user_id, 'web', $userInfo);
         $pictureWebFile = $imageWebPath['file'];
         $pictureWebDir = $imageWebPath['dir'];
+
+        $pictureAnonymous = 'unknown.jpg';
+        $gravatarSize = 22;
+        $realSizeName = 'small_';
 
         switch ($size) {
             case USER_IMAGE_SIZE_SMALL:
@@ -1360,9 +1364,10 @@ class UserManager
             }
             return $file;
         }
+
         $anonymousPath = api_get_path(WEB_CODE_PATH).'img/'.$pictureAnonymous;
 
-        if ($pictureWebFile == 'unknown.jpg') {
+        if ($pictureWebFile == 'unknown.jpg' || empty($pictureWebFile)) {
 
             return $anonymousPath;
         }

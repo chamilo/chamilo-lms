@@ -169,7 +169,7 @@ class AddCourse
         fclose($fp);
 
         // Build index.php of the course.
-        $fd = fopen($cp . '/index.php', 'w');
+        /*$fd = fopen($cp . '/index.php', 'w');
 
         // str_replace() removes \r that cause squares to appear at the end of each line
         //@todo fix the harcoded include
@@ -184,7 +184,7 @@ class AddCourse
         ?>"
         );
         fwrite($fd, $string);
-        @chmod($cp . '/index.php', $perm_file);
+        @chmod($cp . '/index.php', $perm_file);*/
         return 0;
     }
 

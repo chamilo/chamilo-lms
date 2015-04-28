@@ -956,11 +956,11 @@ class GroupPortalManager
     {
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_APP_PATH);
+                $base = api_get_path(SYS_UPLOAD_PATH);
                 break;
             case 'web': // Base: absolute web path.
             default:
-                $base = api_get_path(WEB_PATH).'app/';
+                $base = api_get_path(WEB_PATH).'app/uploads/';
                 break;
         }
 
@@ -985,14 +985,14 @@ class GroupPortalManager
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
             if (!empty($picture_filename)) {
-                $dir = $base.'upload/groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
+                $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
             } elseif ($preview) {
-                $dir = $base.'upload/groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
+                $dir = $base.'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             } else {
-                $dir = $base.'upload/groups/'.$id.'/';
+                $dir = $base.'groups/'.$id.'/';
             }
         } else {
-            $dir = $base.'upload/groups/'.$id.'/';
+            $dir = $base.'groups/'.$id.'/';
         }
 
         if (empty($picture_filename) && $anonymous) {

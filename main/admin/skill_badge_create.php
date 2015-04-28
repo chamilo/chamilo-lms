@@ -45,13 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($existsBadgesDirectory) {
 
-            /*if (!empty($skill['icon'])) {
+            if (!empty($skill['icon'])) {
                 $iconFileAbsolutePath = $badgePath . $skill['icon'];
 
                 if (Security::check_abs_path($iconFileAbsolutePath, $badgePath)) {
                     unlink($badgePath . $skill['icon']);
                 }
-            }*/
+            }
 
             $skillImagePath = sprintf("%s%s.png", $badgePath, $fileName);
 

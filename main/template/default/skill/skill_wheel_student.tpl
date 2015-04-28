@@ -156,26 +156,28 @@ $(document).ready(function() {
         <div class="row">
             <div class="col-md-3 skill-options">
                 <div class="skill-home">
-                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php"><i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}</a>
+                    <a class="btn btn-large btn-block btn-success" href="{{ _p.web }}user_portal.php">
+                        <i class="fa fa-home"></i> {{ "ReturnToCourseList"|get_lang }}</a>
                 </div>
                 <div class="skill-profile">
                     <div class="avatar">
-                        <img width="100px" src="{{ userInfo.avatar }}" style="text-align: center">
+                        <img width="100px" src="{{ user_info.avatar }}" style="text-align: center">
                     </div>
                     <div class="info-user">
-                        <h4 class="title-skill">{{ userInfo.complete_name }}</h4>
+                        <h4 class="title-skill">{{ user_info.complete_name }}</h4>
                         <p>
                             <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default btn-block" target="_blank">{{ 'YourSkillRankingX' | get_lang | format(ranking) }}</a>
                         </p>
-                        {% if mySkills is not empty %}
-                            {%for skill in mySkills %}
-                                {% if skill.iconThumb is empty %}
+                        {% if skills is not empty %}
+                            {% for skill in skills %}
+                                {% if skill.icon is empty %}
                                     <img src="{{ 'badges.png' | icon(32) }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% else %}
-                                    <img src="{{ _p.web_upload }}{{ skill.iconThumb }}" alt="{{ skill.name }}" title="{{ skill.name }}">
+                                    <img src="{{ skill.web_icon_thumb_path }}" alt="{{ skill.name }}" title="{{ skill.name }}">
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
+
                         {% for i in 1..(9 - ranking) %}
                             <img src="{{ 'badges-default.png' | icon(32) }}">
                         {% endfor %}
@@ -249,8 +251,6 @@ $(document).ready(function() {
                     </div>
                 </div>
                 <!-- END ACCORDEON -->
-
-
             </div>
             <div id="wheel_container" class="col-md-9">
                 <div id="skill_wheel">
@@ -274,7 +274,9 @@ $(document).ready(function() {
                 {{ dialogForm }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "Close" | get_lang }}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">
+                    {{ "Close" | get_lang }}
+                </button>
             </div>
         </div>
     </div>

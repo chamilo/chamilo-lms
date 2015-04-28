@@ -50,6 +50,13 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
+$htmlHeadXtra[] = '<script src="'
+    . api_get_path(WEB_PATH) . 'web/assets/jsplumb/dist/js/jquery.jsPlumb-1.7.5-min.js'
+    . '"></script>';
+$htmlHeadXtra[] = '<script src="'
+    . api_get_path(WEB_PATH) . 'web/assets/xcolor/jquery.xcolor.min.js'
+    . '"></script>';
+
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');

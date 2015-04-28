@@ -343,7 +343,7 @@ foreach ($questionList as $questionId) {
 		$question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
 		$questionScore   = $question_result['score'];
 		$totalScore     += $question_result['score'];
-        } elseif (in_array($answerType, [MATCHING, DRAGGABLE])) {
+        } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());
         $questionScore   = $question_result['score'];
         $totalScore     += $question_result['score'];

@@ -954,7 +954,7 @@ class Display
             if ($key == 'id') {
                 $default_id = '';
             }
-            $extra .= $key.'="'.$parameter.'"';
+            $extra .= $key.'="'.$parameter.'" ';
         }
         $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
 
@@ -976,13 +976,13 @@ class Display
                 if (is_array($default)) {
                     foreach($default as $item) {
                         if ($item == $key) {
-                            $html .= 'selected="selected"';
+                            $html .= ' selected="selected"';
                             break;
                         }
                     }
                 } else {
                     if ($default == $key) {
-                        $html .= 'selected="selected"';
+                        $html .= ' selected="selected"';
                     }
                 }
 

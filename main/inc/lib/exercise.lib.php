@@ -104,8 +104,14 @@ class ExerciseLib
             // on the right side are called answers
             $num_suggestions = 0;
 
-            if ($answerType == MATCHING) {
-                $s .= '<table class="table table-hover table-striped">';
+            if (in_array($answerType, [MATCHING, DRAGGABLE])) {
+                if ($answerType == DRAGGABLE) {
+                    $s .= '<div class="ui-widget ui-helper-clearfix">
+                        <div class="clearfix">
+                        <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
+                } else {
+                    $s .= '<table class="table table-hover table-striped">';
+                }
                 // Iterate through answers
                 $x = 1;
                 //mark letters for each answer
@@ -908,6 +914,94 @@ class ExerciseLib
                         }  // end if()
                         $matching_correct_answer++;
                     }
+                } elseif ($answerType == DRAGGABLE) {
+                    if ($answerCorrect != 0) {
+                        $parsed_answer = $answer;
+                        $windowId = $questionId . '_' . $lines_count;
+
+                        $s .= '<li class="thumbnail" id="' . $windowId . '">';
+                        $s .= Display::div(
+                            $parsed_answer,
+                            [
+                                'id' => "window_$windowId",
+                                'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
+                            ]
+                        );
+                        $selectedValue = 0;
+                        $draggableSelectOptions = [];
+
+                        foreach ($select_items as $key => $val) {
+                            if ($debug_mark_answer) {
+                                if ($val['id'] == $answerCorrect) {
+                                    $selectedValue = $val['id'];
+                                }
+                            }
+
+                            if (
+                                isset($user_choice[$matching_correct_answer]) &&
+                                $val['id'] == $user_choice[$matching_correct_answer]['answer']
+                            ) {
+                                $selectedValue = $val['id'];
+                            }
+
+                            $draggableSelectOptions[$val['id']] = $val['letter'];
+                        }
+
+                        $s .= Display::select(
+                            "choice[$questionId][$numAnswer]",
+                            $draggableSelectOptions,
+                            $selectedValue,
+                            [
+                                'id' => "window_{$windowId}_select",
+                                'class' => 'select_option',
+                                'style' => 'display: none;'
+                            ],
+                            false
+                        );
+
+                        if (!empty($answerCorrect) && !empty($selectedValue)) {
+                            $s .= <<<JAVASCRIPT
+                                <script>
+                                    $(function() {
+                                        DraggableAnswer.deleteItem(
+                                            $('#{$questionId}_{$selectedValue}'),
+                                            $('#drop_$windowId')
+                                        );
+                                    });
+                                </script>
+JAVASCRIPT;
+                        }
+
+                        if (isset($select_items[$lines_count])) {
+                            $s .= Display::div(
+                                Display::tag(
+                                    'b',
+                                    $select_items[$lines_count]['letter']
+                                ) . $select_items[$lines_count]['answer'],
+                                [
+                                    'id' => "window_{$windowId}_answer",
+                                    'style' => 'display: none;'
+                                ]
+                            );
+                        } else {
+                            $s .= '&nbsp;';
+                        }
+
+                        $lines_count++;
+
+                        if (($lines_count - 1) == $num_suggestions) {
+                            while (isset($select_items[$lines_count])) {
+                                $s .= Display::tag('b', $select_items[$lines_count]['letter']);
+                                $s .= $select_items[$lines_count]['answer'];
+
+                                $lines_count++;
+                            }
+                        }
+
+                        $matching_correct_answer++;
+
+                        $s .= '</li>';
+                    }
                 }
             }    // end for()
 
@@ -919,6 +1013,37 @@ class ExerciseLib
                 ) {
                     $s .= '</table>';
                 }
+            }
+
+            if ($answerType == DRAGGABLE) {
+                $s .= "</ul></div>";
+
+                $counterAnswer = 1;
+                
+                $s .= '<div class="col-xs-12"><div class="row">';
+
+                for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                    $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                    $windowId = $questionId . '_' . $counterAnswer;
+
+                    if ($answerCorrect) {
+                        $s .= Display::div(
+                            $counterAnswer,
+                            [
+                                'id' => "drop_$windowId",
+                                'class' => 'droppable col-sm-4 well'
+                            ]
+                        );
+
+                        $counterAnswer++;
+                    }
+                }
+
+                $s .= '</div></div>';
+            }
+
+            if ($answerType == MATCHING) {
+                $s .= '</div>';
             }
 
             $s .= '</div>';

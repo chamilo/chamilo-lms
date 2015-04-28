@@ -3122,7 +3122,7 @@ class CourseManager
                         relation_type=" . COURSE_RELATION_TYPE_RRHH . " AND
                         access_url_id = " . api_get_current_access_url_id() . "";
         } else {
-            $sql = "SELECT course_code FROM $tbl_course_rel_user
+            $sql = "SELECT c_id FROM $tbl_course_rel_user
                     WHERE user_id = $hr_manager_id AND relation_type=" . COURSE_RELATION_TYPE_RRHH . " ";
         }
         $result = Database::query($sql);

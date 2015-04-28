@@ -7235,4 +7235,6 @@ $SaveBadge = "Guardar insignia";
 $BadgeMeasuresXPixelsInPNG = "Medidas de la insignia 200x200 píxeles en formato PNG";
 $SetTutor = "Hacer tutor";
 $UniqueAnswerImage = "Respuesta de imagen única";
+$Draggable = "Arrastrable";
+$Incorrect = "Incorrecto";
 ?>

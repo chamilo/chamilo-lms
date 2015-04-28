@@ -32,6 +32,8 @@ class Ims2Question extends Question
 
                 return $answer;
             case MATCHING:
+                //no break
+            case MATCHING_DRAGGABLE:
                 $answer = new ImsAnswerMatching($this->id);
 
                 return $answer;

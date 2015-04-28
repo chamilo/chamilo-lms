@@ -78,14 +78,11 @@ $language_interface_initial_value = $install_language;
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
 
-// Initialization of the internationalization library.
-api_initialize_internationalization();
-// Initialization of the default encoding that will be used by the multibyte
-// string routines in the internationalization library.
-api_set_internationalization_default_encoding($charset);
+// Enables the portablity layer and configures PHP for UTF-8
+\Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
-header('Content-Type: text/html; charset='. api_get_system_encoding());
+header('Content-Type: text/html; charset='. $charset);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -564,12 +561,7 @@ if (@$_POST['step2']) {
         echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
 
-    if (api_is_western_name_order()) {
-        echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
-    } else {
-        echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
-    }
-
+    echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
     <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />

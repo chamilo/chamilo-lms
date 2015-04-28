@@ -923,6 +923,18 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_COURSE_PATH)).' </td>
             </tr>
             <tr>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'home/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'home/').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' <br />('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+            </tr>
+            <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$courseTestLabel.' </td>
             </tr>
@@ -934,18 +946,7 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'home/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'home/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
-            </tr>'.
+            '.
             //'<tr>
             //    <td class="requirements-item">chamilo/searchdb/</td>
             //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>
@@ -1542,13 +1543,9 @@ function display_configuration_settings_form(
     }
 
     // Parameters 3 and 4: administrator's names
-    if (api_is_western_name_order()) {
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-    } else {
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-    }
+
+    display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
     display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
@@ -1805,7 +1802,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
             if (fwrite($handler, $content)) {
                 $sock_errno = '';
                 $sock_errmsg = '';
-                $url = api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$file;
+                $url = api_get_path(WEB_PATH).'app/courses/'.$course_attempt_name.'/'.$file;
 
                 $parsed_url = parse_url($url);
                 //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http

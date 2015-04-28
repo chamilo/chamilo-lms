@@ -33,8 +33,8 @@ $htmlHeadXtra[] = '
 <script>
 var hide_bar = function() {
     $("#template_col").hide();
-    $("#doc_form").removeClass("span9");
-    $("#doc_form").addClass("span11");
+    $("#doc_form").removeClass("col-md-9");
+    $("#doc_form").addClass("col-md-11");
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
@@ -111,7 +111,7 @@ for ($i = 0; $i < ($count_dir); $i++) {
     $relative_url .= '../';
 }
 
-$html_editor_config = array(
+$editorConfig = array(
     'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' :'DocumentsStudent'),
     'Width' => '100%',
     'Height' => '600',
@@ -125,9 +125,9 @@ $html_editor_config = array(
 );
 
 if ($is_certificate_mode) {
-    $html_editor_config['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $html_editor_config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+    $editorConfig['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $editorConfig['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $editorConfig['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights']||
@@ -210,9 +210,9 @@ if ($is_allowed_to_edit) {
 		$content = isset($_POST['content']) ? trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content']))) : null;
 		$content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
-		if (!strstr($content, '/css/frames.css')) {
+		/*if (!strstr($content, '/css/frames.css')) {
 			$content = str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
-		}
+		}*/
 
         if ($dir == '/') {
             $dir = '';
@@ -237,7 +237,7 @@ if ($is_allowed_to_edit) {
 						fclose($fp);
 
                         $filepath = $document_data['absolute_parent_path'];
-
+						/*
 						if (!is_dir($filepath.'css')) {
 							mkdir($filepath.'css', api_get_permissions_for_new_directories());
 							$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
@@ -265,9 +265,9 @@ if ($is_allowed_to_edit) {
 								null,
 								$sessionId
 							);
-						}
+						}*/
 
-						if (!is_file($filepath.'css/frames.css')) {
+						/*if (!is_file($filepath.'css/frames.css')) {
 							$platform_theme = api_get_setting('stylesheets');
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css', $filepath.'css/frames.css');
@@ -303,7 +303,7 @@ if ($is_allowed_to_edit) {
 									$sessionId
 								);
 							}
-						}
+						}*/
 
 						// "WHAT'S NEW" notification: update table item_property
 						$document_id = DocumentManager::get_document_id($_course, $file);
@@ -445,7 +445,6 @@ if ($owner_id == api_get_user_id() ||
 	// This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
 	$defaults['content'] = str_replace('<!--[', '<!-- [', $content);
 
-	//if ($extension == 'htm' || $extension == 'html')
 	// HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
 
     $showSystemFolders = api_get_course_setting('show_system_folders');
@@ -456,7 +455,7 @@ if ($owner_id == api_get_user_id() ||
 
 	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
-            $form->addHtmlEditor('content', '', false, false, $html_editor_config);
+            $form->addHtmlEditor('content', '', true, true, $editorConfig);
 		}
 	}
 
@@ -496,13 +495,19 @@ if ($owner_id == api_get_user_id() ||
 	show_return($parent_id, $dir_original, $call_from_tool, $slide_id, $is_certificate_mode);
 
 	if ($is_certificate_mode) {
-		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
-		$str_info='';
+		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(
+			api_get_user_id(),
+			api_get_course_id()
+		);
+		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
-			$str_info.=$info_value.'<br/>';
+			$str_info .= $info_value.'<br/>';
 		}
 		$create_certificate=get_lang('CreateCertificateWithTags');
-		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
+		Display::display_normal_message(
+			$create_certificate.': <br /><br />'.$str_info,
+			false
+		);
 	}
 
 	if ($extension=='svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true'){
@@ -515,8 +520,8 @@ if ($owner_id == api_get_user_id() ||
             <div class="col-md-1">
                 <div id="hide_bar_template"></div>
             </div>
-            <div id="doc_form" class="col-md-9">
-				'.$form->return_form().'
+            <div id="doc_form" class="col-md-8">
+				'.$form->returnForm().'
             </div>
           </div>';
 }

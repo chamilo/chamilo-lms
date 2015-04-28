@@ -5903,3 +5903,30 @@ ul.holder li.bit-box{
     height: auto !important;
     max-width: 100%;
 }
+
+/***    Draggable answer    ***/
+.question_options ul.exercise-draggable-answer{
+    float: left;
+    margin-bottom: 20px;
+    min-height: 2em;
+    min-width: 100%;
+}
+ul.exercise-draggable-answer li {
+    cursor: move;
+    float: left;
+    margin: 0 20px 20px 0;
+    padding: 5px;
+    text-align: center;
+    width: 200px;
+}
+
+.question_options .droppable {
+    float: left;
+    margin: 0 20px 20px 0;
+    padding: 20px;
+    text-align: center;
+    width: 240px
+}
+.question_options .droppable .gallery .exercise-draggable-answer-option {
+    margin-bottom: 15px;
+}

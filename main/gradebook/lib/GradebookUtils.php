@@ -1173,4 +1173,118 @@ class GradebookUtils
                WHERE id = '.$id;
         Database::query($sql);
     }
+
+    /**
+     * 
+     * Get the achieved certificates for a user in courses
+     * @param int $userId The user id
+     * @param type $includeNonPublicCertificates Whether include the non-plublic certificates
+     * @return array
+     */
+    public static function getUserCertificatesInCourses($userId, $includeNonPublicCertificates = true)
+    {
+        $userId = intval($userId);
+        $courseList = [];
+
+        $courses = CourseManager::get_courses_list_by_user_id($userId);
+
+        foreach ($courses as $course) {
+            if (!$includeNonPublicCertificates) {
+                $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+
+                if (empty($allowPublicCertificates)) {
+                    continue;
+                }
+            }
+
+            $courseGradebookCategory = Category::load(null, null, $course['code']);
+
+            if (empty($courseGradebookCategory)) {
+                continue;
+            }
+
+            $courseGradebookId = $courseGradebookCategory[0]->get_id();
+
+            $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
+
+            if (empty($certificateInfo)) {
+                continue;
+            }
+
+            $courseInfo = api_get_course_info($course['code']);
+
+            $courseList[] = [
+                'course' => $courseInfo['title'],
+                'score' => $certificateInfo['score_certificate'],
+                'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
+                'link' => api_get_path(WEB_PATH) . "certificates/index.php?id={$certificateInfo['id']}"
+            ];
+        }
+
+        return $courseList;
+    }
+
+    /**
+     * Get the achieved certificates for a user in course sessions
+     * @param int $userId The user id
+     * @param type $includeNonPublicCertificates Whether include the non-plublic certificates
+     * @return array
+     */
+    public static function getUserCertificatesInSessions($userId, $includeNonPublicCertificates = true)
+    {
+        $userId = intval($userId);
+        $sessionList = [];
+
+        $sessions = SessionManager::get_sessions_by_user($userId);
+
+        foreach ($sessions as $session) {
+            if (empty($session['courses'])) {
+                continue;
+            }
+
+            $sessionCourses = SessionManager::get_course_list_by_session_id($session['session_id']);
+
+            foreach ($sessionCourses as $course) {
+                if (!$includeNonPublicCertificates) {
+                    $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+
+                    if (empty($allowPublicCertificates)) {
+                        continue;
+                    }
+                }
+
+                $courseGradebookCategory = Category::load(
+                    null,
+                    null,
+                    $course['code'],
+                    null,
+                    null,
+                    $session['session_id']
+                );
+
+                if (empty($courseGradebookCategory)) {
+                    continue;
+                }
+
+                $courseGradebookId = $courseGradebookCategory[0]->get_id();
+
+                $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
+
+                if (empty($certificateInfo)) {
+                    continue;
+                }
+
+                $sessionList[] = [
+                    'session' => $session['session_name'],
+                    'course' => $course['title'],
+                    'score' => $certificateInfo['score_certificate'],
+                    'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
+                    'link' => api_get_path(WEB_PATH) . "certificates/index.php?id={$certificateInfo['id']}"
+                ];
+            }
+        }
+
+        return $sessionList;
+    }
+
 }

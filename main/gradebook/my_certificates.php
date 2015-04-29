@@ -15,74 +15,9 @@ if (api_is_anonymous()) {
 }
 
 $userId = api_get_user_id();
-$courses = CourseManager::get_courses_list_by_user_id($userId);
-$sessions = SessionManager::get_sessions_by_user($userId);
 
-$courseList = $sessionList = [];
-
-foreach ($courses as $course) {
-    $courseGradebookCategory = Category::load(null, null, $course['code']);
-
-    if (empty($courseGradebookCategory)) {
-        continue;
-    }
-
-    $courseGradebookId = $courseGradebookCategory[0]->get_id();
-
-    $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
-
-    if (empty($certificateInfo)) {
-        continue;
-    }
-
-    $courseInfo = api_get_course_info($course['code']);
-
-    $courseList[] = [
-        'course' => $courseInfo['title'],
-        'score' => $certificateInfo['score_certificate'],
-        'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
-        'link' => api_get_path(WEB_PATH) . "certificates/index.php?id={$certificateInfo['id']}"
-    ];
-}
-
-foreach ($sessions as $session) {
-    if (empty($session['courses'])) {
-        continue;
-    }
-
-    $sessionCourses = SessionManager::get_course_list_by_session_id($session['session_id']);
-
-    foreach ($sessionCourses as $sessionCourse) {
-        $courseGradebookCategory = Category::load(
-            null,
-            null,
-            $sessionCourse['code'],
-            null,
-            null,
-            $session['session_id']
-        );
-
-        if (empty($courseGradebookCategory)) {
-            continue;
-        }
-
-        $courseGradebookId = $courseGradebookCategory[0]->get_id();
-
-        $certificateInfo = GradebookUtils::get_certificate_by_user_id($courseGradebookId, $userId);
-
-        if (empty($certificateInfo)) {
-            continue;
-        }
-
-        $sessionList[] = [
-            'session' => $session['session_name'],
-            'course' => $sessionCourse['title'],
-            'score' => $certificateInfo['score_certificate'],
-            'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
-            'link' => api_get_path(WEB_PATH) . "certificates/index.php?id={$certificateInfo['id']}"
-        ];
-    }
-}
+$courseList = GradebookUtils::getUserCertificatesInCourses($userId);
+$sessionList = GradebookUtils::getUserCertificatesInSessions($userId);
 
 $template = new Template(get_lang('MyCertificates'));
 
@@ -96,6 +31,16 @@ if (empty($courseList) || empty($sessionList)) {
         Display::return_message(get_lang('YouNotYetAchievedCertificates'), 'warning')
     );
 }
+
+$template->assign(
+    'actions',
+    Display::toolbarButton(
+        get_lang('CertificatesSearch'),
+        api_get_path(WEB_CODE_PATH) . "gradebook/search.php",
+        'search',
+        'info'
+    )
+);
 
 $template->assign('content', $content);
 $template->display_one_col_template();

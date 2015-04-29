@@ -591,7 +591,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
  * api_get_path(SYS_TEST_PATH)                  /var/www/chamilo/tests/
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
- * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/app/Resources/public/css
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
@@ -600,7 +600,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/app/cache/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
- * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
+ * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/web/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
  * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
@@ -639,8 +639,8 @@ function api_get_path($path_type, $path = null)
         SYS_CODE_PATH           => '',
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
-        WEB_CSS_PATH            => 'css/',
-        SYS_CSS_PATH            => 'css/',
+        WEB_CSS_PATH            => 'web/css/',
+        SYS_CSS_PATH            => 'app/Resources/public/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         SYS_ARCHIVE_PATH        => 'app/cache/',
@@ -772,10 +772,10 @@ function api_get_path($path_type, $path = null)
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
         $paths[SYS_FONTS_PATH]          = $paths[SYS_CODE_PATH].$paths[SYS_FONTS_PATH];
 
-        $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
+        $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
         $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];

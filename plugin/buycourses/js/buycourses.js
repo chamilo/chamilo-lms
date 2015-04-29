@@ -32,17 +32,18 @@ $(document).ready(function () {
     });
 
     $(".save").click(function () {
-        var visible = $(this).parent().parent().prev().prev().children().attr("checked");
-        var price = $(this).parent().parent().prev().children().attr("value");
+        var currentRow = $(this).closest("tr");
+        var courseOrSessionObject ={
+            tab: "save_mod",
+            visible: currentRow.find("[name='visible']").is(':checked') ? 1 : 0,
+            price: currentRow.find("[name='price']").val()
+        };
+
         var course_id = $(this).attr('id');
-        var courseOrSession = $(this).parent().parent()[0].attributes[0].value;
-        if (courseOrSession.indexOf("session") > -1) {
-            courseOrSession = "session_id";
-        } else {
-            courseOrSession = "course_id";
-        }
-        var courseOrSessionObject = {tab: "save_mod", visible: visible, price: price};
+        var courseOrSession = ($(this).closest("td").attr('id')).indexOf("session") > -1 ? "session_id" : "course_id";
+
         courseOrSessionObject[courseOrSession] = course_id;
+
         $.post("function.php", courseOrSessionObject,
             function (data) {
                 if (data.status == "false") {

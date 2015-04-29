@@ -25,14 +25,14 @@ function sync()
     $sql = "SELECT session_id, c_id, nbr_users FROM $tableSessionRelCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE id_session=" . $row['session_id'];
+        $sql = "SELECT 1 FROM $tableBuySessionRelCourse WHERE session_id=" . $row['session_id'];
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
-            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE id_session=" . $row['session_id'];
+            $sql = "UPDATE $tableBuySessionRelCourse SET sync = 1 WHERE session_id=" . $row['session_id'];
             Database::query($sql);
         } else {
             $courseCode = api_get_course_info_by_id($row['c_id'])['code'];
-            $sql = "INSERT INTO $tableBuySessionRelCourse (id_session, course_code, nbr_users, sync)
+            $sql = "INSERT INTO $tableBuySessionRelCourse (session_id, course_code, nbr_users, sync)
             VALUES (" . $row['session_id'] . ", '" . $courseCode . "', " . $row['nbr_users'] . ", 1);";
             Database::query($sql);
         }
@@ -49,9 +49,9 @@ function sync()
     $sql = "SELECT id, code, title FROM $tableCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT id_session FROM $tableBuySessionRelCourse
+        $sql = "SELECT session_id FROM $tableBuySessionRelCourse
         WHERE course_code = '" . $row['code'] . "' LIMIT 1";
-        $courseIdSession = Database::fetch_assoc(Database::query($sql))['id_session'];
+        $courseIdSession = Database::fetch_assoc(Database::query($sql))['session_id'];
         if (!is_numeric($courseIdSession)) {
             $courseIdSession = 0;
         }

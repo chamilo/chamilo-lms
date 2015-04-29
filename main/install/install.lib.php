@@ -232,7 +232,6 @@ function detect_browser_language()
     return 'english';
 }
 
-
 /*      FILESYSTEM RELATED FUNCTIONS */
 
 /**
@@ -250,6 +249,25 @@ function check_writable($folder, $suggestion = false)
             return Display::label(get_lang('NotWritable'), 'info');
         } else {
             return Display::label(get_lang('NotWritable'), 'important');
+        }
+    }
+}
+
+/**
+ * This function checks if the given folder is readable
+ * @param   string  $folder Full path to a folder
+ * @param   bool    $suggestion Whether to show a suggestion or not
+ * @return  string
+ */
+function checkReadable($folder, $suggestion = false)
+{
+    if (is_writable($folder)) {
+        return Display::label(get_lang('Readable'), 'success');
+    } else {
+        if ($suggestion) {
+            return Display::label(get_lang('NotReadable'), 'info');
+        } else {
+            return Display::label(get_lang('NotReadable'), 'important');
         }
     }
 }
@@ -893,11 +911,20 @@ function display_requirements(
         $courseTestLabel = Display::label(get_lang('No'), 'important');
     }
 
+    $oldConf = '';
+    if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php')) {
+        $oldConf = '<tr>
+            <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'inc/conf</td>
+            <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'inc/conf').'</td>
+        </tr>';
+    }
+
     echo '<table class="table">
             <tr>
                 <td class="requirements-item">'.api_get_path(CONFIGURATION_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(CONFIGURATION_PATH)).'</td>
             </tr>
+            '.$oldConf.'
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_UPLOAD_PATH).'users/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH).'users/').'</td>
@@ -937,6 +964,10 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>
+                <td class="requirements-value">'.checkReadable(api_get_path(SYS_PATH).'vendor').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>

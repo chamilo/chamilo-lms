@@ -11,16 +11,19 @@
 if (defined('SYSTEM_INSTALLATION')) {
 
     Log::notice("Starting " . basename(__FILE__));
+    $perm = api_get_permissions_for_new_files();
 
     $oldConfFile = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    $newConfFile = api_get_path(CONFIGURATION_PATH) . 'configuration.php';
 
     if (file_exists($oldConfFile)) {
-        rename($oldConfFile, api_get_path(CONFIGURATION_PATH) . 'configuration.php');
+        rename($oldConfFile, $newConfFile);
+        chmod($newConfFile, $perm);
     }
 
-    // Edit the configuration file
-    $file = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
-    $fh = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
+    // Edit the configuration file.
+    $file = file($newConfFile);
+    $fh = fopen($newConfFile, 'w');
 
     $found_version_old = false;
     $found_stable_old = false;

@@ -180,7 +180,10 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
     // Don't change to include_once
-    include api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    $oldConfigPath = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    if (file_exists($oldConfigPath)) {
+        include $oldConfigPath;
+    }
 }
 
 if (!isset($_GET['running'])) {

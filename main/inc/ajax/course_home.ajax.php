@@ -19,7 +19,7 @@ switch ($action) {
                 $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
                 $na_image = str_replace('.gif', '_na.gif', $tool_image);
             } else {
-                // Display::return_icon() also checks in the main/css/{theme}/icons folder
+                // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
                 $tool_image = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
                 $tool_image = Display::return_icon(
                     $tool_image,

@@ -350,7 +350,7 @@ if ($encryptPassForm == '1') {
         <div class="row">
             <div id="header_left" class="col-md-4">
                 <div id="logo">
-                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+                    <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
                 </div>
             </div>
         </div>

@@ -215,3 +215,7 @@ footer{
 footer a{
   color: #ffffff;
 }
+
+.navbar-default .navbar-brand {
+  color:white;
+}

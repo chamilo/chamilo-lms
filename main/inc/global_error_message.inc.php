@@ -56,9 +56,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
         $theme = 'chamilo';
     }
 
-	$css_path = 'main/css/';
+	$css_path = 'app/Resources/public/css/';
+	$themePath = $css_path.'themes/'.$theme.'/';
+
 	$css_web_path = 'web/assets/';
-	$css_file = $css_path.$theme.'default.css';
+	$css_file = $themePath.'default.css';
 	$bootstrap_file = $css_web_path.'bootstrap/dist/css/bootstrap.min.css';
 	$css_base_file = $css_path.'base.css';
 
@@ -93,11 +95,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
             $css_def .= @file_get_contents($css_base_chamilo_file);
         }
     }
-
-    $css_def = str_replace("@import url('bootstrap.css');", '', $css_def);
-	$css_def = str_replace('main/', $root_rel.'main/', $css_def);
-	$css_def = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css_def);
-	$css_def = str_replace('../../img/', $root_rel.'main/img/', $css_def);
 
 	$global_error_message = array();
 
@@ -142,13 +139,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['title'] = $DatabaseUnavailableTitle;
 			$global_error_message['description'] = $DatabaseUnavailableDescription;
 			break;
-
 		case 6:
 			$global_error_message['section'] = $SectionProtection;
 			$global_error_message['title'] = $AlreadyInstalledTitle;
 			$global_error_message['description'] = $AlreadyInstalledDescription;
 			break;
-
 		default:
 			$global_error_message['section'] = $SectionTechnicalIssues;
 			$global_error_message['title'] = $TechnicalIssuesTitle;
@@ -165,7 +160,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
 	$global_error_message['encoding'] = 'UTF-8';
 	$global_error_message['css'] = $css_def;
-	$global_error_message['chamilo_logo'] = $root_rel.$css_path.$theme.'/images/header-logo.png';
+	$global_error_message['chamilo_logo'] = $css_web_path.'themes/'.$theme.'/images/header-logo.png';
 
 
 // {ORGANISATION}	moved from the header
@@ -185,24 +180,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		<body>
 		<div id="page-wrap">
 			<header>
-				<section id="main" class="container">
-					<div class="row">
-						<div class="col-lg-3">
-							<div class="logo">
-								<a href="#">
-								 <img vspace="10" hspace="10" alt="Chamilo" src="{CHAMILO_LOGO}">
-								 </a>
-							</div>
-						</div>
-						<div class="col-lg-9">
-						</div>
-					</div>
-				</section>
-
 				<section id="menu-bar">
 					<nav class="navbar navbar-default">
 					<div class="container">
 						<div class="navbar-header">
+						    <a class="navbar-brand" href="#">Chamilo</a>
 							<button type="button" class="navbar-toggle btn" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
 								<span class="sr-only">Toggle navigation</span>
 								<span class="icon-bar"></span>
@@ -221,12 +203,13 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 					</div><!-- /.container-fluid -->
 				</nav>
 				</section>
-
+                <!--
 				<section id="breadcrumb-bar">
 					<div class="container">
 						<ul class="breadcrumb"> <li> <a href="#">{SECTION}</a></li></ul>
 					</div>
 				</section>
+				!-->
 			</header>
 			<div id="top_main_content" class="container">
 				<div class="col-md-12">

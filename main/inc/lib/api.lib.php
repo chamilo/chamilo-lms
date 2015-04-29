@@ -288,6 +288,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
+define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
@@ -303,6 +304,8 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
+define('SYS_PUBLIC_PATH', 'SYS_PUBLIC_PATH');
+
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
@@ -583,6 +586,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_UPLOAD_PATH)                /var/www/chamilo/app/upload/
  * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/app/courses/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/app/Resources/public/css
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
@@ -591,7 +595,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
  * api_get_path(SYS_TEST_PATH)                  /var/www/chamilo/tests/
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
- * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/app/Resources/public/css
+ * api_get_path(SYS_PUBLIC_PATH)                /var/www/chamilo/web/
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
@@ -605,6 +609,7 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  * api_get_path(WEB_UPLOAD_PATH)                http://www.mychamilo.org/chamilo/app/upload/
+ * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
  *
  *
  *
@@ -656,7 +661,9 @@ function api_get_path($path_type, $path = null)
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
         WEB_UPLOAD_PATH         => 'app/upload/',
+        WEB_PUBLIC_PATH         => 'web/',
         SYS_TEMPLATE_PATH       => 'template/',
+        SYS_PUBLIC_PATH         => 'web/',
         WEB_FONTS_PATH          => 'fonts/',
         SYS_FONTS_PATH          => 'fonts/',
     );
@@ -675,8 +682,6 @@ function api_get_path($path_type, $path = null)
     static $root_web;
     static $root_sys;
     static $root_rel;
-
-
 
     // Always load root_web modifications for multiple url features
     global $_configuration;
@@ -772,6 +777,7 @@ function api_get_path($path_type, $path = null)
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
+        $paths[SYS_PUBLIC_PATH]         = $paths[SYS_PATH].$paths[SYS_PUBLIC_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
         $paths[SYS_FONTS_PATH]          = $paths[SYS_CODE_PATH].$paths[SYS_FONTS_PATH];
 
@@ -788,6 +794,7 @@ function api_get_path($path_type, $path = null)
 
         $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
         $paths[WEB_UPLOAD_PATH]         = $paths[WEB_PATH].$paths[WEB_UPLOAD_PATH];
+        $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$paths[WEB_PUBLIC_PATH];
 
         $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
         $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
@@ -4283,11 +4290,11 @@ function api_get_visual_theme() {
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
 function api_get_themes() {
-    $cssdir = api_get_path(SYS_PATH).'main/css/';
+    $cssdir = api_get_path(SYS_CSS_PATH);
     $list_dir = array();
     $list_name = array();
 
-    if (@is_dir($cssdir)) {
+    if (is_dir($cssdir)) {
         $themes = @scandir($cssdir);
 
         if (is_array($themes)) {
@@ -4298,7 +4305,7 @@ function api_get_themes() {
                     if (substr($theme, 0, 1) == '.') {
                         continue;
                     } else {
-                        if (@is_dir($cssdir.$theme)) {
+                        if (is_dir($cssdir.$theme)) {
                             $list_dir[] = $theme;
                             $list_name[] = ucwords(str_replace('_', ' ', $theme));
                         }
@@ -4307,6 +4314,7 @@ function api_get_themes() {
             }
         }
     }
+
     return array($list_dir, $list_name);
 }
 
@@ -6491,8 +6499,9 @@ function api_get_unique_id() {
  * Get home path
  * @return string
  */
-function api_get_home_path() {
-    $home = 'home/';
+function api_get_home_path()
+{
+    $home = 'app/home/';
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         $url_info = api_get_access_url($access_url_id);
@@ -6500,11 +6509,11 @@ function api_get_home_path() {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        // if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-        //if ($clean_url != 'localhost/') {
-            $home = 'home/' . $clean_url;
-        //}
+
+        $home = 'app/home/' . $clean_url;
+
     }
+
     return $home;
 }
 

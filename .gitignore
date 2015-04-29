@@ -1,23 +1,19 @@
-# Chamilo configuration
-main/inc/conf
-
-# Temp directories
-archive/*
-!archive/.htaccess
-
+# Cache directories
 app/cache/*
 !app/cache/.htaccess
 
-app/logs/*
+# Chamilo configuration
+app/config/
 
 # Courses
-
 app/courses/*
-courses/*
-!courses/index.html
 
 # Home
-home/*
+app/home/*
+
+app/logs/*
+app/Resources/translations/*
+app/Resources/views/*
 
 # Upload content
 app/upload/*
@@ -26,7 +22,6 @@ app/upload/*
 *.log
 
 # IDE settings
-
 .idea
 .idea/*
 .idea/dictionaries/*

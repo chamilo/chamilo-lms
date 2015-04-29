@@ -911,10 +911,6 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH).'courses/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
-            </tr>
-            <tr>
                 <td class="requirements-item">'.api_get_path(SYS_ARCHIVE_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
             </tr>
@@ -927,8 +923,16 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH).'home/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' <br />('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
+                <td class="requirements-item">'.api_get_path(SYS_CSS_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CSS_PATH), true).'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>

@@ -119,7 +119,7 @@ Version 1.4 (Yannick Warnier)
  */
 /*	INIT SECTION */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
@@ -348,9 +348,8 @@ if ($view == 'sent' OR empty($view)) {
 /*	HEADER & TITLE */
 
 if (isset($origin) && $origin == 'learnpath') {
-    // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
-    echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
-    echo $javascript;
+    $htmlHeadXtra[] = $javascript;
+	Display::display_reduced_header($nameTools, 'Dropbox');
 } else {
     Display::display_header($nameTools, 'Dropbox');
 }

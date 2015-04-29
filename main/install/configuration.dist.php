@@ -199,7 +199,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_days_before_coach_access'] = 0;
 // Default session days after coach access
 //$_configuration['session_days_after_coach_access'] = 0;
-// PDF Logo header located in main/css/xxx/images/pdf_logo_header.png
+// PDF Logo header in app/Resources/public/css/themes/xxx/images/pdf_logo_header.png
 //$_configuration['pdf_logo_header'] = false;
 // Order inscription user list by official_code
 //$_configuration['order_user_list_by_official_code'] = false;
@@ -236,7 +236,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Auto detect language custom pages.
 // $_configuration['auto_detect_language_custom_pages'] = true;
 // If the database is down this css style will be used to show the errors.
-//$_configuration['theme_fallback'] = 'chamilo'; // (main/css/chamilo)
+//$_configuration['theme_fallback'] = 'chamilo'; // (chamilo theme)
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
 // Show reduce LP report

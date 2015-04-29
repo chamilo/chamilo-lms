@@ -203,8 +203,8 @@ function my_rename($file_path, $new_file_name) {
  *           bolean - false otherwise.
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
-function move($source, $target) {
-
+function move($source, $target)
+{
 	if (check_name_exist($source)) {
 		$file_name = basename($source);
 
@@ -220,7 +220,7 @@ function move($source, $target) {
 			/* Directory case */
 			elseif (is_dir($source)) {
 				// Check to not copy the directory inside itself
-				if (ereg('^'.$source.'/', $target.'/')) { // TODO: ereg() function is deprecated in PHP 5.3
+				if ($source.'/' == $target.'/') {
 					return false;
 				} else {
 					copyDirTo($source, $target);
@@ -251,7 +251,7 @@ function copyDirTo($orig_dir_path, $destination, $move = true) {
 		mkdir($destination.'/'.$dir_name, api_get_permissions_for_new_directories());
 		$destination_trail = $destination.'/'.$dir_name;
 		if (is_dir($destination)) {
-			chdir ($orig_dir_path) ;
+			chdir($orig_dir_path) ;
 			$handle = opendir($orig_dir_path);
 
 			while ($element = readdir($handle)) {
@@ -284,106 +284,6 @@ function copyDirTo($orig_dir_path, $destination, $move = true) {
 	}
 }
 
-/* NOTE: These functions batch is used to automatically build HTML forms
- * with a list of the directories contained on the course Directory.
- *
- * From a thechnical point of view, form_dir_lists calls sort_dir wich calls index_dir
- */
-
-/**
- * Gets all the directories and subdirectories
- * contented in a given directory
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - path (string) - directory path of the one to index
- * @return - an array containing the path of all the subdirectories
- */
-function index_dir($path) {
-	$dir_array = array();
-	$save_dir = getcwd();
-	if (is_dir($path)){
-		chdir($path);
-		$handle = opendir($path);
-	    // Reads directory content end record subdirectoies names in $dir_array
-	    if ($handle !== false) {
-	        while ($element = readdir($handle)) {
-	            if ($element == '.' || $element == '..') continue; // Skip the current and parent directories
-	            if (is_dir($element)) $dir_array[] = $path.'/'.$element;
-	        }
-	        closedir($handle) ;
-	    }
-	    // Recursive operation if subdirectories exist
-        $dir_number = sizeof($dir_array);
-        if ($dir_number > 0) {
-            for ($i = 0 ; $i < $dir_number ; $i++) {
-                $sub_dir_array = index_dir($dir_array[$i]); // Function recursivity
-                $dir_array  =  array_merge((array)$dir_array, (array)$sub_dir_array); // Data merge
-            }
-        }
-	}
-	chdir($save_dir) ;
-	return $dir_array ;
-}
-
-/**
- * Indexes all the directories and subdirectories
- * contented in a given directory, and sort them alphabetically
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - path (string) - directory path of the one to index
- * @return - an array containing the path of all the subdirectories sorted
- *           false, if there is no directory
- * @see    - index_and_sort_dir uses the index_dir() function
- */
-function index_and_sort_dir($path) {
-	$dir_list = index_dir($path);
-	if ($dir_list) {
-		natsort($dir_list);
-		return $dir_list;
-	}
-	return false;
-}
-
-
-/**
- * Builds a html form listing all directories of a given directory
- *
- */
-function form_dir_list($source_type, $source_component, $command, $base_work_dir) {
-
-	$dir_list = index_and_sort_dir($base_work_dir);
-	$dialog_box .= "<form action=\"".api_get_self()."\" method=\"post\">\n" ;
-	$dialog_box .= "<input type=\"hidden\" name=\"".$source_type."\" value=\"".$source_component."\">\n" ;
-	$dialog_box .= get_lang('Move').' '.$source_component.' '.get_lang('To');
-	$dialog_box .= "<select name=\"".$command."\">\n" ;
-	$dialog_box .= "<option value=\"\" style=\"color:#999999\">".get_lang('Root')."\n";
-
-	$bwdLen = strlen($base_work_dir) ;	// base directories lenght, used under
-
-	/* build html form inputs */
-	if ($dir_list) {
-		while (list( , $path_value) = each($dir_list) ) {
-			$path_value = substr ( $path_value , $bwdLen );		// Truncates cunfidential informations confidentielles
-			$dirname = basename ($path_value);					// Extracts $path_value directory name du nom
-
-			/* compute de the display tab */
-
-			$tab = "";											// $tab reinitialisation
-			$depth = substr_count($path_value, '/');			// The number of nombre '/' indicates the directory deepness
-
-			for ($h = 0; $h < $depth; $h++) {
-				$tab .= "&nbsp;&nbsp;";
-			}
-			$dialog_box .= "<option value=\"$path_value\">$tab>$dirname\n";
-		}
-	}
-
-	$dialog_box .= "</select>\n";
-	$dialog_box .= "<input type=\"submit\" value=\"".get_lang('Ok')."\">";
-	$dialog_box .= "</form>\n";
-
-	return $dialog_box;
-}
 
 /**
  * Extracting extention of a filename

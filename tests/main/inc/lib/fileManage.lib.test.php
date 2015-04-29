@@ -95,27 +95,6 @@ class TestFileManager extends UnitTestCase {
 		$this->assertNull($res);
 	}
 
-	public function testIndexDir(){
-		$path=api_get_path(SYS_COURSE_PATH).'document/';
-	  	$res = index_dir($path);
-	  	if(!is_null($res)) {
-			$this->assertTrue(is_array($res));
-	  	} else {
-	  		$this->assertFalse($res);
-	  	}
-		//var_dump($res);
-	}
-
-	public function testIndexAndSortDir(){
-		$path=api_get_path(SYS_COURSE_PATH).'document/';
-		$res = index_and_sort_dir($path);
-		if(!is_bool($res)) {
-			$this->assertTrue($res);
-			$this->assertTrue(is_array($res));
-		}
-		//var_dump($res);
-	}
-
 	public function testFormDirList(){
 		$sourceType = '';
 		$sourceComponent = '';

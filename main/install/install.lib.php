@@ -1944,7 +1944,6 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
     $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-
     $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/V'.$chamiloVersion);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());

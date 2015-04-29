@@ -12,6 +12,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     Log::notice("Starting " . basename(__FILE__));
 
+    $oldConfFile = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+
+    if (file_exists($oldConfFile)) {
+        rename($oldConfFile, api_get_path(CONFIGURATION_PATH) . 'configuration.php');
+    }
+
     // Edit the configuration file
     $file = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
     $fh = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');

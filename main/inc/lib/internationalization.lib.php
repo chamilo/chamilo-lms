@@ -2027,7 +2027,7 @@ function _api_strnatrcmp($string1, $string2) {
  * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
  * @link http://php.net/manual/en/function.mb-internal-encoding
  */
-function _api_mb_internal_encoding($encoding = null)
+function _api_mb_internal_encoding($encoding = 'UTF-8')
 {
     return mb_internal_encoding($encoding);
 }

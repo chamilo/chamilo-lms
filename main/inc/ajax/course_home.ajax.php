@@ -13,14 +13,14 @@ switch ($action) {
         if (api_is_allowed_to_edit(null, true)) {
             $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
             $tool_info = api_get_tool_information($_GET['id']);
-            $tool_visibility   = $tool_info['visibility'];
-            $tool_image        = $tool_info['image'];
+            $tool_visibility = $tool_info['visibility'];
+            $tool_image = $tool_info['image'];
             if (api_get_setting('homepage_view') != 'activity_big') {
                 $tool_image = Display::return_icon($tool_image, null, null, null, null, true);
                 $na_image = str_replace('.gif', '_na.gif', $tool_image);
             } else {
                 // Display::return_icon() also checks in the main/css/{theme}/icons folder
-                $tool_image        = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
+                $tool_image = (substr($tool_info['image'], 0, strpos($tool_info['image'], '.'))).'.png';
                 $tool_image = Display::return_icon(
                     $tool_image,
                     get_lang(ucfirst($too_info['name'])),
@@ -32,15 +32,16 @@ switch ($action) {
                 $na_image   = str_replace('.png', '_na.png', $tool_image);
             }
 
-            $requested_image   = ($tool_visibility == 0 ) ? $tool_image : $na_image;
-            $requested_class   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
+            $requested_image = ($tool_visibility == 0 ) ? $tool_image : $na_image;
+            $requested_class = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
             $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-            $requested_view    = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
+            $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 
-            $requested_view    = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
+            $requested_view = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
-            //HIDE AND REACTIVATE TOOL
+
+            // HIDE AND REACTIVATE TOOL
             if ($_GET["id"] == strval(intval($_GET["id"]))) {
 
                 /* -- session condition for visibility

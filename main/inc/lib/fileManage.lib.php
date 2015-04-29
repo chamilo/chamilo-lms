@@ -23,8 +23,13 @@ function update_db_info($action, $old_path, $new_path = '')
     switch ($action) {
         case 'delete':
             $old_path = Database::escape_string($old_path);
-            $to_delete = "WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
-            $query = "DELETE FROM $dbTable " . $to_delete;
+            $query = "DELETE FROM $dbTable
+                      WHERE
+                        c_id = $course_id AND
+                        (
+                            path LIKE BINARY '".$old_path."' OR
+                            path LIKE BINARY '".$old_path."/%'
+                        )";
             Database::query($query);
             break;
         case 'update':
@@ -35,7 +40,7 @@ function update_db_info($action, $old_path, $new_path = '')
             $new_path = Database::escape_string($new_path);
             $query = "UPDATE $dbTable SET
                         path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-                    WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+                      WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
             Database::query($query);
             break;
     }
@@ -75,7 +80,8 @@ function check_name_exist($file_path) {
  * @return boolean - true if the delete succeed, false otherwise.
  * @see    - delete() uses check_name_exist() and removeDir() functions
  */
-function my_delete($file) {
+function my_delete($file)
+{
 	if (check_name_exist($file)) {
 		if (is_file($file)) { // FILE CASE
 			unlink($file);
@@ -99,7 +105,8 @@ function my_delete($file) {
  *
  * @param string	$dir		directory to remove
  */
-function removeDir($dir) {
+function removeDir($dir)
+{
 	if (!@$opendir = opendir($dir)) {
 		return false;
 	}
@@ -127,19 +134,23 @@ function removeDir($dir) {
 	return true;
 }
 
-
 /**
  * Return true if folder is empty
  * @author : hubert.borderiou@grenet.fr
  * @param string $in_folder : folder path on disk
  * @return 1 if folder is empty, 0 otherwise
 */
-
-function folder_is_empty($in_folder) {
+function folder_is_empty($in_folder)
+{
     $folder_is_empty = 0;
     if (is_dir($in_folder)) {
         $tab_folder_content = scandir($in_folder);
-        if ((count($tab_folder_content) == 2 && in_array(".", $tab_folder_content) && in_array("..", $tab_folder_content)) || (count($tab_folder_content) < 2)) {
+        if ((count($tab_folder_content) == 2 &&
+            in_array(".", $tab_folder_content) &&
+            in_array("..", $tab_folder_content)
+            ) ||
+            (count($tab_folder_content) < 2)
+        ) {
             $folder_is_empty = 1;
         }
     }
@@ -208,25 +219,15 @@ function move($source, $target)
 	if (check_name_exist($source)) {
 		$file_name = basename($source);
 
-		if (check_name_exist($target.'/'.$file_name)) {
-			return false;
-		} else {
-			/* File case */
-			if (is_file($source)) {
-				copy($source , $target.'/'.$file_name);
-				unlink($source);
-				return true;
-			}
-			/* Directory case */
-			elseif (is_dir($source)) {
-				// Check to not copy the directory inside itself
-				if ($source.'/' == $target.'/') {
-					return false;
-				} else {
-					copyDirTo($source, $target);
-					return true;
-				}
-			}
+		/* File case */
+		if (is_file($source)) {
+			copy($source , $target.'/'.$file_name);
+			unlink($source);
+			return true;
+		} elseif (is_dir($source)) {
+			/* Directory */
+			copyDirTo($source, $target);
+			return true;
 		}
 	} else {
 		return false;
@@ -241,14 +242,23 @@ function move($source, $target)
  * @param  - $destination (string) - the path of the new area
  * @return - no return
  */
-function copyDirTo($orig_dir_path, $destination, $move = true) {
+function copyDirTo($orig_dir_path, $destination, $move = true)
+{
+	if ($orig_dir_path == $destination) {
+		return false;
+	}
 
 	$save_dir = getcwd();
 	// Extract directory name - create it at destination - update destination trail
 	$dir_name = basename($orig_dir_path);
     $dir_to_copy = array();
 	if (is_dir($orig_dir_path)) {
-		mkdir($destination.'/'.$dir_name, api_get_permissions_for_new_directories());
+		if (!is_dir($destination.'/'.$dir_name)) {
+			mkdir(
+				$destination.'/'.$dir_name,
+				api_get_permissions_for_new_directories()
+			);
+		}
 		$destination_trail = $destination.'/'.$dir_name;
 		if (is_dir($destination)) {
 			chdir($orig_dir_path) ;

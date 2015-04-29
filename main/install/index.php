@@ -35,6 +35,7 @@ api_check_php_version('../inc/');
 ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once 'install.lib.php';
 
 // The function api_get_setting() might be called within the installation scripts.
@@ -177,7 +178,9 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
-    include api_get_path(CONFIGURATION_PATH) . 'configuration.php'; // Don't change to include_once
+    // Old configuration file.
+    // Don't change to include_once
+    include api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
 }
 
 if (!isset($_GET['running'])) {
@@ -665,8 +668,11 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
                 Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
                 Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+                Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+                Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
-                // Migrate using the file Version110.php
+                // Migrate using the migration files located in:
+                // src/Chamilo/CoreBundle/Migrations/Schema/V110
                 migrate(
                     110,
                     $dbNameForm,
@@ -675,6 +681,7 @@ if (@$_POST['step2']) {
                     $dbHostForm,
                     $manager
                 );
+
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';

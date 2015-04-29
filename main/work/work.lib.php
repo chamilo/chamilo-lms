@@ -1248,11 +1248,8 @@ function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
     $sessionId = intval($work_data['session_id']);
-    $courseInfo = api_get_course_info_by_id($course_id);
-
     $work_id = intval($work_data['id']);
     $oldPath = $work_data['url'];
-    $path = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
     $newPath = api_replace_dangerous_char($newPath);
@@ -1263,37 +1260,7 @@ function updateDirName($work_data, $newPath)
     }
 
     if (!empty($newPath)) {
-        //$base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
-
-        //error_log('rename'.$base_work_dir.$oldPath.' - '.$newPath);
-
-        //my_rename($base_work_dir.$oldPath, $newPath);
-
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        /*
-        // Update all the files in the other directories according with the next query
-        $sql = "SELECT id, url FROM $table
-                WHERE
-                    c_id = $course_id AND
-                    parent_id = $work_id AND
-                    session_id = $sessionId AND
-                    url <> ''
-                ";
-        $result = Database::query($sql);
-        $oldPathWithWork = 'work'.$path;
-
-        while ($work = Database :: fetch_array($result)) {
-            $url = str_replace($oldPathWithWork, 'work/'.$newPath, $work['url']);
-            $sql = 'UPDATE ' . $table . '
-                    SET url = "' . $url . '"
-                    WHERE
-                        c_id = ' . $course_id . ' AND
-                        id = ' . $work['id'] . ' AND
-                        session_id = ' . $sessionId . '
-                    ';
-            Database::query($sql);
-        }*/
-        //url= '/".$newPath."',
         $sql = "UPDATE $table SET
                     title = '".$originalNewPath."'
                 WHERE

@@ -9,7 +9,7 @@
  */
 
 $Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
-$PoweredBy = 'Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+$PoweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 
 /**
  * English language variables.

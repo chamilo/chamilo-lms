@@ -745,7 +745,7 @@ if (@$_POST['step2']) {
     display_language_selection();
 }
 
-$poweredBy = 'Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+$poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
           </form>
         </div> <!-- col-md-9-->

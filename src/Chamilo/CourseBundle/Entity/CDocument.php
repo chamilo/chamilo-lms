@@ -60,7 +60,7 @@ class CDocument
     /**
      * @var string
      *
-     * @ORM\Column(name="filetype", type="string", length=255, nullable=false)
+     * @ORM\Column(name="filetype", type="string", length=10, nullable=false)
      */
     private $filetype;
 

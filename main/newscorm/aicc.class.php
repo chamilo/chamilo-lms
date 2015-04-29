@@ -697,7 +697,6 @@ class aicc extends learnpath
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
-        //$zipfilename = '/var/www/dokeos-comp/courses/TEST2/scorm/example_document.html';
         //this file sending implies removing the default mime-type from php.ini
         //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
         DocumentManager :: file_send_for_download($zipfilename, true);

@@ -274,12 +274,10 @@ if ($encryptPassForm == '1') {
 <head>
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
-        /*<![CDATA[*/
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
-        @import "../css/base.css";
-        @import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
-        /*]]>*/
+        @import "../../web/css/base.css";
+        @import "../../web/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
@@ -357,19 +355,6 @@ if ($encryptPassForm == '1') {
             <div id="header_left" class="col-md-4">
                 <div id="logo">
                     <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-                </div>
-            </div>
-        </div>
-        <div class="navbar subnav">
-            <div class="navbar-inner">
-                <div class="container">
-                    <div class="nav-collapse">
-                        <ul class="nav nav-pills">
-                            <li id="current" class="active">
-                                <a target="_top" href="index.php"><?php echo get_lang('Homepage'); ?></a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -759,6 +744,8 @@ if (@$_POST['step2']) {
     // This is the start screen.
     display_language_selection();
 }
+
+$poweredBy = 'Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
           </form>
         </div> <!-- col-md-9-->
@@ -766,6 +753,15 @@ if (@$_POST['step2']) {
     </div> <!-- main end-->
     <div class="push"></div>
   </div><!-- wrapper end-->
-  <footer></footer>
+  <footer>
+      <div class="container">
+          <div class="row">
+              <div style="text-align: center;">
+                  &nbsp;<br />
+                  <?php echo $poweredBy; ?>
+              </div>
+          </div>
+      </div>
+  </footer>
   </body>
 </html>

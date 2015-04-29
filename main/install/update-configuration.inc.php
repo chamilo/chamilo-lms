@@ -17,8 +17,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     $newConfFile = api_get_path(CONFIGURATION_PATH) . 'configuration.php';
 
     if (file_exists($oldConfFile)) {
-        rename($oldConfFile, $newConfFile);
-        chmod($newConfFile, $perm);
+        copy($oldConfFile, $newConfFile);
+        @chmod($newConfFile, $perm);
+        @rmdir($oldConfFile);
     }
 
     // Edit the configuration file.

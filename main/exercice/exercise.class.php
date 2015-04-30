@@ -2837,7 +2837,7 @@ class Exercise
                                     }
                                 } else {
                                     if ($answerType == DRAGGABLE) {
-                                        $user_answer = Display::label(get_lang('NotCorrect'), 'danger');
+                                        $user_answer = Display::label(get_lang('Incorrect'), 'danger');
                                     } else {
                                         $user_answer = Display::span(
                                             $real_list[$s_user_answer],

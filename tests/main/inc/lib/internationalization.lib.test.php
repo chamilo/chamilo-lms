@@ -237,18 +237,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_chr() {
-		$encoding = 'UTF-8';
-		$codepoints = array(1048, 1074, 1072, 1085, 32, 73, 118, 97, 110);
-		$characters = array('И', 'в', 'а', 'н', ' ', 'I', 'v', 'a', 'n'); // UTF-8
-		$res = array();
-		foreach ($codepoints as $codepoint) {
-			$res[] = api_chr($codepoint, $encoding);
-		}
-		$this->assertTrue($res == $characters);
-		//var_dump($res);
-	}
-
 	public function test_api_str_ireplace() {
 		$search = 'Á'; // UTF-8
 		$replace = 'a';
@@ -502,17 +490,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_ereg_replace() {
-		$pattern = 'file=([^"\'&]*)$';
-		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
-		$replacement = 'file=my_test.php';
-		$option = null;
-		$res = api_ereg_replace($pattern, $replacement, $string, $option);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue(strlen($res) == 77);
-		//var_dump($res);
-	}
-
 	public function test_api_eregi() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
@@ -523,16 +500,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_eregi_replace() {
-		$pattern = 'file=([^"\'&]*)$';
-		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
-		$replacement = 'file=my_test.php';
-		$option = null;
-		$res = api_eregi_replace($pattern, $replacement, $string, $option);
-		$this->assertTrue(is_string($res));
-		$this->assertTrue(strlen($res) == 77);
-		//var_dump($res);
-	}
 
 	/**
 	 * ----------------------------------------------------------------------------
@@ -562,17 +529,6 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_strnatcasecmp() {
-		$string1 = '201áéíóu.txt'; // UTF-8
-		$string2 = '30Áéíóu.TXT'; // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_strnatcasecmp($string1, $string2, $language, $encoding);
-		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($res == 1);
-		//var_dump($res);
-	}
-
 	public function  test_api_strnatcmp() {
 		$string1 = '201áéíóu.txt'; // UTF-8
 		$string2 = '30áéíóu.TXT'; // UTF-8
@@ -585,37 +541,11 @@ class TestInternationalization extends UnitTestCase {
 	}
 
 
-/**
- * ----------------------------------------------------------------------------
- * Sorting arrays
- * ----------------------------------------------------------------------------
- */
-
-	public function test_api_asort() {
-		$array = array('úéo', 'aíó', 'áed'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_asort($array, $sort_flag, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'aíó' || $array[$keys[0]] == 'áed'); // The second result is given when intl php-extension is active.
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_arsort() {
-		$array = array('aíó', 'úéo', 'áed'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_arsort($array, $sort_flag, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'úéo');
-		//var_dump($array);
-		//var_dump($res);
-	}
+	/**
+	 * ----------------------------------------------------------------------------
+	 * Sorting arrays
+	 * ----------------------------------------------------------------------------
+	 */
 
 	public function test_api_natsort() {
 		$array = array('img12.png', 'img10.png', 'img2.png', 'img1.png'); // UTF-8
@@ -641,140 +571,11 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_natcasesort() {
-		$array = array('img2.png', 'img10.png', 'Img12.png', 'img1.png'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_natcasesort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'img1.png');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_natcasersort() {
-		$array = array('img2.png', 'img10.png', 'Img12.png', 'img1.png'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_natcasersort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'Img12.png');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_ksort() {
-		$array = array('aíó' => 'img2.png', 'úéo' => 'img10.png', 'áed' => 'img12.png', 'áedc' => 'img1.png'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_ksort($array, $sort_flag, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'img2.png');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_krsort() {
-		$array = array('aíó' => 'img2.png', 'úéo' => 'img10.png', 'áed' => 'img12.png', 'áedc' => 'img1.png'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_krsort($array, $sort_flag, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'img10.png');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_knatsort() {
-		$array = array('img2.png' => 'aíó', 'img10.png' => 'úéo', 'img12.png' => 'áed', 'img1.png' => 'áedc'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_knatsort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'áedc');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_knatrsort() {
-		$array = array('img2.png' => 'aíó', 'img10.png' => 'úéo', 'IMG12.PNG' => 'áed', 'img1.png' => 'áedc'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_knatrsort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'úéo' || $array[$keys[0]] == 'áed'); // The second result is given when intl php-extension is active.
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_knatcasesort() {
-		$array = array('img2.png' => 'aíó', 'img10.png' => 'úéo', 'IMG12.PNG' => 'áed', 'img1.png' => 'áedc'); // UTF-8
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_knatcasesort($array, $language, $encoding);
-		$keys = array_keys($array);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'áedc');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function test_api_sort() {
-		$array = array('úéo', 'aíó', 'áed', 'áedc'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_sort($array, $sort_flag, $language, $encoding);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[0] == 'aíó' || $array[0] == 'áed');  // The second result is given when intl php-extension is active.
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-	public function testapi_rsort() {
-		$array = array('aíó', 'úéo', 'áed', 'áedc'); // UTF-8
-		$sort_flag = SORT_REGULAR;
-		$language = 'english';
-		$encoding = 'UTF-8';
-		$res = api_rsort($array, $sort_flag, $language, $encoding);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[0] == 'úéo');
-		//var_dump($array);
-		//var_dump($res);
-	}
-
-
-/**
- * ----------------------------------------------------------------------------
- * Common sting operations with arrays
- * ----------------------------------------------------------------------------
- */
-
-	public function test_api_in_array_nocase() {
-		$needle = 'áéíó'; // UTF-8
-		$haystack = array('Áéíó', 'uáé', 'íóú'); // UTF-8
-		$strict = false;
-		$encoding = 'UTF-8';
-		$res = api_in_array_nocase($needle, $haystack, $strict, $encoding);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === true);
-		//var_dump($res);
-	}
-
-
-/**
- * ----------------------------------------------------------------------------
- * Encoding management functions
- * ----------------------------------------------------------------------------
- */
+	/**
+	 * ----------------------------------------------------------------------------
+	 * Encoding management functions
+	 * ----------------------------------------------------------------------------
+	 */
 
 	public function test_api_refine_encoding_id() {
 		$encoding = 'koI8-r';
@@ -829,13 +630,6 @@ class TestInternationalization extends UnitTestCase {
 
 	public function test_api_get_system_encoding() {
 		$res = api_get_system_encoding();
-		$this->assertTrue(is_string($res));
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-
-	public function test_api_get_file_system_encoding() {
-		$res = api_get_file_system_encoding();
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 		//var_dump($res);

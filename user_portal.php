@@ -183,6 +183,7 @@ $controller->tpl->assign('course_block', $controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 $controller->tpl->assign('search_block', $controller->return_search_block());
 $controller->tpl->assign('classes_block', $controller->return_classes_block());
+$controller->tpl->assign('certificates_search_block', $controller->returnCertificatesSearchBlock());
 
 //if (api_is_platform_admin() || api_is_drh()) {
 $controller->tpl->assign('skills_block', $controller->return_skills_links());

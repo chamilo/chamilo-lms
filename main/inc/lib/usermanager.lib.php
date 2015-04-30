@@ -5356,4 +5356,36 @@ EOF;
 
         return Display::url(Display::img($userProfile['file']), $userInfo['profile_url']);
     }
+
+    /**
+     * Get users whose name matches $firstname and $lastname
+     * @param string $firstname Firstname to search
+     * @param string $lastname Lastname to search
+     * @return array The user list
+     */
+    public static function getUserByName($firstname, $lastname)
+    {
+        $firstname = Database::escape_string($firstname);
+        $lastname = Database::escape_string($lastname);
+
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $sql = <<<SQL
+            SELECT id, username, lastname, firstname
+            FROM $userTable
+            WHERE firstname LIKE '$firstname%' AND
+                lastname LIKE '$lastname%'
+SQL;
+
+        $result = Database::query($sql);
+
+        $users = [];
+
+        while ($resultData = Database::fetch_object($result)) {
+            $users[] = $resultData;
+        }
+
+        return $users;
+    }
+
 }

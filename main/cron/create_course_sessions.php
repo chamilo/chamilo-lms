@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Create course sessions procedure. It creates sessions for courses that haven't it yet.
- * If today is greater than OFFSET, it will create them also for the next month.
+ * If today is greater than OFFSET, it will create them also for the next quarter
  * @package chamilo.cron
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
@@ -33,6 +33,106 @@ function getMonthFirstAndLastDates($initialDate = null)
 }
 
 /**
+ * Same as month, but for quarters
+ * @param   array   $initialDate First day of the quarter
+ * @return  array   First and last days of the quarter
+ */
+function getQuarterFirstAndLastDates($initialDate = null)
+{
+    $startDate = $initialDate ? $initialDate : date("Y-m-01");
+    $month = getQuarterFirstMonth(getQuarter(date('m', $startDate)));
+    $startDate = substr($startDate, 0, 5) . $month . '-01';
+    $nextQuarterStartDate = date('Y-m-d', api_strtotime($startDate.' + 3 month'));
+    $endDate = date('Y-m-d', api_strtotime($nextQuarterStartDate.' - 1 minute'));
+    return array('startDate' => $startDate, 'endDate' => $endDate);
+}
+
+/**
+ * Returns a quarter from a month
+ * @param   string  The month (digit), with or without leading 0
+ * @return  int The yearly quarter (1, 2, 3 or 4) in which this month lies
+ */
+function getQuarter($month)
+{
+    $quarter = 1;
+    // Remove the leading 0 if any
+    if (substr($month, 0, 1) == '0') {
+        $month = substr($month, 1);
+    }
+    // reduce to 4 quarters: 1..3=1; 4..6=2
+    switch ($month) {
+        case 1:
+            //no break
+        case 2:
+            //no break
+        case 3:
+            $quarter = 1;
+            break;
+        case 4:
+            //no break
+        case 5:
+            //no break
+        case 6:
+            $quarter = 2;
+            break;
+        case 7:
+            //no break
+        case 8:
+            //no break
+        case 9:
+            $quarter = 3;
+            break;
+        case 10:
+            //no break
+        case 11:
+            //no break
+        case 12:
+            $quarter = 4;
+            break;
+    }
+    return $quarter;
+}
+
+/**
+ * Returns the first month of the quarter
+ * @param   int Quarter
+ * @return  string Number of the month, with leading 0
+ */
+function getQuarterFirstMonth($quarter)
+{
+    switch ($quarter) {
+        case 1:
+            return '01';
+        case 2:
+            return '04';
+        case 3:
+            return '07';
+        case 4:
+            return '10';
+    }
+    return false;
+}
+
+/**
+ * Get the quarter in Roman letters
+ * @param   int Quarter
+ * @return  string  Roman letters
+ */
+function getQuarterRoman($quarter)
+{
+    switch ($quarter) {
+        case 1:
+            return 'I';
+        case 2:
+            return 'II';
+        case 3:
+            return 'III';
+        case 4:
+            return 'IV';
+    }
+}
+
+/**
  * Creates one session per course with $administratorId as the creator and
  * adds it to the session starting on $startDate and finishing on $endDate
  * @param   array   $courses Courses
@@ -50,7 +150,13 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
     echo "\n=====================================================================================\n\n";
     // Loop through courses creating one session per each and adding them
     foreach ($courses as $course) {
-        $sessionName = $course['title']." (".date("m/Y", api_strtotime($startDate)).")";
+        //$period = date("m/Y", api_strtotime($startDate));
+        $month = date("m", api_strtotime($startDate));
+        $year = date("Y", api_strtotime($startDate));
+        $quarter = getQuarter($month);
+        $quarter = getQuarterRoman($quarter);
+        $period = $year . '-' . $quarter;
+        $sessionName = '[' . $period . '] ' . $course['title'];
         $sessionId = SessionManager::create_session(
             $sessionName,
             $startDate,
@@ -82,14 +188,15 @@ if (!$lastingAdministrators) {
 $administratorId = intval($administrators[$lastingAdministrators - 1]['user_id']);
 
 // Creates course sessions for the current month
-$dates = getMonthFirstAndLastDates(date('Y-m-').'01');
+$dates = getQuarterFirstAndLastDates(date('Y-m-').'01');
 // Get courses that don't have any session
 $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);
 createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['endDate']);
 
 // Creates course sessions for the following month
-if (date("Y-m-d") >= date("Y-m-".OFFSET)) {
-    $dates = getMonthFirstAndLastDates(date("Y-m-d", api_strtotime(date("Y-m-01")." + 1 month")));
+$offsetDay = intval(substr($dates['endDate'], 8, 2)) - OFFSET;
+if (date("Y-m-d") >= date(substr($dates['endDate'], 0, 8) . $offsetDay)) {
+    $dates = getQuarterFirstAndLastDates(date("Y-m-d", api_strtotime(date("Y-m-01")." + 3 month")));
     // Get courses that don't have any session the next month
     $courses = CourseManager::getCoursesWithoutSession($dates['startDate'], $dates['endDate']);
     createCourseSessions($courses, $administratorId, $dates['startDate'], $dates['endDate']);

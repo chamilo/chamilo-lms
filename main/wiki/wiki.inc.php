@@ -2134,7 +2134,7 @@ class Wiki
                         $obj->title.'</a>';
                 }
 
-                $row[] = $obj->user_id <> 0 ? UserManager::getUserProfileLink($userinfo) : get_lang('Anonymous').' ('.$obj->user_ip.')';
+                $row[] = $obj->user_id != 0 ? UserManager::getUserProfileLink($userinfo) : get_lang('Anonymous').' ('.$obj->user_ip.')';
 
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 

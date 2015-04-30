@@ -67,7 +67,7 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
 $form->addRule(
     'picture',
-    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
 );

@@ -7237,4 +7237,8 @@ $SetTutor = "Hacer tutor";
 $UniqueAnswerImage = "Respuesta de imagen única";
 $Draggable = "Arrastrable";
 $Incorrect = "Incorrecto";
+$YouNotYetAchievedCertificates = "Aún no ha logrado certificados";
+$SearchCertificates = "Buscar certificados";
+$TheUserXNotYetAchievedCertificates = "El usuario %s aún no ha logrado certificados";
+$CertificatesNotPublic = "Los certificados no son públicos";
 ?>

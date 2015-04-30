@@ -1420,4 +1420,41 @@ class IndexManager
     {
         return CourseManager::return_hot_courses();
     }
+
+    /**
+     * Generate the block for show a panel with links to My Certificates and Certificates Search pages
+     * @return string The HTML code for the panel
+     */
+    public function returnCertificatesSearchBlock()
+    {
+        $certificatesItem = Display::tag(
+            'li',
+            Display::url(
+                get_lang('MyCertificates'),
+                api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
+            )
+        );
+
+        $searchItem = null;
+
+        if (api_get_setting('allow_public_certificates') == 'true') {
+            $searchItem = Display::tag(
+                'li',
+                Display::url(
+                    get_lang('Search'),
+                    api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
+                )
+            );
+        }
+
+        return Display::panel(
+            Display::tag(
+                'ul',
+                implode(' ', [$certificatesItem, $searchItem]),
+                ['class' => 'nav nav-pills nav-stacked']
+            ),
+            get_lang('Certificates')
+        );
+    }
+
 }

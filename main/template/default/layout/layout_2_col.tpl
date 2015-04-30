@@ -42,6 +42,9 @@
         {# Skills #}
         {{ skills_block }}
 
+        {# Certificates search block #}
+        {{ certificates_search_block }}
+
 		{# Notice #}
 		{{ notice_block }}
 

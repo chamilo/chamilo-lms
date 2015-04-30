@@ -2512,8 +2512,8 @@ class CourseRestorer
     {
 		if ($this->course->has_resources(RESOURCE_WIKI)) {
 			// wiki table of the target course
-			$table_wiki 		= Database :: get_course_table('wiki');
-			$table_wiki_conf 	= Database :: get_course_table('wiki_conf');
+			$table_wiki 		= Database :: get_course_table(TABLE_WIKI);
+			$table_wiki_conf 	= Database :: get_course_table(TABLE_WIKI_CONF);
 
 			// storing all the resources that have to be copied in an array
 			$resources = $this->course->resources;

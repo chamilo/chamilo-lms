@@ -1440,13 +1440,17 @@ class IndexManager
             )
         );
 
-        $searchItem = Display::tag(
-            'li',
-            Display::url(
-                get_lang('Search'),
-                api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
-            )
-        );
+        $searchItem = null;
+
+        if (api_get_setting('allow_public_certificates') == 'true') {
+            $searchItem = Display::tag(
+                'li',
+                Display::url(
+                    get_lang('Search'),
+                    api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
+                )
+            );
+        }
 
         return Display::panel(
             Display::tag(

@@ -32,15 +32,17 @@ if (empty($courseList) || empty($sessionList)) {
     );
 }
 
-$template->assign(
-    'actions',
-    Display::toolbarButton(
-        get_lang('SearchCertificates'),
-        api_get_path(WEB_CODE_PATH) . "gradebook/search.php",
-        'search',
-        'info'
-    )
-);
+if (api_get_setting('allow_public_certificates') == 'true') {
+    $template->assign(
+        'actions',
+        Display::toolbarButton(
+            get_lang('SearchCertificates'),
+            api_get_path(WEB_CODE_PATH) . "gradebook/search.php",
+            'search',
+            'info'
+        )
+    );
+}
 
 $template->assign('content', $content);
 $template->display_one_col_template();

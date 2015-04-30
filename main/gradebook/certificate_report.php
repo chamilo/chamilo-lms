@@ -60,7 +60,7 @@ if ($selectedSession > 0) {
     if (api_is_student_boss()) {
         $coursesList = CourseManager::getCoursesFollowedByGroupAdmin($userId);
     } else {
-        $coursesList = CourseManager::get_courses_list_by_user_id($userId);
+        $coursesList = CourseManager::get_courses_list_by_user_id($userId, false, true);
 
         if (is_array($coursesList)) {
             foreach ($coursesList as &$course) {

@@ -2571,10 +2571,11 @@ class CourseManager
      * Get list of courses for a given user
      * @param int $user_id
      * @param boolean $include_sessions Whether to include courses from session or not
-     * @return array    List of codes and db names
+     * @param boolean $adminGetsAllCourses If the user is platform admin, whether he gets all the courses or just his. Note: This does *not* include all sessions
+     * @return array    List of codes and db name
      * @author isaac flores paz
      */
-    public static function get_courses_list_by_user_id($user_id, $include_sessions = false)
+    public static function get_courses_list_by_user_id($user_id, $include_sessions = false, $adminGetsAllCourses = false)
     {
         $user_id = intval($user_id);
         $course_list = array();
@@ -2584,15 +2585,22 @@ class CourseManager
         $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $special_course_list = self::get_special_course_list();
 
-        $with_special_courses = $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $sc_string = '"' . implode('","', $special_course_list) . '"';
-            $with_special_courses = ' course.code IN (' . $sc_string . ')';
-            $without_special_courses = ' AND course.code NOT IN (' . $sc_string . ')';
-        }
-
-        if (!empty($with_special_courses)) {
+        if ($adminGetsAllCourses && UserManager::is_admin($user_id)) {
+            // get the whole courses list
             $sql = "SELECT DISTINCT(course.code), course.id as real_id
+                FROM $tbl_course course";
+
+        } else {
+
+            $with_special_courses = $without_special_courses = '';
+            if (!empty($special_course_list)) {
+                $sc_string = '"' . implode('","', $special_course_list) . '"';
+                $with_special_courses = ' course.code IN (' . $sc_string . ')';
+                $without_special_courses = ' AND course.code NOT IN (' . $sc_string . ')';
+            }
+
+            if (!empty($with_special_courses)) {
+                $sql = "SELECT DISTINCT(course.code), course.id as real_id
                     FROM    " . $tbl_course_user . " course_rel_user
                     LEFT JOIN " . $tbl_course . " course
                     ON course.id = course_rel_user.c_id
@@ -2601,23 +2609,23 @@ class CourseManager
                     WHERE  $with_special_courses
                     GROUP BY course.code
                     ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-            $rs_special_course = Database::query($sql);
-            if (Database::num_rows($rs_special_course) > 0) {
-                while ($result_row = Database::fetch_array($rs_special_course)) {
-                    $result_row['special_course'] = 1;
-                    $course_list[] = $result_row;
-                    $codes[] = $result_row['real_id'];
+                $rs_special_course = Database::query($sql);
+                if (Database::num_rows($rs_special_course) > 0) {
+                    while ($result_row = Database::fetch_array($rs_special_course)) {
+                        $result_row['special_course'] = 1;
+                        $course_list[] = $result_row;
+                        $codes[] = $result_row['real_id'];
+                    }
                 }
             }
-        }
 
-        // get course list not auto-register. Use Distinct to avoid multiple
-        // entries when a course is assigned to a HRD (DRH) as watcher
-        $sql = "SELECT DISTINCT(course.code), course.id as real_id
+            // get course list not auto-register. Use Distinct to avoid multiple
+            // entries when a course is assigned to a HRD (DRH) as watcher
+            $sql = "SELECT DISTINCT(course.code), course.id as real_id
                 FROM $tbl_course course
                 INNER JOIN $tbl_course_user cru ON course.id = cru.c_id
                 WHERE cru.user_id='$user_id' $without_special_courses";
-
+        }
         $result = Database::query($sql);
 
         if (Database::num_rows($result)) {

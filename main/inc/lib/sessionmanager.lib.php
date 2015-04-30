@@ -3341,26 +3341,36 @@ class SessionManager
     /**
      * The general coach (field: session.id_coach)
      * @param int $user_id user id
+     * @param boolean   $asPlatformAdmin The user is platform admin, return everything
      * @return array
      */
-    public static function get_sessions_by_general_coach($user_id)
+    public static function get_sessions_by_general_coach($user_id, $asPlatformAdmin = false)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $user_id = intval($user_id);
 
         // Session where we are general coach
         $sql = "SELECT DISTINCT *
-                FROM $session_table
-                WHERE id_coach = $user_id";
+                FROM $session_table";
+
+        if (!$asPlatformAdmin) {
+            $sql .= " WHERE id_coach = $user_id";
+        }
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
+
+            $sqlCoach = '';
+            if (!$asPlatformAdmin) {
+                $sqlCoach = " id_coach = $user_id AND ";
+            }
+
             if ($access_url_id != -1) {
                 $sql = 'SELECT DISTINCT session.*
                     FROM ' . $session_table . ' session INNER JOIN ' . $tbl_session_rel_access_url . ' session_rel_url
                     ON (session.id = session_rel_url.session_id)
-                    WHERE id_coach = ' . $user_id . ' AND access_url_id = ' . $access_url_id;
+                    WHERE '.$sqlCoach.' access_url_id = ' . $access_url_id;
             }
         }
         $sql .= ' ORDER by name';
@@ -5446,12 +5456,13 @@ class SessionManager
      * Get the session coached by a user (general coach and course-session coach)
      * @param int $coachId The coach id
      * @param boolean $checkSessionRelUserVisibility Check the session visibility
+     * @param boolean $asPlatformAdmin The user is a platform admin and we want all sessions
      * @return array The session list
      */
-    public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false)
+    public static function getSessionsCoachedByUser($coachId, $checkSessionRelUserVisibility = false, $asPlatformAdmin = false)
     {
         // Get all sessions where $coachId is the general coach
-        $sessions = self::get_sessions_by_general_coach($coachId);
+        $sessions = self::get_sessions_by_general_coach($coachId, $asPlatformAdmin);
         // Get all sessions where $coachId is the course - session coach
         $courseSessionList = self::getCoursesListByCourseCoach($coachId);
         $sessionsByCoach = array();

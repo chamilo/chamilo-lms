@@ -34,7 +34,7 @@ if (api_is_student_boss()) {
     $userList = GroupPortalManager::getGroupUsersByUser($userId);
     $sessionsList = SessionManager::getSessionsFollowedForGroupAdmin($userId);
 } else {
-    $sessionsList = SessionManager::getSessionsCoachedByUser($userId);
+    $sessionsList = SessionManager::getSessionsCoachedByUser($userId, false, api_is_platform_admin());
 }
 
 foreach ($sessionsList as $session) {

@@ -19,14 +19,19 @@ if (api_get_setting('allow_public_certificates') != 'true') {
     );
 }
 
-$firstname = isset($_POST['firstname']) ? trim($_POST['firstname']) : null;
-$lastname = isset($_POST['lastname']) ? trim($_POST['lastname']) : null;
-
 $userId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $userList = $userInfo = $courseList = $sessionList = [];
 
-if (!empty($firstname) && !empty($lastname)) {
+$searchForm = new FormValidator('search_form', 'post', null, null);
+$searchForm->addText('firstname', get_lang('Firstname'));
+$searchForm->addText('lastname', get_lang('Lastname'));
+$searchForm->addButtonSearch();
+
+if ($searchForm->validate()) {
+    $firstname = $searchForm->getSubmitValue('firstname');
+    $lastname = $searchForm->getSubmitValue('lastname');
+
     $userList = UserManager::getUserByName($firstname, $lastname);
 
     if (empty($userList)) {
@@ -52,11 +57,6 @@ if (!empty($firstname) && !empty($lastname)) {
         Header::location(api_get_self());
     }
 }
-
-$searchForm = new FormValidator('search_form', 'post', null, null);
-$searchForm->addText('firstname', get_lang('Firstname'));
-$searchForm->addText('lastname', get_lang('Lastname'));
-$searchForm->addButtonSearch();
 
 $template = new Template(get_lang('SearchCertificates'));
 

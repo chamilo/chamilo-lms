@@ -42,6 +42,12 @@ if ($searchForm->validate()) {
 } elseif ($userId > 0) {
     $userInfo = api_get_user_info($userId);
 
+    if (empty($userInfo)) {
+        Session::write('message', Display::return_message(get_lang('NoUser'), 'warning'));
+
+        Header::location(api_get_self());
+    }
+
     $courseList = GradebookUtils::getUserCertificatesInCourses($userId, false);
     $sessionList = GradebookUtils::getUserCertificatesInSessions($userId, false);
 

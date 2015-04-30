@@ -6,6 +6,8 @@
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @package chamilo.gradebook
  */
+use \ChamiloSession as Session;
+
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -23,13 +25,14 @@ $lastname = isset($_POST['lastname']) ? trim($_POST['lastname']) : null;
 $userId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 $userList = $userInfo = $courseList = $sessionList = [];
-$message = null;
 
 if (!empty($firstname) && !empty($lastname)) {
     $userList = UserManager::getUserByName($firstname, $lastname);
 
     if (empty($userList)) {
-        $message = Display::return_message(get_lang('NoResults'), 'warning');
+        Session::write('message', Display::return_message(get_lang('NoResults'), 'warning'));
+
+        Header::location(api_get_self());
     }
 } elseif ($userId > 0) {
     $userInfo = api_get_user_info($userId);
@@ -38,10 +41,15 @@ if (!empty($firstname) && !empty($lastname)) {
     $sessionList = GradebookUtils::getUserCertificatesInSessions($userId, false);
 
     if (empty($courseList) && empty($sessionList)) {
-        $message = Display::return_message(
-            sprintf(get_lang('TheUserXNotYetAchievedCertificates'), $userInfo['complete_name']),
-            'warning'
+        Session::write(
+            'message',
+            Display::return_message(
+                sprintf(get_lang('TheUserXNotYetAchievedCertificates'), $userInfo['complete_name']),
+                'warning'
+            )
         );
+
+        Header::location(api_get_self());
     }
 }
 
@@ -57,7 +65,11 @@ $template->assign('user_list', $userList);
 $template->assign('user_info', $userInfo);
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
-$template->assign('message', $message);
+
+if (Session::has('message')) {
+    $template->assign('message', Session::read('message'));
+    Session::erase('message');
+}
 
 $content = $template->fetch('default/gradebook/search.tpl');
 

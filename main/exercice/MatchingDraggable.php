@@ -204,7 +204,7 @@ class MatchingDraggable extends Question
     }
 
     /**
-     * 
+     * Process the creation of answers
      * @param type $form
      */
     public function processAnswersCreation($form)

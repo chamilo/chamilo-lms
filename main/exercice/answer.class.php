@@ -761,7 +761,7 @@ class Answer
 	}
 
     /**
-     * Get the necessary JavaScript for some ansers
+     * Get the necessary JavaScript for some answers
      * @return string
      */
     public function getJs() {

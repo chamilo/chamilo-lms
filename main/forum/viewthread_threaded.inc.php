@@ -335,7 +335,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 if ($userCanQualify) {
     if ($post_id > $post_minor) {
-        $current_qualify_thread = show_qualify(
+        $current_qualify_thread = showQualify(
             '1',
             $rows[$display_post_id]['user_id'],
             $_GET['thread']

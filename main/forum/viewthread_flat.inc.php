@@ -121,7 +121,7 @@ if (isset($current_thread['thread_id'])) {
                 api_get_course_int_id()
             );
 
-            $current_qualify_thread = show_qualify(
+            $current_qualify_thread = showQualify(
                 '1',
                 $row['poster_id'],
                 $_GET['thread']

@@ -7,6 +7,10 @@
 
 $course = api_get_course_info();
 
+$userid = (int)$_GET['user_id'];
+$userInfo = api_get_user_info($userid);
+$current_thread = get_thread_information($_GET['thread']);
+$threadid = $current_thread['thread_id'];
 $rows = get_thread_user_post(
     $course['code'],
     $current_thread['thread_id'],
@@ -49,11 +53,6 @@ if (isset($rows)) {
         echo "<td rowspan=\"3\" class=\"$leftclass\">";
 
         echo '<br /><b>'.  api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_LONG).'</b><br />';
-
-        if (api_is_allowed_to_edit(null,true)) {
-            //echo $url_post;
-        }
-
         echo "</td>";
 
         // The post title
@@ -66,7 +65,7 @@ if (isset($rows)) {
         echo "</tr>";
 
         // The check if there is an attachment
-        $attachment_list=getAllAttachment($row['post_id']);
+        $attachment_list = getAllAttachment($row['post_id']);
 
         if (!empty($attachment_list)) {
             foreach ($attachment_list as $attachment) {
@@ -96,13 +95,10 @@ if (isset($rows)) {
     }
 }
 
-$userid = (int)$_GET['user_id'];
-$userinf = api_get_user_info($userid);
-$current_thread = get_thread_information($_GET['thread']);
-$threadid = $current_thread['thread_id'];
+
 //return Max qualify thread
-$max_qualify = show_qualify('2', $userid, $threadid);
-$current_qualify_thread = show_qualify('1', $userid, $threadid);
+$max_qualify = showQualify('2', $userid, $threadid);
+$current_qualify_thread = showQualify('1', $userid, $threadid);
 
 if (isset($_POST['idtextqualify'])) {
     saveThreadScore(
@@ -122,7 +118,7 @@ $result = get_statistical_information(
     api_get_course_int_id()
 );
 
-if ($userinf['status']!='1') {
+if ($userInfo['status']!='1') {
     echo '<div class="forum-qualification-input-box">';
     require_once 'forumbody.inc.php';
     echo '</div>';

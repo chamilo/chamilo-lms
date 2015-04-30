@@ -2018,8 +2018,6 @@ function get_thread_users_qualify($thread_id)
     $t_session_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $course_id = api_get_course_int_id();
-    $course_code = api_get_course_id();
-    $course_code = Database::escape_string($course_code);
 
     $is_western_name_order = api_is_western_name_order();
     if ($is_western_name_order) {
@@ -2094,9 +2092,9 @@ function get_thread_users_not_qualify($thread_id)
     }
 
     $course_id = api_get_course_int_id();
-    $course_code = api_get_course_id();
 
-    $sql1 = "select user_id FROM  $t_qualify WHERE c_id = $course_id AND thread_id = '".$thread_id."'";
+    $sql1 = "SELECT user_id FROM  $t_qualify
+             WHERE c_id = $course_id AND thread_id = '".$thread_id."'";
     $result1 = Database::query($sql1);
     $cad = '';
     while ($row = Database::fetch_array($result1)) {
@@ -2528,7 +2526,13 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         if (Gradebook::is_active()) {
             //Loading gradebook select
             GradebookUtils::load_gradebook_select_in_tool($form);
-            $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
+            $form->addElement(
+                'checkbox',
+                'thread_qualify_gradebook',
+                '',
+                get_lang('QualifyThreadGradebook'),
+                'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
+            );
         } else {
             $form->addElement('hidden', 'thread_qualify_gradebook', false);
         }
@@ -2591,7 +2595,6 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     } else {
         $defaults['thread_peer_qualify'] = 0;
     }
-
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
@@ -2680,6 +2683,7 @@ function saveThreadScore(
 
     $course_id = api_get_course_int_id();
     $session_id = intval($session_id);
+    $currentUserId = api_get_user_id();
 
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) &&
@@ -2699,14 +2703,12 @@ function saveThreadScore(
                             user_id = $user_id AND
                             thread_id = ".$thread_id;
             } else {
-                $currentUserId = api_get_user_id();
                 $sql = "SELECT COUNT(*) FROM $table_threads_qualify
                         WHERE
                             c_id = $course_id AND
                             qualify_user_id = $currentUserId AND
                             thread_id = ".$thread_id;
             }
-
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
 
@@ -2727,7 +2729,9 @@ function saveThreadScore(
                         WHERE
                             c_id = $course_id AND
                             user_id = ".$user_id." AND
-                            thread_id = ".$thread_id;
+                            thread_id = ".$thread_id." AND
+                            qualify_user_id =  $currentUserId
+                            ";
                 $rs = Database::query($sql);
                 Database::fetch_array($rs);
 
@@ -2750,7 +2754,7 @@ function saveThreadScore(
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
-function show_qualify($option, $user_id, $thread_id)
+function showQualify($option, $user_id, $thread_id)
 {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -2798,7 +2802,7 @@ function show_qualify($option, $user_id, $thread_id)
  * @author Isaac Flores <isaac.flores@dokeos.com>,
  * @version October 2008, dokeos  1.8.6
  */
-function get_historical_qualify($user_id, $thread_id, $opt)
+function getThreadScoreHistory($user_id, $thread_id, $opt)
 {
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
@@ -2818,7 +2822,6 @@ function get_historical_qualify($user_id, $thread_id, $opt)
                     user_id='".Database::escape_string($user_id)."'
                 ORDER BY qualify_time DESC";
     }
-
     $rs = Database::query($sql);
     $log = array();
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
@@ -2856,6 +2859,7 @@ function saveThreadScoreHistory(
     $current_date = date('Y-m-d H:i:s');
 
     $course_id = intval($course_id);
+    $qualify_user_id = intval($qualify_user_id);
 
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) && $option == 1
@@ -2878,30 +2882,44 @@ function saveThreadScoreHistory(
         Database::query($sql);
 
         // Update
-        $sql2 = "UPDATE ".$table_threads_qualify."
-                 SET qualify=".$current_qualify.",qualify_time='".$current_date."'
-                 WHERE c_id = $course_id AND user_id=".$user_id." AND thread_id=".$thread_id.";";
+        $sql2 = "UPDATE $table_threads_qualify SET
+                    qualify = $current_qualify,
+                    qualify_time='".$current_date."'
+                 WHERE
+                    c_id = $course_id AND
+                    user_id=".$user_id." AND
+                    thread_id=".$thread_id." AND
+                    qualify_user_id = $qualify_user_id
+                ";
         Database::query($sql2);
     }
 }
 
 /**
  * This function shows current thread qualify .
- * @param integer contains the information the current thread id
- * @param integer contains the information the current session id
+ * @param integer $threadId
+ * @param integer $sessionId
+ * @param integer $userId
+ *
  * @return array or null if is empty
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version December 2008, dokeos  1.8.6
  */
-function current_qualify_of_thread($thread_id, $session_id)
+function current_qualify_of_thread($threadId, $sessionId, $userId)
 {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
     $course_id = api_get_course_int_id();
-    $session_id = intval($session_id);
+    $sessionId = intval($sessionId);
+    $threadId = intval($threadId);
 
     $sql = "SELECT qualify FROM $table_threads_qualify
-            WHERE c_id = $course_id AND thread_id = $thread_id AND session_id = $session_id";
+            WHERE
+                c_id = $course_id AND
+                thread_id = $threadId AND
+                session_id = $sessionId AND
+                qualify_user_id = $userId
+            ";
     $res = Database::query($sql);
     $row = Database::fetch_array($res, 'ASSOC');
 

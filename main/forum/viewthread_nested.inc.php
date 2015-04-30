@@ -113,7 +113,7 @@ foreach ($rows as $post) {
 
     if ($userCanQualify) {
         if ($count > 0) {
-            $current_qualify_thread = show_qualify(
+            $current_qualify_thread = showQualify(
                 '1',
                 $post['user_id'],
                 $_GET['thread']

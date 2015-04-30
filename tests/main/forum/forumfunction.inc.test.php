@@ -453,11 +453,11 @@ class TestForumFunction extends UnitTestCase {
 	* @return array()
 	*/
 
-	public function testget_historical_qualify() {
+	public function testGetThreadScoreHistory() {
 		$user_id = 1;
 		$thread_id = 1;
 		$opt = true;
-		$res = get_historical_qualify($user_id,$thread_id,$opt);
+		$res = getThreadScoreHistory($user_id,$thread_id,$opt);
 		if(!is_null($res)){
 			$this->assertTrue(is_array($res));
 		} else {
@@ -1068,11 +1068,11 @@ class TestForumFunction extends UnitTestCase {
 	* @example $option=1 obtained the qualification of the current thread
 	*/
 
-	public function testshow_qualify() {
+	public function testShowQualify() {
 	 	$option =  1;
 	 	$user_id = 1;
 	 	$thread_id = 1;
-		$res = show_qualify($option,$user_id,$thread_id);
+        $res = showQualify($option, $user_id, $thread_id);
 		if(!is_numeric($res)){
 			$this->assertTrue(is_null($res));
 		} else {

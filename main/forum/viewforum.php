@@ -41,7 +41,7 @@ $origin = '';
 $origin_string = '';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
-    $origin_string = '&amp;origin='.$origin;
+    $origin_string = '&origin='.$origin;
 }
 
 /* Including necessary files */
@@ -119,7 +119,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title']));
 } else {
     $interbreadcrumb[] = array('url' => $forumUrl.'index.php?search='.Security::remove_XSS($my_search), 'name' => get_lang('ForumCategories'));
-    $interbreadcrumb[] = array('url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => prepare4display($current_forum_category['cat_title']));
+    $interbreadcrumb[] = array('url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&search='.Security::remove_XSS(urlencode($my_search)), 'name' => prepare4display($current_forum_category['cat_title']));
     $interbreadcrumb[] = array('url' => '#', 'name' => Security::remove_XSS($current_forum['forum_title']));
 }
 
@@ -199,19 +199,19 @@ if ($my_action == 'liststd' &&
     $table_list = Display::page_subheader(get_lang('ThreadUsersList').': '.get_name_thread_by_id($_GET['id']));
 
     if ($nrorow3 > 0 || $nrorow3 == -2) {
-        $url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;content='.Security::remove_XSS($_GET['content'],STUDENT).'&amp;id='.intval($_GET['id']);
+        $url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content'],STUDENT).'&id='.intval($_GET['id']);
         $tabs = array(
             array(
                 'content' =>  get_lang('AllStudents'),
-                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=all'
+                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&origin='.$origin.'&list=all'
             ),
             array(
                 'content' =>  get_lang('StudentsQualified'),
-                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=qualify'
+                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&origin='.$origin.'&list=qualify'
             ),
             array(
                 'content' =>  get_lang('StudentsNotQualified'),
-                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&amp;origin='.$origin.'&amp;list=notqualify'
+                'url'    =>   $forumUrl.'viewforum.php?'.$url.'&origin='.$origin.'&list=notqualify'
             ),
         );
         $table_list .= Display::tabs_only_link($tabs, $active);
@@ -229,7 +229,7 @@ if ($my_action == 'liststd' &&
             $table_list.= '<th>'.get_lang('Qualify').'</th>';
         }
         $table_list .= '</tr>';
-        $max_qualify = show_qualify('2', $userid, $_GET['id']);
+        $max_qualify = showQualify('2', $userid, $_GET['id']);
         $counter_stdlist = 0;
 
         if (Database::num_rows($student_list) > 0) {
@@ -248,8 +248,13 @@ if ($my_action == 'liststd' &&
                     $table_list .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
                 }
                 if (api_is_allowed_to_edit(null, true)) {
-                    $current_qualify_thread = show_qualify('1', $row_student_list['user_id'], $_GET['id']);
-                    $table_list .= '<td><a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($_GET['id']).'&amp;user='.$row_student_list['user_id'].'&amp;user_id='.$row_student_list['user_id'].'&amp;idtextqualify='.$current_qualify_thread.'&amp;origin='.$origin.'">'.
+                    $current_qualify_thread = showQualify(
+                        '1',
+                        $row_student_list['user_id'],
+                        $_GET['id']
+                    );
+                    $table_list .= '<td>
+                        <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['user_id'].'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.
                         Display::return_icon($icon_qualify, get_lang('Qualify')).'</a></td></tr>';
                 }
                 $counter_stdlist++;
@@ -285,7 +290,7 @@ echo '<div class="actions">';
 
 if ($origin != 'learnpath') {
     if ($origin=='group') {
-        echo '<a href"='.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'">'.
+        echo '<a href"='.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'&gradebook='.$gradebook.'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
@@ -305,11 +310,11 @@ if (api_is_allowed_to_edit(false, true) OR
     if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
         if (!api_is_anonymous() && !api_is_invitee()) {
             if ($my_forum == strval(intval($my_forum))) {
-                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).$origin_string.'">'.
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.
                     Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $my_forum = strval(intval($my_forum));
-                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&amp;forum='.$my_forum.$origin_string.'">'.
+                echo '<a href="'.$forumUrl.'newthread.php?'.api_get_cidreq().'&forum='.$my_forum.$origin_string.'">'.
                     Display::return_icon('new_thread.png',get_lang('NewTopic'),'',ICON_SIZE_MEDIUM).'</a>';
             }
         }
@@ -380,7 +385,7 @@ if (is_array($threads)) {
             }
             echo '</td>';
             echo '<td>';
-            echo '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;origin='.$origin.'&amp;thread='.$row['thread_id'].$origin_string.'&amp;search='.Security::remove_XSS(urlencode($my_search)).'" '.class_visible_invisible($row['visibility']).'>'.prepare4display($row['thread_title']).'</a></td>';
+            echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&thread='.$row['thread_id'].$origin_string.'&search='.Security::remove_XSS(urlencode($my_search)).'" '.class_visible_invisible($row['visibility']).'>'.prepare4display($row['thread_title']).'</a></td>';
             echo '<td>'.$row['thread_replies'].'</td>';
             echo '<td>'.$row['thread_views'].'</td>';
             // display the author name
@@ -443,19 +448,19 @@ if (is_array($threads)) {
 
             if ($origin != 'learnpath') {
                 if (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) {
-                    echo '<a href="'.$forumUrl.'editpost.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;thread='.Security::remove_XSS($row['thread_id']).'&amp;post='.$row_post_id['post_id'].'&id_attach='.$id_attach.'">'.
+                    echo '<a href="'.$forumUrl.'editpost.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($row['thread_id']).'&post='.$row_post_id['post_id'].'&id_attach='.$id_attach.'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
 
                     if (api_resource_is_locked_by_gradebook($row['thread_id'], LINK_FORUM_THREAD)) {
                         echo Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), array(), ICON_SIZE_SMALL);
                     } else {
-                        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=delete&amp;content=thread&id='.$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))."')) return false;\">".
+                        echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&action=delete&content=thread&id='.$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))."')) return false;\">".
                             Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     }
 
                     display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => $groupId));
                     display_lock_unlock_icon('thread', $row['thread_id'], $row['locked'], array('forum' => $my_forum, 'origin' => $origin, 'gidReq' => api_get_group_id()));
-                    echo '<a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;action=move&thread='.$row['thread_id'].$origin_string.'">'.
+                    echo '<a href="viewforum.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&action=move&thread='.$row['thread_id'].$origin_string.'">'.
                         Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL).'</a>';
                 }
             }
@@ -467,12 +472,12 @@ if (is_array($threads)) {
             }
             $icon_liststd = 'user.png';
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;origin='.$origin.'&amp;action=notify&amp;content=thread&id='.$row['thread_id'].'">'.
+                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&action=notify&content=thread&id='.$row['thread_id'].'">'.
                     Display::return_icon($iconnotify, get_lang('NotifyMe')).'</a>';
             }
 
             if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
-                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&amp;origin='.$origin.'&amp;action=liststd&amp;content=thread&id='.$row['thread_id'].'">'.
+                echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&action=liststd&content=thread&id='.$row['thread_id'].'">'.
                     Display::return_icon($icon_liststd,get_lang('StudentList'), array(), ICON_SIZE_SMALL).'</a>';
             }
             echo '</td></tr>';

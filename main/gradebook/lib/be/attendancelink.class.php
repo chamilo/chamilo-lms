@@ -217,15 +217,6 @@ class AttendanceLink extends AbstractLink
 		return $this->attendance_table;
 	}
 
-	/**
-	 * Lazy load function to get the database table of the item properties
-	 */
-	private function get_itemprop_table()
-	{
-		$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		return $this->itemprop_table;
-	}
-
 	public function needs_name_and_description()
 	{
 		return false;

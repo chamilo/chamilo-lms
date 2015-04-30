@@ -474,6 +474,7 @@ define('MEDIA_QUESTION', 15);
 define('CALCULATED_ANSWER', 16);
 define('UNIQUE_ANSWER_IMAGE', 17);
 define('DRAGGABLE', 18);
+define('MATCHING_DRAGGABLE', 19);
 
 //Some alias used in the QTI exports
 define('MCUA', 1);

@@ -104,13 +104,16 @@ class ExerciseLib
             // on the right side are called answers
             $num_suggestions = 0;
 
-            if (in_array($answerType, [MATCHING, DRAGGABLE])) {
+            if (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if ($answerType == DRAGGABLE) {
                     $s .= '<div class="ui-widget ui-helper-clearfix">
                         <div class="clearfix">
                         <ul class="exercise-draggable-answer ui-helper-reset ui-helper-clearfix">';
                 } else {
-                    $s .= '<table class="table table-hover table-striped">';
+                    $s .= <<<HTML
+                        <div id="drag{$questionId}_question" class="drag_question">
+                            <table class="data_table">
+HTML;
                 }
                 // Iterate through answers
                 $x = 1;
@@ -1002,17 +1005,129 @@ JAVASCRIPT;
 
                         $s .= '</li>';
                     }
+                } elseif ($answerType == MATCHING_DRAGGABLE) {
+                    if ($answerId == 1) {
+                        echo $objAnswerTmp->getJs();
+                    }
+
+                    if ($answerCorrect != 0) {
+                        $parsed_answer = $answer;
+                        $windowId = "{$questionId}_{$lines_count}";
+
+                        $s .= <<<HTML
+                            <tr>
+                                <td widht="45%">
+                                    <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
+                                        <strong>$lines_count.</strong> $parsed_answer
+                                    </div>
+                                </td>
+                                <td width="10%">
+HTML;
+                        $selectedValue = 0;
+                        $questionOptions = [];
+
+                        foreach ($select_items as $key => $val) {
+                            if ($debug_mark_answer) {
+                                if ($val['id'] == $answerCorrect) {
+                                    $selectedValue = $val['id'];
+                                }
+                            }
+
+                            if (
+                                isset($user_choice[$matching_correct_answer]) &&
+                                $val['id'] == $user_choice[$matching_correct_answer]['answer']
+                            ) {
+                                $selectedValue = $val['id'];
+                            }
+
+                            $questionOptions[$val['id']] = $val['letter'];
+                        }
+
+                        $s .= Display::select(
+                            "choice[$questionId][$numAnswer]",
+                            $questionOptions,
+                            $selectedValue,
+                            [
+                                'id' => "window_{$windowId}_select",
+                                'class' => 'hidden'
+                            ],
+                            false
+                        );
+
+                        if (!empty($answerCorrect) && !empty($selectedValue)) {
+                            $s .= <<<JAVASCRIPT
+                                <script>
+                                    jsPlumb.ready(function() {
+                                        jsPlumb.connect({
+                                            source: 'window_$windowId',
+                                            target: 'window_{$questionId}_{$selectedValue}_answer',
+                                            endpoint: ['Blank', {radius: 15}],
+                                            anchors: ['RightMiddle', 'LeftMiddle'],
+                                            paintStyle: {strokeStyle: '#8A8888', lineWidth: 8},
+                                            connector: [
+                                                MatchingDraggable.connectorType,
+                                                {curvines: MatchingDraggable.curviness}
+                                            ]
+                                        });
+                                    });
+                                </script>
+JAVASCRIPT;
+                        }
+
+                        $s .= <<<HTML
+                            </td>
+                            <td width="45%">
+HTML;
+
+                        if (isset($select_items[$lines_count])) {
+                            $s .= <<<HTML
+                                <div id="window_{$windowId}_answer" class="window window_right_question">
+                                    <strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}
+                                </div>
+HTML;
+                        } else {
+                            $s .= '&nbsp;';
+                        }
+
+                        $s .= '</td></tr>';
+
+                        $lines_count++;
+
+                        if (($lines_count - 1) == $num_suggestions) {
+                            while (isset($select_items[$lines_count])) {
+                                $s .= <<<HTML
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td>
+                                            <strong>{$select_items[$lines_count]['letter']}</strong>
+                                            $select_items[$lines_count]['answer']
+                                        </td>
+                                    </tr>
+HTML;
+                                $lines_count++;
+                            }
+                        }
+
+                        $matching_correct_answer++;
+                    }
                 }
             }    // end for()
 
             if ($show_comment) {
                 $s .= '</table>';
-            } else {
-                if ($answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
-                    $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
-                ) {
+            } elseif(
+                in_array(
+                    $answerType,
+                    [
+                        MATCHING,
+                        MATCHING_DRAGGABLE,
+                        UNIQUE_ANSWER_NO_OPTION,
+                        MULTIPLE_ANSWER_TRUE_FALSE,
+                        MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+                    ]
+                )
+            ) {
                     $s .= '</table>';
-                }
             }
 
             if ($answerType == DRAGGABLE) {
@@ -1042,7 +1157,7 @@ JAVASCRIPT;
                 $s .= '</div></div>';
             }
 
-            if ($answerType == MATCHING) {
+            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                 $s .= '</div>';
             }
 
@@ -3106,6 +3221,9 @@ JAVASCRIPT;
                 $select_condition = " e.exe_id, answer ";
                 break;
             case MATCHING:
+                //no break
+            case MATCHING_DRAGGABLE:
+                //no break
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = " DISTINCT exe_user_id ";
@@ -3161,6 +3279,9 @@ JAVASCRIPT;
                     return $good_answers;
                     break;
                 case MATCHING:
+                    //no break
+                case MATCHING_DRAGGABLE:
+                    //no break
                 default:
                     $return = Database::num_rows($result);
             }

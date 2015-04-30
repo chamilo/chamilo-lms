@@ -367,47 +367,36 @@ $(function() {
     });
 
     // Global popup
-    $('.ajax').on('click', function() {
-        var url = this.href;
-        var dialog  = $("#dialog");
-        if ($("#dialog").length == 0) {
-            dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
-        }
+    $('a.ajax').on('click', function(e) {
+        e.preventDefault();
 
-        var width_value = 580;
-        var height_value = 450;
-        var resizable_value = true;
+        var contentUrl = this.href,
+            loadModalContent = $.get(contentUrl);
 
-        var new_param = get_url_params(url, 'width');
-        if (new_param) {
-            width_value = new_param;
-        }
+        $.when(loadModalContent).done(function(modalContent) {
+            var modalDialog = $('#global-modal').find('.modal-dialog'),
+                modalSize = get_url_params(contentUrl, 'modal_size'),
+                modalWidth = get_url_params(contentUrl, 'width');
 
-        var new_param = get_url_params(url, 'height')
-        if (new_param) {
-            height_value = new_param;
-        }
+            modalDialog.removeClass('modal-lg modal-sm').css('width', '');
 
-        var new_param = get_url_params(url, 'resizable');
-        if (new_param) {
-            resizable_value = new_param;
-        }
-
-        // load remote content
-        dialog.load(
-            url,
-            {},
-            function(responseText, textStatus, XMLHttpRequest) {
-                dialog.dialog({
-                    modal       : true,
-                    width       : width_value,
-                    height      : height_value,
-                    resizable   : resizable_value
-                });
+            if (modalSize) {
+                switch (modalSize) {
+                    case 'lg':
+                        modalDialog.addClass('modal-lg');
+                        break;
+                    case 'sm':
+                        modalDialog.addClass('modal-sm');
+                        break;
+                }
+            } else if (modalWidth) {
+                modalDialog.css('width', modalWidth + 'px');
             }
-        );
-        // prevent the browser to follow the link
-        return false;
+
+            $('#global-modal').find('.modal-body').html(modalContent);
+
+            $('#global-modal').modal('show');
+        });
     });
 
     $('a.expand-image').on('click', function(e) {

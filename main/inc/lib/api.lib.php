@@ -5613,7 +5613,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 
 function api_replace_dangerous_char($filename, $strict = 'loose')
 {
-    return URLify::filter($filename, 250);
+    return URLify::filter($filename, 250, null, true);
     /*
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');

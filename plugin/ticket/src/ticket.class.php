@@ -94,6 +94,14 @@ class TicketManager
         $category_id = intval($category_id);
         $project_id = intval($project_id);
         $subject = Database::escape_string($subject);
+        // Remove html tags
+        $content = strip_tags($content);
+        // Remove &nbsp;
+        $content = str_replace("&nbsp;", '', $content);
+        // Remove \r\n\t\s... from ticket's beginning and end
+        $content = trim($content);
+        // Replace server newlines with html
+        $content = str_replace("\r\n", '<br>', $content);
         $content = Database::escape_string($content);
         $personalEmail = Database::escape_string($personalEmail);
         $status = Database::escape_string($status);
@@ -717,7 +725,7 @@ class TicketManager
                     $row['col7'],
                     $row['col8'],
                     $actions,
-                    eregi_replace("[\n|\r|\n\r|\r\n]", ' ', strip_tags($row['col9']))
+                    $row['col9']
                 );
             } else {
                 $actions = "";

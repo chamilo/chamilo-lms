@@ -7231,4 +7231,11 @@ $RequestSubmitted = "Your request has been submitted.";
 $RequestFailed = "We are not able to fulfill your request at this time. Please contact your administrator.";
 $InternalLogin = "Internal login";
 $AlreadyLoggedIn = "You are already logged in";
+$Draggable = "Draggable";
+$Incorrect = "Incorrect";
+$YouNotYetAchievedCertificates = "You not yet achieved certificates";
+$SearchCertificates = "Search certificates";
+$TheUserXNotYetAchievedCertificates = "The user %s not yet achieved certificates";
+$CertificatesNotPublic = "Certificates not public";
+$MatchingDraggable = "Matching Draggable";
 ?>

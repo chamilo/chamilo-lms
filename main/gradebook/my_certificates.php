@@ -35,7 +35,7 @@ if (empty($courseList) || empty($sessionList)) {
 $template->assign(
     'actions',
     Display::toolbarButton(
-        get_lang('CertificatesSearch'),
+        get_lang('SearchCertificates'),
         api_get_path(WEB_CODE_PATH) . "gradebook/search.php",
         'search',
         'info'

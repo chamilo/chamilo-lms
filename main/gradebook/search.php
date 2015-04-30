@@ -38,7 +38,10 @@ if (!empty($firstname) && !empty($lastname)) {
     $sessionList = GradebookUtils::getUserCertificatesInSessions($userId, false);
 
     if (empty($courseList) && empty($sessionList)) {
-        $message = Display::return_message(get_lang('TheUserNotYetAchievedCertificates'), 'warning');
+        $message = Display::return_message(
+            sprintf(get_lang('TheUserXNotYetAchievedCertificates'), $userInfo['complete_name']),
+            'warning'
+        );
     }
 }
 
@@ -47,7 +50,7 @@ $searchForm->addText('firstname', get_lang('Firstname'));
 $searchForm->addText('lastname', get_lang('Lastname'));
 $searchForm->addButtonSearch();
 
-$template = new Template(get_lang('CertificatesSearch'));
+$template = new Template(get_lang('SearchCertificates'));
 
 $template->assign('search_form', $searchForm->returnForm());
 $template->assign('user_list', $userList);
@@ -58,7 +61,7 @@ $template->assign('message', $message);
 
 $content = $template->fetch('default/gradebook/search.tpl');
 
-$template->assign('header', get_lang('CertificatesSearch'));
+$template->assign('header', get_lang('SearchCertificates'));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

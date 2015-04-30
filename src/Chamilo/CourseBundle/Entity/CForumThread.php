@@ -140,10 +140,43 @@ class CForumThread
      * @ORM\Column(name="thread_weight", type="float", precision=6, scale=2, nullable=false)
      */
     private $threadWeight;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="thread_peer_qualify", type="boolean")
+     */
+    private $threadPeerQualify;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->threadPeerQualify = 0;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isThreadPeerQualify()
+    {
+        return $this->threadPeerQualify;
+    }
+
+    /**
+     * @param boolean $threadPeerQualify
+     */
+    public function setThreadPeerQualify($threadPeerQualify)
+    {
+        $this->threadPeerQualify = $threadPeerQualify;
+    }
+
     /**
      * Set threadTitle
      *
      * @param string $threadTitle
+     *
      * @return CForumThread
      */
     public function setThreadTitle($threadTitle)
@@ -167,6 +200,7 @@ class CForumThread
      * Set forumId
      *
      * @param integer $forumId
+     *
      * @return CForumThread
      */
     public function setForumId($forumId)

@@ -21,11 +21,14 @@
  * @package chamilo.forum
  */
 
-require_once api_get_path(SYS_CODE_PATH) . 'forum/forumfunction.inc.php';
 $forumUrl = api_get_path(WEB_CODE_PATH) . 'forum/';
-
+$_user = api_get_user_info();
 $rows = get_posts($_GET['thread']);
 $rows = calculate_children($rows);
+$sessionId = api_get_session_id();
+$currentThread = get_thread_information($_GET['thread']);
+$post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
+$userId = api_get_user_id();
 
 if (isset($_GET['post']) && $_GET['post']) {
     $display_post_id = intval($_GET['post']);
@@ -56,15 +59,14 @@ if (
 
 // Displaying the thread (structure)
 
-$thread_structure = "<div class=\"structure\">" .
-    get_lang('Structure') . "</div>";
+$thread_structure = "<div class=\"structure\">" .get_lang('Structure')."</div>";
 $counter = 0;
 $count = 0;
 $prev_next_array = array();
 
 $forumId  = intval($_GET['forum']);
 $threadId = intval($_GET['thread']);
-$group_id = api_get_group_id();
+$groupId = api_get_group_id();
 
 foreach ($rows as $post) {
     $counter++;
@@ -72,8 +74,8 @@ foreach ($rows as $post) {
     $thread_structure .= "<div style=\"margin-left: " . $indent . "px;\">";
 
     if (
-        !empty($whatsnew_post_info[$forumId][$post['thread_id']]) AND
-        isset($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) AND
+        !empty($whatsnew_post_info[$forumId][$post['thread_id']]) &&
+        isset($whatsnew_post_info[$forumId][$threadId][$post['post_id']]) &&
         !empty($whatsnew_post_info[$forumId][$threadId][$post['post_id']])
     ) {
         $post_image = Display::return_icon('forumpostnew.gif');
@@ -87,8 +89,7 @@ foreach ($rows as $post) {
             $counter == 1 AND !isset($_GET['post'])
         )
     ) {
-        $thread_structure .= '<strong>' .
-            prepare4display($post['post_title']) . '</strong></div>';
+        $thread_structure .= '<strong>' .prepare4display($post['post_title']) . '</strong></div>';
         $prev_next_array[] = $post['post_id'];
     } else {
         if ($post['visible'] == '0') {
@@ -142,6 +143,9 @@ $next_img = Display::return_icon(
     get_lang('NextMessage'),
     array('style' => 'vertical-align: middle;')
 );
+
+$class_prev = '';
+$class_next = '';
 
 // Links
 $first_href = $forumUrl . 'viewthread.php?' . api_get_cidreq() .
@@ -207,21 +211,25 @@ $username = sprintf(get_lang('LoginX'), $rows[$display_post_id]['username']);
 if ($rows[$display_post_id]['user_id'] == '0') {
     $name = prepare4display($rows[$display_post_id]['poster_name']);
 } else {
-    $name = api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
+    $name = api_get_person_name(
+        $rows[$display_post_id]['firstname'],
+        $rows[$display_post_id]['lastname']
+    );
 }
 
 if (api_get_course_setting('allow_user_image_forum')) {
     echo '<br />' . display_user_image($rows[$display_post_id]['user_id'], $name, $origin) . '<br />';
 }
 echo display_user_link(
-        $rows[$display_post_id]['user_id'],
-        $name,
-        $origin,
-        $username
-    ) . "<br />";
+    $rows[$display_post_id]['user_id'],
+    $name,
+    $origin,
+    $username
+) . "<br />";
+
 echo api_convert_and_format_date(
-        $rows[$display_post_id]['post_date']
-    ) . '<br /><br />';
+    $rows[$display_post_id]['post_date']
+) . '<br /><br />';
 // Get attach id
 $attachment_list = get_attachment($display_post_id);
 $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
@@ -229,13 +237,13 @@ $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR (
-        $current_forum['allow_edit'] == 1 AND
+    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) || (
+        $current_forum['allow_edit'] == 1 &&
         $row['user_id'] == $_user['user_id']
-    ) OR (
-        api_is_allowed_to_edit(false,true) && !(
+    ) || (
+        api_is_allowed_to_edit(false, true) && !(
             api_is_course_coach() &&
-            $current_forum['session_id'] != $_SESSION['id_session']
+            $current_forum['session_id'] != $sessionId
         )
     )
 ) {
@@ -253,12 +261,25 @@ if (
     }
 }
 
+
+// Verified the post minor
+$my_post = get_posts($_GET['thread']);
+$id_posts = array();
+
+if (!empty($my_post) && is_array($my_post)) {
+    foreach ($my_post as $post_value) {
+        $id_posts[] = $post_value['post_id'];
+    }
+    sort($id_posts, SORT_NUMERIC);
+    reset($id_posts);
+    // The post minor
+    $post_minor = (int)$id_posts[0];
+}
+
 if (
-    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR
-    api_is_allowed_to_edit(false,true) && !(
-        api_is_course_coach() &&
-        $current_forum['session_id'] != $_SESSION['id_session']
-    )
+    GroupManager::is_tutor_of_group(api_get_user_id(), $groupId) ||
+    api_is_allowed_to_edit(false, true) &&
+    !(api_is_course_coach() &&$current_forum['session_id'] != $sessionId)
 ) {
     if ($locked == false) {
         echo "<a href=\"" . api_get_self() . "?" . api_get_cidreq() .
@@ -274,6 +295,7 @@ if (
                 ICON_SIZE_SMALL
             )."</a>";
     }
+
     display_visible_invisible_icon(
         'post',
         $rows[$display_post_id]['post_id'],
@@ -281,47 +303,44 @@ if (
         array(
             'forum' => $forumId,
             'thread' => $threadId,
-            'post' => Security::remove_XSS($_GET['post']) ));
-    // Verified the post minor
-    $my_post = get_posts($_GET['thread']);
-    $id_posts = array();
+            'post' => Security::remove_XSS($_GET['post'])
+        )
+    );
 
-    if (!empty($my_post) && is_array($my_post)) {
-        foreach ($my_post as $post_value) {
-            $id_posts[] = $post_value['post_id'];
-        }
-        sort($id_posts, SORT_NUMERIC);
-        reset($id_posts);
-        // The post minor
-        $post_minor = (int) $id_posts[0];
-        $post_id = isset($_GET['post']) ? (int) $_GET['post'] : 0;
-        if (!isset($_GET['id']) && $post_id > $post_minor) {
-            echo "<a href=\"viewthread.php?" . api_get_cidreq() .
-                "&gidReq=" . Security::remove_XSS($_GET['gidReq']) .
-                "&forum=" . $forumId . "&thread=" . $threadId .
-                "&origin=" . $origin . "&action=move&post=" .
-                $rows[$display_post_id]['post_id'] . "\">" .
-                Display::return_icon(
-                    'move.png',
-                    get_lang('MovePost'),
-                    array(),
-                    ICON_SIZE_SMALL
-                ) . "</a>";
-        }
+    if (!isset($_GET['id']) && $post_id > $post_minor) {
+        echo "<a href=\"viewthread.php?" . api_get_cidreq() .
+            "&forum=" . $forumId . "&thread=" . $threadId .
+            "&origin=" . $origin . "&action=move&post=" .
+            $rows[$display_post_id]['post_id'] . "\">" .
+            Display::return_icon(
+                'move.png',
+                get_lang('MovePost'),
+                array(),
+                ICON_SIZE_SMALL
+            ) . "</a>";
+
     }
 }
-$userinf = api_get_user_info($rows[$display_post_id]['user_id']);
+
+/*$userinf = api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status = api_get_status_of_user_in_course(
     $rows[$display_post_id]['user_id'],
     api_get_course_int_id()
-);
+);*/
+
+$userCanQualify = $currentThread['thread_peer_qualify'] == 1 && $rows[$display_post_id]['poster_id'] != $userId;
 if (api_is_allowed_to_edit(null, true)) {
+    $userCanQualify = true;
+}
+
+if ($userCanQualify) {
     if ($post_id > $post_minor) {
         $current_qualify_thread = show_qualify(
             '1',
             $rows[$display_post_id]['user_id'],
             $_GET['thread']
         );
+
         if ($locked == false) {
             echo "<a href=\"forumqualify.php?" . api_get_cidreq() .
                 "&forum=" . $forumId . "&thread=" . $threadId .
@@ -330,30 +349,20 @@ if (api_is_allowed_to_edit(null, true)) {
                 $rows[$display_post_id]['user_id'] . "&origin=" . $origin .
                 "&idtextqualify=" . $current_qualify_thread .
                 "\" >" . Display::return_icon(
-                    'new_test_small.gif',
+                    'quiz.gif',
                     get_lang('Qualify')
                 ) . "</a>";
         }
     }
 }
-if (
-    (
-        $current_forum_category &&
-        $current_forum_category['locked'] == 0
-    ) AND $current_forum['locked'] == 0 AND
-    $current_thread['locked'] == 0 OR
-    api_is_allowed_to_edit(false,true)
+if (($current_forum_category && $current_forum_category['locked'] == 0) &&
+    $current_forum['locked'] == 0 &&
+    $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true)
 ) {
-    if (
-        $_user['user_id'] OR (
-            $current_forum['allow_anonymous'] == 1 AND
-            !$_user['user_id']
-        )
+    if ($_user['user_id'] ||
+        ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])
     ) {
-        if (
-            !api_is_anonymous() &&
-            api_is_allowed_to_session_edit(false, true)
-        ) {
+        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
             echo '<a href="reply.php?' . api_get_cidreq() .
                 '&forum=' . $forumId . '&thread=' . $threadId .
                 '&post=' . $rows[$display_post_id]['post_id'] .
@@ -383,6 +392,7 @@ if (
         echo get_lang('ThreadLocked') . '<br />';
     }
 }
+
 echo "</td>";
 // Note: this can be removed here because it will be displayed in the tree
 if (
@@ -424,17 +434,11 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
         echo ' "> ' . $user_filename . ' </a>';
         echo '<span class="forum_attach_comment">' .
             Security::remove_XSS($attachment['comment'], STUDENT) . '</span>';
+
         if (
-            (
-                $current_forum['allow_edit'] == 1 AND
-                $rows[$display_post_id]['user_id'] == $_user['user_id']
-            ) OR (
-                api_is_allowed_to_edit(false, true) && !(
-                    api_is_course_coach() &&
-                    $current_forum['session_id'] != $_SESSION['id_session']
-                )
-            )
-        )	{
+            ($current_forum['allow_edit'] == 1 &&$rows[$display_post_id]['user_id'] == $_user['user_id']) ||
+            (api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $sessionId))
+        ) {
             echo '&nbsp;&nbsp;<a href="' . api_get_self() . '?' .
                 api_get_cidreq() . '&origin=' .
                 Security::remove_XSS($_GET['origin']) .

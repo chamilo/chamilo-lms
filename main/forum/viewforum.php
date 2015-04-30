@@ -144,7 +144,7 @@ if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AN
 
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
-        $message = GradebookUtils::delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
+        $message = deleteForumCategoryThread($_GET['content'], $_GET['id']);
         // Delete link
         $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());
         $link_id = $link_info['id'];
@@ -154,11 +154,18 @@ if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AN
     }
 }
 // Moving.
-if ($my_action == 'move' AND isset($_GET['thread']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
+if ($my_action == 'move' && isset($_GET['thread']) &&
+    api_is_allowed_to_edit(false, true ) &&
+    api_is_allowed_to_session_edit(false, true)
+) {
     $message = move_thread_form();
 }
 // Notification.
-if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id']) && api_is_allowed_to_session_edit(false, true)) {
+if ($my_action == 'notify' &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) &&
+    api_is_allowed_to_session_edit(false, true)
+) {
     $return_message = set_notification($_GET['content'], $_GET['id']);
     Display :: display_confirmation_message($return_message, false);
 }

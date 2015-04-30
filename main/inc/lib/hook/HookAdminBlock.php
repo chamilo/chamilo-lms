@@ -1,5 +1,6 @@
 <?php
-/* For licensing terms, see /license.txt /
+/* For licensing terms, see /license.txt */
+
 /**
  * This file contains a Hook Event class for Admin Block.
  * @package chamilo.library.hook
@@ -12,7 +13,6 @@
  */
 class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
 {
-
     /**
      * Constructor
      */

@@ -133,20 +133,16 @@ if ($origin != 'learnpath') {
     echo '<div style="height:15px">&nbsp;</div>';
 }
 /*New display forum div*/
-echo '<div class="row">';
-echo '<div class="span12">';
 echo '<div class="forum_title">';
 echo '<h1><a href="viewforum.php?&amp;origin='.$origin.'&amp;forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
-echo '</div></div></div>';
+echo '</div>';
 /* End new display forum */
 // The form for the reply
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-echo '<div class="row"><div class="span12">';
-    $values = show_add_post_form($current_forum, $forum_setting, $my_action, $my_post, $my_elements);
-echo '</div></div>';
+$values = show_add_post_form($current_forum, $forum_setting, $my_action, $my_post, $my_elements);
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
     $result = store_reply($current_forum, $values);
     //@todo split the show_add_post_form function
@@ -158,14 +154,12 @@ if (!empty($values) AND isset($_POST['SubmitPost'])) {
     </script>';
 } else {
     // Only show Forum attachment ajax form when do not pass form submit
-    echo '<div class="row"><div class="span12">';
     $attachmentAjaxForm = getAttachmentAjaxForm(
         $current_forum['forum_id'],
         $current_thread['thread_id'],
         0
     );
     echo $attachmentAjaxForm;
-    echo '</div></div>';
 }
 
 if ($origin != 'learnpath') {

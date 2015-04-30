@@ -1625,8 +1625,8 @@ class GroupManager
 
     /**
      * Is the user a tutor of this group?
-     * @param $user_id the id of the user
-     * @param $group_id the id of the group
+     * @param int $user_id the id of the user
+     * @param int $group_id the id of the group
      * @return boolean true/false
      * @todo use the function user_has_access that includes this function
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University

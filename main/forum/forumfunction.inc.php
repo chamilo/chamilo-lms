@@ -160,13 +160,13 @@ function handle_forum_and_forumcategories($lp_id = null)
         $list_threads = get_threads($id_forum);
 
         for ($i = 0; $i < count($list_threads); $i++) {
-            delete_forum_forumcategory_thread('thread', $list_threads[$i]['thread_id']);
+            deleteForumCategoryThread('thread', $list_threads[$i]['thread_id']);
             $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5, intval($list_threads[$i]['thread_id']), api_get_session_id());
             if ($link_info !== false) {
                 GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
             }
         }
-        $return_message = delete_forum_forumcategory_thread($get_content, $get_id);
+        $return_message = deleteForumCategoryThread($get_content, $get_id);
         Display::display_confirmation_message($return_message, false);
     }
 
@@ -190,9 +190,9 @@ function handle_forum_and_forumcategories($lp_id = null)
 /**
  * This function displays the form that is used to add a forum category.
  *
- * @param array $inputvalues (deprecated, set to null when calling)
- * @param   int $lp_id Learning path ID
- * @return void HTML
+ * @param  array $inputvalues (deprecated, set to null when calling)
+ * @param  int $lp_id Learning path ID
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Juan Carlos Raña Trabado (return to lp_id)
  * @version may 2011, Chamilo 1.8.8
@@ -209,9 +209,13 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     // Setting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), array('autofocus'));
-    $form->addElement('html_editor', 'forum_category_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
-
-    //$form->applyFilter('forum_category_comment', 'html_filter');
+    $form->addElement(
+        'html_editor',
+        'forum_category_comment',
+        get_lang('Description'),
+        null,
+        array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200')
+    );
     $form->addButtonCreate(get_lang('CreateCategory'), 'SubmitForumCategory');
 
     // Setting the rules.
@@ -275,7 +279,13 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
     $form->addElement('text', 'forum_title', get_lang('Title'), array('autofocus'));
 
     // The comment of the forum.
-    $form->addElement('html_editor', 'forum_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
+    $form->addElement(
+        'html_editor',
+        'forum_comment',
+        get_lang('Description'),
+        null,
+        array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200')
+    );
 
     // Dropdown list: Forum categories
     $forum_categories = get_forum_categories();
@@ -701,7 +711,6 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
             $sql_image = "'".$new_file_name."', ";
         }
-        $b = isset($values['forum_comment']) ? $values['forum_comment'] : null;
 
         $sql = "INSERT INTO ".$table_forums." (c_id, forum_title, forum_image, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order, session_id)
             VALUES (
@@ -773,7 +782,7 @@ function store_forum($values, $courseInfo = array(), $returnId = false)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function delete_forum_forumcategory_thread($content, $id)
+function deleteForumCategoryThread($content, $id)
 {
     $_course = api_get_course_info();
     $table_forums = Database::get_course_table(TABLE_FORUM);
@@ -783,7 +792,8 @@ function delete_forum_forumcategory_thread($content, $id)
     $id = intval($id);
 
     // Delete all attachment file about this tread id.
-    $sql = "SELECT post_id FROM $table_forums_post WHERE c_id = $course_id AND thread_id = '".$id."' ";
+    $sql = "SELECT post_id FROM $table_forums_post
+            WHERE c_id = $course_id AND thread_id = '".$id."' ";
     $res = Database::query($sql);
     while ($poster_id = Database::fetch_row($res)) {
         delete_attachment($poster_id[0]);
@@ -1867,12 +1877,13 @@ function get_posts($thread_id)
                 ORDER BY posts.post_id ASC";
     }
     $result = Database::query($sql);
-    $post_list = array();
-    while ($row = Database::fetch_array($result)) {
-        $post_list[] = $row;
+
+    $posts = array();
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $posts[] = $row;
     }
 
-    return $post_list;
+    return $posts;
 }
 
 /**
@@ -1915,13 +1926,14 @@ function get_thread_information($thread_id)
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $course_id = api_get_course_int_id();
+    $thread_id = intval($thread_id);
 
     $sql = "SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
             WHERE
                 item_properties.tool= '".TOOL_FORUM_THREAD."' AND
                 item_properties.c_id = $course_id AND
-                item_properties.ref = ".intval($thread_id)." AND
-                threads.thread_id   = ".intval($thread_id)." AND
+                item_properties.ref = ".$thread_id." AND
+                threads.thread_id   = ".$thread_id." AND
                 threads.c_id = $course_id
             ";
     $result = Database::query($sql);
@@ -2260,7 +2272,7 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
         $clean_post_title = Database::escape_string(stripslashes($values['post_title']));
 
         // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
-        $sql = "INSERT INTO $table_threads (c_id, thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,session_id)
+        $sql = "INSERT INTO $table_threads (c_id, thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,thread_peer_qualify, session_id)
                 VALUES (
                     ".$course_id.",
                     '".$clean_post_title."',
@@ -2272,13 +2284,16 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                     "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
                     "'".Database::escape_string($values['numeric_calification'])."',".
                     "'".Database::escape_string($values['weight_calification'])."',".
+                    "'".intval($values['thread_peer_qualify'])."',".
                     "'".api_get_session_id()."')";
         Database::query($sql);
         $last_thread_id = Database::insert_id();
 
         // Add option gradebook qualify.
 
-        if (isset($values['thread_qualify_gradebook']) && 1 == $values['thread_qualify_gradebook']) {
+        if (isset($values['thread_qualify_gradebook']) &&
+            1 == $values['thread_qualify_gradebook']
+        ) {
             // Add function gradebook.
             $resourcetype = 5;
             $resourceid = $last_thread_id;
@@ -2314,9 +2329,12 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
                 api_get_user_id()
             );
 
-            // If the forum properties tell that the posts have to be approved we have to put the whole thread invisible,
-            // because otherwise the students will see the thread and not the post in the thread.
-            // We also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have
+            // If the forum properties tell that the posts have to be approved
+            // we have to put the whole thread invisible,
+            // because otherwise the students will see the thread and not the post
+            // in the thread.
+            // We also have to change $visible because the post itself has to be
+            // visible in this case (otherwise the teacher would have
             // to make the thread visible AND the post.
             // Default behaviour
             api_set_default_visibility(
@@ -2436,7 +2454,9 @@ function store_thread($current_forum, $values, $courseInfo = array(), $showMessa
 
 /**
  * This function displays the form that is used to add a post. This can be a new thread or a reply.
- * @param $action is the parameter that determines if we are
+ * @param array $current_forum
+ * @param array $forum_setting
+ * @param string $action is the parameter that determines if we are
  *  1. newthread: adding a new thread (both empty) => No I-frame
  *  2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
  *  3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled) (I first thought to put and I-frame with the message only)
@@ -2474,7 +2494,21 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     }
 
     $form->addElement('text', 'post_title', get_lang('Title'));
-    $form->addHtmlEditor('post_text', get_lang('Text'), true, api_is_allowed_to_edit(null, true) ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student'));
+    $form->addHtmlEditor(
+        'post_text',
+        get_lang('Text'),
+        true,
+        api_is_allowed_to_edit(null, true) ? array(
+            'ToolbarSet' => 'Forum',
+            'Width' => '100%',
+            'Height' => '300',
+        ) : array(
+            'ToolbarSet' => 'ForumStudent',
+            'Width' => '100%',
+            'Height' => '300',
+            'UserStatus' => 'student',
+        )
+    );
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
     $iframe = null;
@@ -2515,6 +2549,11 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         );
         $form->applyFilter('weight_calification', 'html_filter');
 
+        $group = array();
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('StudentsCanQualifyPeer'), ' ');
+
         $form->addElement('html', '</div>');
     }
 
@@ -2548,7 +2587,11 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $defaults['post_text'] = prepare4display($form_values['post_text']);
         $defaults['post_notification'] = strval(intval($form_values['post_notification']));
         $defaults['thread_sticky'] = strval(intval($form_values['thread_sticky']));
+        $defaults['thread_peer_qualify'] = intval($form_values['thread_peer_qualify']);
+    } else {
+        $defaults['thread_peer_qualify'] = 0;
     }
+
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
@@ -2566,6 +2609,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
             $defaults['post_text'] = '<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%; font-style: italic;">'.get_lang('Quoting').' '.api_get_person_name($values['firstname'], $values['lastname']).':</div><div style="color: #006600; font-size: 90%;  font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';
         }
     }
+
     $form->setDefaults(isset($defaults) ? $defaults : null);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
@@ -2611,57 +2655,85 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 }
 
 /**
- * @param integer contains the information of user id
- * @param integer contains the information of thread id
- * @param integer contains the information of thread qualify
- * @param integer contains the information of user id of qualifier
- * @param integer contains the information of time
- * @param integer contains the information of session id
+ * @param array $threadInfo
+ * @param integer $user_id
+ * @param integer $thread_id
+ * @param integer $thread_qualify
+ * @param integer $qualify_user_id information of user id of qualifier
+ * @param integer $qualify_time
+ * @param integer $session_id
  * @return Array() optional
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
-function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify_user_id = 0, $qualify_time, $session_id = null)
-{
+function saveThreadScore(
+    $threadInfo,
+    $user_id,
+    $thread_id,
+    $thread_qualify = 0,
+    $qualify_user_id = 0,
+    $qualify_time,
+    $session_id = 0
+) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $course_id = api_get_course_int_id();
+    $session_id = intval($session_id);
 
     if ($user_id == strval(intval($user_id)) &&
         $thread_id == strval(intval($thread_id)) &&
         $thread_qualify == strval(floatval($thread_qualify))
     ) {
         // Testing
-        $sql_string = "SELECT thread_qualify_max FROM ".$table_threads."
-                        WHERE c_id = $course_id AND thread_id=".$thread_id.";";
-        $res_string = Database::query($sql_string);
+        $sql = "SELECT thread_qualify_max FROM $table_threads
+                WHERE c_id = $course_id AND thread_id=".$thread_id;
+        $res_string = Database::query($sql);
         $row_string = Database::fetch_array($res_string);
         if ($thread_qualify <= $row_string[0]) {
 
-            $sql1 = "SELECT COUNT(*) FROM ".$table_threads_qualify."
-                     WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
-            $res1 = Database::query($sql1);
-            $row = Database::fetch_array($res1);
+            if ($threadInfo['thread_peer_qualify'] == 0) {
+                $sql = "SELECT COUNT(*) FROM $table_threads_qualify
+                        WHERE
+                            c_id = $course_id AND
+                            user_id = $user_id AND
+                            thread_id = ".$thread_id;
+            } else {
+                $currentUserId = api_get_user_id();
+                $sql = "SELECT COUNT(*) FROM $table_threads_qualify
+                        WHERE
+                            c_id = $course_id AND
+                            qualify_user_id = $currentUserId AND
+                            thread_id = ".$thread_id;
+            }
+
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
 
             if ($row[0] == 0) {
                 $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float) $thread_qualify.", '".$qualify_user_id."','".$qualify_time."','".$session_id."')";
-                $res = Database::query($sql);
-
-                $insertId = Database::insert_id();
-                $sql = "UPDATE $table_threads_qualify SET id = iid WHERE iid = $insertId";
+                        VALUES (".$course_id.", '".$user_id."','".$thread_id."',".(float)$thread_qualify.", '".$qualify_user_id."','".$qualify_time."','".$session_id."')";
                 Database::query($sql);
 
-                return $res;
-            } else {
-                $sql1 = "SELECT qualify FROM ".$table_threads_qualify." WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
-                $rs = Database::query($sql1);
-                $row = Database::fetch_array($rs);
-                $row[1] = "update";
+                $insertId = Database::insert_id();
+                if ($insertId) {
+                    $sql = "UPDATE $table_threads_qualify SET id = iid WHERE iid = $insertId";
+                    Database::query($sql);
+                }
 
-                return $row;
+                return 'insert';
+            } else {
+                $sql = "SELECT qualify FROM ".$table_threads_qualify."
+                        WHERE
+                            c_id = $course_id AND
+                            user_id = ".$user_id." AND
+                            thread_id = ".$thread_id;
+                $rs = Database::query($sql);
+                Database::fetch_array($rs);
+
+                return 'update';
             }
+
         } else {
             return null;
         }
@@ -2670,11 +2742,9 @@ function store_theme_qualify($user_id, $thread_id, $thread_qualify = 0, $qualify
 
 /**
  * This function shows qualify.
- * @param string contains the information of option to run
- * @param string contains the information the current course id
- * @param integer contains the information the current forum id
- * @param integer contains the information the current user id
- * @param integer contains the information the current thread id
+ * @param string $option contains the information of option to run
+ * @param integer $user_id contains the information the current user id
+ * @param integer $thread_id contains the information the current thread id
  * @return integer qualify
  * <code> $option=1 obtained the qualification of the current thread</code>
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
@@ -2693,25 +2763,36 @@ function show_qualify($option, $user_id, $thread_id)
         return false;
     }
 
+    $sql = '';
     switch ($option) {
         case 1:
-            $sql = "SELECT qualify FROM ".$table_threads_qualify." WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id;
+            $sql = "SELECT qualify FROM $table_threads_qualify
+                    WHERE
+                        c_id = $course_id AND
+                        user_id=".$user_id." AND
+                        thread_id=".$thread_id;
             break;
         case 2:
-            $sql = "SELECT thread_qualify_max FROM ".$table_threads." WHERE c_id = $course_id AND thread_id=".$thread_id.";";
+            $sql = "SELECT thread_qualify_max FROM $table_threads
+                    WHERE c_id = $course_id AND thread_id=".$thread_id;
             break;
     }
-    $rs = Database::query($sql);
-    $row = Database::fetch_array($rs);
 
-    return $row[0];
+    if (!empty($sql)) {
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs);
+
+        return $row[0];
+    }
+
+    return array();
 }
 
 /**
  * This function gets qualify historical.
- * @param integer contains the information the current user id
- * @param integer contains the information the current thread id
- * @param boolean contains the information of option to run
+ * @param integer $user_id contains the information the current user id
+ * @param integer $thread_id contains the information the current thread id
+ * @param boolean $opt contains the information of option to run
  * @return array()
  * @author Christian Fasanando <christian.fasanando@dokeos.com>,
  * @author Isaac Flores <isaac.flores@dokeos.com>,
@@ -2721,23 +2802,30 @@ function get_historical_qualify($user_id, $thread_id, $opt)
 {
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
-    $my_qualify_log = array();
 
     if ($opt == 'false') {
         $sql = "SELECT * FROM ".$table_threads_qualify_log."
-                WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' and user_id='".Database::escape_string($user_id)."'
+                WHERE
+                    c_id = $course_id AND
+                    thread_id='".Database::escape_string($thread_id)."' AND
+                    user_id='".Database::escape_string($user_id)."'
                 ORDER BY qualify_time";
     } else {
         $sql = "SELECT * FROM ".$table_threads_qualify_log."
-                WHERE c_id = $course_id AND thread_id='".Database::escape_string($thread_id)."' and user_id='".Database::escape_string($user_id)."'
+                WHERE
+                    c_id = $course_id AND
+                    thread_id='".Database::escape_string($thread_id)."' AND
+                    user_id='".Database::escape_string($user_id)."'
                 ORDER BY qualify_time DESC";
     }
+
     $rs = Database::query($sql);
+    $log = array();
     while ($row = Database::fetch_array($rs, 'ASSOC')) {
-        $my_qualify_log[] = $row;
+        $log[] = $row;
     }
 
-    return $my_qualify_log;
+    return $log;
 }
 
 /**
@@ -2753,9 +2841,9 @@ function get_historical_qualify($user_id, $thread_id, $opt)
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  * @version October 2008, dokeos  1.8.6
  */
-function store_qualify_historical(
+function saveThreadScoreHistory(
     $option,
-    $couser_id,
+    $course_id,
     $forum_id,
     $user_id,
     $thread_id,
@@ -2764,17 +2852,18 @@ function store_qualify_historical(
 ) {
 
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $current_date = date('Y-m-d H:i:s');
 
-    $course_id = api_get_course_int_id();
+    $course_id = intval($course_id);
 
-    if ($user_id == strval(intval($user_id)) && $thread_id == strval(intval($thread_id)) && $option == 1) {
+    if ($user_id == strval(intval($user_id)) &&
+        $thread_id == strval(intval($thread_id)) && $option == 1
+    ) {
 
         // Extract information of thread_qualify.
-        $sql = "SELECT qualify,qualify_time
-                FROM ".$table_threads_qualify."
+        $sql = "SELECT qualify, qualify_time
+                FROM $table_threads_qualify
                 WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
@@ -2791,7 +2880,7 @@ function store_qualify_historical(
         // Update
         $sql2 = "UPDATE ".$table_threads_qualify."
                  SET qualify=".$current_qualify.",qualify_time='".$current_date."'
-                 WHERE c_id = $course_id AND user_id=".$user_id." and thread_id=".$thread_id.";";
+                 WHERE c_id = $course_id AND user_id=".$user_id." AND thread_id=".$thread_id.";";
         Database::query($sql2);
     }
 }
@@ -2809,8 +2898,11 @@ function current_qualify_of_thread($thread_id, $session_id)
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
     $course_id = api_get_course_int_id();
+    $session_id = intval($session_id);
 
-    $res = Database::query("SELECT qualify FROM $table_threads_qualify WHERE c_id = $course_id AND thread_id = $thread_id  AND session_id = $session_id");
+    $sql = "SELECT qualify FROM $table_threads_qualify
+            WHERE c_id = $course_id AND thread_id = $thread_id AND session_id = $session_id";
+    $res = Database::query($sql);
     $row = Database::fetch_array($res, 'ASSOC');
 
     return $row['qualify'];
@@ -2856,34 +2948,55 @@ function store_reply($current_forum, $values)
                     '".Database::escape_string($visible)."')";
         Database::query($sql);
         $new_post_id = Database::insert_id();
-        $values['new_post_id'] = $new_post_id;
-        $message = get_lang('ReplyAdded');
+        if ($new_post_id) {
 
-        if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
-            foreach ($_POST['file_ids'] as $key => $id) {
-                editAttachedFile(array('comment' => $_POST['file_comments'][$key], 'post_id' => $new_post_id), $id);
+            $sql = "UPDATE $table_posts SET post_id = iid WHERE iid = $new_post_id";
+            Database::query($sql);
+            $values['new_post_id'] = $new_post_id;
+            $message = get_lang('ReplyAdded');
+
+            if (!empty($_POST['file_ids']) && is_array($_POST['file_ids'])) {
+                foreach ($_POST['file_ids'] as $key => $id) {
+                    editAttachedFile(
+                        array(
+                            'comment' => $_POST['file_comments'][$key],
+                            'post_id' => $new_post_id
+                        ),
+                        $id
+                    );
+                }
             }
+
+            // Update the thread.
+            update_thread($values['thread_id'], $new_post_id, $post_date);
+
+            // Update the forum.
+            api_item_property_update(
+                $_course,
+                TOOL_FORUM,
+                $values['forum_id'],
+                'NewMessageInForum',
+                api_get_user_id()
+            );
+
+            if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(
+                    null,
+                    true
+                )
+            ) {
+                $message .= '<br />'.get_lang(
+                        'MessageHasToBeApproved'
+                    ).'<br />';
+            }
+
+            // Setting the notification correctly.
+            $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
+            if ($my_post_notification == 1) {
+                set_notification('thread', $values['thread_id'], true);
+            }
+
+            send_notification_mails($values['thread_id'], $values);
         }
-
-        // Update the thread.
-        update_thread($values['thread_id'], $new_post_id, $post_date);
-
-        // Update the forum.
-        api_item_property_update($_course, TOOL_FORUM, $values['forum_id'], 'NewMessageInForum', api_get_user_id());
-
-        if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
-            $message .= '<br />'.get_lang('MessageHasToBeApproved').'<br />';
-        }
-        //$message .= '<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-        //$message .= get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
-
-        // Setting the notification correctly.
-        $my_post_notification = isset($values['post_notification']) ? $values['post_notification'] : null;
-        if ($my_post_notification == 1) {
-            set_notification('thread', $values['thread_id'], true);
-        }
-
-        send_notification_mails($values['thread_id'], $values);
 
         Session::erase('formelements');
         Session::erase('origin');
@@ -2977,17 +3090,43 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
             $form->addElement('html', '<div id="options_field" style="display:none">');
         }
 
-        //Loading gradebook select
+        // Loading gradebook select
         GradebookUtils::load_gradebook_select_in_tool($form);
 
-        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'), array('value' => $current_thread['thread_qualify_max'], 'style' => 'width:40px'));
+        $form->addElement(
+            'text',
+            'numeric_calification',
+            get_lang('QualificationNumeric'),
+            array(
+                'value' => $current_thread['thread_qualify_max'],
+                'style' => 'width:40px',
+            )
+        );
         $form->applyFilter('numeric_calification', 'html_filter');
 
-        $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'), array('value' => $current_thread['thread_title_qualify']));
+        $form->addElement(
+            'text',
+            'calification_notebook_title',
+            get_lang('TitleColumnGradebook'),
+            array('value' => $current_thread['thread_title_qualify'])
+        );
         $form->applyFilter('calification_notebook_title', 'html_filter');
 
-        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, ''), array('value' => $current_thread['thread_weight'], 'style' => 'width:40px'));
+        $form->addElement(
+            'text',
+            'weight_calification',
+            array(get_lang('QualifyWeight'), null, ''),
+            array(
+                'value' => $current_thread['thread_weight'],
+                'style' => 'width:40px',
+            )
+        );
         $form->applyFilter('weight_calification', 'html_filter');
+
+        $group = array();
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
+        $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
+        $form->addGroup($group, '', get_lang('StudentsCanQualifyPeer'), ' ');
 
         $form->addElement('html', '</div>');
     }
@@ -2995,7 +3134,11 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
     if ($forum_setting['allow_post_notification']) {
         $form->addElement('checkbox', 'post_notification', '', get_lang('NotifyByEmail').' ('.$current_post['email'].')');
     }
-    if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $current_post['post_parent_id'] == 0) { // The sticky checkbox only appears when it is the first post of a thread.
+    if ($forum_setting['allow_sticky'] &&
+        api_is_allowed_to_edit(null, true) &&
+        $current_post['post_parent_id'] == 0
+    ) {
+        // The sticky checkbox only appears when it is the first post of a thread.
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
         if ($current_thread['thread_sticky'] == 1) {
             $defaults['thread_sticky'] = true;
@@ -3023,6 +3166,8 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         $defaults['thread_sticky'] = Security::remove_XSS($form_values['thread_sticky']);
     }
 
+    $defaults['thread_peer_qualify'] = intval($current_thread['thread_peer_qualify']);
+
     $form->setDefaults($defaults);
 
     // The course admin can make a thread sticky (=appears with special icon and always on top).
@@ -3033,7 +3178,9 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
     if ($form->validate()) {
         $values = $form->exportValues();
 
-        if ($values['thread_qualify_gradebook'] == '1' && empty($values['weight_calification'])) {
+        if ($values['thread_qualify_gradebook'] == '1' &&
+            empty($values['weight_calification'])
+        ) {
             Display::display_error_message(get_lang('YouMustAssignWeightOfQualification').'&nbsp;<a href="javascript:window.back()">'.get_lang('Back').'</a>', false);
             return false;
         }
@@ -3059,13 +3206,14 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
  */
 function store_edit_post($values)
 {
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
+    $threadTable = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     $course_id = api_get_course_int_id();
 
     //check if this post is the first of the thread
-    // First we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant).
+    // First we check if the change affects the thread and if so we commit
+    // the changes (sticky and post_title=thread_title are relevant).
 
     $posts = get_posts($values['thread_id']);
     $first_post = null;
@@ -3074,24 +3222,25 @@ function store_edit_post($values)
     }
 
     if (!empty($first_post) && $first_post['post_id'] == $values['post_id']) {
-        //if (array_key_exists('is_first_post_of_thread', $values) AND $values['is_first_post_of_thread'] == '1') {
-        $sql = "UPDATE $table_threads SET
-                thread_title            ='".Database::escape_string($values['post_title'])."',
-                thread_sticky           ='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
-            "thread_title_qualify   ='".Database::escape_string($values['calification_notebook_title'])."',".
-            "thread_qualify_max     ='".Database::escape_string($values['numeric_calification'])."',".
-            "thread_weight          ='".Database::escape_string($values['weight_calification'])."'".
-            " WHERE c_id = $course_id AND thread_id='".intval($values['thread_id'])."'";
+        $params = [
+            'thread_title' => $values['post_title'],
+            'thread_sticky' => isset($values['thread_sticky']) ? $values['thread_sticky'] : null,
+            'thread_title_qualify' => $values['calification_notebook_title'],
+            'thread_qualify_max' => $values['numeric_calification'],
+            'thread_weight' => $values['weight_calification'],
+            'thread_peer_qualify' => $values['thread_peer_qualify']
+        ];
+        $where = ['c_id = ? AND thread_id = ?' => [$course_id, $values['thread_id']]];
 
-        Database::query($sql);
+        Database::update($threadTable, $params, $where);
     }
 
     // Update the post_title and the post_text.
     $sql = "UPDATE $table_posts SET
-                post_title          ='".Database::escape_string($values['post_title'])."',
-                post_text           ='".Database::escape_string($values['post_text'])."',
-                post_notification   ='".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."'
-                WHERE c_id = $course_id AND post_id = '".intval($values['post_id'])."'";
+            post_title          ='".Database::escape_string($values['post_title'])."',
+            post_text           ='".Database::escape_string($values['post_text'])."',
+            post_notification   ='".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."'
+            WHERE c_id = $course_id AND post_id = '".intval($values['post_id'])."'";
 
     Database::query($sql);
 
@@ -3383,8 +3532,8 @@ function get_post_topics_of_forum($forum_id)
 /**
  * This function approves a post = change
  *
- * @param $post_id the id of the post that will be deleted
- * @param $action make the post visible or invisible
+ * @param int $post_id the id of the post that will be deleted
+ * @param string $action make the post visible or invisible
  * @return string language variable
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -3398,14 +3547,17 @@ function approve_post($post_id, $action)
     if ($action == 'invisible') {
         $visibility_value = 0;
     }
+
     if ($action == 'visible') {
         $visibility_value = 1;
         handle_mail_cue('post', $post_id);
     }
 
-    $sql = "UPDATE $table_posts SET visible='".Database::escape_string($visibility_value)."'
+    $sql = "UPDATE $table_posts SET
+            visible='".Database::escape_string($visibility_value)."'
             WHERE c_id = $course_id AND post_id='".Database::escape_string($post_id)."'";
     $return = Database::query($sql);
+
     if ($return) {
         return 'PostVisibilityChanged';
     }
@@ -4645,10 +4797,10 @@ function count_number_of_post_for_user_thread($thread_id, $user_id)
  */
 function count_number_of_user_in_course($course_id)
 {
-    $table_course_rel_user = Database::get_main_table('course_rel_user');
+    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $sql = "SELECT * FROM $table_course_rel_user
-            WHERE course_code ='".Database::escape_string($course_id)."' ";
+    $sql = "SELECT * FROM $table
+            WHERE c_id ='".intval($course_id)."' ";
     $result = Database::query($sql);
 
     return count(Database::store_result($result));
@@ -4656,9 +4808,9 @@ function count_number_of_user_in_course($course_id)
 
 /**
  * This function retrieves information of statistical
- * @param   int Thread ID
- * @param   int User ID
- * @param   int Course ID
+ * @param   int $thread_id
+ * @param   int $user_id
+ * @param   int $course_id
  * @return  array the information of statistical
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>,
  * @version octubre 2008, dokeos 1.8
@@ -4888,9 +5040,11 @@ function getForumCreatedByUser($user_id, $courseId, $sessionId)
 }
 
 /**
- * This function builds an array of all the posts in a given thread where the key of the array is the post_id
- * It also adds an element children to the array which itself is an array that contains all the id's of the first-level children
- * @return an array containing all the information on the posts of a thread
+ * This function builds an array of all the posts in a given thread
+ * where the key of the array is the post_id
+ * It also adds an element children to the array which itself is an array
+ * that contains all the id's of the first-level children
+ * @return array $rows containing all the information on the posts of a thread
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function calculate_children($rows)
@@ -4903,14 +5057,20 @@ function calculate_children($rows)
         }
 
         $rows = $rows_with_children;
-        _phorum_recursive_sort($rows, $sorted_rows);
+        forumRecursiveSort($rows, $sorted_rows);
         unset($sorted_rows[0]);
     }
 
     return $sorted_rows;
 }
 
-function _phorum_recursive_sort($rows, &$threads, $seed = 0, $indent = 0)
+/**
+ * @param $rows
+ * @param $threads
+ * @param int $seed
+ * @param int $indent
+ */
+function forumRecursiveSort($rows, &$threads, $seed = 0, $indent = 0)
 {
     if ($seed > 0) {
         $threads[$rows[$seed]['post_id']] = $rows[$seed];
@@ -4920,7 +5080,7 @@ function _phorum_recursive_sort($rows, &$threads, $seed = 0, $indent = 0)
 
     if (isset($rows[$seed]['children'])) {
         foreach ($rows[$seed]['children'] as $child) {
-            _phorum_recursive_sort($rows, $threads, $child, $indent);
+            forumRecursiveSort($rows, $threads, $child, $indent);
         }
     }
 }

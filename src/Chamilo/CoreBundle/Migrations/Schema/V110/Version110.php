@@ -298,6 +298,8 @@ class Version110 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_forum_thread DROP PRIMARY KEY");
         $this->addSql("ALTER TABLE c_forum_thread ADD COLUMN iid int unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT");
 
+        $this->addSql("ALTER TABLE c_forum_thread ADD COLUMN thread_peer_qualify tinyint default 0");
+
         $this->addSql("ALTER TABLE c_glossary MODIFY COLUMN glossary_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_glossary MODIFY COLUMN c_id int unsigned DEFAULT NULL");
         $this->addSql("ALTER TABLE c_glossary DROP PRIMARY KEY");

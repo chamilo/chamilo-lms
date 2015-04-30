@@ -1,10 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.forum
  */
+
 $course = api_get_course_info();
-$rows = get_thread_user_post($course['code'], $current_thread['thread_id'], $_GET['user']);
+
+$rows = get_thread_user_post(
+    $course['code'],
+    $current_thread['thread_id'],
+    $_GET['user']
+);
+$post_en = '';
+
 if (isset($rows)) {
     $counter = 1;
     foreach ($rows as $row) {
@@ -17,9 +26,9 @@ if (isset($rows)) {
         }
 
         if ($row['user_id'] == '0') {
-            $name=prepare4display($row['poster_name']);
+            $name = prepare4display($row['poster_name']);
         } else {
-            $name=api_get_person_name($row['firstname'], $row['lastname']);
+            $name = api_get_person_name($row['firstname'], $row['lastname']);
         }
         if ($counter == 1) {
             echo Display::page_subheader($name);
@@ -27,13 +36,13 @@ if (isset($rows)) {
 
         echo "<div ".$style."><table class=\"data_table\">";
         if ($row['visible']=='0') {
-            $titleclass='forum_message_post_title_2_be_approved';
-            $messageclass='forum_message_post_text_2_be_approved';
-            $leftclass='forum_message_left_2_be_approved';
+            $titleclass = 'forum_message_post_title_2_be_approved';
+            $messageclass = 'forum_message_post_text_2_be_approved';
+            $leftclass = 'forum_message_left_2_be_approved';
         } else {
-            $titleclass='forum_message_post_title';
-            $messageclass='forum_message_post_text';
-            $leftclass='forum_message_left';
+            $titleclass = 'forum_message_post_title';
+            $messageclass = 'forum_message_post_text';
+            $leftclass = 'forum_message_left';
         }
 
         echo "<tr>";
@@ -42,7 +51,7 @@ if (isset($rows)) {
         echo '<br /><b>'.  api_convert_and_format_date($row['post_date'], DATE_TIME_FORMAT_LONG).'</b><br />';
 
         if (api_is_allowed_to_edit(null,true)) {
-            echo $url_post;
+            //echo $url_post;
         }
 
         echo "</td>";
@@ -74,10 +83,14 @@ if (isset($rows)) {
         }
 
         // The post has been displayed => it can be removed from the what's new array
-        unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-        unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
-        unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
-        unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
+        if (isset($whatsnew_post_info)) {
+            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
+        }
+        if (isset($_SESSION['whatsnew_post_info'])) {
+            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
+            unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
+        }
         echo "</table></div>";
         $counter++;
     }
@@ -87,14 +100,27 @@ $userid = (int)$_GET['user_id'];
 $userinf = api_get_user_info($userid);
 $current_thread = get_thread_information($_GET['thread']);
 $threadid = $current_thread['thread_id'];
-$qualify = (int)$_POST['idtextqualify'];
 //return Max qualify thread
 $max_qualify = show_qualify('2', $userid, $threadid);
 $current_qualify_thread = show_qualify('1', $userid, $threadid);
+
 if (isset($_POST['idtextqualify'])) {
-    store_theme_qualify($userid,$threadid,$qualify,$_SESSION['_user']['user_id'],date('Y-m-d H:i:s'),'');
+    saveThreadScore(
+        $current_thread,
+        $userid,
+        $threadid,
+        $_POST['idtextqualify'],
+        api_get_user_id(),
+        date('Y-m-d H:i:s'),
+        ''
+    );
 }
-$result = get_statistical_information($current_thread['thread_id'], $_GET['user_id'], $_GET['cidReq']);
+
+$result = get_statistical_information(
+    $current_thread['thread_id'],
+    $_GET['user_id'],
+    api_get_course_int_id()
+);
 
 if ($userinf['status']!='1') {
     echo '<div class="forum-qualification-input-box">';

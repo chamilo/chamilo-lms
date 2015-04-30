@@ -43,7 +43,6 @@ $current_thread	= get_thread_information($_GET['thread']);
 $current_forum	= get_forum_information($current_thread['forum_id']);
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
-
 /* Header and Breadcrumbs */
 
 if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -58,13 +57,13 @@ if (!empty($gradebook) && $gradebook == 'view') {
     );
 }
 
+$groupId = api_get_group_id();
 if ($origin == 'group') {
-    $session_toolgroup = api_get_group_id();
-    $group_properties = GroupManager :: get_group_properties($session_toolgroup);
+    $group_properties = GroupManager :: get_group_properties($groupId);
     $interbreadcrumb[] = array('url'=>'../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url'=>'../group/group_space.php?gidReq='.$session_toolgroup, 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
-    $interbreadcrumb[] = array('url'=>'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
-    $interbreadcrumb[] = array('url'=>'viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => Security::remove_XSS($current_thread['thread_title']));
+    $interbreadcrumb[] = array('url'=>'../group/group_space.php?'.api_get_cidreq(), 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array('url'=>'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'&origin='.$origin.'&search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
+    $interbreadcrumb[] = array('url'=>'viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'&thread='.Security::remove_XSS($_GET['thread']), 'name' => Security::remove_XSS($current_thread['thread_title']));
 
     Display :: display_header('');
 } else {
@@ -87,7 +86,9 @@ if ($origin == 'group') {
 
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 OR $current_thread['visibility'] == 0)) {
+if (!api_is_allowed_to_edit(false, true) &&
+    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
@@ -95,15 +96,21 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 }
 
 /* Actions */
-$group_id = api_get_group_id();
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
-if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
+if ($my_action == 'delete' &&
+    isset($_GET['content']) &&
+    isset($_GET['id']) &&
+    (api_is_allowed_to_edit(false, true) || GroupManager::is_tutor_of_group(api_get_user_id(), $groupId))
+) {
     $message = delete_post($_GET['id']);
 }
-if (($my_action == 'invisible' OR $my_action == 'visible') AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
+if (($my_action == 'invisible' || $my_action == 'visible') &&
+    isset($_GET['id']) &&
+    (api_is_allowed_to_edit(false, true) || GroupManager::is_tutor_of_group(api_get_user_id(), $groupId))
+) {
     $message = approve_post($_GET['id'], $_GET['action']);
 }
-if ($my_action == 'move' AND isset($_GET['post'])) {
+if ($my_action == 'move' && isset($_GET['post'])) {
     $message = move_post_form();
 }
 
@@ -130,11 +137,17 @@ if ($my_message != 'PostDeletedSpecial') {
         echo '<a href="'.$forumUrl.'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
     }
-    // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
+    // The reply to thread link should only appear when the forum_category is
+    // not locked AND the forum is not locked AND the thread is not locked.
     // If one of the three levels is locked then the link should not be displayed.
-    if (($current_forum_category && $current_forum_category['locked'] == 0) AND $current_forum['locked'] == 0 AND $current_thread['locked'] == 0 OR api_is_allowed_to_edit(false, true)) {
+    if (($current_forum_category &&
+        $current_forum_category['locked'] == 0) &&
+        $current_forum['locked'] == 0 &&
+        $current_thread['locked'] == 0 ||
+        api_is_allowed_to_edit(false, true)
+    ) {
         // The link should only appear when the user is logged in or when anonymous posts are allowed.
-        if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 AND !$_user['user_id'])) {
+        if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])) {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread">'.
@@ -145,9 +158,9 @@ if ($my_message != 'PostDeletedSpecial') {
                 (
                     api_is_allowed_to_edit(false, true) &&
                     !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])
-                ) OR
-                ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR
-                ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)
+                ) ||
+                ($current_forum['allow_new_threads'] == 1 && isset($_user['user_id'])) ||
+                ($current_forum['allow_new_threads'] == 1 && !isset($_user['user_id']) && $current_forum['allow_anonymous'] == 1)
             ) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
@@ -172,18 +185,18 @@ if ($my_message != 'PostDeletedSpecial') {
     /* Display Forum Category and the Forum information */
 
     if (!isset($_SESSION['view']))	{
-        $viewmode = $current_forum['default_view'];
+        $viewMode = $current_forum['default_view'];
     } else {
-        $viewmode = $_SESSION['view'];
+        $viewMode = $_SESSION['view'];
     }
 
-    $viewmode_whitelist = array('flat', 'threaded', 'nested');
-    if (isset($_GET['view']) && in_array($_GET['view'], $viewmode_whitelist)) {
-        $viewmode = $_GET['view'];
-        $_SESSION['view'] = $viewmode;
+    $whiteList = array('flat', 'threaded', 'nested');
+    if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
+        $viewMode = $_GET['view'];
+        $_SESSION['view'] = $viewMode;
     }
-    if (empty($viewmode)) {
-        $viewmode = 'flat';
+    if (empty($viewMode)) {
+        $viewMode = 'flat';
     }
 
     if (isset($_GET['msg']) && isset($_GET['type'])) {
@@ -197,7 +210,7 @@ if ($my_message != 'PostDeletedSpecial') {
         }
     }
 
-    switch ($viewmode) {
+    switch ($viewMode) {
         case 'flat':
             include_once 'viewthread_flat.inc.php';
             break;

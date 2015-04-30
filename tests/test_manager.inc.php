@@ -1,6 +1,6 @@
 <?php
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /* For licensing terms, see /license.txt */
 
@@ -80,7 +80,6 @@ require_once $libdir.'notebook.lib.php';
 
 /**This files need be inside a buffering to clean the objects*/
 ob_start();
-require_once $libdir.'course_document.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();

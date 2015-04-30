@@ -199,9 +199,35 @@ $isAdmin = api_is_platform_admin();
 
 Display::display_header($plugin->get_lang('MyTickets'));
 if ($isAdmin) {
-    $get_parameter = '&keyword=' . Security::remove_XSS($_GET['keyword']) . '&keyword_status=' . Security::remove_XSS($_GET['keyword_status']) . '&keyword_category=' .Security::remove_XSS($_GET['keyword_category']). '&keyword_request_user=' . Security::remove_XSS($_GET['keyword_request_user']);
-    $get_parameter .= '&keyword_admin=' . Security::remove_XSS($_GET['keyword_admin']) . '&keyword_start_date=' . Security::remove_XSS($_GET['keyword_start_date']) . '&keyword_unread=' . Security::remove_XSS($_GET['keyword_unread']);
-    $get_parameter2 = '&Tickets_per_page=' . Security::remove_XSS($_GET['Tickets_per_page']) . '&Tickets_column=' . Security::remove_XSS($_GET['Tickets_column']);
+    $getParameters = [
+        'keyword',
+        'keyword_status',
+        'keyword_category',
+        'keyword_request_user',
+        'keyword_admin',
+        'keyword_start_date',
+        'keyword_unread',
+        'Tickets_per_page',
+        'Tickets_column'
+    ];
+    $get_parameter = '';
+    foreach ($getParameters as $getParameter) {
+        if (isset($_GET[$getParameter])) {
+            $get_parameter .= "&$getParameter=".Security::remove_XSS($_GET[$getParameter]);
+        }
+    }
+
+    $getParameters = [
+        'Tickets_per_page',
+        'Tickets_column'
+    ];
+    $get_parameter2 = '';
+    foreach ($getParameters as $getParameter) {
+        if (isset($_GET[$getParameter])) {
+            $get_parameter2 .= "&$getParameter=".Security::remove_XSS($_GET[$getParameter]);
+        }
+    }
+
     if (isset($_GET['submit_advanced'])) {
         $get_parameter .= "&submit_advanced=";
     }
@@ -209,7 +235,7 @@ if ($isAdmin) {
         $get_parameter .= "&submit_simple=";
     }
     //select categories
-    $select_types .= '<select class="chzn-select" name = "keyword_category" id="keyword_category" ">';
+    $select_types = '<select class="chzn-select" name = "keyword_category" id="keyword_category" ">';
     $select_types .= '<option value="">---' . get_lang('Select') . '---</option>';
     $types = TicketManager::get_all_tickets_categories();
     foreach ($types as $type) {
@@ -217,7 +243,7 @@ if ($isAdmin) {
     }
     $select_types .= "</select>";
     //select admins
-    $select_admins .= '<select  class ="chzn-select" name = "keyword_admin" id="keyword_admin" ">';
+    $select_admins = '<select  class ="chzn-select" name = "keyword_admin" id="keyword_admin" ">';
     $select_admins .= '<option value="">---' . get_lang('Select') . '---</option>';
     $select_admins .= '<option value = "0">' . $plugin->get_lang('Unassigned') . '</option>';
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
@@ -226,7 +252,7 @@ if ($isAdmin) {
     }
     $select_admins .= "</select>";
     //select status
-    $select_status .= '<select  class ="chzn-select" name = "keyword_status" id="keyword_status" >';
+    $select_status = '<select  class ="chzn-select" name = "keyword_status" id="keyword_status" >';
     $select_status .= '<option value="">---' . get_lang('Select') . '---</option>';
     $status = TicketManager::get_all_tickets_status();
     foreach ($status as $stat) {
@@ -234,7 +260,7 @@ if ($isAdmin) {
     }
     $select_status .= "</select>";
     //select priority
-    $select_priority .= '<select  name = "keyword_priority" id="keyword_priority" >';
+    $select_priority = '<select  name = "keyword_priority" id="keyword_priority" >';
     $select_priority .= '<option value="">' . get_lang('All') . '</option>';
     $select_priority .= '<option value="NRM">' . $plugin->get_lang('PriorityNormal') . '</option>';
     $select_priority .= '<option value="HGH">' . $plugin->get_lang('PriorityHigh') . '</option>';

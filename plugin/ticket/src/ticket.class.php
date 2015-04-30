@@ -504,9 +504,12 @@ class TicketManager
         if (!$isAdmin) {
             $sql .= " AND request_user = '$user_id' ";
         }
-        $keyword_unread = Database::escape_string(
-            trim($_GET['keyword_unread'])
-        );
+        $keyword_unread = '';
+        if (isset($_GET['keyword_unread'])) {
+            $keyword_unread = Database::escape_string(
+                trim($_GET['keyword_unread'])
+            );
+        }
         //Search simple
         if (isset($_GET['submit_simple'])) {
             if ($_GET['keyword'] != '') {
@@ -812,9 +815,12 @@ class TicketManager
                          OR user.username LIKE '%$keyword%')  ";
             }
         }
-        $keyword_unread = Database::escape_string(
-            trim($_GET['keyword_unread'])
-        );
+        $keyword_unread = '';
+        if (isset($_GET['keyword_unread'])) {
+            $keyword_unread = Database::escape_string(
+                trim($_GET['keyword_unread'])
+            );
+        }
         //Search advanced
         if (isset($_GET['submit_advanced'])) {
             $keyword_category = Database::escape_string(

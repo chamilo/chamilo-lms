@@ -14,7 +14,7 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/editpaint';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script();
+api_protect_course_script(true);
 api_block_anonymous_users();
 $groupId = api_get_group_id();
 $document_data = DocumentManager::get_document_data_by_id(

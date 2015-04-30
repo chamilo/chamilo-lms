@@ -8,7 +8,7 @@
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
-api_protect_course_script();
+api_protect_course_script(true);
 
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -199,7 +199,9 @@ if (isset($_GET['print']))	{
     exit;
 }
 
-if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report') {
+if (!empty($_GET['export_report']) &&
+    $_GET['export_report'] == 'export_report'
+) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_coach() || $isDrhOfCourse) {
         $user_id = null;
 

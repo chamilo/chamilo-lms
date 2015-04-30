@@ -3,13 +3,11 @@
 /**
 *	@package chamilo.user
 */
-/**
- * INIT SECTION
- */
+
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script();
+api_protect_course_script(true);
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
     if (!api_is_platform_admin()) {
@@ -34,7 +32,7 @@ $usergroup = new UserGroup();
 if (api_is_allowed_to_edit()) {
     echo '<div class="actions">';
     if ($type == 'registered') {
-        echo '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.Display::return_icon('add.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';        
+        echo '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.Display::return_icon('add.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="class.php?'.api_get_cidreq().'&type=registered">'.Display::return_icon('empty_evaluation.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
     }
@@ -53,7 +51,7 @@ if (api_is_allowed_to_edit()) {
             }
             break;
         case 'remove_class_from_course':
-            $id = $_GET['id'];            
+            $id = $_GET['id'];
             if (!empty($id)) {
                 $usergroup->unsubscribe_courses_from_usergroup($id, array(api_get_course_int_id()));
             }
@@ -70,8 +68,8 @@ $columns = array(get_lang('Name'), get_lang('Users'), get_lang('Actions'));
 
 //Column config
 $column_model = array(
-                    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),                        
-                    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),                                                
+                    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+                    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
                     array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false'),
 );
 //Autowidth
@@ -83,7 +81,7 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
                     return \''
-                    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'                    
+                    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
                     .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
                  }';
 ?>

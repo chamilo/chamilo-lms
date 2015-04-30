@@ -9,7 +9,7 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
 if (!api_is_student_boss()) {
-    api_protect_course_script();
+    api_protect_course_script(true);
 }
 
 set_time_limit(0);

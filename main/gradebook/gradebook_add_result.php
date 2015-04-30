@@ -9,7 +9,7 @@
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
-api_protect_course_script();
+api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
 

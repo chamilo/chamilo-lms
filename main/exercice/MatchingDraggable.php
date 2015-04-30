@@ -11,7 +11,7 @@ class MatchingDraggable extends Question
 {
 
     public static $typePicture = 'matching.png';
-    static $explanationLangVar = 'MatchingDrag';
+    static $explanationLangVar = 'MatchingDraggable';
 
     /**
      * Class constructor

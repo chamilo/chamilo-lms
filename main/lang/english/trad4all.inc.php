@@ -7233,4 +7233,8 @@ $InternalLogin = "Internal login";
 $AlreadyLoggedIn = "You are already logged in";
 $Draggable = "Draggable";
 $Incorrect = "Incorrect";
+$YouNotYetAchievedCertificates = "You not yet achieved certificates";
+$SearchCertificates = "Search certificates";
+$TheUserXNotYetAchievedCertificates = "The user %s not yet achieved certificates";
+$CertificatesNotPublic = "Certificates not public";
 ?>

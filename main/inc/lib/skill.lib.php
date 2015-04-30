@@ -14,7 +14,7 @@ class SkillProfile extends Model
      */
     public function __construct()
     {
-        $this->table             = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
         $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
     }
 
@@ -28,6 +28,7 @@ class SkillProfile extends Model
                 ON(p.id = sp.profile_id) ";
         $result   = Database::query($sql);
         $profiles = Database::store_result($result, 'ASSOC');
+
         return $profiles;
     }
 
@@ -45,6 +46,7 @@ class SkillProfile extends Model
                     description = '$description'
                 WHERE id = $profileId ";
         $result = Database::query($sql);
+
         return $result;
     }
 

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Send a redirect to the user agent and exist
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -92,7 +93,7 @@ class Redirect
                 }
             }
             global $_configuration;
-            if (!isset($_configuration['redirect_admin_to_courses_list']) or
+            if (!isset($_configuration['redirect_admin_to_courses_list']) ||
                 $_configuration['redirect_admin_to_courses_list'] === 'false'
             ) {
                 // If the user is a platform admin, redirect to the main admin page
@@ -137,7 +138,7 @@ class Redirect
 
     /**
      * Redirects the user to a given URL through the header('location: ...') function
-     * @param $url
+     * @param string $url
      */
     protected static function navigate($url)
     {

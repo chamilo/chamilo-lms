@@ -10,7 +10,15 @@
 class Promotion extends Model
 {
     public $table;
-    public $columns = array('id','name','description','career_id','status','created_at','updated_at');
+    public $columns = array(
+        'id',
+        'name',
+        'description',
+        'career_id',
+        'status',
+        'created_at',
+        'updated_at',
+    );
 
     /**
      * Constructor
@@ -95,6 +103,7 @@ class Promotion extends Model
 				$pid = $this->save($new);
 			}
 		}
+
 		return $pid;
 	}
 
@@ -106,7 +115,14 @@ class Promotion extends Model
      */
     public function get_all_promotions_by_career_id($career_id, $order = false)
     {
-        return Database::select('*', $this->table, array('where'=>array('career_id = ?'=>$career_id),'order' =>$order));
+        return Database::select(
+            '*',
+            $this->table,
+            array(
+                'where' => array('career_id = ?' => $career_id),
+                'order' => $order,
+            )
+        );
     }
 
     /**
@@ -114,7 +130,10 @@ class Promotion extends Model
      */
     public function get_status_list()
     {
-    	return array(PROMOTION_STATUS_ACTIVE => get_lang('Active'), PROMOTION_STATUS_INACTIVE => get_lang('Inactive'));
+        return array(
+            PROMOTION_STATUS_ACTIVE => get_lang('Active'),
+            PROMOTION_STATUS_INACTIVE => get_lang('Inactive'),
+        );
     }
 
     /**
@@ -123,7 +142,7 @@ class Promotion extends Model
      */
 	public function display()
     {
-		// action links
+		// Action links
 		echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
 		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('new_promotion.png',get_lang('Add'),'','32').'</a>';
@@ -134,12 +153,12 @@ class Promotion extends Model
 
     /**
      * Update all session status by promotion
-     * @param   int     promotion id
-     * @param   int     status (1, 0)
+     * @param   int  $promotion_id
+     * @param   int  $status (1, 0)
     */
     public function update_all_sessions_status_by_promotion_id($promotion_id, $status)
     {
-        $session_list   = SessionManager::get_all_sessions_by_promotion($promotion_id);
+        $session_list = SessionManager::get_all_sessions_by_promotion($promotion_id);
         if (!empty($session_list)) {
             foreach($session_list  as $item) {
                 SessionManager::set_session_status($item['id'], $status);
@@ -150,8 +169,9 @@ class Promotion extends Model
     /**
      * Returns a Form validator Obj
      * @todo the form should be auto generated
-     * @param   string  url
-     * @param   string  header name
+     * @param   string  $url
+     * @param   string  $action
+     *
      * @return  FormValidator
      */
     public function return_form($url, $action = 'add')
@@ -166,7 +186,12 @@ class Promotion extends Model
 
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', $id);
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70','id' => 'name'));
+        $form->addElement(
+            'text',
+            'name',
+            get_lang('Name'),
+            array('size' => '70', 'id' => 'name')
+        );
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -214,7 +239,8 @@ class Promotion extends Model
     }
 
     /**
-     * @param $params
+     * @param array $params
+     *
      * @param bool $show_query
      * @return bool
      */
@@ -234,7 +260,7 @@ class Promotion extends Model
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return bool
      */
     public function delete($id)

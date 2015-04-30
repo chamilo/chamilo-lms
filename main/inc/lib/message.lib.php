@@ -24,6 +24,7 @@ class MessageManager
         foreach ($userlist as $user_id) {
             $online_user_list[$user_id] = GetFullUserName($user_id).($current_user_id == $user_id ? ("&nbsp;(".get_lang('Myself').")") : (""));
         }
+
         return $online_user_list;
     }
 
@@ -70,6 +71,7 @@ class MessageManager
                 WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $i = Database::num_rows($result);
+
         return $i;
     }
 
@@ -84,6 +86,7 @@ class MessageManager
         for ($i = 0; $i < count($user_connect); $i++) {
             $user_id_list[$i] = $user_connect[$i][0];
         }
+
         return $user_id_list;
     }
 
@@ -234,6 +237,7 @@ class MessageManager
             );
 
             Display::addFlash(Display::return_message($warning , 'warning'));
+
             return false;
         }
 
@@ -392,17 +396,17 @@ class MessageManager
         // get message id from data found early for other receiver user
         $sql = "SELECT id FROM $table_message
                 WHERE
-                  user_sender_id ='{$row_message['user_sender_id']}' AND
-                  title='{$row_message['title']}' AND
-                  content='{$row_message['content']}' AND
-                  group_id='{$row_message['group_id']}' AND
-                  user_receiver_id='$receiver_user_id'";
+                    user_sender_id ='{$row_message['user_sender_id']}' AND
+                    title='{$row_message['title']}' AND
+                    content='{$row_message['content']}' AND
+                    group_id='{$row_message['group_id']}' AND
+                    user_receiver_id='$receiver_user_id'";
         $rs_msg_id = Database::query($sql);
         $row = Database::fetch_array($rs_msg_id);
 
         // update parent_id for other user receiver
-        $sql = "UPDATE $table_message SET parent_id = '{$row[id]}'
-                WHERE id = '$message_id'";
+        $sql = "UPDATE $table_message SET parent_id = ".$row['id']."
+                WHERE id = $message_id";
         Database::query($sql);
     }
 
@@ -418,7 +422,8 @@ class MessageManager
             return false;
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
-        $sql = "SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
+        $sql = "SELECT * FROM $table_message
+                WHERE id=".$id." AND msg_status<>4";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -462,14 +467,16 @@ class MessageManager
             $query = "UPDATE $table_message SET msg_status=3
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
             $result = Database::query($query);
+
             return $result;
         }
+
         return false;
     }
 
     /**
      * Saves a message attachment files
-     * @param  array 	$_FILES['name']
+     * @param  array 	$file_attach $_FILES['name']
      * @param  string  	a comment about the uploaded file
      * @param  int		message id
      * @param  int		receiver user id (optional)

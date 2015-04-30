@@ -442,7 +442,7 @@ if ($_REQUEST['tab'] == 'save_mod') {
         $tableField = 'session_id';
     }
 
-    $visible = (isset($_REQUEST['visible'])) ? 1 : 0;
+    $visible = intval($_REQUEST['visible']);
     $price = Database::escape_string($_REQUEST['price']);
 
     $sql = "UPDATE $tableBuy

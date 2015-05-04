@@ -210,6 +210,10 @@ if ($my_message != 'PostDeletedSpecial') {
         }
     }
 
+    if ($current_thread['thread_peer_qualify'] == 1 ) {
+        echo Display::return_message(get_lang('ForumThreadPeerScoringStudentComment'), 'info');
+    }
+
     switch ($viewMode) {
         case 'flat':
             include_once 'viewthread_flat.inc.php';

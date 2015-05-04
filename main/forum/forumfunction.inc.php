@@ -2556,7 +2556,15 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
         $group = array();
         $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('StudentsCanQualifyPeer'), ' ');
+        $form->addGroup(
+            $group,
+            '',
+            [
+                get_lang('ForumThreadPeerScoring'),
+                get_lang('ForumThreadPeerScoringComment'),
+            ],
+            ' '
+        );
 
         $form->addElement('html', '</div>');
     }
@@ -3151,7 +3159,15 @@ function show_edit_post_form($forum_setting, $current_post, $current_thread, $cu
         $group = array();
         $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('StudentsCanQualifyPeer'), ' ');
+        $form->addGroup(
+            $group,
+            '',
+            [
+                get_lang('ForumThreadPeerScoring'),
+                get_lang('ForumThreadPeerScoringComment'),
+            ],
+            ' '
+        );
 
         $form->addElement('html', '</div>');
     }

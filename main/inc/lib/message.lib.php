@@ -852,21 +852,28 @@ class MessageManager
         if ($source == 'outbox') {
             if (isset($message_id) && is_numeric($message_id)) {
                 $query = "SELECT * FROM $table_message
-                          WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
+                          WHERE
+                            user_sender_id = ".api_get_user_id()." AND
+                            id = ".$message_id." AND
+                            msg_status = 4;";
                 $result = Database::query($query);
-                $path = 'outbox.php';
             }
         } else {
             if (is_numeric($message_id) && !empty($message_id)) {
-                $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."'
-                          WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                $query = "UPDATE $table_message SET
+                          msg_status = '".MESSAGE_STATUS_NEW."'
+                          WHERE
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='".$message_id."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table_message
-                          WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                          WHERE
+                            msg_status<>4 AND
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='".$message_id."'";
                 $result = Database::query($query);
             }
-            $path = 'inbox.php';
         }
         $row = Database::fetch_array($result, 'ASSOC');
         $user_sender_id = $row['user_sender_id'];
@@ -928,12 +935,16 @@ class MessageManager
             $social_link = 'f=social';
         }
         if ($source == 'outbox') {
-            $message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+            $message_content .= '<a href="outbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
         } else {
-            $message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
+            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
         }
-        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.
+            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
 
         $message_content .='</div></td>
 		      <td width=10></td>
@@ -949,8 +960,6 @@ class MessageManager
     public static function show_message_box_sent()
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
         $message_id = '';
         if (is_numeric($_GET['id_send'])) {
             $query = "SELECT * FROM $table_message

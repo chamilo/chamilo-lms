@@ -28,12 +28,16 @@ if (isset($_GET['f']) && $_GET['f']=='social') {
 		$social_right_content .= '<div class="actions">';
 
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
+			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
+                Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
 		}
 		if (api_get_setting('allow_message_tool') == 'true') {
-		    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
+		    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+                Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+                Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+                Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
 		}
 		$social_right_content .= '</div>';
 	}
@@ -59,7 +63,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $message .='<div class="span9">';
 }
 //MAIN CONTENT
-$message .= MessageManager::show_message_box($id_message,$source);
+$message .= MessageManager::show_message_box($id_message, $source);
 
 if (api_get_setting('allow_social_tool') == 'true') {
     $message .='</div>';

@@ -16,7 +16,7 @@
  * @todo isn't configuration.php renamed to configuration.inc.php yet?
  * @todo use the $_configuration array for all the needed variables
  * @todo remove the code that displays the button that links to the install page
- * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
+ * 		but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  * @todo make it possible to enable / disable the tracking through the Chamilo config page.
  *
  */
@@ -32,19 +32,18 @@ $kernel = new AppKernel();
 // This path will be useful to include the other initialisation files.
 $includePath = __DIR__;
 
-// @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
 
-$already_installed = false;
+$alreadyInstalled = false;
 if (file_exists($kernel->getConfigurationFile())) {
     require_once $kernel->getConfigurationFile();
-    $already_installed = true;
+    $alreadyInstalled = true;
 } else {
     $_configuration = array();
 }
 
 //Redirects to the main/install/ page
-if (!$already_installed) {
+if (!$alreadyInstalled) {
     $global_error_code = 2;
     // The system has not been installed yet.
     require $includePath.'/global_error_message.inc.php';
@@ -187,7 +186,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.
-Chamilo::session()->start($already_installed);
+Chamilo::session()->start($alreadyInstalled);
 
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
 
@@ -283,7 +282,7 @@ require $includePath.'/local.inc.php';
 
 //Fixes bug in Chamilo 1.8.7.1 array was not set
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
-$administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
+$administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 // Including configuration files
 $configurationFiles = array(
@@ -303,6 +302,7 @@ foreach ($configurationFiles as $file) {
     }
 }
 
+// Error reporting settings.
 if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
     ini_set('log_errors', '1');
@@ -339,7 +339,10 @@ $langpath = api_get_path(SYS_LANG_PATH);
 /* This will only work if we are in the page to edit a sub_language */
 if (isset($this_script) && $this_script == 'sub_language') {
     // getting the arrays of files i.e notification, trad4all, etc
-    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
+    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+        api_get_path(SYS_LANG_PATH).'english',
+        true
+    );
     //getting parent info
     $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
@@ -517,7 +520,8 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-//Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
+//Update of the logout_date field in the table track_e_login
+// (needed for the calculation of the total connection time)
 
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
@@ -561,6 +565,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         }
     }
 }
+
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then
 // see them through main/cron/lang/langstats.php)

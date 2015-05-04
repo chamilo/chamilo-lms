@@ -111,6 +111,10 @@ foreach ($rows as $post) {
         $userCanQualify = true;
     }
 
+    if (empty($currentThread['thread_qualify_max'])) {
+        $userCanQualify = false;
+    }
+
     if ($userCanQualify) {
         if ($count > 0) {
             $current_qualify_thread = showQualify(
@@ -126,7 +130,7 @@ foreach ($rows as $post) {
     }
 
     if (($current_forum_category && $current_forum_category['locked'] == 0) &&
-        $current_forum['locked']==0 && $current_thread['locked']==0 || api_is_allowed_to_edit(false, true)
+        $current_forum['locked'] == 0 && $current_thread['locked'] == 0 || api_is_allowed_to_edit(false, true )
     ) {
         if ($userId || ($current_forum['allow_anonymous']==1 && !$userId)) {
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {

@@ -128,8 +128,10 @@ if (isset($current_thread['thread_id'])) {
             );
 
             if (
-                ($current_thread['thread_peer_qualify'] == 1 ||
-                api_is_allowed_to_edit(null, true))
+                (
+                    $current_thread['thread_peer_qualify'] == 1 ||
+                    api_is_allowed_to_edit(null, true)
+                ) && $current_thread['thread_qualify_max'] > 0
                 && $origin != 'learnpath'
             ) {
                 $my_forum_id = $clean_forum_id;
@@ -142,7 +144,6 @@ if (isset($current_thread['thread_id'])) {
                 if (api_is_allowed_to_edit(null, true)) {
                     $userCanEdit = true;
                 }
-
                 if ($increment > 0 && $locked == false && $userCanEdit) {
                      echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$my_forum_id."&thread=".$clean_thread_id."&action=list&post=".$row['post_id']."&amp;user=".$row['poster_id']."&amp;user_id=".$row['poster_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".
                             Display::return_icon('quiz.gif',get_lang('Qualify'))."</a> ";

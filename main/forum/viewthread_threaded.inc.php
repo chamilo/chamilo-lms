@@ -159,7 +159,7 @@ $prev_href	= $forumUrl . 'viewthread.php?' . api_get_cidreq() .
     '&gradebook=' . $gradebook . '&post=' . $prev_next_array[$prev_id];
 $next_href	= $forumUrl . 'viewthread.php?' . api_get_cidreq() .
     '&forum=' . $forumId . '&thread=' . $threadId .
-    '&gradebook=' . $gradebook . '&post=' . $prev_next_array[$next_id];
+    '&post=' . $prev_next_array[$next_id];
 
 echo '<center style="margin-top: 10px; margin-bottom: 10px;">';
 // Go to: first and previous
@@ -322,15 +322,13 @@ if (
     }
 }
 
-/*$userinf = api_get_user_info($rows[$display_post_id]['user_id']);
-$user_status = api_get_status_of_user_in_course(
-    $rows[$display_post_id]['user_id'],
-    api_get_course_int_id()
-);*/
-
 $userCanQualify = $currentThread['thread_peer_qualify'] == 1 && $rows[$display_post_id]['poster_id'] != $userId;
 if (api_is_allowed_to_edit(null, true)) {
     $userCanQualify = true;
+}
+
+if (empty($currentThread['thread_qualify_max'])) {
+    $userCanQualify = false;
 }
 
 if ($userCanQualify) {

@@ -5,6 +5,7 @@
  * 	@package chamilo.forum
  *  @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
+
 require_once '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -73,7 +74,7 @@ if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     if (!empty($groupId)) {
-        $group_properties  = GroupManager :: get_group_properties($groupId);
+        $group_properties  = GroupManager::get_group_properties($groupId);
         $interbreadcrumb[] = array(
             "url" => "../group/group.php",
             "name" => get_lang('Groups'),
@@ -164,91 +165,6 @@ if (!empty($message)) {
     Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($message <> 'PostDeletedSpecial') {
-    // in this case the first and only post of the thread is removed
-    // this increases the number of times the thread has been viewed
-    increase_thread_view($_GET['thread']);
-    /*
-        Action Links
-    */
-    // the reply to thread link should only appear when the forum_category is
-    // not locked AND the forum is not locked AND the thread is not locked.
-    // if one of the three levels is locked then the link should not be displayed
-    if (($currentForumCategory && $currentForumCategory['locked'] == 0) &&
-        $currentForum['locked'] == 0 &&
-        $currentThread['locked'] == 0 || api_is_allowed_to_edit(false, true)
-    ) {
-        // The link should only appear when the user is logged in or when anonymous posts are allowed.
-        if ($currentUserId ||
-            ($currentForum['allow_anonymous']==1 && !$currentUserId)
-        ) {
-            //new thread link
-            if (api_is_allowed_to_edit(false,true) ||
-                ($currentForum['allow_new_threads'] == 1 && isset($currentUserId)) ||
-                ($currentForum['allow_new_threads'] == 1 &&
-                !isset($currentUserId) &&
-                $currentForum['allow_anonymous'] == 1)
-            ) {
-                if ($currentForum['locked'] <> 1 &&
-                    $currentForum['locked'] <> 1
-                ) {
-                    echo '&nbsp;&nbsp;';
-                } else {
-                    echo get_lang('ForumLocked');
-                }
-            }
-        }
-    }
-
-    // note: this is to prevent that some browsers display the links over
-    // the table (FF does it but Opera doesn't)
-    echo '&nbsp;';
-
-    /*
-        Display Forum Category and the Forum information
-    */
-    if (!isset($_SESSION['view'])) {
-        $viewmode = $currentForum['default_view'];
-    } else {
-        $viewmode = $_SESSION['view'];
-    }
-
-    $whiteList = array('flat', 'threaded', 'nested');
-    if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
-        $viewmode = Database::escape_string($_GET['view']);
-        $_SESSION['view'] = $viewmode;
-    }
-    if (empty($viewmode)) {
-        $viewmode = 'flat';
-    }
-
-    /*
-        Display Forum Category and the Forum information
-    */
-    // we are getting all the information about the current forum and forum category.
-    // note pcool: I tried to use only one sql statement (and function) for this
-    // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-    echo "<table class=\"table\">";
-
-    // the thread
-    echo "<tr><th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
-    echo '<span class="forum_title">'.prepare4display($currentThread['thread_title']).'</span><br />';
-
-    if ($origin!='learnpath') {
-        echo '<span class="forum_low_description">'.prepare4display($currentForumCategory['cat_title']).' - ';
-    }
-
-    echo prepare4display($currentForum['forum_title']).'<br />';
-    echo "</th>";
-    echo "</tr>";
-    if (isset($currentThread['thread_comment'])) {
-        echo '<span>'.prepare4display($currentThread['thread_comment']).'</span>';
-    }
-    echo "</table>";
-
-    include_once 'viewpost.inc.php';
-} // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
-
 if ($allowToQualify) {
     $currentThread = get_thread_information($_GET['thread']);
     $threadId = $currentThread['thread_id'];
@@ -265,28 +181,14 @@ if ($allowToQualify) {
     }
 
     if (!empty($score)) {
-
         $saveResult = saveThreadScore(
             $currentThread,
             $userIdToQualify,
             $threadId,
             $score,
-            api_get_user_id(),
-            date("Y-m-d H:i:s"),
+            api_get_utc_datetime(),
             api_get_session_id()
         );
-
-        if ($saveResult == 'update') {
-            saveThreadScoreHistory(
-                '1',
-                api_get_course_int_id(),
-                $_GET['forum'],
-                $userIdToQualify,
-                $threadId,
-                $score,
-                api_get_user_id()
-            );
-        }
     }
 
     // show qualifications history
@@ -299,9 +201,44 @@ if ($allowToQualify) {
 
     $counter = count($historyList);
 
-    require_once 'forumbody.inc.php';
+    // Show current qualify in my form
+    $qualify = current_qualify_of_thread(
+        $threadId,
+        api_get_session_id(),
+        $_GET['user']
+    );
 
-    if ($counter > 0) {
+    $result = get_statistical_information(
+        $threadId,
+        $_GET['user_id'],
+        api_get_course_int_id()
+    );
+
+    $url = api_get_path(WEB_CODE_PATH).'forum/forumqualify.php?'.
+            api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user']);
+
+    $userToQualifyInfo = api_get_user_info($userIdToQualify);
+    $form = new FormValidator('forum-thread-qualify', 'post', $url);
+    $form->addHeader($userToQualifyInfo['complete_name']);
+    $form->addLabel(get_lang('Thread'), $currentThread['thread_title']);
+    $form->addLabel(get_lang('CourseUsers'), $result['user_course']);
+    $form->addLabel(get_lang('PostsNumber'), $result['post']);
+    $form->addLabel(get_lang('NumberOfPostsForThisUser'), $result['user_post']);
+    $form->addLabel(
+        get_lang('AveragePostPerUser'),
+        round($result['user_post'] / $result['post'], 2)
+    );
+    $form->addText(
+        'idtextqualify',
+        array(get_lang('Qualification'), get_lang('MaxScore').' '.$maxQualify),
+        $qualify
+    );
+    $form->addButtonSave(get_lang('QualifyThisThread'));
+    $form->setDefaults(array('idtextqualify' => $qualify));
+    $form->display();
+
+    // Show past data
+    if (api_is_allowed_to_edit() && $counter > 0) {
         if (isset($_GET['gradebook'])){
             $view_gradebook='&gradebook=view';
         }

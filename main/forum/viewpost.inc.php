@@ -3,6 +3,7 @@
 
 /**
  * @package chamilo.forum
+ * @deprecated
  */
 
 $course = api_get_course_info();

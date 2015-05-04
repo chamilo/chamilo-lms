@@ -247,13 +247,14 @@ if (!isset($_POST['compose'])) {
         }
     }
     $titulo = '<center><h1>Ticket #' . $ticket['ticket']['ticket_code'] . '</h1></center>';
+    $img_assing = '';
     if ($isAdmin && $ticket['ticket']['status_id'] != 'CLS' && $ticket['ticket']['status_id'] != 'REE') {
         if ($ticket['ticket']['assigned_last_user'] != 0 && $ticket['ticket']['assigned_last_user'] == $user_id) {
             $img_assing = '<a href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign">
                             <img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star.png"  style="height: 32px; width: 32px;" border="0" title="Unassign" align="center"/>
                            </a>';
         } else {
-            $img_assing .= '<a href="#" id="assign"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star_na.png" style="height: 32px; width: 32px;" title="Assign" align="center"/></a>';
+            $img_assing = '<a href="#" id="assign"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star_na.png" style="height: 32px; width: 32px;" title="Assign" align="center"/></a>';
         }
     }
     $bold = '';
@@ -306,7 +307,7 @@ if (!isset($_POST['compose'])) {
  	      </tr>';
     }
     //select admins
-    $select_admins .= '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
+    $select_admins = '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
 
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
     foreach ($admins as $admin) {
@@ -450,9 +451,10 @@ function show_form_send_message()
         'button',
         'compose',
         get_lang('SendMessage'),
-        array(
-            'class' => 'save'
-        )
+        null,
+        null,
+        null,
+        'save'
     );
 
     $form->display();

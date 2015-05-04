@@ -946,17 +946,18 @@ class Display
         $extra_attributes = array(),
         $show_blank_item = true,
         $blank_item_text = null
-    ) {
+    )
+    {
         $html = '';
         $extra = '';
-        $default_id =  'id="'.$name.'" ';
-        foreach($extra_attributes as $key=>$parameter) {
+        $default_id = 'id="' . $name . '" ';
+        foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
             }
-            $extra .= $key.'="'.$parameter.'"';
+            $extra .= $key . '="' . $parameter . '" ';
         }
-        $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
+        $html .= '<select name="' . $name . '" ' . $default_id . ' ' . $extra . '>';
 
         if ($show_blank_item) {
             if (empty($blank_item_text)) {
@@ -964,29 +965,29 @@ class Display
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
-            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value'=>'-1'));
+            $html .= self::tag('option', '-- ' . $blank_item_text . ' --', array('value' => '-1'));
         }
         if ($values) {
             foreach ($values as $key => $value) {
-                if(is_array($value) && isset($value['name'])) {
+                if (is_array($value) && isset($value['name'])) {
                     $value = $value['name'];
                 }
-                $html .= '<option value="'.$key.'"';
+                $html .= '<option value="' . $key . '"';
 
                 if (is_array($default)) {
-                    foreach($default as $item) {
+                    foreach ($default as $item) {
                         if ($item == $key) {
-                            $html .= 'selected="selected"';
+                            $html .= ' selected="selected"';
                             break;
                         }
                     }
                 } else {
                     if ($default == $key) {
-                        $html .= 'selected="selected"';
+                        $html .= ' selected="selected"';
                     }
                 }
 
-                $html .= '>'.$value.'</option>';
+                $html .= '>' . $value . '</option>';
             }
         }
         $html .= '</select>';

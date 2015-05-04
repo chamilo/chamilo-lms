@@ -7241,4 +7241,5 @@ $YouNotYetAchievedCertificates = "Aún no ha logrado certificados";
 $SearchCertificates = "Buscar certificados";
 $TheUserXNotYetAchievedCertificates = "El usuario %s aún no ha logrado certificados";
 $CertificatesNotPublic = "Los certificados no son públicos";
+$MatchingDraggable = "Coincidencia arrastrable";
 ?>

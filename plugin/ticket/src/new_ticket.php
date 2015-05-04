@@ -411,8 +411,11 @@ function show_form_send_ticket()
         'button',
         'compose',
         get_lang('SendMessage'),
+        null,
+        null,
+        null,
+        'save',
         array(
-            'class' => 'save',
             'id' => 'btnsubmit'
         )
     );

@@ -145,8 +145,8 @@ class HookManagement implements HookManagementInterface
     public function listHookObservers($eventName)
     {
         $array = array();
-        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . ' hc' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . ' he' .
             ' ON hc.hook_event_id = he.id ' .
             ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';
@@ -202,8 +202,8 @@ class HookManagement implements HookManagementInterface
     public function listAllHookCalls()
     {
         $array = array();
-        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . ' hc' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . ' he' .
             ' ON hc.hook_event_id = he.id ' .
             ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';
@@ -338,8 +338,8 @@ class HookManagement implements HookManagementInterface
         $eventName = Database::escape_string($eventName);
         $observerClassName($observerClassName);
         $type = Database::escape_string($type);
-        $joinTable = $this->tables[TABLE_HOOK_CALL] . 'hc ' .
-            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . 'he ' .
+        $joinTable = $this->tables[TABLE_HOOK_CALL] . ' hc' .
+            ' INNER JOIN ' . $this->tables[TABLE_HOOK_EVENT] . ' he' .
             ' ON hc.hook_event_id = he.id ' .
             ' INNER JOIN ' . $this->tables[TABLE_HOOK_OBSERVER] . ' ho ' .
             ' ON hc.hook_observer_id = ho.id ';

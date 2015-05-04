@@ -50,7 +50,8 @@ abstract class Question
         GLOBAL_MULTIPLE_ANSWER => array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
         CALCULATED_ANSWER => array('calculated_answer.class.php' , 'CalculatedAnswer'),
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
-        DRAGGABLE => ['Draggable.php', 'Draggable']
+        DRAGGABLE => ['Draggable.php', 'Draggable'],
+        MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable']
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
     );
 

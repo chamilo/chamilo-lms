@@ -2774,6 +2774,8 @@ class Exercise
                     break;
                 case DRAGGABLE:
                     //no break
+                case MATCHING_DRAGGABLE:
+                    //no break
                 case MATCHING:
                     if ($from_database) {
                         $sql = 'SELECT id, answer, id_auto
@@ -2851,7 +2853,8 @@ class Exercise
                                 echo '<tr>';
                                 echo '<td>' . $s_answer_label . '</td>';
                                 echo '<td>' . $user_answer;
-                                if ($answerType == MATCHING) {
+
+                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                     if (isset($real_list[$i_answer_correct_answer])) {
                                         echo Display::span(
                                             $real_list[$i_answer_correct_answer],
@@ -2977,7 +2980,7 @@ class Exercise
                     if (
                         !in_array(
                             $answerType,
-                            [MATCHING, DRAGGABLE]
+                            [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]
                         ) ||
                         $answerCorrect
                     ) {
@@ -3245,7 +3248,7 @@ class Exercise
                                     error_log(__LINE__.' first',0);
                                 }
                             }
-                        } elseif($answerType == MATCHING) {
+                        } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
                             echo Display::tag(
@@ -3571,6 +3574,8 @@ class Exercise
                             break;
                         case DRAGGABLE:
                             //no break
+                        case MATCHING_DRAGGABLE:
+                            //no break
                         case MATCHING:
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
@@ -3883,7 +3888,7 @@ class Exercise
                 } else {
                     Event::saveQuestionAttempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
                 }
-            } elseif (in_array($answerType, [MATCHING, DRAGGABLE])) {
+            } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt($questionScore, $val, $quesId, $exeId, $j, $this->id);

@@ -875,7 +875,6 @@ class MessageManager
                 $query = "SELECT * FROM $table_message
                           WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
                 $result = Database::query($query);
-                $path = 'outbox.php';
             }
         } else {
             if (is_numeric($message_id) && !empty($message_id)) {
@@ -887,7 +886,6 @@ class MessageManager
                           WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
                 $result = Database::query($query);
             }
-            $path = 'inbox.php';
         }
         $row = Database::fetch_array($result, 'ASSOC');
         $user_sender_id = $row['user_sender_id'];
@@ -920,9 +918,11 @@ class MessageManager
         $message_content .='<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
             if ($source == 'outbox') {
-                $message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
+                $message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
+                    api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row['user_receiver_id']).'</b>';
             } else {
-                $message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
+                $message_content .= get_lang('From').' <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.
+                    api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b>';
             }
         } else {
             if ($source == 'outbox') {

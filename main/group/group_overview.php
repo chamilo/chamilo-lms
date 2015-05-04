@@ -24,10 +24,6 @@ $nameTools = get_lang('GroupOverview');
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 
-/*	Libraries */
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
-
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 
 if (isset($_GET['action'])) {
@@ -84,7 +80,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
         Display::display_introduction_section(TOOL_GROUP);
     }
 } else {
-?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>default.css" /> <?php
+    Display::display_reduced_header();
 }
 
 // Action links

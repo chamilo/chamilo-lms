@@ -1,3 +1,5 @@
+-- After the database schema is created, the database is filled
+-- with default values.
 
 INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)

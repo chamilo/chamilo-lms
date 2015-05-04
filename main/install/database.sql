@@ -1,11 +1,9 @@
--- Don't modify this file. Edit the entities located in
+--
+-- Don't modify this file. Edit the entities located in:
 -- src/Chamilo/CoreBundle/Entity
 -- src/Chamilo/CourseBundle/Entity
 -- src/Chamilo/UserBundle/Entity
 
---
--- Table structure for table user
---
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE IF NOT EXISTS user (

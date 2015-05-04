@@ -456,53 +456,33 @@ if (!empty($valid_languages)) {
 $language_interface_initial_value = $language_interface;
 
 /**
- * Include all necessary language files
- * - trad4all
- * - notification
- * - custom tool language files
+ * Include the trad4all language file
  */
-$language_files = array();
-$language_files[] = 'trad4all';
-
-if (isset($language_file)) {
-    if (!is_array($language_file)) {
-        $language_files[] = $language_file;
-    } else {
-        $language_files = array_merge($language_files, $language_file);
+// if the sub-language feature is on
+$parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+if (!empty($parent_path)) {
+    // include English
+    include $langpath.'english/trad4all.inc.php';
+    // prepare string for current language and its parent
+    $lang_file = $langpath.$language_interface.'/trad4all.inc.php';
+    $parent_lang_file = $langpath.$parent_path.'/trad4all.inc.php';
+    // load the parent language file first
+    if (file_exists($parent_lang_file)) {
+        include $parent_lang_file;
     }
-}
-// if a set of language files has been properly defined
-if (is_array($language_files)) {
-    // if the sub-language feature is on
-    $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-    if (!empty($parent_path)) {
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language and its parent
-            $lang_file = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            $parent_lang_file = $langpath.$parent_path.'/'.$language_file.'.inc.php';
-            // load the parent language file first
-            if (file_exists($parent_lang_file)) {
-                include $parent_lang_file;
-            }
-            // overwrite the parent language translations if there is a child
-            if (file_exists($lang_file)) {
-                include $lang_file;
-            }
-        }
-    } else {
-        // if the sub-languages feature is not on, then just load the
-        // set language interface
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language
-            $langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            if (file_exists($langfile)) {
-                include $langfile;
-            }
-        }
+    // overwrite the parent language translations if there is a child
+    if (file_exists($lang_file)) {
+        include $lang_file;
+    }
+} else {
+    // if the sub-languages feature is not on, then just load the
+    // set language interface
+    // include English
+    include $langpath.'english/trad4all.inc.php';
+    // prepare string for current language
+        $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+    if (file_exists($langfile)) {
+        include $langfile;
     }
 }
 

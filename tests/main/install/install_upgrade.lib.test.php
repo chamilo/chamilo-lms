@@ -15,7 +15,7 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 
-	public function testWriteCoursesHtaccessFile() {
+	/*public function testWriteCoursesHtaccessFile() {
 		$chamilo_path_folder = api_get_path(SYS_PATH);
 		$url_append=$chamilo_path_folder.'main/install/';
 		$res = write_courses_htaccess_file($url_append);
@@ -25,7 +25,7 @@ class TestInstallUpgrade extends UnitTestCase{
 		}else
 		$this->assertEqual($chamilo_path_folder.'main/install/',$res);
 		//var_dump($res);
-	}
+	}*/
 
 	public function testSplitSqlFile() {
 		$ret='';

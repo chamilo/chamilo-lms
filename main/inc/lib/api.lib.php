@@ -943,7 +943,8 @@ function api_get_path($path_type, $path = null)
  * @return string The path of the resource converted to CDN
  * @author Yannick Warnier <ywarnier@beeznst.org>
  */
-function api_get_cdn_path($web_path) {
+function api_get_cdn_path($web_path)
+{
     global $_configuration;
     $web_root = api_get_path(WEB_PATH);
     $ext = substr($web_path,strrpos($web_path,'.'));

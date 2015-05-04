@@ -23,7 +23,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     //write_system_config_file(api_get_path(CONFIGURATION_PATH) . 'configuration.dist.php');
 
     // Write a .htaccess file in the course repository
-    write_courses_htaccess_file($urlAppendPath);
+    //write_courses_htaccess_file($urlAppendPath);
 
     // Copy distribution files with renaming for being the actual system configuration files.
     copy(

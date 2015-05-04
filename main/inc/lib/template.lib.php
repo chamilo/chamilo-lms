@@ -521,7 +521,7 @@ class Template
         global $disable_js_and_css_files;
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';

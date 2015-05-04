@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+
 /**
  * Chamilo LMS
  *
@@ -159,6 +162,19 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     if (is_file(api_get_path(SYS_PATH).'courses/.htaccess')) {
         unlink(api_get_path(SYS_PATH).'courses/.htaccess');
+    }
+
+    // Delete all "courses/ABC/index.php" files.
+
+    $finder = new Finder();
+    $dirs = $finder->directories()->in(api_get_path(SYS_APP_PATH).'courses');
+    $fs = new Filesystem();
+    /** @var Symfony\Component\Finder\SplFileInfo $dir */
+    foreach ($dirs as $dir) {
+        $indexFile = $dir->getPath().'/index.php';
+        if ($fs->exists($indexFile)) {
+            $fs->remove($indexFile);
+        }
     }
 
     // Move dirs into new structures.

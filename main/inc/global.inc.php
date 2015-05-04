@@ -474,8 +474,8 @@ if (isset($language_file)) {
 // if a set of language files has been properly defined
 if (is_array($language_files)) {
     // if the sub-language feature is on
-    if (api_get_setting('allow_use_sub_language') == 'true') {
-        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+    $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+    if (!empty($parent_path)) {
         foreach ($language_files as $index => $language_file) {
             // include English
             include $langpath.'english/'.$language_file.'.inc.php';

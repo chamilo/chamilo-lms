@@ -921,12 +921,8 @@ function display_requirements(
     echo '<table class="table">
             '.$oldConf.'
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_UPLOAD_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_UPLOAD_PATH)).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH)).'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
@@ -939,6 +935,10 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>
                 <td class="requirements-value">'.checkReadable(api_get_path(SYS_PATH).'vendor').'</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
@@ -1002,6 +1002,11 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
+        $checked_writable = api_get_path(SYS_PUBLIC_PATH);
+        if (!is_writable($checked_writable)) {
+            $notWritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
+        }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         if (!is_writable($checked_writable)) {

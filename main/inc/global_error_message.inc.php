@@ -60,11 +60,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$themePath = $css_path.'themes/'.$theme.'/';
 
 	$css_web_path = 'web/assets/';
-	$css_file = $themePath.'default.css';
 	$bootstrap_file = $css_web_path.'bootstrap/dist/css/bootstrap.min.css';
 	$css_base_file = $css_path.'base.css';
 
-    $css_list = array($bootstrap_file, $css_base_file, $css_file);
+    $css_list = array($bootstrap_file, $css_base_file);
 
 	$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../')).'/';
 	$root_rel = htmlentities($_SERVER['PHP_SELF']);

@@ -995,31 +995,13 @@ function display_requirements(
         $perm_file = api_get_permissions_for_new_files();
 
         $notWritable = array();
-        $curdir = getcwd();
 
-        $checked_writable = api_get_path(CONFIGURATION_PATH);
+        $checked_writable = api_get_path(SYS_APP_PATH);
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_UPLOAD_PATH).'users/';
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checkedWritable = api_get_path(SYS_UPLOAD_PATH).'sessions/';
-        if (!is_writable($checkedWritable)) {
-            $notWritable[] = $checkedWritable;
-            @chmod($checkedWritable, $perm);
-        }
-
-        $checkedWritable = api_get_path(SYS_UPLOAD_PATH).'courses/';
-        if (!is_writable($checkedWritable)) {
-            $notWritable[] = $checkedWritable;
-            @chmod($checkedWritable, $perm);
-        }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
         if (!is_writable($checked_writable)) {
@@ -1027,26 +1009,8 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_COURSE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
         if ($course_test_was_created == false) {
             $error = true;
-        }
-
-        $checked_writable = api_get_path(SYS_APP_PATH).'home/';
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = realpath($checked_writable);
-            @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';

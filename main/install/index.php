@@ -448,7 +448,7 @@ if (@$_POST['step2']) {
     if ($installType == 'update') {
         $db_name = $dbNameForm;
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -624,7 +624,7 @@ if (@$_POST['step2']) {
     if ($installType == 'update') {
         remove_memory_and_time_limits();
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -680,7 +680,7 @@ if (@$_POST['step2']) {
     } else {
         set_file_folder_permissions();
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -692,7 +692,7 @@ if (@$_POST['step2']) {
         // Drop and create the database anyways
         $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,

@@ -204,8 +204,8 @@ if (!isset($_GET['running'])) {
     if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
         $emailForm .= '.localdomain';
     }
-    $adminLastName = 'Doe';
-    $adminFirstName = 'John';
+    $adminLastName = get_lang('DefaultInstallAdminLastname');
+    $adminFirstName = get_lang('DefaultInstallAdminFirstname');
     $loginForm = 'admin';
     $passForm = api_generate_password();
 

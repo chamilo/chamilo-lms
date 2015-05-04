@@ -7243,4 +7243,6 @@ $ForumThreadPeerScoringComment = "If selected, this option will require each stu
 $ForumThreadPeerScoringStudentComment = "To get the expected score in this forum, your contribution will have to be scored by another student, and you will have to score at least 2 other students' contributions. Until you reach this objective, even if scored, your contribution will show as a 0 score in the global grades for this course.";
 $Readable = "Readable";
 $NotReadable = "Not readable";
+$DefaultInstallAdminFirstname = "John";
+$DefaultInstallAdminLastname = "Doe";
 ?>

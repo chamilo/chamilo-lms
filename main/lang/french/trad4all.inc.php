@@ -7232,4 +7232,6 @@ $ForumThreadPeerScoringComment = "Lorsque cette option est sélectionnée, chaqu
 $ForumThreadPeerScoringStudentComment = "Afin d'obtenir le résultat (note) de votre participation dans ce fil de discussion, votre participation devra être évaluée par un autre étudiant, et vous devrez avoir évalué un minimum de 2 autres étudiants. Votre participation restera à 0, même si vous avez été évalué, jusqu'à ce que vous ayez réalisé votre évaluation de 2 autres étudiants.";
 $Readable = "Lisible";
 $NotReadable = "Non accessible en lecture";
+$DefaultInstallAdminFirstname = "Jean";
+$DefaultInstallAdminLastname = "Dupont";
 ?>

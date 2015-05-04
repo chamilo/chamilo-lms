@@ -7272,4 +7272,6 @@ $ForumThreadPeerScoringComment = "Si esta opción está seleccionada, requerirá
 $ForumThreadPeerScoringStudentComment = "Para obtener su resultado en este tema de discusión, su participación tendrá que ser evaluada por lo mínimo por un otro estudiante, y usted tendrá que evaluar por lo mínimo la participación 2 otros estudiantes. Hasta que lo haya hecho, su resultado se mantendrá a 0 aquí y, de ser el caso, en los resultados de este tema de foro en la hoja de evaluación global del curso.";
 $Readable = "Accesible en lectura";
 $NotReadable = "No accesible en lectura";
+$DefaultInstallAdminFirstname = "Juan";
+$DefaultInstallAdminLastname = "Perez";
 ?>

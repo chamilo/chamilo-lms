@@ -4604,9 +4604,9 @@ CREATE TABLE c_attendance_calendar_rel_group (
 -- 1.10.0.38
 DROP TABLE IF EXISTS chat_video;
 CREATE TABLE IF NOT EXISTS chat_video(
-    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    from_user INT NOT NULL,
-    to_user INT NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    from_user INT UNSIGNED NOT NULL,
+    to_user INT UNSIGNED NOT NULL,
     room_name VARCHAR(255) NOT NULL,
     datetime DATETIME NOT NULL
 );

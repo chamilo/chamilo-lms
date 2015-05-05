@@ -23,9 +23,9 @@ class Version20150505142900 extends AbstractMigrationChamilo
         // Create table for video chat
         $this->addSql("
             CREATE TABLE IF NOT EXISTS chat_video(
-                id int primary key not null auto_increment,
-                from_user int not null,
-                to_user int not null,
+                id int unsigned not null auto_increment primary key,
+                from_user int unsigned not null,
+                to_user int unsigned not null,
                 room_name varchar(255) not null,
                 datetime datetime not null
             );

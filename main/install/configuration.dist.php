@@ -305,4 +305,6 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Hide for all user roles the link to export certificates to PDF
 //$_configuration['hide_certificate_export_link'] = false;
 // Hide session course coach in dropbox sent to user list
-// $_configuration['dropbox_hide_course_coach'] = false;
+//$_configuration['dropbox_hide_course_coach'] = false;
+// If SSO is used, the redirection to the master server is forced.
+//$_configuration['force_sso_redirect'] = false;

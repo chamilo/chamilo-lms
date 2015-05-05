@@ -106,7 +106,7 @@ switch ($action) {
             $roomName = isset($_REQUEST['room_name']) ? Security::remove_XSS($_REQUEST['room_name']) : null;
 
             if (VideoChat::nameExists($roomName)) {
-                echo Display::return_message(get_lang('TheVideoChatRoomNameAlreadyExists'), 'error');
+                echo Display::return_message(get_lang('TheVideoChatRoomXNameAlreadyExists'), 'error');
 
                 break;
             }

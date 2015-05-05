@@ -1,4 +1,4 @@
-<p class="lead">{{ "Chat with %s"|get_lang|format(chat_user.complete_name) }}</p>
+<p class="lead">{{ "ChatWithXUser"|get_lang|format(chat_user.complete_name) }}</p>
 <div class="row">
     <div class="col-sm-3">
         <div class="thumbnail">

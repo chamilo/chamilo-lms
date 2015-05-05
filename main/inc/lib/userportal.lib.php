@@ -1427,13 +1427,18 @@ class IndexManager
      */
     public function returnCertificatesSearchBlock()
     {
-        $certificatesItem = Display::tag(
-            'li',
-            Display::url(
-                get_lang('MyCertificates'),
-                api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
-            )
-        );
+
+        $certificatesItem = null;
+
+        if (!api_is_anonymous()) {
+            $certificatesItem = Display::tag(
+                'li',
+                Display::url(
+                    get_lang('MyCertificates'),
+                    api_get_path(WEB_CODE_PATH) . "gradebook/my_certificates.php"
+                )
+            );
+        }
 
         $searchItem = null;
 
@@ -1445,6 +1450,10 @@ class IndexManager
                     api_get_path(WEB_CODE_PATH) . "gradebook/search.php"
                 )
             );
+        }
+
+        if (empty($certificatesItem) && empty($searchItem)) {
+            return null;
         }
 
         return Display::panel(

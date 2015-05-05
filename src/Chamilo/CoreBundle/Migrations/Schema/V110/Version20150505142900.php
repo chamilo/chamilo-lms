@@ -38,5 +38,6 @@ class Version20150505142900 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
+        $this->addSql("DROP TABLE IF EXISTS video_chat;");
     }
 }

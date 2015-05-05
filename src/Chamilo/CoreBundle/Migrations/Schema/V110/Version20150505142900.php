@@ -22,7 +22,7 @@ class Version20150505142900 extends AbstractMigrationChamilo
     {
         // Create table for video chat
         $this->addSql("
-            CREATE TABLE IF NOT EXISTS video_chat(
+            CREATE TABLE IF NOT EXISTS chat_video(
                 id int primary key not null auto_increment,
                 from_user int not null,
                 to_user int not null,
@@ -38,6 +38,6 @@ class Version20150505142900 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-        $this->addSql("DROP TABLE IF EXISTS video_chat;");
+        $this->addSql("DROP TABLE IF EXISTS chat_video;");
     }
 }

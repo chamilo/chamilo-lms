@@ -27,7 +27,7 @@ class VideoChat
 
         return Database::select(
             '*',
-            Database::get_main_table(TABLE_MAIN_VIDEO_CHAT),
+            Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
                 'where' => [
                     '(from_user = ? AND to_user = ?)' => [$user1, $user2],
@@ -48,7 +48,7 @@ class VideoChat
     public static function createRoom($name, $fromUser, $toUser)
     {
         return Database::insert(
-            Database::get_main_table(TABLE_MAIN_VIDEO_CHAT),
+            Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
                 'from_user' => intval($fromUser),
                 'to_user' => intval($toUser),
@@ -67,7 +67,7 @@ class VideoChat
     {
         $resultData = Database::select(
             'COUNT(1) AS count',
-            Database::get_main_table(TABLE_MAIN_VIDEO_CHAT),
+            Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
                 'where' => ['room_name = ?' => $name]
             ],
@@ -90,7 +90,7 @@ class VideoChat
     {
         return Database::select(
             '*',
-            Database::get_main_table(TABLE_MAIN_VIDEO_CHAT),
+            Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
                 'where' => ['room_name = ?' => $name]
             ],

@@ -4602,8 +4602,8 @@ CREATE TABLE c_attendance_calendar_rel_group (
 );
 
 -- 1.10.0.38
-DROP TABLE IF EXISTS video_chat;
-CREATE TABLE IF NOT EXISTS video_chat(
+DROP TABLE IF EXISTS chat_video;
+CREATE TABLE IF NOT EXISTS chat_video(
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     from_user INT NOT NULL,
     to_user INT NOT NULL,
@@ -4611,10 +4611,10 @@ CREATE TABLE IF NOT EXISTS video_chat(
     datetime DATETIME NOT NULL
 );
 
-ALTER TABLE video_chat ADD INDEX idx_video_chat_from_user (from_user);
-ALTER TABLE video_chat ADD INDEX idx_video_chat_to_user (to_user);
-ALTER TABLE video_chat ADD INDEX idx_video_chat_users (from_user, to_user);
-ALTER TABLE video_chat ADD INDEX idx_video_chat_room_name (room_name);
+ALTER TABLE chat_video ADD INDEX idx_chat_video_from_user (from_user);
+ALTER TABLE chat_video ADD INDEX idx_chat_video_to_user (to_user);
+ALTER TABLE chat_video ADD INDEX idx_chat_video_users (from_user, to_user);
+ALTER TABLE chat_video ADD INDEX idx_chat_video_room_name (room_name);
 
 -- Version
 LOCK TABLES settings_current WRITE;

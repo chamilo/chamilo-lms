@@ -1627,4 +1627,4 @@ INSERT INTO sequence_type_entity VALUES
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
-UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.38' WHERE variable = 'chamilo_database_version';

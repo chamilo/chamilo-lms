@@ -1526,10 +1526,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             </body>
 ');
 
-
-
-
-INSERT INTO user_friend_relation_type (id,title)
+INSERT INTO user_friend_relation_type (id, title)
 VALUES
 (1,'SocialUnknow'),
 (2,'SocialParent'),
@@ -1538,7 +1535,8 @@ VALUES
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (1, 'special_course', 'Special course', '', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable)
+VALUES (1, 'special_course', 'Special course', '', 1 , 1);
 
 INSERT INTO skill (name) VALUES ('Root');
 
@@ -1556,8 +1554,8 @@ INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false)
 ('>= 70%','>=', 70.0, 0, null);
 
 INSERT INTO sequence_rule_condition VALUES
-  (1,1,1),
-  (2,1,2);
+(1,1,1),
+(2,1,2);
 
 INSERT INTO sequence_method (description,formula, assign, met_type) VALUES
 ('Add completed item','v#2 + $complete_items;', 2, 'add'),
@@ -1609,9 +1607,11 @@ INSERT INTO sequence_formula VALUES
 (11,9,3),
 (12,10,2),
 (13,11,1);
+
 INSERT INTO sequence_valid VALUES
 (1,1,1),
 (2,1,2);
+
 INSERT INTO sequence_type_entity VALUES
 (1,'Lp', 'Learning Path','c_lp'),
 (2,'Quiz', 'Quiz and Tests','c_quiz'),

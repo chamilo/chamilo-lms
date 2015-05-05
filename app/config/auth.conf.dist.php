@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Configuration file for all authentication methods. Uncomment and configure only the section(s) you need.
+ * Configuration file for all authentication methods.
+ * Uncomment and configure only the section(s) you need.
  * @package chamilo.conf.auth
  */
 
@@ -10,16 +11,17 @@
  * Facebook
  */
 
-/*
- * Decomment those lines and put your facebook app parameters here
- * Find them here : https://developers.facebook.com/apps/
- 
-$facebook_config = array(   'appId'         => 'APPID',
-                            'secret'        => 'secret app',
-                            'return_url'    => api_get_path(WEB_PATH).'?action=fbconnect'
-);
-*/
- 
+
+/**
+ * Uncomment those lines and put your facebook app parameters here
+ *  Find them here : https://developers.facebook.com/apps/
+ */
+/*$facebook_config = array(
+    'appId' => 'APPID',
+    'secret' => 'secret app',
+    'return_url' => api_get_path(WEB_PATH).'?action=fbconnect',
+);*/
+
 
 /**
  * Shibboleth
@@ -33,7 +35,7 @@ $facebook_config = array(   'appId'         => 'APPID',
 
 
 
-/** 
+/**
  * Array of connection parameters
  **/
 $extldap_config = array(
@@ -66,7 +68,7 @@ $extldap_config = array(
 
 /**
  * Correspondance array between chamilo user info and ldap user info
- * This array is of this form : 
+ * This array is of this form :
  *  '<chamilo_field> => <ldap_field>
  *
  * If <ldap_field> is "func", then the value of <chamilo_field> will be the return value of the function
@@ -74,12 +76,12 @@ $extldap_config = array(
  * In this cas you will have to declare the extldap_get_<chamilo_field> function
  *
  * If <ldap_field> is a string beginning with "!", then the value will be this string without "!"
- * 
- * If <ldap_field> is any other string then the value of <chamilo_field> will be 
+ *
+ * If <ldap_field> is any other string then the value of <chamilo_field> will be
  * $ldap_array[<ldap_field>][0]
  *
  * If <ldap_field> is an array then its value will be an array of values with the same rules as above
- * 
+ *
  **/
 $extldap_user_correspondance = array(
     'firstname' => 'givenName',

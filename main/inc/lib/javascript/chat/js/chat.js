@@ -397,6 +397,10 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
 
                 $.when(createForm).done(function(response) {
                     $('#global-modal')
+                        .find('.modal-dialog')
+                        .removeClass('modal-lg');
+
+                    $('#global-modal')
                         .find('.modal-body')
                         .html(response);
 

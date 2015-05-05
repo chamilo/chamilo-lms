@@ -73,11 +73,18 @@ switch ($action) {
         $room = VideoChat::getChatRoomByUsers(api_get_user_id(), $to_user_id);
 
         if ($room !== false) {
-            echo Display::url(
-                get_lang('StartVideoChat'),
+            $videoChatLink = Display::url(
+                Display::tag(
+                    'i',
+                    null,
+                    ['class' => 'fa fa-video-camera']
+                ) . "&nbsp;" . get_lang('StartVideoChat'),
                 api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room={$room['room_name']}"
             );
 
+            $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
+
+            echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
             break;
         }
 
@@ -115,10 +122,18 @@ switch ($action) {
             break;
         }
 
-        echo Display::url(
-            get_lang('StartVideoChat'),
+        $videoChatLink = Display::url(
+            Display::tag(
+                'i',
+                null,
+                ['class' => 'fa fa-video-camera']
+            ) . "&nbsp;" . get_lang('StartVideoChat'),
             api_get_path(WEB_LIBRARY_JS_PATH) . "chat/video.php?room=$roomName"
         );
+
+        $chat->send(api_get_user_id(), $to_user_id, $videoChatLink, false);
+
+        echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;
     default:
         echo '';

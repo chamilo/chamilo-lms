@@ -15,20 +15,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $tok = Security::get_token();
 
-if (isset($_REQUEST['user_friend'])) {
-    $userfriend_id = intval($_REQUEST['user_friend']);
-    // panel=1  send message
-    // panel=2  send invitation
-    $panel = Security::remove_XSS($_REQUEST['view_panel']);
-    $info_user_friend = api_get_user_info($userfriend_id);
-    $info_path_friend = UserManager::get_user_picture_path_by_id(
-        $userfriend_id,
-        'web',
-        false,
-        true
-    );
-}
-
 $group_id = intval($_GET['group_id']);
 $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
 

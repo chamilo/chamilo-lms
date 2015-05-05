@@ -334,7 +334,7 @@ class Wiki
             $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $id";
             Database::query($sql);
 
-            //insert into item_property
+            // insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_WIKI,
@@ -346,7 +346,8 @@ class Wiki
         }
 
         if ($_clean['page_id']	== 0) {
-            $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$id.'"
+            $sql = 'UPDATE '.$tbl_wiki.' SET
+                    page_id="'.$id.'"
                     WHERE c_id = '.$course_id.' AND id="'.$id.'"';
             Database::query($sql);
         }
@@ -382,7 +383,14 @@ class Wiki
         }
 
 
-        api_item_property_update($_course, 'wiki', $id, 'WikiAdded', api_get_user_id(), $groupId);
+        api_item_property_update(
+            $_course,
+            'wiki',
+            $id,
+            'WikiAdded',
+            api_get_user_id(),
+            $groupId
+        );
         self::check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
         $this->setWikiData($id);
 
@@ -508,7 +516,8 @@ class Wiki
 
         // session_id
         $session_id = api_get_session_id();
-        // Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
+        // Unlike ordinary pages of pages of assignments.
+        // Allow create a ordinary page although there is a assignment with the same name
         if ($_clean['assignment']==2 || $_clean['assignment']==1) {
             $page = str_replace(' ','_',$values['title']."_uass".$assig_user_id);
         } else {
@@ -570,16 +579,16 @@ class Wiki
             $_clean['enddate_assig'] = '0000-00-00 00:00:00';
         }
 
-        $_clean['delayedsubmit']=Database::escape_string($values['delayedsubmit']);
-        $_clean['max_text']=Database::escape_string($values['max_text']);
-        $_clean['max_version']=Database::escape_string($values['max_version']);
+        $_clean['delayedsubmit'] = Database::escape_string($values['delayedsubmit']);
+        $_clean['max_text'] = Database::escape_string($values['max_text']);
+        $_clean['max_version'] = Database::escape_string($values['max_version']);
 
         $course_id = api_get_course_int_id();
 
         // Filter no _uass
-        if (api_eregi('_uass', $values['title']) ||
+        if (api_strpos('_uass', $values['title']) === false ||
             (api_strtoupper(trim($values['title'])) == 'INDEX' ||
-                api_strtoupper(trim(api_htmlentities($values['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))
+            api_strtoupper(trim(api_htmlentities($values['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))
         ) {
             self::setMessage(Display::display_warning_message(get_lang('GoAndEditMainPage'), false, true));
         } else {
@@ -594,17 +603,30 @@ class Wiki
                 Database::query($sql);
                 $Id = Database::insert_id();
                 if ($Id > 0) {
+
+                    $sql = "UPDATE $tbl_wiki SET id = iid WHERE iid = $Id";
+                    Database::query($sql);
+
                     //insert into item_property
-                    api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $groupId);
+                    api_item_property_update(
+                        api_get_course_info(),
+                        TOOL_WIKI,
+                        $Id,
+                        'WikiAdded',
+                        api_get_user_id(),
+                        $groupId
+                    );
                 }
 
-                $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE c_id = '.$course_id.' AND id="'.$Id.'"';
+                $sql = 'UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'"
+                        WHERE c_id = '.$course_id.' AND id="'.$Id.'"';
                 Database::query($sql);
 
                 //insert wiki config
                 $sql = " INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
                         VALUES ($course_id, '".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
                 Database::query($sql);
+
                 $this->setWikiData($Id);
                 self::check_emailcue(0, 'A');
                 return get_lang('NewWikiSaved');
@@ -629,8 +651,10 @@ class Wiki
 
         $form->addElement('select', 'progress', get_lang('Progress'), $progress);
 
-        if ((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && isset($row['reflink']) && $row['reflink'] != 'index') {
-
+        if ((api_is_allowed_to_edit(false,true) ||
+            api_is_platform_admin()) &&
+            isset($row['reflink']) && $row['reflink'] != 'index'
+        ) {
             $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
@@ -1747,7 +1771,7 @@ class Wiki
         }
 
         $exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
-        $exportFile = api_replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
+        $exportFile = api_replace_dangerous_char($wikiTitle) . $groupPart;
 
         //$clean_wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
         //$array_clean_wikiContents= explode('|', $clean_wikiContents);
@@ -1849,8 +1873,6 @@ class Wiki
     public function auto_add_page_users($values)
     {
         $assignment_type = $values['assignment'];
-
-        //$assig_user_id is need to identify end reflinks
         $session_id = $this->session_id;
         $groupId = api_get_group_id();
 
@@ -1876,54 +1898,47 @@ class Wiki
 
         $all_students_pages = array();
 
-        //data about teacher
+        // Data about teacher
         $userId = api_get_user_id();
         $userinfo = api_get_user_info($userId);
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
         $name = $userinfo['complete_name']." - ".$username;
 
-        $photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
+        $photo = '<img src="' . $userinfo['avatar'] . '" alt="' . $name . '"  width="40" height="50" align="top" title="' . $name . '"  />';
 
-        if ($userId) {
-            $image_path = UserManager::get_user_picture_path_by_id($userId, 'web', false, true);
-            $image_repository = $image_path['dir'];
-            $existing_image = $image_path['file'];
-            $photo = '<img src="' . $image_repository . $existing_image . '" alt="' . $name . '"  width="40" height="50" align="top" title="' . $name . '"  />';
-        }
-
-        //teacher assignment title
+        // teacher assignment title
         $title_orig = $values['title'];
 
-        //teacher assignment reflink
+        // teacher assignment reflink
         $link2teacher = $values['title'] = $title_orig."_uass".$userId;
 
-        //first: teacher name, photo, and assignment description (original content)
-        // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
-        $content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
+        // first: teacher name, photo, and assignment description (original content)
+        $content_orig_A = '<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
         <table border="0">
             <tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr>
             <tr><td>'.$photo.'<br />'.Display::tag('span', api_get_person_name($userinfo['firstname'], $userinfo['lastname']), array('title'=>$username)).'</td></tr>
         </table></div>';
-        $content_orig_B='<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
+
+        $content_orig_B = '<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
 
         //Second: student list (names, photo and links to their works).
         //Third: Create Students work pages.
         foreach ($a_users_to_add as $o_user_to_add) {
             if ($o_user_to_add['user_id'] != $userId) {
-                //except that puts the task
-                $assig_user_id = $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher
-                $image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
-                $image_repository = $image_path['dir'];
-                $existing_image = $image_path['file'];
+                // except that puts the task
+                $assig_user_id = $o_user_to_add['user_id'];
+                // identifies each page as created by the student, not by teacher
+
+                $userPicture = UserManager::getUserPicture($assig_user_id);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $o_user_to_add['username'], ENT_QUOTES));
                 $name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname'])." . ".$username;
-                $photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
+                $photo= '<img src="'.$userPicture.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
-                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id,$groupId); //student is tutor
-                $is_tutor_and_member = (GroupManager::is_tutor_of_group($assig_user_id,$groupId) && GroupManager::is_subscribed($assig_user_id, $groupId));
-                //student is tutor and member
+                $is_tutor_of_group = GroupManager::is_tutor_of_group($assig_user_id, $groupId); //student is tutor
+                $is_tutor_and_member = GroupManager::is_tutor_of_group($assig_user_id, $groupId) && GroupManager::is_subscribed($assig_user_id, $groupId);
+                // student is tutor and member
 
-                if($is_tutor_and_member) {
+                if ($is_tutor_and_member) {
                     $status_in_group=get_lang('GroupTutorAndMember');
                 } else {
                     if($is_tutor_of_group) {
@@ -1935,7 +1950,6 @@ class Wiki
 
                 if ($assignment_type==1) {
                     $values['title']= $title_orig;
-                    //$values['comment'] = get_lang('AssignmentFirstComToStudent');
                     $values['content'] = '<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
                     <table border="0">
                     <tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr>
@@ -3213,9 +3227,9 @@ class Wiki
                     if (isset($_POST['Submit']) && self::double_post($_POST['wpost_id'])) {
                         $dtime = date( "Y-m-d H:i:s" );
                         $message_author = api_get_user_id();
-                        $sql="INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime) VALUES
-                    	($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
-                        $result = Database::query($sql);
+                        $sql = "INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime)
+                                VALUES ($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
+                        Database::query($sql);
                         self::check_emailcue($id, 'D', $dtime, $message_author);
                     }
                 }//end discuss lock
@@ -3223,10 +3237,14 @@ class Wiki
                 echo '<hr noshade size="1">';
                 $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
-                $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user
-                  WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."'
-                  ORDER BY id DESC";
-                $result=Database::query($sql);
+                $sql = "SELECT *
+                        FROM $tbl_wiki_discuss reviews, $user_table user
+                        WHERE
+                            reviews.c_id = $course_id AND
+                            reviews.publication_id='".$id."' AND
+                            user.user_id='".$firstuserid."'
+                        ORDER BY reviews.id DESC";
+                $result = Database::query($sql);
 
                 $countWPost = Database::num_rows($result);
                 echo get_lang('NumComments').": ".$countWPost; //comment's numbers
@@ -3253,13 +3271,16 @@ class Wiki
 
                 echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
 
-                $sql = 'UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'"
-                    WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
+                $sql = 'UPDATE '.$tbl_wiki.' SET
+                        score="'.Database::escape_string($avg_WPost_score).'"
+                        WHERE
+                            c_id = '.$course_id.' AND
+                            reflink="'.Database::escape_string($page).'" AND
+                            '.$groupfilter.$condition_session;
                 // check if work ok. TODO:
                 Database::query($sql);
 
                 echo '<hr noshade size="1">';
-                //echo '<div style="overflow:auto; height:170px;">';
 
                 while ($row=Database::fetch_array($result)) {
                     $userinfo = api_get_user_info($row['userc_id']);
@@ -3269,17 +3290,9 @@ class Wiki
                         $author_status=get_lang('Teacher');
                     }
 
-                    $user_id = $row['userc_id'];
                     $name = $userinfo['complete_name'];
 
-                    $author_photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
-
-                    if ($user_id) {
-                        $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
-                        $image_repository = $image_path['dir'];
-                        $existing_image = $image_path['file'];
-                        $author_photo= '<img src="'.$image_repository.$existing_image.'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top" title="'.api_htmlentities($name).'"  />';
-                    }
+                    $author_photo= '<img src="'.$userinfo['avatar'].'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
 
                     //stars
                     $p_score=$row['p_score'];

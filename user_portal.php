@@ -54,7 +54,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
             // Session only has 1 course.
             if (isset($sessionInfo['courses']) && count($sessionInfo['courses']) == 1) {
                 $courseCode = $sessionInfo['courses'][0]['code'];
-                $courseInfo = api_get_course_info($courseCode);
+                $courseInfo = api_get_course_info_by_id($sessionInfo['courses'][0]['real_id']);
                 $courseUrl = $courseInfo['course_public_url'].'?id_session='.$sessionInfo['session_id'];
                 header('Location:'.$courseUrl);
                 exit;
@@ -77,7 +77,7 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
 		$courses = CourseManager::get_courses_list_by_user_id($userId);
 
 		if (!empty($courses) && isset($courses[0]) && isset($courses[0]['code'])) {
-			$courseInfo = api_get_course_info($courses[0]['code']);
+			$courseInfo = api_get_course_info_by_id($courses[0]['real_id']);
 			if (!empty($courseInfo)) {
 				$courseUrl = $courseInfo['course_public_url'];
 				header('Location:'.$courseUrl);

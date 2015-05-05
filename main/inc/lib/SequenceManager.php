@@ -27,9 +27,11 @@ class SequenceManager
                 while ($temp_pre_req = Database::fetch_array($result, 'ASSOC')){
                     $pre_req[] = intval($temp_pre_req['sequence_row_entity_id']);
                 }
+
                 return $pre_req;
             }
         }
+
         return false;
     }
 
@@ -69,6 +71,7 @@ class SequenceManager
                 while ($temp_next = Database::fetch_array($result, 'ASSOC')){
                     $next[] = $temp_next;
                 }
+
                 return $next;
             }
         }
@@ -95,9 +98,11 @@ class SequenceManager
                 while ($temp_entity = Database::fetch_array($result, 'ASSOC')){
                     $entity[] = $temp_entity;
                 }
+
                 return $entity;
             }
         }
+
         return false;
     }
 
@@ -106,10 +111,15 @@ class SequenceManager
      * @param int $user_id
      * @param int $session_id
      * @param int $rule_id
+     *
      * @return bool
      */
-    public static function validate_rule_by_row_id($row_entity_id, $user_id = null, $session_id, $rule_id = 1)
-    {
+    public static function validate_rule_by_row_id(
+        $row_entity_id,
+        $user_id = null,
+        $session_id,
+        $rule_id = 1
+    ) {
         if (self::_debug) {
             error_log('Entering '.__FUNCTION__.' in '.__FILE__);
         }
@@ -133,6 +143,7 @@ class SequenceManager
                 }
             }
         }
+
         return false;
     }
 
@@ -157,14 +168,17 @@ class SequenceManager
                 while ($temp_condition = Database::fetch_array($result, 'ASSOC')) {
                     $condition[] = $temp_condition;
                 }
+
                 return $condition;
             }
         }
+
         return false;
     }
 
     /**
      * @param int $rule_id
+     *
      * @return array|bool
      */
     public static function get_method_by_rule_id($rule_id = 1)
@@ -187,6 +201,7 @@ class SequenceManager
                 while ($temp_method = Database::fetch_array($result, 'ASSOC')){
                     $method[] = $temp_method;
                 }
+
                 return $method;
             }
         }
@@ -196,6 +211,7 @@ class SequenceManager
 
     /**
      * @param int $row_entity_id
+     *
      * @return array|bool
      */
     public static function get_value_by_row_entity_id($row_entity_id)
@@ -213,9 +229,11 @@ class SequenceManager
                 while ($temp_value = Database::fetch_array($result, 'ASSOC')){
                     $value[] = $temp_value;
                 }
+
                 return $value;
             }
         }
+
         return false;
     }
 

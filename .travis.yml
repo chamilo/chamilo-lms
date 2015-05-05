@@ -40,7 +40,7 @@ before_script:
   - cp chamilo-cli-install/chamilo-cli-installer.php main/install/
   - mysql -u root -e 'create database chamilo'
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  - sudo chmod -R 0777 archive courses home main/upload/ main/default_course_document/images main/inc/conf searchdb main/lang main/css
+  - sudo chmod -R 0777 app/config app main/default_course_document/images main/lang
   - cd main/install/
   - sudo php5 chamilo-cli-installer.php -l admin -p admin -U travis -u 'http://localhost/' -X travis -L english -z 'admin@example.com' -f 'John' -g 'Doe' -b '555-5555' -c 'Test campus' -y 'Chamilo' -x 'https://chamilo.org'
   - cd ../..

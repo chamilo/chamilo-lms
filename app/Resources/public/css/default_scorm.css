@@ -1,0 +1,164 @@
+/*
+File used to display Learning Path item in student view
+If scorm.css file exists in theme folder, scorm.css file is used instead of this one
+See https://support.chamilo.org/issues/6976
+*/
+
+.inner_lp_toc {
+    overflow: auto;
+    background-color: white;
+    height: 210px;
+}
+
+.inner_lp_toc .scorm_item a {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 1px;
+    padding-bottom: 2px;
+    text-decoration: none;
+    color: #2F3E46;
+}
+
+.inner_lp_toc .scorm_item a.chapter_module {
+    font-weight: normal;
+    margin-right: 10px;
+}
+.inner_lp_toc .scorm_item_highlight {
+    border: 1px solid #999;
+    background:#999;
+    font-weight:bold;
+    text-shadow:0 -1px 1px #666;
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#666),to(#999));
+    background-image:-webkit-linear-gradient(top,#666,#999);
+    background-image:-moz-linear-gradient(top,#666,#999);
+    background-image:-ms-linear-gradient(top,#666,#999);
+    background-image:-o-linear-gradient(top,#666,#999);
+    background-image:linear-gradient(top,#666,#999);
+    margin-right: 0px;
+    padding: 10px 0px 10px 0px;
+    text-decoration: none;
+}
+
+.inner_lp_toc .scorm_item_highlight a {
+    color:#fff;
+    margin-right: 1px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.inner_lp_toc .scorm_item_section {
+    border:1px solid #222;
+    background:#333;
+    font-weight:bold;
+    color:#fff;
+    text-shadow:0 -1px 1px #000;
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#555),to(#333));
+    background-image:-webkit-linear-gradient(top,#555,#333);
+    background-image:-moz-linear-gradient(top,#555,#333);
+    background-image:-ms-linear-gradient(top,#555,#333);
+    background-image:-o-linear-gradient(top,#555,#333);
+    background-image:linear-gradient(top,#555,#333);
+    margin-right: 1px;
+    padding: 10px 0px 10px 0px;
+    text-decoration: none;
+}
+
+.inner_lp_toc .scorm_item {
+    font-size: 16px;
+    margin-left: 10px;
+    margin-right:10px;
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.inner_lp_toc .scorm_item_1 {
+    border-bottom: 1px solid #CCCCCC;
+    background:#eee;
+    font-weight:bold;
+    color:#444;
+    text-shadow:0 1px 1px #f6f6f6;
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#fdfdfd),to(#eee));
+    background-image:-webkit-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-moz-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-ms-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-o-linear-gradient(top,#fdfdfd,#eee);
+    background-image:linear-gradient(top,#fdfdfd,#eee);
+    margin-right: 1px;
+    padding: 10px 0px 10px 0px;
+    text-decoration: none;
+    font-weight: normal;
+     background:#FDFDFD;
+}
+
+.inner_lp_toc .scorm_item_2 {
+    background-image:-webkit-gradient(linear,left top,left bottom,from(#fdfdfd),to(#eee));
+    background-image:-webkit-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-moz-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-ms-linear-gradient(top,#fdfdfd,#eee);
+    background-image:-o-linear-gradient(top,#fdfdfd,#eee);
+    background-image:linear-gradient(top,#fdfdfd,#eee);
+    border-bottom: 1px solid #CCCCCC;
+    color: #444444;
+    font-weight: bold;
+    text-shadow: 0 1px 1px #F6F6F6;
+    margin-right: 1px;
+    padding: 10px 0px 10px 0px;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+.inner_lp_toc .scorm_item_section .scorm_item:before {
+    content : url('../../img/lp_section.png');  /* path from main/newscorm/lp_controller.php file */
+    vertical-align: text-top;
+    margin-right : 5px;
+}
+
+/* learning path's classes for section and item for 5 levels of depth */
+
+.scorm_section_level_0 {
+    padding : 0 0 0 0;
+}
+
+.scorm_section_level_1 {
+    padding : 0 0.5em 0 2em;
+}
+
+.scorm_section_level_2 {
+    padding : 0 0.5em 0 4em;
+}
+
+.scorm_section_level_3 {
+    padding : 0 0.5em 0 6em;
+}
+
+.scorm_section_level_4 {
+    padding : 0 0.5em 0 8em;
+}
+
+.scorm_section_level_5 {
+    padding : 0 0.5em 0 10em;
+}
+
+.scorm_item_level_0 {
+    padding : 0 0 0 0;
+}
+
+.scorm_item_level_1 {
+    padding : 0 0.5em 0 1.5em;
+}
+
+.scorm_item_level_2 {
+    padding : 0 0.5em 0 3em;
+}
+
+.scorm_item_level_3 {
+    padding : 0 0.5em 0 4.5em;
+}
+
+.scorm_item_level_4 {
+    padding : 0 0.5em 0 6em;
+}
+
+.scorm_item_level_5 {
+    padding : 0 0.5em 0 7.5em;
+}

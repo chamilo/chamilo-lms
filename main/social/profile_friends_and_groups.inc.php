@@ -55,17 +55,11 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $friend['lastName']
                 );
                 $friend_html .= '<div id=div_' . $friend['friend_user_id'] . ' class="image_friend_network" ><span><center>';
-                // the height = 92 must be the sqme in the image_friend_network span style in default.css
-                $friends_profile = SocialManager::get_picture_user(
-                    $friend['friend_user_id'],
-                    $friend['image'],
-                    92,
-                    USER_IMAGE_SIZE_MEDIUM,
-                    'width="85" height="90" '
-                );
+
+                $userPicture = UserManager::getUserPicture($friend['friend_user_id']);
 
                 $friend_html .= '<a href="profile.php?u=' . $friend['friend_user_id'] . '&amp;' . $link_shared . '">';
-                $friend_html .= '<img src="' . $friends_profile['file'] . '" ' . $friends_profile['style'] . ' id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" />';
+                $friend_html .= '<img src="' . $userPicture . '" id="imgfriend_' . $friend['friend_user_id'] . '" title="' . $name_user . '" />';
                 $friend_html .= '</center></span>';
                 $friend_html .= '<center class="friend">' . $name_user . '</a></center>';
                 $friend_html .= '</div>';

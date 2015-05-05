@@ -80,13 +80,7 @@ function validate_text_empty (str,msg) {
 }
 
 jQuery(document).ready(function() {
- 	/* Binds a tab id in the url */
-    $("#tab_browse").bind("tabsselect", function(event, ui) {
-		window.location.href=ui.tab;
-    });
 
-	$("#tabs").tabs();
-	$("#tab_browse").tabs();
     var valor = "' . $anchor . '";
 
     $(".head").click(function() {
@@ -221,7 +215,8 @@ $tpl = new Template();
 
 $create_thread_link = '';
 $userInfo = api_get_user_info(api_get_user_id(), true);
-if ($group_id != 0) {
+
+if (!empty($group_id)) {
     SocialManager::setSocialUserBlock($tpl, $user_id, 'groups', $group_id);
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('groups', $group_id);
@@ -277,7 +272,7 @@ if ($group_id != 0) {
     $is_group_member = GroupPortalManager::is_group_member($group_id);
 
     // details about the current group
-    $social_right_content = '<div class="span9">';
+    $social_right_content = '<div class="col-md-12">';
     $social_right_content .= '<div id="social-group-details">';
     //Group's title
     $social_right_content .= Display::tag(
@@ -319,7 +314,7 @@ if ($group_id != 0) {
     $social_right_content .= '</div>';
 
     //-- Show message groups
-    $social_right_content .= '<div class="span9">';
+    $social_right_content .= '<div class="col-md-12">';
 
     if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
         if (!$is_group_member) {
@@ -396,18 +391,8 @@ if ($group_id != 0) {
                     } else {
                         $icon = '';
                     }
-                    $image_path = UserManager::get_user_picture_path_by_id(
-                        $member['user_id'],
-                        'web',
-                        false,
-                        true
-                    );
-                    $picture = UserManager::get_picture_user(
-                        $member['user_id'],
-                        $image_path['file'],
-                        60,
-                        USER_IMAGE_SIZE_MEDIUM
-                    );
+
+                    $userPicture = UserManager::getUserPicture($member['user_id']);
 
                     $member_content .= '<div class="">';
                     $member_name = Display::url(
@@ -418,7 +403,7 @@ if ($group_id != 0) {
                         'profile.php?u=' . $member['user_id']
                     );
                     $member_content .= Display::div(
-                        '<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="' . $picture['file'] . '"/>&nbsp' . $member_name
+                        '<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="' . $userPicture . '"/>&nbsp' . $member_name
                     );
                     $member_content .= '</div>';
 
@@ -457,7 +442,7 @@ if ($group_id != 0) {
     $social_right_content .= '</div>'; // end layout messages
 
 } else {
-    // My groups -----
+    // My groups
     $results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0);
     $grid_my_groups = array();
     $my_group_list = array();
@@ -858,7 +843,7 @@ if ($group_id != 0) {
     if (!empty($create_group_item)) {
         $social_right_content .= Display::div(
             $create_group_item,
-            array('class' => 'span9')
+            array('class' => 'col-md-12')
         );
     }
     $headers = array(
@@ -866,7 +851,7 @@ if ($group_id != 0) {
         get_lang('Popular'),
         get_lang('MyGroups')
     );
-    $social_right_content .= '<div class="span9">' . Display::tabs(
+    $social_right_content .= '<div class="col-md-12">' . Display::tabs(
             $headers,
             array($newest_content, $popular_content, $my_group_content),
             'tab_browse'
@@ -874,7 +859,11 @@ if ($group_id != 0) {
 }
 
 $show_message = null;
-if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {
+if (isset($_REQUEST['action']) &&
+    $_REQUEST['action'] == 'show_message' &&
+    isset($_REQUEST['msg']) &&
+    $_REQUEST['msg'] == 'topic_deleted'
+) {
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 

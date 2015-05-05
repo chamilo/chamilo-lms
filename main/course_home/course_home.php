@@ -28,11 +28,10 @@
 *	@package chamilo.course_home
 */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 $use_anonymous = true;
 
-// Inlcuding the global initialization file.
 require_once dirname(__FILE__).'/../inc/global.inc.php';
 
 // Delete LP sessions - commented out after seeing that normal
@@ -136,6 +135,7 @@ $course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $show_message = '';
 
+
 if (api_is_invitee()) {
     $isInASession = $sessionId > 0;
     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -160,7 +160,7 @@ if ($isSpecialCourse) {
     if (isset($_GET['autoreg'])) {
         $autoRegistration = Security::remove_XSS($_GET['autoreg']);
         if ($autoRegistration == 1) {
-            if (CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT)) {
+            if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
                 Session::write('is_allowed_in_course', true);
             }
         }
@@ -212,7 +212,9 @@ if (!empty($auto_launch)) {
         $condition = '';
         if (!empty($session_id)) {
             $condition =  api_get_session_condition($session_id);
-            $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
+            $sql = "SELECT id FROM $lp_table
+                    WHERE c_id = $course_id AND autolunch = 1 $condition
+                    LIMIT 1";
             $result = Database::query($sql);
             //If we found nothing in the session we just called the session_id =  0 autolunch
             if (Database::num_rows($result) ==  0) {
@@ -222,7 +224,9 @@ if (!empty($auto_launch)) {
             }
         }
 
-        $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
+        $sql = "SELECT id FROM $lp_table
+                WHERE c_id = $course_id AND autolunch = 1 $condition
+                LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result) >  0) {
             $lp_data = Database::fetch_array($result,'ASSOC');
@@ -269,6 +273,7 @@ if ($show_autolunch_lp_warning) {
         'warning'
     );
 }
+
 if (api_get_setting('homepage_view') == 'activity' ||
     api_get_setting('homepage_view') == 'activity_big'
 ) {

@@ -30,7 +30,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     $new_language = str_replace('"', '\"',$new_language);
     // Replace new line signs to avoid parse errors - see #6773
     $new_language = str_replace("\n","\\n",$new_language);
-    $all_file_of_directory[$language_variable]="\"".api_convert_encoding($new_language, api_get_system_encoding(),'UTF-8')."\";";
+    $all_file_of_directory[$language_variable]="\"".$new_language."\";";
     $result_array = array();
 
     foreach ($all_file_of_directory as $key_value=>$value_info) {

@@ -322,7 +322,8 @@ function is_profile_editable() {
  * @param    $user_id    User id
  * @return    The filename of the new production or FALSE if the upload has failed
  */
-function upload_user_production($user_id) {
+function upload_user_production($user_id)
+{
     $production_repository = UserManager::getUserPathById($user_id, 'system');
 
     if (!file_exists($production_repository)) {
@@ -372,12 +373,12 @@ function check_user_email($email) {
 }
 
 /*        MAIN CODE */
-$filtered_extension         = false;
-$update_success             = false;
-$upload_picture_success     = false;
-$upload_production_success  = false;
-$msg_fail_changue_email     = false;
-$msg_is_not_password        = false;
+$filtered_extension = false;
+$update_success = false;
+$upload_picture_success = false;
+$upload_production_success = false;
+$msg_fail_changue_email = false;
+$msg_is_not_password = false;
 
 if (is_platform_authentication()) {
     if (!empty($_SESSION['change_email'])) {
@@ -691,60 +692,37 @@ if (!empty($msg_is_not_password)){
     Display::addFlash(Display :: return_message($warning_msg, 'warning', false));
 }
 
-$gravatarEnabled = api_get_configuration_value('gravatar_enabled');
-
-// User picture size is calculated from SYSTEM path
-$image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
-$image_syspath['dir'].$image_syspath['file'];
-
-//Web path
-$image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
-$image_dir = $image_path['dir'];
-$image = $image_path['file'];
-$image_file = $image_dir.$image;
-if (!$gravatarEnabled) {
-    $image_file .= '?rand='.time();
-}
-$img_attributes = 'src="'.$image_file.'" '
-    .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-    .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
-
-// get the path,width and height from original picture
-$big_image = $image_dir.'big_'.$image;
-
-$big_image_size     = api_getimagesize($big_image);
-$big_image_width    = $big_image_size['width'];
-$big_image_height   = $big_image_size['height'];
-$url_big_image = $image_file;
-if (!$gravatarEnabled) {
-    $url_big_image = $big_image.'?rnd='.time();
-}
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
 $tpl = new Template(get_lang('ModifyProfile'));
 $tpl->assign('actions', $actions);
-//$tpl->assign('message', Display::getFlashToString());
 
 SocialManager::setSocialUserBlock($tpl, $user_id, 'messages');
+
 if (api_get_setting('allow_social_tool') == 'true') {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-    $tpl->assign('social_menu_block', SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button));
+    $menu = SocialManager::show_social_menu(
+        'home',
+        null,
+        api_get_user_id(),
+        false,
+        $show_delete_account_button
+    );
+
+    $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
     $social_layout = $tpl->get_template('social/inbox.tpl');
     $tpl->display($social_layout);
 } else {
-    // Style position:absolute has been removed for Opera-compatibility.
-    $imageToShow = '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
+    $bigImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
+    $normalImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
 
-    if ($image == 'unknown.jpg') {
-        $imageToShow .= '<img '.$img_attributes.' />';
-    } else {
-        $imageToShow .= '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-    }
+    $imageToShow = '<div id="image-message-container">';
+    $imageToShow .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
     $imageToShow .= '</div>';
 
     $content = $imageToShow.$form->returnForm();
 
-    $tpl->assign('content', $form->returnForm());
+    $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

@@ -30,27 +30,7 @@
  *      HTML_QuickForm::isRuleRegistered()
  * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
  */
-$GLOBALS['_HTML_QuickForm_registered_rules'] = array(
-    'required'      => array('html_quickform_rule_required', 'HTML/QuickForm/Rule/Required.php'),
-    'maxlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'minlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'rangelength'   => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'email'         => array('html_quickform_rule_email',    'HTML/QuickForm/Rule/Email.php'),
-    'regex'         => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'lettersonly'   => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'alphanumeric'  => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'numeric'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'nopunctuation' => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'nonzero'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'callback'      => array('html_quickform_rule_callback', 'HTML/QuickForm/Rule/Callback.php'),
-    // Added by Chamilo team, 16-MAR-2010
-    //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
-    'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
-    'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
-    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php'),
-    'captcha'  	    => array('HTML_QuickForm_Rule_CAPTCHA',  'HTML/QuickForm/Rule/CAPTCHA.php')
-    //
-);
+
 
 // {{{ error codes
 
@@ -1415,13 +1395,13 @@ class HTML_QuickForm extends HTML_Common
      */
     function isRuleRegistered($name, $autoRegister = false)
     {
+        return true;
+        var_dump($name);
         if (is_scalar($name) && isset($GLOBALS['_HTML_QuickForm_registered_rules'][$name])) {
             return true;
         } elseif (!$autoRegister) {
             return false;
         }
-        // automatically register the rule if requested
-        include_once 'HTML/QuickForm/RuleRegistry.php';
         $ruleName = false;
         if (is_object($name) && is_a($name, 'html_quickform_rule')) {
             $ruleName = !empty($name->name)? $name->name: strtolower(get_class($name));
@@ -1559,7 +1539,6 @@ class HTML_QuickForm extends HTML_Common
             return false;
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
@@ -1746,7 +1725,6 @@ class HTML_QuickForm extends HTML_Common
     */
     function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
-            include_once 'HTML/QuickForm/Renderer/Default.php';
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
@@ -1793,7 +1771,6 @@ class HTML_QuickForm extends HTML_Common
             return '';
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $test = array();
         $js_escape = array(

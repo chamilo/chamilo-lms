@@ -16,7 +16,7 @@
  * @todo isn't configuration.php renamed to configuration.inc.php yet?
  * @todo use the $_configuration array for all the needed variables
  * @todo remove the code that displays the button that links to the install page
- * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
+ * 		but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  * @todo make it possible to enable / disable the tracking through the Chamilo config page.
  *
  */
@@ -24,24 +24,26 @@
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
+require_once __DIR__.'/../../app/AppKernel.php';
+
+$kernel = new AppKernel();
+
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other initialisation files.
 $includePath = __DIR__;
 
-// @todo Isn't this file renamed to configuration.inc.php yet?
 // Include the main Chamilo platform configuration file.
-$main_configuration_file_path = $includePath.'/conf/configuration.php';
 
-$already_installed = false;
-if (file_exists($main_configuration_file_path)) {
-    require_once $main_configuration_file_path;
-    $already_installed = true;
+$alreadyInstalled = false;
+if (file_exists($kernel->getConfigurationFile())) {
+    require_once $kernel->getConfigurationFile();
+    $alreadyInstalled = true;
 } else {
     $_configuration = array();
 }
 
 //Redirects to the main/install/ page
-if (!$already_installed) {
+if (!$alreadyInstalled) {
     $global_error_code = 2;
     // The system has not been installed yet.
     require $includePath.'/global_error_message.inc.php';
@@ -65,17 +67,14 @@ api_check_php_version($includePath.'/');
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 
-$default_username_length = 40;
+$defaultUserNameLength = 40;
 if (api_get_setting('login_is_email') == 'true') {
-    $default_username_length = 100;
+    $defaultUserNameLength = 100;
 }
-define('USERNAME_MAX_LENGTH', $default_username_length);
+define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
-
-// Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting());
 
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
@@ -105,7 +104,7 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
 
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
+/*$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
 // $_configuration['db_client_flags'] can be set in configuration.php to pass
 // flags to the DB connection
 $dbFlags = api_get_configuration_value('db_client_flags');
@@ -116,7 +115,7 @@ $params = array(
     'password' => $_configuration['db_password'],
     'persistent' => $dbPersistConnection,
     'client_flags' => $dbFlags,
-);
+);*/
 
 // Doctrine ORM configuration
 
@@ -181,30 +180,13 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
 }
 
-/* Initialization of the default encodings */
-// The platform's character set must be retrieved at this early moment.
-$sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-$result = Database::query($sql);
-while ($row = Database::fetch_array($result)) {
-    $charset = $row[0];
-}
-if (empty($charset)) {
-    $charset = 'UTF-8';
-}
-// Preserving the value of the global variable $charset.
-$charset_initial_value = $charset;
+$charset = 'UTF-8';
 
 // Enables the portablity layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
-// Initialization of the internationalization library.
-//api_initialize_internationalization();
-
-// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
-//api_set_internationalization_default_encoding($charset);
-
 // Start session after the internationalization library has been initialized.
-Chamilo::session()->start($already_installed);
+Chamilo::session()->start($alreadyInstalled);
 
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
 
@@ -300,7 +282,7 @@ require $includePath.'/local.inc.php';
 
 //Fixes bug in Chamilo 1.8.7.1 array was not set
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
-$administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
+$administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 // Including configuration files
 $configurationFiles = array(
@@ -320,6 +302,7 @@ foreach ($configurationFiles as $file) {
     }
 }
 
+// Error reporting settings.
 if (api_get_setting('server_type') == 'test') {
     ini_set('display_errors', '1');
     ini_set('log_errors', '1');
@@ -356,7 +339,10 @@ $langpath = api_get_path(SYS_LANG_PATH);
 /* This will only work if we are in the page to edit a sub_language */
 if (isset($this_script) && $this_script == 'sub_language') {
     // getting the arrays of files i.e notification, trad4all, etc
-    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(api_get_path(SYS_LANG_PATH).'english', true);
+    $language_files_to_load = SubLanguageManager:: get_lang_folder_files_list(
+        api_get_path(SYS_LANG_PATH).'english',
+        true
+    );
     //getting parent info
     $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
@@ -470,59 +456,35 @@ if (!empty($valid_languages)) {
 $language_interface_initial_value = $language_interface;
 
 /**
- * Include all necessary language files
- * - trad4all
- * - notification
- * - custom tool language files
+ * Include the trad4all language file
  */
-$language_files = array();
-$language_files[] = 'trad4all';
-
-if (isset($language_file)) {
-    if (!is_array($language_file)) {
-        $language_files[] = $language_file;
-    } else {
-        $language_files = array_merge($language_files, $language_file);
+// if the sub-language feature is on
+$parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+if (!empty($parent_path)) {
+    // include English
+    include $langpath.'english/trad4all.inc.php';
+    // prepare string for current language and its parent
+    $lang_file = $langpath.$language_interface.'/trad4all.inc.php';
+    $parent_lang_file = $langpath.$parent_path.'/trad4all.inc.php';
+    // load the parent language file first
+    if (file_exists($parent_lang_file)) {
+        include $parent_lang_file;
+    }
+    // overwrite the parent language translations if there is a child
+    if (file_exists($lang_file)) {
+        include $lang_file;
+    }
+} else {
+    // if the sub-languages feature is not on, then just load the
+    // set language interface
+    // include English
+    include $langpath.'english/trad4all.inc.php';
+    // prepare string for current language
+        $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+    if (file_exists($langfile)) {
+        include $langfile;
     }
 }
-// if a set of language files has been properly defined
-if (is_array($language_files)) {
-    // if the sub-language feature is on
-    if (api_get_setting('allow_use_sub_language') == 'true') {
-        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language and its parent
-            $lang_file = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            $parent_lang_file = $langpath.$parent_path.'/'.$language_file.'.inc.php';
-            // load the parent language file first
-            if (file_exists($parent_lang_file)) {
-                include $parent_lang_file;
-            }
-            // overwrite the parent language translations if there is a child
-            if (file_exists($lang_file)) {
-                include $lang_file;
-            }
-        }
-    } else {
-        // if the sub-languages feature is not on, then just load the
-        // set language interface
-        foreach ($language_files as $index => $language_file) {
-            // include English
-            include $langpath.'english/'.$language_file.'.inc.php';
-            // prepare string for current language
-            $langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-            if (file_exists($langfile)) {
-                include $langfile;
-            }
-        }
-    }
-}
-
-// The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
-// So, we have to reassign this variable again in order to keep its value right.
-$charset = $charset_initial_value;
 
 // The global variable $text_dir has been defined in the language file trad4all.inc.php.
 // For determing text direction correspondent to the current language we use now information from the internationalization library.
@@ -538,44 +500,52 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-//Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
+//Update of the logout_date field in the table track_e_login
+// (needed for the calculation of the total connection time)
 
 if (!isset($_SESSION['login_as']) && isset($_user)) {
     // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
     $tbl_track_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
-        WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
+    $sql = "SELECT login_id, login_date
+            FROM $tbl_track_login
+            WHERE
+                login_user_id='".$_user["user_id"]."'
+            ORDER BY login_date DESC
+            LIMIT 0,1";
 
-    $q_last_connection = Database::query($sql_last_connection);
+    $q_last_connection = Database::query($sql);
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 
         // is the latest logout_date still relevant?
-        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
-        $q_logout_date = Database::query($sql_logout_date);
+        $sql = "SELECT logout_date FROM $tbl_track_login
+                WHERE login_id = $i_id_last_connection";
+        $q_logout_date = Database::query($sql);
         $res_logout_date = convert_sql_date(Database::result($q_logout_date, 0, 'logout_date'));
 
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
             // it isn't, we should create a fresh entry
             Event::event_login($_user['user_id']);
             // now that it's created, we can get its ID and carry on
-            $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
         $now = api_get_utc_datetime(time());
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='$now' WHERE login_id='$i_id_last_connection'";
-        Database::query($s_sql_update_logout_date);
+        $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
+                WHERE login_id='$i_id_last_connection'";
+        Database::query($sql);
         // Saves the last login in the user table see BT#7297
         if (isset($_configuration['save_user_last_login']) &&
             $_configuration['save_user_last_login']
         ) {
             $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-            $sql = "UPDATE $tableUser SET last_login ='$now' WHERE user_id = ".$_user["user_id"];
+            $sql = "UPDATE $tableUser SET last_login = '$now'
+                    WHERE user_id = ".$_user["user_id"];
             Database::query($sql);
         }
     }
 }
+
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then
 // see them through main/cron/lang/langstats.php)

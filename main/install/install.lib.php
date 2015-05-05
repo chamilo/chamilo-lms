@@ -13,10 +13,8 @@
 use Doctrine\ORM\EntityManager;
 
 /*      CONSTANTS */
-define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
+//define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
-
-/*      COMMON PURPOSE FUNCTIONS    */
 
 /**
  * This function detects whether the system has been already installed.
@@ -232,7 +230,6 @@ function detect_browser_language()
     return 'english';
 }
 
-
 /*      FILESYSTEM RELATED FUNCTIONS */
 
 /**
@@ -255,9 +252,30 @@ function check_writable($folder, $suggestion = false)
 }
 
 /**
+ * This function checks if the given folder is readable
+ * @param   string  $folder Full path to a folder
+ * @param   bool    $suggestion Whether to show a suggestion or not
+ *
+ * @return  string
+ */
+function checkReadable($folder, $suggestion = false)
+{
+    if (is_readable($folder)) {
+        return Display::label(get_lang('Readable'), 'success');
+    } else {
+        if ($suggestion) {
+            return Display::label(get_lang('NotReadable'), 'info');
+        } else {
+            return Display::label(get_lang('NotReadable'), 'important');
+        }
+    }
+}
+
+/**
  * This function is similar to the core file() function, except that it
  * works with line endings in Windows (which is not the case of file())
- * @param   string  File path
+ * @param   string  $filename
+ *
  * @return  array   The lines of the file returned as an array
  */
 function file_to_array($filename)
@@ -268,6 +286,7 @@ function file_to_array($filename)
     $fp = fopen($filename, 'rb');
     $buffer = fread($fp, filesize($filename));
     fclose($fp);
+
     return explode('<br />', nl2br($buffer));
 }
 
@@ -285,17 +304,17 @@ function set_file_folder_permissions()
  * @param string $url_append The path from your webroot to your chamilo root
  * @return bool Result of writing the file
  */
-function write_courses_htaccess_file($url_append)
+/*function write_courses_htaccess_file($url_append)
 {
     $content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
     $content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-    $fp = @fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
+    $fp = @fopen(api_get_path(SYS_COURSE_PATH).'.htaccess', 'w');
     if ($fp) {
         fwrite($fp, $content);
         return fclose($fp);
     }
     return false;
-}
+}*/
 
 /**
  * Write the main system config file
@@ -312,8 +331,6 @@ function write_system_config_file($path)
     global $urlAppendPath;
     global $languageForm;
     global $encryptPassForm;
-    global $installType;
-    global $updatePath;
     global $session_lifetime;
     global $new_version;
     global $new_version_stable;
@@ -503,15 +520,15 @@ function get_config_param_from_db($param = '')
 }
 
 /**
- * In step 3. Tests establishing connection to the database server.
- * If it's a single database environment the function checks if the database exist.
- * If the database does not exist we check the creation permissions.
- * @param   string  $dbHostForm DB host
- * @param   string  $dbUsernameForm DB username
- * @param   string  $dbPassForm DB password
+ * Connect to the database and returns the entity manager
+ * @param string  $dbHostForm DB host
+ * @param string  $dbUsernameForm DB username
+ * @param string  $dbPassForm DB password
+ * @param string  $dbNameForm DB name
+ *
  * @return EntityManager
  */
-function testDbConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
+function connectToDatabase($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm)
 {
     $dbParams = array(
         'driver' => 'pdo_mysql',
@@ -893,38 +910,35 @@ function display_requirements(
         $courseTestLabel = Display::label(get_lang('No'), 'important');
     }
 
+    $oldConf = '';
+    if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php')) {
+        $oldConf = '<tr>
+            <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'inc/conf</td>
+            <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'inc/conf').'</td>
+        </tr>';
+    }
+
     echo '<table class="table">
+            '.$oldConf.'
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'inc/conf/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'inc/conf/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/users/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/users/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/sessions/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/sessions/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'upload/courses/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'upload/courses/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH)).'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'default_course_document/images/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'default_course_document/images/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_ARCHIVE_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_ARCHIVE_PATH)).'</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' <br />('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_DATA_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_DATA_PATH)).'</td>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>
+                <td class="requirements-value">'.checkReadable(api_get_path(SYS_PATH).'vendor').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_COURSE_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_COURSE_PATH)).' </td>
+                <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
@@ -938,29 +952,7 @@ function display_requirements(
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PATH).'home/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'home/').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
-            </tr>'.
-            //'<tr>
-            //    <td class="requirements-item">chamilo/searchdb/</td>
-            //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>
-            //</tr>'.
-            //'<tr>
-            //    <td class="requirements-item">'.session_save_path().'</td>
-            //    <td class="requirements-value">'.(is_writable(session_save_path())
-            //      ? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
-            //      : '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
-            //</tr>'.
-            '';
+            ';
     echo '    </table>';
     echo '  </div>';
     echo '</div>';
@@ -1003,30 +995,17 @@ function display_requirements(
         $perm_file = api_get_permissions_for_new_files();
 
         $notWritable = array();
-        $curdir = getcwd();
 
-        $checked_writable = api_get_path(CONFIGURATION_PATH);
+        $checked_writable = api_get_path(SYS_APP_PATH);
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_CODE_PATH).'upload/users/';
+        $checked_writable = api_get_path(SYS_PUBLIC_PATH);
         if (!is_writable($checked_writable)) {
             $notWritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
-        }
-
-        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/sessions/';
-        if (!is_writable($checkedWritable)) {
-            $notWritable[] = $checkedWritable;
-            @chmod($checkedWritable, $perm);
-        }
-
-        $checkedWritable = api_get_path(SYS_CODE_PATH).'upload/courses/';
-        if (!is_writable($checkedWritable)) {
-            $notWritable[] = $checkedWritable;
-            @chmod($checkedWritable, $perm);
         }
 
         $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
@@ -1035,32 +1014,8 @@ function display_requirements(
             @chmod($checked_writable, $perm);
         }
 
-        $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_DATA_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
-        $checked_writable = api_get_path(SYS_COURSE_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
-
         if ($course_test_was_created == false) {
             $error = true;
-        }
-
-        $checked_writable = api_get_path(SYS_PATH).'home/';
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = realpath($checked_writable);
-            @chmod($checked_writable, $perm);
         }
 
         $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
@@ -1430,7 +1385,7 @@ function display_database_settings_form(
         $database_exists_text = '';
         $manager = null;
         try {
-            $manager = testDbConnect(
+            $manager = connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
@@ -1552,13 +1507,9 @@ function display_configuration_settings_form(
     }
 
     // Parameters 3 and 4: administrator's names
-    if (api_is_western_name_order()) {
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-    } else {
-        display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
-        display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
-    }
+
+    display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
     display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
@@ -1815,7 +1766,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
             if (fwrite($handler, $content)) {
                 $sock_errno = '';
                 $sock_errmsg = '';
-                $url = api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$file;
+                $url = api_get_path(WEB_PATH).'app/courses/'.$course_attempt_name.'/'.$file;
 
                 $parsed_url = parse_url($url);
                 //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
@@ -1876,6 +1827,8 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 }
 
 /**
+ * Save settings values
+ *
  * @param string $organizationName
  * @param string $organizationUrl
  * @param string $siteName
@@ -1921,6 +1874,9 @@ function installSettings(
 }
 
 /**
+ * Executes DB changes based in the classes defined in
+ * src/Chamilo/CoreBundle/Migrations/Schema/*
+ *
  * @param string $chamiloVersion
  * @param string $dbNameForm
  * @param string $dbUsernameForm
@@ -1932,8 +1888,8 @@ function installSettings(
 function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $dbHostForm, $manager)
 {
     $debug = true;
-    // Config doctrine migrations
 
+    // Config doctrine migrations
     $db = \Doctrine\DBAL\DriverManager::getConnection(array(
         'dbname' => $dbNameForm,
         'user' => $dbUsernameForm,
@@ -1948,12 +1904,12 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
 
     $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($db);
 
-    // Table name that will store migrations log (will be created automatically, default name is: doctrine_migration_versions)
+    // Table name that will store migrations log (will be created automatically,
+    // default name is: doctrine_migration_versions)
     $config->setMigrationsTableName('version');
     // Namespace of your migration classes, do not forget escape slashes, do not add last slash
     $config->setMigrationsNamespace('Chamilo\CoreBundle\Migrations\Schema\V'.$chamiloVersion);
     // Directory where your migrations are located
-
     $config->setMigrationsDirectory(api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Migrations/Schema/V'.$chamiloVersion);
     // Load your migrations
     $config->registerMigrationsFromDirectory($config->getMigrationsDirectory());
@@ -1970,6 +1926,7 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
     // Retrieve SQL queries that should be run to migrate you schema to $to version,
     // if $to == null - schema will be migrated to latest version
     $versions = $migration->getSql($to);
+
     if ($debug) {
         $nl = '<br>';
         foreach ($versions as $version => $queries) {
@@ -1983,7 +1940,8 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
     }
 
     try {
-        $migration->migrate($to); // Execute migration!
+        // Execute migration!
+        $migration->migrate($to);
         if ($debug) {
             echo 'DONE'.$nl;
         }
@@ -1995,6 +1953,10 @@ function migrate($chamiloVersion, $dbNameForm, $dbUsernameForm, $dbPassForm, $db
 }
 
 /**
+ *
+ * After the schema was created (table creation), the function adds
+ * admin/platform information.
+ *
  * @param EntityManager $manager
  * @param string $sysPath
  * @param string $encryptPassForm
@@ -2050,7 +2012,7 @@ function finishInstallation(
             break;
     }
 
-    // Insert users
+    // Insert admin and Anonymous users.
 
     $sql = "INSERT INTO user (user_id, lastname, firstname, username, password, auth_source, email, status, official_code, phone, creator_id, registration_date, expiration_date,active,openid,language) VALUES
 		(1, '$adminLastName','$adminFirstName','$loginForm','$passToStore','".PLATFORM_AUTH_SOURCE."','$emailForm',1,'ADMIN','$adminPhoneForm',1,NOW(),NULL,'1',NULL,'$languageForm'),
@@ -2061,7 +2023,7 @@ function finishInstallation(
     $sql = "INSERT INTO admin VALUES(1, 1)";
     Database::query($sql);
 
-    // The chosen during the installation platform language should be enabled.
+    // Set default language
     $sql = "UPDATE language SET available=1 WHERE dokeos_folder = '$languageForm'";
     Database::query($sql);
 

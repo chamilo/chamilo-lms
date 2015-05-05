@@ -1483,7 +1483,7 @@ if (isset($_configuration['import_csv_fix_permissions']) &&
     echo "Executing: ".$command.PHP_EOL;
     system($command);
 
-    $command = "sudo find ".api_get_path(SYS_CODE_PATH)."upload/users  -type d -exec chmod 777 {} \;";
+    $command = "sudo find ".api_get_path(SYS_UPLOAD_PATH)."users  -type d -exec chmod 777 {} \;";
     echo "Executing: ".$command.PHP_EOL;
     system($command);
 }

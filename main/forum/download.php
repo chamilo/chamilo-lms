@@ -54,6 +54,7 @@ $tbl_forum_attachment  = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
 $tbl_forum_post 	   = Database::get_course_table(TABLE_FORUM_POST);
 
 $course_id = api_get_course_int_id();
+$courseInfo =     api_get_course_info_by_id($course_id);
 
 // launch event
 Event::event_download($doc_url);
@@ -71,13 +72,13 @@ $result = Database::query($sql);
 $row = Database::fetch_array($result);
 
 $forum_thread_visibility = api_get_item_visibility(
-    api_get_course_info($course_code),
+    $courseInfo,
     TOOL_FORUM_THREAD,
     $row['thread_id'],
     api_get_session_id()
 );
 $forum_forum_visibility = api_get_item_visibility(
-    api_get_course_info($course_code),
+    $courseInfo,
     TOOL_FORUM,
     $row['forum_id'],
     api_get_session_id()
@@ -86,7 +87,7 @@ $forum_forum_visibility = api_get_item_visibility(
 if ($forum_thread_visibility==1 && $forum_forum_visibility==1) {
     if (Security::check_abs_path(
         $full_file_name,
-        api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/')
+        api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/upload/forum/')
     ) {
         DocumentManager::file_send_for_download(
             $full_file_name,

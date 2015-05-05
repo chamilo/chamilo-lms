@@ -6097,7 +6097,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         global $_configuration;
         // Please, do not modify this dirname formatting.
-        $dir = isset ($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
+        $dir = isset($_GET['dir']) ? $_GET['dir'] : $_POST['dir'];
 
         if (strstr($dir, '..'))
             $dir = '/';
@@ -8650,7 +8650,7 @@ class learnpath
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
         $course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $course_id = $course['real_id'];
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
         $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
@@ -8836,7 +8836,7 @@ class learnpath
     public function scorm_export()
     {
         $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $course_id = $_course['real_id'];
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {
@@ -9518,8 +9518,6 @@ class learnpath
         // TODO: Add a readme file here, with a short description and a link to the Reload player
         // then add the file to the zip, then destroy the file (this is done automatically).
         // http://www.reload.ac.uk/scormplayer.html - once done, don't forget to close FS#138
-        global $_configuration;
-        $append = $_configuration['url_append'];
 
         foreach ($zip_files as $file_path) {
             if (empty($file_path)) {

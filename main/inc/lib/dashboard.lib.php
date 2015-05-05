@@ -101,7 +101,8 @@ class DashboardManager
 
 		echo '</table>';
 		echo '<br />';
-		echo '<button class="save" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.get_lang('EnableDashboardPlugins').'</button></form>';
+		echo '<button class="btn btn-default" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.
+			get_lang('EnableDashboardPlugins').'</button></form>';
 	}
 
 	/**
@@ -334,9 +335,8 @@ class DashboardManager
 	 * @param int  User id
 	 * @return void
 	 */
-	public static function display_user_dashboard_list($user_id) {
-
-		$block_data_without_plugin = self::get_block_data_without_plugin();
+	public static function display_user_dashboard_list($user_id)
+    {
 		$enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
 		$user_block_data = self::get_user_block_data($user_id);
 
@@ -382,11 +382,11 @@ class DashboardManager
 					self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
 					echo '<td>'.$block['name'].'</td>';
 					echo '<td>'.$block['description'].'</td>';
-					echo '<td><center>
+					echo '<td>
                             <select name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
-                            </select></center>
+                            </select>
                           </td>';
 					echo '</tr>';
 				} else {
@@ -396,12 +396,14 @@ class DashboardManager
 
 			echo '</table>';
 			echo '<br />';
-			echo '<button class="save" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'">'.get_lang('EnableDashboardBlock').'</button></form>';
+			echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'">'.
+                get_lang('EnableDashboardBlock').'</button></form>';
 			echo '</div>';
 		} else {
 			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
 			if (api_is_platform_admin()) {
-				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a>';
+				echo '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
+                    get_lang('ConfigureDashboardPlugin').'</a>';
 			}
 		}
 	}

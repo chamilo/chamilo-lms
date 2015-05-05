@@ -48,8 +48,10 @@ class Skype extends Plugin implements HookPluginInterface
             )
         );
         if (empty($result)) {
+            require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
             $extraField = new Extrafield('user');
             $extraField->save(array(
+                'field_type' => UserManager::USER_FIELD_TYPE_TEXT,
                 'field_variable' => 'skype',
                 'field_display_text' => 'Skype',
                 'field_visible' => 1,

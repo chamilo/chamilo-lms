@@ -50,24 +50,6 @@ if (api_is_platform_admin()) {
     );
 }
 
-// Getting the user image
-$sysdir_array = UserManager::get_user_picture_path_by_id($user['user_id'], 'system', false, true);
-$sysdir = $sysdir_array['dir'];
-$webdir_array = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-$webdir = $webdir_array['dir'];
-$fullurl = $webdir.$webdir_array['file'];
-$system_image_path = $sysdir.$webdir_array['file'];
-list($width, $height, $type, $attr) = @getimagesize($system_image_path);
-$resizing = (($height > 200) ? 'height="200"' : '');
-$height += 30;
-$width += 30;
-$window_name = 'window'.uniqid('');
-$onclick = $window_name."=window.open('".$fullurl."','".$window_name
-    ."','alwaysRaised=yes, alwaysLowered=no,alwaysOnTop=yes,toolbar=no,"
-    ."location=no,directories=no,status=no,menubar=no,scrollbars=no,"
-    ."resizable=no,width=".$width.",height=".$height.",left=200,top=20');"
-    ." return false;";
-
 // Show info about who created this user and when
 $creatorId = $user['creator_id'];
 $creatorInfo = api_get_user_info($creatorId);
@@ -155,7 +137,7 @@ if (count($sessions) > 0) {
         $csvContent[] = array($session_item['session_name']);
         $csvContent[] = $headerList;
         foreach ($session_item['courses'] as $my_course) {
-            $courseInfo = api_get_course_info($my_course['code']);
+            $courseInfo = api_get_course_info_by_id($my_course['real_id']);
             $sessionStatus = SessionManager::get_user_status_in_session(
                 $user['user_id'],
                 $courseInfo['real_id'],
@@ -411,19 +393,31 @@ echo '<div class="actions">
 
 echo Display::page_header($tool_name);
 
+
+$fullUrlBig = Usermanager::getUserPicture(
+    $user['user_id'],
+    USER_IMAGE_SIZE_BIG
+);
+
+$fullUrl = Usermanager::getUserPicture(
+    $user['user_id'],
+    USER_IMAGE_SIZE_ORIGINAL
+);
+
+
 echo '<div class="row">';
-echo '<div class="span2">';
-echo '<a href="javascript: void(0);" onclick="'.$onclick.'" >'
-    .'<img src="'.$fullurl.'" '.$resizing.' /></a><br />';
+echo '<div class="col-md-2">';
+echo '<a class="expand-image" href="'.$fullUrlBig.'">'
+    .'<img src="'.$fullUrl.'" /></a><br />';
 echo '</div>';
 
 echo $message;
 
-echo '<div class="span5">';
+echo '<div class="col-md-5">';
 echo $userInformation;
 echo '</div>';
 
-echo '<div class="span5">';
+echo '<div class="col-md-5">';
 echo $trackingInformation;
 echo '</div>';
 echo '</div>';

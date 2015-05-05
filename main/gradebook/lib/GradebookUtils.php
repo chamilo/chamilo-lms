@@ -1211,7 +1211,7 @@ class GradebookUtils
                 continue;
             }
 
-            $courseInfo = api_get_course_info($course['code']);
+            $courseInfo = api_get_course_info_by_id($course['real_id']);
 
             $courseList[] = [
                 'course' => $courseInfo['title'],

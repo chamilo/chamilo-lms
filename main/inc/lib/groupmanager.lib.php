@@ -160,7 +160,7 @@ class GroupManager
     {
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
-        $course_id  = api_get_course_int_id();
+        $course_id  = $_course['real_id'];
 
 
         $currentCourseRepository = $_course['path'];
@@ -199,7 +199,7 @@ class GroupManager
             $sql = "UPDATE $table_group SET id = iid WHERE iid = $lastId";
             Database::query($sql);
 
-            $desired_dir_name= '/'.api_replace_dangerous_char($name,'strict').'_groupdocs';
+            $desired_dir_name= '/'.api_replace_dangerous_char($name).'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH) . $currentCourseRepository . '/document';
 
             $newFolderData = create_unexisting_directory(
@@ -1625,8 +1625,8 @@ class GroupManager
 
     /**
      * Is the user a tutor of this group?
-     * @param $user_id the id of the user
-     * @param $group_id the id of the group
+     * @param int $user_id the id of the user
+     * @param int $group_id the id of the group
      * @return boolean true/false
      * @todo use the function user_has_access that includes this function
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1885,7 +1885,7 @@ class GroupManager
      * Check if a user has access to a certain group tool
      * @param int $user_id The user id
      * @param int $group_id The group id
-     * @param constant $tool The tool to check the access rights. This should be
+     * @param string $tool The tool to check the access rights. This should be
      * one of constants: GROUP_TOOL_DOCUMENTS
      * @return bool True if the given user has access to the given tool in the
      * given course.

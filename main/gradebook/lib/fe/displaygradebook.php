@@ -716,25 +716,12 @@ class DisplayGradebook
         $scoretotal = $cattotal[0]->calc_score($user_id);
         $scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal, SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 
-        $image_syspath = UserManager::get_user_picture_path_by_id($userid, 'system', false, true);
-        $image_size = getimagesize($image_syspath['dir'] . $image_syspath['file']);
-        //Web path
-        $image_path = UserManager::get_user_picture_path_by_id($userid, 'web', false, true);
-        $image_file = $image_path['dir'] . $image_path['file'];
+        $imageUrl = UserManager::getUserPicture($userid);
 
-        if (!api_get_configuration_value('gravatar_enabled')) {
-            $image_file .= '?rand='.time();
-        }
-
-        $img_attributes = 'src="' . $image_file . '" ' . 'alt="' . $user['complete_name'] . '" ';
-        if ($image_size[0] > 200) {
-            //limit display width to 200px
-            $img_attributes .= 'width="200" ';
-        }
-        $info = '<div class="row"><div class="span3">';
-        $info .= '<div class="thumbnail"><img ' . $img_attributes . '/></div>';
+        $info = '<div class="row"><div class="col-md-3">';
+        $info .= '<div class="thumbnail"><img src="' . $imageUrl . '" /></div>';
         $info .= '</div>';
-        $info .= '<div class="span6">';
+        $info .= '<div class="col-md-6">';
         $info .= get_lang('Name') . ' :  <a target="_blank" href="' . api_get_path(WEB_CODE_PATH) . 'social/profile.php?u=' . $userid . '"> ' .
             $user['complete_name'] . '</a><br />';
 

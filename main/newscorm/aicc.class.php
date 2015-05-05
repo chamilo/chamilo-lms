@@ -352,7 +352,7 @@ class aicc extends learnpath
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
         $course_rel_dir  = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path of this course.
-        $current_dir = api_replace_dangerous_char(trim($current_dir), 'strict'); // Current dir we are in, inside scorm/
+        $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0); }
 
          //$uploaded_filename = $_FILES['userFile']['name'];
@@ -365,7 +365,7 @@ class aicc extends learnpath
         $this->zipname = $file_base_name; // Save for later in case we don't have a title.
 
         if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Base file name is : '.$file_base_name, 0); }
-        $new_dir = api_replace_dangerous_char(trim($file_base_name),'strict');
+        $new_dir = api_replace_dangerous_char(trim($file_base_name));
         $this->subdir = $new_dir;
         if($this->debug > 0) { error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0); }
 
@@ -697,7 +697,6 @@ class aicc extends learnpath
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
-        //$zipfilename = '/var/www/dokeos-comp/courses/TEST2/scorm/example_document.html';
         //this file sending implies removing the default mime-type from php.ini
         //DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
         DocumentManager :: file_send_for_download($zipfilename, true);

@@ -112,11 +112,6 @@ function search_sessions($needle, $type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-
-        // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
-
         $session_list = SessionManager::get_sessions_list(
             array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
         );

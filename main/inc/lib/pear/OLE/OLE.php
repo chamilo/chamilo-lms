@@ -30,8 +30,6 @@ define('OLE_DATA_SIZE_SMALL', 0x1000);
 define('OLE_LONG_INT_SIZE',        4);
 define('OLE_PPS_SIZE',          0x80);
 
-require_once 'PEAR.php';
-
 /**
 * Array for storing OLE instances that are accessed from
 * OLE_ChainedBlockStream::stream_open().

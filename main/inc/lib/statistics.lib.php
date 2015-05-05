@@ -697,7 +697,7 @@ class Statistics
             while ($obj = Database::fetch_object($res)) {
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
                 $course = array ();
-                $course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
+                $course[]= '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
                 // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;

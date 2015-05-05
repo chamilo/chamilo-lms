@@ -13,7 +13,6 @@
  * 	- exercise_admin.inc.php : management of the exercise
  * 	- question_admin.inc.php : management of a question (statement & answers)
  * 	- statement_admin.inc.php : management of a statement
- * 	- answer_admin.inc.php : management of answers
  * 	- question_list_admin.inc.php : management of the question list
  *
  * 	Main variables used in this script :
@@ -45,7 +44,7 @@
  * Modified by Hubert Borderiou 21-10-2011 Question by category
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_QUIZ;

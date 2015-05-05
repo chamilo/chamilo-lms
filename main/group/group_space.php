@@ -330,17 +330,14 @@ if (count($tutors) == 0) {
     isset($origin) ? $my_origin = $origin:$my_origin='';
     $tutor_info .= '<ul class="thumbnails">';
     foreach ($tutors as $index => $tutor) {
-        $tab_user_info = api_get_user_info($tutor['user_id']);
-        $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
-        $image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
-        $image_repository = $image_path['dir'];
-        $existing_image = $image_path['file'];
-        $completeName = $tab_user_info['complete_name'];
-        $photo = '<img src="'.$image_repository.$existing_image.'" alt="'.$completeName.'" width="32" height="32" title="'.$completeName.'" />';
+        $userInfo = api_get_user_info($tutor['user_id']);
+        $username = api_htmlentities(sprintf(get_lang('LoginX'), $userInfo['username']), ENT_QUOTES);
+        $completeName = $userInfo['complete_name'];
+        $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$completeName.'" width="32" height="32" title="'.$completeName.'" />';
         $tutor_info .= '<li>';
         $tutor_info .= Display::url(
-            $tab_user_info['complete_name'],
-            $tab_user_info['profile_url']
+            $userInfo['complete_name'],
+            $userInfo['profile_url']
         );
         $tutor_info .= '</li>';
     }
@@ -515,10 +512,7 @@ function email_filter($email)
 function user_icon_filter($user_id)
 {
     $userInfo = api_get_user_info($user_id);
-    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-    $image_repository = $image_path['dir'];
-    $existing_image = $image_path['file'];
-    $photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userInfo['complete_name'].'"  width="22" height="22" title="'.$userInfo['complete_name'].'" /></center>';
+    $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$userInfo['complete_name'].'"  width="22" height="22" title="'.$userInfo['complete_name'].'" />';
     return Display::url($photo, $userInfo['profile_url']);
 }
 

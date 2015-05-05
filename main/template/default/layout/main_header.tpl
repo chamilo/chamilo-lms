@@ -114,6 +114,7 @@
             </section>
         </header>
     <div id="top_main_content" class="container">
+    <div class="row">
     {# course navigation links/shortcuts need to be activated by the admin #}
     {% include template ~ "/layout/course_navigation.tpl" %}
 {% endif %}

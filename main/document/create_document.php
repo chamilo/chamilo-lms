@@ -153,12 +153,12 @@ if ($relative_url== '') {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$html_editor_config = array(
-	'ToolbarSet'           => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
-	'Width'                => '100%',
-	'Height'               => '500',
-	'FullPage'             => true,
-	'InDocument'           => true,
+$editorConfig = array(
+    'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' : 'DocumentsStudent'),
+    'Width' => '100%',
+    'Height' => '500',
+    'FullPage' => true,
+    'InDocument' => true,
 	'CreateDocumentDir'    => $relative_url,
 	'CreateDocumentWebDir' => (empty($group_properties['directory']))
                         		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
@@ -167,9 +167,9 @@ $html_editor_config = array(
 );
 
 if ($is_certificate_mode) {
-    $html_editor_config['CreateDocumentDir']    = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $html_editor_config['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
-    $html_editor_config['BaseHref']             = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
+    $editorConfig['CreateDocumentDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $editorConfig['CreateDocumentWebDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
+    $editorConfig['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
@@ -250,10 +250,10 @@ $form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
 /**
  * Check if a document width the chosen filename already exists
  */
-function document_exists($filename) {
+function document_exists($filename)
+{
     global $dir;
-    // Clean up the name, only ASCII characters should stay. (and strict)
-    $cleanName = api_replace_dangerous_char($filename, 'strict');
+    $cleanName = api_replace_dangerous_char($filename);
 
     // No "dangerous" files
     $cleanName = disable_dangerous_file($cleanName);
@@ -281,7 +281,7 @@ $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
-$form->addHtmlEditor('content','', false, false, $html_editor_config);
+$form->addHtmlEditor('content','', true, true, $editorConfig);
 
 // Comment-field
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
@@ -324,7 +324,10 @@ if (!$is_certificate_mode &&
         $folder_sql = implode("','", $escaped_folders);
 
         $sql = "SELECT * FROM $doc_table
-				WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
+				WHERE
+				    c_id = $course_id AND
+				    filetype='folder' AND
+				    path IN ('".$folder_sql."')";
         $res = Database::query($sql);
         $folder_titles = array();
         while ($obj = Database::fetch_object($res)) {
@@ -337,19 +340,32 @@ if (!$is_certificate_mode &&
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				//Hide some folders
-				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){
-				 continue;
+				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css') {
+                    continue;
 				}
 				//Admin setting for Hide/Show the folders of all users
-				if (api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){
+				if (api_get_setting('show_users_folders') == 'false' &&
+                    (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))
+                ){
 					continue;
 				}
 				//Admin setting for Hide/Show Default folders to all users
-				if (api_get_setting('show_default_folders') == 'false' && ($folder=='/images' || $folder=='/flash' || $folder=='/audio' || $folder=='/video' || strstr($folder, '/images/gallery') || $folder=='/video/flv')){
+				if (api_get_setting('show_default_folders') == 'false' &&
+                    (
+                        $folder == '/images' ||
+                        $folder == '/flash' ||
+                        $folder == '/audio' ||
+                        $folder == '/video' ||
+                        strstr($folder, '/images/gallery') ||
+                        $folder == '/video/flv'
+                    )
+                ){
 					continue;
 				}
 				//Admin setting for Hide/Show chat history folder
-				if (api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
+				if (api_get_setting('show_chat_folder') == 'false' &&
+                    $folder=='/chat_files'
+                ){
 					continue;
 				}
 
@@ -425,9 +441,9 @@ if ($form->validate()) {
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-	if (strpos($content, '/css/frames.css') == false) {
+	/*if (strpos($content, '/css/frames.css') == false) {
 		$content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
-	}
+	}*/
 
     // Don't create file with the same name.
 
@@ -441,17 +457,11 @@ if ($form->validate()) {
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 
-		// change the path of mp3 to absolute
-		// first regexp deals with ../../../ urls
-		// Disabled by Ivan Tcholakov.
-		//$content = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$content);
-		//second regexp deals with audio/ urls
-		// Disabled by Ivan Tcholakov.
-		//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);
 		fputs($fp, $content);
 		fclose($fp);
 		chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
 
+        /*
 		if (!is_dir($filepath.'css')) {
 			mkdir($filepath.'css', api_get_permissions_for_new_directories());
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
@@ -465,7 +475,7 @@ if ($form->validate()) {
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $userId, null, null, null, null, $current_session_id);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $userId, null, null, null, null, $current_session_id);
-		}
+		}*/
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
@@ -534,12 +544,11 @@ if ($form->validate()) {
 		Display :: display_footer();
 	}
 } else {
-	// Interbreadcrumb for the current directory root path
 	// Copied from document.php
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
 
-	// Interbreadcrumb for the current directory root path
+	// Breadcrumb for the current directory root path
     if (!empty($document_data)) {
         if (empty($document_data['parents'])) {
             $interbreadcrumb[] = array(
@@ -588,7 +597,7 @@ if ($form->validate()) {
                 <div id="hide_bar_template"></div>
             </div>
             <div id="doc_form" class="col-md-9">
-                '.$form->return_form().'
+                '.$form->returnForm().'
             </div>
           </div>';
 	Display :: display_footer();

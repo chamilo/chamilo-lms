@@ -116,12 +116,12 @@ foreach ($icons as $key => $icon) {
 
 $icons = json_encode($iconList);
 $ajax = api_get_path(WEB_AJAX_PATH).'chat.ajax.php?action=preview&'.api_get_cidreq();
-header('Content-Type: text/html; charset='.api_get_system_encoding());
+header('Content-Type: text/html; charset=UTF-8');
 
 ?><!DOCTYPE html>
 <html>
 <head>
-<meta charset="<?php echo api_get_system_encoding(); ?>" />
+<meta charset="UTF-8" />
 <title>Chat</title>
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_PATH); ?>web/assets/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-emojiarea/jquery.emojiarea.css">

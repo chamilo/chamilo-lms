@@ -3,8 +3,7 @@
 /**
  *	@package chamilo.chat
  */
-use \Michelf\MarkdownExtra;
-use \Michelf\Markdown;
+use Michelf\MarkdownExtra;
 
 /**
  * @author isaac flores paz
@@ -157,7 +156,6 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
     if (!api_is_anonymous()) {
         if (!empty($message)) {
             Emojione\Emojione::$imagePathPNG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/png/';
-            //Emojione\Emojione::$imagePathSVG = api_get_path(WEB_LIBRARY_PATH).'javascript/emojione/svg/';
             Emojione\Emojione::$ascii = true;
 
             // Parsing emojis
@@ -209,22 +207,15 @@ function saveMessage($message, $userId, $_course, $session_id, $group_id, $previ
                     $userId
                 );
             } else {
-                $doc_id = DocumentManager::get_document_id($_course, $basepath_chat.'/'.$basename_chat.'.log.html');
+                $doc_id = DocumentManager::get_document_id(
+                    $_course,
+                    $basepath_chat.'/'.$basename_chat.'.log.html'
+                );
             }
 
             $fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
-            // view user picture
-            $userImage = UserManager::get_user_picture_path_by_id($userId, 'web', false, true);
 
-            if (substr($userImage['file'],0,7) != 'unknown') {
-                $userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
-            } else {
-                $userPhoto = $userImage['dir'].$userImage['file'];
-            }
-
-            if (api_get_configuration_value('gravatar_enabled')) {
-                $userPhoto = $userImage['file'];
-            }
+            $userPhoto = Usermanager::getUserPicture($userId, USER_IMAGE_SIZE_MEDIUM);
 
             $filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 

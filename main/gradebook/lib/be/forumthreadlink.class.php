@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook link to student publication item
+ * Class ForumThreadLink
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class ForumThreadLink extends AbstractLink
@@ -20,17 +22,21 @@ class ForumThreadLink extends AbstractLink
 		$this->set_type(LINK_FORUM_THREAD);
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_type_name()
 	{
 		return get_lang('ForumThreads');
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_allowed_to_change_name()
 	{
 		return false;
 	}
-
-	// FUNCTIONS IMPLEMENTING ABSTRACTLINK
 
 	/**
 	 * Generate an array of exercises that a teacher hasn't created a link for.
@@ -41,9 +47,10 @@ class ForumThreadLink extends AbstractLink
 		if (empty($this->course_code)) {
 			die('Error in get_not_created_links() : course code not set');
 		}
+
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
-		$sql = 'SELECT thread_id,thread_title,thread_title_qualify from '.$this->get_forum_thread_table()
+		$sql = 'SELECT thread_id,thread_title,thread_title_qualify FROM '.$this->get_forum_thread_table()
 			.' forum_thread WHERE thread_id NOT IN'
 			.' (SELECT ref_id FROM '.$tbl_grade_links
 			.' WHERE type = '.LINK_FORUM_THREAD
@@ -52,17 +59,19 @@ class ForumThreadLink extends AbstractLink
 
 		$result = Database::query($sql);
 
-		$cats = array();
-		while ($data=Database::fetch_array($result)) {
-			if (isset($data['thread_title_qualify']) and
-				$data['thread_title_qualify'] != ""
-			) {
-				$cats[] = array($data['thread_id'], $data['thread_title_qualify']);
-			} else {
-				$cats[] = array($data['thread_id'], $data['thread_title']);
-			}
-		}
-		return $cats;
+        $cats = array();
+        while ($data = Database::fetch_array($result)) {
+            if (isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != "") {
+                $cats[] = array(
+                    $data['thread_id'],
+                    $data['thread_title_qualify'],
+                );
+            } else {
+                $cats[] = array($data['thread_id'], $data['thread_title']);
+            }
+        }
+
+        return $cats;
 	}
 
 	/**
@@ -87,15 +96,18 @@ class ForumThreadLink extends AbstractLink
 
 		$sql = 'SELECT tl.thread_id, tl.thread_title, tl.thread_title_qualify
 				FROM '.$tbl_grade_links.' tl ,'.$tbl_item_property.' ip
-				WHERE 	tl.c_id 		= '.$this->course_id.' AND
-						ip.c_id 		= '.$this->course_id.' AND
-						tl.thread_id	= ip.ref AND
-						ip.tool			= "forum_thread" AND
-						ip.visibility<>2 AND  '.$session_condition.' GROUP BY ip.ref ';
+				WHERE
+				    tl.c_id = '.$this->course_id.' AND
+                    ip.c_id = '.$this->course_id.' AND
+                    tl.thread_id = ip.ref AND
+                    ip.tool = "forum_thread" AND
+                    ip.visibility<>2 AND
+                    '.$session_condition.'
+                GROUP BY ip.ref ';
 
 		$result = Database::query($sql);
 
-		while ($data=Database::fetch_array($result)) {
+		while ($data = Database::fetch_array($result)) {
 			if ( isset($data['thread_title_qualify']) and $data['thread_title_qualify']!=""){
 				$cats[] = array ($data['thread_id'], $data['thread_title_qualify']);
 			} else {
@@ -107,28 +119,38 @@ class ForumThreadLink extends AbstractLink
 		return $my_cats;
 	}
 
-	/**
-	 * Has anyone done this exercise yet ?
-	 */
-	public function has_results()
-	{
-		$tbl_grade_links = Database :: get_course_table(TABLE_FORUM_POST);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links."
-				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
-		$result = Database::query($sql);
-		$number=Database::fetch_row($result);
-		return ($number[0] != 0);
+    /**
+    * Has anyone done this exercise yet ?
+    * @return int
+    */
+    public function has_results()
+    {
+        $table = Database :: get_course_table(TABLE_FORUM_POST);
+        $sql = 'SELECT count(*) AS number FROM '.$table."
+                WHERE
+                    c_id = ".$this->course_id." AND
+                    thread_id = '".$this->get_ref_id()."'";
+        $result = Database::query($sql);
+        $number = Database::fetch_row($result);
+
+        return $number[0] != 0;
 	}
 
 	/**
-	 * @param int $stud_id
+	 * @param int    $stud_id
+     * @param string $type
+     *
 	 * @return array|null
 	 */
 	public function calc_score($stud_id = null, $type = null)
 	{
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+        $threadInfo = get_thread_information($this->get_ref_id());
+
 		$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY);
 
-		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)."
+		$sql = 'SELECT thread_qualify_max
+		        FROM '.Database :: get_course_table(TABLE_FORUM_THREAD)."
   				WHERE c_id = ".$this->course_id." AND thread_id = '".$this->get_ref_id()."'";
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
@@ -136,7 +158,7 @@ class ForumThreadLink extends AbstractLink
 		$sql = "SELECT * FROM $thread_qualify
 				WHERE c_id = ".$this->course_id." AND thread_id = ".$this->get_ref_id();
 		if (isset($stud_id)) {
-			$sql .= ' AND user_id = '."'".intval($stud_id)."'";
+			$sql .= ' AND user_id = '.intval($stud_id);
 		}
 
 		// order by id, that way the student's first attempt is accessed first
@@ -146,19 +168,38 @@ class ForumThreadLink extends AbstractLink
 
 		// for 1 student
 		if (isset($stud_id)) {
-
-			if ($data = Database::fetch_array($scores)) {
-				return array ($data['qualify'], $assignment['thread_qualify_max']);
-			} else {
-				//We sent the 0/thread_qualify_max instead of null for correct calculations
-				//return null;
-				return array (0, $assignment['thread_qualify_max']);
-			}
+            if ($threadInfo['thread_peer_qualify'] == 0) {
+                // Classic way of calculate score
+                if ($data = Database::fetch_array($scores)) {
+                    return array(
+                        $data['qualify'],
+                        $assignment['thread_qualify_max']
+                    );
+                } else {
+                    // We sent the 0/thread_qualify_max instead of null for correct calculations
+                    return array(0, $assignment['thread_qualify_max']);
+                }
+            } else {
+                // Take average
+                $score = 0;
+                $counter = 0;
+                if (Database::num_rows($scores)) {
+                    while ($data = Database::fetch_array($scores, 'ASSOC')) {
+                        $score += $data['qualify'];
+                        $counter++;
+                    }
+                }
+                // If no result
+                if (empty($counter) || $counter <= 2) {
+                    return array(0, $assignment['thread_qualify_max']);
+                }
+                return [$score/$counter, $assignment['thread_qualify_max']];
+            }
 		} else {
-			// all students -> get average
+			// All students -> get average
 			$students = array();  // user list, needed to make sure we only
 			// take first attempts into account
-			$rescount = 0;
+			$counter = 0;
 			$sum = 0;
 			$bestResult = 0;
 			$weight = 0;
@@ -168,7 +209,7 @@ class ForumThreadLink extends AbstractLink
 				if (!(array_key_exists($data['user_id'], $students))) {
 					if ($assignment['thread_qualify_max'] != 0) {
 						$students[$data['user_id']] = $data['qualify'];
-						$rescount++;
+						$counter++;
 						$sum += $data['qualify'] / $assignment['thread_qualify_max'];
 						$sumResult += $data['qualify'];
 						if ($data['qualify'] > $bestResult) {
@@ -179,7 +220,7 @@ class ForumThreadLink extends AbstractLink
 				}
 			}
 
-			if ($rescount == 0) {
+			if ($counter == 0) {
 				return null;
 			} else {
 				switch ($type) {
@@ -187,13 +228,13 @@ class ForumThreadLink extends AbstractLink
 						return array($bestResult, $weight);
 						break;
 					case 'average':
-						return array($sumResult/$rescount, $weight);
+						return array($sumResult/$counter, $weight);
 						break;
 					case 'ranking':
 						return AbstractLink::getCurrentUserRanking($students);
 						break;
 					default:
-						return array($sum, $rescount);
+						return array($sum, $counter);
 						break;
 				}
 			}
@@ -206,15 +247,6 @@ class ForumThreadLink extends AbstractLink
 	private function get_forum_thread_table()
 	{
 		return $this->forum_thread_table = Database :: get_course_table(TABLE_FORUM_THREAD);
-	}
-
-	/**
-	 * Lazy load function to get the database table of the item properties
-	 */
-	private function get_itemprop_table()
-	{
-		$this->itemprop_table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		return $this->itemprop_table;
 	}
 
 	public function needs_name_and_description()
@@ -232,6 +264,9 @@ class ForumThreadLink extends AbstractLink
 		return false;
 	}
 
+    /**
+     * @return string
+     */
 	public function get_name()
 	{
 		$this->get_exercise_data();
@@ -244,10 +279,14 @@ class ForumThreadLink extends AbstractLink
 		}
 	}
 
+    /**
+     * @return string
+     */
 	public function get_description()
 	{
 		return '';//$this->exercise_data['description'];
 	}
+
 	/**
 	 * Check if this still links to an exercise
 	 */

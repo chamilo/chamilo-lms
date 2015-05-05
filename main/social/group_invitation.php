@@ -499,18 +499,8 @@ $members = GroupPortalManager::get_users_by_group(
 );
 if (is_array($members) && count($members) > 0) {
     foreach ($members as &$member) {
-        $image_path = UserManager::get_user_picture_path_by_id(
-            $member['user_id'],
-            'web',
-            false,
-            true
-        );
-        $picture = UserManager::get_picture_user(
-            $member['user_id'],
-            $image_path['file'],
-            80
-        );
-        $member['image'] = '<img src="' . $picture['file'] . '"  width="50px" height="50px"  />';
+        $userPicture = UserManager::getUserPicture($member['user_id']);
+        $member['image'] = '<img src="' . $userPicture . '"  width="50px" height="50px"  />';
     }
     $social_right_content .= '<h3>' . get_lang('UsersAlreadyInvited') . '</h3>';
     $social_right_content .= Display::return_sortable_grid(

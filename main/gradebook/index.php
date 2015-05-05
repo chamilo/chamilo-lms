@@ -12,7 +12,7 @@ $_in_course = true;
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_GRADEBOOK;
 
-api_protect_course_script();
+api_protect_course_script(true);
 
 $course_code 	= api_get_course_id();
 $stud_id        = api_get_user_id();

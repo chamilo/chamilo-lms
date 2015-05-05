@@ -53,7 +53,7 @@ abstract class OpenofficeDocument extends learnpath
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
         $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) -1);
-        $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name'], 'strict');
+        $this->file_path = $this->created_dir.'/'.api_replace_dangerous_char($file['name']);
 
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
 

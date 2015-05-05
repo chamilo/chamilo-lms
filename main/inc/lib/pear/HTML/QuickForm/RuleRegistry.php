@@ -91,24 +91,24 @@ class HTML_QuickForm_RuleRegistry
             // Regular expression
             $rule =& $this->getRule('regex');
             $rule->addData($ruleName, $data1);
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['regex'];
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['regex'];
 
         } elseif ($type == 'function' || $type == 'callback') {
             // Callback function
             $rule =& $this->getRule('callback');
             $rule->addData($ruleName, $data1, $data2, 'function' == $type);
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['callback'];
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = $GLOBALS['_HTML_QuickForm_registered_rules']['callback'];
 
         } elseif (is_object($data1)) {
             // An instance of HTML_QuickForm_Rule
             $this->_rules[strtolower(get_class($data1))] = $data1;
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
 
         } else {
             // Rule class name
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
+            //$GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
         }
-    } // end func registerRule
+    }
 
     /**
      * Returns a reference to the requested rule object
@@ -119,20 +119,53 @@ class HTML_QuickForm_RuleRegistry
      */
     function &getRule($ruleName)
     {
-        list($class, $path) = $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName];
+        if (empty($ruleName)) {
+            return false;
+        }
+
+        $rules = array(
+            'required' => 'HTML_QuickForm_Rule_Required',
+            'maxlength' => 'HTML_QuickForm_Rule_Range',
+            'minlength' => 'HTML_QuickForm_Rule_Range',
+            'rangelength' => 'HTML_QuickForm_Rule_Range',
+            'email' => 'HTML_QuickForm_Rule_Email',
+            'regex' => 'HTML_QuickForm_Rule_Regex',
+            'lettersonly' => 'HTML_QuickForm_Rule_Regex',
+            'alphanumeric' => 'HTML_QuickForm_Rule_Regex',
+            'numeric' => 'HTML_QuickForm_Rule_Regex',
+            'nopunctuation' => 'HTML_QuickForm_Rule_Regex',
+            'nonzero' => 'HTML_QuickForm_Rule_Regex',
+            'callback' => 'HTML_QuickForm_Rule_Callback',
+            'compare' => 'HTML_QuickForm_Rule_Compare',
+            'date_compare' => 'HTML_QuickForm_Rule_DateCompare',
+            'comparedate' => 'HTML_QuickForm_Rule_CompareDate',
+            'errordate' => 'Html_Quickform_Rule_Date',
+            'captcha' => 'HTML_QuickForm_Rule_CAPTCHA',
+            'filetype' => 'HTML_QuickForm_Rule_Filetype',
+            'mobile_phone_number' => 'HTML_QuickForm_Rule_Mobile_Phone_Number',
+            'url' => 'HTML_QuickForm_Rule_Url',
+            'username' => 'HTML_QuickForm_Rule_Username',
+            'multiple_required' => 'HTML_QuickForm_Rule_MultipleRequired',
+            'datetime' => 'DateTimeRule',
+            'username_available' => 'HTML_QuickForm_Rule_UsernameAvailable',
+            'compare_fields' => 'HTML_QuickForm_Compare_Fields',
+            'html' => 'HTML_QuickForm_Rule_HTML',
+            'CAPTCHA' => 'HTML_QuickForm_Rule_CAPTCHA'
+        );
+
+        $class = $rules[$ruleName];
+
+        if (empty($class)) {
+            return false;
+        }
 
         if (!isset($this->_rules[$class])) {
-            if (!empty($path)) {
-                include_once($path);
-            }
-            // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
-            //$this->_rules[$class] =& new $class();
             $this->_rules[$class] = new $class();
-            //
         }
         $this->_rules[$class]->setName($ruleName);
+
         return $this->_rules[$class];
-    } // end func getRule
+    }
 
     /**
      * Performs validation on the given values

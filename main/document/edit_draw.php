@@ -14,7 +14,7 @@ require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/editdraw';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script();
+api_protect_course_script(true);
 api_block_anonymous_users();
 
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);

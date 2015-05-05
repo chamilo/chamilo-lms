@@ -187,7 +187,7 @@ if (!empty($selectedTeacher)) {
 
     if (!empty($courses)) {
         foreach ($courses as $course) {
-            $courseInfo = api_get_course_info($course['code']);
+            $courseInfo = api_get_course_info_by_id($course['real_id']);
 
             $totalTime = UserManager::getExpendedTimeInCourses(
                 $selectedTeacher,
@@ -219,11 +219,11 @@ if (!empty($selectedTeacher)) {
             'name' => $session['name']
         );
 
-        $courseInfo = api_get_course_info($course['course_code']);
+        $courseInfo = api_get_course_info_by_id($course['c_id']);
 
         $totalTime = UserManager::getExpendedTimeInCourses(
             $selectedTeacher,
-            $course['real_id'],
+            $course['c_id'],
             $session['id'],
             $selectedFrom,
             $selectedUntil
@@ -233,7 +233,7 @@ if (!empty($selectedTeacher)) {
         $timeReport->data[] = array(
             'session' => $sessionData,
             'course' => array(
-                'id' => $courseInfo['real_id'],
+                'id' => $course['c_id'],
                 'name' => $courseInfo['title']
             ),
             'coach' => $teacherData,
@@ -249,7 +249,11 @@ if (empty($selectedCourse) && empty($selectedSession) && empty($selectedTeacher)
                 'username' => $teacher['username'],
                 'completeName' => $teacher['completeName'],
             ),
-            'totalTime' => SessionManager::getTotalUserTimeInPlatform($teacher['user_id'], $selectedFrom, $selectedUntil)
+            'totalTime' => SessionManager::getTotalUserTimeInPlatform(
+                $teacher['user_id'],
+                $selectedFrom,
+                $selectedUntil
+            )
         );
     }
 }

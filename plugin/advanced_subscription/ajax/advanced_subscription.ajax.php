@@ -106,18 +106,8 @@ if ($verified) {
                 }
                 // Get student data
                 $studentArray = api_get_user_info($data['studentUserId']);
-                $studentArray['picture'] = UserManager::get_user_picture_path_by_id(
-                    $studentArray['user_id'],
-                    'web',
-                    false,
-                    true
-                );
-                $studentArray['picture'] = UserManager::get_picture_user(
-                    $studentArray['user_id'],
-                    $studentArray['picture']['file'],
-                    22,
-                    USER_IMAGE_SIZE_MEDIUM
-                );
+                $studentArray['picture'] = $studentArray['avatar'];
+
                 // Get superior data if exist
                 $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                 if (!empty($superiorId)) {
@@ -272,18 +262,7 @@ if ($verified) {
                     }
                     // Prepare student data
                     $studentArray = api_get_user_info($data['studentUserId']);
-                    $studentArray['picture'] = UserManager::get_user_picture_path_by_id(
-                        $studentArray['user_id'],
-                        'web',
-                        false,
-                        true
-                    );
-                    $studentArray['picture'] = UserManager::get_picture_user(
-                        $studentArray['user_id'],
-                        $studentArray['picture']['file'],
-                        22,
-                        USER_IMAGE_SIZE_MEDIUM
-                    );
+                    $studentArray['picture'] = $studentArray['avatar'];
                     // Prepare superior data
                     $superiorId = UserManager::getStudentBoss($data['studentUserId']);
                     if (!empty($superiorId)) {

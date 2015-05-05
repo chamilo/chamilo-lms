@@ -1,11 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-* This is the profile social main page
-* @author Julio Montoya <gugli100@gmail.com>
-* @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
-* @package chamilo.social
-*/
+ * This is the profile social main page
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
+ * @todo use Display::panel()
+ * @package chamilo.social
+ */
+
 $cidReset = true;
 require_once '../inc/global.inc.php';
 // Include OpenGraph NOT AVAILABLE
@@ -37,9 +40,20 @@ $social_session_block = null;
 
 if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp_name'])) {
     $messageId = 0;
-    $idMessage = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg_main'], $messageId, MESSAGE_STATUS_WALL_POST);
+    $idMessage = SocialManager::sendWallMessage(
+        api_get_user_id(),
+        $friendId,
+        $_POST['social_wall_new_msg_main'],
+        $messageId,
+        MESSAGE_STATUS_WALL_POST
+    );
     if (!empty($_FILES['picture']['tmp_name']) && $idMessage > 0) {
-        $error = SocialManager::sendWallMessageAttachmentFile(api_get_user_id(), $_FILES['picture'], $idMessage, $fileComment = '');
+        $error = SocialManager::sendWallMessageAttachmentFile(
+            api_get_user_id(),
+            $_FILES['picture'],
+            $idMessage,
+            $fileComment = ''
+        );
     }
 
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
@@ -49,7 +63,13 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
 
 } else if (!empty($_POST['social_wall_new_msg'])  && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
-    $res = SocialManager::sendWallMessage(api_get_user_id(), $friendId, $_POST['social_wall_new_msg'], $messageId , MESSAGE_STATUS_WALL);
+    $res = SocialManager::sendWallMessage(
+        api_get_user_id(),
+        $friendId,
+        $_POST['social_wall_new_msg'],
+        $messageId,
+        MESSAGE_STATUS_WALL
+    );
     $url = api_get_path(WEB_CODE_PATH) . 'social/profile.php';
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: ' . $url);
@@ -97,10 +117,10 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
             }
         }
     } else {
-        $user_info    = UserManager::get_user_info_by_id($user_id);
+        $user_info = UserManager::get_user_info_by_id($user_id);
     }
 } else {
-    $user_info    = UserManager::get_user_info_by_id($user_id);
+    $user_info = UserManager::get_user_info_by_id($user_id);
 }
 
 
@@ -119,7 +139,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH) . 'javascript/';
 api_block_anonymous_users();
-$locale = _api_get_locale_from_language();
+$locale = api_get_language_isocode();
 // Add Jquery scroll pagination plugin
 $htmlHeadXtra[] = api_get_js('jscroll/jquery.jscroll.js');
 // Add Jquery Time ago plugin
@@ -283,8 +303,9 @@ if ($show_full_profile) {
 $wallSocialAddPost = SocialManager::getWallForm();
 $social_wall_block = $wallSocialAddPost;
 
-//Social Post Wall
+// Social Post Wall
 $post_wall = SocialManager::getWallMessagesByUser($my_user_id, $friendId) ;
+
 $social_post_wall_block  = '<div class="panel panel-default social-post">';
 $social_post_wall_block .= '<div class="panel-heading">Mis publicaciones</div>';
 $social_post_wall_block .='<div class="panel-body">';
@@ -486,17 +507,14 @@ if ($show_full_profile) {
 
         $total = count($grid_my_groups);
         $i = 1;
-        foreach($grid_my_groups as $group) {
+        foreach ($grid_my_groups as $group) {
             $my_groups .= '<div class="panel-body">';
             $my_groups .=  $group[0];
             $my_groups .= '</div>';
-            if ($i < $total) {
-                $my_groups .=  ', ';
-            }
             $i++;
         }
         $my_groups .= '</div>';
-        $social_group_info_block =  $my_groups;
+        $social_group_info_block = $my_groups;
     }
 
     //Block Social Course
@@ -627,7 +645,7 @@ if ($show_full_profile) {
     $count_pending_invitations = 0;
     if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
         $pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-        $list_get_path_web     = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+        $list_get_path_web = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
         $count_pending_invitations = count($pending_invitations);
     }
 

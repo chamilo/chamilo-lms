@@ -15,15 +15,21 @@ require_once '../inc/global.inc.php';
 $charset = api_get_system_encoding();
 
 //replace image path
-$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path();
-$path_image_search='../../courses/'.api_get_course_path();
+$path_image = api_get_path(WEB_COURSE_PATH).api_get_course_path();
+$path_image_search = '../../courses/'.api_get_course_path();
 
 if (isset($_POST['glossary_id']) &&
     $_POST['glossary_id'] == strval(intval($_POST['glossary_id']))
 ) {
     $glossary_id= Security::remove_XSS($_POST['glossary_id']);
-    $glossary_description_by_id = GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
-    $glossary_description_by_id = str_replace($path_image_search,$path_image,$glossary_description_by_id);
+    $glossary_description_by_id = GlossaryManager::get_glossary_term_by_glossary_id(
+        $glossary_id
+    );
+    $glossary_description_by_id = str_replace(
+        $path_image_search,
+        $path_image,
+        $glossary_description_by_id
+    );
     echo api_xml_http_response_encode($glossary_description_by_id);
 } elseif (isset($_POST['glossary_data']) && $_POST['glossary_data']=='true') {
     //get_glossary_terms

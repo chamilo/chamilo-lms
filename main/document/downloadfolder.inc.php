@@ -6,7 +6,7 @@
  *	@package chamilo.document
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 set_time_limit(0);
 
@@ -112,8 +112,14 @@ if (api_is_allowed_to_edit()) {
     }
     $querypath = Database::escape_string($querypath);
     // Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT path, session_id, docs.id, props.to_group_id, docs.c_id
-            FROM $doc_table AS docs INNER JOIN $prop_table AS props
+    $sql = "SELECT
+                path,
+                docs.session_id,
+                docs.id,
+                props.to_group_id,
+                docs.c_id
+            FROM $doc_table AS docs
+            INNER JOIN $prop_table AS props
             ON
                 docs.id = props.ref AND
                 docs.c_id = props.c_id

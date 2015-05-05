@@ -156,8 +156,8 @@ class Link extends Model
         global $msgErr;
 
         $ok = true;
-        $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
+        $course_id = $_course['real_id'];
         $session_id = api_get_session_id();
 
         if ($type == 'link') {
@@ -231,8 +231,8 @@ class Link extends Model
                             LIBRARY_PATH
                         ) . 'specific_fields_manager.lib.php';
 
-                    $course_int_id = api_get_course_int_id();
-                    $courseid = api_get_course_id();
+                    $course_int_id = $_course['real_id'];
+                    $courseCode = $_course['code'];
                     $specific_fields = get_specific_field_list();
                     $ic_slide = new IndexableChunk();
 
@@ -251,7 +251,7 @@ class Link extends Model
                                     );
                                     add_specific_field_value(
                                         $specific_field['id'],
-                                        $courseid,
+                                        $courseCode,
                                         TOOL_LINK,
                                         $link_id,
                                         $sterm
@@ -263,10 +263,10 @@ class Link extends Model
 
                     // Build the chunk to index.
                     $ic_slide->addValue('title', $title);
-                    $ic_slide->addCourseId($courseid);
+                    $ic_slide->addCourseId($courseCode);
                     $ic_slide->addToolId(TOOL_LINK);
                     $xapian_data = array(
-                        SE_COURSE_ID => $courseid,
+                        SE_COURSE_ID => $courseCode,
                         SE_TOOL_ID => TOOL_LINK,
                         SE_DATA => array(
                             'link_id' => (int)$link_id
@@ -320,7 +320,7 @@ class Link extends Model
                             $sql,
                             $tbl_se_ref,
                             $course_int_id,
-                            $courseid,
+                            $courseCode,
                             TOOL_LINK,
                             $link_id,
                             $did
@@ -351,11 +351,11 @@ class Link extends Model
                 $order = intval($order);
                 $session_id = api_get_session_id();
                 $sql = "INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order, session_id)
-                        VALUES (" . $course_id . ",
+                        VALUES ($course_id,
                         '" . Database::escape_string($category_title) . "',
                         '" . Database::escape_string($description) . "',
                         '$order',
-                        '$session_id'
+                        $session_id
                         )";
                 Database:: query($sql);
                 $linkId = Database:: insert_id();
@@ -389,7 +389,7 @@ class Link extends Model
         $tbl_link = Database:: get_course_table(TABLE_LINK);
         $tbl_categories = Database:: get_course_table(TABLE_LINK_CATEGORY);
 
-        $course_id = api_get_course_int_id();
+        $course_id = $courseInfo['real_id'];
         $id = intval($id);
 
         if (empty($id)) {
@@ -508,8 +508,8 @@ class Link extends Model
     public static function editLink($id, $values = array())
     {
         $tbl_link = Database:: get_course_table(TABLE_LINK);
-        $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
+        $course_id = $_course['real_id'];
 
         $values['url'] = trim($values['url']);
         $values['title'] = trim($values['title']);

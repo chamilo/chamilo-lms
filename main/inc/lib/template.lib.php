@@ -432,16 +432,16 @@ class Template
 
         //Setting app paths/URLs
         $_p = array(
-            'web'        => api_get_path(WEB_PATH),
+            'web' => api_get_path(WEB_PATH),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
-            'web_main'   => api_get_path(WEB_CODE_PATH),
-            'web_css'    => api_get_path(WEB_CSS_PATH),
-            'web_ajax'   => api_get_path(WEB_AJAX_PATH),
-            'web_img'    => api_get_path(WEB_IMG_PATH),
+            'web_main' => api_get_path(WEB_CODE_PATH),
+            'web_css' => api_get_path(WEB_CSS_PATH),
+            'web_ajax' => api_get_path(WEB_AJAX_PATH),
+            'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_lib'    => api_get_path(WEB_LIBRARY_PATH),
-            'web_data'   => api_get_path(WEB_DATA_PATH),
+            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
@@ -521,7 +521,7 @@ class Template
         global $disable_js_and_css_files;
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/default.css');
 
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';

@@ -184,7 +184,7 @@ switch ($action) {
         }
         break;
     case 'update_question_order':
-        $course_info = api_get_course_info($course_code);
+        $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
         $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
 
@@ -221,7 +221,7 @@ switch ($action) {
         }
         break;
     case 'save_exercise_by_now':
-        $course_info = api_get_course_info($course_code);
+        $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
 
         // Use have permissions?

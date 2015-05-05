@@ -11,8 +11,9 @@
 {% block footer %}
     {#  Footer  #}
     {% if show_footer == true %}
+        </div> <!-- end of #col" -->
         </div> <!-- end of #row" -->
-        </div> <!-- end of #main" -->
+        </div> <!-- end of #container" -->
     {% endif %}
     {% include template ~ "/layout/main_footer.tpl" %}
 {% endblock %}

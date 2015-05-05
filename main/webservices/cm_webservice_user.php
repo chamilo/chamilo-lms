@@ -17,7 +17,7 @@ class WSCMUser extends WSCM {
         {
 
             $listResult = "#";
-            
+
             $listArrayResult = Array();
             $listArray = Array();
 
@@ -52,24 +52,23 @@ class WSCMUser extends WSCM {
 
     public function get_link_user_picture($username, $password, $id)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
-            $userPic = UserManager::get_user_picture_path_by_id($id, "web");
-            if(empty ($userPic['file']))
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $userPic = UserManager::getUserPicture($id);
+            if (empty ($userPic)) {
                 return "0";
-            return $userPic['dir'].$userPic['file'];
+            }
+
+            return $userPic;
         }
+
         return "0";
     }
 
     public function get_user_name($username, $password, $id, $field)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
+        if($this->verifyUserPass($username, $password) == "valid") {
             $userInfo = UserManager::get_user_info_by_id($id);
-            switch ($field)
-            {
-
+            switch ($field) {
                 case 'firstname':
                     return $userInfo['firstname'];
                     break;
@@ -85,49 +84,52 @@ class WSCMUser extends WSCM {
                 default :
                     return $userInfo['firstname'];
             }
+
             return "0";
         }
+
         return "0";
     }
 
     public function send_invitation($username, $password, $userfriend_id, $content_message = '')
     {
         global $charset;
-        if($this->verifyUserPass($username, $password) == "valid")
-        { 
-		$user_id = UserManager::get_user_id_from_username($username); 
-                $message_title = get_lang('Invitation'); 
-                $count_is_true = SocialManager::send_invitation_friend($user_id,$userfriend_id, $message_title, $content_message);
+        if ($this->verifyUserPass($username, $password) == "valid") {
+		    $user_id = UserManager::get_user_id_from_username($username);
+            $message_title = get_lang('Invitation');
+            $count_is_true = SocialManager::send_invitation_friend($user_id,$userfriend_id, $message_title, $content_message);
 
-                if ($count_is_true) {
-                        return Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
-                }else {
-                        return Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
-                }
+            if ($count_is_true) {
+                return Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
+            } else {
+                return Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
+            }
         }
         return get_lang('InvalidId');
     }
 
     public function accept_friend($username, $password, $userfriend_id)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
             UserManager::relate_users($userfriend_id, $user_id, USER_RELATION_TYPE_FRIEND);
             SocialManager::invitation_accepted($userfriend_id, $user_id);
+
             return get_lang('AddedContactToList');
         }
+
         return get_lang('InvalidId');
     }
 
     public function denied_invitation($username, $password, $userfriend_id)
     {
-        if($this->verifyUserPass($username, $password) == "valid")
-        {
+        if ($this->verifyUserPass($username, $password) == "valid") {
             $user_id = UserManager::get_user_id_from_username($username);
             SocialManager::invitation_denied($userfriend_id, $user_id);
+
             return get_lang('InvitationDenied');
         }
+
         return get_lang('InvalidId');
     }
 
@@ -141,7 +143,8 @@ class WSCMUser extends WSCM {
      *@todo Use the UserManager class
      * @todo security filter order by
     */
-    private static function get_user_list_like_start($conditions = array(), $order_by = array()) {
+    private static function get_user_list_like_start($conditions = array(), $order_by = array())
+    {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -161,7 +164,7 @@ class WSCMUser extends WSCM {
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.$order;
         }
-        
+
         $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
             $return_array[] = $result;
@@ -169,7 +172,7 @@ class WSCMUser extends WSCM {
         return $return_array;
     }
 
- 
+
 }
 
 /*
@@ -180,5 +183,3 @@ $aqui = new WSCMUser();
 //print_r($aqui->send_invitation("marco", "c4ca4238a0b923820dcc509a6f75849b", "1", "oia ai"));
 print_r($aqui->denied_invitation("admin", "c4ca4238a0b923820dcc509a6f75849b", "3"));
 */
-
-?>

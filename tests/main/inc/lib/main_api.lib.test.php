@@ -488,7 +488,7 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGetThemes(){
-		$cssdir= api_get_path(SYS_PATH).'main/css/';
+		$cssdir= api_get_path(SYS_CSS_PATH);
 		$res=api_get_themes();
 		$this->assertTrue($res);
 		$this->assertTrue($cssdir);
@@ -706,11 +706,6 @@ class TestMainApi extends UnitTestCase {
 
 	function testApiRequestUri(){
 		$res = api_request_uri();
-		$this->assertTrue($res);
-	}
-
-	function testApiCreateIncludePathSetting(){
-		$res=api_create_include_path_setting();
 		$this->assertTrue($res);
 	}
 

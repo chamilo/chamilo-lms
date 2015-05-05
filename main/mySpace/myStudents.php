@@ -467,31 +467,9 @@ if (!empty($student_id)) {
     echo '<table width="100%" border="0">';
     echo '<tr>';
 
-    $gravatarEnabled = api_get_configuration_value('gravatar_enabled');
-    $image_array = UserManager :: get_user_picture_path_by_id($user_info['user_id'], 'web', false, true);
-    echo '<td class="borderRight" width="10%" valign="top">';
+    $userPicture = UserManager::getUserPicture($user_info['user_id']);
+    echo '<img src="' . $userPicture . '" />';
 
-    // get the path,width and height from original picture
-    $image_file = $image_array['dir'] . $image_array['file'];
-    $big_image = $image_array['dir'] . 'big_' . $image_array['file'];
-    $big_image_size = api_getimagesize($big_image);
-    $big_image_width = $big_image_size['width'];
-    $big_image_height = $big_image_size['height'];
-    $url_big_image = $image_file;
-    if (!$gravatarEnabled) {
-        $url_big_image = $big_image.'?rnd=' . time();
-        $image_file .= '?rnd=' . time();
-    }
-
-    $img_attributes = 'src="' . $image_file . '" ' .
-        'alt="' . $user_info['complete_name']. '" ' .
-        'style="float:' . ($text_dir == 'rtl' ? 'right' : 'left') . '; padding:5px;" ';
-
-    if ($image_array['file'] == 'unknown.jpg') {
-        echo '<img ' . $img_attributes . ' />';
-    } else {
-        echo '<input type="image" ' . $img_attributes . ' onclick="javascript: return show_image(\'' . $url_big_image . '\',\'' . $big_image_width . '\',\'' . $big_image_height . '\');"/>';
-    }
     echo '</td>';
     ?>
     <td width="40%" valign="top">

@@ -293,8 +293,8 @@ class Attendance
 		$table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$session_id = api_get_session_id();
 		$user_id = api_get_user_id();
-		$course_code = api_get_course_id();
-		$course_id = api_get_course_int_id();
+		$course_code = $_course['code'];
+		$course_id = $_course['real_id'];
 		$title_gradebook= Database::escape_string($this->attendance_qualify_title);
 		$value_calification  = 0;
 		$weight_calification =	floatval($this->attendance_weight);
@@ -364,8 +364,8 @@ class Attendance
 		$session_id         = api_get_session_id();
 		$user_id            = api_get_user_id();
 		$attendance_id      = intval($attendance_id);
-		$course_code        = api_get_course_id();
-		$course_id          = api_get_course_int_id();
+		$course_code        = $_course['code'];
+		$course_id          = $_course['real_id'];
 		$title_gradebook	= Database::escape_string($this->attendance_qualify_title);
 		$value_calification = 0;
 		$weight_calification= floatval($this->attendance_weight);
@@ -418,7 +418,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id = api_get_user_id();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -456,7 +456,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id 		= api_get_user_id();
-		$course_id      = api_get_course_int_id();
+		$course_id      = $_course['real_id'];
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -500,7 +500,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id = api_get_user_id();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 		$status = intval($status);
 
 		$action = 'visible';
@@ -615,6 +615,8 @@ class Attendance
 		foreach ($a_course_users as $key => $user_data) {
 			$value = array();
 			$uid = $user_data['user_id'];
+			$userInfo = api_get_user_info($uid);
+
 			$status = $user_data['status'];
 
 			if (!empty($groupId)) {
@@ -654,16 +656,7 @@ class Attendance
 				$value['result_color_bar'] 	= $user_faults['color_bar'];
 			}
 
-			// user's picture
-			$image_path = UserManager::get_user_picture_path_by_id($uid, 'web', false);
-			$user_profile = UserManager::get_picture_user($uid, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-
-			if (!empty($image_path['file'])) {
-				$photo = '<center><a class="ajax" href="'.$image_path['dir'].$image_path['file'].'"  >
-						  <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></a></center>';
-			} else {
-				$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'"  title="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" /></center>';
-			}
+			$photo = '<img src ="'.$userInfo['avatar_small'].'" />';
 
 			$value['photo'] = $photo;
 			$value['firstname'] = $user_data['firstname'];

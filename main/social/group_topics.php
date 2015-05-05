@@ -49,6 +49,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     }
 }
 
+$content = null;
+
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 

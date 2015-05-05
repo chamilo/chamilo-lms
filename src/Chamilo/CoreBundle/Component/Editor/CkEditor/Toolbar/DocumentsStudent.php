@@ -24,6 +24,7 @@ class DocumentsStudent extends Basic
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
+        $config['extraPlugins'] = $this->getPluginsToString();
         $config['fullPage'] = true;
 
         return $config;
@@ -36,7 +37,7 @@ class DocumentsStudent extends Basic
     protected function getMaximizedToolbar()
     {
         return [
-            ['Save', 'NewPage', 'Templates', '-', 'Preview', 'Print'],
+            ['NewPage', 'Templates', '-', 'Preview', 'Print'],
             ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
             ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
@@ -56,9 +57,28 @@ class DocumentsStudent extends Basic
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
+            [
+                'BulletedList',
+                'NumberedList',
+                'HorizontalRule',
+                '-',
+                'Outdent',
+                'Indent',
+                'Blockquote',
+            ],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
+            [
+                'Bold',
+                'Italic',
+                'Underline',
+                'Strike',
+                '-',
+                'Subscript',
+                'Superscript',
+                '-',
+                'TextColor',
+                'BGColor',
+            ],
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
@@ -75,9 +95,26 @@ class DocumentsStudent extends Basic
         return [
             ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
+            [
+                'Image',
+                'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'Audio',
+                'Asciimath',
+            ],
             ['Table', 'SpecialChar'],
-            ['Outdent', 'Indent', '-', 'TextColor', 'BGColor', '-', 'OrderedList', 'UnorderedList'],
+            [
+                'Outdent',
+                'Indent',
+                '-',
+                'TextColor',
+                'BGColor',
+                '-',
+                'OrderedList',
+                'UnorderedList',
+            ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
@@ -95,10 +132,28 @@ class DocumentsStudent extends Basic
         return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Flash',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
+            [
+                'Format',
+                'Font',
+                'FontSize',
+                'Bold',
+                'Italic',
+                'Underline',
+                'TextColor',
+                'BGColor',
+            ],
             ['Toolbarswitch']
         ];
     }

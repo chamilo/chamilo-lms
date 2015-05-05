@@ -675,7 +675,6 @@ class Event
                 unset($event_value['firstName']);
                 unset($event_value['lastName']);
                 unset($event_value['avatar_small']);
-                unset($event_value['avatar_sys_path']);
                 unset($event_value['avatar']);
                 unset($event_value['mail']);
                 unset($event_value['password']);

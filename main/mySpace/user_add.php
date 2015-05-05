@@ -129,9 +129,9 @@ $form->addRule('email', get_lang('EmailWrong'), 'required');
 // Phone
 $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 // Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'));
+/*$form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);*/
 // Username
 $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
@@ -226,14 +226,6 @@ if ($form->validate()) {
 		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 		$picture_uri = '';
-		if (strlen($picture['name']) > 0) {
-			if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')) {
-				mkdir(api_get_path(SYS_CODE_PATH).'upload/users/', api_get_permissions_for_new_directories());
-			}
-			$picture_uri = uniqid('').'_'.api_replace_dangerous_char($picture['name']);
-			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
-			move_uploaded_file($picture['tmp_name'], $picture_location);
-		}
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
 		$official_code = $user['official_code'];
@@ -261,7 +253,22 @@ if ($form->validate()) {
 		// default status = student
 		$status = 5;
 		//create user
-		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
+		$user_id = UserManager::create_user(
+			$firstname,
+			$lastname,
+			$status,
+			$email,
+			$username,
+			$password,
+			$official_code,
+			api_get_setting('platformLanguage'),
+			$phone,
+			$picture_uri,
+			$auth_source,
+			$expiration_date,
+			$active,
+			$hr_dept_id
+		);
 
 		//adding to the session
 		if (api_is_session_admin()) {

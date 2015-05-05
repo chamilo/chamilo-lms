@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
  * Class Display
@@ -761,7 +761,7 @@ class Display
             $size = ICON_SIZE_SMALL;
         }
 
-        //Checking the theme icons folder example: main/css/chamilo/icons/XXX
+        //Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
         if (is_file($code_path.$theme.$size_extra.$image)) {
             $icon = $w_code_path.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {

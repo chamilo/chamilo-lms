@@ -3,13 +3,12 @@
 
 namespace Chamilo\CoreBundle\Component\Editor;
 
-use Doctrine\ORM\EntityManager;
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Course;
-
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Routing\Router;
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Routing\Router;
+use Symfony\Component\Translation\Translator;
+
 //use Symfony\Component\Security\Core\SecurityContext;
 
 /**
@@ -51,7 +50,7 @@ class Connector
         $this->paths = array(
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias
-            'sys_data_path' => api_get_path(SYS_COURSE_PATH),
+            'sys_course_path' => api_get_path(SYS_COURSE_PATH),
          //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']

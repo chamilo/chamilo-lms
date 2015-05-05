@@ -58,22 +58,6 @@ class FormValidator extends HTML_QuickForm
 
         parent::__construct($name, $method, $action, $target, $attributes, $trackSubmit);
 
-        // Load some custom elements and rules
-        $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
-
-        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
-        $this->registerRule('datetime', null, 'DateTimeRule', $dir . 'Rule/DateTimeRule.php');
-        $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
-        $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
-        $this->registerRule('username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable', $dir . 'Rule/UsernameAvailable.php');
-        $this->registerRule('username', null, 'HTML_QuickForm_Rule_Username', $dir . 'Rule/Username.php');
-        $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/Filetype.php');
-        $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
-        $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
-        $this->registerRule('mobile_phone_number', null, 'HTML_QuickForm_Rule_Mobile_Phone_Number', $dir . 'Rule/MobilePhoneNumber.php');
-        $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
-        $this->registerRule('CAPTCHA', 'rule', 'HTML_QuickForm_Rule_CAPTCHA', 'HTML/QuickForm/Rule/CAPTCHA.php');
-
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
@@ -692,7 +676,7 @@ EOT;
     /**
      * Adds a HTML-editor to the form
      * @param string $name
-     * @param string $label				 The label for the form-element
+     * @param string $label The label for the form-element
      * @param bool   $required	(optional) Is the form-element required (default=true)
      * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page.
      * @param array  $config (optional) Configuration settings for the online editor.
@@ -711,7 +695,7 @@ EOT;
         $element = $this->getElement($name);
 
         if ($fullPage) {
-            $config['FullPage'] = true;
+            $config['fullPage'] = true;
         }
 
         if ($element->editor) {

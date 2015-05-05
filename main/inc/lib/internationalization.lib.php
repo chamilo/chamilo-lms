@@ -66,42 +66,6 @@ define('LANGUAGE_DETECT_MAX_LENGTH', 2000);
 // $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
 define('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
-/**
- * Initialization of some internal default values in the internationalization library.
- * @return void
- * Note: This function should be called only once in the global initialization script.
- */
-function api_initialize_internationalization()
-{
-    if (MBSTRING_INSTALLED) {
-        @ini_set('mbstring.func_overload', 0);
-        @ini_set('mbstring.encoding_translation', 0);
-        @ini_set('mbstring.http_input', 'pass');
-        @ini_set('mbstring.http_output', 'pass');
-        @ini_set('mbstring.language', 'neutral');
-    }
-    api_set_internationalization_default_encoding('UTF-8');
-}
-
-/**
- * Sets the internal default encoding for the multi-byte string functions.
- * @param string $encoding		The specified default encoding.
- * @return string				Returns the old value of the default encoding.
- */
-function api_set_internationalization_default_encoding($encoding) {
-    $encoding = api_refine_encoding_id($encoding);
-    $result = _api_mb_internal_encoding();
-    _api_mb_internal_encoding($encoding);
-    _api_mb_regex_encoding($encoding);
-    //_api_iconv_set_encoding('iconv_internal_encoding', $encoding);
-
-    return $result;
-}
-
-/**
- * Language support
- */
-
 // These variables are for internal purposes only, they serve the function api_is_translated().
 $_api_is_translated = false;
 $_api_is_translated_call = false;
@@ -272,27 +236,31 @@ function get_lang($variable, $reserved = null, $language = null) {
 
 /**
  * Gets the current interface language.
- * @param bool $purified (optional)	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
+ * @param bool $purified (optional)	When it is true, a purified (refined)
+ * language value will be returned, for example 'french' instead of 'french_unicode'.
  * @return string					The current language of the interface.
  */
-function api_get_interface_language($purified = false, $check_sub_language = false) {
+function api_get_interface_language($purified = false, $check_sub_language = false)
+{
     global $language_interface;
 
     if (empty($language_interface)) {
         return 'english';
     }
 
-    //1. Checking if current language is supported
-    $language_is_supported = api_is_language_supported($language_interface);
-
-    if ($check_sub_language && !$language_is_supported) {
+    if ($check_sub_language) {
         static $parent_language_name = null;
 
         if (!isset($parent_language_name)) {
-            //2. The current language is a sub language so we grab the father's setting according to the internalization_database/name_order_convetions.php file
-            $language_id   = api_get_language_id($language_interface);
+            // 2. The current language is a sub language so we grab the father's
+            // setting according to the internalization_database/name_order_convetions.php file
+            $language_id = api_get_language_id($language_interface);
             $language_info = api_get_language_info($language_id);
-            if (!empty($language_id) && !empty($language_info)) {
+
+            if (!empty($language_id) &&
+                !empty($language_info) &&
+                !empty($language_info['parent_id'])) {
+
                 $language_info = api_get_language_info($language_info['parent_id']);
                 $parent_language_name = $language_info['english_name'];
                 if (!empty($parent_language_name)) {
@@ -304,42 +272,11 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             return $parent_language_name;
         }
     } else {
-        //2. Normal way
+        // 2. Normal way
         $interface_language = $purified ? api_purify_language_id($language_interface) : $language_interface;
     }
+
     return $interface_language;
-}
-
-/**
- * Checks whether a given language identificator represents supported by *this library* language.
- * @param string $language		The language identificator to be checked ('english', 'french', 'spanish', ...).
- * @return bool $language		TRUE if the language is supported, FALSE otherwise.
- */
-function api_is_language_supported($language) {
-    static $supported = array();
-    if (!isset($supported[$language])) {
-        $supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
-    }
-    return $supported[$language];
-}
-
-/**
- * Validates the input language identificator in order always to return a language that is enabled in the system.
- * This function is to be used for data import when provided language identificators should be validated.
- * @param string $language		The language identificator to be validated.
- * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
- */
-function api_get_valid_language($language) {
-    static $enabled_languages;
-    if (!isset($enabled_languages)) {
-        $enabled_languages_info = api_get_languages();
-        $enabled_languages = $enabled_languages_info['folder'];
-    }
-    $language = str_replace('_km', '_KM', strtolower(trim($language)));
-    if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
-        $language = api_get_setting('platformLanguage');
-    }
-    return $language;
 }
 
 /**
@@ -416,14 +353,7 @@ function api_get_platform_isocodes() {
  */
 function api_get_text_direction($language = null) {
     static $text_direction = array();
-    /*
-     * Not necessary to validate the language because the list if rtl/ltr is harcoded
-     *
-    /*
-     $language_is_supported = api_is_language_supported($language);
-    if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }*/
+
     if (empty($language)) {
     	$language = api_get_interface_language();
     }
@@ -976,13 +906,9 @@ function api_get_person_name(
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
-    $language_is_supported = api_is_language_supported($language);
-    if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
 
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
+    if (empty($language)) {
+        $language = api_get_interface_language(false, true);
     }
 
     if (!isset($valid[$format][$language])) {
@@ -1020,16 +946,16 @@ function api_get_person_name(
     $values = array(
         $first_name,
         $first_name,
-        api_strtoupper($first_name, $encoding),
+        api_strtoupper($first_name),
         $last_name,
         $last_name,
-        api_strtoupper($last_name, $encoding),
+        api_strtoupper($last_name),
         $title,
         $title,
-        api_strtoupper($title, $encoding),
+        api_strtoupper($title),
         $username,
         $username,
-        api_strtoupper($username, $encoding),
+        api_strtoupper($username),
     );
     $person_name = str_replace($keywords, $values, $format);
     return _api_clean_person_name($person_name);
@@ -1049,9 +975,7 @@ function api_is_western_name_order($format = null, $language = null) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
 
-    $language_is_supported = api_is_language_supported($language);
-
-    if (!$language_is_supported || empty($language)) {
+    if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
     if (!isset($order[$format][$language])) {
@@ -1078,8 +1002,7 @@ function api_sort_by_first_name($language = null) {
 
     static $sort_by_first_name = array();
 
-    $language_is_supported = api_is_language_supported($language);
-    if (!$language_is_supported || empty($language)) {
+    if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
     if (!isset($sort_by_first_name[$language])) {
@@ -1126,29 +1049,6 @@ function api_byte_count(& $string) {
 function api_convert_encoding($string, $to_encoding, $from_encoding = null)
 {
     return mb_convert_encoding($string, $to_encoding, $from_encoding);
-    /*
-    if (empty($from_encoding)) {
-        $from_encoding = _api_mb_internal_encoding();
-    }
-    if (api_equal_encodings($to_encoding, $from_encoding)) {
-        return $string; // When conversion is not needed, the string is returned directly, without validation.
-    }
-    if (_api_mb_supports($to_encoding) && _api_mb_supports($from_encoding)) {
-        return @mb_convert_encoding($string, $to_encoding, $from_encoding);
-    }
-    if (_api_iconv_supports($to_encoding) && _api_iconv_supports($from_encoding)) {
-        return @iconv($from_encoding, $to_encoding, $string);
-    }
-    if (api_is_utf8($to_encoding) && api_is_latin1($from_encoding, true)) {
-        return utf8_encode($string);
-    }
-    if (api_is_latin1($to_encoding, true) && api_is_utf8($from_encoding)) {
-        return utf8_decode($string);
-    }
-    if (_api_convert_encoding_supports($to_encoding) && _api_convert_encoding_supports($from_encoding)) {
-        return _api_convert_encoding($string, $to_encoding, $from_encoding);
-    }
-    return $string; // Here the function gives up.*/
 }
 
 /**
@@ -1159,28 +1059,9 @@ function api_convert_encoding($string, $to_encoding, $from_encoding = null)
  * This function is aimed at replacing the function utf8_encode() for human-language strings.
  * @link http://php.net/manual/en/function.utf8-encode
  */
-function api_utf8_encode($string, $from_encoding = null) {
+function api_utf8_encode($string, $from_encoding = 'UTF-8')
+{
     return mb_convert_encoding($string, 'UTF-8', $from_encoding);
-
-    /*if (empty($from_encoding)) {
-        $from_encoding = _api_mb_internal_encoding();
-    }
-    if (api_is_utf8($from_encoding)) {
-        return $string; // When conversion is not needed, the string is returned directly, without validation.
-    }
-    if (_api_mb_supports($from_encoding)) {
-        return @mb_convert_encoding($string, 'UTF-8', $from_encoding);
-    }
-    if (_api_iconv_supports($from_encoding)) {
-        return @iconv($from_encoding, 'UTF-8', $string);
-    }
-    if (api_is_latin1($from_encoding, true)) {
-        return utf8_encode($string);
-    }
-    if (_api_convert_encoding_supports($from_encoding)) {
-        return _api_convert_encoding($string, 'UTF-8', $from_encoding);
-    }
-    return $string; // Here the function gives up.*/
 }
 
 /**
@@ -1191,30 +1072,9 @@ function api_utf8_encode($string, $from_encoding = null) {
  * This function is aimed at replacing the function utf8_decode() for human-language strings.
  * @link http://php.net/manual/en/function.utf8-decode
  */
-function api_utf8_decode($string, $to_encoding = null) {
-
+function api_utf8_decode($string, $to_encoding = null)
+{
     return mb_convert_encoding($string, $to_encoding, 'UTF-8');
-
-    /*
-    if (empty($to_encoding)) {
-        $to_encoding = _api_mb_internal_encoding();
-    }
-    if (api_is_utf8($to_encoding)) {
-        return $string; // When conversion is not needed, the string is returned directly, without validation.
-    }
-    if (_api_mb_supports($to_encoding)) {
-        return @mb_convert_encoding($string, $to_encoding, 'UTF-8');
-    }
-    if (_api_iconv_supports($to_encoding)) {
-        return @iconv('UTF-8', $to_encoding, $string);
-    }
-    if (api_is_latin1($to_encoding, true)) {
-        return utf8_decode($string);
-    }
-    if (_api_convert_encoding_supports($to_encoding)) {
-        return _api_convert_encoding($string, $to_encoding, 'UTF-8');
-    }
-    return $string; // Here the function gives up.*/
 }
 
 /**
@@ -1229,29 +1089,9 @@ function api_utf8_decode($string, $to_encoding = null) {
  * @param bool $check_utf8_validity (optional)	A flag for UTF-8 validity check as condition for making conversion.
  * @return string								Returns the converted string.
  */
-function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false) {
+function api_to_system_encoding($string, $from_encoding = null, $check_utf8_validity = false)
+{
     $system_encoding = api_get_system_encoding();
-    if (empty($from_encoding)) {
-        if (api_is_utf8($system_encoding)) {
-            $from_encoding = api_get_non_utf8_encoding();
-        } else {
-            $from_encoding = 'UTF-8';
-        }
-    }
-    if (api_equal_encodings($system_encoding, $from_encoding)) {
-        return $string;
-    }
-    if ($check_utf8_validity) {
-        if (api_is_utf8($system_encoding)) {
-            if (api_is_valid_utf8($string)) {
-                return $string;
-            }
-        } elseif (api_is_utf8($from_encoding)) {
-            if (!api_is_valid_utf8($string)) {
-                return $string;
-            }
-        }
-    }
     return api_convert_encoding($string, $system_encoding, $from_encoding);
 }
 
@@ -1259,18 +1099,14 @@ function api_to_system_encoding($string, $from_encoding = null, $check_utf8_vali
  * Converts all applicable characters to HTML entities.
  * @param string $string				The input string.
  * @param int $quote_style (optional)	The quote style - ENT_COMPAT (default), ENT_QUOTES, ENT_NOQUOTES.
- * @param string $encoding (optional)	The encoding (of the input string) used in conversion. If it is omited, the platform character set is assumed.
+ * @param string $encoding (optional)	The encoding (of the input string) used in conversion.
+ * If it is omited, the platform character set is assumed.
  * @return string						Returns the converted string.
  * This function is aimed at replacing the function htmlentities() for human-language strings.
  * @link http://php.net/manual/en/function.htmlentities
  */
-function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) {
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (!api_is_utf8($encoding) && _api_html_entity_supports($encoding)) {
-        return htmlentities($string, $quote_style, $encoding);
-    }
+function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8')
+{
     switch($quote_style) {
         case ENT_COMPAT:
             $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
@@ -1279,25 +1115,8 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
             $string = str_replace(array('&', '\'', '"', '<', '>'), array('&amp;', '&#039;', '&quot;', '&lt;', '&gt;'), $string);
             break;
     }
-    if (_api_mb_supports($encoding)) {
-        if (!api_is_utf8($encoding)) {
-            $string = api_utf8_encode($string, $encoding);
-        }
-        $string = @mb_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
-        if (!api_is_utf8($encoding)) { // Just in case.
-            $string = api_utf8_decode($string, $encoding);
-        }
-    } elseif (_api_convert_encoding_supports($encoding)) {
-        if (!api_is_utf8($encoding)) {
-            $string = _api_convert_encoding($string, 'UTF-8', $encoding);
-        }
-        $string = implode(array_map('_api_html_entity_from_unicode', _api_utf8_to_unicode($string)));
-        if (!api_is_utf8($encoding)) { // Just in case.
-            $string = _api_convert_encoding($string, $encoding, 'UTF-8');
-        }
-    }
 
-    return $string;
+    return mb_convert_encoding(api_utf8_encode($string, $encoding), 'HTML-ENTITIES', 'UTF-8');
 }
 
 /**
@@ -1312,9 +1131,6 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = null) {
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_html_entity_supports($encoding)) {
-        return html_entity_decode($string, $quote_style, $encoding);
     }
     if (api_is_encoding_supported($encoding)) {
         if (!api_is_utf8($encoding)) {
@@ -1335,7 +1151,7 @@ function api_html_entity_decode($string, $quote_style = ENT_COMPAT, $encoding = 
  * @param string $from_encoding (optional)	The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
  * @return string							Returns the converted string.
  */
-function api_xml_http_response_encode($string, $from_encoding = null) {
+function api_xml_http_response_encode($string, $from_encoding = 'UTF8') {
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         if (empty($from_encoding)) {
             $from_encoding = _api_mb_internal_encoding();
@@ -1346,7 +1162,6 @@ function api_xml_http_response_encode($string, $from_encoding = null) {
     }
     return $string;
 }
-
 
 /**
  * Transliterates a string with arbitrary encoding into a plain ASCII string.
@@ -1364,18 +1179,6 @@ function api_xml_http_response_encode($string, $from_encoding = null) {
  * @param string $from_encoding (optional)	The encoding of the input string. If it is omited, the platform character set is assumed.
  * @return string							Plain ASCII output.
  *
- * Based on Drupal's module "Transliteration", version 6.x-2.1, 09-JUN-2009:
- * @author Stefan M. Kudwien (smk-ka)
- * @author Daniel F. Kudwien (sun)
- * @link http://drupal.org/project/transliteration
- *
- * See also MediaWiki's UtfNormal.php and CPAN's Text::Unidecode library
- * @link http://www.mediawiki.org
- * @link http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
- *
- * Adaptation for Chamilo 1.8.7, 2010
- * Initial implementation for Dokeos 1.8.6.1, 12-JUN-2009
- * @author Ivan Tcholakov
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null)
 {
@@ -1396,7 +1199,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null)
  * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
  */
 function api_ord($character, $encoding) {
-    return _api_utf8_ord(api_utf8_encode($character, $encoding));
+    return Patchwork\Utf8::ord(api_utf8_encode($character, $encoding));
 }
 
 /**
@@ -1420,64 +1223,9 @@ function api_ord($character, $encoding) {
  * Initial implementation Dokeos LMS, August 2009
  * @author Ivan Tcholakov
  */
-function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
-    return str_ireplace($search, $replace, $subject, $count);
-    /*
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (api_is_encoding_supported($encoding)) {
-        if (!is_array($search) && !is_array($replace)) {
-            if (!api_is_utf8($encoding)) {
-                $search = api_utf8_encode($search, $encoding);
-            }
-            $slen = api_byte_count($search);
-            if ( $slen == 0 ) {
-                return $subject;
-            }
-            if (!api_is_utf8($encoding)) {
-                $replace = api_utf8_encode($replace, $encoding);
-                $subject = api_utf8_encode($subject, $encoding);
-            }
-            $lendif = api_byte_count($replace) - api_byte_count($search);
-            $search = api_strtolower($search, 'UTF-8');
-            $search = preg_quote($search);
-            $lstr = api_strtolower($subject, 'UTF-8');
-            $i = 0;
-            $matched = 0;
-            while (preg_match('/(.*)'.$search.'/Us', $lstr, $matches) ) {
-                if ($i === $count) {
-                    break;
-                }
-                $mlen = api_byte_count($matches[0]);
-                $lstr = substr($lstr, $mlen);
-                $subject = substr_replace($subject, $replace, $matched + api_byte_count($matches[1]), $slen);
-                $matched += $mlen + $lendif;
-                $i++;
-            }
-            if (!api_is_utf8($encoding)) {
-                $subject = api_utf8_decode($subject, $encoding);
-            }
-            return $subject;
-        } else {
-            foreach (array_keys($search) as $k) {
-                if (is_array($replace)) {
-                    if (array_key_exists($k, $replace)) {
-                        $subject = api_str_ireplace($search[$k], $replace[$k], $subject, $count);
-                    } else {
-                        $subject = api_str_ireplace($search[$k], '', $subject, $count);
-                    }
-                } else {
-                    $subject = api_str_ireplace($search[$k], $replace, $subject, $count);
-                }
-            }
-            return $subject;
-        }
-    }
-    if (is_null($count)) {
-        return str_ireplace($search, $replace, $subject);
-    }
-    return str_ireplace($search, $replace, $subject, $count);*/
+function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null)
+{
+    return Utf8::str_ireplace($search, $replace, $subject, $count);
 }
 
 /**
@@ -1494,40 +1242,9 @@ function api_str_ireplace($search, $replace, $subject, & $count = null, $encodin
  * This function is aimed at replacing the function str_split() for human-language strings.
  * @link http://php.net/str_split
  */
-function api_str_split($string, $split_length = 1, $encoding = null) {
-    return str_split($string, $split_length);
-    /*
-    if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (empty($string)) {
-        return array();
-    }
-    if ($split_length < 1) {
-        return false;
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return str_split($string, $split_length);
-    }
-    if (api_is_encoding_supported($encoding)) {
-        $len = api_strlen($string);
-        if ($len <= $split_length) {
-            return array($string);
-        }
-        if (!api_is_utf8($encoding)) {
-            $string = api_utf8_encode($string, $encoding);
-        }
-        if (preg_match_all('/.{'.$split_length.'}|[^\x00]{1,'.$split_length.'}$/us', $string, $result) === false) {
-            return array();
-        }
-        if (!api_is_utf8($encoding)) {
-            global $_api_encoding;
-            $_api_encoding = $encoding;
-            $result = _api_array_utf8_decode($result[0]);
-        }
-        return $result[0];
-    }
-    return str_split($string, $split_length);*/
+function api_str_split($string, $split_length = 1, $encoding = null)
+{
+    return Utf8::str_split($string, $split_length);
 }
 
 /**
@@ -1542,15 +1259,9 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
  * @link http://php.net/manual/en/function.stripos
  * @link http://php.net/manual/en/function.mb-stripos
  */
-function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
-
-    /*if (_api_mb_supports($encoding)) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        return mb_stripos($haystack, $needle, $offset, $encoding);
-    }*/
-    return stripos($haystack, $needle, $offset);
+function api_stripos($haystack, $needle, $offset = 0, $encoding = null)
+{
+    return Utf8::stripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1568,14 +1279,9 @@ function api_stripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.stristr
  * @link http://php.net/manual/en/function.mb-stristr
  */
-function api_stristr($haystack, $needle, $before_needle = false, $encoding = null) {
-    /*if (_api_mb_supports($encoding)) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        return mb_stristr($haystack, $needle, $before_needle, $encoding);
-    }*/
-    return stristr($haystack, $needle, $before_needle);
+function api_stristr($haystack, $needle, $before_needle = false, $encoding = null)
+{
+    return Utf8::stristr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1592,21 +1298,9 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
  * if (strlen($string) != 0)
  * there is no need the original function strlen() to be changed, it works correctly and faster for these cases.
  */
-function api_strlen($string, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return strlen($string);
-    }
-    if (_api_mb_supports($encoding)) {
-        return @mb_strlen($string, $encoding);
-    }
-    if (_api_iconv_supports($encoding)) {
-        return @iconv_strlen($string, $encoding);
-    }*/
-
-    return strlen($string);
+function api_strlen($string, $encoding = null)
+{
+    return Utf8::strlen($string);
 }
 
 /**
@@ -1621,16 +1315,9 @@ function api_strlen($string, $encoding = null) {
  * @link http://php.net/manual/en/function.strpos
  * @link http://php.net/manual/en/function.mb-strpos
  */
-function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return strpos($haystack, $needle, $offset);
-    } elseif (_api_mb_supports($encoding)) {
-        return mb_strpos($haystack, $needle, $offset, $encoding);
-    }*/
-    return strpos($haystack, $needle, $offset);
+function api_strpos($haystack, $needle, $offset = 0, $encoding = null)
+{
+    return Utf8::strpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1648,28 +1335,9 @@ function api_strpos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.strrchr
  * @link http://php.net/manual/en/function.mb-strrchr
  */
-function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        if (!$before_needle) {
-            return strrchr($haystack, $needle);
-        }
-        $result = strrchr($haystack, $needle);
-        if ($result === false) {
-            return false;
-        }
-        return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);
-    } elseif (_api_mb_supports($encoding)) {
-        return mb_strrchr($haystack, $needle, $before_needle, $encoding);
-    }
-    $result = strrchr($haystack, $needle);
-    if ($result === false) {
-        return false;
-    }
-    return api_substr($haystack, 0, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), $encoding);*/
-    return strrchr($haystack, $needle);
+function api_strrchr($haystack, $needle, $before_needle = false, $encoding = null)
+{
+    return Utf8::strrchr($haystack, $needle);
 }
 
 /**
@@ -1680,20 +1348,9 @@ function api_strrchr($haystack, $needle, $before_needle = false, $encoding = nul
  * This function is aimed at replacing the function strrev() for human-language strings.
  * @link http://php.net/manual/en/function.strrev
  */
-function api_strrev($string, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (empty($string)) {
-        return '';
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return strrev($string);
-    }
-    if (api_is_encoding_supported($encoding)) {
-        return implode(array_reverse(api_str_split($string, 1, $encoding)));
-    }*/
-    return strrev($string);
+function api_strrev($string, $encoding = null)
+{
+    return Utf8::strrev($string);
 }
 
 /**
@@ -1710,8 +1367,7 @@ function api_strrev($string, $encoding = null) {
  */
 function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    return strripos($haystack, $needle, $offset);
-    //return api_strrpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+    return Utf8::strripos($haystack, $needle, $offset);
 }
 
 /**
@@ -1728,13 +1384,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null)
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
 {
-    /*if (_api_mb_supports($encoding)) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        return mb_strrpos($haystack, $needle, $offset, $encoding);
-    }*/
-    return strrpos($haystack, $needle, $offset);
+    return Utf8::strrpos($haystack, $needle, $offset);
 }
 
 /**
@@ -1752,28 +1402,9 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null)
  * @link http://php.net/manual/en/function.strstr
  * @link http://php.net/manual/en/function.mb-strstr
  */
-function api_strstr($haystack, $needle, $before_needle = false, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (!is_string($needle)) {
-        $needle = (int)$needle;
-        if (api_is_utf8($encoding)) {
-            $needle = _api_utf8_chr($needle);
-        } else {
-            $needle = chr($needle);
-        }
-    }
-    if ($needle == '') {
-        return false;
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return strstr($haystack, $needle, $before_needle);
-    }
-    if (_api_mb_supports($encoding)) {
-        return mb_strstr($haystack, $needle, $before_needle, $encoding);
-    }*/
-    return strstr($haystack, $needle, $before_needle);
+function api_strstr($haystack, $needle, $before_needle = false, $encoding = null)
+{
+    return Utf8::strstr($haystack, $needle, $before_needle);
 }
 
 /**
@@ -1785,14 +1416,9 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
  * @link http://php.net/manual/en/function.strtolower
  * @link http://php.net/manual/en/function.mb-strtolower
  */
-function api_strtolower($string, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_mb_supports($encoding)) {
-        return mb_strtolower($string, $encoding);
-    }*/
-    return strtolower($string);
+function api_strtolower($string, $encoding = null)
+{
+    return Utf8::strtolower($string);
 }
 
 /**
@@ -1804,14 +1430,9 @@ function api_strtolower($string, $encoding = null) {
  * @link http://php.net/manual/en/function.strtoupper
  * @link http://php.net/manual/en/function.mb-strtoupper
  */
-function api_strtoupper($string, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_mb_supports($encoding)) {
-        return mb_strtoupper($string, $encoding);
-    }*/
-    return strtoupper($string);
+function api_strtoupper($string, $encoding = null)
+{
+    return Utf8::strtoupper($string);
 }
 
 /**
@@ -1826,21 +1447,9 @@ function api_strtoupper($string, $encoding = null) {
  * @link http://php.net/manual/en/function.substr
  * @link http://php.net/manual/en/function.mb-substr
  */
-function api_substr($string, $start, $length = null, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    // Passing null as $length would mean 0. This behaviour has been corrected here.
-    if (is_null($length)) {
-        $length = api_strlen($string, $encoding);
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        return substr($string, $start, $length);
-    }
-    if (_api_mb_supports($encoding)) {
-        return mb_substr($string, $start, $length, $encoding);
-    }*/
-    return substr($string, $start, $length);
+function api_substr($string, $start, $length = null, $encoding = null)
+{
+    return Utf8::substr($string, $start, $length);
 }
 
 /**
@@ -1851,14 +1460,9 @@ function api_substr($string, $start, $length = null, $encoding = null) {
  * @return int							The number of times the needle substring occurs in the haystack string.
  * @link http://php.net/manual/en/function.mb-substr-count.php
  */
-function api_substr_count($haystack, $needle, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_mb_supports($encoding)) {
-        return mb_substr_count($haystack, $needle, $encoding);
-    }*/
-    return substr_count($haystack, $needle);
+function api_substr_count($haystack, $needle, $encoding = null)
+{
+    return Utf8::substr_count($haystack, $needle);
 }
 
 /**
@@ -1880,36 +1484,9 @@ function api_substr_count($haystack, $needle, $encoding = null) {
  * This function is aimed at replacing the function substr_replace() for human-language strings.
  * @link http://php.net/manual/function.substr-replace
  */
-function api_substr_replace($string, $replacement, $start, $length = null, $encoding = null) {
-    /*if (empty($encoding)) {
-        $encoding = _api_mb_internal_encoding();
-    }
-    if (_api_is_single_byte_encoding($encoding)) {
-        if (is_null($length)) {
-            return substr_replace($string, $replacement, $start);
-        }
-        return substr_replace($string, $replacement, $start, $length);
-    }
-    if (api_is_encoding_supported($encoding)) {
-        if (is_null($length)) {
-            $length = api_strlen($string);
-        }
-        if (!api_is_utf8($encoding)) {
-            $string = api_utf8_encode($string, $encoding);
-            $replacement = api_utf8_encode($replacement, $encoding);
-        }
-        $string = _api_utf8_to_unicode($string);
-        array_splice($string, $start, $length, _api_utf8_to_unicode($replacement));
-        $string = _api_utf8_from_unicode($string);
-        if (!api_is_utf8($encoding)) {
-            $string = api_utf8_decode($string, $encoding);
-        }
-        return $string;
-    }
-    if (is_null($length)) {
-        return substr_replace($string, $replacement, $start);
-    }*/
-    return substr_replace($string, $replacement, $start, $length);
+function api_substr_replace($string, $replacement, $start, $length = null, $encoding = null)
+{
+    return UTf8::substr_replace($string, $replacement, $start, $length);
 }
 
 /**
@@ -1925,7 +1502,7 @@ function api_ucfirst($string, $encoding = null) {
         $encoding = _api_mb_internal_encoding();
     }
     return api_strtoupper(api_substr($string, 0, 1, $encoding), $encoding) . api_substr($string, 1, api_strlen($string, $encoding), $encoding);*/
-    return ucfirst($string);
+    return Utf8::ucfirst($string);
 }
 
 /**
@@ -1943,7 +1520,7 @@ function api_ucwords($string, $encoding = null) {
         }
         return mb_convert_case($string, MB_CASE_TITLE, $encoding);
     }*/
-    return ucwords($string);
+    return Utf8::ucwords($string);
 }
 
 /**
@@ -2046,92 +1623,6 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
 }
 
 /**
- * Obsolete string operations using regular expressions, to be deprecated
- */
-
-/**
- * Note: Try to avoid using this function. Use api_preg_match() with Perl-compatible regular expression syntax.
- *
- * Executes a regular expression match with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern			The regular expression pattern.
- * @param string $string			The searched string.
- * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
- * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
- * This function is aimed at replacing the functions ereg() and mb_ereg() for human-language strings.
- * @link http://php.net/manual/en/function.ereg
- * @link http://php.net/manual/en/function.mb-ereg
- */
-function api_ereg($pattern, $string, & $regs = null) {
-    $count = func_num_args();
-    $encoding = _api_mb_regex_encoding();
-    if (_api_mb_supports($encoding)) {
-        if ($count < 3) {
-            return @mb_ereg($pattern, $string);
-        }
-        return @mb_ereg($pattern, $string, $regs);
-    }
-    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-        global $_api_encoding;
-        $_api_encoding = $encoding;
-        _api_mb_regex_encoding('UTF-8');
-        if ($count < 3) {
-            $result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-        } else {
-            $result = @mb_ereg(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-            $regs = _api_array_utf8_decode($regs);
-        }
-        _api_mb_regex_encoding($encoding);
-        return $result;
-    }
-    if ($count < 3) {
-        return ereg($pattern, $string);
-    }
-    return ereg($pattern, $string, $regs);
-}
-
-/**
- * Note: Try to avoid using this function. Use api_preg_match() with Perl-compatible regular expression syntax.
- *
- * Executes a regular expression match, ignoring case, with extended multibyte support.
- * By default this function uses the platform character set.
- * @param string $pattern			The regular expression pattern.
- * @param string $string			The searched string.
- * @param array $regs (optional)	If specified, by this passed by reference parameter an array containing found match and its substrings is returned.
- * @return mixed					1 if match is found, FALSE if not. If $regs has been specified, byte-length of the found match is returned, or FALSE if no match has been found.
- * This function is aimed at replacing the functions eregi() and mb_eregi() for human-language strings.
- * @link http://php.net/manual/en/function.eregi
- * @link http://php.net/manual/en/function.mb-eregi
- */
-function api_eregi($pattern, $string, & $regs = null) {
-    $count = func_num_args();
-    $encoding = _api_mb_regex_encoding();
-    if (_api_mb_supports($encoding)) {
-        if ($count < 3) {
-            return @mb_eregi($pattern, $string);
-        }
-        return @mb_eregi($pattern, $string, $regs);
-    }
-    if (MBSTRING_INSTALLED && api_is_encoding_supported($encoding)) {
-        global $_api_encoding;
-        $_api_encoding = $encoding;
-        _api_mb_regex_encoding('UTF-8');
-        if ($count < 3) {
-            $result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding));
-        } else {
-            $result = @mb_eregi(api_utf8_encode($pattern, $encoding), api_utf8_encode($string, $encoding), $regs);
-            $regs = _api_array_utf8_decode($regs);
-        }
-        _api_mb_regex_encoding($encoding);
-        return $result;
-    }
-    if ($count < 3) {
-        return eregi($pattern, $string);
-    }
-    return eregi($pattern, $string, $regs);
-}
-
-/**
  * String comparison
  */
 
@@ -2162,13 +1653,6 @@ function api_strcasecmp($string1, $string2, $language = null, $encoding = null) 
  */
 function api_strcmp($string1, $string2, $language = null, $encoding = null)
 {
-    if (INTL_INSTALLED) {
-        $collator = _api_get_collator($language);
-        if (is_object($collator)) {
-            $result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
-            return $result === false ? 0 : $result;
-        }
-    }
     return strcmp($string1, $string2);
 }
 
@@ -2183,14 +1667,8 @@ function api_strcmp($string1, $string2, $language = null, $encoding = null)
  * @link http://php.net/manual/en/function.strnatcmp.php
  * @link http://php.net/manual/en/collator.compare.php
  */
-function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
-    if (INTL_INSTALLED) {
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            $result = collator_compare($collator, api_utf8_encode($string1, $encoding), api_utf8_encode($string2, $encoding));
-            return $result === false ? 0 : $result;
-        }
-    }
+function api_strnatcmp($string1, $string2, $language = null, $encoding = null)
+{
     return strnatcmp($string1, $string2);
 }
 
@@ -2207,19 +1685,8 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
  * This function is aimed at replacing the function natsort() for sorting human-language strings.
  * @link http://php.net/manual/en/function.natsort.php
  */
-function api_natsort(&$array, $language = null, $encoding = null) {
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uasort($array, '_api_cmp');
-        }
-    }
+function api_natsort(&$array, $language = null, $encoding = null)
+{
     return natsort($array);
 }
 
@@ -2230,19 +1697,8 @@ function api_natsort(&$array, $language = null, $encoding = null) {
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return bool							Returns TRUE on success, FALSE on error.
  */
-function api_natrsort(&$array, $language = null, $encoding = null) {
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uasort($array, '_api_rcmp');
-        }
-    }
+function api_natrsort(&$array, $language = null, $encoding = null)
+{
     return uasort($array, '_api_strnatrcmp');
 }
 
@@ -2311,39 +1767,14 @@ function api_equal_encodings($encoding1, $encoding2, $strict = false) {
  * @param string $encoding		The tested encoding.
  * @return bool					Returns TRUE if the given encoding id means UTF-8, otherwise returns false.
  */
-function api_is_utf8($encoding) {
+function api_is_utf8($encoding)
+{
     static $result = array();
     if (!isset($result[$encoding])) {
         $result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
     }
     return $result[$encoding];
 }
-
-/**
- * This function checks whether a given encoding represents (is an alias of) ISO Latin 1 character set.
- * @param string/array $encoding		The tested encoding.
- * @param bool $strict					Flag for check precision. ISO-8859-1 is always Latin 1. When $strict is false, ISO-8859-15 is assumed as Latin 1 too.
- * @return bool							Returns TRUE if the given encoding id means Latin 1 character set, otherwise returns false.
- */
-function api_is_latin1($encoding, $strict = false) {
-    static $latin1 = array();
-    static $latin1_strict = array();
-    if ($strict) {
-        if (!isset($latin1_strict[$encoding])) {
-            $latin1_strict[$encoding] = api_equal_encodings($encoding, array('ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1'));
-        }
-        return $latin1_strict[$encoding];
-    }
-    if (!isset($latin1[$encoding])) {
-        $latin1[$encoding] = api_equal_encodings($encoding, array(
-            'ISO-8859-1', 'ISO8859-1', 'CP819', 'LATIN1',
-            'ISO-8859-15', 'ISO8859-15', 'CP923', 'LATIN0', 'LATIN-9',
-            'WINDOWS-1252', 'CP1252', 'WIN-1252', 'WIN1252'
-        ));
-    }
-    return $latin1[$encoding];
-}
-
 /**
  * This function returns the encoding, currently used by the system.
  * @return string	The system's encoding.
@@ -2351,20 +1782,9 @@ function api_is_latin1($encoding, $strict = false) {
  * on the second place the global variable $charset is tried to be returned. If for some
  * reason both attempts fail, then the libraly's internal value will be returned.
  */
-function api_get_system_encoding() {
-    static $system_encoding;
-    if (!isset($system_encoding)) {
-        $encoding_setting = api_get_setting('platform_charset');
-        if (empty($encoding_setting)) {
-            global $charset;
-            if (empty($charset)) {
-                return _api_mb_internal_encoding();
-            }
-            return $charset;
-        }
-        $system_encoding = $encoding_setting;
-    }
-    return $system_encoding;
+function api_get_system_encoding()
+{
+    return 'UTF-8';
 }
 
 /**
@@ -2378,70 +1798,6 @@ function api_is_encoding_supported($encoding) {
         $supported[$encoding] = _api_mb_supports($encoding) || _api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
     }
     return $supported[$encoding];
-}
-
-/**
- * Returns in an array the most-probably used non-UTF-8 encoding for the given language.
- * The first (leading) value is actually used by the system at the moment.
- * @param string $language (optional)	The specified language, the default value is the user intrface language.
- * @return string						The correspondent encoding to the specified language.
- * Note: See the file chamilo/main/inc/lib/internationalization_database/non_utf8_encodings.php
- * if you wish to revise the leading non-UTF-8 encoding for your language.
- */
-function api_get_non_utf8_encoding($language = null)
-{
-    $language_is_supported = api_is_language_supported($language);
-    if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
-
-    $language = api_purify_language_id($language);
-    $encodings = & _api_non_utf8_encodings();
-    if (is_array($encodings[$language])) {
-        if (!empty($encodings[$language][0])) {
-            return $encodings[$language][0];
-        }
-        return null;
-    }
-    return null;
-}
-
-/**
- * Return a list of valid encodings for setting platform character set.
- * @return array	List of valid encodings, preferably IANA-registared.
- */
-function api_get_valid_encodings() {
-    $encodings = & _api_non_utf8_encodings();
-    if (!is_array($encodings)) {
-        $encodings = array('english', array('ISO-8859-15'));
-    }
-
-    $result1 = array();
-    $result2 = array();
-    $result3 = array();
-
-    foreach ($encodings as $value) {
-        if (!empty($value)) {
-            $encoding = api_refine_encoding_id(trim($value[0]));
-            if (!empty($encoding)) {
-                if (strpos($encoding, 'ISO-') === 0) {
-                    $result1[] = $encoding;
-                } elseif (strpos($encoding, 'WINDOWS-') === 0) {
-                    $result2[] = $encoding;
-                } else {
-                    $result3[] = $encoding;
-                }
-            }
-        }
-    }
-
-    $result1 = array_unique($result1);
-    $result2 = array_unique($result2);
-    $result3 = array_unique($result3);
-    natsort($result1);
-    natsort($result2);
-    natsort($result3);
-    return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
 /**
@@ -2508,7 +1864,225 @@ function get_plugin_lang($variable, $pluginName) {
 }
 
 /**
- * Functions for internal use behind this API
+ * Returns an array of translated week days and months, short and normal names.
+ * @param string $language (optional)	Language id. If it is ommited, the current interface language is assumed.
+ * @return array						Returns a multidimensional array with translated week days and months.
+ */
+function &_api_get_day_month_names($language = null) {
+    static $date_parts = array();
+    if (empty($language)) {
+        $language = api_get_interface_language();
+    }
+    if (!isset($date_parts[$language])) {
+        $week_day = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        $month = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+        for ($i = 0; $i < 7; $i++) {
+            $date_parts[$language]['days_short'][] = get_lang($week_day[$i].'Short', '', $language);
+            $date_parts[$language]['days_long'][] = get_lang($week_day[$i].'Long', '', $language);
+        }
+        for ($i = 0; $i < 12; $i++) {
+            $date_parts[$language]['months_short'][] = get_lang($month[$i].'Short', '', $language);
+            $date_parts[$language]['months_long'][] = get_lang($month[$i].'Long', '', $language);
+        }
+    }
+    return $date_parts[$language];
+}
+
+/**
+ * Returns returns person name convention for a given language.
+ * @param string $language	The input language.
+ * @param string $type		The type of the requested convention.
+ * It may be 'format' for name order convention or 'sort_by' for name sorting convention.
+ * @return mixed Depending of the requested type,
+ * the returned result may be string or boolean; null is returned on error;
+ */
+function _api_get_person_name_convention($language, $type)
+{
+    static $conventions;
+    $language = api_purify_language_id($language);
+    if (!isset($conventions)) {
+        $file = dirname(__FILE__).'/internationalization_database/name_order_conventions.php';
+        if (file_exists($file)) {
+            $conventions = include ($file);
+        } else {
+            $conventions = array(
+                'english' => array(
+                    'format' => 'title first_name last_name',
+                    'sort_by' => 'first_name'
+                )
+            );
+        }
+        // Overwrite classic conventions
+        $customConventions = api_get_configuration_value('name_order_conventions');
+
+        if (!empty($customConventions)) {
+            foreach ($customConventions as $key => $data) {
+                $conventions[$key] = $data;
+            }
+        }
+
+        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
+        $replacement1 = array('%F', '%L', '%T');
+        $search2 = array('first_name', 'last_name', 'title');
+        $replacement2 = array('%f', '%l', '%t');
+        foreach (array_keys($conventions) as $key) {
+            $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
+            $conventions[$key]['format'] = _api_validate_person_name_format(_api_clean_person_name(str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))));
+            $conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+        }
+    }
+    switch ($type) {
+        case 'format':
+            return is_string($conventions[$language]['format']) ? $conventions[$language]['format'] : '%t %f %l';
+        case 'sort_by':
+            return is_bool($conventions[$language]['sort_by']) ? $conventions[$language]['sort_by'] : true;
+    }
+    return null;
+}
+
+/**
+ * Replaces non-valid formats for person names with the default (English) format.
+ * @param string $format	The input format to be verified.
+ * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.
+ */
+function _api_validate_person_name_format($format) {
+    if (empty($format) || stripos($format, '%f') === false || stripos($format, '%l') === false) {
+        return '%t %f %l';
+    }
+    return $format;
+}
+
+/**
+ * Removes leading, trailing and duplicate whitespace and/or commas in a full person name.
+ * Cleaning is needed for the cases when not all parts of the name are available or when the name is constructed using a "dirty" pattern.
+ * @param string $person_name	The input person name.
+ * @return string				Returns cleaned person name.
+ */
+function _api_clean_person_name($person_name) {
+    return preg_replace(array('/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'), array(' ', ', ', ',', '', ''), $person_name);
+}
+
+/**
+ * Appendix to "Multibyte string conversion functions"
  */
 
-require_once dirname(__FILE__).'/internationalization_internal.lib.php';
+/**
+ * This is a php-implementation of a function that is similar to mb_convert_encoding() from mbstring extension.
+ * The function converts a given string from one to another character encoding.
+ * @param string $string					The string being converted.
+ * @param string $to_encoding				The encoding that $string is being converted to.
+ * @param string $from_encoding				The encoding that $string is being converted from.
+ * @return string							Returns the converted string.
+ */
+function _api_convert_encoding(&$string, $to_encoding, $from_encoding)
+{
+    return mb_convert_encoding($string, $to_encoding, $from_encoding);
+}
+
+/**
+ * This function determines the name of corresponding to a given encoding conversion table.
+ * It is able to deal with some aliases of the encoding.
+ * @param string $encoding		The given encoding identificator, for example 'WINDOWS-1252'.
+ * @return string				Returns the name of the corresponding conversion table, for the same example - 'CP1252'.
+ */
+function _api_get_character_map_name($encoding) {
+    static $character_map_selector;
+    if (!isset($character_map_selector)) {
+        $file = dirname(__FILE__).'/internationalization_database/conversion/character_map_selector.php';
+        if (file_exists($file)) {
+            $character_map_selector = include ($file);
+        } else {
+            $character_map_selector = array();
+        }
+    }
+    return isset($character_map_selector[$encoding]) ? $character_map_selector[$encoding] : '';
+}
+
+/**
+ * Appendix to "String comparison"
+ */
+
+/**
+ * A reverse function from php-core function strnatcmp(), performs string comparison in reverse natural (alpha-numerical) order.
+ * @param string $string1		The first string.
+ * @param string $string2		The second string.
+ * @return int					Returns 0 if $string1 = $string2; >0 if $string1 < $string2; <0 if $string1 > $string2.
+ */
+function _api_strnatrcmp($string1, $string2) {
+    return strnatcmp($string2, $string1);
+}
+
+/**
+ * ICU locales (accessible through intl extension).
+ */
+
+/**
+ * Appendix to "Encoding management functions"
+ */
+
+/**
+ * Sets/Gets internal character encoding of the common string functions within the PHP mbstring extension.
+ * @param string $encoding (optional)	When this parameter is given, the function sets the internal encoding.
+ * @return string						When $encoding parameter is not given, the function returns the internal encoding.
+ * Note: This function is used in the global initialization script for setting the internal encoding to the platform's character set.
+ * @link http://php.net/manual/en/function.mb-internal-encoding
+ */
+function _api_mb_internal_encoding($encoding = 'UTF-8')
+{
+    return mb_internal_encoding($encoding);
+}
+
+/**
+ * Checks whether the specified encoding is supported by the PHP mbstring extension.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_mb_supports($encoding) {
+    static $supported = array();
+    if (!isset($supported[$encoding])) {
+        if (MBSTRING_INSTALLED) {
+            $supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings(), true);
+        } else {
+            $supported[$encoding] = false;
+        }
+    }
+    return $supported[$encoding];
+}
+
+/**
+ * Checks whether the specified encoding is supported by the PHP iconv extension.
+ * @param string $encoding	The specified encoding.
+ * @return bool				Returns TRUE when the specified encoding is supported, FALSE othewise.
+ */
+function _api_iconv_supports($encoding) {
+    static $supported = array();
+    if (!isset($supported[$encoding])) {
+        if (ICONV_INSTALLED) {
+            $enc = api_refine_encoding_id($encoding);
+            if ($enc != 'HTML-ENTITIES') {
+                $test_string = '';
+                for ($i = 32; $i < 128; $i++) {
+                    $test_string .= chr($i);
+                }
+                $supported[$encoding] = (@iconv_strlen($test_string, $enc)) ? true : false;
+            } else {
+                $supported[$encoding] = false;
+            }
+        } else {
+            $supported[$encoding] = false;
+        }
+    }
+    return $supported[$encoding];
+}
+
+// This function checks whether the function _api_convert_encoding() (the php-
+// implementation) is able to convert from/to a given encoding.
+function _api_convert_encoding_supports($encoding) {
+    static $supports = array();
+    if (!isset($supports[$encoding])) {
+        $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';
+    }
+    return $supports[$encoding];
+}
+
+

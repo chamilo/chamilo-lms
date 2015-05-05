@@ -261,7 +261,6 @@ class Course
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             $resource->content_maker = api_to_system_encoding($resource->content_maker, $this->encoding);
                             $resource->content_license = api_to_system_encoding($resource->content_license, $this->encoding);
-                            //$resource->author = api_to_system_encoding($resource->author, $this->encoding);  // Needs implamantation.
                             break;
                         case RESOURCE_LINK:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);

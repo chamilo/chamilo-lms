@@ -268,6 +268,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 		$form->setConstants(array('sec_token' => $token));
 		$html .= $form->returnForm();
 	}
+
     return $html;
 }
 

@@ -530,7 +530,6 @@ class GroupPortalManager
         $limit = null,
         $image_conf = array('size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80)
     ) {
-        $where = '';
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $group_id = intval($group_id);
@@ -559,22 +558,29 @@ class GroupPortalManager
                 $where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
         }
 
-        $sql = "SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type
+        $sql = "SELECT
+                    picture_uri as image,
+                    u.user_id,
+                    u.firstname,
+                    u.lastname,
+                    relation_type
     		    FROM $tbl_user u INNER JOIN $table_group_rel_user gu
     			ON (gu.user_id = u.user_id)
-    			WHERE gu.group_id= $group_id $where_relation_condition
+    			WHERE
+    			    gu.group_id= $group_id
+    			    $where_relation_condition
     			ORDER BY relation_type, firstname $limit_text";
 
         $result = Database::query($sql);
         $array = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($with_image) {
-                $image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
-                $picture = UserManager::get_picture_user($row['user_id'], $image_path['file'], $image_conf['height'], $image_conf['size']);
-                $row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
+                $picture = UserManager::getUserPicture($row['user_id']);
+                $row['image'] = '<img src="'.$picture.'" />';
             }
             $array[$row['user_id']] = $row;
         }
+
         return $array;
     }
 
@@ -861,6 +867,7 @@ class GroupPortalManager
 
         // User-reserved directory where photos have to be placed.
         $path_info = self::get_group_picture_path_by_id($group_id, 'system', true);
+
         $path = $path_info['dir'];
         // If this directory does not exist - we create it.
         if (!file_exists($path)) {
@@ -936,29 +943,25 @@ class GroupPortalManager
      * with dirname() or the file with basename(). This also works for the
      * functions dealing with the user's productions, as they are located in
      * the same directory.
-     * @param	integer	User ID
-     * @param	string	Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not
+     * @param	integer	$id
+     * @param	string	$type Type of path to return (can be 'system', 'web')
+     * @param	bool	$preview Whether we want to have the directory name returned 'as if' there was a file or not
      * (in the case we want to know which directory to create - otherwise no file means no split subdir)
-     * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
+     * @param	bool	$anonymous If we want that the function returns the /main/img/unknown.jpg image set it at true
+     *
      * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies
      * if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty
      */
-    public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
+    public static function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $anonymous = false)
     {
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_CODE_PATH);
-                break;
-            case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_CODE_PATH);
+                $base = api_get_path(SYS_UPLOAD_PATH);
                 break;
             case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_CODE_PATH);
+            default:
+                $base = api_get_path(WEB_UPLOAD_PATH);
                 break;
-            case 'none':
-            default: // Base: empty, the result path below will be relative.
-                $base = '';
         }
 
         $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
@@ -982,14 +985,14 @@ class GroupPortalManager
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
             if (!empty($picture_filename)) {
-                $dir = $base.'upload/users/groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
+                $dir = $base.'groups/'.substr($picture_filename, 0, 1).'/'.$id.'/';
             } elseif ($preview) {
-                $dir = $base.'upload/users/groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
+                $dir = $base.'groups/'.substr((string) $id, 0, 1).'/'.$id.'/';
             } else {
-                $dir = $base.'upload/users/groups/'.$id.'/';
+                $dir = $base.'groups/'.$id.'/';
             }
         } else {
-            $dir = $base.'upload/users/groups/'.$id.'/';
+            $dir = $base.'groups/'.$id.'/';
         }
 
         if (empty($picture_filename) && $anonymous) {
@@ -1025,16 +1028,20 @@ class GroupPortalManager
 
     /**
      * Gets the current group image
-     * @param string group id
-     * @param string picture group name
-     * @param string height
-     * @param string picture size it can be small_,  medium_  or  big_
-     * @param string style css
+     * @param string $id group id
+     * @param string $picture_file picture group name
+     * @param string $height
+     * @param string $size_picture picture size it can be small_, medium_or big_
+     * @param string $style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-    public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM, $style = '')
-    {
-        $patch_profile = 'upload/users/groups/';
+    public static function get_picture_group(
+        $id,
+        $picture_file,
+        $height,
+        $size_picture = GROUP_IMAGE_SIZE_MEDIUM,
+        $style = ''
+    ) {
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
@@ -1154,8 +1161,8 @@ class GroupPortalManager
 
     /**
      * Shows the left column of the group page
-     * @param int group id
-     * @param int user id
+     * @param int $group_id
+     * @param int $user_id
      *
      */
     public static function show_group_column_information($group_id, $user_id, $show = '')
@@ -1205,9 +1212,6 @@ class GroupPortalManager
                 break;
             case GROUP_USER_PERMISSION_MODERATOR:
                 $relation_group_title = get_lang('IAmAModerator');
-                //$links .=  '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
-                //$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
-                //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';
                 if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace' => '6')).'<span class="'.($show == 'waiting_list' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
                 }
@@ -1249,7 +1253,8 @@ class GroupPortalManager
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $topic_id = intval($topic_id);
         $group_id = intval($group_id);
-        $sql = "UPDATE $table_message SET msg_status=3 WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
+        $sql = "UPDATE $table_message SET msg_status=3
+                WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
         Database::query($sql);
     }
 
@@ -1288,23 +1293,34 @@ class GroupPortalManager
     /**
      * @param FormValidator $form
      * @param array
+     *
+     * @return FormValidator
      */
     public static function setGroupForm($form, $groupData = array())
     {
         // Name
-        $form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>120));
+        $form->addElement('text', 'name', get_lang('Name'), array('maxlength'=>120));
         $form->applyFilter('name', 'html_filter');
         $form->applyFilter('name', 'trim');
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
         // Description
-        $form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()"));
+        $form->addElement(
+            'textarea',
+            'description',
+            get_lang('Description'),
+            array(
+                'cols' => 58,
+                'onKeyDown' => "textarea_maxlength()",
+                'onKeyUp' => "textarea_maxlength()",
+            )
+        );
         $form->applyFilter('description', 'html_filter');
         $form->applyFilter('description', 'trim');
-        $form->addRule('name', '', 'maxlength',255);
+        $form->addRule('name', '', 'maxlength', 255);
 
         // Url
-        $form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
+        $form->addElement('text', 'url', 'URL');
         $form->applyFilter('url', 'html_filter');
         $form->applyFilter('url', 'trim');
 
@@ -1321,8 +1337,8 @@ class GroupPortalManager
 
         // Status
         $status = array();
-        $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-        $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+        $status[GROUP_PERMISSION_OPEN] = get_lang('Open');
+        $status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
         $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
         if (!empty($groupData)) {
@@ -1332,6 +1348,7 @@ class GroupPortalManager
             // Set default values
             $form->setDefaults($groupData);
         }
+
         return $form;
     }
 

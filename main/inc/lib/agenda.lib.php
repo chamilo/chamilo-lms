@@ -931,7 +931,7 @@ class Agenda
                         $my_session_id = $session_item['session_id'];
                         if (!empty($my_courses)) {
                             foreach ($my_courses as $course_item) {
-                                $courseInfo = api_get_course_info($course_item['code']);
+                                $courseInfo = api_get_course_info_by_id($course_item['real_id']);
                                 $this->getCourseEvents($start, $end, $courseInfo, 0, $my_session_id);
                             }
                         }
@@ -2953,7 +2953,7 @@ class Agenda
         // get agenda-items for every course
         $courses = api_get_user_courses($user_id,false);
         foreach ($courses as $id => $course) {
-            $c = api_get_course_info($course['code']);
+            $c = api_get_course_info_by_id($course['real_id']);
             //databases of the courses
             $t_a = Database :: get_course_table(TABLE_AGENDA, $course['db']);
             $t_ip = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course['db']);

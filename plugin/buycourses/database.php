@@ -31,7 +31,7 @@ $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $sql = "SELECT id, name, date_start, date_end FROM $tableSession";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $presql = "INSERT INTO $table (session_id, name, date_start, date_end, visible)
+    $presql = "INSERT INTO $table (id, name, date_start, date_end, visible)
     VALUES ('" . $row['id'] . "','" . $row['name'] . "','" . $row['date_start'] . "','" . $row['date_end'] . "','NO')";
     Database::query($presql);
 }
@@ -59,7 +59,7 @@ while ($row = Database::fetch_assoc($res)) {
 $table = Database::get_main_table(TABLE_BUY_SESSION_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
 	id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-    id_session SMALLINT(5) unsigned DEFAULT '0',
+    session_id SMALLINT(5) unsigned DEFAULT '0',
     course_code VARCHAR(40),
     nbr_users SMALLINT(5) unsigned DEFAULT '0',
     sync int)";
@@ -69,8 +69,8 @@ $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $sql = "SELECT * FROM $tableSessionCourse";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $presql = "INSERT INTO $table (id_session, course_code, nbr_users)
-    VALUES ('" . $row['id_session'] . "','" . $row['course_code'] . "','" . $row['nbr_users'] . "')";
+    $presql = "INSERT INTO $table (session_id, c_id, nbr_users)
+    VALUES ('" . $row['session_id'] . "','" . $row['c_id'] . "','" . $row['nbr_users'] . "')";
     Database::query($presql);
 }
 

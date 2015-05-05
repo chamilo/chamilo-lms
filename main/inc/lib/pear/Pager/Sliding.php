@@ -37,11 +37,6 @@
  */
 
 /**
- * require PEAR::Pager_Common base class
- */
-require_once 'Pager/Common.php';
-
-/**
  * Pager_Sliding - Generic data paging class  ("sliding window" style)
  * Usage examples can be found in the PEAR manual
  *

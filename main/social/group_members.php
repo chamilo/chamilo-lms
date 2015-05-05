@@ -122,13 +122,13 @@ $social_right_content .= '<div style="width:90%">';
 
 foreach ($users as $user) {
     switch ($user['relation_type']) {
-        case  GROUP_USER_PERMISSION_ADMIN:
+        case GROUP_USER_PERMISSION_ADMIN:
             $user['link'] = Display::return_icon(
                 'social_group_admin.png',
                 get_lang('Admin')
             );
             break;
-        case  GROUP_USER_PERMISSION_READER:
+        case GROUP_USER_PERMISSION_READER:
             if (in_array(
                 $user_role,
                 array(
@@ -137,30 +137,34 @@ foreach ($users as $user) {
                 )
             )
             ) {
-                $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=delete">' . Display::return_icon(
+                $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=delete">' .
+                    Display::return_icon(
                         'delete.png',
                         get_lang('DeleteFromGroup')
                     ) . '</a>' .
-                    '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=set_moderator">' . Display::return_icon(
+                    '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=set_moderator">' .
+                    Display::return_icon(
                         'social_moderator_add.png',
                         get_lang('AddModerator')
                     ) . '</a>';
             }
             break;
-        case  GROUP_USER_PERMISSION_PENDING_INVITATION:
-            $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=add">' . Display::return_icon(
+        case GROUP_USER_PERMISSION_PENDING_INVITATION:
+            $user['link'] = '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=add">' .
+                Display::return_icon(
                     'pending_invitation.png',
                     get_lang('PendingInvitation')
                 ) . '</a>';
             break;
-        case  GROUP_USER_PERMISSION_MODERATOR:
+        case GROUP_USER_PERMISSION_MODERATOR:
             $user['link'] = Display::return_icon(
                 'social_group_moderator.png',
                 get_lang('Moderator')
             );
             //only group admin can manage moderators
             if ($user_role == GROUP_USER_PERMISSION_ADMIN) {
-                $user['link'] .= '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=delete_moderator">' . Display::return_icon(
+                $user['link'] .= '<a href="group_members.php?id=' . $group_id . '&u=' . $user['user_id'] . '&action=delete_moderator">'.
+                    Display::return_icon(
                         'social_moderator_delete.png',
                         get_lang('DeleteModerator')
                     ) . '</a>';
@@ -168,19 +172,8 @@ foreach ($users as $user) {
             break;
     }
 
-    $image_path = UserManager::get_user_picture_path_by_id(
-        $user['user_id'],
-        'web',
-        false,
-        true
-    );
-    $picture = UserManager::get_picture_user(
-        $user['user_id'],
-        $image_path['file'],
-        80
-    );
-    $user['image'] = '<img src="' . $picture['file'] . '"  width="50px" height="50px"  />';
-
+    $userPicture = UserManager::getUserPicture($user['user_id']);
+    $user['image'] = '<img src="' . $userPicture . '"  width="50px" height="50px"  />';
     $new_member_list[] = $user;
 }
 if (count($new_member_list) > 0) {

@@ -2048,7 +2048,7 @@ class SessionManager
 
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['c_id'], $courseList)) {
-                    $courseInfo = api_get_course_info($existingCourse['c_id']);
+                    $courseInfo = api_get_course_info_by_id($existingCourse['c_id']);
 
                     $sql = "DELETE FROM $tbl_session_rel_course
                             WHERE c_id = '" . $existingCourse['c_id'] . "' AND session_id = $sessionId";
@@ -2059,7 +2059,7 @@ class SessionManager
                     Database::query($sql);
 
                     CourseManager::remove_course_ranking(
-                        $courseInfo['real_id'],
+                        $existingCourse['c_id'],
                         $sessionId
                     );
 
@@ -2082,7 +2082,7 @@ class SessionManager
             if (!$exists) {
                 //if the course isn't subscribed yet
                 $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id)
-                        VALUES ('$sessionId', '$courseId')";
+                        VALUES ($sessionId, $courseId)";
                 Database::query($sql);
 
                 // We add the current course in the existing courses array,
@@ -2095,22 +2095,22 @@ class SessionManager
                 foreach ($user_list as $enreg_user) {
                     $enreg_user_id = intval($enreg_user['user_id']);
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (session_id, c_id, user_id)
-                            VALUES ($sessionId, '$courseId', $enreg_user_id)";
+                            VALUES ($sessionId, $courseId, $enreg_user_id)";
                     $result = Database::query($sql);
                     if (Database::affected_rows($result)) {
                         $nbr_users++;
                     }
                 }
                 $sql = "UPDATE $tbl_session_rel_course
-                        SET nbr_users=$nbr_users
-                        WHERE session_id ='$sessionId' AND c_id='$courseId'";
+                        SET nbr_users = $nbr_users
+                        WHERE session_id = $sessionId AND c_id = $courseId";
                 Database::query($sql);
             }
         }
 
         $sql = "UPDATE $tbl_session
                 SET nbr_courses = $nbr_courses
-                WHERE id = '$sessionId'";
+                WHERE id = $sessionId";
         Database::query($sql);
     }
 
@@ -5617,7 +5617,7 @@ class SessionManager
     /**
      * Get the courses list by a course coach
      * @param int $coachId The coach id
-     * @return array
+     * @return array (id, user_id, session_id, c_id, visibility, status, legal_agreement)
      */
     public static function getCoursesListByCourseCoach($coachId)
     {

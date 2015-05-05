@@ -1677,8 +1677,6 @@ function move_uploaded_file_collection_into_directory(
  */
 function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_file)
 {
-    $_course = api_get_course_info();
-
     // Open the file
 
     $fp = fopen($html_file, 'r');

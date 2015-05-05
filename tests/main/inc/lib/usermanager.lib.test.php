@@ -201,7 +201,7 @@ class TestUserManager extends UnitTestCase {
 	}
 
 	function testGetPictureUser() {
-		$res=UserManager::get_picture_user(1, 'unknown.jpg', 200, null, null);
+		$res=UserManager::getUserPicture(1, 'unknown.jpg');
 		$this->assertFalse(!(bool)$res);
 	}
 
@@ -236,7 +236,7 @@ class TestUserManager extends UnitTestCase {
 
 	function testGetUserPicturePathById() {
 		$id=5;
-		$res=UserManager::get_user_picture_path_by_id($id,null,null,null);
+		$res=UserManager::get_user_picture_path_by_id($id,null,null);
 		$this->assertTrue(is_array($res));
 	}
 

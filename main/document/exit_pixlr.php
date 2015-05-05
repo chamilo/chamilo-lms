@@ -11,7 +11,7 @@
 */
 
 require_once '../inc/global.inc.php';
-api_protect_course_script();
+api_protect_course_script(true);
 api_block_anonymous_users();
 
 //delete temporal file

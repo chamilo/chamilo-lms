@@ -309,7 +309,11 @@ if ($form->validate()) {
 		if (isset($user['delete_picture']) && $user['delete_picture']) {
 			$picture_uri = UserManager::delete_user_picture($user_id);
 		} elseif (!empty($picture['name'])) {
-			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+            $picture_uri = UserManager::update_user_picture(
+                $user_id,
+                $_FILES['picture']['name'],
+                $_FILES['picture']['tmp_name']
+            );
 		}
 
 		$lastname = $user['lastname'];
@@ -429,46 +433,15 @@ if ($error_drh) {
 	$message = Display::return_message($err_msg, 'error');
 }
 
-$gravatarEnabled = api_get_configuration_value('gravatar_enabled');
-
-// USER PICTURE
-$image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
-$image_dir = $image_path['dir'];
-$image = $image_path['file'];
-$image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown.jpg');
-$image_size = api_getimagesize($image_file);
-
-if (!$gravatarEnabled) {
-    $image_file .= '?rand='.time();
-}
-
-$img_attributes = 'src="'.$image_file.'" '
-	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
-
-if ($image_size['width'] > 300) { //limit display width to 300px
-	$img_attributes .= 'width="300" ';
-}
-
-// get the path,width and height from original picture
-$big_image = $image_dir.'big_'.$image;
-$big_image_size = api_getimagesize($big_image);
-$big_image_width = $big_image_size['width'];
-$big_image_height = $big_image_size['height'];
-$url_big_image = $image_file;
-if (!$gravatarEnabled) {
-    $url_big_image = $big_image.'?rnd='.time();
-}
-
 $content = null;
-if ($image == '') {
-	$content .= '<img '.$img_attributes.' />';
-} else {
-	$content .= '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}
+
+$bigImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);
+$normalImage = Usermanager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_ORIGINAL);
+$content .= '<a class="expand-image" href="'.$bigImage.'" /><img src="'.$normalImage.'"></a>';
+
 
 // Display form
-$content .= $form->return_form();
+$content .= $form->returnForm();
 
 $tpl = new Template($tool_name);
 $tpl->assign('message', $message);

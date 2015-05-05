@@ -87,7 +87,7 @@ class document_processor extends search_processor {
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
                 $name = $row['title'];
-                $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
+                $url = api_get_path(WEB_COURSE_PATH).'%s/document%s';
                 $url = sprintf($url, $course_path, $row['path']);
                 // Get the image path
                 $icon = choose_image(basename($row['path']));

@@ -116,8 +116,8 @@ if ($origin == 'learnpath') {
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility'] == 0 OR $current_forum['visibility'] == 0) OR ($current_forum_category['locked'] <> 0 OR $current_forum['locked'] <> 0 OR $current_thread['locked'] <> 0))) {
-if (!api_is_allowed_to_edit(null, true) AND
-    (($current_forum_category && $current_forum_category['visibility'] == 0) OR
+if (!api_is_allowed_to_edit(null, true) &&
+    (($current_forum_category && $current_forum_category['visibility'] == 0) ||
         $current_forum['visibility'] == 0)
 ) {
     $forum_allow = forum_not_allowed_here();
@@ -126,10 +126,10 @@ if (!api_is_allowed_to_edit(null, true) AND
     }
 }
 
-if (!api_is_allowed_to_edit(null, true) AND
+if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0 ) OR
-        $current_forum['locked'] <> 0 OR
+        ($current_forum_category && $current_forum_category['locked'] <> 0 ) ||
+        $current_forum['locked'] <> 0 ||
         $current_thread['locked'] <> 0
     )
 ) {
@@ -139,7 +139,7 @@ if (!api_is_allowed_to_edit(null, true) AND
     }
 }
 
-if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
+if (!$_user['user_id'] && $current_forum['allow_anonymous'] == 0) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
@@ -147,7 +147,10 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
 }
 $group_id = api_get_group_id();
 
-if (!api_is_allowed_to_edit(null, true) AND $current_forum['allow_edit'] == 0 && !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
+if (!api_is_allowed_to_edit(null, true) &&
+    $current_forum['allow_edit'] == 0 &&
+    !GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+) {
     $forum_allow = forum_not_allowed_here();
     if ($forum_allow === false) {
         exit;
@@ -170,12 +173,10 @@ if ($origin != 'learnpath') {
 /* Display Forum Category and the Forum information */
 
 /*New display forum div*/
-echo '<div class="row">';
-echo '<div class="span12">';
 echo '<div class="forum_title">';
 echo '<h1><a href="viewforum.php?&amp;origin='.$origin.'&amp;forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a></h1>';
 echo '<p class="forum_description">'.prepare4display($current_forum['forum_comment']).'</p>';
-echo '</div></div></div>';
+echo '</div>';
 /* End new display forum */
 
 // Set forum attachment data into $_SESSION
@@ -184,9 +185,7 @@ getAttachedFiles(
     $current_thread['thread_id'],
     $current_post['post_id']
 );
-// The form for the reply
-echo '<div class="row">';
-echo '<div class="span12">';
+
 $values = show_edit_post_form(
     $forum_setting,
     $current_post,
@@ -194,7 +193,6 @@ $values = show_edit_post_form(
     $current_forum,
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : ''
 );
-echo '</div></div>';
 
 if (!empty($values) and isset($_POST['SubmitPost'])) {
     store_edit_post($values);
@@ -207,8 +205,15 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
         $weight_calification = $values['weight_calification'];
         $description = '';
         $session_id = api_get_session_id();
-        $link_info = GradebookUtils::is_resource_in_course_gradebook(api_get_course_id(), 5, $id, $session_id);
+
+        $link_info = GradebookUtils::is_resource_in_course_gradebook(
+            api_get_course_id(),
+            5,
+            $id,
+            $session_id
+        );
         $link_id = $link_info['id'];
+
         if (!$link_info) {
             GradebookUtils::add_resource_to_course_gradebook(
                 $values['category_id'],
@@ -228,14 +233,12 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
     }
 } else {
     // Only show Forum attachment ajax form when do not pass form submit
-    echo '<div class="row"><div class="span12">';
     $attachmentAjaxForm = getAttachmentAjaxForm(
         $current_forum['forum_id'],
         $current_thread['thread_id'],
         $current_post['post_id']
     );
     echo $attachmentAjaxForm;
-    echo '</div></div>';
 }
 
 // Footer

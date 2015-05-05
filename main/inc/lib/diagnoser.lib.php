@@ -67,13 +67,29 @@ class Diagnoser
      * Functions to get the data for the chamilo diagnostics
      * @return array of data
      */
-    function get_chamilo_data() {
+    function get_chamilo_data()
+    {
         $array = array();
-        $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/', 'main/default_course_document/images/');
+        $writable_folders = array(
+            api_get_path(SYS_APP_PATH) .'cache',
+            api_get_path(SYS_COURSE_PATH),
+            api_get_path(SYS_APP_PATH) .'home',
+            api_get_path(SYS_APP_PATH) .'upload/users/',
+            api_get_path(SYS_PATH) .'main/default_course_document/images/',
+        );
         foreach ($writable_folders as $index => $folder) {
-            $writable = is_writable(api_get_path(SYS_PATH) . $folder);
+            $writable = is_writable($folder);
             $status = $writable ? self :: STATUS_OK : self :: STATUS_ERROR;
-            $array[] = $this->build_setting($status, '[FILES]', get_lang('IsWritable') . ': ' . $folder, 'http://be2.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no', get_lang('DirectoryMustBeWritable'));
+            $array[] = $this->build_setting(
+                $status,
+                '[FILES]',
+                get_lang('IsWritable').': '.$folder,
+                'http://be2.php.net/manual/en/function.is-writable.php',
+                $writable,
+                1,
+                'yes_no',
+                get_lang('DirectoryMustBeWritable')
+            );
         }
 
         $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');

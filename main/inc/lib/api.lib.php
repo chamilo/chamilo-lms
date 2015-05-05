@@ -272,6 +272,10 @@ define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');            // $new_path
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
+define('SYS_APP_PATH', 'SYS_APP_PATH');
+define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
+define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
+
 define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
@@ -284,6 +288,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
+define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
@@ -299,10 +304,10 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
+define('SYS_PUBLIC_PATH', 'SYS_PUBLIC_PATH');
+
 define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
-define('SYS_DATA_PATH', 'SYS_DATA_PATH');
-define('WEB_DATA_PATH', 'WEB_DATA_PATH');
 
 define('SYS_DEFAULT_COURSE_DOCUMENT_PATH', 'SYS_DEFAULT_COURSE_DOCUMENT_PATH');
 define('REL_DEFAULT_COURSE_DOCUMENT_PATH', 'REL_DEFAULT_COURSE_DOCUMENT_PATH');
@@ -332,10 +337,10 @@ define('COURSE_RELATION_TYPE_RRHH', 1);
 define('SESSION_RELATION_TYPE_RRHH', 1);
 
 //User image sizes
-define('USER_IMAGE_SIZE_ORIGINAL',  1);
-define('USER_IMAGE_SIZE_BIG',       2);
-define('USER_IMAGE_SIZE_MEDIUM',    3);
-define('USER_IMAGE_SIZE_SMALL',     4);
+define('USER_IMAGE_SIZE_ORIGINAL', 1);
+define('USER_IMAGE_SIZE_BIG', 2);
+define('USER_IMAGE_SIZE_MEDIUM', 3);
+define('USER_IMAGE_SIZE_SMALL', 4);
 
 // Relation type between users
 define('USER_UNKNOW',                   0);
@@ -578,10 +583,12 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(REL_CODE_PATH)                  /chamilo/main/
  * api_get_path(SYS_SERVER_ROOT_PATH)           /var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * api_get_path(SYS_PATH)                       /var/www/chamilo/
- * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
- * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
+ * api_get_path(SYS_APP_PATH)                   /var/www/chamilo/app/
+ * api_get_path(SYS_UPLOAD_PATH)                /var/www/chamilo/app/upload/
+ * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/app/cache
+ * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/app/courses/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/app/Resources/public/css
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
- * api_get_path(SYS_DATA_PATH)                  /var/www/chamilo/data/
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
@@ -589,20 +596,22 @@ require_once __DIR__.'/internationalization.lib.php';
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
  * api_get_path(SYS_TEST_PATH)                  /var/www/chamilo/tests/
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
- * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css/
+ * api_get_path(SYS_PUBLIC_PATH)                /var/www/chamilo/web/
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
  * api_get_path(WEB_COURSE_PATH)                http://www.mychamilo.org/chamilo/courses/
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
- * api_get_path(WEB_DATA_PATH)                  http://www.mychamilo.org/chamilo/data/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
- * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
+ * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/app/cache/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
- * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
+ * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/web/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
  * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/Chamilo/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
+ * api_get_path(WEB_UPLOAD_PATH)                http://www.mychamilo.org/chamilo/app/upload/
+ * api_get_path(WEB_PUBLIC_PATH)                http://www.mychamilo.org/chamilo/web/
+ *
  *
  *
  * This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
@@ -623,14 +632,12 @@ require_once __DIR__.'/internationalization.lib.php';
 function api_get_path($path_type, $path = null)
 {
     static $paths = array(
-        SYS_DATA_PATH           => '',
         WEB_PATH                => '',
         SYS_PATH                => '',
         REL_PATH                => '',
         WEB_SERVER_ROOT_PATH    => '',
         SYS_SERVER_ROOT_PATH    => '',
         WEB_COURSE_PATH         => '',
-        WEB_DATA_PATH           => '',
         SYS_COURSE_PATH         => '',
         REL_COURSE_PATH         => '',
         REL_CODE_PATH           => '',
@@ -638,21 +645,26 @@ function api_get_path($path_type, $path = null)
         SYS_CODE_PATH           => '',
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
-        WEB_CSS_PATH            => 'css/',
-        SYS_CSS_PATH            => 'css/',
+        WEB_CSS_PATH            => 'web/css/',
+        SYS_CSS_PATH            => 'app/Resources/public/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
-        SYS_ARCHIVE_PATH        => 'archive/',
-        WEB_ARCHIVE_PATH        => 'archive/',
+        SYS_ARCHIVE_PATH        => 'app/cache/',
+        WEB_ARCHIVE_PATH        => 'app/cache/',
+        SYS_APP_PATH            => 'app/',
+        SYS_UPLOAD_PATH         => 'app/upload/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        CONFIGURATION_PATH      => 'inc/conf/',
+        CONFIGURATION_PATH      => 'app/config/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
         WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
+        WEB_UPLOAD_PATH         => 'app/upload/',
+        WEB_PUBLIC_PATH         => 'web/',
         SYS_TEMPLATE_PATH       => 'template/',
+        SYS_PUBLIC_PATH         => 'web/',
         WEB_FONTS_PATH          => 'fonts/',
         SYS_FONTS_PATH          => 'fonts/',
     );
@@ -671,15 +683,15 @@ function api_get_path($path_type, $path = null)
     static $root_web;
     static $root_sys;
     static $root_rel;
-    static $code_folder;
-    static $course_folder;
 
     // Always load root_web modifications for multiple url features
     global $_configuration;
     //default $_configuration['root_web'] configuration
     $root_web = $_configuration['root_web'];
 
-    $data_folder    = 'data/';
+    $data_folder = 'data/';
+    $code_folder = 'main/';
+    $course_folder = 'courses/';
 
     // Configuration data for already installed system.
     $root_sys = $_configuration['root_sys'];
@@ -698,9 +710,8 @@ function api_get_path($path_type, $path = null)
     if (!$is_this_function_initialized) {
         global $_configuration;
 
-        $root_rel       = $_configuration['url_append'];
-        $code_folder    = $_configuration['code_append'];
-        $course_folder  = $_configuration['course_folder'];
+        $root_rel = $_configuration['url_append'];
+
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
@@ -725,7 +736,6 @@ function api_get_path($path_type, $path = null)
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
                 $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 $code_folder = 'main/';
-                $course_folder = 'courses/';
             }
             // Here we give up, so we don't touch anything.
         }
@@ -747,29 +757,32 @@ function api_get_path($path_type, $path = null)
         $paths[REL_PATH]                = $root_rel;
         $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
         $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
+
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
-        $paths[SYS_COURSE_PATH]         = $root_sys.$course_folder;
+
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
-        $paths[SYS_DATA_PATH]           = $root_sys.$data_folder;
-        $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
 
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_CODE_PATH].'default_course_document/';
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_PATH].'main/default_course_document/';
 
-
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+
+        $paths[SYS_APP_PATH]            = $paths[SYS_PATH].$paths[SYS_APP_PATH];
+        $paths[SYS_UPLOAD_PATH]         = $paths[SYS_PATH].$paths[SYS_UPLOAD_PATH];
+
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        $paths[SYS_PUBLIC_PATH]         = $paths[SYS_PATH].$paths[SYS_PUBLIC_PATH];
+        $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
         $paths[SYS_FONTS_PATH]          = $paths[SYS_CODE_PATH].$paths[SYS_FONTS_PATH];
 
-        $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
+        $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
         $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
@@ -781,10 +794,13 @@ function api_get_path($path_type, $path = null)
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
 
         $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
+        $paths[WEB_UPLOAD_PATH]         = $paths[WEB_PATH].$paths[WEB_UPLOAD_PATH];
+        $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$paths[WEB_PUBLIC_PATH];
 
         $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
         $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-        $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
+        $paths[CONFIGURATION_PATH]      = $paths[SYS_PATH].$paths[CONFIGURATION_PATH];
+        $paths[SYS_COURSE_PATH]         = $paths[SYS_APP_PATH].$course_folder;
 
         $is_this_function_initialized = true;
     } else {
@@ -802,8 +818,7 @@ function api_get_path($path_type, $path = null)
                 WEB_PLUGIN_PATH         => 'plugin/',
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
-                WEB_AJAX_PATH           => 'inc/ajax/',
-                WEB_DATA_PATH           => '',
+                WEB_AJAX_PATH           => 'inc/ajax/'
             );
 
             $root_web = api_add_trailing_slash($root_web);
@@ -815,7 +830,6 @@ function api_get_path($path_type, $path = null)
             $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
             $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
             $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
-            $paths[WEB_DATA_PATH]           = $root_web.$data_folder;
             $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
 
             $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
@@ -929,7 +943,8 @@ function api_get_path($path_type, $path = null)
  * @return string The path of the resource converted to CDN
  * @author Yannick Warnier <ywarnier@beeznst.org>
  */
-function api_get_cdn_path($web_path) {
+function api_get_cdn_path($web_path)
+{
     global $_configuration;
     $web_root = api_get_path(WEB_PATH);
     $ext = substr($web_path,strrpos($web_path,'.'));
@@ -1307,7 +1322,7 @@ function api_get_user_courses($userid, $fetch_session = true)
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $sql = "SELECT cc.code code, cc.directory dir, cu.status status
+    $sql = "SELECT cc.id as real_id, cc.code code, cc.directory dir, cu.status status
             FROM    $t_course       cc,
                     $t_course_user   cu
             WHERE
@@ -1391,7 +1406,7 @@ function _api_format_user($user, $add_password = false)
         $result['email'] = isset($user['mail'])? $user['mail'] : null;
     }
     $user_id = intval($user['user_id']);
-    $result['user_id'] = $user_id;
+    $result['user_id'] = $result['id'] = $user_id;
     $saveUserLastLogin = api_get_configuration_value('save_user_last_login');
 
     if ($saveUserLastLogin) {
@@ -1417,40 +1432,14 @@ function _api_format_user($user, $add_password = false)
     $result['lastLogin'] = $last_login;
 
     // Getting user avatar.
-    $picture_filename   = trim($result['picture_uri']);
-    $result['avatar'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-    $result['avatar_small'] = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
-    $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
-    $dir = 'upload/users/'.$user_id.'/';
+    $picture_filename = trim($result['picture_uri']);
 
-    //if (!empty($picture_filename) && api_is_anonymous() ) {  //Why you have to be anonymous?
-    if (!empty($picture_filename)) {
-        if (api_get_setting('split_users_upload_directory') === 'true') {
-            $dir = 'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
-        }
-    }
-    $image_sys_path = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
+    $originalFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL, $result);
+    $smallFile = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_SMALL, $result);
 
-    if ($picture_filename && file_exists($image_sys_path)) {
-        $result['avatar'] = api_get_path(WEB_CODE_PATH).$dir.$picture_filename;
-        $result['avatar_small'] = api_get_path(WEB_CODE_PATH).$dir.'small_'.$picture_filename;
-        $result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).$dir.$picture_filename;
-    } else if (api_get_configuration_value('gravatar_enabled')) {
-        $userEmail = isset($user['email']) ? $user['email'] : '';
-        $gravatarType = api_get_configuration_value('gravatar_type');
-        $avatarPaths = array(
-            'avatar' => $result['avatar'],
-            'avatar_small' => $result['avatar_small'],
-            'avatar_sys_path' => $result['avatar_sys_path']
-        );
-        foreach ($avatarPaths as $key => $value) {
-            $avatarSize = api_getimagesize($value);
-            $avatarSize = $avatarSize['width'] > $avatarSize['height'] ?
-                $avatarSize['width'] :
-                $avatarSize['height'];
-            $result[$key] = UserManager::getGravatar($userEmail, $avatarSize, $gravatarType);
-        }
-    }
+    $result['avatar'] = $originalFile;
+    $result['avatar_small'] = $smallFile;
+    //$result['avatar_sys_path'] = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
 
     if (isset($user['user_is_online'])) {
         $result['user_is_online'] = $user['user_is_online'] == true ? 1 : 0;
@@ -4303,11 +4292,11 @@ function api_get_visual_theme() {
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
 function api_get_themes() {
-    $cssdir = api_get_path(SYS_PATH).'main/css/';
+    $cssdir = api_get_path(SYS_CSS_PATH);
     $list_dir = array();
     $list_name = array();
 
-    if (@is_dir($cssdir)) {
+    if (is_dir($cssdir)) {
         $themes = @scandir($cssdir);
 
         if (is_array($themes)) {
@@ -4318,7 +4307,7 @@ function api_get_themes() {
                     if (substr($theme, 0, 1) == '.') {
                         continue;
                     } else {
-                        if (@is_dir($cssdir.$theme)) {
+                        if (is_dir($cssdir.$theme)) {
                             $list_dir[] = $theme;
                             $list_name[] = ucwords(str_replace('_', ' ', $theme));
                         }
@@ -4327,6 +4316,7 @@ function api_get_themes() {
             }
         }
     }
+
     return array($list_dir, $list_name);
 }
 
@@ -5600,20 +5590,19 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     return false;
 }
 
+
 /**
  * Replaces "forbidden" characters in a filename string.
  *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author René Haentjens, UGent (RH)
- * @author Ivan Tcholakov, JUN-2009.        Transliteration functionality has been added.
- * @param  string $filename                 The filename string.
- * @param  string $strict (optional)        When it is 'strict', all non-ASCII charaters will be replaced. Additional ASCII replacemets will be done too.
- * @return string                           The cleaned filename.
+ * @param string $filename
+ * @param int $length
+ * @param bool $file_name
+ * @return string
  */
-
-function api_replace_dangerous_char($filename, $strict = 'loose')
+function api_replace_dangerous_char($filename)
 {
-    return URLify::filter($filename, 250);
+    return URLify::filter($filename, 250, '', true);
+
     /*
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
@@ -5667,34 +5656,6 @@ function api_request_uri() {
     return $uri;
 }
 
-/**
- * Creates the "include_path" php-setting, following the rule that
- * PEAR packages of Chamilo should be read before other external packages.
- * To be used in global.inc.php only.
- * @author Ivan Tcholakov, 06-NOV-2008.
- */
-function api_create_include_path_setting() {
-    $include_path = ini_get('include_path');
-    if (!empty($include_path)) {
-        $include_path_array = explode(PATH_SEPARATOR, $include_path);
-        $dot_found = array_search('.', $include_path_array);
-        if ($dot_found !== false) {
-            $result = array();
-            foreach ($include_path_array as $path) {
-                $result[] = $path;
-                if ($path == '.') {
-                    // The path of Chamilo PEAR packages is to be inserted after the current directory path.
-                    $result[] = api_get_path(LIBRARY_PATH).'pear';
-                }
-            }
-            return implode(PATH_SEPARATOR, $result);
-        }
-        // Current directory is not listed in the include_path setting, low probability is here.
-        return api_get_path(LIBRARY_PATH).'pear'.PATH_SEPARATOR.$include_path;
-    }
-    // The include_path setting is empty, low probability is here.
-    return api_get_path(LIBRARY_PATH).'pear';
-}
 
 /** Gets the current access_url id of the Chamilo Platform
  * @author Julio Montoya <gugli100@gmail.com>
@@ -6540,8 +6501,9 @@ function api_get_unique_id() {
  * Get home path
  * @return string
  */
-function api_get_home_path() {
-    $home = 'home/';
+function api_get_home_path()
+{
+    $home = 'app/home/';
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
         $url_info = api_get_access_url($access_url_id);
@@ -6549,11 +6511,11 @@ function api_get_home_path() {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        // if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-        //if ($clean_url != 'localhost/') {
-            $home = 'home/' . $clean_url;
-        //}
+
+        $home = 'app/home/' . $clean_url;
+
     }
+
     return $home;
 }
 
@@ -7976,27 +7938,6 @@ function api_protect_course_group($tool, $showHeader = true)
     }
 }
 
-/**
- * Check if Chmailo is installed correctly. If so, return the version
- * @return array ('installed' => 0/1, 'message' => error/db version)
- */
-function apiIsSystemInstalled()
-{
-    $root = __DIR__.'/../../../';
-    $configFile = $root.'main/inc/conf/configuration.php';
-    if (!is_readable($configFile)) {
-        return array ('installed' => 0, 'message' => 'No config file');
-    }
-    $result = Database::query(
-        "SELECT selected _value FROM settings_current WHERE variable = 'chamilo_database_version'"
-    );
-    if ($result == false) {
-        return array ('installed' => 0, 'message' => 'No way to recover version');
-    }
-    $settingsRow = Database::fetch_assoc($result);
-    $version = $settingsRow['selected_value'];
-    return array('installed' => 1, 'message' => $version);
-}
 
 /**
  * Limit the access to Session Admins wheen the limit_session_admin_role

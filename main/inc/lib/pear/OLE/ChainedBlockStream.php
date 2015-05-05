@@ -22,9 +22,6 @@
  * @since      File available since Release 0.6.0
  */
 
-require_once 'PEAR.php';
-require_once 'OLE.php';
-
 /**
  * Stream wrapper for reading data stored in an OLE file. Implements methods
  * for PHP's stream_wrapper_register(). For creating streams using this

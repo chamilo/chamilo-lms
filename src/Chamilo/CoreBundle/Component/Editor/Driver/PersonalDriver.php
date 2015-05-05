@@ -18,9 +18,8 @@ class PersonalDriver extends Driver implements DriverInterface
     public function setup()
     {
         $userId = api_get_user_id();
-        $path = \UserManager::getUserPathById($userId);
-        if (!empty($path)) {
-            $dir = api_get_path(SYS_CODE_PATH) . $path;
+        $dir = \UserManager::getUserPathById($userId, 'system');
+        if (!empty($dir)) {
 
             if (!is_dir($dir)) {
                 mkdir($dir);

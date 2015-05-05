@@ -552,8 +552,8 @@ function display_student_publications_list(
 
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
-    $course_id = api_get_course_int_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
 
     $sort_params = array();
 
@@ -1248,11 +1248,8 @@ function updateDirName($work_data, $newPath)
 {
     $course_id = $work_data['c_id'];
     $sessionId = intval($work_data['session_id']);
-    $courseInfo = api_get_course_info_by_id($course_id);
-
     $work_id = intval($work_data['id']);
     $oldPath = $work_data['url'];
-    $path = $work_data['url'];
     $originalNewPath = Database::escape_string($newPath);
     $newPath = Database::escape_string($newPath);
     $newPath = api_replace_dangerous_char($newPath);
@@ -1263,37 +1260,7 @@ function updateDirName($work_data, $newPath)
     }
 
     if (!empty($newPath)) {
-        //$base_work_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work';
-
-        //error_log('rename'.$base_work_dir.$oldPath.' - '.$newPath);
-
-        //my_rename($base_work_dir.$oldPath, $newPath);
-
         $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        /*
-        // Update all the files in the other directories according with the next query
-        $sql = "SELECT id, url FROM $table
-                WHERE
-                    c_id = $course_id AND
-                    parent_id = $work_id AND
-                    session_id = $sessionId AND
-                    url <> ''
-                ";
-        $result = Database::query($sql);
-        $oldPathWithWork = 'work'.$path;
-
-        while ($work = Database :: fetch_array($result)) {
-            $url = str_replace($oldPathWithWork, 'work/'.$newPath, $work['url']);
-            $sql = 'UPDATE ' . $table . '
-                    SET url = "' . $url . '"
-                    WHERE
-                        c_id = ' . $course_id . ' AND
-                        id = ' . $work['id'] . ' AND
-                        session_id = ' . $sessionId . '
-                    ';
-            Database::query($sql);
-        }*/
-        //url= '/".$newPath."',
         $sql = "UPDATE $table SET
                     title = '".$originalNewPath."'
                 WHERE
@@ -1590,9 +1557,9 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id, true, false, 'work.session_id');
 
-    $course_id = api_get_course_int_id();
     $group_id = api_get_group_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
     $work_id = intval($work_id);
 
     if (!empty($group_id)) {
@@ -1668,7 +1635,7 @@ function getWorkListStudent(
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $courseInfo = api_get_course_info();
-    $course_id = api_get_course_int_id();
+    $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
@@ -2156,9 +2123,9 @@ function get_work_user_list(
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $session_id = api_get_session_id();
-    $course_id = api_get_course_int_id();
     $group_id = api_get_group_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
 
     $work_id = intval($work_id);
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
@@ -3188,13 +3155,7 @@ function getWorkComments($work)
     $comments = Database::store_result($result, 'ASSOC');
     if (!empty($comments)) {
         foreach ($comments as &$comment) {
-            $pictureInfo = UserManager::get_picture_user(
-                $comment['user_id'],
-                $comment['picture_uri'],
-                24,
-                USER_IMAGE_SIZE_SMALL
-            );
-            $comment['picture'] = $pictureInfo['file'];
+            $comment['picture'] = UserManager::getUserPicture($comment['user_id']);
             $commentInfo = getWorkComment($comment['id']);
 
             if (!empty($commentInfo)) {
@@ -3558,7 +3519,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
         if (!empty($workParent)) {
             $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
             $newFileName = 'comment_'.$commentId.'_'.php2phps(
-                api_replace_dangerous_char($fileData['name'], 'strict')
+                api_replace_dangerous_char($fileData['name'])
             );
             $newFilePath = $uploadDir.'/'.$newFileName;
             $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
@@ -3687,7 +3648,7 @@ function setWorkUploadForm($form, $uploadFormType = 0)
             break;
     }
 
-    $form->addButtonUpload(get_lang('Send'), 'submitWork');
+    $form->addButtonUpload(get_lang('Upload'), 'submitWork');
 }
 
 /**
@@ -3706,7 +3667,7 @@ function uploadWork($my_folder_data, $_course)
     $filename = add_ext_on_mime(stripslashes($_FILES['file']['name']), $_FILES['file']['type']);
 
     // Replace dangerous characters
-    $filename = api_replace_dangerous_char($filename, 'strict');
+    $filename = api_replace_dangerous_char($filename);
 
     // Transform any .php file in .phps fo security
     $filename = php2phps($filename);

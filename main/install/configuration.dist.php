@@ -50,14 +50,6 @@ $_configuration['root_sys'] = '{ROOT_SYS}';
 // example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] = '{URL_APPEND_PATH}';
 
-// Directory of the Chamilo code.
-// You could change this but it is not advised since this has not been tested yet.
-$_configuration['code_append'] = "main/";
-
-// Directory to store all course-related files.
-// You could change this but it is not advised since this has not been tested yet.
-$_configuration['course_folder'] = "courses/";
-
 // URL to your phpMyAdmin installation.
 // If not empty, a link will be available in the Platform Administration
 $_configuration['db_admin_path'] = '';
@@ -68,8 +60,8 @@ $_configuration['db_admin_path'] = '';
 // CAS IMPLEMENTATION
 // -> Go to your portal Chamilo > Administration > CAS to activate CAS
 // You can leave these lines uncommented even if you don't use CAS authentification
-$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
-$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
+//$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
+//$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
 
 // NEW LDAP IMPLEMENTATION BASED ON external_login info
 // -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
@@ -207,7 +199,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 //$_configuration['session_days_before_coach_access'] = 0;
 // Default session days after coach access
 //$_configuration['session_days_after_coach_access'] = 0;
-// PDF Logo header located in main/css/xxx/images/pdf_logo_header.png
+// PDF Logo header in app/Resources/public/css/themes/xxx/images/pdf_logo_header.png
 //$_configuration['pdf_logo_header'] = false;
 // Order inscription user list by official_code
 //$_configuration['order_user_list_by_official_code'] = false;
@@ -244,7 +236,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // Auto detect language custom pages.
 // $_configuration['auto_detect_language_custom_pages'] = true;
 // If the database is down this css style will be used to show the errors.
-//$_configuration['theme_fallback'] = 'chamilo'; // (main/css/chamilo)
+//$_configuration['theme_fallback'] = 'chamilo'; // (chamilo theme)
 // The default template that will be use in the system.
 //$_configuration['default_template'] = 'default'; // (main/template/default)
 // Show reduce LP report

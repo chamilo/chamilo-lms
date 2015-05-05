@@ -24,6 +24,7 @@ class MessageManager
         foreach ($userlist as $user_id) {
             $online_user_list[$user_id] = GetFullUserName($user_id).($current_user_id == $user_id ? ("&nbsp;(".get_lang('Myself').")") : (""));
         }
+
         return $online_user_list;
     }
 
@@ -53,6 +54,7 @@ class MessageManager
                 GetFullUserName($uid).
                 "</b>";
         }
+
         return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
     }
 
@@ -69,6 +71,7 @@ class MessageManager
                 WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $i = Database::num_rows($result);
+
         return $i;
     }
 
@@ -83,6 +86,7 @@ class MessageManager
         for ($i = 0; $i < count($user_connect); $i++) {
             $user_id_list[$i] = $user_connect[$i][0];
         }
+
         return $user_id_list;
     }
 
@@ -233,6 +237,7 @@ class MessageManager
             );
 
             Display::addFlash(Display::return_message($warning , 'warning'));
+
             return false;
         }
 
@@ -391,17 +396,17 @@ class MessageManager
         // get message id from data found early for other receiver user
         $sql = "SELECT id FROM $table_message
                 WHERE
-                  user_sender_id ='{$row_message['user_sender_id']}' AND
-                  title='{$row_message['title']}' AND
-                  content='{$row_message['content']}' AND
-                  group_id='{$row_message['group_id']}' AND
-                  user_receiver_id='$receiver_user_id'";
+                    user_sender_id ='{$row_message['user_sender_id']}' AND
+                    title='{$row_message['title']}' AND
+                    content='{$row_message['content']}' AND
+                    group_id='{$row_message['group_id']}' AND
+                    user_receiver_id='$receiver_user_id'";
         $rs_msg_id = Database::query($sql);
         $row = Database::fetch_array($rs_msg_id);
 
         // update parent_id for other user receiver
-        $sql = "UPDATE $table_message SET parent_id = '{$row[id]}'
-                WHERE id = '$message_id'";
+        $sql = "UPDATE $table_message SET parent_id = ".$row['id']."
+                WHERE id = $message_id";
         Database::query($sql);
     }
 
@@ -417,7 +422,8 @@ class MessageManager
             return false;
         $user_receiver_id = intval($user_receiver_id);
         $id = intval($id);
-        $sql = "SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
+        $sql = "SELECT * FROM $table_message
+                WHERE id=".$id." AND msg_status<>4";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -461,14 +467,16 @@ class MessageManager
             $query = "UPDATE $table_message SET msg_status=3
                     WHERE user_sender_id='$user_sender_id' AND id='$id'";
             $result = Database::query($query);
+
             return $result;
         }
+
         return false;
     }
 
     /**
      * Saves a message attachment files
-     * @param  array 	$_FILES['name']
+     * @param  array 	$file_attach $_FILES['name']
      * @param  string  	a comment about the uploaded file
      * @param  int		message id
      * @param  int		receiver user id (optional)
@@ -844,21 +852,28 @@ class MessageManager
         if ($source == 'outbox') {
             if (isset($message_id) && is_numeric($message_id)) {
                 $query = "SELECT * FROM $table_message
-                          WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
+                          WHERE
+                            user_sender_id = ".api_get_user_id()." AND
+                            id = ".$message_id." AND
+                            msg_status = 4;";
                 $result = Database::query($query);
-                $path = 'outbox.php';
             }
         } else {
             if (is_numeric($message_id) && !empty($message_id)) {
-                $query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."'
-                          WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                $query = "UPDATE $table_message SET
+                          msg_status = '".MESSAGE_STATUS_NEW."'
+                          WHERE
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='".$message_id."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table_message
-                          WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+                          WHERE
+                            msg_status<>4 AND
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='".$message_id."'";
                 $result = Database::query($query);
             }
-            $path = 'inbox.php';
         }
         $row = Database::fetch_array($result, 'ASSOC');
         $user_sender_id = $row['user_sender_id'];
@@ -877,10 +892,9 @@ class MessageManager
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
-        $from_user = UserManager::get_user_info_by_id($user_sender_id);
-        $name = api_get_person_name($from_user['firstname'], $from_user['lastname']);
-        $user_image = UserManager::get_picture_user($row['user_sender_id'], $from_user['picture_uri'], 80);
-        $user_image = Display::img($user_image['file'], $name, array('title' => $name));
+        $from_user = api_get_user_info($user_sender_id);
+        $name = $from_user['complete_name'];
+        $user_image = Display::img($from_user['avatar'], $name, array('title' => $name));
 
         $message_content = Display::page_subheader(str_replace("\\", "", $title));
 
@@ -921,12 +935,16 @@ class MessageManager
             $social_link = 'f=social';
         }
         if ($source == 'outbox') {
-            $message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+            $message_content .= '<a href="outbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
         } else {
-            $message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
+                Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
+            $message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
         }
-        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+        $message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.
+            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
 
         $message_content .='</div></td>
 		      <td width=10></td>
@@ -942,8 +960,6 @@ class MessageManager
     public static function show_message_box_sent()
     {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
-
         $message_id = '';
         if (is_numeric($_GET['id_send'])) {
             $query = "SELECT * FROM $table_message
@@ -1060,16 +1076,14 @@ class MessageManager
                 $value['count'] = $count;
                 $new_topics[$id] = $value;
             }
-            //$new_topics = sort_column($new_topics,'count');
-            $param_names = array_keys($_GET);
+
             $array_html = array();
 
             foreach ($new_topics as $index => $topic) {
                 $html = '';
                 // topics
-                //$indent	= 0;
-                $user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
-                //$files_attachments  = self::get_links_message_attachment_files($topic['id']);
+                $user_sender_info = api_get_user_info($topic['user_sender_id']);
+
                 $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 
                 $html .= '<div class="row">';
@@ -1077,7 +1091,7 @@ class MessageManager
                 $items = $topic['count'];
                 $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
 
-                $html .= '<div class="span1">';
+                $html .= '<div class="col-md-1">';
                 $html .= Display::div(Display::tag('span', $items).$reply_label, array('class' => 'group_discussions_replies'));
                 $html .= '</div>';
 
@@ -1087,16 +1101,20 @@ class MessageManager
                     $topic['title'] = get_lang('Untitled');
                 }
 
-                $html .= '<div class="span4">';
+                $html .= '<div class="col-md-4">';
                 $html .= Display::tag('h4', Display::url(Security::remove_XSS($topic['title'], STUDENT, true), 'group_topics.php?id='.$group_id.'&topic_id='.$topic['id']));
 
-                if ($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) {
+                if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
+                    $my_group_role == GROUP_USER_PERMISSION_MODERATOR
+                ) {
                     $actions = '<br />'.Display::url(get_lang('Delete'), api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'], array('class' => 'btn btn-default'));
                 }
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
-                    if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00') {
+                    if (!empty($topic['update_date']) &&
+                        $topic['update_date'] != '0000-00-00 00:00:00'
+                    ) {
                         $date .= '<div class="message-group-date" > <i>'.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</i></div>';
                     }
                 } else {
@@ -1105,21 +1123,20 @@ class MessageManager
                 $html .= $date.$actions;
                 $html .= '</div>';
 
-                $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);
-                $image_repository = $image_path['dir'];
-                $existing_image = $image_path['file'];
+                $image = $user_sender_info['avatar'];
 
                 $user_info = '<td valign="top"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
-                $user_info .= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+                $user_info .= '<div class="message-group-author"><img src="'.$image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
                 $user_info .= '</td>';
 
-                $html .= '<div class="span2">';
+                $html .= '<div class="col-md-2">';
                 $html .= $user_info;
                 $html .= '</div>';
                 $html .= '</div>';
 
                 $array_html[] = array($html);
             }
+
             // grids for items and topics  with paginations
             $html_messages .= Display::return_sortable_grid(
                 'topics',
@@ -1177,9 +1194,9 @@ class MessageManager
         }
         $html .= Display::page_subheader(Security::remove_XSS($main_message['title'].$delete_button, STUDENT, true));
 
-        $user_sender_info = UserManager::get_user_info_by_id($main_message['user_sender_id']);
+        $user_sender_info = api_get_user_info($main_message['user_sender_id']);
         $files_attachments = self::get_links_message_attachment_files($main_message['id']);
-        $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+        $name = $user_sender_info['complete_name'];
 
         $topic_page_nr = isset($_GET['topics_page_nr']) ? intval($_GET['topics_page_nr']) : null;
         $links.= '<div id="message-reply-link">';
@@ -1191,10 +1208,8 @@ class MessageManager
         $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
         $links.= '</div>';
 
-        $image_path = UserManager::get_user_picture_path_by_id($main_message['user_sender_id'], 'web', false, true);
-        $image_repository = $image_path['dir'];
-        $existing_image = $image_path['file'];
-        $main_content.= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+        $userPicture = $user_sender_info['avatar'];
+        $main_content.= '<div class="message-group-author"><img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
         $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'&nbsp;</a>';
 
         $date = '';
@@ -1225,9 +1240,9 @@ class MessageManager
                 $user_link = '';
                 $links = '';
                 $html_items = '';
-                $user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
+                $user_sender_info = api_get_user_info($topic['user_sender_id']);
                 $files_attachments = self::get_links_message_attachment_files($topic['id']);
-                $name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+                $name = $user_sender_info['complete_name'];
 
                 $links.= '<div id="message-reply-link">';
                 if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
@@ -1237,10 +1252,9 @@ class MessageManager
                 $links.= Display :: return_icon('talk.png', get_lang('Reply')).'</a>';
                 $links.= '</div>';
 
-                $image_path = UserManager::get_user_picture_path_by_id($topic['user_sender_id'], 'web', false, true);
-                $image_repository = $image_path['dir'];
-                $existing_image = $image_path['file'];
-                $html_items.= '<div class="message-group-author"><img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
+                $userPicture = $user_sender_info['avatar'];
+
+                $html_items.= '<div class="message-group-author"><img src="'.$userPicture.'" alt="'.$name.'"  width="32" height="32" title="'.$name.'" /></div>';
                 $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a>';
 
                 $date = '';

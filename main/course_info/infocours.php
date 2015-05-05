@@ -434,7 +434,7 @@ if ($form->validate() && is_settings_editable()) {
         isset($_configuration[$urlId]['hosting_limit_active_courses']) &&
         $_configuration[$urlId]['hosting_limit_active_courses'] > 0
     ) {
-        $courseInfo = api_get_course_info($course_code);
+        $courseInfo = api_get_course_info_by_id($courseId);
 
         // Check if
         if ($courseInfo['visibility'] == COURSE_VISIBILITY_HIDDEN &&

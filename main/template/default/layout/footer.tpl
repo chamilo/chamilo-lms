@@ -1,4 +1,3 @@
-
 <footer> <!-- start of #footer section -->
     <div class="container">
         <div class="row">
@@ -102,16 +101,18 @@
 
     /* Makes row highlighting possible */
     $(document).ready( function() {
+        // Date time settings.
         moment.locale('{{ locale }}');
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
         $.datepicker.regional["local"] = $.datepicker.regional["{{ locale }}"];
 
+        // Bootstrap tabs.
         $('.tab-wrapper a').click(function (e) {
-            e.preventDefault()
+            e.preventDefault();
             $(this).tab('show');
 
             //$('#tabs a:first').tab('show') // Select first tab
-        })
+        });
 
         /**
          * Advanced options

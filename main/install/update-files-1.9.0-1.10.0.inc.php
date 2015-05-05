@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+
 /**
  * Chamilo LMS
  *
@@ -13,9 +16,6 @@
 Log::notice('Entering file');
 
 if (defined('SYSTEM_INSTALLATION')) {
-
-    $conf_dir = api_get_path(CONFIGURATION_PATH);
-
     // Changes for 1.10.x
     // Delete directories and files that are not necessary anymore
     // pChart (1) lib, etc
@@ -86,6 +86,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         'xhosa',
         'yoruba',
     );
+
     $filesToDelete = array(
         'accessibility',
         'admin',
@@ -136,9 +137,11 @@ if (defined('SYSTEM_INSTALLATION')) {
         'wiki',
         'work',
     );
+
     $list = scandir($langPath);
     foreach ($list as $entry) {
-        if (is_dir($langPath . $entry) && in_array($entry, $officialLanguages)
+        if (is_dir($langPath . $entry) &&
+            in_array($entry, $officialLanguages)
         ) {
             foreach ($filesToDelete as $file) {
                 if (is_file($langPath . $entry . '/' . $file . '.inc.php')) {
@@ -147,6 +150,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
+
     // Remove the "main/conference/" directory that wasn't used since years long
     // past - see rrmdir function declared below
     @rrmdir(api_get_path(SYS_CODE_PATH).'conference');
@@ -155,6 +159,43 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (is_file(api_get_path(LIBRARY_PATH).'events.lib.inc.php')) {
         @unlink(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
     }
+
+    if (is_file(api_get_path(SYS_PATH).'courses/.htaccess')) {
+        unlink(api_get_path(SYS_PATH).'courses/.htaccess');
+    }
+
+    // Delete all "courses/ABC/index.php" files.
+
+    $finder = new Finder();
+    $dirs = $finder->directories()->in(api_get_path(SYS_APP_PATH).'courses');
+    $fs = new Filesystem();
+    /** @var Symfony\Component\Finder\SplFileInfo $dir */
+    foreach ($dirs as $dir) {
+        $indexFile = $dir->getPath().'/index.php';
+        if ($fs->exists($indexFile)) {
+            $fs->remove($indexFile);
+        }
+    }
+
+    // Move dirs into new structures.
+
+    $movePathList = [
+        api_get_path(SYS_CODE_PATH).'upload/users/groups' => api_get_path(SYS_UPLOAD_PATH),
+        api_get_path(SYS_CODE_PATH).'upload/users' => api_get_path(SYS_UPLOAD_PATH),
+        api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH),
+        api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH),
+        api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian',
+        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH)
+    ];
+
+    foreach ($movePathList as $origin => $destination) {
+        if (is_dir($origin)) {
+            move($origin, $destination);
+        }
+    }
+
+    // Remove archive
+    @rrmdir(api_get_path(SYS_PATH).'archive');
 
 } else {
     echo 'You are not allowed here !'. __FILE__;

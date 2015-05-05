@@ -163,29 +163,28 @@ class ExtraFieldValue extends Model
                             break;
                         case ExtraField::FIELD_TYPE_FILE_IMAGE:
                             $dirPermissions = api_get_permissions_for_new_directories();
-                            $sysCodePath = api_get_path(SYS_CODE_PATH);
 
                             switch ($this->type) {
                                 case 'course':
-                                    $fileDir = "upload/courses/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                                     break;
                                 case 'session':
-                                    $fileDir = "upload/sessions/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
                                     break;
                                 case 'user':
-                                    $fileDir = UserManager::getUserPathById($this->handler_id);
+                                    $fileDir = UserManager::getUserPathById($this->handler_id, 'system');
                                     break;
                             }
 
                             $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE . "_{$params[$this->handler_id]}.png";
 
-                            if (!file_exists($sysCodePath . $fileDir)) {
-                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            if (!file_exists($fileDir)) {
+                                mkdir($fileDir, $dirPermissions, true);
                             }
 
                             if ($value['error'] == 0) {
                                 $imageExtraField = new Image($value['tmp_name']);
-                                $imageExtraField->send_image($sysCodePath . $fileDir . $fileName, -1, 'png');
+                                $imageExtraField->send_image($fileDir . $fileName, -1, 'png');
 
                                 $new_params = array(
                                     $this->handler_id => $params[$this->handler_id],
@@ -202,29 +201,28 @@ class ExtraFieldValue extends Model
                             break;
                         case ExtraField::FIELD_TYPE_FILE:
                             $dirPermissions = api_get_permissions_for_new_directories();
-                            $sysCodePath = api_get_path(SYS_CODE_PATH);
 
                             switch ($this->type) {
                                 case 'course':
-                                    $fileDir = "upload/courses/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
                                     break;
                                 case 'session':
-                                    $fileDir = "upload/sessions/";
+                                    $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
                                     break;
                                 case 'user':
-                                    $fileDir = UserManager::getUserPathById($this->handler_id);
+                                    $fileDir = UserManager::getUserPathById($this->handler_id, 'system');
                                     break;
                             }
 
                             $cleanedName = api_replace_dangerous_char($value['name']);
                             $fileName = ExtraField::FIELD_TYPE_FILE . "_{$params[$this->handler_id]}_$cleanedName";
 
-                            if (!file_exists($sysCodePath . $fileDir)) {
-                                mkdir($sysCodePath . $fileDir, $dirPermissions, true);
+                            if (!file_exists($fileDir)) {
+                                mkdir($fileDir, $dirPermissions, true);
                             }
 
                             if ($value['error'] == 0) {
-                                moveUploadedFile($value, $sysCodePath . $fileDir . $fileName);
+                                moveUploadedFile($value, $fileDir . $fileName);
 
                                 $new_params = array(
                                     $this->handler_id => $params[$this->handler_id],

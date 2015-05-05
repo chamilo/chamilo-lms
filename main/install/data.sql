@@ -1,3 +1,5 @@
+-- After the database schema is created, the database is filled
+-- with default values.
 
 INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
@@ -693,6 +695,16 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0),
 ('Yor&ugrave;b&aacute;','yoruba','yo','yoruba',0);
 
+-- Set parent language to Spanish for all close-by languages, same for Italian, French, Portuguese and Chinese
+UPDATE language SET parent_id = 49 WHERE english_name = 'quechua_cusco';
+UPDATE language SET parent_id = 49 WHERE english_name = 'galician';
+UPDATE language SET parent_id = 49 WHERE english_name = 'esperanto';
+UPDATE language SET parent_id = 49 WHERE english_name = 'catalan';
+UPDATE language SET parent_id = 49 WHERE english_name = 'asturian';
+UPDATE language SET parent_id = 28 WHERE english_name = 'friulian';
+UPDATE language SET parent_id = 18 WHERE english_name = 'occitan';
+UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian';
+UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese';
 
 INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
@@ -1524,10 +1536,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             </body>
 ');
 
-
-
-
-INSERT INTO user_friend_relation_type (id,title)
+INSERT INTO user_friend_relation_type (id, title)
 VALUES
 (1,'SocialUnknow'),
 (2,'SocialParent'),
@@ -1536,7 +1545,8 @@ VALUES
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (1, 'special_course', 'Special course', '', 1 , 1);
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable)
+VALUES (1, 'special_course', 'Special course', '', 1 , 1);
 
 INSERT INTO skill (name) VALUES ('Root');
 
@@ -1554,8 +1564,8 @@ INSERT INTO sequence_condition (description, mat_op, param, act_true, act_false)
 ('>= 70%','>=', 70.0, 0, null);
 
 INSERT INTO sequence_rule_condition VALUES
-  (1,1,1),
-  (2,1,2);
+(1,1,1),
+(2,1,2);
 
 INSERT INTO sequence_method (description,formula, assign, met_type) VALUES
 ('Add completed item','v#2 + $complete_items;', 2, 'add'),
@@ -1607,12 +1617,14 @@ INSERT INTO sequence_formula VALUES
 (11,9,3),
 (12,10,2),
 (13,11,1);
+
 INSERT INTO sequence_valid VALUES
 (1,1,1),
 (2,1,2);
+
 INSERT INTO sequence_type_entity VALUES
 (1,'Lp', 'Learning Path','c_lp'),
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
-UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version';

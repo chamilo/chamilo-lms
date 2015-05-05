@@ -106,8 +106,8 @@ class quiz_processor extends search_processor {
     /**
      * Get learning path information
      */
-    private function get_information($course_id, $exercise_id) {
-        $course_information = api_get_course_info($course_id);
+    private function get_information($courseCode, $exercise_id) {
+        $course_information = api_get_course_info($courseCode);
         $course_id = $course_information['real_id'];
 
         if (!empty($course_information)) {
@@ -118,9 +118,11 @@ class quiz_processor extends search_processor {
             $dk_result = Database::query($sql);
 
             //actually author isn't saved on exercise tool, but prepare for when it's ready
+            /*
             $sql = "SELECT insert_user_id FROM $item_property_table
                     WHERE ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id 
                     LIMIT 1";
+            */
 
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {

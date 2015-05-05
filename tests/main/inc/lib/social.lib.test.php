@@ -57,17 +57,6 @@ class TestSocial extends UnitTestCase{
 
 	}
 
-	public function testGetListPathWebByUserId(){
-		$user_id=1;
-		$id_group=null;
-		$search_name=null;
-		$res = SocialManager::get_list_path_web_by_user_id($user_id,$id_group,$search_name);
-		if(!($res===true)):
-		$this->assertTrue(is_array($res));
-		endif;
-		//var_dump($res);
-	}
-
 	public function testGetListWebPathUserInvitationByUserId(){
 		$user_id=1;
 		$res = SocialManager::get_list_web_path_user_invitation_by_user_id($user_id);

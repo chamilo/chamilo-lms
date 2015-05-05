@@ -1,0 +1,34 @@
+# Check that your Apache virtualhost have this settings:
+
+#<Directory "/var/www/chamilo-classic">
+#  AllowOverride All
+#  Order allow,deny
+#  Allow from all
+#</Directory>
+
+RewriteEngine on
+RewriteCond %{QUERY_STRING} ^id=(.*)$
+
+# http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
+RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
+
+# http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
+RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
+
+# Course redirection
+RewriteCond %{QUERY_STRING} ^id_session=(.*)$
+RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cidReq=$1&id_session=%1 [L]
+RewriteRule ^courses/([^/]+)/$ main/course_home/course_home.php?cidReq=$1&id_session=%1 [L]
+RewriteRule ^courses/([^/]+)/index.php$ main/course_home/course_home.php?cidReq=$1 [L]
+
+# Rewrite everything in the scorm folder of a course to the download script
+RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_url=/$2&cDir=$1 [QSA,L]
+
+# Rewrite everything in the document folder of a course to the download script
+RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+
+# Rewrite everything in the work folder
+RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
+
+# Course upload files
+RewriteRule ^courses/([^/]+)/upload/(.*)$ app/courses/$1/upload/$2 [QSA,L]

@@ -2,35 +2,36 @@
 <head>
     <meta charset="utf-8" />
 	<title>Guia de Instalación de Chamilo 1.10</title>
-    <link rel="stylesheet" href="../main/css/bootstrap.css" type="text/css" media="screen,projection" />
-    <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="../web/assets/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen,projection" />
+    <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 </head>
 
 <body>
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container-fluid">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="index.html">Chamilo - Documentation</a>
-            <div class="nav-collapse">
-            <ul class="nav">
-                <li><a href="index.html">Home</a></li>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Chamilo - Documentation</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Home</a></li>
                 <li ><a href="readme.html">About</a></li>
-                <li ><a href="license.html">License</a></li>
+                <li><a href="license.html">License</a></li>
                 <li><a href="credits.html">Credits</a></li>
-                <li><a href="dependencies.html">Dependencies</a></li>
+                <li ><a href="dependencies.html">Dependencies</a></li>
                 <li><a href="changelog.html">Changelog</a></li>
             </ul>
-            </div><!--/.nav-collapse -->
-        </div>
+        </div><!--/.nav-collapse -->
     </div>
-</div>
-
+</nav>
 
 <div class="container">
 <ul class="breadcrumb">
@@ -131,15 +132,14 @@ Los siguientes directorios necesitan tener permisos de lectura, escritura y ejec
 <p>
 Remplace [chamilo] por el directorio en el cual está ubicado su Chamilo:
 <ul>
-  <li>[chamilo]/main/inc/conf/</li>
-  <li>[chamilo]/main/upload/users/</li>
-  <li>[chamilo]/main/upload/sessions/</li>
-  <li>[chamilo]/main/upload/courses/</li>
-  <li>[chamilo]/main/default_course_document/images/</li>
-  <li>[chamilo]/archive/</li>
-  <li>[chamilo]/courses/</li>
-  <li>[chamilo]/home/</li>
-  <li>[chamilo]/data/</li>
+    <li>[chamilo]/app/config/</li>
+    <li>[chamilo]/app/upload/users/</li>
+    <li>[chamilo]/app/upload/sessions/</li>
+    <li>[chamilo]/app/upload/courses/</li>
+    <li>[chamilo]/main/default_course_document/images/</li>
+    <li>[chamilo]/app/cache/</li>
+    <li>[chamilo]/app/courses/</li>
+    <li>[chamilo]/app/home/</li>
 </ul>
 Opcionalmente, puede hacer lo mismo a los directorios siguientes si desea
 activar la subida de paquetes de estilos CSS y la definición de sub-idiomas:
@@ -403,14 +403,16 @@ seleccione "Configurar la página de inicio" en la sección de administración d
 
 Los siguientes directorios necesitan permisos de lectura, escritura y ejecución para el servidor web:
 <ul>
-  <li>chamilo/main/inc/conf/</li>
-  <li>chamilo/main/upload/users/</li>
-  <li>chamilo/main/default_course_document/</li>
-  <li>chamilo/archive/</li>
-  <li>chamilo/courses/</li>
-  <li>chamilo/home/</li>
+    <li>[chamilo]/app/config/</li>
+    <li>[chamilo]/app/upload/users/</li>
+    <li>[chamilo]/app/upload/sessions/</li>
+    <li>[chamilo]/app/upload/courses/</li>
+    <li>[chamilo]/app/cache/</li>
+    <li>[chamilo]/app/courses/</li>
+    <li>[chamilo]/app/home/</li>
+    <li>[chamilo]/app/logs/</li>
+    <li>[chamilo]/main/default_course_document/images/</li>
 </ul>
-
 En Linux, Mac OS X y sistemas operativos BSD esto se puede arreglar rápidamente  mediante el uso
 del comando CHMOD 777, sin embargo si usted no está seguro,  le recomandamos que busque
 asistencia para su propio SO en <a href="http://www.chamilo.org/forum">nuestro foro</a>.

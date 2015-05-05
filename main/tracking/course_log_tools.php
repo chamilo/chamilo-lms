@@ -12,7 +12,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
-$course_info = api_get_course_info(api_get_course_id());
+$course_info = api_get_course_info();
 
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;

@@ -67,9 +67,6 @@ function search_users($needle,$type)
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
-        // xajax send utf8 datas... datas in db can be non-utf8 datas
-        $charset = api_get_system_encoding();
-        $needle = api_convert_encoding($needle, $charset, 'utf-8');
         $assigned_users_to_hrm = array();
 
         switch ($userStatus) {

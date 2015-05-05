@@ -14,7 +14,7 @@ class SkillProfile extends Model
      */
     public function __construct()
     {
-        $this->table             = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
+        $this->table = Database::get_main_table(TABLE_MAIN_SKILL_PROFILE);
         $this->table_rel_profile = Database::get_main_table(TABLE_MAIN_SKILL_REL_PROFILE);
     }
 
@@ -28,6 +28,7 @@ class SkillProfile extends Model
                 ON(p.id = sp.profile_id) ";
         $result   = Database::query($sql);
         $profiles = Database::store_result($result, 'ASSOC');
+
         return $profiles;
     }
 
@@ -45,6 +46,7 @@ class SkillProfile extends Model
                     description = '$description'
                 WHERE id = $profileId ";
         $result = Database::query($sql);
+
         return $result;
     }
 
@@ -535,6 +537,20 @@ class Skill extends Model
     }
 
     /**
+     * Gets an element
+     * @param int $id
+     *
+     * @return array|mixed
+     */
+    public function get($id)
+    {
+        $result = parent::get($id);
+        $result['web_icon_path'] = api_get_path(WEB_UPLOAD_PATH).'badges/'.$result['icon'];
+
+        return $result;
+    }
+
+    /**
      * @param int $id
      * @return array
      */
@@ -589,7 +605,14 @@ class Skill extends Model
             }
         }
 
-        $sql = "SELECT s.id, s.name, s.description, ss.parent_id, ss.relation_type, s.icon, s.short_code
+        $sql = "SELECT
+                    s.id,
+                    s.name,
+                    s.description,
+                    ss.parent_id,
+                    ss.relation_type,
+                    s.icon,
+                    s.short_code
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_skill} ss
                 ON (s.id = ss.skill_id) $id_condition
@@ -597,18 +620,19 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = array();
-
+        $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $skill_rel_skill    = new SkillRelSkill();
-                $a                  = $skill_rel_skill->get_skill_parents($row['id']);
-                $row['level']       = count($a) - 1;
-                $row['gradebooks']  = self::get_gradebooks_by_skill($row['id']);
+                $skill_rel_skill = new SkillRelSkill();
+                $parents = $skill_rel_skill->get_skill_parents($row['id']);
+                $row['level'] = count($parents) - 1;
+                $row['gradebooks'] = self::get_gradebooks_by_skill($row['id']);
+                $row['web_icon_path'] = $webPath.'badges/'.$row['icon'];
                 $skills[$row['id']] = $row;
             }
         }
 
-        //Load all children of the parent_id
+        // Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {
             foreach ($skills as $skill) {
                 $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);
@@ -848,6 +872,7 @@ class Skill extends Model
      * Get user's skills
      *
      * @param int $userId User's id
+     * @param bool $get_skill_data
      */
     public function get_user_skills($user_id, $get_skill_data = false)
     {
@@ -860,23 +885,30 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
-
+        $uploadPath = api_get_path(WEB_UPLOAD_PATH);
         $clean_skill = array();
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 if ($get_skill_data) {
                     $iconThumb = null;
+                    $iconPath = null;
 
                     if (!empty($skill['icon'])) {
                         $iconThumb = sprintf(
                             "badges/%s-small.png",
                             sha1($skill['name'])
                         );
+
+                        $iconPath = sprintf(
+                            "badges/%s.png",
+                            sha1($skill['name'])
+                        );
                     }
                     $clean_skill[$skill['id']] = array_merge(
                         $skill,
                         array(
-                            'iconThumb' => $iconThumb
+                            'web_icon_thumb_path' => $uploadPath.$iconThumb,
+                            'web_icon_path' => $uploadPath.$iconPath
                         )
                     );
                 } else {
@@ -884,6 +916,7 @@ class Skill extends Model
                 }
             }
         }
+
         return $clean_skill;
     }
 

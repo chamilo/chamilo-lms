@@ -11,10 +11,20 @@
 if (defined('SYSTEM_INSTALLATION')) {
 
     Log::notice("Starting " . basename(__FILE__));
+    $perm = api_get_permissions_for_new_files();
 
-    // Edit the configuration file
-    $file   = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
-    $fh     = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
+    $oldConfFile = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    $newConfFile = api_get_path(CONFIGURATION_PATH) . 'configuration.php';
+
+    if (file_exists($oldConfFile)) {
+        copy($oldConfFile, $newConfFile);
+        @chmod($newConfFile, $perm);
+        @rmdir($oldConfFile);
+    }
+
+    // Edit the configuration file.
+    $file = file($newConfFile);
+    $fh = fopen($newConfFile, 'w');
 
     $found_version_old = false;
     $found_stable_old = false;
@@ -38,7 +48,6 @@ if (defined('SYSTEM_INSTALLATION')) {
             $found_software_url = true;
             $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
         } elseif (stripos($line, '$userPasswordCrypted') !== false) {
-            //$line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
             $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";
         } elseif (stripos($line, '?>') !== false) {
             $ignore = true;

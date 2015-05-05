@@ -853,30 +853,25 @@ class IndexManager
     {
         $html = null;
         if (!api_is_anonymous()) {
-            $img_array = UserManager::get_user_picture_path_by_id(
-                api_get_user_id(),
-                'web', true, true
-            );
-            $img_array = UserManager::get_picture_user(
-                api_get_user_id(),
-                $img_array['file'],
-                50,
-                USER_IMAGE_SIZE_MEDIUM,
-                ' width="90" height="90" '
-            );
-            $profile_content = null;
+            $userPicture = UserManager::getUserPicture(api_get_user_id());
+            $content = null;
+
             if (api_get_setting('allow_social_tool') == 'true') {
-                $profile_content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/social/home.php"><img src="' . $img_array['file'] . '"  ' . $img_array['style'] . ' ></a>';
+                $content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/social/home.php">
+                <img src="' . $userPicture . '" ></a>';
             } else {
-                $profile_content .= '<a style="text-align:center"  href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php"><img title="' . get_lang('EditProfile') . '" src="' . $img_array['file'] . '" ' . $img_array['style'] . '></a>';
+                $content .= '<a style="text-align:center" href="' . api_get_path(WEB_PATH) . 'main/auth/profile.php">
+                <img title="' . get_lang('EditProfile') . '" src="' . $userPicture. '" ></a>';
             }
+
             $html = self::show_right_block(
                 null,
-                $profile_content,
+                $content,
                 'user_image_block',
                 array('style' => 'text-align:center;')
             );
         }
+
         return $html;
     }
 

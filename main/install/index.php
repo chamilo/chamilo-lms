@@ -35,6 +35,7 @@ api_check_php_version('../inc/');
 ob_implicit_flush(true);
 session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once 'install.lib.php';
 
 // The function api_get_setting() might be called within the installation scripts.
@@ -78,14 +79,11 @@ $language_interface_initial_value = $install_language;
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
 
-// Initialization of the internationalization library.
-api_initialize_internationalization();
-// Initialization of the default encoding that will be used by the multibyte
-// string routines in the internationalization library.
-api_set_internationalization_default_encoding($charset);
+// Enables the portablity layer and configures PHP for UTF-8
+\Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
-header('Content-Type: text/html; charset='. api_get_system_encoding());
+header('Content-Type: text/html; charset='. $charset);
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
@@ -180,7 +178,12 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
-    include api_get_path(CONFIGURATION_PATH) . 'configuration.php'; // Don't change to include_once
+    // Old configuration file.
+    // Don't change to include_once
+    $oldConfigPath = api_get_path(SYS_CODE_PATH) . 'inc/conf/configuration.php';
+    if (file_exists($oldConfigPath)) {
+        include $oldConfigPath;
+    }
 }
 
 if (!isset($_GET['running'])) {
@@ -201,8 +204,8 @@ if (!isset($_GET['running'])) {
     if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
         $emailForm .= '.localdomain';
     }
-    $adminLastName = 'Doe';
-    $adminFirstName = 'John';
+    $adminLastName = get_lang('DefaultInstallAdminLastname');
+    $adminFirstName = get_lang('DefaultInstallAdminFirstname');
     $loginForm = 'admin';
     $passForm = api_generate_password();
 
@@ -271,12 +274,10 @@ if ($encryptPassForm == '1') {
 <head>
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
-        /*<![CDATA[*/
         @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
         @import "../../web/assets/fontawesome/css/font-awesome.min.css";
-        @import "../css/base.css";
-        @import "../css/<?php echo api_get_visual_theme(); ?>/default.css";
-        /*]]>*/
+        @import "../../web/css/base.css";
+        @import "../../web/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript">
@@ -353,20 +354,7 @@ if ($encryptPassForm == '1') {
         <div class="row">
             <div id="header_left" class="col-md-4">
                 <div id="logo">
-                    <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
-                </div>
-            </div>
-        </div>
-        <div class="navbar subnav">
-            <div class="navbar-inner">
-                <div class="container">
-                    <div class="nav-collapse">
-                        <ul class="nav nav-pills">
-                            <li id="current" class="active">
-                                <a target="_top" href="index.php"><?php echo get_lang('Homepage'); ?></a>
-                            </li>
-                        </ul>
-                    </div>
+                    <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
                 </div>
             </div>
         </div>
@@ -460,7 +448,7 @@ if (@$_POST['step2']) {
     if ($installType == 'update') {
         $db_name = $dbNameForm;
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -564,12 +552,7 @@ if (@$_POST['step2']) {
         echo get_lang('AdminPass') . ' : <strong>' . $passForm . '</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
 
-    if (api_is_western_name_order()) {
-        echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
-    } else {
-        echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
-    }
-
+    echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
     echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
     <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
     <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
@@ -641,7 +624,7 @@ if (@$_POST['step2']) {
     if ($installType == 'update') {
         remove_memory_and_time_limits();
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -673,8 +656,11 @@ if (@$_POST['step2']) {
                 Database::query("ALTER TABLE c_link MODIFY COLUMN on_homepage char(10) NOT NULL default '0'");
                 Database::query("ALTER TABLE c_blog_rating MODIFY COLUMN rating_type char(40) NOT NULL default 'post'");
                 Database::query("ALTER TABLE c_survey MODIFY COLUMN anonymous char(10) NOT NULL default '0'");
+                Database::query("ALTER TABLE c_document MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
+                Database::query("ALTER TABLE c_student_publication MODIFY COLUMN filetype char(10) NOT NULL default 'file'");
 
-                // Migrate using the file Version110.php
+                // Migrate using the migration files located in:
+                // src/Chamilo/CoreBundle/Migrations/Schema/V110
                 migrate(
                     110,
                     $dbNameForm,
@@ -683,6 +669,7 @@ if (@$_POST['step2']) {
                     $dbHostForm,
                     $manager
                 );
+
                 include 'update-files-1.9.0-1.10.0.inc.php';
                 // Only updates the configuration.inc.php with the new version
                 include 'update-configuration.inc.php';
@@ -693,7 +680,7 @@ if (@$_POST['step2']) {
     } else {
         set_file_folder_permissions();
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -705,7 +692,7 @@ if (@$_POST['step2']) {
         // Drop and create the database anyways
         $manager->getConnection()->getSchemaManager()->dropAndCreateDatabase($dbNameForm);
 
-        $manager = testDbConnect(
+        $manager = connectToDatabase(
             $dbHostForm,
             $dbUsernameForm,
             $dbPassForm,
@@ -757,6 +744,8 @@ if (@$_POST['step2']) {
     // This is the start screen.
     display_language_selection();
 }
+
+$poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 ?>
           </form>
         </div> <!-- col-md-9-->
@@ -764,6 +753,15 @@ if (@$_POST['step2']) {
     </div> <!-- main end-->
     <div class="push"></div>
   </div><!-- wrapper end-->
-  <footer></footer>
+  <footer>
+      <div class="container">
+          <div class="row">
+              <div style="text-align: center;">
+                  &nbsp;<br />
+                  <?php echo $poweredBy; ?>
+              </div>
+          </div>
+      </div>
+  </footer>
   </body>
 </html>

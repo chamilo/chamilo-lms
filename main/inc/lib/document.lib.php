@@ -2406,7 +2406,7 @@ class DocumentManager
                 $orig_course_info_path = $origin_course_info_path;
             }
         } else {
-            $orig_course_path = api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'] . '/';
+            $orig_course_path = api_get_path(SYS_COURSE_PATH).$orig_course_info['path'] . '/';
             $orig_course_info_path = $orig_course_info['path'];
         }
 
@@ -5301,15 +5301,7 @@ class DocumentManager
                 }
             } elseif (strstr($basename, 'sf_user_')) {
                 $userinfo = api_get_user_info(substr($basename, 8));
-                $image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
-
-                if ($image_path['file'] == 'unknown.jpg') {
-                    $icon = $image_path['file'];
-                } else {
-                    //$icon = '../upload/users/' . substr($basename, 8) . '/' . $image_path['file'];
-                    $user_image = true;
-                    $icon = $image_path['dir'] . $image_path['file'];
-                }
+                $icon = $userinfo['avatar'];
 
                 $basename = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
             } elseif (strstr($path, 'shared_folder_session_')) {

@@ -64,13 +64,17 @@ if ($form->validate()) {
     if ($group['delete_picture']) {
         $picture_uri = GroupPortalManager::delete_group_picture($group_id);
     } elseif (!empty($picture['name'])) {
-        $picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+        $picture_uri = GroupPortalManager::update_group_picture(
+            $group_id,
+            $_FILES['picture']['name'],
+            $_FILES['picture']['tmp_name']
+        );
     }
 
-    $name 			= $group['name'];
-    $description	= $group['description'];
-    $url 			= $group['url'];
-    $status 		= intval($group['visibility']);
+    $name = $group['name'];
+    $description = $group['description'];
+    $url = $group['url'];
+    $status = intval($group['visibility']);
 
     $allowMemberGroupToLeave = null;
     if (GroupPortalManager::canLeaveFeatureEnabled($group_data)) {
@@ -98,12 +102,12 @@ $url_big_image = $big_image.'?rnd='.time();
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_edit', $group_id);
 $social_menu_block = SocialManager::show_social_menu('group_edit', $group_id);
-$social_right_content = $form->return_form();
+$social_right_content = $form->returnForm();
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
 $tpl->assign('social_avatar_block', $social_avatar_block);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('social/home.tpl');
+$social_layout = $tpl->get_template('social/groups.tpl');
 $tpl->display($social_layout);

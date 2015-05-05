@@ -179,7 +179,10 @@ if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title'],
+        );
     }
 }
 
@@ -296,7 +299,7 @@ $defaults = array(
 
 $form->setDefaults($defaults);
 
-$simple_form = $form->return_form();
+$simple_form = $form->returnForm();
 
 $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file';
 $multiple_form =  get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'<br />';
@@ -326,4 +329,5 @@ if ($nav_info ['name'] == 'Internet Explorer') {
     $headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
     echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');
 }
+
 Display::display_footer();

@@ -1,12 +1,10 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.include.search
  */
-/**
- * Code
- */
+
 // some constants to avoid serialize string keys on serialized data array
 define('SE_COURSE_ID', 0);
 define('SE_TOOL_ID', 1);
@@ -25,7 +23,8 @@ define('XAPIAN_PREFIX_TOOLID', 'O');
  * Class
  * @package chamilo.include.search
  */
-abstract class _IndexableChunk {
+abstract class _IndexableChunk
+{
     /* struct (array)
      * {
      *     string title; <- nombre de archivo/elemento
@@ -97,20 +96,22 @@ abstract class _IndexableChunk {
  * Extension of the _IndexableChunk class to make IndexableChunk extensible.
  * @package chamilo.include.search
  */
-class IndexableChunk extends _IndexableChunk {
+class IndexableChunk extends _IndexableChunk
+{
 
     /**
      * Let add course id term
      */
-    public function addCourseId($course_id) {
+    public function addCourseId($course_id)
+    {
         $this->addTerm($course_id, XAPIAN_PREFIX_COURSEID);
     }
 
     /**
      * Let add tool id term
      */
-    public function addToolId($tool_id) {
+    public function addToolId($tool_id)
+    {
         $this->addTerm($tool_id, XAPIAN_PREFIX_TOOLID);
     }
-
 }

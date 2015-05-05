@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 /**
  * Documents toolbar configuration
  *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Documents extends Basic
 {
@@ -18,6 +18,7 @@ class Documents extends Basic
      */
     public function getConfig()
     {
+        $config = array();
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
         } else {
@@ -25,8 +26,6 @@ class Documents extends Basic
         }
 
         $config['extraPlugins'] = $this->getPluginsToString();
-        //$config['mathJaxLib'] = $this->urlGenerator->generate('javascript').'/math_jax/MathJax.js?config=default';
-        //$config['mathJaxLib'] = api_get_path(WEB_LIBRARY_JS_PATH).'/math_jax/MathJax.js?config=default';
         $config['fullPage'] = true;
 
         return $config;
@@ -53,9 +52,18 @@ class Documents extends Basic
     protected function getNormalToolbar()
     {
         return [
-            ['Save', 'Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
+            ['Maximize', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath', 'Asciisvg'],
+            [
+                'Image',
+                'Video',
+                'Flash',
+                'Oembed',
+                'Youtube',
+                'Audio',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['Table', 'SpecialChar'],
             [
                 'Outdent',
@@ -86,12 +94,31 @@ class Documents extends Basic
         return [
             ['Save', 'NewPage', 'Templates', '-', 'PasteFromWord'],
             ['Undo', 'Redo'],
-            ['Link', 'Image', 'Video', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
+            [
+                'Link',
+                'Image',
+                'Video',
+                'Flash',
+                'Youtube',
+                'Audio',
+                'Table',
+                'Asciimath',
+                'Asciisvg',
+            ],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
-            ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
+            [
+                'Format',
+                'Font',
+                'FontSize',
+                'Bold',
+                'Italic',
+                'Underline',
+                'TextColor',
+                'BGColor',
+                'Source',
+            ],
             ['Toolbarswitch', 'ShowBlocks']
         ];
     }
-
 }

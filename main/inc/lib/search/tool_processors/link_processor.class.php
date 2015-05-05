@@ -40,10 +40,10 @@ class link_processor extends search_processor {
     public function process() {
         $results = array();
 
-        foreach ($this->links as $courseid => $one_course_links) {
-            $course_info = api_get_course_info($courseid);
+        foreach ($this->links as $courseCode => $one_course_links) {
+            $course_info = api_get_course_info($courseCode);
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseid);
+            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseCode);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
                 $result = NULL;
@@ -53,7 +53,7 @@ class link_processor extends search_processor {
                     if ($visibility) {
                         // if one is visible let show the result for a course
                         // also asume all data of this item like the data of the whole group of links(Ex. author)
-                        list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseid, $one_link['link_id']);
+                        list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseCode, $one_link['link_id']);
                         $result_tmp = array(
                             'toolid' => TOOL_LINK,
                             'score' => $one_course_links['total_score'] / (count($one_course_links) - 1), // not count total_score array item

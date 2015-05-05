@@ -14,8 +14,9 @@ $noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
-$course_info = api_get_course_info();
-$course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
+$course_info = api_get_course_info_by_id($courseId);
+$course_code = $course_info['code'];
 $session_id = api_get_session_id();
 
 if (empty($course_info)) {

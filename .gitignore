@@ -1,39 +1,27 @@
-# Chamilo configuration
-main/inc/conf
+# Cache directories
+app/cache/*
+!app/cache/.htaccess
 
-# Temp directories
-archive/*
-!archive/.htaccess
+# Chamilo configuration
+app/config/
 
 # Courses
-
-courses/*
-!courses/index.html
+app/courses/*
 
 # Home
-home/*
+app/home/*
 
-# User images
-main/upload/users/*
-!main/upload/users/index.html
+app/logs/*
+app/Resources/translations/*
+app/Resources/views/*
 
-# Session images
-main/upload/sessions/*
-!main/upload/sessions/index.html
-
-# Course images
-main/upload/courses/*
-!main/upload/courses/index.html
+# Upload content
+app/upload/*
 
 # Logs and databases #
 *.log
 
-# Xapian indexes directory
-searchdb/*
-!searchdb/index.html
-
 # IDE settings
-
 .idea
 .idea/*
 .idea/dictionaries/*
@@ -53,8 +41,3 @@ composer.lock
 vendor
 web/assets/*
 
-# Data directory (new directory for archive/)
-data/*
-!data/index.html
-data/badges/*
-!data/badges/index.html

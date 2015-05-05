@@ -9,8 +9,8 @@
         "irc": "irc://irc.freenode.org/chamilo"
     },
     "autoload": {
-        "psr-0": {
-            "Chamilo": "src/"
+        "psr-4": {
+            "Chamilo\\": "src/Chamilo/"
         },
         "classmap": [
             "main/auth",
@@ -51,6 +51,7 @@
         "doctrine/migrations": "1.0.*@dev",
         "symfony/doctrine-bridge": "2.6.4",
         "symfony/validator": "2.6.4",
+        "symfony/filesystem": "~2.6",
         "gedmo/doctrine-extensions": "~2.3",
         "sonata-project/user-bundle": "~2.2",
         "ramsey/array_column": "~1.1",
@@ -79,7 +80,14 @@
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*"
-
+    },
+    "scripts": {
+        "post-update-cmd": [
+            "Chamilo\\CoreBundle\\Component\\Theme\\DumpTheme::dumpCssFiles"
+        ],
+        "post-install-cmd": [
+            "Chamilo\\CoreBundle\\Component\\Theme\\DumpTheme::dumpCssFiles"
+        ]
     },
     "extra": {
         "branch-alias": {

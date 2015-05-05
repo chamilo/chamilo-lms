@@ -16,15 +16,16 @@
 User-Agent: *
 
 # Directories
-Disallow: /archive/
-Disallow: /courses/
+Disallow: /app/cache/
+Disallow: /app/logs/
+Disallow: /app/upload/
+Disallow: /app/courses/
 Disallow: /documentation/
 Disallow: /home/
 Disallow: /main/
 Disallow: /plugin/
-Disallow: /searchdb/
 Disallow: /tests/
- 
+
 # Files
 Disallow: /license.txt
 Disallow: /README.txt

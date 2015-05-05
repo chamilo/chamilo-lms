@@ -59,7 +59,7 @@ composer update
 
 On a Debian-based system, launch:
 ```
-sudo chown -R www-data:www-data archive course data home searchdb main/upload/users main/upload/sessions main/upload/courses main/default_course_document/images main/lang main/css main/inc/conf
+sudo chown -R www-data:www-data app main/default_course_document/images main/lang  
 ```
 
 ### Start the installer

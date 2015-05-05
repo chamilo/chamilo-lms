@@ -18,8 +18,8 @@ filter:
         - tests/*
         - main/img/*
         - main/lang/*
-        - archive/*
-        - data/*
+        - app/cache/*
+        - app/logs/*
         - web/*
 checks:
     php:

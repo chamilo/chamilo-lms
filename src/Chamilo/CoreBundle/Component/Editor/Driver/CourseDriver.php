@@ -111,10 +111,9 @@ class CourseDriver extends Driver implements DriverInterface
     {
         $url = null;
         if ($this->allow()) {
-            //$directory = $this->connector->course->getDirectory();
             $directory = $this->connector->course['directory'];
-            $dataPath = $this->connector->paths['sys_data_path'];
-            $url = $dataPath.$directory.'/document/';
+            $coursePath = $this->connector->paths['sys_course_path'];
+            $url = $coursePath.$directory.'/document/';
         }
 
         return $url;

@@ -345,16 +345,12 @@ switch ($action) {
                 $document_info = DocumentManager::get_document_data_by_id(
                     $document_id,
                     api_get_course_id(),
-                    true,
                     0
                 );
             }
             $parent_id = $document_info['parent_id'];
-            $my_path = UserManager::get_user_picture_path_by_id(
-                api_get_user_id(),
-                'system'
-            );
-            $user_folder = $my_path['dir'].'my_files/';
+            $my_path = UserManager::getUserPathById(api_get_user_id());
+            $user_folder = $my_path.'my_files/';
             $my_path = null;
 
             if (!file_exists($user_folder)) {
@@ -1377,9 +1373,9 @@ if ($is_allowed_to_edit ||
         $user_id = api_get_user_id();
 
         // Create the template_thumbnails folder in the upload folder (if needed)
-        if (!is_dir(api_get_path(SYS_PATH).'courses/'.$courseInfo['directory'].'/upload/template_thumbnails/')) {
+        if (!is_dir(api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/')) {
             @mkdir(
-                api_get_path(SYS_PATH).'courses/'.$courseInfo['directory'].'/upload/template_thumbnails/',
+                api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/',
                 api_get_permissions_for_new_directories()
             );
         }
@@ -1396,7 +1392,7 @@ if ($is_allowed_to_edit ||
                 );
 
                 // Upload dir
-                $upload_dir = api_get_path(SYS_PATH).'courses/'.$courseInfo['directory'].'/upload/template_thumbnails/';
+                $upload_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/upload/template_thumbnails/';
 
                 // Resize image to max default and end upload
                 $temp = new Image($_FILES['template_image']['tmp_name']);

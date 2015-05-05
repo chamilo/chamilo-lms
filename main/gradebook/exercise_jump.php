@@ -14,8 +14,8 @@ require_once '../inc/global.inc.php';
 api_block_anonymous_users();
 $this_section=SECTION_COURSES;
 
-$course_code = api_get_course_id();
-$course_info = api_get_course_info($course_code);
+$course_id = api_get_course_int_id();
+$course_info = api_get_course_info_by_id($course_id);
 $course_title = $course_info['title'];
 $course_code = $return_result['code'];
 $gradebook = Security::remove_XSS($_GET['gradebook']);

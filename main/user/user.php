@@ -38,8 +38,8 @@ $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
 $course_info = api_get_course_info();
 $user_id = api_get_user_id();
-$courseCode = api_get_course_id();
-$courseId = api_get_course_int_id();
+$courseCode = $course_info['code'];
+$courseId = $course_info['real_id'];
 
 //Can't auto unregister from a session
 if (!empty($sessionId)) {
@@ -617,7 +617,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
-    $course_code = api_get_course_id();
+    $course_code = $course_info['code'];
 
     $a_users = array();
 

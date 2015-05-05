@@ -380,8 +380,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     if ($vcourse['code'] == $course_code) {
                                         // Ignore, this has already been inserted.
                                     } else {
-                                        $course_info = api_get_course_info($course['code']);
-                                        $courseId = $course_info['real_id'];
+                                        $course_info = api_get_course_info_by_id($course['id']);
+                                        $courseId = $course['real_id'];
 
                                         $sql_course = "INSERT INTO $tbl_session_course SET
                                                 c_id = $courseId,

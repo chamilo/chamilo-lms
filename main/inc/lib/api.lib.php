@@ -1322,7 +1322,7 @@ function api_get_user_courses($userid, $fetch_session = true)
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-    $sql = "SELECT cc.code code, cc.directory dir, cu.status status
+    $sql = "SELECT cc.id as real_id, cc.code code, cc.directory dir, cu.status status
             FROM    $t_course       cc,
                     $t_course_user   cu
             WHERE
@@ -1406,7 +1406,7 @@ function _api_format_user($user, $add_password = false)
         $result['email'] = isset($user['mail'])? $user['mail'] : null;
     }
     $user_id = intval($user['user_id']);
-    $result['user_id'] = $user_id;
+    $result['user_id'] = $result['id'] = $user_id;
     $saveUserLastLogin = api_get_configuration_value('save_user_last_login');
 
     if ($saveUserLastLogin) {

@@ -29,8 +29,9 @@ if (!api_is_coach()) {
     api_not_allowed(true);
 }
 
-$courseCode = api_get_course_id();
-$courseInfo = api_get_course_info($courseCode);
+$courseId = api_get_course_int_id();
+$courseInfo = api_get_course_info($courseId);
+$courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 
 if (empty($courseCode) OR empty($sessionId)) {

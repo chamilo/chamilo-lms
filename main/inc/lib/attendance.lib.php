@@ -293,8 +293,8 @@ class Attendance
 		$table_link = Database:: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$session_id = api_get_session_id();
 		$user_id = api_get_user_id();
-		$course_code = api_get_course_id();
-		$course_id = api_get_course_int_id();
+		$course_code = $_course['code'];
+		$course_id = $_course['real_id'];
 		$title_gradebook= Database::escape_string($this->attendance_qualify_title);
 		$value_calification  = 0;
 		$weight_calification =	floatval($this->attendance_weight);
@@ -364,8 +364,8 @@ class Attendance
 		$session_id         = api_get_session_id();
 		$user_id            = api_get_user_id();
 		$attendance_id      = intval($attendance_id);
-		$course_code        = api_get_course_id();
-		$course_id          = api_get_course_int_id();
+		$course_code        = $_course['code'];
+		$course_id          = $_course['real_id'];
 		$title_gradebook	= Database::escape_string($this->attendance_qualify_title);
 		$value_calification = 0;
 		$weight_calification= floatval($this->attendance_weight);
@@ -418,7 +418,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id = api_get_user_id();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -456,7 +456,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id 		= api_get_user_id();
-		$course_id      = api_get_course_int_id();
+		$course_id      = $_course['real_id'];
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -500,7 +500,7 @@ class Attendance
 		$_course = api_get_course_info();
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id = api_get_user_id();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 		$status = intval($status);
 
 		$action = 'visible';

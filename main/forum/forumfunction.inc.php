@@ -2240,7 +2240,7 @@ function count_number_of_forums_in_category($cat_id)
  */
 function store_thread($current_forum, $values, $courseInfo = array(), $showMessage = true)
 {
-    $courseInfo = empty($courseInfo) ? api_get_course_info() :$courseInfo ;
+    $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo ;
     $_user = api_get_user_info();
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];

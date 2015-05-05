@@ -669,7 +669,9 @@ if (!empty($user_list)) {
 
         if (is_array($course_list) && !empty($course_list)) {
             foreach ($course_list as $my_course) {
-                $key = $my_course['code'].'_'.$my_course['session_id'];
+                $courseInfo = api_get_course_info_by_id($my_course['c_id']);
+                $my_course['real_id'] = $my_course['c_id'];
+                $key = $courseInfo['code'].'_'.$my_course['session_id'];
 
                 if (!in_array($key, $new_course_list)) {
                     $my_course['not_registered'] = 1;
@@ -679,7 +681,7 @@ if (!empty($user_list)) {
         }
 
         foreach ($course_list_registered as & $course) {
-            $courseInfo = api_get_course_info($course['code']);
+            $courseInfo = api_get_course_info_by_id($course['real_id']);
             $course['name'] = $courseInfo['name'];
         }
 

@@ -1623,9 +1623,9 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        $course_id = api_get_course_int_id();
-        $_course = api_get_course_info();
         $session_id = api_get_session_id();
+        $_course = api_get_course_info();
+        $course_id = $_course['real_id'];
         $userId = api_get_user_id();
         $condition_session = api_get_session_condition($session_id, true, true, 'announcement.session_id');
 

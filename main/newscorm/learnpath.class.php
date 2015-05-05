@@ -8650,7 +8650,7 @@ class learnpath
         $selfUrl = api_get_self();
         $courseIdReq = api_get_cidreq();
         $course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $course_id = $course['real_id'];
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $linkCategoryTable = Database::get_course_table(TABLE_LINK_CATEGORY);
         $moveEverywhereIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
@@ -8836,7 +8836,7 @@ class learnpath
     public function scorm_export()
     {
         $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $course_id = $_course['real_id'];
 
         // Remove memory and time limits as much as possible as this might be a long process...
         if (function_exists('ini_set')) {

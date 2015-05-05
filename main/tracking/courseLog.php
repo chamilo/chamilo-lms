@@ -12,7 +12,7 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $courseInfo = api_get_course_info(api_get_course_id());
-$courseCode = api_get_course_id();
+$courseCode = $courseInfo['code'];
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 

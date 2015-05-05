@@ -4380,7 +4380,7 @@ class SurveyUtil
     public static function getSurveyList($user_id)
     {
         $_course = api_get_course_info();
-        $course_id = api_get_course_int_id();
+        $course_id = $_course['real_id'];
         $user_id = intval($user_id);
         $sessionId = api_get_session_id();
 

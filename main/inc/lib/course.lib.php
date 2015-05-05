@@ -706,18 +706,19 @@ class CourseManager
     }
 
     /**
-     * Subscribe a user $user_id to a course $course_code.
+     * Subscribe a user $user_id to a course defined by $courseCode.
      * @author Hugues Peeters
      * @author Roan Embrechts
      *
      * @param  int $user_id the id of the user
-     * @param  string $course_code the course code
-     * @param string $status (optional) The user's status in the course
+     * @param  string $courseCode the course code
+     * @param  int $status (optional) The user's status in the course
+     * @param  int The user category in which this subscription will be classified
      *
      * @return boolean true if subscription succeeds, boolean false otherwise.
      * @assert ('', '') === false
      */
-    public static function add_user_to_course($user_id, $course_code, $status = STUDENT, $userCourseCategoryId = 0)
+    public static function add_user_to_course($user_id, $courseCode, $status = STUDENT, $userCourseCategoryId = 0)
     {
         $debug = false;
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -725,16 +726,16 @@ class CourseManager
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
-        if (empty($user_id) || empty($course_code) || ($user_id != strval(intval($user_id)))) {
+        if (empty($user_id) || empty($courseCode) || ($user_id != strval(intval($user_id)))) {
             return false;
         }
 
-        $course_code = Database::escape_string($course_code);
-        $courseInfo = api_get_course_info($course_code);
+        $courseCode = Database::escape_string($courseCode);
+        $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
         // Check in advance whether the user has already been registered on the platform.
-        $sql = "SELECT status FROM " . $user_table . " WHERE user_id = '$user_id' ";
+        $sql = "SELECT status FROM " . $user_table . " WHERE user_id = $user_id ";
         if (Database::num_rows(Database::query($sql)) == 0) {
             if ($debug) {
                 error_log('The user has not been registered to the platform');
@@ -745,9 +746,9 @@ class CourseManager
         // Check whether the user has already been subscribed to this course.
         $sql = "SELECT * FROM $course_user_table
                 WHERE
-                    user_id = '$user_id' AND
-                    relation_type<>" . COURSE_RELATION_TYPE_RRHH . " AND
-                    c_id = '$courseId'";
+                    user_id = $user_id AND
+                    relation_type <> " . COURSE_RELATION_TYPE_RRHH . " AND
+                    c_id = $courseId";
         if (Database::num_rows(Database::query($sql)) > 0) {
             if ($debug) {
                 error_log('The user has been already subscribed to the course');
@@ -755,14 +756,16 @@ class CourseManager
             return false; // The user has been subscribed to the course.
         }
 
-        // Check in advance whether subscription is allowed or not for this course.
-        $sql = "SELECT code, visibility FROM $course_table
-                WHERE id = $courseId AND subscribe = '" . SUBSCRIBE_NOT_ALLOWED . "'";
-        if (Database::num_rows(Database::query($sql)) > 0) {
-            if ($debug) {
-                error_log('Subscription is not allowed for this course');
+        if (!api_is_course_admin()) {
+            // Check in advance whether subscription is allowed or not for this course.
+            $sql = "SELECT code, visibility FROM $course_table
+                    WHERE id = $courseId AND subscribe = '" . SUBSCRIBE_NOT_ALLOWED . "'";
+            if (Database::num_rows(Database::query($sql)) > 0) {
+                if ($debug) {
+                    error_log('Subscription is not allowed for this course');
+                }
+                return false; // Subscription is not allowed for this course.
             }
-            return false; // Subscription is not allowed for this course.
         }
 
         // Ok, subscribe the user.
@@ -774,6 +777,7 @@ class CourseManager
             'sort' => $max_sort + 1,
             'user_course_cat' => $userCourseCategoryId
         ];
+        error_log(print_r($params, 1));
         $insertId = Database::insert($course_user_table, $params);
 
         return $insertId;

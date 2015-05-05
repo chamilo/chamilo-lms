@@ -695,6 +695,16 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('isiXhosa', 'xhosa', 'xh', 'xhosa', 0),
 ('Yor&ugrave;b&aacute;','yoruba','yo','yoruba',0);
 
+-- Set parent language to Spanish for all close-by languages, same for Italian, French, Portuguese and Chinese
+UPDATE language SET parent_id = 49 WHERE english_name = 'quechua_cusco';
+UPDATE language SET parent_id = 49 WHERE english_name = 'galician';
+UPDATE language SET parent_id = 49 WHERE english_name = 'esperanto';
+UPDATE language SET parent_id = 49 WHERE english_name = 'catalan';
+UPDATE language SET parent_id = 49 WHERE english_name = 'asturian';
+UPDATE language SET parent_id = 28 WHERE english_name = 'friulian';
+UPDATE language SET parent_id = 18 WHERE english_name = 'occitan';
+UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian';
+UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese';
 
 INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
@@ -1617,4 +1627,4 @@ INSERT INTO sequence_type_entity VALUES
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
-UPDATE settings_current SET selected_value = '1.10.0.36' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.37' WHERE variable = 'chamilo_database_version';

@@ -201,7 +201,7 @@ function return_logo($theme) {
 function return_notification_menu()
 {
     $_course    = api_get_course_info();
-    $course_id  = api_get_course_id();
+    $course_id  = $_course['code'];
     $user_id    = api_get_user_id();
 
     $html = '';
@@ -497,7 +497,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $session_name = api_get_session_name($session_id);
     $_course = api_get_course_info();
     $user_id = api_get_user_id();
-    $course_id = api_get_course_id();
+    $course_id = $_course['real_id'];
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);

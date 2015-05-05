@@ -282,7 +282,7 @@ class Blog
 	{
 		$_user = api_get_user_info();
 		$_course = api_get_course_info();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 
 		$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 		$upload_ok=true;
@@ -2010,7 +2010,7 @@ class Blog
 		$_course = api_get_course_info();
 		$is_western_name_order = api_is_western_name_order();
 		$session_id = api_get_session_id();
-		$course_id = api_get_course_int_id();
+		$course_id = $_course['real_id'];
 
 		$currentCourse = $_course['code'];
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);

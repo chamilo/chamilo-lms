@@ -51,7 +51,7 @@ $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 $course_id = api_get_course_int_id();
-$_course = api_get_course_info();
+$_course = api_get_course_info_by_id($course_id);
 $group_id = api_get_group_id();
 
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);

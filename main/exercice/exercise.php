@@ -37,9 +37,9 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
 $courseInfo = api_get_course_info();
-$courseId = api_get_course_int_id();
-$userId = api_get_user_id();
+$courseId = $courseInfo['real_id'];
 $userInfo = api_get_user_info();
+$userId = $userInfo['id'];
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     $userId,
     $courseInfo

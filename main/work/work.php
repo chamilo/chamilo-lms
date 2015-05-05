@@ -14,8 +14,8 @@ api_protect_course_script(true);
 
 require_once 'work.lib.php';
 
-$course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
+$course_id      = $course_info['real_id'];
 $user_id 	    = api_get_user_id();
 $id_session     = api_get_session_id();
 
@@ -33,7 +33,7 @@ $_course = api_get_course_info();
 /*	Constants and variables */
 
 $tool_name = get_lang('StudentPublications');
-$course_code = api_get_course_id();
+$course_code = $_course['code'];
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 

@@ -111,7 +111,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 				echo "	</td>
 						<td align='center'>
 					 ";
-				$courseInfo = api_get_course_info($student_online['c_id']);
+				$courseInfo = api_get_course_info_by_id($student_online['c_id']);
 				echo $courseInfo['title'];
 				echo "	</td>
 						<td align='center'>

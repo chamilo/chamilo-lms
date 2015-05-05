@@ -160,7 +160,7 @@ class GroupManager
     {
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
-        $course_id  = api_get_course_int_id();
+        $course_id  = $_course['real_id'];
 
 
         $currentCourseRepository = $_course['path'];

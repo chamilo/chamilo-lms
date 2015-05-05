@@ -153,9 +153,8 @@ if (Database::num_rows($res) > 0) {
 } else {
     echo get_lang('NoUsersInCourse');
 }
-$courseInfo = api_get_course_info($course->code);
 
-$session_list = SessionManager::get_session_by_course($courseInfo['real_id']);
+$session_list = SessionManager::get_session_by_course($course->id);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {

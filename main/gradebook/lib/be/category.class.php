@@ -288,7 +288,7 @@ class Category implements GradebookItem
             return $cats;
         }
 
-        $courseCode = api_get_course_info(api_get_course_id());
+        $courseCode = api_get_course_info_by_id(api_get_course_int_id());
         $courseCode = $courseCode['code'];
         $session_id = intval($session_id);
 

@@ -21,8 +21,8 @@ $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 $userInfo = api_get_user_info();
 $session_id = api_get_session_id();
-$course_code = api_get_course_id();
 $course_info = api_get_course_info();
+$course_code = $course_info['code'];
 $group_id = api_get_group_id();
 
 if (empty($work_id)) {

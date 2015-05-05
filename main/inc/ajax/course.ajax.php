@@ -28,7 +28,7 @@ switch ($action) {
             $list_course_all_info = CourseManager::get_courses_list_by_user_id($user_id, false);
             if (!empty($list_course_all_info)) {
                 foreach ($list_course_all_info as $course_item) {
-                    $course_info = api_get_course_info($course_item['code']);
+                    $course_info = api_get_course_info_by_id($course_item['real_id']);
                     echo $course_info['title'].'<br />';
                 }
             } else {

@@ -552,8 +552,8 @@ function display_student_publications_list(
 
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
-    $course_id = api_get_course_int_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
 
     $sort_params = array();
 
@@ -1557,9 +1557,9 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id, true, false, 'work.session_id');
 
-    $course_id = api_get_course_int_id();
     $group_id = api_get_group_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
     $work_id = intval($work_id);
 
     if (!empty($group_id)) {
@@ -1635,7 +1635,7 @@ function getWorkListStudent(
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $courseInfo = api_get_course_info();
-    $course_id = api_get_course_int_id();
+    $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
     $group_id = api_get_group_id();
@@ -2123,9 +2123,9 @@ function get_work_user_list(
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $session_id = api_get_session_id();
-    $course_id = api_get_course_int_id();
     $group_id = api_get_group_id();
-    $course_info = api_get_course_info(api_get_course_id());
+    $course_info = api_get_course_info();
+    $course_id = $course_info['real_id'];
 
     $work_id = intval($work_id);
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';

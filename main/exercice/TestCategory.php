@@ -85,8 +85,8 @@ class TestCategory
 				Database::query($sql);
 
 				// add test_category in item_property table
-				$course_code = api_get_course_id();
-				$course_info = api_get_course_info($course_code);
+				$course_id = api_get_course_int_id();
+				$course_info = api_get_course_info_by_id($course_id);
 				api_item_property_update(
 					$course_info,
 					TOOL_TEST_CATEGORY,
@@ -117,13 +117,13 @@ class TestCategory
 		if (Database::affected_rows($result) <= 0) {
 			return false;
 		} else {
+            $course_id = api_get_course_int_id();
             // remove link between question and category
             $sql2 = "DELETE FROM $tbl_question_rel_cat
-            		 WHERE category_id=$v_id AND c_id=".api_get_course_int_id();
+            		 WHERE category_id=$v_id AND c_id=".$course_id;
             Database::query($sql2);
             // item_property update
-            $course_code = api_get_course_id();
-            $course_info = api_get_course_info($course_code);
+            $course_info = api_get_course_info_by_id($course_id);
 			api_item_property_update(
 				$course_info,
 				TOOL_TEST_CATEGORY,
@@ -151,8 +151,8 @@ class TestCategory
 			return false;
 		} else {
             // item_property update
-            $course_code = api_get_course_id();
-            $course_info = api_get_course_info($course_code);
+            $course_id = api_get_course_int_id();
+            $course_info = api_get_course_info_by_id($course_id);
             api_item_property_update(
                 $course_info,
                 TOOL_TEST_CATEGORY,

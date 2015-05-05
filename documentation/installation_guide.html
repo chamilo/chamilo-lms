@@ -384,6 +384,7 @@ As this is only a minor version change from previous 1.10.* versions of Chamilo,
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x/1.9.x</span></li>
   <li> clean your archive/ directory: take a temporary copy of index.html, delete all the contents *in* this directory (do NOT remove the directory itself, only its contents!). It will all be re-generated. You can also delete the contents of this directory through the "Archive directory cleanup" option in the "System" box of the Administration page.</li>
+  <li> make sure "AllowOverride All" is present in your Apache configuration, as interpreting the .htaccess files is very important for Chamilo to work</li>
 </ul>
 
 <br />

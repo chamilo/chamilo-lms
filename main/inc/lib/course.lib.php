@@ -777,7 +777,6 @@ class CourseManager
             'sort' => $max_sort + 1,
             'user_course_cat' => $userCourseCategoryId
         ];
-        error_log(print_r($params, 1));
         $insertId = Database::insert($course_user_table, $params);
 
         return $insertId;

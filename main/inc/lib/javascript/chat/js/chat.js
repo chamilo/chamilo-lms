@@ -97,6 +97,8 @@ $(document).ready(function() {
 		var chat_id =  $(this).attr('rel');
 		closeChatBox(chat_id);
 	});
+
+        Modernizr.addTest('peerconnection', !!Modernizr.prefixed('RTCPeerConnection', window));
 });
 
 
@@ -371,6 +373,37 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online) {
         var chatboxoptions = $('<div>')
             .addClass('chatboxoptions')
             .appendTo(chatboxHead);
+
+        $('<a>')
+            .addClass('btn btn-xs')
+            .attr({
+                href: '#'
+            })
+            .html('<i class="fa fa-video-camera"></i>')
+            .on('click', function(e) {
+                e.preventDefault();
+
+                if (!Modernizr.peerconnection) {
+                    return;
+                }
+
+                var createForm = $.get(
+                    ajax_url,
+                    {
+                        action: 'start_video',
+                        to: user_id
+                    }
+                );
+
+                $.when(createForm).done(function(response) {
+                    $('#global-modal')
+                        .find('.modal-body')
+                        .html(response);
+
+                    $('#global-modal').modal('show');
+                });
+            })
+            .appendTo(chatboxoptions);
 
         $('<a>')
             .addClass('btn btn-xs togglelink')

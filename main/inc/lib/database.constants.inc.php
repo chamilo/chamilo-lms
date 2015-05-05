@@ -327,6 +327,7 @@ define('TABLE_MAIN_SKILL_PROFILE',          'skill_profile');
 define('TABLE_MAIN_SKILL_REL_PROFILE',      'skill_rel_profile');
 
 define('TABLE_MAIN_CHAT',					'chat');
+define('TABLE_MAIN_VIDEO_CHAT', 'video_chat');
 define('TABLE_TIMELINE',                    'timeline');
 
 // Gradebook model

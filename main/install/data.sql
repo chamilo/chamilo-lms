@@ -740,30 +740,32 @@ INSERT INTO course_module VALUES
 (29,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
 (30,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'legal_accept','Legal',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'already_logged_in','Already logged in',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'update_type','Update script type',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (10, 'tags','tags',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'rssfeeds','RSS',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'dashboard', 'Dashboard', 0, 0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (11, 'timezone', 'Timezone', 0, 0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_message',      'MailNotifyMessage',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1');
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'user_chat_status','User chat status',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES (1, 'google_calendar_url','Google Calendar URL',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'legal_accept','Legal',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'already_logged_in','Already logged in',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'update_type','Update script type',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 10, 'tags','tags',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'rssfeeds','RSS',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'dashboard', 'Dashboard', 0, 0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 11, 'timezone', 'Timezone', 0, 0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_invitation',   'MailNotifyInvitation',1,1,'1');
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_message',      'MailNotifyMessage',1,1,'1');
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) values (1, 4, 'mail_notify_group_message','MailNotifyGroupMessage',1,1,'1');
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'user_chat_status','User chat status',0,0);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable) VALUES (1, 1, 'google_calendar_url','Google Calendar URL',0,0);
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (8, '0', 'No',3);
+INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, default_value) VALUES (2, 1, 'special_course', 'Special course', 1 , 1, '');
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (9, '0', 'No',3);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (8, '0', 'No',3);
 
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '1', 'AtOnce',1);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '8', 'Daily',2);
-INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values (10, '0', 'No',3);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (9, '0', 'No',3);
+
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '1', 'AtOnce',1);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '8', 'Daily',2);
+INSERT INTO extra_field_options (field_id, option_value, option_display_text, option_order) VALUES (10, '0', 'No',3);
 
 INSERT INTO access_url(url, description, active, created_by) VALUES ('http://localhost/',' ',1,1);
 
@@ -1544,9 +1546,6 @@ VALUES
 (4,'SocialGoodFriend'),
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
-
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable)
-VALUES (1, 'special_course', 'Special course', '', 1 , 1);
 
 INSERT INTO skill (name) VALUES ('Root');
 

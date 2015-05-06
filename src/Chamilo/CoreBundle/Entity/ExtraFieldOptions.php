@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -26,7 +27,7 @@ class ExtraFieldOptions
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField", inversedBy="options", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
     protected $field;
@@ -36,22 +37,35 @@ class ExtraFieldOptions
      *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    private $value;
+    protected $value;
 
     /**
      * @var string
      *
      * @ORM\Column(name="display_text", type="string", length=64, nullable=true)
      */
-    private $displayText;
+    protected $displayText;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="priority", type="string", length=255, nullable=true)
+     */
+    protected $priority;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="priority_message", type="string", length=255, nullable=true)
+     */
+    protected $priorityMessage;
+
+     /**
      * @var integer
      *
-     * @ORM\Column(name="optionOrder", type="integer", nullable=true)
+     * @ORM\Column(name="option_order", type="integer", nullable=true)
      */
-    private $optionOrder;
-
+    protected $optionOrder;
 
     /**
      * @return int
@@ -71,18 +85,14 @@ class ExtraFieldOptions
 
     /**
      * @param int $optionOrder
+     *
+     * @return $this
      */
     public function setOptionOrder($optionOrder)
     {
         $this->optionOrder = $optionOrder;
-    }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -95,10 +105,14 @@ class ExtraFieldOptions
 
     /**
      * @param mixed $field
+     *
+     * @return $this
      */
     public function setField($field)
     {
         $this->field = $field;
+
+        return $this;
     }
 
     /**
@@ -111,10 +125,14 @@ class ExtraFieldOptions
 
     /**
      * @param string $value
+     *
+     * @return $this
      */
     public function setValue($value)
     {
         $this->value = $value;
+
+        return $this;
     }
 
     /**
@@ -127,9 +145,54 @@ class ExtraFieldOptions
 
     /**
      * @param string $displayText
+     *
+     * @return $this
      */
     public function setDisplayText($displayText)
     {
         $this->displayText = $displayText;
+
+        return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param string $priority
+     *
+     * @return ExtraFieldOptions
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriorityMessage()
+    {
+        return $this->priorityMessage;
+    }
+
+    /**
+     * @param string $priorityMessage
+     *
+     * @return ExtraFieldOptions
+     */
+    public function setPriorityMessage($priorityMessage)
+    {
+        $this->priorityMessage = $priorityMessage;
+
+        return $this;
+    }
+
 }

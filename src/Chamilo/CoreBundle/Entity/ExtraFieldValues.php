@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -31,10 +32,10 @@ class ExtraFieldValues extends BaseAttributeValue
     protected $value;
 
     /**
-     * @var string
-     * @ORM\Column(name="field_id", type="integer", nullable=false, unique=false)
-     */
-    protected $fieldId;
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
+     * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
+     **/
+    protected $field;
 
     /**
      * @var string
@@ -46,24 +47,64 @@ class ExtraFieldValues extends BaseAttributeValue
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime $updated
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(name="updated_at", type="datetime")
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->tms = new \DateTime();
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param mixed $field
+     *
+     * @return ExtraFieldValues
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemId()
+    {
+        return $this->itemId;
+    }
+
+    /**
+     * @param string $itemId
+     *
+     * @return ExtraFieldValues
+     */
+    public function setItemId($itemId)
+    {
+        $this->itemId = $itemId;
+
+        return $this;
     }
 
     /**
@@ -76,10 +117,14 @@ class ExtraFieldValues extends BaseAttributeValue
 
     /**
      * @param \DateTime $createdAt
+     *
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -92,10 +137,14 @@ class ExtraFieldValues extends BaseAttributeValue
 
     /**
      * @param \DateTime $updatedAt
+     *
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
      /**

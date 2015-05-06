@@ -94,7 +94,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 /*
  * Get initial values for all fields.
  */
-$user_data = UserManager::get_user_info_by_id(api_get_user_id());
+$user_data = api_get_user_info(api_get_user_id());
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
 $id_temp_key = UserManager::get_api_key_id(api_get_user_id(), 'dokeos');
 $value_array = $array_list_key[$id_temp_key];
@@ -268,7 +268,7 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
 
 // EXTRA FIELDS
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'profile', false, api_get_user_id());
+$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, false, api_get_user_id());
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -364,11 +364,14 @@ function check_user_password($password) {
  */
 function check_user_email($email) {
     $user_id = api_get_user_id();
-    if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
+    if ($user_id != strval(intval($user_id)) || empty($email)) {
+        return false;
+    }
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
     $email = Database::escape_string($email);
-    $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
-    $result = Database::query($sql_password);
+    $sql = "SELECT * FROM $table_user
+            WHERE user_id='".$user_id."' AND email='".$email."'";
+    $result = Database::query($sql);
     return Database::num_rows($result) != 0;
 }
 
@@ -593,6 +596,7 @@ if ($form->validate()) {
             }
         }
     }
+
     if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }

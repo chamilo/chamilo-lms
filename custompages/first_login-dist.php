@@ -17,7 +17,7 @@ if (! isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
 if (isset($_POST['password'])) {
-    $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+    $u = api_get_user_info($_SESSION['conditional_login']['uid']);
     if ($_POST['password'] != $_POST['password2']) {
         header('Location: '. api_get_self().'?invalid=2');
         exit();
@@ -27,7 +27,26 @@ if (isset($_POST['password'])) {
         exit();
     }
     $password = $_POST['password'];
-    $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], $password, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], null, $u['language'],'');
+	$updated = UserManager::update_user(
+		$u['user_id'],
+		$u['firstname'],
+		$u['lastname'],
+		$u['username'],
+		$password,
+		$u['auth_source'],
+		$u['email'],
+		$u['status'],
+		$u['official_code'],
+		$u['phone'],
+		$u['picture_uri'],
+		$u['expiration_date'],
+		$u['active'],
+		$u['creator_id'],
+		$u['hr_dept_id'],
+		null,
+		$u['language'],
+		''
+	);
 
     if ($updated) {
         UserManager::update_extra_field_value($u['user_id'], 'already_logged_in', 'true');

@@ -204,8 +204,12 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
 		$form->addElement('hidden','save_form','save_form');
 
 		//adding reply mail
-		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
-		$default['content'] = '<p><br/></p>'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
+		$user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
+		$default['content'] = '<p><br/></p>'.sprintf(
+			get_lang('XWroteY'),
+			$user_reply_info['complete_name'],
+			Security::filter_terms($message_reply_info['content'])
+		);
 	}
 
 	if (empty($group_id)) {
@@ -310,7 +314,6 @@ if ($group_id != 0) {
 
 // LEFT COLUMN
 $social_left_content = null;
-$userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');

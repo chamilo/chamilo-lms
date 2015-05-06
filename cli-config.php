@@ -14,10 +14,28 @@
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 
-require_once 'main/inc/global.inc.php';
+require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/main/inc/lib/api.lib.php';
+$configurationFile = __DIR__.'/app/config/configuration.php';
 
-// replace with mechanism to retrieve EntityManager in your app
-$entityManager = Database::getManager();
+if (!is_file($configurationFile)) {
+    echo "File does not exists: $configurationFile";
+    exit();
+}
+
+require_once $configurationFile;
+
+$database = new \Database();
+$dbParams = array(
+    'driver' => 'pdo_mysql',
+    'host' => $_configuration['db_host'],
+    'user' => $_configuration['db_user'],
+    'password' => $_configuration['db_password'],
+    'dbname' => $_configuration['main_database'],
+);
+
+$database->connect($dbParams, realpath(__DIR__).'/', realpath(__DIR__).'/');
+$entityManager = $database->getManager();
 
 return ConsoleRunner::createHelperSet($entityManager);
 

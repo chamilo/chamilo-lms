@@ -600,6 +600,7 @@ class CoursesController
         $tpl->assign('action', $action);
         $tpl->assign('showCourses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('showSessions', CoursesAndSessionsCatalog::showSessions());
+        $tpl->assign('showTutor', (api_get_setting('show_session_coach')==='true' ? true : false));
         $tpl->assign('api_get_self', api_get_self());
         $tpl->assign('sessionUrl', $sessionUrl);
         $tpl->assign('courseUrl', $courseUrl);

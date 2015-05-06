@@ -522,7 +522,7 @@ class CoursesController
      * Generate a label if the user has been  registered in session
      * @return string The label
      */
-    public function getAlreadyRegisterInSessionLabel()
+    public function getAlreadyRegisteredInSessionLabel()
     {
         $icon = Display::return_icon('students.gif', get_lang('Student'));
 
@@ -615,7 +615,7 @@ class CoursesController
         $tpl->assign('searchDate', $date);
         $tpl->assign('web_session_courses_ajax_url', api_get_path(WEB_AJAX_PATH) . 'course.ajax.php');
         $tpl->assign('sessions_blocks', $sessionsBlocks);
-        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisterInSessionLabel());
+        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
 
         $contentTemplate = $tpl->get_template('auth/sessions_catalog.tpl');
 

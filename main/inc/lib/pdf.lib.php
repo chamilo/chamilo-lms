@@ -444,6 +444,7 @@ class PDF
             $pdf_name = api_replace_dangerous_char($pdf_name);
             $output_file = $pdf_name.'.pdf';
         }
+        $output_file = api_get_path(SYS_ARCHIVE_PATH) . $output_file;
         $this->pdf->Output($output_file, $outputMode); // F to save the pdf in a file
         if ($outputMode == 'F') {
             // Do NOT exit when export to file

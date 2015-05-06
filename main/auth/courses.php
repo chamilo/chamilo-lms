@@ -205,7 +205,12 @@ switch ($action) {
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
-        SessionManager::suscribe_users_to_session($_GET['session_id'], array($_GET['user_id']));
-        header('Location: courses.php');
+        $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
+        if ($registrationAllowed) {
+            SessionManager::suscribe_users_to_session($_GET['session_id'],
+                array($_GET['user_id']));
+            header('Location: courses.php');
+        }
+        //else show error message?
         break;
 }

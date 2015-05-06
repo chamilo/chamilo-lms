@@ -39,4 +39,5 @@ $content = $template->fetch('default/chat/video.tpl');
 
 $template->assign('header', $room['room_name']);
 $template->assign('content', $content);
+$template->assign('message', Display::return_message(get_lang('BroswerDoesNotSupportWebRTC'), 'warning'));
 $template->display_one_col_template();

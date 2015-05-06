@@ -135,6 +135,9 @@ switch ($action) {
 
         echo Display::tag('p', $videoChatLink, ['class' => 'lead']);
         break;
+    case 'notify_not_support':
+        $chat->send(api_get_user_id(), $to_user_id, get_lang('TheXUserBrowserDoesNotSupportWebRTC'));
+        break;
     default:
         echo '';
 }

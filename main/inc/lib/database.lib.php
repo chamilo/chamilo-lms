@@ -149,6 +149,9 @@ class Database
             $sysPath."vendor/gedmo/doctrine-extensions/lib"
         );
 
+        $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+        $entityManager->getEventManager()->addEventSubscriber($timestampableListener);
+
         $this->setConnection($entityManager->getConnection());
         $this->setManager($entityManager);
 

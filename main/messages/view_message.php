@@ -55,8 +55,7 @@ if (empty($_GET['id'])) {
 
 $message  = '';
 
-//LEFT COLUMN
-$userInfo    = UserManager::get_user_info_by_id($user_id);
+// LEFT COLUMN
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu($show_menu);

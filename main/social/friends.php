@@ -78,8 +78,7 @@ function clear_form () {
 
 $interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
-//Block Social Avatar
-$user_info    = UserManager::get_user_info_by_id($user_id);
+
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');
 

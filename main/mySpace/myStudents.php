@@ -452,8 +452,8 @@ if (!empty($student_id)) {
             $info_course['tutor_name'] = implode(",",$info_tutor_name);
         } elseif ($session_coach_id != 0) {
             $session_coach_id = intval($session_info['id_coach']);
-            $coach_info = UserManager::get_user_info_by_id($session_coach_id);
-            $info_course['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
+            $coach_info = api_get_user_info($session_coach_id);
+            $info_course['tutor_name'] = $coach_info['complete_name'];
         }
         $coachs_name  = $info_course['tutor_name'];
         $session_name = $session_info['name'];

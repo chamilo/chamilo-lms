@@ -2057,7 +2057,7 @@ class Blog
 				$user['user_id'] = $user['id_user'];
 			}
 			if(!in_array($user['user_id'],$blog_member_ids)) {
-				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
+				$a_infosUser = api_get_user_info($user['user_id']);
 				$row = array ();
 				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.((isset($_GET['selectall']) && $_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
 				$username = api_htmlentities(sprintf(get_lang('LoginX'), $a_infosUser["username"]), ENT_QUOTES);

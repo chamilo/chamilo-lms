@@ -368,7 +368,7 @@ $user_id = api_get_user_id();
 if ($user_id == 0) {
     $user_id = $survey_invitation['user'];
 }
-$user_data = UserManager :: get_user_info_by_id($user_id);
+$user_data = api_get_user_info($user_id);
 
 if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_array($user_data)) {
     $form_fields = explode('@', $survey_data['form_fields']);
@@ -492,7 +492,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
 
     // EXTRA FIELDS
     $extra_data = UserManager :: get_extra_user_data($user_id, true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'profile');
+    UserManager::set_extra_fields_in_form($form, $extra_data);
 
     $form->addButtonNext(get_lang('Next'));
     $user_data = array_merge($user_data, $extra_data);

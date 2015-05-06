@@ -126,9 +126,9 @@ $dbParams = array(
     'password' => $_configuration['db_password'],
     'dbname' => $_configuration['main_database'],
 );
-
 try {
     $database = new \Database();
+
     $database->connect($dbParams);
 } catch (Exception $e) {
     $global_error_code = 3;

@@ -64,10 +64,9 @@ function edit_category_form($in_action) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $objcat = new TestCategory($category_id);
 
-        // initiate the object
         $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action . '&category_id=' . $category_id);
 
-        // settting the form elements
+        // Setting the form elements
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));

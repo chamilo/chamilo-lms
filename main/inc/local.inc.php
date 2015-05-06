@@ -117,7 +117,7 @@ use ChamiloSession as Session;
 if (isset($_SESSION['conditional_login']['uid']) &&
     $_SESSION['conditional_login']['can_login'] === true
 ) {
-    $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+    $uData = api_get_user_info($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);
 
     $_user['user_id'] = $_SESSION['conditional_login']['uid'];

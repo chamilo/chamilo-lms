@@ -60,7 +60,8 @@ if (!empty($sessionId)) {
     foreach ($studentList['students'] as &$student) {
         $studentId = intval($student['user_id']);
         $data['studentUserId'] = $studentId;
-        $student['area'] = UserManager::get_user_info_by_id($studentId)['extra']['area'];
+
+        $student['area'] = api_get_user_info($studentId)['extra']['area'];
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;

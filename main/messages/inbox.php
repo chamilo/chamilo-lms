@@ -124,7 +124,7 @@ if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social
         $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
     }
 }
-$userInfo    = UserManager::get_user_info_by_id($user_id);
+
 //LEFT CONTENT
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Menu

@@ -491,7 +491,7 @@ class CoursesController
      * @param boolean   Session autosubscription set. False by default.
      * @return string   The button
      */
-    public function getRegisterInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
+    public function getRegisteredInSessionButton($sessionData, $catalogSessionAutoSubscriptionAllowed = false)
     {
         $url = $catalogSessionAutoSubscriptionAllowed ?
             api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_to_session&session_id=".
@@ -586,7 +586,7 @@ class CoursesController
                 'is_subscribed' => $session['is_subscribed'],
                 'icon' => $this->getSessionIcon($session['name']),
                 'date' => SessionManager::getSessionFormattedDate($session),
-                'subscribe_button' => $this->getRegisterInSessionButton(
+                'subscribe_button' => $this->getRegisteredInSessionButton(
                     $session[$key],
                     $catalogSessionAutoSubscriptionAllowed
                 ),

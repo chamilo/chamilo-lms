@@ -28,23 +28,24 @@ before_script:
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 restart
   # install Chash, a database, and then install Chamilo
-  #- git clone https://github.com/chamilo/chash
-  #- cd chash
-  #- composer install
-  #- composer update
-  #- php5 -d phar.readonly=0 createPhar.php
-  #- chmod +x chash.phar
-  #- sudo mv chash.phar /usr/local/bin/chash
+  - git clone https://github.com/chamilo/chash
+  - cd chash
+  - composer install
+  - composer update
+  - php5 -d phar.readonly=0 createPhar.php
+  - chmod +x chash.phar
+  - sudo mv chash.phar /usr/local/bin/chash
   #- cd ..
-  - git clone -b nophpversioncheck --single-branch https://github.com/ywarnier/chamilo-cli-install.git
-  - cp chamilo-cli-install/chamilo-cli-installer.php main/install/
-  - mysql -u root -e 'create database chamilo'
+  #- git clone -b nophpversioncheck --single-branch https://github.com/ywarnier/chamilo-cli-install.git
+  #- cp chamilo-cli-install/chamilo-cli-installer.php main/install/
+  #- mysql -u root -e 'create database chamilo'
+  #- sudo chmod -R 0777 app/config app main/default_course_document/images main/lang
+  #- cd main/install/
+  #- sudo php5 chamilo-cli-installer.php -l admin -p admin -U travis -u 'http://localhost/' -X travis -L english -z 'admin@example.com' -f 'John' -g 'Doe' -b '555-5555' -c 'Test campus' -y 'Chamilo' -x 'https://chamilo.org'
+  #- cd ../..
   # install Chamilo with Chash - see reference https://github.com/sonnym/travis-ci-drupal-module-example/blob/master/.travis.yml
-  - sudo chmod -R 0777 app/config app main/default_course_document/images main/lang
-  - cd main/install/
-  - sudo php5 chamilo-cli-installer.php -l admin -p admin -U travis -u 'http://localhost/' -X travis -L english -z 'admin@example.com' -f 'John' -g 'Doe' -b '555-5555' -c 'Test campus' -y 'Chamilo' -x 'https://chamilo.org'
-  - cd ../..
-  #- sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.0 /home/travis/build/chamilo/chamilo-lms
+  - cd /home/travis/build/chamilo/chamilo-lms
+  - sudo chash chash:chamilo_install --no-interaction --sitename="Chamilo" --site_url="http://localhost/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555" 1.10.x
 
 script:
   # - phpunit -c tests/phpunit

@@ -35,7 +35,7 @@ class ExtraFieldOptions
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="text", nullable=true)
+     * @ORM\Column(name="option_value", type="text", nullable=true)
      */
     protected $value;
 

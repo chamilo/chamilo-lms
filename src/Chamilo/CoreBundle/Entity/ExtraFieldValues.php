@@ -60,6 +60,12 @@ class ExtraFieldValues extends BaseAttributeValue
     protected $updatedAt;
 
     /**
+     * @var string
+     * @ORM\Column(name="comment", type="text", nullable=true, unique=false)
+     */
+    protected $comment;
+
+    /**
      * Constructor
      */
     public function __construct()

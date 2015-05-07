@@ -138,8 +138,6 @@ $_configuration['cdn'] = array(
 /**
  * Misc. settings
  */
-// Verbose backup
-$_configuration['verbose_backup'] = false;
 // security word for password recovery
 $_configuration['security_key'] = '{SECURITY_KEY}';
 // Hash function method

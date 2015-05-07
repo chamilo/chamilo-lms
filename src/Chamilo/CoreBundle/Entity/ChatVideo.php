@@ -36,7 +36,7 @@ class ChatVideo
     /**
      * @var string
      *
-     * @ORM\Column(name="room_name", type="text", nullable=false)
+     * @ORM\Column(name="room_name", type="string", nullable=false)
      */
     private $roomName;
 

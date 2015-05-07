@@ -92,7 +92,11 @@ class IndexManager
     }
 
     function return_announcements($show_slide = true) {
-        // Display System announcements
+        //// Display System announcements
+        $hideAnnouncements = api_get_setting('hide_global_announcements_when_not_connected');
+        if ($hideAnnouncements == 'true' && empty($userId)) {
+            return null;
+        }
         $announcement = isset($_GET['announcement']) ? $_GET['announcement'] : null;
         $announcement = intval($announcement);
 
@@ -234,9 +238,8 @@ class IndexManager
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             // Hiding home top when user not connected.
-            if (isset($_configuration['hide_home_top_when_connected']) &&
-                $_configuration['hide_home_top_when_connected'] && !empty($userId)
-            ) {
+            $hideTop = api_get_setting('hide_home_top_when_connected');
+            if ($hideTop == 'true' && !empty($userId)) {
                 return $html;
             }
 
@@ -747,7 +750,8 @@ class IndexManager
         global $_configuration;
 
         // Captcha
-        $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+        $captcha = api_get_setting('allow_captcha');
+        $allowCaptcha = $captcha == 'true';
 
         if ($allowCaptcha) {
             $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;

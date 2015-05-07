@@ -255,7 +255,8 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
     $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
     $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
 
-    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+    $checkPass = api_get_setting('allow_strength_pass_checker');
+    if ($checkPass == 'true') {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));

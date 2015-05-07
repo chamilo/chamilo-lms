@@ -159,32 +159,12 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 /**
  * Settings to be included as settings_current in future versions
  */
-// Hide the main home section for connected users (to show announcements instead)
-//$_configuration['hide_home_top_when_connected'] = true;
-// Hide the global announcements for non-connected users
-//$_configuration['hide_global_announcements_when_not_connected'] = true;
-// Use this course as template for all new courses (define course real ID as value)
-//$_configuration['course_creation_use_template'] = 14;
 // Uncomment the following to prevent all admins to use the "login as" feature
 //$_configuration['login_as_forbidden_globally'] = true;
-// Add password strength checker
-//$_configuration['allow_strength_pass_checker'] = true;
-// Enable captcha
-//$_configuration['enable_captcha'] = true;
-//$_configuration['allow_captcha'] = true;
-// Prevent account from logging in for a certain amount of time
-// if captcha is wrong for the specified number of times
-//$_configuration['captcha_number_mistakes_to_block_account'] = 5;
-// Prevent account from logging in for the specified number of minutes
-//$_configuration['captcha_time_to_block'] = 5;//minutes
-// Allow DRH role to access all content and users from the sessions he follows
-//$_configuration['drh_can_access_all_session_content'] = true;
-// Display group's forum in general forum tool
-//$_configuration['display_groups_forum_in_general_tool'] = true;
+
 // Boost query on last connection time
 //$_configuration['save_user_last_login'] = true;
-// Allow course tutors in sessions to add existing students to their session
-//$_configuration['allow_tutors_to_assign_students_to_session'] = 'false';
+
 // Allow select the return link in the LP view
 //$_configuration['allow_lp_return_link'] = false;
 // If true the export link is blocked.

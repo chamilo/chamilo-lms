@@ -240,6 +240,7 @@ class GradebookTable extends SortableTable
                     $value_data = isset($data[4]) ? $data[4] : null;
                     if (!is_null($value_data)) {
                         $row[] = Display::tag('h4', $value_data);
+                        $row[] = $this->build_edit_column($item);
                     } else {
                         $row[] = $this->build_edit_column($item);
                     }

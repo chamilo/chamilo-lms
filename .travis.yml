@@ -55,4 +55,4 @@ script:
 # configure notifications (email, IRC, campfire etc)
 notifications:
   # IRC notifications - disabled for creating a lot of noise on the channel
-  # irc: "irc.freenode.org#chamilo"
+  irc: "irc.freenode.org#chamilodev"

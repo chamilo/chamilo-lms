@@ -4601,21 +4601,6 @@ CREATE TABLE c_attendance_calendar_rel_group (
   calendar_id INT NOT NULL
 );
 
--- 1.10.0.38
-DROP TABLE IF EXISTS chat_video;
-CREATE TABLE IF NOT EXISTS chat_video(
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    from_user INT UNSIGNED NOT NULL,
-    to_user INT UNSIGNED NOT NULL,
-    room_name VARCHAR(255) NOT NULL,
-    datetime DATETIME NOT NULL
-);
-
-ALTER TABLE chat_video ADD INDEX idx_chat_video_from_user (from_user);
-ALTER TABLE chat_video ADD INDEX idx_chat_video_to_user (to_user);
-ALTER TABLE chat_video ADD INDEX idx_chat_video_users (from_user, to_user);
-ALTER TABLE chat_video ADD INDEX idx_chat_video_room_name (room_name);
-
 -- Version
 LOCK TABLES settings_current WRITE;
 UPDATE settings_current SET selected_value = '1.10.0.38' WHERE variable = 'chamilo_database_version';

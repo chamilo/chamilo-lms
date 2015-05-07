@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V110;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20150505142900
@@ -21,15 +22,37 @@ class Version20150505142900 extends AbstractMigrationChamilo
     public function up(Schema $schema)
     {
         // Create table for video chat
-        $this->addSql("
-            CREATE TABLE IF NOT EXISTS chat_video(
-                id int unsigned not null auto_increment primary key,
-                from_user int unsigned not null,
-                to_user int unsigned not null,
-                room_name varchar(255) not null,
-                datetime datetime not null
-            );
-        ");
+        $chatVideoTable = $schema->createTable('chat_video');
+        $chatVideoTable->addColumn(
+            'id',
+            Type::INTEGER,
+            ['unsigned' => true, 'autoincrement' => true, 'notnull' => true]
+        );
+        $chatVideoTable->addColumn(
+            'from_user',
+            Type::INTEGER,
+            ['unsigned' => true, 'notnull' => true]
+        );
+        $chatVideoTable->addColumn(
+            'to_user',
+            Type::INTEGER,
+            ['unsigned' => true, 'notnull' => true]
+        );
+        $chatVideoTable->addColumn(
+            'room_name',
+            Type::STRING,
+            ['length' => 255, 'notnull' => true]
+        );
+        $chatVideoTable->addColumn(
+            'datetime',
+            Type::DATETIME,
+            ['notnull' => true]
+        );
+        $chatVideoTable->setPrimaryKey(['id']);
+        $chatVideoTable->addIndex(['from_user'], 'idx_chat_video_from_user');
+        $chatVideoTable->addIndex(['to_user'], 'idx_chat_video_to_user');
+        $chatVideoTable->addIndex(['from_user', 'to_user'], 'idx_chat_video_users');
+        $chatVideoTable->addIndex(['room_name'], 'idx_chat_video_room_name');
     }
 
     /**
@@ -38,6 +61,6 @@ class Version20150505142900 extends AbstractMigrationChamilo
      */
     public function down(Schema $schema)
     {
-        $this->addSql("DROP TABLE IF EXISTS chat_video;");
+        $schema->dropTable('chat_video');
     }
 }

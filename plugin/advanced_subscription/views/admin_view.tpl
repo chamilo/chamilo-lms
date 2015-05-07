@@ -34,7 +34,7 @@
         <div class="col-md-12">
             <div class="student-list-table">
                 <table id="student_table" class="table table-striped">
-                    <tbody>
+                    <thead>
                     <tr>
                         <th>{{ "Postulant" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th>{{ "InscriptionDate" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
@@ -42,6 +42,8 @@
                         <th>{{ "BossValidation" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                         <th class="advanced-subscription-decision-column">{{ "Decision" | get_plugin_lang('AdvancedSubscriptionPlugin') }}</th>
                     </tr>
+                    </thead>
+                    <tbody>
                     {% set row_class = "row_odd" %}
                     {% for student in students %}
                     <tr class="{{ row_class }}">
@@ -62,7 +64,7 @@
                             {% endif %}
                         </td>
                         <td>
-
+                            {% if student.status != approveAdmin and student.status != disapproveAdmin %}
                             <a
                                 class="btn btn-success btn-advanced-subscription btn-accept"
                                 href="{{ student.acceptUrl }}"
@@ -75,7 +77,7 @@
                             >
                                 {{ 'RejectInfinitive' | get_plugin_lang('AdvancedSubscriptionPlugin') }}
                             </a>
-
+                            {% endif %}
                         </td>
                     </tr>
                     {% if row_class == "row_even" %}
@@ -133,16 +135,16 @@
                 var confirmed = confirm(msg.replace(msgRe, studentName));
             }
             if (confirmed) {
-                var thisBlock = $(this).closest("tr");
-                var advancedSubscriptionUrl = $(this).attr("href")
-                $("#iframeAdvsub").attr("src", advancedSubscriptionUrl)
+                var tdParent = $(this).closest("td");
+                var advancedSubscriptionUrl = $(this).attr("href");
+                $("#iframeAdvsub").attr("src", advancedSubscriptionUrl);
                 $("#modalMail").modal("show");
                 $.ajax({
                     dataType: "json",
                     url: advancedSubscriptionUrl
                 }).done(function(result){
-                    if (result.error == true) {
-                        thisBlock.slideUp();
+                    if (result.error === true) {
+                        tdParent.html('');
                     } else {
                         console.log(result);
                     }

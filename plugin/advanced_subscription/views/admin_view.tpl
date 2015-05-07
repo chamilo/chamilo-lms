@@ -93,7 +93,7 @@
 <input name="f" value="social" type="hidden">
 </form>
 <div class="modal fade" id="modalMail" tabindex="-1" role="dialog" aria-labelledby="modalMailLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

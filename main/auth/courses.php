@@ -205,11 +205,30 @@ switch ($action) {
         $courses_controller->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
-        $registrationAllowed = api_get_setting('catalog_allow_session_auto_subscription');
+        $registrationAllowed = api_get_configuration_value('catalog_allow_session_auto_subscription');
         if ($registrationAllowed) {
-            SessionManager::suscribe_users_to_session($_GET['session_id'],
-                array($_GET['user_id']));
-            header('Location: courses.php');
+            SessionManager::suscribe_users_to_session(
+                $_GET['session_id'],
+                array($_GET['user_id'])
+            );
+
+            $coursesList = SessionManager::get_course_list_by_session_id($_GET['session_id']);
+            $count = count($coursesList);
+            $url = '';
+
+            if ($count <= 0) {
+                // no course in session -> return to catalog
+                $url = api_get_path(WEB_CODE_PATH) . 'auth/courses.php';
+            } elseif ($count == 1) {
+                // only one course, so redirect directly to this course
+                foreach ($coursesList as $course) {
+                    $url = api_get_path(WEB_COURSE_PATH) . $course['directory'] . '/index.php?id_session=' . intval($_GET['session_id']);
+                }
+            } else {
+                $url = api_get_path(WEB_CODE_PATH) . 'session/index.php?session_id=' . intval($_GET['session_id']);
+            }
+            header('Location: ' . $url);
+            exit;
         }
         //else show error message?
         break;

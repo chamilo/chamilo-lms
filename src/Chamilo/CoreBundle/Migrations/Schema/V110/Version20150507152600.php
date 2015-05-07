@@ -68,7 +68,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         $this->addSettingCurrent(
             'course_creation_use_template',
             '',
-            'text',
+            'textfield',
             'Course',
             ($value?$value:''),
             'CourseCreationUsesTemplateText',
@@ -123,7 +123,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         $this->addSettingCurrent(
             'captcha_number_mistakes_to_block_account',
             '',
-            'text',
+            'textfield',
             'Security',
             ($value?$value:5),
             'CaptchaNumberOfMistakesBeforeBlockingAccountText',
@@ -140,7 +140,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         $this->addSettingCurrent(
             'captcha_time_to_block',
             '',
-            'text',
+            'textfield',
             'Security',
             ($value?$value:5),
             'CaptchaTimeAccountIsLockedText',

@@ -1627,7 +1627,7 @@ INSERT INTO sequence_type_entity VALUES
 (2,'Quiz', 'Quiz and Tests','c_quiz'),
 (3,'LpItem', 'Items of a Learning Path','c_lp_item');
 
--- Version 1.10.0.40
+-- Version 1.10.0.39
 
 INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)

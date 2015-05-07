@@ -172,7 +172,7 @@ class Chat extends Model
      * @param string Message
      * @return void Prints "1"
      */
-    public function send($from_user_id, $to_user_id, $message)
+    public function send($from_user_id, $to_user_id, $message, $printResult = true)
     {
         $user_friend_relation = SocialManager::get_relation_between_contacts($from_user_id, $to_user_id);
         if ($user_friend_relation == USER_RELATION_TYPE_FRIEND) {
@@ -207,11 +207,15 @@ class Chat extends Model
                 $this->save($params);
             }
 
-            echo "1";
-            exit;
+            if ($printResult) {
+                echo "1";
+                exit;
+            }
         } else {
-            echo "0";
-            exit;
+            if ($printResult) {
+                echo "0";
+                exit;
+            }
         }
     }
 

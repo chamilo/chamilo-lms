@@ -5954,3 +5954,11 @@ ul.exercise-draggable-answer li {
 ._jsPlumb_endpoint {
     z-index: 50;
 }
+
+/*** Video chat ***/
+video#chat-local-video,
+div#chat-remote-video video {
+    display: block;
+    height: auto;
+    width: 100%;
+}

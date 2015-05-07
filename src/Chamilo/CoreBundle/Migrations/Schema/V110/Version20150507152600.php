@@ -68,7 +68,7 @@ class Version20150507152600 extends AbstractMigrationChamilo
         $this->addSettingCurrent(
             'course_creation_use_template',
             '',
-            'radio',
+            'text',
             'Course',
             ($value?$value:''),
             'CourseCreationUsesTemplateText',

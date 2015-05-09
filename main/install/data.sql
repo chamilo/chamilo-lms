@@ -1633,7 +1633,7 @@ INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
 ('hide_home_top_when_connected', '', 'radio', 'Platform', 'false', 'HideHomeTopContentWhenLoggedInText', 'HideHomeTopContentWhenLoggedInComment', NULL, '', true),
-('hide_global_announcements_when_not_connected','','radio','Platform','true', 'HideGlobalAnnouncementsWhenNotLoggedInText','HideGlobalAnnouncementsWhenNotLoggedInComment',NULL,'', true),
+('hide_global_announcements_when_not_connected','','radio','Platform','false', 'HideGlobalAnnouncementsWhenNotLoggedInText','HideGlobalAnnouncementsWhenNotLoggedInComment',NULL,'', true),
 ('course_creation_use_template','','textfield','Course','','CourseCreationUsesTemplateText','CourseCreationUsesTemplateComment',NULL,'',true),
 ('allow_strength_pass_checker','','radio','Security','true','EnablePasswordStrengthCheckerText','EnablePasswordStrengthCheckerComment',NULL,'',true),
 ('allow_captcha','','radio','Security','false','EnableCaptchaText','EnableCaptchaComment',NULL,'',true),

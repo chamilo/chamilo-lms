@@ -132,9 +132,9 @@ define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
 $user_id = api_get_user_id();
 $course_code = api_get_course_id();
+$courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $show_message = '';
-
 
 if (api_is_invitee()) {
     $isInASession = $sessionId > 0;
@@ -154,7 +154,7 @@ if (api_is_invitee()) {
 Session::erase('toolgroup');
 Session::erase('_gid');
 
-$isSpecialCourse = CourseManager::is_special_course($course_code);
+$isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
     if (isset($_GET['autoreg'])) {

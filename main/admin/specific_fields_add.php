@@ -8,27 +8,19 @@
 // Resetting the course id.
 $cidReset = true;
 
-// including necessary libraries
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-include_once $libpath.'specific_fields_manager.lib.php';
+require_once $libpath.'specific_fields_manager.lib.php';
 
 // section for the tabs
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 // user permissions
 api_protect_admin_script();
 
-// Database table definitions
-$table_admin  = Database :: get_main_table(TABLE_MAIN_ADMIN);
-$table_user   = Database :: get_main_table(TABLE_MAIN_USER);
-$table_uf     = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-$table_uf_opt = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-$table_uf_val = Database :: get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
-$interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
+$interbreadcrumb[] = array('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 if ($_GET['action']<>'edit') {
   $tool_name = get_lang('AddSpecificSearchField');
 } else {

@@ -50,9 +50,12 @@ class Kannelsms implements SmsPluginLibraryInterface
         $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
 
         $mobilePhoneNumberExtraFieldValue = new ExtraFieldValue('user');
-        $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+        $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id(
+            $userId,
+            $mobilePhoneNumberExtraField['id']
+        );
 
-        return $mobilePhoneNumberExtraFieldValue['field_value'];
+        return $mobilePhoneNumberExtraFieldValue['value'];
     }
 
     /**

@@ -37,18 +37,33 @@ $token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],'name' => $extraFieldInfo['field_display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[]=array(
+        'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
+        'name' => $extraFieldInfo['display_text']
+    );
+    $interbreadcrumb[]=array(
+        'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
+        'name' => get_lang('EditExtraFieldOptions')
+    );
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],'name' => $extraFieldInfo['field_display_text']);
-    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    $interbreadcrumb[]=array(
+        'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
+        'name' => $extraFieldInfo['display_text']
+    );
+    $interbreadcrumb[]=array(
+        'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
+        'name' => get_lang('EditExtraFieldOptions')
+    );
 
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extraField->type,'name' => $extraField->pageName);
-    $interbreadcrumb[]=array('url' =>  'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],'name' => $extraFieldInfo['field_display_text']);
+    $interbreadcrumb[]=array(
+        'url' =>  'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
+        'name' => $extraFieldInfo['display_text']
+    );
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
 }
 
@@ -96,11 +111,18 @@ $htmlHeadXtra[]='<script>
 // The header.
 Display::display_header($tool_name);
 
-echo Display::page_header($extraFieldInfo['field_display_text']);
+echo Display::page_header($extraFieldInfo['display_text']);
 
 $obj = new ExtraFieldOption($type);
-$columns = array('option_display_text', 'option_value', 'option_order');
-$result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id), 'order'=>"option_order ASC"));
+$columns = array('display_text', 'option_value', 'option_order');
+$result = Database::select(
+    '*',
+    $obj->table,
+    array(
+        'where' => array("field_id = ? " => $field_id),
+        'order' => "option_order ASC",
+    )
+);
 
 $table = new HTML_Table(array('class' => 'data_table'));
 $column = 0;

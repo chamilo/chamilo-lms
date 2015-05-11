@@ -14,11 +14,11 @@
 /**
  * Require Exception class for error handling.
  */
-require_once 'Text/CAPTCHA/Exception.php';
+//require_once 'Text/CAPTCHA/Exception.php';
 /**
  * Require Text_Password class for generating the phrase.
  */
-require_once 'Text/Password.php';
+//require_once 'Text/Password.php';
 
 /**
  * Text_CAPTCHA - creates a CAPTCHA for Turing tests.
@@ -77,7 +77,7 @@ class Text_CAPTCHA
     {
         $driver = basename($driver);
         $class = 'Text_CAPTCHA_Driver_' . $driver;
-        $file = str_replace('_', '/', $class) . '.php';
+        /*$file = str_replace('_', '/', $class) . '.php';
         //check if it exists and can be loaded
         if (!@fclose(@fopen($file, 'r', true))) {
             throw new Text_CAPTCHA_Exception(
@@ -85,7 +85,7 @@ class Text_CAPTCHA
             );
         }
         //continue with including the driver
-        include_once $file;
+        include_once $file;*/
 
         $driver = new $class;
 

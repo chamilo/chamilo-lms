@@ -11,8 +11,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link     http://pear.php.net/package/Text_CAPTCHA
  */
-require_once 'Text/CAPTCHA/Driver/Base.php';
-require_once 'Image/Text.php';
 
 /**
  * Text_CAPTCHA_Driver_Image - Text_CAPTCHA driver graphical CAPTCHAs
@@ -69,7 +67,8 @@ class Text_CAPTCHA_Driver_Image extends Text_CAPTCHA_Driver_Base
         'text_color' => '#000000',
         'lines_color' => '#CACACA',
         'background_color' => '#555555',
-        'antialias' => false);
+        'antialias' => false
+    );
 
     /**
      * Init function

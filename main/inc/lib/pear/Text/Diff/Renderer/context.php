@@ -14,8 +14,6 @@
  * @package Text_Diff
  */
 
-/** Text_Diff_Renderer */
-require_once 'Text/Diff/Renderer.php';
 
 /**
  * @package Text_Diff

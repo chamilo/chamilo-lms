@@ -1,10 +1,10 @@
 <?php
 /**
- * This script populates the user_extra_fields_value table with a new field which 
+ * This script populates the user_extra_fields_value table with a new field which
  * contains the username for each user. This allows you to use web
  * services to update users based on their username (which is assumed
  * to be the same as in the application which calls the webservice).
- * This script should be called any time a new user (or a large group of new 
+ * This script should be called any time a new user (or a large group of new
  * users) is added to the database.
  * @package chamilo.webservices
  */
@@ -18,10 +18,11 @@ die();
 $extra_field_id = 9;
 require_once('../inc/global.inc.php');
 $tuser = Database::get_main_table(TABLE_MAIN_USER);
-$tuserfv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+$tuserfv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 $sql = "SELECT user_id, username FROM $tuser ORDER BY user_id";
 $res = Database::query($sql);
 while($row = Database::fetch_array($res)) {
-  $sql2 = "INSERT INTO $tuserfv (user_id, field_id, field_value) VALUES (".$row['user_id'].", 11,'".$row['username']."')";
+  $sql2 = "INSERT INTO $tuserfv (item_id, field_id, value)
+           VALUES (".$row['user_id'].", 11,'".$row['username']."')";
   $res2 = Database::query($sql2);
 }

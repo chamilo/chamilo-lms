@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 *	@package chamilo.admin
 */
@@ -16,8 +17,6 @@ api_protect_super_admin($user_id, null, true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
 <script>
 var is_platform_id = "'.$is_platform_admin.'";
@@ -93,8 +92,6 @@ $user_data['old_password'] = $user_data['password'];
 
 $user_data['registration_date'] = api_get_local_time($user_data['registration_date']);
 unset($user_data['password']);
-$extra_data = UserManager :: get_extra_user_data($user_id, true);
-$user_data = array_merge($user_data, $extra_data);
 
 // Create the form
 $form = new FormValidator(
@@ -178,7 +175,7 @@ $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
     $auth_sources = array();
     foreach ($extAuthSource as $key => $info) {
-        // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
+        // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
         // extAuthSource always on for CAS even if not activated
         // same action for file user_add.php
@@ -188,7 +185,7 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
         }
     }
     if ($nb_ext_auth_source_added > 0) {
-        // @todo check the radio button for external authentification and select the external authentification in the menu
+        // @todo check the radio button for external authentification and select the external authentication in the menu
         $group[] = $form->createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
         $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
         $group[] = $form->createElement('static', '', '', '<br />');
@@ -265,8 +262,9 @@ if (!$user_data['platform_admin']) {
 }
 
 // EXTRA FIELDS
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
-$jquery_ready_content = $return_params['jquery_ready_content'];
+$extraField = new ExtraField('user');
+$returnParams = $extraField->addElements($form, $user_data['user_id']);
+$jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] ='<script>
@@ -274,7 +272,6 @@ $(document).ready(function(){
 	'.$jquery_ready_content.'
 });
 </script>';
-
 
 // Submit button
 $form->addButtonSave(get_lang('Save'));
@@ -372,7 +369,7 @@ if ($form->validate()) {
         );
 
 		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
-			$up = UserManager::update_openid($user_id,$user['openid']);
+			$up = UserManager::update_openid($user_id, $user['openid']);
 		}
         $currentUserId = api_get_user_id();
 		if ($user_id != $currentUserId) {
@@ -383,7 +380,10 @@ if ($form->validate()) {
 			}
 		}
 
-		foreach ($user as $key => $value) {
+        $extraFieldValue = new ExtraFieldValue('user');
+        $extraFieldValue->saveFieldValues($user);
+
+		/*foreach ($user as $key => $value) {
 			if (substr($key, 0, 6) == 'extra_') {
                 //an extra field
                 //@todo remove this as well as in the profile.php ad put it in a function
@@ -420,7 +420,7 @@ if ($form->validate()) {
                 // To remove from user_field_value and folder
                 UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
             }
-		}
+		}*/
 		$tok = Security::get_token();
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
 		exit();

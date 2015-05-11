@@ -74,9 +74,9 @@ if (api_is_multiple_url_enabled()) {
         $clean_url .= '/';
 
 
-        $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
-        $homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
-        $new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+        $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
+        $homep_new = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path added the url
+        $new_url_dir = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
         //we create the new dir for the new sites
         if (!is_dir($new_url_dir)) {
             mkdir($new_url_dir, api_get_permissions_for_new_directories());
@@ -84,11 +84,11 @@ if (api_is_multiple_url_enabled()) {
     }
 } else {
     $homep_new = '';
-    $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+    $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
 }
 
-$topf 	 = 'register_top'; //topf for Top File
-$ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
+$topf = 'register_top'; //topf for Top File
+$ext = '.html'; //ext for HTML Extension - when used frequently, variables are
 $homef = array($topf);
 
 // If language-specific file does not exist, create it by copying default file
@@ -240,18 +240,30 @@ if ($display_all_form) {
     }
 
     //	EXTENDED FIELDS
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mycomptetences') == 'true') {
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration','mycomptetences') == 'true'
+    ) {
         $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mydiplomas') == 'true') {
+
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration','mydiplomas') == 'true'
+    ) {
         $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','myteach') == 'true') {
+
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration','myteach') == 'true'
+    ) {
         $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
-    if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true') {
+
+    if (api_get_setting('extended_profile') == 'true' &&
+        api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true'
+    ) {
         $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
     }
+
     if (api_get_setting('extended_profile') == 'true') {
         if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
             $form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
@@ -266,8 +278,9 @@ if ($display_all_form) {
             $form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
-    $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
+
+    $extraField = new ExtraField('user');
+    $extraField->addElements($form);
 }
 
 // Terms and conditions

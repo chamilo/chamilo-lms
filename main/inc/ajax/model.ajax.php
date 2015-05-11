@@ -1241,16 +1241,28 @@ switch ($action) {
         break;
     case 'get_extra_fields':
         $obj = new ExtraField($type);
-        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter', 'field_order');
-        $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $columns = array(
+            'display_text',
+            'variable',
+            'field_type',
+            'changeable',
+            'visible',
+            'filter',
+            'field_order',
+        );
+        $result = Database::select(
+            '*',
+            $obj->table,
+            array('order' => "$sidx $sord", 'LIMIT' => "$start , $limit")
+        );
         $new_result = array();
         if (!empty($result)) {
             foreach ($result as $item) {
-                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
-                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $new_result[]        = $item;
+                $item['field_type'] = $obj->get_field_type_by_id($item['field_type']);
+                $item['changeable'] = $item['changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['visible'] = $item['visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['filter'] = $item['filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[] = $item;
             }
             $result = $new_result;
         }
@@ -1346,8 +1358,16 @@ switch ($action) {
         break;
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);
-        $columns = array('option_display_text', 'option_value', 'option_order');
-        $result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id),'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $columns = array('display_text', 'option_value', 'option_order');
+        $result = Database::select(
+            '*',
+            $obj->table,
+            array(
+                'where' => array("field_id = ? " => $field_id),
+                'order' => "$sidx $sord",
+                'LIMIT' => "$start , $limit",
+            )
+        );
         break;
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');

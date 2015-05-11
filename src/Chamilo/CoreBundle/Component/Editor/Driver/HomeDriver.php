@@ -25,7 +25,7 @@ class HomeDriver extends Driver implements DriverInterface
     public function getConfiguration()
     {
         if ($this->allow()) {
-            $home = api_get_path(SYS_PATH).'home';
+            $home = api_get_path(SYS_APP_PATH).'home';
 
             return array(
                 'driver' => 'HomeDriver',

@@ -1087,21 +1087,52 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function addRule($element, $message, $type, $format=null, $validation='server', $reset = false, $force = false)
-    {
+    function addRule(
+        $element,
+        $message,
+        $type,
+        $format = null,
+        $validation = 'server',
+        $reset = false,
+        $force = false
+    ) {
         if (!$force) {
             if (!is_array($element) && !$this->elementExists($element)) {
-                return PEAR::raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$element' does not exist in HTML_QuickForm::addRule()", 'HTML_QuickForm_Error', true);
+                return PEAR::raiseError(
+                    null,
+                    QUICKFORM_NONEXIST_ELEMENT,
+                    null,
+                    E_USER_WARNING,
+                    "Element '$element' does not exist in HTML_QuickForm::addRule()",
+                    'HTML_QuickForm_Error',
+                    true
+                );
             } elseif (is_array($element)) {
                 foreach ($element as $el) {
                     if (!$this->elementExists($el)) {
-                        return PEAR::raiseError(null, QUICKFORM_NONEXIST_ELEMENT, null, E_USER_WARNING, "Element '$el' does not exist in HTML_QuickForm::addRule()", 'HTML_QuickForm_Error', true);
+                        return PEAR::raiseError(
+                            null,
+                            QUICKFORM_NONEXIST_ELEMENT,
+                            null,
+                            E_USER_WARNING,
+                            "Element '$el' does not exist in HTML_QuickForm::addRule()",
+                            'HTML_QuickForm_Error',
+                            true
+                        );
                     }
                 }
             }
         }
         if (false === ($newName = $this->isRuleRegistered($type, true))) {
-            return PEAR::raiseError(null, QUICKFORM_INVALID_RULE, null, E_USER_WARNING, "Rule '$type' is not registered in HTML_QuickForm::addRule()", 'HTML_QuickForm_Error', true);
+            return PEAR::raiseError(
+                null,
+                QUICKFORM_INVALID_RULE,
+                null,
+                E_USER_WARNING,
+                "Rule '$type' is not registered in HTML_QuickForm::addRule()",
+                'HTML_QuickForm_Error',
+                true
+            );
         } elseif (is_string($newName)) {
             $type = $newName;
         }

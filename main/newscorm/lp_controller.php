@@ -7,7 +7,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
@@ -908,7 +908,7 @@ switch ($action) {
             $params = array(
                 'lp_id' => $_SESSION['oLP']->id
             );
-            $extraFieldValue->save_field_values($_REQUEST);
+            $extraFieldValue->saveFieldValues($_REQUEST);
 
             if ($_FILES['lp_preview_image']['size'] > 0)
                 $_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);

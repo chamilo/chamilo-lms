@@ -19,8 +19,6 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $checkPass = api_get_setting('allow_strength_pass_checker');
 if ($checkPass == 'true') {
@@ -69,7 +67,7 @@ function password_switch_radio_button() {
 var is_platform_id = "'.$is_platform_admin.'";
 
 function display_drh_list(){
-	if(document.getElementById("status_select").value=='.STUDENT.') {
+	if (document.getElementById("status_select").value=='.STUDENT.') {
 		document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
@@ -92,8 +90,8 @@ if (!empty($_GET['message'])) {
     $message = urldecode($_GET['message']);
 }
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 $tool_name = get_lang('AddUsers');
 
 // Create the form
@@ -161,16 +159,16 @@ $auth_sources = 0; //make available wider as we need it in case of form reset (s
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && count($extAuthSource) > 0) {
 	$auth_sources = array();
-	foreach ($extAuthSource as $key => $info) {
-	    // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
-	    // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
-	    // extAuthSource always on for CAS even if not activated
-	    // same action for file user_edit.php
-	    if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
-		    $auth_sources[$key] = $key;
-    		$nb_ext_auth_source_added++;
-		}
-	}
+    foreach ($extAuthSource as $key => $info) {
+        // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
+        // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
+        // extAuthSource always on for CAS even if not activated
+        // same action for file user_edit.php
+        if (($key == CAS_AUTH_SOURCE && api_get_setting('cas_activate') === 'true') || ($key != CAS_AUTH_SOURCE)) {
+            $auth_sources[$key] = $key;
+            $nb_ext_auth_source_added++;
+        }
+    }
 	if ($nb_ext_auth_source_added > 0) {
     	$group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
     	$group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
@@ -194,10 +192,20 @@ $status[COURSEMANAGER] = get_lang('Teacher');
 $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
 $status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] 	= get_lang('RoleStudentBoss');
-$status[INVITEE] 	= get_lang('Invitee');
+$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+$status[INVITEE] = get_lang('Invitee');
 
-$form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'class'=>'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
+$form->addElement(
+    'select',
+    'status',
+    get_lang('Profile'),
+    $status,
+    array(
+        'id' => 'status_select',
+        'class' => 'chzn-select',
+        'onchange' => 'javascript: display_drh_list();',
+    )
+);
 
 //drh list (display only if student)
 $display = isset($_POST['status']) && $_POST['status'] == STUDENT  || !isset($_POST['status']) ? 'block' : 'none';
@@ -207,7 +215,10 @@ $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
 
 if (isset($drh_list) && is_array($drh_list)) {
 	foreach ($drh_list as $drh) {
-		$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
+        $drh_select->addOption(
+            api_get_person_name($drh['firstname'], $drh['lastname']),
+            $drh['user_id']
+        );
 	}
 }
 $form->addElement('html', '</div>');
@@ -247,10 +258,10 @@ $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
 $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
-$extra_data = UserManager::get_extra_user_data(0, true);
+$extraField = new ExtraField('user');
+$returnParams = $extraField->addElements($form);
 
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_add');
-$jquery_ready_content = $return_params['jquery_ready_content'];
+$jquery_ready_content = $returnParams['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] ='<script>
@@ -269,7 +280,6 @@ $defaults['expiration_date'] = api_get_local_time('+'.$days.' day');
 
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
-$defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
@@ -279,24 +289,26 @@ $html_results_enabled[] = $form->createElement('button', 'submit_plus', get_lang
 $form->addGroup($html_results_enabled);
 
 // Validate form
-if( $form->validate()) {
+if ($form->validate()) {
 	$check = Security::check_token('post');
-	if ($check) {
-		$user = $form->exportValues();
-		$lastname       = $user['lastname'];
-		$firstname      = $user['firstname'];
-		$official_code  = $user['official_code'];
-		$email          = $user['email'];
-		$phone          = $user['phone'];
-		$username       = $user['username'];
-		$status         = intval($user['status']);
-		$language       = $user['language'];
-		$picture        = $_FILES['picture'];
-		$platform_admin = intval($user['admin']['platform_admin']);
-		$send_mail      = intval($user['mail']['send_mail']);
-		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
+    if ($check) {
+        $user = $form->exportValues();
+        $lastname = $user['lastname'];
+        $firstname = $user['firstname'];
+        $official_code = $user['official_code'];
+        $email = $user['email'];
+        $phone = $user['phone'];
+        $username = $user['username'];
+        $status = intval($user['status']);
+        $language = $user['language'];
+        $picture = $_FILES['picture'];
+        $platform_admin = intval($user['admin']['platform_admin']);
+        $send_mail = intval($user['mail']['send_mail']);
+        $hr_dept_id = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
-		if (isset($extAuthSource) && count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
+		if (isset($extAuthSource) && count($extAuthSource) > 0 &&
+            $user['password']['password_auto'] == '2'
+        ) {
 			$auth_source = $user['password']['auth_source'];
 			$password = 'PLACEHOLDER';
 		} else {
@@ -304,11 +316,11 @@ if( $form->validate()) {
 			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
 		}
 
-		if ($user['radio_expiration_date'] == '1') {
-			$expiration_date = $user['expiration_date'];
-		} else {
-			$expiration_date = null;
-		}
+        if ($user['radio_expiration_date'] == '1') {
+            $expiration_date = $user['expiration_date'];
+        } else {
+            $expiration_date = null;
+        }
 
 		$active = intval($user['active']);
 
@@ -356,7 +368,11 @@ if( $form->validate()) {
 			}
 		} else {
  			if (!empty($picture['name'])) {
-				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+                $picture_uri = UserManager::update_user_picture(
+                    $user_id,
+                    $_FILES['picture']['name'],
+                    $_FILES['picture']['tmp_name']
+                );
                 UserManager::update_user(
                     $user_id,
                     $firstname,
@@ -378,9 +394,10 @@ if( $form->validate()) {
                 );
 			}
 
-			foreach ($extra as $key => $value) {
-				UserManager::update_extra_field_value($user_id, $key, $value);
-			}
+            $extraFieldValues = new ExtraFieldValue('user');
+            $user['item_id'] = $user_id;
+            $extraFieldValues->saveFieldValues($user);
+
 			$message = get_lang('UserAdded');
 		}
 		if (isset($user['submit_plus'])) {
@@ -405,7 +422,7 @@ if( $form->validate()) {
 if (!empty($message)){
 	$message = Display::return_message(stripslashes($message));
 }
-$content = $form->return_form();
+$content = $form->returnForm();
 
 $tpl = new Template($tool_name);
 //$tpl->assign('actions', $actions);

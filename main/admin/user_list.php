@@ -304,6 +304,7 @@ function prepare_user_sql_query($is_count) {
 *
 *	This function defines globals.
 *   @param  int     $userId
+ *
 *   @return bool    False on failure, redirection on success
 *	@author Evie Embrechts
 *   @author Yannick Warnier <yannick.warnier@dokeos.com>
@@ -830,27 +831,6 @@ $form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
 $form->addElement('html', '</td><td>');
 
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
-
-/*
- * @todo fix this code
-$extra_data = UserManager::get_extra_fields( 0,10,5, 'ASC', true, 1);
-var_dump($extra_data);
-$extra_options = array();
-if (!empty($extra_data)) {
-    $extra_options[0] = get_lang('All');
-    // get information about extra data for adding to input select
-    foreach ($extra_data as $field_variable => $field_value) {
-        $extra = UserManager::get_extra_field_information_by_name($field_variable);
-        $extra_options[$field_variable] = $extra['field_display_text'];
-    }
-
-    $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
-    $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-    $form->addText('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
-    $form->addElement('html', '</div>');
-} else {
-    $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-}*/
 
 $form->addElement('html', '</td></tr>');
 

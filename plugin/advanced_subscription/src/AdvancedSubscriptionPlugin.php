@@ -79,13 +79,11 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     private function addAreaField()
     {
         $result = Database::select(
-            'field_variable',
+            'variable',
             'user_field',
             array(
                 'where'=> array(
-                    'field_variable = ? ' => array(
-                        'area'
-                    )
+                    'variable = ? ' => array('area')
                 )
             )
         );
@@ -94,13 +92,13 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             $extraField = new ExtraField('user');
             $extraField->save(array(
                 'field_type' => 1,
-                'field_variable' => 'area',
-                'field_display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
-                'field_default_value' => null,
+                'variable' => 'area',
+                'display_text' => get_plugin_lang('Area', 'AdvancedSubscriptionPlugin'),
+                'default_value' => null,
                 'field_order' => null,
-                'field_visible' => 1,
-                'field_changeable' => 1,
-                'field_filter' => null
+                'visible' => 1,
+                'changeable' => 1,
+                'filter' => null
             ));
         }
     }
@@ -185,7 +183,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 'uri' => $wsUrl
             );
             $client = new SoapClient(null, $options);
-            $userInfo = UserManager::get_user_info_by_id($userId);
+            $userInfo = api_get_user_info($userId);
             try {
                 $profileCompleted = $client->__soapCall('getProfileCompletionPercentage', $userInfo['extra']['drupal_user_id']);
             } catch (\Exception $e) {
@@ -247,19 +245,19 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (is_array($sessions) && count($sessions) > 0) {
             foreach ($sessions as $session) {
                 $costField = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
-                $userCost += $costField['field_value'];
+                $userCost += $costField['value'];
 
                 $teachingHoursField = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
-                $expendedTime += $teachingHoursField['field_value'];
+                $expendedTime += $teachingHoursField['value'];
             }
         }
 
         if (isset($params['sessionId'])) {
             $costField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'cost');
-            $userCost += $costField['field_value'];
+            $userCost += $costField['value'];
 
             $teachingHoursField = $extra->get_values_by_handler_and_field_variable($params['sessionId'], 'teaching_hours');
-            $expendedTime += $teachingHoursField['field_value'];
+            $expendedTime += $teachingHoursField['value'];
         }
 
         if ($maxCost <= $userCost) {
@@ -468,25 +466,15 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function isSessionOpen($sessionId, $fieldVariable = 'is_open_session')
     {
-        $sessionId = (int) $sessionId;
-        $fieldVariable = Database::escape_string($fieldVariable);
+        $extraFieldValue = new ExtraFieldValue('session');
+        $result = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $sessionId,
+            $fieldVariable
+        );
+
         $isOpen = false;
-        if ($sessionId > 0 && !empty($fieldVariable)) {
-            $sfTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-            $sfvTable = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-            $joinTable = $sfvTable . ' sfv INNER JOIN ' . $sfTable . ' sf ON sfv.field_id = sf.id ';
-            $row = Database::select(
-                'sfv.field_value as field_value',
-                $joinTable,
-                array(
-                    'where' => array(
-                        'sfv.session_id = ? AND sf.field_variable = ?' => array($sessionId, $fieldVariable),
-                    )
-                )
-            );
-            if (isset($row[0]) && is_array($row[0])) {
-                $isOpen = (bool) $row[0]['field_value'];
-            }
+        if (!empty($result)) {
+            $isOpen = (bool) $result['value'];
         }
 
         return $isOpen;
@@ -908,7 +896,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         if (!empty($sessionId)) {
             $extra = new ExtraFieldValue('session');
             $var = $extra->get_values_by_handler_and_field_variable($sessionId, 'vacancies');
-            $vacancy = intval($var['field_value']);
+            $vacancy = intval($var['value']);
             if (!empty($vacancy)) {
                 $vacancy -= $this->countQueueByParams(
                     array(
@@ -938,30 +926,38 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         if (!empty($sessionId)) {
             // Assign variables
-            $fieldsArray = array('code', 'cost', 'place', 'allow_visitors', 'teaching_hours', 'brochure', 'banner');
+            $fieldsArray = array(
+                'code',
+                'cost',
+                'place',
+                'allow_visitors',
+                'teaching_hours',
+                'brochure',
+                'banner',
+            );
             $extraSession = new ExtraFieldValue('session');
             $extraField = new ExtraField('session');
             // Get session fields
             $fieldList = $extraField->get_all(array(
-                'field_variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
+                'variable IN ( ?, ?, ?, ?, ?, ?, ? )' => $fieldsArray
             ));
             // Index session fields
             $fields = array();
             foreach ($fieldList as $field) {
-                $fields[$field['id']] = $field['field_variable'];
+                $fields[$field['id']] = $field['variable'];
             }
 
             $mergedArray = array_merge(array($sessionId), array_keys($fields));
 
-            $sql = "SELECT * FROM " . Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES) .
-                " WHERE session_id = %d AND field_id IN (%d, %d, %d, %d, %d, %d, %d)";
+            $sql = "SELECT * FROM " . Database::get_main_table(TABLE_EXTRA_FIELD_VALUES) ."
+                    WHERE item_id = %d AND field_id IN (%d, %d, %d, %d, %d, %d, %d)";
             $sql = vsprintf($sql, $mergedArray);
             $sessionFieldValueList = Database::query($sql);
             while ($sessionFieldValue = Database::fetch_assoc($sessionFieldValueList)) {
                 // Check if session field value is set in session field list
                 if (isset($fields[$sessionFieldValue['field_id']])) {
                     $var = $fields[$sessionFieldValue['field_id']];
-                    $val = $sessionFieldValue['field_value'];
+                    $val = $sessionFieldValue['value'];
                     // Assign session field value to session
                     $sessionArray[$var] = $val;
                 }
@@ -1078,25 +1074,25 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $extraField = new ExtraField('session');
         // Get session fields
         $fieldList = $extraField->get_all(array(
-            'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+            'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
         ));
         // Index session fields
         $fields = array();
         foreach ($fieldList as $field) {
-            $fields[$field['id']] = $field['field_variable'];
+            $fields[$field['id']] = $field['variable'];
         }
 
         $mergedArray = array_merge(array($sessionId), array_keys($fields));
         $sessionFieldValueList = $extraSession->get_all(
             array(
-                'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+                'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
             )
         );
         foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Check if session field value is set in session field list
             if (isset($fields[$sessionFieldValue['field_id']])) {
                 $var = $fields[$sessionFieldValue['field_id']];
-                $val = $sessionFieldValue['field_value'];
+                $val = $sessionFieldValue['value'];
                 // Assign session field value to session
                 $sessionArray[$var] = $val;
             }
@@ -1314,16 +1310,17 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     private function getApprovedInductionSessions($userId)
     {
         $tSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tSessionField = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-        $tSessionFieldValues = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $tSessionField = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $tSessionFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
+        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::SESSION_FIELD_TYPE;
         $sql = "SELECT s.id FROM $tSession AS s
-            INNER JOIN $tSessionFieldValues AS sfv ON s.id = sfv.session_id
+            INNER JOIN $tSessionFieldValues AS sfv ON s.id = sfv.item_id
             INNER JOIN $tSessionField AS sf ON sfv.field_id = sf.id
             INNER JOIN $tSessionUser AS su ON s.id = su.session_id
             WHERE
-                sf.field_variable = 'is_induction_session' AND
+                sf.extra_field_type = $extraFieldType
+                sf.variable = 'is_induction_session' AND
                 su.relation_type = 0 AND
                 su.user_id = " . intval($userId);
 

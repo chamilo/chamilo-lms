@@ -100,13 +100,13 @@ if (isset($_REQUEST['action'])) {
 }
 
 $social_right_content = '';
-$userInfo    = UserManager::get_user_info_by_id($user_id);
 if (api_get_setting('allow_social_tool') == 'true') {
     //Block Social Menu
     $social_menu_block = SocialManager::show_social_menu('messages');
 
     $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
+        Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .= '</div>';
 }
 //MAIN CONTENT

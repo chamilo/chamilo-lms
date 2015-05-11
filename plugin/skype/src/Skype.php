@@ -36,26 +36,27 @@ class Skype extends Plugin implements HookPluginInterface
     public function install()
     {
         $this->installHook();
+
         $result = Database::select(
-            'field_variable',
-            Database::get_main_table(TABLE_MAIN_USER_FIELD),
+            'variable',
+            Database::get_main_table(TABLE_EXTRA_FIELD),
             array(
                 'where'=> array(
-                    'field_variable = ?' => array(
+                    'variable = ?' => array(
                         'skype'
                     )
                 )
             )
         );
+
         if (empty($result)) {
-            require_once api_get_path(LIBRARY_PATH).'extra_field.lib.php';
             $extraField = new Extrafield('user');
             $extraField->save(array(
-                'field_type' => UserManager::USER_FIELD_TYPE_TEXT,
-                'field_variable' => 'skype',
-                'field_display_text' => 'Skype',
-                'field_visible' => 1,
-                'field_changeable' => 1
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => 'skype',
+                'display_text' => 'Skype',
+                'visible' => 1,
+                'changeable' => 1
             ));
         }
     }

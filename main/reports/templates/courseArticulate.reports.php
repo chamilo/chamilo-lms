@@ -3,7 +3,7 @@
 $reports_template['CourseArticulate'] = array(
 	'description' => 'CourseArticulate',
 	'getSQL' => 'reports_template_CourseArticulate_getSQL',
-	'wizard' => 
+	'wizard' =>
 '
 <span id="CourseArticulate" class="step">
 	<span class="font_normal_07em_black">This report does not need any particular settings</span><br />
@@ -21,16 +21,16 @@ function reports_template_CourseArticulate_getSQL() {
 	$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
 	$query .= ' order by u.user_id ';
 	$queries[0] = $query;
-
+	$extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::USER_FIELD_TYPE;
 	// Custom Field
 	foreach (array("tags" => "tags") as $k => $v) { // FIXME
-		$query = 'select ufv.field_value  as "'.$v.'" ';
+		$query = 'select ufv.value  as "'.$v.'" ';
 		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= 'left join'.Database::get_main_table(TABLE_MAIN_USER_FIELD).' uf ';
-		$query .= ' on uf.field_variable="'.$k.'" ';
-		$query .= 'left outer join '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' ufv ';
-		$query .= ' on ufv.user_id = u.user_id and ufv.field_id = uf.id ';
-		$query .= 'where u.user_id in ('.reports_getVisibilitySQL().') ';
+		$query .= 'left join'.Database::get_main_table(TABLE_EXTRA_FIELD).' uf ';
+		$query .= ' on uf.variable ="'.$k.'" ';
+		$query .= 'left outer join '.Database::get_main_table(TABLE_EXTRA_FIELD_VALUES).' ufv ';
+		$query .= ' on ufv.item_id = u.user_id and ufv.field_id = uf.id ';
+		$query .= 'where ufv.extra_field_type = '.$extraFieldType.' AND u.user_id in ('.reports_getVisibilitySQL().') ';
 		$query .= ' order by u.user_id ';
 		$queries[] = $query;
 	}
@@ -112,7 +112,7 @@ function reports_template_CourseArticulate_getSQL() {
 		$query .= ' group by u.user_id ';
 		$query .= ' order by u.user_id ';
 		$queries[] = $query;
-	}		
+	}
 
 	return $queries;
 }

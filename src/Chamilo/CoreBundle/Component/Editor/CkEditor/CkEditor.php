@@ -151,7 +151,8 @@ class CkEditor extends Editor
                 'html' => $content
             );
         }
-        //var_dump($templateList);
+
+
         return json_encode($templateList);
     }
 }

@@ -106,7 +106,7 @@ foreach($Sessions as $session){
 						$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
 						$UserAdd[]=$user_id;
 					} else {
-						$user = UserManager::get_user_info($username);
+						$user = api_get_user_info_from_username($username);
 						$user_id=$user['user_id'];
 						UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
 						$UserUpdate[]=$user_id;

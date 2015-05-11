@@ -3967,7 +3967,7 @@ class Exercise
             . '&id='
             . $exe_id
             . '&action=qualify';
-        $user_info = UserManager::get_user_info_by_id(api_get_user_id());
+        $user_info = api_get_user_info(api_get_user_id());
 
         $msg = '<p>'.get_lang('ExerciseAttempted').' :</p>
                     <p>'.get_lang('AttemptDetails').' : </p>
@@ -4043,7 +4043,7 @@ class Exercise
             . '&id='
             . $exe_id
             . '&action=qualify';
-        $user_info = UserManager::get_user_info_by_id(api_get_user_id());
+        $user_info = api_get_user_info(api_get_user_id());
 
         $msg = '<p>'.get_lang('OpenQuestionsAttempted').' :</p>
                     <p>'.get_lang('AttemptDetails').' : </p>
@@ -4140,7 +4140,7 @@ class Exercise
             . '&id='
             . $exe_id
             . '&action=qualify';
-        $user_info = UserManager::get_user_info_by_id(api_get_user_id());
+        $user_info = api_get_user_info(api_get_user_id());
 
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
@@ -4183,11 +4183,11 @@ class Exercise
                         </tr>
                     </table>';
             $msg .=  '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'),$oral_question_list).'<br />';
-            $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
-            $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
-            $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
-            $msg    = str_replace("#mail#",        $user_info['email'],$msg1);
-            $msg    = str_replace("#course#",      $course_info['name'],$msg1);
+            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
+            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg1);
+            $msg = str_replace("#course#", $course_info['name'], $msg1);
 
             if ($origin != 'learnpath') {
                 $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />

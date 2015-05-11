@@ -12,8 +12,6 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link     http://pear.php.net/package/Text_CAPTCHA
  */
-require_once 'Text/CAPTCHA/Driver/Base.php';
-require_once 'Text/Figlet.php';
 /**
  * Text_CAPTCHA_Driver_Figlet - Text_CAPTCHA driver Figlet based CAPTCHAs
  *

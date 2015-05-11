@@ -127,8 +127,6 @@ if (is_array($_GET) && count($_GET) > 0) {
         }
     }
 }
-//Social Avatar BLock
-$user_info    = UserManager::get_user_info_by_id($user_id);
 
 //Social Menu Block
 $social_menu_block = SocialManager::show_social_menu('myfiles');

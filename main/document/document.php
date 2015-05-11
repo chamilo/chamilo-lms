@@ -1705,10 +1705,9 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             if (!empty($groupId)) {
                 if (!empty($document_data['insert_user_id'])) {
-                    $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
-                    $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                    $user_info = api_get_user_info($document_data['insert_user_id']);
                     $user_link = '<div class="document_owner">'.
-                        get_lang('Owner').': '.UserManager::displayUserProfile($user_info).'</div>';
+                        get_lang('Owner').': '.UserManager::getUserProfileLink($user_info).'</div>';
                 }
             }
 

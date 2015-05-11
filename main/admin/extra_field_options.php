@@ -40,18 +40,21 @@ $token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
     $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['display_text']);
     $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
 
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
     $interbreadcrumb[]=array('url' => 'extra_fields.php?type='.$extra_field->type,'name' => $extra_field->pageName);
-    $interbreadcrumb[]=array('url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array(
+        'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
+        'name' => $extra_field_info['display_text']
+    );
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
 }
 
@@ -60,14 +63,43 @@ $params = 'field_id='.$field_id.'&type='.$extra_field->type;
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Value'),  get_lang('Order'), get_lang('Actions'));
+$columns = array(
+    get_lang('Name'),
+    get_lang('Value'),
+    get_lang('Order'),
+    get_lang('Actions'),
+);
 
 //Column config
-$column_model   = array(
-    array('name'=>'option_display_text', 'index'=>'option_display_text',      'width'=>'180',   'align'=>'left'),
-    array('name'=>'option_value',       'index'=>'option_value',          'width'=>'',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'option_order',         'index'=>'option_order',              'width'=>'',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
+$column_model = array(
+    array(
+        'name' => 'display_text',
+        'index' => 'display_text',
+        'width' => '180',
+        'align' => 'left',
+    ),
+    array(
+        'name' => 'option_value',
+        'index' => 'option_value',
+        'width' => '',
+        'align' => 'left',
+        'sortable' => 'false',
+    ),
+    array(
+        'name' => 'option_order',
+        'index' => 'option_order',
+        'width' => '',
+        'align' => 'left',
+        'sortable' => 'false',
+    ),
+    array(
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '100',
+        'align' => 'left',
+        'formatter' => 'action_formatter',
+        'sortable' => 'false',
+    ),
 );
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -76,23 +108,31 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-         return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-         '\';
+    return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+    '\';
  }';
-$htmlHeadXtra[]='
-<script>
+
+$htmlHeadXtra[]='<script>
 $(function() {
     // grid definition see the $obj->display() function
-    '.Display::grid_js('extra_field_options',  $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
-
+    '.Display::grid_js(
+        'extra_field_options',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    ).'
 });
 </script>';
 
 // The header.
 Display::display_header($tool_name);
 
-echo Display::page_header($extra_field_info['field_display_text']);
+echo Display::page_header($extra_field_info['display_text']);
 
 $obj = new ExtraFieldOption($extra_field->type);
 $obj->field_id = $field_id;
@@ -110,16 +150,13 @@ switch ($action) {
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $obj->save_one_item($values);
+                $res = $obj->save_one_item($values);
                 if ($res) {
                     Display::display_confirmation_message(get_lang('ItemAdded'));
                 }
             }
             $obj->display();
         } else {
-            /*echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';            */
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
@@ -134,14 +171,11 @@ switch ($action) {
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $obj->update($values);
+                $res = $obj->update($values);
                 Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['name']), false);
             }
             $obj->display();
         } else {
-            /*echo '<div class="actions">';
-            echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';*/
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();

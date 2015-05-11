@@ -334,7 +334,21 @@ class WSUser extends WS {
 	 * @param array Extra fields. An array with elements of the form ('field_name' => 'name_of_the_field', 'field_value' => 'value_of_the_field'). Leave empty if you don't want to update
 	 * @return mixed True if user was successfully updated, WSError otherwise
 	 */
-	protected function editUserHelper($user_id_field_name, $user_id_value, $firstname, $lastname, $status, $loginname, $password, $encrypt_method, $email, $language, $phone, $expiration_date, $extras) {
+	protected function editUserHelper(
+		$user_id_field_name,
+		$user_id_value,
+		$firstname,
+		$lastname,
+		$status,
+		$loginname,
+		$password,
+		$encrypt_method,
+		$email,
+		$language,
+		$phone,
+		$expiration_date,
+		$extras
+	) {
         global $api_failureList;
 		$user_id = $this->getUserId($user_id_field_name, $user_id_value);
 		if($user_id instanceof WSError) {
@@ -343,11 +357,30 @@ class WSUser extends WS {
 			if($password == '') {
 				$password = null;
 			}
-			$user_info = UserManager::get_user_info_by_id($user_id);
-			if(count($extras) == 0) {
+			$user_info = api_get_user_info($user_id);
+			if (count($extras) == 0) {
 				$extras = null;
 			}
-			$result = UserManager::update_user($user_id, $firstname, $lastname, $loginname, $password, PLATFORM_AUTH_SOURCE, $email, $status, '', $phone, $user_info['picture_uri'], $expiration_date, $user_info['active'], null, $user_info['hr_dept_id'], $extras, $encrypt_method);
+
+			$result = UserManager::update_user(
+				$user_id,
+				$firstname,
+				$lastname,
+				$loginname,
+				$password,
+				PLATFORM_AUTH_SOURCE,
+				$email,
+				$status,
+				'',
+				$phone,
+				$user_info['picture_uri'],
+				$expiration_date,
+				$user_info['active'],
+				null,
+				$user_info['hr_dept_id'],
+				$extras,
+				$encrypt_method
+			);
 			if (!$result) {
 				$failure = $api_failureList[0];
 				if($failure == 'encrypt_method invalid') {

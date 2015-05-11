@@ -152,7 +152,7 @@ function external_add_user($u) {
  * @author ndiechburg <noel@cblue.be>
  * */
 function external_update_user($new_user) {
-    $old_user = UserManager::get_user_info_by_id($new_user['user_id']);
+    $old_user = api_get_user_info($new_user['user_id']);
     $u = array_merge($old_user, $new_user);
     $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], null, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], $u['extra'], $u['language'], '');
     if (isset($u['courses']) && !empty($u['courses'])) {

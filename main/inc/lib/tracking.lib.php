@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use CpChart\Classes\pCache as pCache;
 use CpChart\Classes\pData as pData;
 use CpChart\Classes\pImage as pImage;
@@ -5920,16 +5921,21 @@ class TrackingCourseLog
     {
     	// Database table definition
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
 
-    	$sql = "SELECT user.user_id, field.field_value
-    	        FROM $table_user user, $table_user_field_values field
+    	$sql = "SELECT user.user_id, v.value
+    	        FROM $table_user user INNER JOIN $table_user_field_values v
+    	        ON (user.user_id = v.item_id
+    	        INNER JOIN $extraFieldTable f
+    	        ON (f.id = v.field_id)
                 WHERE
-                    user.user_id = field.user_id AND
-                    field.field_id='".intval($field_id)."'";
+                    f.extra_field_type = $extraFieldType AND
+                    v.field_id='".intval($field_id)."'";
     	$result = Database::query($sql);
     	while($row = Database::fetch_array($result)) {
-    		$return[$row['user_id']][] = $row['field_value'];
+    		$return[$row['item_id']][] = $row['value'];
     	}
     	return $return;
     }
@@ -5951,9 +5957,10 @@ class TrackingCourseLog
     public static function get_addtional_profile_information_of_field_by_user($field_id, $users)
     {
     	// Database table definition
-    	$table_user                 = Database::get_main_table(TABLE_MAIN_USER);
-    	$table_user_field_values     = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-    	$result_extra_field         = UserManager::get_extra_field_information($field_id);
+    	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+    	$table_user_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $extraField = Database::get_main_table(TABLE_EXTRA_FIELD);
+    	$result_extra_field = UserManager::get_extra_field_information($field_id);
 
     	if (!empty($users)) {
     		if ($result_extra_field['field_type'] == UserManager::USER_FIELD_TYPE_TAG ) {
@@ -5967,32 +5974,40 @@ class TrackingCourseLog
     			}
     		} else {
     			$new_user_array = array();
-    			foreach($users as $user_id) {
+    			foreach ($users as $user_id) {
     				$new_user_array[]= "'".$user_id."'";
     			}
     			$users = implode(',',$new_user_array);
-    			//selecting only the necessary information NOT ALL the user list
-    			$sql = "SELECT user.user_id, field.field_value
+                $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
+    			// Selecting only the necessary information NOT ALL the user list
+    			$sql = "SELECT user.user_id, v.value
     			        FROM $table_user user
-    			        INNER JOIN $table_user_field_values field
-                        ON (user.user_id = field.user_id)
-                        WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
+    			        INNER JOIN $table_user_field_values v
+                        ON (user.user_id = v.item_id)
+                        INNER JOIN $extraField f
+                        ON (f.id = v.field_id)
+                        WHERE
+                            f.extra_field_type = $extraFieldType AND
+                            v.field_id=".intval($field_id)." AND
+                            user.user_id IN ($users)";
 
     			$result = Database::query($sql);
     			while($row = Database::fetch_array($result)) {
     				// get option value for field type double select by id
-    				if (!empty($row['field_value'])) {
-    					if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DOUBLE_SELECT) {
-    						$id_double_select = explode(';',$row['field_value']);
+    				if (!empty($row['value'])) {
+    					if ($result_extra_field['field_type'] ==
+                            ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        ) {
+    						$id_double_select = explode(';', $row['value']);
     						if (is_array($id_double_select)) {
     							$value1 = $result_extra_field['options'][$id_double_select[0]]['option_value'];
     							$value2 = $result_extra_field['options'][$id_double_select[1]]['option_value'];
-    							$row['field_value'] = ($value1.';'.$value2);
+    							$row['value'] = ($value1.';'.$value2);
     						}
     					}
     				}
     				// get other value from extra field
-    				$return[$row['user_id']][] = $row['field_value'];
+    				$return[$row['user_id']][] = $row['value'];
     			}
     		}
     	}

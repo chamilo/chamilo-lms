@@ -747,8 +747,6 @@ class IndexManager
             array('id' => 'password', 'icon' => 'lock')
         );
 
-        global $_configuration;
-
         // Captcha
         $captcha = api_get_setting('allow_captcha');
         $allowCaptcha = $captcha == 'true';
@@ -758,8 +756,8 @@ class IndexManager
             if ($useCaptcha) {
                 $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
                 $options = array(
-                    'width'        => 250,
-                    'height'       => 90,
+                    'width' => 250,
+                    'height' => 90,
                     'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
                     'sessionVar'   => basename(__FILE__, '.php'),
                     'imageOptions' => array(
@@ -774,7 +772,7 @@ class IndexManager
                 //$options = array('callback' => 'qfcaptcha_image.php');
 
                 $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
-                $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+                $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
                 $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
                 $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');

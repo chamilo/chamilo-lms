@@ -10,7 +10,7 @@
  * @license  http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link     http://pear.php.net/package/Text_CAPTCHA
  */
-require_once 'Text/CAPTCHA/Driver.php';
+
 /**
  * Base class file for all Text_CAPTCHA drivers.
  *

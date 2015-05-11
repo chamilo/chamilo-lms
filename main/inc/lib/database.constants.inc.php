@@ -58,17 +58,22 @@ define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY', 'gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 'gradebook_certificate');
 
 // Profiling
+
+define('TABLE_EXTRA_FIELD', 'extra_field');
+define('TABLE_EXTRA_FIELD_OPTIONS', 'extra_field_options');
+define('TABLE_EXTRA_FIELD_VALUES', 'extra_field_values');
+
 define('TABLE_MAIN_USER_FIELD', 'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS', 'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES', 'user_field_values');
 
-define('TABLE_MAIN_LP_FIELD', 'lp_field');
+/*define('TABLE_MAIN_LP_FIELD', 'lp_field');
 define('TABLE_MAIN_LP_FIELD_OPTIONS', 'lp_field_options');
-define('TABLE_MAIN_LP_FIELD_VALUES', 'lp_field_values');
+define('TABLE_MAIN_LP_FIELD_VALUES', 'lp_field_values');*/
 
-define('TABLE_MAIN_CALENDAR_EVENT_FIELD', 'calendar_event_field');
+/*define('TABLE_MAIN_CALENDAR_EVENT_FIELD', 'calendar_event_field');
 define('TABLE_MAIN_CALENDAR_EVENT_OPTIONS', 'calendar_event_options');
-define('TABLE_MAIN_CALENDAR_EVENT_VALUES', 'calendar_event_values');
+define('TABLE_MAIN_CALENDAR_EVENT_VALUES', 'calendar_event_values');*/
 
 //User tags
 define('TABLE_MAIN_TAG', 'tag');
@@ -108,14 +113,15 @@ define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
 define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
 define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 
-// Web services
-define('TABLE_MAIN_USER_API_KEY', 'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD', 'course_field');
 define('TABLE_MAIN_COURSE_FIELD_OPTIONS', 'course_field_options');
 define('TABLE_MAIN_COURSE_FIELD_VALUES', 'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD', 'session_field');
 define('TABLE_MAIN_SESSION_FIELD_OPTIONS', 'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES', 'session_field_values');
+
+// Web services
+define('TABLE_MAIN_USER_API_KEY', 'user_api_key');
 
 // Term and conditions
 define('TABLE_MAIN_LEGAL', 'legal');

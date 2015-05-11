@@ -224,8 +224,8 @@ class ImportCsv
         $extraField = new ExtraField('calendar_event');
         $extraField->save(array(
             'field_type' => ExtraField::FIELD_TYPE_TEXT,
-            'field_variable' => $this->extraFieldIdNameList['calendar_event'],
-            'field_display_text' => 'External calendar event id'
+            'variable' => $this->extraFieldIdNameList['calendar_event'],
+            'display_text' => 'External calendar event id'
         ));
     }
 
@@ -680,7 +680,7 @@ class ImportCsv
                 $externalSessionId = null;
                 if (isset($row['external_sessionID'])) {
                     $externalSessionId = $row['external_sessionID'];
-                    $sessionId = SessionManager::get_session_id_from_original_id(
+                    $sessionId = SessionManager::getSessionIdFromOriginalId(
                         $externalSessionId,
                         $this->extraFieldIdNameList['session']
                     );
@@ -865,9 +865,9 @@ class ImportCsv
                 if (!empty($eventId)) {
                     $extraFieldValue->save(
                         array(
-                            'field_value' => $externalEventId,
+                            'value' => $externalEventId,
                             'field_id' => $extraFieldInfo['id'],
-                            'calendar_event_id' => $eventId
+                            'item_id' => $eventId
                         )
                     );
                     $this->logger->addInfo(
@@ -900,12 +900,12 @@ class ImportCsv
             foreach ($data as $row) {
                 $row = $this->cleanCourseRow($row);
 
-                $courseCode = CourseManager::get_course_id_from_original_id(
+                $courseId = CourseManager::getCourseInfoFromOriginalId(
                     $row['extra_' . $this->extraFieldIdNameList['course']],
                     $this->extraFieldIdNameList['course']
                 );
 
-                $courseInfo = api_get_course_info($courseCode);
+                $courseInfo = api_get_course_info_by_id($courseId);
 
                 if (empty($courseInfo)) {
                     // Create
@@ -1004,7 +1004,7 @@ class ImportCsv
             // Looping the sessions.
             foreach ($sessions as $session) {
                 if (!empty($session['SessionID'])) {
-                    $sessionId = SessionManager::get_session_id_from_original_id(
+                    $sessionId = SessionManager::getSessionIdFromOriginalId(
                         $session['SessionID'],
                         $this->extraFieldIdNameList['session']
                     );
@@ -1399,17 +1399,7 @@ class ImportCsv
         echo $sql.PHP_EOL;
 
         // Extra fields
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-        $sql = "DELETE FROM $table";
-        Database::query($sql);
-        echo $sql.PHP_EOL;
-
-        $table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $sql = "DELETE FROM $table";
         Database::query($sql);
         echo $sql.PHP_EOL;

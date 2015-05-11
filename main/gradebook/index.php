@@ -14,9 +14,9 @@ $current_course_tool  = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);
 
-$course_code 	= api_get_course_id();
-$stud_id        = api_get_user_id();
-$session_id		= api_get_session_id();
+$course_code = api_get_course_id();
+$stud_id = api_get_user_id();
+$session_id = api_get_session_id();
 
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';

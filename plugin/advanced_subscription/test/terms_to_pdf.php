@@ -17,7 +17,7 @@ $data['is_connected'] = true;
 $data['profile_completed'] = 90.0;
 $data['sessionId'] = intval($_REQUEST['s']);
 $data['studentUserId'] = intval($_REQUEST['u']);
-$data['student'] = UserManager::get_user_info_by_id($data['studentUserId']);
+$data['student'] = api_get_user_info($data['studentUserId']);
 $data['session'] = api_get_session_info($data['sessionId']);
 
 if (!empty($data['sessionId']) && !empty($data['studentUserId'])) {

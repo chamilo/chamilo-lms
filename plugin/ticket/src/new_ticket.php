@@ -159,13 +159,12 @@ div.divTicket {
 </style>';
 $types = TicketManager::get_all_tickets_categories();
 $htmlHeadXtra[] = '<script language="javascript">
-                        var projects = ' . js_array($types, 'projects', 'project_id') . '
-                        var course_required = ' . js_array($types, 'course_required', 'course_required') . '
-                        var other_area = ' . js_array($types, 'other_area', 'other_area') . '
-                        var email = ' . js_array($types, 'email', 'email') .
-                        '</script>';
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+    var projects = ' . js_array($types, 'projects', 'project_id') . '
+    var course_required = ' . js_array($types, 'course_required', 'course_required') . '
+    var other_area = ' . js_array($types, 'other_area', 'other_area') . '
+    var email = ' . js_array($types, 'email', 'email') .
+'</script>';
+
 
 /**
  * @param $s

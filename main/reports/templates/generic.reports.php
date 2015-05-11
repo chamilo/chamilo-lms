@@ -3,7 +3,7 @@
 $reports_template['Generic'] = array(
 	'description' => 'Generic',
 	'getSQL' => 'reports_template_Generic_getSQL',
-	'wizard' => 
+	'wizard' =>
 '
 <span id="Generic" class="step">
 	<span class="font_normal_07em_black">This report does not need any particular settings</span><br />
@@ -22,14 +22,12 @@ function reports_template_Generic_getSQL() {
 	$query .= ' order by u.user_id ';
 	$queries[0] = $query;
 
-
-	
 	// Custom Field
-	foreach (array(10 => "description") as $k => $v) { 
-		$query = 'select ufv.field_value  as "'.$v.'" ';
+	foreach (array(10 => "description") as $k => $v) {
+		$query = 'select ufv.value  as "'.$v.'" ';
 		$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';
-		$query .= 'left outer join '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' ufv ';
-		$query .= ' on ufv.user_id = u.user_id and ufv.field_id = '.$k;
+		$query .= 'left outer join '.Database::get_main_table(TABLE_EXTRA_FIELD_VALUES).' ufv ';
+		$query .= ' on ufv.item_id = u.user_id and ufv.field_id = '.$k;
 		$query .= ' where u.user_id in ('.reports_getVisibilitySQL().') ';
 		$query .= ' order by u.user_id ';
 		$queries[] = $query;
@@ -46,7 +44,7 @@ function reports_template_Generic_getSQL() {
 		$query .= ' order by u.user_id ';
 		$queries[] = $query;
 	}
-	
+
 	// premiere connexion
 	$query = 'select min(tel.login_date) as "First connection", max(tel.logout_date) as "Latest connection"  ';
 	$query .= 'from '.Database::get_main_table(TABLE_MAIN_USER).' u ';

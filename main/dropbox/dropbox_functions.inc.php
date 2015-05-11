@@ -895,7 +895,7 @@ function store_add_dropbox()
 
     if ($b_send_mail) {
         foreach ($new_work_recipients as $recipient_id) {
-            $recipent_temp = UserManager :: get_user_info_by_id($recipient_id);
+            $recipent_temp = api_get_user_info($recipient_id);
             $additionalParameters = array(
                 'smsType' => SmsPlugin::NEW_FILE_SHARED_COURSE_BY,
                 'userId' => $recipient_id,

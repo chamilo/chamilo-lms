@@ -48,7 +48,7 @@ class WSCMAnnouncements extends WSCM
             {
                 case 'sender':
                     $field_table = "insert_user_id";
-                    $sender = UserManager::get_user_info_by_id($announcements[0][$field_table]);
+                    $sender = api_get_user_info($announcements[0][$field_table]);
                     $announcements[0][$field_table] = $sender['firstname']." ".$sender['lastname'];
                     break;
                 case 'title' :

@@ -5,13 +5,13 @@
   This script must not exit.
  */
 
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 require_once(dirname(__FILE__) . '/functions.inc.php');
 
 //MAIN CODE
 //$uData variable is set in local.inc.php
-$user = UserManager::get_user_info_by_id($uData['user_id']);
+$user = api_get_user_info($uData['user_id']);
 $new_user = external_get_user_info($login);
 $user['firstname'] = $new_user['firstname'];
 $user['lastname'] = $new_user['lastname'];

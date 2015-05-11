@@ -122,13 +122,13 @@ class SmsPlugin extends Plugin
         if (empty($extraFieldInfo)) {
             $extraField->save(array(
                 'field_type' => 1,
-                'field_variable' => 'mobile_phone_number',
-                'field_display_text' => $this->get_lang('mobile_phone_number'),
-                'field_default_value' => null,
+                'variable' => 'mobile_phone_number',
+                'display_text' => $this->get_lang('mobile_phone_number'),
+                'default_value' => null,
                 'field_order' => 2,
-                'field_visible' => 1,
-                'field_changeable' => 1,
-                'field_filter' => null
+                'visible' => 1,
+                'changeable' => 1,
+                'filter' => null
             ));
         }
     }

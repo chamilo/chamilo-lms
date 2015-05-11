@@ -27,25 +27,32 @@ if (!empty($sessionId)) {
     $sessionList[$sessionId]['selected'] = 'selected="selected"';
     $studentList['session']['id'] = $sessionId;
     // Assign variables
-    $fieldsArray = array('description', 'target', 'mode', 'publication_end_date', 'recommended_number_of_participants', 'vacancies');
+    $fieldsArray = array(
+        'description',
+        'target',
+        'mode',
+        'publication_end_date',
+        'recommended_number_of_participants',
+        'vacancies',
+    );
     $sessionArray = api_get_session_info($sessionId);
     $extraSession = new ExtraFieldValue('session');
     $extraField = new ExtraField('session');
     // Get session fields
     $fieldList = $extraField->get_all(array(
-        'field_variable IN ( ?, ?, ?, ?, ?, ?)' => $fieldsArray
+        'variable IN ( ?, ?, ?, ?, ?, ?)' => $fieldsArray
     ));
     // Index session fields
     foreach ($fieldList as $field) {
-        $fields[$field['id']] = $field['field_variable'];
+        $fields[$field['id']] = $field['variable'];
     }
-    $params = array(' session_id = ? '  => $sessionId);
+    $params = array(' item_id = ? '  => $sessionId);
     $sessionFieldValueList = $extraSession->get_all(array('where' => $params));
     foreach ($sessionFieldValueList as $sessionFieldValue) {
             // Check if session field value is set in session field list
         if (isset($fields[$sessionFieldValue['field_id']])) {
             $var = $fields[$sessionFieldValue['field_id']];
-            $val = $sessionFieldValue['field_value'];
+            $val = $sessionFieldValue['value'];
             // Assign session field value to session
             $sessionArray[$var] = $val;
         }
@@ -60,7 +67,8 @@ if (!empty($sessionId)) {
     foreach ($studentList['students'] as &$student) {
         $studentId = intval($student['user_id']);
         $data['studentUserId'] = $studentId;
-        $student['area'] = UserManager::get_user_info_by_id($studentId)['extra']['area'];
+
+        $student['area'] = api_get_user_info($studentId)['extra']['area'];
         $student['userLink'] = api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$studentId;
         $data['queueId'] = intval($student['queue_id']);
         $data['newStatus'] = ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED;

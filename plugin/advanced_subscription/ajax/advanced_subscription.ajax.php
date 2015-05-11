@@ -82,24 +82,24 @@ if ($verified) {
                 $extraField = new ExtraField('session');
                 // Get session fields
                 $fieldList = $extraField->get_all(array(
-                    'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
                 ));
                 // Index session fields
                 foreach ($fieldList as $field) {
-                    $fields[$field['id']] = $field['field_variable'];
+                    $fields[$field['id']] = $field['variable'];
                 }
 
                 $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
                 $sessionFieldValueList = $extraSession->get_all(
                     array(
-                        'session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+                        'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
                     )
                 );
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
                     // Check if session field value is set in session field list
                     if (isset($fields[$sessionFieldValue['field_id']])) {
                         $var = $fields[$sessionFieldValue['field_id']];
-                        $val = $sessionFieldValue['field_value'];
+                        $val = $sessionFieldValue['value'];
                         // Assign session field value to session
                         $sessionArray[$var] = $val;
                     }
@@ -240,11 +240,11 @@ if ($verified) {
                     $extraField = new ExtraField('session');
                     // Get session fields
                     $fieldList = $extraField->get_all(array(
-                        'field_variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                        'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
                     ));
                     // Index session fields
                     foreach ($fieldList as $field) {
-                        $fields[$field['id']] = $field['field_variable'];
+                        $fields[$field['id']] = $field['variable'];
                     }
 
                     $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
@@ -255,7 +255,7 @@ if ($verified) {
                         // Check if session field value is set in session field list
                         if (isset($fields[$sessionFieldValue['field_id']])) {
                             $var = $fields[$sessionFieldValue['field_id']];
-                            $val = $sessionFieldValue['field_value'];
+                            $val = $sessionFieldValue['value'];
                             // Assign session field value to session
                             $sessionArray[$var] = $val;
                         }

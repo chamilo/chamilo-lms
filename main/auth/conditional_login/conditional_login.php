@@ -27,10 +27,11 @@ array_push($login_conditions, array(
 //));
 
 function dc_check_phone_number($user){
-    $uInfo = UserManager::get_user_info_by_id($user['user_id']);
+    $uInfo = api_get_user_info($user['user_id']);
     if (empty($uInfo['phone'])) {
         return false;
     }
+
     return true;
 }
 

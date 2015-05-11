@@ -28,28 +28,30 @@ class Auth
     {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
 
+        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv
+        $sql = "SELECT item_id FROM $TABLE_COURSE_FIELD_VALUE tcfv
                 INNER JOIN $TABLE_COURSE_FIELD tcf
                 ON tcfv.field_id =  tcf.id
                 WHERE
-                    tcf.field_variable = 'special_course' AND
-                    tcfv.field_value = 1
+                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.variable = 'special_course' AND
+                    tcfv.value = 1
                 ";
 
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"' . $result_row['course_code'] . '"';
+        $result = Database::query($sql);
+        $special_course_list = array();
+        if (Database::num_rows($result) > 0) {
+            while ($result_row = Database::fetch_array($result)) {
+                $special_course_list[] = '"' . $result_row['item_id'] . '"';
             }
         }
         $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
+            $without_special_courses = ' AND course.id NOT IN (' . implode(',', $special_course_list) . ')';
         }
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
@@ -121,28 +123,32 @@ class Auth
         // table definitions
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
+        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+
+        $extraFieldType = \Chamilo\CoreBundle\Entity\ExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
-        $sql = "SELECT course_code
+        $sql = "SELECT item_id
                 FROM $TABLE_COURSE_FIELD_VALUE tcfv
                 INNER JOIN $TABLE_COURSE_FIELD tcf
                 ON tcfv.field_id =  tcf.id
                 WHERE
-                    tcf.field_variable = 'special_course' AND
-                    tcfv.field_value = 1 ";
+                    tcf.extra_field_type = $extraFieldType AND
+                    tcf.variable = 'special_course' AND
+                    tcfv.value = 1 ";
 
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"' . $result_row['course_code'] . '"';
+        $result = Database::query($sql);
+        $special_course_list = array();
+        if (Database::num_rows($result) > 0) {
+            while ($result_row = Database::fetch_array($result)) {
+                $special_course_list[] = '"' . $result_row['item_id'] . '"';
             }
         }
+
         $without_special_courses = '';
         if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
+            $without_special_courses = ' AND course.id NOT IN (' . implode(',', $special_course_list) . ')';
         }
 
         $sql = "SELECT
@@ -482,104 +488,6 @@ class Auth
     public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = array())
     {
         return browseCoursesInCategory($categoryCode, $randomValue, $limit);
-    }
-
-    /**
-     * Search the courses database for a course that matches the search term.
-     * The search is done on the code, title and tutor field of the course table.
-     * @param string $search_term : the string that the user submitted, what we are looking for
-     * @param array $limit
-     * @return array an array containing a list of all the courses (the code, directory, dabase, visual_code, title, ... ) matching the the search term.
-     */
-    public function search_courses($search_term, $limit)
-    {
-        $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
-        $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
-        $limitFilter = getLimitFilterFromArray($limit);
-
-        // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv
-                INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id
-                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"' . $result_row['course_code'] . '"';
-            }
-        }
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
-        }
-
-        $search_term_safe = Database::escape_string($search_term);
-        $sql_find = "SELECT * FROM $TABLECOURS
-                    WHERE (
-                        code LIKE '%".$search_term_safe . "%' OR
-                        title LIKE '%" . $search_term_safe ."%' OR
-                        tutor_name LIKE '%" . $search_term_safe . "%'
-                        )
-                        $without_special_courses
-                    ORDER BY title, visual_code ASC
-                    $limitFilter
-                    ";
-
-        if (api_is_multiple_url_enabled()) {
-            $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql_find = "SELECT *
-                            FROM $TABLECOURS as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $url_access_id AND (
-                                    code LIKE '%" . $search_term_safe . "%' OR
-                                    title LIKE '%" . $search_term_safe . "%' OR
-                                    tutor_name LIKE '%" . $search_term_safe . "%'
-                                )
-                                $without_special_courses
-                            ORDER BY title, visual_code ASC
-                            $limitFilter
-                            ";
-            }
-        }
-        $result_find = Database::query($sql_find);
-        $courses = array();
-        while ($row = Database::fetch_array($result_find)) {
-            $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count(
-                $row['id'],
-                0,
-                api_get_utc_datetime(time() - (30 * 86400))
-            );
-
-            $point_info = CourseManager::get_course_ranking($row['id'], 0);
-
-            $courses[] = array(
-                'real_id' => $row['id'],
-                'point_info' => $point_info,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'db' => $row['db_name'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month
-            );
-        }
-        return $courses;
     }
 
     /**

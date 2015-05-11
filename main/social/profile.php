@@ -88,14 +88,17 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     }
     // It's me!
     if (api_get_user_id() != $user_id) {
-        $user_info    = UserManager::get_user_info_by_id($user_id);
+        $user_info = api_get_user_info($user_id);
         $show_full_profile = false;
         if (!$user_info) {
             // user does no exist !!
             api_not_allowed(true);
         } else {
             //checking the relationship between me and my friend
-            $my_status= SocialManager::get_relation_between_contacts(api_get_user_id(), $user_id);
+            $my_status = SocialManager::get_relation_between_contacts(
+                api_get_user_id(),
+                $user_id
+            );
             if (in_array($my_status, array(
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
@@ -104,7 +107,10 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
                 $show_full_profile = true;
             }
             //checking the relationship between my friend and me
-            $my_friend_status = SocialManager::get_relation_between_contacts($user_id, api_get_user_id());
+            $my_friend_status = SocialManager::get_relation_between_contacts(
+                $user_id,
+                api_get_user_id()
+            );
             if (in_array($my_friend_status, array(
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
@@ -117,13 +123,11 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
             }
         }
     } else {
-        $user_info = UserManager::get_user_info_by_id($user_id);
+        $user_info = api_get_user_info($user_id);
     }
 } else {
-    $user_info = UserManager::get_user_info_by_id($user_id);
+    $user_info = api_get_user_info($user_id);
 }
-
-
 
 if ($user_info['user_id'] == api_get_user_id()) {
     $isSelfUser = true;
@@ -324,18 +328,14 @@ $socialAutoExtendLink = Display::url(
     )
 );
 
-/* $socialRightInformation =  SocialManager::social_wrapper_div($personal_info, 4); */
 $socialRightInformation = null;
-
-//$social_right_content .= SocialManager::social_wrapper_div($wallSocial, 5);
 $social_right_content = null;
-
+$show_full_profile = true;
 if ($show_full_profile) {
 
-    // Block Extra information
-    $t_uf    = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
-    $t_ufo    = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-    $extra_user_data = UserManager::get_extra_user_data($user_id);
+    $t_ufo    = Database :: get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+    $extra_user_data = UserManager::get_extra_user_data($user_id, false, true);
+
     $extra_information = '';
     if (is_array($extra_user_data) && count($extra_user_data)>0 ) {
 
@@ -343,40 +343,51 @@ if ($show_full_profile) {
         $extra_information .= '<div class="panel-heading">'.get_lang('ExtraInformation').'</div>';
         $extra_information .='<div class="panel-body">';
         $extra_information_value = '';
-        foreach($extra_user_data as $key=>$data) {
-            //Avoding parameters
-            if (in_array($key, array('mail_notify_invitation','mail_notify_message', 'mail_notify_group_message' ))) {
+        $extraField = new ExtraField('user');
+        foreach ($extra_user_data as $key => $data) {
+            // Avoiding parameters
+            if (in_array(
+                $key,
+                array(
+                    'mail_notify_invitation',
+                    'mail_notify_message',
+                    'mail_notify_group_message',
+                )
+            )) {
                 continue;
             }
             // get display text, visibility and type from user_field table
             $field_variable = str_replace('extra_','',$key);
-            $sql = "SELECT field_display_text,field_visible,field_type,id "
-                ." FROM $t_uf WHERE field_variable ='$field_variable'";
-            $res_field = Database::query($sql);
-            $row_field = Database::fetch_row($res_field);
-            $field_display_text = $row_field[0];
-            $field_visible = $row_field[1];
-            $field_type = $row_field[2];
-            $field_id = $row_field[3];
-            if ($field_visible == 1) {
-                if (is_array($data)) {
-                    $extra_information_value .= '<dt>'.ucfirst($field_display_text).'</dt>'
-                        .'<dd> '.implode(',',$data).'</dd>';
-                } else {
-                    if ($field_type == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
-                        $id_options = explode(';',$data);
+
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                $field_variable
+            );
+
+            if ($extraFieldInfo['visible'] != 1) {
+                continue;
+            }
+
+            if (is_array($data)) {
+                $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).'</dt>'
+                    .'<dd> '.implode(',', $data).'</dd>';
+            } else {
+                switch ($extraFieldInfo['field_type']) {
+                    case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                        $id_options = explode(';', $data);
                         $value_options = array();
                         // get option display text from user_field_options table
                         foreach ($id_options as $id_option) {
-                            $sql = "SELECT option_display_text FROM $t_ufo WHERE id = '$id_option'";
+                            $sql = "SELECT display_text FROM $t_ufo WHERE id = '$id_option'";
                             $res_options = Database::query($sql);
                             $row_options = Database::fetch_row($res_options);
                             $value_options[] = $row_options[0];
                         }
-                        $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt>'
-                            .'<dd>'.implode(' ',$value_options).'</dd>';
-                    } elseif ($field_type == UserManager::USER_FIELD_TYPE_TAG ) {
-                        $user_tags = UserManager::get_user_tags($user_id, $field_id);
+                        $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt>'
+                            .'<dd>'.implode(' ', $value_options).'</dd>';
+                        break;
+                    case ExtraField::FIELD_TYPE_TAG:
+                        $user_tags = UserManager::get_user_tags($user_id, $extraFieldInfo['id']);
+
                         $tag_tmp = array();
                         foreach ($user_tags as $tags) {
                             $tag_tmp[] = '<a class="label label_tag"'
@@ -385,10 +396,11 @@ if ($show_full_profile) {
                                 .'</a>';
                         }
                         if (is_array($user_tags) && count($user_tags)>0) {
-                            $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt>'
+                            $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt>'
                                 .'<dd>'.implode('', $tag_tmp).'</dd>';
                         }
-                    } elseif ($field_type == UserManager::USER_FIELD_TYPE_SOCIAL_PROFILE) {
+                        break;
+                    case ExtraField::FIELD_TYPE_SOCIAL_PROFILE:
                         $icon_path = UserManager::get_favicon_from_url($data);
                         $bottom = '0.2';
                         //quick hack for hi5
@@ -399,16 +411,18 @@ if ($show_full_profile) {
                         $data = '<a href="'.$data.'">'
                             .'<img src="'.$icon_path.'" alt="icon"'
                             .' style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'
-                            .$field_display_text
+                            .$extraFieldInfo['display_text']
                             .'</a>';
                         $extra_information_value .= '<dd>'.$data.'</dd>';
-                    } else {
+                        break;
+                    default:
                         if (!empty($data)) {
-                            $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.$data.'</dd>';
+                            $extra_information_value .= '<dt>'.ucfirst($extraFieldInfo['display_text']).':</dt><dd>'.$data.'</dd>';
                         }
-                    }
+                    break;
                 }
             }
+
         }
         // if there are information to show
         if (!empty($extra_information_value)) {

@@ -117,7 +117,7 @@ use ChamiloSession as Session;
 if (isset($_SESSION['conditional_login']['uid']) &&
     $_SESSION['conditional_login']['can_login'] === true
 ) {
-    $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+    $uData = api_get_user_info($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);
 
     $_user['user_id'] = $_SESSION['conditional_login']['uid'];
@@ -561,13 +561,18 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $osso->logout(); //redirects and exits
             }
         } elseif (!$logout) {
-            // Handle cookie comming from Master Server
-            //  Use this first line if you want users to still see the
-            //  homepage without connecting
-            //if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
-            //  Use this second line if you want all users to be redirected
-            //  unless they are connected (removed req on sso_cookie)
-            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
+            // Handle cookie from Master Server
+
+            $forceSsoRedirect = api_get_configuration_value('force_sso_redirect');
+            if ($forceSsoRedirect) {
+                // all users to be redirected unless they are connected (removed req on sso_cookie)
+                $redirectToMasterConditions = !isset($_GET['sso_referer']) && !isset($_GET['loginFailed']);
+            } else {
+                //  Users to still see the homepage without connecting
+                $redirectToMasterConditions = !isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie']);
+            }
+
+            if ($redirectToMasterConditions) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {

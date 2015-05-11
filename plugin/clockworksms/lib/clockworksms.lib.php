@@ -78,7 +78,7 @@ class Clockworksms implements SmsPluginLibraryInterface
         $mobilePhoneNumberExtraFieldValue = new ExtraFieldValue('user');
         $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
 
-        return $mobilePhoneNumberExtraFieldValue['field_value'];
+        return $mobilePhoneNumberExtraFieldValue['value'];
     }
 
     /**

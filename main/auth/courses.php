@@ -83,9 +83,9 @@ $actions = array(
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_random_courses';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = Security::remove_XSS($_GET['action']);
-} else {
-    // Nothing to do
 }
+
+$categoryCode = isset($_GET['category_code']) ? $_GET['category_code'] : '';
 
 $nameTools = getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
@@ -156,13 +156,13 @@ if (isset($_REQUEST['search_course'])) {
 // Subscribe user to course
 if (isset($_REQUEST['subscribe_course'])) {
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
+        $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $categoryCode);
     }
 }
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $_GET['search_term'], $_GET['category_code']);
+        $courses_controller->unsubscribe_user_from_course($_GET['unsubscribe'], $_GET['search_term'], $categoryCode);
             //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
     }
 }
@@ -189,7 +189,14 @@ switch ($action) {
         $courses_controller->courses_list($action);
         break;
     case 'subscribe':
-        $courses_controller->courses_categories($action, $_GET['category_code'], null, null, null, $limit);
+        $courses_controller->courses_categories(
+            $action,
+            $categoryCode,
+            null,
+            null,
+            null,
+            $limit
+        );
         break;
     case 'display_random_courses':
         if ($user_can_view_page) {
@@ -199,7 +206,14 @@ switch ($action) {
         }
         break;
     case 'display_courses':
-        $courses_controller->courses_categories($action, $_GET['category_code'], null, null, null, $limit);
+        $courses_controller->courses_categories(
+            $action,
+            $categoryCode,
+            null,
+            null,
+            null,
+            $limit
+        );
         break;
     case 'display_sessions':
         $courses_controller->sessionsList($action, $nameTools, $limit);

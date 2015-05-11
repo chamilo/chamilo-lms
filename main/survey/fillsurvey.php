@@ -73,16 +73,9 @@ if ($surveyCode != "") {
     // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous.
 }
 
-// Header
-Display :: display_header(get_lang('ToolSurvey'));
-
 // First we check if the needed parameters are present
 if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
-    echo '<div class="survey-block';
-    Display :: display_error_message(get_lang('SurveyParametersMissingUseCopyPaste'), false);
-    echo '</div>';
-    Display :: display_footer();
-    exit;
+    api_not_allowed(true, get_lang('SurveyParametersMissingUseCopyPaste'));
 }
 
 $invitationcode = $_GET['invitationcode'];
@@ -133,9 +126,7 @@ $sql = "SELECT * FROM $table_survey_invitation
             invitation_code = '".Database :: escape_string($invitationcode)."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
-    Display :: display_error_message(get_lang('WrongInvitationCode'), false);
-    Display :: display_footer();
-    exit;
+    api_not_allowed(true, get_lang('WrongInvitationCode'));
 }
 
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
@@ -145,11 +136,7 @@ if ( !isset($_POST['finish_survey']) &&
     ($isAnonymous && isset($_SESSION['surveyuser'])) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
-    echo '<div class="survey-block">';
-    Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
-    echo '</div>';
-    Display :: display_footer();
-    exit;
+    api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
 }
 
 // Checking if there is another survey with this code.
@@ -160,10 +147,15 @@ $sql = "SELECT * FROM $table_survey
             code='".Database::escape_string($survey_invitation['survey_code'])."'";
 $result = Database::query($sql);
 
+
+
+
 if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
+        // Header
+        Display :: display_header(get_lang('ToolSurvey'));
         echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.Security::remove_XSS($_GET['course']).'&invitationcode='.Security::remove_XSS($_GET['invitationcode']).'&cidReq='.Security::remove_XSS($_GET['cidReq']).'">';
         echo '<select name="language">';
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -335,47 +327,21 @@ if (count($_POST) > 0) {
     }
 }
 
-// Displaying the survey title and subtitle (appears on every page)
-echo '<div class="survey-block">';
-echo '<div id="survey_title">';
-echo Display::return_icon(
-    'statistics.png',
-    get_lang('CreateNewSurvey'),
-    array('style'=>'display:inline-block; margin-right:5px;'),
-    ICON_SIZE_SMALL
-);
-echo strip_tags($survey_data['survey_title']).'</div>';
-echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
-
-// Checking time availability
-check_time_availability($survey_data);
-
-// Displaying the survey introduction
-if (!isset($_GET['show'])) {
-    // The first thing we do is delete the session
-    unset($_SESSION['paged_questions']);
-    unset($_SESSION['page_questions_sec']);
-    $paged_questions_sec = array();
-
-    if (!empty($survey_data['survey_introduction'])) {
-        echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
-    }
-    $limit = 0;
-}
-
 $user_id = api_get_user_id();
 
 if ($user_id == 0) {
     $user_id = $survey_invitation['user'];
 }
-$user_data = UserManager :: get_user_info_by_id($user_id);
+$user_data = api_get_user_info($user_id);
 
-if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_array($user_data)) {
+if ($survey_data['form_fields'] != '' &&
+    $survey_data['anonymous'] == 0 && is_array($user_data)
+) {
     $form_fields = explode('@', $survey_data['form_fields']);
     $list = array();
     foreach ($form_fields as $field) {
         $field_value = explode(':', $field);
-        if ($field_value[1] == 1) {
+        if (isset($field_value[1]) && $field_value[1] == 1) {
             if ($field_value[0] != '') {
                 $val = api_substr($field_value[0], 8, api_strlen($field_value[0]));
                 $list[$val] = 1;
@@ -387,13 +353,11 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
     $form = new FormValidator(
         'profile',
         'post',
-        api_get_self()."?".str_replace('&show_form=1', '&show_form=1', $_SERVER['QUERY_STRING']),
-        null,
-        array('style' => 'width: 75%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;'))
+        api_get_self()."?".str_replace('&show_form=1', '&show_form=1', $_SERVER['QUERY_STRING'])
     );
 
     if (api_is_western_name_order()) {
-        if ($list['firstname'] == 1) {
+        if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
             $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
             if (api_get_setting('profile', 'name') !== 'true') {
@@ -403,7 +367,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
             $form->applyFilter(array('firstname'), 'trim');
             $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if ($list['lastname'] == 1) {
+        if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
             $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
             if (api_get_setting('profile', 'name') !== 'true') {
@@ -414,7 +378,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
     } else {
-        if ($list['lastname'] == 1) {
+        if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
             $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
             if (api_get_setting('profile', 'name') !== 'true') {
@@ -424,7 +388,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
             $form->applyFilter(array('lastname'), 'trim');
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
-        if ($list['firstname'] == 1) {
+        if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
             $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
             if (api_get_setting('profile', 'name') !== 'true') {
@@ -436,7 +400,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
         }
     }
 
-    if ($list['official_code'] == 1) {
+    if (isset($list['official_code']) && $list['official_code'] == 1) {
         //    OFFICIAL CODE
         if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
             $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
@@ -452,7 +416,8 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
             }
         }
     }
-    if ($list['email'] == 1) {
+
+    if (isset($list['email']) && $list['email'] == 1) {
         //    EMAIL
         $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
         if (api_get_setting('profile', 'email') !== 'true') {
@@ -466,7 +431,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
         $form->addRule('email', get_lang('EmailWrong'), 'email');
     }
 
-    if ($list['phone'] == 1) {
+    if (isset($list['phone']) && $list['phone'] == 1) {
         //    PHONE
         $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
         if (api_get_setting('profile', 'phone') !== 'true') {
@@ -479,8 +444,8 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
         }
     }
 
-    if ($list['language'] == 1) {
-        //LANGUAGE
+    if (isset($list['language']) && $list['language'] == 1) {
+        // LANGUAGE
         $form->addElement('select_language', 'language', get_lang('Language'));
         if (api_get_setting('profile', 'language') !== 'true') {
             $form->freeze('language');
@@ -491,12 +456,52 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
     }
 
     // EXTRA FIELDS
-    $extra_data = UserManager :: get_extra_user_data($user_id, true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'profile');
+    $extraField = new ExtraField('user');
+    $returnParams = $extraField->addElements($form, api_get_user_id());
+
+    $jquery_ready_content = $returnParams['jquery_ready_content'];
+
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+    $htmlHeadXtra[] ='<script>
+    $(document).ready(function(){
+        '.$jquery_ready_content.'
+    });
+    </script>';
+
 
     $form->addButtonNext(get_lang('Next'));
-    $user_data = array_merge($user_data, $extra_data);
     $form->setDefaults($user_data);
+}
+
+// Checking time availability
+check_time_availability($survey_data);
+
+// Header
+Display :: display_header(get_lang('ToolSurvey'));
+
+// Displaying the survey title and subtitle (appears on every page)
+echo '<div class="survey-block">';
+echo '<div id="survey_title">';
+echo Display::return_icon(
+    'statistics.png',
+    get_lang('CreateNewSurvey'),
+    array('style'=>'display:inline-block; margin-right:5px;'),
+    ICON_SIZE_SMALL
+);
+echo strip_tags($survey_data['survey_title']).'</div>';
+echo '<div id="survey_subtitle">'.strip_tags($survey_data['survey_subtitle']).'</div>';
+
+// Displaying the survey introduction
+if (!isset($_GET['show'])) {
+    // The first thing we do is delete the session
+    unset($_SESSION['paged_questions']);
+    unset($_SESSION['page_questions_sec']);
+    $paged_questions_sec = array();
+
+    if (!empty($survey_data['survey_introduction'])) {
+        echo '<div id="survey_content" class="survey_content">'.$survey_data['survey_introduction'].'</div>';
+    }
+    $limit = 0;
 }
 
 if ($survey_data['form_fields'] &&
@@ -511,24 +516,35 @@ if ($survey_data['form_fields'] &&
                 $extras = array();
                 // Build SQL query
                 $sql = "UPDATE $table_user SET";
+                $update = false;
+                $allowedFields = [
+                    'firstname',
+                    'lastname',
+                    'official_code',
+                    'email',
+                    'phone',
+                    'language'
+                ];
+
                 foreach ($user_data as $key => $value) {
-                    if (substr($key, 0, 6) == 'extra_') { //an extra field
-                        $extras[substr($key, 6)] = $value;
-                    } else {
+                    if (in_array($key, $allowedFields)) {
                         $sql .= " $key = '".Database :: escape_string($value)."',";
+                        $update = true;
                     }
+
                 }
                 // Remove trailing , from the query we have so far
                 $sql = rtrim($sql, ',');
-                $sql .= " WHERE user_id  = '".$user_id."'";
-                Database::query($sql);
-                // Update the extra fields
-                if (is_array($extras)) {
-                    foreach ($extras as $key => $value) {
-                        $myres = UserManager :: update_extra_field_value($user_id, $key, $value);
-                    }
+
+                if ($update) {
+                    Database::query($sql);
                 }
-                echo '<div id="survey_content" class="survey_content">'.get_lang('InformationUpdated').' '.get_lang('PleaseFillSurvey').'</div>';
+
+                $extraFieldValue = new ExtraFieldValue('user');
+                $extraFieldValue->saveFieldValues($user_data);
+
+                echo '<div id="survey_content" class="survey_content">'.
+                    get_lang('InformationUpdated').' '.get_lang('PleaseFillSurvey').'</div>';
             }
         }
         $_GET['show'] = 0;
@@ -1285,13 +1301,24 @@ function check_time_availability($surv_data) {
     $cur_date = time();
 
     if ($cur_date < $start_date) {
-        Display :: display_warning_message(get_lang('SurveyNotAvailableYet'), false);
-        Display :: display_footer();
-        exit;
+        api_not_allowed(
+            true,
+            Display:: return_message(
+                get_lang('SurveyNotAvailableYet'),
+                'warning',
+                false
+            )
+        );
     }
+
     if ($cur_date > $end_date) {
-        Display :: display_warning_message(get_lang('SurveyNotAvailableAnymore'), false);
-        Display :: display_footer();
-        exit;
+        api_not_allowed(
+            true,
+            Display:: return_message(
+                get_lang('SurveyNotAvailableAnymore'),
+                'warning',
+                false
+            )
+        );
     }
 }

@@ -71,9 +71,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
         $this->_persistantFreeze = true;
 
         $this->setType('text');
-
-        $renderer = FormValidator::getDefaultRenderer();
-        //$renderer->setElementTemplate($this->getTemplate(), $elementName);
     }
 
     /**

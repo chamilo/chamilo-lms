@@ -66,8 +66,8 @@ class WSCMUser extends WSCM {
 
     public function get_user_name($username, $password, $id, $field)
     {
-        if($this->verifyUserPass($username, $password) == "valid") {
-            $userInfo = UserManager::get_user_info_by_id($id);
+        if ($this->verifyUserPass($username, $password) == "valid") {
+            $userInfo = api_get_user_info($id);
             switch ($field) {
                 case 'firstname':
                     return $userInfo['firstname'];

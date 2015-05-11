@@ -1004,7 +1004,7 @@ function add_edit_template() {
                     $new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
 
                     // The upload directory.
-                    $upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
+                    $upload_dir = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/';
 
                     // Create the directory if it does not exist.
                     if (!is_dir($upload_dir)) {
@@ -1079,7 +1079,7 @@ function delete_template($id) {
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.

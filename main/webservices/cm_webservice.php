@@ -219,12 +219,11 @@ class WSCM {
 				return new WSCMError(200, "Course not found");
 			}
 		} else {
-			$course_code = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
-			if($course_code == 0) {
+			$courseId = CourseManager::get_course_code_from_original_id($course_id_value, $course_id_field_name);
+			if (empty($courseId)) {
 				return new WSCMError(200, "Course not found");
 			} else {
-				$course_info = CourseManager::get_course_information($course_code);
-				return $course_info['id'];
+				return $courseId;
 			}
 		}
 	}
@@ -237,8 +236,9 @@ class WSCM {
 	 * @param string Session id value
 	 * @return mixed System session id if the session was found, WSError otherwise
 	 */
-	protected function getSessionId($session_id_field_name, $session_id_value) {
-		if($session_id_field_name == "chamilo_session_id") {
+	protected function getSessionId($session_id_field_name, $session_id_value)
+	{
+		if ($session_id_field_name == "chamilo_session_id") {
 			$session = SessionManager::fetch((int)$session_id_value);
 			if(!empty($session)) {
 				return intval($session_id_value);
@@ -246,7 +246,10 @@ class WSCM {
 				return new WSCMError(300, "Session not found");
 			}
 		} else {
-			$session_id = SessionManager::get_session_id_from_original_id($session_id_value, $session_id_field_name);
+			$session_id = SessionManager::getSessionIdFromOriginalId(
+				$session_id_value,
+				$session_id_field_name
+			);
 			if($session_id == 0) {
 				return new WSCMError(300, "Session not found");
 			} else {

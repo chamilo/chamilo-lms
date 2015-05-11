@@ -84,13 +84,71 @@ class HTML_QuickForm_CAPTCHA_Image extends HTML_QuickForm_CAPTCHA
     var $_CAPTCHA_driver = 'Image';
 
     /**
+     * Code based in HTML_QuickForm_text::getTemplate()
+     * In order to render correctly the captcha in different layouts
+     * @param string $layout
+     *
+     * @return string
+     */
+    public static function getTemplate($layout)
+    {
+        $size = 8;
+        switch ($layout) {
+            case FormValidator::LAYOUT_INLINE:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    {element}
+                </div>';
+                break;
+            case FormValidator::LAYOUT_HORIZONTAL:
+                return '
+                <div class="form-group {error_class}">
+                    <label {label-for} class="col-sm-2 control-label" >
+                        <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
+                        {label}
+                    </label>
+                    <div class="col-sm-'.$size.'">
+                        {icon}
+                        {element}
+
+                        <!-- BEGIN label_2 -->
+                            <p class="help-block">{label_2}</p>
+                        <!-- END label_2 -->
+
+                        <!-- BEGIN error -->
+                            <span class="help-inline">{error}</span>
+                        <!-- END error -->
+                    </div>
+                    <div class="col-sm-2">
+                        <!-- BEGIN label_3 -->
+                            {label_3}
+                        <!-- END label_3 -->
+                    </div>
+                </div>';
+                break;
+            case FormValidator::LAYOUT_BOX_NO_LABEL:
+                return '
+                        <div class="input-group">
+                            {icon}
+                            {element}
+                        </div>';
+                break;
+        }
+    }
+
+    /**
      * Returns the HTML for the CAPTCHA image
      *
      * @return string
      * @access public
      */
-    function toHtml()
+    public function toHtml()
     {
+
         if ($this->_flagFrozen) {
             return '';
         }

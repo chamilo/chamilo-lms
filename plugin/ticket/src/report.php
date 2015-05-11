@@ -67,8 +67,6 @@ div.ticket-form {
 
 </style>';
 $types = TicketManager::get_all_tickets_categories();
-$htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $tools = array();
 $tools['todas'] = array('id' => '', 'name' => get_lang('Todas'));
 $tools['announcement'] = array('id' => 'announcement', 'name' => get_lang('Announcement'));
